@@ -23,4 +23,9 @@
 from osv import fields, osv
 
 class external_osv(osv.osv):
-    
+    pass
+
+#TODO convertion external id -> OpenERP object using Object mapping_column_name key!
+#same as mage_to_oe mageerp_osv conversion method
+
+external_osv()

@@ -22,13 +22,6 @@
 
 from osv import fields, osv
 
-#class external_osv(osv.osv):
-#    pass
-
-#TODO convertion external id -> OpenERP object using Object mapping_column_name key!
-#same as mage_to_oe mageerp_osv conversion method
-    
-#external_osv()
 
 class external_referential_type(osv.osv):
     _name = 'external.referential.type'
@@ -137,6 +130,7 @@ class external_mapping(osv.osv):
     }
     
     def create(self):
+        #TODO create the field and remove trash code here!
                 #Check if field already exists
         field_ids = self.pool.get('ir.model.fields').search(cr, uid, [('name', '=', field_name), ('model_id', '=', model_id)])
         if not field_ids:
@@ -158,17 +152,3 @@ class external_mapping(osv.osv):
             #All field values are computed, now save
             field_id = self.pool.get('ir.model.fields').create(cr, uid, field_vals)
 external_mapping()
-
-
-class ir_model(osv.osv):
-    _inherit = 'ir.model'
-    _columns = {
-        'external_list_method': fields.char('List Method', size=64),
-        'external_get_method': fields.char('Get Method', size=64),
-        'external_update_method': fields.char('Update Method', size=64),
-        'external_create_method': fields.char('Create Method', size=64),
-        'external_delete_method': fields.char('Delete Method', size=64),
-        'external_mapping_ids': fields.one2many('external.mapping', 'model_id', 'External Mappings'),
-    }
-    
-ir_model()

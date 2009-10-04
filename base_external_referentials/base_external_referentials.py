@@ -32,7 +32,7 @@ from osv import fields, osv
 
 class external_referential_type(osv.osv):
     _name = 'external.referential.type'
-    _description = 'External Referential Type'
+    _description = 'External Referential Type (Ex.Magento,Spree)'
     
     _columns = {
         'name': fields.char('Name', size=64, required=True),
@@ -59,15 +59,20 @@ class external_referential(osv.osv):
         'location': fields.char('Location', size=64),
         'username': fields.char('User Name', size=64),
         'password': fields.char('Password', size=64),
+        'authentication': fields.text('Authentication Script'),
         'mapping_ids': fields.one2many('external.mapping', 'referential_id', 'Mappings'),
         'mapping_column_name': fields.function(_mapping_column_name, method=True, type="char", string='Column Name', help='Column in OpenERP mapped tables for bookkeeping the external id'),
+        'state':fields.selection([
+                                  ('draft','Drafting'),
+                                  ('done','Done') 
+                                  ],'Status',readonly=True,store=True)
     }
     
     _sql_constraints = [
         ('name_uniq', 'unique (name)', 'Referential names must be unique !')
     ]
     
-    #TODO warning on name change if mapping exist
+    #TODO warning on name change if mapping exist: Implemented in attrs
     
     def core_sync(self, cr, uid, ids, ctx={}):
         osv.except_osv(_("Not Implemented"), _("Not Implemented in abstract base module!"))

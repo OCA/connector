@@ -1,67 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
 <openerp>
-    <data>
-        <record id="external_referential_form_view" model="ir.ui.view">
-            <field name="name">external_referential_form_view</field>
-            <field name="model">external.referential</field>
-            <field name="type">form</field>
-            <field name="arch" type="xml">
-                <form>
-                	<group col="4" colspan="4">
-	                	<field name="name" />
-	                	<field name="type_id" />
-	                	<field name="mapping_column_name" />
-	                	<field name="location" />
-	                	<field name="username" />
-	                	<field name="password" />
-	                	<button name="core_sync" string="Synchronize Referential Settings" colspan="2" type="object" />
-                	</group>
-                	<field name="mapping_ids" widget="one2many_list" nolabel="1">
-                		<form>
-                			<field name="model_id" />
-                			<group col="4" colspan="4">
-                			<field name="external_list_method" />
-                			<field name="external_get_method" />
-                			<field name="external_update_method" />
-                			<field name="external_create_method" />
-                			<field name="external_delete_method" />
-                			</group>
-                			<field colspan="4" name="mapping_ids" widget="one2many_list" nolabel="1">
-                				<tree editable="bottom" string="Field Mappings">
-                					<field name="field_id" />
-                					<field name="external_field" />
-                					<field name="type" />
-                					<field name="external_type" />
-                				</tree>
-    		                	<form string="Field Mapping">
-                					<field name="field_id" />
-                					<field name="external_field" />
-                					<field name="type" />
-                					<field name="external_type" />
-                					<newline/>
-                					<field name="in_function" />
-                					<newline/>
-                					<field name="out_function" />
-                				</form>
-                			</field>
-                		</form>
-                	</field>
-                </form>
-            </field>
-        </record>
-        
-		<record id="ir_actions_act_window_externalreferential0" model="ir.actions.act_window">
-			<field eval="&quot;&quot;&quot;form&quot;&quot;&quot;" name="view_type"/>
-			<field eval="&quot;&quot;&quot;external.referential&quot;&quot;&quot;" name="res_model"/>
-			<field eval="&quot;&quot;&quot;tree,form&quot;&quot;&quot;" name="view_mode"/>
-			<field eval="&quot;&quot;&quot;current&quot;&quot;&quot;" name="target"/>
-			<field eval="&quot;&quot;&quot;external_referential&quot;&quot;&quot;" name="name"/>
-			<field eval="80" name="limit"/>
-			<field eval="&quot;&quot;&quot;{}&quot;&quot;&quot;" name="context"/>
-			<field eval="&quot;&quot;&quot;ir.actions.act_window&quot;&quot;&quot;" name="type"/>
+	<data>
+		<record id="external_referential_form_view" model="ir.ui.view">
+			<field name="name">external_referential_form_view</field>
+			<field name="model">external.referential</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form>
+					<group col="4" colspan="4">
+						<field name="name" />
+						<notebook colspan="4">
+							<page string="General">
+								<field name="type_id" />
+								<field name="mapping_column_name" />
+								<field name="location" />
+							</page>
+							<page string="Authentication">
+								<field name="username" />
+								<field name="password" />
+								<field name="authentication" />
+							</page>
+						</notebook>
+						<field name="state" />
+						<button name="core_sync" string="Synchronize Referential Settings" colspan="2" type="object" />
+					</group>
+					<field name="mapping_ids" widget="one2many_list" nolabel="1">
+						<form>
+							<field name="model_id" />
+							<group col="4" colspan="4">
+								<field name="external_list_method" />
+								<field name="external_get_method" />
+								<field name="external_update_method" />
+								<field name="external_create_method" />
+								<field name="external_delete_method" />
+							</group>
+							<field colspan="4" name="mapping_ids" widget="one2many_list" nolabel="1">
+								<tree editable="bottom" string="Field Mappings">
+									<field name="field_id" />
+									<field name="external_field" />
+									<field name="type" />
+									<field name="external_type" />
+								</tree>
+								<form string="Field Mapping">
+									<field name="field_id" />
+									<field name="external_field" />
+									<field name="type" />
+									<field name="external_type" />
+									<newline />
+									<field name="in_function" />
+									<newline />
+									<field name="out_function" />
+								</form>
+							</field>
+						</form>
+					</field>
+				</form>
+			</field>
 		</record>
-		
+
+		<record id="ir_actions_act_window_externalreferential0" model="ir.actions.act_window">
+			<field eval="&quot;&quot;&quot;form&quot;&quot;&quot;" name="view_type" />
+			<field eval="&quot;&quot;&quot;external.referential&quot;&quot;&quot;" name="res_model" />
+			<field eval="&quot;&quot;&quot;tree,form&quot;&quot;&quot;" name="view_mode" />
+			<field eval="&quot;&quot;&quot;current&quot;&quot;&quot;" name="target" />
+			<field eval="&quot;&quot;&quot;external_referential&quot;&quot;&quot;" name="name" />
+			<field eval="80" name="limit" />
+			<field eval="&quot;&quot;&quot;{}&quot;&quot;&quot;" name="context" />
+			<field eval="&quot;&quot;&quot;ir.actions.act_window&quot;&quot;&quot;" name="type" />
+		</record>
+
 		<menuitem id="ir_ui_menu_extref0" name="External Referentials" parent="base.next_id_9" action="ir_actions_act_window_externalreferential0" />
 
-    </data>
+	</data>
 </openerp>

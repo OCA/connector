@@ -180,8 +180,6 @@ class external_mapping_line(osv.osv):
     _order = 'type,external_type'
     #TODO add constraint: not both field_id and external_field null
 external_mapping_line()
-<<<<<<< TREE
-
 
 class external_mapping(osv.osv):
     _name = 'external.mapping'
@@ -205,19 +203,3 @@ class external_mapping(osv.osv):
         print "To be implemented yet"
         
 external_mapping()
-
-
-class ir_model(osv.osv):
-    _inherit = 'ir.model'
-    _columns = {
-        'external_list_method': fields.char('List Method', size=64),
-        'external_get_method': fields.char('Get Method', size=64),
-        'external_update_method': fields.char('Update Method', size=64),
-        'external_create_method': fields.char('Create Method', size=64),
-        'external_delete_method': fields.char('Delete Method', size=64),
-        'external_mapping_ids': fields.one2many('external.mapping', 'model_id', 'External Mappings'),
-    }
-    
-ir_model()
-=======
->>>>>>> MERGE-SOURCE

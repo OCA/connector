@@ -121,6 +121,7 @@ class external_mapping(osv.osv):
     _columns = {
         'referential_id': fields.many2one('external.referential', 'External Referential', required=True, select=True, ondelete='cascade'),
         'model_id': fields.many2one('ir.model', 'OpenERP Model', required=True, select=True, ondelete='cascade'),
+        'model':fields.related('model_id','model',type='char', string='Model Name'),
         'related_model_ids': fields.function(_get_related_model_ids, method=True, type="one2many", relation="ir.model", string='Related Inherited Models', help="potentially inherited through '_inherits' model, used for mapping field selection"),
         'external_list_method': fields.char('List Method', size=64),
         'external_get_method': fields.char('Get Method', size=64),
@@ -128,7 +129,8 @@ class external_mapping(osv.osv):
         'external_create_method': fields.char('Create Method', size=64),
         'external_delete_method': fields.char('Delete Method', size=64),
         'mapping_ids': fields.one2many('external.mapping.line', 'mapping_id', 'Mappings Lines'),
-        'external_field_id':fields.many2one('ir.model.fields', 'Foreign Key Field')
+        'external_field_id':fields.many2one('ir.model.fields', 'Foreign Key Field'),
+        'external_field':fields.related('external_field_id','name',type='char', string='Field Name'),
     }
     
     def create(self, cr, ui, vals, context=None):

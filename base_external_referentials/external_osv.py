@@ -23,16 +23,16 @@
 from osv import fields, osv
 
 class external_osv(osv.osv):
-    def extid_to_oeid(self,cr,uid,ids,external_referential_id):
+    def extid_to_oeid(self, cr, uid, ids, external_referential_id):
         #First get the external key field name
-        #convertion external id -> OpenERP object using Object mapping_column_name key!
-        mapping_id = self.pool.get('external.mapping').search(cr,uid,[('model','=',self._name),('referential_id','=',external_referential_id)])
+        #conversion external id -> OpenERP object using Object mapping_column_name key!
+        mapping_id = self.pool.get('external.mapping').search(cr, uid, [('model', '=', self._name), ('referential_id', '=', external_referential_id)])
         if mapping_id:
             #now get the external field name
-            ext_field_name = self.pool.get('external.mapping').read(cr,uid,mapping_id[0],['external_field'])['external_field']
+            ext_field_name = self.pool.get('external.mapping').read(cr, uid, mapping_id[0], ['external_field'])['external_field']
             if ext_field_name:
                 #now get the oe_id
-                oe_id = self.search(cr,uid,[(ext_field_name,'=',ids)])
+                oe_id = self.search(cr, uid, [(ext_field_name, '=', ids)])
                 if oe_id:
                     return oe_id[0]
                 

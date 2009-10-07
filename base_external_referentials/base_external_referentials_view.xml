@@ -16,8 +16,8 @@
 								<field name="location" />
 							</page>
 							<page string="Authentication">
-								<field name="username" />
-								<field name="password" />
+								<field name="apiusername" />
+								<field name="apipass" />
 								<field name="authentication" />
 							</page>
 						</notebook>

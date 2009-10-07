@@ -50,9 +50,9 @@ class external_referential(osv.osv):
     _columns = {
         'name': fields.char('Name', size=64, required=True),
         'type_id': fields.many2one('external.referential.type', 'Referential Type', select=True),
-        'location': fields.char('Location', size=64),
-        'username': fields.char('User Name', size=64),
-        'password': fields.char('Password', size=64),
+        'location': fields.char('Location', size=200),
+        'apiusername': fields.char('User Name', size=64),
+        'apipass': fields.char('Password', size=64),
         'authentication': fields.text('Authentication Script'),
         'mapping_ids': fields.one2many('external.mapping', 'referential_id', 'Mappings'),
         'mapping_column_name': fields.function(_mapping_column_name, method=True, type="char", string='Column Name', help='Column in OpenERP mapped tables for bookkeeping the external id'),

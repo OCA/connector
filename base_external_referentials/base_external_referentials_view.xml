@@ -25,13 +25,13 @@
 						<button name="core_sync" string="Synchronize Referential Settings" colspan="2" type="object" />
 					</group>
 					<field name="mapping_ids" widget="one2many_list" nolabel="1">
-						<tree>
+						<tree string="Object Mappings">
 							<field name="model_id" />
 							<field name="related_model_ids" invisible="1"/>
 							<field name="external_field_id" />
 							<field name="mapping_ids" />
 						</tree>
-						<form>
+						<form string="Object Mappings">
 							<field name="model_id" on_change="model_id_change(model_id)"/>
 							<field name="related_model_ids" invisible="1"/>
 							<group col="4" colspan="4">
@@ -62,6 +62,18 @@
 						</form>
 					</field>
 				</form>
+			</field>
+		</record>
+		
+		<record id="external_referential_tree_view" model="ir.ui.view">
+			<field name="name">external_referential_tree_view</field>
+			<field name="model">external.referential</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+				<tree>
+					<field name="name" select="1" />
+					<field name="location" select="1" />
+				</tree>
 			</field>
 		</record>
 

@@ -34,7 +34,7 @@ by:
 * a location (possibly webservice URL, database connection URL...); the connection method will tell it...
 * referential credentials (user name + password)
 
-OpenERP altready has limited supported to external ids using the ir_model_data and the id
+OpenERP already has limited supported to external ids using the ir_model_data and the id
 fields in the loaded data such as XML or CSV.
 The issue is that teh current system, while very useful to deal with internal OpenERP data has some
 limitations:

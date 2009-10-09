@@ -152,7 +152,7 @@ external_mapping()
 
 
 class external_mapping_line(osv.osv):
-    _inherit = 'external.mapping.line'
+    _name = 'external.mapping.line'
     
     _columns = {
         'field_id': fields.many2one('ir.model.fields', 'OpenERP Field', select=True, ondelete='cascade'),

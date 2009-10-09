@@ -130,7 +130,7 @@ class external_mapping(osv.osv):
         'external_delete_method': fields.char('Delete Method', size=64),
         'mapping_ids': fields.one2many('external.mapping.line', 'mapping_id', 'Mappings Lines'),
         'external_field_id':fields.many2one('ir.model.fields', 'Foreign Key Field'),
-        'external_field':fields.related('external_field_id','name',type='char', string='Field Name'),
+        'external_field':fields.related('external_field_id','name',type='char', string='Foreign Key Field Name'),
     }
     
     def create(self, cr, ui, vals, context=None):

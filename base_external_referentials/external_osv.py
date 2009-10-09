@@ -90,5 +90,50 @@ class external_osv(osv.osv):
                                     write_ids.append(existing_rec_ids)
                             else:
                                 create_ids.append(self.create(cr,uid,vals,context))
-                            
-                                    
+
+    def ext_export_data(self,cr,uid,ids,external_referential_id,defaults={},context={}):
+        #if ids is [] all records are selected or ids has to be a list of ids
+        #return a list of dictionary of formatted items
+        if external_referential_id:
+            out_data = []
+            if not ids:
+                ids = self.search(cr,uid,[])#Get all records if ids is empty
+            data = self.read(cr,uid,ids,[])
+            #Find the mapping record now
+            mapping_id = self.pool.get('external.mapping').search(cr,uid,[('model','=',self._name),('referential_id','=',external_referential_id)])
+            if mapping_id:
+                #If a mapping exists for current model, search for mapping lines
+                mapping_line_ids = self.pool.get('external.mapping.line').search(cr,uid,[('mapping_id','=',mapping_id),('type','in',['in_out','out'])])
+                mapping_lines = self.pool.get('external.mapping.line').read(cr,uid,mapping_line_ids,['external_field','out_function'])
+                if mapping_lines:
+                    #if mapping lines exist find the data conversion for each row in inward data
+                    for each_row in data:
+                        vals = {} #Dictionary for record
+                        for each_mapping_line in mapping_lines:
+                            #Build the space for expr
+                            space = {
+                                    'self':self,
+                                    'cr':cr,
+                                    'uid':uid,
+                                    'data':data,
+                                    'external_referential_id':external_referential_id,
+                                    'defaults':defaults,
+                                    'context':context,
+                                    'record':each_row
+                                        }
+                            #The expression should return value in list of tuple format
+                            #eg[('name','Sharoon'),('age',20)] -> vals = {'name':'Sharoon', 'age':20}
+                            exec each_mapping_line['out_function'] in space
+                            result = space.get('result',False)
+                            #If result exists and is of type list
+                            if result and type(result)==list:
+                                for each_tuple in result:
+                                    if type(each_tuple)==tuple and len(each_tuple)==2:
+                                        vals[each_tuple[0]] = each_tuple[1]
+                        #Every mapping line has now been translated into vals dictionary, now set defaults if any
+                        for each_default_entry in defaults.keys():
+                            vals[each_default_entry] = defaults[each_default_entry]
+                        #If vals exist append it to the out_data list
+                        if vals:
+                            out_data.append(vals)
+        return out_data

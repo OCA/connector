@@ -34,6 +34,36 @@ class external_referential_type(osv.osv):
     
 external_referential_type()
 
+class external_mapping_srcrecs(osv.osv):
+    _name = "external.mapping.srcrecs"
+    _description = "The source mapping records"
+    _columns = {
+        'type_id':fields.many2one('external.referential.type','External Referential Type',ondelete='cascade',select=True),
+        'model_id': fields.many2one('ir.model', 'OpenERP Model', required=True, select=True, ondelete='cascade'),
+        'model':fields.related('model_id','model',type='char', string='Model Name'),
+        'external_list_method': fields.char('List Method', size=64),
+        'external_get_method': fields.char('Get Method', size=64),
+        'external_update_method': fields.char('Update Method', size=64),
+        'external_create_method': fields.char('Create Method', size=64),
+        'external_delete_method': fields.char('Delete Method', size=64),
+                }
+external_mapping_srcrecs()
+
+class external_mappinglines_srcrecs(osv.osv):
+    _name = 'external.mappinglines.srcrecs'
+    _description = 'The source mapping line records'
+    _columns = {
+        'type_id':fields.many2one('external.referential.type','External Referential Type',ondelete='cascade',select=True),
+        'model_id': fields.many2one('ir.model', 'OpenERP Model', select=True, ondelete='cascade'),
+        'model':fields.related('model_id','model',type='char', string='Model Name'),
+        'external_field': fields.char('External Field', size=32),
+        'type': fields.selection([('in_out', 'External <-> OpenERP'), ('in', 'External -> OpenERP'), ('out', 'External <- OpenERP')], 'Type'),
+        'external_type': fields.selection([('str', 'String'), ('bool', 'Boolean'), ('int', 'Integer'), ('float', 'Float')], 'External Type'),
+        'in_function': fields.text('Import in OpenERP Mapping Python Function'),
+        'out_function': fields.text('Export from OpenERP Mapping Python Function'),
+                }
+external_mappinglines_srcrecs()
+
 class external_referential(osv.osv):
     _name = 'external.referential'
     _description = 'External Referential'
@@ -42,11 +72,48 @@ class external_referential(osv.osv):
         res = {}
         for referential in self.browse(cr, uid, ids, context):
             if referential.name:
-                res[referential.id] = referential.name + "_id"
+                res[referential.id] = "x_" + referential.name.replace('-', '').replace(' ', '').lower() + "_id"
             else:
                 res[referential.id] = False
         return res    
     
+    def refresh_mapping(self,cr,uid,ids,ctx={}):
+        #This function will reinstate mapping & mapping_lines for registered objects
+        for id in ids:
+            ext_ref = self.browse(cr,uid,id)
+            mappings_obj = self.pool.get('external.mapping')
+            mapping_line_obj = self.pool.get('external.mapping.line')
+            #Delete Existing mappings if any
+            existing_mapping_ids =  mappings_obj.search(cr,uid,[('referential_id','=',id)])
+            if existing_mapping_ids:
+                mappings_obj.unlink(cr,uid,existing_mapping_ids)
+            #Fetch mapping lines now
+            mapping_src_ids = self.pool.get('external.mapping.srcrecs').search(cr,uid,[('type_id','=',ext_ref.type_id.id)])
+            for each_mapping_rec in self.pool.get('external.mapping.srcrecs').read(cr,uid,mapping_src_ids,[]):
+                vals = {
+                                'referential_id': id,
+                                'model_id': each_mapping_rec['model_id'][0] or False,
+                                'external_list_method': each_mapping_rec['external_list_method'],
+                                'external_get_method': each_mapping_rec['external_get_method'],
+                                'external_update_method': each_mapping_rec['external_update_method'],
+                                'external_create_method': each_mapping_rec['external_create_method'],
+                                'external_delete_method': each_mapping_rec['external_delete_method'],
+                                            }
+                mapping_id = mappings_obj.create(cr,uid,vals)
+                #Now create mapping lines of the created mapping model
+                mapping_lines_src_ids = self.pool.get('external.mappinglines.srcrecs').search(cr,uid,[('type_id','=',ext_ref.type_id.id),('model_id','=',each_mapping_rec['model_id'][0])])
+                for each_mapping_line_rec in  self.pool.get('external.mappinglines.srcrecs').read(cr,uid,mapping_lines_src_ids,[]):
+                    vals = {
+                        'external_field': each_mapping_line_rec['external_field'],
+                        'mapping_id': mapping_id,
+                        'type': each_mapping_line_rec['type'],
+                        'external_type': each_mapping_line_rec['external_type'],
+                        'in_function': each_mapping_line_rec['in_function'],
+                        'out_function': each_mapping_line_rec['out_function'],
+                        }
+                    mapping_line_obj.create(cr,uid,vals)
+            
+                
     _columns = {
         'name': fields.char('Name', size=64, required=True),
         'type_id': fields.many2one('external.referential.type', 'Referential Type', select=True),
@@ -66,9 +133,6 @@ class external_referential(osv.osv):
     ]
     
     #TODO warning on name change if mapping exist: Implemented in attrs
-    
-    def core_sync(self, cr, uid, ids, ctx={}):
-        osv.except_osv(_("Not Implemented"), _("Not Implemented in abstract base module!"))
     
 external_referential()
 
@@ -134,24 +198,28 @@ class external_mapping(osv.osv):
     
     def create(self, cr, ui, vals, context=None):
         "check if external mapping key already exists, else create it"
-        if not vals.get('external_field_id', False):
-            referential = self.pool.get('external.referential').browse(cr, ui, vals['referential_id'])
-            field_vals = {
-                'name':referential.mapping_column_name,
-                'model_id':vals['model_id'],
-                'model':self.pool.get('ir.model').browse(cr, ui, vals['model_id']).model,
-                'field_description':str(referential.mapping_column_name) + " Ref",
-                'ttype':'integer',
-            }
-            field_id = self.pool.get('ir.model.fields').create(cr, ui, field_vals)
-            vals['external_field_id'] = field_id
+        referential = self.pool.get('external.referential').browse(cr, ui, vals['referential_id'])
+        #check if field exists in model
+        model_id = self.pool.get('ir.model').browse(cr, ui, vals['model_id']).model
+        field_id = self.pool.get('ir.model.fields').search(cr,ui,[('model_id','=',vals['model_id']),('name','=',referential.mapping_column_name)])
+        if not field_id:
+            if not vals.get('external_field_id', False):
+                field_vals = {
+                    'name':referential.mapping_column_name,
+                    'model_id':vals['model_id'],
+                    'model':self.pool.get('ir.model').browse(cr, ui, vals['model_id']).model,
+                    'field_description':str(referential.mapping_column_name) + " Ref",
+                    'ttype':'integer',
+                }
+                field_id = self.pool.get('ir.model.fields').create(cr, ui, field_vals, context={'manual':True})
+                vals['external_field_id'] = field_id
         return super(external_mapping, self).create(cr, ui, vals, context)
 
 external_mapping()
 
 
 class external_mapping_line(osv.osv):
-    _name = 'external.mapping.line'
+    _inherit = 'external.mapping.line'
     
     _columns = {
         'field_id': fields.many2one('ir.model.fields', 'OpenERP Field', select=True, ondelete='cascade'),

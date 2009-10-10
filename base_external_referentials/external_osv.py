@@ -66,7 +66,7 @@ class external_osv(osv.osv):
                                     'external_referential_id':external_referential_id,
                                     'defaults':defaults,
                                     'context':context,
-                                    'if':type_casted_field
+                                    'ifield':type_casted_field
                                         }
                             #The expression should return value in list of tuple format
                             #eg[('name','Sharoon'),('age',20)] -> vals = {'name':'Sharoon', 'age':20}
@@ -82,9 +82,10 @@ class external_osv(osv.osv):
                             vals[each_default_entry] = defaults[each_default_entry]
                         #Vals is complete now, perform a record check, for that we need foreign field
                         for_key_field = self.pool.get('external.mapping').read(cr,uid,mapping_id[0],['external_field'])['external_field']
+                        vals[for_key_field] = external_referential_id
                         if vals and for_key_field in vals.keys():
                             #Check if record exists
-                            existing_rec_ids = self.search(cr,uid,[(for_key_field,'=',vals['for_key_field'])]) 
+                            existing_rec_ids = self.search(cr,uid,[(for_key_field,'=',vals[for_key_field])]) 
                             if existing_rec_ids:
                                 if self.write(cr,uid,existing_rec_ids,vals,context):
                                     write_ids.append(existing_rec_ids)

@@ -91,7 +91,7 @@ class external_osv(osv.osv):
                         for each_default_entry in defaults.keys():
                             vals[each_default_entry] = defaults[each_default_entry]
                         #Vals is complete now, perform a record check, for that we need foreign field
-                        for_key_field = self.pool.get('external.mapping').read(cr,uid,mapping_id[0],['external_field'])['external_field']
+                        for_key_field = self.pool.get('external.mapping').read(cr,uid,mapping_id[0],['external_key_name'])['external_key_name']
                         vals[for_key_field] = external_referential_id
                         if vals and for_key_field in vals.keys():
                             #Check if record exists
@@ -100,7 +100,15 @@ class external_osv(osv.osv):
                                 if self.write(cr,uid,existing_rec_ids,vals,context):
                                     write_ids.append(existing_rec_ids)
                             else:
-                                create_ids.append(self.create(cr,uid,vals,context))
+                                crid = self.create(cr,uid,vals,context)
+                                create_ids.append(crid)
+                                ir_model_data_vals = {
+                                        'name':str(vals[for_key_field]),
+                                        'model':self._name,
+                                        'res_id':crid,
+                                        'external_referential_id':external_referential_id
+                                                      }
+                                self.pool.get('ir.model.data').create(cr,uid,ir_model_data_vals)
 
     def ext_export_data(self,cr,uid,ids,external_referential_id,defaults={},context={}):
         #if ids is [] all records are selected or ids has to be a list of ids

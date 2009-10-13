@@ -29,23 +29,17 @@ class external_osv(osv.osv):
         mapping_id = self.pool.get('external.mapping').search(cr, uid, [('model', '=', self._name), ('referential_id', '=', external_referential_id)])
         if mapping_id:
             #now get the external field name
-            ext_field_name = self.pool.get('external.mapping').read(cr, uid, mapping_id[0], ['external_field'])['external_field']
+            ext_field_name = self.pool.get('external.mapping').read(cr, uid, mapping_id[0], ['external_key_name'])['external_key_name']
+            ext_field_value = self.read(cr,uid,ids,[ext_field_name])[ext_field_name]
             if ext_field_name:
                 #now get the oe_id
-                oe_id = self.search(cr, uid, [(ext_field_name, '=', ids)])
-                if oe_id:
-                    return oe_id[0]
+                model_data_id = self.pool.get('ir.model.data').search(cr,uid,[('name','=',ext_field_value),('model','=',self._name),('external_referential_id','=',external_referential_id)])
+                if model_data_id:
+                    oe_id = self.pool.get('ir.model.data').read(cr,uid,ids,['res_id'])['res_id']
+                    if oe_id:
+                        return oe_id
+        return False
     
-    def where_i_belong(self,cr,uid,id):
-        all_mapping_cols = self.pool.get('external.referential')._get_all_mappingcolnames(cr,uid)
-        result = {}
-        if all_mapping_cols:
-            my_read = self.read(cr,uid,id,[])
-            for each_key in all_mapping_cols:
-                if each_key in my_read.keys() and my_read[each_key]:
-                    result[each_key] = my_read[each_key]
-        return result
-        
     def ext_import(self,cr, uid, data, external_referential_id, defaults={}, context={}):
         #Inward data has to be list of dictionary
         #This function will import a given set of data as list of dictionary into Open ERP
@@ -103,7 +97,7 @@ class external_osv(osv.osv):
                                 crid = self.create(cr,uid,vals,context)
                                 create_ids.append(crid)
                                 ir_model_data_vals = {
-                                        'name':str(vals[for_key_field]),
+                                        'name':unicode(vals[for_key_field]),
                                         'model':self._name,
                                         'res_id':crid,
                                         'external_referential_id':external_referential_id

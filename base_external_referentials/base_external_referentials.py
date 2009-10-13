@@ -44,6 +44,7 @@ class external_mapping_srcrecs(osv.osv):
         'external_update_method': fields.char('Update Method', size=64),
         'external_create_method': fields.char('Create Method', size=64),
         'external_delete_method': fields.char('Delete Method', size=64),
+        'external_key_name':fields.char('External field used as key',size=64)
                 }
 external_mapping_srcrecs()
 
@@ -180,8 +181,7 @@ class external_mapping(osv.osv):
         'external_create_method': fields.char('Create Method', size=64),
         'external_delete_method': fields.char('Delete Method', size=64),
         'mapping_ids': fields.one2many('external.mapping.line', 'mapping_id', 'Mappings Lines'),
-        'external_field_id':fields.many2one('ir.model.fields', 'Foreign Key Field'),
-        'external_field':fields.related('external_field_id','name',type='char', string='Foreign Key Field Name'),
+        'external_key_name':fields.char('External field used as key',size=64,required=True)
     }
 
 external_mapping()
@@ -218,3 +218,10 @@ class external_mapping_line(osv.osv):
     _order = 'type,external_type'
     #TODO add constraint: not both field_id and external_field null
 external_mapping_line()
+
+class ir_model_data(osv.osv):
+    _inherit="ir.model.data"
+    _columns = {
+        'external_referential_id':fields.many2one('external.referential','Ext. Referential')
+                }
+ir_model_data()

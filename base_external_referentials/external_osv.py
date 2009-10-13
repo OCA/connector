@@ -36,6 +36,16 @@ class external_osv(osv.osv):
                 if oe_id:
                     return oe_id[0]
     
+    def where_i_belong(self,cr,uid,id):
+        all_mapping_cols = self.pool.get('external.referential')._get_all_mappingcolnames(cr,uid)
+        result = {}
+        if all_mapping_cols:
+            my_read = self.read(cr,uid,id,[])
+            for each_key in all_mapping_cols:
+                if each_key in my_read.keys() and my_read[each_key]:
+                    result[each_key] = my_read[each_key]
+        return result
+        
     def ext_import(self,cr, uid, data, external_referential_id, defaults={}, context={}):
         #Inward data has to be list of dictionary
         #This function will import a given set of data as list of dictionary into Open ERP

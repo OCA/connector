@@ -21,8 +21,6 @@
 ##############################################################################
 
 from osv import fields, osv
-from sets import Set
-
 
 class external_referential_type(osv.osv):
     _name = 'external.referential.type'
@@ -68,15 +66,6 @@ class external_referential(osv.osv):
     _name = 'external.referential'
     _description = 'External Referential'
 
-    def _mapping_column_name(self, cr, uid, ids, name, arg, context=None):
-        res = {}
-        for referential in self.browse(cr, uid, ids, context):
-            if referential.name:
-                res[referential.id] = "x_" + referential.name.replace('-', '').replace(' ', '').lower() + "_id"
-            else:
-                res[referential.id] = False
-        return res    
-    
     def refresh_mapping(self,cr,uid,ids,ctx={}):
         #This function will reinstate mapping & mapping_lines for registered objects
         for id in ids:
@@ -121,7 +110,6 @@ class external_referential(osv.osv):
         'apiusername': fields.char('User Name', size=64),
         'apipass': fields.char('Password', size=64),
         'mapping_ids': fields.one2many('external.mapping', 'referential_id', 'Mappings'),
-        'mapping_column_name': fields.function(_mapping_column_name, method=True, type="char", string='Column Name', help='Column in OpenERP mapped tables for bookkeeping the external id'),
         'state':fields.selection([
                                   ('draft','Drafting'),
                                   ('done','Done') 
@@ -195,25 +183,6 @@ class external_mapping(osv.osv):
         'external_field_id':fields.many2one('ir.model.fields', 'Foreign Key Field'),
         'external_field':fields.related('external_field_id','name',type='char', string='Foreign Key Field Name'),
     }
-    
-    def create(self, cr, ui, vals, context=None):
-        "check if external mapping key already exists, else create it"
-        referential = self.pool.get('external.referential').browse(cr, ui, vals['referential_id'])
-        #check if field exists in model
-        model_id = self.pool.get('ir.model').browse(cr, ui, vals['model_id']).model
-        field_id = self.pool.get('ir.model.fields').search(cr,ui,[('model_id','=',vals['model_id']),('name','=',referential.mapping_column_name)])
-        if not field_id:
-            if not vals.get('external_field_id', False):
-                field_vals = {
-                    'name':referential.mapping_column_name,
-                    'model_id':vals['model_id'],
-                    'model':self.pool.get('ir.model').browse(cr, ui, vals['model_id']).model,
-                    'field_description':str(referential.mapping_column_name) + " Ref",
-                    'ttype':'integer',
-                }
-                field_id = self.pool.get('ir.model.fields').create(cr, ui, field_vals, context={'manual':True})
-                vals['external_field_id'] = field_id
-        return super(external_mapping, self).create(cr, ui, vals, context)
 
 external_mapping()
 

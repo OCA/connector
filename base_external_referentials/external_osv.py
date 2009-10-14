@@ -86,20 +86,19 @@ class external_osv(osv.osv):
                             vals[each_default_entry] = defaults[each_default_entry]
                         #Vals is complete now, perform a record check, for that we need foreign field
                         for_key_field = self.pool.get('external.mapping').read(cr,uid,mapping_id[0],['external_key_name'])['external_key_name']
-                        del vals[for_key_field]
                         if vals and for_key_field in vals.keys():
+                            del vals[for_key_field]
                             #Check if record exists
-                            #existing_rec_ids = self.search(cr,uid,[(for_key_field,'=',vals[for_key_field])]) 
-                            ir_model_data_ids = self.pool.get('ir.model.data').search(cr, uid, [('model', '=', self._name), ('name', '=', external_referential_id)])
-                            existing_rec_ids = self.pool.get('ir.model.data').read(cr, uid, ir_model_data_ids, ['res_id'])
-                            if existing_rec_ids:
-                                if self.write(cr,uid,existing_rec_ids,vals,context):
-                                    write_ids.append(existing_rec_ids)
+                            existing_ir_model_data_id = self.pool.get('ir.model.data').search(cr, uid, [('model', '=', self._name), ('name', '=', external_referential_id)])
+                            if existing_ir_model_data_id:
+                                existing_rec_id = self.pool.get('ir.model.data').read(cr, uid, existing_ir_model_data_id, ['res_id'])[0]['res_id']
+                                if self.write(cr,uid,existing_rec_id,vals,context):
+                                    write_ids.append(existing_rec_id)
                             else:
                                 crid = self.create(cr,uid,vals,context)
                                 create_ids.append(crid)
                                 ir_model_data_vals = {
-                                        'name':unicode(vals[for_key_field]),
+                                        'name':unicode(external_referential_id),
                                         'model':self._name,
                                         'res_id':crid,
                                         'external_referential_id':external_referential_id,

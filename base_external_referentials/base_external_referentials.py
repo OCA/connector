@@ -21,6 +21,7 @@
 ##############################################################################
 
 from osv import fields, osv
+from sets import Set
 
 class external_referential_type(osv.osv):
     _name = 'external.referential.type'
@@ -88,6 +89,7 @@ class external_referential(osv.osv):
                                 'external_update_method': each_mapping_rec['external_update_method'],
                                 'external_create_method': each_mapping_rec['external_create_method'],
                                 'external_delete_method': each_mapping_rec['external_delete_method'],
+                                'external_key_name': each_mapping_rec['external_key_name'],
                                             }
                 mapping_id = mappings_obj.create(cr,uid,vals)
                 #Now create mapping lines of the created mapping model
@@ -224,4 +226,9 @@ class ir_model_data(osv.osv):
     _columns = {
         'external_referential_id':fields.many2one('external.referential','Ext. Referential')
                 }
+    
+    #should override unique(name, module) constraint!
+    _sql_constraints = [
+        ('module_name_uniq', 'unique(name, module, model)', 'You can not have multiple records with the same id for the same module'),
+    ]
 ir_model_data()

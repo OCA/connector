@@ -12,7 +12,6 @@
 						<notebook colspan="4">
 							<page string="General">
 								<field name="type_id" />
-								<field name="mapping_column_name" />
 								<field name="location" />
 							</page>
 							<page string="Authentication">
@@ -28,7 +27,6 @@
 						<tree string="Object Mappings">
 							<field name="model_id" />
 							<field name="related_model_ids" invisible="1" />
-							<field name="external_field_id" />
 							<field name="mapping_ids" />
 						</tree>
 						<form string="Object Mappings">
@@ -40,6 +38,7 @@
 								<field name="external_update_method" />
 								<field name="external_create_method" />
 								<field name="external_delete_method" />
+								<field name="external_key_name" />
 							</group>
 							<field colspan="4" name="mapping_ids" widget="one2many_list" nolabel="1" context="{'model_id':model_id}">
 								<tree editable="bottom" string="Field Mappings">

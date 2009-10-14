@@ -86,10 +86,12 @@ class external_osv(osv.osv):
                             vals[each_default_entry] = defaults[each_default_entry]
                         #Vals is complete now, perform a record check, for that we need foreign field
                         for_key_field = self.pool.get('external.mapping').read(cr,uid,mapping_id[0],['external_key_name'])['external_key_name']
-                        vals[for_key_field] = external_referential_id
+                        del vals[for_key_field]
                         if vals and for_key_field in vals.keys():
                             #Check if record exists
-                            existing_rec_ids = self.search(cr,uid,[(for_key_field,'=',vals[for_key_field])]) 
+                            #existing_rec_ids = self.search(cr,uid,[(for_key_field,'=',vals[for_key_field])]) 
+                            ir_model_data_ids = self.pool.get('ir.model.data').search(cr, uid, [('model', '=', self._name), ('name', '=', external_referential_id)])
+                            existing_rec_ids = self.pool.get('ir.model.data').read(cr, uid, ir_model_data_ids, ['res_id'])
                             if existing_rec_ids:
                                 if self.write(cr,uid,existing_rec_ids,vals,context):
                                     write_ids.append(existing_rec_ids)
@@ -100,7 +102,8 @@ class external_osv(osv.osv):
                                         'name':unicode(vals[for_key_field]),
                                         'model':self._name,
                                         'res_id':crid,
-                                        'external_referential_id':external_referential_id
+                                        'external_referential_id':external_referential_id,
+                                        'module':'base_external_referentials'
                                                       }
                                 self.pool.get('ir.model.data').create(cr,uid,ir_model_data_vals)
 

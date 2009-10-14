@@ -33,8 +33,8 @@ class external_referential_type(osv.osv):
     
 external_referential_type()
 
-class external_mapping_srcrecs(osv.osv):
-    _name = "external.mapping.srcrecs"
+class external_mapping_template(osv.osv):
+    _name = "external.mapping.template"
     _description = "The source mapping records"
     _columns = {
         'type_id':fields.many2one('external.referential.type','External Referential Type',ondelete='cascade',select=True),
@@ -47,10 +47,10 @@ class external_mapping_srcrecs(osv.osv):
         'external_delete_method': fields.char('Delete Method', size=64),
         'external_key_name':fields.char('External field used as key',size=64)
                 }
-external_mapping_srcrecs()
+external_mapping_template()
 
-class external_mappinglines_srcrecs(osv.osv):
-    _name = 'external.mappinglines.srcrecs'
+class external_mappinglines_template(osv.osv):
+    _name = 'external.mappinglines.template'
     _description = 'The source mapping line records'
     _columns = {
         'type_id':fields.many2one('external.referential.type','External Referential Type',ondelete='cascade',select=True),
@@ -62,7 +62,7 @@ class external_mappinglines_srcrecs(osv.osv):
         'in_function': fields.text('Import in OpenERP Mapping Python Function'),
         'out_function': fields.text('Export from OpenERP Mapping Python Function'),
                 }
-external_mappinglines_srcrecs()
+external_mappinglines_template()
 
 class external_referential(osv.osv):
     _name = 'external.referential'
@@ -79,8 +79,8 @@ class external_referential(osv.osv):
             if existing_mapping_ids:
                 mappings_obj.unlink(cr,uid,existing_mapping_ids)
             #Fetch mapping lines now
-            mapping_src_ids = self.pool.get('external.mapping.srcrecs').search(cr,uid,[('type_id','=',ext_ref.type_id.id)])
-            for each_mapping_rec in self.pool.get('external.mapping.srcrecs').read(cr,uid,mapping_src_ids,[]):
+            mapping_src_ids = self.pool.get('external.mapping.template').search(cr,uid,[('type_id','=',ext_ref.type_id.id)])
+            for each_mapping_rec in self.pool.get('external.mapping.template').read(cr,uid,mapping_src_ids,[]):
                 vals = {
                                 'referential_id': id,
                                 'model_id': each_mapping_rec['model_id'][0] or False,
@@ -93,8 +93,8 @@ class external_referential(osv.osv):
                                             }
                 mapping_id = mappings_obj.create(cr,uid,vals)
                 #Now create mapping lines of the created mapping model
-                mapping_lines_src_ids = self.pool.get('external.mappinglines.srcrecs').search(cr,uid,[('type_id','=',ext_ref.type_id.id),('model_id','=',each_mapping_rec['model_id'][0])])
-                for each_mapping_line_rec in  self.pool.get('external.mappinglines.srcrecs').read(cr,uid,mapping_lines_src_ids,[]):
+                mapping_lines_src_ids = self.pool.get('external.mappinglines.template').search(cr,uid,[('type_id','=',ext_ref.type_id.id),('model_id','=',each_mapping_rec['model_id'][0])])
+                for each_mapping_line_rec in  self.pool.get('external.mappinglines.template').read(cr,uid,mapping_lines_src_ids,[]):
                     vals = {
                         'external_field': each_mapping_line_rec['external_field'],
                         'mapping_id': mapping_id,

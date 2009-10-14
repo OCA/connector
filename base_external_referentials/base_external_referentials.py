@@ -226,9 +226,5 @@ class ir_model_data(osv.osv):
     _columns = {
         'external_referential_id':fields.many2one('external.referential','Ext. Referential')
                 }
-    
-    #should override unique(name, module) constraint!
-    _sql_constraints = [
-        ('module_name_uniq', 'unique(name, module, model)', 'You can not have multiple records with the same id for the same module'),
-    ]
+
 ir_model_data()

@@ -23,6 +23,13 @@
 from osv import fields, osv
 
 class external_osv(osv.osv):
+    
+    def prefixed_id(self, id):
+        return self._name + '_' + str(id)
+    
+    def id_from_prefixed_id(self, prefixed_id):
+        return prefixed_id.split(self._name + '_')[1]
+
     def extid_to_oeid(self, cr, uid, ids, external_referential_id):
         #First get the external key field name
         #conversion external id -> OpenERP object using Object mapping_column_name key!
@@ -33,9 +40,9 @@ class external_osv(osv.osv):
             ext_field_value = self.read(cr,uid,ids,[ext_field_name])[ext_field_name]
             if ext_field_name:
                 #now get the oe_id
-                model_data_id = self.pool.get('ir.model.data').search(cr,uid,[('name','=',ext_field_value),('model','=',self._name),('external_referential_id','=',external_referential_id)])
+                model_data_id = self.pool.get('ir.model.data').search(cr,uid,[('name','=', self.prefixed_id(ext_field_value)),('model','=',self._name),('external_referential_id','=',external_referential_id)])
                 if model_data_id:
-                    oe_id = self.pool.get('ir.model.data').read(cr,uid,ids,['res_id'])['res_id']
+                    oe_id = self.pool.get('ir.model.data').read(cr,uid,model_data_id,['res_id'])['res_id']
                     if oe_id:
                         return oe_id
         return False
@@ -89,16 +96,16 @@ class external_osv(osv.osv):
                         if vals and for_key_field in vals.keys():
                             del vals[for_key_field]
                             #Check if record exists
-                            existing_ir_model_data_id = self.pool.get('ir.model.data').search(cr, uid, [('model', '=', self._name), ('name', '=', external_referential_id)])
+                            existing_ir_model_data_id = self.pool.get('ir.model.data').search(cr, uid, [('model', '=', self._name), ('name', '=', self.prefixed_id(external_referential_id))])
                             if existing_ir_model_data_id:
-                                existing_rec_id = self.pool.get('ir.model.data').read(cr, uid, existing_ir_model_data_id, ['res_id'])[0]['res_id']
+                                existing_rec_id = self.pool.get('ir.model.data').read(cr, uid, self.id_from_prefixed_id(existing_ir_model_data_id), ['res_id'])[0]['res_id']
                                 if self.write(cr,uid,existing_rec_id,vals,context):
                                     write_ids.append(existing_rec_id)
                             else:
                                 crid = self.create(cr,uid,vals,context)
                                 create_ids.append(crid)
                                 ir_model_data_vals = {
-                                        'name':unicode(external_referential_id),
+                                        'name':self.prefixed_id(external_referential_id),
                                         'model':self._name,
                                         'res_id':crid,
                                         'external_referential_id':external_referential_id,

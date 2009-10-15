@@ -31,20 +31,20 @@ class external_osv(osv.osv):
         return prefixed_id.split(self._name + '_')[1]
     
     def referential_id(self, cr, uid, id):
-        model_data_id = self.pool.get('ir.model.data').search(cr,uid,[('res_id','=', id),('model','=',self._name)])
+        model_data_id = self.pool.get('ir.model.data').search(cr,uid,[('res_id','=', id),('model','=',self._name),('module', '=', 'base_external_referentials')])
         if model_data_id:
             return self.pool.get('ir.model.data').read(cr,uid,model_data_id[0],['external_referential_id'])['external_referential_id'][0]
         else:
-            return false
+            return False
 
     def extid_to_oeid(self, cr, uid, ids, external_referential_id):
         #First get the external key field name
         #conversion external id -> OpenERP object using Object mapping_column_name key!
         mapping_id = self.pool.get('external.mapping').search(cr, uid, [('model', '=', self._name), ('referential_id', '=', external_referential_id)])
         if mapping_id:
-            model_data_id = self.pool.get('ir.model.data').search(cr,uid,[('name','=', self.prefixed_id(ids)),('model','=',self._name),('external_referential_id','=',external_referential_id)])[0]
-            if model_data_id:
-                oe_id = self.pool.get('ir.model.data').read(cr,uid,model_data_id,['res_id'])['res_id']
+            model_data_ids = self.pool.get('ir.model.data').search(cr,uid,[('name','=', self.prefixed_id(ids)),('model','=',self._name),('external_referential_id','=',external_referential_id)])
+            if model_data_ids:
+                oe_id = self.pool.get('ir.model.data').read(cr,uid,model_data_ids[0],['res_id'])['res_id']
                 if oe_id:
                     return oe_id
         return False
@@ -96,9 +96,10 @@ class external_osv(osv.osv):
                         #Vals is complete now, perform a record check, for that we need foreign field
                         for_key_field = self.pool.get('external.mapping').read(cr,uid,mapping_id[0],['external_key_name'])['external_key_name']
                         if vals and for_key_field in vals.keys():
+                            external_id = vals[for_key_field]
                             del vals[for_key_field]
                             #Check if record exists
-                            existing_ir_model_data_id = self.pool.get('ir.model.data').search(cr, uid, [('model', '=', self._name), ('name', '=', self.prefixed_id(external_referential_id))])
+                            existing_ir_model_data_id = self.pool.get('ir.model.data').search(cr, uid, [('model', '=', self._name), ('name', '=', self.prefixed_id(external_id))])
                             if existing_ir_model_data_id:
                                 existing_rec_id = self.pool.get('ir.model.data').read(cr, uid, existing_ir_model_data_id, ['res_id'])[0]['res_id']
                                 if self.write(cr,uid,existing_rec_id,vals,context):
@@ -107,7 +108,7 @@ class external_osv(osv.osv):
                                 crid = self.create(cr,uid,vals,context)
                                 create_ids.append(crid)
                                 ir_model_data_vals = {
-                                        'name':self.prefixed_id(external_referential_id),
+                                        'name':self.prefixed_id(external_id),
                                         'model':self._name,
                                         'res_id':crid,
                                         'external_referential_id':external_referential_id,

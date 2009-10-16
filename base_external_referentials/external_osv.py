@@ -107,6 +107,7 @@ class external_osv(osv.osv):
                                 existing_rec_id = self.pool.get('ir.model.data').read(cr, uid, existing_ir_model_data_id, ['res_id'])[0]['res_id']
                                 if self.write(cr,uid,existing_rec_id,vals,context):
                                     write_ids.append(existing_rec_id)
+                                    self.pool.get('ir.model.data').write(cr, uid, existing_ir_model_data_id,{'res_id':existing_rec_id})
                             else:
                                 crid = self.create(cr,uid,vals,context)
                                 create_ids.append(crid)
@@ -200,9 +201,19 @@ class external_osv(osv.osv):
                             #Remove prefix and get remote record id
                             prefixed_id = self.pool.get('ir.model.data').read(cr,uid,rec_check_ids[0],['name'])['name']
                             ext_id = int(self.id_from_prefixed_id(prefixed_id))
-                            #Record exists only update is required
-                            if conn and mapping_rec['external_update_method']:
-                                self.ext_update(cr, uid, exp_data[0], conn, mapping_rec['external_update_method'], ext_id)
+                            #Record exists, check if update is required, for that collect last update times from ir.data & record
+                            last_exported_times = self.pool.get('ir.model.data').read(cr,uid,rec_check_ids[0],['write_date','create_date'])
+                            last_exported_time = last_exported_times['write_date'] or last_exported_times['create_date']
+                            this_record_times = self.read(cr,uid,id,['write_date','create_date'])
+                            last_updated_time = this_record_times['write_date'] or this_record_times['create_date']
+                            if True:#if last_updated_time < last_exported_time by more than 2 seconds
+                                if conn and mapping_rec['external_update_method']:
+                                    self.ext_update(cr, uid, exp_data[0], conn, mapping_rec['external_update_method'], ext_id)
+                                    #Just simply write to ir.model.data to update the updated time
+                                    ir_model_data_vals = {
+                                            'res_id':id,
+                                                          }
+                                    self.pool.get('ir.model.data').write(cr,uid,rec_check_ids[0],ir_model_data_vals)
                         else:
                             #Record needs to be created
                             if conn and mapping_rec['external_create_method']:

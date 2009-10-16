@@ -100,7 +100,7 @@ class external_osv(osv.osv):
                         for_key_field = self.pool.get('external.mapping').read(cr,uid,mapping_id[0],['external_key_name'])['external_key_name']
                         if vals and for_key_field in vals.keys():
                             external_id = vals[for_key_field]
-                            del vals[for_key_field]
+                            #del vals[for_key_field] looks like it is affecting the import :(
                             #Check if record exists
                             existing_ir_model_data_id = self.pool.get('ir.model.data').search(cr, uid, [('model', '=', self._name), ('name', '=', self.prefixed_id(external_id))])
                             if existing_ir_model_data_id:
@@ -153,13 +153,14 @@ class external_osv(osv.osv):
                                     }
                             #The expression should return value in list of tuple format
                             #eg[('name','Sharoon'),('age',20)] -> vals = {'name':'Sharoon', 'age':20}
-                            exec each_mapping_line['out_function'] in space
-                            result = space.get('result',False)
-                            #If result exists and is of type list
-                            if result and type(result)==list:
-                                for each_tuple in result:
-                                    if type(each_tuple)==tuple and len(each_tuple)==2:
-                                        vals[each_tuple[0]] = each_tuple[1]
+                            if each_mapping_line['out_function']:
+                                exec each_mapping_line['out_function'] in space
+                                result = space.get('result',False)
+                                #If result exists and is of type list
+                                if result and type(result)==list:
+                                    for each_tuple in result:
+                                        if type(each_tuple)==tuple and len(each_tuple)==2:
+                                            vals[each_tuple[0]] = each_tuple[1]
                         #Every mapping line has now been translated into vals dictionary, now set defaults if any
                         for each_default_entry in defaults.keys():
                             vals[each_default_entry] = defaults[each_default_entry]
@@ -177,18 +178,21 @@ class external_osv(osv.osv):
             if not external_referential_ids:
                 ir_model_data_recids = self.pool.get('ir.model.data').search(cr,uid,[('model','=',self._name),('res_id','=',id),('module','=','base_external_referentials')])
                 if ir_model_data_recids:
-                    for each_model_rec in self.pool.get('ir.model.data').read(cr,uid,['external_reference']):
-                        if each_model_rec['external_reference']:
-                            external_referential_ids.append(each_model_rec['external_reference'])
+                    for each_model_rec in self.pool.get('ir.model.data').read(cr,uid,ir_model_data_recids,['external_referential_id']):
+                        if each_model_rec['external_referential_id']:
+                            external_referential_ids.append(each_model_rec['external_referential_id'][0])
+            #if still theres no external_referential_ids then export to all referentials
+            if not external_referential_ids:
+                external_referential_ids = self.pool.get('external.referential').search(cr,uid,[])
             #Do an export for each external ID
             for each_ext_ref in external_referential_ids:
                 exp_data = self.ext_export_data(cr, uid, [id], each_ext_ref, defaults, context)
                 if exp_data and len(exp_data)==1:
                     #Check if export for this referential demands a create or update
-                    rec_check_ids = self.pool.get('ir.model.data').search(cr,uid,[('model','=',self._name),('res_id','=',id),('module','=','base_external_referentials'),('external_reference','=',each_ext_ref)])
+                    rec_check_ids = self.pool.get('ir.model.data').search(cr,uid,[('model','=',self._name),('res_id','=',id),('module','=','base_external_referentials'),('external_referential_id','=',each_ext_ref)])
                     #rec_check_ids will indicate if the product already has a mapping record with ext system
                     mapping_id = self.pool.get('external.mapping').search(cr,uid,[('model','=',self._name),('referential_id','=',each_ext_ref)])
-                    if maping_id and len(maping_id)==1:
+                    if mapping_id and len(mapping_id)==1:
                         mapping_rec = self.pool.get('external.mapping').read(cr,uid,mapping_id[0],['external_update_method','external_create_method'])
                         conn = context.get('conn_obj',False)
                         if rec_check_ids and mapping_rec and len(rec_check_ids)==1:
@@ -198,11 +202,11 @@ class external_osv(osv.osv):
                             ext_id = int(self.id_from_prefixed_id(prefixed_id))
                             #Record exists only update is required
                             if conn and mapping_rec['external_update_method']:
-                                conn.call(mapping_rec['external_update_method'],[ext_id,exp_data[0]])
+                                self.ext_update(cr, uid, exp_data[0], conn, mapping_rec['external_update_method'], ext_id)
                         else:
                             #Record needs to be created
                             if conn and mapping_rec['external_create_method']:
-                                crid = conn.call(mapping_rec['external_create_method'],exp_data)
+                                crid = self.ext_create(cr, uid, exp_data[0], conn, mapping_rec['external_create_method'])
                                 ir_model_data_vals = {
                                         'name':self.prefixed_id(crid),
                                         'model':self._name,
@@ -211,3 +215,9 @@ class external_osv(osv.osv):
                                         'module':'base_external_referentials'
                                                       }
                                 self.pool.get('ir.model.data').create(cr,uid,ir_model_data_vals)
+    
+    def ext_create(self,cr,uid,data,conn,method):
+        return conn.call(method,data)
+    
+    def ext_update(self,cr,uid,data,conn,method,existing_id):    
+        conn.call(method,[existing_id,data])

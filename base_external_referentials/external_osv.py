@@ -170,6 +170,8 @@ class external_osv(osv.osv):
     
     def ext_export(self,cr, uid, ids, external_referential_ids=[], defaults={}, context={}):
         #external_referential_ids has to be alist
+        if not ids:
+            ids = self.search(cr,uid,[])
         for id in ids:
             #If no external_ref_ids are mentioned, then take all ext_ref_this item has
             if not external_referential_ids:

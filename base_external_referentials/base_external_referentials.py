@@ -224,7 +224,9 @@ external_mapping_line()
 class ir_model_data(osv.osv):
     _inherit="ir.model.data"
     _columns = {
-        'external_referential_id':fields.many2one('external.referential','Ext. Referential')
+        'external_referential_id':fields.many2one('external.referential','Ext. Referential'),
+        'create_date': fields.datetime('Created date', readonly=True),
+        'write_date': fields.datetime('Updated date', readonly=True),
                 }
 
 ir_model_data()

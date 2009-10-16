@@ -22,6 +22,8 @@
 
 from osv import fields, osv
 import base64
+import time
+import datetime
 
 class external_osv(osv.osv):
     
@@ -203,17 +205,21 @@ class external_osv(osv.osv):
                             ext_id = int(self.id_from_prefixed_id(prefixed_id))
                             #Record exists, check if update is required, for that collect last update times from ir.data & record
                             last_exported_times = self.pool.get('ir.model.data').read(cr,uid,rec_check_ids[0],['write_date','create_date'])
-                            last_exported_time = last_exported_times['write_date'] or last_exported_times['create_date']
+                            last_exported_time = last_exported_times.get('write_date',False) or last_exported_times.get('create_date',False)
                             this_record_times = self.read(cr,uid,id,['write_date','create_date'])
-                            last_updated_time = this_record_times['write_date'] or this_record_times['create_date']
-                            if True:#if last_updated_time < last_exported_time by more than 2 seconds
-                                if conn and mapping_rec['external_update_method']:
-                                    self.ext_update(cr, uid, exp_data[0], conn, mapping_rec['external_update_method'], ext_id)
-                                    #Just simply write to ir.model.data to update the updated time
-                                    ir_model_data_vals = {
-                                            'res_id':id,
-                                                          }
-                                    self.pool.get('ir.model.data').write(cr,uid,rec_check_ids[0],ir_model_data_vals)
+                            last_updated_time = this_record_times.get('write_date',False) or this_record_times.get('create_date',False)
+                            if last_updated_time and last_exported_time:
+                                last_exported_time=datetime.datetime.fromtimestamp(time.mktime(time.strptime(last_exported_time, '%Y-%m-%d %H:%M:%S')))
+                                last_updated_time=datetime.datetime.fromtimestamp(time.mktime(time.strptime(last_updated_time, '%Y-%m-%d %H:%M:%S')))
+                                if (last_updated_time - last_exported_time).__abs__().seconds < 1:#if last_updated_time < last_exported_time by more than 2 seconds
+                                    continue
+                            if conn and mapping_rec['external_update_method']:
+                                self.ext_update(cr, uid, exp_data[0], conn, mapping_rec['external_update_method'], ext_id)
+                                #Just simply write to ir.model.data to update the updated time
+                                ir_model_data_vals = {
+                                        'res_id':id,
+                                                      }
+                                self.pool.get('ir.model.data').write(cr,uid,rec_check_ids[0],ir_model_data_vals)
                         else:
                             #Record needs to be created
                             if conn and mapping_rec['external_create_method']:

@@ -59,6 +59,48 @@ class external_osv(osv.osv):
             res[record['id']] = rid
         return res
     
+    def oevals_from_extdata(self, cr, uid, external_referential_id, data_record, key_field, mapping_lines, defaults, context):
+        vals = {} #Dictionary for create record
+        for each_mapping_line in mapping_lines:
+            #Type cast if the expression exists
+            if each_mapping_line['external_type']:
+                type_casted_field = eval(each_mapping_line['external_type'])(data_record.get(each_mapping_line['external_field'],False))
+            else:
+                type_casted_field = data_record.get(each_mapping_line['external_field'],False)
+            #Build the space for expr
+            space = {
+                        'self':self,
+                        'cr':cr,
+                        'uid':uid,
+                        'data':data_record,
+                        'external_referential_id':external_referential_id,
+                        'defaults':defaults,
+                        'context':context,
+                        'ifield':type_casted_field,
+                        'conn':context.get('conn_obj',False),
+                        'base64':base64
+                    }
+            #The expression should return value in list of tuple format
+            #eg[('name','Sharoon'),('age',20)] -> vals = {'name':'Sharoon', 'age':20}
+            exec each_mapping_line['in_function'] in space
+            result = space.get('result',False)
+            #If result exists and is of type list
+            if result and type(result)==list:
+                for each_tuple in result:
+                    if type(each_tuple)==tuple and len(each_tuple)==2:
+                        vals[each_tuple[0]] = each_tuple[1] 
+        #Every mapping line has now been translated into vals dictionary, now set defaults if any
+        for each_default_entry in defaults.keys():
+            vals[each_default_entry] = defaults[each_default_entry]
+            
+        return vals
+
+
+    #TODO for export; reverse of oevals_from_extdata; extract code from ext_export method
+    def extdata_from_oevals(self, cr, uid, defaults, context):
+        pass
+
+    
     def ext_import(self,cr, uid, data, external_referential_id, defaults={}, context={}):
         #Inward data has to be list of dictionary
         #This function will import a given set of data as list of dictionary into Open ERP
@@ -72,41 +114,10 @@ class external_osv(osv.osv):
                 mapping_lines = self.pool.get('external.mapping.line').read(cr,uid,mapping_line_ids,['external_field','external_type','in_function'])
                 if mapping_lines:
                     #if mapping lines exist find the data conversion for each row in inward data
+                    for_key_field = self.pool.get('external.mapping').read(cr,uid,mapping_id[0],['external_key_name'])['external_key_name']
                     for each_row in data:
-                        vals = {} #Dictionary for create record
-                        for each_mapping_line in mapping_lines:
-                            #Type cast if the expression exists
-                            if each_mapping_line['external_type']:
-                                type_casted_field = eval(each_mapping_line['external_type'])(each_row.get(each_mapping_line['external_field'],False))
-                            else:
-                                type_casted_field = each_row.get(each_mapping_line['external_field'],False)
-                            #Build the space for expr
-                            space = {
-                                    'self':self,
-                                    'cr':cr,
-                                    'uid':uid,
-                                    'data':each_row,
-                                    'external_referential_id':external_referential_id,
-                                    'defaults':defaults,
-                                    'context':context,
-                                    'ifield':type_casted_field,
-                                    'conn':context.get('conn_obj',False),
-                                    'base64':base64
-                                        }
-                            #The expression should return value in list of tuple format
-                            #eg[('name','Sharoon'),('age',20)] -> vals = {'name':'Sharoon', 'age':20}
-                            exec each_mapping_line['in_function'] in space
-                            result = space.get('result',False)
-                            #If result exists and is of type list
-                            if result and type(result)==list:
-                                for each_tuple in result:
-                                    if type(each_tuple)==tuple and len(each_tuple)==2:
-                                        vals[each_tuple[0]] = each_tuple[1] 
-                        #Every mapping line has now been translated into vals dictionary, now set defaults if any
-                        for each_default_entry in defaults.keys():
-                            vals[each_default_entry] = defaults[each_default_entry]
-                        #Vals is complete now, perform a record check, for that we need foreign field
-                        for_key_field = self.pool.get('external.mapping').read(cr,uid,mapping_id[0],['external_key_name'])['external_key_name']
+                        vals = self.oevals_from_extdata(cr, uid, external_referential_id, each_row, for_key_field, mapping_lines, defaults, context)
+                        #perform a record check, for that we need foreign field
                         if vals and for_key_field in vals.keys():
                             external_id = vals[for_key_field]
                             #del vals[for_key_field] looks like it is affecting the import :(
@@ -130,11 +141,11 @@ class external_osv(osv.osv):
                                 crid = self.create(cr,uid,vals,context)
                                 create_ids.append(crid)
                                 ir_model_data_vals = {
-                                        'name':self.prefixed_id(external_id),
-                                        'model':self._name,
-                                        'res_id':crid,
-                                        'external_referential_id':external_referential_id,
-                                        'module':'base_external_referentials'
+                                                        'name':self.prefixed_id(external_id),
+                                                        'model':self._name,
+                                                        'res_id':crid,
+                                                        'external_referential_id':external_referential_id,
+                                                        'module':'base_external_referentials'
                                                       }
                                 self.pool.get('ir.model.data').create(cr,uid,ir_model_data_vals)
                                 
@@ -203,7 +214,7 @@ class external_osv(osv.osv):
                     for each_model_rec in self.pool.get('ir.model.data').read(cr,uid,ir_model_data_recids,['external_referential_id']):
                         if each_model_rec['external_referential_id']:
                             external_referential_ids.append(each_model_rec['external_referential_id'][0])
-            #if still theres no external_referential_ids then export to all referentials
+            #if still there no external_referential_ids then export to all referentials
             if not external_referential_ids:
                 external_referential_ids = self.pool.get('external.referential').search(cr,uid,[])
             #Do an export for each external ID

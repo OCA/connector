@@ -167,3 +167,45 @@ class external_osv(osv.osv):
                         if vals:
                             out_data.append(vals)
         return out_data
+    
+    def ext_export(self,cr, uid, ids, external_referential_ids=[], defaults={}, context={}):
+        #external_referential_ids has to be alist
+        for id in ids:
+            #If no external_ref_ids are mentioned, then take all ext_ref_this item has
+            if not external_referential_ids:
+                ir_model_data_recids = self.pool.get('ir.model.data').search(cr,uid,[('model','=',self._name),('res_id','=',id),('module','=','base_external_referentials')])
+                if ir_model_data_recids:
+                    for each_model_rec in self.pool.get('ir.model.data').read(cr,uid,['external_reference']):
+                        if each_model_rec['external_reference']:
+                            external_referential_ids.append(each_model_rec['external_reference'])
+            #Do an export for each external ID
+            for each_ext_ref in external_referential_ids:
+                exp_data = self.ext_export_data(cr, uid, [id], each_ext_ref, defaults, context)
+                if exp_data and len(exp_data)==1:
+                    #Check if export for this referential demands a create or update
+                    rec_check_ids = self.pool.get('ir.model.data').search(cr,uid,[('model','=',self._name),('res_id','=',id),('module','=','base_external_referentials'),('external_reference','=',each_ext_ref)])
+                    #rec_check_ids will indicate if the product already has a mapping record with ext system
+                    mapping_id = self.pool.get('external.mapping').search(cr,uid,[('model','=',self._name),('referential_id','=',each_ext_ref)])
+                    if maping_id and len(maping_id)==1:
+                        mapping_rec = self.pool.get('external.mapping').read(cr,uid,mapping_id[0],['external_update_method','external_create_method'])
+                        conn = context.get('conn_obj',False)
+                        if rec_check_ids and mapping_rec and len(rec_check_ids)==1:
+                            #The record was either imported or previously exported, so go for update
+                            #Remove prefix and get remote record id
+                            prefixed_id = self.pool.get('ir.model.data').read(cr,uid,rec_check_ids[0],['name'])['name']
+                            ext_id = int(self.id_from_prefixed_id(prefixed_id))
+                            #Record exists only update is required
+                            if conn and mapping_rec['external_update_method']:
+                                conn.call(mapping_rec['external_update_method'],[ext_id,exp_data[0]])
+                        else:
+                            #Record needs to be created
+                            if conn and mapping_rec['external_create_method']:
+                                crid = conn.call(mapping_rec['external_create_method'],exp_data)
+                                ir_model_data_vals = {
+                                        'name':self.prefixed_id(crid),
+                                        'model':self._name,
+                                        'res_id':id,
+                                        'external_referential_id':each_ext_ref,
+                                        'module':'base_external_referentials'
+                                                      }
+                                self.pool.get('ir.model.data').create(cr,uid,ir_model_data_vals)

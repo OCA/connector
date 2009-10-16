@@ -21,6 +21,7 @@
 ##############################################################################
 
 from osv import fields, osv
+import base64
 
 class external_osv(osv.osv):
     
@@ -75,11 +76,13 @@ class external_osv(osv.osv):
                                     'self':self,
                                     'cr':cr,
                                     'uid':uid,
-                                    'data':data,
+                                    'data':each_row,
                                     'external_referential_id':external_referential_id,
                                     'defaults':defaults,
                                     'context':context,
-                                    'ifield':type_casted_field
+                                    'ifield':type_casted_field,
+                                    'conn':context.get('conn_obj',False),
+                                    'base64':base64
                                         }
                             #The expression should return value in list of tuple format
                             #eg[('name','Sharoon'),('age',20)] -> vals = {'name':'Sharoon', 'age':20}

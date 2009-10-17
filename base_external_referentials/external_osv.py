@@ -86,7 +86,7 @@ class external_osv(osv.osv):
                 try:
                     exec each_mapping_line['in_function'] in space
                 except Exception,e:
-                    print "Err in mapping in:",each_mapping_line['in_function']," for:", space, "\n",e
+                    print "Err in mapping in:",each_mapping_line['in_function'],"i/p field",space['ifield'],"\n",e
                 result = space.get('result',False)
                 #If result exists and is of type list
                 if result and type(result)==list:
@@ -109,9 +109,9 @@ class external_osv(osv.osv):
     def ext_import(self,cr, uid, data, external_referential_id, defaults={}, context={}):
         #Inward data has to be list of dictionary
         #This function will import a given set of data as list of dictionary into Open ERP
+        write_ids = []  #Will record ids of records modified, not sure if will be used
+        create_ids = [] #Will record ids of newly created records, not sure if will be used
         if data:
-            write_ids = []  #Will record ids of records modified, not sure if will be used
-            create_ids = [] #Will record ids of newly created records, not sure if will be used
             mapping_id = self.pool.get('external.mapping').search(cr,uid,[('model','=',self._name),('referential_id','=',external_referential_id)])
             if mapping_id:
                 #If a mapping exists for current model, search for mapping lines

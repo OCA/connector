@@ -63,32 +63,36 @@ class external_osv(osv.osv):
         vals = {} #Dictionary for create record
         for each_mapping_line in mapping_lines:
             #Type cast if the expression exists
-            if each_mapping_line['external_type']:
-                type_casted_field = eval(each_mapping_line['external_type'])(data_record.get(each_mapping_line['external_field'],False))
-            else:
-                type_casted_field = data_record.get(each_mapping_line['external_field'],False)
-            #Build the space for expr
-            space = {
-                        'self':self,
-                        'cr':cr,
-                        'uid':uid,
-                        'data':data_record,
-                        'external_referential_id':external_referential_id,
-                        'defaults':defaults,
-                        'context':context,
-                        'ifield':type_casted_field,
-                        'conn':context.get('conn_obj',False),
-                        'base64':base64
-                    }
-            #The expression should return value in list of tuple format
-            #eg[('name','Sharoon'),('age',20)] -> vals = {'name':'Sharoon', 'age':20}
-            exec each_mapping_line['in_function'] in space
-            result = space.get('result',False)
-            #If result exists and is of type list
-            if result and type(result)==list:
-                for each_tuple in result:
-                    if type(each_tuple)==tuple and len(each_tuple)==2:
-                        vals[each_tuple[0]] = each_tuple[1] 
+            if each_mapping_line['external_field'] in data_record.keys():
+                if each_mapping_line['external_type']:
+                    type_casted_field = eval(each_mapping_line['external_type'])(data_record.get(each_mapping_line['external_field'],False))
+                else:
+                    type_casted_field = data_record.get(each_mapping_line['external_field'],False)
+                #Build the space for expr
+                space = {
+                            'self':self,
+                            'cr':cr,
+                            'uid':uid,
+                            'data':data_record,
+                            'external_referential_id':external_referential_id,
+                            'defaults':defaults,
+                            'context':context,
+                            'ifield':type_casted_field,
+                            'conn':context.get('conn_obj',False),
+                            'base64':base64
+                        }
+                #The expression should return value in list of tuple format
+                #eg[('name','Sharoon'),('age',20)] -> vals = {'name':'Sharoon', 'age':20}
+                try:
+                    exec each_mapping_line['in_function'] in space
+                except Exception,e:
+                    print "Err in mapping in:",each_mapping_line['in_function']," for:", space, "\n",e
+                result = space.get('result',False)
+                #If result exists and is of type list
+                if result and type(result)==list:
+                    for each_tuple in result:
+                        if type(each_tuple)==tuple and len(each_tuple)==2:
+                            vals[each_tuple[0]] = each_tuple[1] 
         #Every mapping line has now been translated into vals dictionary, now set defaults if any
         for each_default_entry in defaults.keys():
             vals[each_default_entry] = defaults[each_default_entry]

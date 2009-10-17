@@ -99,6 +99,7 @@ class external_osv(osv.osv):
     #TODO for export; reverse of oevals_from_extdata; extract code from ext_export method
     def extdata_from_oevals(self, cr, uid, defaults, context):
         pass
+        #rvalyi: ext_export_data function does just this :-)
 
     
     def ext_import(self,cr, uid, data, external_referential_id, defaults={}, context={}):
@@ -187,7 +188,11 @@ class external_osv(osv.osv):
                             #The expression should return value in list of tuple format
                             #eg[('name','Sharoon'),('age',20)] -> vals = {'name':'Sharoon', 'age':20}
                             if each_mapping_line['out_function']:
-                                exec each_mapping_line['out_function'] in space
+                                try:
+                                    exec each_mapping_line['out_function'] in space
+                                except Exception,e:
+                                    print "Exception in out mapping exec",each_mapping_line['out_function'],space
+                                    print "Error:",e
                                 result = space.get('result',False)
                                 #If result exists and is of type list
                                 if result and type(result)==list:

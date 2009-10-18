@@ -69,6 +69,8 @@ class external_osv(osv.osv):
                         type_casted_field = eval(each_mapping_line['external_type'])(data_record.get(each_mapping_line['external_field'],False))
                     else:
                         type_casted_field = data_record.get(each_mapping_line['external_field'],False)
+                    if type_casted_field in ['None','False']:
+                        type_casted_field = False
                 except Exception,e:
                     type_casted_field = False
                 #Build the space for expr

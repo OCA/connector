@@ -64,10 +64,13 @@ class external_osv(osv.osv):
         for each_mapping_line in mapping_lines:
             #Type cast if the expression exists
             if each_mapping_line['external_field'] in data_record.keys():
-                if each_mapping_line['external_type']:
-                    type_casted_field = eval(each_mapping_line['external_type'])(data_record.get(each_mapping_line['external_field'],False))
-                else:
-                    type_casted_field = data_record.get(each_mapping_line['external_field'],False)
+                try:
+                    if each_mapping_line['external_type']:
+                        type_casted_field = eval(each_mapping_line['external_type'])(data_record.get(each_mapping_line['external_field'],False))
+                    else:
+                        type_casted_field = data_record.get(each_mapping_line['external_field'],False)
+                except Exception,e:
+                    type_casted_field = False
                 #Build the space for expr
                 space = {
                             'self':self,

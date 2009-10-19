@@ -81,7 +81,8 @@ class external_osv(osv.osv):
                             'context':context,
                             'ifield':type_casted_field,
                             'conn':context.get('conn_obj',False),
-                            'base64':base64
+                            'base64':base64,
+                            'vals':vals
                         }
                 #The expression should return value in list of tuple format
                 #eg[('name','Sharoon'),('age',20)] -> vals = {'name':'Sharoon', 'age':20}

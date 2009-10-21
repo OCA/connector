@@ -40,20 +40,30 @@ class external_osv(osv.osv):
         else:
             return False
         
-    def external_connection(self, cr, uid, referential, DEBUG=False):
+    def external_connection(self, cr, uid, DEBUG=False):
         """Should be overridden to provide valid external referential connection"""
         return False
 
-    def extid_to_oeid(self, cr, uid, ids, external_referential_id):
+    def extid_to_oeid(self, cr, uid, id, external_referential_id, context={}):
         #First get the external key field name
         #conversion external id -> OpenERP object using Object mapping_column_name key!
         mapping_id = self.pool.get('external.mapping').search(cr, uid, [('model', '=', self._name), ('referential_id', '=', external_referential_id)])
         if mapping_id:
-            model_data_ids = self.pool.get('ir.model.data').search(cr,uid,[('name','=', self.prefixed_id(ids)),('model','=',self._name),('external_referential_id','=',external_referential_id)])
+            model_data_ids = self.pool.get('ir.model.data').search(cr,uid,[('name','=', self.prefixed_id(id)),('model','=',self._name),('external_referential_id','=',external_referential_id)])
             if model_data_ids:
-                oe_id = self.pool.get('ir.model.data').read(cr,uid,model_data_ids[0],['res_id'])['res_id']
-                if oe_id:
-                    return oe_id
+                claimed_oe_id = self.pool.get('ir.model.data').read(cr,uid,model_data_ids[0],['res_id'])['res_id']
+                
+                #because OpenERP might keep ir_model_data (is it a bug?) for deleted records, we check if record exists:
+                ids = self.search(cr, uid, [('id', '=', claimed_oe_id)])
+                if ids:
+                    return ids[0]
+
+            try:
+                result = self.get_external_data(cr, uid, self.external_connection(cr, uid, self.pool.get('external.referential').browse(cr, uid, external_referential_id)), external_referential_id, {}, {'id':id})
+                if len(result['create_ids']) == 1:
+                    return result['create_ids'][0]
+            except Exception, error: #external system might return error beacause not such record exists
+                print error
         return False
     
     def oevals_from_extdata(self, cr, uid, external_referential_id, data_record, key_field, mapping_lines, defaults, context):
@@ -107,7 +117,10 @@ class external_osv(osv.osv):
     def extdata_from_oevals(self, cr, uid, defaults, context):
         pass
         #rvalyi: ext_export_data function does just this :-)
-
+        
+    def get_external_data(self, cr, uid, conn, external_referential_id, defaults={}, context={}):
+        """Constructs data using WS or other synch protocols and then call ext_import on it"""
+        return {'create_ids': [], 'write_ids': []}
     
     def ext_import(self,cr, uid, data, external_referential_id, defaults={}, context={}):
         #Inward data has to be list of dictionary
@@ -126,36 +139,36 @@ class external_osv(osv.osv):
                     for each_row in data:
                         vals = self.oevals_from_extdata(cr, uid, external_referential_id, each_row, for_key_field, mapping_lines, defaults, context)
                         #perform a record check, for that we need foreign field
-                        if vals and for_key_field in vals.keys():
-                            external_id = vals[for_key_field]
-                            #del vals[for_key_field] looks like it is affecting the import :(
-                            #Check if record exists
-                            existing_ir_model_data_id = self.pool.get('ir.model.data').search(cr, uid, [('model', '=', self._name), ('name', '=', self.prefixed_id(external_id))])
-                            record_test_id = False
-                            if existing_ir_model_data_id:
-                                existing_rec_id = self.pool.get('ir.model.data').read(cr, uid, existing_ir_model_data_id, ['res_id'])[0]['res_id']
-                                
-                                #Note: I wonder why OpenERP doesn't clean up already ir_model_data which res_id records have been deleted
-                                record_test_id = self.search(cr, uid, [('id', '=', existing_rec_id)])
-                                if not record_test_id:
-                                    self.pool.get('ir.model.data').unlink(cr, uid, existing_ir_model_data_id)
+                        external_id = vals.get(for_key_field, False) or each_row.get('external_id', False)
+                        #del vals[for_key_field] looks like it is affecting the import :(
+                        #Check if record exists
+                        existing_ir_model_data_id = self.pool.get('ir.model.data').search(cr, uid, [('model', '=', self._name), ('name', '=', self.prefixed_id(external_id))])
+                        record_test_id = False
+                        if existing_ir_model_data_id:
+                            existing_rec_id = self.pool.get('ir.model.data').read(cr, uid, existing_ir_model_data_id, ['res_id'])[0]['res_id']
+                            
+                            #Note: I wonder why OpenERP doesn't clean up already ir_model_data which res_id records have been deleted
+                            record_test_id = self.search(cr, uid, [('id', '=', existing_rec_id)])
+                            if not record_test_id:
+                                self.pool.get('ir.model.data').unlink(cr, uid, existing_ir_model_data_id)
 
-                            if record_test_id:
+                        if record_test_id:
+                            if vals.get(for_key_field, False):
                                 del vals[for_key_field]
-                                if self.write(cr,uid,existing_rec_id,vals,context):
-                                    write_ids.append(existing_rec_id)
-                                    self.pool.get('ir.model.data').write(cr, uid, existing_ir_model_data_id,{'res_id':existing_rec_id})
-                            else:
-                                crid = self.create(cr,uid,vals,context)
-                                create_ids.append(crid)
-                                ir_model_data_vals = {
-                                                        'name':self.prefixed_id(external_id),
-                                                        'model':self._name,
-                                                        'res_id':crid,
-                                                        'external_referential_id':external_referential_id,
-                                                        'module':'base_external_referentials'
-                                                      }
-                                self.pool.get('ir.model.data').create(cr,uid,ir_model_data_vals)
+                            if self.write(cr,uid,existing_rec_id,vals,context):
+                                write_ids.append(existing_rec_id)
+                                self.pool.get('ir.model.data').write(cr, uid, existing_ir_model_data_id,{'res_id':existing_rec_id})
+                        else:
+                            crid = self.create(cr,uid,vals,context)
+                            create_ids.append(crid)
+                            ir_model_data_vals = {
+                                                    'name':self.prefixed_id(external_id),
+                                                    'model':self._name,
+                                                    'res_id':crid,
+                                                    'external_referential_id':external_referential_id,
+                                                    'module':'base_external_referentials'
+                                                  }
+                            self.pool.get('ir.model.data').create(cr,uid,ir_model_data_vals)
                                 
         return {'create_ids': create_ids, 'write_ids': write_ids}
 

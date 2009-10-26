@@ -281,6 +281,7 @@ class external_osv(osv.osv):
                                                             'module': 'base_external_referentials'
                                                           }
                                     self.pool.get('ir.model.data').create(cr, uid, ir_model_data_vals)
+                            cr.commit()
 
 
     def ext_create(self, cr, uid, data, conn, method):

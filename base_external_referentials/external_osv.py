@@ -177,7 +177,6 @@ class external_osv(osv.osv):
         return {'create_ids': create_ids, 'write_ids': write_ids}
 
 
-   #TODO for export; reverse of oevals_from_extdata; extract code from ext_export method
     def extdata_from_oevals(self, cr, uid, external_referential_id, data_record, mapping_lines, defaults, context):
         vals = {} #Dictionary for record
         for each_mapping_line in mapping_lines:

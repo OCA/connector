@@ -212,34 +212,12 @@ class external_osv(osv.osv):
             
         return vals
 
-
-    def ext_export_data(self, cr, uid, ids, external_referential_id, defaults={}, context={}):
-        #if ids is [] all records are selected or ids has to be a list of ids
-        #return a list of dictionary of formatted items
-        if external_referential_id:
-            out_data = []
-            if not ids:
-                ids = self.search(cr, uid, [])#Get all records if ids is empty
-            data = self.read(cr, uid, ids, [])
-            #Find the mapping record now
-            mapping_id = self.pool.get('external.mapping').search(cr, uid, [('model', '=', self._name), ('referential_id', '=', external_referential_id)])
-            if mapping_id:
-                #If a mapping exists for current model, search for mapping lines
-                mapping_line_ids = self.pool.get('external.mapping.line').search(cr, uid, [('mapping_id', '=', mapping_id), ('type', 'in', ['in_out', 'out'])])
-                mapping_lines = self.pool.get('external.mapping.line').read(cr, uid, mapping_line_ids, ['external_field', 'out_function'])
-                if mapping_lines:
-                    #if mapping lines exist find the data conversion for each row in inward data
-                    for each_row in data:
-                        vals = self.extdata_from_oevals(cr, uid, external_referential_id, each_row, mapping_lines, defaults, context)
-                        if vals:
-                            out_data.append(vals)
-        return out_data
     
     def ext_export(self, cr, uid, ids, external_referential_ids=[], defaults={}, context={}):
-        #external_referential_ids has to be alist
+        #external_referential_ids has to be a list
         if not ids:
             ids = self.search(cr, uid, [])
-        for id in ids:
+        for record_data in self.read(cr, uid, ids, []):            
             #If no external_ref_ids are mentioned, then take all ext_ref_this item has
             if not external_referential_ids:
                 ir_model_data_recids = self.pool.get('ir.model.data').search(cr, uid, [('model', '=', self._name), ('res_id', '=', id), ('module', '=', 'base_external_referentials')])
@@ -251,51 +229,59 @@ class external_osv(osv.osv):
             if not external_referential_ids:
                 external_referential_ids = self.pool.get('external.referential').search(cr, uid, [])
             #Do an export for each external ID
-            for each_ext_ref in external_referential_ids:
-                exp_data = self.ext_export_data(cr, uid, [id], each_ext_ref, defaults, context)
-                if exp_data and len(exp_data) == 1:
-                    #Check if export for this referential demands a create or update
-                    rec_check_ids = self.pool.get('ir.model.data').search(cr, uid, [('model', '=', self._name), ('res_id', '=', id), ('module', '=', 'base_external_referentials'), ('external_referential_id', '=', each_ext_ref)])
-                    #rec_check_ids will indicate if the product already has a mapping record with ext system
-                    mapping_id = self.pool.get('external.mapping').search(cr, uid, [('model', '=', self._name), ('referential_id', '=', each_ext_ref)])
-                    if mapping_id and len(mapping_id) == 1:
-                        mapping_rec = self.pool.get('external.mapping').read(cr, uid, mapping_id[0], ['external_update_method', 'external_create_method'])
-                        conn = context.get('conn_obj', False)
-                        if rec_check_ids and mapping_rec and len(rec_check_ids) == 1:
-                            #The record was either imported or previously exported, so go for update
-                            #Remove prefix and get remote record id
-                            prefixed_id = self.pool.get('ir.model.data').read(cr, uid, rec_check_ids[0], ['name'])['name']
-                            ext_id = int(self.id_from_prefixed_id(prefixed_id))
-                            #Record exists, check if update is required, for that collect last update times from ir.data & record
-                            last_exported_times = self.pool.get('ir.model.data').read(cr, uid, rec_check_ids[0], ['write_date', 'create_date'])
-                            last_exported_time = last_exported_times.get('write_date', False) or last_exported_times.get('create_date', False)
-                            this_record_times = self.read(cr, uid, id, ['write_date', 'create_date'])
-                            last_updated_time = this_record_times.get('write_date', False) or this_record_times.get('create_date', False)
-                            if last_updated_time and last_exported_time:
-                                last_exported_time = datetime.datetime.fromtimestamp(time.mktime(time.strptime(last_exported_time, '%Y-%m-%d %H:%M:%S')))
-                                last_updated_time = datetime.datetime.fromtimestamp(time.mktime(time.strptime(last_updated_time, '%Y-%m-%d %H:%M:%S')))
-                                if (last_updated_time - last_exported_time).__abs__().seconds < 1:#if last_updated_time < last_exported_time by more than 2 seconds
-                                    continue
-                            if conn and mapping_rec['external_update_method']:
-                                self.ext_update(cr, uid, exp_data[0], conn, mapping_rec['external_update_method'], ext_id)
-                                #Just simply write to ir.model.data to update the updated time
-                                ir_model_data_vals = {
-                                        'res_id':id,
-                                                      }
-                                self.pool.get('ir.model.data').write(cr, uid, rec_check_ids[0], ir_model_data_vals)
-                        else:
-                            #Record needs to be created
-                            if conn and mapping_rec['external_create_method']:
-                                crid = self.ext_create(cr, uid, exp_data[0], conn, mapping_rec['external_create_method'])
-                                ir_model_data_vals = {
-                                        'name':self.prefixed_id(crid),
-                                        'model':self._name,
-                                        'res_id':id,
-                                        'external_referential_id':each_ext_ref,
-                                        'module':'base_external_referentials'
-                                                      }
-                                self.pool.get('ir.model.data').create(cr, uid, ir_model_data_vals)
-    
+            for ext_ref_id in external_referential_ids:
+                #Find the mapping record now
+                mapping_id = self.pool.get('external.mapping').search(cr, uid, [('model', '=', self._name), ('referential_id', '=', ext_ref_id)])
+                if mapping_id:
+                    #If a mapping exists for current model, search for mapping lines
+                    mapping_line_ids = self.pool.get('external.mapping.line').search(cr, uid, [('mapping_id', '=', mapping_id), ('type', 'in', ['in_out', 'out'])])
+                    mapping_lines = self.pool.get('external.mapping.line').read(cr, uid, mapping_line_ids, ['external_field', 'out_function'])
+                    if mapping_lines:
+                        #if mapping lines exist find the data conversion for each row in inward data
+                        exp_data = self.extdata_from_oevals(cr, uid, ext_ref_id, record_data, mapping_lines, defaults, context)
+                
+                        #Check if export for this referential demands a create or update
+                        rec_check_ids = self.pool.get('ir.model.data').search(cr, uid, [('model', '=', self._name), ('res_id', '=', record_data['id']), ('module', '=', 'base_external_referentials'), ('external_referential_id', '=', ext_ref_id)])
+                        #rec_check_ids will indicate if the product already has a mapping record with ext system
+                        mapping_id = self.pool.get('external.mapping').search(cr, uid, [('model', '=', self._name), ('referential_id', '=', ext_ref_id)])
+                        if mapping_id and len(mapping_id) == 1:
+                            mapping_rec = self.pool.get('external.mapping').read(cr, uid, mapping_id[0], ['external_update_method', 'external_create_method'])
+                            conn = context.get('conn_obj', False)
+                            if rec_check_ids and mapping_rec and len(rec_check_ids) == 1:
+                                #The record was either imported or previously exported, so go for update
+                                #Remove prefix and get remote record id
+                                prefixed_id = self.pool.get('ir.model.data').read(cr, uid, rec_check_ids[0], ['name'])['name']
+                                ext_id = int(self.id_from_prefixed_id(prefixed_id))
+                                #Record exists, check if update is required, for that collect last update times from ir.data & record
+                                last_exported_times = self.pool.get('ir.model.data').read(cr, uid, rec_check_ids[0], ['write_date', 'create_date'])
+                                last_exported_time = last_exported_times.get('write_date', False) or last_exported_times.get('create_date', False)
+                                this_record_times = self.read(cr, uid, record_data['id'], ['write_date', 'create_date'])
+                                last_updated_time = this_record_times.get('write_date', False) or this_record_times.get('create_date', False)
+                                if last_updated_time and last_exported_time:
+                                    last_exported_time = datetime.datetime.fromtimestamp(time.mktime(time.strptime(last_exported_time, '%Y-%m-%d %H:%M:%S')))
+                                    last_updated_time = datetime.datetime.fromtimestamp(time.mktime(time.strptime(last_updated_time, '%Y-%m-%d %H:%M:%S')))
+                                    if (last_updated_time - last_exported_time).__abs__().seconds < 1:#if last_updated_time < last_exported_time by more than 2 seconds
+                                        continue
+                                if conn and mapping_rec['external_update_method']:
+                                    self.ext_update(cr, uid, exp_data, conn, mapping_rec['external_update_method'], ext_id)
+                                    #Just simply write to ir.model.data to update the updated time
+                                    ir_model_data_vals = {
+                                                            'res_id': record_data['id'],
+                                                          }
+                                    self.pool.get('ir.model.data').write(cr, uid, rec_check_ids[0], ir_model_data_vals)
+                            else:
+                                #Record needs to be created
+                                if conn and mapping_rec['external_create_method']:
+                                    crid = self.ext_create(cr, uid, exp_data, conn, mapping_rec['external_create_method'])
+                                    ir_model_data_vals = {
+                                                            'name': self.prefixed_id(crid),
+                                                            'model': self._name,
+                                                            'res_id': record_data['id'],
+                                                            'external_referential_id': ext_ref_id,
+                                                            'module': 'base_external_referentials'
+                                                          }
+                                    self.pool.get('ir.model.data').create(cr, uid, ir_model_data_vals)
+            
     def ext_create(self, cr, uid, data, conn, method):
         return conn.call(method, data)
     

@@ -217,7 +217,7 @@ class external_osv(osv.osv):
         #external_referential_ids has to be a list
         if not ids:
             ids = self.search(cr, uid, [])
-        for record_data in self.read(cr, uid, ids, []):            
+        for record_data in self.read(cr, uid, ids, []):        
             #If no external_ref_ids are mentioned, then take all ext_ref_this item has
             if not external_referential_ids:
                 ir_model_data_recids = self.pool.get('ir.model.data').search(cr, uid, [('model', '=', self._name), ('res_id', '=', id), ('module', '=', 'base_external_referentials')])
@@ -281,9 +281,10 @@ class external_osv(osv.osv):
                                                             'module': 'base_external_referentials'
                                                           }
                                     self.pool.get('ir.model.data').create(cr, uid, ir_model_data_vals)
-            
+
+
     def ext_create(self, cr, uid, data, conn, method):
         return conn.call(method, data)
     
-    def ext_update(self, cr, uid, data, conn, method, existing_id):    
-        conn.call(method, [existing_id, data])
+    def ext_update(self, cr, uid, data, conn, method, existing_id):
+        return conn.call(method, [existing_id, data])

@@ -248,10 +248,8 @@ class external_osv(osv.osv):
                             mapping_rec = self.pool.get('external.mapping').read(cr, uid, mapping_id[0], ['external_update_method', 'external_create_method'])
                             conn = context.get('conn_obj', False)
                             if rec_check_ids and mapping_rec and len(rec_check_ids) == 1:
-                                #The record was either imported or previously exported, so go for update
-                                #Remove prefix and get remote record id
-                                prefixed_id = self.pool.get('ir.model.data').read(cr, uid, rec_check_ids[0], ['name'])['name']
-                                ext_id = int(self.id_from_prefixed_id(prefixed_id))
+                                ext_id = self.oeid_to_extid(cr, uid, record_data['id'], ext_ref_id, context)
+                                #int(self.id_from_prefixed_id(prefixed_id))
                                 #Record exists, check if update is required, for that collect last update times from ir.data & record
                                 last_exported_times = self.pool.get('ir.model.data').read(cr, uid, rec_check_ids[0], ['write_date', 'create_date'])
                                 last_exported_time = last_exported_times.get('write_date', False) or last_exported_times.get('create_date', False)
@@ -263,7 +261,7 @@ class external_osv(osv.osv):
                                     if (last_updated_time - last_exported_time).__abs__().seconds < 1:#if last_updated_time < last_exported_time by more than 2 seconds
                                         continue
                                 if conn and mapping_rec['external_update_method']:
-                                    self.ext_update(cr, uid, exp_data, conn, mapping_rec['external_update_method'], ext_id)
+                                    self.ext_update(cr, uid, exp_data, conn, mapping_rec['external_update_method'], record_data['id'], ext_id)
                                     #Just simply write to ir.model.data to update the updated time
                                     ir_model_data_vals = {
                                                             'res_id': record_data['id'],
@@ -272,7 +270,7 @@ class external_osv(osv.osv):
                             else:
                                 #Record needs to be created
                                 if conn and mapping_rec['external_create_method']:
-                                    crid = self.ext_create(cr, uid, exp_data, conn, mapping_rec['external_create_method'])
+                                    crid = self.ext_create(cr, uid, exp_data, conn, mapping_rec['external_create_method'], record_data['id'])
                                     ir_model_data_vals = {
                                                             'name': self.prefixed_id(crid),
                                                             'model': self._name,
@@ -284,8 +282,8 @@ class external_osv(osv.osv):
                             cr.commit()
 
 
-    def ext_create(self, cr, uid, data, conn, method):
+    def ext_create(self, cr, uid, data, conn, method, oe_id):
         return conn.call(method, data)
     
-    def ext_update(self, cr, uid, data, conn, method, existing_id):
-        return conn.call(method, [existing_id, data])
+    def ext_update(self, cr, uid, data, conn, method, oe_id, external_id):
+        return conn.call(method, [external_id, data])

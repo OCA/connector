@@ -45,13 +45,10 @@ class external_osv(osv.osv):
         return False
     
     def oeid_to_extid(self, cr, uid, id, external_referential_id, context={}):
-        print "ENTERING oeid_to_extid", id, self
         model_data_ids = self.pool.get('ir.model.data').search(cr, uid, [('model', '=', self._name), ('res_id', '=', id), ('module', '=', 'base_external_referentials'), ('external_referential_id', '=', external_referential_id)])
-        print "model_data_ids",model_data_ids
         if model_data_ids and len(model_data_ids) > 0:
             prefixed_id = self.pool.get('ir.model.data').read(cr, uid, model_data_ids[0], ['name'])['name']
             ext_id = int(self.id_from_prefixed_id(prefixed_id))
-            print "ext_id", ext_id
             return ext_id
         return False
 

@@ -45,10 +45,13 @@ class external_osv(osv.osv):
         return False
     
     def oeid_to_extid(self, cr, uid, id, external_referential_id, context={}):
+        print "ENTERING oeid_to_extid", id, self
         model_data_ids = self.pool.get('ir.model.data').search(cr, uid, [('model', '=', self._name), ('res_id', '=', id), ('module', '=', 'base_external_referentials'), ('external_referential_id', '=', external_referential_id)])
+        print "model_data_ids",model_data_ids
         if model_data_ids and len(model_data_ids) > 0:
             prefixed_id = self.pool.get('ir.model.data').read(cr, uid, model_data_ids[0], ['name'])['name']
             ext_id = int(self.id_from_prefixed_id(prefixed_id))
+            print "ext_id", ext_id
             return ext_id
         return False
 
@@ -107,7 +110,10 @@ class external_osv(osv.osv):
                 try:
                     exec each_mapping_line['in_function'] in space
                 except Exception, e:
-                    print "Err in mapping in:", each_mapping_line['in_function'], "i/p field", space['ifield'], "\n", e
+                    print "Err in import mapping in:\n", each_mapping_line['in_function']
+                    del(space['__builtins__'])
+                    print "mapping context", space
+                    print "Error:", e
                 result = space.get('result', False)
                 #If result exists and is of type list
                 if result and type(result) == list:
@@ -198,7 +204,9 @@ class external_osv(osv.osv):
                 try:
                     exec each_mapping_line['out_function'] in space
                 except Exception, e:
-                    print "Exception in out mapping exec", each_mapping_line['out_function'], space
+                    print "Exception in export mapping in:\n", each_mapping_line['out_function']
+                    del(space['__builtins__'])
+                    print "mapping context", space
                     print "Error:", e
                 result = space.get('result', False)
                 #If result exists and is of type list
@@ -261,7 +269,7 @@ class external_osv(osv.osv):
                                     if (last_updated_time - last_exported_time).__abs__().seconds < 1:#if last_updated_time < last_exported_time by more than 2 seconds
                                         continue
                                 if conn and mapping_rec['external_update_method']:
-                                    self.ext_update(cr, uid, exp_data, conn, mapping_rec['external_update_method'], record_data['id'], ext_id)
+                                    self.ext_update(cr, uid, exp_data, conn, mapping_rec['external_update_method'], record_data['id'], ext_id, rec_check_ids[0], mapping_rec['external_create_method'])
                                     #Just simply write to ir.model.data to update the updated time
                                     ir_model_data_vals = {
                                                             'res_id': record_data['id'],
@@ -282,8 +290,22 @@ class external_osv(osv.osv):
                             cr.commit()
 
 
+    def can_create_on_update_failure(self, error):
+        return True
+
     def ext_create(self, cr, uid, data, conn, method, oe_id):
         return conn.call(method, data)
     
-    def ext_update(self, cr, uid, data, conn, method, oe_id, external_id):
-        return conn.call(method, [external_id, data])
+    def ext_update(self, cr, uid, data, conn, method, oe_id, external_id, ir_model_data_id, create_method):
+        try:
+            return conn.call(method, [external_id, data])
+        except Exception, e:
+            print "UPDATE ERROR", e
+            if self.can_create_on_update_failure(e):
+                print "may be the resource doesn't exist any more in the external referential, trying to re-create a new one"
+                print "args", cr, uid, data, conn, create_method, oe_id
+                crid = self.ext_create(cr, uid, data, conn, create_method, oe_id)
+                self.pool.get('ir.model.data').write(cr, uid, ir_model_data_id, {'name': self.prefixed_id(crid)})
+                return crid
+            
+        

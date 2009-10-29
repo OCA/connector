@@ -24,6 +24,7 @@ from osv import fields, osv
 import base64
 import time
 import datetime
+import netsvc
 
 class external_osv(osv.osv):
     
@@ -134,6 +135,7 @@ class external_osv(osv.osv):
         #This function will import a given set of data as list of dictionary into Open ERP
         write_ids = []  #Will record ids of records modified, not sure if will be used
         create_ids = [] #Will record ids of newly created records, not sure if will be used
+        logger = netsvc.Logger()
         if data:
             mapping_id = self.pool.get('external.mapping').search(cr, uid, [('model', '=', self._name), ('referential_id', '=', external_referential_id)])
             if mapping_id:
@@ -165,6 +167,7 @@ class external_osv(osv.osv):
                             if self.write(cr, uid, existing_rec_id, vals, context):
                                 write_ids.append(existing_rec_id)
                                 self.pool.get('ir.model.data').write(cr, uid, existing_ir_model_data_id, {'res_id':existing_rec_id})
+                                logger.notifyChannel('ext synchro', netsvc.LOG_INFO, "Updated in OpenERP %s from External Ref with external_id %s and OpenERP id %s successfully" %(self._name, external_id, existing_rec_id))
                         else:
                             crid = self.create(cr, uid, vals, context)
                             create_ids.append(crid)
@@ -176,6 +179,9 @@ class external_osv(osv.osv):
                                                     'module':'base_external_referentials'
                                                   }
                             self.pool.get('ir.model.data').create(cr, uid, ir_model_data_vals)
+                            logger.notifyChannel('ext synchro', netsvc.LOG_INFO, "Created in OpenERP %s from External Ref with external_id %s and OpenERP id %s successfully" %(self._name, external_id, crid))
+                        cr.commit()
+                        
                                 
         return {'create_ids': create_ids, 'write_ids': write_ids}
 
@@ -220,6 +226,7 @@ class external_osv(osv.osv):
     
     def ext_export(self, cr, uid, ids, external_referential_ids=[], defaults={}, context={}):
         #external_referential_ids has to be a list
+        logger = netsvc.Logger()
         if not ids:
             ids = self.search(cr, uid, [])
         for record_data in self.read(cr, uid, ids, []):        
@@ -272,6 +279,7 @@ class external_osv(osv.osv):
                                                             'res_id': record_data['id'],
                                                           }
                                     self.pool.get('ir.model.data').write(cr, uid, rec_check_ids[0], ir_model_data_vals)
+                                    logger.notifyChannel('ext synchro', netsvc.LOG_INFO, "Updated in External Ref %s from OpenERP with external_id %s and OpenERP id %s successfully" %(self._name, ext_id, record_data['id']))
                             else:
                                 #Record needs to be created
                                 if conn and mapping_rec['external_create_method']:
@@ -284,10 +292,11 @@ class external_osv(osv.osv):
                                                             'module': 'base_external_referentials'
                                                           }
                                     self.pool.get('ir.model.data').create(cr, uid, ir_model_data_vals)
+                                    logger.notifyChannel('ext synchro', netsvc.LOG_INFO, "Created in External Ref %s from OpenERP with external_id %s and OpenERP id %s successfully" %(self._name, crid, record_data['id']))
                             cr.commit()
 
 
-    def can_create_on_update_failure(self, error):
+    def can_create_on_update_failure(self, error, data):
         return True
 
     def ext_create(self, cr, uid, data, conn, method, oe_id):
@@ -297,9 +306,9 @@ class external_osv(osv.osv):
         try:
             return conn.call(method, [external_id, data])
         except Exception, e:
-            print "UPDATE ERROR", e
-            if self.can_create_on_update_failure(e):
-                print "may be the resource doesn't exist any more in the external referential, trying to re-create a new one"
+            logger.notifyChannel('ext synchro', netsvc.LOG_INFO, "UPDATE ERROR: %s" % e)
+            if self.can_create_on_update_failure(e, data):
+                logger.notifyChannel('ext synchro', netsvc.LOG_INFO, "may be the resource doesn't exist any more in the external referential, trying to re-create a new one")
                 print "args", cr, uid, data, conn, create_method, oe_id
                 crid = self.ext_create(cr, uid, data, conn, create_method, oe_id)
                 self.pool.get('ir.model.data').write(cr, uid, ir_model_data_id, {'name': self.prefixed_id(crid)})

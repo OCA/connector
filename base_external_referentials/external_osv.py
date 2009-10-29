@@ -273,7 +273,7 @@ class external_osv(osv.osv):
                                     if (last_updated_time - last_exported_time).__abs__().seconds < 1:#if last_updated_time < last_exported_time by more than 2 seconds
                                         continue
                                 if conn and mapping_rec['external_update_method']:
-                                    self.ext_update(cr, uid, exp_data, conn, mapping_rec['external_update_method'], record_data['id'], ext_id, rec_check_ids[0], mapping_rec['external_create_method'])
+                                    self.ext_update(cr, uid, exp_data, conn, mapping_rec['external_update_method'], record_data['id'], ext_id, rec_check_ids[0], mapping_rec['external_create_method'], context)
                                     #Just simply write to ir.model.data to update the updated time
                                     ir_model_data_vals = {
                                                             'res_id': record_data['id'],
@@ -283,7 +283,7 @@ class external_osv(osv.osv):
                             else:
                                 #Record needs to be created
                                 if conn and mapping_rec['external_create_method']:
-                                    crid = self.ext_create(cr, uid, exp_data, conn, mapping_rec['external_create_method'], record_data['id'])
+                                    crid = self.ext_create(cr, uid, exp_data, conn, mapping_rec['external_create_method'], record_data['id'], context)
                                     ir_model_data_vals = {
                                                             'name': self.prefixed_id(crid),
                                                             'model': self._name,
@@ -296,20 +296,19 @@ class external_osv(osv.osv):
                             cr.commit()
 
 
-    def can_create_on_update_failure(self, error, data):
+    def can_create_on_update_failure(self, error, data, context):
         return True
 
-    def ext_create(self, cr, uid, data, conn, method, oe_id):
+    def ext_create(self, cr, uid, data, conn, method, oe_id, context):
         return conn.call(method, data)
     
-    def ext_update(self, cr, uid, data, conn, method, oe_id, external_id, ir_model_data_id, create_method):
+    def ext_update(self, cr, uid, data, conn, method, oe_id, external_id, ir_model_data_id, create_method, context):
         try:
             return conn.call(method, [external_id, data])
         except Exception, e:
             logger.notifyChannel('ext synchro', netsvc.LOG_INFO, "UPDATE ERROR: %s" % e)
-            if self.can_create_on_update_failure(e, data):
+            if self.can_create_on_update_failure(e, data, context):
                 logger.notifyChannel('ext synchro', netsvc.LOG_INFO, "may be the resource doesn't exist any more in the external referential, trying to re-create a new one")
-                print "args", cr, uid, data, conn, create_method, oe_id
                 crid = self.ext_create(cr, uid, data, conn, create_method, oe_id)
                 self.pool.get('ir.model.data').write(cr, uid, ir_model_data_id, {'name': self.prefixed_id(crid)})
                 return crid

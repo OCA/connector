@@ -306,10 +306,11 @@ class external_osv(osv.osv):
         try:
             return conn.call(method, [external_id, data])
         except Exception, e:
+            logger = netsvc.Logger()
             logger.notifyChannel('ext synchro', netsvc.LOG_INFO, "UPDATE ERROR: %s" % e)
             if self.can_create_on_update_failure(e, data, context):
                 logger.notifyChannel('ext synchro', netsvc.LOG_INFO, "may be the resource doesn't exist any more in the external referential, trying to re-create a new one")
-                crid = self.ext_create(cr, uid, data, conn, create_method, oe_id)
+                crid = self.ext_create(cr, uid, data, conn, create_method, oe_id, context)
                 self.pool.get('ir.model.data').write(cr, uid, ir_model_data_id, {'name': self.prefixed_id(crid)})
                 return crid
             

@@ -261,17 +261,25 @@ class external_osv(osv.osv):
                             conn = context.get('conn_obj', False)
                             if rec_check_ids and mapping_rec and len(rec_check_ids) == 1:
                                 ext_id = self.oeid_to_extid(cr, uid, record_data['id'], ext_ref_id, context)
-                                #int(self.id_from_prefixed_id(prefixed_id))
-                                #Record exists, check if update is required, for that collect last update times from ir.data & record
-                                last_exported_times = self.pool.get('ir.model.data').read(cr, uid, rec_check_ids[0], ['write_date', 'create_date'])
-                                last_exported_time = last_exported_times.get('write_date', False) or last_exported_times.get('create_date', False)
-                                this_record_times = self.read(cr, uid, record_data['id'], ['write_date', 'create_date'])
-                                last_updated_time = this_record_times.get('write_date', False) or this_record_times.get('create_date', False)
-                                if last_updated_time and last_exported_time:
-                                    last_exported_time = datetime.datetime.fromtimestamp(time.mktime(time.strptime(last_exported_time, '%Y-%m-%d %H:%M:%S')))
-                                    last_updated_time = datetime.datetime.fromtimestamp(time.mktime(time.strptime(last_updated_time, '%Y-%m-%d %H:%M:%S')))
-                                    if (last_updated_time - last_exported_time).__abs__().seconds < 1:#if last_updated_time < last_exported_time by more than 2 seconds
-                                        continue
+
+                                if not context.get('force', False):
+                                    #Record exists, check if update is required, for that collect last update times from ir.data & record
+                                    last_exported_times = self.pool.get('ir.model.data').read(cr, uid, rec_check_ids[0], ['write_date', 'create_date'])
+                                    last_exported_time = last_exported_times.get('write_date', False) or last_exported_times.get('create_date', False)
+                                    this_record_times = self.read(cr, uid, record_data['id'], ['write_date', 'create_date'])
+                                    last_updated_time = this_record_times.get('write_date', False) or this_record_times.get('create_date', False)
+    
+                                    if not last_updated_time: #strangely seems that on inherits structure, write_date/create_date are False for children
+                                        cr.execute("select write_date, create_date from %s where id=%s;" % (self._name.replace('.', '_'), record_data['id']))
+                                        read = cr.fetchone()
+                                        last_updated_time = read[0] and read[0].split('.')[0] or read[1] and read[1].split('.')[0] or False
+                                        
+                                    if last_updated_time and last_exported_time:
+                                        last_exported_time = datetime.datetime.fromtimestamp(time.mktime(time.strptime(last_exported_time, '%Y-%m-%d %H:%M:%S')))
+                                        last_updated_time = datetime.datetime.fromtimestamp(time.mktime(time.strptime(last_updated_time, '%Y-%m-%d %H:%M:%S')))
+                                        if last_exported_time + datetime.timedelta(seconds=1) > last_updated_time:
+                                            continue
+
                                 if conn and mapping_rec['external_update_method']:
                                     self.ext_update(cr, uid, exp_data, conn, mapping_rec['external_update_method'], record_data['id'], ext_id, rec_check_ids[0], mapping_rec['external_create_method'], context)
                                     #Just simply write to ir.model.data to update the updated time

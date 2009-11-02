@@ -27,7 +27,7 @@
 						<tree string="Object Mappings">
 							<field name="model_id" />
 <!--							<field name="related_model_ids" invisible="1" />-->
-							<field name="mapping_ids" />
+<!--							<field name="mapping_ids" />-->
 						</tree>
 						<form string="Object Mappings">
 							<field name="model_id" on_change="model_id_change(model_id)" />

@@ -148,7 +148,7 @@ class external_osv(osv.osv):
                     for each_row in data:
                         vals = self.oevals_from_extdata(cr, uid, external_referential_id, each_row, for_key_field, mapping_lines, defaults, context)
                         #perform a record check, for that we need foreign field
-                        external_id = vals.get(for_key_field, False) or each_row.get('external_id', False)
+                        external_id = vals.get(for_key_field, False) or each_row.get(for_key_field, False) or each_row.get('external_id', False)
                         #del vals[for_key_field] looks like it is affecting the import :(
                         #Check if record exists
                         existing_ir_model_data_id = self.pool.get('ir.model.data').search(cr, uid, [('model', '=', self._name), ('name', '=', self.prefixed_id(external_id))])

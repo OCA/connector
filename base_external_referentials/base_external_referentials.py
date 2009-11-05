@@ -113,10 +113,6 @@ class external_referential(osv.osv):
         'apiusername': fields.char('User Name', size=64),
         'apipass': fields.char('Password', size=64),
         'mapping_ids': fields.one2many('external.mapping', 'referential_id', 'Mappings'),
-        'state':fields.selection([
-                                  ('draft', 'Drafting'),
-                                  ('done', 'Done') 
-                                  ], 'Status', readonly=True, store=True)
     }
     
     _sql_constraints = [

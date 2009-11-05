@@ -8,7 +8,7 @@
 			<field name="arch" type="xml">
 				<form>
 					<group col="4" colspan="4">
-						<field name="name" />
+						<field name="name" attrs="{'readonly':[('mapping_ids','!=',[])]}"/>
 						<notebook colspan="4">
 							<page string="General">
 								<field name="type_id" />
@@ -19,9 +19,8 @@
 								<field name="apipass" />
 							</page>
 						</notebook>
-						<field name="state" />
-						<button name="refresh_mapping" string="Remap the mappings" colspan="2" type="object" />
-						<button name="core_sync" string="Synchronize Referential Settings" colspan="2" type="object" />
+						<button name="refresh_mapping" string="Reload Referential Mapping Templates" colspan="2" type="object" />
+						<button name="core_sync" string="Synchronize Referential Settings" colspan="2" type="object" attrs="{'readonly':[('mapping_ids','=',[])]}"/>
 					</group>
 					<field name="mapping_ids" widget="one2many_list" nolabel="1">
 						<tree string="Object Mappings">

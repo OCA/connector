@@ -3,7 +3,7 @@
 #
 #    OpenERP, Open Source Management Solution
 #    Copyright (C) 2004-2009 Tiny SPRL (<http://tiny.be>). All Rights Reserved
-#    Sharoon Thomas, Raphael Valyi
+#    Sharoon Thomas, Raphaël Valyi
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -156,7 +156,8 @@ class external_osv(osv.osv):
                         if existing_ir_model_data_id:
                             existing_rec_id = self.pool.get('ir.model.data').read(cr, uid, existing_ir_model_data_id, ['res_id'])[0]['res_id']
                             
-                            #Note: I wonder why OpenERP doesn't clean up already ir_model_data which res_id records have been deleted
+                            #Note: OpenERP cleans up ir_model_data which res_id records have been deleted only at server update because that would be a perf penalty,
+                            #so we take care of it here:
                             record_test_id = self.search(cr, uid, [('id', '=', existing_rec_id)])
                             if not record_test_id:
                                 self.pool.get('ir.model.data').unlink(cr, uid, existing_ir_model_data_id)

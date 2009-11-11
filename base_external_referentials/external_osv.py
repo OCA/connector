@@ -56,23 +56,24 @@ class external_osv(osv.osv):
     def extid_to_oeid(self, cr, uid, id, external_referential_id, context={}):
         #First get the external key field name
         #conversion external id -> OpenERP object using Object mapping_column_name key!
-        mapping_id = self.pool.get('external.mapping').search(cr, uid, [('model', '=', self._name), ('referential_id', '=', external_referential_id)])
-        if mapping_id:
-            model_data_ids = self.pool.get('ir.model.data').search(cr, uid, [('name', '=', self.prefixed_id(id)), ('model', '=', self._name), ('external_referential_id', '=', external_referential_id)])
-            if model_data_ids:
-                claimed_oe_id = self.pool.get('ir.model.data').read(cr, uid, model_data_ids[0], ['res_id'])['res_id']
-                
-                #because OpenERP might keep ir_model_data (is it a bug?) for deleted records, we check if record exists:
-                ids = self.search(cr, uid, [('id', '=', claimed_oe_id)])
-                if ids:
-                    return ids[0]
-
-            try:
-                result = self.get_external_data(cr, uid, self.external_connection(cr, uid, self.pool.get('external.referential').browse(cr, uid, external_referential_id)), external_referential_id, {}, {'id':id})
-                if len(result['create_ids']) == 1:
-                    return result['create_ids'][0]
-            except Exception, error: #external system might return error beacause not such record exists
-                print error
+        if id:
+            mapping_id = self.pool.get('external.mapping').search(cr, uid, [('model', '=', self._name), ('referential_id', '=', external_referential_id)])
+            if mapping_id:
+                model_data_ids = self.pool.get('ir.model.data').search(cr, uid, [('name', '=', self.prefixed_id(id)), ('model', '=', self._name), ('external_referential_id', '=', external_referential_id)])
+                if model_data_ids:
+                    claimed_oe_id = self.pool.get('ir.model.data').read(cr, uid, model_data_ids[0], ['res_id'])['res_id']
+                    
+                    #because OpenERP might keep ir_model_data (is it a bug?) for deleted records, we check if record exists:
+                    ids = self.search(cr, uid, [('id', '=', claimed_oe_id)])
+                    if ids:
+                        return ids[0]
+    
+                try:
+                    result = self.get_external_data(cr, uid, self.external_connection(cr, uid, self.pool.get('external.referential').browse(cr, uid, external_referential_id)), external_referential_id, {}, {'id':id})
+                    if len(result['create_ids']) == 1:
+                        return result['create_ids'][0]
+                except Exception, error: #external system might return error because no such record exists
+                    print error
         return False
     
     def oevals_from_extdata(self, cr, uid, external_referential_id, data_record, key_field, mapping_lines, defaults, context):

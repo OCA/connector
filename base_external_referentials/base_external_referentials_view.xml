@@ -40,7 +40,7 @@
 								<field name="external_key_name" />
 							</group>
 							<field colspan="4" name="mapping_ids" widget="one2many_list" nolabel="1" context="{'model_id':model_id}">
-								<tree editable="bottom" string="Field Mappings">
+								<tree string="Field Mappings">
 									<!--<field name="field_id" domain="[('model_id','in',[rec[1] for rec in parent.related_model_ids])]" />-->
 									<field name="external_field" />
 									<field name="type" />

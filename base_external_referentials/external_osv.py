@@ -229,9 +229,11 @@ class external_osv(osv.osv):
     def ext_export(self, cr, uid, ids, external_referential_ids=[], defaults={}, context={}):
         #external_referential_ids has to be a list
         logger = netsvc.Logger()
+        write_ids = []  #Will record ids of records modified, not sure if will be used
+        create_ids = [] #Will record ids of newly created records, not sure if will be used
         if not ids:
             ids = self.search(cr, uid, [])
-        for record_data in self.read(cr, uid, ids, []):        
+        for record_data in self.read(cr, uid, ids, [], context):
             #If no external_ref_ids are mentioned, then take all ext_ref_this item has
             if not external_referential_ids:
                 ir_model_data_recids = self.pool.get('ir.model.data').search(cr, uid, [('model', '=', self._name), ('res_id', '=', id), ('module', '=', 'base_external_referentials_keep')])
@@ -284,6 +286,7 @@ class external_osv(osv.osv):
 
                                 if conn and mapping_rec['external_update_method']:
                                     self.ext_update(cr, uid, exp_data, conn, mapping_rec['external_update_method'], record_data['id'], ext_id, rec_check_ids[0], mapping_rec['external_create_method'], context)
+                                    write_ids.append(record_data['id'])
                                     #Just simply write to ir.model.data to update the updated time
                                     ir_model_data_vals = {
                                                             'res_id': record_data['id'],
@@ -294,6 +297,7 @@ class external_osv(osv.osv):
                                 #Record needs to be created
                                 if conn and mapping_rec['external_create_method']:
                                     crid = self.ext_create(cr, uid, exp_data, conn, mapping_rec['external_create_method'], record_data['id'], context)
+                                    create_ids.append(record_data['id'])
                                     ir_model_data_vals = {
                                                             'name': self.prefixed_id(crid),
                                                             'model': self._name,
@@ -304,6 +308,8 @@ class external_osv(osv.osv):
                                     self.pool.get('ir.model.data').create(cr, uid, ir_model_data_vals)
                                     logger.notifyChannel('ext synchro', netsvc.LOG_INFO, "Created in External Ref %s from OpenERP with external_id %s and OpenERP id %s successfully" %(self._name, crid, record_data['id']))
                             cr.commit()
+                            
+        return {'create_ids': create_ids, 'write_ids': write_ids}
 
 
     def can_create_on_update_failure(self, error, data, context):
@@ -312,9 +318,12 @@ class external_osv(osv.osv):
     def ext_create(self, cr, uid, data, conn, method, oe_id, context):
         return conn.call(method, data)
     
+    def try_ext_update(self, cr, uid, data, conn, method, oe_id, external_id, ir_model_data_id, create_method, context):
+        return conn.call(method, [external_id, data])
+    
     def ext_update(self, cr, uid, data, conn, method, oe_id, external_id, ir_model_data_id, create_method, context):
         try:
-            return conn.call(method, [external_id, data])
+            self.try_ext_update(cr, uid, data, conn, method, oe_id, external_id, ir_model_data_id, create_method, context)
         except Exception, e:
             logger = netsvc.Logger()
             logger.notifyChannel('ext synchro', netsvc.LOG_INFO, "UPDATE ERROR: %s" % e)

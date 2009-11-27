@@ -166,12 +166,13 @@ class external_osv(osv.osv):
                         if record_test_id:
                             if vals.get(for_key_field, False):
                                 del vals[for_key_field]
-                            if self.write(cr, uid, existing_rec_id, vals, context):
+                            if self.oe_update(cr, uid, existing_rec_id, vals, data, external_referential_id, defaults, context):
                                 write_ids.append(existing_rec_id)
                                 self.pool.get('ir.model.data').write(cr, uid, existing_ir_model_data_id, {'res_id':existing_rec_id})
                                 logger.notifyChannel('ext synchro', netsvc.LOG_INFO, "Updated in OpenERP %s from External Ref with external_id %s and OpenERP id %s successfully" %(self._name, external_id, existing_rec_id))
+ 
                         else:
-                            crid = self.create(cr, uid, vals, context)
+                            crid = self.oe_create(cr, uid, vals, data, external_referential_id, defaults, context)
                             create_ids.append(crid)
                             ir_model_data_vals = {
                                                     'name':self.prefixed_id(external_id),
@@ -187,6 +188,13 @@ class external_osv(osv.osv):
                                 
         return {'create_ids': create_ids, 'write_ids': write_ids}
 
+    def oe_update(self, cr, uid, existing_rec_id, vals, data, external_referential_id, defaults, context):
+        return self.write(cr, uid, existing_rec_id, vals, context)
+ 
+    
+    def oe_create(self, cr, uid, vals, data, external_referential_id, defaults, context):
+        return self.create(cr, uid, vals, context)
+    
 
     def extdata_from_oevals(self, cr, uid, external_referential_id, data_record, mapping_lines, defaults, context):
         vals = {} #Dictionary for record

@@ -166,13 +166,13 @@ class external_osv(osv.osv):
                         if record_test_id:
                             if vals.get(for_key_field, False):
                                 del vals[for_key_field]
-                            if self.oe_update(cr, uid, existing_rec_id, vals, data, external_referential_id, defaults, context):
+                            if self.oe_update(cr, uid, existing_rec_id, vals, each_row, external_referential_id, defaults, context):
                                 write_ids.append(existing_rec_id)
                                 self.pool.get('ir.model.data').write(cr, uid, existing_ir_model_data_id, {'res_id':existing_rec_id})
                                 logger.notifyChannel('ext synchro', netsvc.LOG_INFO, "Updated in OpenERP %s from External Ref with external_id %s and OpenERP id %s successfully" %(self._name, external_id, existing_rec_id))
  
                         else:
-                            crid = self.oe_create(cr, uid, vals, data, external_referential_id, defaults, context)
+                            crid = self.oe_create(cr, uid, vals, each_row, external_referential_id, defaults, context)
                             create_ids.append(crid)
                             ir_model_data_vals = {
                                                     'name':self.prefixed_id(external_id),

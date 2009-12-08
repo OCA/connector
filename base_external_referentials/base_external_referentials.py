@@ -75,23 +75,33 @@ class external_referential(osv.osv):
             mappings_obj = self.pool.get('external.mapping')
             mapping_line_obj = self.pool.get('external.mapping.line')
             #Delete Existing mappings if any
-            existing_mapping_ids = mappings_obj.search(cr, uid, [('referential_id', '=', id)])
+            cr.execute("""select id from (select distinct external_mapping_line.id, external_mapping.model_id
+                            from (external_mapping_line join external_mapping on external_mapping.id = external_mapping_line.mapping_id)
+                            join external_mappinglines_template on (external_mappinglines_template.external_field = external_mapping_line.external_field
+                            and external_mappinglines_template.model_id = external_mapping.model_id)
+                            where external_mapping.referential_id=%s order by external_mapping_line.id) as tmp;""", (id,))
+            existing_mapping_ids = cr.fetchall()
             if existing_mapping_ids:
-                mappings_obj.unlink(cr, uid, existing_mapping_ids)
+                mapping_line_obj.unlink(cr, uid, [tuple[0] for tuple in existing_mapping_ids])
+
             #Fetch mapping lines now
             mapping_src_ids = self.pool.get('external.mapping.template').search(cr, uid, [('type_id', '=', ext_ref.type_id.id)])
             for each_mapping_rec in self.pool.get('external.mapping.template').read(cr, uid, mapping_src_ids, []):
-                vals = {
-                                'referential_id': id,
-                                'model_id': each_mapping_rec['model_id'][0] or False,
-                                'external_list_method': each_mapping_rec['external_list_method'],
-                                'external_get_method': each_mapping_rec['external_get_method'],
-                                'external_update_method': each_mapping_rec['external_update_method'],
-                                'external_create_method': each_mapping_rec['external_create_method'],
-                                'external_delete_method': each_mapping_rec['external_delete_method'],
-                                'external_key_name': each_mapping_rec['external_key_name'],
-                                            }
-                mapping_id = mappings_obj.create(cr, uid, vals)
+                existing_ids = mappings_obj.search(cr, uid, [('referential_id', '=', id), ('model_id', '=', each_mapping_rec['model_id'][0] or False)])
+                if len(existing_ids) == 0:
+                    vals = {
+                                    'referential_id': id,
+                                    'model_id': each_mapping_rec['model_id'][0] or False,
+                                    'external_list_method': each_mapping_rec['external_list_method'],
+                                    'external_get_method': each_mapping_rec['external_get_method'],
+                                    'external_update_method': each_mapping_rec['external_update_method'],
+                                    'external_create_method': each_mapping_rec['external_create_method'],
+                                    'external_delete_method': each_mapping_rec['external_delete_method'],
+                                    'external_key_name': each_mapping_rec['external_key_name'],
+                                                }
+                    mapping_id = mappings_obj.create(cr, uid, vals)
+                else:
+                    mapping_id = existing_ids[0]
                 #Now create mapping lines of the created mapping model
                 mapping_lines_src_ids = self.pool.get('external.mappinglines.template').search(cr, uid, [('type_id', '=', ext_ref.type_id.id), ('model_id', '=', each_mapping_rec['model_id'][0])])
                 for each_mapping_line_rec in  self.pool.get('external.mappinglines.template').read(cr, uid, mapping_lines_src_ids, []):

@@ -34,13 +34,18 @@ class external_osv(osv.osv):
     def id_from_prefixed_id(self, prefixed_id):
         return prefixed_id.split(self._name + '_')[1]
     
-    def referential_id(self, cr, uid, id):
-        model_data_id = self.pool.get('ir.model.data').search(cr,uid,[('res_id','=', id),('model','=',self._name),('module', '=', 'base_external_referentials')])
-        if model_data_id:
-            return self.pool.get('ir.model.data').read(cr,uid,model_data_id[0],['external_referential_id'])['external_referential_id'][0]
+    def get_last_imported_external_id(self, cr, object_name, referential_id, where_clause):
+        table_name = object_name.replace('.', '_')
+        cr.execute("""SELECT %s.id, ir_model_data.name from sale_order inner join ir_model_data
+                        ON %s.id = ir_model_data.res_id 
+                        WHERE ir_model_data.model='%s' %s and ir_model_data.external_referential_id = %s
+                        ORDER BY sale_order.create_date DESC LIMIT 1;""" % (table_name, table_name, object_name, where_clause and ("and " + where_clause) or "", "%s"), (referential_id,))
+        results = cr.fetchone()
+        if results and len(results) > 0:
+            return [results[0], results[1].split('sale.order' +'_')[1]]
         else:
-            return False
-        
+            return [False, False]
+    
     def external_connection(self, cr, uid, DEBUG=False):
         """Should be overridden to provide valid external referential connection"""
         return False

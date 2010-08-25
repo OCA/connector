@@ -127,6 +127,7 @@ class external_mapping(osv.osv):
         'external_create_method': fields.char('Create Method', size=64),
         'external_delete_method': fields.char('Delete Method', size=64),
         'mapping_ids': fields.one2many('external.mapping.line', 'mapping_id', 'Mappings Lines'),
+        'external_key_field':fields.many2one('external.mapping.line', 'Foreign key field')
     }
     
     def create(self):

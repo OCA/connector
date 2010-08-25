@@ -39,6 +39,10 @@ class external_osv(osv.osv):
             return self.pool.get('ir.model.data').read(cr,uid,model_data_id[0],['external_referential_id'])['external_referential_id'][0]
         else:
             return False
+        
+    def external_connection(self, cr, uid, referential, DEBUG=False):
+        """Should be overridden to provide valid external referential connection"""
+        return False
 
     def extid_to_oeid(self, cr, uid, ids, external_referential_id):
         #First get the external key field name
@@ -51,13 +55,6 @@ class external_osv(osv.osv):
                 if oe_id:
                     return oe_id
         return False
-    
-    def oe_get(self, cr, uid, ids, context=None):
-        res = {}
-        for record in self.read(cr, uid, ids, [context['field']], context):
-            rid = self.pool.get(context['oe_model']).extid_to_oeid(cr, uid, record[context['field']], self.referential_id(cr, uid, record['id']))
-            res[record['id']] = rid
-        return res
     
     def oevals_from_extdata(self, cr, uid, external_referential_id, data_record, key_field, mapping_lines, defaults, context):
         vals = {} #Dictionary for create record
@@ -101,7 +98,7 @@ class external_osv(osv.osv):
         #Every mapping line has now been translated into vals dictionary, now set defaults if any
         for each_default_entry in defaults.keys():
             vals[each_default_entry] = defaults[each_default_entry]
-            
+
         return vals
 
 

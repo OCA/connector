@@ -114,6 +114,7 @@ class external_referential(osv.osv):
                         'out_function': each_mapping_line_rec['out_function'],
                         }
                     mapping_line_obj.create(cr, uid, vals)
+        return True
             
                 
     _columns = {
@@ -229,10 +230,22 @@ external_mapping_line()
 
 class ir_model_data(osv.osv):
     _inherit = "ir.model.data"
+
+    def _get_external_referential_id(self, cr, uid, ids, name, arg, context=None):
+        res = {}
+        for model_data in self.browse(cr, uid, ids, context):
+            s = model_data.module.split('.') #we assume a module name with a '.' means external referential
+            if len(s) > 1:
+                res[model_data.id] = self.pool.get('external.referential').search(cr, uid, [['name', '=', s[1]]])[0]
+            else:
+                res[model_data.id] = False
+        return res
+
     _columns = {
-        'external_referential_id':fields.many2one('external.referential', 'Ext. Referential'),
-        'create_date': fields.datetime('Created date', readonly=True),
-        'write_date': fields.datetime('Updated date', readonly=True),
-                }
+        'external_referential_id': fields.function(_get_external_referential_id, method=True, type="many2one", relation='external.referential', string='Ext. Referential', store=True),
+        #'external_referential_id':fields.many2one('external.referential', 'Ext. Referential'),
+        #'create_date': fields.datetime('Created date', readonly=True), #TODO used?
+        #'write_date': fields.datetime('Updated date', readonly=True), #TODO used?
+    }
 
 ir_model_data()

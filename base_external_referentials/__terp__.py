@@ -28,24 +28,23 @@
     'description': """
 This module provide an abstract common minimal base to add any additional external id columns
 to some OpenObject table, pointing to some external referential.
-A referential is abstract and minimal at this stage, it's only identified
-by:
+A referential is abstract and minimal at this stage, it only has:
 * a name
 * a location (possibly webservice URL, database connection URL...); the connection method will tell it...
 * referential credentials (user name + password)
+* placeholders for custom in and out mapping for OpenERP object fields.
 
 OpenERP already has limited supported to external ids using the ir_model_data and the id
-fields in the loaded data such as XML or CSV.
-The issue is that teh current system, while very useful to deal with internal OpenERP data has some
-limitations:
-* it doesn't scale well to whole production data because everything ends up into the ir_model_data
-* all the system is built with a using reference id in mind. But in fact you might want SEVERAL external ids.
-Say you sale your products over several websites (using the new Magento multi-instance connector for
-instance), then you want that each product have SEVERAL external id columns. This is exactly what
-this module enables!
+fields in the loaded data such as XML or CSV. We think that's OK to store all referential ids
+into the same ir_model_data table: yes it makes it large, but synchronisation operations involve
+a network bottleneck anyway, so it's largely OK and negligible to have a large table here.
+The existing ir_model_data feature of OpenERP is mostly thought as an mono-external referential
+(even if the module key of ir_model_data plays some referential scoping role). Here we just push
+the concept further to assume multiple external ids for OpenERP entities and add the possibility
+to customize their field mapping directly in OpenERP to accomodate the external systems.
     """,
     'author': 'Raphaël Valyi (Akretion.com), Sharoon Thomas (Openlabs.co.in)',
-    'website': 'http://www.akretion.com',
+    'website': 'http://www.akretion.com, http://openlabs.co.in/',
     'depends': ['base'],
     'init_xml': [],
     'update_xml': ['base_external_referentials_view.xml'],

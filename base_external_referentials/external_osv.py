@@ -36,13 +36,18 @@ class external_osv(osv.osv):
     
     def get_last_imported_external_id(self, cr, object_name, referential_id, where_clause):
         table_name = object_name.replace('.', '_')
-        cr.execute("""SELECT %s.id, ir_model_data.name from sale_order inner join ir_model_data
-                        ON %s.id = ir_model_data.res_id 
-                        WHERE ir_model_data.model='%s' %s and ir_model_data.external_referential_id = %s
-                        ORDER BY sale_order.create_date DESC LIMIT 1;""" % (table_name, table_name, object_name, where_clause and ("and " + where_clause) or "", "%s"), (referential_id,))
+        cr.execute("""
+                   SELECT %(table_name)s.id, ir_model_data.name from %(table_name)s inner join ir_model_data
+                   ON %(table_name)s.id = ir_model_data.res_id
+                   WHERE ir_model_data.model=%%s %(where_clause)s
+                     AND ir_model_data.external_referential_id = %%s
+                   ORDER BY %(table_name)s.create_date DESC
+                   LIMIT 1
+                   """ % { 'table_name' : table_name, 'where_clause' : where_clause and ("and " + where_clause) or ""}
+                   , (object_name, referential_id,))
         results = cr.fetchone()
         if results and len(results) > 0:
-            return [results[0], results[1].split('sale.order' +'_')[1]]
+            return [results[0], results[1].split(object_name +'_')[1]]
         else:
             return [False, False]
     
@@ -50,15 +55,15 @@ class external_osv(osv.osv):
         """Should be overridden to provide valid external referential connection"""
         return False
     
-    def oeid_to_extid(self, cr, uid, id, external_referential_id, context={}):
-        model_data_ids = self.pool.get('ir.model.data').search(cr, uid, [('model', '=', self._name), ('res_id', '=', id), ('module', '=', 'base_external_referentials_keep'), ('external_referential_id', '=', external_referential_id)])
+    def oeid_to_extid(self, cr, uid, id, external_referential_id, context=None):
+        model_data_ids = self.pool.get('ir.model.data').search(cr, uid, [('model', '=', self._name), ('res_id', '=', id), ('external_referential_id', '=', external_referential_id)])
         if model_data_ids and len(model_data_ids) > 0:
             prefixed_id = self.pool.get('ir.model.data').read(cr, uid, model_data_ids[0], ['name'])['name']
             ext_id = int(self.id_from_prefixed_id(prefixed_id))
             return ext_id
         return False
 
-    def extid_to_oeid(self, cr, uid, id, external_referential_id, context={}):
+    def extid_to_oeid(self, cr, uid, id, external_referential_id, context=None):
         #First get the external key field name
         #conversion external id -> OpenERP object using Object mapping_column_name key!
         if id:
@@ -82,6 +87,8 @@ class external_osv(osv.osv):
         return False
     
     def oevals_from_extdata(self, cr, uid, external_referential_id, data_record, key_field, mapping_lines, defaults, context):
+        if context is None:
+            context = {}
         vals = {} #Dictionary for create record
         for each_mapping_line in mapping_lines:
             #Type cast if the expression exists
@@ -114,10 +121,11 @@ class external_osv(osv.osv):
                 try:
                     exec each_mapping_line['in_function'] in space
                 except Exception, e:
-                    print "Err in import mapping in:\n", each_mapping_line['in_function']
+                    logger = netsvc.Logger()
+                    logger.notifyChannel('extdata_from_oevals', netsvc.DEBUG, "Error in import mapping: %r" % (each_mapping_line['in_function'],))
                     del(space['__builtins__'])
-                    print "mapping context", space
-                    print "Error:", e
+                    logger.notifyChannel('extdata_from_oevals', netsvc.DEBUG, "Mapping Context: %r" % (space,))
+                    logger.notifyChannel('extdata_from_oevals', netsvc.DEBUG, "Exception: %r" % (e,))
                 result = space.get('result', False)
                 #If result exists and is of type list
                 if result and type(result) == list:
@@ -131,12 +139,16 @@ class external_osv(osv.osv):
         return vals
 
         
-    def get_external_data(self, cr, uid, conn, external_referential_id, defaults={}, context={}):
+    def get_external_data(self, cr, uid, conn, external_referential_id, defaults=None, context=None):
         """Constructs data using WS or other synch protocols and then call ext_import on it"""
         return {'create_ids': [], 'write_ids': []}
 
-    
-    def ext_import(self, cr, uid, data, external_referential_id, defaults={}, context={}):
+    def ext_import(self, cr, uid, data, external_referential_id, defaults=None, context=None):
+        if defaults is None:
+            defaults = {}
+        if context is None:
+            context = {}
+
         #Inward data has to be list of dictionary
         #This function will import a given set of data as list of dictionary into Open ERP
         write_ids = []  #Will record ids of records modified, not sure if will be used
@@ -157,11 +169,11 @@ class external_osv(osv.osv):
                         external_id = vals.get(for_key_field, False) or each_row.get(for_key_field, False) or each_row.get('external_id', False)
                         #del vals[for_key_field] looks like it is affecting the import :(
                         #Check if record exists
-                        existing_ir_model_data_id = self.pool.get('ir.model.data').search(cr, uid, [('model', '=', self._name), ('name', '=', self.prefixed_id(external_id))])
+                        existing_ir_model_data_id = self.pool.get('ir.model.data').search(cr, uid, [('model', '=', self._name), ('name', '=', self.prefixed_id(external_id)), ('external_referential_id', '=', external_referential_id)])
                         record_test_id = False
                         if existing_ir_model_data_id:
                             existing_rec_id = self.pool.get('ir.model.data').read(cr, uid, existing_ir_model_data_id, ['res_id'])[0]['res_id']
-                            
+
                             #Note: OpenERP cleans up ir_model_data which res_id records have been deleted only at server update because that would be a perf penalty,
                             #so we take care of it here:
                             record_test_id = self.search(cr, uid, [('id', '=', existing_rec_id)])
@@ -175,22 +187,21 @@ class external_osv(osv.osv):
                                 write_ids.append(existing_rec_id)
                                 self.pool.get('ir.model.data').write(cr, uid, existing_ir_model_data_id, {'res_id':existing_rec_id})
                                 logger.notifyChannel('ext synchro', netsvc.LOG_INFO, "Updated in OpenERP %s from External Ref with external_id %s and OpenERP id %s successfully" %(self._name, external_id, existing_rec_id))
- 
+
                         else:
                             crid = self.oe_create(cr, uid, vals, each_row, external_referential_id, defaults, context)
                             create_ids.append(crid)
                             ir_model_data_vals = {
-                                                    'name':self.prefixed_id(external_id),
-                                                    'model':self._name,
-                                                    'res_id':crid,
-                                                    'external_referential_id':external_referential_id,
-                                                    'module':'base_external_referentials_keep'
-                                                  }
+                                'name': self.prefixed_id(external_id),
+                                'model': self._name,
+                                'res_id': crid,
+                                'external_referential_id': external_referential_id,
+                                'module': 'extref.' + self.pool.get('external.referential').read(cr, uid, external_referential_id, ['name'])['name']
+                            }
                             self.pool.get('ir.model.data').create(cr, uid, ir_model_data_vals)
                             logger.notifyChannel('ext synchro', netsvc.LOG_INFO, "Created in OpenERP %s from External Ref with external_id %s and OpenERP id %s successfully" %(self._name, external_id, crid))
                         cr.commit()
-                        
-                                
+
         return {'create_ids': create_ids, 'write_ids': write_ids}
 
     def oe_update(self, cr, uid, existing_rec_id, vals, data, external_referential_id, defaults, context):
@@ -201,31 +212,35 @@ class external_osv(osv.osv):
         return self.create(cr, uid, vals, context)
     
 
-    def extdata_from_oevals(self, cr, uid, external_referential_id, data_record, mapping_lines, defaults, context):
+    def extdata_from_oevals(self, cr, uid, external_referential_id, data_record, mapping_lines, defaults, context=None):
+        if context is None:
+            context = {}
         vals = {} #Dictionary for record
         for each_mapping_line in mapping_lines:
             #Build the space for expr
             space = {
-                    'self':self,
-                    'cr':cr,
-                    'uid':uid,
-                    'external_referential_id':external_referential_id,
-                    'defaults':defaults,
-                    'context':context,
-                    'record':data_record,
-                    'conn':context.get('conn_obj', False),
-                    'base64':base64
-                    }
+                'self':self,
+                'cr':cr,
+                'uid':uid,
+                'external_referential_id':external_referential_id,
+                'defaults':defaults,
+                'context':context,
+                'record':data_record,
+                'conn':context.get('conn_obj', False),
+                'base64':base64
+            }
             #The expression should return value in list of tuple format
             #eg[('name','Sharoon'),('age',20)] -> vals = {'name':'Sharoon', 'age':20}
             if each_mapping_line['out_function']:
                 try:
                     exec each_mapping_line['out_function'] in space
                 except Exception, e:
-                    print "Exception in export mapping in:\n", each_mapping_line['out_function']
+                    logger = netsvc.Logger()
+                    logger.notifyChannel('extdata_from_oevals', netsvc.DEBUG, "Error in import mapping: %r" % (each_mapping_line['out_function'],))
                     del(space['__builtins__'])
-                    print "mapping context", space
-                    print "Error:", e
+                    logger.notifyChannel('extdata_from_oevals', netsvc.DEBUG, "Mapping Context: %r" % (space,))
+                    logger.notifyChannel('extdata_from_oevals', netsvc.DEBUG, "Exception: %r" % (e,))
+
                 result = space.get('result', False)
                 #If result exists and is of type list
                 if result and type(result) == list:
@@ -239,17 +254,17 @@ class external_osv(osv.osv):
         return vals
 
     
-    def ext_export(self, cr, uid, ids, external_referential_ids=[], defaults={}, context={}):
+    def ext_export(self, cr, uid, ids, external_referential_ids=[], defaults={}, context=None):
+        if context is None:
+            context = {}
         #external_referential_ids has to be a list
         logger = netsvc.Logger()
         write_ids = []  #Will record ids of records modified, not sure if will be used
         create_ids = [] #Will record ids of newly created records, not sure if will be used
-        if not ids:
-            ids = self.search(cr, uid, [])
         for record_data in self.read(cr, uid, ids, [], context):
             #If no external_ref_ids are mentioned, then take all ext_ref_this item has
             if not external_referential_ids:
-                ir_model_data_recids = self.pool.get('ir.model.data').search(cr, uid, [('model', '=', self._name), ('res_id', '=', id), ('module', '=', 'base_external_referentials_keep')])
+                ir_model_data_recids = self.pool.get('ir.model.data').search(cr, uid, [('model', '=', self._name), ('res_id', '=', id), ('module', 'ilike', 'extref')])
                 if ir_model_data_recids:
                     for each_model_rec in self.pool.get('ir.model.data').read(cr, uid, ir_model_data_recids, ['external_referential_id']):
                         if each_model_rec['external_referential_id']:
@@ -268,9 +283,8 @@ class external_osv(osv.osv):
                     if mapping_lines:
                         #if mapping lines exist find the data conversion for each row in inward data
                         exp_data = self.extdata_from_oevals(cr, uid, ext_ref_id, record_data, mapping_lines, defaults, context)
-                
                         #Check if export for this referential demands a create or update
-                        rec_check_ids = self.pool.get('ir.model.data').search(cr, uid, [('model', '=', self._name), ('res_id', '=', record_data['id']), ('module', '=', 'base_external_referentials_keep'), ('external_referential_id', '=', ext_ref_id)])
+                        rec_check_ids = self.pool.get('ir.model.data').search(cr, uid, [('model', '=', self._name), ('res_id', '=', record_data['id']), ('module', 'ilike', 'extref'), ('external_referential_id', '=', ext_ref_id)])
                         #rec_check_ids will indicate if the product already has a mapping record with ext system
                         mapping_id = self.pool.get('external.mapping').search(cr, uid, [('model', '=', self._name), ('referential_id', '=', ext_ref_id)])
                         if mapping_id and len(mapping_id) == 1:
@@ -316,7 +330,7 @@ class external_osv(osv.osv):
                                                             'model': self._name,
                                                             'res_id': record_data['id'],
                                                             'external_referential_id': ext_ref_id,
-                                                            'module': 'base_external_referentials_keep'
+                                                            'module': 'extref.' + self.pool.get('external.referential').read(cr, uid, ext_ref_id, ['name'])['name']
                                                           }
                                     self.pool.get('ir.model.data').create(cr, uid, ir_model_data_vals)
                                     logger.notifyChannel('ext synchro', netsvc.LOG_INFO, "Created in External Ref %s from OpenERP with external_id %s and OpenERP id %s successfully" %(self._name, crid, record_data['id']))

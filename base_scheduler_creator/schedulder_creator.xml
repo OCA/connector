@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<openerp>
+	<data>
+
+		<record id="scheduler_creator_wizard" model="ir.ui.view">
+			<field name="name">scheduler.creator.wizard.form</field>
+			<field name="priority">20</field>
+			<field name="model">scheduler.creator.wizard</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form string="Scheduler Creator">
+					<group>
+				    	<separator colspan="4" string="Create Automaticaly Your Scheduler"/>
+				        <button icon="gtk-cancel" special="cancel" string="Cancel"/>
+				        <button icon="gtk-ok" name="action_create" string="Create" type="object"/>
+				        <separator colspan="4"/>
+ 					</group>
+ 				</form>
+			</field>
+		</record>
+		
+		<record id="action_scheduler_creator_wizard" model="ir.actions.act_window">
+			<field name="name">create a scheduler</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">scheduler.creator.wizard</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">form</field>
+			<field name="target">new</field>
+			<field name="context">{}</field>
+		</record>
+
+
+		
+    </data>
+</openerp>

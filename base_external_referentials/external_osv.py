@@ -122,10 +122,10 @@ class external_osv(osv.osv):
                     exec each_mapping_line['in_function'] in space
                 except Exception, e:
                     logger = netsvc.Logger()
-                    logger.notifyChannel('extdata_from_oevals', netsvc.DEBUG, "Error in import mapping: %r" % (each_mapping_line['in_function'],))
+                    logger.notifyChannel('extdata_from_oevals', netsvc.LOG_DEBUG, "Error in import mapping: %r" % (each_mapping_line['in_function'],))
                     del(space['__builtins__'])
-                    logger.notifyChannel('extdata_from_oevals', netsvc.DEBUG, "Mapping Context: %r" % (space,))
-                    logger.notifyChannel('extdata_from_oevals', netsvc.DEBUG, "Exception: %r" % (e,))
+                    logger.notifyChannel('extdata_from_oevals', netsvc.LOG_DEBUG, "Mapping Context: %r" % (space,))
+                    logger.notifyChannel('extdata_from_oevals', netsvc.LOG_DEBUG, "Exception: %r" % (e,))
                 result = space.get('result', False)
                 #If result exists and is of type list
                 if result and type(result) == list:

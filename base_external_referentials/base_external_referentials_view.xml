@@ -19,9 +19,17 @@
 								<field name="apipass" />
 							</page>
 						</notebook>
-						<button name="refresh_mapping" string="Reload Referential Mapping Templates" colspan="2" type="object" />
-						<button name="core_sync" string="Synchronize Referential Settings" colspan="2" type="object" attrs="{'readonly':[('mapping_ids','=',[])]}"/>
 					</group>
+				    <group col="4" colspan="4">
+				        <separator string="Core Components" colspan="4" />
+				        <notebook colspan="4">
+				        	<page string="Referential Actions">
+				        	    <separator string="Compulsory" colspan="4" />
+				                <button name="refresh_mapping" string="1 - Reload Referential Mapping Templates" colspan="2" type="object" />
+            					<button name="core_sync" string="2 - Synchronize Referential Settings" colspan="2" type="object" attrs="{'readonly':[('mapping_ids','=',[])]}"/>
+            				</page>
+            			</notebook>
+            		</group>
 					<field name="mapping_ids" widget="one2many_list" nolabel="1">
 						<tree string="Object Mappings">
 							<field name="model_id" />

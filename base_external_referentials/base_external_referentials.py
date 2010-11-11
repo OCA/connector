@@ -237,7 +237,7 @@ class ir_model_data(osv.osv):
             s = model_data.module.split('.') #we assume a module name with a '.' means external referential
             if len(s) > 1:
                 ref_ids = self.pool.get('external.referential').search(cr, uid, [['name', '=', s[1]]])
-                if ids:
+                if ref_ids:
                     res[model_data.id] = ref_ids[0]
                 else:
                     res[model_data.id] = False

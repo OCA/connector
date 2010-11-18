@@ -27,7 +27,14 @@ import datetime
 import netsvc
 
 class external_osv(osv.osv):
-    
+
+    def read_w_order(self, cr, user, ids, fields_to_read=None, context=None, load='_classic_read'):
+        res = self.read(cr, user, ids, fields_to_read, context, load)
+        resultat = []
+        for id in ids:
+            resultat += [x for x in res if x['id'] == id]
+        return resultat
+
     def prefixed_id(self, id):
         return self._name + '_' + str(id)
     
@@ -236,10 +243,10 @@ class external_osv(osv.osv):
                     exec each_mapping_line['out_function'] in space
                 except Exception, e:
                     logger = netsvc.Logger()
-                    logger.notifyChannel('extdata_from_oevals', netsvc.DEBUG, "Error in import mapping: %r" % (each_mapping_line['out_function'],))
+                    logger.notifyChannel('extdata_from_oevals', netsvc.LOG_DEBUG, "Error in import mapping: %r" % (each_mapping_line['out_function'],))
                     del(space['__builtins__'])
-                    logger.notifyChannel('extdata_from_oevals', netsvc.DEBUG, "Mapping Context: %r" % (space,))
-                    logger.notifyChannel('extdata_from_oevals', netsvc.DEBUG, "Exception: %r" % (e,))
+                    logger.notifyChannel('extdata_from_oevals', netsvc.LOG_DEBUG, "Mapping Context: %r" % (space,))
+                    logger.notifyChannel('extdata_from_oevals', netsvc.LOG_DEBUG, "Exception: %r" % (e,))
 
                 result = space.get('result', False)
                 #If result exists and is of type list
@@ -261,7 +268,7 @@ class external_osv(osv.osv):
         logger = netsvc.Logger()
         write_ids = []  #Will record ids of records modified, not sure if will be used
         create_ids = [] #Will record ids of newly created records, not sure if will be used
-        for record_data in self.read(cr, uid, ids, [], context):
+        for record_data in self.read_w_order(cr, uid, ids, [], context):
             #If no external_ref_ids are mentioned, then take all ext_ref_this item has
             if not external_referential_ids:
                 ir_model_data_recids = self.pool.get('ir.model.data').search(cr, uid, [('model', '=', self._name), ('res_id', '=', id), ('module', 'ilike', 'extref')])
@@ -293,7 +300,7 @@ class external_osv(osv.osv):
                             if rec_check_ids and mapping_rec and len(rec_check_ids) == 1:
                                 ext_id = self.oeid_to_extid(cr, uid, record_data['id'], ext_ref_id, context)
 
-                                if not context.get('force', False):
+                                if not context.get('force', False):#TODO rename this context's key in 'no_date_check' or something like that
                                     #Record exists, check if update is required, for that collect last update times from ir.data & record
                                     last_exported_times = self.pool.get('ir.model.data').read(cr, uid, rec_check_ids[0], ['write_date', 'create_date'])
                                     last_exported_time = last_exported_times.get('write_date', False) or last_exported_times.get('create_date', False)

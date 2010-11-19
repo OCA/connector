@@ -35,6 +35,13 @@ class external_osv(osv.osv):
             resultat += [x for x in res if x['id'] == id]
         return resultat
 
+    def browse_w_order(self, cr, uid, ids, context=None, list_class=None, fields_process={}):
+        res = self.browse(cr, uid, ids, context, list_class, fields_process)
+        resultat = []
+        for id in ids:
+            resultat += [x for x in res if x.id == id]
+        return resultat
+
     def prefixed_id(self, id):
         return self._name + '_' + str(id)
     

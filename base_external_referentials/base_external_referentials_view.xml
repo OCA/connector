@@ -60,9 +60,9 @@
 									<field name="type" />
 									<field name="external_type" />
 									<newline />
-									<field name="in_function" />
+									<field name="in_function" colspan="4"/>
 									<newline />
-									<field name="out_function" />
+									<field name="out_function" colspan="4"/>
 								</form>
 							</field>
 						</form>

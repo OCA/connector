@@ -102,6 +102,11 @@ class external_referential(osv.osv):
                     mapping_id = mappings_obj.create(cr, uid, vals)
                 else:
                     mapping_id = existing_ids[0]
+                    data = self.pool.get('ir.model').read(cr, uid, [each_mapping_rec['model_id'][0]], ['model', 'name'], context)[0]
+                    model = data['model']
+                    model_name = data['name']
+                    self.pool.get('external.mapping').create_external_link(cr, uid, model, model_name)
+
                 #Now create mapping lines of the created mapping model
                 mapping_lines_src_ids = self.pool.get('external.mappinglines.template').search(cr, uid, [('type_id', '=', ext_ref.type_id.id), ('model_id', '=', each_mapping_rec['model_id'][0])])
                 for each_mapping_line_rec in  self.pool.get('external.mappinglines.template').read(cr, uid, mapping_lines_src_ids, []):
@@ -178,6 +183,21 @@ class external_mapping(osv.osv):
             return {'value': {'related_model_ids': self._related_model_ids(cr, uid, model)}}
         else:
             return {}
+
+    def create_external_link(self, cr, uid, model, model_name):
+        vals = {'domain': "[('res_id', '=', 'active_id'), ('model', '=', '%s')]" %(model,), 'name': 'External ' + model_name, 'res_model': 'ir.model.data', 'src_model': model, 'view_type': 'form'}
+        xml_id = "ext_" + model_name
+        ir_model_data_id = self.pool.get('ir.model.data')._update(cr, uid, 'ir.actions.act_window', "base_external_referentials", vals, xml_id, False, 'update')
+        value = 'ir.actions.act_window,'+str(ir_model_data_id)
+        return self.pool.get('ir.model.data').ir_set(cr, uid, 'action', 'client_action_relate', xml_id, [model], value, replace=True, isobject=True, xml_id=xml_id)
+
+    def create(self, cr, uid, vals, context=None):
+        res = super(external_mapping, self).create(cr, uid, vals, context)
+        data = self.pool.get('ir.model').read(cr, uid, [vals['model_id']], ['model', 'name'], context)[0]
+        model = data['model']
+        model_name = data['name']
+        self.create_external_link(cr, uid, model, model_name)
+        return res
     
     _columns = {
         'referential_id': fields.many2one('external.referential', 'External Referential', required=True, select=True, ondelete='cascade'),

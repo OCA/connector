@@ -252,14 +252,17 @@ class ir_model_data(osv.osv):
     _inherit = "ir.model.data"
     
     def init(self, cr):
-      cr.execute("update ir_model_data set name = replace(replace(name, '_','/'), '.', '_') where module ilike 'extref%';")
+      #FIXME: migration workaround: we changed the ir_model_data usage to make standard CSV import work again
+      cr.execute("update ir_model_data set name = replace(name, '_mag_order', '/mag-order') where module ilike 'extref%';")
+      cr.execute("update ir_model_data set name = replace(name, '_([1-9])', E'/\\1') where module ilike 'extref%';")
+      cr.execute("update ir_model_data set name = replace('.', '_') where module ilike 'extref%';")
       cr.execute("update ir_model_data set module = replace(module, '.','/') where module ilike 'extref%';")
       return True
 
     def _get_external_referential_id(self, cr, uid, ids, name, arg, context=None):
         res = {}
         for model_data in self.browse(cr, uid, ids, context):
-            s = model_data.module.split('.') #we assume a module name with a '.' means external referential
+            s = model_data.module.split('/') #we assume a module name with a '/' means external referential
             if len(s) > 1:
                 ref_ids = self.pool.get('external.referential').search(cr, uid, [['name', '=', s[1]]])
                 if ref_ids:

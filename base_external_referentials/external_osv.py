@@ -43,10 +43,11 @@ class external_osv(osv.osv):
         return resultat
 
     def prefixed_id(self, id):
+        """The reason why we don't just use the external id and put the model as the prefix is to avoid unique ir_model_data#name per module constraint violation."""
         return self._name.replace('.', '_') + '/' + str(id)
     
     def id_from_prefixed_id(self, prefixed_id):
-        return prefixed_id.split(self._name + '/')[1]
+        return prefixed_id.split(self._name.replace('.', '_') + '/')[1]
     
     def get_last_imported_external_id(self, cr, object_name, referential_id, where_clause):
         table_name = object_name.replace('.', '_')
@@ -61,7 +62,7 @@ class external_osv(osv.osv):
                    , (object_name, referential_id,))
         results = cr.fetchone()
         if results and len(results) > 0:
-            return [results[0], results[1].split(object_name +'/')[1]]
+            return [results[0], results[1].split(object_name.replace('.', '_') +'/')[1]]
         else:
             return [False, False]
     

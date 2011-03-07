@@ -250,6 +250,11 @@ external_mapping_line()
 
 class ir_model_data(osv.osv):
     _inherit = "ir.model.data"
+    
+    def init(self, cr):
+      cr.execute("update ir_model_data set name = replace(replace(name, '_','/'), '.', '_') where module ilike 'extref%';")
+      cr.execute("update ir_model_data set module = replace(module, '.','/') where module ilike 'extref%';")
+      return True
 
     def _get_external_referential_id(self, cr, uid, ids, name, arg, context=None):
         res = {}

@@ -43,10 +43,10 @@ class external_osv(osv.osv):
         return resultat
 
     def prefixed_id(self, id):
-        return self._name + '_' + str(id)
+        return self._name.replace('.', '_') + '/' + str(id)
     
     def id_from_prefixed_id(self, prefixed_id):
-        return prefixed_id.split(self._name + '_')[1]
+        return prefixed_id.split(self._name + '/')[1]
     
     def get_last_imported_external_id(self, cr, object_name, referential_id, where_clause):
         table_name = object_name.replace('.', '_')
@@ -61,7 +61,7 @@ class external_osv(osv.osv):
                    , (object_name, referential_id,))
         results = cr.fetchone()
         if results and len(results) > 0:
-            return [results[0], results[1].split(object_name +'_')[1]]
+            return [results[0], results[1].split(object_name +'/')[1]]
         else:
             return [False, False]
     
@@ -81,25 +81,23 @@ class external_osv(osv.osv):
         #First get the external key field name
         #conversion external id -> OpenERP object using Object mapping_column_name key!
         if id:
-            mapping_id = self.pool.get('external.mapping').search(cr, uid, [('model', '=', self._name), ('referential_id', '=', external_referential_id)])
-            if mapping_id:
-                model_data_ids = self.pool.get('ir.model.data').search(cr, uid, [('name', '=', self.prefixed_id(id)), ('model', '=', self._name), ('external_referential_id', '=', external_referential_id)])
-                if model_data_ids:
-                    claimed_oe_id = self.pool.get('ir.model.data').read(cr, uid, model_data_ids[0], ['res_id'])['res_id']
+            model_data_ids = self.pool.get('ir.model.data').search(cr, uid, [('name', '=', self.prefixed_id(id)), ('model', '=', self._name), ('external_referential_id', '=', external_referential_id)])
+            if model_data_ids:
+                claimed_oe_id = self.pool.get('ir.model.data').read(cr, uid, model_data_ids[0], ['res_id'])['res_id']
                     
-                    #because OpenERP might keep ir_model_data (is it a bug?) for deleted records, we check if record exists:
-                    ids = self.search(cr, uid, [('id', '=', claimed_oe_id)])
-                    if ids:
-                        return ids[0]
+                #because OpenERP might keep ir_model_data (is it a bug?) for deleted records, we check if record exists:
+                ids = self.search(cr, uid, [('id', '=', claimed_oe_id)])
+                if ids:
+                    return ids[0]
     
-                try:
-                    if context and context.get('alternative_key', False): #FIXME dirty fix for Magento product.info id/sku mix bug: https://bugs.launchpad.net/magentoerpconnect/+bug/688225
-                        id = context.get('alternative_key', False)
-                    result = self.get_external_data(cr, uid, self.external_connection(cr, uid, self.pool.get('external.referential').browse(cr, uid, external_referential_id)), external_referential_id, {}, {'id':id})
-                    if len(result['create_ids']) == 1:
-                        return result['create_ids'][0]
-                except Exception, error: #external system might return error because no such record exists
-                    print error
+            try:
+                if context and context.get('alternative_key', False): #FIXME dirty fix for Magento product.info id/sku mix bug: https://bugs.launchpad.net/magentoerpconnect/+bug/688225
+                    id = context.get('alternative_key', False)
+                result = self.get_external_data(cr, uid, self.external_connection(cr, uid, self.pool.get('external.referential').browse(cr, uid, external_referential_id)), external_referential_id, {}, {'id':id})
+                if len(result['create_ids']) == 1:
+                    return result['create_ids'][0]
+            except Exception, error: #external system might return error because no such record exists
+                print error
         return False
     
     def oevals_from_extdata(self, cr, uid, external_referential_id, data_record, key_field, mapping_lines, defaults, context):
@@ -212,7 +210,7 @@ class external_osv(osv.osv):
                                 'model': self._name,
                                 'res_id': crid,
                                 'external_referential_id': external_referential_id,
-                                'module': 'extref.' + self.pool.get('external.referential').read(cr, uid, external_referential_id, ['name'])['name']
+                                'module': 'extref/' + self.pool.get('external.referential').read(cr, uid, external_referential_id, ['name'])['name']
                             }
                             self.pool.get('ir.model.data').create(cr, uid, ir_model_data_vals)
                             logger.notifyChannel('ext synchro', netsvc.LOG_INFO, "Created in OpenERP %s from External Ref with external_id %s and OpenERP id %s successfully" %(self._name, external_id, crid))
@@ -346,7 +344,7 @@ class external_osv(osv.osv):
                                                             'model': self._name,
                                                             'res_id': record_data['id'],
                                                             'external_referential_id': ext_ref_id,
-                                                            'module': 'extref.' + self.pool.get('external.referential').read(cr, uid, ext_ref_id, ['name'])['name']
+                                                            'module': 'extref/' + self.pool.get('external.referential').read(cr, uid, ext_ref_id, ['name'])['name']
                                                           }
                                     self.pool.get('ir.model.data').create(cr, uid, ir_model_data_vals)
                                     logger.notifyChannel('ext synchro', netsvc.LOG_INFO, "Created in External Ref %s from OpenERP with external_id %s and OpenERP id %s successfully" %(self._name, crid, record_data['id']))

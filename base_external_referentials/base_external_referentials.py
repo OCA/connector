@@ -28,7 +28,7 @@ class external_referential_type(osv.osv):
     _description = 'External Referential Type (Ex.Magento,Spree)'
     
     _columns = {
-        'name': fields.char('Name', size=64, required=True, readonly=True), #dont allow creation of type from frontend
+        'name': fields.char('Name', size=64, required=True), #dont allow creation of type from frontend
     }
     
 external_referential_type()

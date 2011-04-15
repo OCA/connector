@@ -65,6 +65,26 @@ class external_osv(osv.osv):
             return [results[0], results[1].split(object_name.replace('.', '_') +'/')[1]]
         else:
             return [False, False]
+            
+    def get_modified_ids(self, cr, uid, date=False, context=None): 
+        """ This function will return the ids of the modified or created items of self object since the date
+
+        @return: a table of this format : [[id1, last modified date], [id2, last modified date] ...] """
+        if date:
+            sql_request = "SELECT id, create_date, write_date FROM %s " % (self._name.replace('.', '_'),)
+            sql_request += "WHERE create_date > %s OR write_date > %s;"
+            cr.execute(sql_request, (date, date))
+        else:
+            sql_request = "SELECT id, create_date, write_date FROM %s " % (self._name.replace('.', '_'),)
+            cr.execute(sql_request)
+        l = cr.fetchall()
+        res = []
+        for p in l:
+            if p[2]:
+                res += [[p[0], p[2]]] 
+            else:
+                res += [[p[0], p[1]]] 
+        return sorted(res, key=lambda date: date[1])
     
     def external_connection(self, cr, uid, DEBUG=False):
         """Should be overridden to provide valid external referential connection"""

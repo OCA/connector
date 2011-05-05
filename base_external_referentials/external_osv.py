@@ -91,6 +91,8 @@ class external_osv(osv.osv):
         return False
     
     def oeid_to_extid(self, cr, uid, id, external_referential_id, context=None):
+        """Returns the external id of a resource by its OpenERP id.
+        Returns False if the resource id does not exists."""
         model_data_ids = self.pool.get('ir.model.data').search(cr, uid, [('model', '=', self._name), ('res_id', '=', id), ('external_referential_id', '=', external_referential_id)])
         if model_data_ids and len(model_data_ids) > 0:
             prefixed_id = self.pool.get('ir.model.data').read(cr, uid, model_data_ids[0], ['name'])['name']
@@ -98,19 +100,29 @@ class external_osv(osv.osv):
             return ext_id
         return False
 
-    def extid_to_oeid(self, cr, uid, id, external_referential_id, context=None):
-        #First get the external key field name
-        #conversion external id -> OpenERP object using Object mapping_column_name key!
+    def extid_to_existing_oeid(self, cr, uid, id, external_referential_id, context=None):
+        """Returns the OpenERP id of a resource by its external id.
+           Returns False if the resource does not exist."""
         if id:
             model_data_ids = self.pool.get('ir.model.data').search(cr, uid, [('name', '=', self.prefixed_id(id)), ('model', '=', self._name), ('external_referential_id', '=', external_referential_id)])
             if model_data_ids:
                 claimed_oe_id = self.pool.get('ir.model.data').read(cr, uid, model_data_ids[0], ['res_id'])['res_id']
-                    
+
                 #because OpenERP might keep ir_model_data (is it a bug?) for deleted records, we check if record exists:
                 ids = self.search(cr, uid, [('id', '=', claimed_oe_id)])
                 if ids:
                     return ids[0]
-    
+        return False
+
+    def extid_to_oeid(self, cr, uid, id, external_referential_id, context=None):
+        """Returns the OpenERP ID of a resource by its external id.
+        Creates the resource from the external connection if the resource does not exist."""
+        #First get the external key field name
+        #conversion external id -> OpenERP object using Object mapping_column_name key!
+        if id:
+            existing_id = self.extid_to_existing_oeid(cr, uid, id, external_referential_id, context)
+            if existing_id:
+                return existing_id
             try:
                 if context and context.get('alternative_key', False): #FIXME dirty fix for Magento product.info id/sku mix bug: https://bugs.launchpad.net/magentoerpconnect/+bug/688225
                     id = context.get('alternative_key', False)

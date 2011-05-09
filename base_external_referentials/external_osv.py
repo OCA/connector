@@ -388,7 +388,6 @@ def ext_export(self, cr, uid, ids, external_referential_ids=[], defaults={}, con
 
 
 def can_create_on_update_failure(self, error, data, context):
-        print data, context
 	return True
 
 def ext_create(self, cr, uid, data, conn, method, oe_id, context):

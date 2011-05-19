@@ -253,10 +253,14 @@ class ir_model_data(osv.osv):
     
     def init(self, cr):
       #FIXME: migration workaround: we changed the ir_model_data usage to make standard CSV import work again
-      cr.execute("update ir_model_data set name = replace(name, '_mag_order', '/mag_order') where module ilike 'extref%';")
-      cr.execute("update ir_model_data set name = regexp_replace(name, '_([1-9])', E'/\\1') where module ilike 'extref%';")
-      cr.execute("update ir_model_data set name = replace(name, '.', '_') where module ilike 'extref%';")
-      cr.execute("update ir_model_data set module = replace(module, '.','/') where module ilike 'extref%';")
+      cr.execute("select name from external_referential;")
+      referentials = cr.fetchall()
+      for tuple in referentials:
+          name = tuple[0]
+          cr.execute("update ir_model_data set name = replace(name, '_mag_order', '/mag_order') where module = %s;", (name,))
+          cr.execute("update ir_model_data set name = regexp_replace(name, '_([1-9])', E'/\\1') where module = %s;", (name,))
+          cr.execute("update ir_model_data set name = replace(name, '.', '_') where module = %s;", (name,))
+          cr.execute("update ir_model_data set module = replace(module, '.','/') where module = %s;", (name,))
       return True
 
     def _get_external_referential_id(self, cr, uid, ids, name, arg, context=None):

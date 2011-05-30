@@ -256,9 +256,9 @@ class ir_model_data(osv.osv):
       cr.execute("select name from external_referential;")
       referentials = cr.fetchall()
       for tuple in referentials:
-          name = tuple[0]
+          name = "extref." + tuple[0]
           cr.execute("update ir_model_data set name = replace(name, '_mag_order', '/mag_order') where module = %s;", (name,))
-          cr.execute("update ir_model_data set name = regexp_replace(name, '_([1-9])', E'/\\1') where module = %s;", (name,))
+          cr.execute("update ir_model_data set name = regexp_replace(name, '_([1-9])', E'/\\\\1') where module = %s;", (name,))
           cr.execute("update ir_model_data set name = replace(name, '.', '_') where module = %s;", (name,))
           cr.execute("update ir_model_data set module = replace(module, '.','/') where module = %s;", (name,))
       return True

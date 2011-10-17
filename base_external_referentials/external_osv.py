@@ -152,6 +152,9 @@ def oevals_from_extdata(self, cr, uid, external_referential_id, data_record, key
     if context is None:
         context = {}
     vals = {} #Dictionary for create record
+    #Set defaults if any
+    for each_default_entry in defaults.keys():
+        vals[each_default_entry] = defaults[each_default_entry]
     for each_mapping_line in mapping_lines:
         #Type cast if the expression exists
         if each_mapping_line['external_field'] in data_record.keys():
@@ -207,9 +210,6 @@ def oevals_from_extdata(self, cr, uid, external_referential_id, data_record, key
                 else:
                     if not context.get('dont_raise_error', False):
                         raise MappingError(_('Invalid format for the variable result.'), each_mapping_line['external_field'])
-    #Every mapping line has now been translated into vals dictionary, now set defaults if any
-    for each_default_entry in defaults.keys():
-        vals[each_default_entry] = defaults[each_default_entry]
     return vals
 
 
@@ -333,6 +333,9 @@ def extdata_from_oevals(self, cr, uid, external_referential_id, data_record, map
     if context is None:
         context = {}
     vals = {} #Dictionary for record
+    #Set defaults if any
+    for each_default_entry in defaults.keys():
+        vals[each_default_entry] = defaults[each_default_entry]
     for each_mapping_line in mapping_lines:
         #Build the space for expr
         space = {
@@ -369,9 +372,6 @@ def extdata_from_oevals(self, cr, uid, external_referential_id, data_record, map
                 else:
                     if not context.get('dont_raise_error', False):
                         raise MappingError(_('Invalid format for the variable result.'), each_mapping_line['external_field'])
-    #Every mapping line has now been translated into vals dictionary, now set defaults if any
-    for each_default_entry in defaults.keys():
-        vals[each_default_entry] = defaults[each_default_entry]
     return vals
 
 

@@ -158,7 +158,10 @@ def oevals_from_extdata(self, cr, uid, external_referential_id, data_record, key
             try:
                 ifield = data_record.get(each_mapping_line['external_field'], False)
                 if ifield:
-                    type_casted_field = eval(each_mapping_line['external_type'])(ifield)
+                    if each_mapping_line['external_type'] == 'list' and type(ifield) in [str, unicode]:
+                        type_casted_field = list(eval(ifield))
+                    else:
+                        type_casted_field = eval(each_mapping_line['external_type'])(ifield)
                 else:
                     type_casted_field = ifield
                 if type_casted_field in ['None', 'False']:
@@ -196,14 +199,17 @@ def oevals_from_extdata(self, cr, uid, external_referential_id, data_record, key
             
             result = space.get('result', False)
             #If result exists and is of type list
-            if result and type(result) == list:
-                for each_tuple in result:
-                    if type(each_tuple) == tuple and len(each_tuple) == 2:
-                        vals[each_tuple[0]] = each_tuple[1]
+            if result:
+                if type(result) == list:
+                    for each_tuple in result:
+                        if type(each_tuple) == tuple and len(each_tuple) == 2:
+                            vals[each_tuple[0]] = each_tuple[1]
+                else:
+                    if not context.get('dont_raise_error', False):
+                        raise MappingError(_('Invalid format for the variable result.'), each_mapping_line['external_field'])
     #Every mapping line has now been translated into vals dictionary, now set defaults if any
     for each_default_entry in defaults.keys():
         vals[each_default_entry] = defaults[each_default_entry]
-
     return vals
 
 
@@ -355,14 +361,17 @@ def extdata_from_oevals(self, cr, uid, external_referential_id, data_record, map
                     raise MappingError(e, each_mapping_line['external_field'])
             result = space.get('result', False)
             #If result exists and is of type list
-            if result and type(result) == list:
-                for each_tuple in result:
-                    if type(each_tuple) == tuple and len(each_tuple) == 2:
-                        vals[each_tuple[0]] = each_tuple[1]
+            if result:
+                if type(result) == list:
+                    for each_tuple in result:
+                        if type(each_tuple) == tuple and len(each_tuple) == 2:
+                            vals[each_tuple[0]] = each_tuple[1]
+                else:
+                    if not context.get('dont_raise_error', False):
+                        raise MappingError(_('Invalid format for the variable result.'), each_mapping_line['external_field'])
     #Every mapping line has now been translated into vals dictionary, now set defaults if any
     for each_default_entry in defaults.keys():
         vals[each_default_entry] = defaults[each_default_entry]
-
     return vals
 
 

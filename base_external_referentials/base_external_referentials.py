@@ -129,6 +129,7 @@ class external_referential(osv.osv):
         'apiusername': fields.char('User Name', size=64),
         'apipass': fields.char('Password', size=64),
         'mapping_ids': fields.one2many('external.mapping', 'referential_id', 'Mappings'),
+        'create_date': fields.datetime('Creation Date', readonly=True, select=True, help="Date on which external referential is created."),
     }
     
     _sql_constraints = [

@@ -8,7 +8,8 @@
 			<field name="arch" type="xml">
 				<form>
 					<group col="4" colspan="4">
-						<field name="name" attrs="{'readonly':[('mapping_ids','!=',[])]}"/>
+						<field name="name" attrs="{'readonly':[('create_date','!=',False)]}"/>
+						<field name="create_date" invisible="True"/>
 						<notebook colspan="4">
 							<page string="General">
 								<field name="type_id" />

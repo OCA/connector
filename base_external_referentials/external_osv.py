@@ -145,6 +145,7 @@ def extid_to_oeid(self, cr, uid, id, external_referential_id, context=None):
             if len(result['create_ids']) == 1:
                 return result['create_ids'][0]
         except Exception, error: #external system might return error because no such record exists
+            print "===================== error when importing the %s on fly =================", self._name
             print error
     return False
 
@@ -217,8 +218,8 @@ def get_external_data(self, cr, uid, conn, external_referential_id, defaults=Non
     """Constructs data using WS or other synch protocols and then call ext_import on it"""
     return {'create_ids': [], 'write_ids': []}
 
-#TODO the same function for export
 
+#TODO remove me, using a decorator will be better, also for a decorator should be added for export
 def import_with_try(self, cr, uid, callback, data_record, external_referential_id, defaults, context=None):
     if not context:
         context={}
@@ -269,7 +270,7 @@ def ext_import(self, cr, uid, data, external_referential_id, defaults=None, cont
         mapping_id = self.pool.get('external.mapping').search(cr, uid, [('model', '=', self._name), ('referential_id', '=', external_referential_id)])
         if mapping_id:
             #If a mapping exists for current model, search for mapping lines
-            mapping_line_ids = self.pool.get('external.mapping.line').search(cr, uid, [('mapping_id', '=', mapping_id), ('type', 'in', ['in_out', 'in'])])
+            mapping_line_ids = self.pool.get('external.mapping.line').search(cr, uid, [('mapping_id', '=', mapping_id[0]), ('type', 'in', ['in_out', 'in'])])
             mapping_lines = self.pool.get('external.mapping.line').read(cr, uid, mapping_line_ids, ['external_field', 'external_type', 'in_function'])
             if mapping_lines:
                 #if mapping lines exist find the data conversion for each row in inward data
@@ -400,7 +401,7 @@ def ext_export(self, cr, uid, ids, external_referential_ids=[], defaults={}, con
             mapping_id = self.pool.get('external.mapping').search(cr, uid, [('model', '=', self._name), ('referential_id', '=', ext_ref_id)])
             if mapping_id:
                 #If a mapping exists for current model, search for mapping lines
-                mapping_line_ids = self.pool.get('external.mapping.line').search(cr, uid, [('mapping_id', '=', mapping_id), ('type', 'in', ['in_out', 'out'])])
+                mapping_line_ids = self.pool.get('external.mapping.line').search(cr, uid, [('mapping_id', '=', mapping_id[0]), ('type', 'in', ['in_out', 'out'])])
                 mapping_lines = self.pool.get('external.mapping.line').read(cr, uid, mapping_line_ids, ['external_field', 'out_function'])
                 if mapping_lines:
                     #if mapping lines exist find the data conversion for each row in inward data

@@ -101,10 +101,6 @@ def get_modified_ids(self, cr, uid, date=False, context=None):
             res += [[p[0], p[1]]]
     return sorted(res, key=lambda date: date[1])
 
-def external_connection(self, cr, uid, referential, DEBUG=False):
-    """Should be overridden to provide valid external referential connection"""
-    return False
-
 def oeid_to_extid(self, cr, uid, id, external_referential_id, context=None):
     """Returns the external id of a resource by its OpenERP id.
     Returns False if the resource id does not exists."""
@@ -143,7 +139,8 @@ def extid_to_oeid(self, cr, uid, id, external_referential_id, context=None):
         try:
             if context and context.get('alternative_key', False): #FIXME dirty fix for Magento product.info id/sku mix bug: https://bugs.launchpad.net/magentoerpconnect/+bug/688225
                 id = context.get('alternative_key', False)
-            result = self.get_external_data(cr, uid, self.external_connection(cr, uid, self.pool.get('external.referential').browse(cr, uid, external_referential_id)), external_referential_id, {}, {'id':id})
+            conn = self.pool.get('external.referential').external_connection(cr, uid, external_referential_id)
+            result = self.get_external_data(cr, uid, conn , external_referential_id, {}, {'id':id})
             if len(result['create_ids']) == 1:
                 return result['create_ids'][0]
         except Exception, error: #external system might return error because no such record exists
@@ -535,11 +532,7 @@ def _prepare_external_id_vals(self, cr, uid, res_id, ext_id, external_referentia
 def retry_export(self, cr, uid, id, ext_id, external_referential_id, defaults=None, context=None):
     """ When we export again a previously failed export
     """
-    conn = self.external_connection(
-        cr,
-        uid,
-        self.pool.get('external.referential').
-        browse(cr, uid, external_referential_id))
+    conn = self.pool.get('external.referential').external_connection(cr, uid, external_referential_id)
     context['conn_obj'] = conn
     return self.ext_export(cr, uid, [id], [external_referential_id], defaults, context)
 
@@ -596,7 +589,6 @@ osv.osv.prefixed_id = prefixed_id
 osv.osv.id_from_prefixed_id = id_from_prefixed_id
 osv.osv.get_last_imported_external_id = get_last_imported_external_id
 osv.osv.get_modified_ids = get_modified_ids
-osv.osv.external_connection = external_connection
 osv.osv.oeid_to_extid = oeid_to_extid
 osv.osv.extid_to_existing_oeid = extid_to_existing_oeid
 osv.osv.extid_to_oeid = extid_to_oeid

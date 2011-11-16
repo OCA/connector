@@ -144,6 +144,7 @@ def extid_to_oeid(self, cr, uid, id, external_referential_id, context=None):
             if len(result['create_ids']) == 1:
                 return result['create_ids'][0]
         except Exception, error: #external system might return error because no such record exists
+            logger = netsvc.Logger()
             logger.notifyChannel('ext synchro', netsvc.LOG_INFO, "Error when importing on fly the object %s with the external_id %s and the external referential %s.\n Error : %s" %(self._name, id, external_referential_id, error))
             raise
     return False

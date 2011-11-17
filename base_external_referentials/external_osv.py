@@ -101,6 +101,13 @@ def get_modified_ids(self, cr, uid, date=False, context=None):
             res += [[p[0], p[1]]]
     return sorted(res, key=lambda date: date[1])
 
+def get_all_oeid_from_referential(self, cr, uid, referential_id, context=None):
+    """Returns the openerp ids of the ressource which have an ext_id in the referential"""
+    ir_model_data_obj = self.pool.get('ir.model.data')
+    model_data_ids = ir_model_data_obj.search(cr, uid, [('model', '=', self._name), ('external_referential_id', '=', referential_id)])
+    return [x['res_id'] for x in ir_model_data_obj.read(cr, uid, model_data_ids, ['res_id'], context=context)]
+    
+
 def oeid_to_extid(self, cr, uid, id, external_referential_id, context=None):
     """Returns the external id of a resource by its OpenERP id.
     Returns False if the resource id does not exists."""
@@ -331,10 +338,7 @@ def ext_import(self, cr, uid, data, external_referential_id, defaults=None, cont
                         self.pool.get('ir.model.data').write(cr, uid, existing_ir_model_data_id, {'res_id': existing_rec_id}, context=context)
                     else:
                         ir_model_data_vals = \
-                        self._prepare_external_id_vals(cr, uid, existing_rec_id,
-                                                       external_id, external_referential_id,
-                                                       defaults=defaults, context=context)
-                        self.pool.get('ir.model.data').create(cr, uid, ir_model_data_vals, context=context)
+                        self.create_external_id_vals(cr, uid, existing_rec_id, external_id, external_referential_id, context=context)
                         if bound:
                             logger.notifyChannel('ext synchro', netsvc.LOG_INFO, "Bound in OpenERP %s from External Ref with external_id %s and OpenERP id %s successfully" %(self._name, external_id, existing_rec_id))
 
@@ -502,8 +506,7 @@ def ext_export(self, cr, uid, ids, external_referential_ids=[], defaults={}, con
                                 try:
                                     crid = self.ext_create(cr, uid, exp_data, conn, mapping_rec['external_create_method'], record_data['id'], context)
                                     create_ids.append(record_data['id'])
-                                    ir_model_data_vals = self._prepare_external_id_vals(cr, uid, record_data['id'], crid, ext_ref_id, defaults=defaults, context=context)
-                                    self.pool.get('ir.model.data').create(cr, uid, ir_model_data_vals)
+                                    self.create_external_id_vals(cr, uid, record_data['id'], crid, ext_ref_id, context=context)
                                     report_line_obj.log_success(cr, uid, self._name, 'export',
                                                                 res_id=record_data['id'],
                                                                 external_id=crid, defaults=defaults,
@@ -518,7 +521,7 @@ def ext_export(self, cr, uid, ids, external_referential_ids=[], defaults={}, con
 
     return {'create_ids': create_ids, 'write_ids': write_ids}
 
-def _prepare_external_id_vals(self, cr, uid, res_id, ext_id, external_referential_id, defaults=None, context=None):
+def _prepare_external_id_vals(self, cr, uid, res_id, ext_id, external_referential_id, context=None):
     """ Create an external reference for a resource id in the ir.model.data table"""
     ir_model_data_vals = {
                             'name': self.prefixed_id(ext_id),
@@ -529,6 +532,16 @@ def _prepare_external_id_vals(self, cr, uid, res_id, ext_id, external_referentia
                             read(cr, uid, external_referential_id, ['name'])['name']
                           }
     return ir_model_data_vals
+
+
+def create_external_id_vals(self, cr, uid, existing_rec_id, external_id, external_referential_id, context=None):
+    """Add the external id in the table ir_model_data"""
+    ir_model_data_vals = \
+    self._prepare_external_id_vals(cr, uid, existing_rec_id,
+                                   external_id, external_referential_id,
+                                   context=context)
+    return self.pool.get('ir.model.data').create(cr, uid, ir_model_data_vals, context=context)
+
 
 def retry_export(self, cr, uid, id, ext_id, external_referential_id, defaults=None, context=None):
     """ When we export again a previously failed export
@@ -610,4 +623,6 @@ osv.osv.ext_update = ext_update
 osv.osv.report_action_mapping = report_action_mapping
 osv.osv._prepare_external_id_vals = _prepare_external_id_vals
 osv.osv._search_existing_id_by_vals = _search_existing_id_by_vals
+osv.osv.get_all_oeid_from_referential = get_all_oeid_from_referential
+osv.osv.create_external_id_vals = create_external_id_vals
 

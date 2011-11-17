@@ -72,7 +72,6 @@ class external_referential(osv.osv):
         """Should be overridden to provide valid external referential connection"""
         return False
 
-
     def refresh_mapping(self, cr, uid, ids, context={}):
         #This function will reinstate mapping & mapping_lines for registered objects
         for id in ids:

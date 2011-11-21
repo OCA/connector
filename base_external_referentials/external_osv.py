@@ -105,7 +105,9 @@ def get_all_oeid_from_referential(self, cr, uid, referential_id, context=None):
     """Returns the openerp ids of the ressource which have an ext_id in the referential"""
     ir_model_data_obj = self.pool.get('ir.model.data')
     model_data_ids = ir_model_data_obj.search(cr, uid, [('model', '=', self._name), ('external_referential_id', '=', referential_id)])
-    return [x['res_id'] for x in ir_model_data_obj.read(cr, uid, model_data_ids, ['res_id'], context=context)]
+    #because OpenERP might keep ir_model_data (is it a bug?) for deleted records, we check if record exists:
+    claimed_oe_ids = [x['res_id'] for x in ir_model_data_obj.read(cr, uid, model_data_ids, ['res_id'], context=context)]
+    return self.search(cr, uid, [('id', 'in', claimed_oe_ids)])
     
 
 def oeid_to_extid(self, cr, uid, id, external_referential_id, context=None):

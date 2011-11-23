@@ -3,7 +3,7 @@
 #
 #    OpenERP, Open Source Management Solution
 #    Copyright (C) 2004-2009 Tiny SPRL (<http://tiny.be>). All Rights Reserved
-#    Sharoon Thomas, Raphaël Valyi
+#    Sharoon Thomas, Raphaël Valyi, Guewen Baconnier
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -108,7 +108,7 @@ def external_connection(self, cr, uid, referential, DEBUG=False):
 def oeid_to_extid(self, cr, uid, id, external_referential_id, context=None):
     """Returns the external id of a resource by its OpenERP id.
     Returns False if the resource id does not exists."""
-    if type(id) == list:
+    if isinstance(id, list):
         id = id[0]
     model_data_ids = self.pool.get('ir.model.data').search(cr, uid, [('model', '=', self._name), ('res_id', '=', id), ('external_referential_id', '=', external_referential_id)])
     if model_data_ids and len(model_data_ids) > 0:
@@ -163,7 +163,7 @@ def oevals_from_extdata(self, cr, uid, external_referential_id, data_record, key
         if each_mapping_line['external_field'] in data_record.keys():
             ifield = data_record.get(each_mapping_line['external_field'], False)
             if ifield:
-                if each_mapping_line['external_type'] == 'list' and type(ifield) in [str, unicode]:
+                if each_mapping_line['external_type'] == 'list' and isinstance(ifield, (str, unicode)):
                     casted_field = eval(ifield)
                     # For a list, external data may returns something like '1,2,3' but also '1' if only
                     # one item has been selected. So if the casted field is not iterable, we put it in a tuple: (1,)
@@ -400,14 +400,16 @@ def extdata_from_oevals(self, cr, uid, external_referential_id, data_record, map
                 del(space['__builtins__'])
                 logger.notifyChannel('extdata_from_oevals', netsvc.LOG_DEBUG, "Mapping Context: %r" % (space,))
                 logger.notifyChannel('extdata_from_oevals', netsvc.LOG_DEBUG, "Exception: %r" % (e,))
+                # For which purpose should we let the error go silently ? What is this dont_rais_error ?
+                # I think that MappingError must always be raised and be catched at higher level
                 if not context.get('dont_raise_error', False):
                     raise MappingError(e, each_mapping_line['external_field'])
             result = space.get('result', False)
             #If result exists and is of type list
             if result:
-                if type(result) == list:
+                if isinstance(result, list):
                     for each_tuple in result:
-                        if type(each_tuple) == tuple and len(each_tuple) == 2:
+                        if isinstance(each_tuple, tuple) and len(each_tuple) == 2:
                             vals[each_tuple[0]] = each_tuple[1]
                 else:
                     if not context.get('dont_raise_error', False):

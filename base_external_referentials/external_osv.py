@@ -27,6 +27,8 @@ import datetime
 import netsvc
 import pooler
 
+from tools.translate import _
+
 class MappingError(Exception):
      def __init__(self, value, name):
          self.value = value
@@ -200,17 +202,21 @@ def oevals_from_extdata(self, cr, uid, external_referential_id, data_record, key
                 del(space['__builtins__'])
                 logger.notifyChannel('extdata_from_oevals', netsvc.LOG_DEBUG, "Mapping Context: %r" % (space,))
                 logger.notifyChannel('extdata_from_oevals', netsvc.LOG_DEBUG, "Exception: %r" % (e,))
+                # For which purpose should we let the error go silently ? What is this dont_rais_error ?
+                # I think that MappingError must always be raised and be catched at higher level
                 if not context.get('dont_raise_error', False):
                     raise MappingError(e, each_mapping_line['external_field'])
             
             result = space.get('result', False)
-            #If result exists and is of type list
+            # Check if result returned by the mapping function is correct : [('field1': value), ('field2': value))]
+            # And fill the vals dict with the results
             if result:
-                if type(result) == list:
+                if isinstance(result, list):
                     for each_tuple in result:
-                        if type(each_tuple) == tuple and len(each_tuple) == 2:
+                        if isinstance(each_tuple, tuple) and len(each_tuple) == 2:
                             vals[each_tuple[0]] = each_tuple[1]
                 else:
+                    # same comment as upper
                     if not context.get('dont_raise_error', False):
                         raise MappingError(_('Invalid format for the variable result.'), each_mapping_line['external_field'])
     return vals

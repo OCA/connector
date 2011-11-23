@@ -173,7 +173,10 @@ def oevals_from_extdata(self, cr, uid, external_referential_id, data_record, key
                 else:
                     type_casted_field = eval(each_mapping_line['external_type'])(ifield)
             else:
-                type_casted_field = ifield
+                if each_mapping_line['external_type'] == 'list':
+                    type_casted_field = []
+                else:
+                    type_casted_field = ifield
 
             if type_casted_field in ['None', 'False']:
                 type_casted_field = False

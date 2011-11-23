@@ -159,21 +159,23 @@ def oevals_from_extdata(self, cr, uid, external_referential_id, data_record, key
     for each_mapping_line in mapping_lines:
         #Type cast if the expression exists
         if each_mapping_line['external_field'] in data_record.keys():
-            try:
-                ifield = data_record.get(each_mapping_line['external_field'], False)
-                if ifield:
-                    if each_mapping_line['external_type'] == 'list' and type(ifield) in [str, unicode]:
-                        type_casted_field = list(eval(ifield))
-                    else:
-                        type_casted_field = eval(each_mapping_line['external_type'])(ifield)
+            ifield = data_record.get(each_mapping_line['external_field'], False)
+            if ifield:
+                if each_mapping_line['external_type'] == 'list' and type(ifield) in [str, unicode]:
+                    casted_field = eval(ifield)
+                    # For a list, external data may returns something like '1,2,3' but also '1' if only
+                    # one item has been selected. So if the casted field is not iterable, we put it in a tuple: (1,)
+                    if not hasattr(casted_field, '__iter__'):
+                        casted_field = (casted_field,)
+                    type_casted_field = list(casted_field)
                 else:
-                    type_casted_field = ifield
-                if type_casted_field in ['None', 'False']:
-                    type_casted_field = False
-            except Exception, e:
+                    type_casted_field = eval(each_mapping_line['external_type'])(ifield)
+            else:
+                type_casted_field = ifield
+
+            if type_casted_field in ['None', 'False']:
                 type_casted_field = False
-                if not context.get('dont_raise_error', False):
-                    raise MappingError(e, each_mapping_line['external_field'])
+
             #Build the space for expr
             space = {
                         'self':self,

@@ -164,7 +164,8 @@ def oevals_from_extdata(self, cr, uid, external_referential_id, data_record, key
             ifield = data_record.get(each_mapping_line['external_field'], False)
             if ifield:
                 if each_mapping_line['external_type'] == 'list' and isinstance(ifield, (str, unicode)):
-                    casted_field = eval(ifield)
+                    # external data sometimes returns ',1,2,3' for a list...
+                    casted_field = eval(ifield.strip(','))
                     # For a list, external data may returns something like '1,2,3' but also '1' if only
                     # one item has been selected. So if the casted field is not iterable, we put it in a tuple: (1,)
                     if not hasattr(casted_field, '__iter__'):

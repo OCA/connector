@@ -421,7 +421,7 @@ def extdata_from_oevals(self, cr, uid, external_referential_id, data_record, map
                 # For which purpose should we let the error go silently ? What is this dont_rais_error ?
                 # I think that MappingError must always be raised and be catched at higher level
                 if not context.get('dont_raise_error', False):
-                    raise MappingError(e, each_mapping_line['external_field'])
+                    raise MappingError(e, each_mapping_line['external_field'], self._name)
             result = space.get('result', False)
             #If result exists and is of type list
             if result:
@@ -530,7 +530,6 @@ def ext_export(self, cr, uid, ids, external_referential_ids=[], defaults={}, con
                                                                exception=err, defaults=defaults,
                                                                context=context)
                         cr.commit()
-
     return {'create_ids': create_ids, 'write_ids': write_ids}
 
 def _prepare_external_id_vals(self, cr, uid, res_id, ext_id, external_referential_id, context=None):

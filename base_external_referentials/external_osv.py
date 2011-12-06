@@ -123,18 +123,38 @@ def oeid_to_extid(self, cr, uid, id, external_referential_id, context=None):
         return ext_id
     return False
 
-def extid_to_existing_oeid(self, cr, uid, id, external_referential_id, context=None):
+def _extid_to_expected_oeid(self, cr, uid, external_id, external_referential_id, context=None):
+    """
+    Returns the id of the entry in ir.model.data and the expected id of the resource in the current model
+    Warning the expected_oe_id may not exists in the model, that's the res_id registered in ir.model.data
+
+    @param external_id: id in the external referential
+    @param external_referential_id: id of the external referential
+    @return: tuple of (ir.model.data entry id, expected resource id in the current model)
+    """
+    model_data_obj = self.pool.get('ir.model.data')
+    model_data_ids = model_data_obj.search(cr, uid,
+        [('name', '=', self.prefixed_id(external_id)),
+         ('model', '=', self._name),
+         ('external_referential_id', '=', external_referential_id)], context=context)
+    model_data_id = model_data_ids and model_data_ids[0] or False
+    expected_oe_id = False
+    if model_data_id:
+        expected_oe_id = model_data_obj.read(cr, uid, model_data_id, ['res_id'])['res_id']
+    return model_data_id, expected_oe_id
+
+def extid_to_existing_oeid(self, cr, uid, external_id, external_referential_id, context=None):
     """Returns the OpenERP id of a resource by its external id.
        Returns False if the resource does not exist."""
-    if id:
-        model_data_ids = self.pool.get('ir.model.data').search(cr, uid, [('name', '=', self.prefixed_id(id)), ('model', '=', self._name), ('external_referential_id', '=', external_referential_id)])
-        if model_data_ids:
-            claimed_oe_id = self.pool.get('ir.model.data').read(cr, uid, model_data_ids[0], ['res_id'])['res_id']
-
-            #because OpenERP might keep ir_model_data (is it a bug?) for deleted records, we check if record exists:
-            ids = self.search(cr, uid, [('id', '=', claimed_oe_id)])
-            if ids:
-                return ids[0]
+    if external_id:
+        ir_model_data_id, expected_oe_id = self._extid_to_expected_oeid\
+            (cr, uid, external_id, external_referential_id, context=context)
+        # Note: OpenERP cleans up ir_model_data which res_id records have been deleted
+        # only at server update because that would be a perf penalty, we returns the res_id only if
+        # really existing
+        existing_ids = self.search(cr, uid, [('id', '=', expected_oe_id)], context=context)
+        if existing_ids:
+            return expected_oe_id
     return False
 
 def extid_to_oeid(self, cr, uid, id, external_referential_id, context=None):
@@ -284,6 +304,35 @@ def import_with_try(self, cr, uid, callback, data_record, external_referential_i
         import_cr.close()
     return res
 
+def _existing_oeid_for_extid_import(self, cr, uid, vals, external_id, external_referential_id, context=None):
+    """
+    Used in ext_import in order to search the OpenERP resource to update when importing an external resource.
+    It searches the reference in ir.model.data and returns the id in ir.model.data and the id of the
+    current's model resource, if it really exists (it may not exists, see below)
+
+    As OpenERP cleans up ir_model_data which res_id records have been deleted only at server update
+    because that would be a perf penalty, so we take care of it here.
+
+    This method can also be used by inheriting, in order to find and bind resources by another way than ir.model.data when
+    the resource is not already imported.
+    As instance, search and bind partners by their mails. In such case, it must returns False for the ir_model_data.id and
+    the partner to bind for the resource id
+
+    @param vals: vals to create in OpenERP, already evaluated by oevals_from_extdata
+    @param external_id: external id of the resource to create
+    @param external_referential_id: external referential id from where we import the resource
+    @return: tuple of (ir.model.data id / False: external id to create in ir.model.data, model resource id / False: resource to create)
+    """
+    existing_ir_model_data_id, expected_res_id = self._extid_to_expected_oeid\
+        (cr, uid, external_id, external_referential_id, context=context)
+
+    # Take care of deleted resource ids, cleans up ir.model.data
+    existing_res_ids = self.search(cr, uid, [('id', '=', expected_res_id)])
+    if existing_ir_model_data_id and not existing_res_ids:
+        self.pool.get('ir.model.data').unlink(cr, uid, existing_ir_model_data_id)
+        existing_ir_model_data_id = False
+    return existing_ir_model_data_id, existing_res_ids and existing_res_ids[0] or False
+
 def ext_import(self, cr, uid, data, external_referential_id, defaults=None, context=None):
     if defaults is None:
         defaults = {}
@@ -312,25 +361,9 @@ def ext_import(self, cr, uid, data, external_referential_id, defaults=None, cont
                     external_id = vals.get('external_id', False) or vals.get(for_key_field, False) or each_row.get(for_key_field, False) or each_row.get('external_id', False)
                     #del vals[for_key_field] looks like it is affecting the import :(
                     #Check if record exists
-                    existing_ir_model_data_id = self.pool.get('ir.model.data').search(cr, uid, [('model', '=', self._name),
-                                                                                                ('name', '=', self.prefixed_id(external_id)),
-                                                                                                ('external_referential_id', '=', external_referential_id)])
-                    existing_rec_id = False
-                    if existing_ir_model_data_id:
-                        existing_rec_id = self.pool.get('ir.model.data').read(cr, uid, existing_ir_model_data_id, ['res_id'])[0]['res_id']
 
-                        #Note: OpenERP cleans up ir_model_data which res_id records have been deleted only at server update because that would be a perf penalty,
-                        #so we take care of it here:
-                        test_existing_rec_id = self.search(cr, uid, [('id', '=', existing_rec_id)])
-                        if not test_existing_rec_id:
-                            self.pool.get('ir.model.data').unlink(cr, uid, existing_ir_model_data_id)
-                            existing_ir_model_data_id = existing_rec_id = False
-                    else:
-                        # alternative way to find an OpenERP resource to bind with the external resource
-                        existing_rec_id = \
-                        self._search_existing_id_by_vals(cr, uid, vals, external_id,
-                                                         external_referential_id, defaults,
-                                                         context=context)
+                    existing_ir_model_data_id, existing_rec_id = self._existing_oeid_for_extid_import\
+                        (cr, uid, vals, external_id, external_referential_id, context=context)
 
                     if existing_rec_id:
                         if vals.get(for_key_field, False):
@@ -338,10 +371,6 @@ def ext_import(self, cr, uid, data, external_referential_id, defaults=None, cont
                         if self.oe_update(cr, uid, existing_rec_id, vals, each_row, external_referential_id, defaults=defaults, context=context):
                             written = True
                             write_ids.append(existing_rec_id)
-                        if not existing_ir_model_data_id:
-                            # means the external resource is bound to an existing resource
-                            # using the _search_existing_id_by_vals method
-                            bound = True
                     else:
                         existing_rec_id = self.oe_create(cr, uid, vals, each_row, external_referential_id, defaults, context=context)
                         created = True
@@ -351,7 +380,9 @@ def ext_import(self, cr, uid, data, external_referential_id, defaults=None, cont
                     else:
                         ir_model_data_vals = \
                         self.create_external_id_vals(cr, uid, existing_rec_id, external_id, external_referential_id, context=context)
-                        if bound:
+                        if not created:
+                            # means the external resource is bound to an already existing resource
+                            # but not registered in ir.model.data, we log it to inform the success of the binding
                             logger.notifyChannel('ext synchro', netsvc.LOG_INFO, "Bound in OpenERP %s from External Ref with external_id %s and OpenERP id %s successfully" %(self._name, external_id, existing_rec_id))
 
                     if created:
@@ -362,17 +393,6 @@ def ext_import(self, cr, uid, data, external_referential_id, defaults=None, cont
                         logger.notifyChannel('ext synchro', netsvc.LOG_INFO, "Updated in OpenERP %s from External Ref with external_id %s and OpenERP id %s successfully" %(self._name, external_id, existing_rec_id))
 
     return {'create_ids': create_ids, 'write_ids': write_ids}
-
-def _search_existing_id_by_vals(self, cr, uid, vals, external_id, external_referential_id, defaults=None, context=None):
-    """ Hook. Used to bind resources already existing in OpenERP when they are 
-        imported from the external referential if no external id is found in ir.model.data.
-        As instance, search a partner by the mail, once found, the mapping will 
-        be written in ir.model.data and the existing customer updated.  
-        Must return the id of the resource on which the external id must be binded.
-        
-        Return: ID of the resource
-    """
-    return False
 
 def retry_import(self, cr, uid, id, ext_id, external_referential_id, defaults=None, context=None):
     """ When we import again a previously failed import
@@ -615,11 +635,13 @@ osv.osv.id_from_prefixed_id = id_from_prefixed_id
 osv.osv.get_last_imported_external_id = get_last_imported_external_id
 osv.osv.get_modified_ids = get_modified_ids
 osv.osv.oeid_to_extid = oeid_to_extid
+osv.osv._extid_to_expected_oeid = _extid_to_expected_oeid
 osv.osv.extid_to_existing_oeid = extid_to_existing_oeid
 osv.osv.extid_to_oeid = extid_to_oeid
 osv.osv.oevals_from_extdata = oevals_from_extdata
 osv.osv.get_external_data = get_external_data
 osv.osv.import_with_try = import_with_try
+osv.osv._existing_oeid_for_extid_import = _existing_oeid_for_extid_import
 osv.osv.ext_import = ext_import
 osv.osv.retry_import = retry_import
 osv.osv.oe_update = oe_update
@@ -633,7 +655,6 @@ osv.osv.try_ext_update = try_ext_update
 osv.osv.ext_update = ext_update
 osv.osv.report_action_mapping = report_action_mapping
 osv.osv._prepare_external_id_vals = _prepare_external_id_vals
-osv.osv._search_existing_id_by_vals = _search_existing_id_by_vals
 osv.osv.get_all_oeid_from_referential = get_all_oeid_from_referential
 osv.osv.create_external_id_vals = create_external_id_vals
 

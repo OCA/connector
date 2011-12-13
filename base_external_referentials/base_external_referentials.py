@@ -127,7 +127,7 @@ class external_referential(osv.osv):
             
                 
     _columns = {
-        'name': fields.char('Name', size=64, required=True),
+        'name': fields.char('Name', size=32, required=True),
         'type_id': fields.many2one('external.referential.type', 'Referential Type', select=True),
         'location': fields.char('Location', size=200),
         'apiusername': fields.char('User Name', size=64),
@@ -138,6 +138,16 @@ class external_referential(osv.osv):
     
     _sql_constraints = [
         ('name_uniq', 'unique (name)', 'Referential names must be unique !')
+    ]
+
+    def _test_dot_in_name(self, cr, uid, ids, context=None):
+        for referential in self.browse(cr, uid, ids):
+            if '.' in obj.name:
+                return False
+        return True
+    
+    _constraints = [
+        (_test_dot_in_name, 'The name cannot contain a dot!', ['name']),
     ]
     
     #TODO warning on name change if mapping exist: Implemented in attrs

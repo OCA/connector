@@ -142,7 +142,7 @@ class external_referential(osv.osv):
 
     def _test_dot_in_name(self, cr, uid, ids, context=None):
         for referential in self.browse(cr, uid, ids):
-            if '.' in obj.name:
+            if '.' in referential.name:
                 return False
         return True
     

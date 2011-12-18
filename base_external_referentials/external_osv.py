@@ -194,12 +194,19 @@ def extid_to_oeid(self, cr, uid, id, external_referential_id, context=None):
             if len(result['create_ids']) == 1:
                 return result['create_ids'][0]
         except Exception, error: #external system might return error because no such record exists
-            logger = netsvc.Logger()
-            logger.notifyChannel('ext synchro', netsvc.LOG_INFO, "Error when importing on fly the object %s with the external_id %s and the external referential %s.\n Error : %s" %(self._name, id, external_referential_id, error))
-            raise
+            raise osv.except_osv(_('Ext Synchro'), _("Error when importing on fly the object %s with the external_id %s and the external referential %s.\n Error : %s" %(self._name, id, external_referential_id, error)))
     return False
 
-def oevals_from_extdata(self, cr, uid, external_referential_id, data_record, key_field, mapping_lines, defaults, context):
+def oevals_from_extdata(self, cr, uid, external_referential_id, data_record, mapping_lines, defaults, context):
+    """
+    Used in convert_extdata_into_oedata in order to convert external row of data into OpenERP data
+
+    @param external_referential_id: external referential id from where we import the resource
+    @param external_data_row: a dictionnary of data to convert into OpenERP data
+    @mapping_lines: list of mapping line used to convert external data row into OpenERP data
+    @param defauls: defaults value for the data imported
+    @return: dictionary of converted data in OpenERP format 
+    """
     if context is None:
         context = {}
     vals = {} #Dictionary for create record
@@ -263,10 +270,7 @@ def oevals_from_extdata(self, cr, uid, external_referential_id, data_record, key
                 del(space['__builtins__'])
                 logger.notifyChannel('extdata_from_oevals', netsvc.LOG_DEBUG, "Mapping Context: %r" % (space,))
                 logger.notifyChannel('extdata_from_oevals', netsvc.LOG_DEBUG, "Exception: %r" % (e,))
-                # For which purpose should we let the error go silently ? What is this dont_rais_error ?
-                # I think that MappingError must always be raised and be catched at higher level
-                if not context.get('dont_raise_error', False):
-                    raise MappingError(e, each_mapping_line['external_field'], self._name)
+                raise MappingError(e, each_mapping_line['external_field'], self._name)
             
             result = space.get('result', False)
             # Check if result returned by the mapping function is correct : [('field1': value), ('field2': value))]
@@ -277,9 +281,7 @@ def oevals_from_extdata(self, cr, uid, external_referential_id, data_record, key
                         if isinstance(each_tuple, tuple) and len(each_tuple) == 2:
                             vals[each_tuple[0]] = each_tuple[1]
                 else:
-                    # same comment as upper
-                    if not context.get('dont_raise_error', False):
-                        raise MappingError(_('Invalid format for the variable result.'), each_mapping_line['external_field'], self._name)
+                    raise MappingError(_('Invalid format for the variable result.'), each_mapping_line['external_field'], self._name)
     return vals
 
 
@@ -352,66 +354,93 @@ def _existing_oeid_for_extid_import(self, cr, uid, vals, external_id, external_r
         existing_ir_model_data_id = expected_res_id = False
     return existing_ir_model_data_id, expected_res_id
 
-def ext_import(self, cr, uid, data, external_referential_id, defaults=None, context=None):
+def convert_extdata_into_oedata(self, cr, uid, external_data, external_referential_id, defaults=None, context=None):
+    """
+    Used in ext_import in order to convert all of the external data into OpenERP data
+
+    @param external_data: list of external_data to convert into OpenERP data
+    @param external_referential_id: external referential id from where we import the resource
+    @param defauls: defaults value for 
+    @return: list of the line converted into OpenERP value
+    """
+    if defaults is None:
+        defaults = {}
+    if context is None:
+        context = {}
+    result= []
+    if external_data:
+        mapping_id = self.pool.get('external.mapping').search(cr, uid, [('model', '=', self._name), ('referential_id', '=', external_referential_id)])
+        if not mapping_id:
+            raise osv.except_osv(_('External Import Error'), _("The object %s doesn't have an external mapping" %self._name))
+        else:
+            #If a mapping exists for current model, search for mapping lines
+            mapping_line_ids = self.pool.get('external.mapping.line').search(cr, uid, [('mapping_id', '=', mapping_id[0]), ('type', 'in', ['in_out', 'in'])])
+            mapping_lines = self.pool.get('external.mapping.line').read(cr, uid, mapping_line_ids, ['external_field', 'external_type', 'in_function'])
+            if mapping_lines:
+                #if mapping lines exist find the external_data conversion for each row in inward external_data
+                for each_row in external_data:
+                    created = written = bound = False
+                    result.append(self.oevals_from_extdata(cr, uid, external_referential_id, each_row, mapping_lines, defaults, context))
+    return result
+
+def ext_import(self, cr, uid, external_data, external_referential_id, defaults=None, context=None):
+    """
+    Used in various function of MagentoERPconnect for exemple in order to import external data into OpenERP.
+    This data will converted into OpenERP data by using the function convert_extdata_into_oedata
+    And then created or updated, and an external id will be added into the table ir.model.data
+
+    @param external_data: list of external_data to convert into OpenERP data
+    @param external_referential_id: external referential id from where we import the resource
+    @param defauls: defaults value for 
+    @return: dictionary with the key "create_ids" and "write_ids" which containt a list of ids created/written
+    """
     if defaults is None:
         defaults = {}
     if context is None:
         context = {}
 
-    #Inward data has to be list of dictionary
-    #This function will import a given set of data as list of dictionary into Open ERP
-    write_ids = []  #Will record ids of records modified, not sure if will be used
-    create_ids = [] #Will record ids of newly created records, not sure if will be used
+    write_ids = []
+    create_ids = []
     logger = netsvc.Logger()
-    if data:
-        mapping_id = self.pool.get('external.mapping').search(cr, uid, [('model', '=', self._name), ('referential_id', '=', external_referential_id)])
-        if mapping_id:
-            #If a mapping exists for current model, search for mapping lines
-            mapping_line_ids = self.pool.get('external.mapping.line').search(cr, uid, [('mapping_id', '=', mapping_id[0]), ('type', 'in', ['in_out', 'in'])])
-            mapping_lines = self.pool.get('external.mapping.line').read(cr, uid, mapping_line_ids, ['external_field', 'external_type', 'in_function'])
-            if mapping_lines:
-                #if mapping lines exist find the data conversion for each row in inward data
-                for_key_field = self.pool.get('external.mapping').read(cr, uid, mapping_id[0], ['external_key_name'])['external_key_name']
-                for each_row in data:
-                    created = written = bound = False
-                    vals = self.oevals_from_extdata(cr, uid, external_referential_id, each_row, for_key_field, mapping_lines, defaults, context)
-                    #perform a record check, for that we need foreign field
-                    #TODO seb asked : did the option "vals.get(for_key_field, False)" and "each_row.get('external_id', False)" are still usefull??
-                    external_id = vals.get('external_id', False) or vals.get(for_key_field, False) or each_row.get(for_key_field, False) or each_row.get('external_id', False)
-                    #del vals[for_key_field] looks like it is affecting the import :(
-                    #Check if record exists
 
-                    existing_ir_model_data_id, existing_rec_id = self._existing_oeid_for_extid_import\
-                        (cr, uid, vals, external_id, external_referential_id, context=context)
+    result = self.convert_extdata_into_oedata(cr, uid, external_data, external_referential_id, defaults=default, context=context)
 
-                    if existing_rec_id:
-                        if vals.get(for_key_field, False):
-                            del vals[for_key_field]
-                        if self.oe_update(cr, uid, existing_rec_id, vals, each_row, external_referential_id, defaults=defaults, context=context):
-                            written = True
-                            write_ids.append(existing_rec_id)
-                    else:
-                        existing_rec_id = self.oe_create(cr, uid, vals, each_row, external_referential_id, defaults, context=context)
-                        created = True
+    for row in result:
+        if not row.get('external_id'):
+            raise osv.except_osv(_('External Import Error'), _("The object imported need an external_id, maybe the mapping doesn't exist for the object : %s" %self._name))
+        else:
+            existing_ir_model_data_id, existing_rec_id = self._existing_oeid_for_extid_import\
+                (cr, uid, vals, external_id, external_referential_id, context=context)
+            if existing_rec_id:
+                del vals['external_id']
+                if self.oe_update(cr, uid, existing_rec_id, vals, each_row, external_referential_id, defaults=defaults, context=context):
+                    written = True
+                    write_ids.append(existing_rec_id)
+            else:
+                existing_rec_id = self.oe_create(cr, uid, vals, each_row, external_referential_id, defaults, context=context)
+                created = True                
 
-                    if existing_ir_model_data_id:
-                        self.pool.get('ir.model.data').write(cr, uid, existing_ir_model_data_id, {'res_id': existing_rec_id}, context=context)
-                    else:
-                        ir_model_data_vals = \
-                        self.create_external_id_vals(cr, uid, existing_rec_id, external_id, external_referential_id, context=context)
-                        if not created:
-                            # means the external resource is bound to an already existing resource
-                            # but not registered in ir.model.data, we log it to inform the success of the binding
-                            logger.notifyChannel('ext synchro', netsvc.LOG_INFO, "Bound in OpenERP %s from External Ref with external_id %s and OpenERP id %s successfully" %(self._name, external_id, existing_rec_id))
+            if existing_ir_model_data_id:
+                if created:
+                    # means the external ressource is registred in ir.model.data but the ressource doesn't exist
+                    # in this case we have to update the ir.model.data in order to point to the ressource created
+                    self.pool.get('ir.model.data').write(cr, uid, existing_ir_model_data_id, {'res_id': existing_rec_id}, context=context)
+            else:
+                ir_model_data_vals = \
+                self.create_external_id_vals(cr, uid, existing_rec_id, external_id, external_referential_id, context=context)
+                if not created:
+                    # means the external resource is bound to an already existing resource
+                    # but not registered in ir.model.data, we log it to inform the success of the binding
+                    logger.notifyChannel('ext synchro', netsvc.LOG_INFO, "Bound in OpenERP %s from External Ref with external_id %s and OpenERP id %s successfully" %(self._name, external_id, existing_rec_id))
 
-                    if created:
-                        create_ids.append(existing_rec_id)
-                        logger.notifyChannel('ext synchro', netsvc.LOG_INFO, "Created in OpenERP %s from External Ref with external_id %s and OpenERP id %s successfully" %(self._name, external_id, existing_rec_id))
-                    elif written:
-                        write_ids.append(existing_rec_id)
-                        logger.notifyChannel('ext synchro', netsvc.LOG_INFO, "Updated in OpenERP %s from External Ref with external_id %s and OpenERP id %s successfully" %(self._name, external_id, existing_rec_id))
+            if created:
+                create_ids.append(existing_rec_id)
+                logger.notifyChannel('ext synchro', netsvc.LOG_INFO, "Created in OpenERP %s from External Ref with external_id %s and OpenERP id %s successfully" %(self._name, external_id, existing_rec_id))
+            elif written:
+                write_ids.append(existing_rec_id)
+                logger.notifyChannel('ext synchro', netsvc.LOG_INFO, "Updated in OpenERP %s from External Ref with external_id %s and OpenERP id %s successfully" %(self._name, external_id, existing_rec_id))
 
-    return {'create_ids': create_ids, 'write_ids': write_ids}
+    return {'create_ids': create_ids, 'write_ids': write_ids}        
 
 def retry_import(self, cr, uid, id, ext_id, external_referential_id, defaults=None, context=None):
     """ When we import again a previously failed import
@@ -457,10 +486,7 @@ def extdata_from_oevals(self, cr, uid, external_referential_id, data_record, map
                 del(space['__builtins__'])
                 logger.notifyChannel('extdata_from_oevals', netsvc.LOG_DEBUG, "Mapping Context: %r" % (space,))
                 logger.notifyChannel('extdata_from_oevals', netsvc.LOG_DEBUG, "Exception: %r" % (e,))
-                # For which purpose should we let the error go silently ? What is this dont_rais_error ?
-                # I think that MappingError must always be raised and be catched at higher level
-                if not context.get('dont_raise_error', False):
-                    raise MappingError(e, each_mapping_line['external_field'], self._name)
+                raise MappingError(e, each_mapping_line['external_field'], self._name)
             result = space.get('result', False)
             #If result exists and is of type list
             if result:
@@ -469,8 +495,7 @@ def extdata_from_oevals(self, cr, uid, external_referential_id, data_record, map
                         if isinstance(each_tuple, tuple) and len(each_tuple) == 2:
                             vals[each_tuple[0]] = each_tuple[1]
                 else:
-                    if not context.get('dont_raise_error', False):
-                        raise MappingError(_('Invalid format for the variable result.'), each_mapping_line['external_field'], self._name)
+                    raise MappingError(_('Invalid format for the variable result.'), each_mapping_line['external_field'], self._name)
     return vals
 
 

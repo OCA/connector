@@ -45,7 +45,7 @@ class external_mapping_template(osv.osv):
         'external_update_method': fields.char('Update Method', size=64),
         'external_create_method': fields.char('Create Method', size=64),
         'external_delete_method': fields.char('Delete Method', size=64),
-        'external_key_name':fields.char('External field used as key', size=64)
+        'external_key_name':fields.char('External field used as key', size=64),
                 }
 external_mapping_template()
 
@@ -57,11 +57,18 @@ class external_mappinglines_template(osv.osv):
         'model_id': fields.many2one('ir.model', 'OpenERP Model', select=True, ondelete='cascade'),
         'model':fields.related('model_id', 'model', type='char', string='Model Name'),
         'external_field': fields.char('External Field', size=32),
-        'type': fields.selection([('in_out', 'External <-> OpenERP'), ('in', 'External -> OpenERP'), ('out', 'External <- OpenERP')], 'Type'),
+        'type': fields.selection([('in_out', 'External <-> OpenERP'), ('in', 'External -> OpenERP'), ('out', 'External <- OpenERP'), ('sub-mapping','Sub Mapping Line')], 'Type'),
         'external_type': fields.selection([('unicode', 'String'), ('bool', 'Boolean'), ('int', 'Integer'), ('float', 'Float'), ('list', 'List'), ('dict', 'Dictionnary')], 'External Type'),
         'in_function': fields.text('Import in OpenERP Mapping Python Function'),
         'out_function': fields.text('Export from OpenERP Mapping Python Function'),
-                }
+        'child_mapping_id': fields.many2one('external.mapping.template', 'Child Mapping', select=True, ondelete='cascade', 
+            help=('This give you the possibility to import data with a structure of Parent/child'
+                'For example when you import a sale order, the sale order is the parent of the sale order line'
+                'In this case you have to select the child mapping in order to convert the data'
+                )
+            ),
+        }
+
 external_mappinglines_template()
 
 class external_referential(osv.osv):
@@ -175,7 +182,7 @@ external_mapping_line()
 class external_mapping(osv.osv):
     _name = 'external.mapping'
     _description = 'External Mapping'
-    _rec_name = 'model_id'
+    _rec_name = 'model'
     
     def _related_model_ids(self, cr, uid, model):
         field_ids = self.pool.get("ir.model.fields").search(cr, uid, [('model_id', '=', model.id), ('ttype', '=', 'many2one')])
@@ -225,7 +232,7 @@ class external_mapping(osv.osv):
         'external_create_method': fields.char('Create Method', size=64),
         'external_delete_method': fields.char('Delete Method', size=64),
         'mapping_ids': fields.one2many('external.mapping.line', 'mapping_id', 'Mappings Lines'),
-        'external_key_name':fields.char('External field used as key', size=64, required=True)
+        'external_key_name':fields.char('External field used as key', size=64),
     }
 
 external_mapping()
@@ -239,10 +246,16 @@ class external_mapping_line(osv.osv):
         'external_field': fields.char('External Field', size=32),
         'mapping_id': fields.many2one('external.mapping', 'External Mapping', select=True, ondelete='cascade'),
         'related_model_id': fields.related('mapping_id', 'model_id', type='many2one', relation='ir.model', string='Related Model'),
-        'type': fields.selection([('in_out', 'External <-> OpenERP'), ('in', 'External -> OpenERP'), ('out', 'External <- OpenERP')], 'Type'),
+        'type': fields.selection([('in_out', 'External <-> OpenERP'), ('in', 'External -> OpenERP'), ('out', 'External <- OpenERP'), ('sub-mapping','Sub Mapping Line')], 'Type'),
         'external_type': fields.selection([('unicode', 'String'), ('bool', 'Boolean'), ('int', 'Integer'), ('float', 'Float'), ('list', 'List'), ('dict', 'Dictionnary')], 'External Type'),
         'in_function': fields.text('Import in OpenERP Mapping Python Function'),
         'out_function': fields.text('Export from OpenERP Mapping Python Function'),
+        'child_mapping_id': fields.many2one('external.mapping', 'Child Mapping', select=True, 
+            help=('This give you the possibility to import data with a structure of Parent/child'
+                'For example when you import a sale order, the sale order is the parent of the sale order line'
+                'In this case you have to select the child mapping in order to convert the data'
+                )
+            ),
     }
     
     _default = {

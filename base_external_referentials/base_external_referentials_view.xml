@@ -60,10 +60,13 @@
 									<field name="external_field" />
 									<field name="type" />
 									<field name="external_type" />
-									<newline />
-									<field name="in_function" colspan="4"/>
-									<newline />
-									<field name="out_function" colspan="4"/>
+                                    <field name="child_mapping_id" colspan="4" attrs="{'invisible':[('type','!=','sub-mapping')]}"/>
+                                    <group string="function" attrs="{'invisible':[('type','=','sub-mapping')]}" colspan="4">
+									    <newline />
+									    <field name="in_function" colspan="4"/>
+									    <newline />
+									    <field name="out_function" colspan="4"/>
+                                    </group>
 								</form>
 							</field>
 						</form>

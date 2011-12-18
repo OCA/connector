@@ -197,18 +197,21 @@ def extid_to_oeid(self, cr, uid, id, external_referential_id, context=None):
             raise osv.except_osv(_('Ext Synchro'), _("Error when importing on fly the object %s with the external_id %s and the external referential %s.\n Error : %s" %(self._name, id, external_referential_id, error)))
     return False
 
-def oevals_from_extdata(self, cr, uid, external_referential_id, data_record, mapping_lines, defaults, context):
+def oevals_from_extdata(self, cr, uid, external_referential_id, data_record, mapping_lines, key_for_external_id=None, defaults=None, context=None):
     """
     Used in convert_extdata_into_oedata in order to convert external row of data into OpenERP data
 
     @param external_referential_id: external referential id from where we import the resource
     @param external_data_row: a dictionnary of data to convert into OpenERP data
     @mapping_lines: list of mapping line used to convert external data row into OpenERP data
+    @key_for_external_id: string which is the key for getting the external_id
     @param defauls: defaults value for the data imported
     @return: dictionary of converted data in OpenERP format 
     """
     if context is None:
         context = {}
+    if default is None:
+        default = {}
     vals = {} #Dictionary for create record
     #Set defaults if any
     for each_default_entry in defaults.keys():
@@ -282,6 +285,8 @@ def oevals_from_extdata(self, cr, uid, external_referential_id, data_record, map
                             vals[each_tuple[0]] = each_tuple[1]
                 else:
                     raise MappingError(_('Invalid format for the variable result.'), each_mapping_line['external_field'], self._name)
+    if key_for_external_id and data_record.get(key_for_external_id):
+        vals.update({'external_id': int(data_record[key_for_external_id])})
     return vals
 
 
@@ -375,12 +380,13 @@ def convert_extdata_into_oedata(self, cr, uid, external_data, external_referenti
         else:
             #If a mapping exists for current model, search for mapping lines
             mapping_line_ids = self.pool.get('external.mapping.line').search(cr, uid, [('mapping_id', '=', mapping_id[0]), ('type', 'in', ['in_out', 'in'])])
-            mapping_lines = self.pool.get('external.mapping.line').read(cr, uid, mapping_line_ids, ['external_field', 'external_type', 'in_function'])
-            if mapping_lines:
+            if mapping_line_ids:
+                mapping_lines = self.pool.get('external.mapping.line').read(cr, uid, mapping_line_ids, ['external_field', 'external_type', 'in_function'])
+                key_for_external_id = self.pool.get('external.mapping').read(cr, uid, mapping_id, ['external_key_name'])['external_key_name']
                 #if mapping lines exist find the external_data conversion for each row in inward external_data
                 for each_row in external_data:
                     created = written = bound = False
-                    result.append(self.oevals_from_extdata(cr, uid, external_referential_id, each_row, mapping_lines, defaults, context))
+                    result.append(self.oevals_from_extdata(cr, uid, external_referential_id, each_row, mapping_lines, key_for_external_id, defaults, context))
     return result
 
 def ext_import(self, cr, uid, external_data, external_referential_id, defaults=None, context=None):

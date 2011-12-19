@@ -36,6 +36,8 @@ external_referential_type()
 class external_mapping_template(osv.osv):
     _name = "external.mapping.template"
     _description = "The source mapping records"
+    _rec_name = 'model'
+    
     _columns = {
         'type_id':fields.many2one('external.referential.type', 'External Referential Type', ondelete='cascade', select=True),
         'model_id': fields.many2one('ir.model', 'OpenERP Model', required=True, select=True, ondelete='cascade'),
@@ -52,12 +54,24 @@ external_mapping_template()
 class external_mappinglines_template(osv.osv):
     _name = 'external.mappinglines.template'
     _description = 'The source mapping line records'
+    _rec_name = 'name_function'
+    
+    def _name_get_fnc(self, cr, uid, ids, name, arg, context=None):
+        res = {}
+        for mapping_line in self.browse(cr, uid, ids, context):
+            res[mapping_line.id] = mapping_line.field_id or mapping_line.external_field
+        return res
+
     _columns = {
+        'name_function': fields.function(_name_get_fnc, method=True, type="char", string='Full Name'),
         'type_id':fields.many2one('external.referential.type', 'External Referential Type', ondelete='cascade', select=True),
+        'field_id': fields.many2one('ir.model.fields', 'OpenERP Field', select=True, ondelete='cascade'),
         'model_id': fields.many2one('ir.model', 'OpenERP Model', select=True, ondelete='cascade'),
         'model':fields.related('model_id', 'model', type='char', string='Model Name'),
         'external_field': fields.char('External Field', size=32),
-        'type': fields.selection([('in_out', 'External <-> OpenERP'), ('in', 'External -> OpenERP'), ('out', 'External <- OpenERP'), ('sub-mapping','Sub Mapping Line')], 'Type'),
+        'type': fields.selection([('in_out', 'External <-> OpenERP'), ('in', 'External -> OpenERP'), ('out', 'External <- OpenERP')], 'Type'),
+        'evaluation_type': fields.selection([('function', 'Function'), ('sub-mapping','Sub Mapping Line')], 'Evalution Type'),
+        # TODO ('direct', 'Direct Evaluation'), for simple mapping line function we can evaluate it without mapping just by know the external field and the openerp field
         'external_type': fields.selection([('unicode', 'String'), ('bool', 'Boolean'), ('int', 'Integer'), ('float', 'Float'), ('list', 'List'), ('dict', 'Dictionnary')], 'External Type'),
         'in_function': fields.text('Import in OpenERP Mapping Python Function'),
         'out_function': fields.text('Export from OpenERP Mapping Python Function'),
@@ -85,6 +99,8 @@ class external_referential(osv.osv):
             ext_ref = self.browse(cr, uid, id)
             mappings_obj = self.pool.get('external.mapping')
             mapping_line_obj = self.pool.get('external.mapping.line')
+            mapping_tmpl_obj = self.pool.get('external.mapping.template')
+            
             #Delete Existing mappings if any
             cr.execute("""select id from (select distinct external_mapping_line.id, external_mapping.model_id
                             from (external_mapping_line join external_mapping on external_mapping.id = external_mapping_line.mapping_id)
@@ -95,6 +111,8 @@ class external_referential(osv.osv):
             if existing_mapping_ids:
                 mapping_line_obj.unlink(cr, uid, [tuple[0] for tuple in existing_mapping_ids])
 
+            link_parent_child_mapping = []
+            template_mapping_id_to_mapping_id = {}
             #Fetch mapping lines now
             mapping_src_ids = self.pool.get('external.mapping.template').search(cr, uid, [('type_id', '=', ext_ref.type_id.id)])
             for each_mapping_rec in self.pool.get('external.mapping.template').read(cr, uid, mapping_src_ids, []):
@@ -118,6 +136,8 @@ class external_referential(osv.osv):
                     model_name = data['name']
                     self.pool.get('external.mapping').create_external_link(cr, uid, model, model_name)
 
+                template_mapping_id_to_mapping_id[each_mapping_rec['id']] = mapping_id
+
                 #Now create mapping lines of the created mapping model
                 mapping_lines_src_ids = self.pool.get('external.mappinglines.template').search(cr, uid, [('type_id', '=', ext_ref.type_id.id), ('model_id', '=', each_mapping_rec['model_id'][0])])
                 for each_mapping_line_rec in  self.pool.get('external.mappinglines.template').read(cr, uid, mapping_lines_src_ids, []):
@@ -125,11 +145,20 @@ class external_referential(osv.osv):
                         'external_field': each_mapping_line_rec['external_field'],
                         'mapping_id': mapping_id,
                         'type': each_mapping_line_rec['type'],
+                        'evaluation_type': each_mapping_line_rec['evaluation_type'],
                         'external_type': each_mapping_line_rec['external_type'],
                         'in_function': each_mapping_line_rec['in_function'],
                         'out_function': each_mapping_line_rec['out_function'],
+                        'field_id': each_mapping_line_rec['field_id'] and each_mapping_line_rec['field_id'][0] or False,
                         }
-                    mapping_line_obj.create(cr, uid, vals)
+                    mapping_line_id = mapping_line_obj.create(cr, uid, vals)
+                    if each_mapping_line_rec['child_mapping_id']:
+                        link_parent_child_mapping.append([mapping_line_id, each_mapping_line_rec['child_mapping_id'][0]])
+
+            #Now link the sub-mapping to the corresponding child
+            for mapping_line_id, mapping_tmpl_id in link_parent_child_mapping:
+                mapping_id = template_mapping_id_to_mapping_id[mapping_tmpl_id]
+                mapping_line_obj.write(cr, uid, mapping_line_id, {'child_mapping_id': mapping_id}, context=context)
         return True
             
                 
@@ -248,6 +277,8 @@ class external_mapping_line(osv.osv):
         'related_model_id': fields.related('mapping_id', 'model_id', type='many2one', relation='ir.model', string='Related Model'),
         'type': fields.selection([('in_out', 'External <-> OpenERP'), ('in', 'External -> OpenERP'), ('out', 'External <- OpenERP'), ('sub-mapping','Sub Mapping Line')], 'Type'),
         'external_type': fields.selection([('unicode', 'String'), ('bool', 'Boolean'), ('int', 'Integer'), ('float', 'Float'), ('list', 'List'), ('dict', 'Dictionnary')], 'External Type'),
+        'evaluation_type': fields.selection([('function', 'Function'), ('sub-mapping','Sub Mapping Line')], 'Evalution Type'),
+        # TODO ('direct', 'Direct Evaluation'), for simple mapping line function we can evaluate it without mapping just by know the external field and the openerp field
         'in_function': fields.text('Import in OpenERP Mapping Python Function'),
         'out_function': fields.text('Export from OpenERP Mapping Python Function'),
         'child_mapping_id': fields.many2one('external.mapping', 'Child Mapping', select=True, 

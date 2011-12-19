@@ -219,7 +219,7 @@ def oevals_from_extdata(self, cr, uid, external_referential_id, data_record, map
         vals[each_default_entry] = defaults[each_default_entry]
     for each_mapping_line in mapping_lines:
         if each_mapping_line['external_field'] in data_record.keys():
-            if each_mapping_line['type'] == 'sub-mapping':
+            if each_mapping_line['evaluation_type'] == 'sub-mapping':
                 sub_mapping_list.append(each_mapping_line)
             else:              
                 ifield = data_record.get(each_mapping_line['external_field'], False)
@@ -279,19 +279,21 @@ def oevals_from_extdata(self, cr, uid, external_referential_id, data_record, map
                     else:
                         raise MappingError(_('Invalid format for the variable result.'), each_mapping_line['external_field'], self._name)
 
-    print 'extenal key is', key_for_external_id
-    print 'value is', data_record.get(key_for_external_id)
     if key_for_external_id and data_record.get(key_for_external_id):
         vals.update({'external_id': int(data_record[key_for_external_id])})
-
+    
+    ir_model_field_obj = self.pool.get('ir.model.fields')
     for sub_mapping in sub_mapping_list:
+        print 'this is a sub mapping', sub_mapping
         ifield = data_record.get(sub_mapping['external_field'])
         if ifield:
-            vals[sub_mapping['field_id'][1]]=[]
-            model = self.pool.get('ir.model').read(cr, uid, sub_mapping['model_id'][0], ['model'], context=context)['model']
-            lines = self.pool.get(model).convert_extdata_into_oedata(cr, uid, ifield, external_referential_id, parent_data=vals, defaults=None, context=None)
+            field_name = ir_model_field_obj.read(cr, uid, sub_mapping['field_id'][0], ['name'], context=context)['name']
+            vals[field_name] = []
+            lines = self.pool.get(sub_mapping['child_mapping_id'][1]).convert_extdata_into_oedata(cr, uid, ifield, external_referential_id, parent_data=vals, defaults=None, context=None)
             for line in lines:
-                vals[sub_mapping['field_id'][1]].append((0, 0, line))
+                if 'external_id' in line:
+                    del line['external_id']
+                vals[field_name].append((0, 0, line))
     return vals
 
 
@@ -387,7 +389,7 @@ def convert_extdata_into_oedata(self, cr, uid, external_data, external_referenti
             #If a mapping exists for current model, search for mapping lines
             mapping_line_ids = self.pool.get('external.mapping.line').search(cr, uid, [('mapping_id', '=', mapping_id[0]), ('type', 'in', ['in_out', 'in'])])
             if mapping_line_ids:
-                mapping_lines = self.pool.get('external.mapping.line').read(cr, uid, mapping_line_ids, ['external_field', 'external_type', 'in_function', 'type'])
+                mapping_lines = self.pool.get('external.mapping.line').read(cr, uid, mapping_line_ids, [])
                 key_for_external_id = self.pool.get('external.mapping').read(cr, uid, mapping_id[0], ['external_key_name'])['external_key_name']
                 #if mapping lines exist find the external_data conversion for each row in inward external_data
                 for each_row in external_data:

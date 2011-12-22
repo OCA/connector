@@ -102,6 +102,19 @@ def get_modified_ids(self, cr, uid, date=False, context=None):
             res += [[p[0], p[1]]]
     return sorted(res, key=lambda date: date[1])
 
+
+def get_all_extid_from_referential(self, cr, uid, referential_id, context=None):
+    """Returns the external ids of the ressource which have an ext_id in the referential"""
+    ir_model_data_obj = self.pool.get('ir.model.data')
+    model_data_ids = ir_model_data_obj.search(cr, uid, [('model', '=', self._name), ('external_referential_id', '=', referential_id)])
+    #because OpenERP might keep ir_model_data (is it a bug?) for deleted records, we check if record exists:
+    oeid_to_extid = {}
+    for data in ir_model_data_obj.read(cr, uid, model_data_ids, ['res_id', 'name'], context=context):
+        oeid_to_extid[data['res_id']] = self.id_from_prefixed_id(data['name'])
+    claimed_oe_ids = oeid_to_extid.keys()
+    exiting_oe_ids = self.search(cr, uid, [('id', 'in', claimed_oe_ids)])
+    return [oeid_to_extid[oe_id] for oe_id in exiting_oe_ids]
+
 def get_all_oeid_from_referential(self, cr, uid, referential_id, context=None):
     """Returns the openerp ids of the ressource which have an ext_id in the referential"""
     ir_model_data_obj = self.pool.get('ir.model.data')
@@ -656,5 +669,6 @@ osv.osv.ext_update = ext_update
 osv.osv.report_action_mapping = report_action_mapping
 osv.osv._prepare_external_id_vals = _prepare_external_id_vals
 osv.osv.get_all_oeid_from_referential = get_all_oeid_from_referential
+osv.osv.get_all_extid_from_referential = get_all_extid_from_referential
 osv.osv.create_external_id_vals = create_external_id_vals
 

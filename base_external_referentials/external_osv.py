@@ -164,10 +164,12 @@ def extid_to_existing_oeid(self, cr, uid, external_id, external_referential_id, 
             (cr, uid, external_id, external_referential_id, context=context)
         # Note: OpenERP cleans up ir_model_data which res_id records have been deleted
         # only at server update because that would be a perf penalty, we returns the res_id only if
-        # really existing
+        # really existing and we delete the ir_model_data unused
         existing_ids = self.search(cr, uid, [('id', '=', expected_oe_id)], context=context)
         if existing_ids:
             return expected_oe_id
+        elif ir_model_data_id:
+            self.pool.get('ir.model.data').unlink(cr, uid, ir_model_data_id, context=context)
     return False
 
 def extid_to_oeid(self, cr, uid, id, external_referential_id, context=None):

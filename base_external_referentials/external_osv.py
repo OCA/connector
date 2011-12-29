@@ -199,6 +199,33 @@ def extid_to_oeid(self, cr, uid, id, external_referential_id, context=None):
             raise osv.except_osv(_('Ext Synchro'), _("Error when importing on fly the object %s with the external_id %s and the external referential %s.\n Error : %s" %(self._name, id, external_referential_id, error)))
     return False
 
+def call_sub_mapping(self, cr, uid, sub_mapping_list, external_data, external_referential_id, vals, defaults=None, context=None):
+    """
+    Used in oevals_from_extdata in order to call the sub mapping
+
+    @param sub_mapping_list: list of sub-mapping to apply
+    @param external_data: list of data to convert into OpenERP data
+    @param external_referential_id: external referential id from where we import the resource
+    @param vals: dictionnary of value previously converted
+    @param defauls: defaults value for the data imported
+    @return: dictionary of converted data in OpenERP format 
+    """
+
+    if not defaults:
+        defaults={}
+    ir_model_field_obj = self.pool.get('ir.model.fields')
+    for sub_mapping in sub_mapping_list:
+        ifield = external_data.get(sub_mapping['external_field'])
+        if ifield:
+            field_name = ir_model_field_obj.read(cr, uid, sub_mapping['field_id'][0], ['name'], context=context)['name']
+            vals[field_name] = []
+            lines = self.pool.get(sub_mapping['child_mapping_id'][1]).convert_extdata_into_oedata(cr, uid, ifield, external_referential_id, parent_data=vals, defaults=defaults.get(field_name), context=context)
+            for line in lines:
+                if 'external_id' in line:
+                    del line['external_id']
+                vals[field_name].append((0, 0, line))
+    return vals
+
 def oevals_from_extdata(self, cr, uid, external_referential_id, data_record, mapping_lines, key_for_external_id=None, parent_data=None, previous_lines=None, defaults=None, context=None):
     """
     Used in convert_extdata_into_oedata in order to convert external row of data into OpenERP data
@@ -285,18 +312,8 @@ def oevals_from_extdata(self, cr, uid, external_referential_id, data_record, map
     if key_for_external_id and data_record.get(key_for_external_id):
         vals.update({'external_id': int(data_record[key_for_external_id])})
     
-    ir_model_field_obj = self.pool.get('ir.model.fields')
-    for sub_mapping in sub_mapping_list:
-        print 'this is a sub mapping', sub_mapping
-        ifield = data_record.get(sub_mapping['external_field'])
-        if ifield:
-            field_name = ir_model_field_obj.read(cr, uid, sub_mapping['field_id'][0], ['name'], context=context)['name']
-            vals[field_name] = []
-            lines = self.pool.get(sub_mapping['child_mapping_id'][1]).convert_extdata_into_oedata(cr, uid, ifield, external_referential_id, parent_data=vals, defaults=None, context=None)
-            for line in lines:
-                if 'external_id' in line:
-                    del line['external_id']
-                vals[field_name].append((0, 0, line))
+    vals = self.call_sub_mapping(cr, uid, sub_mapping_list, data_record, external_referential_id, vals, defaults=defaults, context=context)
+
     return vals
 
 
@@ -701,6 +718,7 @@ osv.osv.oeid_to_extid = oeid_to_extid
 osv.osv._extid_to_expected_oeid = _extid_to_expected_oeid
 osv.osv.extid_to_existing_oeid = extid_to_existing_oeid
 osv.osv.extid_to_oeid = extid_to_oeid
+osv.osv.call_sub_mapping = call_sub_mapping
 osv.osv.oevals_from_extdata = oevals_from_extdata
 osv.osv.convert_extdata_into_oedata = convert_extdata_into_oedata
 osv.osv.get_external_data = get_external_data

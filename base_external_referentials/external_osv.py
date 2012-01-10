@@ -29,6 +29,7 @@ import pooler
 
 from tools.translate import _
 
+
 class MappingError(Exception):
     def __init__(self, value, mapping_name, mapping_object):
         self.value = value
@@ -36,13 +37,13 @@ class MappingError(Exception):
         self.mapping_object = mapping_object
     def __str__(self):
         return repr('the mapping line : %s for the object %s have an error : %s'%(self.mapping_name, self.mapping_object, self.value))
-        
+
+
 class ExtConnError(Exception):
      def __init__(self, value):
          self.value = value
      def __str__(self):
          return repr(self.value)
-
 
 def read_w_order(self, cr, user, ids, fields_to_read=None, context=None, load='_classic_read'):
     res = self.read(cr, user, ids, fields_to_read, context, load)
@@ -102,7 +103,6 @@ def get_modified_ids(self, cr, uid, date=False, context=None):
             res += [[p[0], p[1]]]
     return sorted(res, key=lambda date: date[1])
 
-
 def get_all_extid_from_referential(self, cr, uid, referential_id, context=None):
     """Returns the external ids of the ressource which have an ext_id in the referential"""
     ir_model_data_obj = self.pool.get('ir.model.data')
@@ -112,8 +112,8 @@ def get_all_extid_from_referential(self, cr, uid, referential_id, context=None):
     for data in ir_model_data_obj.read(cr, uid, model_data_ids, ['res_id', 'name'], context=context):
         oeid_to_extid[data['res_id']] = self.id_from_prefixed_id(data['name'])
     claimed_oe_ids = oeid_to_extid.keys()
-    exiting_oe_ids = self.search(cr, uid, [('id', 'in', claimed_oe_ids)])
-    return [oeid_to_extid[oe_id] for oe_id in exiting_oe_ids]
+    existing_oe_ids = self.exists(cr, uid, claimed_oe_ids, context=context)
+    return [oeid_to_extid[oe_id] for oe_id in existing_oe_ids]
 
 def get_all_oeid_from_referential(self, cr, uid, referential_id, context=None):
     """Returns the openerp ids of the ressource which have an ext_id in the referential"""
@@ -121,8 +121,7 @@ def get_all_oeid_from_referential(self, cr, uid, referential_id, context=None):
     model_data_ids = ir_model_data_obj.search(cr, uid, [('model', '=', self._name), ('external_referential_id', '=', referential_id)])
     #because OpenERP might keep ir_model_data (is it a bug?) for deleted records, we check if record exists:
     claimed_oe_ids = [x['res_id'] for x in ir_model_data_obj.read(cr, uid, model_data_ids, ['res_id'], context=context)]
-    return self.search(cr, uid, [('id', 'in', claimed_oe_ids)])
-    
+    return self.exists(cr, uid, claimed_oe_ids, context=context)
 
 def oeid_to_extid(self, cr, uid, id, external_referential_id, context=None):
     """Returns the external id of a resource by its OpenERP id.
@@ -165,10 +164,16 @@ def extid_to_existing_oeid(self, cr, uid, external_id, external_referential_id, 
         # Note: OpenERP cleans up ir_model_data which res_id records have been deleted
         # only at server update because that would be a perf penalty, we returns the res_id only if
         # really existing and we delete the ir_model_data unused
-        existing_ids = self.search(cr, uid, [('id', '=', expected_oe_id)], context=context)
+        existing_ids = self.exists(cr, uid, expected_oe_id, context=context)
         if existing_ids:
             return expected_oe_id
         elif ir_model_data_id:
+            # CHECK: do we have to unlink the result when we call to this method ? I propose just to ignore them
+            # see method _existing_oeid_for_extid_import
+            # the bad ir.model.data are cleaned up when we import again a external resource with the same id
+            # So I see 2 cons points:
+            # - perf penalty
+            # - by doing an unlink, we are writing to the database even if we just need to read a record (what about locks?)
             self.pool.get('ir.model.data').unlink(cr, uid, ir_model_data_id, context=context)
     return False
 
@@ -342,9 +347,9 @@ def _existing_oeid_for_extid_import(self, cr, uid, vals, external_id, external_r
         (cr, uid, external_id, external_referential_id, context=context)
 
     # Take care of deleted resource ids, cleans up ir.model.data
-    existing_res_ids = self.search(cr, uid, [('id', '=', expected_res_id)])
+    existing_res_ids = self.exists(cr, uid, expected_res_id, context=context)
     if existing_ir_model_data_id and not existing_res_ids:
-        self.pool.get('ir.model.data').unlink(cr, uid, existing_ir_model_data_id)
+        self.pool.get('ir.model.data').unlink(cr, uid, existing_ir_model_data_id, context=context)
         existing_ir_model_data_id = False
     return existing_ir_model_data_id, existing_res_ids and existing_res_ids[0] or False
 

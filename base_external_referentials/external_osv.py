@@ -111,9 +111,9 @@ def get_all_extid_from_referential(self, cr, uid, referential_id, context=None):
     oeid_to_extid = {}
     for data in ir_model_data_obj.read(cr, uid, model_data_ids, ['res_id', 'name'], context=context):
         oeid_to_extid[data['res_id']] = self.id_from_prefixed_id(data['name'])
-    claimed_oe_ids = oeid_to_extid.keys()
-    existing_oe_ids = self.exists(cr, uid, claimed_oe_ids, context=context)
-    return [oeid_to_extid[oe_id] for oe_id in existing_oe_ids]
+    if not oeid_to_extid:
+        return []
+    return [oeid_to_extid[oe_id] for oe_id in self.exists(cr, uid, oeid_to_extid.keys(), context=context)]
 
 def get_all_oeid_from_referential(self, cr, uid, referential_id, context=None):
     """Returns the openerp ids of the ressource which have an ext_id in the referential"""
@@ -121,7 +121,7 @@ def get_all_oeid_from_referential(self, cr, uid, referential_id, context=None):
     model_data_ids = ir_model_data_obj.search(cr, uid, [('model', '=', self._name), ('external_referential_id', '=', referential_id)])
     #because OpenERP might keep ir_model_data (is it a bug?) for deleted records, we check if record exists:
     claimed_oe_ids = [x['res_id'] for x in ir_model_data_obj.read(cr, uid, model_data_ids, ['res_id'], context=context)]
-    return self.exists(cr, uid, claimed_oe_ids, context=context)
+    return claimed_oe_ids and self.exists(cr, uid, claimed_oe_ids, context=context) or []
 
 def oeid_to_extid(self, cr, uid, id, external_referential_id, context=None):
     """Returns the external id of a resource by its OpenERP id.
@@ -164,8 +164,7 @@ def extid_to_existing_oeid(self, cr, uid, external_id, external_referential_id, 
         # Note: OpenERP cleans up ir_model_data which res_id records have been deleted
         # only at server update because that would be a perf penalty, we returns the res_id only if
         # really existing and we delete the ir_model_data unused
-        existing_ids = self.exists(cr, uid, expected_oe_id, context=context)
-        if existing_ids:
+        if expected_oe_id and self.exists(cr, uid, expected_oe_id, context=context):
             return expected_oe_id
         elif ir_model_data_id:
             # CHECK: do we have to unlink the result when we call to this method ? I propose just to ignore them
@@ -347,11 +346,10 @@ def _existing_oeid_for_extid_import(self, cr, uid, vals, external_id, external_r
         (cr, uid, external_id, external_referential_id, context=context)
 
     # Take care of deleted resource ids, cleans up ir.model.data
-    existing_res_ids = self.exists(cr, uid, expected_res_id, context=context)
-    if existing_ir_model_data_id and not existing_res_ids:
+    if existing_ir_model_data_id and expected_res_id and not self.exists(cr, uid, expected_res_id, context=context):
         self.pool.get('ir.model.data').unlink(cr, uid, existing_ir_model_data_id, context=context)
-        existing_ir_model_data_id = False
-    return existing_ir_model_data_id, existing_res_ids and existing_res_ids[0] or False
+        existing_ir_model_data_id = expected_res_id = False
+    return existing_ir_model_data_id, expected_res_id
 
 def ext_import(self, cr, uid, data, external_referential_id, defaults=None, context=None):
     if defaults is None:

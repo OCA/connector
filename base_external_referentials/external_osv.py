@@ -30,6 +30,8 @@ import pooler
 
 from tools.translate import _
 from tools import DEFAULT_SERVER_DATETIME_FORMAT, DEFAULT_SERVER_DATE_FORMAT
+from lxml import etree
+import re
 
 class MappingError(Exception):
     def __init__(self, value, mapping_name, mapping_object):
@@ -197,14 +199,15 @@ def extid_to_oeid(self, cr, uid, id, external_referential_id, context=None):
             raise osv.except_osv(_('Ext Synchro'), _("Error when importing on fly the object %s with the external_id %s and the external referential %s.\n Error : %s" %(self._name, id, external_referential_id, error)))
     return False
 
-def oevals_from_extdata(self, cr, uid, external_referential_id, data_record, mapping_lines, key_for_external_id=None, parent_data=None, defaults=None, context=None):
+def oevals_from_extdata(self, cr, uid, external_referential_id, data_record, mapping_lines, key_for_external_id=None, parent_data=None, previous_lines=None, defaults=None, context=None):
     """
     Used in convert_extdata_into_oedata in order to convert external row of data into OpenERP data
 
     @param external_referential_id: external referential id from where we import the resource
     @param external_data_row: a dictionnary of data to convert into OpenERP data
-    @mapping_lines: list of mapping line used to convert external data row into OpenERP data
-    @key_for_external_id: string which is the key for getting the external_id
+    @param mapping_lines: list of mapping line used to convert external data row into OpenERP data
+    @param key_for_external_id: string which is the key for getting the external_id
+    @param previous_lines: list of the previous line converted. This is not used here but it's necessary for playing on change on sale order line
     @param defauls: defaults value for the data imported
     @return: dictionary of converted data in OpenERP format 
     """
@@ -394,7 +397,7 @@ def convert_extdata_into_oedata(self, cr, uid, external_data, external_referenti
                 #if mapping lines exist find the external_data conversion for each row in inward external_data
                 for each_row in external_data:
                     created = written = bound = False
-                    result.append(self.oevals_from_extdata(cr, uid, external_referential_id, each_row, mapping_lines, key_for_external_id, parent_data, defaults, context))
+                    result.append(self.oevals_from_extdata(cr, uid, external_referential_id, each_row, mapping_lines, key_for_external_id, parent_data, result, defaults, context))
     return result
 
 def ext_import(self, cr, uid, external_data, external_referential_id, defaults=None, context=None):
@@ -719,4 +722,3 @@ osv.osv._prepare_external_id_vals = _prepare_external_id_vals
 osv.osv.get_all_oeid_from_referential = get_all_oeid_from_referential
 osv.osv.get_all_extid_from_referential = get_all_extid_from_referential
 osv.osv.create_external_id_vals = create_external_id_vals
-

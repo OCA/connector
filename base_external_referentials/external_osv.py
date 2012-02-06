@@ -224,7 +224,26 @@ def call_sub_mapping(self, cr, uid, sub_mapping_list, external_data, external_re
                 if 'external_id' in line:
                     del line['external_id']
                 vals[field_name].append((0, 0, line))
+
     return vals
+
+
+def merge_with_default_value(self, cr, uid, sub_mapping_list, data_record, external_referential_id, vals, defaults=None, context=None):
+    """
+    Used in oevals_from_extdata in order to merge the defaults values, some params are useless here but need in base_sale_multichannels to play the on_change
+
+    @param sub_mapping_list: list of sub-mapping to apply
+    @param external_data: list of data to convert into OpenERP data
+    @param external_referential_id: external referential id from where we import the resource
+    @param vals: dictionnary of value previously converted
+    @param defauls: defaults value for the data imported
+    @return: dictionary of converted data in OpenERP format 
+    """
+    for key in defaults:
+        if not key in vals:
+            vals[key] = defaults[key]
+    return vals
+
 
 def oevals_from_extdata(self, cr, uid, external_referential_id, data_record, mapping_lines, key_for_external_id=None, parent_data=None, previous_lines=None, defaults=None, context=None):
     """
@@ -242,11 +261,9 @@ def oevals_from_extdata(self, cr, uid, external_referential_id, data_record, map
         context = {}
     if defaults is None:
         defaults = {}
+
     vals = {} #Dictionary for create record
     sub_mapping_list=[]
-    #Set defaults if any
-    for each_default_entry in defaults.keys():
-        vals[each_default_entry] = defaults[each_default_entry]
     for each_mapping_line in mapping_lines:
         if each_mapping_line['external_field'] in data_record.keys():
             if each_mapping_line['evaluation_type'] == 'sub-mapping':
@@ -312,6 +329,7 @@ def oevals_from_extdata(self, cr, uid, external_referential_id, data_record, map
     if key_for_external_id and data_record.get(key_for_external_id):
         vals.update({'external_id': int(data_record[key_for_external_id])})
     
+    vals = self.merge_with_default_value(cr, uid, sub_mapping_list, data_record, external_referential_id, vals, defaults=defaults, context=context)
     vals = self.call_sub_mapping(cr, uid, sub_mapping_list, data_record, external_referential_id, vals, defaults=defaults, context=context)
 
     return vals
@@ -719,6 +737,7 @@ osv.osv._extid_to_expected_oeid = _extid_to_expected_oeid
 osv.osv.extid_to_existing_oeid = extid_to_existing_oeid
 osv.osv.extid_to_oeid = extid_to_oeid
 osv.osv.call_sub_mapping = call_sub_mapping
+osv.osv.merge_with_default_value = merge_with_default_value
 osv.osv.oevals_from_extdata = oevals_from_extdata
 osv.osv.convert_extdata_into_oedata = convert_extdata_into_oedata
 osv.osv.get_external_data = get_external_data

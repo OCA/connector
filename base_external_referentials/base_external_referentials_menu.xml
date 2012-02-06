@@ -27,6 +27,7 @@
             <field name="res_model">external.report</field>
             <field name="view_type">form</field>
             <field name="view_id" ref="external_report_tree_view"/>
+            <field name="search_view_id" ref="external_report_search_form_view"/>
 		</record>
 
 		<menuitem id="ir_ui_menu_external_report" name="External Report" parent="ir_ui_menu_external_referentials" action="ir_actions_act_window_external_report" />
@@ -39,6 +40,7 @@
             <field name="res_model">external.report.history</field>
             <field name="view_type">form</field>
             <field name="view_id" ref="external_report_history_tree_view"/>
+            <field name="search_view_id" ref="external_report_history_search_view"/>
 		</record>
 
 		<menuitem id="ir_ui_menu_external_report_history" name="External Report History" parent="ir_ui_menu_external_referentials" action="ir_actions_act_window_external_report_history" />

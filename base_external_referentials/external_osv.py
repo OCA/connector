@@ -29,7 +29,7 @@ import netsvc
 import pooler
 
 from tools.translate import _
-
+from tools import DEFAULT_SERVER_DATETIME_FORMAT, DEFAULT_SERVER_DATE_FORMAT
 
 class MappingError(Exception):
     def __init__(self, value, mapping_name, mapping_object):
@@ -527,8 +527,8 @@ def ext_export(self, cr, uid, ids, external_referential_ids=[], defaults={}, con
                                     last_updated_time = read[0] and read[0].split('.')[0] or read[1] and read[1].split('.')[0] or False
 
                                 if last_updated_time and last_exported_time:
-                                    last_exported_time = datetime.datetime.fromtimestamp(time.mktime(time.strptime(last_exported_time, '%Y-%m-%d %H:%M:%S')))
-                                    last_updated_time = datetime.datetime.fromtimestamp(time.mktime(time.strptime(last_updated_time, '%Y-%m-%d %H:%M:%S')))
+                                    last_exported_time = datetime.datetime.fromtimestamp(time.mktime(time.strptime(last_exported_time[:19], DEFAULT_SERVER_DATETIME_FORMAT)))
+                                    last_updated_time = datetime.datetime.fromtimestamp(time.mktime(time.strptime(last_updated_time[:19], DEFAULT_SERVER_DATETIME_FORMAT)))
                                     if last_exported_time + datetime.timedelta(seconds=1) > last_updated_time:
                                         continue
 

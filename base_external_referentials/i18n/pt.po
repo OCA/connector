@@ -1,16 +1,16 @@
-# Translation of OpenERP Server.
-# This file contains the translation of the following modules:
-#	* base_external_referentials
+# Portuguese translation for openobject-addons
+# Copyright (c) 2011 Rosetta Contributors and Canonical Ltd 2011
+# This file is distributed under the same license as the openobject-addons package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2011.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenERP Server 5.0.6\n"
-"Report-Msgid-Bugs-To: support@openerp.com\n"
+"Project-Id-Version: openobject-addons\n"
+"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2009-12-20 17:21+0000\n"
-"PO-Revision-Date: 2011-02-14 11:36+0000\n"
-"Last-Translator: Jordi Esteve (www.zikzakmedia.com) "
-"<jesteve@zikzakmedia.com>\n"
-"Language-Team: \n"
+"PO-Revision-Date: 2011-02-14 10:04+0000\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: Portuguese <pt@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -22,44 +22,44 @@ msgstr ""
 msgid ""
 "The Object name must start with x_ and not contain any special character !"
 msgstr ""
-"¡El nombre del objeto debe empezar con x_ y no contener ningún carácter "
-"especial!"
+"O nome do Objecto deve começar com x_ e não pode conter nenhum caracter "
+"especial !"
 
 #. module: base_external_referentials
 #: field:external.referential,mapping_ids:0
 msgid "Mappings"
-msgstr "Mapeos"
+msgstr "Mapeamentos"
 
 #. module: base_external_referentials
 #: view:external.referential:0
 msgid "Object Mappings"
-msgstr "Mapeos de objetos"
+msgstr "Mapeamento de Objectos"
 
 #. module: base_external_referentials
 #: view:external.referential:0
 msgid "Synchronize Referential Settings"
-msgstr "Sincronizar configuraciones de referencias"
+msgstr "Sincronizar configurações Referênciais"
 
 #. module: base_external_referentials
 #: view:external.referential:0
 msgid "Authentication"
-msgstr "Autenticación"
+msgstr "Autenticação"
 
 #. module: base_external_referentials
 #: field:external.referential,location:0
 msgid "Location"
-msgstr "URL Localización"
+msgstr "Localização"
 
 #. module: base_external_referentials
 #: constraint:ir.actions.act_window:0
 msgid "Invalid model name in the action definition."
-msgstr "Nombre de modelo no válido en la definición de la acción."
+msgstr "Nome do modelo  inválido na definição da acção."
 
 #. module: base_external_referentials
 #: selection:external.mapping.line,type:0
 #: selection:external.mappinglines.template,type:0
 msgid "External <- OpenERP"
-msgstr "Exterior <- OpenERP"
+msgstr "Externas <- OpenERP"
 
 #. module: base_external_referentials
 #: field:external.mapping.line,type:0
@@ -70,23 +70,23 @@ msgstr "Tipo"
 #. module: base_external_referentials
 #: view:external.referential:0
 msgid "Reload Referential Mapping Templates"
-msgstr "Recargar plantillas de mapeo de referencias"
+msgstr "Recarregar Modelos de Mapeamento Referenciais"
 
 #. module: base_external_referentials
 #: model:ir.module.module,shortdesc:base_external_referentials.module_meta_information
 msgid "Base External Referentials"
-msgstr "Base Referencias externas"
+msgstr "Base Referenciais Externas"
 
 #. module: base_external_referentials
 #: field:external.mapping,related_model_ids:0
 msgid "Related Inherited Models"
-msgstr "Modelos heredados relacionados"
+msgstr "Modelo Herdado Relacionado"
 
 #. module: base_external_referentials
 #: field:external.mapping.line,external_type:0
 #: field:external.mappinglines.template,external_type:0
 msgid "External Type"
-msgstr "Tipo externo"
+msgstr "Tipo Externo"
 
 #. module: base_external_referentials
 #: selection:external.mapping.line,external_type:0
@@ -98,32 +98,32 @@ msgstr "String"
 #: field:external.mapping,external_list_method:0
 #: field:external.mapping.template,external_list_method:0
 msgid "List Method"
-msgstr "Método lista"
+msgstr "Método Lista"
 
 #. module: base_external_referentials
 #: model:ir.ui.menu,name:base_external_referentials.ir_ui_menu_extref0
 msgid "External Referentials"
-msgstr "Referencias externas"
+msgstr "Referenciais Externas"
 
 #. module: base_external_referentials
 #: model:ir.model,name:base_external_referentials.model_external_referential_type
 msgid "External Referential Type (Ex.Magento,Spree)"
-msgstr "Tipo referencia externa (Ej. Magento, Spree, Moodle)"
+msgstr "Tipo Referencial Externo (Ex.Magento,Spree)"
 
 #. module: base_external_referentials
 #: field:external.mapping.line,related_model_id:0
 msgid "Related Model"
-msgstr "Modelo relacionado"
+msgstr "Modelo Relacionado"
 
 #. module: base_external_referentials
 #: field:ir.model.data,create_date:0
 msgid "Created date"
-msgstr "Fecha creación"
+msgstr "Data criada"
 
 #. module: base_external_referentials
 #: field:external.referential,apiusername:0
 msgid "User Name"
-msgstr "Nombre usuario"
+msgstr "Nome de Utilizador"
 
 #. module: base_external_referentials
 #: help:external.mapping,related_model_ids:0
@@ -131,114 +131,114 @@ msgid ""
 "potentially inherited through '_inherits' model, used for mapping field "
 "selection"
 msgstr ""
-"Potencialmente heredado mediante modelos '_inherits', usado para el mapeo de "
-"campos selección."
+"potencialmente herdado mediante modelos  '_inherits', utilizado para "
+"mapeamentos de campo de selecção"
 
 #. module: base_external_referentials
 #: field:external.mapping,external_get_method:0
 #: field:external.mapping.template,external_get_method:0
 msgid "Get Method"
-msgstr "Método obtener (Get)"
+msgstr "Obter Método"
 
 #. module: base_external_referentials
 #: field:external.mapping,model:0
 #: field:external.mapping.template,model:0
 #: field:external.mappinglines.template,model:0
 msgid "Model Name"
-msgstr "Nombre modelo"
+msgstr "Nome do Modelo"
 
 #. module: base_external_referentials
 #: selection:external.mapping.line,external_type:0
 #: selection:external.mappinglines.template,external_type:0
 msgid "Integer"
-msgstr "Integer"
+msgstr "Inteiro"
 
 #. module: base_external_referentials
 #: view:external.referential:0
 #: model:ir.model,name:base_external_referentials.model_external_mapping_line
 msgid "Field Mapping"
-msgstr "Mapeo de campo"
+msgstr "Mapeamento de Campo"
 
 #. module: base_external_referentials
 #: model:ir.model,name:base_external_referentials.model_external_mapping_template
 msgid "The source mapping records"
-msgstr "Los mapeos originales"
+msgstr "A origem das gravações de mapeamento"
 
 #. module: base_external_referentials
 #: model:ir.actions.act_window,name:base_external_referentials.ir_actions_act_window_externalreferential0
 msgid "external_referential"
-msgstr "Referencias externas"
+msgstr "Referencial_externas"
 
 #. module: base_external_referentials
 #: constraint:ir.ui.view:0
 msgid "Invalid XML for View Architecture!"
-msgstr "¡XML inválido para la definición de la vista!"
+msgstr "XML Inválido para a Arquitectura de Vista!"
 
 #. module: base_external_referentials
 #: field:external.mapping.line,external_field:0
 #: field:external.mappinglines.template,external_field:0
 msgid "External Field"
-msgstr "Campo externo"
+msgstr "Campo Externo"
 
 #. module: base_external_referentials
 #: field:external.referential,name:0
 #: field:external.referential.type,name:0
 msgid "Name"
-msgstr "Nombre"
+msgstr "Nome"
 
 #. module: base_external_referentials
 #: field:external.mapping.line,in_function:0
 #: field:external.mappinglines.template,in_function:0
 msgid "Import in OpenERP Mapping Python Function"
-msgstr "Función Python de mapeo, importación en OpenERP"
+msgstr "Importar em OpenERP Função Python de Mapeamento"
 
 #. module: base_external_referentials
 #: field:external.mapping,mapping_ids:0
 msgid "Mappings Lines"
-msgstr "Líneas de mapeo"
+msgstr "Linhas de Mapeamento"
 
 #. module: base_external_referentials
 #: selection:external.mapping.line,type:0
 #: selection:external.mappinglines.template,type:0
 msgid "External -> OpenERP"
-msgstr "Exterior -> OpenERP"
+msgstr "Externo -> OpenERP"
 
 #. module: base_external_referentials
 #: model:ir.model,name:base_external_referentials.model_external_mappinglines_template
 msgid "The source mapping line records"
-msgstr "Las líneas de mapeo originales"
+msgstr "A origem da linha de gravações de mapeamento"
 
 #. module: base_external_referentials
 #: field:external.mapping,referential_id:0
 #: model:ir.model,name:base_external_referentials.model_external_referential
 msgid "External Referential"
-msgstr "Referencia externa"
+msgstr "Referencial Externo"
 
 #. module: base_external_referentials
 #: field:external.referential,type_id:0
 msgid "Referential Type"
-msgstr "Tipo referencia"
+msgstr "Tipo Referencial"
 
 #. module: base_external_referentials
 #: view:external.referential:0
 msgid "General"
-msgstr "General"
+msgstr "Geral"
 
 #. module: base_external_referentials
 #: field:external.mapping,external_update_method:0
 #: field:external.mapping.template,external_update_method:0
 msgid "Update Method"
-msgstr "Método actualización"
+msgstr "Método Actualizado"
 
 #. module: base_external_referentials
 #: field:external.mapping.line,name_function:0
 msgid "Full Name"
-msgstr "Nombre completo"
+msgstr "Nome Completo"
 
 #. module: base_external_referentials
 #: view:external.referential:0
 msgid "Field Mappings"
-msgstr "Mapeos de campos"
+msgstr "Mapeamento de Campos"
 
 #. module: base_external_referentials
 #: field:external.mapping,model_id:0
@@ -251,18 +251,18 @@ msgstr "Modelo OpenERP"
 #: field:external.mapping.line,out_function:0
 #: field:external.mappinglines.template,out_function:0
 msgid "Export from OpenERP Mapping Python Function"
-msgstr "Función Python de mapeo, exportación desde OpenERP"
+msgstr "Exportar a partir do OpenERP Função Python de Mapeamento"
 
 #. module: base_external_referentials
 #: field:external.referential,apipass:0
 msgid "Password"
-msgstr "Contraseña"
+msgstr "Palavra Passe"
 
 #. module: base_external_referentials
 #: field:external.mapping.line,mapping_id:0
 #: model:ir.model,name:base_external_referentials.model_external_mapping
 msgid "External Mapping"
-msgstr "Mapeo externo"
+msgstr "Mapeamento Externo"
 
 #. module: base_external_referentials
 #: field:external.mapping.line,field_id:0
@@ -273,7 +273,7 @@ msgstr "Campo OpenERP"
 #: field:external.mapping,external_create_method:0
 #: field:external.mapping.template,external_create_method:0
 msgid "Create Method"
-msgstr "Método creación"
+msgstr "Criar Método"
 
 #. module: base_external_referentials
 #: selection:external.mapping.line,external_type:0
@@ -285,29 +285,29 @@ msgstr "Float"
 #: field:external.mapping,external_key_name:0
 #: field:external.mapping.template,external_key_name:0
 msgid "External field used as key"
-msgstr "Campo externo usado como clave"
+msgstr "Campo Externas  usado como chave"
 
 #. module: base_external_referentials
 #: field:external.mapping,external_delete_method:0
 #: field:external.mapping.template,external_delete_method:0
 msgid "Delete Method"
-msgstr "Método borrado"
+msgstr "Método Apagado"
 
 #. module: base_external_referentials
 #: selection:external.mapping.line,external_type:0
 #: selection:external.mappinglines.template,external_type:0
 msgid "Boolean"
-msgstr "Boolean"
+msgstr "Boleano"
 
 #. module: base_external_referentials
 #: field:ir.model.data,external_referential_id:0
 msgid "Ext. Referential"
-msgstr "Referencia ext."
+msgstr "Ext. Referencial"
 
 #. module: base_external_referentials
 #: field:ir.model.data,write_date:0
 msgid "Updated date"
-msgstr "Fecha actualización"
+msgstr "Data actualizado"
 
 #. module: base_external_referentials
 #: model:ir.module.module,description:base_external_referentials.module_meta_information
@@ -341,38 +341,42 @@ msgid ""
 "    "
 msgstr ""
 "\n"
-"Este módulo proporciona una mínima base de abstracción común para añadir "
-"cualquier id de columnas externas a algunas tablas OpenObject para que "
-"apunten a algunas referencias externas.\n"
-"Una referencia es un concepto abstracto y mínimo a este nivel, se identifica "
-"sólo por:\n"
-"* Un nombre\n"
-"* URL de una localización (posiblemente URL del webservice, URL de la "
-"conexión a la base de datos...); el método de conexión lo proporcionará.\n"
-"* Credenciales de conexión (nombre de usuario + contraseña)\n"
+"Este módulo fornecem uma mínina base de abstração comum para adicionar "
+"alguma identificação de colunas externas\n"
+"a algumas tabelas OpenObject, para que apontem algumas referências "
+"externas.\n"
+"Um referencial é abstrata e mínima nesta fase, só é identificado\n"
+"por:\n"
+"* um nome\n"
+"* uma localização (possibilidade de URL webservice,URL da conecção á base de "
+"dados...); o método de conexão vai contá-la...\n"
+"* credenciais referenciais (nome de utilizador + palavra passe)\n"
 "\n"
-"OpenERP ya tiene un soporte limitado a ids externas utilizando la tabla "
-"ir_model_data y los campos id en los datos cargados como XML o CSV.\n"
-"La cuestión es que el sistema actual, aunque muy útil para hacer frente a "
-"datos internos de OpenERP, tiene algunas limitaciones:\n"
-"* No escala bien con todos los datos de producción, porque todo termina "
-"guardado en la tabla ir_model_data\n"
-"* Todo el sistema está construido teniendo en cuenta la id de referencia. "
-"Pero es posible que desee tener varias identificaciones externas.\n"
-"Por ejemplo, si vende sus productos en varios sitios web (utilizando, por "
-"ejemplo, el nuevo conector Magento multi tienda), y desea que cada producto "
-"tenga varias columnas exteriores de identificación. Esto es exactamente lo "
-"que permite este módulo.\n"
+"OpenERP já tem suporte limitado para identificação externa utilizando a "
+"identificação ir_model_data\n"
+"e campos de dados carregados, como XML ou CSV.\n"
+"A questão é que o sistema actual, e muito útil para lidar com dados internos "
+"e OpenERP tem algumas\n"
+"limitações:\n"
+"*não escala bem aos dados de produção inteira, porque tudo termina na "
+"ir_model_data\n"
+"* Todo o sistema é construído com uma identificação de referência em mente. "
+"Mas na verdade pode querer várias identificações externas.\n"
+"Digamos que venda o seu produto ao longo de vários sites (utilizando o novo "
+"conector Magento multi-instância por\n"
+"exemplo), então quer que cada produto tem várias colunas de identificações "
+"externas. Isto é exatamente o que \n"
+"este módulo permite!\n"
 "    "
 
 #. module: base_external_referentials
 #: field:external.mapping.template,type_id:0
 #: field:external.mappinglines.template,type_id:0
 msgid "External Referential Type"
-msgstr "Tipo referencia externa"
+msgstr "Tipo Referencial Externo"
 
 #. module: base_external_referentials
 #: selection:external.mapping.line,type:0
 #: selection:external.mappinglines.template,type:0
 msgid "External <-> OpenERP"
-msgstr "Exterior <-> OpenERP"
+msgstr "Externo <-> OpenERP"

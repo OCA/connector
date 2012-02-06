@@ -166,7 +166,7 @@ def oevals_from_extdata(self, cr, uid, external_referential_id, data_record, key
                     type_casted_field = False
             except Exception, e:
                 type_casted_field = False
-                if context.get('raise_error', False):
+                if not context.get('dont_raise_error', False):
                     raise MappingError(e, each_mapping_line['external_field'])
             #Build the space for expr
             space = {

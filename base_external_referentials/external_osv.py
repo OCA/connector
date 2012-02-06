@@ -52,6 +52,13 @@ class external_osv(osv.osv):
                     return oe_id
         return False
     
+    def oe_get(self, cr, uid, ids, context=None):
+        res = {}
+        for record in self.read(cr, uid, ids, [context['field']], context):
+            rid = self.pool.get(context['oe_model']).extid_to_oeid(cr, uid, record[context['field']], self.referential_id(cr, uid, record['id']))
+            res[record['id']] = rid
+        return res
+    
     def ext_import(self,cr, uid, data, external_referential_id, defaults={}, context={}):
         #Inward data has to be list of dictionary
         #This function will import a given set of data as list of dictionary into Open ERP
@@ -105,8 +112,17 @@ class external_osv(osv.osv):
                             #del vals[for_key_field] looks like it is affecting the import :(
                             #Check if record exists
                             existing_ir_model_data_id = self.pool.get('ir.model.data').search(cr, uid, [('model', '=', self._name), ('name', '=', self.prefixed_id(external_id))])
+                            record_test_id = False
                             if existing_ir_model_data_id:
                                 existing_rec_id = self.pool.get('ir.model.data').read(cr, uid, existing_ir_model_data_id, ['res_id'])[0]['res_id']
+                                
+                                #Note: I wonder why OpenERP doesn't clean up already ir_model_data which res_id records have been deleted
+                                record_test_id = self.search(cr, uid, [('id', '=', existing_rec_id)])
+                                if not record_test_id:
+                                    self.pool.get('ir.model.data').unlink(cr, uid, existing_ir_model_data_id)
+
+                            if record_test_id:
+                                del vals[for_key_field]
                                 if self.write(cr,uid,existing_rec_id,vals,context):
                                     write_ids.append(existing_rec_id)
                                     self.pool.get('ir.model.data').write(cr, uid, existing_ir_model_data_id,{'res_id':existing_rec_id})
@@ -121,6 +137,9 @@ class external_osv(osv.osv):
                                         'module':'base_external_referentials'
                                                       }
                                 self.pool.get('ir.model.data').create(cr,uid,ir_model_data_vals)
+                                
+        return {'create_ids': create_ids, 'write_ids': write_ids}
+
 
     def ext_export_data(self,cr,uid,ids,external_referential_id,defaults={},context={}):
         #if ids is [] all records are selected or ids has to be a list of ids

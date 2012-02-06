@@ -83,18 +83,6 @@
 			</field>
 		</record>
 
-		<record id="ir_actions_act_window_externalreferential0" model="ir.actions.act_window">
-			<field eval="&quot;&quot;&quot;form&quot;&quot;&quot;" name="view_type" />
-			<field eval="&quot;&quot;&quot;external.referential&quot;&quot;&quot;" name="res_model" />
-			<field eval="&quot;&quot;&quot;tree,form&quot;&quot;&quot;" name="view_mode" />
-			<field eval="&quot;&quot;&quot;current&quot;&quot;&quot;" name="target" />
-			<field eval="&quot;&quot;&quot;external_referential&quot;&quot;&quot;" name="name" />
-			<field eval="80" name="limit" />
-			<field eval="&quot;&quot;&quot;{}&quot;&quot;&quot;" name="context" />
-			<field eval="&quot;&quot;&quot;ir.actions.act_window&quot;&quot;&quot;" name="type" />
-		</record>
-
-		<menuitem id="ir_ui_menu_extref0" name="External Referentials" parent="base.next_id_9" action="ir_actions_act_window_externalreferential0" />
 
 	</data>
 </openerp>

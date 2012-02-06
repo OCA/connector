@@ -1,12 +1,100 @@
 <?xml version="1.0" encoding="utf-8"?>
 <openerp>
 	<data>
+
+        <!-- External Report -->
+		<record id="external_report_form_view" model="ir.ui.view">
+			<field name="name">external_report_form_view</field>
+			<field name="model">external.report</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form string="External Report">
+                    <field name="name"/>
+                    <field name="date"/>
+                    <field name="external_referential_id"/>
+                    <newline/>
+                    <field name="failed_line_ids" nolabel="1" colspan="4">
+                        <tree colors="red:state=='fail'" string="Fails">
+                            <field name="state" invisible="True"/>
+                            <field name="res_model"/>
+                            <field name="method"/>
+                            <field name="timestamp"/>
+                            <field name="res_id"/>
+                            <field name="external_id"/>
+                            <field name="error_message"/>
+                            <button name="execute" string="Execute Again!" icon="gtk-go-forward" type="object" colspan="2"/>
+                        </tree>
+                     </field>
+                    <newline/>
+                    <field name="history_ids" nolabel="1" colspan="4">
+                        <tree colors="red:state=='fail'" string="History">
+                            <field name="date"/>
+                            <field name="count"/>
+                            <field name="res_model"/>
+                            <field name="method"/>
+                            <field name="user_id"/>
+                            <field name="state"/>
+                        </tree>
+                    </field>
+				</form>
+			</field>
+		</record>
+
+		<record id="external_report_tree_view" model="ir.ui.view">
+			<field name="name">external_report_tree_view</field>
+			<field name="model">external.report</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+				<tree string="External Reports">
+                    <field name="name"/>
+                    <field name="date"/>
+                    <field name="external_referential_id"/>
+				</tree>
+			</field>
+		</record>
+
+        <!-- External Report History -->
+		<record id="external_report_history_form_view" model="ir.ui.view">
+			<field name="name">external_report_history_view</field>
+			<field name="model">external.report.history</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form string="External Report History">
+                    <field name="external_report_id"/>
+                    <field name="date"/>
+                    <field name="count"/>
+                    <field name="res_model"/>
+                    <field name="method"/>
+                    <field name="user_id"/>
+                    <field name="state"/>
+				</form>
+			</field>
+		</record>
+
+		<record id="external_report_history_tree_view" model="ir.ui.view">
+			<field name="name">external_report_history_tree_view</field>
+			<field name="model">external.report.history</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+				<tree string="External Report History">
+                    <field name="external_report_id"/>
+                    <field name="date"/>
+                    <field name="count"/>
+                    <field name="res_model"/>
+                    <field name="method"/>
+                    <field name="user_id"/>
+                    <field name="state"/>
+				</tree>
+			</field>
+		</record>
+
+        <!-- External Report Line -->
 		<record id="external_report_line_form_view" model="ir.ui.view">
 			<field name="name">external_report_line_form_view</field>
 			<field name="model">external.report.line</field>
 			<field name="type">form</field>
 			<field name="arch" type="xml">
-				<form>
+				<form string="External Report Line">
                     <field name="external_report_id"/>
                     <field name="res_model"/>
                     <field name="res_id"/>
@@ -31,30 +119,18 @@
 			<field name="model">external.report.line</field>
 			<field name="type">tree</field>
 			<field name="arch" type="xml">
-				<tree colors="red:state=='failed'">
+				<tree colors="red:state=='fail'" string="External Report Lines">
                     <field name="state"/>
                     <field name="res_model"/>
                     <field name="method"/>
                     <field name="timestamp"/>
-                    <field name="state"/>
                     <field name="res_id"/>
                     <field name="external_id"/>
                     <field name="error_message"/>
+                    <button name="execute" string="Execute Again!" icon="gtk-go-forward" type="object" colspan="2"/>
 				</tree>
 			</field>
 		</record>
 
-		<record id="ir_actions_act_window_external_report_line" model="ir.actions.act_window">
-			<field eval="&quot;&quot;&quot;form&quot;&quot;&quot;" name="view_type" />
-			<field eval="&quot;&quot;&quot;external.report.line&quot;&quot;&quot;" name="res_model" />
-			<field eval="&quot;&quot;&quot;tree,form&quot;&quot;&quot;" name="view_mode" />
-			<field eval="&quot;&quot;&quot;current&quot;&quot;&quot;" name="target" />
-			<field eval="&quot;&quot;&quot;external_report_line&quot;&quot;&quot;" name="name" />
-			<field eval="80" name="limit" />
-			<field eval="&quot;&quot;&quot;{}&quot;&quot;&quot;" name="context" />
-			<field eval="&quot;&quot;&quot;ir.actions.act_window&quot;&quot;&quot;" name="type" />
-		</record>
-
-		<menuitem id="ir_ui_menu_external_report_line" name="External Report Lines" parent="base.next_id_9" action="ir_actions_act_window_external_report_line" />
     </data>
 </openerp>

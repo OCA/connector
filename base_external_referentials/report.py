@@ -35,6 +35,7 @@ class external_report(osv.osv):
 #                                      string="Count of failed lines",
 #                                      store=True),
         'line_ids': fields.one2many('external.report.line', 'external_report_id', 'Report Lines'),
+        'failed_line_ids': fields.one2many('external.report.line', 'external_report_id', 'Failed Report Lines', domain=[('state', '=', 'fail')]),
         'history_ids': fields.one2many('external.report.history', 'external_report_id', 'History'),
     }
 
@@ -105,7 +106,31 @@ class external_report(osv.osv):
         Successful lines are cleaned at each start of a report
         so we historize their aggregation.
         """
-        pass
+        # TODO historize a different line for each method and model
+        lines_obj = self.pool.get('external.report.line')
+        history_obj = self.pool.get('external.report.history')
+        log_cr = pooler.get_db(cr.dbname).cursor()
+        try:
+            for state in ['success', 'fail']:
+                lines = lines_obj.search(log_cr, uid,
+                                         [('external_report_id', '=', id),
+                                          ('state', '=', state)],
+                                         context=context)
+                count = len(lines)
+                history_obj.create(log_cr, uid,
+                                   {
+                        'external_report_id': id,
+                        'res_model': 'product.product',  # TODO agregation by model and method
+                        'method': 'export',  # TODO agregation by model and method
+                        'count': count,
+                        'user_id': uid,
+                        'state': state
+                    }, context=context)
+
+            log_cr.commit()
+        finally:
+            log_cr.close()
+        return True
 
 external_report()
 
@@ -113,13 +138,14 @@ external_report()
 class external_report_history(osv.osv):
     _name = 'external.report.history'
     _description = 'External Report History'
+    _rec_name = 'external_report_id'
 
     _columns = {
         'external_report_id': fields.many2one('external.report',
                                               'External Report',
                                               required=True,
                                               readonly=True),
-        'timestamp': fields.datetime('Date', required=True, readonly=True),
+        'date': fields.datetime('Date', required=True, readonly=True),
         'res_model': fields.char('Resource Object', size=64,
                                  required=True, readonly=True),
         'method': fields.char('Method', size=64, required=True, readonly=True),
@@ -131,7 +157,7 @@ class external_report_history(osv.osv):
     }
 
     _defaults = {
-        "timestamp": lambda *a: time.strftime("%Y-%m-%d %H:%M:%S")
+        "date": lambda *a: time.strftime("%Y-%m-%d %H:%M:%S")
     }
 
 external_report_history()

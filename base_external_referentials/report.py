@@ -23,7 +23,6 @@ from osv import osv, fields
 from tools.translate import _
 from tools.safe_eval import safe_eval
 
-
 class external_report(osv.osv):
     _name = 'external.report'
     _description = 'External Report'
@@ -53,14 +52,21 @@ class external_report(osv.osv):
                                        'external_report_id', 'History'),
     }
 
-    def get_report_by_ref(self, cr, uid, ref, external_referential_id,
+    def get_report_filter(self, cr, uid, ref, external_referential_id, name=None,
+                          context=None):
+        filter = [('ref', '=', ref),
+                ('external_referential_id', '=', external_referential_id)]                     
+        if name:
+            filter.append(('name', '=', name))
+        return filter        
+                   
+
+    def get_report_by_ref(self, cr, uid, ref, external_referential_id, name=None,
                           context=None):
         report_id = False
-        report = self.search(cr, uid,
-                           [('ref', '=', ref),
-                            ('external_referential_id',
-                             '=', external_referential_id)],
-                           context=context)
+        filter = self.get_report_filter(cr, uid, ref, external_referential_id,
+                                        name=name, context=context)
+        report = self.search(cr, uid, filter, context=context)
         if report:
             report_id = report[0]
         return report_id
@@ -80,7 +86,7 @@ class external_report(osv.osv):
             self.pool.get('external.report.line').retry(cr, uid, line.id, context)
         return True
 
-    def start_report(self, cr, uid, id=None, ref=None,
+    def start_report(self, cr, uid, id=None, ref=None, name=None,
                      external_referential_id=None, context=None):
         """ Start a report, use the report with the id in the parameter
         if given. Otherwise, try to find the report which have the same ref
@@ -95,6 +101,7 @@ class external_report(osv.osv):
         else:
             report_id = self.get_report_by_ref(cr, uid, ref,
                                                external_referential_id,
+                                               name,
                                                context)
 
         log_cr = pooler.get_db(cr.dbname).cursor()
@@ -110,13 +117,15 @@ class external_report(osv.osv):
             else:
                 report_id = self.create(log_cr, uid,
                                         # TODO get a correct name for the user
-                                        {'name': ref,
+                                        {'name': name or ref,
                                          'ref': ref,
                                          'external_referential_id': external_referential_id,
                                          'start_date': time.strftime("%Y-%m-%d %H:%M:%S"),
                                          },
                                         context=context)
+            print 'commit du log'
             log_cr.commit()
+            print 'commit du log fini'
 
         finally:
             log_cr.close()
@@ -218,8 +227,9 @@ class external_report_lines(osv.osv):
         'date': fields.datetime('Date', required=True, readonly=True),
         'external_id': fields.char('External ID', size=64, readonly=True),
         'error_message': fields.text('Error Message', readonly=True),
-        'origin_defaults': fields.text('Defaults', readonly=True),
-        'origin_context': fields.text('Context', readonly=True),
+        'data_record': fields.struct('External Data', readonly=True),
+        'origin_defaults': fields.struct('Defaults', readonly=True),
+        'origin_context': fields.struct('Context', readonly=True),
     }
 
     _defaults = {
@@ -227,11 +237,11 @@ class external_report_lines(osv.osv):
     }
 
     def _log_base(self, cr, uid, state, model, action, res_id=None,
-                  external_id=None,exception=None, defaults=None,
-                  context=None):
+                  external_id=None,exception=None, data_record=None,
+                  defaults=None, context=None):
         defaults = defaults or {}
         context = context or {}
-
+        print 'context', context
         existing_line_id = context.get('retry_report_line_id', False)
 
         # We do not log any action if no report is started
@@ -261,8 +271,8 @@ class external_report_lines(osv.osv):
                                {'state': state,
                                 'date': time.strftime("%Y-%m-%d %H:%M:%S"),
                                 'error_message': exception and str(exception) or False,
-                                'origin_defaults': str(origin_defaults),
-                                'origin_context': str(origin_context),
+                                'origin_defaults': origin_defaults,
+                                'origin_context': origin_context,
                                 })
             else:
                 self.create(log_cr, uid, {
@@ -274,10 +284,10 @@ class external_report_lines(osv.osv):
                                 'res_id': res_id,
                                 'external_id': external_id,
                                 'error_message': exception and str(exception) or False,
-                                'origin_defaults': str(origin_defaults),
-                                'origin_context': str(origin_context),
+                                'data_record': data_record,
+                                'origin_defaults': origin_defaults,
+                                'origin_context': origin_context,
                             })
-
             log_cr.commit()
 
         finally:
@@ -286,34 +296,25 @@ class external_report_lines(osv.osv):
 
     def log_failed(self, cr, uid, model, action,
                    res_id=None, external_id=None, exception=None,
-                   defaults=None, context=None):
-        return self._log_base(cr, uid, 'fail', model, action, res_id,
-                             external_id, exception, defaults, context)
+                   data_record=None, defaults=None, context=None):
+        return self._log_base(cr, uid, 'fail', model, action, res_id=res_id,
+                             external_id=external_id, exception=exception,
+                             data_record=data_record, defaults=defaults,
+                             context=context)
 
     def log_success(self, cr, uid, model, action,
                     res_id=None, external_id=None, exception=None,
-                    defaults=None, context=None):
-        return self._log_base(cr, uid, 'success', model, action, res_id,
-                             external_id, exception, defaults, context)
+                    data_record=None, defaults=None, context=None):
+        return self._log_base(cr, uid, 'success', model, action, res_id=res_id,
+                             external_id=external_id, exception=exception,
+                             data_record=data_record, defaults=defaults,
+                             context=context)
 
     def retry(self, cr, uid, ids, context=None):
         if isinstance(ids, int):
             ids = [ids]
 
         for log in self.browse(cr, uid, ids, context=context):
-            origin_context = safe_eval(log.origin_context)
-            origin_defaults = safe_eval(log.origin_defaults)
-
-            # keep the id of the line to update it with the result
-            origin_context['retry_report_line_id'] = log.id
-            # force export of the resource
-            origin_context['force_export'] = True
-            origin_context['force'] = True
-            
-            ##TODO remove : not needed since magento 6.1 ########
-            origin_context['do_not_update_date'] = True         #
-            #####################################################
-            
             mapping = self.pool.get(log.res_model).\
             report_action_mapping(cr, uid, context=context)
 
@@ -321,13 +322,26 @@ class external_report_lines(osv.osv):
             if not method:
                 raise Exception("No python method defined for action %s" %
                                 (log.action,))
-            method(cr, uid,
-                   log.res_id,
-                   log.external_id,
-                   log.external_report_id.external_referential_id.id,
-                   origin_defaults,
-                   origin_context)
-
+                                
+            
+            kwargs={}
+            for field, value in method['fields'].items():
+                kwargs[field] = safe_eval(value, {'log': log})
+                
+            if not kwargs.get('context', False):
+                kwargs['context']={}
+            
+            # keep the id of the line to update it with the result
+            kwargs['context']['retry_report_line_id'] = log.id
+            # force export of the resource
+            kwargs['context']['force_export'] = True
+            kwargs['context']['force'] = True
+            
+            ##TODO remove : not needed since magento 6.1 ########
+            kwargs['context']['do_not_update_date'] = True         #
+            #####################################################
+        
+            method['method'](cr, uid, **kwargs)
         return True
 
     def aggregate_actions(self, cr, uid, ids, context=None):

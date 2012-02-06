@@ -26,6 +26,20 @@ import time
 import datetime
 import netsvc
 
+class MappingError(Exception):
+     def __init__(self, value, name):
+         print 'fucking exception'
+         self.value = value
+         self.mapping_name = name
+     def __str__(self):
+         return repr(self.value)
+        
+class ExtConnError(Exception):
+     def __init__(self, value):
+         self.value = value
+     def __str__(self):
+         return repr(self.value)
+
 class external_osv(osv.osv):
     pass #FIXME remove! only here for compatibility purpose for now
 
@@ -87,7 +101,7 @@ def get_modified_ids(self, cr, uid, date=False, context=None):
             res += [[p[0], p[1]]]
     return sorted(res, key=lambda date: date[1])
 
-def external_connection(self, cr, uid, DEBUG=False):
+def external_connection(self, cr, uid, referential, DEBUG=False):
     """Should be overridden to provide valid external referential connection"""
     return False
 
@@ -142,7 +156,7 @@ def oevals_from_extdata(self, cr, uid, external_referential_id, data_record, key
         #Type cast if the expression exists
         if each_mapping_line['external_field'] in data_record.keys():
             try:
-                if each_mapping_line['external_type'] and type(data_record.get(each_mapping_line['external_field'], False)) != unicode:
+                if each_mapping_line['external_type'] and type(data_record.get(each_mapping_line['external_field'], False)):
                     type_casted_field = eval(each_mapping_line['external_type'])(data_record.get(each_mapping_line['external_field'], False))
                 else:
                     type_casted_field = data_record.get(each_mapping_line['external_field'], False)
@@ -150,6 +164,8 @@ def oevals_from_extdata(self, cr, uid, external_referential_id, data_record, key
                     type_casted_field = False
             except Exception, e:
                 type_casted_field = False
+                if context.get('raise_error', False):
+                    raise MappingError(e, each_mapping_line['external_field'])
             #Build the space for expr
             space = {
                         'self':self,
@@ -174,6 +190,9 @@ def oevals_from_extdata(self, cr, uid, external_referential_id, data_record, key
                 del(space['__builtins__'])
                 logger.notifyChannel('extdata_from_oevals', netsvc.LOG_DEBUG, "Mapping Context: %r" % (space,))
                 logger.notifyChannel('extdata_from_oevals', netsvc.LOG_DEBUG, "Exception: %r" % (e,))
+                if context.get('raise_error', False):
+                    raise MappingError(e, each_mapping_line['external_field'])
+            
             result = space.get('result', False)
             #If result exists and is of type list
             if result and type(result) == list:
@@ -204,6 +223,7 @@ def ext_import(self, cr, uid, data, external_referential_id, defaults=None, cont
     logger = netsvc.Logger()
     if data:
         mapping_id = self.pool.get('external.mapping').search(cr, uid, [('model', '=', self._name), ('referential_id', '=', external_referential_id)])
+        print 'mapping_id', mapping_id, self._name, external_referential_id
         if mapping_id:
             #If a mapping exists for current model, search for mapping lines
             mapping_line_ids = self.pool.get('external.mapping.line').search(cr, uid, [('mapping_id', '=', mapping_id), ('type', 'in', ['in_out', 'in'])])
@@ -214,7 +234,8 @@ def ext_import(self, cr, uid, data, external_referential_id, defaults=None, cont
                 for each_row in data:
                     vals = self.oevals_from_extdata(cr, uid, external_referential_id, each_row, for_key_field, mapping_lines, defaults, context)
                     #perform a record check, for that we need foreign field
-                    external_id = vals.get(for_key_field, False) or each_row.get(for_key_field, False) or each_row.get('external_id', False)
+                    #TODO seb asked : did the option "vals.get(for_key_field, False)" and "each_row.get('external_id', False)" are still usefull??
+                    external_id = vals.get('external_id', False) or vals.get(for_key_field, False) or each_row.get(for_key_field, False) or each_row.get('external_id', False)
                     #del vals[for_key_field] looks like it is affecting the import :(
                     #Check if record exists
                     existing_ir_model_data_id = self.pool.get('ir.model.data').search(cr, uid, [('model', '=', self._name), ('name', '=', self.prefixed_id(external_id)), ('external_referential_id', '=', external_referential_id)])
@@ -248,7 +269,9 @@ def ext_import(self, cr, uid, data, external_referential_id, defaults=None, cont
                         }
                         self.pool.get('ir.model.data').create(cr, uid, ir_model_data_vals)
                         logger.notifyChannel('ext synchro', netsvc.LOG_INFO, "Created in OpenERP %s from External Ref with external_id %s and OpenERP id %s successfully" %(self._name, external_id, crid))
-                    cr.commit()
+                    #it should be better if the default value is no commit, moreover it can be better to use an other cursor
+                    if not context.get('no_intermediary_commit', False):
+                        cr.commit()
 
     return {'create_ids': create_ids, 'write_ids': write_ids}
 
@@ -294,7 +317,8 @@ def extdata_from_oevals(self, cr, uid, external_referential_id, data_record, map
                 del(space['__builtins__'])
                 logger.notifyChannel('extdata_from_oevals', netsvc.LOG_DEBUG, "Mapping Context: %r" % (space,))
                 logger.notifyChannel('extdata_from_oevals', netsvc.LOG_DEBUG, "Exception: %r" % (e,))
-
+                if context.get('raise_error', False):
+                    raise MappingError(e, each_mapping_line['external_field'])
             result = space.get('result', False)
             #If result exists and is of type list
             if result and type(result) == list:
@@ -451,8 +475,22 @@ def report_action_mapping(self, cr, uid, context=None):
         the method to launch when we replay the action.
         """
         mapping = {
-            'export': self.retry_export,
-            'import': self.retry_import,
+            'export': {'method': self.retry_export, 
+                       'fields': {'id': 'log.res_id',
+                                  'ext_id': 'log.external_id',
+                                  'external_referential_id': 'log.external_report_id.external_referential_id.id',
+                                  'defaults': 'log.origin_defaults',
+                                  'context': 'log.origin_context',
+                                  },
+                    },
+            'import': {'method': self.retry_import,
+                       'fields': {'id': 'log.res_id',
+                                  'ext_id': 'log.external_id',
+                                  'external_referential_id': 'log.external_report_id.external_referential_id.id',
+                                  'defaults': 'log.origin_defaults',
+                                  'context': 'log.origin_context',
+                                  },
+                    }
         }
         return mapping
 

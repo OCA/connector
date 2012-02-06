@@ -28,25 +28,11 @@ import datetime
 import netsvc
 import pooler
 
+from message_error import MappingError, ExtConnError
 from tools.translate import _
 from tools import DEFAULT_SERVER_DATETIME_FORMAT, DEFAULT_SERVER_DATE_FORMAT
 from lxml import etree
 import re
-
-class MappingError(Exception):
-    def __init__(self, value, mapping_name, mapping_object):
-        self.value = value
-        self.mapping_name = mapping_name
-        self.mapping_object = mapping_object
-    def __str__(self):
-        return repr('the mapping line : %s for the object %s have an error : %s'%(self.mapping_name, self.mapping_object, self.value))
-
-
-class ExtConnError(Exception):
-     def __init__(self, value):
-         self.value = value
-     def __str__(self):
-         return repr(self.value)
 
 def read_w_order(self, cr, user, ids, fields_to_read=None, context=None, load='_classic_read'):
     res = self.read(cr, user, ids, fields_to_read, context, load)
@@ -69,6 +55,8 @@ def prefixed_id(self, id):
 def id_from_prefixed_id(self, prefixed_id):
     return prefixed_id.split(self._name.replace('.', '_') + '/')[1]
 
+
+#DID we still need if?
 def get_last_imported_external_id(self, cr, object_name, referential_id, where_clause):
     table_name = object_name.replace('.', '_')
     cr.execute("""
@@ -338,43 +326,6 @@ def oevals_from_extdata(self, cr, uid, external_referential_id, data_record, map
 def get_external_data(self, cr, uid, conn, external_referential_id, defaults=None, context=None):
     """Constructs data using WS or other synch protocols and then call ext_import on it"""
     return {'create_ids': [], 'write_ids': []}
-
-
-#TODO remove me, using a decorator will be better, also for a decorator should be added for export
-def import_with_try(self, cr, uid, callback, data_record, external_referential_id, defaults, context=None):
-    if not context:
-        context={}
-    res={}
-    report_line_obj = self.pool.get('external.report.line')
-    report_line_id = report_line_obj._log_base(cr, uid, self._name, callback.im_func.func_name, 
-                                    state='fail', external_id=context.get('external_object_id', False),
-                                    defaults=defaults, data_record=data_record, 
-                                    context=context)
-    context['report_line_id'] = report_line_id
-    import_cr = pooler.get_db(cr.dbname).cursor()
-    res = callback(import_cr, uid, data_record, external_referential_id, defaults, context=context)
-    try:
-        pass
-        #res = callback(import_cr, uid, data_record, external_referential_id, defaults, context=context)
-    except MappingError as e:
-        import_cr.rollback()
-        report_line_obj.write(cr, uid, report_line_id, {
-                        'error_message': 'Error with the mapping : %s. Error details : %s'%(e.mapping_name, e.value),
-                        }, context=context)
-    except osv.except_osv as e:
-        import_cr.rollback()
-        raise osv.except_osv(*e)
-    except Exception as e:
-        import_cr.rollback()
-        raise Exception(e)
-    else:
-        report_line_obj.write(cr, uid, report_line_id, {
-                    'state': 'success',
-                    }, context=context)
-        import_cr.commit()
-    finally:
-        import_cr.close()
-    return res
 
 def _existing_oeid_for_extid_import(self, cr, uid, vals, external_id, external_referential_id, context=None):
     """
@@ -725,20 +676,6 @@ def report_action_mapping(self, cr, uid, context=None):
     }
     return mapping
 
-def _call_specific_method(self, method, *args, **kwargs):
-    '''This abstract method will call the appropriated method depending of the referential
-    :params string method method to call
-    :params list args list of arguments
-    :params dict kwargs dictionnary of argument must contain the keys 'function' and 'referential_type'
-    '''
-    method = method.lower()
-    if method in dir(self):
-        return getattr(self, method)(*args, **kwargs)
-    else:
-        raise osv.except_osv(_("Not Implemented"), _("The method %s is not implemented" %(method,)))
-
-
-
 osv.osv.read_w_order = read_w_order
 osv.osv.browse_w_order = browse_w_order
 osv.osv.prefixed_id = prefixed_id
@@ -772,4 +709,3 @@ osv.osv._prepare_external_id_vals = _prepare_external_id_vals
 osv.osv.get_all_oeid_from_referential = get_all_oeid_from_referential
 osv.osv.get_all_extid_from_referential = get_all_extid_from_referential
 osv.osv.create_external_id_vals = create_external_id_vals
-osv.osv._call_specific_method = _call_specific_method

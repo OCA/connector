@@ -26,38 +26,6 @@ from tools import DEFAULT_SERVER_DATETIME_FORMAT
 import netsvc
 
 
-def open_report(func):
-    """ This decorator will start and close a report for the function call
-    The function must start with "self, cr, uid, object"
-    And the object must have a field call "referential_id" related to the object "external.referential"
-    """
-    def wrapper(self, cr, uid, object, *args, **kwargs):
-        if not self._columns.get('referential_id'):
-            raise osv.except_osv(_("Not Implemented"), _("The field referential_id doesn't exist on the object %s. Reporting system can not be used" %(self._name,)))
-
-        report_obj = self.pool.get('external.report')
-        context = kwargs.get('context')
-        if not context:
-            context={}
-            kwargs['context'] = context
-        
-        #Start the report
-        report_id = report_obj.start_report(cr, uid, id=None, method=func.__name__, object=object, context=context)
-
-        #Execute the original function and add the report_id to the context
-        context['report_id'] = report_id
-        response = func(self, cr, uid, object, *args, **kwargs)
-
-        #Close the report
-        report_obj.end_report(cr, uid, report_id, context=context)
-
-        return response
-    return wrapper
-
-
-
-
-
 
 class external_report(osv.osv):
     _name = 'external.report'

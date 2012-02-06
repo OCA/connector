@@ -10,6 +10,8 @@
 			<field name="arch" type="xml">
 				<form string="External Referential Reports">
                     <field name="name"/>
+                    <field name="object_name"/>
+                    <field name="object_related_description"/>
                     <newline/>
                     <field name="start_date"/>
                     <field name="end_date"/>
@@ -49,11 +51,13 @@
 			<field name="model">external.report</field>
 			<field name="type">tree</field>
 			<field name="arch" type="xml">
-				<tree colors="red:len(failed_line_ids)>0" string="External Reports">
+				<tree string="External Reports"> <!--colors="red:len(failed_line_ids)>0" TODO fix me-->
+                    <field name="external_referential_id"/>
+                    <field name="object_related_description"/>
+                    <field name="object_name"/>
                     <field name="name"/>
                     <field name="start_date"/>
                     <field name="end_date"/>
-                    <field name="external_referential_id"/>
                     <field name="failed_line_ids" invisible="1"/>
 				</tree>
 			</field>
@@ -71,6 +75,7 @@
                    <newline/>
                    <group  expand='0' string='Group by...' groups="base.group_extended">
                        <filter string='External Referential' icon="terp-stock_symbol-selection" domain="[]" context="{'group_by' : 'external_referential_id'}" />
+                       <filter string='Object Related' icon="terp-stock_symbol-selection" domain="[]" context="{'group_by' : 'object_related_description'}" />
                    </group>
                 </search>
             </field>

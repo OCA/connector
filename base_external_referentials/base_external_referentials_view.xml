@@ -12,8 +12,9 @@
 						<field name="create_date" invisible="True"/>
 						<notebook colspan="4">
 							<page string="General">
-								<field name="type_id" />
-								<field name="location" />
+							    <field name="version_id"/>
+							    <field name="location"/>
+					<field name="type_id"/>
 							</page>
 							<page string="Authentication">
 								<field name="apiusername" />
@@ -85,6 +86,19 @@
 					<field name="name" select="1" />
 					<field name="location" select="1" />
 				</tree>
+			</field>
+		</record>
+
+		<record id="external_referential_version_form_view" model="ir.ui.view">
+			<field name="name">external_referential_version_form_view</field>
+			<field name="model">external.referential.version</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form>
+				    <field name="name" />
+                    <field name="full_name" />
+					<field name="type_id"/>
+				</form>
 			</field>
 		</record>
 

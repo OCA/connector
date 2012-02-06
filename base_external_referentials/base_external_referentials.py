@@ -29,6 +29,27 @@ class external_referential_type(osv.osv):
     
     _columns = {
         'name': fields.char('Name', size=64, required=True), #dont allow creation of type from frontend
+        'version_ids': fields.one2many('external.referential.version', 'type_id', 'Version', required=True)
+    }
+    
+external_referential_type()
+
+class external_referential_version(osv.osv):
+    _name = 'external.referential.version'
+    _description = 'External Referential Version (Ex: v1.5.0.0 +, v1.3.2.4 +)'
+    _rec_name = 'full_name'    
+
+    def _get_full_name(self, cr, uid, ids, name, arg, context=None):
+        res = {}
+        for version in self.read(cr, uid, ids, ['name', 'type_id'], context=context):
+            res[version['id']] = '%s %s'%(version['type_id'][1], version['name'])
+        return res
+
+ 
+    _columns = {
+        'full_name': fields.function(_get_full_name, store=True, type='char', size=64, string='Full Name'),
+        'name': fields.char('name', size=64, required=True),
+        'type_id': fields.many2one('external.referential.type', 'Type', required=True),
     }
     
 external_referential_type()
@@ -39,7 +60,7 @@ class external_mapping_template(osv.osv):
     _rec_name = 'model'
     
     _columns = {
-        'type_id':fields.many2one('external.referential.type', 'External Referential Type', ondelete='cascade', select=True),
+        'version_id':fields.many2one('external.referential.version', 'External Referential Version', ondelete='cascade', select=True),
         'model_id': fields.many2one('ir.model', 'OpenERP Model', required=True, select=True, ondelete='cascade'),
         'model':fields.related('model_id', 'model', type='char', string='Model Name'),
         'external_list_method': fields.char('List Method', size=64),
@@ -64,7 +85,7 @@ class external_mappinglines_template(osv.osv):
 
     _columns = {
         'name_function': fields.function(_name_get_fnc, method=True, type="char", string='Full Name'),
-        'type_id':fields.many2one('external.referential.type', 'External Referential Type', ondelete='cascade', select=True),
+        'version_id':fields.many2one('external.referential.version', 'External Referential Version', ondelete='cascade', select=True),
         'field_id': fields.many2one('ir.model.fields', 'OpenERP Field', select=True, ondelete='cascade'),
         'model_id': fields.many2one('ir.model', 'OpenERP Model', select=True, ondelete='cascade'),
         'model':fields.related('model_id', 'model', type='char', string='Model Name'),
@@ -114,7 +135,7 @@ class external_referential(osv.osv):
             link_parent_child_mapping = []
             template_mapping_id_to_mapping_id = {}
             #Fetch mapping lines now
-            mapping_src_ids = self.pool.get('external.mapping.template').search(cr, uid, [('type_id', '=', ext_ref.type_id.id)])
+            mapping_src_ids = self.pool.get('external.mapping.template').search(cr, uid, [('version_id', '=', ext_ref.version_id.id)])
             for each_mapping_rec in self.pool.get('external.mapping.template').read(cr, uid, mapping_src_ids, []):
                 existing_ids = mappings_obj.search(cr, uid, [('referential_id', '=', id), ('model_id', '=', each_mapping_rec['model_id'][0] or False)])
                 if len(existing_ids) == 0:
@@ -139,7 +160,7 @@ class external_referential(osv.osv):
                 template_mapping_id_to_mapping_id[each_mapping_rec['id']] = mapping_id
 
                 #Now create mapping lines of the created mapping model
-                mapping_lines_src_ids = self.pool.get('external.mappinglines.template').search(cr, uid, [('type_id', '=', ext_ref.type_id.id), ('model_id', '=', each_mapping_rec['model_id'][0])])
+                mapping_lines_src_ids = self.pool.get('external.mappinglines.template').search(cr, uid, [('version_id', '=', ext_ref.version_id.id), ('model_id', '=', each_mapping_rec['model_id'][0])])
                 for each_mapping_line_rec in  self.pool.get('external.mappinglines.template').read(cr, uid, mapping_lines_src_ids, []):
                     vals = {
                         'external_field': each_mapping_line_rec['external_field'],
@@ -164,7 +185,8 @@ class external_referential(osv.osv):
                 
     _columns = {
         'name': fields.char('Name', size=32, required=True),
-        'type_id': fields.many2one('external.referential.type', 'Referential Type', select=True),
+        'type_id': fields.related('version_id', 'type_id', type='many2one', relation='external.referential.type', string='External Type'),
+        'version_id': fields.many2one('external.referential.version', 'Referential Version', select=True),
         'location': fields.char('Location', size=200),
         'apiusername': fields.char('User Name', size=64),
         'apipass': fields.char('Password', size=64),

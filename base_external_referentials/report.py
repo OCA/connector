@@ -22,7 +22,42 @@ import pooler
 from osv import osv, fields
 from tools.translate import _
 from tools.safe_eval import safe_eval
+from tools import DEFAULT_SERVER_DATETIME_FORMAT
 import netsvc
+
+
+def open_report(func):
+    """ This decorator will start and close a report for the function call
+    The function must start with "self, cr, uid, object"
+    And the object must have a field call "referential_id" related to the object "external.referential"
+    """
+    def wrapper(self, cr, uid, object, *args, **kwargs):
+        if not self._columns.get('referential_id'):
+            raise osv.except_osv(_("Not Implemented"), _("The field referential_id doesn't exist on the object %s. Reporting system can not be used" %(self._name,)))
+
+        report_obj = self.pool.get('external.report')
+        context = kwargs.get('context')
+        if not context:
+            context={}
+            kwargs['context'] = context
+        
+        #Start the report
+        report_id = report_obj.start_report(cr, uid, id=None, method=func.__name__, object=object, context=context)
+
+        #Execute the original function and add the report_id to the context
+        context['report_id'] = report_id
+        response = func(self, cr, uid, object, *args, **kwargs)
+
+        #Close the report
+        report_obj.end_report(cr, uid, report_id, context=context)
+
+        return response
+    return wrapper
+
+
+
+
+
 
 class external_report(osv.osv):
     _name = 'external.report'
@@ -30,13 +65,18 @@ class external_report(osv.osv):
     _order = 'end_date desc'
 
     _columns = {
-        'name': fields.char('Report Name', size=32, required=True,
+        'name': fields.char('Action', size=32, required=True,
                             readonly=True),
-        'ref': fields.char('Report Reference', size=64, required=True,
+        'object_name': fields.char('Ressource Name', size=64, required=True,
+                            readonly=True),
+        'object_related': fields.char('Report Related To', size=64, required=True,
+                            readonly=True),
+        'object_related_description': fields.char('Report Related To', size=64, required=True,
+                            readonly=True),
+        'res_id': fields.integer('Ressource id', required=True, readonly=True), 
+        'method': fields.char('Method', size=64, required=True,
                            readonly=True,
-                           help="Internal reference which represents "
-                                "the action like export catalog "
-                                "or import orders"),
+                           help="Method linked to the report"),
         'start_date': fields.datetime('Last Start Date', readonly=True),
         'end_date': fields.datetime('Last End Date', readonly=True),
         'external_referential_id': fields.many2one('external.referential',
@@ -53,20 +93,17 @@ class external_report(osv.osv):
                                        'external_report_id', 'History'),
     }
 
-    def get_report_filter(self, cr, uid, ref, external_referential_id, name=None,
-                          context=None):
-        filter = [('ref', '=', ref),
-                ('external_referential_id', '=', external_referential_id)]                     
-        if name:
-            filter.append(('name', '=', name))
-        return filter        
+    def get_report_filter(self, cr, uid, method, object, context=None):
+        return [
+            ('method', '=', method),
+            ('res_id', '=', object.id),
+            ('object_related', '=', object._name),
+        ]       
                    
 
-    def get_report_by_ref(self, cr, uid, ref, external_referential_id, name=None,
-                          context=None):
+    def get_report(self, cr, uid, method, object, context=None):
         report_id = False
-        filter = self.get_report_filter(cr, uid, ref, external_referential_id,
-                                        name=name, context=context)
+        filter = self.get_report_filter(cr, uid, method, object, context=context)
         report = self.search(cr, uid, filter, context=context)
         if report:
             report_id = report[0]
@@ -82,6 +119,7 @@ class external_report(osv.osv):
         return True
 
     def retry_failed_lines(self, cr, uid, ids, context=None):
+        retry_cr = pooler.get_db(cr.dbname).cursor()
         logger = netsvc.Logger()
         logger.notifyChannel('retry_failed_lines', netsvc.LOG_INFO, "retry the failed lines of the reports ids %s" % (ids,))
         if isinstance(ids, int):
@@ -89,50 +127,56 @@ class external_report(osv.osv):
         if not context:
             context={}
         context['origin'] = 'retry'
-        for report in self.read(cr, uid, ids, ['failed_line_ids'], context=context):
+        for report in self.read(retry_cr, uid, ids, ['failed_line_ids'], context=context):
             failed_line_ids = report['failed_line_ids']
             if failed_line_ids:
                 context['external_report_id'] = report['id']
-                self.start_report(cr, uid, report['id'], context=context)
-                self.pool.get('external.report.line').retry(cr, uid, failed_line_ids, context=context)
-                self.end_report(cr, uid, report['id'], context=context)
+                self.start_report(retry_cr, uid, report['id'], context=context)
+                self.pool.get('external.report.line').retry(retry_cr, uid, failed_line_ids, context=context)
+                self.end_report(retry_cr, uid, report['id'], context=context)
+        retry_cr.commit()
+        retry_cr.close()
         return True
 
-    def start_report(self, cr, uid, id=None, ref=None, name=None,
-                     external_referential_id=None, context=None):
+    def start_report(self, cr, uid, id=None, method=None,
+                     object=None, context=None):
         """ Start a report, use the report with the id in the parameter
-        if given. Otherwise, try to find the report which have the same ref
-         and external referential (we use the same report to avoid a
+        if given. Otherwise, try to find the report which have the same method
+         and object (we use the same report to avoid a
          multiplication of reports) If nothing is found, it create a new report
         """
 
-        if not id and (not ref or not external_referential_id):
+        if not id and (not method or not object):
             raise Exception('No reference to create the report!')
         if id:
             report_id = id
         else:
-            report_id = self.get_report_by_ref(cr, uid, ref,
-                                               external_referential_id,
-                                               name,
-                                               context)
+            report_id = self.get_report(cr, uid, method, object, context)
+                                               
         log_cr = pooler.get_db(cr.dbname).cursor()
         try:
             if report_id:
+                print 'report already exist'
                 self.write(log_cr, uid, report_id,
-                           {'start_date': time.strftime("%Y-%m-%d %H:%M:%S"),
+                           {'start_date': time.strftime(DEFAULT_SERVER_DATETIME_FORMAT),
                             'end_date': False},
                            context=context)
                 # clean successful lines of the last report
                 self._clean_successful_lines(log_cr, uid, report_id, context)
             else:
-                report_id = self.create(log_cr, uid,
-                                        # TODO get a correct name for the user
-                                        {'name': name or ref,
-                                         'ref': ref,
-                                         'external_referential_id': external_referential_id,
-                                         'start_date': time.strftime("%Y-%m-%d %H:%M:%S"),
-                                         },
-                                        context=context)
+                print 'create report'
+                report_id = self.create(log_cr, uid, {
+                            'name': method.replace('_', ' ').strip(),
+                            'object_name': getattr(object, object._rec_name),
+                            'object_related': object._name,
+                            'object_related_description': object._description,
+                            'res_id': object.id,
+                            'method': method,
+                            'external_referential_id': object.referential_id.id,
+                            'start_date': time.strftime(DEFAULT_SERVER_DATETIME_FORMAT),
+                                 },
+                                context=context)
+            print 'commit'
             log_cr.commit()
 
         finally:
@@ -173,7 +217,7 @@ class external_report(osv.osv):
                     }, context=context)
 
             self.write(log_cr, uid, id,
-                       {'end_date': time.strftime("%Y-%m-%d %H:%M:%S")},
+                       {'end_date': time.strftime(DEFAULT_SERVER_DATETIME_FORMAT)},
                        context=context)
 
             log_cr.commit()
@@ -209,7 +253,7 @@ class external_report_history(osv.osv):
     }
 
     _defaults = {
-        "date": lambda *a: time.strftime("%Y-%m-%d %H:%M:%S")
+        "date": lambda *a: time.strftime(DEFAULT_SERVER_DATETIME_FORMAT)
     }
 
 external_report_history()
@@ -237,13 +281,13 @@ class external_report_lines(osv.osv):
         'date': fields.datetime('Date', required=True, readonly=True),
         'external_id': fields.char('External ID', size=64, readonly=True),
         'error_message': fields.text('Error Message', readonly=True),
-        'data_record': fields.struct('External Data', readonly=True),
-        'origin_defaults': fields.struct('Defaults', readonly=True),
-        'origin_context': fields.struct('Context', readonly=True),
+        'data_record': fields.serialized('External Data', readonly=True),
+        'origin_defaults': fields.serialized('Defaults', readonly=True),
+        'origin_context': fields.serialized('Context', readonly=True),
     }
 
     _defaults = {
-        "date": lambda *a: time.strftime("%Y-%m-%d %H:%M:%S")
+        "date": lambda *a: time.strftime(DEFAULT_SERVER_DATETIME_FORMAT)
     }
 
     def _log_base(self, cr, uid, model, action, state=None, res_id=None,
@@ -278,7 +322,7 @@ class external_report_lines(osv.osv):
                 self.write(log_cr, uid,
                                existing_line_id,
                                {'state': state,
-                                'date': time.strftime("%Y-%m-%d %H:%M:%S"),
+                                'date': time.strftime(DEFAULT_SERVER_DATETIME_FORMAT),
                                 'error_message': exception and str(exception) or False,
                                 'origin_defaults': origin_defaults,
                                 'origin_context': origin_context,
@@ -289,7 +333,7 @@ class external_report_lines(osv.osv):
                                 'state': state,
                                 'res_model': model,
                                 'action': action,
-                                'date': time.strftime("%Y-%m-%d %H:%M:%S"),
+                                'date': time.strftime(DEFAULT_SERVER_DATETIME_FORMAT),
                                 'res_id': res_id,
                                 'external_id': external_id,
                                 'error_message': exception and str(exception) or False,
@@ -309,7 +353,7 @@ class external_report_lines(osv.osv):
     def log_failed(self, cr, uid, model, action,
                    res_id=None, external_id=None, exception=None,
                    data_record=None, defaults=None, context=None):
-        return self._log_base(cr, uid, 'fail', model, action, res_id=res_id,
+        return self._log_base(cr, uid, model, action, 'fail', res_id=res_id,
                              external_id=external_id, exception=exception,
                              data_record=data_record, defaults=defaults,
                              context=context)
@@ -317,7 +361,7 @@ class external_report_lines(osv.osv):
     def log_success(self, cr, uid, model, action,
                     res_id=None, external_id=None, exception=None,
                     data_record=None, defaults=None, context=None):
-        return self._log_base(cr, uid, 'success', model, action, res_id=res_id,
+        return self._log_base(cr, uid,  model, action, 'success', res_id=res_id,
                              external_id=external_id, exception=exception,
                              data_record=data_record, defaults=defaults,
                              context=context)

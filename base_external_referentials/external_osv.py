@@ -701,29 +701,42 @@ def ext_update(self, cr, uid, data, conn, method, oe_id, external_id, ir_model_d
             return crid
 
 def report_action_mapping(self, cr, uid, context=None):
-        """
-        For each action logged in the reports, we associate
-        the method to launch when we replay the action.
-        """
-        mapping = {
-            'export': {'method': self.retry_export, 
-                       'fields': {'id': 'log.res_id',
-                                  'ext_id': 'log.external_id',
-                                  'external_referential_id': 'log.external_report_id.external_referential_id.id',
-                                  'defaults': 'log.origin_defaults',
-                                  'context': 'log.origin_context',
-                                  },
-                    },
-            'import': {'method': self.retry_import,
-                       'fields': {'id': 'log.res_id',
-                                  'ext_id': 'log.external_id',
-                                  'external_referential_id': 'log.external_report_id.external_referential_id.id',
-                                  'defaults': 'log.origin_defaults',
-                                  'context': 'log.origin_context',
-                                  },
-                    }
-        }
-        return mapping
+    """
+    For each action logged in the reports, we associate
+    the method to launch when we replay the action.
+    """
+    mapping = {
+        'export': {'method': self.retry_export, 
+                   'fields': {'id': 'log.res_id',
+                              'ext_id': 'log.external_id',
+                              'external_referential_id': 'log.external_report_id.external_referential_id.id',
+                              'defaults': 'log.origin_defaults',
+                              'context': 'log.origin_context',
+                              },
+                },
+        'import': {'method': self.retry_import,
+                   'fields': {'id': 'log.res_id',
+                              'ext_id': 'log.external_id',
+                              'external_referential_id': 'log.external_report_id.external_referential_id.id',
+                              'defaults': 'log.origin_defaults',
+                              'context': 'log.origin_context',
+                              },
+                }
+    }
+    return mapping
+
+def _call_specific_method(self, method, *args, **kwargs):
+    '''This abstract method will call the appropriated method depending of the referential
+    :params string method method to call
+    :params list args list of arguments
+    :params dict kwargs dictionnary of argument must contain the keys 'function' and 'referential_type'
+    '''
+    method = method.lower()
+    if method in dir(self):
+        return getattr(self, method)(*args, **kwargs)
+    else:
+        raise osv.except_osv(_("Not Implemented"), _("The method %s is not implemented" %(method,)))
+
 
 
 osv.osv.read_w_order = read_w_order
@@ -759,3 +772,4 @@ osv.osv._prepare_external_id_vals = _prepare_external_id_vals
 osv.osv.get_all_oeid_from_referential = get_all_oeid_from_referential
 osv.osv.get_all_extid_from_referential = get_all_extid_from_referential
 osv.osv.create_external_id_vals = create_external_id_vals
+osv.osv._call_specific_method = _call_specific_method

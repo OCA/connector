@@ -156,10 +156,11 @@ def oevals_from_extdata(self, cr, uid, external_referential_id, data_record, key
         #Type cast if the expression exists
         if each_mapping_line['external_field'] in data_record.keys():
             try:
-                if each_mapping_line['external_type'] and type(data_record.get(each_mapping_line['external_field'], False)):
-                    type_casted_field = eval(each_mapping_line['external_type'])(data_record.get(each_mapping_line['external_field'], False))
+                ifield = data_record.get(each_mapping_line['external_field'], False)
+                if ifield:
+                    type_casted_field = eval(each_mapping_line['external_type'])(ifield)
                 else:
-                    type_casted_field = data_record.get(each_mapping_line['external_field'], False)
+                    type_casted_field = ifield
                 if type_casted_field in ['None', 'False']:
                     type_casted_field = False
             except Exception, e:
@@ -350,7 +351,7 @@ def extdata_from_oevals(self, cr, uid, external_referential_id, data_record, map
                 del(space['__builtins__'])
                 logger.notifyChannel('extdata_from_oevals', netsvc.LOG_DEBUG, "Mapping Context: %r" % (space,))
                 logger.notifyChannel('extdata_from_oevals', netsvc.LOG_DEBUG, "Exception: %r" % (e,))
-                if context.get('raise_error', False):
+                if not context.get('dont_raise_error', False):
                     raise MappingError(e, each_mapping_line['external_field'])
             result = space.get('result', False)
             #If result exists and is of type list

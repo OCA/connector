@@ -205,9 +205,9 @@ def extid_to_oeid(self, cr, uid, id, external_referential_id, context=None):
             raise osv.except_osv(_('Ext Synchro'), _("Error when importing on fly the object %s with the external_id %s and the external referential %s.\n Error : %s" %(self._name, id, external_referential_id, error)))
     return False
 
-def call_sub_mapping(self, cr, uid, sub_mapping_list, external_data, external_referential_id, vals, defaults=None, context=None):
+def _transform_sub_mapping(self, cr, uid, sub_mapping_list, external_data, external_referential_id, vals, defaults=None, context=None):
     """
-    Used in oevals_from_extdata in order to call the sub mapping
+    Used in _transform_one_external_resource in order to call the sub mapping
 
     @param sub_mapping_list: list of sub-mapping to apply
     @param external_data: list of data to convert into OpenERP data
@@ -225,7 +225,7 @@ def call_sub_mapping(self, cr, uid, sub_mapping_list, external_data, external_re
         if ifield:
             field_name = ir_model_field_obj.read(cr, uid, sub_mapping['field_id'][0], ['name'], context=context)['name']
             vals[field_name] = []
-            lines = self.pool.get(sub_mapping['child_mapping_id'][1]).convert_extdata_into_oedata(cr, uid, ifield, external_referential_id, parent_data=vals, defaults=defaults.get(field_name), context=context)
+            lines = self.pool.get(sub_mapping['child_mapping_id'][1])._transform_external_resources(cr, uid, ifield, external_referential_id, parent_data=vals, defaults=defaults.get(field_name), context=context)
             for line in lines:
                 if 'external_id' in line:
                     del line['external_id']
@@ -236,7 +236,7 @@ def call_sub_mapping(self, cr, uid, sub_mapping_list, external_data, external_re
 
 def merge_with_default_value(self, cr, uid, sub_mapping_list, data_record, external_referential_id, vals, defaults=None, context=None):
     """
-    Used in oevals_from_extdata in order to merge the defaults values, some params are useless here but need in base_sale_multichannels to play the on_change
+    Used in _transform_one_external_resource in order to merge the defaults values, some params are useless here but need in base_sale_multichannels to play the on_change
 
     @param sub_mapping_list: list of sub-mapping to apply
     @param external_data: list of data to convert into OpenERP data
@@ -251,9 +251,9 @@ def merge_with_default_value(self, cr, uid, sub_mapping_list, data_record, exter
     return vals
 
 
-def oevals_from_extdata(self, cr, uid, external_referential_id, data_record, mapping_lines, key_for_external_id=None, parent_data=None, previous_lines=None, defaults=None, context=None):
+def _transform_one_external_resource(self, cr, uid, external_referential_id, data_record, mapping_lines, key_for_external_id=None, parent_data=None, previous_lines=None, defaults=None, context=None):
     """
-    Used in convert_extdata_into_oedata in order to convert external row of data into OpenERP data
+    Used in _transform_external_resources in order to convert external row of data into OpenERP data
 
     @param external_referential_id: external referential id from where we import the resource
     @param external_data_row: a dictionnary of data to convert into OpenERP data
@@ -336,11 +336,13 @@ def oevals_from_extdata(self, cr, uid, external_referential_id, data_record, map
         vals.update({'external_id': int(data_record[key_for_external_id])})
     
     vals = self.merge_with_default_value(cr, uid, sub_mapping_list, data_record, external_referential_id, vals, defaults=defaults, context=context)
-    vals = self.call_sub_mapping(cr, uid, sub_mapping_list, data_record, external_referential_id, vals, defaults=defaults, context=context)
+    vals = self._transform_sub_mapping(cr, uid, sub_mapping_list, data_record, external_referential_id, vals, defaults=defaults, context=context)
 
     return vals
 
 
+
+#TODO rename this function
 def get_external_data(self, cr, uid, conn, external_referential_id, defaults=None, context=None):
     """Constructs data using WS or other synch protocols and then call ext_import on it"""
     return {'create_ids': [], 'write_ids': []}
@@ -359,7 +361,7 @@ def _existing_oeid_for_extid_import(self, cr, uid, vals, external_id, external_r
     As instance, search and bind partners by their mails. In such case, it must returns False for the ir_model_data.id and
     the partner to bind for the resource id
 
-    @param vals: vals to create in OpenERP, already evaluated by oevals_from_extdata
+    @param vals: vals to create in OpenERP, already evaluated by _transform_one_external_resource
     @param external_id: external id of the resource to create
     @param external_referential_id: external referential id from where we import the resource
     @return: tuple of (ir.model.data id / False: external id to create in ir.model.data, model resource id / False: resource to create)
@@ -390,7 +392,7 @@ def _get_mapping(self, cr, uid, external_referential_id, context=None):
             "key_for_external_id": False,
                 }
 
-def _convert_extdata_into_oedata(self, cr, uid, external_data, external_referential_id, parent_data=None, defaults=None, context=None, mapping=None):
+def _transform_external_resources(self, cr, uid, external_data, external_referential_id, parent_data=None, defaults=None, context=None, mapping=None):
     """
     Used in ext_import in order to convert all of the external data into OpenERP data
 
@@ -408,13 +410,75 @@ def _convert_extdata_into_oedata(self, cr, uid, external_data, external_referent
             mapping[self._name] = self._get_mapping(cr, uid,  external_referential_id, context=context)
         if mapping.get(self._name):
             for each_row in external_data:
-                result.append(self.oevals_from_extdata(cr, uid, external_referential_id, each_row, mapping_lines, key_for_external_id, parent_data, result, defaults, context))
+                result.append(self._transform_one_external_resource(cr, uid, external_referential_id, each_row, mapping_lines, key_for_external_id, parent_data, result, defaults, context))
     return result
 
-def _ext_import_one_element(self, cr, uid, row, external_referential_id, defaults=None, context=None, mapping=None):
+
+def _get_defaults_values(self, cr, uid, ref_called_from, context=context):
     """
-    Used in _ext_import_elements
-    The row will converted into OpenERP data by using the function convert_extdata_into_oedata
+    Abstract function that return the default value
+    Can be overwriten in your module
+
+    :param browse_record ref_called_from: reference (shop, referential, ...) that call the import 
+    :param string ressource_name: the resource to import
+    :return: dictionary with the key "create_ids" and "write_ids" which containt the id created/written
+    """
+    return None
+
+def _get_import_step(cr, uid, ref_called_from, referential_id, context=context):
+    """
+    Abstract function that return the default step for importing data
+    Can be overwriten in your module
+
+    :param browse_record ref_called_from: reference (shop, referential, ...) that call the import 
+    :param string ressource_name: the resource to import
+    :return: dictionary with the key "create_ids" and "write_ids" which containt the id created/written
+    """
+    return 100
+
+def import_resources(self, cr, uid, ids, resource_name, referential_id, context=None):
+    """
+    Abstract function to import resources from a shop / a referential
+
+    :param list ids: list of id
+    :param string ressource_name: the resource to import
+    :return: dictionary with the key "create_ids" and "write_ids" which containt the id created/written
+    """
+    result = {"create_ids" : [], "write_ids" : []}
+    for ref_called_from in self.browse(cr, uid, ids, context=context):
+        defaults = object.get_defaults_values(context=context)
+        res = self.pool.get(ressource_name)._import_ressources(cr, uid, ref_called_from, defaults, context=context)
+        for key in result:
+            result[key].append(res.get(key, []))
+    return result
+
+def _import_resources(self, cr, uid, ref_called_from, referential_id, defaults, context=None):
+    """
+    Abstract function to import resources for a specific object (like shop, referential...)
+
+    :param browse_record ref_called_from: reference (shop, referential, ...) that call the import 
+    :param int referential_id: id of the external referential
+    :params dict defaults: dictionnary of defaults values
+    :return: dictionary with the key "create_ids" and "write_ids" which containt the ids created/written
+    """
+    result = {"create_ids" : [], "write_ids" : []}
+    mapping = self._get_mapping(cr, uid, referential_id, context=context)
+    step = self._get_import_step(cr, uid, ref_called_from, referential_id, context=context)
+    filter = self._get_filter(cr, uid, ref_called_from, referential_id, step, context=context)
+    resources = self._get_external_resources(cr, uid, ref_called_from, referential_id, context=context)
+    while resources:
+        filter = self._get_filter(cr, uid, ref_called_from, referential_id, step, context=context)
+        resources = self._get_external_resources(cr, uid, ref_called_from, referential_id, context=context)
+        res = self._record_external_resources(self, cr, uid, external_data, external_referential_id, defaults=defaults, context=context)
+        for key in result:
+            result[key].append(res.get(key, []))
+    return result
+
+
+def _record_one_external_resource(self, cr, uid, row, external_referential_id, defaults=None, context=None, mapping=None):
+    """
+    Used in _record_external_resources
+    The row will converted into OpenERP data by using the function _transform_external_resources
     And then created or updated, and an external id will be added into the table ir.model.data
 
     :param dict row: row_data to convert into OpenERP data
@@ -424,7 +488,7 @@ def _ext_import_one_element(self, cr, uid, row, external_referential_id, default
     """
 
     written = created = False
-    vals = self.convert_extdata_into_oedata(cr, uid, [row], external_referential_id, defaults=defaults, context=context, mapping=mapping)[0]
+    vals = self._transform_external_resources(cr, uid, [row], external_referential_id, defaults=defaults, context=context, mapping=mapping)[0]
     if not 'external_id' in vals:
         raise osv.except_osv(_('External Import Error'), _("The object imported need an external_id, maybe the mapping doesn't exist for the object : %s" %self._name))
     else:
@@ -459,14 +523,14 @@ def _ext_import_one_element(self, cr, uid, row, external_referential_id, default
                             "external_id %s and OpenERP id %s successfully" %(self._name, external_id, existing_rec_id)))
             return {'create_id' : existing_rec_id}
         elif written:
-            logger.notifyChannel('ext synchro', netsvc.LOG_INFO, ("Updated in OpenERP %s from External Ref with
+            logger.notifyChannel('ext synchro', netsvc.LOG_INFO, ("Updated in OpenERP %s from External Ref with"
                             "external_id %s and OpenERP id %s successfully" %(self._name, external_id, existing_rec_id)))
             return {'write_id' : existing_rec_id}
 
-def _ext_import_elements(self, cr, uid, external_data, external_referential_id, defaults=None, context=None):
+def _record_external_resources(self, cr, uid, external_data, external_referential_id, defaults=None, context=None):
     """
     Used in various function of MagentoERPconnect for exemple in order to import external data into OpenERP.
-    This each row of the data will converted and then imported in OpenERP using the function _ext_import_one_element
+    This each row of the data will converted and then imported in OpenERP using the function _record_one_external_resource
 
     @param external_data: list of external_data to convert into OpenERP data
     @param external_referential_id: external referential id from where we import the resource
@@ -476,11 +540,11 @@ def _ext_import_elements(self, cr, uid, external_data, external_referential_id, 
 
     result = {'write_ids': [], 'create_ids': []}
     logger = netsvc.Logger()
-    mapping = self._get_mapping(cr, uid, external_referential_id, context=context):
+    mapping = self._get_mapping(cr, uid, external_referential_id, context=context)
     for row in external_data:
-        res = self._ext_import_one_element(cr, uid, row, external_referential_id, defaults=defaults, context=context, mapping=mapping)
-        result['create_ids'].append(res['create_id']) if res.get('create_id')
-        result['write_ids'].append(res['write_id']) if res.get('write_id')
+        res = self._record_one_external_resource(cr, uid, row, external_referential_id, defaults=defaults, context=context, mapping=mapping)
+        if res.get('create_id'): result['create_ids'].append(res['create_id'])
+        if res.get('write_id'): result['write_ids'].append(res['write_id'])
     return result        
 
 def retry_import(self, cr, uid, id, ext_id, external_referential_id, defaults=None, context=None):
@@ -712,8 +776,10 @@ def report_action_mapping(self, cr, uid, context=None):
     }
     return mapping
 
+
 osv.osv.read_w_order = read_w_order
 osv.osv.browse_w_order = browse_w_order
+
 osv.osv.prefixed_id = prefixed_id
 osv.osv.id_from_prefixed_id = id_from_prefixed_id
 osv.osv.get_last_imported_external_id = get_last_imported_external_id
@@ -722,17 +788,37 @@ osv.osv.oeid_to_extid = oeid_to_extid
 osv.osv._extid_to_expected_oeid = _extid_to_expected_oeid
 osv.osv.extid_to_existing_oeid = extid_to_existing_oeid
 osv.osv.extid_to_oeid = extid_to_oeid
-osv.osv.call_sub_mapping = call_sub_mapping
-osv.osv.merge_with_default_value = merge_with_default_value
-osv.osv.oevals_from_extdata = oevals_from_extdata
-osv.osv.convert_extdata_into_oedata = convert_extdata_into_oedata
+
+##### Extention for importing resources
 osv.osv.get_external_data = get_external_data
-osv.osv.import_with_try = import_with_try
-osv.osv._existing_oeid_for_extid_import = _existing_oeid_for_extid_import
-osv.osv.ext_import = ext_import
+
 osv.osv.retry_import = retry_import
+osv.osv._get_mapping = _get_mapping
+osv.osv._get_import_step = _get_import_step
+
+osv.osv._get_filter = _get_filter
+osv.osv._get_external_ressources = _get_external_ressources
+
+osv.osv.import_resources = import_resources
+osv.osv._import_one_resource = _import_one_resource
+
+osv.osv._record_external_resources = _record_external_resources
+osv.osv._record_one_external_resource = _record_one_external_resource
+
+osv.osv._transform_external_resources = _transform_external_resources
+osv.osv._transform_one_external_resource = _transform_one_external_resource
+
+osv.osv._transform_sub_mapping = _transform_sub_mapping
+osv.osv._merge_with_default_value = _merge_with_default_value
+
 osv.osv.oe_update = oe_update
 osv.osv.oe_create = oe_create
+
+########
+
+
+osv.osv._existing_oeid_for_extid_import = _existing_oeid_for_extid_import
+
 osv.osv.extdata_from_oevals = extdata_from_oevals
 osv.osv.ext_export = ext_export
 osv.osv.retry_export = retry_export

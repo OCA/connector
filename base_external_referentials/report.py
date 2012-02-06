@@ -18,13 +18,10 @@
 #
 ##############################################################################
 import time
-import netsvc
 import pooler
 from osv import osv, fields
 from tools.translate import _
 from tools.safe_eval import safe_eval
-
-# TODO implement shop_id in base_sale_multichannels
 
 
 class external_report(osv.osv):
@@ -133,7 +130,7 @@ class external_report(osv.osv):
         Successful lines are cleaned at each start of a report
         so we historize their aggregation.
         """
-        
+
         lines_obj = self.pool.get('external.report.line')
         history_obj = self.pool.get('external.report.history')
         log_cr = pooler.get_db(cr.dbname).cursor()
@@ -164,7 +161,7 @@ class external_report(osv.osv):
             log_cr.commit()
         finally:
             log_cr.close()
-        return True
+        return id
 
 external_report()
 
@@ -204,10 +201,6 @@ class external_report_lines(osv.osv):
     _description = 'External Report Lines'
     _rec_name = 'res_id'
     _order = 'date desc'
-
-    def _action_selection(self, cr, uid, context=None):
-        mapping = self.action_mapping(cr, uid, context)
-        return zip(mapping.keys(), mapping.keys())
 
     _columns = {
         'external_report_id': fields.many2one('external.report',

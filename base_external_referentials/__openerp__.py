@@ -48,7 +48,7 @@ to customize their field mapping directly in OpenERP to accomodate the external 
     'depends': ['base'],
     'init_xml': [],
     'update_xml': ['base_external_referentials_view.xml',
-                   'report.xml',
+                   'report_view.xml',
                    'base_external_referentials_menu.xml',],
     'demo_xml': [],
     'installable': True,

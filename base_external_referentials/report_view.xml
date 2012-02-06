@@ -8,7 +8,7 @@
 			<field name="model">external.report</field>
 			<field name="type">form</field>
 			<field name="arch" type="xml">
-				<form string="External Report">
+				<form string="External Referential Reports">
                     <field name="name"/>
                     <newline/>
                     <field name="start_date"/>
@@ -57,6 +57,23 @@
 			</field>
 		</record>
 
+        <record id="external_report_search_form_view" model="ir.ui.view">
+            <field name="name">external_report_search_view</field>
+            <field name="model">external.report</field>
+            <field name="type">search</field>
+            <field name="arch" type="xml">
+                <search string="External Referential Reports">
+                   <field name="name"/>
+                   <field name="external_referential_id"/>
+                   <field name="end_date"/>
+                   <newline/>
+                   <group  expand='0' string='Group by...' groups="base.group_extended">
+                       <filter string='External Referential' icon="terp-stock_symbol-selection" domain="[]" context="{'group_by' : 'external_referential_id'}" />
+                   </group>
+                </search>
+            </field>
+        </record>
+
         <!-- External Report History -->
 		<record id="external_report_history_form_view" model="ir.ui.view">
 			<field name="name">external_report_history_view</field>
@@ -80,7 +97,7 @@
 			<field name="model">external.report.history</field>
 			<field name="type">tree</field>
 			<field name="arch" type="xml">
-				<tree string="External Report History">
+				<tree string="External Report History" colors="red:state=='fail'">
                     <field name="external_report_id"/>
                     <field name="date"/>
                     <field name="count"/>
@@ -91,6 +108,32 @@
 				</tree>
 			</field>
 		</record>
+
+        <record id="external_report_history_search_view" model="ir.ui.view">
+            <field name="name">external_report_history_search_view</field>
+            <field name="model">external.report.history</field>
+            <field name="type">search</field>
+            <field name="arch" type="xml">
+                <search string="External Report History">
+                   <filter string="Success" icon="terp-accessories-archiver" domain="[('state','=','success')]"/>
+                   <filter string="Failures" icon="terp-accessories-archiver" domain="[('state','=','fail')]"/>
+                   <separator orientation="vertical"/>
+                   <field name="external_report_id"/>
+                   <field name="date"/>
+                   <field name="res_model"/>
+                   <field name="action"/>
+                   <field name="user_id"/>
+                   <field name="state"/>
+                   <newline/>
+                   <group  expand='0' string='Group by...' groups="base.group_extended">
+                       <filter string='Report' icon="terp-stock_symbol-selection" domain="[]" context="{'group_by' : 'external_report_id'}" />
+                       <filter string='Date' icon="terp-stock_symbol-selection" domain="[]" context="{'group_by' : 'date'}" />
+                       <filter string='Model' icon="terp-stock_symbol-selection" domain="[]" context="{'group_by' : 'res_model'}" />
+                       <filter string='Action' icon="terp-stock_symbol-selection" domain="[]" context="{'group_by' : 'action'}" />
+                   </group>
+                </search>
+            </field>
+        </record>
 
         <!-- External Report Line -->
 		<record id="external_report_line_form_view" model="ir.ui.view">

@@ -19,12 +19,12 @@
                         <tree colors="red:state=='fail'" string="Fails">
                             <field name="state" invisible="True"/>
                             <field name="res_model"/>
-                            <field name="method"/>
+                            <field name="action"/>
                             <field name="date"/>
                             <field name="res_id"/>
                             <field name="external_id"/>
                             <field name="error_message"/>
-                            <button name="execute" string="Execute Again!" icon="gtk-go-forward" type="object" colspan="2"/>
+                            <button name="retry" string="Retry" icon="gtk-go-forward" type="object" colspan="2"/>
                         </tree>
                      </field>
                     <newline/>
@@ -33,7 +33,7 @@
                             <field name="date"/>
                             <field name="count"/>
                             <field name="res_model"/>
-                            <field name="method"/>
+                            <field name="action"/>
                             <field name="user_id"/>
                             <field name="state"/>
                         </tree>
@@ -47,11 +47,12 @@
 			<field name="model">external.report</field>
 			<field name="type">tree</field>
 			<field name="arch" type="xml">
-				<tree string="External Reports">
+				<tree colors="red:len(failed_line_ids)>0" string="External Reports">
                     <field name="name"/>
                     <field name="start_date"/>
                     <field name="end_date"/>
                     <field name="external_referential_id"/>
+                    <field name="failed_line_ids" invisible="1"/>
 				</tree>
 			</field>
 		</record>
@@ -67,7 +68,7 @@
                     <field name="date"/>
                     <field name="count"/>
                     <field name="res_model"/>
-                    <field name="method"/>
+                    <field name="action"/>
                     <field name="user_id"/>
                     <field name="state"/>
 				</form>
@@ -84,7 +85,7 @@
                     <field name="date"/>
                     <field name="count"/>
                     <field name="res_model"/>
-                    <field name="method"/>
+                    <field name="action"/>
                     <field name="user_id"/>
                     <field name="state"/>
 				</tree>
@@ -102,7 +103,7 @@
                     <field name="res_model"/>
                     <field name="res_id"/>
                     <field name="external_id"/>
-                    <field name="method"/>
+                    <field name="action"/>
                     <field name="date"/>
                     <field name="state"/>
                     <separator colspan="4"/>
@@ -112,7 +113,7 @@
                         <field name="origin_context"/>
                     </group>
                     <separator colspan="4"/>
-                    <button name="execute" string="Execute Again!" icon="gtk-go-forward" type="object" colspan="2"/>
+                    <button name="retry" string="Retry" icon="gtk-go-forward" type="object" colspan="2"/>
 				</form>
 			</field>
 		</record>
@@ -125,12 +126,12 @@
 				<tree colors="red:state=='fail'" string="External Report Lines">
                     <field name="state"/>
                     <field name="res_model"/>
-                    <field name="method"/>
+                    <field name="action"/>
                     <field name="date"/>
                     <field name="res_id"/>
                     <field name="external_id"/>
                     <field name="error_message"/>
-                    <button name="execute" string="Execute Again!" icon="gtk-go-forward" type="object" colspan="2"/>
+                    <button name="retry" string="Retry" icon="gtk-go-forward" type="object" colspan="2"/>
 				</tree>
 			</field>
 		</record>

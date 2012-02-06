@@ -399,13 +399,13 @@ def ext_export(self, cr, uid, ids, external_referential_ids=[], defaults={}, con
                                                             'module': 'extref/' + self.pool.get('external.referential').read(cr, uid, ext_ref_id, ['name'])['name']
                                                           }
                                     self.pool.get('ir.model.data').create(cr, uid, ir_model_data_vals)
-                                    report_line_obj.log_success(cr, uid, self._name, report_line_obj.METHOD_EXPORT,
+                                    report_line_obj.log_success(cr, uid, self._name, 'export',
                                                                 ext_ref_id, res_id=record_data['id'],
                                                                 external_id=crid, defaults=defaults,
                                                                 context=context)
                                     logger.notifyChannel('ext synchro', netsvc.LOG_INFO, "Created in External Ref %s from OpenERP with external_id %s and OpenERP id %s successfully" %(self._name, crid, record_data['id']))
                                 except Exception, err:
-                                    report_line_obj.log_failed(cr, uid, self._name, report_line_obj.METHOD_EXPORT,
+                                    report_line_obj.log_failed(cr, uid, self._name, 'export',
                                                                ext_ref_id, res_id=record_data['id'],
                                                                exception=err, defaults=defaults,
                                                                context=context)
@@ -445,6 +445,17 @@ def ext_update(self, cr, uid, data, conn, method, oe_id, external_id, ir_model_d
             self.pool.get('ir.model.data').write(cr, uid, ir_model_data_id, {'name': self.prefixed_id(crid)})
             return crid
 
+def report_action_mapping(self, cr, uid, context=None):
+        """
+        For each action logged in the reports, we associate
+        the method to launch when we replay the action.
+        """
+        mapping = {
+            'export': self.retry_export,
+            'import': self.retry_import,
+        }
+        return mapping
+
 
 osv.osv.read_w_order = read_w_order
 osv.osv.browse_w_order = browse_w_order
@@ -468,4 +479,4 @@ osv.osv.can_create_on_update_failure = can_create_on_update_failure
 osv.osv.ext_create = ext_create
 osv.osv.try_ext_update = try_ext_update
 osv.osv.ext_update = ext_update
-
+osv.osv.report_action_mapping = report_action_mapping

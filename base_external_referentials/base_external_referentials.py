@@ -68,7 +68,7 @@ class external_referential(osv.osv):
     _name = 'external.referential'
     _description = 'External Referential'
 
-    def refresh_mapping(self, cr, uid, ids, ctx={}):
+    def refresh_mapping(self, cr, uid, ids, context={}):
         #This function will reinstate mapping & mapping_lines for registered objects
         for id in ids:
             ext_ref = self.browse(cr, uid, id)

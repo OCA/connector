@@ -226,9 +226,9 @@ class external_report_lines(osv.osv):
         "date": lambda *a: time.strftime("%Y-%m-%d %H:%M:%S")
     }
 
-    def _log_base(self, cr, uid, state, model, action,
-                 external_referential_id, res_id=None, external_id=None,
-                 exception=None, defaults=None, context=None):
+    def _log_base(self, cr, uid, state, model, action, res_id=None,
+                  external_id=None,exception=None, defaults=None,
+                  context=None):
         defaults = defaults or {}
         context = context or {}
 
@@ -253,7 +253,8 @@ class external_report_lines(osv.osv):
             # FIXME : see if we have some problem with other objects
             # and maybe remove from the conect all objects
             # which are not string, boolean, list, dict, integer, float or ?
-            del origin_context['conn_obj']
+            if origin_context.get('conn_obj', False):
+                del origin_context['conn_obj']
             if existing_line_id:
                 self.write(log_cr, uid,
                                existing_line_id,
@@ -269,7 +270,6 @@ class external_report_lines(osv.osv):
                                 'state': state,
                                 'res_model': model,
                                 'action': action,
-                                'external_referential_id': external_referential_id,
                                 'date': time.strftime("%Y-%m-%d %H:%M:%S"),
                                 'res_id': res_id,
                                 'external_id': external_id,
@@ -284,18 +284,16 @@ class external_report_lines(osv.osv):
             log_cr.close()
         return True
 
-    def log_failed(self, cr, uid, model, action, external_referential_id,
+    def log_failed(self, cr, uid, model, action,
                    res_id=None, external_id=None, exception=None,
                    defaults=None, context=None):
-        return self._log_base(cr, uid, 'fail', model, action,
-                             external_referential_id, res_id,
+        return self._log_base(cr, uid, 'fail', model, action, res_id,
                              external_id, exception, defaults, context)
 
-    def log_success(self, cr, uid, model, action, external_referential_id,
+    def log_success(self, cr, uid, model, action,
                     res_id=None, external_id=None, exception=None,
                     defaults=None, context=None):
-        return self._log_base(cr, uid, 'success', model, action,
-                             external_referential_id, res_id,
+        return self._log_base(cr, uid, 'success', model, action, res_id,
                              external_id, exception, defaults, context)
 
     def retry(self, cr, uid, ids, context=None):
@@ -323,6 +321,7 @@ class external_report_lines(osv.osv):
                                 (log.action,))
             method(cr, uid,
                    log.res_id,
+                   log.external_id,
                    log.external_report_id.external_referential_id.id,
                    origin_defaults,
                    origin_context)

@@ -253,7 +253,7 @@ def ext_import(self, cr, uid, data, external_referential_id, defaults=None, cont
     return {'create_ids': create_ids, 'write_ids': write_ids}
 
 
-def retry_import(self, cr, uid, id, external_referential_id, defaults=None, context=None):
+def retry_import(self, cr, uid, id, ext_id, external_referential_id, defaults=None, context=None):
     """ When we import again a previously failed import
     """
     raise osv.except_osv(_("Not Implemented"), _("Not Implemented in abstract base module!"))
@@ -376,13 +376,13 @@ def ext_export(self, cr, uid, ids, external_referential_ids=[], defaults={}, con
                                                           }
                                     self.pool.get('ir.model.data').write(cr, uid, rec_check_ids[0], ir_model_data_vals)
                                     report_line_obj.log_success(cr, uid, self._name, 'export',
-                                                                ext_ref_id, res_id=record_data['id'],
+                                                                res_id=record_data['id'],
                                                                 external_id=ext_id, defaults=defaults,
                                                                 context=context)
                                     logger.notifyChannel('ext synchro', netsvc.LOG_INFO, "Updated in External Ref %s from OpenERP with external_id %s and OpenERP id %s successfully" %(self._name, ext_id, record_data['id']))
                                 except Exception, err:
                                     report_line_obj.log_failed(cr, uid, self._name, 'export',
-                                                               ext_ref_id, res_id=record_data['id'],
+                                                               res_id=record_data['id'],
                                                                external_id=ext_id, exception=err,
                                                                defaults=defaults, context=context)
                         else:
@@ -400,20 +400,20 @@ def ext_export(self, cr, uid, ids, external_referential_ids=[], defaults={}, con
                                                           }
                                     self.pool.get('ir.model.data').create(cr, uid, ir_model_data_vals)
                                     report_line_obj.log_success(cr, uid, self._name, 'export',
-                                                                ext_ref_id, res_id=record_data['id'],
+                                                                res_id=record_data['id'],
                                                                 external_id=crid, defaults=defaults,
                                                                 context=context)
                                     logger.notifyChannel('ext synchro', netsvc.LOG_INFO, "Created in External Ref %s from OpenERP with external_id %s and OpenERP id %s successfully" %(self._name, crid, record_data['id']))
                                 except Exception, err:
                                     report_line_obj.log_failed(cr, uid, self._name, 'export',
-                                                               ext_ref_id, res_id=record_data['id'],
+                                                               res_id=record_data['id'],
                                                                exception=err, defaults=defaults,
                                                                context=context)
                         cr.commit()
 
     return {'create_ids': create_ids, 'write_ids': write_ids}
 
-def retry_export(self, cr, uid, id, external_referential_id, defaults=None, context=None):
+def retry_export(self, cr, uid, id, ext_id, external_referential_id, defaults=None, context=None):
     """ When we export again a previously failed export
     """
     conn = self.external_connection(
@@ -470,6 +470,7 @@ osv.osv.extid_to_oeid = extid_to_oeid
 osv.osv.oevals_from_extdata = oevals_from_extdata
 osv.osv.get_external_data = get_external_data
 osv.osv.ext_import = ext_import
+osv.osv.retry_import = retry_import
 osv.osv.oe_update = oe_update
 osv.osv.oe_create = oe_create
 osv.osv.extdata_from_oevals = extdata_from_oevals

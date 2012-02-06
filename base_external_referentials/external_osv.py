@@ -25,10 +25,10 @@ import base64
 import time
 import datetime
 import netsvc
+import pooler
 
 class MappingError(Exception):
      def __init__(self, value, name):
-         print 'fucking exception'
          self.value = value
          self.mapping_name = name
      def __str__(self):
@@ -190,7 +190,7 @@ def oevals_from_extdata(self, cr, uid, external_referential_id, data_record, key
                 del(space['__builtins__'])
                 logger.notifyChannel('extdata_from_oevals', netsvc.LOG_DEBUG, "Mapping Context: %r" % (space,))
                 logger.notifyChannel('extdata_from_oevals', netsvc.LOG_DEBUG, "Exception: %r" % (e,))
-                if context.get('raise_error', False):
+                if not context.get('dont_raise_error', False):
                     raise MappingError(e, each_mapping_line['external_field'])
             
             result = space.get('result', False)
@@ -210,6 +210,40 @@ def get_external_data(self, cr, uid, conn, external_referential_id, defaults=Non
     """Constructs data using WS or other synch protocols and then call ext_import on it"""
     return {'create_ids': [], 'write_ids': []}
 
+#TODO the same function for export
+
+def import_with_try(self, cr, uid, callback, data_record, external_referential_id, defaults, context=None):
+    if not context:
+        context={}
+    res={}
+    report_line_obj = self.pool.get('external.report.line')
+    report_line_id = report_line_obj._log_base(cr, uid, self._name, callback.im_func.func_name, 
+                                    state='fail', external_id=context.get('external_object_id', False),
+                                    defaults=defaults, data_record=data_record, 
+                                    context=context)
+    context['report_line_id'] = report_line_id
+    import_cr = pooler.get_db(cr.dbname).cursor()
+    res = callback(import_cr, uid, data_record, external_referential_id, defaults, context=context)
+    try:
+        res = callback(import_cr, uid, data_record, external_referential_id, defaults, context=context)
+    except MappingError as e:
+        import_cr.rollback()
+        report_line_obj.write(cr, uid, report_line_id, {
+                        'error_message': 'Error with the mapping : %s. Error details : %s'%(e.mapping_name, e.value),
+                        }, context=context)
+    except osv.except_osv as e:
+        raise osv.except_osv(*e)
+    except Exception as e:
+        raise Exception(e)
+    else:
+        report_line_obj.write(cr, uid, report_line_id, {
+                    'state': 'success',
+                    }, context=context)
+        import_cr.commit()
+    finally:
+        import_cr.close()
+    return res
+
 def ext_import(self, cr, uid, data, external_referential_id, defaults=None, context=None):
     if defaults is None:
         defaults = {}
@@ -223,7 +257,6 @@ def ext_import(self, cr, uid, data, external_referential_id, defaults=None, cont
     logger = netsvc.Logger()
     if data:
         mapping_id = self.pool.get('external.mapping').search(cr, uid, [('model', '=', self._name), ('referential_id', '=', external_referential_id)])
-        print 'mapping_id', mapping_id, self._name, external_referential_id
         if mapping_id:
             #If a mapping exists for current model, search for mapping lines
             mapping_line_ids = self.pool.get('external.mapping.line').search(cr, uid, [('mapping_id', '=', mapping_id), ('type', 'in', ['in_out', 'in'])])
@@ -269,9 +302,6 @@ def ext_import(self, cr, uid, data, external_referential_id, defaults=None, cont
                         }
                         self.pool.get('ir.model.data').create(cr, uid, ir_model_data_vals)
                         logger.notifyChannel('ext synchro', netsvc.LOG_INFO, "Created in OpenERP %s from External Ref with external_id %s and OpenERP id %s successfully" %(self._name, external_id, crid))
-                    #it should be better if the default value is no commit, moreover it can be better to use an other cursor
-                    if not context.get('no_intermediary_commit', False):
-                        cr.commit()
 
     return {'create_ids': create_ids, 'write_ids': write_ids}
 
@@ -507,6 +537,7 @@ osv.osv.extid_to_existing_oeid = extid_to_existing_oeid
 osv.osv.extid_to_oeid = extid_to_oeid
 osv.osv.oevals_from_extdata = oevals_from_extdata
 osv.osv.get_external_data = get_external_data
+osv.osv.import_with_try = import_with_try
 osv.osv.ext_import = ext_import
 osv.osv.retry_import = retry_import
 osv.osv.oe_update = oe_update

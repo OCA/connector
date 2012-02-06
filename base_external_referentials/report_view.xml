@@ -35,9 +35,11 @@
                             <field name="res_model"/>
                             <field name="action"/>
                             <field name="user_id"/>
+                            <field name="origin"/>
                             <field name="state"/>
                         </tree>
                     </field>
+                    <button name="retry_failed_lines" string="Retry All Failed" icon="gtk-go-forward" type="object" colspan="2"/>
 				</form>
 			</field>
 		</record>
@@ -154,6 +156,7 @@
                         <field name="error_message"/>
                         <field name="origin_defaults"/>
                         <field name="origin_context"/>
+                        <field name="data_record"/>
                     </group>
                     <separator colspan="4"/>
                     <button name="retry" string="Retry" icon="gtk-go-forward" type="object" colspan="2"/>

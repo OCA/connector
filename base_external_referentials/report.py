@@ -22,6 +22,7 @@ import pooler
 from osv import osv, fields
 from tools.translate import _
 from tools.safe_eval import safe_eval
+import netsvc
 
 class external_report(osv.osv):
     _name = 'external.report'
@@ -47,7 +48,7 @@ class external_report(osv.osv):
         'failed_line_ids': fields.one2many('external.report.line',
                                            'external_report_id',
                                            'Failed Report Lines',
-                                           domain=[('state', '=', 'fail')]),
+                                           domain=[('state', '!=', 'success')]),
         'history_ids': fields.one2many('external.report.history',
                                        'external_report_id', 'History'),
     }
@@ -80,10 +81,21 @@ class external_report(osv.osv):
         lines_obj.unlink(cr, uid, line_ids, context=context)
         return True
 
-    def _retry_failed_lines(self, cr, uid, report_id, context=None):
-        report = self.browse(cr, uid, report_id, context)
-        for line in report.failed_line_ids:
-            self.pool.get('external.report.line').retry(cr, uid, line.id, context)
+    def retry_failed_lines(self, cr, uid, ids, context=None):
+        logger = netsvc.Logger()
+        logger.notifyChannel('retry_failed_lines', netsvc.LOG_INFO, "retry the failed lines of the reports ids %s" % (ids,))
+        if isinstance(ids, int):
+            ids = [ids]
+        if not context:
+            context={}
+        context['origin'] = 'retry'
+        for report in self.read(cr, uid, ids, ['failed_line_ids'], context=context):
+            failed_line_ids = report['failed_line_ids']
+            if failed_line_ids:
+                context['external_report_id'] = report['id']
+                self.start_report(cr, uid, report['id'], context=context)
+                self.pool.get('external.report.line').retry(cr, uid, failed_line_ids, context=context)
+                self.end_report(cr, uid, report['id'], context=context)
         return True
 
     def start_report(self, cr, uid, id=None, ref=None, name=None,
@@ -103,7 +115,6 @@ class external_report(osv.osv):
                                                external_referential_id,
                                                name,
                                                context)
-
         log_cr = pooler.get_db(cr.dbname).cursor()
         try:
             if report_id:
@@ -111,7 +122,6 @@ class external_report(osv.osv):
                            {'start_date': time.strftime("%Y-%m-%d %H:%M:%S"),
                             'end_date': False},
                            context=context)
-
                 # clean successful lines of the last report
                 self._clean_successful_lines(log_cr, uid, report_id, context)
             else:
@@ -123,14 +133,10 @@ class external_report(osv.osv):
                                          'start_date': time.strftime("%Y-%m-%d %H:%M:%S"),
                                          },
                                         context=context)
-            print 'commit du log'
             log_cr.commit()
-            print 'commit du log fini'
 
         finally:
             log_cr.close()
-
-        self._retry_failed_lines(cr, uid, report_id, context)
 
         return report_id
 
@@ -139,13 +145,15 @@ class external_report(osv.osv):
         Successful lines are cleaned at each start of a report
         so we historize their aggregation.
         """
-
+        report = self.browse(cr, uid, id, context=context)
         lines_obj = self.pool.get('external.report.line')
         history_obj = self.pool.get('external.report.history')
         log_cr = pooler.get_db(cr.dbname).cursor()
         try:
             line_ids = lines_obj.search(log_cr, uid,
-                                     [('external_report_id', '=', id)],
+                                     [('external_report_id', '=', id),
+                                     '|', ('write_date', '>', report.start_date),
+                                     ('create_date', '>', report.start_date)],
                                      context=context)
 
             grouped_lines = lines_obj.aggregate_actions(cr, uid,
@@ -160,7 +168,8 @@ class external_report(osv.osv):
                         'action': line[2],
                         'count': grouped_lines[line],
                         'user_id': uid,
-                        'state': line[0]
+                        'state': line[0],
+                        'origin': context.get('origin', False),
                     }, context=context)
 
             self.write(log_cr, uid, id,
@@ -196,6 +205,7 @@ class external_report_history(osv.osv):
         'state': fields.selection((('success', 'Success'),
                                    ('fail', 'Failed')),
                                    'Status', required=True, readonly=True),
+        'origin': fields.char('Origin', size=64, readonly=True),
     }
 
     _defaults = {
@@ -236,12 +246,11 @@ class external_report_lines(osv.osv):
         "date": lambda *a: time.strftime("%Y-%m-%d %H:%M:%S")
     }
 
-    def _log_base(self, cr, uid, state, model, action, res_id=None,
+    def _log_base(self, cr, uid, model, action, state=None, res_id=None,
                   external_id=None,exception=None, data_record=None,
                   defaults=None, context=None):
         defaults = defaults or {}
         context = context or {}
-        print 'context', context
         existing_line_id = context.get('retry_report_line_id', False)
 
         # We do not log any action if no report is started
@@ -275,7 +284,7 @@ class external_report_lines(osv.osv):
                                 'origin_context': origin_context,
                                 })
             else:
-                self.create(log_cr, uid, {
+                existing_line_id = self.create(log_cr, uid, {
                                 'external_report_id': external_report_id,
                                 'state': state,
                                 'res_model': model,
@@ -292,8 +301,11 @@ class external_report_lines(osv.osv):
 
         finally:
             log_cr.close()
-        return True
+        return existing_line_id
 
+
+
+#Deprecated
     def log_failed(self, cr, uid, model, action,
                    res_id=None, external_id=None, exception=None,
                    data_record=None, defaults=None, context=None):
@@ -301,7 +313,7 @@ class external_report_lines(osv.osv):
                              external_id=external_id, exception=exception,
                              data_record=data_record, defaults=defaults,
                              context=context)
-
+#Deprecated
     def log_success(self, cr, uid, model, action,
                     res_id=None, external_id=None, exception=None,
                     data_record=None, defaults=None, context=None):
@@ -326,7 +338,7 @@ class external_report_lines(osv.osv):
             
             kwargs={}
             for field, value in method['fields'].items():
-                kwargs[field] = safe_eval(value, {'log': log})
+                kwargs[field] = safe_eval(value, {'log': log, 'self': self})
                 
             if not kwargs.get('context', False):
                 kwargs['context']={}

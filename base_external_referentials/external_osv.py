@@ -108,10 +108,12 @@ def external_connection(self, cr, uid, referential, DEBUG=False):
 def oeid_to_extid(self, cr, uid, id, external_referential_id, context=None):
     """Returns the external id of a resource by its OpenERP id.
     Returns False if the resource id does not exists."""
+    if type(id) == list:
+        id = id[0]
     model_data_ids = self.pool.get('ir.model.data').search(cr, uid, [('model', '=', self._name), ('res_id', '=', id), ('external_referential_id', '=', external_referential_id)])
     if model_data_ids and len(model_data_ids) > 0:
         prefixed_id = self.pool.get('ir.model.data').read(cr, uid, model_data_ids[0], ['name'])['name']
-        ext_id = int(self.id_from_prefixed_id(prefixed_id))
+        ext_id = self.id_from_prefixed_id(prefixed_id)
         return ext_id
     return False
 
@@ -223,9 +225,10 @@ def import_with_try(self, cr, uid, callback, data_record, external_referential_i
                                     context=context)
     context['report_line_id'] = report_line_id
     import_cr = pooler.get_db(cr.dbname).cursor()
-    res = callback(cr, uid, data_record, external_referential_id, defaults, context=context)
+    res = callback(import_cr, uid, data_record, external_referential_id, defaults, context=context)
     try:
-        res = callback(import_cr, uid, data_record, external_referential_id, defaults, context=context)
+        pass
+        #res = callback(import_cr, uid, data_record, external_referential_id, defaults, context=context)
     except MappingError as e:
         import_cr.rollback()
         report_line_obj.write(cr, uid, report_line_id, {

@@ -283,5 +283,9 @@ class ir_model_data(osv.osv):
         #'create_date': fields.datetime('Created date', readonly=True), #TODO used?
         #'write_date': fields.datetime('Updated date', readonly=True), #TODO used?
     }
+    
+    _sql_constraints = [
+        ('external_reference_uniq_per_object', 'unique(model, res_id, external_referential_id)', 'You cannot have on record with multiple external id for a sae referential'),
+    ]
 
 ir_model_data()

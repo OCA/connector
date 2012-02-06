@@ -47,7 +47,7 @@ class external_report(osv.osv):
                            help="Method linked to the report"),
         'start_date': fields.datetime('Last Start Date', readonly=True),
         'end_date': fields.datetime('Last End Date', readonly=True),
-        'external_referential_id': fields.many2one('external.referential',
+        'referential_id': fields.many2one('external.referential',
                                                    'External Referential',
                                                    required=True,
                                                    readonly=True),
@@ -140,7 +140,7 @@ class external_report(osv.osv):
                             'object_related_description': object._description,
                             'res_id': object.id,
                             'method': method,
-                            'external_referential_id': object.referential_id.id,
+                            'referential_id': object.referential_id.id,
                             'start_date': time.strftime(DEFAULT_SERVER_DATETIME_FORMAT),
                                  },
                                 context=context)

@@ -78,7 +78,7 @@ def get_last_imported_external_id(self, cr, object_name, referential_id, where_c
                SELECT %(table_name)s.id, ir_model_data.name from %(table_name)s inner join ir_model_data
                ON %(table_name)s.id = ir_model_data.res_id
                WHERE ir_model_data.model=%%s %(where_clause)s
-                 AND ir_model_data.external_referential_id = %%s
+                 AND ir_model_data.referential_id = %%s
                ORDER BY %(table_name)s.create_date DESC
                LIMIT 1
                """ % { 'table_name' : table_name, 'where_clause' : where_clause and ("and " + where_clause) or ""}
@@ -113,7 +113,7 @@ def get_modified_ids(self, cr, uid, date=False, context=None):
 def get_all_extid_from_referential(self, cr, uid, referential_id, context=None):
     """Returns the external ids of the ressource which have an ext_id in the referential"""
     ir_model_data_obj = self.pool.get('ir.model.data')
-    model_data_ids = ir_model_data_obj.search(cr, uid, [('model', '=', self._name), ('external_referential_id', '=', referential_id)])
+    model_data_ids = ir_model_data_obj.search(cr, uid, [('model', '=', self._name), ('referential_id', '=', referential_id)])
     #because OpenERP might keep ir_model_data (is it a bug?) for deleted records, we check if record exists:
     oeid_to_extid = {}
     for data in ir_model_data_obj.read(cr, uid, model_data_ids, ['res_id', 'name'], context=context):
@@ -125,49 +125,49 @@ def get_all_extid_from_referential(self, cr, uid, referential_id, context=None):
 def get_all_oeid_from_referential(self, cr, uid, referential_id, context=None):
     """Returns the openerp ids of the ressource which have an ext_id in the referential"""
     ir_model_data_obj = self.pool.get('ir.model.data')
-    model_data_ids = ir_model_data_obj.search(cr, uid, [('model', '=', self._name), ('external_referential_id', '=', referential_id)])
+    model_data_ids = ir_model_data_obj.search(cr, uid, [('model', '=', self._name), ('referential_id', '=', referential_id)])
     #because OpenERP might keep ir_model_data (is it a bug?) for deleted records, we check if record exists:
     claimed_oe_ids = [x['res_id'] for x in ir_model_data_obj.read(cr, uid, model_data_ids, ['res_id'], context=context)]
     return claimed_oe_ids and self.exists(cr, uid, claimed_oe_ids, context=context) or []
 
-def oeid_to_extid(self, cr, uid, id, external_referential_id, context=None):
+def oeid_to_extid(self, cr, uid, id, referential_id, context=None):
     """Returns the external id of a resource by its OpenERP id.
     Returns False if the resource id does not exists."""
     if isinstance(id, list):
         id = id[0]
-    model_data_ids = self.pool.get('ir.model.data').search(cr, uid, [('model', '=', self._name), ('res_id', '=', id), ('external_referential_id', '=', external_referential_id)])
+    model_data_ids = self.pool.get('ir.model.data').search(cr, uid, [('model', '=', self._name), ('res_id', '=', id), ('referential_id', '=', referential_id)])
     if model_data_ids and len(model_data_ids) > 0:
         prefixed_id = self.pool.get('ir.model.data').read(cr, uid, model_data_ids[0], ['name'])['name']
         ext_id = self.id_from_prefixed_id(prefixed_id)
         return ext_id
     return False
 
-def _extid_to_expected_oeid(self, cr, uid, external_id, external_referential_id, context=None):
+def _extid_to_expected_oeid(self, cr, uid, external_id, referential_id, context=None):
     """
     Returns the id of the entry in ir.model.data and the expected id of the resource in the current model
     Warning the expected_oe_id may not exists in the model, that's the res_id registered in ir.model.data
 
     @param external_id: id in the external referential
-    @param external_referential_id: id of the external referential
+    @param referential_id: id of the external referential
     @return: tuple of (ir.model.data entry id, expected resource id in the current model)
     """
     model_data_obj = self.pool.get('ir.model.data')
     model_data_ids = model_data_obj.search(cr, uid,
         [('name', '=', self.prefixed_id(external_id)),
          ('model', '=', self._name),
-         ('external_referential_id', '=', external_referential_id)], context=context)
+         ('referential_id', '=', referential_id)], context=context)
     model_data_id = model_data_ids and model_data_ids[0] or False
     expected_oe_id = False
     if model_data_id:
         expected_oe_id = model_data_obj.read(cr, uid, model_data_id, ['res_id'])['res_id']
     return model_data_id, expected_oe_id
 
-def extid_to_existing_oeid(self, cr, uid, external_id, external_referential_id, context=None):
+def extid_to_existing_oeid(self, cr, uid, external_id, referential_id, context=None):
     """Returns the OpenERP id of a resource by its external id.
        Returns False if the resource does not exist."""
     if external_id:
         ir_model_data_id, expected_oe_id = self._extid_to_expected_oeid\
-            (cr, uid, external_id, external_referential_id, context=context)
+            (cr, uid, external_id, referential_id, context=context)
         # Note: OpenERP cleans up ir_model_data which res_id records have been deleted
         # only at server update because that would be a perf penalty, we returns the res_id only if
         # really existing and we delete the ir_model_data unused
@@ -183,33 +183,33 @@ def extid_to_existing_oeid(self, cr, uid, external_id, external_referential_id, 
             self.pool.get('ir.model.data').unlink(cr, uid, ir_model_data_id, context=context)
     return False
 
-def extid_to_oeid(self, cr, uid, id, external_referential_id, context=None):
+def extid_to_oeid(self, cr, uid, id, referential_id, context=None):
     """Returns the OpenERP ID of a resource by its external id.
     Creates the resource from the external connection if the resource does not exist."""
     #First get the external key field name
     #conversion external id -> OpenERP object using Object mapping_column_name key!
     if id:
-        existing_id = self.extid_to_existing_oeid(cr, uid, id, external_referential_id, context)
+        existing_id = self.extid_to_existing_oeid(cr, uid, id, referential_id, context)
         if existing_id:
             return existing_id
         try:
             if context and context.get('alternative_key', False): #FIXME dirty fix for Magento product.info id/sku mix bug: https://bugs.launchpad.net/magentoerpconnect/+bug/688225
                 id = context.get('alternative_key', False)
-            conn = self.pool.get('external.referential').external_connection(cr, uid, external_referential_id)
-            result = self.get_external_data(cr, uid, conn , external_referential_id, {}, {'id':id})
+            conn = self.pool.get('external.referential').external_connection(cr, uid, referential_id)
+            result = self.get_external_data(cr, uid, conn , referential_id, {}, {'id':id})
             if len(result['create_ids']) == 1:
                 return result['create_ids'][0]
         except Exception, error: #external system might return error because no such record exists
-            raise osv.except_osv(_('Ext Synchro'), _("Error when importing on fly the object %s with the external_id %s and the external referential %s.\n Error : %s" %(self._name, id, external_referential_id, error)))
+            raise osv.except_osv(_('Ext Synchro'), _("Error when importing on fly the object %s with the external_id %s and the external referential %s.\n Error : %s" %(self._name, id, referential_id, error)))
     return False
 
-def _transform_sub_mapping(self, cr, uid, sub_mapping_list, external_data, external_referential_id, vals, mapping, defaults=None, context=None):
+def _transform_sub_mapping(self, cr, uid, sub_mapping_list, external_data, referential_id, vals, mapping, defaults=None, context=None):
     """
     Used in _transform_one_external_resource in order to call the sub mapping
 
     @param sub_mapping_list: list of sub-mapping to apply
     @param external_data: list of data to convert into OpenERP data
-    @param external_referential_id: external referential id from where we import the resource
+    @param referential_id: external referential id from where we import the resource
     @param vals: dictionnary of value previously converted
     @param defauls: defaults value for the data imported
     @return: dictionary of converted data in OpenERP format 
@@ -223,7 +223,7 @@ def _transform_sub_mapping(self, cr, uid, sub_mapping_list, external_data, exter
         if ifield:
             field_name = ir_model_field_obj.read(cr, uid, sub_mapping['field_id'][0], ['name'], context=context)['name']
             vals[field_name] = []
-            lines = self.pool.get(sub_mapping['child_mapping_id'][1])._transform_external_resources(cr, uid, ifield, external_referential_id, mapping, parent_data=vals, defaults=defaults.get(field_name), context=context)
+            lines = self.pool.get(sub_mapping['child_mapping_id'][1])._transform_external_resources(cr, uid, ifield, referential_id, mapping, parent_data=vals, defaults=defaults.get(field_name), context=context)
             for line in lines:
                 if 'external_id' in line:
                     del line['external_id']
@@ -232,13 +232,13 @@ def _transform_sub_mapping(self, cr, uid, sub_mapping_list, external_data, exter
     return vals
 
 
-def _merge_with_default_values(self, cr, uid, sub_mapping_list, data_record, external_referential_id, vals, defaults=None, context=None):
+def _merge_with_default_values(self, cr, uid, sub_mapping_list, data_record, referential_id, vals, defaults=None, context=None):
     """
     Used in _transform_one_external_resource in order to merge the defaults values, some params are useless here but need in base_sale_multichannels to play the on_change
 
     @param sub_mapping_list: list of sub-mapping to apply
     @param external_data: list of data to convert into OpenERP data
-    @param external_referential_id: external referential id from where we import the resource
+    @param referential_id: external referential id from where we import the resource
     @param vals: dictionnary of value previously converted
     @param defauls: defaults value for the data imported
     @return: dictionary of converted data in OpenERP format 
@@ -249,11 +249,11 @@ def _merge_with_default_values(self, cr, uid, sub_mapping_list, data_record, ext
     return vals
 
 
-def _transform_one_external_resource(self, cr, uid, external_referential_id, data_record, mapping, parent_data=None, previous_lines=None, defaults=None, context=None):
+def _transform_one_external_resource(self, cr, uid, referential_id, data_record, mapping, parent_data=None, previous_lines=None, defaults=None, context=None):
     """
     Used in _transform_external_resources in order to convert external row of data into OpenERP data
 
-    @param external_referential_id: external referential id from where we import the resource
+    @param referential_id: external referential id from where we import the resource
     @param external_data_row: a dictionnary of data to convert into OpenERP data
     @param mapping dict: dictionnary of mapping {'product.product' : {'mapping_lines' : [...], 'key_for_external_id':'...'}}
     @param previous_lines: list of the previous line converted. This is not used here but it's necessary for playing on change on sale order line
@@ -301,7 +301,7 @@ def _transform_one_external_resource(self, cr, uid, external_referential_id, dat
                             'cr':cr,
                             'uid':uid,
                             'data':data_record,
-                            'external_referential_id':external_referential_id,
+                            'referential_id':referential_id,
                             'defaults':defaults,
                             'context':context,
                             'ifield':type_casted_field,
@@ -335,19 +335,19 @@ def _transform_one_external_resource(self, cr, uid, external_referential_id, dat
     if key_for_external_id and data_record.get(key_for_external_id):
         vals.update({'external_id': int(data_record[key_for_external_id])})
     
-    vals = self._merge_with_default_values(cr, uid, sub_mapping_list, data_record, external_referential_id, vals, defaults=defaults, context=context)
-    vals = self._transform_sub_mapping(cr, uid, sub_mapping_list, data_record, external_referential_id, vals, mapping, defaults=defaults, context=context)
+    vals = self._merge_with_default_values(cr, uid, sub_mapping_list, data_record, referential_id, vals, defaults=defaults, context=context)
+    vals = self._transform_sub_mapping(cr, uid, sub_mapping_list, data_record, referential_id, vals, mapping, defaults=defaults, context=context)
 
     return vals
 
 
 
 #TODO rename this function
-def get_external_data(self, cr, uid, conn, external_referential_id, defaults=None, context=None):
+def get_external_data(self, cr, uid, conn, referential_id, defaults=None, context=None):
     """Constructs data using WS or other synch protocols and then call ext_import on it"""
     return {'create_ids': [], 'write_ids': []}
 
-def _existing_oeid_for_extid_import(self, cr, uid, vals, external_id, external_referential_id, context=None):
+def _existing_oeid_for_extid_import(self, cr, uid, vals, external_id, referential_id, context=None):
     """
     Used in ext_import in order to search the OpenERP resource to update when importing an external resource.
     It searches the reference in ir.model.data and returns the id in ir.model.data and the id of the
@@ -363,11 +363,11 @@ def _existing_oeid_for_extid_import(self, cr, uid, vals, external_id, external_r
 
     @param vals: vals to create in OpenERP, already evaluated by _transform_one_external_resource
     @param external_id: external id of the resource to create
-    @param external_referential_id: external referential id from where we import the resource
+    @param referential_id: external referential id from where we import the resource
     @return: tuple of (ir.model.data id / False: external id to create in ir.model.data, model resource id / False: resource to create)
     """
     existing_ir_model_data_id, expected_res_id = self._extid_to_expected_oeid\
-        (cr, uid, external_id, external_referential_id, context=context)
+        (cr, uid, external_id, referential_id, context=context)
 
     # Take care of deleted resource ids, cleans up ir.model.data
     if existing_ir_model_data_id and expected_res_id and not self.exists(cr, uid, expected_res_id, context=context):
@@ -398,12 +398,12 @@ def _get_mapping(self, cr, uid, referential_id, context=None):
             "key_for_external_id": False,
                 }
 
-def _transform_external_resources(self, cr, uid, external_data, external_referential_id, parent_data=None, defaults=None, context=None, mapping=None):
+def _transform_external_resources(self, cr, uid, external_data, referential_id, parent_data=None, defaults=None, context=None, mapping=None):
     """
     Used in ext_import in order to convert all of the external data into OpenERP data
 
     @param external_data: list of external_data to convert into OpenERP data
-    @param external_referential_id: external referential id from where we import the resource
+    @param referential_id: external referential id from where we import the resource
     @param parent_data: data of the parent, only use when a mapping line have the type 'sub mapping'
     @param defauls: defaults value for data converted
     @return: list of the line converted into OpenERP value
@@ -413,10 +413,10 @@ def _transform_external_resources(self, cr, uid, external_data, external_referen
     result= []
     if external_data:
         if mapping.get(self._name) is None:
-            mapping[self._name] = self._get_mapping(cr, uid,  external_referential_id, context=context)
+            mapping[self._name] = self._get_mapping(cr, uid,  referential_id, context=context)
         if mapping[self._name].get("mapping_lines"):
             for each_row in external_data:
-                result.append(self._transform_one_external_resource(cr, uid, external_referential_id, each_row, mapping, parent_data, result, defaults, context))
+                result.append(self._transform_one_external_resource(cr, uid, referential_id, each_row, mapping, parent_data, result, defaults, context))
     return result
 
 def _get_filter(self, cr, uid, ref_called_from, context=None):
@@ -502,32 +502,32 @@ def _import_resources(self, cr, uid, ref_called_from, referential_id, defaults, 
     return result
 
 
-def _record_one_external_resource(self, cr, uid, row, external_referential_id, defaults=None, context=None, mapping=None):
+def _record_one_external_resource(self, cr, uid, row, referential_id, defaults=None, context=None, mapping=None):
     """
     Used in _record_external_resources
     The row will converted into OpenERP data by using the function _transform_external_resources
     And then created or updated, and an external id will be added into the table ir.model.data
 
     :param dict row: row_data to convert into OpenERP data
-    :param int external_referential_id: external referential id from where we import the resource
+    :param int referential_id: external referential id from where we import the resource
     :param dict defauls: defaults value
     :return: dictionary with the key "create_id" and "write_id" which containt the id created/written
     """
     logger = netsvc.Logger()
     written = created = False
-    vals = self._transform_external_resources(cr, uid, [row], external_referential_id, defaults=defaults, context=context, mapping=mapping)[0]
+    vals = self._transform_external_resources(cr, uid, [row], referential_id, defaults=defaults, context=context, mapping=mapping)[0]
     if not 'external_id' in vals:
         raise osv.except_osv(_('External Import Error'), _("The object imported need an external_id, maybe the mapping doesn't exist for the object : %s" %self._name))
     else:
         external_id = vals['external_id']
         del vals['external_id']
         existing_ir_model_data_id, existing_rec_id = self._existing_oeid_for_extid_import\
-            (cr, uid, vals, external_id, external_referential_id, context=context)
+            (cr, uid, vals, external_id, referential_id, context=context)
         if existing_rec_id:
-            if self.oe_update(cr, uid, existing_rec_id, vals, external_referential_id, defaults=defaults, context=context):
+            if self.oe_update(cr, uid, existing_rec_id, vals, referential_id, defaults=defaults, context=context):
                 written = True
         else:
-            existing_rec_id = self.oe_create(cr, uid, vals, external_referential_id, defaults, context=context)
+            existing_rec_id = self.oe_create(cr, uid, vals, referential_id, defaults, context=context)
             created = True                
 
         if existing_ir_model_data_id:
@@ -537,7 +537,7 @@ def _record_one_external_resource(self, cr, uid, row, external_referential_id, d
                 self.pool.get('ir.model.data').write(cr, uid, existing_ir_model_data_id, {'res_id': existing_rec_id}, context=context)
         else:
             ir_model_data_vals = \
-            self.create_external_id_vals(cr, uid, existing_rec_id, external_id, external_referential_id, context=context)
+            self.create_external_id_vals(cr, uid, existing_rec_id, external_id, referential_id, context=context)
             if not created:
                 # means the external resource is bound to an already existing resource
                 # but not registered in ir.model.data, we log it to inform the success of the binding
@@ -553,39 +553,39 @@ def _record_one_external_resource(self, cr, uid, row, external_referential_id, d
                             "external_id %s and OpenERP id %s successfully" %(self._name, external_id, existing_rec_id)))
             return {'write_id' : existing_rec_id}
 
-def _record_external_resources(self, cr, uid, external_data, external_referential_id, defaults=None, context=None):
+def _record_external_resources(self, cr, uid, external_data, referential_id, defaults=None, context=None):
     """
     Used in various function of MagentoERPconnect for exemple in order to import external data into OpenERP.
     This each row of the data will converted and then imported in OpenERP using the function _record_one_external_resource
 
     @param external_data: list of external_data to convert into OpenERP data
-    @param external_referential_id: external referential id from where we import the resource
+    @param referential_id: external referential id from where we import the resource
     @param defauls: defaults value
     @return: dictionary with the key "create_ids" and "write_ids" which containt a list of ids created/written
     """
 
     result = {'write_ids': [], 'create_ids': []}
-    mapping = self._get_mapping(cr, uid, external_referential_id, context=context)
+    mapping = self._get_mapping(cr, uid, referential_id, context=context)
     for row in external_data:
-        res = self._record_one_external_resource(cr, uid, row, external_referential_id, defaults=defaults, context=context, mapping=mapping)
+        res = self._record_one_external_resource(cr, uid, row, referential_id, defaults=defaults, context=context, mapping=mapping)
         if res.get('create_id'): result['create_ids'].append(res['create_id'])
         if res.get('write_id'): result['write_ids'].append(res['write_id'])
     return result        
 
-def retry_import(self, cr, uid, id, ext_id, external_referential_id, defaults=None, context=None):
+def retry_import(self, cr, uid, id, ext_id, referential_id, defaults=None, context=None):
     """ When we import again a previously failed import
     """
     raise osv.except_osv(_("Not Implemented"), _("Not Implemented in abstract base module!"))
 
-def oe_update(self, cr, uid, existing_rec_id, vals, external_referential_id, defaults, context):
+def oe_update(self, cr, uid, existing_rec_id, vals, referential_id, defaults, context):
     return self.write(cr, uid, existing_rec_id, vals, context)
 
 
-def oe_create(self, cr, uid, vals, external_referential_id, defaults, context):
+def oe_create(self, cr, uid, vals, referential_id, defaults, context):
     return self.create(cr, uid, vals, context)
 
 
-def extdata_from_oevals(self, cr, uid, external_referential_id, data_record, mapping_lines, defaults, context=None):
+def extdata_from_oevals(self, cr, uid, referential_id, data_record, mapping_lines, defaults, context=None):
     if context is None:
         context = {}
     vals = {} #Dictionary for record
@@ -598,7 +598,7 @@ def extdata_from_oevals(self, cr, uid, external_referential_id, data_record, map
             'self':self,
             'cr':cr,
             'uid':uid,
-            'external_referential_id':external_referential_id,
+            'referential_id':referential_id,
             'defaults':defaults,
             'context':context,
             'record':data_record,
@@ -629,27 +629,27 @@ def extdata_from_oevals(self, cr, uid, external_referential_id, data_record, map
     return vals
 
 
-def ext_export(self, cr, uid, ids, external_referential_ids=[], defaults={}, context=None):
+def ext_export(self, cr, uid, ids, referential_ids=[], defaults={}, context=None):
     if context is None:
         context = {}
-    #external_referential_ids has to be a list
+    #referential_ids has to be a list
     logger = netsvc.Logger()
     report_line_obj = self.pool.get('external.report.line')
     write_ids = []  #Will record ids of records modified, not sure if will be used
     create_ids = [] #Will record ids of newly created records, not sure if will be used
     for record_data in self.read_w_order(cr, uid, ids, [], context):
         #If no external_ref_ids are mentioned, then take all ext_ref_this item has
-        if not external_referential_ids:
+        if not referential_ids:
             ir_model_data_recids = self.pool.get('ir.model.data').search(cr, uid, [('model', '=', self._name), ('res_id', '=', id), ('module', 'ilike', 'extref')])
             if ir_model_data_recids:
-                for each_model_rec in self.pool.get('ir.model.data').read(cr, uid, ir_model_data_recids, ['external_referential_id']):
-                    if each_model_rec['external_referential_id']:
-                        external_referential_ids.append(each_model_rec['external_referential_id'][0])
-        #if still there no external_referential_ids then export to all referentials
-        if not external_referential_ids:
-            external_referential_ids = self.pool.get('external.referential').search(cr, uid, [])
+                for each_model_rec in self.pool.get('ir.model.data').read(cr, uid, ir_model_data_recids, ['referential_id']):
+                    if each_model_rec['referential_id']:
+                        referential_ids.append(each_model_rec['referential_id'][0])
+        #if still there no referential_ids then export to all referentials
+        if not referential_ids:
+            referential_ids = self.pool.get('external.referential').search(cr, uid, [])
         #Do an export for each external ID
-        for ext_ref_id in external_referential_ids:
+        for ext_ref_id in referential_ids:
             #Find the mapping record now
             mapping_id = self.pool.get('external.mapping').search(cr, uid, [('model', '=', self._name), ('referential_id', '=', ext_ref_id)])
             if mapping_id:
@@ -660,7 +660,7 @@ def ext_export(self, cr, uid, ids, external_referential_ids=[], defaults={}, con
                     #if mapping lines exist find the data conversion for each row in inward data
                     exp_data = self.extdata_from_oevals(cr, uid, ext_ref_id, record_data, mapping_lines, defaults, context)
                     #Check if export for this referential demands a create or update
-                    rec_check_ids = self.pool.get('ir.model.data').search(cr, uid, [('model', '=', self._name), ('res_id', '=', record_data['id']), ('module', 'ilike', 'extref'), ('external_referential_id', '=', ext_ref_id)])
+                    rec_check_ids = self.pool.get('ir.model.data').search(cr, uid, [('model', '=', self._name), ('res_id', '=', record_data['id']), ('module', 'ilike', 'extref'), ('referential_id', '=', ext_ref_id)])
                     #rec_check_ids will indicate if the product already has a mapping record with ext system
                     mapping_id = self.pool.get('external.mapping').search(cr, uid, [('model', '=', self._name), ('referential_id', '=', ext_ref_id)])
                     if mapping_id and len(mapping_id) == 1:
@@ -726,34 +726,34 @@ def ext_export(self, cr, uid, ids, external_referential_ids=[], defaults={}, con
                         cr.commit()
     return {'create_ids': create_ids, 'write_ids': write_ids}
 
-def _prepare_external_id_vals(self, cr, uid, res_id, ext_id, external_referential_id, context=None):
+def _prepare_external_id_vals(self, cr, uid, res_id, ext_id, referential_id, context=None):
     """ Create an external reference for a resource id in the ir.model.data table"""
     ir_model_data_vals = {
                             'name': self.prefixed_id(ext_id),
                             'model': self._name,
                             'res_id': res_id,
-                            'external_referential_id': external_referential_id,
+                            'referential_id': referential_id,
                             'module': 'extref/' + self.pool.get('external.referential').\
-                            read(cr, uid, external_referential_id, ['name'])['name']
+                            read(cr, uid, referential_id, ['name'])['name']
                           }
     return ir_model_data_vals
 
 
-def create_external_id_vals(self, cr, uid, existing_rec_id, external_id, external_referential_id, context=None):
+def create_external_id_vals(self, cr, uid, existing_rec_id, external_id, referential_id, context=None):
     """Add the external id in the table ir_model_data"""
     ir_model_data_vals = \
     self._prepare_external_id_vals(cr, uid, existing_rec_id,
-                                   external_id, external_referential_id,
+                                   external_id, referential_id,
                                    context=context)
     return self.pool.get('ir.model.data').create(cr, uid, ir_model_data_vals, context=context)
 
 
-def retry_export(self, cr, uid, id, ext_id, external_referential_id, defaults=None, context=None):
+def retry_export(self, cr, uid, id, ext_id, referential_id, defaults=None, context=None):
     """ When we export again a previously failed export
     """
-    conn = self.pool.get('external.referential').external_connection(cr, uid, external_referential_id)
+    conn = self.pool.get('external.referential').external_connection(cr, uid, referential_id)
     context['conn_obj'] = conn
-    return self.ext_export(cr, uid, [id], [external_referential_id], defaults, context)
+    return self.ext_export(cr, uid, [id], [referential_id], defaults, context)
 
 def can_create_on_update_failure(self, error, data, context):
     return True
@@ -785,7 +785,7 @@ def report_action_mapping(self, cr, uid, context=None):
         'export': {'method': self.retry_export, 
                    'fields': {'id': 'log.res_id',
                               'ext_id': 'log.external_id',
-                              'external_referential_id': 'log.external_report_id.external_referential_id.id',
+                              'referential_id': 'log.external_report_id.referential_id.id',
                               'defaults': 'log.origin_defaults',
                               'context': 'log.origin_context',
                               },
@@ -793,7 +793,7 @@ def report_action_mapping(self, cr, uid, context=None):
         'import': {'method': self.retry_import,
                    'fields': {'id': 'log.res_id',
                               'ext_id': 'log.external_id',
-                              'external_referential_id': 'log.external_report_id.external_referential_id.id',
+                              'referential_id': 'log.external_report_id.referential_id.id',
                               'defaults': 'log.origin_defaults',
                               'context': 'log.origin_context',
                               },

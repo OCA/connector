@@ -344,7 +344,7 @@ class ir_model_data(osv.osv):
           cr.execute("update ir_model_data set module = replace(module, '.','/') where module = %s;", (name,))
       return True
 
-    def _get_external_referential_id(self, cr, uid, ids, name, arg, context=None):
+    def _get_referential_id(self, cr, uid, ids, name, arg, context=None):
         res = {}
         for model_data in self.browse(cr, uid, ids, context):
             s = model_data.module.split('/') #we assume a module name with a '/' means external referential
@@ -359,14 +359,14 @@ class ir_model_data(osv.osv):
         return res
 
     _columns = {
-        'external_referential_id': fields.function(_get_external_referential_id, method=True, type="many2one", relation='external.referential', string='Ext. Referential', store=True),
-        #'external_referential_id':fields.many2one('external.referential', 'Ext. Referential'),
+        'referential_id': fields.function(_get_referential_id, method=True, type="many2one", relation='external.referential', string='Ext. Referential', store=True),
+        #'referential_id':fields.many2one('external.referential', 'Ext. Referential'),
         #'create_date': fields.datetime('Created date', readonly=True), #TODO used?
         #'write_date': fields.datetime('Updated date', readonly=True), #TODO used?
     }
     
     _sql_constraints = [
-        ('external_reference_uniq_per_object', 'unique(model, res_id, external_referential_id)', 'You cannot have on record with multiple external id for a sae referential'),
+        ('external_reference_uniq_per_object', 'unique(model, res_id, referential_id)', 'You cannot have on record with multiple external id for a sae referential'),
     ]
 
 ir_model_data()

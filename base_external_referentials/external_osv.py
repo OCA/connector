@@ -223,7 +223,7 @@ def import_with_try(self, cr, uid, callback, data_record, external_referential_i
                                     context=context)
     context['report_line_id'] = report_line_id
     import_cr = pooler.get_db(cr.dbname).cursor()
-    res = callback(import_cr, uid, data_record, external_referential_id, defaults, context=context)
+    res = callback(cr, uid, data_record, external_referential_id, defaults, context=context)
     try:
         res = callback(import_cr, uid, data_record, external_referential_id, defaults, context=context)
     except MappingError as e:
@@ -232,8 +232,10 @@ def import_with_try(self, cr, uid, callback, data_record, external_referential_i
                         'error_message': 'Error with the mapping : %s. Error details : %s'%(e.mapping_name, e.value),
                         }, context=context)
     except osv.except_osv as e:
+        import_cr.rollback()
         raise osv.except_osv(*e)
     except Exception as e:
+        import_cr.rollback()
         raise Exception(e)
     else:
         report_line_obj.write(cr, uid, report_line_id, {

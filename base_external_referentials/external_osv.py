@@ -29,22 +29,24 @@ class external_osv(osv.osv):
     
     def id_from_prefixed_id(self, prefixed_id):
         return prefixed_id.split(self._name + '_')[1]
+    
+    def referential_id(self, cr, uid, id):
+        model_data_id = self.pool.get('ir.model.data').search(cr,uid,[('res_id','=', id),('model','=',self._name)])
+        if model_data_id:
+            return self.pool.get('ir.model.data').read(cr,uid,model_data_id[0],['external_referential_id'])['external_referential_id'][0]
+        else:
+            return false
 
     def extid_to_oeid(self, cr, uid, ids, external_referential_id):
         #First get the external key field name
         #conversion external id -> OpenERP object using Object mapping_column_name key!
         mapping_id = self.pool.get('external.mapping').search(cr, uid, [('model', '=', self._name), ('referential_id', '=', external_referential_id)])
         if mapping_id:
-            #now get the external field name
-            ext_field_name = self.pool.get('external.mapping').read(cr, uid, mapping_id[0], ['external_key_name'])['external_key_name']
-            ext_field_value = self.read(cr,uid,ids,[ext_field_name])[ext_field_name]
-            if ext_field_name:
-                #now get the oe_id
-                model_data_id = self.pool.get('ir.model.data').search(cr,uid,[('name','=', self.prefixed_id(ext_field_value)),('model','=',self._name),('external_referential_id','=',external_referential_id)])
-                if model_data_id:
-                    oe_id = self.pool.get('ir.model.data').read(cr,uid,model_data_id,['res_id'])['res_id']
-                    if oe_id:
-                        return oe_id
+            model_data_id = self.pool.get('ir.model.data').search(cr,uid,[('name','=', self.prefixed_id(ids)),('model','=',self._name),('external_referential_id','=',external_referential_id)])[0]
+            if model_data_id:
+                oe_id = self.pool.get('ir.model.data').read(cr,uid,model_data_id,['res_id'])['res_id']
+                if oe_id:
+                    return oe_id
         return False
     
     def ext_import(self,cr, uid, data, external_referential_id, defaults={}, context={}):
@@ -98,7 +100,7 @@ class external_osv(osv.osv):
                             #Check if record exists
                             existing_ir_model_data_id = self.pool.get('ir.model.data').search(cr, uid, [('model', '=', self._name), ('name', '=', self.prefixed_id(external_referential_id))])
                             if existing_ir_model_data_id:
-                                existing_rec_id = self.pool.get('ir.model.data').read(cr, uid, self.id_from_prefixed_id(existing_ir_model_data_id), ['res_id'])[0]['res_id']
+                                existing_rec_id = self.pool.get('ir.model.data').read(cr, uid, existing_ir_model_data_id, ['res_id'])[0]['res_id']
                                 if self.write(cr,uid,existing_rec_id,vals,context):
                                     write_ids.append(existing_rec_id)
                             else:
@@ -142,7 +144,7 @@ class external_osv(osv.osv):
                                     'defaults':defaults,
                                     'context':context,
                                     'record':each_row
-                                        }
+                                    }
                             #The expression should return value in list of tuple format
                             #eg[('name','Sharoon'),('age',20)] -> vals = {'name':'Sharoon', 'age':20}
                             exec each_mapping_line['out_function'] in space

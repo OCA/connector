@@ -31,8 +31,6 @@ import pooler
 from message_error import MappingError, ExtConnError
 from tools.translate import _
 from tools import DEFAULT_SERVER_DATETIME_FORMAT, DEFAULT_SERVER_DATE_FORMAT
-from lxml import etree
-import re
 
 def read_w_order(self, cr, uid, ids, fields_to_read=None, context=None, load='_classic_read'):
     """ Read records with given ids with the given fields and return it respecting the order of the ids
@@ -205,7 +203,7 @@ def extid_to_oeid(self, cr, uid, id, external_referential_id, context=None):
             raise osv.except_osv(_('Ext Synchro'), _("Error when importing on fly the object %s with the external_id %s and the external referential %s.\n Error : %s" %(self._name, id, external_referential_id, error)))
     return False
 
-def _transform_sub_mapping(self, cr, uid, sub_mapping_list, external_data, external_referential_id, vals, defaults=None, context=None):
+def _transform_sub_mapping(self, cr, uid, sub_mapping_list, external_data, external_referential_id, vals, mapping, defaults=None, context=None):
     """
     Used in _transform_one_external_resource in order to call the sub mapping
 
@@ -225,7 +223,7 @@ def _transform_sub_mapping(self, cr, uid, sub_mapping_list, external_data, exter
         if ifield:
             field_name = ir_model_field_obj.read(cr, uid, sub_mapping['field_id'][0], ['name'], context=context)['name']
             vals[field_name] = []
-            lines = self.pool.get(sub_mapping['child_mapping_id'][1])._transform_external_resources(cr, uid, ifield, external_referential_id, parent_data=vals, defaults=defaults.get(field_name), context=context)
+            lines = self.pool.get(sub_mapping['child_mapping_id'][1])._transform_external_resources(cr, uid, ifield, external_referential_id, mapping, parent_data=vals, defaults=defaults.get(field_name), context=context)
             for line in lines:
                 if 'external_id' in line:
                     del line['external_id']
@@ -234,7 +232,7 @@ def _transform_sub_mapping(self, cr, uid, sub_mapping_list, external_data, exter
     return vals
 
 
-def merge_with_default_value(self, cr, uid, sub_mapping_list, data_record, external_referential_id, vals, defaults=None, context=None):
+def _merge_with_default_values(self, cr, uid, sub_mapping_list, data_record, external_referential_id, vals, defaults=None, context=None):
     """
     Used in _transform_one_external_resource in order to merge the defaults values, some params are useless here but need in base_sale_multichannels to play the on_change
 
@@ -251,14 +249,13 @@ def merge_with_default_value(self, cr, uid, sub_mapping_list, data_record, exter
     return vals
 
 
-def _transform_one_external_resource(self, cr, uid, external_referential_id, data_record, mapping_lines, key_for_external_id=None, parent_data=None, previous_lines=None, defaults=None, context=None):
+def _transform_one_external_resource(self, cr, uid, external_referential_id, data_record, mapping, parent_data=None, previous_lines=None, defaults=None, context=None):
     """
     Used in _transform_external_resources in order to convert external row of data into OpenERP data
 
     @param external_referential_id: external referential id from where we import the resource
     @param external_data_row: a dictionnary of data to convert into OpenERP data
-    @param mapping_lines: list of mapping line used to convert external data row into OpenERP data
-    @param key_for_external_id: string which is the key for getting the external_id
+    @param mapping dict: dictionnary of mapping {'product.product' : {'mapping_lines' : [...], 'key_for_external_id':'...'}}
     @param previous_lines: list of the previous line converted. This is not used here but it's necessary for playing on change on sale order line
     @param defauls: defaults value for the data imported
     @return: dictionary of converted data in OpenERP format 
@@ -267,6 +264,9 @@ def _transform_one_external_resource(self, cr, uid, external_referential_id, dat
         context = {}
     if defaults is None:
         defaults = {}
+
+    mapping_lines = mapping[self._name].get("mapping_line")
+    key_for_external_id = mapping[self._name].get("key_for_external_id")
 
     vals = {} #Dictionary for create record
     sub_mapping_list=[]
@@ -335,8 +335,8 @@ def _transform_one_external_resource(self, cr, uid, external_referential_id, dat
     if key_for_external_id and data_record.get(key_for_external_id):
         vals.update({'external_id': int(data_record[key_for_external_id])})
     
-    vals = self.merge_with_default_value(cr, uid, sub_mapping_list, data_record, external_referential_id, vals, defaults=defaults, context=context)
-    vals = self._transform_sub_mapping(cr, uid, sub_mapping_list, data_record, external_referential_id, vals, defaults=defaults, context=context)
+    vals = self._merge_with_default_values(cr, uid, sub_mapping_list, data_record, external_referential_id, vals, defaults=defaults, context=context)
+    vals = self._transform_sub_mapping(cr, uid, sub_mapping_list, data_record, external_referential_id, vals, mapping, defaults=defaults, context=context)
 
     return vals
 
@@ -375,8 +375,14 @@ def _existing_oeid_for_extid_import(self, cr, uid, vals, external_id, external_r
         existing_ir_model_data_id = expected_res_id = False
     return existing_ir_model_data_id, expected_res_id
 
-def _get_mapping(self, cr, uid, external_referential_id, context=None):
-    mapping_id = self.pool.get('external.mapping').search(cr, uid, [('model', '=', self._name), ('referential_id', '=', external_referential_id)])
+def _get_mapping(self, cr, uid, referential_id, context=None):
+    """
+    Function that return the mapping line for the corresponding object
+
+    :param  int referential_id: the referential id
+    :return: dictionary with the key "mapping_lines" and "key_for_external_id" 
+    """
+    mapping_id = self.pool.get('external.mapping').search(cr, uid, [('model', '=', self._name), ('referential_id', '=', referential_id)])
     if not mapping_id:
         raise osv.except_osv(_('External Import Error'), _("The object %s doesn't have an external mapping" %self._name))
     else:
@@ -406,15 +412,14 @@ def _transform_external_resources(self, cr, uid, external_data, external_referen
         mapping = {}
     result= []
     if external_data:
-        if mapping.get(self._name, []) is None:
+        if mapping.get(self._name) is None:
             mapping[self._name] = self._get_mapping(cr, uid,  external_referential_id, context=context)
-        if mapping.get(self._name):
+        if mapping[self._name].get("mapping_lines"):
             for each_row in external_data:
-                result.append(self._transform_one_external_resource(cr, uid, external_referential_id, each_row, mapping_lines, key_for_external_id, parent_data, result, defaults, context))
+                result.append(self._transform_one_external_resource(cr, uid, external_referential_id, each_row, mapping, parent_data, result, defaults, context))
     return result
 
-
-def _get_defaults_values(self, cr, uid, ref_called_from, context=context):
+def _get_filter(self, cr, uid, ref_called_from, context=None):
     """
     Abstract function that return the default value
     Can be overwriten in your module
@@ -425,7 +430,18 @@ def _get_defaults_values(self, cr, uid, ref_called_from, context=context):
     """
     return None
 
-def _get_import_step(cr, uid, ref_called_from, referential_id, context=context):
+def _get_default_values(self, cr, uid, ref_called_from, context=None):
+    """
+    Abstract function that return the default value
+    Can be overwriten in your module
+
+    :param browse_record ref_called_from: reference (shop, referential, ...) that call the import 
+    :param string ressource_name: the resource to import
+    :return: dictionary with the key "create_ids" and "write_ids" which containt the id created/written
+    """
+    return None
+
+def _get_import_step(cr, uid, ref_called_from, referential_id, context=None):
     """
     Abstract function that return the default step for importing data
     Can be overwriten in your module
@@ -435,6 +451,17 @@ def _get_import_step(cr, uid, ref_called_from, referential_id, context=context):
     :return: dictionary with the key "create_ids" and "write_ids" which containt the id created/written
     """
     return 100
+
+def _get_external_resources(cr, uid, ref_called_from, referential_id, filter, context=None):
+    """
+    Abstract function that call the external system to fetch data
+    Not implemented here
+
+    :param browse_record ref_called_from: reference (shop, referential, ...) that call the import 
+    :param string ressource_name: the resource to import
+    :return: dictionary with the key "create_ids" and "write_ids" which containt the id created/written
+    """
+    raise osv.except_osv(_("Not Implemented"), _("Not Implemented in abstract base module!"))
 
 def import_resources(self, cr, uid, ids, resource_name, referential_id, context=None):
     """
@@ -446,8 +473,8 @@ def import_resources(self, cr, uid, ids, resource_name, referential_id, context=
     """
     result = {"create_ids" : [], "write_ids" : []}
     for ref_called_from in self.browse(cr, uid, ids, context=context):
-        defaults = object.get_defaults_values(context=context)
-        res = self.pool.get(ressource_name)._import_ressources(cr, uid, ref_called_from, defaults, context=context)
+        defaults = object.get_default_values(context=context)
+        res = self.pool.get(resource_name)._import_resources(cr, uid, ref_called_from, defaults, context=context)
         for key in result:
             result[key].append(res.get(key, []))
     return result
@@ -468,8 +495,8 @@ def _import_resources(self, cr, uid, ref_called_from, referential_id, defaults, 
     resources = self._get_external_resources(cr, uid, ref_called_from, referential_id, context=context)
     while resources:
         filter = self._get_filter(cr, uid, ref_called_from, referential_id, step, context=context)
-        resources = self._get_external_resources(cr, uid, ref_called_from, referential_id, context=context)
-        res = self._record_external_resources(self, cr, uid, external_data, external_referential_id, defaults=defaults, context=context)
+        resources = self._get_external_resources(cr, uid, ref_called_from, referential_id, filter, context=context)
+        res = self._record_external_resources(self, cr, uid, resources, referential_id, defaults=defaults, context=context, mapping=mapping)
         for key in result:
             result[key].append(res.get(key, []))
     return result
@@ -486,7 +513,7 @@ def _record_one_external_resource(self, cr, uid, row, external_referential_id, d
     :param dict defauls: defaults value
     :return: dictionary with the key "create_id" and "write_id" which containt the id created/written
     """
-
+    logger = netsvc.Logger()
     written = created = False
     vals = self._transform_external_resources(cr, uid, [row], external_referential_id, defaults=defaults, context=context, mapping=mapping)[0]
     if not 'external_id' in vals:
@@ -499,7 +526,6 @@ def _record_one_external_resource(self, cr, uid, row, external_referential_id, d
         if existing_rec_id:
             if self.oe_update(cr, uid, existing_rec_id, vals, external_referential_id, defaults=defaults, context=context):
                 written = True
-                write_ids.append(existing_rec_id)
         else:
             existing_rec_id = self.oe_create(cr, uid, vals, external_referential_id, defaults, context=context)
             created = True                
@@ -539,7 +565,6 @@ def _record_external_resources(self, cr, uid, external_data, external_referentia
     """
 
     result = {'write_ids': [], 'create_ids': []}
-    logger = netsvc.Logger()
     mapping = self._get_mapping(cr, uid, external_referential_id, context=context)
     for row in external_data:
         res = self._record_one_external_resource(cr, uid, row, external_referential_id, defaults=defaults, context=context, mapping=mapping)
@@ -794,13 +819,15 @@ osv.osv.get_external_data = get_external_data
 
 osv.osv.retry_import = retry_import
 osv.osv._get_mapping = _get_mapping
+osv.osv._get_default_values = _get_default_values
 osv.osv._get_import_step = _get_import_step
 
 osv.osv._get_filter = _get_filter
-osv.osv._get_external_ressources = _get_external_ressources
+osv.osv._get_external_resources = _get_external_resources
 
 osv.osv.import_resources = import_resources
-osv.osv._import_one_resource = _import_one_resource
+osv.osv._import_resources = _import_resources
+#osv.osv._import_one_resource = _import_one_resource
 
 osv.osv._record_external_resources = _record_external_resources
 osv.osv._record_one_external_resource = _record_one_external_resource
@@ -809,7 +836,7 @@ osv.osv._transform_external_resources = _transform_external_resources
 osv.osv._transform_one_external_resource = _transform_one_external_resource
 
 osv.osv._transform_sub_mapping = _transform_sub_mapping
-osv.osv._merge_with_default_value = _merge_with_default_value
+osv.osv._merge_with_default_values = _merge_with_default_values
 
 osv.osv.oe_update = oe_update
 osv.osv.oe_create = oe_create

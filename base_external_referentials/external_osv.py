@@ -30,11 +30,12 @@ import pooler
 from tools.translate import _
 
 class MappingError(Exception):
-     def __init__(self, value, name):
-         self.value = value
-         self.mapping_name = name
-     def __str__(self):
-         return repr(self.value)
+    def __init__(self, value, mapping_name, mapping_object):
+        self.value = value
+        self.mapping_name = mapping_name
+        self.mapping_object = mapping_object
+    def __str__(self):
+        return repr('the mapping line : %s for the object %s have an error : %s'%(self.mapping_name, self.mapping_object, self.value))
         
 class ExtConnError(Exception):
      def __init__(self, value):
@@ -185,10 +186,19 @@ def oevals_from_extdata(self, cr, uid, external_referential_id, data_record, key
                     type_casted_field = []
                 else:
                     type_casted_field = ifield
+<<<<<<< TREE
 
             if type_casted_field in ['None', 'False']:
+=======
+                if not type_casted_field and each_mapping_line['external_type'] == 'list':
+                    type_casted_field = []
+>>>>>>> MERGE-SOURCE
                 type_casted_field = False
+<<<<<<< TREE
 
+=======
+                    raise MappingError(e, each_mapping_line['external_field'], self._name)
+>>>>>>> MERGE-SOURCE
             #Build the space for expr
             space = {
                         'self':self,
@@ -216,7 +226,7 @@ def oevals_from_extdata(self, cr, uid, external_referential_id, data_record, key
                 # For which purpose should we let the error go silently ? What is this dont_rais_error ?
                 # I think that MappingError must always be raised and be catched at higher level
                 if not context.get('dont_raise_error', False):
-                    raise MappingError(e, each_mapping_line['external_field'])
+                    raise MappingError(e, each_mapping_line['external_field'], self._name)
             
             result = space.get('result', False)
             # Check if result returned by the mapping function is correct : [('field1': value), ('field2': value))]
@@ -229,7 +239,7 @@ def oevals_from_extdata(self, cr, uid, external_referential_id, data_record, key
                 else:
                     # same comment as upper
                     if not context.get('dont_raise_error', False):
-                        raise MappingError(_('Invalid format for the variable result.'), each_mapping_line['external_field'])
+                        raise MappingError(_('Invalid format for the variable result.'), each_mapping_line['external_field'], self._name)
     return vals
 
 
@@ -421,7 +431,7 @@ def extdata_from_oevals(self, cr, uid, external_referential_id, data_record, map
                             vals[each_tuple[0]] = each_tuple[1]
                 else:
                     if not context.get('dont_raise_error', False):
-                        raise MappingError(_('Invalid format for the variable result.'), each_mapping_line['external_field'])
+                        raise MappingError(_('Invalid format for the variable result.'), each_mapping_line['external_field'], self._name)
     return vals
 
 

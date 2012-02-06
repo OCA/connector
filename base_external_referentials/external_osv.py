@@ -40,8 +40,6 @@ class ExtConnError(Exception):
      def __str__(self):
          return repr(self.value)
 
-class external_osv(osv.osv):
-    pass #FIXME remove! only here for compatibility purpose for now
 
 def read_w_order(self, cr, user, ids, fields_to_read=None, context=None, load='_classic_read'):
     res = self.read(cr, user, ids, fields_to_read, context, load)

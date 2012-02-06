@@ -5,10 +5,12 @@ from osv import osv, fields
 from tools.translate import _
 from tools.safe_eval import safe_eval
 
+# TODO implement shop_id in base_sale_multichannels
 
 class external_report(osv.osv):
     _name = 'external.report'
     _description = 'External Report'
+    _order = 'end_date desc'
 
 #    def _count_failed_lines(self, cr, uid, ids, field_name, arg, context):
 #        res = {}
@@ -25,7 +27,8 @@ class external_report(osv.osv):
                            help="Internal reference which represents "
                                 "the action like export catalog "
                                 "or import orders"),
-        'date': fields.datetime('Date', required=True, readonly=True),
+        'start_date': fields.datetime('Last Start Date', readonly=True),
+        'end_date': fields.datetime('Last End Date', readonly=True),
         'external_referential_id': fields.many2one('external.referential',
                                                    'External Referential',
                                                    required=True,
@@ -38,11 +41,6 @@ class external_report(osv.osv):
         'failed_line_ids': fields.one2many('external.report.line', 'external_report_id', 'Failed Report Lines', domain=[('state', '=', 'fail')]),
         'history_ids': fields.one2many('external.report.history', 'external_report_id', 'History'),
     }
-
-    _defaults = {
-        "date": lambda *a: time.strftime("%Y-%m-%d %H:%M:%S")
-    }
-
 
     def get_report_by_ref(self, cr, uid, ref, external_referential_id, context=None):
         report_id = False
@@ -78,11 +76,11 @@ class external_report(osv.osv):
             report_id = self.get_report_by_ref(cr, uid, ref, external_referential_id, context)
 
         log_cr = pooler.get_db(cr.dbname).cursor()
-
         try:
             if report_id:
                 self.write(log_cr, uid, report_id,
-                           {'date': time.strftime("%Y-%m-%d %H:%M:%S")},
+                           {'start_date': time.strftime("%Y-%m-%d %H:%M:%S"),
+                            'end_date': False},
                            context=context)
 
                 # clean successful lines of the last report
@@ -91,7 +89,8 @@ class external_report(osv.osv):
                 report_id = self.create(log_cr, uid,
                                         {'name': ref,  # TODO get a correct name for the user
                                          'ref': ref,
-                                         'external_referential_id': external_referential_id
+                                         'external_referential_id': external_referential_id,
+                                         'start_date': time.strftime("%Y-%m-%d %H:%M:%S"),
                                          },
                                         context=context)
             log_cr.commit()
@@ -127,6 +126,10 @@ class external_report(osv.osv):
                         'state': state
                     }, context=context)
 
+            self.write(log_cr, uid, id,
+                       {'end_date': time.strftime("%Y-%m-%d %H:%M:%S")},
+                       context=context)
+                
             log_cr.commit()
         finally:
             log_cr.close()
@@ -139,17 +142,19 @@ class external_report_history(osv.osv):
     _name = 'external.report.history'
     _description = 'External Report History'
     _rec_name = 'external_report_id'
+    _order = 'date desc'
 
     _columns = {
         'external_report_id': fields.many2one('external.report',
                                               'External Report',
                                               required=True,
-                                              readonly=True),
+                                              readonly=True,
+                                              ondelete='cascade'),
         'date': fields.datetime('Date', required=True, readonly=True),
         'res_model': fields.char('Resource Object', size=64,
                                  required=True, readonly=True),
         'method': fields.char('Method', size=64, required=True, readonly=True),
-        'count': fields.integer('Count'),
+        'count': fields.integer('Count', readonly=True),
         'user_id':fields.many2one('res.users', 'User', required=True, readonly=True),
         'state': fields.selection((('success', 'Success'),
                                    ('fail', 'Failed')),
@@ -167,6 +172,7 @@ class external_report_lines(osv.osv):
     _name = 'external.report.line'
     _description = 'External Report Lines'
     _rec_name = 'res_id'
+    _order = 'date desc'
 
     METHOD_EXPORT = 'export'
     METHOD_IMPORT = 'import'
@@ -189,7 +195,8 @@ class external_report_lines(osv.osv):
         'external_report_id': fields.many2one('external.report',
                                               'External Report',
                                               required=True,
-                                              readonly=True),
+                                              readonly=True,
+                                              ondelete='restrict'),
         'state': fields.selection((('success', 'Success'),
                                    ('fail', 'Failed')),
                                    'Status', required=True, readonly=True),
@@ -198,7 +205,7 @@ class external_report_lines(osv.osv):
         'res_id': fields.integer('Resource Id', readonly=True),
         'method': fields.selection(_method_selection,
                                     'Method', required=True, readonly=True),
-        'timestamp': fields.datetime('Date', required=True, readonly=True),
+        'date': fields.datetime('Date', required=True, readonly=True),
         'external_id': fields.char('External ID', size=64, readonly=True),
         'error_message': fields.text('Error Message', readonly=True),
         'origin_defaults': fields.text('Defaults', readonly=True),
@@ -206,10 +213,9 @@ class external_report_lines(osv.osv):
     }
 
     _defaults = {
-        "timestamp": lambda *a: time.strftime("%Y-%m-%d %H:%M:%S")
+        "date": lambda *a: time.strftime("%Y-%m-%d %H:%M:%S")
     }
-    _order = "timestamp desc"
-
+    
     def _log_base(self, cr, uid, state, model, method,
                  external_referential_id, res_id=None, external_id=None,
                  exception=None, defaults=None, context=None):
@@ -240,7 +246,7 @@ class external_report_lines(osv.osv):
                 self.write(log_cr, uid,
                                context['retry_from_log_id'],
                                {'state': state,
-                                'timestamp': time.strftime("%Y-%m-%d %H:%M:%S"),
+                                'date': time.strftime("%Y-%m-%d %H:%M:%S"),
                                 'error_message': exception and str(exception) or False,
                                 'origin_defaults': str(origin_defaults),
                                 'origin_context': str(origin_context),
@@ -252,7 +258,7 @@ class external_report_lines(osv.osv):
                                 'res_model': model,
                                 'method': method,
                                 'external_referential_id': external_referential_id,
-                                'timestamp': time.strftime("%Y-%m-%d %H:%M:%S"),
+                                'date': time.strftime("%Y-%m-%d %H:%M:%S"),
                                 'res_id': res_id,
                                 'external_id': external_id,
                                 'error_message': exception and str(exception) or False,

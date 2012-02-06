@@ -256,7 +256,7 @@ def ext_import(self, cr, uid, data, external_referential_id, defaults=None, cont
 def retry_import(self, cr, uid, id, external_referential_id, defaults=None, context=None):
     """ When we import again a previously failed import
     """
-    raise NotImplementedError
+    raise osv.except_osv(_("Not Implemented"), _("Not Implemented in abstract base module!"))
 
 def oe_update(self, cr, uid, existing_rec_id, vals, data, external_referential_id, defaults, context):
     return self.write(cr, uid, existing_rec_id, vals, context)

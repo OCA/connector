@@ -10,7 +10,9 @@
 			<field name="arch" type="xml">
 				<form string="External Report">
                     <field name="name"/>
-                    <field name="date"/>
+                    <newline/>
+                    <field name="start_date"/>
+                    <field name="end_date"/>
                     <field name="external_referential_id"/>
                     <newline/>
                     <field name="failed_line_ids" nolabel="1" colspan="4">
@@ -18,7 +20,7 @@
                             <field name="state" invisible="True"/>
                             <field name="res_model"/>
                             <field name="method"/>
-                            <field name="timestamp"/>
+                            <field name="date"/>
                             <field name="res_id"/>
                             <field name="external_id"/>
                             <field name="error_message"/>
@@ -47,7 +49,8 @@
 			<field name="arch" type="xml">
 				<tree string="External Reports">
                     <field name="name"/>
-                    <field name="date"/>
+                    <field name="start_date"/>
+                    <field name="end_date"/>
                     <field name="external_referential_id"/>
 				</tree>
 			</field>
@@ -100,7 +103,7 @@
                     <field name="res_id"/>
                     <field name="external_id"/>
                     <field name="method"/>
-                    <field name="timestamp"/>
+                    <field name="date"/>
                     <field name="state"/>
                     <separator colspan="4"/>
                     <group colspan="4" col="3">
@@ -123,7 +126,7 @@
                     <field name="state"/>
                     <field name="res_model"/>
                     <field name="method"/>
-                    <field name="timestamp"/>
+                    <field name="date"/>
                     <field name="res_id"/>
                     <field name="external_id"/>
                     <field name="error_message"/>

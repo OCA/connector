@@ -47,7 +47,7 @@ to customize their field mapping directly in OpenERP to accomodate the external 
     'website': 'http://www.akretion.com, http://openlabs.co.in/',
     'depends': ['base'],
     'init_xml': [],
-    'update_xml': ['base_external_referentials_view.xml'],
+    'update_xml': ['base_external_referentials_view.xml', 'report.xml'],
     'demo_xml': [],
     'installable': True,
     'certificate': '',

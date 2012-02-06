@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+		<record id="external_report_line_form_view" model="ir.ui.view">
+			<field name="name">external_report_line_form_view</field>
+			<field name="model">external.report.line</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form>
+                    <field name="external_report_id"/>
+                    <field name="res_model"/>
+                    <field name="res_id"/>
+                    <field name="external_id"/>
+                    <field name="method"/>
+                    <field name="timestamp"/>
+                    <field name="state"/>
+                    <separator colspan="4"/>
+                    <group colspan="4" col="3">
+                        <field name="error_message"/>
+                        <field name="origin_defaults"/>
+                        <field name="origin_context"/>
+                    </group>
+                    <separator colspan="4"/>
+                    <button name="execute" string="Execute Again!" icon="gtk-go-forward" type="object" colspan="2"/>
+				</form>
+			</field>
+		</record>
+
+		<record id="external_report_line_tree_view" model="ir.ui.view">
+			<field name="name">external_report_line_tree_view</field>
+			<field name="model">external.report.line</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+				<tree colors="red:state=='failed'">
+                    <field name="state"/>
+                    <field name="res_model"/>
+                    <field name="method"/>
+                    <field name="timestamp"/>
+                    <field name="state"/>
+                    <field name="res_id"/>
+                    <field name="external_id"/>
+                    <field name="error_message"/>
+				</tree>
+			</field>
+		</record>
+
+		<record id="ir_actions_act_window_external_report_line" model="ir.actions.act_window">
+			<field eval="&quot;&quot;&quot;form&quot;&quot;&quot;" name="view_type" />
+			<field eval="&quot;&quot;&quot;external.report.line&quot;&quot;&quot;" name="res_model" />
+			<field eval="&quot;&quot;&quot;tree,form&quot;&quot;&quot;" name="view_mode" />
+			<field eval="&quot;&quot;&quot;current&quot;&quot;&quot;" name="target" />
+			<field eval="&quot;&quot;&quot;external_report_line&quot;&quot;&quot;" name="name" />
+			<field eval="80" name="limit" />
+			<field eval="&quot;&quot;&quot;{}&quot;&quot;&quot;" name="context" />
+			<field eval="&quot;&quot;&quot;ir.actions.act_window&quot;&quot;&quot;" name="type" />
+		</record>
+
+		<menuitem id="ir_ui_menu_external_report_line" name="External Report Lines" parent="base.next_id_9" action="ir_actions_act_window_external_report_line" />
+    </data>
+</openerp>

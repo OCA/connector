@@ -299,6 +299,27 @@ class external_mapping(osv.osv):
         'external_key_name':fields.char('External field used as key', size=64),
     }
 
+    def add_all_fields(self, cr, uid, ids, context={}):
+    	print "IN add all fields"
+    	mapping_line_obj = self.pool.get('external.mapping.line')
+    	mapping = self.browse(cr, uid, ids)[0]
+    	print "maaping_id: ",mapping.id
+    	for field in mapping.model_id.field_id:
+    		print "field: ",field
+    		print "field_id: ",field.id
+    		vals = {'mapping_id': mapping.id,
+    				'field_id': field.id,
+					'type' : 'in_out',
+                    'active' : True,
+                    }
+    		mapping_line_obj.create(cr, uid, vals)
+    		
+        return True
+
+    def create_mapping_file(self, cr, uid, vals, context=None):
+        print "IN create_mapping_file"
+        return True
+                
 external_mapping()
 
 

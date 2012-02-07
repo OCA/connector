@@ -22,6 +22,8 @@
 
 from osv import fields, osv
 from sets import Set
+from tools.translate import _
+
 
 class external_referential_category(osv.osv):
     _name = 'external.referential.category'
@@ -313,12 +315,31 @@ class external_mapping(osv.osv):
         return True
 
 	# Method to export the mapping file
-    def create_mapping_file(self, cr, uid, vals, context=None):
-        print "IN create_mapping_file"
-        print "file first line with columns titles"
+    def create_mapping_file(self, cr, uid, ids, context={}):
+        mapping_line = "\"id\",\"version_id:id\",\"model_id:id\",\"external_field\",\"field_id:id\",\"type\",\"evaluation_type\",\"external_type\",\"child_mapping_id:id\",\"in_function\",\"out_function\"\n"
         mapping = self.browse(cr, uid, ids)[0]
-    	for field in mapping.model_id.field_id:
-    		print "line with col values"
+    	for line in mapping.mapping_ids:
+    		if line.external_field!=False and line.active==True:
+    			mapping_line += "\""+mapping.referential_id.version_id.name+"_erp_"+line.external_field+"\","
+    			mapping_line += "\""+str(mapping.referential_id.version_id.id)+"\","
+    			mapping_line += "\""+str(mapping.model_id.id)+"\","
+    			mapping_line += "\""+line.external_field+"\","
+    			mapping_line += "\""+str(line.field_id.id)+"\","
+    			mapping_line += "\""+line.type+"\","
+    			if line.evaluation_type!=False:
+    				mapping_line += "\""+line.evaluation_type+"\""
+    			mapping_line += ","
+    			if line.external_type!=False:
+    				mapping_line += "\""+line.external_type+"\""
+    			mapping_line += ","
+    			mapping_line += "\""+str(line.child_mapping_id)+"\","
+    			if line.in_function!=False:
+    				mapping_line += "\""+line.in_function+"\""
+    			mapping_line += ","
+    			if line.out_function!=False:
+    				mapping_line += "\""+line.out_function+"\""
+    			mapping_line += "\n"
+    	raise osv.except_osv(_('Mapping lines'), _(mapping_line))
         return True
                 
 external_mapping()

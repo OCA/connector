@@ -83,19 +83,17 @@
 									<field name="sequence" />
 									<field name="type" />
                                     <field name="evaluation_type" />
-									<separator string="Internal fields" colspan="2"/>
 									<separator string="External fields" colspan="2"/>
-									<field name="field_id" domain="[('model_id','=',parent.model_id)]" />
+									<separator string="Internal fields" colspan="2"/>
 									<field name="external_field" />
-									<separator string=" " colspan="2"/>
+									<field name="field_id" domain="[('model_id','=',parent.model_id)]" />
 									<field name="external_type" />
-									
                                     <field name="child_mapping_id" colspan="4" attrs="{'invisible':[('evaluation_type','!=','sub-mapping')]}"/>
-                                    <group string="function" attrs="{'invisible':[('evaluation_type','!=','function')]}" colspan="4">
-									    <newline />
-									    <field name="in_function" colspan="4"/>
-									    <newline />
-									    <field name="out_function" colspan="4"/>
+                                    <group attrs="{'invisible':[('evaluation_type','!=','function')]}" colspan="4">
+									    <separator string="Import in OpenERP Mapping Python Function" colspan="2"/>
+									    <separator string="Export from OpenERP Mapping Python Function" colspan="2"/>
+									    <field name="in_function" colspan="2" nolabel="1"/>
+									    <field name="out_function" colspan="2" nolabel="1"/>
                                     </group>
 								</form>
 							</field>

@@ -332,7 +332,7 @@ class external_mapping(osv.osv):
     			if line.external_type!=False:
     				mapping_line += "\""+line.external_type+"\""
     			mapping_line += ","
-    			mapping_line += "\""+str(line.child_mapping_id)+"\","
+    			mapping_line += "\""+str(line.child_mapping_id.id)+"\","
     			if line.in_function!=False:
     				mapping_line += "\""+line.in_function+"\""
     			mapping_line += ","

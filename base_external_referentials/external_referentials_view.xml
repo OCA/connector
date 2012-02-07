@@ -1,7 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <openerp>
 	<data>
-		<record id="external_referential_form_view" model="ir.ui.view">
+
+        <record model="ir.ui.view" id="external_referential_search_view">
+            <field name="name">external.referential.search.view</field>
+            <field name="model">external.referential</field>
+            <field name="type">search</field>
+            <field name="arch" type="xml">
+                <search string="External Referential">
+                   <field name="name"/>
+                   <field name="type_id"/>
+                   <field name="categ_id"/>
+                   <newline/>
+                   <group  expand='0' string='Group by...' groups="base.group_extended">
+                       <filter string='Category' icon="terp-stock_symbol-selection" domain="[]" context="{'group_by' : 'categ_id'}" />
+                   </group>
+                </search>
+            </field>
+        </record>
+
+		<record model="ir.ui.view" id="external_referential_form_view">
 			<field name="name">external_referential_form_view</field>
 			<field name="model">external.referential</field>
 			<field name="type">form</field>
@@ -14,7 +32,7 @@
 							<page string="General">
 							    <field name="version_id"/>
 							    <field name="location"/>
-					<field name="type_id"/>
+                                <field name="categ_name" invisible="True"/>
 							</page>
 							<page string="Authentication">
 								<field name="apiusername" />
@@ -98,6 +116,19 @@
 				    <field name="name" />
                     <field name="full_name" />
 					<field name="type_id"/>
+				</form>
+			</field>
+		</record>
+
+		<record id="external_referential_type_form_view" model="ir.ui.view">
+			<field name="name">external_referential_type_form_view</field>
+			<field name="model">external.referential.type</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form>
+				    <field name="name" />
+				    <field name="categ_id" />
+					<field name="version_ids" colspan="4"/>
 				</form>
 			</field>
 		</record>

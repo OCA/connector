@@ -23,13 +23,25 @@
 from osv import fields, osv
 from sets import Set
 
+class external_referential_category(osv.osv):
+    _name = 'external.referential.category'
+    _description = 'External Referential Category (Ex: e-commerce, crm, warehouse)'
+    
+    _columns = {
+        'name': fields.char('Name', size=64, required=True), #dont allow creation of type from frontend
+        'type_ids': fields.one2many('external.referential.type', 'categ_id', 'Types', required=True)
+    }
+    
+external_referential_category()
+
 class external_referential_type(osv.osv):
     _name = 'external.referential.type'
     _description = 'External Referential Type (Ex.Magento,Spree)'
     
     _columns = {
         'name': fields.char('Name', size=64, required=True), #dont allow creation of type from frontend
-        'version_ids': fields.one2many('external.referential.version', 'type_id', 'Version', required=True)
+        'categ_id': fields.many2one('external.referential.category', 'Category'),
+        'version_ids': fields.one2many('external.referential.version', 'type_id', 'Versions', required=True)
     }
     
 external_referential_type()
@@ -45,7 +57,6 @@ class external_referential_version(osv.osv):
             res[version['id']] = '%s %s'%(version['type_id'][1], version['name'])
         return res
 
- 
     _columns = {
         'full_name': fields.function(_get_full_name, store=True, type='char', size=64, string='Full Name'),
         'name': fields.char('name', size=64, required=True),
@@ -186,6 +197,8 @@ class external_referential(osv.osv):
     _columns = {
         'name': fields.char('Name', size=32, required=True),
         'type_id': fields.related('version_id', 'type_id', type='many2one', relation='external.referential.type', string='External Type'),
+        'categ_id': fields.related('type_id', 'categ_id', type='many2one', relation='external.referential.category', string='External Category'),
+        'categ_name': fields.related('categ_id', 'name', type='char', string='External Category Name'),
         'version_id': fields.many2one('external.referential.version', 'Referential Version', select=True),
         'location': fields.char('Location', size=200),
         'apiusername': fields.char('User Name', size=64),

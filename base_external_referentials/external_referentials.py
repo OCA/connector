@@ -316,6 +316,8 @@ class external_mapping_line(osv.osv):
         # TODO ('direct', 'Direct Evaluation'), for simple mapping line function we can evaluate it without mapping just by know the external field and the openerp field
         'in_function': fields.text('Import in OpenERP Mapping Python Function'),
         'out_function': fields.text('Export from OpenERP Mapping Python Function'),
+        'sequence': fields.integer('Sequence'),
+        'active': fields.boolean('Active', help="if not checked : not printed in report"),
         'child_mapping_id': fields.many2one('external.mapping', 'Child Mapping', select=True, 
             help=('This give you the possibility to import data with a structure of Parent/child'
                 'For example when you import a sale order, the sale order is the parent of the sale order line'

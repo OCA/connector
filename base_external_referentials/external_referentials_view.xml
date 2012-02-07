@@ -69,12 +69,16 @@
 							</group>
 							<field colspan="4" name="mapping_ids" widget="one2many_list" nolabel="1" context="{'model_id':model_id}">
 								<tree string="Field Mappings">
+									<field name="active" />
+									<field name="sequence" />
 									<field name="field_id" />
 									<field name="external_field" />
 									<field name="type" />
 									<field name="external_type" />
 								</tree>
 								<form string="Field Mapping">
+									<field name="active" />
+									<field name="sequence" />
 									<field name="field_id" domain="[('model_id','=',parent.model_id)]" />
 									<field name="external_field" />
 									<field name="type" />

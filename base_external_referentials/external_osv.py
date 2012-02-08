@@ -529,8 +529,10 @@ def _import_resources(self, cr, uid, ref_called_from, referential_id, defaults, 
                 if not ext_ids:
                     break
                 for ext_id in ext_ids:
-                    resource = self._get_external_resources(cr, uid, ref_called_from, mapping, referential_id, ext_id, context=context)
-                    res = self._record_one_external_resource(cr, uid, resource, referential_id, defaults=defaults, context=context, mapping=mapping)
+                    resources = self._get_external_resources(cr, uid, ref_called_from, mapping, referential_id, ext_id, context=context)
+                    if not isinstance(resources, list):
+                        resources = [resources]
+                    res = self._record_external_resources(cr, uid, resources, referential_id, defaults=defaults, context=context, mapping=mapping)
                     for key in result:
                         result[key].append(res.get(key, []))
     return result

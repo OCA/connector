@@ -19,12 +19,11 @@
 ##############################################################################
 import time
 import pooler
+import logging
 from osv import osv, fields
 from tools.translate import _
 from tools.safe_eval import safe_eval
 from tools import DEFAULT_SERVER_DATETIME_FORMAT
-import netsvc
-
 
 
 class external_report(osv.osv):
@@ -88,8 +87,7 @@ class external_report(osv.osv):
 
     def retry_failed_lines(self, cr, uid, ids, context=None):
         retry_cr = pooler.get_db(cr.dbname).cursor()
-        logger = netsvc.Logger()
-        logger.notifyChannel('retry_failed_lines', netsvc.LOG_INFO, "retry the failed lines of the reports ids %s" % (ids,))
+        logging.getLogger('external_synchro').info("retry the failed lines of the reports ids %s" % (ids,))
         if isinstance(ids, int):
             ids = [ids]
         if not context:

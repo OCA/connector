@@ -25,7 +25,7 @@ from osv import fields, osv
 import base64
 import time
 import datetime
-import netsvc
+import logging
 import pooler
 
 from message_error import MappingError, ExtConnError
@@ -320,11 +320,10 @@ def _transform_one_external_resource(self, cr, uid, referential_id, data_record,
                 try:
                     exec mapping_line['in_function'] in space
                 except Exception, e:
-                    logger = netsvc.Logger()
-                    logger.notifyChannel('extdata_from_oevals', netsvc.LOG_DEBUG, "Error in import mapping: %r" % (mapping_line['in_function'],))
+                    logging.getLogger('transform_external_data').error("Error in import mapping: %r" % (mapping_line['in_function'],),
+                                                                       "Mapping Context: %r" % (space,),
+                                                                       "Exception: %r" % (e,))
                     del(space['__builtins__'])
-                    logger.notifyChannel('extdata_from_oevals', netsvc.LOG_DEBUG, "Mapping Context: %r" % (space,))
-                    logger.notifyChannel('extdata_from_oevals', netsvc.LOG_DEBUG, "Exception: %r" % (e,))
                     raise MappingError(e, mapping_line['external_field'], self._name)
                 
                 result = space.get('result', False)
@@ -519,7 +518,6 @@ def _record_one_external_resource(self, cr, uid, row, referential_id, defaults=N
     :param dict defaults: defaults value
     :return: dictionary with the key "create_id" and "write_id" which containt the id created/written
     """
-    logger = netsvc.Logger()
     written = created = False
     vals = self._transform_external_resources(cr, uid, [row], referential_id, defaults=defaults, context=context, mapping=mapping)[0]
     if not 'external_id' in vals:
@@ -547,16 +545,16 @@ def _record_one_external_resource(self, cr, uid, row, referential_id, defaults=N
             if not created:
                 # means the external resource is bound to an already existing resource
                 # but not registered in ir.model.data, we log it to inform the success of the binding
-                logger.notifyChannel('ext synchro', netsvc.LOG_INFO, ("Bound in OpenERP %s from External Ref with"
-                            "external_id %s and OpenERP id %s successfully" %(self._name, external_id, existing_rec_id)))
+                logging.getLogger('external_synchro').info("Bound in OpenERP %s from External Ref with "
+                                            "external_id %s and OpenERP id %s successfully" %(self._name, external_id, existing_rec_id))
 
         if created:
-            logger.notifyChannel('ext synchro', netsvc.LOG_INFO, ("Created in OpenERP %s from External Ref with" 
-                            "external_id %s and OpenERP id %s successfully" %(self._name, external_id, existing_rec_id)))
+            logging.getLogger('external_synchro').info(("Created in OpenERP %s from External Ref with"
+                                        "external_id %s and OpenERP id %s successfully" %(self._name, external_id, existing_rec_id)))
             return {'create_id' : existing_rec_id}
         elif written:
-            logger.notifyChannel('ext synchro', netsvc.LOG_INFO, ("Updated in OpenERP %s from External Ref with"
-                            "external_id %s and OpenERP id %s successfully" %(self._name, external_id, existing_rec_id)))
+            logging.getLogger('external_synchro').info(("Updated in OpenERP %s from External Ref with"
+                                        "external_id %s and OpenERP id %s successfully" %(self._name, external_id, existing_rec_id)))
             return {'write_id' : existing_rec_id}
 
 def _record_external_resources(self, cr, uid, external_data, referential_id, defaults=None, context=None):
@@ -617,11 +615,10 @@ def extdata_from_oevals(self, cr, uid, referential_id, data_record, mapping_line
             try:
                 exec each_mapping_line['out_function'] in space
             except Exception, e:
-                logger = netsvc.Logger()
-                logger.notifyChannel('extdata_from_oevals', netsvc.LOG_DEBUG, "Error in import mapping: %r" % (each_mapping_line['out_function'],))
+                logging.getLogger('external_synchro').exception("Error in import mapping: %r" % (each_mapping_line['out_function'],),
+                                                                "Mapping Context: %r" % (space,),
+                                                                "Exception: %r" % (e,))
                 del(space['__builtins__'])
-                logger.notifyChannel('extdata_from_oevals', netsvc.LOG_DEBUG, "Mapping Context: %r" % (space,))
-                logger.notifyChannel('extdata_from_oevals', netsvc.LOG_DEBUG, "Exception: %r" % (e,))
                 raise MappingError(e, each_mapping_line['external_field'], self._name)
             result = space.get('result', False)
             #If result exists and is of type list
@@ -639,7 +636,6 @@ def ext_export(self, cr, uid, ids, referential_ids=[], defaults={}, context=None
     if context is None:
         context = {}
     #referential_ids has to be a list
-    logger = netsvc.Logger()
     report_line_obj = self.pool.get('external.report.line')
     write_ids = []  #Will record ids of records modified, not sure if will be used
     create_ids = [] #Will record ids of newly created records, not sure if will be used
@@ -706,7 +702,7 @@ def ext_export(self, cr, uid, ids, referential_ids=[], defaults={}, context=None
                                                                 res_id=record_data['id'],
                                                                 external_id=ext_id, defaults=defaults,
                                                                 context=context)
-                                    logger.notifyChannel('ext synchro', netsvc.LOG_INFO, "Updated in External Ref %s from OpenERP with external_id %s and OpenERP id %s successfully" %(self._name, ext_id, record_data['id']))
+                                    logging.getLogger('external_synchro').info("Updated in External Ref %s from OpenERP with external_id %s and OpenERP id %s successfully" %(self._name, ext_id, record_data['id']))
                                 except Exception, err:
                                     report_line_obj.log_failed(cr, uid, self._name, 'export',
                                                                res_id=record_data['id'],
@@ -723,7 +719,7 @@ def ext_export(self, cr, uid, ids, referential_ids=[], defaults={}, context=None
                                                                 res_id=record_data['id'],
                                                                 external_id=crid, defaults=defaults,
                                                                 context=context)
-                                    logger.notifyChannel('ext synchro', netsvc.LOG_INFO, "Created in External Ref %s from OpenERP with external_id %s and OpenERP id %s successfully" %(self._name, crid, record_data['id']))
+                                    logging.getLogger('external_synchro').info("Created in External Ref %s from OpenERP with external_id %s and OpenERP id %s successfully" %(self._name, crid, record_data['id']))
                                 except Exception, err:
                                     report_line_obj.log_failed(cr, uid, self._name, 'export',
                                                                res_id=record_data['id'],
@@ -774,10 +770,9 @@ def ext_update(self, cr, uid, data, conn, method, oe_id, external_id, ir_model_d
     try:
         self.try_ext_update(cr, uid, data, conn, method, oe_id, external_id, ir_model_data_id, create_method, context)
     except Exception, e:
-        logger = netsvc.Logger()
-        logger.notifyChannel('ext synchro', netsvc.LOG_INFO, "UPDATE ERROR: %s" % e)
+        logging.getLogger('external_synchro').exception("UPDATE ERROR: %s" % e)
         if self.can_create_on_update_failure(e, data, context):
-            logger.notifyChannel('ext synchro', netsvc.LOG_INFO, "may be the resource doesn't exist any more in the external referential, trying to re-create a new one")
+            logging.getLogger('external_synchro').info("The resource maybe doesn't exist any more in the external referential, trying to re-create a new one")
             crid = self.ext_create(cr, uid, data, conn, create_method, oe_id, context)
             self.pool.get('ir.model.data').write(cr, uid, ir_model_data_id, {'name': self.prefixed_id(crid)})
             return crid

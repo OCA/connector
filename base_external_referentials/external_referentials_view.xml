@@ -74,6 +74,7 @@
 									<field name="active" />
 									<field name="sequence" />
 									<field name="field_id" />
+									<field name="field_real_name" />
 									<field name="external_field" />
 									<field name="external_type" />
 									<field name="type" />
@@ -87,6 +88,7 @@
 									<separator string="Internal fields" colspan="2"/>
 									<field name="external_field" />
 									<field name="field_id" domain="[('model_id','=',parent.model_id)]" />
+									<field name="field_real_name" />
 									<field name="external_type" />
                                     <field name="child_mapping_id" colspan="4" attrs="{'invisible':[('evaluation_type','!=','sub-mapping')]}"/>
                                     <group attrs="{'invisible':[('evaluation_type','!=','function')]}" colspan="4">

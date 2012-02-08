@@ -46,7 +46,7 @@
 				        	<page string="Referential Actions">
 				        	    <separator string="Compulsory" colspan="4" />
 				                <button name="refresh_mapping" string="1 - Reload Referential Mapping Templates" colspan="2" type="object" />
-            					<button name="core_sync" string="2 - Synchronize Referential Settings" colspan="2" type="object" attrs="{'readonly':[('mapping_ids','=',[])]}"/>
+            					<button name="import_referential" string="2 - Synchronize Referential Settings" colspan="2" type="object" attrs="{'readonly':[('mapping_ids','=',[])]}"/>
             				</page>
             			</notebook>
             		</group>
@@ -66,6 +66,7 @@
 								<field name="external_create_method" />
 								<field name="external_delete_method" />
 								<field name="external_key_name" />
+								<field name="external_resource_name" />
 							</group>
 							<button name="add_all_fields" string="Add all object fields" colspan="2" type="object" />
 							<button name="create_mapping_file" string="Export mapping file" colspan="2" type="object" />

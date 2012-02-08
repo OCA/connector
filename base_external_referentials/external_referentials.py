@@ -82,6 +82,7 @@ class external_mapping_template(osv.osv):
         'external_create_method': fields.char('Create Method', size=64),
         'external_delete_method': fields.char('Delete Method', size=64),
         'external_key_name':fields.char('External field used as key', size=64),
+        'external_resource_name':fields.char('External Resource Name', size=64),
                 }
 external_mapping_template()
 
@@ -298,6 +299,7 @@ class external_mapping(osv.osv):
         'external_delete_method': fields.char('Delete Method', size=64),
         'mapping_ids': fields.one2many('external.mapping.line', 'mapping_id', 'Mappings Lines'),
         'external_key_name':fields.char('External field used as key', size=64),
+        'external_resource_name':fields.char('External Resource Name', size=64),
     }
 
 	# Method to set mapping with all object files

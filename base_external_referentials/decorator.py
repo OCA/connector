@@ -25,7 +25,7 @@ from tools.translate import _
 from message_error import MappingError
 import functools
 
-def only_for_referential(referential_type):
+def only_for_referential(referential_type_filter):
     """ 
     This decorator will execute the code of the function decorated only if
     the referential_type match with the referential_type pass in the context
@@ -35,7 +35,18 @@ def only_for_referential(referential_type):
         @functools.wraps(func)
         def wrapped(self, *args, **kwargs):
             context = kwargs.get('context')
-            if context and context.get('referential_type') and referential_type.lower() == context['referential_type'].lower():
+            if self._name == 'external.referential' and (isinstance(args[2], int) or isinstance(args[2], list)):
+                cr, uid = args[0], args[1]
+                #TODO this decorator do not support multi referential call, raise an error to avoir error
+                if isinstance(args[2], list):
+                    ref_id = args[2][0]
+                else:
+                    ref_id = args[2]
+                referential_type = self.read(cr, uid, ref_id, context=context)['type_id'][1]
+            else:
+                referential_type = context and context.get('referential_type')
+
+            if referential_type and referential_type.lower() == referential_type_filter.lower():
                 return func(self, *args, **kwargs)
             else:
                 # TODO REFACTOR this code

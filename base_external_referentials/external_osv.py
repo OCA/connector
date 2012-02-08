@@ -394,14 +394,16 @@ def _get_mapping(self, cr, uid, referential_id, context=None):
         #If a mapping exists for current model, search for mapping lines
         mapping_line_ids = self.pool.get('external.mapping.line').search(cr, uid, [('mapping_id', '=', mapping_id[0]), ('type', 'in', ['in_out', 'in'])])
         if mapping_line_ids:
-            return {
-                "mapping_lines": self.pool.get('external.mapping.line').read(cr, uid, mapping_line_ids, []),
-                "key_for_external_id": self.pool.get('external.mapping').read(cr, uid, mapping_id[0], ['external_key_name'])['external_key_name'],
-                }
+            mapping_lines = self.pool.get('external.mapping.line').read(cr, uid, mapping_line_ids, [])
+        else:
+            mapping_lines = []
+
+        external_mapping = self.pool.get('external.mapping').read(cr, uid, mapping_id[0], ['external_key_name', 'external_resource_name'])
         return {
-            "mapping_lines": [],
-            "key_for_external_id": False,
-                }
+            "mapping_lines": mapping_lines,
+            "key_for_external_id": external_mapping['external_key_name'],
+            "external_resource_name": external_mapping['external_resource_name'],
+            }
 
 def _transform_external_resources(self, cr, uid, external_data, referential_id, parent_data=None, defaults=None, context=None, mapping=None):
     """
@@ -424,9 +426,20 @@ def _transform_external_resources(self, cr, uid, external_data, referential_id, 
                 result.append(self._transform_one_external_resource(cr, uid, referential_id, each_row, mapping, parent_data, result, defaults, context))
     return result
 
-def _get_filter(self, cr, uid, ref_called_from, context=None):
+def _get_filter(self, cr, uid, ref_called_from, referential_id, resource_filter, step, context=None):
     """
     Abstract function that return the default value
+    Can be overwriten in your module
+
+    :param browse_record ref_called_from: reference (shop, referential, ...) that call the import 
+    :param string ressource_name: the resource to import
+    :return: dictionary with the key "create_ids" and "write_ids" which containt the id created/written
+    """
+    return None
+
+def _get_external_ids(self, cr, uid, ref_called_from, referential_id, resource_filter, mapping=None, context=None):
+    """
+    Abstract function that return the external_ids to import
     Can be overwriten in your module
 
     :param browse_record ref_called_from: reference (shop, referential, ...) that call the import 
@@ -446,7 +459,7 @@ def _get_default_values(self, cr, uid, ref_called_from, context=None):
     """
     return None
 
-def _get_import_step(cr, uid, ref_called_from, referential_id, context=None):
+def _get_import_step(self, cr, uid, ref_called_from, referential_id, context=None):
     """
     Abstract function that return the default step for importing data
     Can be overwriten in your module
@@ -457,7 +470,7 @@ def _get_import_step(cr, uid, ref_called_from, referential_id, context=None):
     """
     return 100
 
-def _get_external_resources(cr, uid, ref_called_from, referential_id, filter, context=None):
+def _get_external_resources(self, cr, uid, ref_called_from, mapping, referential_id, filter, context=None):
     """
     Abstract function that call the external system to fetch data
     Not implemented here
@@ -468,7 +481,7 @@ def _get_external_resources(cr, uid, ref_called_from, referential_id, filter, co
     """
     raise osv.except_osv(_("Not Implemented"), _("Not Implemented in abstract base module!"))
 
-def import_resources(self, cr, uid, ids, resource_name, referential_id, context=None):
+def import_resources(self, cr, uid, ids, resource_name, context=None):
     """
     Abstract function to import resources from a shop / a referential
 
@@ -478,13 +491,24 @@ def import_resources(self, cr, uid, ids, resource_name, referential_id, context=
     """
     result = {"create_ids" : [], "write_ids" : []}
     for ref_called_from in self.browse(cr, uid, ids, context=context):
-        defaults = object.get_default_values(context=context)
-        res = self.pool.get(resource_name)._import_resources(cr, uid, ref_called_from, defaults, context=context)
+        defaults = ref_called_from._get_default_values(context=context)
+        if ref_called_from._name == 'external.referential':
+            referential_id = ref_called_from.id
+            context['referential_type'] = ref_called_from.type_id.name
+            context['conn'] = ref_called_from.external_connection(context=context)
+        else:
+            if hasattr(ref_called_from, 'referential_id'):
+                referential_id = ref_called_from.referential_id.id
+                context['referential_type'] = ref_called_from.referential_id.type_id.name
+                context['conn'] = ref_called_from.referential_id.external_connection(context=context)
+            else:
+                raise osv.except_osv(_("Not Implemented"), _("The field referential_id doesn't exist on the object %s. Reporting system can not be used" %(ref_called_from._name,)))
+        res = self.pool.get(resource_name)._import_resources(cr, uid, ref_called_from, referential_id, defaults, context=context)
         for key in result:
             result[key].append(res.get(key, []))
     return result
 
-def _import_resources(self, cr, uid, ref_called_from, referential_id, defaults, context=None):
+def _import_resources(self, cr, uid, ref_called_from, referential_id, defaults, context=None, method="search_then_read"):
     """
     Abstract function to import resources for a specific object (like shop, referential...)
 
@@ -494,16 +518,21 @@ def _import_resources(self, cr, uid, ref_called_from, referential_id, defaults, 
     :return: dictionary with the key "create_ids" and "write_ids" which containt the ids created/written
     """
     result = {"create_ids" : [], "write_ids" : []}
-    mapping = self._get_mapping(cr, uid, referential_id, context=context)
-    step = self._get_import_step(cr, uid, ref_called_from, referential_id, context=context)
-    filter = self._get_filter(cr, uid, ref_called_from, referential_id, step, context=context)
-    resources = self._get_external_resources(cr, uid, ref_called_from, referential_id, context=context)
-    while resources:
-        filter = self._get_filter(cr, uid, ref_called_from, referential_id, step, context=context)
-        resources = self._get_external_resources(cr, uid, ref_called_from, referential_id, filter, context=context)
-        res = self._record_external_resources(self, cr, uid, resources, referential_id, defaults=defaults, context=context, mapping=mapping)
-        for key in result:
-            result[key].append(res.get(key, []))
+    mapping = {self._name : self._get_mapping(cr, uid, referential_id, context=context)}
+    if mapping[self._name].get('mapping_lines'):
+        step = self._get_import_step(cr, uid, ref_called_from, referential_id, context=context)
+        resource_filter = None
+        if method == 'search_then_read':
+            while True:
+                resource_filter = self._get_filter(cr, uid, ref_called_from, referential_id, resource_filter, step, context=context)
+                ext_ids = self._get_external_ids(cr, uid, ref_called_from, referential_id, resource_filter, mapping=mapping, context=context)
+                if not ext_ids:
+                    break
+                for ext_id in ext_ids:
+                    resources = self._get_external_resources(cr, uid, ref_called_from, mapping, referential_id, ext_id, context=context)
+                    res = self._record_external_resources(cr, uid, resources, referential_id, defaults=defaults, context=context, mapping=mapping)
+                    for key in result:
+                        result[key].append(res.get(key, []))
     return result
 
 
@@ -519,7 +548,7 @@ def _record_one_external_resource(self, cr, uid, row, referential_id, defaults=N
     :return: dictionary with the key "create_id" and "write_id" which containt the id created/written
     """
     written = created = False
-    vals = self._transform_external_resources(cr, uid, [row], referential_id, defaults=defaults, context=context, mapping=mapping)[0]
+    vals = self._transform_one_external_resource(cr, uid, referential_id, row, mapping, defaults=defaults, context=context)
     if not 'external_id' in vals:
         raise osv.except_osv(_('External Import Error'), _("The object imported need an external_id, maybe the mapping doesn't exist for the object : %s" %self._name))
     else:
@@ -557,7 +586,7 @@ def _record_one_external_resource(self, cr, uid, row, referential_id, defaults=N
                                         "external_id %s and OpenERP id %s successfully" %(self._name, external_id, existing_rec_id)))
             return {'write_id' : existing_rec_id}
 
-def _record_external_resources(self, cr, uid, external_data, referential_id, defaults=None, context=None):
+def _record_external_resources(self, cr, uid, external_data, referential_id, defaults=None, context=None, mapping=None):
     """
     Used in various function of MagentoERPconnect for exemple in order to import external data into OpenERP.
     This each row of the data will converted and then imported in OpenERP using the function _record_one_external_resource
@@ -567,9 +596,10 @@ def _record_external_resources(self, cr, uid, external_data, referential_id, def
     @param defauls: defaults value
     @return: dictionary with the key "create_ids" and "write_ids" which containt a list of ids created/written
     """
-
+    if not mapping:
+        mapping={}
     result = {'write_ids': [], 'create_ids': []}
-    mapping = self._get_mapping(cr, uid, referential_id, context=context)
+    mapping[self._name] = self._get_mapping(cr, uid, referential_id, context=context)
     for row in external_data:
         res = self._record_one_external_resource(cr, uid, row, referential_id, defaults=defaults, context=context, mapping=mapping)
         if res.get('create_id'): result['create_ids'].append(res['create_id'])

@@ -285,7 +285,7 @@ def _transform_one_external_resource(self, cr, uid, referential_id, data_record,
     if defaults is None:
         defaults = {}
 
-    mapping_lines = mapping[self._name].get("mapping_line")
+    mapping_lines = mapping[self._name].get("mapping_lines")
     key_for_external_id = mapping[self._name].get("key_for_external_id")
 
     vals = {} #Dictionary for create record
@@ -300,7 +300,7 @@ def _transform_one_external_resource(self, cr, uid, referential_id, data_record,
                                        (mapping_line['external_field'],),
                         mapping_line['external_field'], self._name)
                 field_name = self.pool.get('ir.model.fields').read(cr, uid,
-                    mapping_line['field_id'], ['name'], context=context)['name']
+                    mapping_line['field_id'][0], ['name'], context=context)['name']
                 vals[field_name] = get_ifield(data_record, mapping_line)
             else:
                 #Build the space for expr
@@ -401,7 +401,7 @@ def _get_mapping(self, cr, uid, referential_id, context=None):
         external_mapping = self.pool.get('external.mapping').read(cr, uid, mapping_id[0], ['external_key_name', 'external_resource_name'])
         return {
             "mapping_lines": mapping_lines,
-            "key_for_external_id": external_mapping['external_key_name'],
+            "key_for_external_id": external_mapping['external_key_name'] or 'id',
             "external_resource_name": external_mapping['external_resource_name'],
             }
 
@@ -529,8 +529,8 @@ def _import_resources(self, cr, uid, ref_called_from, referential_id, defaults, 
                 if not ext_ids:
                     break
                 for ext_id in ext_ids:
-                    resources = self._get_external_resources(cr, uid, ref_called_from, mapping, referential_id, ext_id, context=context)
-                    res = self._record_external_resources(cr, uid, resources, referential_id, defaults=defaults, context=context, mapping=mapping)
+                    resource = self._get_external_resources(cr, uid, ref_called_from, mapping, referential_id, ext_id, context=context)
+                    res = self._record_one_external_resource(cr, uid, resource, referential_id, defaults=defaults, context=context, mapping=mapping)
                     for key in result:
                         result[key].append(res.get(key, []))
     return result

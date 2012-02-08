@@ -254,12 +254,32 @@ def _transform_one_external_resource(self, cr, uid, referential_id, data_record,
     Used in _transform_external_resources in order to convert external row of data into OpenERP data
 
     @param referential_id: external referential id from where we import the resource
-    @param external_data_row: a dictionnary of data to convert into OpenERP data
+    @param data_record: a dictionnary of data to convert into OpenERP data
     @param mapping dict: dictionnary of mapping {'product.product' : {'mapping_lines' : [...], 'key_for_external_id':'...'}}
     @param previous_lines: list of the previous line converted. This is not used here but it's necessary for playing on change on sale order line
-    @param defauls: defaults value for the data imported
+    @param defaults: defaults value for the data imported
     @return: dictionary of converted data in OpenERP format 
     """
+    def get_ifield(data_record, mapping_line):
+        ifield = data_record.get(mapping_line['external_field'], False)
+        if ifield:
+            if mapping_line['external_type'] == 'list' and isinstance(ifield, (str, unicode)):
+                # external data sometimes returns ',1,2,3' for a list...
+                casted_field = eval(ifield.strip(','))
+                # For a list, external data may returns something like '1,2,3' but also '1' if only
+                # one item has been selected. So if the casted field is not iterable, we put it in a tuple: (1,)
+                if not hasattr(casted_field, '__iter__'):
+                    casted_field = (casted_field,)
+                ifield = list(casted_field)
+            else:
+                ifield = eval(mapping_line['external_type'])(ifield)
+        else:
+            if mapping_line['external_type'] == 'list':
+                ifield = []
+        if ifield in ['None', 'False']:
+            ifield = False
+        return ifield
+
     if context is None:
         context = {}
     if defaults is None:
@@ -270,59 +290,45 @@ def _transform_one_external_resource(self, cr, uid, referential_id, data_record,
 
     vals = {} #Dictionary for create record
     sub_mapping_list=[]
-    for each_mapping_line in mapping_lines:
-        if each_mapping_line['external_field'] in data_record.keys():
-            if each_mapping_line['evaluation_type'] == 'sub-mapping':
-                sub_mapping_list.append(each_mapping_line)
-            else:              
-                ifield = data_record.get(each_mapping_line['external_field'], False)
-                if ifield:
-                    if each_mapping_line['external_type'] == 'list' and isinstance(ifield, (str, unicode)):
-                        # external data sometimes returns ',1,2,3' for a list...
-                        casted_field = eval(ifield.strip(','))
-                        # For a list, external data may returns something like '1,2,3' but also '1' if only
-                        # one item has been selected. So if the casted field is not iterable, we put it in a tuple: (1,)
-                        if not hasattr(casted_field, '__iter__'):
-                            casted_field = (casted_field,)
-                        type_casted_field = list(casted_field)
-                    else:
-                        type_casted_field = eval(each_mapping_line['external_type'])(ifield)
-                else:
-                    if each_mapping_line['external_type'] == 'list':
-                        type_casted_field = []
-                    else:
-                        type_casted_field = ifield
-                if type_casted_field in ['None', 'False']:
-                    type_casted_field = False
-
+    for mapping_line in mapping_lines:
+        if mapping_line['external_field'] in data_record.keys():
+            if mapping_line['evaluation_type'] == 'sub-mapping':
+                sub_mapping_list.append(mapping_line)
+            elif mapping_line['evaluation_type'] == 'direct':
+                if not mapping_line.get('field_id'):
+                    raise MappingError("Field missing for direct mapping of field %s" %
+                                       (mapping_line['external_field'],),
+                        mapping_line['external_field'], self._name)
+                field_name = self.pool.get('ir.model.fields').read(cr, uid,
+                    mapping_line['field_id'], ['name'], context=context)['name']
+                vals[field_name] = get_ifield(data_record, mapping_line)
+            else:
                 #Build the space for expr
-                space = {
-                            'self':self,
-                            'cr':cr,
-                            'uid':uid,
-                            'data':data_record,
-                            'referential_id':referential_id,
-                            'defaults':defaults,
-                            'context':context,
-                            'ifield':type_casted_field,
-                            'conn':context.get('conn_obj', False),
-                            'base64':base64,
-                            'vals':vals
-                        }
+                space = {'self': self,
+                         'cr': cr,
+                         'uid': uid,
+                         'data': data_record,
+                         'referential_id': referential_id,
+                         'defaults': defaults,
+                         'context': context,
+                         'ifield': get_ifield(data_record, mapping_line),
+                         'conn': context.get('conn_obj', False),
+                         'base64': base64,
+                         'vals': vals}
                 #The expression should return value in list of tuple format
                 #eg[('name','Sharoon'),('age',20)] -> vals = {'name':'Sharoon', 'age':20}
                 try:
-                    exec each_mapping_line['in_function'] in space
+                    exec mapping_line['in_function'] in space
                 except Exception, e:
                     logger = netsvc.Logger()
-                    logger.notifyChannel('extdata_from_oevals', netsvc.LOG_DEBUG, "Error in import mapping: %r" % (each_mapping_line['in_function'],))
+                    logger.notifyChannel('extdata_from_oevals', netsvc.LOG_DEBUG, "Error in import mapping: %r" % (mapping_line['in_function'],))
                     del(space['__builtins__'])
                     logger.notifyChannel('extdata_from_oevals', netsvc.LOG_DEBUG, "Mapping Context: %r" % (space,))
                     logger.notifyChannel('extdata_from_oevals', netsvc.LOG_DEBUG, "Exception: %r" % (e,))
-                    raise MappingError(e, each_mapping_line['external_field'], self._name)
+                    raise MappingError(e, mapping_line['external_field'], self._name)
                 
                 result = space.get('result', False)
-                # Check if result returned by the mapping function is correct : [('field1': value), ('field2': value))]
+                # Check if result returned by the mapping function is correct : [('field1', value), ('field2', value))]
                 # And fill the vals dict with the results
                 if result:
                     if isinstance(result, list):
@@ -330,7 +336,7 @@ def _transform_one_external_resource(self, cr, uid, referential_id, data_record,
                             if isinstance(each_tuple, tuple) and len(each_tuple) == 2:
                                 vals[each_tuple[0]] = each_tuple[1]
                     else:
-                        raise MappingError(_('Invalid format for the variable result.'), each_mapping_line['external_field'], self._name)
+                        raise MappingError(_('Invalid format for the variable result.'), mapping_line['external_field'], self._name)
 
     if key_for_external_id and data_record.get(key_for_external_id):
         vals.update({'external_id': int(data_record[key_for_external_id])})
@@ -405,7 +411,7 @@ def _transform_external_resources(self, cr, uid, external_data, referential_id, 
     @param external_data: list of external_data to convert into OpenERP data
     @param referential_id: external referential id from where we import the resource
     @param parent_data: data of the parent, only use when a mapping line have the type 'sub mapping'
-    @param defauls: defaults value for data converted
+    @param defaults: defaults value for data converted
     @return: list of the line converted into OpenERP value
     """
     if not mapping:
@@ -510,7 +516,7 @@ def _record_one_external_resource(self, cr, uid, row, referential_id, defaults=N
 
     :param dict row: row_data to convert into OpenERP data
     :param int referential_id: external referential id from where we import the resource
-    :param dict defauls: defaults value
+    :param dict defaults: defaults value
     :return: dictionary with the key "create_id" and "write_id" which containt the id created/written
     """
     logger = netsvc.Logger()

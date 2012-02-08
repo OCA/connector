@@ -104,8 +104,7 @@ class external_mappinglines_template(osv.osv):
         'model':fields.related('model_id', 'model', type='char', string='Model Name'),
         'external_field': fields.char('External Field', size=32),
         'type': fields.selection([('in_out', 'External <-> OpenERP'), ('in', 'External -> OpenERP'), ('out', 'External <- OpenERP')], 'Type'),
-        'evaluation_type': fields.selection([('function', 'Function'), ('sub-mapping','Sub Mapping Line')], 'Evalution Type'),
-        # TODO ('direct', 'Direct Evaluation'), for simple mapping line function we can evaluate it without mapping just by know the external field and the openerp field
+        'evaluation_type': fields.selection([('function', 'Function'), ('sub-mapping','Sub Mapping Line'), ('direct', 'Direct Mapping')], 'Evalution Type'),
         'external_type': fields.selection([('unicode', 'String'), ('bool', 'Boolean'), ('int', 'Integer'), ('float', 'Float'), ('list', 'List'), ('dict', 'Dictionnary')], 'External Type'),
         'in_function': fields.text('Import in OpenERP Mapping Python Function'),
         'out_function': fields.text('Export from OpenERP Mapping Python Function'),

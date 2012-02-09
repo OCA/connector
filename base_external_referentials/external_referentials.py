@@ -128,7 +128,8 @@ class external_referential(osv.osv):
         return False
 
     def import_referentials(self, cr, uid, ids, context=None):
-        return self.import_resources(cr, uid, ids, 'external.referential', context=context)
+        self.import_resources(cr, uid, ids, 'external.referential', context=context)
+        return True
 
     def refresh_mapping(self, cr, uid, ids, context={}):
         #This function will reinstate mapping & mapping_lines for registered objects
@@ -164,6 +165,7 @@ class external_referential(osv.osv):
                                     'external_create_method': each_mapping_rec['external_create_method'],
                                     'external_delete_method': each_mapping_rec['external_delete_method'],
                                     'external_key_name': each_mapping_rec['external_key_name'],
+                                    'external_resource_name': each_mapping_rec['external_resource_name'],
                                                 }
                     mapping_id = mappings_obj.create(cr, uid, vals)
                 else:
@@ -187,6 +189,7 @@ class external_referential(osv.osv):
                         'in_function': each_mapping_line_rec['in_function'],
                         'out_function': each_mapping_line_rec['out_function'],
                         'field_id': each_mapping_line_rec['field_id'] and each_mapping_line_rec['field_id'][0] or False,
+                        'active':True,
                         }
                     mapping_line_id = mapping_line_obj.create(cr, uid, vals)
                     if each_mapping_line_rec['child_mapping_id']:

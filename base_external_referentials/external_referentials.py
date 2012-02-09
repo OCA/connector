@@ -325,10 +325,10 @@ class external_mapping(osv.osv):
     	for line in mapping.mapping_ids:
     		if line.external_field!=False and line.active==True:
     			mapping_line += "\""+mapping.referential_id.version_id.name+"_erp_"+line.external_field+"\","
-    			mapping_line += "\""+str(mapping.referential_id.version_id.name)+"\","
-    			mapping_line += "\""+str(mapping.model_id.id)+"\","
+    			mapping_line += "\""+mapping.referential_id.version_id.name+"\","
+    			mapping_line += "\""+mapping.model_id.get_external_id(context=context)[mapping.model_id.id]+"\","
     			mapping_line += "\""+line.external_field+"\","
-    			mapping_line += "\""+str(line.field_id.id)+"\","
+    			mapping_line += "\""+line.field_id.get_external_id(context=context)[line.field_id.id]+"\","
     			mapping_line += "\""+line.type+"\","
     			if line.evaluation_type!=False:
     				mapping_line += "\""+line.evaluation_type+"\""

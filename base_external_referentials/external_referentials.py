@@ -164,6 +164,7 @@ class external_referential(osv.osv):
                                     'external_create_method': each_mapping_rec['external_create_method'],
                                     'external_delete_method': each_mapping_rec['external_delete_method'],
                                     'external_key_name': each_mapping_rec['external_key_name'],
+                                    'external_resource_name': each_mapping_rec['external_resource_name'],
                                                 }
                     mapping_id = mappings_obj.create(cr, uid, vals)
                 else:

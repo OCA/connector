@@ -33,21 +33,14 @@ def only_for_referential(referential_type_filter):
     """
     def decorator(func):
         @functools.wraps(func)
-        def wrapped(self, *args, **kwargs):
-            context = kwargs.get('context')
-            if self._name == 'external.referential' and (isinstance(args[2], int) or isinstance(args[2], list)):
-                cr, uid = args[0], args[1]
-                #TODO this decorator do not support multi referential call, raise an error to avoir error
-                if isinstance(args[2], list):
-                    ref_id = args[2][0]
-                else:
-                    ref_id = args[2]
-                referential_type = self.read(cr, uid, ref_id, context=context)['type_id'][1]
+        def wrapped(self, cr, uid, argument, *args, **kwargs):
+            if self._name == 'external.referential' and (isinstance(argument, list) or isinstance(argument, int)):
+                referential_id = isinstance(argument, list) and argument[0] or argument
+                referential = self.browse(cr, uid, referential_id)
             else:
-                referential_type = context and context.get('referential_type')
-
-            if referential_type and referential_type.lower() == referential_type_filter.lower():
-                return func(self, *args, **kwargs)
+                referential = argument.referential_id
+            if referential.type_id.name.lower() == referential_type_filter.lower():
+                return func(self, cr, uid, argument, *args, **kwargs)
             else:
                 # TODO REFACTOR this code
                 # It's the first time I do something like that :S
@@ -62,7 +55,7 @@ def only_for_referential(referential_type_filter):
                 for base in self.__class__.mro()[1:]:
                     if parent:
                         if hasattr(base, name):
-                            return getattr(base, name)(self, *args, **kwargs)
+                            return getattr(base, name)(self, cr, uid, argument, *args, **kwargs)
                     if str(base) == str(self.__class__):
                         #now I am at the good level of the class inherited
                         parent = True

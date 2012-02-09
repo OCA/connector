@@ -24,7 +24,6 @@ from osv import fields, osv
 from sets import Set
 from tools.translate import _
 
-
 class external_referential_category(osv.osv):
     _name = 'external.referential.category'
     _description = 'External Referential Category (Ex: e-commerce, crm, warehouse)'

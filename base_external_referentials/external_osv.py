@@ -32,6 +32,14 @@ from message_error import MappingError, ExtConnError
 from tools.translate import _
 from tools import DEFAULT_SERVER_DATETIME_FORMAT, DEFAULT_SERVER_DATE_FORMAT
 
+
+class ExternalSession(object):
+    def __init__(self, referential, debug=False):
+        self.referential_id = referential
+        self.connection = referential.external_connection(debug=debug)
+        self.logger = logging.getLogger(referential.name)
+
+
 def read_w_order(self, cr, uid, ids, fields_to_read=None, context=None, load='_classic_read'):
     """ Read records with given ids with the given fields and return it respecting the order of the ids
     This is very usefull for synchronizing data in a special order with an external system
@@ -405,7 +413,7 @@ def _get_mapping(self, cr, uid, referential_id, context=None):
             "external_resource_name": external_mapping['external_resource_name'],
             }
 
-def _transform_external_resources(self, cr, uid, external_data, referential_id, parent_data=None, defaults=None, context=None, mapping=None):
+def _transform_external_resources(self, cr, uid, external_session, resources, defaults=None, mapping=None, parent_data=None, context=None):
     """
     Used in ext_import in order to convert all of the external data into OpenERP data
 
@@ -422,11 +430,13 @@ def _transform_external_resources(self, cr, uid, external_data, referential_id, 
         if mapping.get(self._name) is None:
             mapping[self._name] = self._get_mapping(cr, uid,  referential_id, context=context)
         if mapping[self._name].get("mapping_lines"):
-            for each_row in external_data:
-                result.append(self._transform_one_external_resource(cr, uid, referential_id, each_row, mapping, parent_data, result, defaults, context))
+            for resource in resources:
+                result.append(self._transform_one_external_resource(cr, uid, external_session, resource, 
+                                                            defaults=defaults, mapping=mapping, parent_data=parent_data, 
+                                                            previous_result=result, context=context))
     return result
 
-def _get_filter(self, cr, uid, ref_called_from, referential_id, resource_filter, step, context=None):
+def _get_filter(self, cr, uid, external_session, step, resource_filter=None, context=None):
     """
     Abstract function that return the default value
     Can be overwriten in your module
@@ -437,7 +447,7 @@ def _get_filter(self, cr, uid, ref_called_from, referential_id, resource_filter,
     """
     return None
 
-def _get_external_resource_ids(self, cr, uid, ref_called_from, referential_id, resource_filter, mapping=None, context=None):
+def _get_external_resource_ids(self, cr, uid, external_session, resource_filter=None, mapping=None, context=None):
     """
     Abstract function that return the external_ids to import
     Can be overwriten in your module
@@ -448,7 +458,7 @@ def _get_external_resource_ids(self, cr, uid, ref_called_from, referential_id, r
     """
     return None
 
-def _get_default_values(self, cr, uid, ref_called_from, context=None):
+def _get_default_import_values(self, cr, uid, external_session, context=None):
     """
     Abstract function that return the default value
     Can be overwriten in your module
@@ -459,7 +469,7 @@ def _get_default_values(self, cr, uid, ref_called_from, context=None):
     """
     return None
 
-def _get_import_step(self, cr, uid, ref_called_from, referential_id, context=None):
+def _get_import_step(self, cr, uid, external_session, context=None):
     """
     Abstract function that return the default step for importing data
     Can be overwriten in your module
@@ -470,7 +480,7 @@ def _get_import_step(self, cr, uid, ref_called_from, referential_id, context=Non
     """
     return 100
 
-def _get_external_resources(self, cr, uid, ref_called_from, mapping, referential_id, filter, context=None):
+def _get_external_resources(self, cr, uid, external_session, external_id=None, resource_filter=None, mapping=None, fields=None, context=None):
     """
     Abstract function that call the external system to fetch data
     Not implemented here
@@ -490,25 +500,22 @@ def import_resources(self, cr, uid, ids, resource_name, context=None):
     :return: dictionary with the key "create_ids" and "write_ids" which containt the id created/written
     """
     result = {"create_ids" : [], "write_ids" : []}
-    for ref_called_from in self.browse(cr, uid, ids, context=context):
-        defaults = ref_called_from._get_default_values(context=context)
-        if ref_called_from._name == 'external.referential':
-            referential_id = ref_called_from.id
-            context['referential_type'] = ref_called_from.type_id.name
-            context['conn'] = ref_called_from.external_connection(context=context)
+    for browse_record in self.browse(cr, uid, ids, context=context):
+        defaults = browse_record._get_default_import_values(context=context)
+        if browse_record._name == 'external.referential':
+            external_session = ExternalSession(browse_record)
         else:
-            if hasattr(ref_called_from, 'referential_id'):
-                referential_id = ref_called_from.referential_id.id
-                context['referential_type'] = ref_called_from.referential_id.type_id.name
-                context['conn'] = ref_called_from.referential_id.external_connection(context=context)
+            if hasattr(browse_record, 'referential_id'):
+                context['%s_id'%browse_record._name] = browse_record.id
+                external_session = ExternalSession(browse_record.referential_id)
             else:
-                raise osv.except_osv(_("Not Implemented"), _("The field referential_id doesn't exist on the object %s. Reporting system can not be used" %(ref_called_from._name,)))
-        res = self.pool.get(resource_name)._import_resources(cr, uid, ref_called_from, referential_id, defaults, context=context)
+                raise osv.except_osv(_("Not Implemented"), _("The field referential_id doesn't exist on the object %s. Reporting system can not be used" %(browse_record._name,)))
+        res = self.pool.get(resource_name)._import_resources(cr, uid, external_session, defaults, context=context)
         for key in result:
             result[key].append(res.get(key, []))
     return result
 
-def _import_resources(self, cr, uid, ref_called_from, referential_id, defaults, context=None, method="search_then_read"):
+def _import_resources(self, cr, uid, external_session, defaults=None, context=None, method="search_then_read"):
     """
     Abstract function to import resources for a specific object (like shop, referential...)
 
@@ -518,44 +525,46 @@ def _import_resources(self, cr, uid, ref_called_from, referential_id, defaults, 
     :return: dictionary with the key "create_ids" and "write_ids" which containt the ids created/written
     """
     result = {"create_ids" : [], "write_ids" : []}
-    mapping = {self._name : self._get_mapping(cr, uid, referential_id, context=context)}
+    mapping = {self._name : self._get_mapping(cr, uid, external_session.referential_id.id, context=context)}
     if mapping[self._name].get('mapping_lines'):
-        step = self._get_import_step(cr, uid, ref_called_from, referential_id, context=context)
+        step = self._get_import_step(cr, uid, external_session, context=context)
         resource_filter = None
         if method == 'search_then_read':
             while True:
-                resource_filter = self._get_filter(cr, uid, ref_called_from, referential_id, resource_filter, step, context=context)
-                ext_ids = self._get_external_resource_ids(cr, uid, ref_called_from, referential_id, resource_filter, mapping=mapping, context=context)
+                resource_filter = self._get_filter(cr, uid, external_session, step, resource_filter=resource_filter, context=context)
+                ext_ids = self._get_external_resource_ids(cr, uid, external_session, resource_filter, mapping=mapping, context=context)
                 if not ext_ids:
                     break
                 for ext_id in ext_ids:
-                    resources = self._get_external_resources(cr, uid, ref_called_from, mapping, referential_id, ext_id, context=context)
+                    #TODO import only the field needed to improve speed import ;)
+                    resources = self._get_external_resources(cr, uid, external_session, ext_id, mapping=mapping, fields=None, context=context)
                     if not isinstance(resources, list):
                         resources = [resources]
-                    res = self._record_external_resources(cr, uid, resources, referential_id, defaults=defaults, context=context, mapping=mapping)
+                    res = self._record_external_resources(cr, uid, external_session, resources, defaults=defaults, mapping=mapping, context=context)
                     for key in result:
                         result[key].append(res.get(key, []))
     return result
 
 
-def _record_one_external_resource(self, cr, uid, row, referential_id, defaults=None, context=None, mapping=None):
+def _record_one_external_resource(self, cr, uid, external_session, resource, defaults=None, mapping=None, context=None):
     """
     Used in _record_external_resources
-    The row will converted into OpenERP data by using the function _transform_external_resources
+    The resource will converted into OpenERP data by using the function _transform_external_resources
     And then created or updated, and an external id will be added into the table ir.model.data
 
-    :param dict row: row_data to convert into OpenERP data
+    :param dict resource: resource to convert into OpenERP data
     :param int referential_id: external referential id from where we import the resource
     :param dict defaults: defaults value
     :return: dictionary with the key "create_id" and "write_id" which containt the id created/written
     """
     written = created = False
-    vals = self._transform_one_external_resource(cr, uid, referential_id, row, mapping, defaults=defaults, context=context)
+    vals = self._transform_one_external_resource(cr, uid, external_session, resource, mapping=mapping, defaults=defaults, context=context)
     if not 'external_id' in vals:
         raise osv.except_osv(_('External Import Error'), _("The object imported need an external_id, maybe the mapping doesn't exist for the object : %s" %self._name))
     else:
         external_id = vals['external_id']
         del vals['external_id']
+        referential_id = external_session.referential_id.id
         existing_ir_model_data_id, existing_rec_id = self._existing_oeid_for_extid_import\
             (cr, uid, vals, external_id, referential_id, context=context)
         if existing_rec_id:
@@ -576,19 +585,19 @@ def _record_one_external_resource(self, cr, uid, row, referential_id, defaults=N
             if not created:
                 # means the external resource is bound to an already existing resource
                 # but not registered in ir.model.data, we log it to inform the success of the binding
-                logging.getLogger('external_synchro').info("Bound in OpenERP %s from External Ref with "
+                external_session.logger.info("Bound in OpenERP %s from External Ref with "
                                             "external_id %s and OpenERP id %s successfully" %(self._name, external_id, existing_rec_id))
 
         if created:
-            logging.getLogger('external_synchro').info(("Created in OpenERP %s from External Ref with"
+            external_session.logger.info(("Created in OpenERP %s from External Ref with"
                                         "external_id %s and OpenERP id %s successfully" %(self._name, external_id, existing_rec_id)))
             return {'create_id' : existing_rec_id}
         elif written:
-            logging.getLogger('external_synchro').info(("Updated in OpenERP %s from External Ref with"
+            external_session.logger.info(("Updated in OpenERP %s from External Ref with"
                                         "external_id %s and OpenERP id %s successfully" %(self._name, external_id, existing_rec_id)))
             return {'write_id' : existing_rec_id}
 
-def _record_external_resources(self, cr, uid, external_data, referential_id, defaults=None, context=None, mapping=None):
+def _record_external_resources(self, cr, uid, external_session, resources, defaults=None, mapping=None, context=None):
     """
     Used in various function of MagentoERPconnect for exemple in order to import external data into OpenERP.
     This each row of the data will converted and then imported in OpenERP using the function _record_one_external_resource
@@ -601,9 +610,9 @@ def _record_external_resources(self, cr, uid, external_data, referential_id, def
     if not mapping:
         mapping={}
     result = {'write_ids': [], 'create_ids': []}
-    mapping[self._name] = self._get_mapping(cr, uid, referential_id, context=context)
-    for row in external_data:
-        res = self._record_one_external_resource(cr, uid, row, referential_id, defaults=defaults, context=context, mapping=mapping)
+    mapping[self._name] = self._get_mapping(cr, uid, external_session.referential_id.id, context=context)
+    for resource in resources:
+        res = self._record_one_external_resource(cr, uid, external_session, resource, defaults=defaults, mapping=mapping, context=context)
         if res.get('create_id'): result['create_ids'].append(res['create_id'])
         if res.get('write_id'): result['write_ids'].append(res['write_id'])
     return result        
@@ -852,7 +861,7 @@ osv.osv.get_external_data = get_external_data
 
 osv.osv.retry_import = retry_import
 osv.osv._get_mapping = _get_mapping
-osv.osv._get_default_values = _get_default_values
+osv.osv._get_default_import_values = _get_default_import_values
 osv.osv._get_import_step = _get_import_step
 
 osv.osv._get_filter = _get_filter

@@ -329,7 +329,7 @@ class external_mapping(osv.osv):
     		if line.external_field!=False and line.active==True:
     			current_model = mapping.model_id.get_external_id(context=context)[mapping.model_id.id]
     			current_field = line.field_id.get_external_id(context=context)[line.field_id.id]
-    			mapping_line += "\""+mapping.referential_id.version_id.name+"_"+current_model+"_"+current_field+"_"+line.external_field+"\","
+    			mapping_line += "\""+mapping.referential_id.version_id.get_external_id(context=context)[mapping.referential_id.version_id.id]+"_"+mapping.model_id.name+"_"+line.field_id.name+"_"+line.external_field+"\","
     			mapping_line += "\""+mapping.referential_id.version_id.name+"\","
     			mapping_line += "\""+current_model+"\","
     			mapping_line += "\""+line.external_field+"\","

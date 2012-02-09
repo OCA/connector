@@ -191,27 +191,26 @@ def extid_to_existing_oeid(self, cr, uid, external_id, referential_id, context=N
             self.pool.get('ir.model.data').unlink(cr, uid, ir_model_data_id, context=context)
     return False
 
-def extid_to_oeid(self, cr, uid, id, referential_id, context=None):
+def extid_to_oeid(self, cr, uid, external_session, external_id, context=None):
     """Returns the OpenERP ID of a resource by its external id.
     Creates the resource from the external connection if the resource does not exist."""
     #First get the external key field name
     #conversion external id -> OpenERP object using Object mapping_column_name key!
-    if id:
-        existing_id = self.extid_to_existing_oeid(cr, uid, id, referential_id, context)
+    if external_id:
+        existing_id = self.extid_to_existing_oeid(cr, uid, external_session.referential_id.id, external_id, context=context)
         if existing_id:
             return existing_id
-        try:
-            if context and context.get('alternative_key', False): #FIXME dirty fix for Magento product.info id/sku mix bug: https://bugs.launchpad.net/magentoerpconnect/+bug/688225
-                id = context.get('alternative_key', False)
-            conn = self.pool.get('external.referential').external_connection(cr, uid, referential_id)
-            result = self.get_external_data(cr, uid, conn , referential_id, {}, {'id':id})
-            if len(result['create_ids']) == 1:
-                return result['create_ids'][0]
-        except Exception, error: #external system might return error because no such record exists
-            raise osv.except_osv(_('Ext Synchro'), _("Error when importing on fly the object %s with the external_id %s and the external referential %s.\n Error : %s" %(self._name, id, referential_id, error)))
+        #TODO try except will be added latter
+        #try:
+        if context and context.get('alternative_key', False): #FIXME dirty fix for Magento product.info id/sku mix bug: https://bugs.launchpad.net/magentoerpconnect/+bug/688225
+            id = context.get('alternative_key', False)
+            context['id'] 
+        return self._import_one_resource(cr, uid, external_session, external_id, context=context)
+        #except Exception, error: #external system might return error because no such record exists
+        #    raise osv.except_osv(_('Ext Synchro'), _("Error when importing on fly the object %s with the external_id %s and the external referential %s.\n Error : %s" %(self._name, id, referential_id, error)))
     return False
 
-def _transform_sub_mapping(self, cr, uid, sub_mapping_list, external_data, referential_id, vals, mapping, defaults=None, context=None):
+def _transform_sub_mapping(self, cr, uid, external_session, resource, vals, sub_mapping_list, mapping, defaults=None, context=None):
     """
     Used in _transform_one_external_resource in order to call the sub mapping
 
@@ -231,7 +230,7 @@ def _transform_sub_mapping(self, cr, uid, sub_mapping_list, external_data, refer
         if ifield:
             field_name = ir_model_field_obj.read(cr, uid, sub_mapping['field_id'][0], ['name'], context=context)['name']
             vals[field_name] = []
-            lines = self.pool.get(sub_mapping['child_mapping_id'][1])._transform_external_resources(cr, uid, ifield, referential_id, mapping, parent_data=vals, defaults=defaults.get(field_name), context=context)
+            lines = self.pool.get(sub_mapping['child_mapping_id'][1])._transform_external_resources(cr, uid, external_session, ifield, defaults=defaults.get(field_name), mapping=mapping, parent_data=vals, context=context)
             for line in lines:
                 if 'external_id' in line:
                     del line['external_id']
@@ -240,7 +239,7 @@ def _transform_sub_mapping(self, cr, uid, sub_mapping_list, external_data, refer
     return vals
 
 
-def _merge_with_default_values(self, cr, uid, sub_mapping_list, data_record, referential_id, vals, defaults=None, context=None):
+def _merge_with_default_values(self, cr, uid, external_session, ressource, vals, sub_mapping_list, defaults=None, context=None):
     """
     Used in _transform_one_external_resource in order to merge the defaults values, some params are useless here but need in base_sale_multichannels to play the on_change
 
@@ -257,36 +256,19 @@ def _merge_with_default_values(self, cr, uid, sub_mapping_list, data_record, ref
     return vals
 
 
-def _transform_one_external_resource(self, cr, uid, referential_id, data_record, mapping, parent_data=None, previous_lines=None, defaults=None, context=None):
+
+def _transform_one_external_resource(self, cr, uid, external_session, resource, mapping, parent_data=None, previous_result=None, defaults=None, context=None):
     """
     Used in _transform_external_resources in order to convert external row of data into OpenERP data
 
     @param referential_id: external referential id from where we import the resource
-    @param data_record: a dictionnary of data to convert into OpenERP data
+    @param resource: a dictionnary of data to convert into OpenERP data
     @param mapping dict: dictionnary of mapping {'product.product' : {'mapping_lines' : [...], 'key_for_external_id':'...'}}
-    @param previous_lines: list of the previous line converted. This is not used here but it's necessary for playing on change on sale order line
+    @param previous_result: list of the previous line converted. This is not used here but it's necessary for playing on change on sale order line
     @param defaults: defaults value for the data imported
     @return: dictionary of converted data in OpenERP format 
     """
-    def get_ifield(data_record, mapping_line):
-        ifield = data_record.get(mapping_line['external_field'], False)
-        if ifield:
-            if mapping_line['external_type'] == 'list' and isinstance(ifield, (str, unicode)):
-                # external data sometimes returns ',1,2,3' for a list...
-                casted_field = eval(ifield.strip(','))
-                # For a list, external data may returns something like '1,2,3' but also '1' if only
-                # one item has been selected. So if the casted field is not iterable, we put it in a tuple: (1,)
-                if not hasattr(casted_field, '__iter__'):
-                    casted_field = (casted_field,)
-                ifield = list(casted_field)
-            else:
-                ifield = eval(mapping_line['external_type'])(ifield)
-        else:
-            if mapping_line['external_type'] == 'list':
-                ifield = []
-        if ifield in ['None', 'False']:
-            ifield = False
-        return ifield
+
 
     if context is None:
         context = {}
@@ -299,60 +281,86 @@ def _transform_one_external_resource(self, cr, uid, referential_id, data_record,
     vals = {} #Dictionary for create record
     sub_mapping_list=[]
     for mapping_line in mapping_lines:
-        if mapping_line['external_field'] in data_record.keys():
+        if mapping_line['external_field'] in resource.keys():
             if mapping_line['evaluation_type'] == 'sub-mapping':
                 sub_mapping_list.append(mapping_line)
-            elif mapping_line['evaluation_type'] == 'direct':
-                if not mapping_line.get('field_id'):
-                    raise MappingError("Field missing for direct mapping of field %s" %
-                                       (mapping_line['external_field'],),
-                        mapping_line['external_field'], self._name)
-                field_name = self.pool.get('ir.model.fields').read(cr, uid,
-                    mapping_line['field_id'][0], ['name'], context=context)['name']
-                vals[field_name] = get_ifield(data_record, mapping_line)
             else:
-                #Build the space for expr
-                space = {'self': self,
-                         'cr': cr,
-                         'uid': uid,
-                         'data': data_record,
-                         'referential_id': referential_id,
-                         'defaults': defaults,
-                         'context': context,
-                         'ifield': get_ifield(data_record, mapping_line),
-                         'conn': context.get('conn_obj', False),
-                         'base64': base64,
-                         'vals': vals}
-                #The expression should return value in list of tuple format
-                #eg[('name','Sharoon'),('age',20)] -> vals = {'name':'Sharoon', 'age':20}
-                try:
-                    exec mapping_line['in_function'] in space
-                except Exception, e:
-                    logging.getLogger('transform_external_data').error("Error in import mapping: %r" % (mapping_line['in_function'],),
-                                                                       "Mapping Context: %r" % (space,),
-                                                                       "Exception: %r" % (e,))
-                    del(space['__builtins__'])
-                    raise MappingError(e, mapping_line['external_field'], self._name)
-                
-                result = space.get('result', False)
-                # Check if result returned by the mapping function is correct : [('field1', value), ('field2', value))]
-                # And fill the vals dict with the results
-                if result:
-                    if isinstance(result, list):
-                        for each_tuple in result:
-                            if isinstance(each_tuple, tuple) and len(each_tuple) == 2:
-                                vals[each_tuple[0]] = each_tuple[1]
-                    else:
-                        raise MappingError(_('Invalid format for the variable result.'), mapping_line['external_field'], self._name)
+                #TODO improve this code
+                field_name = self.pool.get('ir.model.fields').read(cr, uid,
+                        mapping_line['field_id'][0], ['name'], context=context)['name']
+                field_value = resource[mapping_line['external_field']]
+                field_type = mapping_line['external_type']
+                if mapping_line['evaluation_type'] == 'direct':
+                    if not mapping_line.get('field_id'):
+                        raise MappingError("Field missing for direct mapping of field %s" %
+                                           (mapping_line['external_field'],),
+                            mapping_line['external_field'], self._name)
 
-    if key_for_external_id and data_record.get(key_for_external_id):
-        vals.update({'external_id': int(data_record[key_for_external_id])})
-    
-    vals = self._merge_with_default_values(cr, uid, sub_mapping_list, data_record, referential_id, vals, defaults=defaults, context=context)
-    vals = self._transform_sub_mapping(cr, uid, sub_mapping_list, data_record, referential_id, vals, mapping, defaults=defaults, context=context)
+                    vals[field_name] = self._transform_external_field(cr, uid, external_session, field_name, field_value, field_type, context=context)
+                else:
+                    #Build the space for expr
+                    space = {'self': self,
+                             'cr': cr,
+                             'uid': uid,
+                             'data': resource,
+                             'referential_id': external_session.referential_id.id,
+                             'defaults': defaults,
+                             'context': context,
+                             'ifield': self._transform_external_field(cr, uid, external_session, field_name, field_value, field_type, context=context),
+                             'conn': context.get('conn_obj', False),
+                             'base64': base64,
+                             'vals': vals}
+                    #The expression should return value in list of tuple format
+                    #eg[('name','Sharoon'),('age',20)] -> vals = {'name':'Sharoon', 'age':20}
+                    try:
+                        exec mapping_line['in_function'] in space
+                    except Exception, e:
+                        logging.getLogger('transform_external_data').error("Error in import mapping: %r" % (mapping_line['in_function'],),
+                                                                           "Mapping Context: %r" % (space,),
+                                                                           "Exception: %r" % (e,))
+                        #del(space['__builtins__'])
+                        raise MappingError(e, mapping_line['external_field'], self._name)
+                    
+                    result = space.get('result', False)
+                    # Check if result returned by the mapping function is correct : [('field1', value), ('field2', value))]
+                    # And fill the vals dict with the results
+                    if result:
+                        if isinstance(result, list):
+                            for each_tuple in result:
+                                if isinstance(each_tuple, tuple) and len(each_tuple) == 2:
+                                    vals[each_tuple[0]] = each_tuple[1]
+                        else:
+                            raise MappingError(_('Invalid format for the variable result.'), mapping_line['external_field'], self._name)
+
+    if key_for_external_id and resource.get(key_for_external_id):
+        vals.update({'external_id': int(resource[key_for_external_id])})
+
+    vals = self._merge_with_default_values(cr, uid, external_session, resource, vals, sub_mapping_list, defaults=defaults, context=context)
+    vals = self._transform_sub_mapping(cr, uid, external_session, resource, vals, sub_mapping_list, mapping, defaults=defaults, context=context)
 
     return vals
 
+def _transform_external_field(self, cr, uid, external_session, field_name, field_value, field_type, context=None):
+    field = False
+    if field_value:
+        if field_type == 'o2m':
+            return self.pool.get(self._columns[field_name]._obj).extid_to_oeid(cr, uid, external_session, field_value, context=context)
+        if field_type == 'list' and isinstance(field_value, (str, unicode)):
+            # external data sometimes returns ',1,2,3' for a list...
+            casted_field = eval(ifield.strip(','))
+            # For a list, external data may returns something like '1,2,3' but also '1' if only
+            # one item has been selected. So if the casted field is not iterable, we put it in a tuple: (1,)
+            if not hasattr(casted_field, '__iter__'):
+                casted_field = (casted_field,)
+            field = list(casted_field)
+        else:
+            field = eval(field_type)(field_value)
+    else:
+        if field_type == 'list':
+            field = []
+    if field in ['None', 'False']:
+        field = False
+    return field
 
 
 #TODO rename this function
@@ -501,7 +509,6 @@ def import_resources(self, cr, uid, ids, resource_name, context=None):
     """
     result = {"create_ids" : [], "write_ids" : []}
     for browse_record in self.browse(cr, uid, ids, context=context):
-        defaults = browse_record._get_default_import_values(context=context)
         if browse_record._name == 'external.referential':
             external_session = ExternalSession(browse_record)
         else:
@@ -510,6 +517,7 @@ def import_resources(self, cr, uid, ids, resource_name, context=None):
                 external_session = ExternalSession(browse_record.referential_id)
             else:
                 raise osv.except_osv(_("Not Implemented"), _("The field referential_id doesn't exist on the object %s. Reporting system can not be used" %(browse_record._name,)))
+        defaults = self.pool.get(resource_name)._get_default_import_values(cr, uid, external_session, context=context)
         res = self.pool.get(resource_name)._import_resources(cr, uid, external_session, defaults, context=context)
         for key in result:
             result[key].append(res.get(key, []))
@@ -524,6 +532,7 @@ def _import_resources(self, cr, uid, external_session, defaults=None, context=No
     :params dict defaults: dictionnary of defaults values
     :return: dictionary with the key "create_ids" and "write_ids" which containt the ids created/written
     """
+    external_session.logger.info("Start to import the ressource %s"%(self._name,))
     result = {"create_ids" : [], "write_ids" : []}
     mapping = {self._name : self._get_mapping(cr, uid, external_session.referential_id.id, context=context)}
     if mapping[self._name].get('mapping_lines'):
@@ -545,6 +554,11 @@ def _import_resources(self, cr, uid, external_session, defaults=None, context=No
                         result[key].append(res.get(key, []))
     return result
 
+def _import_one_resource(self, cr, uid, external_session, external_id, context=None):
+    resources = self._get_external_resources(cr, uid, external_session, external_id, context=context)
+    res = self._record_external_resources(cr, uid, external_session, resources, context=context)
+    id = res.get('write_ids') and res['write_ids'][0] or res['create_ids'][0]
+    return id
 
 def _record_one_external_resource(self, cr, uid, external_session, resource, defaults=None, mapping=None, context=None):
     """
@@ -625,12 +639,10 @@ def retry_import(self, cr, uid, id, ext_id, referential_id, defaults=None, conte
 def oe_update(self, cr, uid, existing_rec_id, vals, referential_id, defaults, context):
     return self.write(cr, uid, existing_rec_id, vals, context)
 
-
 def oe_create(self, cr, uid, vals, referential_id, defaults, context):
     return self.create(cr, uid, vals, context)
 
-
-def extdata_from_oevals(self, cr, uid, referential_id, data_record, mapping_lines, defaults, context=None):
+def extdata_from_oevals(self, cr, uid, referential_id, resource, mapping_lines, defaults, context=None):
     if context is None:
         context = {}
     vals = {} #Dictionary for record
@@ -646,7 +658,7 @@ def extdata_from_oevals(self, cr, uid, referential_id, data_record, mapping_line
             'referential_id':referential_id,
             'defaults':defaults,
             'context':context,
-            'record':data_record,
+            'record':resource,
             'conn':context.get('conn_obj', False),
             'base64':base64
         }
@@ -870,7 +882,7 @@ osv.osv._get_external_resource_ids = _get_external_resource_ids
 
 osv.osv.import_resources = import_resources
 osv.osv._import_resources = _import_resources
-#osv.osv._import_one_resource = _import_one_resource
+osv.osv._import_one_resource = _import_one_resource
 
 osv.osv._record_external_resources = _record_external_resources
 osv.osv._record_one_external_resource = _record_one_external_resource
@@ -880,6 +892,8 @@ osv.osv._transform_one_external_resource = _transform_one_external_resource
 
 osv.osv._transform_sub_mapping = _transform_sub_mapping
 osv.osv._merge_with_default_values = _merge_with_default_values
+
+osv.osv._transform_external_field =_transform_external_field
 
 osv.osv.oe_update = oe_update
 osv.osv.oe_create = oe_create

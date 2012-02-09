@@ -128,7 +128,8 @@ class external_referential(osv.osv):
         return False
 
     def import_referentials(self, cr, uid, ids, context=None):
-        return self.import_resources(cr, uid, ids, 'external.referential', context=context)
+        self.import_resources(cr, uid, ids, 'external.referential', context=context)
+        return True
 
     def refresh_mapping(self, cr, uid, ids, context={}):
         #This function will reinstate mapping & mapping_lines for registered objects

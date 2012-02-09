@@ -46,7 +46,7 @@
 				        	<page string="Referential Actions">
 				        	    <separator string="Compulsory" colspan="4" />
 				                <button name="refresh_mapping" string="1 - Reload Referential Mapping Templates" colspan="2" type="object" />
-            					<button name="import_referential" string="2 - Synchronize Referential Settings" colspan="2" type="object" attrs="{'readonly':[('mapping_ids','=',[])]}"/>
+            					<button name="import_referentials" string="2 - Synchronize Referential Settings" colspan="2" type="object" attrs="{'readonly':[('mapping_ids','=',[])]}"/>
             				</page>
             			</notebook>
             		</group>

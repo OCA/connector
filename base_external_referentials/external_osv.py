@@ -437,7 +437,7 @@ def _get_filter(self, cr, uid, ref_called_from, referential_id, resource_filter,
     """
     return None
 
-def _get_external_ids(self, cr, uid, ref_called_from, referential_id, resource_filter, mapping=None, context=None):
+def _get_external_resource_ids(self, cr, uid, ref_called_from, referential_id, resource_filter, mapping=None, context=None):
     """
     Abstract function that return the external_ids to import
     Can be overwriten in your module
@@ -525,7 +525,7 @@ def _import_resources(self, cr, uid, ref_called_from, referential_id, defaults, 
         if method == 'search_then_read':
             while True:
                 resource_filter = self._get_filter(cr, uid, ref_called_from, referential_id, resource_filter, step, context=context)
-                ext_ids = self._get_external_ids(cr, uid, ref_called_from, referential_id, resource_filter, mapping=mapping, context=context)
+                ext_ids = self._get_external_resource_ids(cr, uid, ref_called_from, referential_id, resource_filter, mapping=mapping, context=context)
                 if not ext_ids:
                     break
                 for ext_id in ext_ids:
@@ -857,6 +857,7 @@ osv.osv._get_import_step = _get_import_step
 
 osv.osv._get_filter = _get_filter
 osv.osv._get_external_resources = _get_external_resources
+osv.osv._get_external_resource_ids = _get_external_resource_ids
 
 osv.osv.import_resources = import_resources
 osv.osv._import_resources = _import_resources

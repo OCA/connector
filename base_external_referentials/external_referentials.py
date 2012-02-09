@@ -320,7 +320,7 @@ class external_mapping(osv.osv):
 
 	# Method to export the mapping file
     def create_mapping_file(self, cr, uid, ids, context={}):
-        mapping_line = "\"id\",\"version_id:id\",\"model_id:id\",\"external_field\",\"field_id:id\",\"type\",\"evaluation_type\",\"external_type\",\"child_mapping_id:id\",\"in_function\",\"out_function\",\"active\"\n"
+        mapping_line = "\"id\",\"version_id:id\",\"model_id:id\",\"external_field\",\"field_id:id\",\"type\",\"evaluation_type\",\"external_type\",\"child_mapping_id:id\",\"in_function\",\"out_function\"\n"
         mapping = self.browse(cr, uid, ids)[0]
     	for line in mapping.mapping_ids:
     		if line.external_field!=False and line.active==True:
@@ -346,7 +346,7 @@ class external_mapping(osv.osv):
     			mapping_line += ","
     			if line.out_function!=False:
     				mapping_line += "\""+line.out_function+"\""
-    			mapping_line += ",\"True\"\n"
+    			mapping_line += "\n"
     	raise osv.except_osv(_('Mapping lines'), _(mapping_line))
         return True
                 

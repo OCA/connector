@@ -188,6 +188,7 @@ class external_referential(osv.osv):
                         'in_function': each_mapping_line_rec['in_function'],
                         'out_function': each_mapping_line_rec['out_function'],
                         'field_id': each_mapping_line_rec['field_id'] and each_mapping_line_rec['field_id'][0] or False,
+                        'active':True,
                         }
                     mapping_line_id = mapping_line_obj.create(cr, uid, vals)
                     if each_mapping_line_rec['child_mapping_id']:

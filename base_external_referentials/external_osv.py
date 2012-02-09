@@ -226,7 +226,7 @@ def _transform_sub_mapping(self, cr, uid, external_session, resource, vals, sub_
         defaults={}
     ir_model_field_obj = self.pool.get('ir.model.fields')
     for sub_mapping in sub_mapping_list:
-        ifield = external_data.get(sub_mapping['external_field'])
+        ifield = resource.get(sub_mapping['external_field'])
         if ifield:
             field_name = ir_model_field_obj.read(cr, uid, sub_mapping['field_id'][0], ['name'], context=context)['name']
             vals[field_name] = []
@@ -434,9 +434,9 @@ def _transform_external_resources(self, cr, uid, external_session, resources, de
     if not mapping:
         mapping = {}
     result= []
-    if external_data:
+    if resources:
         if mapping.get(self._name) is None:
-            mapping[self._name] = self._get_mapping(cr, uid,  referential_id, context=context)
+            mapping[self._name] = self._get_mapping(cr, uid, external_session.referential_id.id, context=context)
         if mapping[self._name].get("mapping_lines"):
             for resource in resources:
                 result.append(self._transform_one_external_resource(cr, uid, external_session, resource, 

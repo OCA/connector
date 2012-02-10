@@ -464,7 +464,7 @@ def _get_external_resource_ids(self, cr, uid, external_session, resource_filter=
     :param string ressource_name: the resource to import
     :return: dictionary with the key "create_ids" and "write_ids" which containt the id created/written
     """
-    return None
+    raise osv.except_osv(_("Not Implemented"), _("Not Implemented in abstract base module!"))
 
 def _get_default_import_values(self, cr, uid, external_session, context=None):
     """

@@ -219,58 +219,66 @@ def extid_to_oeid(self, cr, uid, external_session, external_id, context=None):
 
 
 
-def _get_filter(self, cr, uid, external_session, step, resource_filter=None, context=None):
+def _get_filter(self, cr, uid, external_session, step, previous_filter=None, context=None):
     """
-    Abstract function that return the default value
+    Abstract function that return the filter
     Can be overwriten in your module
 
-    :param browse_record ref_called_from: reference (shop, referential, ...) that call the import 
-    :param string ressource_name: the resource to import
-    :return: dictionary with the key "create_ids" and "write_ids" which containt the id created/written
+    :param ExternalSession external_session : External_session that contain all params of connection
+    :param int step: Step the of the import, 100 meant you will import data per 100
+    :param dict previous_filter: the previous filter
+    :return: dictionary with a filter
+    :rtype: dict
     """
     return None
 
 def _get_external_resource_ids(self, cr, uid, external_session, resource_filter=None, mapping=None, context=None):
     """
-    Abstract function that return the external_ids to import
+    Abstract function that return the external resource ids
     Can be overwriten in your module
 
-    :param browse_record ref_called_from: reference (shop, referential, ...) that call the import 
-    :param string ressource_name: the resource to import
-    :return: dictionary with the key "create_ids" and "write_ids" which containt the id created/written
+    :param ExternalSession external_session : External_session that contain all params of connection
+    :param dict resource_filter: the filter to apply to the external search method
+    :param dict mapping: dictionnary of mapping, the key is the openerp object's name 
+    :return: a list of external_id
+    :rtype: list
     """
     raise osv.except_osv(_("Not Implemented"), _("Not Implemented in abstract base module!"))
 
 def _get_default_import_values(self, cr, uid, external_session, context=None):
     """
-    Abstract function that return the default value
+    Abstract function that return the default value for on object
     Can be overwriten in your module
 
-    :param browse_record ref_called_from: reference (shop, referential, ...) that call the import 
-    :param string ressource_name: the resource to import
-    :return: dictionary with the key "create_ids" and "write_ids" which containt the id created/written
+    :param ExternalSession external_session : External_session that contain all params of connection
+    :return: a dictionnary of default value
+    :rtype: dict
     """
     return None
 
 def _get_import_step(self, cr, uid, external_session, context=None):
     """
-    Abstract function that return the default step for importing data
+    Abstract function that return the step for importing data
     Can be overwriten in your module
 
-    :param browse_record ref_called_from: reference (shop, referential, ...) that call the import 
-    :param string ressource_name: the resource to import
-    :return: dictionary with the key "create_ids" and "write_ids" which containt the id created/written
+    :param ExternalSession external_session : External_session that contain all params of connection
+    :return: a integer that corespond to the limit of object to import
+    :rtype: int
     """
     return 100
 
 def _get_external_resources(self, cr, uid, external_session, external_id=None, resource_filter=None, mapping=None, fields=None, context=None):
     """
-    Abstract function that call the external system to fetch data
-    Not implemented here
+    Abstract function that return the external resource
+    Can be overwriten in your module
 
-    :param browse_record ref_called_from: reference (shop, referential, ...) that call the import 
-    :param string ressource_name: the resource to import
-    :return: dictionary with the key "create_ids" and "write_ids" which containt the id created/written
+    :param ExternalSession external_session : External_session that contain all params of connection
+    :param int external_id : resource external id to import
+    :param dict resource_filter: the filter to apply to the external search method
+    :param dict mapping: dictionnary of mapping, the key is the openerp object's name
+    :param list fields: list of field to read
+    :return: a list of dict that contain resource information
+    :rtype: list
     """
     raise osv.except_osv(_("Not Implemented"), _("Not Implemented in abstract base module!"))
 
@@ -279,7 +287,8 @@ def _get_mapping(self, cr, uid, referential_id, context=None):
     Function that return the mapping line for the corresponding object
 
     :param  int referential_id: the referential id
-    :return: dictionary with the key "mapping_lines" and "key_for_external_id" 
+    :return: dictionary with the key "mapping_lines" and "key_for_external_id"
+    :rtype: dict
     """
     mapping_id = self.pool.get('external.mapping').search(cr, uid, [('model', '=', self._name), ('referential_id', '=', referential_id)])
     if not mapping_id:
@@ -301,11 +310,12 @@ def _get_mapping(self, cr, uid, referential_id, context=None):
 
 def import_resources(self, cr, uid, ids, resource_name, context=None):
     """
-    Abstract function to import resources from a shop / a referential
+    Abstract function to import resources from a shop / a referential...
 
     :param list ids: list of id
-    :param string ressource_name: the resource to import
+    :param string ressource_name: the resource name to import
     :return: dictionary with the key "create_ids" and "write_ids" which containt the id created/written
+    :rtype: dict
     """
     result = {"create_ids" : [], "write_ids" : []}
     for browse_record in self.browse(cr, uid, ids, context=context):
@@ -340,7 +350,7 @@ def _import_resources(self, cr, uid, external_session, defaults=None, context=No
         resource_filter = None
         if method == 'search_then_read':
             while True:
-                resource_filter = self._get_filter(cr, uid, external_session, step, resource_filter=resource_filter, context=context)
+                resource_filter = self._get_filter(cr, uid, external_session, step, previous_filter=resource_filter, context=context)
                 ext_ids = self._get_external_resource_ids(cr, uid, external_session, resource_filter, mapping=mapping, context=context)
                 if not ext_ids:
                     break

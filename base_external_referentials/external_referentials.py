@@ -72,8 +72,8 @@ class external_mapping_template(osv.osv):
     _rec_name = 'model'
     
     _columns = {
-        'version_id':fields.many2one('external.referential.version', 'External Referential Version', ondelete='cascade', select=True),
-        'model_id': fields.many2one('ir.model', 'OpenERP Model', required=True, select=True, ondelete='cascade'),
+        'version_id':fields.many2one('external.referential.version', 'External Referential Version', ondelete='cascade'),
+        'model_id': fields.many2one('ir.model', 'OpenERP Model', required=True, ondelete='cascade'),
         'model':fields.related('model_id', 'model', type='char', string='Model Name'),
         'external_list_method': fields.char('List Method', size=64),
         'external_get_method': fields.char('Get Method', size=64),
@@ -97,10 +97,10 @@ class external_mappinglines_template(osv.osv):
         return res
 
     _columns = {
-        'name_function': fields.function(_name_get_fnc, method=True, type="char", string='Full Name'),
-        'version_id':fields.many2one('external.referential.version', 'External Referential Version', ondelete='cascade', select=True),
-        'field_id': fields.many2one('ir.model.fields', 'OpenERP Field', select=True, ondelete='cascade'),
-        'model_id': fields.many2one('ir.model', 'OpenERP Model', select=True, ondelete='cascade'),
+        'name_function': fields.function(_name_get_fnc, type="char", string='Full Name'),
+        'version_id':fields.many2one('external.referential.version', 'External Referential Version', ondelete='cascade'),
+        'field_id': fields.many2one('ir.model.fields', 'OpenERP Field', ondelete='cascade'),
+        'model_id': fields.many2one('ir.model', 'OpenERP Model', ondelete='cascade'),
         'model':fields.related('model_id', 'model', type='char', string='Model Name'),
         'external_field': fields.char('External Field', size=32),
         'type': fields.selection([('in_out', 'External <-> OpenERP'), ('in', 'External -> OpenERP'), ('out', 'External <- OpenERP')], 'Type'),
@@ -108,7 +108,7 @@ class external_mappinglines_template(osv.osv):
         'external_type': fields.selection([('o2m', 'one2many'), ('unicode', 'String'), ('bool', 'Boolean'), ('int', 'Integer'), ('float', 'Float'), ('list', 'List'), ('dict', 'Dictionnary')], 'External Type', required=True),
         'in_function': fields.text('Import in OpenERP Mapping Python Function'),
         'out_function': fields.text('Export from OpenERP Mapping Python Function'),
-        'child_mapping_id': fields.many2one('external.mapping.template', 'Child Mapping', select=True, ondelete='cascade', 
+        'child_mapping_id': fields.many2one('external.mapping.template', 'Child Mapping', ondelete='cascade',
             help=('This give you the possibility to import data with a structure of Parent/child'
                 'For example when you import a sale order, the sale order is the parent of the sale order line'
                 'In this case you have to select the child mapping in order to convert the data'
@@ -206,12 +206,12 @@ class external_referential(osv.osv):
         'type_id': fields.related('version_id', 'type_id', type='many2one', relation='external.referential.type', string='External Type'),
         'categ_id': fields.related('type_id', 'categ_id', type='many2one', relation='external.referential.category', string='External Category'),
         'categ_name': fields.related('categ_id', 'name', type='char', string='External Category Name'),
-        'version_id': fields.many2one('external.referential.version', 'Referential Version', select=True),
-        'location': fields.char('Location', size=200),
+        'version_id': fields.many2one('external.referential.version', 'Referential Version', required=True),
+        'location': fields.char('Location', size=200, required=True),
         'apiusername': fields.char('User Name', size=64),
         'apipass': fields.char('Password', size=64),
         'mapping_ids': fields.one2many('external.mapping', 'referential_id', 'Mappings'),
-        'create_date': fields.datetime('Creation Date', readonly=True, select=True, help="Date on which external referential is created."),
+        'create_date': fields.datetime('Creation Date', readonly=True, help="Date on which external referential is created."),
     }
     
     _sql_constraints = [
@@ -244,7 +244,7 @@ class external_mapping_line(osv.osv):
         return res
     
     _columns = {
-        'name_function': fields.function(_name_get_fnc, method=True, type="char", string='Full Name'),
+        'name_function': fields.function(_name_get_fnc, type="char", string='Full Name'),
     }
 
 external_mapping_line()
@@ -293,10 +293,10 @@ class external_mapping(osv.osv):
         return res
     
     _columns = {
-        'referential_id': fields.many2one('external.referential', 'External Referential', required=True, select=True, ondelete='cascade'),
-        'model_id': fields.many2one('ir.model', 'OpenERP Model', required=True, select=True, ondelete='cascade'),
+        'referential_id': fields.many2one('external.referential', 'External Referential', required=True, ondelete='cascade'),
+        'model_id': fields.many2one('ir.model', 'OpenERP Model', required=True, ondelete='cascade'),
         'model':fields.related('model_id', 'model', type='char', string='Model Name'),
-        'related_model_ids': fields.function(_get_related_model_ids, method=True, type="one2many", relation="ir.model", string='Related Inherited Models', help="potentially inherited through '_inherits' model, used for mapping field selection"),
+        'related_model_ids': fields.function(_get_related_model_ids, type="one2many", relation="ir.model", string='Related Inherited Models', help="potentially inherited through '_inherits' model, used for mapping field selection"),
         'external_list_method': fields.char('List Method', size=64),
         'external_get_method': fields.char('Get Method', size=64),
         'external_update_method': fields.char('Update Method', size=64),
@@ -317,7 +317,7 @@ class external_mapping(osv.osv):
 					'type' : 'in_out',
                     'active' : True,
                     }
-    		mapping_line_obj.create(cr, uid, vals)    		
+    		mapping_line_obj.create(cr, uid, vals)
         return True
 
 	# Method to export the mapping file
@@ -360,11 +360,11 @@ class external_mapping_line(osv.osv):
     _inherit = 'external.mapping.line'
     
     _columns = {
-        'field_id': fields.many2one('ir.model.fields', 'OpenERP Field', select=True, ondelete='cascade'),
+        'field_id': fields.many2one('ir.model.fields', 'OpenERP Field', ondelete='cascade'),
         'field_real_name': fields.related('field_id', 'name', type='char', relation='ir.model.field', string='Field name',readonly=True),
         
         'external_field': fields.char('External Field', size=32),
-        'mapping_id': fields.many2one('external.mapping', 'External Mapping', select=True, ondelete='cascade'),
+        'mapping_id': fields.many2one('external.mapping', 'External Mapping', ondelete='cascade'),
         'related_model_id': fields.related('mapping_id', 'model_id', type='many2one', relation='ir.model', string='Related Model'),
         'type': fields.selection([('in_out', 'External <-> OpenERP'), ('in', 'External -> OpenERP'), ('out', 'External <- OpenERP')], 'Type'),
         'external_type': fields.selection([('o2m', 'one2many'), ('unicode', 'String'), ('bool', 'Boolean'), ('int', 'Integer'), ('float', 'Float'), ('list', 'List'), ('dict', 'Dictionnary')], 'External Type', required=True),
@@ -373,7 +373,7 @@ class external_mapping_line(osv.osv):
         'out_function': fields.text('Export from OpenERP Mapping Python Function'),
         'sequence': fields.integer('Sequence'),
         'active': fields.boolean('Active', help="if not checked : not printed in report"),
-        'child_mapping_id': fields.many2one('external.mapping', 'Child Mapping', select=True, 
+        'child_mapping_id': fields.many2one('external.mapping', 'Child Mapping',
             help=('This give you the possibility to import data with a structure of Parent/child'
                 'For example when you import a sale order, the sale order is the parent of the sale order line'
                 'In this case you have to select the child mapping in order to convert the data'
@@ -429,7 +429,7 @@ class ir_model_data(osv.osv):
         return res
 
     _columns = {
-        'referential_id': fields.function(_get_referential_id, method=True, type="many2one", relation='external.referential', string='Ext. Referential', store=True),
+        'referential_id': fields.function(_get_referential_id, type="many2one", relation='external.referential', string='Ext. Referential', store=True),
         #'referential_id':fields.many2one('external.referential', 'Ext. Referential'),
         #'create_date': fields.datetime('Created date', readonly=True), #TODO used?
         #'write_date': fields.datetime('Updated date', readonly=True), #TODO used?

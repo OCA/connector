@@ -381,8 +381,10 @@ class external_mapping_line(osv.osv):
             ),
     }
     
-    _default = {
+    _defaults = {
          'type' : lambda * a: 'in_out',
+         'external_type': lambda *a: 'unicode',
+         'evaluation_type': lambda *a: 'direct',
     }
     
     def _check_mapping_line_name(self, cr, uid, ids):

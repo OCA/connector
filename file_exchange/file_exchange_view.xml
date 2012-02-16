@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  file_exchange for OpenERP
+  Copyright (C) 2012 Akretion Emmanuel Samyn <emmanuel.samyn@akretion.com>
+  The licence is in the file __openerp__.py
+-->
+
+<openerp>
+    <data>
+    <!-- VIEW FOR THE OBJECT : file_exchange -->
+        <record id="file_exchange_view_form" model="ir.ui.view">
+            <field name="name">file_exchange.file_exchange.view_form</field>
+            <field name="model">file.exchange</field>
+            <field eval="16" name="priority"/>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="file_exchange">
+                    <field name="name" />
+                    <field name="file_ids" />
+                    <field name="external_id" />
+                    <field name="scheduler_id" />
+                    <button name="import_files" string="Import files" type="object" />
+                    <button name="export_files" string="Export files" type="object" />
+                </form>
+            </field>
+        </record>
+
+        <record id="file_exchange_view_tree" model="ir.ui.view">
+            <field name="name">file_exchange_view_tree</field>
+            <field name="model">file.exchange</field>
+            <field eval="16" name="priority"/>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="file_exchange">
+                    <field name="name" />
+                    <field name="file_ids" />
+                    <field name="external_id" />
+                    <field name="scheduler_id" />
+                </tree>
+            </field>
+        </record>
+
+    <!-- VIEW FOR THE OBJECT : external_file -->
+        <record id="external_file_view_form" model="ir.ui.view">
+            <field name="name">external_file.view_form</field>
+            <field name="model">external.file</field>
+            <field eval="16" name="priority"/>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="external_file">
+                    <field name="name" />
+                    <field name="type" />
+                    <field name="model_id" />
+                    <field name="format" />
+                </form>
+            </field>
+        </record>
+
+        <record id="external_file_view_tree" model="ir.ui.view">
+            <field name="name">external_file.view_tree</field>
+            <field name="model">external.file</field>
+            <field eval="16" name="priority"/>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="external_file">
+                    <field name="name" />
+                    <field name="type" />
+                    <field name="model_id" />
+                    <field name="format" />
+                </tree>
+            </field>
+        </record>
+        
+    </data>
+</openerp>

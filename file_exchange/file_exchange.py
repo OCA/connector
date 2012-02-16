@@ -35,10 +35,10 @@ class file_exchange(osv.osv):
         return True
 
     _columns = {
-        'name': fields.char('Name', size=64),
-        'external_id':fields.many2one('external.referential', 'Referential'),
-        'scheduler_id':fields.many2one('ir.cron', 'Scheduler'),
-        'file_ids': fields.one2many('external_file', 'Field relation id', ''),
+        'name': fields.char('Name', size=64,help="Exchange description like the name of the supplier, bank,..."),
+        'external_id':fields.many2one('external.referential', 'Referential',help="Referential to use for connection and mapping"),
+        'scheduler_id':fields.many2one('ir.cron', 'Scheduler',help="Scheduler that will execute the cron task"),
+        'file_ids': fields.one2many('external.file', 'related_file_id', 'Files',help="List of files to be exchanged"),
     }
 
     _defaults = {
@@ -54,10 +54,13 @@ class external_file(osv.osv):
     _description = "external file"
 
     _columns = {
-        'name': fields.char('Name', size=64),
-        'type': fields.boolean('Type'),
-        'model_id':fields.many2one('ir.model', 'Model'),
+        'related_file_id' : fields.many2one('file.exchange', 'File'),
+        'name': fields.char('Name', size=64,help="Name of the file which is also the standard naming for the exchange"),
+        'type': fields.selection([('in','IN'),
+                                    ('out','OUT'),], 'Type',help="IN for files coming from the other system and to be imported in the ERP ; OUT for files to be generated from the ERP and send to the other system"),
+        'model_id':fields.many2one('ir.model', 'Model',help="OpenEPR main object from which all the fields will be related"),
         'format' : fields.selection([('csv','CSV'),], 'File format'),
+        'fields_ids': fields.many2many('ir.model.fields', 'fields_and_files_rel', 'external_file.file_id', 'fields_id', 'Fields',help="list of the fields used in the file"),
     }
 
     _defaults = {

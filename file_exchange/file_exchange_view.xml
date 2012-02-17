@@ -18,9 +18,16 @@
                     <field name="name" />
                     <field name="external_id" />
                     <field name="scheduler_id" />
-                    <field name="file_ids" colspan="4" nolabel="1"/>
-                    <button name="import_files" string="Import files" type="object" />
-                    <button name="export_files" string="Export files" type="object" />
+                    <field name="type" />
+                    <field name="model_id" />
+                    <field name="format" />
+                    <field name="folder_path" />
+                    <field name="incomming_filter" attrs="{'invisible':[('type','!=','in')]}"/>
+                    <button name="import_files" colspan="2" string="Import files" type="object" attrs="{'invisible':[('type','!=','in')]}"/>
+                    <field name="output_format" attrs="{'invisible':[('type','!=','out')]}"/>
+                    <button name="export_files" colspan="2" string="Export files" type="object" attrs="{'invisible':[('type','!=','out')]}"/>
+                    <separator string="Fields" colspan="4" />
+                    <field name="file_fields_ids" colspan="4" nolabel="1"/>
                 </form>
             </field>
         </record>
@@ -34,42 +41,42 @@
                 <tree string="file_exchange">
                     <field name="name" />
                     <field name="external_id" />
+                    <field name="format" />
+                    <field name="type" />
                     <field name="scheduler_id" />
                 </tree>
             </field>
         </record>
 
-    <!-- VIEW FOR THE OBJECT : external_file -->
-        <record id="external_file_view_form" model="ir.ui.view">
-            <field name="name">external_file.view_form</field>
-            <field name="model">external.file</field>
+    <!-- VIEW FOR THE OBJECT : file_fields -->
+        <record id="file_fields_view_form" model="ir.ui.view">
+            <field name="name">file_exchange.file_fields.view_form</field>
+            <field name="model">file.fields</field>
             <field eval="16" name="priority"/>
             <field name="type">form</field>
             <field name="arch" type="xml">
-                <form string="external_file">
+                <form string="file_fields">
+                    <field name="sequence" />
                     <field name="name" />
-                    <field name="type" />
-                    <field name="model_id" />
-                    <field name="format" />
-                    <field name="fields_ids" />
+                    <field name="mapping_line_id" />
                 </form>
             </field>
         </record>
 
-        <record id="external_file_view_tree" model="ir.ui.view">
-            <field name="name">external_file.view_tree</field>
-            <field name="model">external.file</field>
+        <record id="file_fields_view_tree" model="ir.ui.view">
+            <field name="name">file_fields_view_tree</field>
+            <field name="model">file.fields</field>
             <field eval="16" name="priority"/>
             <field name="type">tree</field>
             <field name="arch" type="xml">
-                <tree string="external_file">
+                <tree string="file_fields">
+                    <field name="sequence" />
                     <field name="name" />
-                    <field name="type" />
-                    <field name="model_id" />
-                    <field name="format" />
+                    <field name="mapping_line_id" />
                 </tree>
             </field>
         </record>
+
         
     </data>
 </openerp>

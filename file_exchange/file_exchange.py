@@ -22,9 +22,7 @@
 from osv import osv, fields
 import netsvc
 
-#=====
 class file_exchange(osv.osv):
-    
     _name = "file.exchange"
     _description = "file exchange"
 
@@ -35,36 +33,47 @@ class file_exchange(osv.osv):
         return True
 
     _columns = {
-        'name': fields.char('Name', size=64,help="Exchange description like the name of the supplier, bank,..."),
+        'name': fields.char('Name', size=64, help="Exchange description like the name of the supplier, bank,..."),
+        'type': fields.selection([('in','IN'),('out','OUT'),], 'Type',help=("IN for files coming from the other system"
+                                                                "and to be imported in the ERP ; OUT for files to be"
+                                                                "generated from the ERP and send to the other system")),
+        'model_id':fields.many2one('ir.model', 'Model',help="OpenEPR main object from which all the fields will be related"),
+        'format' : fields.selection([('csv','CSV'),('csv_no_header','CSV WITHOUT HEADER')], 'File format'),
         'external_id':fields.many2one('external.referential', 'Referential',help="Referential to use for connection and mapping"),
         'scheduler_id':fields.many2one('ir.cron', 'Scheduler',help="Scheduler that will execute the cron task"),
-        'file_ids': fields.one2many('external.file', 'related_file_id', 'Files',help="List of files to be exchanged"),
-    }
-
-    _defaults = {
-
+        'output_format': fields.char('Output Format', size=128, help="Output Format will be used to generate the output file name"),
+        'incomming_filter': fields.char('Incomming Filter', size=128, help="Incomming filter that will be useed to define the file to import"),
+        'folder_path': fields.char('Folder Path', size=128, help="folder that containt the incomming or the outgoing file"),
+        'file_fields_ids': fields.one2many('file.fields', 'file_id', 'Fields')
     }
 
 file_exchange()
 
-#=====
-class external_file(osv.osv):
-    
-    _name = "external.file"
-    _description = "external file"
+
+class file_fields(osv.osv):
+    _name = "file.fields"
+    _description = "file fields"
 
     _columns = {
-        'related_file_id' : fields.many2one('file.exchange', 'File'),
-        'name': fields.char('Name', size=64,help="Name of the file which is also the standard naming for the exchange"),
-        'type': fields.selection([('in','IN'),
-                                    ('out','OUT'),], 'Type',help="IN for files coming from the other system and to be imported in the ERP ; OUT for files to be generated from the ERP and send to the other system"),
-        'model_id':fields.many2one('ir.model', 'Model',help="OpenEPR main object from which all the fields will be related"),
-        'format' : fields.selection([('csv','CSV'),], 'File format'),
-        'fields_ids': fields.many2many('ir.model.fields', 'fields_and_files_rel', 'external_file.file_id', 'fields_id', 'Fields',help="list of the fields used in the file"),
+        #TODO the field name should be autocompleted bey the external field when selecting a mapping
+        'name': fields.char('Name', size=64),
+        'sequence': fields.integer('Sequence', required=True, help="The sequence field is used to define the order of the fields"),
+        #TODO add a filter only fields that belong to the main object or to sub-object should be available
+        'mapping_line_id': fields.many2one('external.mapping.line', 'OpenERP Mapping', require="True"),
+        'file_id': fields.many2one('file.exchange', 'File Exchange', require="True"),
     }
 
-    _defaults = {
+file_fields()
 
-    }
 
-external_file()
+
+
+
+
+
+
+
+
+
+
+

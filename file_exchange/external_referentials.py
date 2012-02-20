@@ -1,8 +1,8 @@
 # -*- encoding: utf-8 -*-
 ###############################################################################
 #                                                                             #
-#   file_exchange for OpenERP                                               #
-#   Copyright (C) 2012 Akretion Emmanuel Samyn <emmanuel.samyn@akretion.com>   #
+#   file_exchange for OpenERP                                                 #
+#   Copyright (C) 2011 Akretion Sébastien BEAU <sebastien.beau@akretion.com>  #
 #                                                                             #
 #   This program is free software: you can redistribute it and/or modify      #
 #   it under the terms of the GNU Affero General Public License as            #
@@ -19,23 +19,26 @@
 #                                                                             #
 ###############################################################################
 
-{
-    'name': 'file_exchange',
-    'version': '0.1',
-    'category': 'Generic Modules/Others',
-    'license': 'AGPL-3',
-    'description': """empty""",
-    'author': 'Akretion',
-    'website': 'http://www.akretion.com/',
-    'depends': ['base_external_referentials'], 
-    'init_xml': [],
-    'update_xml': [ 
-       'file_exchange_view.xml',
-       'file_exchange_menu.xml',
-        'external_referentials_view.xml',
-    ],
-    'demo_xml': [],
-    'installable': True,
-    'active': False,
-}
+from osv import osv, fields
+import netsvc
+from base_file_protocole.base_file_protocole import FileConnection
+from tools.translate import _
+
+class external_referential(osv.osv):
+    _inherit = "external.referential"
+
+    def external_connection_backport(self, cr, uid, id, debug=False, context=None):
+        if isinstance(id, list):
+            id=id[0]
+        referential = self.browse(cr, uid, id, context=context)
+        try:
+            return FileConnection(referential.protocole, referential.location, referential.apiusername, referential.apipass)
+        except Exception, e:
+            raise osv.except_osv(_("Connection Error"), _("Could not connect to server\nCheck url & user & password.\n %s"%e))
+
+    _columns={
+        'protocole': fields.selection([('ftp','ftp'),], 'Protocole'),
+    }
+
+external_referential()
 

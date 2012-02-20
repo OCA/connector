@@ -1,8 +1,8 @@
 # -*- encoding: utf-8 -*-
 ###############################################################################
 #                                                                             #
-#   file_exchange for OpenERP                                               #
-#   Copyright (C) 2012 Akretion Emmanuel Samyn <emmanuel.samyn@akretion.com>   #
+#   ftp_external_referential for OpenERP                                      #
+#   Copyright (C) 2011 Akretion Sébastien BEAU <sebastien.beau@akretion.com>  #
 #                                                                             #
 #   This program is free software: you can redistribute it and/or modify      #
 #   it under the terms of the GNU Affero General Public License as            #
@@ -19,23 +19,30 @@
 #                                                                             #
 ###############################################################################
 
-{
-    'name': 'file_exchange',
-    'version': '0.1',
-    'category': 'Generic Modules/Others',
-    'license': 'AGPL-3',
-    'description': """empty""",
-    'author': 'Akretion',
-    'website': 'http://www.akretion.com/',
-    'depends': ['base_external_referentials'], 
-    'init_xml': [],
-    'update_xml': [ 
-       'file_exchange_view.xml',
-       'file_exchange_menu.xml',
-        'external_referentials_view.xml',
-    ],
-    'demo_xml': [],
-    'installable': True,
-    'active': False,
-}
+from osv import osv, fields
+import netsvc
 
+osv.osv._get_filter = _get_filter
+osv.osv._get_default_import_values = _get_default_import_values
+
+original_get_filter = osv.osv._get_filter
+original__get_default_import_values = osv.osv._get_default_import_values
+
+
+
+def _get_filter(self, cr, uid, external_session, step, previous_filter=None, context=None):
+    if external_session.referential_id.type == 'file_exchange':
+        file_exchange_id = context['file.exchange_id']
+        self.pool
+    return original_get_filter
+
+
+class ftp_osv(osv.osv):
+    
+    _name = "ftp.osv"
+    _description = "ftp osv"
+
+
+
+
+ftp_osv()

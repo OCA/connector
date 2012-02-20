@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  prestashoperpconnect for OpenERP
+  Copyright (C) 2012 Akretion Sébastien BEAU <sebastien.beau@akretion.com>
+  The licence is in the file __openerp__.py
+-->
+
+<openerp>
+    <data>
+    
+        <!-- INHERITED VIEW FOR THE OBJECT : external.referential -->
+
+        <record id="external_referential_view_form" model="ir.ui.view">
+			<field name="name">file_exchange.external.referential.view_form</field>
+			<field name="model">external.referential</field>
+			<field name="inherit_id" ref="base_external_referentials.external_referential_form_view" />
+            <field eval="16" name="priority"/>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<data>
+					<field name="location" position="after">
+						<field name="protocole" />
+					</field>
+				</data>
+			</field>
+		</record>
+
+    </data>
+</openerp>

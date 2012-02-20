@@ -16,18 +16,18 @@
             <field name="arch" type="xml">
                 <form string="file_exchange">
                     <field name="name" />
-                    <field name="external_id" />
+                    <field name="referential_id" />
                     <field name="scheduler_id" />
                     <field name="type" />
                     <field name="model_id" />
                     <field name="format" />
                     <field name="folder_path" />
-                    <field name="incomming_filter" attrs="{'invisible':[('type','!=','in')]}"/>
+                    <field name="incomming_file" attrs="{'invisible':[('type','!=','in')]}"/>
                     <button name="import_files" colspan="2" string="Import files" type="object" attrs="{'invisible':[('type','!=','in')]}"/>
                     <field name="output_format" attrs="{'invisible':[('type','!=','out')]}"/>
                     <button name="export_files" colspan="2" string="Export files" type="object" attrs="{'invisible':[('type','!=','out')]}"/>
                     <separator string="Fields" colspan="4" />
-                    <field name="file_fields_ids" colspan="4" nolabel="1"/>
+                    <field name="field_ids" colspan="4" nolabel="1"/>
                 </form>
             </field>
         </record>
@@ -39,8 +39,8 @@
             <field name="type">tree</field>
             <field name="arch" type="xml">
                 <tree string="file_exchange">
+                    <field name="referential_id" />
                     <field name="name" />
-                    <field name="external_id" />
                     <field name="format" />
                     <field name="type" />
                     <field name="scheduler_id" />
@@ -57,8 +57,9 @@
             <field name="arch" type="xml">
                 <form string="file_fields">
                     <field name="sequence" />
-                    <field name="name" />
-                    <field name="mapping_line_id" />
+                    <field name="mapping_line_id" attrs="{'readonly':[('custom_name','!=',False)]}"/>
+                    <field name="custom_name" attrs="{'readonly':[('mapping_line_id','!=',False)]}"/>
+                    <field name="default_value" />
                 </form>
             </field>
         </record>
@@ -69,10 +70,12 @@
             <field eval="16" name="priority"/>
             <field name="type">tree</field>
             <field name="arch" type="xml">
-                <tree string="file_fields">
+                <tree editable="top" string="file_fields">
                     <field name="sequence" />
-                    <field name="name" />
-                    <field name="mapping_line_id" />
+                    <field name="mapping_line_id" attrs="{'readonly':[('custom_name','!=',False)]}"/>
+                    <field name="custom_name" attrs="{'readonly':[('mapping_line_id','!=',False)]}"/>
+                    <field name="name"/>
+                    <field name="default_value" />
                 </tree>
             </field>
         </record>

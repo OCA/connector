@@ -23,6 +23,7 @@
 from osv import fields, osv
 from sets import Set
 from tools.translate import _
+import time
 
 class external_referential_category(osv.osv):
     _name = 'external.referential.category'
@@ -223,7 +224,67 @@ class external_referential(osv.osv):
             if '.' in referential.name:
                 return False
         return True
-    
+
+    # Method to export external referential type
+    def build_external_ref_type(self, cr, uid, ids, context={}):
+        csv_file = "\"id\",\"name\",\"categ_id:id\"\n"
+        referential = self.browse(cr, uid, ids)[0]
+        print "referential: ",referential
+        csv_file += "\""+referential.type_id.name+"_"+time.strftime('%Y_%m')+"\","
+        csv_file += "\""+referential.type_id.name+"\","
+        csv_file += "\""+referential.type_id.categ_id.get_external_id(context=context)[referential.type_id.categ_id.id]+"\""
+        raise osv.except_osv(_('external_referential_type.csv'), _(csv_file))
+        return True
+
+    # Method to export external referential version
+    def build_external_ref_version(self, cr, uid, ids, context={}):
+        csv_file = "\"type_id:id\",\"id\",\"name\"\n"
+        referential = self.browse(cr, uid, ids)[0]
+        csv_file += "\""+referential.type_id.get_external_id(context=context)[referential.type_id.id]+"\","
+        csv_file += "\""+referential.version_id.name+"_"+time.strftime('%Y_%m')+"\","
+        csv_file += "\""+referential.version_id.name+"\""
+        raise osv.except_osv(_('external_referential_version.csv'), _(csv_file))
+        return True
+
+    # Method to export external referential type
+    def build_external_mapping_template(self, cr, uid, ids, context={}):
+        csv_file = "\"id\",\"version_id:id\",\"model_id:id\",\"external_list_method\",\"external_get_method\",\"external_update_method\",\"external_create_method\",\"external_delete_method\",\"external_key_name\",\"external_resource_name\"\n"
+        referential = self.browse(cr, uid, ids)[0]
+        for mapping in referential.mapping_ids:
+            csv_file += "\""+referential.name+"_"+referential.version_id.name+"_"+mapping.model_id.name+"\","
+            csv_file += "\""+referential.version_id.get_external_id(context=context)[referential.version_id.id]+"\","
+            csv_file += "\""+mapping.model_id.get_external_id(context=context)[mapping.model_id.id]+"\","
+            if mapping.external_list_method!=False:
+                csv_file += "\""+mapping.external_list_method+"\","
+            else:
+                csv_file += "\"\","            
+            if mapping.external_get_method!=False:
+                csv_file += "\""+mapping.external_get_method+"\","
+            else:
+                csv_file += "\"\","
+            if mapping.external_update_method!=False:
+                csv_file += "\""+mapping.external_update_method+"\","
+            else:
+                csv_file += "\"\","
+            if mapping.external_create_method!=False:
+                csv_file += "\""+mapping.external_create_method+"\","
+            else:
+                csv_file += "\"\","
+            if mapping.external_delete_method!=False:
+                csv_file += "\""+mapping.external_delete_method+"\","
+            else:
+                csv_file += "\"\","
+            if mapping.external_key_name!=False:
+                csv_file += "\""+mapping.external_key_name+"\","
+            else:
+                csv_file += "\"\","
+            if mapping.external_resource_name!=False:
+                csv_file += "\""+mapping.external_resource_name+"\"\n"
+            else:
+                csv_file += "\"\"\n"
+        raise osv.except_osv(_('external_referential_mapping_template.csv'), _(csv_file))
+        return True
+
     _constraints = [
         (_test_dot_in_name, 'The name cannot contain a dot!', ['name']),
     ]
@@ -307,50 +368,56 @@ class external_mapping(osv.osv):
         'external_resource_name':fields.char('External Resource Name', size=64),
     }
 
-	# Method to set mapping with all object files
+    # Method to set mapping with all object files
     def add_all_fields(self, cr, uid, ids, context={}):
-    	mapping_line_obj = self.pool.get('external.mapping.line')
-    	mapping = self.browse(cr, uid, ids)[0]
-    	for field in mapping.model_id.field_id:
-    		vals = {'mapping_id': mapping.id,
-    				'field_id': field.id,
-					'type' : 'in_out',
+        mapping_line_obj = self.pool.get('external.mapping.line')
+        mapping = self.browse(cr, uid, ids)[0]
+        for field in mapping.model_id.field_id:
+            vals = {'mapping_id': mapping.id,
+                    'field_id': field.id,
+                    'type' : 'in_out',
                     'active' : True,
                     }
-    		mapping_line_obj.create(cr, uid, vals)
+            mapping_line_obj.create(cr, uid, vals)
         return True
 
-	# Method to export the mapping file
+    # Method to export the mapping file
     def create_mapping_file(self, cr, uid, ids, context={}):
-        mapping_line = "\"id\",\"version_id:id\",\"model_id:id\",\"external_field\",\"field_id:id\",\"type\",\"evaluation_type\",\"external_type\",\"child_mapping_id:id\",\"in_function\",\"out_function\"\n"
+        csv_file = "\"id\",\"version_id:id\",\"model_id:id\",\"external_field\",\"field_id:id\",\"type\",\"evaluation_type\",\"external_type\",\"child_mapping_id:id\",\"in_function\",\"out_function\"\n"
         mapping = self.browse(cr, uid, ids)[0]
-    	for line in mapping.mapping_ids:
-    		if line.external_field!=False and line.active==True:
-    			current_model = mapping.model_id.get_external_id(context=context)[mapping.model_id.id]
-    			current_field = line.field_id.get_external_id(context=context)[line.field_id.id]
-    			print mapping.referential_id.version_id.get_external_id(context=context)[mapping.referential_id.version_id.id]
-    			mapping_line += "\""+mapping.referential_id.version_id.get_external_id(context=context)[mapping.referential_id.version_id.id]+"_"+mapping.model_id.name+"_"+line.field_id.name+"_"+line.external_field+"\","
-    			mapping_line += "\""+mapping.referential_id.version_id.name+"\","
-    			mapping_line += "\""+current_model+"\","
-    			mapping_line += "\""+line.external_field+"\","
-    			mapping_line += "\""+current_field+"\","
-    			mapping_line += "\""+line.type+"\","
-    			if line.evaluation_type!=False:
-    				mapping_line += "\""+line.evaluation_type+"\""
-    			mapping_line += ","
-    			if line.external_type!=False:
-    				mapping_line += "\""+line.external_type+"\""
-    			mapping_line += ","
-    			if line.child_mapping_id.id!=False:
-    			    mapping_line += "\""+line.child_mapping_id.get_external_id(context=context)[line.child_mapping_id.id]+"\""
-    			mapping_line += ","    
-    			if line.in_function!=False:
-    				mapping_line += "\""+line.in_function+"\""
-    			mapping_line += ","
-    			if line.out_function!=False:
-    				mapping_line += "\""+line.out_function+"\""
-    			mapping_line += "\n"
-    	raise osv.except_osv(_('Mapping lines'), _(mapping_line))
+        for line in mapping.mapping_ids:
+            if line.external_field!=False and line.selected==True:
+                current_model = mapping.model_id.get_external_id(context=context)[mapping.model_id.id]
+                current_field = line.field_id.get_external_id(context=context)[line.field_id.id]
+                print mapping.referential_id.version_id.get_external_id(context=context)[mapping.referential_id.version_id.id]
+
+                csv_file += "\""+mapping.referential_id.version_id.get_external_id(context=context)[mapping.referential_id.version_id.id]+"_"+mapping.model_id.name+"_"+line.field_id.name+"_"+line.external_field+"\","
+                csv_file += "\""+mapping.referential_id.version_id.get_external_id(context=context)[mapping.referential_id.version_id.id]+"\","
+                csv_file += "\""+current_model+"\","
+                csv_file += "\""+line.external_field+"\","
+                csv_file += "\""+current_field+"\","
+                csv_file += "\""+line.type+"\","
+                if line.evaluation_type!=False:
+                    csv_file += "\""+line.evaluation_type+"\","
+                else:
+                    csv_file += "\"\","
+                if line.external_type!=False:
+                    csv_file += "\""+line.external_type+"\","
+                else:
+                    csv_file += "\"\","
+                if line.child_mapping_id.id!=False:
+                    csv_file += "\""+line.child_mapping_id.get_external_id(context=context)[line.child_mapping_id.id]+"\","
+                else:
+                    csv_file += "\"\","
+                if line.in_function!=False:
+                    csv_file += "\""+line.in_function+"\","
+                else:
+                    csv_file += "\"\","
+                if line.out_function!=False:
+                    csv_file += "\""+line.out_function+"\"\n"
+                else:
+                    csv_file += "\"\"\n"
+        raise osv.except_osv(_('Mapping lines'), _(csv_file))
         return True
                 
 external_mapping()
@@ -373,6 +440,7 @@ class external_mapping_line(osv.osv):
         'out_function': fields.text('Export from OpenERP Mapping Python Function'),
         'sequence': fields.integer('Sequence'),
         'active': fields.boolean('Active', help="if not checked : not printed in report"),
+        'selected': fields.boolean('Selected', help="to select for mapping"),
         'child_mapping_id': fields.many2one('external.mapping', 'Child Mapping',
             help=('This give you the possibility to import data with a structure of Parent/child'
                 'For example when you import a sale order, the sale order is the parent of the sale order line'

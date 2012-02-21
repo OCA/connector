@@ -18,12 +18,14 @@
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.     #
 #                                                                             #
 ###############################################################################
-
+from tools.safe_eval import safe_eval as eval
 from osv import osv, fields
 import netsvc
 from base_external_referentials.external_osv import ExternalSession
 import csv
 from tempfile import TemporaryFile
+from encodings.aliases import aliases
+from tools.translate import _
 
 class file_exchange(osv.osv):
     _name = "file.exchange"
@@ -41,9 +43,7 @@ class file_exchange(osv.osv):
 
     def _get_external_file_resources(self, cr, uid, external_session, filepath, filename, format, fields_name=None, context=None):
         external_file = external_session.connection.get(filepath, filename)
-        print 'format', format, format == 'csv_no_header'
         if format == 'csv_no_header':
-            print 'no header'
             res = csv.DictReader(external_file, fieldnames=fields_name, delimiter=';')
             return [x for x in res]
         return []
@@ -82,34 +82,76 @@ class file_exchange(osv.osv):
         return True
 
     def _export_files(self, cr, uid, method_id, context=None):
+        def flat_resources(resources):
+            result=[]
+            for resource in resources:
+                row_to_flat = False
+                for key, value in resource.items():
+                    if 'hidden_field_to_split_' in key:
+                        if isinstance(value, list):
+                            if row_to_flat:
+                                raise osv.except_osv(_('Error !'), _('Can not flat two row in the same resource'))
+                            row_to_flat = value
+                        elif isinstance(value, dict):
+                            
+                            for k,v in flat_resources([value])[0].items():
+                                resource[k] = v
+                        del resource[key]
+                if row_to_flat:
+                    for elements in row_to_flat:
+                        tmp_dict = resource.copy()
+                        tmp_dict.update(flat_resources([elements])[0])
+                        result.append(tmp_dict)
+                else:
+                    result.append(resource)
+            return result
+                
+
         file_fields_obj = self.pool.get('file.fields')
         method = self.browse(cr, uid, method_id, context=context)
         defaults = self.get_default_fields_values(cr, uid, method_id, context=context)
         external_session = ExternalSession(method.referential_id)
         model_obj = self.pool.get(method.model_id.model)
+        encoding = method.encoding
 
         fields_name_ids = file_fields_obj.search(cr, uid, [['file_id', '=', method.id]], context=context)
         fields_info = file_fields_obj.read(cr, uid, fields_name_ids, ['name', 'mapping_line_id'], context=context)
-        fields_to_read = [x['mapping_line_id'][1] for x in fields_info if x['mapping_line_id']]
+        mapping_line_filter_ids = [x['mapping_line_id'][0] for x in fields_info if x['mapping_line_id']]
         fields_name = [x['name'] for x in fields_info]
 
         #TODO add a filter
-        ids_to_export = model_obj.search(cr, uid, [], context=context)
+        ids_to_export = model_obj.search(cr, uid, eval(method.search_filter), context=context)
 
-        mapping = {model_obj._name : model_obj._get_mapping(cr, uid, external_session.referential_id.id, mapping_type='out', context=context)}
-        resources = model_obj._get_oe_resources_into_external_format(cr, uid, external_session, ids_to_export, mapping=mapping, fields=fields_to_read, defaults=defaults, context=context)
+        mapping = {model_obj._name : model_obj._get_mapping(cr, uid, external_session.referential_id.id, convertion_type='from_openerp_to_external', mapping_line_filter_ids=mapping_line_filter_ids, context=context)}
+        fields_to_read = [x['internal_field'] for x in mapping[model_obj._name]['mapping_lines']]
+        resources = model_obj._get_oe_resources_into_external_format(cr, uid, external_session, ids_to_export, mapping=mapping, mapping_line_filter_ids=mapping_line_filter_ids, fields=fields_to_read, defaults=defaults, context=context)
         if method.format == 'csv':
-            #output_file = TemporaryFile('w+b')
-            output_file = open("/tmp/output", 'w+b')
-            fields_name = [x.encode('utf-8') for x in fields_name]
-            dw = csv.DictWriter(output_file, fieldnames=fields_name, delimiter=';')
+            output_file = TemporaryFile('w+b')
+            fields_name = [x.encode(encoding) for x in fields_name]
+            dw = csv.DictWriter(output_file, fieldnames=fields_name, delimiter=';', quotechar='"')
             dw.writeheader()
+            resources = flat_resources(resources)
             for resource in resources:
-                dw.writerow({k.encode('utf8'):v.encode('utf8') for k,v in resource.items()})
+                row = {}
+                for k,v in resource.items():
+                    try:
+                        if isinstance(v, unicode):
+                            row[k.encode(encoding)] = v.encode(encoding)
+                        else:
+                            row[k.encode(encoding)] = v
+                    except:
+                        row[k.encode(encoding)] = "ERROR"
+                        #TODO raise an error correctly
+                dw.writerow(row)
             output_file.seek(0)
         external_session.connection.send(method.folder_path, method.output_format, output_file)
-
         return True
+
+    def _get_encoding(self, cr, user, context=None):
+        result = [(x, x.replace('_', '-')) for x in set(aliases.values())]
+        result.sort()
+        return result
+
 
     _columns = {
         'name': fields.char('Name', size=64, help="Exchange description like the name of the supplier, bank,..."),
@@ -120,10 +162,12 @@ class file_exchange(osv.osv):
         'format' : fields.selection([('csv','CSV'),('csv_no_header','CSV WITHOUT HEADER')], 'File format'),
         'referential_id':fields.many2one('external.referential', 'Referential',help="Referential to use for connection and mapping"),
         'scheduler_id':fields.many2one('ir.cron', 'Scheduler',help="Scheduler that will execute the cron task"),
+        'search_filter':  fields.char('Search Filter', size=256),
         'output_format': fields.char('Output Format', size=128, help="Output Format will be used to generate the output file name"),
         'incomming_file': fields.char('Incomming File Name', size=128, help="Incomming file name that will be useed to define the file to import"),
         'folder_path': fields.char('Folder Path', size=128, help="folder that containt the incomming or the outgoing file"),
-        'field_ids': fields.one2many('file.fields', 'file_id', 'Fields')
+        'encoding': fields.selection(_get_encoding, 'Encoding', require=True),
+        'field_ids': fields.one2many('file.fields', 'file_id', 'Fields'),
     }
 
 file_exchange()
@@ -146,22 +190,9 @@ class file_fields(osv.osv):
         'custom_name': fields.char('Custom Name', size=64),
         'sequence': fields.integer('Sequence', required=True, help="The sequence field is used to define the order of the fields"),
         #TODO add a filter only fields that belong to the main object or to sub-object should be available
-        'mapping_line_id': fields.many2one('external.mapping.line', 'OpenERP Mapping'),
+        'mapping_line_id': fields.many2one('external.mapping.line', 'OpenERP Mapping', domain = "[('referential_id', '=', parent.referential_id)]"),
         'file_id': fields.many2one('file.exchange', 'File Exchange', require="True"),
         'default_value': fields.char('Default Value', size=64),
     }
 
 file_fields()
-
-
-
-
-
-
-
-
-
-
-
-
-

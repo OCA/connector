@@ -20,7 +20,9 @@
                     <field name="scheduler_id" />
                     <field name="type" />
                     <field name="model_id" />
+                    <field name="encoding" />
                     <field name="format" />
+                    <field name="search_filter" />
                     <field name="folder_path" />
                     <field name="incomming_file" attrs="{'invisible':[('type','!=','in')]}"/>
                     <button name="import_files" colspan="2" string="Import files" type="object" attrs="{'invisible':[('type','!=','in')]}"/>

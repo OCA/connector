@@ -1,8 +1,8 @@
 # -*- encoding: utf-8 -*-
 ###############################################################################
 #                                                                             #
-#   file_exchange for OpenERP                                               #
-#   Copyright (C) 2012 Akretion Emmanuel Samyn <emmanuel.samyn@akretion.com>   #
+#   file_exchange for OpenERP                                                 #
+#   Copyright (C) 2012 Akretion Emmanuel Samyn <emmanuel.samyn@akretion.com>  #
 #                                                                             #
 #   This program is free software: you can redistribute it and/or modify      #
 #   it under the terms of the GNU Affero General Public License as            #
@@ -30,9 +30,10 @@
     'depends': ['base_external_referentials'], 
     'init_xml': [],
     'update_xml': [ 
-       'file_exchange_view.xml',
-       'file_exchange_menu.xml',
+        'file_exchange_view.xml',
+        'file_exchange_menu.xml',
         'external_referentials_view.xml',
+        'settings/external.referential.category.csv',
     ],
     'demo_xml': [],
     'installable': True,

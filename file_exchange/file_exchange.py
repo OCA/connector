@@ -29,7 +29,7 @@ from tools.translate import _
 
 class file_exchange(osv.osv):
     _name = "file.exchange"
-    _description = "file exchange"
+    _description = "    file exchange"
 
     def get_default_fields_values(self, cr, uid, id, context=None):
         if isinstance(id, list):
@@ -37,7 +37,19 @@ class file_exchange(osv.osv):
         res = {}
         method = self.browse(cr, uid, id, context=context)
         for field in method.field_ids:
-            if field.default_value:
+            if field.advanced_default_value:
+                space = {'self': self,
+                         'cr': cr,
+                         'uid': uid,
+                         'id': id,
+                         'context': context,
+                    }
+                try:
+                    exec field.advanced_default_value in space
+                except Exception, e:
+                    raise osv.except_osv(_('Error !'), _('Error when evaluating advanced default value: %s \n Exception: %s' %(fields.name,e)))
+                res[field.name] = space.get('result', False)
+            elif field.default_value:
                 res[field.name] = field.default_value
         return res
 
@@ -82,6 +94,7 @@ class file_exchange(osv.osv):
         return True
 
     def _export_files(self, cr, uid, method_id, context=None):
+    #TODO refactor this method toooooo long!!!!!
         def flat_resources(resources):
             result=[]
             for resource in resources:
@@ -93,7 +106,6 @@ class file_exchange(osv.osv):
                                 raise osv.except_osv(_('Error !'), _('Can not flat two row in the same resource'))
                             row_to_flat = value
                         elif isinstance(value, dict):
-                            
                             for k,v in flat_resources([value])[0].items():
                                 resource[k] = v
                         del resource[key]
@@ -105,13 +117,15 @@ class file_exchange(osv.osv):
                 else:
                     result.append(resource)
             return result
-                
 
         file_fields_obj = self.pool.get('file.fields')
+
         method = self.browse(cr, uid, method_id, context=context)
-        defaults = self.get_default_fields_values(cr, uid, method_id, context=context)
         external_session = ExternalSession(method.referential_id)
+        external_session.logger.info("Start to export %s"%(method.name,))
+
         model_obj = self.pool.get(method.model_id.model)
+        defaults = self.get_default_fields_values(cr, uid, method_id, context=context)
         encoding = method.encoding
 
         fields_name_ids = file_fields_obj.search(cr, uid, [['file_id', '=', method.id]], context=context)
@@ -144,14 +158,33 @@ class file_exchange(osv.osv):
                         #TODO raise an error correctly
                 dw.writerow(row)
             output_file.seek(0)
-        external_session.connection.send(method.folder_path, method.output_format, output_file)
+        method.start_action_after_execution(model_obj, ids_to_export, context=context)
+        filename = self.pool.get('ir.sequence')._process(method.filename)
+        external_session.connection.send(method.folder_path, filename, output_file)
+        external_session.logger.info("File transfert have been done succesfully %s"%(method.name,))
+        return True
+
+    def start_action_after_execution(self, cr, uid, id, self_object, object_ids, context=None):
+        if isinstance(id, list):
+            id = id[0]
+        method = self.browse(cr, uid, id, context=context)
+        if method.action_after_execution:
+            space = {'self': self_object,
+                     'cr': cr,
+                     'uid': uid,
+                     'ids': object_ids,
+                     'context': context,
+                }
+            try:
+                exec method.action_after_execution in space
+            except Exception, e:
+                raise osv.except_osv(_('Error !'), _('Error can not apply the python action default value: %s \n Exception: %s' %(method.name,e)))
         return True
 
     def _get_encoding(self, cr, user, context=None):
         result = [(x, x.replace('_', '-')) for x in set(aliases.values())]
         result.sort()
         return result
-
 
     _columns = {
         'name': fields.char('Name', size=64, help="Exchange description like the name of the supplier, bank,..."),
@@ -163,11 +196,11 @@ class file_exchange(osv.osv):
         'referential_id':fields.many2one('external.referential', 'Referential',help="Referential to use for connection and mapping"),
         'scheduler_id':fields.many2one('ir.cron', 'Scheduler',help="Scheduler that will execute the cron task"),
         'search_filter':  fields.char('Search Filter', size=256),
-        'output_format': fields.char('Output Format', size=128, help="Output Format will be used to generate the output file name"),
-        'incomming_file': fields.char('Incomming File Name', size=128, help="Incomming file name that will be useed to define the file to import"),
+        'filename': fields.char('Filename', size=128, help="Filename will be used to generate the output file name or to read the incoming file"),
         'folder_path': fields.char('Folder Path', size=128, help="folder that containt the incomming or the outgoing file"),
         'encoding': fields.selection(_get_encoding, 'Encoding', require=True),
         'field_ids': fields.one2many('file.fields', 'file_id', 'Fields'),
+        'action_after_execution': fields.text('Action After Execution', help="This python code will after the import or export will be done"),
     }
 
 file_exchange()
@@ -177,6 +210,21 @@ class file_fields(osv.osv):
     _name = "file.fields"
     _description = "file fields"
     _order='sequence'
+
+    def _clean_vals(self, vals):
+        if vals.get('custom_name'):
+            vals['mapping_line_id'] = False
+        elif vals.get('mapping_line_id'):
+            vals['custom_name'] = False
+        return vals
+
+    def create(self, cr, uid, vals, context=None):
+        vals = self._clean_vals(vals)
+        return super(file_fields, self).create(cr, uid, vals, context=context)
+
+    def write(self, cr, uid, ids, vals, context=None):
+        vals = self._clean_vals(vals)
+        return super(file_fields, self).write(cr, uid, ids, vals, context=context)
 
     def _name_get_fnc(self, cr, uid, ids, name, arg, context=None):
         res = {}
@@ -193,6 +241,7 @@ class file_fields(osv.osv):
         'mapping_line_id': fields.many2one('external.mapping.line', 'OpenERP Mapping', domain = "[('referential_id', '=', parent.referential_id)]"),
         'file_id': fields.many2one('file.exchange', 'File Exchange', require="True"),
         'default_value': fields.char('Default Value', size=64),
+        'advanced_default_value': fields.text('Advanced Default Value', help="This python code will be evaluate and the value in the varaible result will be used as defaut value"),
     }
 
 file_fields()

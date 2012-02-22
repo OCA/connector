@@ -24,12 +24,17 @@
                     <field name="format" />
                     <field name="search_filter" />
                     <field name="folder_path" />
-                    <field name="incomming_file" attrs="{'invisible':[('type','!=','in')]}"/>
+                    <field name="filename"/>
                     <button name="import_files" colspan="2" string="Import files" type="object" attrs="{'invisible':[('type','!=','in')]}"/>
-                    <field name="output_format" attrs="{'invisible':[('type','!=','out')]}"/>
                     <button name="export_files" colspan="2" string="Export files" type="object" attrs="{'invisible':[('type','!=','out')]}"/>
-                    <separator string="Fields" colspan="4" />
-                    <field name="field_ids" colspan="4" nolabel="1"/>
+                    <notebook colspan="4">
+                        <page string="Fields">
+                            <field name="field_ids" colspan="4" nolabel="1"/>
+                        </page>
+                        <page string="Action After Execution" >
+                            <field name="action_after_execution" colspan="4" nolabel="1"/>
+                        </page>
+                    </notebook>
                 </form>
             </field>
         </record>
@@ -61,7 +66,9 @@
                     <field name="sequence" />
                     <field name="mapping_line_id" attrs="{'readonly':[('custom_name','!=',False)]}"/>
                     <field name="custom_name" attrs="{'readonly':[('mapping_line_id','!=',False)]}"/>
-                    <field name="default_value" />
+                    <field name="default_value" attrs="{'readonly':[('advanced_default_value','!=',False)]}"/>
+                    <separator string="Advanced Default Value" colspan="4"/>
+                    <field name="advanced_default_value" nolabel="1" colspan="4"/>
                 </form>
             </field>
         </record>

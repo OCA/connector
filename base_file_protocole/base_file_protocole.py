@@ -60,15 +60,22 @@ class FileConnection(object):
             self.connection.retrbinary("RETR " + filename, outfile.write)
             outfile.seek(0)
             return outfile
-        if self.is_('filestore'):
-            return open(os.path.join(filepath, filename), 'w+b')
+        elif self.is_('filestore'):
+            return open(os.path.join(filepath, filename), 'r+b')
 
     def search(self, filepath, filename):
         if self.is_('ftp'):
             self.connection.cwd('/') #go to root menu by security
             self.connection.cwd(filepath)
+            #Take care that ftp lib use utf-8 and not unicode
             return [x for x in self.connection.nlst() if filename.encode('utf-8') in x]
-        if self.is_('filestore'):
-            return [x for x in os.listdir(filepath) if filename.encode('utf-8') in x]
+        elif self.is_('filestore'):
+            return [x for x in os.listdir(filepath) if filename in x]
+
+    def move(self, oldfilepath, newfilepath, filename):
+        if self.is_('ftp'):
+            self.connection.rename(os.path.join(oldfilepath, filename), os.path.join(newfilepath, filename))
+        elif self.is_('filestore'):
+            os.rename(os.path.join(oldfilepath, filename), os.path.join(newfilepath, filename))
 
 

@@ -27,7 +27,7 @@
     'description': """empty""",
     'author': 'Akretion',
     'website': 'http://www.akretion.com/',
-    'depends': ['base_external_referentials'], 
+    'depends': ['base_external_referentials', 'base_file_protocole', 'base_scheduler_creator'], 
     'init_xml': [],
     'update_xml': [ 
         'file_exchange_view.xml',

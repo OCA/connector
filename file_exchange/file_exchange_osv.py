@@ -20,29 +20,18 @@
 ###############################################################################
 
 from osv import osv, fields
+from base_external_referentials.decorator import only_for_referential
 import netsvc
 
-osv.osv._get_filter = _get_filter
-osv.osv._get_default_import_values = _get_default_import_values
+osv.osv._feo_record_one_external_resource = osv.osv._record_one_external_resource #feo mean file_exchange_original
 
-original_get_filter = osv.osv._get_filter
-original__get_default_import_values = osv.osv._get_default_import_values
+@only_for_referential(ref_categ ='File Exchange', super_function = osv.osv._feo_record_one_external_resource)
+def _record_one_external_resource(self, cr, uid, external_session, resource, defaults=None, mapping=None, context=None):
+    method = self.pool.get('file.exchange').browse(cr, uid, context['file_exchange_id'], context=context)
+    method.start_action('action_before_each', self, None, context=context)
+    res = self._feo_record_one_external_resource(cr, uid, external_session, resource, defaults=defaults, mapping=mapping, context=context)
+    res_id = res.get('create_id', False) or res.get('write_id', False)
+    method.start_action('action_after_each', self, [res_id], context=context)
+    return res
 
-
-
-def _get_filter(self, cr, uid, external_session, step, previous_filter=None, context=None):
-    if external_session.referential_id.type == 'file_exchange':
-        file_exchange_id = context['file.exchange_id']
-        self.pool
-    return original_get_filter
-
-
-class ftp_osv(osv.osv):
-    
-    _name = "ftp.osv"
-    _description = "ftp osv"
-
-
-
-
-ftp_osv()
+osv.osv._record_one_external_resource = _record_one_external_resource

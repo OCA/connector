@@ -20,4 +20,5 @@
 #################################################################################
 import external_referentials
 import file_exchange
+import file_exchange_osv
 

@@ -37,7 +37,7 @@ class external_referential(osv.osv):
             raise osv.except_osv(_("Connection Error"), _("Could not connect to server\nCheck url & user & password.\n %s"%e))
 
     _columns={
-        'protocole': fields.selection([('ftp','ftp'),], 'Protocole'),
+        'protocole': fields.selection([('ftp','ftp'), ('filestore', 'Filestore')], 'Protocole'),
     }
 
 external_referential()

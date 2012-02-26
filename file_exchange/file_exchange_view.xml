@@ -17,22 +17,34 @@
                 <form string="file_exchange">
                     <field name="name" />
                     <field name="referential_id" />
-                    <field name="scheduler_id" />
+                    <field name="scheduler" />
                     <field name="type" />
                     <field name="model_id" />
                     <field name="encoding" />
                     <field name="format" />
-                    <field name="search_filter" />
+                    <field name="search_filter" attrs="{'invisible':[('type','!=','out')]}"/>
                     <field name="folder_path" />
+                    <field name="archive_folder_path"  attrs="{'invisible':[('type','!=','in')]}"/>
                     <field name="filename"/>
-                    <button name="import_files" colspan="2" string="Import files" type="object" attrs="{'invisible':[('type','!=','in')]}"/>
-                    <button name="export_files" colspan="2" string="Export files" type="object" attrs="{'invisible':[('type','!=','out')]}"/>
+                    <group name="Start Task" colspan="2" col="2">
+                        <button name="start_task" colspan="2" string="Import files" type="object" attrs="{'invisible':[('type','!=','in')]}"/>
+                        <button name="start_task" colspan="2" string="Export files" type="object" attrs="{'invisible':[('type','!=','out')]}"/>
+                    </group>
                     <notebook colspan="4">
                         <page string="Fields">
                             <field name="field_ids" colspan="4" nolabel="1"/>
                         </page>
-                        <page string="Action After Execution" >
-                            <field name="action_after_execution" colspan="4" nolabel="1"/>
+                        <page string="Action Before/After All" >
+                            <separator string="Action Before All" colspan="4"/>
+                            <field name="action_before_all" colspan="4" nolabel="1"/>
+                            <separator string="Action After All" colspan="4"/>
+                            <field name="action_after_all" colspan="4" nolabel="1"/>
+                        </page>
+                        <page string="Action Before/After Each" >
+                            <separator string="Action Before Each" colspan="4"/>
+                            <field name="action_before_each" colspan="4" nolabel="1"/>
+                            <separator string="Action After Each" colspan="4"/>
+                            <field name="action_after_each" colspan="4" nolabel="1"/>
                         </page>
                     </notebook>
                 </form>
@@ -50,7 +62,7 @@
                     <field name="name" />
                     <field name="format" />
                     <field name="type" />
-                    <field name="scheduler_id" />
+                    <field name="scheduler" />
                 </tree>
             </field>
         </record>
@@ -68,6 +80,7 @@
                     <field name="custom_name" attrs="{'readonly':[('mapping_line_id','!=',False)]}"/>
                     <field name="default_value" attrs="{'readonly':[('advanced_default_value','!=',False)]}"/>
                     <separator string="Advanced Default Value" colspan="4"/>
+                    <field name='alternative_key'/>
                     <field name="advanced_default_value" nolabel="1" colspan="4"/>
                 </form>
             </field>
@@ -84,11 +97,21 @@
                     <field name="mapping_line_id" attrs="{'readonly':[('custom_name','!=',False)]}"/>
                     <field name="custom_name" attrs="{'readonly':[('mapping_line_id','!=',False)]}"/>
                     <field name="name"/>
-                    <field name="default_value" />
+                    <field name="default_value"/>
+                    <field name='alternative_key'/>
                 </tree>
             </field>
         </record>
 
-        
+<!--WIZARD TO ADD SCHEDULER -->
+
+        <record id="ir_action_create_scheduler_in_file_exchange" model="ir.values">
+            <field name="key2">client_action_multi</field>
+            <field name="model">file.exchange</field>
+            <field name="name">Create a scheduler</field>
+            <field eval="'ir.actions.act_window,%d'%ref('base_scheduler_creator.action_scheduler_creator_wizard')" name="value"/>
+            <field eval="True" name="object"/>
+        </record>
+
     </data>
 </openerp>

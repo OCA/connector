@@ -29,7 +29,7 @@ from tools.translate import _
 
 class file_exchange(osv.osv):
     _name = "file.exchange"
-    _description = "    file exchange"
+    _description = "file exchange"
 
     def get_default_fields_values(self, cr, uid, id, context=None):
         if isinstance(id, list):
@@ -60,38 +60,44 @@ class file_exchange(osv.osv):
             return [x for x in res]
         return []
 
-    def import_files(self, cr, uid, ids, context=None):
-        for method_id in ids:
-            res = self._import_files(cr, uid, method_id, context=context)
+    def start_task(self, cr, uid, ids, context=None):
+        for method in self.browse(cr, uid, ids, context=context):
+            if method.type == 'in':
+                self._import_files(cr, uid, method.id, context=context)
+            elif method.type == 'out':
+                self._export_files(cr, uid, method.id, context=context)
         return True
 
     def _import_files(self, cr, uid, method_id, context=None):
+        if not context:
+            context={}
+        context['file_exchange_id'] = method_id
         file_fields_obj = self.pool.get('file.fields')
         method = self.browse(cr, uid, method_id, context=context)
         defaults = self.get_default_fields_values(cr, uid, method_id, context=context)
         external_session = ExternalSession(method.referential_id)
-        mapping = {method.model_id.name : self._get_mapping(cr, uid, method.referential_id.id, context=context)}
+        mapping = {method.model_id.model : self.pool.get(method.model_id.model)._get_mapping(cr, uid, method.referential_id.id, context=context)}
 
         fields_name_ids = file_fields_obj.search(cr, uid, [['file_id', '=', method.id]], context=context)
         fields_name = [x['name'] for x in file_fields_obj.read(cr, uid, fields_name_ids, ['name'], context=context)]
 
         result = {"create_ids" : [], "write_ids" : []}
-        list_filename = external_session.connection.search(method.folder_path, method.incomming_file)
+        list_filename = external_session.connection.search(method.folder_path, method.filename)
+        if not list_filename:
+            external_session.logger.info("No file '%s' found on the server"%(method.filename,))
         for filename in list_filename:
             external_session.logger.info("Start to import the file %s"%(filename,))
             resources = self._get_external_file_resources(cr, uid, external_session, method.folder_path, filename, method.format, fields_name, context=context)
-            print 'res', resources
-            import pdb; pdb.set_trace()
-            res = self._record_external_resources(cr, uid, external_session, resources, defaults=defaults, mapping=mapping, context=context)
+            res = self.pool.get(method.model_id.model)._record_external_resources(cr, uid, external_session, resources, defaults=defaults, mapping=mapping, context=context)
+            external_session.connection.move(method.folder_path, method.archive_folder_path, filename)
             external_session.logger.info("Finish to import the file %s"%(filename,))
         return result
 
-
-
-    def export_files(self, cr, uid, ids, context=None):
-        for method_id in ids:
-            res = self._export_files(cr, uid, method_id, context=context)
-        return True
+    def _check_if_file_exist(self, cr, uid, external_session, folder_path, filename, context=None):
+        exist = external_session.connection.search(folder_path, filename)
+        if exist:
+            raise osv.except_osv(_('Error !'), _('The file "%s" already exist in the folder "%s"' %(filename, folder_path)))
+        return False
 
     def _export_files(self, cr, uid, method_id, context=None):
     #TODO refactor this method toooooo long!!!!!
@@ -122,6 +128,10 @@ class file_exchange(osv.osv):
 
         method = self.browse(cr, uid, method_id, context=context)
         external_session = ExternalSession(method.referential_id)
+
+        filename = self.pool.get('ir.sequence')._process(method.filename)
+        self._check_if_file_exist(cr, uid, external_session, method.folder_path, filename, context=context)
+
         external_session.logger.info("Start to export %s"%(method.name,))
 
         model_obj = self.pool.get(method.model_id.model)
@@ -139,6 +149,11 @@ class file_exchange(osv.osv):
         mapping = {model_obj._name : model_obj._get_mapping(cr, uid, external_session.referential_id.id, convertion_type='from_openerp_to_external', mapping_line_filter_ids=mapping_line_filter_ids, context=context)}
         fields_to_read = [x['internal_field'] for x in mapping[model_obj._name]['mapping_lines']]
         resources = model_obj._get_oe_resources_into_external_format(cr, uid, external_session, ids_to_export, mapping=mapping, mapping_line_filter_ids=mapping_line_filter_ids, fields=fields_to_read, defaults=defaults, context=context)
+
+        if not resources:
+            external_session.logger.info("Not data to export for %s"%(method.name,))
+            return True
+
         if method.format == 'csv':
             output_file = TemporaryFile('w+b')
             fields_name = [x.encode(encoding) for x in fields_name]
@@ -158,17 +173,18 @@ class file_exchange(osv.osv):
                         #TODO raise an error correctly
                 dw.writerow(row)
             output_file.seek(0)
-        method.start_action_after_execution(model_obj, ids_to_export, context=context)
-        filename = self.pool.get('ir.sequence')._process(method.filename)
+        method.start_action('action_after_all', model_obj, ids_to_export, context=context)
+
         external_session.connection.send(method.folder_path, filename, output_file)
         external_session.logger.info("File transfert have been done succesfully %s"%(method.name,))
         return True
 
-    def start_action_after_execution(self, cr, uid, id, self_object, object_ids, context=None):
+    def start_action(self, cr, uid, id, action_name, self_object, object_ids, context=None):
         if isinstance(id, list):
             id = id[0]
         method = self.browse(cr, uid, id, context=context)
-        if method.action_after_execution:
+        action_code = getattr(method, action_name)
+        if action_code:
             space = {'self': self_object,
                      'cr': cr,
                      'uid': uid,
@@ -176,7 +192,7 @@ class file_exchange(osv.osv):
                      'context': context,
                 }
             try:
-                exec method.action_after_execution in space
+                exec action_code in space
             except Exception, e:
                 raise osv.except_osv(_('Error !'), _('Error can not apply the python action default value: %s \n Exception: %s' %(method.name,e)))
         return True
@@ -194,13 +210,17 @@ class file_exchange(osv.osv):
         'model_id':fields.many2one('ir.model', 'Model',help="OpenEPR main object from which all the fields will be related"),
         'format' : fields.selection([('csv','CSV'),('csv_no_header','CSV WITHOUT HEADER')], 'File format'),
         'referential_id':fields.many2one('external.referential', 'Referential',help="Referential to use for connection and mapping"),
-        'scheduler_id':fields.many2one('ir.cron', 'Scheduler',help="Scheduler that will execute the cron task"),
+        'scheduler':fields.many2one('ir.cron', 'Scheduler',help="Scheduler that will execute the cron task"),
         'search_filter':  fields.char('Search Filter', size=256),
         'filename': fields.char('Filename', size=128, help="Filename will be used to generate the output file name or to read the incoming file"),
         'folder_path': fields.char('Folder Path', size=128, help="folder that containt the incomming or the outgoing file"),
+        'archive_folder_path': fields.char('Archive Folder Path', size=128, help="if a path is set when a file is imported the file will be automatically moved to this folder"),
         'encoding': fields.selection(_get_encoding, 'Encoding', require=True),
         'field_ids': fields.one2many('file.fields', 'file_id', 'Fields'),
-        'action_after_execution': fields.text('Action After Execution', help="This python code will after the import or export will be done"),
+        'action_before_all': fields.text('Action Before All', help="This python code will executed after the import/export"),
+        'action_after_all': fields.text('Action After All', help="This python code will executed after the import/export"),
+        'action_before_each': fields.text('Action Before Each', help="This python code will executed after each element of the import/export"), 
+        'action_after_each': fields.text('Action After Each', help="This python code will executed after each element of the import/export"),
     }
 
 file_exchange()
@@ -241,7 +261,9 @@ class file_fields(osv.osv):
         'mapping_line_id': fields.many2one('external.mapping.line', 'OpenERP Mapping', domain = "[('referential_id', '=', parent.referential_id)]"),
         'file_id': fields.many2one('file.exchange', 'File Exchange', require="True"),
         'default_value': fields.char('Default Value', size=64),
-        'advanced_default_value': fields.text('Advanced Default Value', help="This python code will be evaluate and the value in the varaible result will be used as defaut value"),
+        'advanced_default_value': fields.text('Advanced Default Value', help=("This python code will be evaluate and the value"
+                                                                        "in the varaible result will be used as defaut value")),
+        'alternative_key': fields.related('mapping_line_id', 'alternative_key', type='boolean', string='Alternative Key'),
     }
 
 file_fields()

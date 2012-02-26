@@ -10,7 +10,7 @@
             <field name="res_model">file.exchange</field>
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
-            <!-- field name="view_id" ref="file_exchange_view_tree"/ -->
+            <field name="context">{'wizard_object' : 'file.exchange', 'function' : 'start_task', 'object_link' : 'file.exchange' }</field>
         </record>
             
         <menuitem id="menu_files_exchange_list" name="Files exchange" parent="menu_file_exchange" action="actions_open_file_exchange" />

@@ -106,7 +106,7 @@ class external_mappinglines_template(osv.osv):
         'external_field': fields.char('External Field', size=32),
         'type': fields.selection([('in_out', 'External <-> OpenERP'), ('in', 'External -> OpenERP'), ('out', 'External <- OpenERP')], 'Type'),
         'evaluation_type': fields.selection([('function', 'Function'), ('sub-mapping','Sub Mapping Line'), ('direct', 'Direct Mapping')], 'Evalution Type', required=True),
-        'external_type': fields.selection([('o2m', 'one2many'), ('unicode', 'String'), ('bool', 'Boolean'), ('int', 'Integer'), ('float', 'Float'), ('list', 'List'), ('dict', 'Dictionnary')], 'External Type', required=True),
+        'external_type': fields.selection([('m2o', 'many2one'), ('m2m', 'many2many'), ('o2m', 'one2many'), ('unicode', 'String'), ('bool', 'Boolean'), ('int', 'Integer'), ('float', 'Float'), ('list', 'List'), ('dict', 'Dictionnary')], 'External Type', required=True),
         'in_function': fields.text('Import in OpenERP Mapping Python Function'),
         'out_function': fields.text('Export from OpenERP Mapping Python Function'),
         'child_mapping_id': fields.many2one('external.mapping.template', 'Child Mapping', ondelete='cascade',
@@ -115,6 +115,9 @@ class external_mappinglines_template(osv.osv):
                 'In this case you have to select the child mapping in order to convert the data'
                 )
             ),
+        'alternative_key': fields.boolean('Alternative Key', help=("Only one field can be selected as alternative key,"
+                                                                "if no external id was found for the record the alternative key"
+                                                                "will be used to identify the resource")),
         }
 
 external_mappinglines_template()
@@ -190,6 +193,7 @@ class external_referential(osv.osv):
                         'out_function': each_mapping_line_rec['out_function'],
                         'field_id': each_mapping_line_rec['field_id'] and each_mapping_line_rec['field_id'][0] or False,
                         'active':True,
+                        'alternative_key': each_mapping_line_rec['alternative_key'],
                         }
                     mapping_line_id = mapping_line_obj.create(cr, uid, vals)
                     if each_mapping_line_rec['child_mapping_id']:
@@ -301,7 +305,7 @@ class external_mapping_line(osv.osv):
     def _name_get_fnc(self, cr, uid, ids, name, arg, context=None):
         res = {}
         for mapping_line in self.browse(cr, uid, ids, context):
-            res[mapping_line.id] = mapping_line.field_id or mapping_line.external_field
+            res[mapping_line.id] = mapping_line.external_field or mapping_line.field_id.name
         return res
     
     _columns = {
@@ -427,14 +431,14 @@ class external_mapping_line(osv.osv):
     _inherit = 'external.mapping.line'
     
     _columns = {
+        'referential_id': fields.related('mapping_id', 'referential_id', type='many2one', relation='external.referential', string='Referential'),
         'field_id': fields.many2one('ir.model.fields', 'OpenERP Field', ondelete='cascade'),
-        'field_real_name': fields.related('field_id', 'name', type='char', relation='ir.model.field', string='Field name',readonly=True),
-        
+        'internal_field': fields.related('field_id', 'name', type='char', relation='ir.model.field', string='Field name',readonly=True),
         'external_field': fields.char('External Field', size=32),
         'mapping_id': fields.many2one('external.mapping', 'External Mapping', ondelete='cascade'),
         'related_model_id': fields.related('mapping_id', 'model_id', type='many2one', relation='ir.model', string='Related Model'),
         'type': fields.selection([('in_out', 'External <-> OpenERP'), ('in', 'External -> OpenERP'), ('out', 'External <- OpenERP')], 'Type'),
-        'external_type': fields.selection([('o2m', 'one2many'), ('unicode', 'String'), ('bool', 'Boolean'), ('int', 'Integer'), ('float', 'Float'), ('list', 'List'), ('dict', 'Dictionnary')], 'External Type', required=True),
+        'external_type': fields.selection([('m2o', 'many2one'), ('m2m', 'many2many'), ('o2m', 'one2many'), ('unicode', 'String'), ('bool', 'Boolean'), ('int', 'Integer'), ('float', 'Float'), ('list', 'List'), ('dict', 'Dictionnary')], 'External Type', required=True),
         'evaluation_type': fields.selection([('function', 'Function'), ('sub-mapping','Sub Mapping Line'), ('direct', 'Direct Mapping')], 'Evalution Type', required=True),
         'in_function': fields.text('Import in OpenERP Mapping Python Function'),
         'out_function': fields.text('Export from OpenERP Mapping Python Function'),
@@ -447,6 +451,9 @@ class external_mapping_line(osv.osv):
                 'In this case you have to select the child mapping in order to convert the data'
                 )
             ),
+        'alternative_key': fields.boolean('Alternative Key', help=("Only one field can be selected as alternative key,"
+                                                                "if no external id was found for the record the alternative key"
+                                                                "will be used to identify the resource")),
     }
     
     _defaults = {

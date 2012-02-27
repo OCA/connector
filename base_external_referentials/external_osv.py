@@ -1015,13 +1015,13 @@ osv.osv._import_one_resource = _import_one_resource
 osv.osv._record_external_resources = _record_external_resources
 osv.osv._record_one_external_resource = _record_one_external_resource
 
-osv.osv._transform_external_resources = _transform_external_resources
-osv.osv._transform_one_external_resource = _transform_one_external_resource
+osv.osv._transform_resources = _transform_resources
+osv.osv._transform_one_resource = _transform_one_resource
 
 osv.osv._transform_sub_mapping = _transform_sub_mapping
 osv.osv._merge_with_default_values = _merge_with_default_values
 
-osv.osv._transform_external_field =_transform_external_field
+osv.osv._transform_field =_transform_field
 
 osv.osv.oe_update = oe_update
 osv.osv.oe_create = oe_create

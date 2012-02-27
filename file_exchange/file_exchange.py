@@ -223,6 +223,31 @@ class file_exchange(osv.osv):
         'action_after_each': fields.text('Action After Each', help="This python code will executed after each element of the import/export"),
     }
 
+    # Method to export the mapping file
+    def create_mapping_file(self, cr, uid, ids, context={}):
+        csv_file = "\"name\",\"custom_name\",\"sequence\",\"mapping_line_id:id\",\"file_id:id\",\"default_value\",\"advanced_default_value\"\n"
+        current_file = self.browse(cr, uid, ids)[0]
+        for field in current_file.field_ids:
+            csv_file += "\"" + field.name
+            csv_file += "\",\""
+            if field.custom_name:
+                csv_file += field.custom_name
+            csv_file += "\",\""
+            csv_file += str(field.sequence)
+            csv_file += "\",\""
+            csv_file += "TODO" #mapping_line_id
+            csv_file += "\",\""
+            csv_file += "TOFIX_"+str(field.file_id.id)+"_"+field.file_id.get_external_id(context=context)[field.file_id.id]
+            csv_file += "\",\""
+            if field.default_value:
+                csv_file += field.default_value
+            csv_file += "\",\""
+            if field.advanced_default_value:
+                csv_file += field.advanced_default_value
+            csv_file += "\"\n"
+        raise osv.except_osv(_('Fields'), _(csv_file))
+        return True
+        
 file_exchange()
 
 

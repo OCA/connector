@@ -46,6 +46,9 @@
                             <separator string="Action After Each" colspan="4"/>
                             <field name="action_after_each" colspan="4" nolabel="1"/>
                         </page>
+                        <page string="CSV file generation">
+                            <button name="create_mapping_file" string="Export fields file" colspan="2" type="object" />
+                        </page>
                     </notebook>
                 </form>
             </field>

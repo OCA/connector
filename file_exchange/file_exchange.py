@@ -237,7 +237,7 @@ class file_exchange(osv.osv):
             csv_file += "\",\""
             csv_file += "TODO" #mapping_line_id
             csv_file += "\",\""
-            csv_file += "TOFIX_"+str(field.file_id.id)+"_"+field.file_id.get_external_id(context=context)[field.file_id.id]
+            csv_file += field.file_id.name.replace(' ', '_')
             csv_file += "\",\""
             if field.default_value:
                 csv_file += field.default_value

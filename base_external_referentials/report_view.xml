@@ -51,7 +51,7 @@
 			<field name="model">external.report</field>
 			<field name="type">tree</field>
 			<field name="arch" type="xml">
-				<tree string="External Reports"> <!--colors="red:len(failed_line_ids)>0" TODO fix me-->
+				<tree string="External Reports" colors="red:failed_line_ids">
                     <field name="referential_id"/>
                     <field name="object_related_description"/>
                     <field name="object_name"/>
@@ -156,13 +156,6 @@
                     <field name="action"/>
                     <field name="date"/>
                     <field name="state"/>
-                    <separator colspan="4"/>
-                    <group colspan="4" col="3">
-                        <field name="error_message"/>
-                        <field name="origin_defaults"/>
-                        <field name="origin_context"/>
-                        <field name="data_record"/>
-                    </group>
                     <separator colspan="4"/>
                     <button name="retry" string="Retry" icon="gtk-go-forward" type="object" colspan="2"/>
 				</form>

@@ -126,7 +126,7 @@ class external_referential(osv.osv):
     _name = 'external.referential'
     _description = 'External Referential'
 
-    def external_connection(self, cr, uid, referential, DEBUG=False, context=None):
+    def external_connection(self, cr, uid, referential, debug=False, context=None):
         """Should be overridden to provide valid external referential connection"""
         return False
 

@@ -25,7 +25,7 @@ from tools.translate import _
 from message_error import MappingError
 import functools
 
-def only_for_referential(referential_type_filter):
+def only_for_referential(ref_type=None, ref_categ=None, super_function=None):
     """ 
     This decorator will execute the code of the function decorated only if
     the referential_type match with the referential_type pass in the context
@@ -39,28 +39,31 @@ def only_for_referential(referential_type_filter):
                 referential = self.browse(cr, uid, referential_id)
             else:
                 referential = argument.referential_id
-            if referential.type_id.name.lower() == referential_type_filter.lower():
+            if ref_type and referential.type_id.name.lower() == ref_type.lower() or ref_categ and referential.categ_id.name.lower() == ref_categ.lower():
                 return func(self, cr, uid, argument, *args, **kwargs)
             else:
-                # TODO REFACTOR this code
-                # It's the first time I do something like that :S
-                # I never use decorator before :(
-                # My aim is to call the super method instead of original method
-                # when the referential is not the appropriated referential
-                # Can you check my code I share your experience about this kind of feature?
-                # Can you help me to clean my code?
-                # Thanks you for your help ;)
-                parent = False
-                name = func.__name__
-                for base in self.__class__.mro()[1:]:
-                    if parent:
-                        if hasattr(base, name):
-                            return getattr(base, name)(self, cr, uid, argument, *args, **kwargs)
-                    if str(base) == str(self.__class__):
-                        #now I am at the good level of the class inherited
-                        parent = True
-                raise osv.except_osv(_("Not Implemented"), _("Not parent method found"))
-                ##### REFACTOR END
+                if super_function:
+                    return super_function(self, cr, uid, argument, *args, **kwargs)
+                else:
+                    # TODO REFACTOR this code
+                    # It's the first time I do something like that :S
+                    # I never use decorator before :(
+                    # My aim is to call the super method instead of original method
+                    # when the referential is not the appropriated referential
+                    # Can you check my code and share your experience about this kind of feature?
+                    # Can you help me to clean my code?
+                    # Thanks you for your help ;)
+                    parent = False
+                    name = func.__name__
+                    for base in self.__class__.mro()[1:]:
+                        if parent:
+                            if hasattr(base, name):
+                                return getattr(base, name)(self, cr, uid, argument, *args, **kwargs)
+                        if str(base) == str(self.__class__):
+                            #now I am at the good level of the class inherited
+                            parent = True
+                    raise osv.except_osv(_("Not Implemented"), _("Not parent method found"))
+                    ##### REFACTOR END
         return wrapped
     return decorator
 

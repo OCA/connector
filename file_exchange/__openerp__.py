@@ -24,7 +24,10 @@
     'version': '0.1',
     'category': 'Generic Modules/Others',
     'license': 'AGPL-3',
-    'description': """empty""",
+    'description': """
+Definition : a file exchange is a file to be exchanged (in/out) between OpenERP and another system (referential)
+Goal : store file details and and file fields
+""",
     'author': 'Akretion',
     'website': 'http://www.akretion.com/',
     'depends': ['base_external_referentials', 'base_file_protocole', 'base_scheduler_creator'], 

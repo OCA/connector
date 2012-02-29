@@ -27,7 +27,7 @@ from tools.translate import _
 class external_referential(osv.osv):
     _inherit = "external.referential"
 
-    def external_connection_backport(self, cr, uid, id, debug=False, context=None):
+    def external_connection(self, cr, uid, id, debug=False, context=None):
         if isinstance(id, list):
             id=id[0]
         referential = self.browse(cr, uid, id, context=context)

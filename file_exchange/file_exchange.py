@@ -106,15 +106,16 @@ class file_exchange(osv.osv):
             for resource in resources:
                 row_to_flat = False
                 for key, value in resource.items():
-                    if 'hidden_field_to_split_' in key:
-                        if isinstance(value, list):
-                            if row_to_flat:
-                                raise osv.except_osv(_('Error !'), _('Can not flat two row in the same resource'))
-                            row_to_flat = value
-                        elif isinstance(value, dict):
-                            for k,v in flat_resources([value])[0].items():
-                                resource[k] = v
-                        del resource[key]
+                    if key != False:
+                        if 'hidden_field_to_split_' in key:
+                            if isinstance(value, list):
+                                if row_to_flat:
+                                    raise osv.except_osv(_('Error !'), _('Can not flat two row in the same resource'))
+                                row_to_flat = value
+                            elif isinstance(value, dict):
+                                for k,v in flat_resources([value])[0].items():
+                                    resource[k] = v
+                            del resource[key]
                 if row_to_flat:
                     for elements in row_to_flat:
                         tmp_dict = resource.copy()
@@ -127,56 +128,76 @@ class file_exchange(osv.osv):
         file_fields_obj = self.pool.get('file.fields')
 
         method = self.browse(cr, uid, method_id, context=context)
+    #=== Get connection
         external_session = ExternalSession(method.referential_id)
-
-        filename = self.pool.get('ir.sequence')._process(method.filename)
+        sequence_obj = self.pool.get('ir.sequence')
+        d = sequence_obj._interpolation_dict()
+        filename = sequence_obj._interpolate(method.filename, d)
+    #=== Check if file already exist in specified folder. If so, raise an alert
         self._check_if_file_exist(cr, uid, external_session, method.folder_path, filename, context=context)
-
+    #=== Start export
         external_session.logger.info("Start to export %s"%(method.name,))
-
         model_obj = self.pool.get(method.model_id.model)
         defaults = self.get_default_fields_values(cr, uid, method_id, context=context)
         encoding = method.encoding
-
+    #=== Get external file ids and fields
         fields_name_ids = file_fields_obj.search(cr, uid, [['file_id', '=', method.id]], context=context)
         fields_info = file_fields_obj.read(cr, uid, fields_name_ids, ['name', 'mapping_line_id'], context=context)
+        print "fields_info: ",fields_info
+    #=== Get lines that need to be mapped
         mapping_line_filter_ids = [x['mapping_line_id'][0] for x in fields_info if x['mapping_line_id']]
         fields_name = [x['name'] for x in fields_info]
-
+    #=== Apply filter
         #TODO add a filter
-        ids_to_export = model_obj.search(cr, uid, eval(method.search_filter), context=context)
-
+        ids_filter = "()" # In case not filter is filed in the form
+        if method.search_filter != False:
+            ids_filter = method.search_filter
+        ids_to_export = model_obj.search(cr, uid, eval(ids_filter), context=context)
+    #=== Start mapping
         mapping = {model_obj._name : model_obj._get_mapping(cr, uid, external_session.referential_id.id, convertion_type='from_openerp_to_external', mapping_line_filter_ids=mapping_line_filter_ids, context=context)}
         fields_to_read = [x['internal_field'] for x in mapping[model_obj._name]['mapping_lines']]
+        # TODO : CASE fields_to_read is False !!!
         resources = model_obj._get_oe_resources_into_external_format(cr, uid, external_session, ids_to_export, mapping=mapping, mapping_line_filter_ids=mapping_line_filter_ids, fields=fields_to_read, defaults=defaults, context=context)
-
+        print "resources: ",resources
+    #=== Check if content to export
         if not resources:
             external_session.logger.info("Not data to export for %s"%(method.name,))
             return True
-
+    #=== Write CSV file
         if method.format == 'csv':
             output_file = TemporaryFile('w+b')
             fields_name = [x.encode(encoding) for x in fields_name]
+            print "fields_name: ",fields_name
             dw = csv.DictWriter(output_file, fieldnames=fields_name, delimiter=';', quotechar='"')
-            dw.writeheader()
+#            dw.writeheader() TODO : only for python >= 2.7
+            row = {}
+        #=== Write header
+            for name in fields_name:
+                row[name.encode(encoding)] = name.encode(encoding)
+            dw.writerow(row)
+        #=== Write content
             resources = flat_resources(resources)
             for resource in resources:
                 row = {}
                 for k,v in resource.items():
-                    try:
-                        if isinstance(v, unicode):
-                            row[k.encode(encoding)] = v.encode(encoding)
-                        else:
-                            row[k.encode(encoding)] = v
-                    except:
-                        row[k.encode(encoding)] = "ERROR"
+                    if k!=False:
+                        try:
+                            if isinstance(v, unicode) and v!=False:
+                                row[k.encode(encoding)] = v.encode(encoding)
+                            else:
+                                row[k.encode(encoding)] = v
+                        except:
+                            row[k.encode(encoding)] = "ERROR"
                         #TODO raise an error correctly
+                print "=====> row: ",row
                 dw.writerow(row)
             output_file.seek(0)
         method.start_action('action_after_all', model_obj, ids_to_export, context=context)
 
+    #=== Export file
         external_session.connection.send(method.folder_path, filename, output_file)
         external_session.logger.info("File transfert have been done succesfully %s"%(method.name,))
+        raise osv.except_osv(_('Export succesfull'), _('File transfert have been done succesfully %s' %(method.name,)))
         return True
 
     def start_action(self, cr, uid, id, action_name, self_object, object_ids, context=None):

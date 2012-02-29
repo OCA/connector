@@ -26,6 +26,9 @@
     'version': '1.0',
     'category': 'Generic Modules/Base',
     'description': """
+Definition : a referential is an external system that will interacts with OpenERP
+Goal : store external system connection details and objects fields mapping
+
 This module provide an abstract common minimal base to add any additional external id columns
 to some OpenObject table, pointing to some external referential.
 A referential is abstract and minimal at this stage, it only has:

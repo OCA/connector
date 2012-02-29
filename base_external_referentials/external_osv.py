@@ -517,7 +517,6 @@ def _transform_one_resource(self, cr, uid, external_session, convertion_type, re
     @return: dictionary of converted data in OpenERP format 
     """
 
-
     if context is None:
         context = {}
     if defaults is None:
@@ -729,9 +728,6 @@ def _get_oe_resources_into_external_format(self, cr, uid, external_session, ids,
 def _record_resourse_into_external_referential(self, cr, uid, external_session, resource, context=None):
     print 'TODO'
     return True
-
-
-
 
 
 def _existing_oeid_for_extid_import(self, cr, uid, vals, external_id, referential_id, context=None):

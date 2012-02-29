@@ -233,7 +233,6 @@ class external_referential(osv.osv):
     def build_external_ref_type(self, cr, uid, ids, context={}):
         csv_file = "\"id\",\"name\",\"categ_id:id\"\n"
         referential = self.browse(cr, uid, ids)[0]
-        print "referential: ",referential
         csv_file += "\""+referential.type_id.name+"_"+time.strftime('%Y_%m')+"\","
         csv_file += "\""+referential.type_id.name+"\","
         csv_file += "\""+referential.type_id.categ_id.get_external_id(context=context)[referential.type_id.categ_id.id]+"\""
@@ -393,7 +392,6 @@ class external_mapping(osv.osv):
             if line.external_field!=False and line.selected==True:
                 current_model = mapping.model_id.get_external_id(context=context)[mapping.model_id.id]
                 current_field = line.field_id.get_external_id(context=context)[line.field_id.id]
-                print mapping.referential_id.version_id.get_external_id(context=context)[mapping.referential_id.version_id.id]
 
                 csv_file += "\""+mapping.referential_id.version_id.get_external_id(context=context)[mapping.referential_id.version_id.id]+"_"+mapping.model_id.name+"_"+line.field_id.name+"_"+line.external_field+"\","
                 csv_file += "\""+mapping.referential_id.version_id.get_external_id(context=context)[mapping.referential_id.version_id.id]+"\","

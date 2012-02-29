@@ -45,6 +45,14 @@ class ExternalSession(object):
     def is_categ(self, referential_category):
         return self.referential_id.categ_id.name.lower() == referential_category.lower()
 
+
+########################################################################################################################
+#
+#                                             BASIC FEATURES
+#
+########################################################################################################################
+
+
 def read_w_order(self, cr, uid, ids, fields_to_read=None, context=None, load='_classic_read'):
     """ Read records with given ids with the given fields and return it respecting the order of the ids
     This is very usefull for synchronizing data in a special order with an external system
@@ -214,6 +222,32 @@ def extid_to_oeid(self, cr, uid, external_session, external_id, context=None):
         #except Exception, error: #external system might return error because no such record exists
         #    raise osv.except_osv(_('Ext Synchro'), _("Error when importing on fly the object %s with the external_id %s and the external referential %s.\n Error : %s" %(self._name, id, referential_id, error)))
     return False
+
+#######################        MONKEY PATCHING       #######################
+
+osv.osv.read_w_order = read_w_order
+osv.osv.browse_w_order = browse_w_order
+
+osv.osv.prefixed_id = prefixed_id
+osv.osv.id_from_prefixed_id = id_from_prefixed_id
+osv.osv.get_last_imported_external_id = get_last_imported_external_id
+osv.osv.get_modified_ids = get_modified_ids
+osv.osv.oeid_to_extid = oeid_to_extid
+osv.osv._extid_to_expected_oeid = _extid_to_expected_oeid
+osv.osv.extid_to_existing_oeid = extid_to_existing_oeid
+osv.osv.extid_to_oeid = extid_to_oeid
+osv.osv.get_all_oeid_from_referential = get_all_oeid_from_referential
+osv.osv.get_all_extid_from_referential = get_all_extid_from_referential
+
+
+########################################################################################################################
+#
+#                                             END OF BASIC FEATURES
+#
+########################################################################################################################
+
+
+
 
 
 ########################################################################################################################
@@ -479,216 +513,7 @@ def _record_one_external_resource(self, cr, uid, external_session, resource, def
         return {'write_id' : existing_rec_id}
     return {}
 
-def _transform_resources(self, cr, uid, external_session, convertion_type, resources, defaults=None, mapping=None, mapping_line_filter_ids=None, parent_data=None, context=None):
-    """
-    Used in ext_import in order to convert all of the external data into OpenERP data
 
-    @param external_data: list of external_data to convert into OpenERP data
-    @param referential_id: external referential id from where we import the resource
-    @param parent_data: data of the parent, only use when a mapping line have the type 'sub mapping'
-    @param defaults: defaults value for data converted
-    @return: list of the line converted into OpenERP value
-    """
-    if not mapping:
-        mapping = {}
-    result= []
-    if resources:
-        if mapping.get(self._name) is None:
-            mapping[self._name] = self._get_mapping(cr, uid, external_session.referential_id.id, convertion_type=convertion_type, mapping_line_filter_ids=mapping_line_filter_ids, context=context)
-        if convertion_type == 'from_openerp_to_external':
-            field_to_read = [x['internal_field'] for x in mapping[self._name]['mapping_lines']]
-            resources = self.read(cr, uid, resources, field_to_read, context=context)
-        if mapping[self._name].get("mapping_lines"):
-            for resource in resources:
-                result.append(self._transform_one_resource(cr, uid, external_session, convertion_type, resource, 
-                                                            mapping, mapping_line_filter_ids, parent_data=parent_data, 
-                                                            previous_result=result, defaults=defaults, context=context))
-    return result
-
-def _transform_one_resource(self, cr, uid, external_session, convertion_type, resource, mapping, mapping_line_filter_ids=None, parent_data=None, previous_result=None, defaults=None, context=None):
-    """
-    Used in _transform_external_resources in order to convert external row of data into OpenERP data
-
-    @param referential_id: external referential id from where we import the resource
-    @param resource: a dictionnary of data to convert into OpenERP data
-    @param mapping dict: dictionnary of mapping {'product.product' : {'mapping_lines' : [...], 'key_for_external_id':'...'}}
-    @param previous_result: list of the previous line converted. This is not used here but it's necessary for playing on change on sale order line
-    @param defaults: defaults value for the data imported
-    @return: dictionary of converted data in OpenERP format 
-    """
-
-
-    if context is None:
-        context = {}
-    if defaults is None:
-        defaults = {}
-
-    mapping_lines = mapping[self._name].get("mapping_lines")
-    key_for_external_id = mapping[self._name].get("key_for_external_id")
-
-    vals = {} #Dictionary for create record
-    sub_mapping_list=[]
-    for mapping_line in mapping_lines:
-
-        if convertion_type == 'from_external_to_openerp':
-            from_field = mapping_line['external_field']
-            to_field = mapping_line['internal_field']
-
-        elif convertion_type == 'from_openerp_to_external':
-            from_field = mapping_line['internal_field']
-            to_field = mapping_line['external_field']
-
-        if from_field in resource.keys():
-            field_value = resource[from_field]
-            field_type = mapping_line['external_type'] #TODO maybe need some improvement by default we use the same evaluation as imput
-            if mapping_line['evaluation_type'] == 'sub-mapping':
-                sub_mapping_list.append(mapping_line)
-            else:
-                if mapping_line['evaluation_type'] == 'direct':
-                    vals[to_field] = self._transform_field(cr, uid, external_session, convertion_type, to_field, field_value, field_type, context=context)
-                else:
-                    #Build the space for expr
-                    space = {'self': self,
-                             'cr': cr,
-                             'uid': uid,
-                             'data': resource,
-                             'referential_id': external_session.referential_id.id,
-                             'defaults': defaults,
-                             'context': context,
-                             'ifield': self._transform_field(cr, uid, external_session, convertion_type, to_field, field_value, field_type, context=context),
-                             'conn': context.get('conn_obj', False),
-                             'base64': base64,
-                             'vals': vals,
-                             'previous_result': previous_result,
-                        }
-
-                    #The expression should return value in list of tuple format
-                    #eg[('name','Sharoon'),('age',20)] -> vals = {'name':'Sharoon', 'age':20}
-                    if convertion_type == 'from_external_to_openerp':
-                        mapping_function_key = 'in_function'
-                    else:
-                        mapping_function_key = 'out_function'
-                    try:
-                        exec mapping_line[mapping_function_key] in space
-                    except Exception, e:
-                        external_session.logger.error("Error in import mapping: %r" % (mapping_line[mapping_function_key],),
-                                                                           "Mapping Context: %r" % (space,),
-                                                                           "Exception: %r" % (e,))
-                        #del(space['__builtins__'])
-                        raise MappingError(e, mapping_line['external_field'], self._name)
-                    
-                    result = space.get('result', False)
-                    # Check if result returned by the mapping function is correct : [('field1', value), ('field2', value))]
-                    # And fill the vals dict with the results
-                    if result:
-                        if isinstance(result, list):
-                            for each_tuple in result:
-                                if isinstance(each_tuple, tuple) and len(each_tuple) == 2:
-                                    vals[each_tuple[0]] = each_tuple[1]
-                        else:
-                            raise MappingError(_('Invalid format for the variable result.'), mapping_line['external_field'], self._name)
-
-    if convertion_type == 'from_external_to_openerp' and key_for_external_id and resource.get(key_for_external_id):
-        vals.update({'external_id': int(resource[key_for_external_id])})
-
-    vals = self._merge_with_default_values(cr, uid, external_session, resource, vals, sub_mapping_list, defaults=defaults, context=context)
-    vals = self._transform_sub_mapping(cr, uid, external_session, convertion_type, resource, vals, sub_mapping_list, mapping, mapping_line_filter_ids=mapping_line_filter_ids, defaults=defaults, context=context)
-    return vals
-
-def _transform_field(self, cr, uid, external_session, convertion_type, field_name, field_value, field_type, context=None):
-    field = False
-    if field_value:
-        if field_type == 'o2m':
-            if convertion_type == 'from_external_to_openerp':
-                return self.pool.get(self._columns[field_name]._obj).extid_to_oeid(cr, uid, external_session, field_value, context=context)
-            else:
-                return field_value[0]
-        if field_type == 'list' and isinstance(field_value, (str, unicode)):
-            # external data sometimes returns ',1,2,3' for a list...
-            casted_field = eval(ifield.strip(','))
-            # For a list, external data may returns something like '1,2,3' but also '1' if only
-            # one item has been selected. So if the casted field is not iterable, we put it in a tuple: (1,)
-            if not hasattr(casted_field, '__iter__'):
-                casted_field = (casted_field,)
-            field = list(casted_field)
-        else:
-            field = eval(field_type)(field_value)
-
-    if field in ['None', 'False']:
-        field = False
-
-    #Set correct null value for each type
-    if field is False or field is None:
-        null_value = {
-            'unicode': '', 
-            'int': 0,
-            'float': 0,
-            'list': [],
-            'dict': {},
-        }
-        field = null_value[field_type]
-    return field
-
-def _merge_with_default_values(self, cr, uid, external_session, ressource, vals, sub_mapping_list, defaults=None, context=None):
-    """
-    Used in _transform_one_external_resource in order to merge the defaults values, some params are useless here but need in base_sale_multichannels to play the on_change
-
-    @param sub_mapping_list: list of sub-mapping to apply
-    @param external_data: list of data to convert into OpenERP data
-    @param referential_id: external referential id from where we import the resource
-    @param vals: dictionnary of value previously converted
-    @param defauls: defaults value for the data imported
-    @return: dictionary of converted data in OpenERP format 
-    """
-    for key in defaults:
-        if not key in vals:
-            vals[key] = defaults[key]
-    return vals
-
-def _transform_sub_mapping(self, cr, uid, external_session, convertion_type, resource, vals, sub_mapping_list, mapping, mapping_line_filter_ids=None, defaults=None, context=None):
-    """
-    Used in _transform_one_external_resource in order to call the sub mapping
-
-    @param sub_mapping_list: list of sub-mapping to apply
-    @param external_data: list of data to convert into OpenERP data
-    @param referential_id: external referential id from where we import the resource
-    @param vals: dictionnary of value previously converted
-    @param defauls: defaults value for the data imported
-    @return: dictionary of converted data in OpenERP format 
-    """
-
-    if not defaults:
-        defaults={}
-    ir_model_field_obj = self.pool.get('ir.model.fields')
-    for sub_mapping in sub_mapping_list:
-        if convertion_type == 'from_external_to_openerp':
-            from_field = sub_mapping['external_field']
-            to_field = sub_mapping['internal_field']
-            field_value = resource[from_field]
-
-        elif convertion_type == 'from_openerp_to_external':
-            from_field = sub_mapping['internal_field']
-            to_field = sub_mapping['external_field'] or 'hidden_field_to_split_%s'%from_field # if the field doesn't have any name we assume at that we will split it
-            #Before calling submapping o2m resource must be an int and not a list of (id, name)
-            if sub_mapping['external_type'] == 'm2o':
-                field_value = resource[from_field] and resource[from_field][0] or False
-            else:
-                field_value = resource[from_field]
-
-        if field_value:
-            if isinstance(field_value, list):
-                vals[to_field] = []
-                lines = self.pool.get(sub_mapping['child_mapping_id'][1])._transform_resources(cr, uid, external_session, convertion_type, field_value, defaults=defaults.get(to_field), mapping=mapping, mapping_line_filter_ids=mapping_line_filter_ids, parent_data=vals, context=context)
-                for line in lines:
-                    if 'external_id' in line:
-                        del line['external_id']
-                    if convertion_type == 'from_external_to_openerp':
-                        vals[to_field].append((0, 0, line))
-                    else:
-                        vals[to_field].append(line)
-            else:
-                vals[to_field] = self.pool.get(sub_mapping['child_mapping_id'][1])._transform_resources(cr, uid, external_session, convertion_type, [field_value], defaults=defaults.get(to_field), mapping=mapping, mapping_line_filter_ids=mapping_line_filter_ids, parent_data=vals, context=context)[0]
-    return vals
 
 def retry_import(self, cr, uid, id, ext_id, referential_id, defaults=None, context=None):
     """ When we import again a previously failed import
@@ -702,10 +527,41 @@ def oe_create(self, cr, uid, vals, referential_id, defaults, context):
     return self.create(cr, uid, vals, context)
 
 
-#TODO rename this function
+#TODO rename this function DID WE STILL NEED IT??
 def get_external_data(self, cr, uid, conn, referential_id, defaults=None, context=None):
     """Constructs data using WS or other synch protocols and then call ext_import on it"""
     return {'create_ids': [], 'write_ids': []}
+
+#######################        MONKEY PATCHING       #######################
+
+osv.osv.get_external_data = get_external_data
+
+osv.osv.retry_import = retry_import
+osv.osv._get_mapping = _get_mapping
+osv.osv._get_default_import_values = _get_default_import_values
+osv.osv._get_import_step = _get_import_step
+
+osv.osv._get_filter = _get_filter
+osv.osv._get_external_resources = _get_external_resources
+osv.osv._get_external_resource_ids = _get_external_resource_ids
+
+osv.osv.import_resources = import_resources
+osv.osv._import_resources = _import_resources
+osv.osv._import_one_resource = _import_one_resource
+
+osv.osv._record_external_resources = _record_external_resources
+osv.osv._record_one_external_resource = _record_one_external_resource
+osv.osv.oe_update = oe_update
+osv.osv.oe_create = oe_create
+
+########################################################################################################################
+#
+#                                             END OF IMPORT FEATURES
+#
+########################################################################################################################
+
+
+
 
 ########################################################################################################################
 #
@@ -925,6 +781,7 @@ def create_external_id_vals(self, cr, uid, existing_rec_id, external_id, referen
     return self.pool.get('ir.model.data').create(cr, uid, ir_model_data_vals, context=context)
 
 
+#TODO check if still needed?
 def retry_export(self, cr, uid, id, ext_id, referential_id, defaults=None, context=None):
     """ When we export again a previously failed export
     """
@@ -932,15 +789,19 @@ def retry_export(self, cr, uid, id, ext_id, referential_id, defaults=None, conte
     context['conn_obj'] = conn
     return self.ext_export(cr, uid, [id], [referential_id], defaults, context)
 
+#TODO check if still needed?
 def can_create_on_update_failure(self, error, data, context):
     return True
 
+#TODO check if still needed?
 def ext_create(self, cr, uid, data, conn, method, oe_id, context):
     return conn.call(method, data)
 
+#TODO check if still needed?
 def try_ext_update(self, cr, uid, data, conn, method, oe_id, external_id, ir_model_data_id, create_method, context):
     return conn.call(method, [external_id, data])
 
+#TODO check if still needed?
 def ext_update(self, cr, uid, data, conn, method, oe_id, external_id, ir_model_data_id, create_method, context):
     try:
         self.try_ext_update(cr, uid, data, conn, method, oe_id, external_id, ir_model_data_id, create_method, context)
@@ -952,6 +813,257 @@ def ext_update(self, cr, uid, data, conn, method, oe_id, external_id, ir_model_d
             self.pool.get('ir.model.data').write(cr, uid, ir_model_data_id, {'name': self.prefixed_id(crid)})
             return crid
 
+
+#######################        MONKEY PATCHING       #######################
+
+osv.osv._export_resources_into_external_referential = _export_resources_into_external_referential
+osv.osv._get_oe_resources_into_external_format = _get_oe_resources_into_external_format
+osv.osv._record_resourse_into_external_referential =_record_resourse_into_external_referential
+
+osv.osv._existing_oeid_for_extid_import = _existing_oeid_for_extid_import
+
+osv.osv.extdata_from_oevals = extdata_from_oevals
+osv.osv.ext_export = ext_export
+
+osv.osv.retry_export = retry_export
+osv.osv.can_create_on_update_failure = can_create_on_update_failure
+osv.osv.ext_create = ext_create
+osv.osv.try_ext_update = try_ext_update
+osv.osv.ext_update = ext_update
+
+osv.osv._prepare_external_id_vals = _prepare_external_id_vals
+
+osv.osv.create_external_id_vals = create_external_id_vals
+
+
+########################################################################################################################
+#
+#                                             END OF EXPORT FEATURES
+#
+########################################################################################################################
+
+
+
+
+
+########################################################################################################################
+#
+#                                             GENERIC TRANSFORM FEATURES
+#
+########################################################################################################################
+
+def _transform_resources(self, cr, uid, external_session, convertion_type, resources, defaults=None, mapping=None, mapping_line_filter_ids=None, parent_data=None, context=None):
+    """
+    Used in ext_import in order to convert all of the external data into OpenERP data
+
+    @param external_data: list of external_data to convert into OpenERP data
+    @param referential_id: external referential id from where we import the resource
+    @param parent_data: data of the parent, only use when a mapping line have the type 'sub mapping'
+    @param defaults: defaults value for data converted
+    @return: list of the line converted into OpenERP value
+    """
+    if not mapping:
+        mapping = {}
+    result= []
+    if resources:
+        if mapping.get(self._name) is None:
+            mapping[self._name] = self._get_mapping(cr, uid, external_session.referential_id.id, convertion_type=convertion_type, mapping_line_filter_ids=mapping_line_filter_ids, context=context)
+        if convertion_type == 'from_openerp_to_external':
+            field_to_read = [x['internal_field'] for x in mapping[self._name]['mapping_lines']]
+            resources = self.read(cr, uid, resources, field_to_read, context=context)
+        if mapping[self._name].get("mapping_lines"):
+            for resource in resources:
+                result.append(self._transform_one_resource(cr, uid, external_session, convertion_type, resource, 
+                                                            mapping, mapping_line_filter_ids, parent_data=parent_data, 
+                                                            previous_result=result, defaults=defaults, context=context))
+    return result
+
+def _transform_one_resource(self, cr, uid, external_session, convertion_type, resource, mapping, mapping_line_filter_ids=None, parent_data=None, previous_result=None, defaults=None, context=None):
+    """
+    Used in _transform_external_resources in order to convert external row of data into OpenERP data
+
+    @param referential_id: external referential id from where we import the resource
+    @param resource: a dictionnary of data to convert into OpenERP data
+    @param mapping dict: dictionnary of mapping {'product.product' : {'mapping_lines' : [...], 'key_for_external_id':'...'}}
+    @param previous_result: list of the previous line converted. This is not used here but it's necessary for playing on change on sale order line
+    @param defaults: defaults value for the data imported
+    @return: dictionary of converted data in OpenERP format 
+    """
+
+
+    if context is None:
+        context = {}
+    if defaults is None:
+        defaults = {}
+
+    mapping_lines = mapping[self._name].get("mapping_lines")
+    key_for_external_id = mapping[self._name].get("key_for_external_id")
+
+    vals = {} #Dictionary for create record
+    sub_mapping_list=[]
+    for mapping_line in mapping_lines:
+
+        if convertion_type == 'from_external_to_openerp':
+            from_field = mapping_line['external_field']
+            to_field = mapping_line['internal_field']
+
+        elif convertion_type == 'from_openerp_to_external':
+            from_field = mapping_line['internal_field']
+            to_field = mapping_line['external_field']
+
+        if from_field in resource.keys():
+            field_value = resource[from_field]
+            field_type = mapping_line['external_type'] #TODO maybe need some improvement by default we use the same evaluation as imput
+            if mapping_line['evaluation_type'] == 'sub-mapping':
+                sub_mapping_list.append(mapping_line)
+            else:
+                if mapping_line['evaluation_type'] == 'direct':
+                    vals[to_field] = self._transform_field(cr, uid, external_session, convertion_type, to_field, field_value, field_type, context=context)
+                else:
+                    #Build the space for expr
+                    space = {'self': self,
+                             'cr': cr,
+                             'uid': uid,
+                             'data': resource,
+                             'referential_id': external_session.referential_id.id,
+                             'defaults': defaults,
+                             'context': context,
+                             'ifield': self._transform_field(cr, uid, external_session, convertion_type, to_field, field_value, field_type, context=context),
+                             'conn': context.get('conn_obj', False),
+                             'base64': base64,
+                             'vals': vals,
+                             'previous_result': previous_result,
+                        }
+
+                    #The expression should return value in list of tuple format
+                    #eg[('name','Sharoon'),('age',20)] -> vals = {'name':'Sharoon', 'age':20}
+                    if convertion_type == 'from_external_to_openerp':
+                        mapping_function_key = 'in_function'
+                    else:
+                        mapping_function_key = 'out_function'
+                    try:
+                        exec mapping_line[mapping_function_key] in space
+                    except Exception, e:
+                        external_session.logger.error("Error in import mapping: %r" % (mapping_line[mapping_function_key],),
+                                                                           "Mapping Context: %r" % (space,),
+                                                                           "Exception: %r" % (e,))
+                        #del(space['__builtins__'])
+                        raise MappingError(e, mapping_line['external_field'], self._name)
+                    
+                    result = space.get('result', False)
+                    # Check if result returned by the mapping function is correct : [('field1', value), ('field2', value))]
+                    # And fill the vals dict with the results
+                    if result:
+                        if isinstance(result, list):
+                            for each_tuple in result:
+                                if isinstance(each_tuple, tuple) and len(each_tuple) == 2:
+                                    vals[each_tuple[0]] = each_tuple[1]
+                        else:
+                            raise MappingError(_('Invalid format for the variable result.'), mapping_line['external_field'], self._name)
+
+    if convertion_type == 'from_external_to_openerp' and key_for_external_id and resource.get(key_for_external_id):
+        vals.update({'external_id': int(resource[key_for_external_id])})
+
+    vals = self._merge_with_default_values(cr, uid, external_session, resource, vals, sub_mapping_list, defaults=defaults, context=context)
+    vals = self._transform_sub_mapping(cr, uid, external_session, convertion_type, resource, vals, sub_mapping_list, mapping, mapping_line_filter_ids=mapping_line_filter_ids, defaults=defaults, context=context)
+    return vals
+
+def _transform_field(self, cr, uid, external_session, convertion_type, field_name, field_value, field_type, context=None):
+    field = False
+    if field_value:
+        if field_type == 'o2m':
+            if convertion_type == 'from_external_to_openerp':
+                return self.pool.get(self._columns[field_name]._obj).extid_to_oeid(cr, uid, external_session, field_value, context=context)
+            else:
+                return field_value[0]
+        if field_type == 'list' and isinstance(field_value, (str, unicode)):
+            # external data sometimes returns ',1,2,3' for a list...
+            casted_field = eval(ifield.strip(','))
+            # For a list, external data may returns something like '1,2,3' but also '1' if only
+            # one item has been selected. So if the casted field is not iterable, we put it in a tuple: (1,)
+            if not hasattr(casted_field, '__iter__'):
+                casted_field = (casted_field,)
+            field = list(casted_field)
+        else:
+            field = eval(field_type)(field_value)
+
+    if field in ['None', 'False']:
+        field = False
+
+    #Set correct null value for each type
+    if field is False or field is None:
+        null_value = {
+            'unicode': '', 
+            'int': 0,
+            'float': 0,
+            'list': [],
+            'dict': {},
+        }
+        field = null_value[field_type]
+    return field
+
+def _merge_with_default_values(self, cr, uid, external_session, ressource, vals, sub_mapping_list, defaults=None, context=None):
+    """
+    Used in _transform_one_external_resource in order to merge the defaults values, some params are useless here but need in base_sale_multichannels to play the on_change
+
+    @param sub_mapping_list: list of sub-mapping to apply
+    @param external_data: list of data to convert into OpenERP data
+    @param referential_id: external referential id from where we import the resource
+    @param vals: dictionnary of value previously converted
+    @param defauls: defaults value for the data imported
+    @return: dictionary of converted data in OpenERP format 
+    """
+    for key in defaults:
+        if not key in vals:
+            vals[key] = defaults[key]
+    return vals
+
+def _transform_sub_mapping(self, cr, uid, external_session, convertion_type, resource, vals, sub_mapping_list, mapping, mapping_line_filter_ids=None, defaults=None, context=None):
+    """
+    Used in _transform_one_external_resource in order to call the sub mapping
+
+    @param sub_mapping_list: list of sub-mapping to apply
+    @param external_data: list of data to convert into OpenERP data
+    @param referential_id: external referential id from where we import the resource
+    @param vals: dictionnary of value previously converted
+    @param defauls: defaults value for the data imported
+    @return: dictionary of converted data in OpenERP format 
+    """
+
+    if not defaults:
+        defaults={}
+    ir_model_field_obj = self.pool.get('ir.model.fields')
+    for sub_mapping in sub_mapping_list:
+        if convertion_type == 'from_external_to_openerp':
+            from_field = sub_mapping['external_field']
+            to_field = sub_mapping['internal_field']
+            field_value = resource[from_field]
+
+        elif convertion_type == 'from_openerp_to_external':
+            from_field = sub_mapping['internal_field']
+            to_field = sub_mapping['external_field'] or 'hidden_field_to_split_%s'%from_field # if the field doesn't have any name we assume at that we will split it
+            #Before calling submapping o2m resource must be an int and not a list of (id, name)
+            if sub_mapping['external_type'] == 'm2o':
+                field_value = resource[from_field] and resource[from_field][0] or False
+            else:
+                field_value = resource[from_field]
+
+        if field_value:
+            if isinstance(field_value, list):
+                vals[to_field] = []
+                lines = self.pool.get(sub_mapping['child_mapping_id'][1])._transform_resources(cr, uid, external_session, convertion_type, field_value, defaults=defaults.get(to_field), mapping=mapping, mapping_line_filter_ids=mapping_line_filter_ids, parent_data=vals, context=context)
+                for line in lines:
+                    if 'external_id' in line:
+                        del line['external_id']
+                    if convertion_type == 'from_external_to_openerp':
+                        vals[to_field].append((0, 0, line))
+                    else:
+                        vals[to_field].append(line)
+            else:
+                vals[to_field] = self.pool.get(sub_mapping['child_mapping_id'][1])._transform_resources(cr, uid, external_session, convertion_type, [field_value], defaults=defaults.get(to_field), mapping=mapping, mapping_line_filter_ids=mapping_line_filter_ids, parent_data=vals, context=context)[0]
+    return vals
+
+#TODO check if still needed?
 def report_action_mapping(self, cr, uid, context=None):
     """
     For each action logged in the reports, we associate
@@ -977,75 +1089,21 @@ def report_action_mapping(self, cr, uid, context=None):
     }
     return mapping
 
-########################################################################################################################
-#
-#                                             GENERIC FEATURES
-#
-########################################################################################################################
-
-
-osv.osv.read_w_order = read_w_order
-osv.osv.browse_w_order = browse_w_order
-
-osv.osv.prefixed_id = prefixed_id
-osv.osv.id_from_prefixed_id = id_from_prefixed_id
-osv.osv.get_last_imported_external_id = get_last_imported_external_id
-osv.osv.get_modified_ids = get_modified_ids
-osv.osv.oeid_to_extid = oeid_to_extid
-osv.osv._extid_to_expected_oeid = _extid_to_expected_oeid
-osv.osv.extid_to_existing_oeid = extid_to_existing_oeid
-osv.osv.extid_to_oeid = extid_to_oeid
-
-##### Extention for importing resources
-osv.osv.get_external_data = get_external_data
-
-osv.osv.retry_import = retry_import
-osv.osv._get_mapping = _get_mapping
-osv.osv._get_default_import_values = _get_default_import_values
-osv.osv._get_import_step = _get_import_step
-
-osv.osv._get_filter = _get_filter
-osv.osv._get_external_resources = _get_external_resources
-osv.osv._get_external_resource_ids = _get_external_resource_ids
-
-osv.osv.import_resources = import_resources
-osv.osv._import_resources = _import_resources
-osv.osv._import_one_resource = _import_one_resource
-
-osv.osv._record_external_resources = _record_external_resources
-osv.osv._record_one_external_resource = _record_one_external_resource
+#######################        MONKEY PATCHING       #######################
 
 osv.osv._transform_resources = _transform_resources
 osv.osv._transform_one_resource = _transform_one_resource
-
 osv.osv._transform_sub_mapping = _transform_sub_mapping
 osv.osv._merge_with_default_values = _merge_with_default_values
-
 osv.osv._transform_field =_transform_field
-
-osv.osv.oe_update = oe_update
-osv.osv.oe_create = oe_create
-
-##### Extention for exporting resources
-osv.osv._export_resources_into_external_referential = _export_resources_into_external_referential
-osv.osv._get_oe_resources_into_external_format = _get_oe_resources_into_external_format
-osv.osv._record_resourse_into_external_referential =_record_resourse_into_external_referential
-
-
-
-
-
-osv.osv._existing_oeid_for_extid_import = _existing_oeid_for_extid_import
-
-osv.osv.extdata_from_oevals = extdata_from_oevals
-osv.osv.ext_export = ext_export
-osv.osv.retry_export = retry_export
-osv.osv.can_create_on_update_failure = can_create_on_update_failure
-osv.osv.ext_create = ext_create
-osv.osv.try_ext_update = try_ext_update
-osv.osv.ext_update = ext_update
 osv.osv.report_action_mapping = report_action_mapping
-osv.osv._prepare_external_id_vals = _prepare_external_id_vals
-osv.osv.get_all_oeid_from_referential = get_all_oeid_from_referential
-osv.osv.get_all_extid_from_referential = get_all_extid_from_referential
-osv.osv.create_external_id_vals = create_external_id_vals
+
+########################################################################################################################
+#
+#                                           END GENERIC TRANSFORM FEATURES
+#
+########################################################################################################################
+
+
+
+

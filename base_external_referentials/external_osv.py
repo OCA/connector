@@ -37,8 +37,8 @@ class ExternalSession(object):
     def __init__(self, referential):
         self.referential_id = referential
         self.debug = referential.debug
-        self.connection = referential.external_connection(debug=self.debug)
         self.logger = logging.getLogger(referential.name)
+        self.connection = referential.external_connection(debug=self.debug, logger = self.logger)
 
     def is_type(self, referential_type):
         return self.referential_id.type_id.name.lower() == referential_type.lower()
@@ -152,6 +152,7 @@ def get_all_oeid_from_referential(self, cr, uid, referential_id, context=None):
     claimed_oe_ids = [x['res_id'] for x in ir_model_data_obj.read(cr, uid, model_data_ids, ['res_id'], context=context)]
     return claimed_oe_ids and self.exists(cr, uid, claimed_oe_ids, context=context) or []
 
+#TODO it will be better to have for signature (self, cr, uid, referential_id, external_id, context=None)
 def oeid_to_extid(self, cr, uid, id, referential_id, context=None):
     """Returns the external id of a resource by its OpenERP id.
     Returns False if the resource id does not exists."""
@@ -164,6 +165,7 @@ def oeid_to_extid(self, cr, uid, id, referential_id, context=None):
         return ext_id
     return False
 
+#TODO it will be better to have for signature (self, cr, uid, referential_id, external_id, context=None)
 def _extid_to_expected_oeid(self, cr, uid, external_id, referential_id, context=None):
     """
     Returns the id of the entry in ir.model.data and the expected id of the resource in the current model
@@ -184,6 +186,7 @@ def _extid_to_expected_oeid(self, cr, uid, external_id, referential_id, context=
         expected_oe_id = model_data_obj.read(cr, uid, model_data_id, ['res_id'])['res_id']
     return model_data_id, expected_oe_id
 
+#TODO it will be better to have for signature (self, cr, uid, referential_id, external_id, context=None)
 def extid_to_existing_oeid(self, cr, uid, external_id, referential_id, context=None):
     """Returns the OpenERP id of a resource by its external id.
        Returns False if the resource does not exist."""
@@ -211,7 +214,7 @@ def extid_to_oeid(self, cr, uid, external_session, external_id, context=None):
     #First get the external key field name
     #conversion external id -> OpenERP object using Object mapping_column_name key!
     if external_id:
-        existing_id = self.extid_to_existing_oeid(cr, uid, external_session.referential_id.id, external_id, context=context)
+        existing_id = self.extid_to_existing_oeid(cr, uid, external_id, external_session.referential_id.id, context=context)
         if existing_id:
             return existing_id
         #TODO try except will be added latter

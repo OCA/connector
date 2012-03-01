@@ -394,6 +394,7 @@ def _import_resources(self, cr, uid, external_session, defaults=None, method="se
     if mapping[self._name].get('mapping_lines'):
         step = self._get_import_step(cr, uid, external_session, context=context)
         resource_filter = None
+        #TODO refactor improve and simplify this code
         if method == 'search_then_read':
             while True:
                 resource_filter = self._get_filter(cr, uid, external_session, step, previous_filter=resource_filter, context=context)
@@ -408,6 +409,18 @@ def _import_resources(self, cr, uid, external_session, defaults=None, method="se
                     res = self._record_external_resources(cr, uid, external_session, resources, defaults=defaults, mapping=mapping, context=context)
                     for key in result:
                         result[key].append(res.get(key, []))
+        elif method == 'search_then_read_no_loop':
+            #Magento API do not support step import so we can not use a loop
+            resource_filter = self._get_filter(cr, uid, external_session, step, previous_filter=resource_filter, context=context)
+            ext_ids = self._get_external_resource_ids(cr, uid, external_session, resource_filter, mapping=mapping, context=context)
+            for ext_id in ext_ids:
+                #TODO import only the field needed to improve speed import ;)
+                resources = self._get_external_resources(cr, uid, external_session, ext_id, mapping=mapping, fields=None, context=context)
+                if not isinstance(resources, list):
+                    resources = [resources]
+                res = self._record_external_resources(cr, uid, external_session, resources, defaults=defaults, mapping=mapping, context=context)
+                for key in result:
+                    result[key].append(res.get(key, []))
         elif method == 'search_read':
             while True:
                 resource_filter = self._get_filter(cr, uid, external_session, step, previous_filter=resource_filter, context=context)
@@ -498,7 +511,7 @@ def _record_one_external_resource(self, cr, uid, external_session, resource, def
         existing_rec_id = self.search(cr, uid, [(alternative_key, '=', vals[alternative_key])], context=context)
         existing_rec_id = existing_rec_id and existing_rec_id[0] or False
 
-    if not (external_id or existing_rec_id):
+    if (external_id is None or external_di is False) and not existing_rec_id:
         raise osv.except_osv(_('External Import Error'), _("The object imported need an external_id, maybe the mapping doesn't exist for the object : %s" %self._name))
 
     if existing_rec_id:
@@ -997,6 +1010,11 @@ def _transform_field(self, cr, uid, external_session, convertion_type, field_nam
                 return self.pool.get(self._columns[field_name]._obj).extid_to_oeid(cr, uid, external_session, field_value, context=context)
             else:
                 return field_value[0]
+        if field_type == 'o2m_get_name':
+            if convertion_type == 'from_external_to_openerp':
+                return self.pool.get(self._columns[field_name]._obj).extid_to_oeid(cr, uid, external_session, field_value, context=context)
+            else:
+                return field_value[1]
         if field_type == 'list' and isinstance(field_value, (str, unicode)):
             # external data sometimes returns ',1,2,3' for a list...
             casted_field = eval(ifield.strip(','))

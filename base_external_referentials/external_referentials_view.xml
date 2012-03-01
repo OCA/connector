@@ -37,6 +37,8 @@
                             <page string="Authentication">
                                 <field name="apiusername" />
                                 <field name="apipass" />
+                            <!-- TODO improve view -->
+                                <field name="debug" />
                             </page>
                         </notebook>
                     </group>

@@ -217,6 +217,7 @@ class external_referential(osv.osv):
         'apipass': fields.char('Password', size=64),
         'mapping_ids': fields.one2many('external.mapping', 'referential_id', 'Mappings'),
         'create_date': fields.datetime('Creation Date', readonly=True, help="Date on which external referential is created."),
+        'debug': fields.boolean('Debug', help='If debug mode is active all request between the external referential and OpenERP will be in the log')
     }
     
     _sql_constraints = [

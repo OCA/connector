@@ -34,9 +34,10 @@ from tools import DEFAULT_SERVER_DATETIME_FORMAT, DEFAULT_SERVER_DATE_FORMAT
 
 
 class ExternalSession(object):
-    def __init__(self, referential, debug=False):
+    def __init__(self, referential):
         self.referential_id = referential
-        self.connection = referential.external_connection(debug=debug)
+        self.debug = referential.debug
+        self.connection = referential.external_connection(debug=self.debug)
         self.logger = logging.getLogger(referential.name)
 
     def is_type(self, referential_type):
@@ -141,7 +142,7 @@ def get_all_extid_from_referential(self, cr, uid, referential_id, context=None):
         oeid_to_extid[data['res_id']] = self.id_from_prefixed_id(data['name'])
     if not oeid_to_extid:
         return []
-    return [oeid_to_extid[oe_id] for oe_id in self.exists(cr, uid, oeid_to_extid.keys(), context=context)]
+    return [int(oeid_to_extid[oe_id]) for oe_id in self.exists(cr, uid, oeid_to_extid.keys(), context=context)]
 
 def get_all_oeid_from_referential(self, cr, uid, referential_id, context=None):
     """Returns the openerp ids of the ressource which have an ext_id in the referential"""
@@ -522,7 +523,7 @@ def _record_one_external_resource(self, cr, uid, external_session, resource, def
         existing_rec_id = self.oe_create(cr, uid, vals, referential_id, defaults, context=context)
         created = True
 
-    if not external_id_ok:
+    if external_id_ok:
         if existing_ir_model_data_id:
             if created:
                 # means the external ressource is registred in ir.model.data but the ressource doesn't exist

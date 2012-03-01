@@ -104,6 +104,16 @@ class external_report(osv.osv):
         retry_cr.close()
         return True
 
+    def _prepare_start_report(self, cr, uid, method, object, context=None):
+        return {'name': method.replace('_', ' ').strip(),
+                'object_name': getattr(object, object._rec_name),
+                'object_related': object._name,
+                'object_related_description': object._description,
+                'res_id': object.id,
+                'method': method,
+                'referential_id': object.referential_id.id,
+                'start_date': time.strftime(DEFAULT_SERVER_DATETIME_FORMAT),}
+
     def start_report(self, cr, uid, id=None, method=None,
                      object=None, context=None):
         """ Start a report, use the report with the id in the parameter
@@ -131,17 +141,11 @@ class external_report(osv.osv):
                 self._clean_successful_lines(log_cr, uid, report_id, context)
             else:
                 print 'create report'
-                report_id = self.create(log_cr, uid, {
-                            'name': method.replace('_', ' ').strip(),
-                            'object_name': getattr(object, object._rec_name),
-                            'object_related': object._name,
-                            'object_related_description': object._description,
-                            'res_id': object.id,
-                            'method': method,
-                            'referential_id': object.referential_id.id,
-                            'start_date': time.strftime(DEFAULT_SERVER_DATETIME_FORMAT),
-                                 },
-                                context=context)
+                report_id = self.create(
+                    log_cr, uid,
+                    self._prepare_start_report(
+                        cr, uid, method, object, context=context),
+                    context=context)
             print 'commit'
             log_cr.commit()
 

@@ -53,6 +53,7 @@
             <field name="res_model">external.report.line</field>
             <field name="view_type">form</field>
             <field name="view_id" ref="external_report_line_tree_view"/>
+            <field name="search_view_id" ref="external_report_line_search_view"/>
 		</record>
 
 		<menuitem id="ir_ui_menu_external_report_line" name="External Report Lines" parent="ir_ui_menu_external_referentials" action="ir_actions_act_window_external_report_line" />

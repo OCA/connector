@@ -70,7 +70,7 @@
                                 <field name="external_update_method" />
                                 <field name="external_create_method" />
                                 <field name="external_delete_method" />
-                                <field name="external_key_name" />
+                                <field name="key_for_external_id" />
                                 <field name="external_resource_name" />
                             </group>
                             <button name="add_all_fields" string="Add all object fields" colspan="2" type="object" />

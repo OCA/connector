@@ -346,16 +346,14 @@ def _get_mapping(self, cr, uid, referential_id, convertion_type='from_external_t
         else:
             mapping_lines = []
 
-        external_mapping = self.pool.get('external.mapping').read(cr, uid, mapping_id[0], ['external_key_name', 'external_resource_name'])
+        res = self.pool.get('external.mapping').read(cr, uid, mapping_id[0], context=context)
         alternative_key = [x['internal_field'] for x in mapping_lines if x['alternative_key']]
-        return {
-            "mapping_lines": mapping_lines,
-            "key_for_external_id": external_mapping['external_key_name'] or 'id',
-            "external_resource_name": external_mapping['external_resource_name'],
-            "alternative_key": alternative_key and alternative_key[0] or False,
-            }
+        res['alternative_key'] = alternative_key and alternative_key[0] or False
+        res['key_for_external_id'] = res['key_for_external_id'] or 'id'
+        res['mapping_lines'] = mapping_lines
+        return res
 
-def import_resources(self, cr, uid, ids, resource_name, context=None):
+def import_resources(self, cr, uid, ids, resource_name, method="search_then_read", context=None):
     """
     Abstract function to import resources from a shop / a referential...
 
@@ -375,12 +373,12 @@ def import_resources(self, cr, uid, ids, resource_name, context=None):
             else:
                 raise osv.except_osv(_("Not Implemented"), _("The field referential_id doesn't exist on the object %s. Reporting system can not be used" %(browse_record._name,)))
         defaults = self.pool.get(resource_name)._get_default_import_values(cr, uid, external_session, context=context)
-        res = self.pool.get(resource_name)._import_resources(cr, uid, external_session, defaults, context=context)
+        res = self.pool.get(resource_name)._import_resources(cr, uid, external_session, defaults, method=method, context=context)
         for key in result:
             result[key].append(res.get(key, []))
     return result
 
-def _import_resources(self, cr, uid, external_session, defaults=None, context=None, method="search_then_read"):
+def _import_resources(self, cr, uid, external_session, defaults=None, method="search_then_read", context=None):
     """
     Abstract function to import resources form a specific object (like shop, referential...)
 
@@ -410,6 +408,28 @@ def _import_resources(self, cr, uid, external_session, defaults=None, context=No
                     res = self._record_external_resources(cr, uid, external_session, resources, defaults=defaults, mapping=mapping, context=context)
                     for key in result:
                         result[key].append(res.get(key, []))
+        elif method == 'search_read':
+            while True:
+                resource_filter = self._get_filter(cr, uid, external_session, step, previous_filter=resource_filter, context=context)
+                #TODO import only the field needed to improve speed import ;)
+                resources = self._get_external_resources(cr, uid, external_session, resource_filter=resource_filter, mapping=mapping, fields=None, context=context)
+                if not resources:
+                    break
+                if not isinstance(resources, list):
+                    resources = [resources]
+                res = self._record_external_resources(cr, uid, external_session, resources, defaults=defaults, mapping=mapping, context=context)
+                for key in result:
+                    result[key].append(res.get(key, []))
+        elif method == 'search_read_no_loop':
+            #Magento API do not support step import so we can not use a loop
+            resource_filter = self._get_filter(cr, uid, external_session, step, previous_filter=resource_filter, context=context)
+            #TODO import only the field needed to improve speed import ;)
+            resources = self._get_external_resources(cr, uid, external_session, resource_filter=resource_filter, mapping=mapping, fields=None, context=context)
+            if not isinstance(resources, list):
+                resources = [resources]
+            res = self._record_external_resources(cr, uid, external_session, resources, defaults=defaults, mapping=mapping, context=context)
+            for key in result:
+                result[key].append(res.get(key, []))
     return result
 
 def _import_one_resource(self, cr, uid, external_session, external_id, context=None):
@@ -473,8 +493,8 @@ def _record_one_external_resource(self, cr, uid, external_session, resource, def
     if external_id:
         del vals['external_id']
         existing_ir_model_data_id, existing_rec_id = self._existing_oeid_for_extid_import\
-            (cr, uid, vals, external_id, referential_id, alternative_key=alternative_key, context=context)
-    if not existing_rec_id:
+            (cr, uid, vals, external_id, referential_id, context=context)
+    if not existing_rec_id and alternative_key:
         existing_rec_id = self.search(cr, uid, [(alternative_key, '=', vals[alternative_key])], context=context)
         existing_rec_id = existing_rec_id and existing_rec_id[0] or False
 
@@ -924,6 +944,7 @@ def _transform_one_resource(self, cr, uid, external_session, convertion_type, re
                     space = {'self': self,
                              'cr': cr,
                              'uid': uid,
+                             'external_session': external_session,
                              'data': resource,
                              'referential_id': external_session.referential_id.id,
                              'defaults': defaults,

@@ -81,7 +81,7 @@ class external_mapping_template(osv.osv):
         'external_update_method': fields.char('Update Method', size=64),
         'external_create_method': fields.char('Create Method', size=64),
         'external_delete_method': fields.char('Delete Method', size=64),
-        'external_key_name':fields.char('External field used as key', size=64),
+        'key_for_external_id':fields.char('External field used as key', size=64),
         'external_resource_name':fields.char('External Resource Name', size=64),
                 }
 external_mapping_template()
@@ -167,7 +167,7 @@ class external_referential(osv.osv):
                                     'external_update_method': each_mapping_rec['external_update_method'],
                                     'external_create_method': each_mapping_rec['external_create_method'],
                                     'external_delete_method': each_mapping_rec['external_delete_method'],
-                                    'external_key_name': each_mapping_rec['external_key_name'],
+                                    'key_for_external_id': each_mapping_rec['key_for_external_id'],
                                     'external_resource_name': each_mapping_rec['external_resource_name'],
                                                 }
                     mapping_id = mappings_obj.create(cr, uid, vals)
@@ -233,7 +233,6 @@ class external_referential(osv.osv):
     def build_external_ref_type(self, cr, uid, ids, context={}):
         csv_file = "\"id\",\"name\",\"categ_id:id\"\n"
         referential = self.browse(cr, uid, ids)[0]
-        print "referential: ",referential
         csv_file += "\""+referential.type_id.name+"_"+time.strftime('%Y_%m')+"\","
         csv_file += "\""+referential.type_id.name+"\","
         csv_file += "\""+referential.type_id.categ_id.get_external_id(context=context)[referential.type_id.categ_id.id]+"\""
@@ -252,7 +251,7 @@ class external_referential(osv.osv):
 
     # Method to export external referential type
     def build_external_mapping_template(self, cr, uid, ids, context={}):
-        csv_file = "\"id\",\"version_id:id\",\"model_id:id\",\"external_list_method\",\"external_get_method\",\"external_update_method\",\"external_create_method\",\"external_delete_method\",\"external_key_name\",\"external_resource_name\"\n"
+        csv_file = "\"id\",\"version_id:id\",\"model_id:id\",\"external_list_method\",\"external_get_method\",\"external_update_method\",\"external_create_method\",\"external_delete_method\",\"key_for_external_id\",\"external_resource_name\"\n"
         referential = self.browse(cr, uid, ids)[0]
         for mapping in referential.mapping_ids:
             csv_file += "\""+referential.name+"_"+referential.version_id.name+"_"+mapping.model_id.name+"\","
@@ -278,8 +277,8 @@ class external_referential(osv.osv):
                 csv_file += "\""+mapping.external_delete_method+"\","
             else:
                 csv_file += "\"\","
-            if mapping.external_key_name!=False:
-                csv_file += "\""+mapping.external_key_name+"\","
+            if mapping.key_for_external_id!=False:
+                csv_file += "\""+mapping.key_for_external_id+"\","
             else:
                 csv_file += "\"\","
             if mapping.external_resource_name!=False:
@@ -368,7 +367,7 @@ class external_mapping(osv.osv):
         'external_create_method': fields.char('Create Method', size=64),
         'external_delete_method': fields.char('Delete Method', size=64),
         'mapping_ids': fields.one2many('external.mapping.line', 'mapping_id', 'Mappings Lines'),
-        'external_key_name':fields.char('External field used as key', size=64),
+        'key_for_external_id':fields.char('External field used as key', size=64),
         'external_resource_name':fields.char('External Resource Name', size=64),
     }
 
@@ -393,7 +392,6 @@ class external_mapping(osv.osv):
             if line.external_field!=False and line.selected==True:
                 current_model = mapping.model_id.get_external_id(context=context)[mapping.model_id.id]
                 current_field = line.field_id.get_external_id(context=context)[line.field_id.id]
-                print mapping.referential_id.version_id.get_external_id(context=context)[mapping.referential_id.version_id.id]
 
                 csv_file += "\""+mapping.referential_id.version_id.get_external_id(context=context)[mapping.referential_id.version_id.id]+"_"+mapping.model_id.name+"_"+line.field_id.name+"_"+line.external_field+"\","
                 csv_file += "\""+mapping.referential_id.version_id.get_external_id(context=context)[mapping.referential_id.version_id.id]+"\","

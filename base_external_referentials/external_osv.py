@@ -500,10 +500,11 @@ def _record_one_external_resource(self, cr, uid, external_session, resource, def
 
     referential_id = external_session.referential_id.id
     external_id = vals.get('external_id')
+    external_id_ok = not (external_id is None or external_id is False)
     alternative_key = mapping[self._name]['alternative_key']
     existing_rec_id = False
     existing_ir_model_data_id = False
-    if external_id:
+    if not (external_id is None or external_id is False):
         del vals['external_id']
         existing_ir_model_data_id, existing_rec_id = self._existing_oeid_for_extid_import\
             (cr, uid, vals, external_id, referential_id, context=context)
@@ -511,7 +512,7 @@ def _record_one_external_resource(self, cr, uid, external_session, resource, def
         existing_rec_id = self.search(cr, uid, [(alternative_key, '=', vals[alternative_key])], context=context)
         existing_rec_id = existing_rec_id and existing_rec_id[0] or False
 
-    if (external_id is None or external_di is False) and not existing_rec_id:
+    if not (external_id_ok or existing_rec_id):
         raise osv.except_osv(_('External Import Error'), _("The object imported need an external_id, maybe the mapping doesn't exist for the object : %s" %self._name))
 
     if existing_rec_id:
@@ -521,7 +522,7 @@ def _record_one_external_resource(self, cr, uid, external_session, resource, def
         existing_rec_id = self.oe_create(cr, uid, vals, referential_id, defaults, context=context)
         created = True
 
-    if external_id:
+    if not external_id_ok:
         if existing_ir_model_data_id:
             if created:
                 # means the external ressource is registred in ir.model.data but the ressource doesn't exist
@@ -538,11 +539,11 @@ def _record_one_external_resource(self, cr, uid, external_session, resource, def
 
     if created:
         external_session.logger.info(("Created in OpenERP %s from External Ref with"
-                                    "external_id %s and OpenERP id %s successfully" %(self._name, external_id or vals[alternative_key], existing_rec_id)))
+                                    "external_id %s and OpenERP id %s successfully" %(self._name, external_id_ok and str(external_id) or vals[alternative_key], existing_rec_id)))
         return {'create_id' : existing_rec_id}
     elif written:
         external_session.logger.info(("Updated in OpenERP %s from External Ref with"
-                                    "external_id %s and OpenERP id %s successfully" %(self._name, external_id or vals[alternative_key], existing_rec_id)))
+                                    "external_id %s and OpenERP id %s successfully" %(self._name, external_id_ok and str(external_id) or vals[alternative_key], existing_rec_id)))
         return {'write_id' : existing_rec_id}
     return {}
 

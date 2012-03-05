@@ -224,16 +224,16 @@ class file_exchange(osv.osv):
         return result
 
     _columns = {
-        'name': fields.char('Name', size=64, help="Exchange description like the name of the supplier, bank,..."),
+        'name': fields.char('Name', size=64, help="Exchange description like the name of the supplier, bank,...", require=True),
         'type': fields.selection([('in','IN'),('out','OUT'),], 'Type',help=("IN for files coming from the other system"
                                                                 "and to be imported in the ERP ; OUT for files to be"
                                                                 "generated from the ERP and send to the other system")),
-        'model_id':fields.many2one('ir.model', 'Model',help="OpenEPR main object from which all the fields will be related"),
+        'model_id':fields.many2one('ir.model', 'Model',help="OpenEPR main object from which all the fields will be related", require=True),
         'format' : fields.selection([('csv','CSV'),('csv_no_header','CSV WITHOUT HEADER')], 'File format'),
-        'referential_id':fields.many2one('external.referential', 'Referential',help="Referential to use for connection and mapping"),
+        'referential_id':fields.many2one('external.referential', 'Referential',help="Referential to use for connection and mapping", require=True),
         'scheduler':fields.many2one('ir.cron', 'Scheduler',help="Scheduler that will execute the cron task"),
         'search_filter':  fields.char('Search Filter', size=256),
-        'filename': fields.char('Filename', size=128, help="Filename will be used to generate the output file name or to read the incoming file"),
+        'filename': fields.char('Filename', size=128, help="Filename will be used to generate the output file name or to read the incoming file. It is possible to use variables (check in sequence for syntax)", require=True),
         'folder_path': fields.char('Folder Path', size=128, help="folder that containt the incomming or the outgoing file"),
         'archive_folder_path': fields.char('Archive Folder Path', size=128, help="if a path is set when a file is imported the file will be automatically moved to this folder"),
         'encoding': fields.selection(_get_encoding, 'Encoding', require=True),
@@ -244,13 +244,39 @@ class file_exchange(osv.osv):
         'action_after_each': fields.text('Action After Each', help="This python code will executed after each element of the import/export"),
     }
 
+    # Method to export the exchange file
+    def create_exchange_file(self, cr, uid, ids, context={}):
+        csv_file = "\"id\",\"name\",\"referential_id:id\",\"scheduler:id\",\"type\",\"model_id:id\",\"encoding\",\"format\",\"search_filter\",\"folder_path\",\"filename\"\n"
+        current_file = self.browse(cr, uid, ids)[0]
+        generated_id = "\"" + current_file.name + "_" + current_file.referential_id.name + "_" + current_file.model_id.name + "\","
+        csv_file += generated_id.replace(' ', '_')
+        csv_file += "\"" + current_file.name + "\","
+        csv_file += "\"" + current_file.referential_id.get_external_id(context=context)[current_file.referential_id.id] + "\",\""
+        if current_file.scheduler :
+            csv_file += current_file.scheduler.get_external_id(context=context)[current_file.scheduler.id]
+        csv_file += "\",\"" + current_file.type + "\","
+        csv_file += "\"" + current_file.model_id.get_external_id(context=context)[current_file.model_id.id] + "\","
+        csv_file += "\"" + current_file.encoding + "\","
+        csv_file += "\"" + current_file.format + "\",\""
+        if current_file.search_filter:
+            csv_file += current_file.search_filter
+        csv_file += "\",\"" 
+        if current_file.folder_path:
+            csv_file += current_file.folder_path
+        csv_file += "\",\"" + current_file.filename + "\""
+
+        raise osv.except_osv(_('Fields'), _(csv_file))
+        return True
+        
     # Method to export the mapping file
-    def create_mapping_file(self, cr, uid, ids, context={}):
-        csv_file = "\"name\",\"custom_name\",\"sequence\",\"mapping_line_id:id\",\"file_id:id\",\"default_value\",\"advanced_default_value\"\n"
+    def create_file_fields(self, cr, uid, ids, context={}):
+        csv_file = "\"id\",\"name\",\"custom_name\",\"sequence\",\"mapping_line_id:id\",\"file_id:id\",\"default_value\",\"advanced_default_value\"\n"
         current_file = self.browse(cr, uid, ids)[0]
         for field in current_file.field_ids:
-            csv_file += "\"" + field.name
-            csv_file += "\",\""
+            generated_id = "\"" + field.file_id.name + "_" + field.name + "_" + str(field.sequence) + "\","
+            print "gen_id: ",generated_id
+            csv_file += generated_id.replace(' ', '_')
+            csv_file += "\"" + field.name + "\",\""
             if field.custom_name:
                 csv_file += field.custom_name
             csv_file += "\",\""
@@ -258,7 +284,7 @@ class file_exchange(osv.osv):
             csv_file += "\",\""
             csv_file += "TODO" #mapping_line_id
             csv_file += "\",\""
-            csv_file += field.file_id.name.replace(' ', '_')
+            csv_file += field.file_id.get_external_id(context=context)[field.file_id.id]
             csv_file += "\",\""
             if field.default_value:
                 csv_file += field.default_value
@@ -268,9 +294,8 @@ class file_exchange(osv.osv):
             csv_file += "\"\n"
         raise osv.except_osv(_('Fields'), _(csv_file))
         return True
-        
-file_exchange()
 
+file_exchange()
 
 class file_fields(osv.osv):
     _name = "file.fields"
@@ -310,6 +335,7 @@ class file_fields(osv.osv):
         'advanced_default_value': fields.text('Advanced Default Value', help=("This python code will be evaluate and the value"
                                                                         "in the varaible result will be used as defaut value")),
         'alternative_key': fields.related('mapping_line_id', 'alternative_key', type='boolean', string='Alternative Key'),
+        'is_compulsary' : fields.boolean('Is compulsary', help="Is this field compulsary in the exchange ?"),
     }
 
 file_fields()

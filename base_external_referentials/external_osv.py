@@ -1029,6 +1029,8 @@ def _transform_field(self, cr, uid, external_session, convertion_type, field_nam
                 casted_field = (casted_field,)
             field = list(casted_field)
         else:
+            if field_type == 'float' and isinstance(field_value, (str, unicode)):
+                field_value = field_value.replace(',','.')
             field = eval(field_type)(field_value)
 
     if field in ['None', 'False']:

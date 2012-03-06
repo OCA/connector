@@ -52,13 +52,63 @@ class file_exchange(osv.osv):
             elif field.default_value:
                 res[field.name] = field.default_value
         return res
-
-    def _get_external_file_resources(self, cr, uid, external_session, filepath, filename, format, fields_name=None, context=None):
+    
+    def _get_external_file_resources(self, cr, uid, external_session, filepath, filename, format, fields_name=None, mapping=None, context=None):
         external_file = external_session.connection.get(filepath, filename)
-        if format == 'csv_no_header':
-            res = csv.DictReader(external_file, fieldnames=fields_name, delimiter=';')
-            return [x for x in res]
-        return []
+        method_id = context['file_exchange_id']
+        method = self.browse(cr, uid, method_id, context=context)
+        if format in ['csv_no_header','csv']:
+            field_model = {}
+            alternative_key = False
+            for field_id in method.field_ids:
+                if not field_id.mapping_line_id:
+                    continue
+                field_model[field_id.name] = "%s_%s" %(field_id.mapping_line_id.related_model_id.model, field_id.mapping_line_id.mapping_id.id)
+                if field_id.alternative_key:
+                    alternative_key = field_id.name
+            res = csv.DictReader(external_file, fieldnames= format=='csv_no_header' and fields_name or None, delimiter=method.delimiter.encode('utf-8'))
+            mapping_id = self.pool.get('external.mapping').search(cr, uid, [('model_id', '=', method.model_id.id)], context=context)[0]
+            method_model_name = "%s_%s" %(method.model_id.model, mapping_id)
+            mapping_tree = self._get_mapping_tree(cr, uid, mapping_id, context=context)
+            result = {}
+            merge_keys = [key for mapping in mapping_tree for key in mapping if mapping[key]['type'] in ['o2m','m2m']]
+            for line in res:
+                res_line = {}
+                for key in line:
+                    if key in field_model:
+                        value_model = field_model[key]
+                        if value_model != method_model_name:
+                            if not value_model in res_line:
+                                res_line[value_model] = {}
+                            res_line[value_model][key] = line[key]
+                        else: 
+                            res_line[key] = line[key]
+                for mapping in mapping_tree:
+                    for key, value in mapping.items():
+                        if value['parent_name'] != method_model_name:
+                            res_line[value['parent_name']][key] = res_line[key]
+                            del res_line[key] 
+                if line[alternative_key] in result:
+                    for key in merge_keys:
+                        result[line[alternative_key]][key].append(res_line[key])
+                else:
+                    result[line[alternative_key]] = res_line
+                    for key in merge_keys:
+                        result[line[alternative_key]][key] =  [result[line[alternative_key]][key]]
+            result = [result[key] for key in result]
+        return result
+    
+    def _get_mapping_tree(self, cr, uid, mapping_id, parent_name=None, mapping_type=None, context=None):
+        result = []
+        mapping = self.pool.get('external.mapping').browse(cr, uid, mapping_id, context=context)
+        mapping_name = "%s_%s" %(mapping.model_id.model, mapping.id)
+        for mapping_line in mapping.mapping_ids:
+            if mapping_line.evaluation_type == 'sub-mapping':
+                res = self._get_mapping_tree(cr, uid, mapping_line.child_mapping_id.id, mapping_name, mapping_line.external_type, context=context)
+                result = res + result
+        if parent_name:
+            result.append({mapping_name : {'parent_name' : parent_name, 'type' : mapping_type}})
+        return result
 
     def start_task(self, cr, uid, ids, context=None):
         for method in self.browse(cr, uid, ids, context=context):
@@ -87,7 +137,7 @@ class file_exchange(osv.osv):
             external_session.logger.info("No file '%s' found on the server"%(method.filename,))
         for filename in list_filename:
             external_session.logger.info("Start to import the file %s"%(filename,))
-            resources = self._get_external_file_resources(cr, uid, external_session, method.folder_path, filename, method.format, fields_name, context=context)
+            resources = self._get_external_file_resources(cr, uid, external_session, method.folder_path, filename, method.format, fields_name, mapping=mapping, context=context)
             res = self.pool.get(method.model_id.model)._record_external_resources(cr, uid, external_session, resources, defaults=defaults, mapping=mapping, context=context)
             external_session.connection.move(method.folder_path, method.archive_folder_path, filename)
             external_session.logger.info("Finish to import the file %s"%(filename,))
@@ -242,6 +292,7 @@ class file_exchange(osv.osv):
         'action_after_all': fields.text('Action After All', help="This python code will executed after the import/export"),
         'action_before_each': fields.text('Action Before Each', help="This python code will executed after each element of the import/export"), 
         'action_after_each': fields.text('Action After Each', help="This python code will executed after each element of the import/export"),
+        'delimiter':fields.char('Fields delimiter', size=64, help="Delimiter used in the CSV file"),
     }
 
     # Method to export the exchange file

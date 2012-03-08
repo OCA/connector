@@ -51,6 +51,9 @@
                             <button name="create_exchange_file" string="Export exchange file" colspan="2" type="object" />
                             <button name="create_file_fields" string="Export fields file" colspan="2" type="object" />
                         </page>
+                        <page string="Import Default Values">
+                            <field name="import_default_field" colspan="4" nolabel="1"/>
+                        </page>
                     </notebook>
                 </form>
             </field>
@@ -106,6 +109,35 @@
                     <field name="name"/>
                     <field name="default_value"/>
                     <field name='alternative_key'/>
+                </tree>
+            </field>
+        </record>
+
+    <!-- VIEW FOR THE OBJECT : default_fields -->
+        <record id="default_fields_view_form" model="ir.ui.view">
+            <field name="name">file_exchange.default_fields.view_form</field>
+            <field name="model">file.default.import.values</field>
+            <field eval="16" name="priority"/>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="file default import values">
+                    <field name="import_default_field" />
+                    <field name="import_default_value" />
+                    <field name="file_id" />
+                </form>
+            </field>
+        </record>
+
+        <record id="default_fields_view_tree" model="ir.ui.view">
+            <field name="name">file_exchange.default_fields_view_tree</field>
+            <field name="model">file.default.import.values</field>
+            <field eval="16" name="priority"/>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree editable="top" string="file default import values">
+                    <field name="import_default_field" />
+                    <field name="import_default_value" />
+                    <field name="file_id" />
                 </tree>
             </field>
         </record>

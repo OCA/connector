@@ -22,7 +22,7 @@ from tools.safe_eval import safe_eval as eval
 from osv import osv, fields
 import netsvc
 from base_external_referentials.external_osv import ExternalSession
-import csv
+from base_file_protocole.base_file_protocole import FileCsvReader
 from tempfile import TemporaryFile
 from encodings.aliases import aliases
 from tools.translate import _
@@ -31,7 +31,7 @@ class file_exchange(osv.osv):
     _name = "file.exchange"
     _description = "file exchange"
 
-    def get_default_fields_values(self, cr, uid, id, context=None):
+    def get_export_default_fields_values(self, cr, uid, id, context=None):
         if isinstance(id, list):
             id = id[0]
         res = {}
@@ -52,6 +52,13 @@ class file_exchange(osv.osv):
             elif field.default_value:
                 res[field.name] = field.default_value
         return res
+
+    def get_import_default_fields_values(self, cr, uid, method_id, context=None):
+        res = {}
+        method = self.browse(cr, uid, method_id, context=context)
+        for field in method.import_default_field:
+            res[field.import_default_field.name] = field.import_default_value
+        return res
     
     def _get_external_file_resources(self, cr, uid, external_session, filepath, filename, format, fields_name=None, mapping=None, context=None):
         external_file = external_session.connection.get(filepath, filename)
@@ -64,14 +71,14 @@ class file_exchange(osv.osv):
                 if not field_id.mapping_line_id:
                     continue
                 field_model[field_id.name] = "%s_%s" %(field_id.mapping_line_id.related_model_id.model, field_id.mapping_line_id.mapping_id.id)
-                if field_id.alternative_key:
+                if field_id.alternative_key and field_id.mapping_line_id.related_model_id.model == method.model_id.model:
                     alternative_key = field_id.name
-            res = csv.DictReader(external_file, fieldnames= format=='csv_no_header' and fields_name or None, delimiter=method.delimiter.encode('utf-8'))
+            res = FileCsvReader(external_file, fieldnames= format=='csv_no_header' and fields_name or None, delimiter=method.delimiter.encode('utf-8'), encoding = method.encoding)
             mapping_id = self.pool.get('external.mapping').search(cr, uid, [('model_id', '=', method.model_id.id)], context=context)[0]
             method_model_name = "%s_%s" %(method.model_id.model, mapping_id)
             mapping_tree = self._get_mapping_tree(cr, uid, mapping_id, context=context)
             result = {}
-            merge_keys = [key for mapping in mapping_tree for key in mapping if mapping[key]['type'] in ['o2m','m2m']]
+            merge_keys = [key for mapping in mapping_tree for key in mapping if mapping[key]['type'] in ['one2many','many2many']]
             for line in res:
                 res_line = {}
                 for key in line:
@@ -95,7 +102,7 @@ class file_exchange(osv.osv):
                     result[line[alternative_key]] = res_line
                     for key in merge_keys:
                         result[line[alternative_key]][key] =  [result[line[alternative_key]][key]]
-            result = [result[key] for key in result]
+            result = [result[key] for key in result]         
         return result
     
     def _get_mapping_tree(self, cr, uid, mapping_id, parent_name=None, mapping_type=None, context=None):
@@ -124,7 +131,7 @@ class file_exchange(osv.osv):
         context['file_exchange_id'] = method_id
         file_fields_obj = self.pool.get('file.fields')
         method = self.browse(cr, uid, method_id, context=context)
-        defaults = self.get_default_fields_values(cr, uid, method_id, context=context)
+        defaults = self.get_import_default_fields_values(cr, uid, method_id, context=context)
         external_session = ExternalSession(method.referential_id)
         mapping = {method.model_id.model : self.pool.get(method.model_id.model)._get_mapping(cr, uid, method.referential_id.id, context=context)}
 
@@ -188,7 +195,7 @@ class file_exchange(osv.osv):
     #=== Start export
         external_session.logger.info("Start to export %s"%(method.name,))
         model_obj = self.pool.get(method.model_id.model)
-        defaults = self.get_default_fields_values(cr, uid, method_id, context=context)
+        defaults = self.get_export_default_fields_values(cr, uid, method_id, context=context)
         encoding = method.encoding
     #=== Get external file ids and fields
         fields_name_ids = file_fields_obj.search(cr, uid, [['file_id', '=', method.id]], context=context)
@@ -293,6 +300,7 @@ class file_exchange(osv.osv):
         'action_before_each': fields.text('Action Before Each', help="This python code will executed after each element of the import/export"), 
         'action_after_each': fields.text('Action After Each', help="This python code will executed after each element of the import/export"),
         'delimiter':fields.char('Fields delimiter', size=64, help="Delimiter used in the CSV file"),
+        'import_default_field':fields.one2many('file.default.import.values', 'file_id', 'Default Field'),
     }
 
     # Method to export the exchange file
@@ -390,3 +398,14 @@ class file_fields(osv.osv):
     }
 
 file_fields()
+
+class file_default_import_values(osv.osv):
+    _name = "file.default.import.values"
+    _description = "file default import values"
+
+    _columns = {
+        'import_default_field':fields.many2one('ir.model.fields', 'Default Field'),
+        'import_default_value':fields.char('Default Value', size=128),
+        'file_id': fields.many2one('file.exchange', 'File Exchange', require="True"),
+    }
+

@@ -356,7 +356,7 @@ class external_mapping(osv.osv):
             return {}
 
     def create_external_link(self, cr, uid, model, model_name):
-        vals = {'domain': "[('res_id', '=', 'active_id'), ('model', '=', '%s')]" %(model,), 'name': 'External ' + model_name, 'res_model': 'ir.model.data', 'src_model': model, 'view_type': 'form'}
+        vals = {'domain': "[('res_id', '=', active_id), ('model', '=', '%s')]" %(model,), 'name': 'External ' + model_name, 'res_model': 'ir.model.data', 'src_model': model, 'view_type': 'form'}
         xml_id = "ext_" + model.replace(".", "_")
         ir_model_data_id = self.pool.get('ir.model.data')._update(cr, uid, 'ir.actions.act_window', "base_external_referentials", vals, xml_id, False, 'update')
         value = 'ir.actions.act_window,'+str(ir_model_data_id)

@@ -325,7 +325,27 @@ def _get_external_resources(self, cr, uid, external_session, external_id=None, r
     """
     raise osv.except_osv(_("Not Implemented"), _("Not Implemented in abstract base module!"))
 
-def _get_mapping(self, cr, uid, referential_id, convertion_type='from_external_to_openerp', mapping_line_filter_ids=None, context=None):
+def _get_mapping_id(self, cr, uid, referential_id, context=None):
+    """
+    Function that return the mapping id for the corresponding object
+
+    :params int referential_id: the referential id
+    :return the id of the mapping
+    :rtype integer
+    """
+    mapping_id = self.pool.get('external.mapping').search(cr, uid, [('model', '=', self._name), ('referential_id', '=', referential_id)], context=context)
+    return mapping_id and mapping_id[0] or False
+
+def _init_mapping(self, cr, uid, referential_id, convertion_type='from_external_to_openerp', mapping_line_filter_ids=None, mapping=None, mapping_id=None, context=None):
+    if not mapping:
+        mapping={}
+    if not mapping_id:
+        mapping_id = self._get_mapping_id(cr, uid, referential_id, context=context)
+    if not mapping.get(mapping_id):
+        mapping[mapping_id] = self._get_mapping(cr, uid, referential_id, convertion_type=convertion_type, mapping_line_filter_ids=mapping_line_filter_ids, mapping_id=mapping_id, context=context)
+    return mapping, mapping_id
+
+def _get_mapping(self, cr, uid, referential_id, convertion_type='from_external_to_openerp', mapping_line_filter_ids=None, mapping_id=None, context=None):
     """
     Function that return the mapping line for the corresponding object
 
@@ -333,24 +353,25 @@ def _get_mapping(self, cr, uid, referential_id, convertion_type='from_external_t
     :return: dictionary with the key "mapping_lines" and "key_for_external_id"
     :rtype: dict
     """
-    mapping_id = self.pool.get('external.mapping').search(cr, uid, [('model', '=', self._name), ('referential_id', '=', referential_id)])
+    if not mapping_id:
+        mapping_id = self._get_mapping_id(cr, uid, referential_id, context=context)
     if not mapping_id:
         raise osv.except_osv(_('External Import Error'), _("The object %s doesn't have an external mapping" %self._name))
     else:
         #If a mapping exists for current model, search for mapping lines
 
         mapping_type = convertion_type == 'from_external_to_openerp' and 'in' or 'out'
-        mapping_line_filter = [('mapping_id', '=', mapping_id[0]),
+        mapping_line_filter = [('mapping_id', '=', mapping_id),
                             ('type', 'in', ['in_out', mapping_type])]
         if mapping_line_filter_ids:
             mapping_line_filter += ['|', ('id', 'in', mapping_line_filter_ids), ('evaluation_type', '=', 'sub-mapping')]
-        mapping_line_ids = self.pool.get('external.mapping.line').search(cr, uid, mapping_line_filter)
+        mapping_line_ids = self.pool.get('external.mapping.line').search(cr, uid, mapping_line_filter, context=context)
         if mapping_line_ids:
-            mapping_lines = self.pool.get('external.mapping.line').read(cr, uid, mapping_line_ids, [])
+            mapping_lines = self.pool.get('external.mapping.line').read(cr, uid, mapping_line_ids, [], context=context)
         else:
             mapping_lines = []
 
-        res = self.pool.get('external.mapping').read(cr, uid, mapping_id[0], context=context)
+        res = self.pool.get('external.mapping').read(cr, uid, mapping_id, context=context)
         alternative_key = [x['internal_field'] for x in mapping_lines if x['alternative_key']]
         res['alternative_key'] = alternative_key and alternative_key[0] or False
         res['key_for_external_id'] = res['key_for_external_id'] or 'id'
@@ -394,8 +415,8 @@ def _import_resources(self, cr, uid, external_session, defaults=None, method="se
     """
     external_session.logger.info("Start to import the ressource %s"%(self._name,))
     result = {"create_ids" : [], "write_ids" : []}
-    mapping = {self._name : self._get_mapping(cr, uid, external_session.referential_id.id, context=context)}
-    if mapping[self._name].get('mapping_lines'):
+    mapping, mapping_id = self._init_mapping(cr, uid, external_session.referential_id.id, context=context)
+    if mapping[mapping_id].get('mapping_lines'):
         step = self._get_import_step(cr, uid, external_session, context=context)
         resource_filter = None
         #TODO refactor improve and simplify this code
@@ -410,7 +431,7 @@ def _import_resources(self, cr, uid, external_session, defaults=None, method="se
                     resources = self._get_external_resources(cr, uid, external_session, ext_id, mapping=mapping, fields=None, context=context)
                     if not isinstance(resources, list):
                         resources = [resources]
-                    res = self._record_external_resources(cr, uid, external_session, resources, defaults=defaults, mapping=mapping, context=context)
+                    res = self._record_external_resources(cr, uid, external_session, resources, defaults=defaults, mapping=mapping, mapping_id=mapping_id, context=context)
                     for key in result:
                         result[key].append(res.get(key, []))
         elif method == 'search_then_read_no_loop':
@@ -422,7 +443,7 @@ def _import_resources(self, cr, uid, external_session, defaults=None, method="se
                 resources = self._get_external_resources(cr, uid, external_session, ext_id, mapping=mapping, fields=None, context=context)
                 if not isinstance(resources, list):
                     resources = [resources]
-                res = self._record_external_resources(cr, uid, external_session, resources, defaults=defaults, mapping=mapping, context=context)
+                res = self._record_external_resources(cr, uid, external_session, resources, defaults=defaults, mapping=mapping, mapping_id=mapping_id, context=context)
                 for key in result:
                     result[key].append(res.get(key, []))
         elif method == 'search_read':
@@ -434,7 +455,7 @@ def _import_resources(self, cr, uid, external_session, defaults=None, method="se
                     break
                 if not isinstance(resources, list):
                     resources = [resources]
-                res = self._record_external_resources(cr, uid, external_session, resources, defaults=defaults, mapping=mapping, context=context)
+                res = self._record_external_resources(cr, uid, external_session, resources, defaults=defaults, mapping=mapping, mapping_id=mapping_id, context=context)
                 for key in result:
                     result[key].append(res.get(key, []))
         elif method == 'search_read_no_loop':
@@ -444,7 +465,7 @@ def _import_resources(self, cr, uid, external_session, defaults=None, method="se
             resources = self._get_external_resources(cr, uid, external_session, resource_filter=resource_filter, mapping=mapping, fields=None, context=context)
             if not isinstance(resources, list):
                 resources = [resources]
-            res = self._record_external_resources(cr, uid, external_session, resources, defaults=defaults, mapping=mapping, context=context)
+            res = self._record_external_resources(cr, uid, external_session, resources, defaults=defaults, mapping=mapping, mapping_id=mapping_id, context=context)
             for key in result:
                 result[key].append(res.get(key, []))
     return result
@@ -466,7 +487,7 @@ def _import_one_resource(self, cr, uid, external_session, external_id, context=N
 
 
 
-def _record_external_resources(self, cr, uid, external_session, resources, defaults=None, mapping=None, context=None):
+def _record_external_resources(self, cr, uid, external_session, resources, defaults=None, mapping=None, mapping_id=None, context=None):
     """
     Abstract function to record external resources (this will convert the data and create/update the object in openerp)
 
@@ -477,18 +498,16 @@ def _record_external_resources(self, cr, uid, external_session, resources, defau
     :return: dictionary with the key "create_ids" and "write_ids" which containt the id created/written
     :rtype: dict
     """
-    if not mapping:
-        mapping={}
     result = {'write_ids': [], 'create_ids': []}
-    mapping[self._name] = self._get_mapping(cr, uid, external_session.referential_id.id, context=context)
+    mapping, mapping_id = self._init_mapping(cr, uid, external_session.referential_id.id, mapping=mapping, mapping_id=mapping_id, context=context)
     for resource in resources:
-        res = self._record_one_external_resource(cr, uid, external_session, resource, defaults=defaults, mapping=mapping, context=context)
+        res = self._record_one_external_resource(cr, uid, external_session, resource, defaults=defaults, mapping=mapping, mapping_id=mapping_id, context=context)
         if res.get('create_id'): result['create_ids'].append(res['create_id'])
         if res.get('write_id'): result['write_ids'].append(res['write_id'])
     return result
 
 
-def _record_one_external_resource(self, cr, uid, external_session, resource, defaults=None, mapping=None, context=None):
+def _record_one_external_resource(self, cr, uid, external_session, resource, defaults=None, mapping=None, mapping_id=None, context=None):
     """
     Used in _record_external_resources
     The resource will converted into OpenERP data by using the function _transform_external_resources
@@ -499,13 +518,14 @@ def _record_one_external_resource(self, cr, uid, external_session, resource, def
     :param dict defaults: defaults value
     :return: dictionary with the key "create_id" and "write_id" which containt the id created/written
     """
+    mapping, mapping_id = self._init_mapping(cr, uid, external_session.referential_id.id, mapping=mapping, mapping_id=mapping_id, context=context)
     written = created = False
-    vals = self._transform_one_resource(cr, uid, external_session, 'from_external_to_openerp', resource, mapping=mapping, defaults=defaults, context=context)
+    vals = self._transform_one_resource(cr, uid, external_session, 'from_external_to_openerp', resource, mapping=mapping, mapping_id=mapping_id, defaults=defaults, context=context)
 
     referential_id = external_session.referential_id.id
     external_id = vals.get('external_id')
     external_id_ok = not (external_id is None or external_id is False)
-    alternative_key = mapping[self._name]['alternative_key']
+    alternative_key = mapping[mapping_id]['alternative_key']
     existing_rec_id = False
     existing_ir_model_data_id = False
     if not (external_id is None or external_id is False):
@@ -516,8 +536,8 @@ def _record_one_external_resource(self, cr, uid, external_session, resource, def
         existing_rec_id = self.search(cr, uid, [(alternative_key, '=', vals[alternative_key])], context=context)
         existing_rec_id = existing_rec_id and existing_rec_id[0] or False
 
-    if not (external_id_ok or existing_rec_id):
-        raise osv.except_osv(_('External Import Error'), _("The object imported need an external_id, maybe the mapping doesn't exist for the object : %s" %self._name))
+    if not (external_id_ok or alternative_key):
+        external_session.logger.warning(_("The object imported need an external_id, maybe the mapping doesn't exist for the object : %s" %self._name))
 
     if existing_rec_id:
         if self.oe_update(cr, uid, existing_rec_id, vals, referential_id, defaults=defaults, context=context):
@@ -543,11 +563,11 @@ def _record_one_external_resource(self, cr, uid, external_session, resource, def
 
     if created:
         external_session.logger.info(("Created in OpenERP %s from External Ref with"
-                                    "external_id %s and OpenERP id %s successfully" %(self._name, external_id_ok and str(external_id) or vals[alternative_key], existing_rec_id)))
+                                    "external_id %s and OpenERP id %s successfully" %(self._name, external_id_ok and str(external_id) or vals.get(alternative_key), existing_rec_id)))
         return {'create_id' : existing_rec_id}
     elif written:
         external_session.logger.info(("Updated in OpenERP %s from External Ref with"
-                                    "external_id %s and OpenERP id %s successfully" %(self._name, external_id_ok and str(external_id) or vals[alternative_key], existing_rec_id)))
+                                    "external_id %s and OpenERP id %s successfully" %(self._name, external_id_ok and str(external_id) or vals.get(alternative_key), existing_rec_id)))
         return {'write_id' : existing_rec_id}
     return {}
 
@@ -576,6 +596,8 @@ osv.osv.get_external_data = get_external_data
 
 osv.osv.retry_import = retry_import
 osv.osv._get_mapping = _get_mapping
+osv.osv._get_mapping_id = _get_mapping_id
+osv.osv._init_mapping = _init_mapping
 osv.osv._get_default_import_values = _get_default_import_values
 osv.osv._get_import_step = _get_import_step
 
@@ -609,7 +631,7 @@ osv.osv.oe_create = oe_create
 
 
 def _export_resources_into_external_referential(self, cr, uid, external_session, ids, fields=[], defaults=None, context=None):
-    mapping = {self._name : self._get_mapping(cr, uid, external_session.referential_id.id, mapping_type='out', context=context)}
+    mapping, mapping_id = self._init_mapping(cr, uid, external_session.referential_id.id, convertion_type='from_openerp_to_external', context=context)
     resources = self._get_oe_resources_into_external_format(cr, uid, external_session, ids, mapping=mapping, fields=fields, defaults=defaults, context=context)
     print 'TODO'
     return True
@@ -890,7 +912,7 @@ osv.osv.create_external_id_vals = create_external_id_vals
 #
 ########################################################################################################################
 
-def _transform_resources(self, cr, uid, external_session, convertion_type, resources, defaults=None, mapping=None, mapping_line_filter_ids=None, parent_data=None, context=None):
+def _transform_resources(self, cr, uid, external_session, convertion_type, resources, defaults=None, mapping=None, mapping_id=None, mapping_line_filter_ids=None, parent_data=None, context=None):
     """
     Used in ext_import in order to convert all of the external data into OpenERP data
 
@@ -900,23 +922,20 @@ def _transform_resources(self, cr, uid, external_session, convertion_type, resou
     @param defaults: defaults value for data converted
     @return: list of the line converted into OpenERP value
     """
-    if not mapping:
-        mapping = {}
     result= []
     if resources:
-        if mapping.get(self._name) is None:
-            mapping[self._name] = self._get_mapping(cr, uid, external_session.referential_id.id, convertion_type=convertion_type, mapping_line_filter_ids=mapping_line_filter_ids, context=context)
+        mapping, mapping_id = self._init_mapping(cr, uid, external_session.referential_id.id, convertion_type=convertion_type, mapping_line_filter_ids=mapping_line_filter_ids, mapping=mapping, mapping_id=mapping_id, context=context)
         if convertion_type == 'from_openerp_to_external':
-            field_to_read = [x['internal_field'] for x in mapping[self._name]['mapping_lines']]
+            field_to_read = [x['internal_field'] for x in mapping[mapping_id]['mapping_lines']]
             resources = self.read(cr, uid, resources, field_to_read, context=context)
-        if mapping[self._name].get("mapping_lines"):
+        if mapping[mapping_id].get("mapping_lines"):
             for resource in resources:
                 result.append(self._transform_one_resource(cr, uid, external_session, convertion_type, resource, 
-                                                            mapping, mapping_line_filter_ids, parent_data=parent_data, 
+                                                            mapping, mapping_id, mapping_line_filter_ids, parent_data=parent_data, 
                                                             previous_result=result, defaults=defaults, context=context))
     return result
 
-def _transform_one_resource(self, cr, uid, external_session, convertion_type, resource, mapping, mapping_line_filter_ids=None, parent_data=None, previous_result=None, defaults=None, context=None):
+def _transform_one_resource(self, cr, uid, external_session, convertion_type, resource, mapping, mapping_id, mapping_line_filter_ids=None, parent_data=None, previous_result=None, defaults=None, context=None):
     """
     Used in _transform_external_resources in order to convert external row of data into OpenERP data
 
@@ -933,16 +952,16 @@ def _transform_one_resource(self, cr, uid, external_session, convertion_type, re
         context = {}
     if defaults is None:
         defaults = {}
-
-    mapping_lines = mapping[self._name].get("mapping_lines")
-    key_for_external_id = mapping[self._name].get("key_for_external_id")
+    mapping_lines = mapping[mapping_id].get("mapping_lines")
+    key_for_external_id = mapping[mapping_id].get("key_for_external_id")
 
     vals = {} #Dictionary for create record
     sub_mapping_list=[]
     for mapping_line in mapping_lines:
-
         if convertion_type == 'from_external_to_openerp':
             from_field = mapping_line['external_field']
+            if not from_field:
+                from_field = "%s_%s" %(mapping_line['child_mapping_id'][1], mapping_line['child_mapping_id'][0])
             to_field = mapping_line['internal_field']
 
         elif convertion_type == 'from_openerp_to_external':
@@ -1002,7 +1021,6 @@ def _transform_one_resource(self, cr, uid, external_session, convertion_type, re
 
     if convertion_type == 'from_external_to_openerp' and key_for_external_id and resource.get(key_for_external_id):
         vals.update({'external_id': int(resource[key_for_external_id])})
-
     vals = self._merge_with_default_values(cr, uid, external_session, resource, vals, sub_mapping_list, defaults=defaults, context=context)
     vals = self._transform_sub_mapping(cr, uid, external_session, convertion_type, resource, vals, sub_mapping_list, mapping, mapping_line_filter_ids=mapping_line_filter_ids, defaults=defaults, context=context)
     return vals
@@ -1010,7 +1028,7 @@ def _transform_one_resource(self, cr, uid, external_session, convertion_type, re
 def _transform_field(self, cr, uid, external_session, convertion_type, field_name, field_value, field_type, context=None):
     field = False
     if field_value:
-        if field_type == 'o2m':
+        if field_type == 'one2many':
             if convertion_type == 'from_external_to_openerp':
                 return self.pool.get(self._columns[field_name]._obj).extid_to_oeid(cr, uid, external_session, field_value, context=context)
             else:
@@ -1080,8 +1098,12 @@ def _transform_sub_mapping(self, cr, uid, external_session, convertion_type, res
         defaults={}
     ir_model_field_obj = self.pool.get('ir.model.fields')
     for sub_mapping in sub_mapping_list:
+        sub_object_name = sub_mapping['child_mapping_id'][1]
+        mapping_id = sub_mapping['child_mapping_id'][0]
         if convertion_type == 'from_external_to_openerp':
             from_field = sub_mapping['external_field']
+            if not from_field:
+                from_field = "%s_%s" %(sub_object_name, mapping_id)
             to_field = sub_mapping['internal_field']
             field_value = resource[from_field]
 
@@ -1089,15 +1111,15 @@ def _transform_sub_mapping(self, cr, uid, external_session, convertion_type, res
             from_field = sub_mapping['internal_field']
             to_field = sub_mapping['external_field'] or 'hidden_field_to_split_%s'%from_field # if the field doesn't have any name we assume at that we will split it
             #Before calling submapping o2m resource must be an int and not a list of (id, name)
-            if sub_mapping['external_type'] == 'm2o':
+            if sub_mapping['external_type'] == 'many2one':
                 field_value = resource[from_field] and resource[from_field][0] or False
             else:
                 field_value = resource[from_field]
 
         if field_value:
-            if isinstance(field_value, list):
+            if sub_mapping['internal_type'] in ['one2many', 'many2many']:
                 vals[to_field] = []
-                lines = self.pool.get(sub_mapping['child_mapping_id'][1])._transform_resources(cr, uid, external_session, convertion_type, field_value, defaults=defaults.get(to_field), mapping=mapping, mapping_line_filter_ids=mapping_line_filter_ids, parent_data=vals, context=context)
+                lines = self.pool.get(sub_object_name)._transform_resources(cr, uid, external_session, convertion_type, field_value, defaults=defaults.get(to_field), mapping=mapping, mapping_id=mapping_id, mapping_line_filter_ids=mapping_line_filter_ids, parent_data=vals, context=context)
                 for line in lines:
                     if 'external_id' in line:
                         del line['external_id']
@@ -1105,8 +1127,12 @@ def _transform_sub_mapping(self, cr, uid, external_session, convertion_type, res
                         vals[to_field].append((0, 0, line))
                     else:
                         vals[to_field].append(line)
+            elif sub_mapping['internal_type'] == 'many2one':
+                res = self.pool.get(sub_object_name)._record_one_external_resource(cr, uid, external_session, field_value, defaults=defaults.get(to_field), mapping=mapping, mapping_id=mapping_id, context=context)
+                vals[to_field] = res.get('write_id') or res.get('create_id')
             else:
-                vals[to_field] = self.pool.get(sub_mapping['child_mapping_id'][1])._transform_resources(cr, uid, external_session, convertion_type, [field_value], defaults=defaults.get(to_field), mapping=mapping, mapping_line_filter_ids=mapping_line_filter_ids, parent_data=vals, context=context)[0]
+                vals[to_field] = self.pool.get(sub_object_name)._transform_resources(cr, uid, external_session, convertion_type, [field_value], defaults=defaults.get(to_field), mapping=mapping, mapping_id=mapping_id, mapping_line_filter_ids=mapping_line_filter_ids, parent_data=vals, context=context)[0]
+
     return vals
 
 #TODO check if still needed?

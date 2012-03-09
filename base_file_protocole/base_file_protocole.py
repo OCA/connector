@@ -26,6 +26,7 @@ from ftplib import FTP
 import sys
 import os
 import shutil
+import csv
 
 class FileConnection(object):
 
@@ -78,4 +79,45 @@ class FileConnection(object):
         elif self.is_('filestore'):
             os.rename(os.path.join(oldfilepath, filename), os.path.join(newfilepath, filename))
 
+class FileCsvReader(object):
+    """
+    A CSV reader which will iterate over lines in the CSV file "f",
+    which is encoded in the given encoding.
+    """
 
+    def __init__(self, f, encoding="utf-8", **kwds):            
+        self.encoding = encoding
+        self.reader = csv.DictReader(f, **kwds)
+
+    def next(self):
+        row = self.reader.next()
+#        print "next row=", row
+        res = {}
+        for key, value in row.items():
+            if value and key:
+                res[unicode(key, self.encoding)] = unicode(value, self.encoding)
+            elif key:
+                res[unicode(key, self.encoding)] = value
+            else:
+                res[key] = value
+        return res
+
+    def __iter__(self):
+        return self
+
+    def reorganize(self, field_structure=None, merge_keys=None, ref_field=None):
+        result = {}
+        for line in self:
+            for child, parent in field_structure:
+                if not parent in line:
+                    line[parent] = {}
+                line[parent][child] = line[child]
+                del line[child]
+            if line[ref_field] in result:
+                for key in merge_keys:
+                    result[line[ref_field]][key].append(line[key])
+            else:
+                result[line[ref_field]] = line
+                for key in merge_keys:
+                    result[line[ref_field]][key] =  [result[line[ref_field]][key]]
+        return [result[key] for key in result]

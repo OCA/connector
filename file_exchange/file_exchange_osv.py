@@ -26,10 +26,11 @@ import netsvc
 osv.osv._feo_record_one_external_resource = osv.osv._record_one_external_resource #feo mean file_exchange_original
 
 @only_for_referential(ref_categ ='File Exchange', super_function = osv.osv._feo_record_one_external_resource)
-def _record_one_external_resource(self, cr, uid, external_session, resource, defaults=None, mapping=None, context=None):
+def _record_one_external_resource(self, cr, uid, *args, **kwargs):
+    context=kwargs.get('context')
     method = self.pool.get('file.exchange').browse(cr, uid, context['file_exchange_id'], context=context)
     method.start_action('action_before_each', self, None, context=context)
-    res = self._feo_record_one_external_resource(cr, uid, external_session, resource, defaults=defaults, mapping=mapping, context=context)
+    res = self._feo_record_one_external_resource(cr, uid, *args, **kwargs)
     res_id = res.get('create_id', False) or res.get('write_id', False)
     method.start_action('action_after_each', self, [res_id], context=context)
     return res

@@ -65,57 +65,39 @@ class file_exchange(osv.osv):
         method_id = context['file_exchange_id']
         method = self.browse(cr, uid, method_id, context=context)
         if format in ['csv_no_header','csv']:
-            field_model = {}
-            alternative_key = False
-            for field_id in method.field_ids:
-                if not field_id.mapping_line_id:
-                    continue
-                field_model[field_id.name] = "%s_%s" %(field_id.mapping_line_id.related_model_id.model, field_id.mapping_line_id.mapping_id.id)
-                if field_id.alternative_key and field_id.mapping_line_id.related_model_id.model == method.model_id.model:
-                    alternative_key = field_id.name
-            res = FileCsvReader(external_file, fieldnames= format=='csv_no_header' and fields_name or None, delimiter=method.delimiter.encode('utf-8'), encoding = method.encoding)
+            alternative_key_id = self.pool.get('file.fields').search(cr, uid, [('alternative_key', '=', True), ('mapping_line_id.related_model_id', '=', method.model_id.id), ('file_id', '=', method.id)], context=context)[0]
+            alternative_key = self.pool.get('file.fields').read(cr, uid, alternative_key_id, ['name'], context=context)['name']            
             mapping_id = self.pool.get('external.mapping').search(cr, uid, [('model_id', '=', method.model_id.id)], context=context)[0]
             method_model_name = "%s_%s" %(method.model_id.model, mapping_id)
-            mapping_tree = self._get_mapping_tree(cr, uid, mapping_id, context=context)
-            result = {}
-            merge_keys = [key for mapping in mapping_tree for key in mapping if mapping[key]['type'] in ['one2many','many2many']]
-            for line in res:
-                res_line = {}
-                for key in line:
-                    if key in field_model:
-                        value_model = field_model[key]
-                        if value_model != method_model_name:
-                            if not value_model in res_line:
-                                res_line[value_model] = {}
-                            res_line[value_model][key] = line[key]
-                        else: 
-                            res_line[key] = line[key]
-                for mapping in mapping_tree:
-                    for key, value in mapping.items():
-                        if value['parent_name'] != method_model_name:
-                            res_line[value['parent_name']][key] = res_line[key]
-                            del res_line[key] 
-                if line[alternative_key] in result:
-                    for key in merge_keys:
-                        result[line[alternative_key]][key].append(res_line[key])
-                else:
-                    result[line[alternative_key]] = res_line
-                    for key in merge_keys:
-                        result[line[alternative_key]][key] =  [result[line[alternative_key]][key]]
-            result = [result[key] for key in result]         
-        return result
+            mapping_tree, merge_keys = self._get_mapping_tree(cr, uid, mapping_id, context=context)
+
+            csv = FileCsvReader(external_file, fieldnames= format=='csv_no_header' and fields_name or None, delimiter=method.delimiter.encode('utf-8'), encoding = method.encoding)
+            res = csv.reorganize(field_structure=mapping_tree, merge_keys=merge_keys, ref_field=alternative_key)
+           
+
+        return res
     
-    def _get_mapping_tree(self, cr, uid, mapping_id, parent_name=None, mapping_type=None, context=None):
+    def _get_mapping_tree(self, cr, uid, mapping_id, parent_name=None, grand_parent_name=None, context=None):
+        mapping_tree = []
         result = []
+        merge_keys = []
         mapping = self.pool.get('external.mapping').browse(cr, uid, mapping_id, context=context)
         mapping_name = "%s_%s" %(mapping.model_id.model, mapping.id)
         for mapping_line in mapping.mapping_ids:
             if mapping_line.evaluation_type == 'sub-mapping':
-                res = self._get_mapping_tree(cr, uid, mapping_line.child_mapping_id.id, mapping_name, mapping_line.external_type, context=context)
+                res, sub_merge_keys = self._get_mapping_tree(cr, uid, mapping_line.child_mapping_id.id, mapping_name,  context=context)
                 result = res + result
-        if parent_name:
-            result.append({mapping_name : {'parent_name' : parent_name, 'type' : mapping_type}})
-        return result
+                merge_keys = merge_keys + sub_merge_keys
+                if mapping_line.internal_type in ['one2many','many2many']:
+                    merge_keys.append("%s_%s" %(mapping_line.child_mapping_id.model, mapping_line.child_mapping_id.id))
+            else:
+                if parent_name:
+                    result.append((mapping_line.external_field , mapping_name))
+        if grand_parent_name:
+            result.append((mapping_name , parent_name))
+        if not parent_name:
+            result = list(set(result))
+        return result, merge_keys
 
     def start_task(self, cr, uid, ids, context=None):
         for method in self.browse(cr, uid, ids, context=context):

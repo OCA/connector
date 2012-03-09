@@ -373,7 +373,7 @@ def _get_mapping(self, cr, uid, referential_id, convertion_type='from_external_t
 
         res = self.pool.get('external.mapping').read(cr, uid, mapping_id, context=context)
         alternative_key = [x['internal_field'] for x in mapping_lines if x['alternative_key']]
-        res['alternative_key'] = alternative_key and alternative_key[0] or False
+        res['alternative_keys'] = alternative_key or False
         res['key_for_external_id'] = res['key_for_external_id'] or 'id'
         res['mapping_lines'] = mapping_lines
         return res
@@ -525,18 +525,21 @@ def _record_one_external_resource(self, cr, uid, external_session, resource, def
     referential_id = external_session.referential_id.id
     external_id = vals.get('external_id')
     external_id_ok = not (external_id is None or external_id is False)
-    alternative_key = mapping[mapping_id]['alternative_key']
+    alternative_keys = mapping[mapping_id]['alternative_keys']
     existing_rec_id = False
     existing_ir_model_data_id = False
     if not (external_id is None or external_id is False):
         del vals['external_id']
         existing_ir_model_data_id, existing_rec_id = self._existing_oeid_for_extid_import\
             (cr, uid, vals, external_id, referential_id, context=context)
-    if not existing_rec_id and alternative_key:
-        existing_rec_id = self.search(cr, uid, [(alternative_key, '=', vals[alternative_key])], context=context)
+    if not existing_rec_id and alternative_keys:
+        domain = []
+        for alternative_key in alternative_keys:
+            domain.append((alternative_key, '=', vals[alternative_key]))
+        existing_rec_id = self.search(cr, uid, domain, context=context)
         existing_rec_id = existing_rec_id and existing_rec_id[0] or False
 
-    if not (external_id_ok or alternative_key):
+    if not (external_id_ok or alternative_keys):
         external_session.logger.warning(_("The object imported need an external_id, maybe the mapping doesn't exist for the object : %s" %self._name))
 
     if existing_rec_id:
@@ -562,12 +565,20 @@ def _record_one_external_resource(self, cr, uid, external_session, resource, def
                                             "external_id %s and OpenERP id %s successfully" %(self._name, external_id, existing_rec_id))
 
     if created:
-        external_session.logger.info(("Created in OpenERP %s from External Ref with"
-                                    "external_id %s and OpenERP id %s successfully" %(self._name, external_id_ok and str(external_id) or vals.get(alternative_key), existing_rec_id)))
+        if external_id:
+            external_session.logger.info(("Created in OpenERP %s from External Ref with"
+                                    "external_id %s and OpenERP id %s successfully" %(self._name, external_id_ok and str(external_id), existing_rec_id)))
+        elif alternative_keys:
+            external_session.logger.info(("Created in OpenERP %s from External Ref with"
+                                    "alternative_keys %s and OpenERP id %s successfully" %(self._name, external_id_ok and str (vals.get(alternative_keys)), existing_rec_id)))
         return {'create_id' : existing_rec_id}
     elif written:
-        external_session.logger.info(("Updated in OpenERP %s from External Ref with"
-                                    "external_id %s and OpenERP id %s successfully" %(self._name, external_id_ok and str(external_id) or vals.get(alternative_key), existing_rec_id)))
+        if external_id:
+            external_session.logger.info(("Updated in OpenERP %s from External Ref with"
+                                    "external_id %s and OpenERP id %s successfully" %(self._name, external_id_ok and str(external_id), existing_rec_id)))
+        elif alternative_keys:
+            external_session.logger.info(("Updated in OpenERP %s from External Ref with"
+                                    "alternative_keys %s and OpenERP id %s successfully" %(self._name, external_id_ok and str (vals.get(alternative_keys)), existing_rec_id)))
         return {'write_id' : existing_rec_id}
     return {}
 

@@ -126,6 +126,19 @@ class external_referential(osv.osv):
     _name = 'external.referential'
     _description = 'External Referential'
 
+    #Only user that can write crypted field can read it
+    _crypted_field = ['apiusername', 'apipass', 'location']
+
+    def read(self,cr, uid, ids, fields=None, context=None, load='_classic_read'):
+        canwrite = self.check_write(cr, uid, raise_exception=False)
+        res = super(external_referential, self).read(cr, uid, ids, fields=fields, context=context, load=load)
+        if not canwrite:
+            for val in res:
+                for crypted_field in self._crypted_field:
+                    if val.get(crypted_field):
+                        val[crypted_field]='********'
+        return res
+
     def external_connection(self, cr, uid, referential, debug=False, context=None):
         """Should be overridden to provide valid external referential connection"""
         return False

@@ -21,6 +21,7 @@
                     <field name="type" />
                     <field name="model_id" />
                     <field name="encoding" />
+                    <field name="lang" />
                     <field name="format" />
                     <field name="delimiter" />
                     <field name="search_filter" attrs="{'invisible':[('type','!=','out')]}"/>

@@ -100,11 +100,15 @@ class file_exchange(osv.osv):
         return result, merge_keys
 
     def start_task(self, cr, uid, ids, context=None):
+        if not context:
+            context={}
         for method in self.browse(cr, uid, ids, context=context):
+            ctx = context.copy()
+            ctx['lang'] = method.lang.code
             if method.type == 'in':
-                self._import_files(cr, uid, method.id, context=context)
+                self._import_files(cr, uid, method.id, context=ctx)
             elif method.type == 'out':
-                self._export_files(cr, uid, method.id, context=context)
+                self._export_files(cr, uid, method.id, context=ctx)
         return True
 
     def _import_files(self, cr, uid, method_id, context=None):
@@ -240,6 +244,8 @@ class file_exchange(osv.osv):
         return True
 
     def start_action(self, cr, uid, id, action_name, self_object, object_ids, context=None):
+        if not context:
+            context={}
         if isinstance(id, list):
             id = id[0]
         method = self.browse(cr, uid, id, context=context)
@@ -282,6 +288,7 @@ class file_exchange(osv.osv):
         'action_before_each': fields.text('Action Before Each', help="This python code will executed after each element of the import/export"), 
         'action_after_each': fields.text('Action After Each', help="This python code will executed after each element of the import/export"),
         'delimiter':fields.char('Fields delimiter', size=64, help="Delimiter used in the CSV file"),
+        'lang': fields.many2one('res.lang', 'Language'),
         'import_default_field':fields.one2many('file.default.import.values', 'file_id', 'Default Field'),
     }
 

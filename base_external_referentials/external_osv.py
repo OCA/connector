@@ -1031,7 +1031,8 @@ def _transform_one_resource(self, cr, uid, external_session, convertion_type, re
                             raise MappingError(_('Invalid format for the variable result.'), mapping_line['external_field'], self._name)
 
     if convertion_type == 'from_external_to_openerp' and key_for_external_id and resource.get(key_for_external_id):
-        vals.update({'external_id': int(resource[key_for_external_id])})
+        ext_id = resource[key_for_external_id]
+        vals.update({'external_id': ext_id.isdigit() and int(ext_id) or ext_id})
     vals = self._merge_with_default_values(cr, uid, external_session, resource, vals, sub_mapping_list, defaults=defaults, context=context)
     vals = self._transform_sub_mapping(cr, uid, external_session, convertion_type, resource, vals, sub_mapping_list, mapping, mapping_line_filter_ids=mapping_line_filter_ids, defaults=defaults, context=context)
     return vals

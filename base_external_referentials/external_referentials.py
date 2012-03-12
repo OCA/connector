@@ -77,6 +77,7 @@ class external_mapping_template(osv.osv):
         'model_id': fields.many2one('ir.model', 'OpenERP Model', required=True, ondelete='cascade'),
         'model':fields.related('model_id', 'model', type='char', string='Model Name'),
         'external_list_method': fields.char('List Method', size=64),
+        'external_search_method': fields.char('Search Method', size=64),
         'external_get_method': fields.char('Get Method', size=64),
         'external_update_method': fields.char('Update Method', size=64),
         'external_create_method': fields.char('Create Method', size=64),
@@ -101,8 +102,7 @@ class external_mappinglines_template(osv.osv):
         'name_function': fields.function(_name_get_fnc, type="char", string='Full Name'),
         'version_id':fields.many2one('external.referential.version', 'External Referential Version', ondelete='cascade'),
         'field_id': fields.many2one('ir.model.fields', 'OpenERP Field', ondelete='cascade'),
-        'model_id': fields.many2one('ir.model', 'OpenERP Model', ondelete='cascade'),
-        'model':fields.related('model_id', 'model', type='char', string='Model Name'),
+        'mapping_id': fields.many2one('external.mapping.template', 'External Mapping', ondelete='cascade'),
         'external_field': fields.char('External Field', size=32),
         'type': fields.selection([('in_out', 'External <-> OpenERP'), ('in', 'External -> OpenERP'), ('out', 'External <- OpenERP')], 'Type'),
         'evaluation_type': fields.selection([('function', 'Function'), ('sub-mapping','Sub Mapping Line'), ('direct', 'Direct Mapping')], 'Evalution Type', required=True),
@@ -155,49 +155,42 @@ class external_referential(osv.osv):
             mapping_line_obj = self.pool.get('external.mapping.line')
             mapping_tmpl_obj = self.pool.get('external.mapping.template')
             
-            #Delete Existing mappings if any
-            cr.execute("""select id from (select distinct external_mapping_line.id, external_mapping.model_id
-                            from (external_mapping_line join external_mapping on external_mapping.id = external_mapping_line.mapping_id)
-                            join external_mappinglines_template on (external_mappinglines_template.external_field = external_mapping_line.external_field
-                            and external_mappinglines_template.model_id = external_mapping.model_id)
-                            where external_mapping.referential_id=%s order by external_mapping_line.id) as tmp;""", (id,))
-            existing_mapping_ids = cr.fetchall()
-            if existing_mapping_ids:
-                mapping_line_obj.unlink(cr, uid, [tuple[0] for tuple in existing_mapping_ids])
+            existing_mapping_line_ids = mapping_line_obj.search(cr, uid, [['mapping_id.referential_id', '=', id], ['template_id', '!=', False]], context=context)
+            mapping_line_obj.unlink(cr, uid, existing_mapping_line_ids)
 
             link_parent_child_mapping = []
             template_mapping_id_to_mapping_id = {}
             #Fetch mapping lines now
             mapping_src_ids = self.pool.get('external.mapping.template').search(cr, uid, [('version_id', '=', ext_ref.version_id.id)])
             for each_mapping_rec in self.pool.get('external.mapping.template').read(cr, uid, mapping_src_ids, []):
-                existing_ids = mappings_obj.search(cr, uid, [('referential_id', '=', id), ('model_id', '=', each_mapping_rec['model_id'][0] or False)])
+                existing_ids = mappings_obj.search(cr, uid, [('referential_id', '=', id), ('template_id', '=', each_mapping_rec['id'])])
+                vals = {
+                        'referential_id': id,
+                        'template_id': each_mapping_rec['id'],
+                        'model_id': each_mapping_rec['model_id'][0] or False,
+                        'external_list_method': each_mapping_rec['external_list_method'],
+                        'external_search_method': each_mapping_rec['external_search_method'],
+                        'external_get_method': each_mapping_rec['external_get_method'],
+                        'external_update_method': each_mapping_rec['external_update_method'],
+                        'external_create_method': each_mapping_rec['external_create_method'],
+                        'external_delete_method': each_mapping_rec['external_delete_method'],
+                        'key_for_external_id': each_mapping_rec['key_for_external_id'],
+                        'external_resource_name': each_mapping_rec['external_resource_name'],
+                }
                 if len(existing_ids) == 0:
-                    vals = {
-                                    'referential_id': id,
-                                    'model_id': each_mapping_rec['model_id'][0] or False,
-                                    'external_list_method': each_mapping_rec['external_list_method'],
-                                    'external_get_method': each_mapping_rec['external_get_method'],
-                                    'external_update_method': each_mapping_rec['external_update_method'],
-                                    'external_create_method': each_mapping_rec['external_create_method'],
-                                    'external_delete_method': each_mapping_rec['external_delete_method'],
-                                    'key_for_external_id': each_mapping_rec['key_for_external_id'],
-                                    'external_resource_name': each_mapping_rec['external_resource_name'],
-                                                }
                     mapping_id = mappings_obj.create(cr, uid, vals)
                 else:
                     mapping_id = existing_ids[0]
-                    data = self.pool.get('ir.model').read(cr, uid, [each_mapping_rec['model_id'][0]], ['model', 'name'], context)[0]
-                    model = data['model']
-                    model_name = data['name']
-                    self.pool.get('external.mapping').create_external_link(cr, uid, model, model_name)
+                    self.pool.get('external.mapping').write(cr, uid, mapping_id, vals, context=context)
 
                 template_mapping_id_to_mapping_id[each_mapping_rec['id']] = mapping_id
 
                 #Now create mapping lines of the created mapping model
-                mapping_lines_src_ids = self.pool.get('external.mappinglines.template').search(cr, uid, [('version_id', '=', ext_ref.version_id.id), ('model_id', '=', each_mapping_rec['model_id'][0])])
+                mapping_lines_src_ids = self.pool.get('external.mappinglines.template').search(cr, uid, [('mapping_id', '=', each_mapping_rec['id'])])
                 for each_mapping_line_rec in  self.pool.get('external.mappinglines.template').read(cr, uid, mapping_lines_src_ids, []):
                     vals = {
                         'external_field': each_mapping_line_rec['external_field'],
+                        'template_id': each_mapping_line_rec['id'],
                         'mapping_id': mapping_id,
                         'type': each_mapping_line_rec['type'],
                         'evaluation_type': each_mapping_line_rec['evaluation_type'],
@@ -205,7 +198,6 @@ class external_referential(osv.osv):
                         'in_function': each_mapping_line_rec['in_function'],
                         'out_function': each_mapping_line_rec['out_function'],
                         'field_id': each_mapping_line_rec['field_id'] and each_mapping_line_rec['field_id'][0] or False,
-                        'active':True,
                         'alternative_key': each_mapping_line_rec['alternative_key'],
                         }
                     mapping_line_id = mapping_line_obj.create(cr, uid, vals)
@@ -355,27 +347,25 @@ class external_mapping(osv.osv):
         else:
             return {}
 
-    def create_external_link(self, cr, uid, model, model_name):
-        vals = {'domain': "[('res_id', '=', active_id), ('model', '=', '%s')]" %(model,), 'name': 'External ' + model_name, 'res_model': 'ir.model.data', 'src_model': model, 'view_type': 'form'}
-        xml_id = "ext_" + model.replace(".", "_")
-        ir_model_data_id = self.pool.get('ir.model.data')._update(cr, uid, 'ir.actions.act_window', "base_external_referentials", vals, xml_id, False, 'update')
-        value = 'ir.actions.act_window,'+str(ir_model_data_id)
-        return self.pool.get('ir.model.data').ir_set(cr, uid, 'action', 'client_action_relate', xml_id, [model], value, replace=True, isobject=True, xml_id=xml_id)
-
     def create(self, cr, uid, vals, context=None):
         res = super(external_mapping, self).create(cr, uid, vals, context)
-        data = self.pool.get('ir.model').read(cr, uid, [vals['model_id']], ['model', 'name'], context)[0]
-        model = data['model']
-        model_name = data['name']
-        self.create_external_link(cr, uid, model, model_name)
+        self.pool.get('ir.model').create_external_link(cr, uid, vals['model_id'], context=context)
+        return res
+
+    def write(self, cr, uid, ids, vals, context=None):
+        res = super(external_mapping, self).write(cr, uid, ids, vals, context=context)
+        if vals.get('model_id'):
+            self.pool.get('ir.model').create_external_link(cr, uid, vals['model_id'], context=context)
         return res
     
     _columns = {
+        'template_id': fields.many2one('external.mapping.template', 'External Mapping Template'),
         'referential_id': fields.many2one('external.referential', 'External Referential', required=True, ondelete='cascade'),
         'model_id': fields.many2one('ir.model', 'OpenERP Model', required=True, ondelete='cascade'),
         'model':fields.related('model_id', 'model', type='char', string='Model Name'),
         'related_model_ids': fields.function(_get_related_model_ids, type="one2many", relation="ir.model", string='Related Inherited Models', help="potentially inherited through '_inherits' model, used for mapping field selection"),
         'external_list_method': fields.char('List Method', size=64),
+        'external_search_method': fields.char('Search Method', size=64),
         'external_get_method': fields.char('Get Method', size=64),
         'external_update_method': fields.char('Update Method', size=64),
         'external_create_method': fields.char('Create Method', size=64),
@@ -393,7 +383,6 @@ class external_mapping(osv.osv):
             vals = {'mapping_id': mapping.id,
                     'field_id': field.id,
                     'type' : 'in_out',
-                    'active' : True,
                     }
             mapping_line_obj.create(cr, uid, vals)
         return True
@@ -435,7 +424,11 @@ class external_mapping(osv.osv):
                     csv_file += "\"\"\n"
         raise osv.except_osv(_('Mapping lines'), _(csv_file))
         return True
-                
+
+    _sql_constraints = [
+        ('ref_template_uniq', 'unique (referential_id, template_id)', 'A referential can not have various mapping imported from the same template')
+    ]
+
 external_mapping()
 
 
@@ -443,6 +436,7 @@ class external_mapping_line(osv.osv):
     _inherit = 'external.mapping.line'
     
     _columns = {
+        'template_id': fields.many2one('external.mappinglines.template', 'External Mapping Lines Template'),
         'referential_id': fields.related('mapping_id', 'referential_id', type='many2one', relation='external.referential', string='Referential'),
         'field_id': fields.many2one('ir.model.fields', 'OpenERP Field', ondelete='cascade'),
         'internal_field': fields.related('field_id', 'name', type='char', relation='ir.model.field', string='Field name',readonly=True),
@@ -455,8 +449,6 @@ class external_mapping_line(osv.osv):
         'in_function': fields.text('Import in OpenERP Mapping Python Function'),
         'out_function': fields.text('Export from OpenERP Mapping Python Function'),
         'sequence': fields.integer('Sequence'),
-
-        'active': fields.boolean('Active', help="if not checked : not printed in report"),
         'selected': fields.boolean('Selected', help="to select for mapping"),
         'child_mapping_id': fields.many2one('external.mapping', 'Child Mapping',
             help=('This give you the possibility to import data with a structure of Parent/child'
@@ -486,6 +478,9 @@ class external_mapping_line(osv.osv):
         (_check_mapping_line_name, "Error ! Invalid Mapping Line Name: Field and External Field cannot be both null", ['parent_id'])
     ]
     
+    _sql_constraints = [
+        ('ref_template_uniq', 'unique (referential_id, template_id)', 'A referential can not have various mapping line imported from the same template mapping line')
+    ]
     _order = 'type,external_type'
     #TODO add constraint: not both field_id and external_field null
 external_mapping_line()

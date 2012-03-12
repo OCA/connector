@@ -1,5 +1,5 @@
 import external_referentials
 import external_osv
 import report
-#import module
+import ir_model
 import decorator

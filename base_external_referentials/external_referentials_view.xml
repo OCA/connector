@@ -68,6 +68,7 @@
                             <field name="related_model_ids" invisible="1" />
                             <group col="4" colspan="4">
                                 <field name="external_list_method" />
+                                <field name="external_search_method" />
                                 <field name="external_get_method" />
                                 <field name="external_update_method" />
                                 <field name="external_create_method" />
@@ -89,7 +90,6 @@
                                     <field name="alternative_key" />
                                 </tree>
                                 <form string="Field Mapping">
-                                    <field name="active" />
                                     <field name="selected" />
                                     <field name="sequence" />
                                     <field name="type" />

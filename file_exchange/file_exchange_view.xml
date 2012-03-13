@@ -18,13 +18,20 @@
                     <field name="name" />
                     <field name="referential_id" />
                     <field name="scheduler" />
-                    <field name="type" />
+                    <group name="file_types" colspan="2" col="4">
+                        <field name="type" />
+                        <field name="do_not_update" />
+                    </group>
                     <field name="model_id" />
-                    <field name="encoding" />
-                    <field name="lang" />
-                    <field name="format" />
-                    <field name="delimiter" />
+                    <group name="file_parameters" colspan="2" col="4">
+                        <field name="encoding"/>
+                        <field name="format" />
+                    </group>
                     <field name="search_filter" attrs="{'invisible':[('type','!=','out')]}"/>
+                    <group name="file_options" colspan="2" col="4">
+                        <field name="lang" />
+                        <field name="delimiter" />
+                    </group>
                     <field name="folder_path" />
                     <field name="archive_folder_path"  attrs="{'invisible':[('type','!=','in')]}"/>
                     <field name="filename"/>
@@ -125,6 +132,8 @@
                     <field name="import_default_field" />
                     <field name="import_default_value" />
                     <field name="file_id" />
+                    <field name="mapping_id" />
+                    <field name="related_model" attrs="{'invisible':'1'}"/>
                 </form>
             </field>
         </record>
@@ -139,6 +148,8 @@
                     <field name="import_default_field" />
                     <field name="import_default_value" />
                     <field name="file_id" />
+                    <field name="mapping_id" />
+                    <field name="related_model" attrs="{'invisible':'1'}" />
                 </tree>
             </field>
         </record>

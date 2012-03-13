@@ -24,7 +24,7 @@
 from osv import fields, osv
 import base64
 import time
-import datetime
+from datetime import datetime
 import logging
 import pooler
 
@@ -152,7 +152,6 @@ def get_all_oeid_from_referential(self, cr, uid, referential_id, context=None):
     claimed_oe_ids = [x['res_id'] for x in ir_model_data_obj.read(cr, uid, model_data_ids, ['res_id'], context=context)]
     return claimed_oe_ids and self.exists(cr, uid, claimed_oe_ids, context=context) or []
 
-#TODO it will be better to have for signature (self, cr, uid, referential_id, external_id, context=None)
 def oeid_to_extid(self, cr, uid, id, referential_id, context=None):
     """Returns the external id of a resource by its OpenERP id.
     Returns False if the resource id does not exists."""
@@ -165,8 +164,7 @@ def oeid_to_extid(self, cr, uid, id, referential_id, context=None):
         return ext_id
     return False
 
-#TODO it will be better to have for signature (self, cr, uid, referential_id, external_id, context=None)
-def _extid_to_expected_oeid(self, cr, uid, external_id, referential_id, context=None):
+def _extid_to_expected_oeid(self, cr, uid, referential_id, external_id, context=None):
     """
     Returns the id of the entry in ir.model.data and the expected id of the resource in the current model
     Warning the expected_oe_id may not exists in the model, that's the res_id registered in ir.model.data
@@ -186,13 +184,12 @@ def _extid_to_expected_oeid(self, cr, uid, external_id, referential_id, context=
         expected_oe_id = model_data_obj.read(cr, uid, model_data_id, ['res_id'])['res_id']
     return model_data_id, expected_oe_id
 
-#TODO it will be better to have for signature (self, cr, uid, referential_id, external_id, context=None)
-def extid_to_existing_oeid(self, cr, uid, external_id, referential_id, context=None):
+def extid_to_existing_oeid(self, cr, uid, referential_id, external_id, context=None):
     """Returns the OpenERP id of a resource by its external id.
        Returns False if the resource does not exist."""
     if external_id:
         ir_model_data_id, expected_oe_id = self._extid_to_expected_oeid\
-            (cr, uid, external_id, referential_id, context=context)
+            (cr, uid, referential_id, external_id, context=context)
         # Note: OpenERP cleans up ir_model_data which res_id records have been deleted
         # only at server update because that would be a perf penalty, we returns the res_id only if
         # really existing and we delete the ir_model_data unused
@@ -214,7 +211,7 @@ def extid_to_oeid(self, cr, uid, external_session, external_id, context=None):
     #First get the external key field name
     #conversion external id -> OpenERP object using Object mapping_column_name key!
     if external_id:
-        existing_id = self.extid_to_existing_oeid(cr, uid, external_id, external_session.referential_id.id, context=context)
+        existing_id = self.extid_to_existing_oeid(cr, uid, external_session.referential_id.id, external_id, context=context)
         if existing_id:
             return existing_id
         #TODO try except will be added latter
@@ -480,8 +477,12 @@ def _import_one_resource(self, cr, uid, external_session, external_id, context=N
     :rtype: int
     """
     resources = self._get_external_resources(cr, uid, external_session, external_id, context=context)
-    res = self._record_external_resources(cr, uid, external_session, resources, context=context)
-    id = res.get('write_ids') and res['write_ids'][0] or res['create_ids'][0]
+    if isinstance(resources, list):
+        res = self._record_external_resources(cr, uid, external_session, resources, context=context)
+        id = res.get('write_ids') and res['write_ids'][0] or res['create_ids'][0]
+    else:
+        res = self._record_one_external_resource(cr, uid, external_session, resources, context=context)
+        id = res.get('write_id') or res.get('create_id')
     return id
 
 
@@ -549,6 +550,11 @@ def _record_one_external_resource(self, cr, uid, external_session, resource, def
         existing_rec_id = self.oe_create(cr, uid, vals, referential_id, defaults, context=context)
         created = True
 
+    print "external_id_ok", external_id_ok
+    print "created", created
+    print "written", written
+    print "object", self._name
+
     if external_id_ok:
         if existing_ir_model_data_id:
             if created:
@@ -593,6 +599,9 @@ def oe_update(self, cr, uid, existing_rec_id, vals, referential_id, defaults, co
     return self.write(cr, uid, existing_rec_id, vals, context)
 
 def oe_create(self, cr, uid, vals, referential_id, defaults, context):
+    print "=============== CREATE ========="
+    print vals
+    print defaults
     return self.create(cr, uid, vals, context)
 
 
@@ -681,7 +690,7 @@ def _existing_oeid_for_extid_import(self, cr, uid, vals, external_id, referentia
     @return: tuple of (ir.model.data id / False: external id to create in ir.model.data, model resource id / False: resource to create)
     """
     existing_ir_model_data_id, expected_res_id = self._extid_to_expected_oeid\
-        (cr, uid, external_id, referential_id, context=context)
+        (cr, uid, referential_id, external_id, context=context)
 
     # Take care of deleted resource ids, cleans up ir.model.data
     if existing_ir_model_data_id and expected_res_id and not self.exists(cr, uid, expected_res_id, context=context):
@@ -974,6 +983,7 @@ def _transform_one_resource(self, cr, uid, external_session, convertion_type, re
             if not from_field:
                 from_field = "%s_%s" %(mapping_line['child_mapping_id'][1], mapping_line['child_mapping_id'][0])
             to_field = mapping_line['internal_field']
+            to_field = mapping_line['internal_field']
 
         elif convertion_type == 'from_openerp_to_external':
             from_field = mapping_line['internal_field']
@@ -981,12 +991,11 @@ def _transform_one_resource(self, cr, uid, external_session, convertion_type, re
 
         if from_field in resource.keys():
             field_value = resource[from_field]
-            field_type = mapping_line['external_type'] #TODO maybe need some improvement by default we use the same evaluation as imput
             if mapping_line['evaluation_type'] == 'sub-mapping':
                 sub_mapping_list.append(mapping_line)
             else:
                 if mapping_line['evaluation_type'] == 'direct':
-                    vals[to_field] = self._transform_field(cr, uid, external_session, convertion_type, to_field, field_value, field_type, context=context)
+                    vals[to_field] = self._transform_field(cr, uid, external_session, convertion_type, field_value, mapping_line, context=context)
                 else:
                     #Build the space for expr
                     space = {'self': self,
@@ -997,7 +1006,7 @@ def _transform_one_resource(self, cr, uid, external_session, convertion_type, re
                              'referential_id': external_session.referential_id.id,
                              'defaults': defaults,
                              'context': context,
-                             'ifield': self._transform_field(cr, uid, external_session, convertion_type, to_field, field_value, field_type, context=context),
+                             'ifield': self._transform_field(cr, uid, external_session, convertion_type, field_value, mapping_line, context=context),
                              'conn': context.get('conn_obj', False),
                              'base64': base64,
                              'vals': vals,
@@ -1037,31 +1046,57 @@ def _transform_one_resource(self, cr, uid, external_session, convertion_type, re
     vals = self._transform_sub_mapping(cr, uid, external_session, convertion_type, resource, vals, sub_mapping_list, mapping, mapping_line_filter_ids=mapping_line_filter_ids, defaults=defaults, context=context)
     return vals
 
-def _transform_field(self, cr, uid, external_session, convertion_type, field_name, field_value, field_type, context=None):
+def _transform_field(self, cr, uid, external_session, convertion_type, field_value, mapping_line, context=None):
     field = False
+    external_type = mapping_line['external_type']
+    internal_type = mapping_line['internal_type']
+    internal_field = mapping_line['internal_field']
     if field_value:
-        if field_type == 'one2many':
+        if internal_type == 'many2one' and mapping_line['evaluation_type']=='direct':
+            if external_type not in ['int', 'unicode']:
+                raise osv.except_osv(_('User Error'), _('Wrong external type for mapping %s. One2Many object must have for external type string or integer')%(mapping_line['name'],))
+            related_obj_name = self._columns[internal_field]._obj
+            related_obj = self.pool.get(related_obj_name)
             if convertion_type == 'from_external_to_openerp':
-                return self.pool.get(self._columns[field_name]._obj).extid_to_oeid(cr, uid, external_session, field_value, context=context)
+                if external_type == 'unicode':
+                    #TODO it can be great if we can search on other field
+                    related_obj.search(cr, uid, [(related_obj._rec_name, '=', field_value)], context=context)
+                else:
+                    return related_obj.extid_to_oeid(cr, uid, external_session, field_value, context=context)
             else:
-                return field_value[0]
-        if field_type == 'o2m_get_name':
+                if external_type == 'unicode':
+                    #TODO it can be great if we can return on other field and not only the name
+                    return field_value[1]
+                else:
+                    return related_obj.extid_to_oeid(cr, uid, external_session, field_value[0], context=context)
+
+        elif external_type == "datetime":
+            datetime_format = mapping_line['datetime_format']
             if convertion_type == 'from_external_to_openerp':
-                return self.pool.get(self._columns[field_name]._obj).extid_to_oeid(cr, uid, external_session, field_value, context=context)
+                datetime_value = datetime.strptime(field_value, datetime_format)
+                if internal_type == 'date':
+                    return datetime_value.strftime(DEFAULT_SERVER_DATE_FORMAT)
+                elif internal_type == 'datetime':
+                    return datetime_value.strftime(DEFAULT_SERVER_DATETIME_FORMAT)
             else:
-                return field_value[1]
-        if field_type == 'list' and isinstance(field_value, (str, unicode)):
+                if internal_type == 'date':
+                    datetime_value = datetime.strptime(field_value, DEFAULT_SERVER_DATE_FORMAT)
+                elif internal_type == 'datetime':
+                    datetime_value = datetime.strptime(field_value, DEFAULT_SERVER_DATETIME_FORMAT)
+                return datetime.strptime(datetime_value, datetime_format)
+
+        elif external_type == 'list' and isinstance(field_value, (str, unicode)):
             # external data sometimes returns ',1,2,3' for a list...
-            casted_field = eval(ifield.strip(','))
+            casted_field = eval(field_value.strip(','))
             # For a list, external data may returns something like '1,2,3' but also '1' if only
             # one item has been selected. So if the casted field is not iterable, we put it in a tuple: (1,)
             if not hasattr(casted_field, '__iter__'):
                 casted_field = (casted_field,)
             field = list(casted_field)
         else:
-            if field_type == 'float' and isinstance(field_value, (str, unicode)):
+            if external_type == 'float' and isinstance(field_value, (str, unicode)):
                 field_value = field_value.replace(',','.')
-            field = eval(field_type)(field_value)
+            field = eval(external_type)(field_value)
 
     if field in ['None', 'False']:
         field = False
@@ -1075,7 +1110,10 @@ def _transform_field(self, cr, uid, external_session, convertion_type, field_nam
             'list': [],
             'dict': {},
         }
-        field = null_value[field_type]
+        if convertion_type == 'from_external_to_openerp':
+            null_value['datetime'] = False
+        else:
+            null_value['datetime'] = ''
     return field
 
 def _merge_with_default_values(self, cr, uid, external_session, ressource, vals, sub_mapping_list, defaults=None, context=None):

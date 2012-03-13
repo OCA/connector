@@ -73,6 +73,7 @@
                                 <field name="external_update_method" />
                                 <field name="external_create_method" />
                                 <field name="external_delete_method" />
+                                <field name="external_done_method" />
                                 <field name="key_for_external_id" />
                                 <field name="external_resource_name" />
                             </group>
@@ -99,6 +100,7 @@
                                     <field name="external_field" />
                                     <field name="field_id" domain="[('model_id','=',parent.model_id)]" />
                                     <field name="external_type" />
+                                    <field name="datetime_format" attrs="{'invisible':[('external_type','!=','datetime')]}"/>
                                     <field name="internal_field" />
                                     <field name="alternative_key" />
                                     <field name="child_mapping_id" colspan="4" attrs="{'invisible':[('evaluation_type','!=','sub-mapping')]}"/>

@@ -550,11 +550,6 @@ def _record_one_external_resource(self, cr, uid, external_session, resource, def
         existing_rec_id = self.oe_create(cr, uid, vals, referential_id, defaults, context=context)
         created = True
 
-    print "external_id_ok", external_id_ok
-    print "created", created
-    print "written", written
-    print "object", self._name
-
     if external_id_ok:
         if existing_ir_model_data_id:
             if created:
@@ -599,9 +594,6 @@ def oe_update(self, cr, uid, existing_rec_id, vals, referential_id, defaults, co
     return self.write(cr, uid, existing_rec_id, vals, context)
 
 def oe_create(self, cr, uid, vals, referential_id, defaults, context):
-    print "=============== CREATE ========="
-    print vals
-    print defaults
     return self.create(cr, uid, vals, context)
 
 

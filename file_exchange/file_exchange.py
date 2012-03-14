@@ -267,7 +267,8 @@ class file_exchange(osv.osv):
                 exec action_code in space
             except Exception, e:
                 raise osv.except_osv(_('Error !'), _('Error can not apply the python action default value: %s \n Exception: %s' %(method.name,e)))
-
+            if 'result' in space:
+                return space['result']
         return True
 
     def _get_encoding(self, cr, user, context=None):
@@ -294,6 +295,7 @@ class file_exchange(osv.osv):
         'action_after_all': fields.text('Action After All', help="This python code will executed after the import/export"),
         'action_before_each': fields.text('Action Before Each', help="This python code will executed after each element of the import/export"), 
         'action_after_each': fields.text('Action After Each', help="This python code will executed after each element of the import/export"),
+        'check_if_import': fields.text('Check If Import', help="This python code will be executed before each element of the import"), 
         'delimiter':fields.char('Fields delimiter', size=64, help="Delimiter used in the CSV file"),
         'lang': fields.many2one('res.lang', 'Language'),
         'import_default_field':fields.one2many('file.default.import.values', 'file_id', 'Default Field'),

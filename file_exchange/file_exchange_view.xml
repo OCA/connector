@@ -50,10 +50,14 @@
                             <field name="action_after_all" colspan="4" nolabel="1"/>
                         </page>
                         <page string="Action Before/After Each" >
+                            <group name="Check If Import" colspan="4" attrs="{'invisible':[('type','!=','in')]}" >
+                                <separator string="Check If Import" colspan="4" />
+                                <field name="check_if_import" colspan="4" nolabel="1" /> 
+                            </group>    
                             <separator string="Action Before Each" colspan="4"/>
                             <field name="action_before_each" colspan="4" nolabel="1"/>
                             <separator string="Action After Each" colspan="4"/>
-                            <field name="action_after_each" colspan="4" nolabel="1"/>
+                            <field name="action_after_each" colspan="4" nolabel="1"/>                       
                         </page>
                         <page string="CSV file generation">
                             <button name="create_exchange_file" string="Export exchange file" colspan="2" type="object" />

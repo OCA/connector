@@ -29,10 +29,13 @@ osv.osv._feo_record_one_external_resource = osv.osv._record_one_external_resourc
 def _record_one_external_resource(self, cr, uid, external_session, resource, **kwargs):
     context=kwargs.get('context')
     method = self.pool.get('file.exchange').browse(cr, uid, context['file_exchange_id'], context=context)
-    method.start_action('action_before_each', self, None, resource, context=context)
-    res = self._feo_record_one_external_resource(cr, uid, external_session, resource, **kwargs)
-    res_id = res.get('create_id', False) or res.get('write_id', False)
-    method.start_action('action_after_each', self, [res_id], resource, context=context)
+    check = method.start_action('check_if_import', self, None, resource, context=context)
+    res = {}
+    if check:
+        method.start_action('action_before_each', self, None, resource, context=context)
+        res = self._feo_record_one_external_resource(cr, uid, external_session, resource, **kwargs)
+        res_id = res.get('create_id', False) or res.get('write_id', False)
+        method.start_action('action_after_each', self, [res_id], resource, context=context)
     return res
 
 osv.osv._record_one_external_resource = _record_one_external_resource

@@ -264,7 +264,8 @@ class external_referential(osv.osv):
         csv_file = "\"id\",\"version_id:id\",\"model_id:id\",\"external_list_method\",\"external_get_method\",\"external_update_method\",\"external_create_method\",\"external_delete_method\",\"key_for_external_id\",\"external_resource_name\"\n"
         referential = self.browse(cr, uid, ids)[0]
         for mapping in referential.mapping_ids:
-            csv_file += "\""+referential.name+"_"+referential.version_id.name+"_"+mapping.model_id.name+"\","
+            generated_id = referential.name+"_"+referential.version_id.name+"_"+mapping.model_id.name
+            csv_file += "\""+generated_id.replace(" ", "_")+"\","
             csv_file += "\""+referential.version_id.get_external_id(context=context)[referential.version_id.id]+"\","
             csv_file += "\""+mapping.model_id.get_external_id(context=context)[mapping.model_id.id]+"\","
             if mapping.external_list_method!=False:
@@ -363,6 +364,7 @@ class external_mapping(osv.osv):
         return res
     
     _columns = {
+        'name': fields.char('Mapping name', size=100, help="User friendly name"),
         'template_id': fields.many2one('external.mapping.template', 'External Mapping Template'),
         'referential_id': fields.many2one('external.referential', 'External Referential', required=True, ondelete='cascade'),
         'model_id': fields.many2one('ir.model', 'OpenERP Model', required=True, ondelete='cascade'),
@@ -397,7 +399,7 @@ class external_mapping(osv.osv):
         csv_file = "\"id\",\"version_id:id\",\"model_id:id\",\"external_field\",\"field_id:id\",\"type\",\"evaluation_type\",\"external_type\",\"child_mapping_id:id\",\"in_function\",\"out_function\"\n"
         mapping = self.browse(cr, uid, ids)[0]
         for line in mapping.mapping_ids:
-            if line.external_field!=False and line.selected==True:
+            if (line.external_field!=False ) and line.selected==True: #or line.evaluation_type=='sub-mapping'
                 current_model = mapping.model_id.get_external_id(context=context)[mapping.model_id.id]
                 current_field = line.field_id.get_external_id(context=context)[line.field_id.id]
 
@@ -445,7 +447,7 @@ class external_mapping_line(osv.osv):
         'referential_id': fields.related('mapping_id', 'referential_id', type='many2one', relation='external.referential', string='Referential'),
         'field_id': fields.many2one('ir.model.fields', 'OpenERP Field', ondelete='cascade'),
         'internal_field': fields.related('field_id', 'name', type='char', relation='ir.model.field', string='Field name',readonly=True),
-        'external_field': fields.char('External Field', size=32),
+        'external_field': fields.char('External Field', size=32, help="Leave empty if use a sub mapping line evaluation_type"),
         'mapping_id': fields.many2one('external.mapping', 'External Mapping', ondelete='cascade'),
         'related_model_id': fields.related('mapping_id', 'model_id', type='many2one', relation='ir.model', string='Related Model'),
         'type': fields.selection([('in_out', 'External <-> OpenERP'), ('in', 'External -> OpenERP'), ('out', 'External <- OpenERP')], 'Type'),

@@ -57,9 +57,8 @@ class file_exchange(osv.osv):
         res = {}
         method = self.browse(cr, uid, method_id, context=context)
         for field in method.import_default_field:
-            import pdb;pdb.set_trace()
-            res[field.import_default_field.name] = field.import_default_value
-            
+            if field.file_id.model_id.model == field.mapping_id.model_id.model:
+                res[field.import_default_field.name] = field.import_default_value
         return res
     
     def _get_external_file_resources(self, cr, uid, external_session, filepath, filename, format, fields_name=None, mapping=None, context=None):

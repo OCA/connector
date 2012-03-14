@@ -27,6 +27,23 @@ from tempfile import TemporaryFile
 from encodings.aliases import aliases
 from tools.translate import _
 
+class FileExchangeCsvReader(FileCsvReader):
+    def __init__(self, f, pre_processing=None, **kwds):
+        init = super(FileExchangeCsvReader, self).__init__(f, **kwds)
+        self.pre_processing = pre_processing
+        return init
+
+    def next(self):
+        row = super(FileExchangeCsvReader, self).next()
+        if self.pre_processing:
+            space = {'row': row,
+                }
+            try:
+                exec self.pre_processing in space
+            except Exception, e:
+                raise osv.except_osv(_('Error !'), _('Error can not apply the python action pre-processing value'))
+        return row
+
 class file_exchange(osv.osv):
     _name = "file.exchange"
     _description = "file exchange"
@@ -70,7 +87,7 @@ class file_exchange(osv.osv):
             alternative_key = self.pool.get('file.fields').read(cr, uid, alternative_key_id, ['name'], context=context)['name']
             mapping_id = self.pool.get('external.mapping').search(cr, uid, [('model_id', '=', method.model_id.id)], context=context)[0]
             mapping_tree, merge_keys = self._get_mapping_tree(cr, uid, mapping_id, context=context)
-            csv = FileCsvReader(external_file, fieldnames= format=='csv_no_header' and fields_name or None, delimiter=method.delimiter.encode('utf-8'), encoding = method.encoding)
+            csv = FileExchangeCsvReader(external_file, fieldnames= format=='csv_no_header' and fields_name or None, delimiter=method.delimiter.encode('utf-8'), encoding=method.encoding, pre_processing=method.pre_processing)
             res = csv.reorganize(field_structure=mapping_tree, merge_keys=merge_keys, ref_field=alternative_key)
         return res
     
@@ -300,6 +317,7 @@ class file_exchange(osv.osv):
         'lang': fields.many2one('res.lang', 'Language'),
         'import_default_field':fields.one2many('file.default.import.values', 'file_id', 'Default Field'),
         'do_not_update':fields.boolean('Do Not Update'),
+        'pre_processing': fields.text('Pre-Processing', help="This python code will be executed before merge of elements of the import"), 
     }
 
     # Method to export the exchange file

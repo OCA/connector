@@ -43,6 +43,10 @@
                         <page string="Fields">
                             <field name="field_ids" colspan="4" nolabel="1"/>
                         </page>
+                        <page string="Pre-Processing" >
+                            <separator string="Pre-Processing" colspan="4"/>
+                            <field name="pre_processing" colspan="4" nolabel="1"/>
+                        </page>
                         <page string="Action Before/After All" >
                             <separator string="Action Before All" colspan="4"/>
                             <field name="action_before_all" colspan="4" nolabel="1"/>

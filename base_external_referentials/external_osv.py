@@ -925,7 +925,8 @@ osv.osv.create_external_id_vals = create_external_id_vals
 #
 ########################################################################################################################
 
-def _transform_resources(self, cr, uid, external_session, convertion_type, resources, defaults=None, mapping=None, mapping_id=None, mapping_line_filter_ids=None, parent_data=None, context=None):
+def _transform_resources(self, cr, uid, external_session, convertion_type, resources, mapping=None, mapping_id=None,
+                    mapping_line_filter_ids=None, parent_data=None, defaults=None, context=None):
     """
     Used in ext_import in order to convert all of the external data into OpenERP data
 
@@ -938,9 +939,6 @@ def _transform_resources(self, cr, uid, external_session, convertion_type, resou
     result= []
     if resources:
         mapping, mapping_id = self._init_mapping(cr, uid, external_session.referential_id.id, convertion_type=convertion_type, mapping_line_filter_ids=mapping_line_filter_ids, mapping=mapping, mapping_id=mapping_id, context=context)
-        if convertion_type == 'from_openerp_to_external':
-            field_to_read = [x['internal_field'] for x in mapping[mapping_id]['mapping_lines']]
-            resources = self.read(cr, uid, resources, field_to_read, context=context)
         if mapping[mapping_id].get("mapping_lines"):
             for resource in resources:
                 result.append(self._transform_one_resource(cr, uid, external_session, convertion_type, resource, 
@@ -948,7 +946,8 @@ def _transform_resources(self, cr, uid, external_session, convertion_type, resou
                                                             previous_result=result, defaults=defaults, context=context))
     return result
 
-def _transform_one_resource(self, cr, uid, external_session, convertion_type, resource, mapping, mapping_id, mapping_line_filter_ids=None, parent_data=None, previous_result=None, defaults=None, context=None):
+def _transform_one_resource(self, cr, uid, external_session, convertion_type, resource, mapping=None, mapping_id=None,
+                    mapping_line_filter_ids=None, parent_data=None, previous_result=None, defaults=None, context=None):
     """
     Used in _transform_external_resources in order to convert external row of data into OpenERP data
 
@@ -965,6 +964,9 @@ def _transform_one_resource(self, cr, uid, external_session, convertion_type, re
         context = {}
     if defaults is None:
         defaults = {}
+
+    mapping, mapping_id = self._init_mapping(cr, uid, external_session.referential_id.id, convertion_type=convertion_type, mapping_line_filter_ids=mapping_line_filter_ids, mapping=mapping, mapping_id=mapping_id, context=context)
+
     mapping_lines = mapping[mapping_id].get("mapping_lines")
     key_for_external_id = mapping[mapping_id].get("key_for_external_id")
 
@@ -1034,7 +1036,7 @@ def _transform_one_resource(self, cr, uid, external_session, convertion_type, re
         ext_id = resource[key_for_external_id]
         vals.update({'external_id': ext_id.isdigit() and int(ext_id) or ext_id})
     vals = self._merge_with_default_values(cr, uid, external_session, resource, vals, sub_mapping_list, defaults=defaults, context=context)
-    vals = self._transform_sub_mapping(cr, uid, external_session, convertion_type, resource, vals, sub_mapping_list, mapping, mapping_line_filter_ids=mapping_line_filter_ids, defaults=defaults, context=context)
+    vals = self._transform_sub_mapping(cr, uid, external_session, convertion_type, resource, vals, sub_mapping_list, mapping, mapping_id, mapping_line_filter_ids=mapping_line_filter_ids, defaults=defaults, context=context)
     return vals
 
 def _transform_field(self, cr, uid, external_session, convertion_type, field_value, mapping_line, context=None):
@@ -1126,7 +1128,7 @@ def _merge_with_default_values(self, cr, uid, external_session, ressource, vals,
             vals[key] = defaults[key]
     return vals
 
-def _transform_sub_mapping(self, cr, uid, external_session, convertion_type, resource, vals, sub_mapping_list, mapping, mapping_line_filter_ids=None, defaults=None, context=None):
+def _transform_sub_mapping(self, cr, uid, external_session, convertion_type, resource, vals, sub_mapping_list, mapping, mapping_id, mapping_line_filter_ids=None, defaults=None, context=None):
     """
     Used in _transform_one_external_resource in order to call the sub mapping
 
@@ -1143,7 +1145,7 @@ def _transform_sub_mapping(self, cr, uid, external_session, convertion_type, res
     ir_model_field_obj = self.pool.get('ir.model.fields')
     for sub_mapping in sub_mapping_list:
         sub_object_name = sub_mapping['child_mapping_id'][1]
-        mapping_id = sub_mapping['child_mapping_id'][0]
+        sub_mapping_id = sub_mapping['child_mapping_id'][0]
         if convertion_type == 'from_external_to_openerp':
             from_field = sub_mapping['external_field']
             if not from_field:
@@ -1163,9 +1165,26 @@ def _transform_sub_mapping(self, cr, uid, external_session, convertion_type, res
         sub_mapping_defaults = self._get_default_import_values(cr, uid, external_session, mapping_id, defaults.get(to_field), context=context)
 
         if field_value:
+            sub_mapping_obj = self.pool.get(sub_object_name)
+            transform_args = [cr, uid, external_session, convertion_type, field_value]
+            transform_kwargs = {
+                'defaults': defaults.get(to_field),
+                'mapping': mapping, 
+                'mapping_id': sub_mapping_id,
+                'mapping_line_filter_ids': mapping_line_filter_ids,
+                'parent_data': vals,
+                'context': context,
+            }
+
             if sub_mapping['internal_type'] in ['one2many', 'many2many']:
                 vals[to_field] = []
-                lines = self.pool.get(sub_object_name)._transform_resources(cr, uid, external_session, convertion_type, field_value, defaults=sub_mapping_defaults, mapping=mapping, mapping_id=mapping_id, mapping_line_filter_ids=mapping_line_filter_ids, parent_data=vals, context=context)
+                if convertion_type == 'from_external_to_openerp':
+                    lines = sub_mapping_obj._transform_resources(*transform_args, **transform_kwargs)
+                else:
+                    field_to_read = [x['internal_field'] for x in mapping[sub_mapping_id]['mapping_lines']]
+                    sub_resources = self.read(cr, uid, field_value, field_to_read, context=context)
+                    transform_args[4] = sub_resources
+                    lines = sub_mapping_obj._transform_resources(*transform_args, **transform_kwargs)
                 for line in lines:
                     if 'external_id' in line:
                         del line['external_id']
@@ -1173,12 +1192,18 @@ def _transform_sub_mapping(self, cr, uid, external_session, convertion_type, res
                         vals[to_field].append((0, 0, line))
                     else:
                         vals[to_field].append(line)
-            elif sub_mapping['internal_type'] == 'many2one':
-                res = self.pool.get(sub_object_name)._record_one_external_resource(cr, uid, external_session, field_value, defaults=sub_mapping_defaults, mapping=mapping, mapping_id=mapping_id, context=context)
-                vals[to_field] = res.get('write_id') or res.get('create_id')
-            else:
-                vals[to_field] = self.pool.get(sub_object_name)._transform_resources(cr, uid, external_session, convertion_type, [field_value], defaults=sub_mapping_defaults, mapping=mapping, mapping_id=mapping_id, mapping_line_filter_ids=mapping_line_filter_ids, parent_data=vals, context=context)[0]
 
+            elif sub_mapping['internal_type'] == 'many2one':
+                if convertion_type == 'from_external_to_openerp':
+                    res = sub_mapping_obj._record_one_external_resource(cr, uid, external_session, field_value,
+                                defaults=defaults.get(to_field), mapping=mapping, mapping_id=mapping_id, context=context)
+                    vals[to_field] = res.get('write_id') or res.get('create_id')
+                else:
+                    sub_resource = sub_mapping_obj.read(cr, uid, field_value[0], context=context)
+                    transform_args[4] = sub_resource
+                    vals[to_field] = sub_mapping_obj._transform_one_resource(*transform_args, **transform_kwargs)
+            else:
+                raise osv.except_osv(_('User Error'), _('Error with mapping : %s. Sub mapping can be only apply on one2many, many2one or many2many fields')%(sub_mapping['name'],))
     return vals
 
 #TODO check if still needed?

@@ -43,7 +43,7 @@ osv.osv._record_one_external_resource = _record_one_external_resource
 osv.osv._feo_get_default_import_values = osv.osv._get_default_import_values #feo mean file_exchange_original
 
 @only_for_referential(ref_categ ='File Exchange', super_function = osv.osv._feo_get_default_import_values)
-def _get_default_import_values(self, cr, uid, external_session, mapping_id, defaults=None, context=None):
+def _get_default_import_values(self, cr, uid, external_session, mapping_id=None, defaults=None, context=None):
     if not defaults:
         defaults = {}
     method = self.pool.get('file.exchange').browse(cr, uid, context['file_exchange_id'], context=context)

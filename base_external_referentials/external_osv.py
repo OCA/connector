@@ -390,7 +390,7 @@ def import_resources(self, cr, uid, ids, resource_name, method="search_then_read
             external_session = ExternalSession(browse_record)
         else:
             if hasattr(browse_record, 'referential_id'):
-                context['%s_id'%browse_record._name] = browse_record.id
+                context['%s_id'%browse_record._name.replace('.', '_')] = browse_record.id
                 external_session = ExternalSession(browse_record.referential_id)
             else:
                 raise osv.except_osv(_("Not Implemented"), _("The field referential_id doesn't exist on the object %s. Reporting system can not be used" %(browse_record._name,)))
@@ -1045,7 +1045,10 @@ def _transform_field(self, cr, uid, external_session, convertion_type, field_val
         if internal_type == 'many2one' and mapping_line['evaluation_type']=='direct':
             if external_type not in ['int', 'unicode']:
                 raise osv.except_osv(_('User Error'), _('Wrong external type for mapping %s. One2Many object must have for external type string or integer')%(mapping_line['name'],))
-            related_obj_name = self._columns[internal_field]._obj
+            if self._columns.get(internal_field):
+                related_obj_name = self._columns[internal_field]._obj
+            else:
+                related_obj_name = self._inherit_fields[internal_field][2]._obj
             related_obj = self.pool.get(related_obj_name)
             if convertion_type == 'from_external_to_openerp':
                 if external_type == 'unicode':
@@ -1073,7 +1076,7 @@ def _transform_field(self, cr, uid, external_session, convertion_type, field_val
                     datetime_value = datetime.strptime(field_value, DEFAULT_SERVER_DATE_FORMAT)
                 elif internal_type == 'datetime':
                     datetime_value = datetime.strptime(field_value, DEFAULT_SERVER_DATETIME_FORMAT)
-                return datetime.strptime(datetime_value, datetime_format)
+                return datetime_value.strftime(datetime_format)
 
         elif external_type == 'list' and isinstance(field_value, (str, unicode)):
             # external data sometimes returns ',1,2,3' for a list...

@@ -27,6 +27,10 @@ from tempfile import TemporaryFile
 from encodings.aliases import aliases
 from tools.translate import _
 
+
+#TODO implement the FileCsvWriter in base_file_protocole and remove import csv
+import csv
+
 class FileExchangeCsvReader(FileCsvReader):
     def __init__(self, f, pre_processing=None, **kwds):
         init = super(FileExchangeCsvReader, self).__init__(f, **kwds)

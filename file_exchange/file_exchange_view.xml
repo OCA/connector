@@ -100,7 +100,12 @@
             <field name="arch" type="xml">
                 <form string="file_fields">
                     <field name="sequence" />
-                    <field name="mapping_line_id" attrs="{'readonly':[('custom_name','!=',False)]}"/>
+                    <field name="mapping_line_id" attrs="{'readonly':[('custom_name','!=',False)]}">
+                        <tree>
+                            <field name="external_field"/>
+                            <field name="mapping_id"/>
+                        </tree>
+                    </field>
                     <field name="custom_name" attrs="{'readonly':[('mapping_line_id','!=',False)]}"/>
                     <field name="default_value" attrs="{'readonly':[('advanced_default_value','!=',False)]}"/>
                     <field name="is_compulsary"/>

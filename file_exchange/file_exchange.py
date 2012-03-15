@@ -208,7 +208,6 @@ class file_exchange(osv.osv):
     #=== Get external file ids and fields
         fields_name_ids = file_fields_obj.search(cr, uid, [['file_id', '=', method.id]], context=context)
         fields_info = file_fields_obj.read(cr, uid, fields_name_ids, ['name', 'mapping_line_id'], context=context)
-        print "fields_info: ",fields_info
     #=== Get lines that need to be mapped
         mapping_line_filter_ids = [x['mapping_line_id'][0] for x in fields_info if x['mapping_line_id']]
         fields_name = [x['name'] for x in fields_info]
@@ -219,11 +218,10 @@ class file_exchange(osv.osv):
             ids_filter = method.search_filter
         ids_to_export = model_obj.search(cr, uid, eval(ids_filter), context=context)
     #=== Start mapping
-        mapping = {model_obj._name : model_obj._get_mapping(cr, uid, external_session.referential_id.id, convertion_type='from_openerp_to_external', mapping_line_filter_ids=mapping_line_filter_ids, context=context)}
-        fields_to_read = [x['internal_field'] for x in mapping[model_obj._name]['mapping_lines']]
+        mapping,mapping_id = model_obj._init_mapping(cr, uid, external_session.referential_id.id, convertion_type='from_openerp_to_external', context=context)
+        fields_to_read = [x['internal_field'] for x in mapping[mapping_id]['mapping_lines']]
         # TODO : CASE fields_to_read is False !!!
-        resources = model_obj._get_oe_resources_into_external_format(cr, uid, external_session, ids_to_export, mapping=mapping, mapping_line_filter_ids=mapping_line_filter_ids, fields=fields_to_read, defaults=defaults, context=context)
-        print "resources: ",resources
+        resources = model_obj._get_oe_resources_into_external_format(cr, uid, external_session, ids_to_export, mapping=mapping,mapping_id=mapping_id, mapping_line_filter_ids=mapping_line_filter_ids, fields=fields_to_read, defaults=defaults, context=context)
     #=== Check if content to export
         if not resources:
             external_session.logger.info("Not data to export for %s"%(method.name,))
@@ -232,7 +230,6 @@ class file_exchange(osv.osv):
         if method.format == 'csv':
             output_file = TemporaryFile('w+b')
             fields_name = [x.encode(encoding) for x in fields_name]
-            print "fields_name: ",fields_name
             dw = csv.DictWriter(output_file, fieldnames=fields_name, delimiter=';', quotechar='"')
 #            dw.writeheader() TODO : only for python >= 2.7
             row = {}
@@ -254,7 +251,6 @@ class file_exchange(osv.osv):
                         except:
                             row[k.encode(encoding)] = "ERROR"
                         #TODO raise an error correctly
-                print "=====> row: ",row
                 dw.writerow(row)
             output_file.seek(0)
         method.start_action('action_after_all', model_obj, ids_to_export, context=context)
@@ -346,12 +342,12 @@ class file_exchange(osv.osv):
         
     # Method to export the mapping file
     def create_file_fields(self, cr, uid, ids, context={}):
-        csv_file = "\"id\",\"name\",\"custom_name\",\"sequence\",\"mapping_line_id:id\",\"file_id:id\",\"default_value\",\"advanced_default_value\"\n"
+        csv_file = "\"id\",\"is_compulsary\",\"name\",\"custom_name\",\"sequence\",\"mapping_line_id:id\",\"file_id:id\",\"default_value\",\"advanced_default_value\"\n"
         current_file = self.browse(cr, uid, ids)[0]
         for field in current_file.field_ids:
             generated_id = "\"" + field.file_id.name + "_" + field.name + "_" + str(field.sequence) + "\","
-            print "gen_id: ",generated_id
             csv_file += generated_id.replace(' ', '_')
+            csv_file += "\"" + str(field.is_compulsary) + "\",\""
             csv_file += "\"" + field.name + "\",\""
             if field.custom_name:
                 csv_file += field.custom_name

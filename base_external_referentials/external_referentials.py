@@ -369,7 +369,7 @@ class external_mapping(osv.osv):
         'referential_id': fields.many2one('external.referential', 'External Referential', required=True, ondelete='cascade'),
         'model_id': fields.many2one('ir.model', 'OpenERP Model', required=True, ondelete='cascade'),
         'model':fields.related('model_id', 'model', type='char', string='Model Name'),
-        'related_model_ids': fields.function(_get_related_model_ids, type="one2many", relation="ir.model", string='Related Inherited Models', help="potentially inherited through '_inherits' model, used for mapping field selection"),
+        'related_model_ids': fields.function(_get_related_model_ids, type="many2many", relation="ir.model", string='Related Inherited Models', help="potentially inherited through '_inherits' model, used for mapping field selection"),
         'external_list_method': fields.char('List Method', size=64),
         'external_search_method': fields.char('Search Method', size=64),
         'external_get_method': fields.char('Get Method', size=64),

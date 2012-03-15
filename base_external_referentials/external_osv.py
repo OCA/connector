@@ -285,7 +285,7 @@ def _get_external_resource_ids(self, cr, uid, external_session, resource_filter=
     """
     raise osv.except_osv(_("Not Implemented"), _("Not Implemented in abstract base module!"))
 
-def _get_default_import_values(self, cr, uid, external_session, context=None):
+def _get_default_import_values(self, cr, uid, external_session, mapping_id=None, defaults=None, context=None):
     """
     Abstract function that return the default value for on object
     Can be overwriten in your module
@@ -294,7 +294,7 @@ def _get_default_import_values(self, cr, uid, external_session, context=None):
     :return: a dictionnary of default value
     :rtype: dict
     """
-    return None
+    return defaults
 
 def _get_import_step(self, cr, uid, external_session, context=None):
     """
@@ -543,9 +543,10 @@ def _record_one_external_resource(self, cr, uid, external_session, resource, def
     if not (external_id_ok or alternative_keys):
         external_session.logger.warning(_("The object imported need an external_id, maybe the mapping doesn't exist for the object : %s" %self._name))
 
-    if existing_rec_id:
-        if self.oe_update(cr, uid, existing_rec_id, vals, referential_id, defaults=defaults, context=context):
-            written = True
+    if existing_rec_id:    
+        if not self._name in context.get('do_not_update', []):
+            if self.oe_update(cr, uid, existing_rec_id, vals, referential_id, defaults=defaults, context=context):
+                written = True
     else:
         existing_rec_id = self.oe_create(cr, uid, vals, referential_id, defaults, context=context)
         created = True
@@ -1158,11 +1159,13 @@ def _transform_sub_mapping(self, cr, uid, external_session, convertion_type, res
                 field_value = resource[from_field] and resource[from_field][0] or False
             else:
                 field_value = resource[from_field]
+      
+        sub_mapping_defaults = self._get_default_import_values(cr, uid, external_session, mapping_id, defaults.get(to_field), context=context)
 
         if field_value:
             if sub_mapping['internal_type'] in ['one2many', 'many2many']:
                 vals[to_field] = []
-                lines = self.pool.get(sub_object_name)._transform_resources(cr, uid, external_session, convertion_type, field_value, defaults=defaults.get(to_field), mapping=mapping, mapping_id=mapping_id, mapping_line_filter_ids=mapping_line_filter_ids, parent_data=vals, context=context)
+                lines = self.pool.get(sub_object_name)._transform_resources(cr, uid, external_session, convertion_type, field_value, defaults=sub_mapping_defaults, mapping=mapping, mapping_id=mapping_id, mapping_line_filter_ids=mapping_line_filter_ids, parent_data=vals, context=context)
                 for line in lines:
                     if 'external_id' in line:
                         del line['external_id']
@@ -1171,10 +1174,10 @@ def _transform_sub_mapping(self, cr, uid, external_session, convertion_type, res
                     else:
                         vals[to_field].append(line)
             elif sub_mapping['internal_type'] == 'many2one':
-                res = self.pool.get(sub_object_name)._record_one_external_resource(cr, uid, external_session, field_value, defaults=defaults.get(to_field), mapping=mapping, mapping_id=mapping_id, context=context)
+                res = self.pool.get(sub_object_name)._record_one_external_resource(cr, uid, external_session, field_value, defaults=sub_mapping_defaults, mapping=mapping, mapping_id=mapping_id, context=context)
                 vals[to_field] = res.get('write_id') or res.get('create_id')
             else:
-                vals[to_field] = self.pool.get(sub_object_name)._transform_resources(cr, uid, external_session, convertion_type, [field_value], defaults=defaults.get(to_field), mapping=mapping, mapping_id=mapping_id, mapping_line_filter_ids=mapping_line_filter_ids, parent_data=vals, context=context)[0]
+                vals[to_field] = self.pool.get(sub_object_name)._transform_resources(cr, uid, external_session, convertion_type, [field_value], defaults=sub_mapping_defaults, mapping=mapping, mapping_id=mapping_id, mapping_line_filter_ids=mapping_line_filter_ids, parent_data=vals, context=context)[0]
 
     return vals
 

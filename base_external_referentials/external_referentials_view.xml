@@ -81,44 +81,79 @@
                             </group>
                             <button name="add_all_fields" string="Add all object fields" colspan="2" type="object" />
                             <button name="create_mapping_file" string="Export mapping file" colspan="2" type="object" />
-                            <field colspan="4" name="mapping_ids" widget="one2many_list" nolabel="1" context="{'model_id':model_id}">
-                                <tree editable="top" string="Field Mappings" >
-                                    <field name="selected" />
-                                    <field name="sequence" />
-                                    <field name="field_id" />
-                                    <field name="internal_field" />
-                                    <field name="external_field" />
-                                    <field name="external_type" />
-                                    <field name="type" />
-                                    <field name="alternative_key" />
-                                </tree>
-                                <form string="Field Mapping">
-                                    <field name="selected" />
-                                    <field name="sequence" />
-                                    <field name="type" />
-                                    <field name="evaluation_type" />
-                                    <separator string="External fields" colspan="2"/>
-                                    <separator string="Internal fields" colspan="2"/>
-                                    <field name="external_field" />
-                                    <field name="field_id" domain="[('model_id','=',parent.model_id)]" />
-                                    <field name="external_type" />
-                                    <field name="datetime_format" attrs="{'invisible':[('external_type','!=','datetime')]}"/>
-                                    <field name="internal_field" />
-                                    <field name="alternative_key" />
-                                    <field name="child_mapping_id" colspan="4" attrs="{'invisible':[('evaluation_type','!=','sub-mapping')]}"/>
-                                    <group attrs="{'invisible':[('evaluation_type','!=','function')]}" colspan="4">
-                                        <separator string="Import in OpenERP Mapping Python Function" colspan="2"/>
-                                        <separator string="Export from OpenERP Mapping Python Function" colspan="2"/>
-                                        <field name="in_function" colspan="2" nolabel="1"/>
-                                        <field name="out_function" colspan="2" nolabel="1"/>
-                                    </group>
-                                </form>
-                            </field>
+                            <field colspan="4" name="mapping_ids" widget="one2many_list" nolabel="1" context="{'model_id':model_id}"/>
                         </form>
                     </field>
                 </form>
             </field>
         </record>
+
+<!-- External mapping line search views -->
+        <record model="ir.ui.view" id="external_mapping_line_search_view">
+            <field name="name">external.mapping_line.search.view</field>
+            <field name="model">external.mapping.line</field>
+            <field name="type">search</field>
+            <field name="arch" type="xml">
+                <search string="Mapping line">
+                   <field name="external_field"/>
+                   <field name="name"/>
+                   <field name="mapping_id" />
+                </search>
+            </field>
+        </record>
+<!-- External mapping line tree views -->
+        <record id="external_mapping_line_tree_view" model="ir.ui.view">
+            <field name="name">external_mapping_line_tree_view</field>
+            <field name="model">external.mapping.line</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="selected" />
+                    <field name="sequence" />
+                    <field name="field_id" />
+                    <field name="internal_field" />
+                    <field name="external_field" />
+                    <field name="external_type" />
+                    <field name="type" />
+                    <field name="alternative_key" />
+                    <field name="name" />
+                    <field name="mapping_id" />
+                </tree>
+            </field>
+        </record>
+
+<!-- External mapping line form views -->
+        <record model="ir.ui.view" id="external_mapping_line_form_view">
+            <field name="name">external_mapping_line_form_view</field>
+            <field name="model">external.mapping.line</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form>
+                    <field name="selected" />
+                    <field name="sequence" />
+                    <field name="type" />
+                    <field name="evaluation_type" />
+                    <separator string="External fields" colspan="2"/>
+                    <separator string="Internal fields" colspan="2"/>
+                    <field name="external_field" select="1"/>
+                    <field name="field_id" domain="[('model_id','=',parent.model_id)]" />
+                    <field name="external_type" />
+                    <field name="datetime_format" attrs="{'invisible':[('external_type','!=','datetime')]}"/>
+                    <field name="internal_field" />
+                    <field name="alternative_key" />
+                    <field name="name" />
+                    <field name="mapping_id" />
+                    <field name="child_mapping_id" colspan="4" attrs="{'invisible':[('evaluation_type','!=','sub-mapping')]}"/>
+                    <group attrs="{'invisible':[('evaluation_type','!=','function')]}" colspan="4">
+                        <separator string="Import in OpenERP Mapping Python Function" colspan="2"/>
+                        <separator string="Export from OpenERP Mapping Python Function" colspan="2"/>
+                        <field name="in_function" colspan="2" nolabel="1"/>
+                        <field name="out_function" colspan="2" nolabel="1"/>
+                    </group>
+                </form>
+            </field>
+        </record>
+
 
         <record id="external_referential_tree_view" model="ir.ui.view">
             <field name="name">external_referential_tree_view</field>

@@ -364,7 +364,7 @@ class external_mapping(osv.osv):
         return res
     
     _columns = {
-        'name': fields.char('Mapping name', size=100, help="User friendly name"),
+        'name': fields.char('Mapping context', size=100, help="In case you need to make many mappings on the same object"),
         'template_id': fields.many2one('external.mapping.template', 'External Mapping Template'),
         'referential_id': fields.many2one('external.referential', 'External Referential', required=True, ondelete='cascade'),
         'model_id': fields.many2one('ir.model', 'OpenERP Model', required=True, ondelete='cascade'),
@@ -443,6 +443,7 @@ class external_mapping_line(osv.osv):
     _inherit = 'external.mapping.line'
     
     _columns = {
+        'name': fields.char('Mapping line context', size=100, help="To precise the line context"),
         'template_id': fields.many2one('external.mappinglines.template', 'External Mapping Lines Template'),
         'referential_id': fields.related('mapping_id', 'referential_id', type='many2one', relation='external.referential', string='Referential'),
         'field_id': fields.many2one('ir.model.fields', 'OpenERP Field', ondelete='cascade'),

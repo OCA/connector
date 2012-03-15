@@ -648,10 +648,10 @@ def _export_resources_into_external_referential(self, cr, uid, external_session,
     print 'TODO'
     return True
 
-def _get_oe_resources_into_external_format(self, cr, uid, external_session, ids, mapping=None, mapping_line_filter_ids=None, fields=[], defaults=None, context=None):
+def _get_oe_resources_into_external_format(self, cr, uid, external_session, ids, mapping=None, mapping_id=None, mapping_line_filter_ids=None, fields=[], defaults=None, context=None):
     result = []
     for resource in self.read_w_order(cr, uid, ids, fields, context):
-        result.append(self._transform_one_resource(cr, uid,  external_session, 'from_openerp_to_external', resource, mapping, mapping_line_filter_ids=mapping_line_filter_ids, parent_data=None, previous_result=None, defaults=defaults, context=context))
+        result.append(self._transform_one_resource(cr, uid,  external_session, 'from_openerp_to_external', resource, mapping,mapping_id, mapping_line_filter_ids=mapping_line_filter_ids, parent_data=None, previous_result=None, defaults=defaults, context=context))
     return result
 
 def _record_resourse_into_external_referential(self, cr, uid, external_session, resource, context=None):
@@ -976,11 +976,9 @@ def _transform_one_resource(self, cr, uid, external_session, convertion_type, re
                 from_field = "%s_%s" %(mapping_line['child_mapping_id'][1], mapping_line['child_mapping_id'][0])
             to_field = mapping_line['internal_field']
             to_field = mapping_line['internal_field']
-
         elif convertion_type == 'from_openerp_to_external':
             from_field = mapping_line['internal_field']
             to_field = mapping_line['external_field']
-
         if from_field in resource.keys():
             field_value = resource[from_field]
             if mapping_line['evaluation_type'] == 'sub-mapping':

@@ -262,7 +262,6 @@ class file_exchange(osv.osv):
     #=== Export file
         external_session.connection.send(method.folder_path, filename, output_file)
         external_session.logger.info("File transfert have been done succesfully %s"%(method.name,))
-        raise osv.except_osv(_('Export succesfull'), _('File transfert have been done succesfully %s' %(method.name,)))
         return True
 
     def start_action(self, cr, uid, id, action_name, self_object, object_ids=None, resource=None, context=None):

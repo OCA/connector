@@ -48,7 +48,7 @@ to customize their field mapping directly in OpenERP to accomodate the external 
     """,
     'author': 'Raphaël Valyi (Akretion.com), Sharoon Thomas (Openlabs.co.in)',
     'website': 'http://www.akretion.com, http://openlabs.co.in/',
-    'depends': ['base'],
+    'depends': ['base','base_pop_up'],
     'init_xml': [],
     'update_xml': [
         'external_referentials_view.xml',

@@ -60,13 +60,13 @@
                     <field name="mapping_ids" widget="one2many_list" nolabel="1">
                         <tree string="Object Mappings">
                             <field name="model_id" />
-                            <field name="name" />
+                            <field name="extra_name" />
 <!--                            <field name="related_model_ids" invisible="1" />-->
 <!--                            <field name="mapping_ids" />-->
                         </tree>
                         <form string="Object Mappings">
                             <field name="model_id" on_change="model_id_change(model_id)" />
-                            <field name="name" />
+                            <field name="extra_name" />
                             <field name="related_model_ids" invisible="1" />
                             <group col="4" colspan="4">
                                 <field name="external_list_method" />
@@ -192,7 +192,6 @@
                 </form>
             </field>
         </record>
-
 
     </data>
 </openerp>

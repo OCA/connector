@@ -1149,7 +1149,7 @@ def _transform_sub_mapping(self, cr, uid, external_session, convertion_type, res
         if convertion_type == 'from_external_to_openerp':
             from_field = sub_mapping['external_field']
             if not from_field:
-                from_field = "%s_%s" %(sub_object_name, mapping_id)
+                from_field = "%s_%s" %(sub_object_name, sub_mapping_id)
             to_field = sub_mapping['internal_field']
             field_value = resource[from_field]
 
@@ -1196,7 +1196,7 @@ def _transform_sub_mapping(self, cr, uid, external_session, convertion_type, res
             elif sub_mapping['internal_type'] == 'many2one':
                 if convertion_type == 'from_external_to_openerp':
                     res = sub_mapping_obj._record_one_external_resource(cr, uid, external_session, field_value,
-                                defaults=defaults.get(to_field), mapping=mapping, mapping_id=mapping_id, context=context)
+                                defaults=defaults.get(to_field), mapping=mapping, mapping_id=sub_mapping_id, context=context)
                     vals[to_field] = res.get('write_id') or res.get('create_id')
                 else:
                     sub_resource = sub_mapping_obj.read(cr, uid, field_value[0], context=context)

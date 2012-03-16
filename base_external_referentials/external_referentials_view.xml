@@ -51,9 +51,9 @@
                                 <button name="import_referentials" string="2 - Synchronize Referential Settings" colspan="2" type="object" attrs="{'readonly':[('mapping_ids','=',[])]}"/>
                             </page>
                             <page string="CSV file generation">
-                                <button name="build_external_ref_type" string="external referential type" colspan="2" type="object" />
-                                <button name="build_external_ref_version" string="external referential version" colspan="2" type="object"/>
-                                <button name="build_external_mapping_template" string="external mapping template" colspan="2" type="object"/>
+                                <button name="build_external_ref_type" string="Export referential type" colspan="2" type="object" />
+                                <button name="build_external_ref_version" string="Export referential version" colspan="2" type="object"/>
+                                <button name="build_external_mapping_template" string="Export mapping template" colspan="2" type="object"/>
                             </page>
                         </notebook>
                     </group>

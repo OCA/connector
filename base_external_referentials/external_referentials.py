@@ -36,7 +36,16 @@ class external_referential_category(osv.osv):
         'name': fields.char('Name', size=64, required=True), #dont allow creation of type from frontend
         'type_ids': fields.one2many('external.referential.type', 'categ_id', 'Types', required=True)
     }
-    
+
+    def get_absolute_id(self, cr, uid, id, context=None):
+        if isinstance(id,list):
+            id = id[0]
+        referential_categ = self.browse(cr, uid, id, context=context)
+        categ_id = categ_id.get_external_id(context=context)[categ_id.id]
+        if not categ_id:
+            categ_id = referential_categ.name.replace('.','_').replace(' ','_')
+        return categ_id
+
 external_referential_category()
 
 class external_referential_type(osv.osv):
@@ -48,13 +57,31 @@ class external_referential_type(osv.osv):
         'categ_id': fields.many2one('external.referential.category', 'Category'),
         'version_ids': fields.one2many('external.referential.version', 'type_id', 'Versions', required=True)
     }
-    
+
+    def get_absolute_id(self, cr, uid, id, context=None):
+        if isinstance(id,list):
+            id = id[0]
+        referential_type = self.browse(cr, uid, id, context=context)
+        type_id = referential_type.get_external_id(context=context)[referential_type.id]
+        if not type_id:
+            type_id = referential_type.name.replace('.','_').replace(' ','_')
+        return type_id
+
 external_referential_type()
 
 class external_referential_version(osv.osv):
     _name = 'external.referential.version'
     _description = 'External Referential Version (Ex: v1.5.0.0 +, v1.3.2.4 +)'
-    _rec_name = 'full_name'    
+    _rec_name = 'full_name'
+
+    def get_absolute_id(self, cr, uid, id, context=None):
+        if isinstance(id,list):
+            id = id[0]
+        version = self.browse(cr, uid, id, context=context)
+        version_id = version.get_external_id(context=context)[version.id]
+        if not version_id:
+            version_id = version.name.replace('.','_').replace(' ','_')
+        return version_id
 
     def _get_full_name(self, cr, uid, ids, name, arg, context=None):
         res = {}
@@ -243,64 +270,64 @@ class external_referential(osv.osv):
         return True
 
     # Method to export external referential type
-    def build_external_ref_type(self, cr, uid, ids, context={}):
-        csv_file = "\"id\",\"name\",\"categ_id:id\"\n"
-        referential = self.browse(cr, uid, ids)[0]
-        csv_file += "\""+referential.type_id.name+"_"+time.strftime('%Y_%m')+"\","
-        csv_file += "\""+referential.type_id.name+"\","
-        csv_file += "\""+referential.type_id.categ_id.get_external_id(context=context)[referential.type_id.categ_id.id]+"\""
-        raise osv.except_osv(_('external_referential_type.csv'), _(csv_file))
-        return True
+    def build_external_ref_type(self, cr, uid, id, context=None):
+        if isinstance(id,list):
+            id = id[0]
+        output_file = TemporaryFile('w+b')
+        fieldnames = ['id', 'name', 'categ_id:id']
+        csv = FileCsvWriter(output_file, fieldnames, encoding="utf-8", writeheader=True, delimiter=';', quotechar='"')
+
+        referential = self.browse(cr, uid, id, context=context)
+        row = {
+            'id': referential.type_id.name+"_"+time.strftime('%Y_%m'),
+            'name': referential.type_id.name,
+            'categ_id:id': referential.version_id.name,
+        }
+        csv.writerow(row)
+        return self.pool.get('output.file').open_output_file(cr, uid, 'external.referential.type.csv', output_file, 'Referential Type Export', context=context)
 
     # Method to export external referential version
-    def build_external_ref_version(self, cr, uid, ids, context={}):
-        csv_file = "\"type_id:id\",\"id\",\"name\"\n"
-        referential = self.browse(cr, uid, ids)[0]
-        csv_file += "\""+referential.type_id.get_external_id(context=context)[referential.type_id.id]+"\","
-        csv_file += "\""+referential.version_id.name+"_"+time.strftime('%Y_%m')+"\","
-        csv_file += "\""+referential.version_id.name+"\""
-        raise osv.except_osv(_('external_referential_version.csv'), _(csv_file))
-        return True
+    def build_external_ref_version(self, cr, uid, id, context=None):
+        if isinstance(id,list):
+            id = id[0]
+        output_file = TemporaryFile('w+b')
+        fieldnames = ['type_id:id', 'id', 'name']
+        csv = FileCsvWriter(output_file, fieldnames, encoding="utf-8", writeheader=True, delimiter=';', quotechar='"')
+
+        referential = self.browse(cr, uid, id, context=context)
+        row = {
+            'type_id:id': referential.type_id.get_absolute_id(context=context),
+            'id': referential.version_id.name+"_"+time.strftime('%Y_%m'),
+            'name': referential.version_id.name,
+        }
+        csv.writerow(row)
+        return self.pool.get('output.file').open_output_file(cr, uid, 'external.referential.version.csv', output_file, 'Referential Version Export', context=context)
+
 
     # Method to export external referential type
-    def build_external_mapping_template(self, cr, uid, ids, context={}):
-        csv_file = "\"id\",\"version_id:id\",\"model_id:id\",\"external_list_method\",\"external_get_method\",\"external_update_method\",\"external_create_method\",\"external_delete_method\",\"key_for_external_id\",\"external_resource_name\"\n"
-        referential = self.browse(cr, uid, ids)[0]
+    def build_external_mapping_template(self, cr, uid, id, context=None):
+        if isinstance(id,list):
+            id = id[0]
+        output_file = TemporaryFile('w+b')
+        fieldnames = ['id', 'version_id:id', 'model_id:id', 'external_list_method', 'external_get_method', 'external_update_method', 'external_create_method', 'external_delete_method', 'key_for_external_id', 'external_resource_name']
+        csv = FileCsvWriter(output_file, fieldnames, encoding="utf-8", writeheader=True, delimiter=';', quotechar='"')
+
+        referential = self.browse(cr, uid, id, context=context)
         for mapping in referential.mapping_ids:
-            generated_id = referential.name+"_"+referential.version_id.name+"_"+mapping.model_id.name
-            csv_file += "\""+generated_id.replace(" ", "_")+"\","
-            csv_file += "\""+referential.version_id.get_external_id(context=context)[referential.version_id.id]+"\","
-            csv_file += "\""+mapping.model_id.get_external_id(context=context)[mapping.model_id.id]+"\","
-            if mapping.external_list_method!=False:
-                csv_file += "\""+mapping.external_list_method+"\","
-            else:
-                csv_file += "\"\","            
-            if mapping.external_get_method!=False:
-                csv_file += "\""+mapping.external_get_method+"\","
-            else:
-                csv_file += "\"\","
-            if mapping.external_update_method!=False:
-                csv_file += "\""+mapping.external_update_method+"\","
-            else:
-                csv_file += "\"\","
-            if mapping.external_create_method!=False:
-                csv_file += "\""+mapping.external_create_method+"\","
-            else:
-                csv_file += "\"\","
-            if mapping.external_delete_method!=False:
-                csv_file += "\""+mapping.external_delete_method+"\","
-            else:
-                csv_file += "\"\","
-            if mapping.key_for_external_id!=False:
-                csv_file += "\""+mapping.key_for_external_id+"\","
-            else:
-                csv_file += "\"\","
-            if mapping.external_resource_name!=False:
-                csv_file += "\""+mapping.external_resource_name+"\"\n"
-            else:
-                csv_file += "\"\"\n"
-        raise osv.except_osv(_('external_referential_mapping_template.csv'), _(csv_file))
-        return True
+            row = {
+                'id': mapping.get_absolute_id(context=context),
+                'version_id:id': referential.version_id.get_absolute_id(context=context),
+                'model_id:id': mapping.model_id.get_external_id(context=context)[mapping.model_id.id],
+                'external_list_method': mapping.external_list_method or '',
+                'external_get_method': mapping.external_get_method or '',
+                'external_update_method': mapping.external_update_method or '',
+                'external_create_method': mapping.external_create_method or '',
+                'external_delete_method': mapping.external_delete_method or '',
+                'key_for_external_id': mapping.key_for_external_id or '',
+                'external_resource_name': mapping.external_resource_name or '',
+            }
+            csv.writerow(row)
+        return self.pool.get('output.file').open_output_file(cr, uid, 'external.mapping.template.csv', output_file, 'Mapping Template Export', context=context)
 
     _constraints = [
         (_test_dot_in_name, 'The name cannot contain a dot!', ['name']),
@@ -432,38 +459,6 @@ class external_mapping(osv.osv):
                 'out_function': line.out_function or '',
             }
             csv.writerow(row)
-#            if (line.external_field!=False ) and line.selected==True: #or line.evaluation_type=='sub-mapping'
-#                current_model = mapping.model_id.get_external_id(context=context)[mapping.model_id.id]
-#                current_field = line.field_id.get_external_id(context=context)[line.field_id.id]
-
-#                csv_file += "\""+mapping.referential_id.version_id.get_external_id(context=context)[mapping.referential_id.version_id.id]+"_"+mapping.model_id.name+"_"+line.field_id.name+"_"+line.external_field+"\","
-#                csv_file += "\""+mapping.referential_id.version_id.get_external_id(context=context)[mapping.referential_id.version_id.id]+"\","
-#                csv_file += "\""+current_model+"\","
-#                csv_file += "\""+line.external_field+"\","
-#                csv_file += "\""+current_field+"\","
-#                csv_file += "\""+line.type+"\","
-#                if line.evaluation_type!=False:
-#                    csv_file += "\""+line.evaluation_type+"\","
-#                else:
-#                    csv_file += "\"\","
-#                if line.external_type!=False:
-#                    csv_file += "\""+line.external_type+"\","
-#                else:
-#                    csv_file += "\"\","
-#                if line.child_mapping_id.id!=False:
-#                    csv_file += "\""+line.child_mapping_id.get_external_id(context=context)[line.child_mapping_id.id]+"\","
-#                else:
-#                    csv_file += "\"\","
-#                if line.in_function!=False:
-#                    csv_file += "\""+line.in_function+"\","
-#                else:
-#                    csv_file += "\"\","
-#                if line.out_function!=False:
-#                    csv_file += "\""+line.out_function+"\"\n"
-#                else:
-#                    csv_file += "\"\"\n"
-#        raise osv.except_osv(_('Mapping lines'), _(csv_file))
-
         return self.pool.get('output.file').open_output_file(cr, uid, 'external.mapping.line.csv', output_file, 'Mapping Line Export', context=context)
 
     _sql_constraints = [

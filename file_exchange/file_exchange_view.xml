@@ -108,7 +108,7 @@
                     </field>
                     <field name="custom_name" attrs="{'readonly':[('mapping_line_id','!=',False)]}"/>
                     <field name="default_value" attrs="{'readonly':[('advanced_default_value','!=',False)]}"/>
-                    <field name="is_compulsary"/>
+                    <field name="is_required"/>
                     <separator string="Advanced Default Value" colspan="4"/>
                     <field name='alternative_key'/>
                     <field name="advanced_default_value" nolabel="1" colspan="4"/>
@@ -124,7 +124,7 @@
             <field name="arch" type="xml">
                 <tree editable="top" string="file_fields">
                     <field name="sequence" />
-                    <field name="is_compulsary"/>
+                    <field name="is_required"/>
                     <field name="mapping_line_id" attrs="{'readonly':[('custom_name','!=',False)]}"/>
                     <field name="custom_name" attrs="{'readonly':[('mapping_line_id','!=',False)]}"/>
                     <field name="name"/>

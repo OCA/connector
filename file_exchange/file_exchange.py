@@ -22,7 +22,7 @@ from tools.safe_eval import safe_eval as eval
 from osv import osv, fields
 import netsvc
 from base_external_referentials.external_osv import ExternalSession
-from base_file_protocole.base_file_protocole import FileCsvReader
+from base_file_protocole.base_file_protocole import FileCsvReader, FileCsvWriter
 from tempfile import TemporaryFile
 from encodings.aliases import aliases
 from tools.translate import _
@@ -319,56 +319,68 @@ class file_exchange(osv.osv):
         'pre_processing': fields.text('Pre-Processing', help="This python code will be executed before merge of elements of the import"), 
     }
 
-    # Method to export the exchange file
-    def create_exchange_file(self, cr, uid, ids, context={}):
-        csv_file = "\"id\",\"name\",\"referential_id:id\",\"scheduler:id\",\"type\",\"model_id:id\",\"encoding\",\"format\",\"search_filter\",\"folder_path\",\"filename\"\n"
-        current_file = self.browse(cr, uid, ids)[0]
-        generated_id = "\"" + current_file.name + "_" + current_file.referential_id.name + "_" + current_file.model_id.name + "\","
-        csv_file += generated_id.replace(' ', '_')
-        csv_file += "\"" + current_file.name + "\","
-        csv_file += "\"" + current_file.referential_id.get_external_id(context=context)[current_file.referential_id.id] + "\",\""
-        if current_file.scheduler :
-            csv_file += current_file.scheduler.get_external_id(context=context)[current_file.scheduler.id]
-        csv_file += "\",\"" + current_file.type + "\","
-        csv_file += "\"" + current_file.model_id.get_external_id(context=context)[current_file.model_id.id] + "\","
-        csv_file += "\"" + current_file.encoding + "\","
-        csv_file += "\"" + current_file.format + "\",\""
-        if current_file.search_filter:
-            csv_file += current_file.search_filter
-        csv_file += "\",\"" 
-        if current_file.folder_path:
-            csv_file += current_file.folder_path
-        csv_file += "\",\"" + current_file.filename + "\""
+    def get_absolute_id(self, cr, uid, id, context=None):
+        if isinstance(id,list):
+            id = id[0]
+        file_exchange = self.browse(cr, uid, id, context=context)
+        file_exchange_id = file_exchange.get_external_id(context=context)[file_exchange.id]
+        if not file_exchange_id:
+            file_echange_id = file_exchange.name.replace(' ','_').replace('.','_')
+        return file_exchange_id
 
-        raise osv.except_osv(_('Fields'), _(csv_file))
-        return True
+    # Method to export the exchange file
+    def create_exchange_file(self, cr, uid, id, context=None):
+        if isinstance(id,list):
+            id = id[0]
+        output_file = TemporaryFile('w+b')
+        fieldnames = ['id', 'name', 'referential_id:id', 'type', 'encoding', 'format', 'lang:id', 'delimiter', 'search_filter', 'folder_path', 'filename', 'do_not_update', 'action_before_all', 'action_after_all', 'action_before_each', 'action_after_each', 'check_if_import', 'pre_processing']
+        csv = FileCsvWriter(output_file, fieldnames, encoding="utf-8", writeheader=True, delimiter=';', quotechar='"')
+        current_file = self.browse(cr, uid, id, context=context)
+        row = {
+            'id': current_file.get_absolute_id(context=context),
+            'name': current_file.name,
+            'type': current_file.type,
+            #'model_id:id': , TODO change model_id in mapping_id
+            'encoding': current_file.encoding,
+            'format': current_file.format,
+            'delimiter': current_file.delimiter,
+            'search_filter': current_file.search_filter or '',
+            'folder_path': current_file.folder_path or '',
+            'filename': current_file.filename,
+            'do_not_update': str(current_file.do_not_update),
+            'action_before_all': current_file.action_before_all or '',
+            'action_after_all': current_file.action_after_all or '',
+            'action_before_each': current_file.action_before_each or '',
+            'action_after_each': current_file.action_after_each or '',
+            'check_if_import': current_file.check_if_import or '',
+            'pre_processing': current_file.pre_processing or '',
+        }
+        csv.writerow(row)
+        return self.pool.get('output.file').open_output_file(cr, uid, 'file exchange.csv', output_file, 'File Exchange Export', context=context)
         
     # Method to export the mapping file
-    def create_file_fields(self, cr, uid, ids, context={}):
-        csv_file = "\"id\",\"is_compulsary\",\"name\",\"custom_name\",\"sequence\",\"mapping_line_id:id\",\"file_id:id\",\"default_value\",\"advanced_default_value\"\n"
-        current_file = self.browse(cr, uid, ids)[0]
+    def create_file_fields(self, cr, uid, id, context=None):
+        if isinstance(id,list):
+            id = id[0]
+        output_file = TemporaryFile('w+b')
+        fieldnames = ['id', 'is_required', 'name', 'custom_name', 'sequence', 'mapping_line_id:id', 'file_id:id', 'default_value', 'advanced_default_value', 'alternative_key']
+        csv = FileCsvWriter(output_file, fieldnames, encoding="utf-8", writeheader=True, delimiter=';', quotechar='"')
+        current_file = self.browse(cr, uid, id, context=context)
         for field in current_file.field_ids:
-            generated_id = "\"" + field.file_id.name + "_" + field.name + "_" + str(field.sequence) + "\","
-            csv_file += generated_id.replace(' ', '_')
-            csv_file += "\"" + str(field.is_compulsary) + "\",\""
-            csv_file += "\"" + field.name + "\",\""
-            if field.custom_name:
-                csv_file += field.custom_name
-            csv_file += "\",\""
-            csv_file += str(field.sequence)
-            csv_file += "\",\""
-            csv_file += "TODO" #mapping_line_id
-            csv_file += "\",\""
-            csv_file += field.file_id.get_external_id(context=context)[field.file_id.id]
-            csv_file += "\",\""
-            if field.default_value:
-                csv_file += field.default_value
-            csv_file += "\",\""
-            if field.advanced_default_value:
-                csv_file += field.advanced_default_value
-            csv_file += "\"\n"
-        raise osv.except_osv(_('Fields'), _(csv_file))
-        return True
+            row = {
+                'id': field.get_absolute_id(context=context),
+                'is_required': str(field.is_required),
+                'name': field.name,
+                'custom_name': field.custom_name or '',
+                'sequence': str(field.sequence),
+                'mapping_line_id:id': field.mapping_line_id and field.mapping_line_id.get_absolute_id(context=context) or '',
+                'file_id:id': field.file_id.get_absolute_id(context=context),
+                'default_value': field.default_value or '',
+                'advanced_default_value': field.advanced_default_value or '',
+                'alternative_key': str(field.alternative_key),
+            }
+            csv.writerow(row)
+        return self.pool.get('output.file').open_output_file(cr, uid, 'file exchange fields.csv', output_file, 'File Exchange Fields Export', context=context)
 
 file_exchange()
 
@@ -410,8 +422,20 @@ class file_fields(osv.osv):
         'advanced_default_value': fields.text('Advanced Default Value', help=("This python code will be evaluate and the value"
                                                                         "in the varaible result will be used as defaut value")),
         'alternative_key': fields.related('mapping_line_id', 'alternative_key', type='boolean', string='Alternative Key'),
-        'is_compulsary' : fields.boolean('Is compulsary', help="Is this field compulsary in the exchange ?"),
+        'is_required' : fields.boolean('Is required', help="Is this field required in the exchange ?"),
     }
+
+    def get_absolute_id(self, cr, uid, id, context=None):
+        if isinstance(id,list):
+            id = id[0]
+        field = self.browse(cr, uid, id, context=context)
+        field_id = field.get_external_id(context=context)[field.id]
+        if not field_id:
+            file_name = field.file_id.name.replace(' ','_')
+            field_name = field.name
+            sequence = str(field.sequence)
+            field_id = (file_name + '_' + field_name + '_' + sequence).replace('.','_')
+        return field_id
 
 file_fields()
 

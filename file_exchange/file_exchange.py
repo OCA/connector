@@ -325,7 +325,7 @@ class file_exchange(osv.osv):
         file_exchange = self.browse(cr, uid, id, context=context)
         file_exchange_id = file_exchange.get_external_id(context=context)[file_exchange.id]
         if not file_exchange_id:
-            file_echange_id = file_exchange.name.replace(' ','_').replace('.','_')
+            file_exchange_id = file_exchange.name.replace(' ','_').replace('.','_')
         return file_exchange_id
 
     # Method to export the exchange file
@@ -379,6 +379,24 @@ class file_exchange(osv.osv):
                 'advanced_default_value': field.advanced_default_value or '',
                 'alternative_key': str(field.alternative_key),
             }
+            csv.writerow(row)
+        return self.pool.get('output.file').open_output_file(cr, uid, 'file exchange fields.csv', output_file, 'File Exchange Fields Export', context=context)
+
+    def create_file_default_fields(self, cr, uid, id, context=None):
+        if isinstance(id,list):
+            id = id[0]
+        output_file = TemporaryFile('w+b')
+        fieldnames = ['id', 'import_default_value', 'file_id:id', 'mapping_id:id']
+        csv = FileCsvWriter(output_file, fieldnames, encoding="utf-8", writeheader=True, delimiter=';', quotechar='"')
+        current_file = self.browse(cr, uid, id, context=context)
+        for field in current_file.import_default_field:
+            row = {
+                'id': field.get_absolute_id(context=context),
+                'import_default_value': field.import_default_value,
+                'file_id:id': current_file.get_absolute_id(context=context),
+                'mapping_id:id': field.mapping_id.get_absolute_id(context=context),
+            }
+            import pdb;pdb.set_trace()
             csv.writerow(row)
         return self.pool.get('output.file').open_output_file(cr, uid, 'file exchange fields.csv', output_file, 'File Exchange Fields Export', context=context)
 
@@ -451,4 +469,15 @@ class file_default_import_values(osv.osv):
         #'related_model_ids':fields.related('mapping_id', 'related_model_ids', type='many2many', relation="ir.model", string='Related Model'),
         'related_model':fields.related('mapping_id', 'model_id', type='many2one',relation="ir.model", string='Related Model'),
     }
+
+    def get_absolute_id(self, cr, uid, id, context=None):
+        if isinstance(id,list):
+            id = id[0]
+        field = self.browse(cr, uid, id, context=context)
+        field_id = field.get_external_id(context=context)[field.id]
+        if not field_id:
+            file_name = field.file_id.name.replace(' ','_')
+            field_name = field.import_default_field.name
+            field_id = (file_name + '_' + field_name).replace('.','_')
+        return field_id
 

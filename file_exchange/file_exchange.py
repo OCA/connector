@@ -78,7 +78,7 @@ class file_exchange(osv.osv):
         res = {}
         method = self.browse(cr, uid, method_id, context=context)
         for field in method.import_default_field:
-            if field.file_id.model_id.model == field.mapping_id.model_id.model:
+            if field.file_id.mapping_id.id == field.mapping_id.id:
                 res[field.import_default_field.name] = field.import_default_value
         return res
     
@@ -87,9 +87,9 @@ class file_exchange(osv.osv):
         method_id = context['file_exchange_id']
         method = self.browse(cr, uid, method_id, context=context)
         if format in ['csv_no_header','csv']:
-            alternative_key_id = self.pool.get('file.fields').search(cr, uid, [('alternative_key', '=', True), ('mapping_line_id.related_model_id', '=', method.model_id.id), ('file_id', '=', method.id)], context=context)[0]
+            alternative_key_id = self.pool.get('file.fields').search(cr, uid, [('alternative_key', '=', True), ('mapping_line_id.related_model_id', '=', method.mapping_id.model_id.id), ('file_id', '=', method.id)], context=context)[0]
             alternative_key = self.pool.get('file.fields').read(cr, uid, alternative_key_id, ['name'], context=context)['name']
-            mapping_id = self.pool.get('external.mapping').search(cr, uid, [('model_id', '=', method.model_id.id)], context=context)[0]
+            mapping_id = self.pool.get('external.mapping').search(cr, uid, [('model_id', '=', method.mapping_id.model_id.id)], context=context)[0]
             mapping_tree, merge_keys = self._get_mapping_tree(cr, uid, mapping_id, context=context)
             csv = FileExchangeCsvReader(external_file, fieldnames= format=='csv_no_header' and fields_name or None, delimiter=method.delimiter.encode('utf-8'), encoding=method.encoding, pre_processing=method.pre_processing)
             res = csv.reorganize(field_structure=mapping_tree, merge_keys=merge_keys, ref_field=alternative_key)
@@ -123,7 +123,7 @@ class file_exchange(osv.osv):
         for method in self.browse(cr, uid, ids, context=context):
             ctx = context.copy()
             ctx['lang'] = method.lang.code
-            ctx['do_not_update'] = method.do_not_update and [method.model_id.model] or []
+            ctx['do_not_update'] = method.do_not_update and [method.mapping_id.model_id.model] or []
             if method.type == 'in':
                 self._import_files(cr, uid, method.id, context=ctx)
             elif method.type == 'out':
@@ -136,11 +136,11 @@ class file_exchange(osv.osv):
         context['file_exchange_id'] = method_id
         file_fields_obj = self.pool.get('file.fields')
         method = self.browse(cr, uid, method_id, context=context)
-        model_obj = self.pool.get(method.model_id.model)
+        model_obj = self.pool.get(method.mapping_id.model_id.model)
         method.start_action('action_before_all', model_obj, context=context)
         defaults = self._get_import_default_fields_values(cr, uid, method_id, context=context)
         external_session = ExternalSession(method.referential_id)
-        mapping = {method.model_id.model : self.pool.get(method.model_id.model)._get_mapping(cr, uid, method.referential_id.id, context=context)}
+        mapping = {method.mapping_id.model_id.model : self.pool.get(method.mapping_id.model_id.model)._get_mapping(cr, uid, method.referential_id.id, context=context)}
 
         fields_name_ids = file_fields_obj.search(cr, uid, [['file_id', '=', method.id]], context=context)
         fields_name = [x['name'] for x in file_fields_obj.read(cr, uid, fields_name_ids, ['name'], context=context)]
@@ -153,7 +153,7 @@ class file_exchange(osv.osv):
         for filename in list_filename:
             external_session.logger.info("Start to import the file %s"%(filename,))
             resources = self._get_external_file_resources(cr, uid, external_session, method.folder_path, filename, method.format, fields_name, mapping=mapping, context=context)
-            res = self.pool.get(method.model_id.model)._record_external_resources(cr, uid, external_session, resources, defaults=defaults, mapping=mapping, context=context)
+            res = self.pool.get(method.mapping_id.model_id.model)._record_external_resources(cr, uid, external_session, resources, defaults=defaults, mapping=mapping, context=context)
             external_session.connection.move(method.folder_path, method.archive_folder_path, filename)
             external_session.logger.info("Finish to import the file %s"%(filename,))
             ids_imported += res['create_ids'] + res['write_ids']
@@ -205,7 +205,7 @@ class file_exchange(osv.osv):
         self._check_if_file_exist(cr, uid, external_session, method.folder_path, filename, context=context)
     #=== Start export
         external_session.logger.info("Start to export %s"%(method.name,))
-        model_obj = self.pool.get(method.model_id.model)
+        model_obj = self.pool.get(method.mapping_id.model_id.model)
         method.start_action('action_before_all', model_obj, context=context)
         defaults = self.get_export_default_fields_values(cr, uid, method_id, context=context)
         encoding = method.encoding
@@ -297,7 +297,7 @@ class file_exchange(osv.osv):
         'type': fields.selection([('in','IN'),('out','OUT'),], 'Type',help=("IN for files coming from the other system"
                                                                 "and to be imported in the ERP ; OUT for files to be"
                                                                 "generated from the ERP and send to the other system")),
-        'model_id':fields.many2one('ir.model', 'Model',help="OpenEPR main object from which all the fields will be related", require=True),
+        'mapping_id':fields.many2one('external.mapping', 'External Mapping', require="True"),
         'format' : fields.selection([('csv','CSV'),('csv_no_header','CSV WITHOUT HEADER')], 'File format'),
         'referential_id':fields.many2one('external.referential', 'Referential',help="Referential to use for connection and mapping", require=True),
         'scheduler':fields.many2one('ir.cron', 'Scheduler',help="Scheduler that will execute the cron task"),
@@ -333,14 +333,14 @@ class file_exchange(osv.osv):
         if isinstance(id,list):
             id = id[0]
         output_file = TemporaryFile('w+b')
-        fieldnames = ['id', 'name', 'referential_id:id', 'type', 'encoding', 'format', 'lang:id', 'delimiter', 'search_filter', 'folder_path', 'filename', 'do_not_update', 'action_before_all', 'action_after_all', 'action_before_each', 'action_after_each', 'check_if_import', 'pre_processing']
+        fieldnames = ['id', 'name', 'referential_id:id', 'type', 'mapping_id:id', 'encoding', 'format', 'lang:id', 'delimiter', 'search_filter', 'folder_path', 'filename', 'do_not_update', 'action_before_all', 'action_after_all', 'action_before_each', 'action_after_each', 'check_if_import', 'pre_processing']
         csv = FileCsvWriter(output_file, fieldnames, encoding="utf-8", writeheader=True, delimiter=';', quotechar='"')
         current_file = self.browse(cr, uid, id, context=context)
         row = {
             'id': current_file.get_absolute_id(context=context),
             'name': current_file.name,
             'type': current_file.type,
-            #'model_id:id': , TODO change model_id in mapping_id
+            'mapping_id:id': current_file.mapping_id.get_absolute_id(context=context),
             'encoding': current_file.encoding,
             'format': current_file.format,
             'delimiter': current_file.delimiter,

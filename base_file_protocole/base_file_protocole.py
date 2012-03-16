@@ -121,3 +121,31 @@ class FileCsvReader(object):
                 for key in merge_keys:
                     result[line[ref_field]][key] =  [result[line[ref_field]][key]]
         return [result[key] for key in result]
+
+class FileCsvWriter(object):
+    """
+    A CSV writer which will write rows to CSV file "f",
+    which is encoded in the given encoding.
+    """
+
+    def __init__(self, f, fieldnames, encoding="utf-8", writeheader=False, **kwds):
+        self.encoding = encoding
+        self.writer = csv.DictWriter(f, fieldnames, **kwds)
+        if writeheader:
+            row = {}
+            for field in fieldnames:
+                row[field.encode(self.encoding)] = field.encode(self.encoding)
+            self.writer.writerow(row)
+
+    def writerow(self, row):
+        write_row = {}
+        for k,v in row.items():
+            if isinstance(v, unicode) and v!=False:
+                write_row[k.encode(self.encoding)] = v.encode(self.encoding)
+            else:
+                write_row[k.encode(self.encoding)] = v
+        self.writer.writerow(write_row)
+
+    def writerows(self, rows):
+        for row in rows:
+            self.writerow(row)

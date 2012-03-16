@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  base_pop_up for OpenERP
+  Copyright (C) 2011 Akretion Benoît Guillot <benoit.guillot@akretion.com>
+  The licence is in the file __openerp__.py
+-->
+
+<openerp>
+    <data>
+    
+        <!-- VIEW FOR THE OBJECT : outut_file -->
+
+        <record model="ir.ui.view" id="export_mapping_form_view">
+            <field name="name">export_mapping_form_view</field>
+            <field name="model">output.file</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form>
+                    <group name="output file" colspan="4" col="2">
+                        <field name="name" />
+                        <field name="file"/>
+                    </group>
+                    <button name="close" colspan="1" string="Close" type="object" icon="gtk-go-forward"/>
+                </form>
+            </field>
+        </record>
+
+    </data>
+</openerp>
+

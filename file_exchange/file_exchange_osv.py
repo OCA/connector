@@ -48,7 +48,7 @@ def _get_default_import_values(self, cr, uid, external_session, mapping_id=None,
         defaults = {}
     method = self.pool.get('file.exchange').browse(cr, uid, context['file_exchange_id'], context=context)
     mapping = self.pool.get('external.mapping').browse(cr, uid, mapping_id, context=context)
-    for field in method.import_default_field:
+    for field in method.import_default_fields:
         if field.mapping_id.model_id.model == mapping.model_id.model:
             defaults[field.import_default_field.name] = field.import_default_value
     return defaults

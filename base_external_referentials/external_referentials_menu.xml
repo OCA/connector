@@ -19,6 +19,19 @@
 
 		<menuitem id="ir_ui_menu_extref0" name="External Referentials" parent="ir_ui_menu_external_referentials" action="ir_actions_act_window_externalreferential0" />
 
+        <!-- External Referentials Types -->
+
+        <record id="ir_actions_act_window_external_type" model="ir.actions.act_window">
+            <field name="name">External Referentials Types</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">external.referential.type</field>
+            <field name="view_type">form</field>
+            <field name="view_id" ref="external_referential_type_tree_view"/>
+            <field name="search_view_id" ref="external_referential_type_search_form_view"/>
+        </record>
+
+        <menuitem id="ir_ui_menu_external_types" name="External Referentials Types" parent="ir_ui_menu_external_referentials" action="ir_actions_act_window_external_type" />
+
         <!-- External Report -->
 
 		<record id="ir_actions_act_window_external_report" model="ir.actions.act_window">

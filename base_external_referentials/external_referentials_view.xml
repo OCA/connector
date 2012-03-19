@@ -180,6 +180,8 @@
             </field>
         </record>
 
+        <!-- External Referentials Types -->
+
         <record id="external_referential_type_form_view" model="ir.ui.view">
             <field name="name">external_referential_type_form_view</field>
             <field name="model">external.referential.type</field>
@@ -190,6 +192,36 @@
                     <field name="categ_id" />
                     <field name="version_ids" colspan="4"/>
                 </form>
+            </field>
+        </record>
+
+        <record id="external_referential_type_tree_view" model="ir.ui.view">
+            <field name="name">external_referential_type_tree_view</field>
+            <field name="model">external.referential.type</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="External Referential Types">
+                    <field name="name" />
+                    <field name="categ_id" />
+                    <field name="version_ids" colspan="4"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="external_referential_type_search_form_view" model="ir.ui.view">
+            <field name="name">external_referential_type_search_form_view</field>
+            <field name="model">external.referential.type</field>
+            <field name="type">search</field>
+            <field name="arch" type="xml">
+                <search string="External Referential Types">
+                    <field name="name" />
+                    <field name="categ_id" />
+                    <field name="version_ids" colspan="4"/>
+                   <newline/>
+                   <group  expand='0' string='Group by...' groups="base.group_extended">
+                       <filter string='External Referential' icon="terp-stock_symbol-selection" domain="[]" context="{'group_by' : 'referential_id'}" />
+                   </group>
+                </search>
             </field>
         </record>
 

@@ -115,6 +115,7 @@ class external_mapping_template(osv.osv):
         'external_done_method': fields.char('Done Method', size=64),
         'key_for_external_id':fields.char('External field used as key', size=64),
         'external_resource_name':fields.char('External Resource Name', size=64),
+        'extra_name': fields.char('Extra Name', size=100),
                 }
 external_mapping_template()
 
@@ -209,6 +210,7 @@ class external_referential(osv.osv):
                         'external_done_method': each_mapping_rec['external_done_method'],
                         'key_for_external_id': each_mapping_rec['key_for_external_id'],
                         'external_resource_name': each_mapping_rec['external_resource_name'],
+                        'extra_name':each_mapping_rec['extra_name'],
                 }
                 if len(existing_ids) == 0:
                     mapping_id = mappings_obj.create(cr, uid, vals)
@@ -309,13 +311,14 @@ class external_referential(osv.osv):
         if isinstance(id,list):
             id = id[0]
         output_file = TemporaryFile('w+b')
-        fieldnames = ['id', 'version_id:id', 'model_id:id', 'external_list_method', 'external_get_method', 'external_update_method', 'external_create_method', 'external_delete_method', 'key_for_external_id', 'external_resource_name']
+        fieldnames = ['id', 'extra_name', 'version_id:id', 'model_id:id', 'external_list_method', 'external_get_method', 'external_update_method', 'external_create_method', 'external_delete_method', 'key_for_external_id', 'external_resource_name']
         csv = FileCsvWriter(output_file, fieldnames, encoding="utf-8", writeheader=True, delimiter=',', quotechar='"')
 
         referential = self.browse(cr, uid, id, context=context)
         for mapping in referential.mapping_ids:
             row = {
                 'id': mapping.get_absolute_id(context=context),
+                'extra_name': mapping.extra_name or '',
                 'version_id:id': referential.version_id.get_absolute_id(context=context),
                 'model_id:id': mapping.model_id.get_external_id(context=context)[mapping.model_id.id],
                 'external_list_method': mapping.external_list_method or '',
@@ -429,7 +432,7 @@ class external_mapping(osv.osv):
             id = id[0]
         mapping = self.browse(cr, uid, id, context=context)
         if mapping.template_id:
-            mapping_id = mapping.template_id.get_external_id(context=context)[line.id]
+            mapping_id = mapping.template_id.get_external_id(context=context)[mapping.template_id.id]
         else:
             version_name = mapping.referential_id.version_id.name.replace(' ','_')
             mapping_name = mapping.model + (mapping.extra_name and ('_' + mapping.extra_name) or '')
@@ -527,7 +530,7 @@ class external_mapping_line(osv.osv):
             id = id[0]
         line = self.browse(cr, uid, id, context=context)
         if line.template_id:
-            line_id = line.template_id.get_external_id(context=context)[line.id]
+            line_id = line.template_id.get_external_id(context=context)[line.template_id.id]
         else:
             version_name = line.referential_id.version_id.name.replace(' ','_')
             mapping_name = line.mapping_id.model + (line.mapping_id.extra_name and ('_' + line.mapping_id.extra_name) or '')

@@ -41,7 +41,7 @@ class external_referential_category(osv.osv):
         if isinstance(id,list):
             id = id[0]
         referential_categ = self.browse(cr, uid, id, context=context)
-        categ_id = categ_id.get_external_id(context=context)[categ_id.id]
+        categ_id = referential_categ.get_external_id(context=context)[referential_categ.id]
         if not categ_id:
             categ_id = referential_categ.name.replace('.','_').replace(' ','_')
         return categ_id
@@ -275,13 +275,13 @@ class external_referential(osv.osv):
             id = id[0]
         output_file = TemporaryFile('w+b')
         fieldnames = ['id', 'name', 'categ_id:id']
-        csv = FileCsvWriter(output_file, fieldnames, encoding="utf-8", writeheader=True, delimiter=';', quotechar='"')
+        csv = FileCsvWriter(output_file, fieldnames, encoding="utf-8", writeheader=True, delimiter=',', quotechar='"')
 
         referential = self.browse(cr, uid, id, context=context)
         row = {
-            'id': referential.type_id.name+"_"+time.strftime('%Y_%m'),
+            'id': referential.type_id.name,
             'name': referential.type_id.name,
-            'categ_id:id': referential.version_id.name,
+            'categ_id:id': referential.categ_id.get_absolute_id(context=context),
         }
         csv.writerow(row)
         return self.pool.get('output.file').open_output_file(cr, uid, 'external.referential.type.csv', output_file, 'Referential Type Export', context=context)
@@ -292,12 +292,12 @@ class external_referential(osv.osv):
             id = id[0]
         output_file = TemporaryFile('w+b')
         fieldnames = ['type_id:id', 'id', 'name']
-        csv = FileCsvWriter(output_file, fieldnames, encoding="utf-8", writeheader=True, delimiter=';', quotechar='"')
+        csv = FileCsvWriter(output_file, fieldnames, encoding="utf-8", writeheader=True, delimiter=',', quotechar='"')
 
         referential = self.browse(cr, uid, id, context=context)
         row = {
             'type_id:id': referential.type_id.get_absolute_id(context=context),
-            'id': referential.version_id.name+"_"+time.strftime('%Y_%m'),
+            'id': referential.version_id.name,
             'name': referential.version_id.name,
         }
         csv.writerow(row)
@@ -310,7 +310,7 @@ class external_referential(osv.osv):
             id = id[0]
         output_file = TemporaryFile('w+b')
         fieldnames = ['id', 'version_id:id', 'model_id:id', 'external_list_method', 'external_get_method', 'external_update_method', 'external_create_method', 'external_delete_method', 'key_for_external_id', 'external_resource_name']
-        csv = FileCsvWriter(output_file, fieldnames, encoding="utf-8", writeheader=True, delimiter=';', quotechar='"')
+        csv = FileCsvWriter(output_file, fieldnames, encoding="utf-8", writeheader=True, delimiter=',', quotechar='"')
 
         referential = self.browse(cr, uid, id, context=context)
         for mapping in referential.mapping_ids:
@@ -442,7 +442,7 @@ class external_mapping(osv.osv):
             id = id[0]
         output_file = TemporaryFile('w+b')
         fieldnames = ['id', 'mapping_id:id', 'external_field', 'field_id:id', 'type', 'evaluation_type', 'external_type', 'child_mapping_id:id', 'in_function', 'out_function']
-        csv = FileCsvWriter(output_file, fieldnames, encoding="utf-8", writeheader=True, delimiter=';', quotechar='"')
+        csv = FileCsvWriter(output_file, fieldnames, encoding="utf-8", writeheader=True, delimiter=',', quotechar='"')
 
         mapping = self.browse(cr, uid, id, context=context)
         for line in mapping.mapping_ids:
@@ -459,7 +459,7 @@ class external_mapping(osv.osv):
                 'out_function': line.out_function or '',
             }
             csv.writerow(row)
-        return self.pool.get('output.file').open_output_file(cr, uid, 'external.mapping.line.csv', output_file, 'Mapping Line Export', context=context)
+        return self.pool.get('output.file').open_output_file(cr, uid, 'external.mappinglines.template.csv', output_file, 'Mapping Line Export', context=context)
 
     _sql_constraints = [
         ('ref_template_uniq', 'unique (referential_id, template_id)', 'A referential can not have various mapping imported from the same template')

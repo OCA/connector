@@ -222,7 +222,7 @@ class file_exchange(osv.osv):
             ids_filter = method.search_filter
         ids_to_export = model_obj.search(cr, uid, eval(ids_filter), context=context)
     #=== Start mapping
-        mapping,mapping_id = model_obj._init_mapping(cr, uid, external_session.referential_id.id, convertion_type='from_openerp_to_external', mapping_line_filter_ids=mapping_line_filter_ids, context=context)
+        mapping,mapping_id = model_obj._init_mapping(cr, uid, external_session.referential_id.id, convertion_type='from_openerp_to_external', mapping_line_filter_ids=mapping_line_filter_ids,mapping_id=method.mapping_id.id, context=context)
         fields_to_read = [x['internal_field'] for x in mapping[mapping_id]['mapping_lines']]
         # TODO : CASE fields_to_read is False !!!
         resources = model_obj._get_oe_resources_into_external_format(cr, uid, external_session, ids_to_export, mapping=mapping,mapping_id=mapping_id, mapping_line_filter_ids=mapping_line_filter_ids, fields=fields_to_read, defaults=defaults, context=context)

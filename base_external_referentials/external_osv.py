@@ -1151,16 +1151,12 @@ def _transform_sub_mapping(self, cr, uid, external_session, convertion_type, res
             if not from_field:
                 from_field = "%s_%s" %(sub_object_name, sub_mapping_id)
             to_field = sub_mapping['internal_field']
-            field_value = resource[from_field]
 
         elif convertion_type == 'from_openerp_to_external':
             from_field = sub_mapping['internal_field']
             to_field = sub_mapping['external_field'] or 'hidden_field_to_split_%s'%from_field # if the field doesn't have any name we assume at that we will split it
-            #Before calling submapping o2m resource must be an int and not a list of (id, name)
-            if sub_mapping['external_type'] == 'many2one':
-                field_value = resource[from_field] and resource[from_field][0] or False
-            else:
-                field_value = resource[from_field]
+            
+        field_value = resource[from_field]
       
         sub_mapping_defaults = self._get_default_import_values(cr, uid, external_session, mapping_id, defaults.get(to_field), context=context)
 

@@ -179,7 +179,7 @@ class external_referential(osv.osv):
         self.import_resources(cr, uid, ids, 'external.referential', context=context)
         return True
 
-    def refresh_mapping(self, cr, uid, ids, context={}):
+    def refresh_mapping(self, cr, uid, ids, context=None):
         #This function will reinstate mapping & mapping_lines for registered objects
         for id in ids:
             ext_ref = self.browse(cr, uid, id)
@@ -413,7 +413,7 @@ class external_mapping(osv.osv):
     }
 
     # Method to set mapping with all object files
-    def add_all_fields(self, cr, uid, ids, context={}):
+    def add_all_fields(self, cr, uid, ids, context=None):
         mapping_line_obj = self.pool.get('external.mapping.line')
         mapping = self.browse(cr, uid, ids)[0]
         for field in mapping.model_id.field_id:
@@ -441,7 +441,7 @@ class external_mapping(osv.osv):
         if isinstance(id,list):
             id = id[0]
         output_file = TemporaryFile('w+b')
-        fieldnames = ['id', 'mapping_id:id', 'external_field', 'field_id:id', 'type', 'evaluation_type', 'external_type', 'child_mapping_id:id', 'in_function', 'out_function']
+        fieldnames = ['id', 'mapping_id:id', 'external_field', 'field_id:id', 'type', 'evaluation_type', 'external_type', 'child_mapping_id:id', 'alternative_key', 'in_function', 'out_function']
         csv = FileCsvWriter(output_file, fieldnames, encoding="utf-8", writeheader=True, delimiter=',', quotechar='"')
 
         mapping = self.browse(cr, uid, id, context=context)
@@ -455,6 +455,7 @@ class external_mapping(osv.osv):
                 'evaluation_type': line.evaluation_type,
                 'external_type': line.external_type,
                 'child_mapping_id:id': line.child_mapping_id and line.child_mapping_id.get_absolute_id(context=context) or '',
+                'alternative_key': str(line.alternative_key),
                 'in_function': line.in_function or '',
                 'out_function': line.out_function or '',
             }

@@ -77,7 +77,7 @@ class file_exchange(osv.osv):
     def _get_import_default_fields_values(self, cr, uid, method_id, context=None):
         res = {}
         method = self.browse(cr, uid, method_id, context=context)
-        for field in method.import_default_field:
+        for field in method.import_default_fields:
             if field.file_id.mapping_id.id == field.mapping_id.id:
                 res[field.import_default_field.name] = field.import_default_value
         return res
@@ -314,9 +314,10 @@ class file_exchange(osv.osv):
         'check_if_import': fields.text('Check If Import', help="This python code will be executed before each element of the import"), 
         'delimiter':fields.char('Fields delimiter', size=64, help="Delimiter used in the CSV file"),
         'lang': fields.many2one('res.lang', 'Language'),
-        'import_default_field':fields.one2many('file.default.import.values', 'file_id', 'Default Field'),
+        'import_default_fields':fields.one2many('file.default.import.values', 'file_id', 'Default Field'),
         'do_not_update':fields.boolean('Do Not Update'),
-        'pre_processing': fields.text('Pre-Processing', help="This python code will be executed before merge of elements of the import"), 
+        'pre_processing': fields.text('Pre-Processing', help="This python code will be executed before merge of elements of the import"),
+        'mapping_template_id':fields.many2one('external.mapping.template', 'External Mapping Template', require="True"),
     }
 
     def get_absolute_id(self, cr, uid, id, context=None):
@@ -333,19 +334,20 @@ class file_exchange(osv.osv):
         if isinstance(id,list):
             id = id[0]
         output_file = TemporaryFile('w+b')
-        fieldnames = ['id', 'name', 'referential_id:id', 'type', 'mapping_id:id', 'encoding', 'format', 'lang:id', 'delimiter', 'search_filter', 'folder_path', 'filename', 'do_not_update', 'action_before_all', 'action_after_all', 'action_before_each', 'action_after_each', 'check_if_import', 'pre_processing']
-        csv = FileCsvWriter(output_file, fieldnames, encoding="utf-8", writeheader=True, delimiter=';', quotechar='"')
+        fieldnames = ['id', 'name', 'type', 'mapping_template_id:id', 'encoding', 'format', 'delimiter', 'search_filter', 'folder_path', 'archive_folder_path', 'filename', 'do_not_update', 'action_before_all', 'action_after_all', 'action_before_each', 'action_after_each', 'check_if_import', 'pre_processing']
+        csv = FileCsvWriter(output_file, fieldnames, encoding="utf-8", writeheader=True, delimiter=',', quotechar='"')
         current_file = self.browse(cr, uid, id, context=context)
         row = {
             'id': current_file.get_absolute_id(context=context),
             'name': current_file.name,
             'type': current_file.type,
-            'mapping_id:id': current_file.mapping_id.get_absolute_id(context=context),
+            'mapping_template_id:id': current_file.mapping_id.get_absolute_id(context=context),
             'encoding': current_file.encoding,
             'format': current_file.format,
             'delimiter': current_file.delimiter,
             'search_filter': current_file.search_filter or '',
             'folder_path': current_file.folder_path or '',
+            'archive_folder_path': current_file.archive_folder_path or '',
             'filename': current_file.filename,
             'do_not_update': str(current_file.do_not_update),
             'action_before_all': current_file.action_before_all or '',
@@ -356,15 +358,15 @@ class file_exchange(osv.osv):
             'pre_processing': current_file.pre_processing or '',
         }
         csv.writerow(row)
-        return self.pool.get('output.file').open_output_file(cr, uid, 'file exchange.csv', output_file, 'File Exchange Export', context=context)
+        return self.pool.get('output.file').open_output_file(cr, uid, 'file.exchange.csv', output_file, 'File Exchange Export', context=context)
         
     # Method to export the mapping file
     def create_file_fields(self, cr, uid, id, context=None):
         if isinstance(id,list):
             id = id[0]
         output_file = TemporaryFile('w+b')
-        fieldnames = ['id', 'is_required', 'name', 'custom_name', 'sequence', 'mapping_line_id:id', 'file_id:id', 'default_value', 'advanced_default_value', 'alternative_key']
-        csv = FileCsvWriter(output_file, fieldnames, encoding="utf-8", writeheader=True, delimiter=';', quotechar='"')
+        fieldnames = ['id', 'is_required', 'name', 'custom_name', 'sequence', 'mappinglines_template_id:id', 'file_id:id', 'default_value', 'advanced_default_value', 'alternative_key']
+        csv = FileCsvWriter(output_file, fieldnames, encoding="utf-8", writeheader=True, delimiter=',', quotechar='"')
         current_file = self.browse(cr, uid, id, context=context)
         for field in current_file.field_ids:
             row = {
@@ -373,32 +375,46 @@ class file_exchange(osv.osv):
                 'name': field.name,
                 'custom_name': field.custom_name or '',
                 'sequence': str(field.sequence),
-                'mapping_line_id:id': field.mapping_line_id and field.mapping_line_id.get_absolute_id(context=context) or '',
+                'mappinglines_template_id:id': field.mapping_line_id and field.mapping_line_id.get_absolute_id(context=context) or '',
                 'file_id:id': field.file_id.get_absolute_id(context=context),
                 'default_value': field.default_value or '',
                 'advanced_default_value': field.advanced_default_value or '',
                 'alternative_key': str(field.alternative_key),
             }
             csv.writerow(row)
-        return self.pool.get('output.file').open_output_file(cr, uid, 'file exchange fields.csv', output_file, 'File Exchange Fields Export', context=context)
+        return self.pool.get('output.file').open_output_file(cr, uid, 'file.fields.csv', output_file, 'File Exchange Fields Export', context=context)
 
+    # Method to export the default fields file
     def create_file_default_fields(self, cr, uid, id, context=None):
         if isinstance(id,list):
             id = id[0]
         output_file = TemporaryFile('w+b')
-        fieldnames = ['id', 'import_default_value', 'file_id:id', 'mapping_id:id']
-        csv = FileCsvWriter(output_file, fieldnames, encoding="utf-8", writeheader=True, delimiter=';', quotechar='"')
+        fieldnames = ['id', 'import_default_field:id', 'import_default_value', 'file_id:id', 'mapping_template_id:id']
+        csv = FileCsvWriter(output_file, fieldnames, encoding="utf-8", writeheader=True, delimiter=',', quotechar='"')
         current_file = self.browse(cr, uid, id, context=context)
-        for field in current_file.import_default_field:
+        for field in current_file.import_default_fields:
             row = {
                 'id': field.get_absolute_id(context=context),
+                'import_default_field:id': field.import_default_field.get_external_id(context=context)[field.import_default_field.id],
                 'import_default_value': field.import_default_value,
                 'file_id:id': current_file.get_absolute_id(context=context),
-                'mapping_id:id': field.mapping_id.get_absolute_id(context=context),
+                'mapping_template_id:id': field.mapping_id.get_absolute_id(context=context),
             }
-            import pdb;pdb.set_trace()
             csv.writerow(row)
-        return self.pool.get('output.file').open_output_file(cr, uid, 'file exchange fields.csv', output_file, 'File Exchange Fields Export', context=context)
+        return self.pool.get('output.file').open_output_file(cr, uid, 'file.default.import.values.csv', output_file, 'File Exchange Fields Export', context=context)
+
+    def load_mapping(self, cr, uid, ids, context=None):
+        for method in self.browse(cr, uid, ids, context=context):
+            mapping_id = self.pool.get('external.mapping').search(cr, uid, [('referential_id', '=', method.referential_id.id),('template_id', '=', method.mapping_template_id.id)], context=context)[0]
+            self.write(cr, uid, method.id, {'mapping_id': mapping_id}, context=context)
+            for default_field in method.import_default_fields:
+                default_mapping_id = self.pool.get('external.mapping').search(cr, uid, [('referential_id', '=', method.referential_id.id),('template_id', '=', default_field.mapping_template_id.id)], context=context)[0]
+                default_field.write({'mapping_id': default_mapping_id}, context=context)
+            for field in method.field_ids:
+                if field.mappinglines_template_id:
+                    field_mapping_line_id = self.pool.get('external.mapping.line').search(cr, uid, [('referential_id', '=', method.referential_id.id),('template_id', '=', field.mappinglines_template_id.id)], context=context)[0]
+                    field.write({'mapping_line_id': field_mapping_line_id}, context=context)
+        return True
 
 file_exchange()
 
@@ -441,6 +457,7 @@ class file_fields(osv.osv):
                                                                         "in the varaible result will be used as defaut value")),
         'alternative_key': fields.related('mapping_line_id', 'alternative_key', type='boolean', string='Alternative Key'),
         'is_required' : fields.boolean('Is required', help="Is this field required in the exchange ?"),
+        'mappinglines_template_id':fields.many2one('external.mappinglines.template', 'External Mappinglines Template')
     }
 
     def get_absolute_id(self, cr, uid, id, context=None):
@@ -466,6 +483,7 @@ class file_default_import_values(osv.osv):
         'import_default_value':fields.char('Default Value', size=128),
         'file_id': fields.many2one('file.exchange', 'File Exchange', require="True"),
         'mapping_id':fields.many2one('external.mapping', 'External Mapping', require="True"),
+        'mapping_template_id':fields.many2one('external.mapping.template', 'External Mapping Template', require="True"),
         #'related_model_ids':fields.related('mapping_id', 'related_model_ids', type='many2many', relation="ir.model", string='Related Model'),
         'related_model':fields.related('mapping_id', 'model_id', type='many2one',relation="ir.model", string='Related Model'),
     }

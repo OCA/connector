@@ -64,7 +64,7 @@
                             <separator string="Action After Each" colspan="4"/>
                             <field name="action_after_each" colspan="4" nolabel="1"/>
                         </page>
-                        <page string="CSV file generation">
+                        <page string="CSV file generation" groups="base_external_referentials.group_export_mapping" >
                             <button name="create_exchange_file" string="Export exchange file" colspan="2" type="object" />
                             <button name="create_file_fields" string="Export fields file" colspan="2" type="object" />
                             <button name="create_file_default_fields" string="Export default fields file" colspan="2" type="object" />

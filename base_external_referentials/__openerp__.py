@@ -55,6 +55,7 @@ to customize their field mapping directly in OpenERP to accomodate the external 
         'report_view.xml',
         'external_referentials_menu.xml',
         'security/ir.model.access.csv',
+        'security/base_external_referentials_security.xml',
     ],
     'demo_xml': [],
     'installable': True,

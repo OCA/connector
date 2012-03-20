@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  base_external_referentials for OpenERP
+  Copyright (C) 2011 Akretion Benoît Guillot <benoit.guillot@akretion.com>
+  The licence is in the file __openerp__.py
+-->
+
+<openerp>
+    <data>
+
+    <record id="base_external_referentials.group_export_mapping" model="res.groups">
+        <field name="name">Export Mapping Manager</field>
+    </record>
+
+    </data>
+</openerp>

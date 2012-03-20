@@ -50,10 +50,10 @@
                                 <button name="refresh_mapping" string="1 - Reload Referential Mapping Templates" colspan="2" type="object" />
                                 <button name="import_referentials" string="2 - Synchronize Referential Settings" colspan="2" type="object" attrs="{'readonly':[('mapping_ids','=',[])]}"/>
                             </page>
-                            <page string="CSV file generation">
+                            <page string="CSV file generation" groups="base_external_referentials.group_export_mapping" >
                                 <button name="build_external_ref_type" string="Export referential type" colspan="2" type="object" />
-                                <button name="build_external_ref_version" string="Export referential version" colspan="2" type="object"/>
-                                <button name="build_external_mapping_template" string="Export mapping template" colspan="2" type="object"/>
+                                <button name="build_external_ref_version" string="Export referential version" colspan="2" type="object" />
+                                <button name="build_external_mapping_template" string="Export mapping template" colspan="2" type="object" />
                             </page>
                         </notebook>
                     </group>
@@ -80,8 +80,8 @@
                                 <field name="external_resource_name" />
                             </group>
                             <button name="add_all_fields" string="Add all object fields" colspan="2" type="object" />
-                            <button name="create_mapping_file" string="Export mapping file" colspan="2" type="object" />
-                            <field colspan="4" name="mapping_ids" widget="one2many_list" nolabel="1" context="{'model_id':model_id}"/>
+                            <button name="create_mapping_file" string="Export mapping file" colspan="2" type="object" groups="base_external_referentials.group_export_mapping"/>
+                            <field colspan="4" name="mapping_ids" widget="one2many_list" nolabel="1" context="{'model_id':model_id}" />
                         </form>
                     </field>
                 </form>

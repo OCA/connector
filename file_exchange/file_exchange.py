@@ -137,7 +137,6 @@ class file_exchange(osv.osv):
         file_fields_obj = self.pool.get('file.fields')
         method = self.browse(cr, uid, method_id, context=context)
         model_obj = self.pool.get(method.mapping_id.model_id.model)
-        method.start_action('action_before_all', model_obj, context=context)
         defaults = self._get_import_default_fields_values(cr, uid, method_id, context=context)
         external_session = ExternalSession(method.referential_id)
         mapping = {method.mapping_id.model_id.model : self.pool.get(method.mapping_id.model_id.model)._get_mapping(cr, uid, method.referential_id.id, context=context)}
@@ -151,13 +150,14 @@ class file_exchange(osv.osv):
             external_session.logger.info("No file '%s' found on the server"%(method.filename,))
         ids_imported = []
         for filename in list_filename:
+            method.start_action('action_before_all', model_obj, context=context)
             external_session.logger.info("Start to import the file %s"%(filename,))
             resources = self._get_external_file_resources(cr, uid, external_session, method.folder_path, filename, method.format, fields_name, mapping=mapping, context=context)
             res = self.pool.get(method.mapping_id.model_id.model)._record_external_resources(cr, uid, external_session, resources, defaults=defaults, mapping=mapping, context=context)
             external_session.connection.move(method.folder_path, method.archive_folder_path, filename)
             external_session.logger.info("Finish to import the file %s"%(filename,))
             ids_imported += res['create_ids'] + res['write_ids']
-        method.start_action('action_after_all', model_obj, ids_imported, context=context)
+            method.start_action('action_after_all', model_obj, ids_imported, context=context)
         return result
 
     def _check_if_file_exist(self, cr, uid, external_session, folder_path, filename, context=None):

@@ -503,8 +503,9 @@ def _record_external_resources(self, cr, uid, external_session, resources, defau
     mapping, mapping_id = self._init_mapping(cr, uid, external_session.referential_id.id, mapping=mapping, mapping_id=mapping_id, context=context)
     for resource in resources:
         res = self._record_one_external_resource(cr, uid, external_session, resource, defaults=defaults, mapping=mapping, mapping_id=mapping_id, context=context)
-        if res.get('create_id'): result['create_ids'].append(res['create_id'])
-        if res.get('write_id'): result['write_ids'].append(res['write_id'])
+        if res:
+            if res.get('create_id'): result['create_ids'].append(res['create_id'])
+            if res.get('write_id'): result['write_ids'].append(res['write_id'])
     return result
 
 

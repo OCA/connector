@@ -74,7 +74,7 @@ def open_report(func):
     And the object must have a field call "referential_id" related to the object "external.referential"
     """
     @functools.wraps(func)
-    def wrapper(self, cr, uid, object, *args, **kwargs):
+    def wrapper(self, cr, uid, external_session, object_id, *args, **kwargs):
         if not self._columns.get('referential_id'):
             raise osv.except_osv(_("Not Implemented"), _("The field referential_id doesn't exist on the object %s. Reporting system can not be used" %(self._name,)))
 
@@ -85,11 +85,12 @@ def open_report(func):
             kwargs['context'] = context
         
         #Start the report
+        object = self.browse(cr, uid, object_id, context=context)
         report_id = report_obj.start_report(cr, uid, id=None, method=func.__name__, object=object, context=context)
 
         #Execute the original function and add the report_id to the context
         context['report_id'] = report_id
-        response = func(self, cr, uid, object, *args, **kwargs)
+        response = func(self, cr, uid, external_session, object_id, *args, **kwargs)
 
         #Close the report
         report_obj.end_report(cr, uid, report_id, context=context)
@@ -106,31 +107,37 @@ def catch_error_in_report(func):
     And the object must have a field call "referential_id" related to the object "external.referential"
     """
     @functools.wraps(func)
-    def wrapper(self, cr, uid, *args, **kwargs):
+    def wrapper(self, cr, uid, external_session, resource, *args, **kwargs):
         context = kwargs.get('context')
         if not (context and context.get('report_id')):
             raise osv.except_osv(_("Error"), _("There is no key report_id in the context you can not use the decorator in this case"))
+        if context.get('report_line_based_on'):
+            if not context['report_line_based_on'] == self._name:
+                return func(self, cr, uid, external_session, resource, *args, **kwargs)
         report_line_obj = self.pool.get('external.report.line')
+        log_cr = pooler.get_db(cr.dbname).cursor()
         report_line_id = report_line_obj._log_base(
-                                    cr,
+                                    log_cr,
                                     uid, 
                                     self._name,
-                                    func.__name_, 
+                                    func.__name__, 
                                     state='fail',
                                     external_id=context.get('external_report_id'),
                                     defaults=kwargs.get('defaults'),
-                                    data_record=kwargs.get('data_record'), 
+                                    data_record=resource, 
                                     context=kwargs.get('context')
                             )
 
         import_cr = pooler.get_db(cr.dbname).cursor()
+        response = False
         try:
-            response = func(self, import_cr, uid, *args, **kwargs)
+            response = func(self, import_cr, uid, external_session, resource, *args, **kwargs)
         except MappingError as e:
             import_cr.rollback()
-            report_line_obj.write(cr, uid, report_line_id, {
+            report_line_obj.write(log_cr, uid, report_line_id, {
                             'error_message': 'Error with the mapping : %s. Error details : %s'%(e.mapping_name, e.value),
                             }, context=context)
+            log_cr.commit()
         except osv.except_osv as e:
             #TODO write correctly the message in the report
             import_cr.rollback()
@@ -140,12 +147,14 @@ def catch_error_in_report(func):
             import_cr.rollback()
             raise Exception(e)
         else:
-            report_line_obj.write(cr, uid, report_line_id, {
+            report_line_obj.write(log_cr, uid, report_line_id, {
                         'state': 'success',
                         }, context=context)
+            log_cr.commit()
             import_cr.commit()
         finally:
             import_cr.close()
+            log_cr.close()
         return response
     return wrapper
 

@@ -24,6 +24,7 @@ from osv import osv, fields
 from tools.translate import _
 from tools.safe_eval import safe_eval
 from tools import DEFAULT_SERVER_DATETIME_FORMAT
+import simplejson
 
 
 class external_report(osv.osv):
@@ -51,13 +52,13 @@ class external_report(osv.osv):
                                                    required=True,
                                                    readonly=True),
         'line_ids': fields.one2many('external.report.line',
-                                    'external_report_id', 'Report Lines'),
+                                    'report_id', 'Report Lines'),
         'failed_line_ids': fields.one2many('external.report.line',
-                                           'external_report_id',
+                                           'report_id',
                                            'Failed Report Lines',
                                            domain=[('state', '!=', 'success')]),
         'history_ids': fields.one2many('external.report.history',
-                                       'external_report_id', 'History'),
+                                       'report_id', 'History'),
     }
 
     def get_report_filter(self, cr, uid, method, object, context=None):
@@ -79,7 +80,7 @@ class external_report(osv.osv):
     def _clean_successful_lines(self, cr, uid, report_id, context=None):
         lines_obj = self.pool.get('external.report.line')
         line_ids = lines_obj.search(cr, uid,
-                                    [('external_report_id', '=', report_id),
+                                    [('report_id', '=', report_id),
                                     ('state', '=', 'success')],
                                     context=context)
         lines_obj.unlink(cr, uid, line_ids, context=context)
@@ -96,7 +97,7 @@ class external_report(osv.osv):
         for report in self.read(retry_cr, uid, ids, ['failed_line_ids'], context=context):
             failed_line_ids = report['failed_line_ids']
             if failed_line_ids:
-                context['external_report_id'] = report['id']
+                context['report_id'] = report['id']
                 self.start_report(retry_cr, uid, report['id'], context=context)
                 self.pool.get('external.report.line').retry(retry_cr, uid, failed_line_ids, context=context)
                 self.end_report(retry_cr, uid, report['id'], context=context)
@@ -165,19 +166,19 @@ class external_report(osv.osv):
         log_cr = pooler.get_db(cr.dbname).cursor()
         try:
             line_ids = lines_obj.search(log_cr, uid,
-                                     [('external_report_id', '=', id),
+                                     [('report_id', '=', id),
                                      '|', ('write_date', '>', report.start_date),
                                      ('create_date', '>', report.start_date)],
                                      context=context)
 
-            grouped_lines = lines_obj.aggregate_actions(cr, uid,
+            grouped_lines = lines_obj.aggregate_actions(log_cr, uid,
                                                         line_ids,
                                                         context)
 
             for line in grouped_lines:
                 history_obj.create(log_cr, uid,
                                    {
-                        'external_report_id': id,
+                        'report_id': id,
                         'res_model': line[1],
                         'action': line[2],
                         'count': grouped_lines[line],
@@ -201,11 +202,11 @@ external_report()
 class external_report_history(osv.osv):
     _name = 'external.report.history'
     _description = 'External Report History'
-    _rec_name = 'external_report_id'
+    _rec_name = 'report_id'
     _order = 'date desc'
 
     _columns = {
-        'external_report_id': fields.many2one('external.report',
+        'report_id': fields.many2one('external.report',
                                               'External Report',
                                               required=True,
                                               readonly=True,
@@ -235,8 +236,20 @@ class external_report_lines(osv.osv):
     _rec_name = 'res_id'
     _order = 'date desc'
 
+    def _get_data_record(self, cr, uid, ids, field_name, arg, context=None):
+        res = {}
+        for report_line in self.browse(cr, uid, ids, context=context):
+            res[report_line.id] = simplejson.dumps(report_line.data_record)
+        return res
+
+    def _set_data_record(self, cr, uid, ids, field_name, arg, context=None):
+        res = {}
+        for report_line in self.browse(cr, uid, ids, context=context):
+            res[report_line.id] = simplejson.loads(report_line.data_record)
+        return res
+
     _columns = {
-        'external_report_id': fields.many2one('external.report',
+        'report_id': fields.many2one('external.report',
                                               'External Report',
                                               required=True,
                                               readonly=True,
@@ -252,6 +265,7 @@ class external_report_lines(osv.osv):
         'external_id': fields.char('External ID', size=64, readonly=True),
         'error_message': fields.text('Error Message', readonly=True),
         'data_record': fields.serialized('External Data', readonly=True),
+        'data_record_text':fields.function(_get_data_record, fnct_inv=_set_data_record, type="text", string='External Data'),
         'origin_defaults': fields.serialized('Defaults', readonly=True),
         'origin_context': fields.serialized('Context', readonly=True),
     }
@@ -271,12 +285,12 @@ class external_report_lines(osv.osv):
         # if the log was a fail, we raise to not let the import continue
         # This ensure a backward compatibility, synchro will continue to
         # work exactly the same way if no report is started
-        if not(existing_line_id or context.get('external_report_id', False)):
+        if not(existing_line_id or context.get('report_id', False)):
             if state == 'fail':
                 raise
             return False
 
-        external_report_id = context['external_report_id']
+        report_id = context['report_id']
         log_cr = pooler.get_db(cr.dbname).cursor()
 
         try:
@@ -299,7 +313,7 @@ class external_report_lines(osv.osv):
                                 })
             else:
                 existing_line_id = self.create(log_cr, uid, {
-                                'external_report_id': external_report_id,
+                                'report_id': report_id,
                                 'state': state,
                                 'res_model': model,
                                 'action': action,
@@ -311,6 +325,7 @@ class external_report_lines(osv.osv):
                                 'origin_defaults': origin_defaults,
                                 'origin_context': origin_context,
                             })
+                print existing_line_id
             log_cr.commit()
 
         finally:

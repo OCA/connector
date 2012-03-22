@@ -136,10 +136,10 @@ class file_exchange(osv.osv):
         context['file_exchange_id'] = method_id
         file_fields_obj = self.pool.get('file.fields')
         method = self.browse(cr, uid, method_id, context=context)
-        model_obj = self.pool.get(method.mapping_id.model_id.model)
         defaults = self._get_import_default_fields_values(cr, uid, method_id, context=context)
         external_session = ExternalSession(method.referential_id)
-        mapping = {method.mapping_id.model_id.model : self.pool.get(method.mapping_id.model_id.model)._get_mapping(cr, uid, method.referential_id.id, context=context)}
+        model_obj = self.pool.get(method.mapping_id.model_id.model)
+        mapping,mapping_id = model_obj._init_mapping(cr, uid, external_session.referential_id.id, convertion_type='from_external_to_openerp', mapping_id=method.mapping_id.id, context=context)
 
         fields_name_ids = file_fields_obj.search(cr, uid, [['file_id', '=', method.id]], context=context)
         fields_name = [x['name'] for x in file_fields_obj.read(cr, uid, fields_name_ids, ['name'], context=context)]
@@ -148,17 +148,25 @@ class file_exchange(osv.osv):
         list_filename = external_session.connection.search(method.folder_path, method.filename)
         if not list_filename:
             external_session.logger.info("No file '%s' found on the server"%(method.filename,))
-        ids_imported = []
         for filename in list_filename:
-            method.start_action('action_before_all', model_obj, context=context)
-            external_session.logger.info("Start to import the file %s"%(filename,))
-            resources = self._get_external_file_resources(cr, uid, external_session, method.folder_path, filename, method.format, fields_name, mapping=mapping, context=context)
-            res = self.pool.get(method.mapping_id.model_id.model)._record_external_resources(cr, uid, external_session, resources, defaults=defaults, mapping=mapping, context=context)
-            external_session.connection.move(method.folder_path, method.archive_folder_path, filename)
-            external_session.logger.info("Finish to import the file %s"%(filename,))
-            ids_imported += res['create_ids'] + res['write_ids']
-            method.start_action('action_after_all', model_obj, ids_imported, context=context)
+            res = self._import_one_file(cr, uid, method_id, filename, external_session, defaults, mapping, mapping_id, fields_name, context=context)
+            result["create_ids"] += res.get('create_ids',[])
+            result["write_ids"] += res.get('write_ids',[])
         return result
+
+    def _import_one_file(self, cr, uid, method_id, filename, external_session, defaults, mapping, mapping_id, fields_name, context=None):
+        ids_imported = []
+        method = self.browse(cr, uid, method_id, context=context)
+        model_obj = self.pool.get(method.mapping_id.model_id.model)
+        external_session.logger.info("Start to import the file %s"%(filename,))
+        method.start_action('action_before_all', model_obj, context=context)
+        resources = self._get_external_file_resources(cr, uid, external_session, method.folder_path, filename, method.format, fields_name, mapping=mapping, context=context)
+        res = self.pool.get(method.mapping_id.model_id.model)._record_external_resources(cr, uid, external_session, resources, defaults=defaults, mapping=mapping, context=context)
+        ids_imported += res['create_ids'] + res['write_ids']
+        method.start_action('action_after_all', model_obj, ids_imported, context=context)
+        external_session.connection.move(method.folder_path, method.archive_folder_path, filename)
+        external_session.logger.info("Finish to import the file %s"%(filename,))
+        return res
 
     def _check_if_file_exist(self, cr, uid, external_session, folder_path, filename, context=None):
         exist = external_session.connection.search(folder_path, filename)

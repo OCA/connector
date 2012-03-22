@@ -23,6 +23,7 @@ from osv import osv, fields
 import netsvc
 from base_external_referentials.external_osv import ExternalSession
 from base_file_protocole.base_file_protocole import FileCsvReader, FileCsvWriter
+from base_external_referentials.decorator import open_report
 from tempfile import TemporaryFile
 from encodings.aliases import aliases
 from tools.translate import _
@@ -137,6 +138,7 @@ class file_exchange(osv.osv):
         file_fields_obj = self.pool.get('file.fields')
         method = self.browse(cr, uid, method_id, context=context)
         defaults = self._get_import_default_fields_values(cr, uid, method_id, context=context)
+        context['report_line_based_on'] = method.mapping_id.model_id.model
         external_session = ExternalSession(method.referential_id)
         model_obj = self.pool.get(method.mapping_id.model_id.model)
         mapping,mapping_id = model_obj._init_mapping(cr, uid, external_session.referential_id.id, convertion_type='from_external_to_openerp', mapping_id=method.mapping_id.id, context=context)
@@ -149,12 +151,13 @@ class file_exchange(osv.osv):
         if not list_filename:
             external_session.logger.info("No file '%s' found on the server"%(method.filename,))
         for filename in list_filename:
-            res = self._import_one_file(cr, uid, method_id, filename, external_session, defaults, mapping, mapping_id, fields_name, context=context)
+            res = self._import_one_file(cr, uid, external_session, method_id, filename, defaults, mapping, mapping_id, fields_name, context=context)
             result["create_ids"] += res.get('create_ids',[])
             result["write_ids"] += res.get('write_ids',[])
         return result
 
-    def _import_one_file(self, cr, uid, method_id, filename, external_session, defaults, mapping, mapping_id, fields_name, context=None):
+    @open_report
+    def _import_one_file(self, cr, uid, external_session, method_id, filename, defaults, mapping, mapping_id, fields_name, context=None):
         ids_imported = []
         method = self.browse(cr, uid, method_id, context=context)
         model_obj = self.pool.get(method.mapping_id.model_id.model)

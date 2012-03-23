@@ -124,7 +124,7 @@ def catch_error_in_report(func):
                                     state='fail',
                                     external_id=context.get('external_report_id'),
                                     defaults=kwargs.get('defaults'),
-                                    data_record=resource, 
+                                    resource=resource, 
                                     context=kwargs.get('context')
                             )
 

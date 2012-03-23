@@ -182,7 +182,7 @@
                     <field name="date"/>
                     <field name="state"/>
                     <separator string="External Data" colspan="4"/>
-                        <field name="data_record_text" colspan="4" nolabel="1"/>
+                        <field name="resource_text" colspan="4" nolabel="1"/>
                     <separator colspan="4"/>
                     <button name="retry" string="Retry" icon="gtk-go-forward" type="object" colspan="2"/>
 				</form>

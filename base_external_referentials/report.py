@@ -236,16 +236,16 @@ class external_report_lines(osv.osv):
     _rec_name = 'res_id'
     _order = 'date desc'
 
-    def _get_data_record(self, cr, uid, ids, field_name, arg, context=None):
+    def _get_resource(self, cr, uid, ids, field_name, arg, context=None):
         res = {}
         for report_line in self.browse(cr, uid, ids, context=context):
-            res[report_line.id] = simplejson.dumps(report_line.data_record)
+            res[report_line.id] = simplejson.dumps(report_line.resource)
         return res
 
-    def _set_data_record(self, cr, uid, ids, field_name, arg, context=None):
+    def _set_resource(self, cr, uid, ids, field_name, arg, context=None):
         res = {}
         for report_line in self.browse(cr, uid, ids, context=context):
-            res[report_line.id] = simplejson.loads(report_line.data_record)
+            res[report_line.id] = simplejson.loads(report_line.resource)
         return res
 
     _columns = {
@@ -264,8 +264,8 @@ class external_report_lines(osv.osv):
         'date': fields.datetime('Date', required=True, readonly=True),
         'external_id': fields.char('External ID', size=64, readonly=True),
         'error_message': fields.text('Error Message', readonly=True),
-        'data_record': fields.serialized('External Data', readonly=True),
-        'data_record_text':fields.function(_get_data_record, fnct_inv=_set_data_record, type="text", string='External Data'),
+        'resource': fields.serialized('External Data', readonly=True),
+        'resource_text':fields.function(_get_resource, fnct_inv=_set_resource, type="text", string='External Data'),
         'origin_defaults': fields.serialized('Defaults', readonly=True),
         'origin_context': fields.serialized('Context', readonly=True),
     }
@@ -275,7 +275,7 @@ class external_report_lines(osv.osv):
     }
 
     def _log_base(self, cr, uid, model, action, state=None, res_id=None,
-                  external_id=None,exception=None, data_record=None,
+                  external_id=None,exception=None, resource=None,
                   defaults=None, context=None):
         defaults = defaults or {}
         context = context or {}
@@ -321,7 +321,7 @@ class external_report_lines(osv.osv):
                                 'res_id': res_id,
                                 'external_id': external_id,
                                 'error_message': exception and str(exception) or False,
-                                'data_record': data_record,
+                                'resource': resource,
                                 'origin_defaults': origin_defaults,
                                 'origin_context': origin_context,
                             })
@@ -337,18 +337,18 @@ class external_report_lines(osv.osv):
 #Deprecated
     def log_failed(self, cr, uid, model, action,
                    res_id=None, external_id=None, exception=None,
-                   data_record=None, defaults=None, context=None):
+                   resource=None, defaults=None, context=None):
         return self._log_base(cr, uid, model, action, 'fail', res_id=res_id,
                              external_id=external_id, exception=exception,
-                             data_record=data_record, defaults=defaults,
+                             resource=resource, defaults=defaults,
                              context=context)
 #Deprecated
     def log_success(self, cr, uid, model, action,
                     res_id=None, external_id=None, exception=None,
-                    data_record=None, defaults=None, context=None):
+                    resource=None, defaults=None, context=None):
         return self._log_base(cr, uid,  model, action, 'success', res_id=res_id,
                              external_id=external_id, exception=exception,
-                             data_record=data_record, defaults=defaults,
+                             resource=resource, defaults=defaults,
                              context=context)
 
     def retry(self, cr, uid, ids, context=None):

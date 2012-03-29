@@ -331,6 +331,7 @@ class file_exchange(osv.osv):
         'do_not_update':fields.boolean('Do Not Update'),
         'pre_processing': fields.text('Pre-Processing', help="This python code will be executed before merge of elements of the import"),
         'mapping_template_id':fields.many2one('external.mapping.template', 'External Mapping Template', require="True"),
+        'notes': fields.text('Notes'),
     }
 
     def get_absolute_id(self, cr, uid, id, context=None):

@@ -72,6 +72,9 @@
                         <page string="Import Default Values">
                             <field name="import_default_fields" colspan="4" nolabel="1"/>
                         </page>
+                        <page string="Notes">
+                            <field name="notes" colspan="4" nolabel="1"/>
+                        </page>
                     </notebook>
                 </form>
             </field>

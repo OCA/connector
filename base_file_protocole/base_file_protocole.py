@@ -94,12 +94,11 @@ class FileCsvReader(object):
 #        print "next row=", row
         res = {}
         for key, value in row.items():
-            if value and key:
-                res[unicode(key, self.encoding)] = unicode(value, self.encoding)
-            elif key:
-                res[unicode(key, self.encoding)] = value
-            else:
-                res[key] = value
+            if not isinstance(key, unicode) and key:
+                key = unicode(key, self.encoding)
+            if not isinstance(value, unicode) and value:
+                value = unicode(value, self.encoding)
+            res[key] = value
         return res
 
     def __iter__(self):
@@ -111,8 +110,9 @@ class FileCsvReader(object):
             for child, parent in field_structure:
                 if not parent in line:
                     line[parent] = {}
-                line[parent][child] = line[child]
-                del line[child]
+                if line.get(child):
+                    line[parent][child] = line[child]
+                    del line[child]
             if line[ref_field] in result:
                 for key in merge_keys:
                     result[line[ref_field]][key].append(line[key])

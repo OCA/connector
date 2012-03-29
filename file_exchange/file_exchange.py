@@ -125,6 +125,7 @@ class file_exchange(osv.osv):
             ctx = context.copy()
             ctx['lang'] = method.lang.code
             ctx['do_not_update'] = method.do_not_update and [method.mapping_id.model_id.model] or []
+            ctx['file_exchange_id'] = method.id
             if method.type == 'in':
                 self._import_files(cr, uid, method.id, context=ctx)
             elif method.type == 'out':
@@ -241,41 +242,41 @@ class file_exchange(osv.osv):
         if not resources:
             external_session.logger.info("Not data to export for %s"%(method.name,))
             return True
+        output_file =TemporaryFile('w+b')
+        fields_name = [x.encode(encoding) for x in fields_name]
+        dw = csv.DictWriter(output_file, fieldnames=fields_name, delimiter=';', quotechar='"')
+#       dw.writeheader() TODO : only for python >= 2.7
+        row = {}
     #=== Write CSV file
         if method.format == 'csv':
-            output_file = TemporaryFile('w+b')
-            fields_name = [x.encode(encoding) for x in fields_name]
-            dw = csv.DictWriter(output_file, fieldnames=fields_name, delimiter=';', quotechar='"')
-#            dw.writeheader() TODO : only for python >= 2.7
-            row = {}
         #=== Write header
             for name in fields_name:
                 row[name.encode(encoding)] = name.encode(encoding)
             dw.writerow(row)
         #=== Write content
-            resources = flat_resources(resources)
-            for resource in resources:
-                row = {}
-                for k,v in resource.items():
-                    if k!=False:
-                        try:
-                            if isinstance(v, unicode) and v!=False:
-                                row[k.encode(encoding)] = v.encode(encoding)
-                            else:
-                                row[k.encode(encoding)] = v
-                        except:
-                            row[k.encode(encoding)] = "ERROR"
-                        #TODO raise an error correctly
-                dw.writerow(row)
-            output_file.seek(0)
-        method.start_action('action_after_all', model_obj, ids_to_export, context=context)
+        resources = flat_resources(resources)
+        for resource in resources:
+            row = {}
+            for k,v in resource.items():
+                if k!=False:
+                    try:
+                        if isinstance(v, unicode) and v!=False:
+                            row[k.encode(encoding)] = v.encode(encoding)
+                        else:
+                            row[k.encode(encoding)] = v
+                    except:
+                        row[k.encode(encoding)] = "ERROR"
+                    #TODO raise an error correctly
+            dw.writerow(row)
+        output_file.seek(0)
+        method.start_action('action_after_all', model_obj, ids_to_export, context=context,external_session=external_session)
 
     #=== Export file
         external_session.connection.send(method.folder_path, filename, output_file)
         external_session.logger.info("File transfert have been done succesfully %s"%(method.name,))
         return True
 
-    def start_action(self, cr, uid, id, action_name, self_object, object_ids=None, resource=None, context=None):
+    def start_action(self, cr, uid, id, action_name, self_object, object_ids=None, resource=None, context=None,external_session=None):
         if not context:
             context={}
         if isinstance(id, list):
@@ -289,6 +290,7 @@ class file_exchange(osv.osv):
                      'ids': object_ids,
                      'resource': resource,
                      'context': context,
+                     'external_session':external_session,
                 }
             try:
                 exec action_code in space

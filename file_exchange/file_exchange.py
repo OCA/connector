@@ -80,7 +80,14 @@ class file_exchange(osv.osv):
         method = self.browse(cr, uid, method_id, context=context)
         for field in method.import_default_fields:
             if field.file_id.mapping_id.id == field.mapping_id.id:
-                res[field.import_default_field.name] = field.import_default_value
+                if field.type == 'integer':
+                    res[field.import_default_field.name] = int(field.import_default_value)
+                elif field.type == 'float':
+                    res[field.import_default_field.name] = float(field.import_default_value)
+                elif field.type in ['list','dict']:
+                    res[field.import_default_field.name] = eval(field.import_default_value)
+                else:
+                    res[field.import_default_field.name] = str(field.import_default_value)
         return res
     
     def _get_external_file_resources(self, cr, uid, external_session, filepath, filename, format, fields_name=None, mapping=None, context=None):
@@ -500,6 +507,7 @@ class file_default_import_values(osv.osv):
         'mapping_template_id':fields.many2one('external.mapping.template', 'External Mapping Template', require="True"),
         #'related_model_ids':fields.related('mapping_id', 'related_model_ids', type='many2many', relation="ir.model", string='Related Model'),
         'related_model':fields.related('mapping_id', 'model_id', type='many2one',relation="ir.model", string='Related Model'),
+        'type':fields.selection([('integer', 'Integer'), ('float', 'Float'),('char','String'),('dict','Dict'),('list','List')], 'Field Type', required=True),
     }
 
     def get_absolute_id(self, cr, uid, id, context=None):

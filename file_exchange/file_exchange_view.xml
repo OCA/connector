@@ -151,6 +151,7 @@
                     <field name="import_default_value" />
                     <field name="file_id" />
                     <field name="mapping_id" />
+                    <field name="type" />
                     <field name="related_model" attrs="{'invisible':'1'}"/>
                 </form>
             </field>
@@ -167,6 +168,7 @@
                     <field name="import_default_value" />
                     <field name="file_id" />
                     <field name="mapping_id" />
+                    <field name="type" />
                     <field name="related_model" attrs="{'invisible':'1'}" />
                 </tree>
             </field>

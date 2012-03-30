@@ -363,19 +363,14 @@ class external_mapping(osv.osv):
     _description = 'External Mapping'
     _rec_name = 'model'
     
-    def _related_model_ids(self, cr, uid, model):
-        field_ids = self.pool.get("ir.model.fields").search(cr, uid, [('model_id', '=', model.id), ('ttype', '=', 'many2one')])
-        model_names = Set([model.model])
-        for field in self.pool.get("ir.model.fields").browse(cr, uid, field_ids):
-            model_names.add(field.relation)
-        model_ids = self.pool.get("ir.model").search(cr, uid, [('model', 'in', [name for name in model_names])])
-        return model_ids
-    
     def _get_related_model_ids(self, cr, uid, ids, name, arg, context=None):
-        "Used to retrieve model field one can map without ambiguity. Fields can come from Inherited objects or other many2one relations"
+        "Used to retrieve model field one can map without ambiguity. Fields come from Inherited objects"
         res = {}
         for mapping in self.browse(cr, uid, ids, context): #FIXME: could be fully recursive instead of only 1 level
-            res[mapping.id] = self._related_model_ids(cr, uid, mapping.model_id)
+            main_model = mapping.model_id.model
+            inherits_model = [x for x in self.pool.get(main_model)._inherits]
+            model_ids = [mapping.model_id.id] + self.pool.get('ir.model').search(cr, uid, [['model','in', inherits_model]], context=context)
+            res[mapping.id] = model_ids
         return res
     
     def model_id_change(self, cr, uid, ids, model_id=None):
@@ -519,9 +514,9 @@ class external_mapping_line(osv.osv):
         (_check_mapping_line_name, "Error ! Invalid Mapping Line Name: Field and External Field cannot be both null", ['parent_id'])
     ]
     
-    _sql_constraints = [
-        ('ref_template_uniq', 'unique (referential_id, template_id)', 'A referential can not have various mapping line imported from the same template mapping line')
-    ]
+#    _sql_constraints = [
+#        ('ref_template_uniq', 'unique (referential_id, template_id)', 'A referential can not have various mapping line imported from the same template mapping line')
+#    ]
     _order = 'type,external_type'
     #TODO add constraint: not both field_id and external_field null
 

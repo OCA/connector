@@ -25,7 +25,7 @@ from tools.translate import _
 from message_error import MappingError
 import functools
 
-def only_for_referential(ref_type=None, ref_categ=None, super_function=None):
+def only_for_referential(ref_type=None, ref_categ=None, super_function=None, module_name=None):
     """ 
     This decorator will execute the code of the function decorated only if
     the referential_type match with the referential_type pass in the context
@@ -53,17 +53,25 @@ def only_for_referential(ref_type=None, ref_categ=None, super_function=None):
                     # Can you check my code and share your experience about this kind of feature?
                     # Can you help me to clean my code?
                     # Thanks you for your help ;)
+
+                    #Due to some problem of recursivity I introduce the params "module_name"
+                    #It's not clean at all but it's work
                     parent = False
                     name = func.__name__
                     for base in self.__class__.mro()[1:]:
                         if parent:
                             if hasattr(base, name):
                                 return getattr(base, name)(self, cr, uid, argument, *args, **kwargs)
-                        if str(base) == str(self.__class__):
+                        if module_name:
+                            if module_name in str(base):
+                                #now I am at the good level of the class inherited
+                                parent = True
+                        elif str(base) == str(self.__class__):
                             #now I am at the good level of the class inherited
                             parent = True
                     raise osv.except_osv(_("Not Implemented"), _("Not parent method found"))
-                    ##### REFACTOR END
+#                    ##### REFACTOR END
+
         return wrapped
     return decorator
 

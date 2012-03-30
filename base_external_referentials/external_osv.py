@@ -27,6 +27,7 @@ import time
 from datetime import datetime
 import logging
 import pooler
+from collections import defaultdict
 
 from message_error import MappingError, ExtConnError
 from tools.translate import _
@@ -642,24 +643,218 @@ osv.osv.oe_create = oe_create
 #
 ########################################################################################################################
 
+def _get_export_step(self, cr, uid, external_session, context=None):
+    """
+    Abstract function that return the step for importing data
+    Can be overwriten in your module
 
-def _export_resources_into_external_referential(self, cr, uid, external_session, ids, fields=[], defaults=None, context=None):
+    :param ExternalSession external_session : External_session that contain all params of connection
+    :return: a integer that corespond to the limit of object to import
+    :rtype: int
+    """
+    return 100
+
+def _get_default_export_values(self, cr, uid, external_session, mapping_id=None, defaults=None, context=None):
+    """
+    Abstract function that return the default value for on object
+    Can be overwriten in your module
+
+    :param ExternalSession external_session : External_session that contain all params of connection
+    :return: a dictionnary of default value
+    :rtype: dict
+    """
+    return defaults
+
+def _get_last_exported_date(self, cr, uid, external_session, context=None):
+    return False
+
+def _set_last_exported_date(self, cr, uid, external_session, date, context=None):
+    return False
+
+
+#For now it's just support 1 level of inherit TODO make it recursive
+def get_ids_and_update_date(self, cr, uid, ids=None, last_exported_date=None, context=None):
+    table = self._table
+    params = ()
+    if not self._inherits:
+        greatest = "greatest(write_date, create_date)"
+        query = """
+            select %s as update_date, id
+                from %s
+                order by update_date asc;
+            """%(greatest, table,)
+    else:
+        inherits_table = self.pool.get(self._inherits.keys()[0])._table
+        join_field = self._inherits[self._inherits.keys()[0]]
+        greatest = "greatest(%s.write_date, %s.create_date, %s.write_date, %s.create_date)"%(table, table, inherits_table, inherits_table)
+        query = """
+            select %s as update_date, %s.id as id
+                from %s
+                    join %s on %s.id = %s.%s
+
+            """%(greatest, table, table, inherits_table, inherits_table, table, join_field)
+    if ids:
+        query += " where %s.id in %s"%(table)
+        params += (tuple(ids),)
+    if last_exported_date:
+        query += (ids and " and " or " where ") + greatest + " > %s"
+        params += (last_exported_date,)
+    query += " order by update_date asc;"
+    cr.execute(query, params)
+    read = cr.dictfetchall()
+    ids = []
+    ids_2_dates = {}
+    for data in read:
+        ids.append(data['id'])
+        ids_2_dates[data['id']] = data['update_date']
+    return ids, ids_2_dates
+
+
+def init_context_before_exporting_resource(self, cr, uid, object_id, resource_name, context=None):
+    if self._name != 'external.referential' and 'referential_id' in self._columns.keys():
+        context['%s_id'%self._name.replace('.', '_')] = object_id
+    return context
+
+def export_resources(self, cr, uid, ids, resource_name, context=None):
+    """
+    Abstract function to export resources from a shop / a referential...
+
+    :param list ids: list of id
+    :param string ressource_name: the resource name to import
+    :return: True
+    :rtype: boolean
+    """
+    print 'export resource'
+    for browse_record in self.browse(cr, uid, ids, context=context):
+        if browse_record._name == 'external.referential':
+            external_session = ExternalSession(browse_record)
+        else:
+            if hasattr(browse_record, 'referential_id'):
+                context = self.init_context_before_exporting_resource(cr, uid, browse_record.id, resource_name, context=context)
+                external_session = ExternalSession(browse_record.referential_id)
+            else:
+                raise osv.except_osv(_("Not Implemented"), _("The field referential_id doesn't exist on the object %s." %(browse_record._name,)))
+        self.pool.get(resource_name)._export_resources(cr, uid, external_session, context=context)
+    return True
+
+
+
+def send_to_external(self, cr, uid, external_session, resource, update_date, context=None):
+    print 'send this data to the external system', update_date
+    print 'data', resource
+    self._set_last_exported_date(cr, uid, external_session, update_date, context=context)
+    return True
+
+def get_lang_to_export(self, cr, uid, external_session, context=None):
+    if not context:
+        return []
+    else:
+        return [context.get('lang')]
+
+def _export_resources(self, cr, uid, external_session, method="onebyone", context=None):
+    defaults = self._get_default_export_values(cr, uid, external_session, context=context)
     mapping, mapping_id = self._init_mapping(cr, uid, external_session.referential_id.id, convertion_type='from_openerp_to_external', context=context)
-    resources = self._get_oe_resources_into_external_format(cr, uid, external_session, ids, mapping=mapping, fields=fields, defaults=defaults, context=context)
-    print 'TODO'
+    last_exported_date = self._get_last_exported_date(cr, uid, external_session, context=context)
+    ids, ids_2_date = self.get_ids_and_update_date(cr, uid, last_exported_date=last_exported_date, context=context)
+
+    step = self._get_export_step(cr, uid, external_session, context=context)
+
+    group_obj = self.pool.get('group.fields')
+    group_ids = group_obj.search(cr, uid, [['model_id', '=', self._name]], context=context)
+    inherits_group_ids = group_obj.search(cr, uid, [['model_id', '=',self._inherits.keys()[0]]], context=context)
+    smart_export =  context.get('smart_export') and (group_ids or inherits_group_ids) and {'group_ids': group_ids, 'inherits_group_ids': inherits_group_ids}
+
+    #TODO get lang to export 
+    langs = self.get_lang_to_export(cr, uid, external_session, context=context)
+
+    while ids:
+        ids_to_process = ids[0:step]
+        ids = ids[step:]
+        print 'read %s id'%len(ids_to_process)
+        print datetime.now()
+        resources = self._get_oe_resources(cr, uid, external_session, ids_to_process, langs=langs,
+                                    smart_export=smart_export, last_exported_date=last_exported_date,
+                                    mapping=mapping, mapping_id=mapping_id, context=context)
+        print 'read done start transform', datetime.now()
+        print 'transform start', datetime.now()
+        for key_id in resources:
+            for key_lang in resources[key_id]:
+                resources[key_id][key_lang] = self._transform_one_resource(cr, uid, external_session, 'from_openerp_to_external', 
+                                                    resources[key_id][key_lang], mapping=mapping, mapping_id=mapping_id,
+                                                    defaults=defaults, context=context)
+        print 'transform done', datetime.now()
+
+        if method == "onebyone":
+            for id in ids_to_process:
+                self.send_to_external(cr, uid, external_session, resources[id], ids_2_date[id], context=context)
+    now = datetime.now().strftime(DEFAULT_SERVER_DATETIME_FORMAT)
+    self._set_last_exported_date(cr, uid, external_session, now, context=context)
     return True
 
-def _get_oe_resources_into_external_format(self, cr, uid, external_session, ids, mapping=None, mapping_id=None, mapping_line_filter_ids=None, fields=[], defaults=None, context=None):
-    result = []
-    for resource in self.read_w_order(cr, uid, ids, fields, context):
-        result.append(self._transform_one_resource(cr, uid,  external_session, 'from_openerp_to_external', resource, mapping,mapping_id, mapping_line_filter_ids=mapping_line_filter_ids, parent_data=None, previous_result=None, defaults=defaults, context=context))
-    return result
-
-def _record_resourse_into_external_referential(self, cr, uid, external_session, resource, context=None):
-    print 'TODO'
+def _export_one_resource(self, cr, uid, external_session, ids=None, fields=None, defaults=None, context=None):
+    #TODO
     return True
 
+def multi_lang_read(self, cr, uid, ids, fields_to_read, langs, resources=None, context=None):
+    def is_translatable(field):
+        if self._columns.get(field):
+            return self._columns[field].translate
+        else:
+            return self._inherit_fields[field][2].translate
 
+    if not resources:
+        resources = defaultdict(lambda: defaultdict(dict))
+    first = True
+    for lang in langs:
+        ctx = context.copy()
+        ctx['lang'] = lang
+        for resource in self.read(cr, uid, ids, fields_to_read, context=ctx):
+            resources[resource['id']][lang] = resource
+        if first:
+            fields_to_read = [field for field in fields_to_read if is_translatable(field)]
+            first=False
+    return resources
+
+def full_read(self, cr, uid, ids, langs, resources, mapping=None, mapping_id=None, context=None):
+    fields_to_read = self.get_field_to_export(cr, uid, ids, mapping, mapping_id, context=context)
+    return self.multi_lang_read(cr, uid, ids, fields_to_read, langs, resources=resources, context=context)
+
+def smart_read(self, cr, uid, ids, langs, resources, group_ids, inherits_group_ids, last_exported_date=None,
+                                                                        mapping=None, mapping_id=None, context=None):
+    if last_exported_date:
+        search_filter = []
+        if group_ids:
+            if inherits_group_ids:
+                search_filter = ['|', ['x_last_update', '>=', last_exported_date], ['%s.x_last_update'%self._inherits[self._inherits.keys()[0]], '>=', last_exported_date]]
+        if inherits_group_ids:
+            search_filter = [['%s.x_last_update'%self._inherits[self._inherits.keys()[0]], '>=', last_exported_date]]
+        resource_ids_full_read = self.search(cr, uid, search_filter, context=context)
+        resource_ids_partial_read = [id for id in ids if not id in resource_ids_full_read]
+    else:
+        resource_ids_full_read = ids
+        resource_ids_partial_read = []
+
+    resources = self.full_read(cr, uid, resource_ids_full_read, langs, resources, context=context)
+
+    if resource_ids_partial_read:
+        for group in self.pool.get('group.fields').browse(cr, uid, group_ids, context=context):
+            resource_ids = self.search(cr, uid, [[group.column_name, '>=', last_exported_date]['id', 'in', resource_ids_partial_read]], context=context)
+            fields_to_read = [field.name for field in group.field_ids]
+            resources = self.multi_lang_read(cr, uid, resource_ids, fields_to_read, langs, resources=resources, context=context)
+    return resources
+
+def get_field_to_export(self, cr, uid, ids, mapping, mapping_id, context=None):
+    return []
+
+def _get_oe_resources(self, cr, uid, external_session, ids, langs, smart_export=None,
+                                            last_exported_date=None, mapping=None, mapping_id=None, context=None):
+    resources = None
+    if smart_export:
+        resources = self.smart_read(cr, uid, ids, langs, resources, smart_export['group_ids'], smart_export['inherits_group_ids'],
+                            last_exported_date=last_exported_date, mapping=mapping, mapping_id=mapping_id, context=context)
+    else:
+        resources = self.full_read(cr, uid, ids, langs, resources, mapping=mapping, mapping_id=mapping_id, context=context)
+    return resources
 
 
 
@@ -889,9 +1084,24 @@ def ext_update(self, cr, uid, data, conn, method, oe_id, external_id, ir_model_d
 
 #######################        MONKEY PATCHING       #######################
 
-osv.osv._export_resources_into_external_referential = _export_resources_into_external_referential
-osv.osv._get_oe_resources_into_external_format = _get_oe_resources_into_external_format
-osv.osv._record_resourse_into_external_referential =_record_resourse_into_external_referential
+osv.osv._get_default_export_values = _get_default_export_values
+osv.osv._get_export_step = _get_export_step
+
+osv.osv._get_last_exported_date = _get_last_exported_date
+osv.osv._set_last_exported_date = _set_last_exported_date
+osv.osv.get_ids_and_update_date = get_ids_and_update_date
+osv.osv.get_field_to_export = get_field_to_export
+
+osv.osv.send_to_external = send_to_external
+osv.osv.get_lang_to_export = get_lang_to_export
+osv.osv.multi_lang_read = multi_lang_read
+osv.osv.full_read = full_read
+osv.osv.smart_read = smart_read
+
+osv.osv.init_context_before_exporting_resource = init_context_before_exporting_resource
+osv.osv._export_resources = _export_resources
+osv.osv.export_resources = export_resources
+osv.osv._get_oe_resources = _get_oe_resources
 
 osv.osv._existing_oeid_for_extid_import = _existing_oeid_for_extid_import
 
@@ -978,10 +1188,10 @@ def _transform_one_resource(self, cr, uid, external_session, convertion_type, re
             if not from_field:
                 from_field = "%s_%s" %(mapping_line['child_mapping_id'][1], mapping_line['child_mapping_id'][0])
             to_field = mapping_line['internal_field']
-            to_field = mapping_line['internal_field']
         elif convertion_type == 'from_openerp_to_external':
             from_field = mapping_line['internal_field']
             to_field = mapping_line['external_field']
+
         if from_field in resource.keys():
             field_value = resource[from_field]
             if mapping_line['evaluation_type'] == 'sub-mapping':
@@ -1037,6 +1247,7 @@ def _transform_one_resource(self, cr, uid, external_session, convertion_type, re
         vals.update({'external_id': ext_id.isdigit() and int(ext_id) or ext_id})
     vals = self._merge_with_default_values(cr, uid, external_session, resource, vals, sub_mapping_list, defaults=defaults, context=context)
     vals = self._transform_sub_mapping(cr, uid, external_session, convertion_type, resource, vals, sub_mapping_list, mapping, mapping_id, mapping_line_filter_ids=mapping_line_filter_ids, defaults=defaults, context=context)
+
     return vals
 
 def _transform_field(self, cr, uid, external_session, convertion_type, field_value, mapping_line, context=None):

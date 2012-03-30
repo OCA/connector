@@ -136,7 +136,7 @@
                     <separator string="External fields" colspan="2"/>
                     <separator string="Internal fields" colspan="2"/>
                     <field name="external_field" select="1"/>
-                    <field name="field_id" domain="[('model_id','=',parent.model_id)]" />
+                    <field name="field_id" domain="[('model_id','in',parent.related_model_ids[0][2])]" />
                     <field name="external_type" />
                     <field name="datetime_format" attrs="{'invisible':[('external_type','!=','datetime')]}"/>
                     <field name="internal_field" />

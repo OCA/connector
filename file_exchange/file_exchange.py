@@ -83,7 +83,7 @@ class file_exchange(osv.osv):
                 if field.type == 'integer':
                     res[field.import_default_field.name] = int(field.import_default_value)
                 elif field.type == 'float':
-                    res[field.import_default_field.name] = float(field.import_default_value)
+                    res[field.import_default_field.name] = float(field.import_default_value.replace(',','.'))
                 elif field.type in ['list','dict']:
                     res[field.import_default_field.name] = eval(field.import_default_value)
                 else:

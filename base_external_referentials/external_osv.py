@@ -502,6 +502,9 @@ def _record_external_resources(self, cr, uid, external_session, resources, defau
     result = {'write_ids': [], 'create_ids': []}
     mapping, mapping_id = self._init_mapping(cr, uid, external_session.referential_id.id, mapping=mapping, mapping_id=mapping_id, context=context)
     for resource in resources:
+        for field in mapping[mapping_id]['mapping_lines']:
+            if field['alternative_key']:
+                context['external_id_for_report'] = field['external_field']
         res = self._record_one_external_resource(cr, uid, external_session, resource, defaults=defaults, mapping=mapping, mapping_id=mapping_id, context=context)
         if res:
             if res.get('create_id'): result['create_ids'].append(res['create_id'])
@@ -523,28 +526,24 @@ def _record_one_external_resource(self, cr, uid, external_session, resource, def
     mapping, mapping_id = self._init_mapping(cr, uid, external_session.referential_id.id, mapping=mapping, mapping_id=mapping_id, context=context)
     written = created = False
     vals = self._transform_one_resource(cr, uid, external_session, 'from_external_to_openerp', resource, mapping=mapping, mapping_id=mapping_id, defaults=defaults, context=context)
-
+    if not vals:
+        # for example in the case of an update on existing resource if update is not wanted vals will be {}
+        return {}
     referential_id = external_session.referential_id.id
     external_id = vals.get('external_id')
     external_id_ok = not (external_id is None or external_id is False)
     alternative_keys = mapping[mapping_id]['alternative_keys']
     existing_rec_id = False
     existing_ir_model_data_id = False
-    if not (external_id is None or external_id is False):
+    if external_id_ok:
         del vals['external_id']
-        existing_ir_model_data_id, existing_rec_id = self._existing_oeid_for_extid_import\
-            (cr, uid, vals, external_id, referential_id, context=context)
-    if not existing_rec_id and alternative_keys:
-        domain = []
-        for alternative_key in alternative_keys:
-            domain.append((alternative_key, '=', vals[alternative_key]))
-        existing_rec_id = self.search(cr, uid, domain, context=context)
-        existing_rec_id = existing_rec_id and existing_rec_id[0] or False
+    existing_ir_model_data_id, existing_rec_id = self._existing_oeid_for_extid_import\
+            (cr, uid, vals, external_id, referential_id, alternative_keys, context=context)
 
     if not (external_id_ok or alternative_keys):
         external_session.logger.warning(_("The object imported need an external_id, maybe the mapping doesn't exist for the object : %s" %self._name))
 
-    if existing_rec_id:    
+    if existing_rec_id:
         if not self._name in context.get('do_not_update', []):
             if self.oe_update(cr, uid, existing_rec_id, vals, referential_id, defaults=defaults, context=context):
                 written = True
@@ -584,8 +583,6 @@ def _record_one_external_resource(self, cr, uid, external_session, resource, def
                                     "alternative_keys %s and OpenERP id %s successfully" %(self._name, external_id_ok and str (vals.get(alternative_keys)), existing_rec_id)))
         return {'write_id' : existing_rec_id}
     return {}
-
-
 
 def retry_import(self, cr, uid, id, ext_id, referential_id, defaults=None, context=None):
     """ When we import again a previously failed import
@@ -664,7 +661,7 @@ def _record_resourse_into_external_referential(self, cr, uid, external_session, 
 
 
 
-def _existing_oeid_for_extid_import(self, cr, uid, vals, external_id, referential_id, context=None):
+def _existing_oeid_for_extid_import(self, cr, uid, vals, external_id, referential_id, alternative_keys, context=None):
     """
     Used in ext_import in order to search the OpenERP resource to update when importing an external resource.
     It searches the reference in ir.model.data and returns the id in ir.model.data and the id of the
@@ -683,13 +680,23 @@ def _existing_oeid_for_extid_import(self, cr, uid, vals, external_id, referentia
     @param referential_id: external referential id from where we import the resource
     @return: tuple of (ir.model.data id / False: external id to create in ir.model.data, model resource id / False: resource to create)
     """
-    existing_ir_model_data_id, expected_res_id = self._extid_to_expected_oeid\
+    existing_ir_model_data_id = expected_res_id = False
+    if not (external_id is None or external_id is False):
+        existing_ir_model_data_id, expected_res_id = self._extid_to_expected_oeid\
         (cr, uid, referential_id, external_id, context=context)
-
     # Take care of deleted resource ids, cleans up ir.model.data
-    if existing_ir_model_data_id and expected_res_id and not self.exists(cr, uid, expected_res_id, context=context):
-        self.pool.get('ir.model.data').unlink(cr, uid, existing_ir_model_data_id, context=context)
-        existing_ir_model_data_id = expected_res_id = False
+        if existing_ir_model_data_id and expected_res_id and not self.exists(cr, uid, expected_res_id, context=context):
+            self.pool.get('ir.model.data').unlink(cr, uid, existing_ir_model_data_id, context=context)
+            existing_ir_model_data_id = expected_res_id = False
+
+    if not expected_res_id and alternative_keys:
+        domain = []
+        for alternative_key in alternative_keys:
+            if vals.get(alternative_key):
+                domain.append((alternative_key, '=', vals[alternative_key]))
+        if domain:
+            expected_res_id = self.search(cr, uid, domain, context=context)
+            expected_res_id = expected_res_id and expected_res_id[0] or False
     return existing_ir_model_data_id, expected_res_id
 
 
@@ -966,7 +973,8 @@ def _transform_one_resource(self, cr, uid, external_session, convertion_type, re
     if defaults is None:
         defaults = {}
 
-    mapping, mapping_id = self._init_mapping(cr, uid, external_session.referential_id.id, convertion_type=convertion_type, mapping_line_filter_ids=mapping_line_filter_ids, mapping=mapping, mapping_id=mapping_id, context=context)
+    referential_id = external_session.referential_id.id
+    mapping, mapping_id = self._init_mapping(cr, uid, referential_id, convertion_type=convertion_type, mapping_line_filter_ids=mapping_line_filter_ids, mapping=mapping, mapping_id=mapping_id, context=context)
 
     mapping_lines = mapping[mapping_id].get("mapping_lines")
     key_for_external_id = mapping[mapping_id].get("key_for_external_id")
@@ -1016,9 +1024,8 @@ def _transform_one_resource(self, cr, uid, external_session, convertion_type, re
                     try:
                         exec mapping_line[mapping_function_key] in space
                     except Exception, e:
-                        external_session.logger.error("Error in import mapping: %r" % (mapping_line[mapping_function_key],),
-                                                                           "Mapping Context: %r" % (space,),
-                                                                           "Exception: %r" % (e,))
+                        external_session.logger.error('Error in import mapping: %s    Exception: %s' 
+                                                            % (mapping_line['external_field'],e,))
                         #del(space['__builtins__'])
                         raise MappingError(e, mapping_line['external_field'], self._name)
                     
@@ -1032,10 +1039,17 @@ def _transform_one_resource(self, cr, uid, external_session, convertion_type, re
                                     vals[each_tuple[0]] = each_tuple[1]
                         else:
                             raise MappingError(_('Invalid format for the variable result.'), mapping_line['external_field'], self._name)
-
+    ext_id = False
     if convertion_type == 'from_external_to_openerp' and key_for_external_id and resource.get(key_for_external_id):
         ext_id = resource[key_for_external_id]
         vals.update({'external_id': ext_id.isdigit() and int(ext_id) or ext_id})
+    if self._name in context.get('do_not_update', []):
+        # if the update of the object is not wanted, we skipped the sub_mapping update also. In the function _transform_one_resource, the creation will also be skipped.
+        alternative_keys = mapping[mapping_id]['alternative_keys']
+        existing_ir_model_data_id, existing_rec_id = self._existing_oeid_for_extid_import\
+            (cr, uid, vals, ext_id, referential_id, alternative_keys, context=context)
+        if existing_rec_id:
+            return {}
     vals = self._merge_with_default_values(cr, uid, external_session, resource, vals, sub_mapping_list, defaults=defaults, context=context)
     vals = self._transform_sub_mapping(cr, uid, external_session, convertion_type, resource, vals, sub_mapping_list, mapping, mapping_id, mapping_line_filter_ids=mapping_line_filter_ids, defaults=defaults, context=context)
     return vals

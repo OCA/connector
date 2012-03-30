@@ -122,12 +122,13 @@ def catch_error_in_report(func):
                                     self._name,
                                     func.__name__, 
                                     state='fail',
-                                    external_id=context.get('external_report_id'),
-                                    defaults=kwargs.get('defaults'),
-                                    resource=resource, 
-                                    context=kwargs.get('context')
+                                    external_id=resource[context.get('external_id_for_report')],
+                                    #defaults=kwargs.get('defaults'),
+                                    resource=resource,
+                                    args = args,
+                                    kwargs = kwargs
+                                    #context=kwargs.get('context')
                             )
-
         import_cr = pooler.get_db(cr.dbname).cursor()
         response = False
         try:
@@ -147,7 +148,7 @@ def catch_error_in_report(func):
             import_cr.rollback()
             raise Exception(e)
         else:
-            report_line_obj.write(log_cr, uid, report_line_id, {
+            report_line_obj.write(log_cr, uid, report_line_id, {    
                         'state': 'success',
                         }, context=context)
             log_cr.commit()

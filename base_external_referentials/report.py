@@ -25,6 +25,7 @@ from tools.translate import _
 from tools.safe_eval import safe_eval
 from tools import DEFAULT_SERVER_DATETIME_FORMAT
 import simplejson
+from base_external_referentials.external_osv import ExternalSession
 
 
 class external_report(osv.osv):
@@ -87,22 +88,17 @@ class external_report(osv.osv):
         return True
 
     def retry_failed_lines(self, cr, uid, ids, context=None):
-        retry_cr = pooler.get_db(cr.dbname).cursor()
         logging.getLogger('external_synchro').info("retry the failed lines of the reports ids %s" % (ids,))
         if isinstance(ids, int):
             ids = [ids]
         if not context:
             context={}
         context['origin'] = 'retry'
-        for report in self.read(retry_cr, uid, ids, ['failed_line_ids'], context=context):
+        for report in self.read(cr, uid, ids, ['failed_line_ids'], context=context):
             failed_line_ids = report['failed_line_ids']
             if failed_line_ids:
                 context['report_id'] = report['id']
-                self.start_report(retry_cr, uid, report['id'], context=context)
-                self.pool.get('external.report.line').retry(retry_cr, uid, failed_line_ids, context=context)
-                self.end_report(retry_cr, uid, report['id'], context=context)
-        retry_cr.commit()
-        retry_cr.close()
+                self.pool.get('external.report.line').retry(cr, uid, failed_line_ids, context=context)
         return True
 
     def _prepare_start_report(self, cr, uid, method, object, context=None):
@@ -266,8 +262,8 @@ class external_report_lines(osv.osv):
         'error_message': fields.text('Error Message', readonly=True),
         'resource': fields.serialized('External Data', readonly=True),
         'resource_text':fields.function(_get_resource, fnct_inv=_set_resource, type="text", string='External Data'),
-        'origin_defaults': fields.serialized('Defaults', readonly=True),
-        'origin_context': fields.serialized('Context', readonly=True),
+        'args': fields.serialized('Args', readonly=True),
+        'kwargs': fields.serialized('Kwargs', readonly=True),
     }
 
     _defaults = {
@@ -276,9 +272,11 @@ class external_report_lines(osv.osv):
 
     def _log_base(self, cr, uid, model, action, state=None, res_id=None,
                   external_id=None,exception=None, resource=None,
-                  defaults=None, context=None):
-        defaults = defaults or {}
-        context = context or {}
+                  args=None, kwargs=None):
+        #defaults = defaults or {}
+        #context = context or {}
+        defaults = kwargs.get('defaults')
+        context = kwargs.get('context')
         existing_line_id = context.get('retry_report_line_id', False)
 
         # We do not log any action if no report is started
@@ -294,22 +292,18 @@ class external_report_lines(osv.osv):
         log_cr = pooler.get_db(cr.dbname).cursor()
 
         try:
-            origin_defaults = defaults.copy()
-            origin_context = context.copy()
             # connection object can not be kept in text indeed
             # FIXME : see if we have some problem with other objects
             # and maybe remove from the conect all objects
             # which are not string, boolean, list, dict, integer, float or ?
-            if origin_context.get('conn_obj', False):
-                del origin_context['conn_obj']
             if existing_line_id:
                 self.write(log_cr, uid,
                                existing_line_id,
                                {'state': state,
                                 'date': time.strftime(DEFAULT_SERVER_DATETIME_FORMAT),
                                 'error_message': exception and str(exception) or False,
-                                'origin_defaults': origin_defaults,
-                                'origin_context': origin_context,
+                                'args': args,
+                                'kwargs': kwargs,
                                 })
             else:
                 existing_line_id = self.create(log_cr, uid, {
@@ -322,8 +316,8 @@ class external_report_lines(osv.osv):
                                 'external_id': external_id,
                                 'error_message': exception and str(exception) or False,
                                 'resource': resource,
-                                'origin_defaults': origin_defaults,
-                                'origin_context': origin_context,
+                                'args': args,
+                                'kwargs': kwargs,
                             })
                 print existing_line_id
             log_cr.commit()
@@ -356,33 +350,18 @@ class external_report_lines(osv.osv):
             ids = [ids]
 
         for log in self.browse(cr, uid, ids, context=context):
-            mapping = self.pool.get(log.res_model).\
-            report_action_mapping(cr, uid, context=context)
-
-            method = mapping.get(log.action, False)
-            if not method:
-                raise Exception("No python method defined for action %s" %
-                                (log.action,))
-                                
-            
-            kwargs={}
-            for field, value in method['fields'].items():
-                kwargs[field] = safe_eval(value, {'log': log, 'self': self})
-                
+            method = getattr(self.pool.get(log.kwargs['context']['report_line_based_on']), log.action)
+            args = log.args
+            kwargs = log.kwargs
+            external_session = ExternalSession(log.report_id.referential_id)
+            resource = log.resource
             if not kwargs.get('context', False):
                 kwargs['context']={}
-            
+
             # keep the id of the line to update it with the result
             kwargs['context']['retry_report_line_id'] = log.id
-            # force export of the resource
-            kwargs['context']['force_export'] = True
-            kwargs['context']['force'] = True
-            
-            ##TODO remove : not needed since magento 6.1 ########
-            kwargs['context']['do_not_update_date'] = True         #
-            #####################################################
         
-            method['method'](cr, uid, **kwargs)
+            method(cr, uid, external_session, resource, *args, **kwargs)
         return True
 
     def aggregate_actions(self, cr, uid, ids, context=None):

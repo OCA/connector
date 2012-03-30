@@ -1,8 +1,9 @@
 # -*- encoding: utf-8 -*-
 ###############################################################################
 #                                                                             #
-#   file_exchange for OpenERP                                                 #
+#   base_external_file_protocole for OpenERP                                  #
 #   Copyright (C) 2012 Akretion Emmanuel Samyn <emmanuel.samyn@akretion.com>  #
+#   Copyright (C) 2012 Akretion Sebastien Beau <sebastien.beau@akretion.com>  #
 #                                                                             #
 #   This program is free software: you can redistribute it and/or modify      #
 #   it under the terms of the GNU Affero General Public License as            #
@@ -18,26 +19,5 @@
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.     #
 #                                                                             #
 ###############################################################################
-
-{
-    'name': 'file_exchange',
-    'version': '0.1',
-    'category': 'Generic Modules/Others',
-    'license': 'AGPL-3',
-    'description': """
-Definition : a file exchange is a file to be exchanged (in/out) between OpenERP and another system (referential)
-Goal : store file details and and file fields
-""",
-    'author': 'Akretion',
-    'website': 'http://www.akretion.com/',
-    'depends': ['base_external_referentials', 'base_file_protocole', 'base_scheduler_creator'], 
-    'init_xml': [],
-    'update_xml': [ 
-        'file_exchange_view.xml',
-        'file_exchange_menu.xml',
-    ],
-    'demo_xml': [],
-    'installable': True,
-    'active': False,
-}
+import external_referentials
 

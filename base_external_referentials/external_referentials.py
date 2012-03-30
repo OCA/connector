@@ -54,7 +54,7 @@ class external_referential_type(osv.osv):
     
     _columns = {
         'name': fields.char('Name', size=64, required=True), #dont allow creation of type from frontend
-        'categ_id': fields.many2one('external.referential.category', 'Category'),
+        'categ_id': fields.many2one('external.referential.category', 'Category', required=True),
         'version_ids': fields.one2many('external.referential.version', 'type_id', 'Versions', required=True)
     }
 

@@ -88,7 +88,7 @@
 			<field name="type">form</field>
 			<field name="arch" type="xml">
 				<form string="External Report History">
-                    <field name="external_report_id"/>
+                    <field name="report_id"/>
                     <field name="date"/>
                     <field name="count"/>
                     <field name="res_model"/>
@@ -105,7 +105,7 @@
 			<field name="type">tree</field>
 			<field name="arch" type="xml">
 				<tree string="External Report History" colors="red:state=='fail'">
-                    <field name="external_report_id"/>
+                    <field name="report_id"/>
                     <field name="date"/>
                     <field name="count"/>
                     <field name="res_model"/>
@@ -125,7 +125,7 @@
                    <filter string="Success" icon="terp-accessories-archiver" domain="[('state','=','success')]"/>
                    <filter string="Failures" icon="terp-accessories-archiver" domain="[('state','=','fail')]"/>
                    <separator orientation="vertical"/>
-                   <field name="external_report_id"/>
+                   <field name="report_id"/>
                    <field name="date"/>
                    <field name="res_model"/>
                    <field name="action"/>
@@ -133,7 +133,7 @@
                    <field name="state"/>
                    <newline/>
                    <group  expand='0' string='Group by...' groups="base.group_extended">
-                       <filter string='Report' icon="terp-stock_symbol-selection" domain="[]" context="{'group_by' : 'external_report_id'}" />
+                       <filter string='Report' icon="terp-stock_symbol-selection" domain="[]" context="{'group_by' : 'report_id'}" />
                        <filter string='Date' icon="terp-stock_symbol-selection" domain="[]" context="{'group_by' : 'date'}" />
                        <filter string='Model' icon="terp-stock_symbol-selection" domain="[]" context="{'group_by' : 'res_model'}" />
                        <filter string='Action' icon="terp-stock_symbol-selection" domain="[]" context="{'group_by' : 'action'}" />
@@ -151,14 +151,14 @@
                    <filter string="Success" icon="terp-accessories-archiver" domain="[('state','=','success')]"/>
                    <filter string="Failures" icon="terp-accessories-archiver" domain="[('state','=','fail')]"/>
                    <separator orientation="vertical"/>
-                   <field name="external_report_id"/>
+                   <field name="report_id"/>
                    <field name="date"/>
                    <field name="res_model"/>
                    <field name="action"/>
                    <field name="state"/>
                    <newline/>
                    <group  expand='0' string='Group by...' groups="base.group_extended">
-                       <filter string='Report' icon="terp-stock_symbol-selection" domain="[]" context="{'group_by' : 'external_report_id'}" />
+                       <filter string='Report' icon="terp-stock_symbol-selection" domain="[]" context="{'group_by' : 'report_id'}" />
                        <filter string='Date' icon="terp-stock_symbol-selection" domain="[]" context="{'group_by' : 'date'}" />
                        <filter string='Model' icon="terp-stock_symbol-selection" domain="[]" context="{'group_by' : 'res_model'}" />
                        <filter string='Action' icon="terp-stock_symbol-selection" domain="[]" context="{'group_by' : 'action'}" />
@@ -174,13 +174,15 @@
 			<field name="type">form</field>
 			<field name="arch" type="xml">
 				<form string="External Report Line">
-                    <field name="external_report_id"/>
+                    <field name="report_id"/>
                     <field name="res_model"/>
                     <field name="res_id"/>
                     <field name="external_id"/>
                     <field name="action"/>
                     <field name="date"/>
                     <field name="state"/>
+                    <separator string="External Data" colspan="4"/>
+                        <field name="resource_text" colspan="4" nolabel="1"/>
                     <separator colspan="4"/>
                     <button name="retry" string="Retry" icon="gtk-go-forward" type="object" colspan="2"/>
 				</form>
@@ -193,7 +195,7 @@
 			<field name="type">tree</field>
 			<field name="arch" type="xml">
 				<tree colors="red:state=='fail'" string="External Report Lines">
-                    <field name="external_report_id" invisible="True"/>
+                    <field name="report_id" invisible="True"/>
                     <field name="state"/>
                     <field name="res_model"/>
                     <field name="action"/>

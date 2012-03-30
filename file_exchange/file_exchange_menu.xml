@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <menuitem id="menu_file_exchange" name="File exchange" parent="base.menu_administration" sequence="10"/>
+
+        <!-- File exchange -->
+        <record id="actions_open_file_exchange" model="ir.actions.act_window">
+            <field name="name">File exchange</field>
+            <field name="res_model">file.exchange</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{'wizard_object' : 'file.exchange', 'function' : 'start_task', 'object_link' : 'file.exchange' }</field>
+        </record>
+            
+        <menuitem id="menu_files_exchange_list" name="Files exchange" parent="menu_file_exchange" action="actions_open_file_exchange" />
+
+
+        
+    </data>
+</openerp>

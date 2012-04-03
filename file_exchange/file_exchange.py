@@ -410,7 +410,7 @@ class file_exchange(osv.osv):
         if isinstance(id,list):
             id = id[0]
         output_file = TemporaryFile('w+b')
-        fieldnames = ['id', 'import_default_field:id', 'import_default_value', 'file_id:id', 'mapping_template_id:id']
+        fieldnames = ['id', 'import_default_field:id', 'import_default_value', 'file_id:id', 'mapping_template_id:id', 'type']
         csv = FileCsvWriter(output_file, fieldnames, encoding="utf-8", writeheader=True, delimiter=',', quotechar='"')
         current_file = self.browse(cr, uid, id, context=context)
         for field in current_file.import_default_fields:
@@ -420,6 +420,7 @@ class file_exchange(osv.osv):
                 'import_default_value': field.import_default_value,
                 'file_id:id': current_file.get_absolute_id(context=context),
                 'mapping_template_id:id': field.mapping_id.get_absolute_id(context=context),
+                'type': field.type,
             }
             csv.writerow(row)
         return self.pool.get('output.file').open_output_file(cr, uid, 'file.default.import.values.csv', output_file, 'File Exchange Fields Export', context=context)
@@ -502,9 +503,9 @@ class file_default_import_values(osv.osv):
     _columns = {
         'import_default_field':fields.many2one('ir.model.fields', 'Default Field', domain="[('model_id', '=', related_model)]"),
         'import_default_value':fields.char('Default Value', size=128),
-        'file_id': fields.many2one('file.exchange', 'File Exchange', require="True"),
-        'mapping_id':fields.many2one('external.mapping', 'External Mapping', require="True"),
-        'mapping_template_id':fields.many2one('external.mapping.template', 'External Mapping Template', require="True"),
+        'file_id': fields.many2one('file.exchange', 'File Exchange', required=True),
+        'mapping_id':fields.many2one('external.mapping', 'External Mapping', required=True),
+        'mapping_template_id':fields.many2one('external.mapping.template', 'External Mapping Template', required=True),
         #'related_model_ids':fields.related('mapping_id', 'related_model_ids', type='many2many', relation="ir.model", string='Related Model'),
         'related_model':fields.related('mapping_id', 'model_id', type='many2one',relation="ir.model", string='Related Model'),
         'type':fields.selection([('integer', 'Integer'), ('float', 'Float'),('char','String'),('dict','Dict'),('list','List')], 'Field Type', required=True),

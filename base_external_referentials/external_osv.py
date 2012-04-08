@@ -1400,13 +1400,13 @@ def _transform_sub_mapping(self, cr, uid, external_session, convertion_type, res
             
         field_value = resource[from_field]
       
-        sub_mapping_defaults = self._get_default_import_values(cr, uid, external_session, mapping_id, defaults.get(to_field), context=context)
+        sub_mapping_defaults = self._get_default_import_values(cr, uid, external_session, sub_mapping_id, defaults.get(to_field), context=context)
 
         if field_value:
             sub_mapping_obj = self.pool.get(sub_object_name)
             transform_args = [cr, uid, external_session, convertion_type, field_value]
             transform_kwargs = {
-                'defaults': defaults.get(to_field),
+                'defaults': sub_mapping_defaults,
                 'mapping': mapping, 
                 'mapping_id': sub_mapping_id,
                 'mapping_line_filter_ids': mapping_line_filter_ids,
@@ -1434,7 +1434,7 @@ def _transform_sub_mapping(self, cr, uid, external_session, convertion_type, res
             elif sub_mapping['internal_type'] == 'many2one':
                 if convertion_type == 'from_external_to_openerp':
                     res = sub_mapping_obj._record_one_external_resource(cr, uid, external_session, field_value,
-                                defaults=defaults.get(to_field), mapping=mapping, mapping_id=sub_mapping_id, context=context)
+                                defaults=sub_mapping_defaults, mapping=mapping, mapping_id=sub_mapping_id, context=context)
                     vals[to_field] = res.get('write_id') or res.get('create_id')
                 else:
                     sub_resource = sub_mapping_obj.read(cr, uid, field_value[0], context=context)

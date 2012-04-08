@@ -25,7 +25,8 @@ from tools.translate import _
 from message_error import MappingError
 import functools
 
-def only_for_referential(ref_type=None, ref_categ=None, super_function=None, module_name=None):
+
+def only_for_referential(ref_type=None, ref_categ=None, super_function=None):
     """ 
     This decorator will execute the code of the function decorated only if
     the referential_type match with the referential_type pass in the context
@@ -45,33 +46,18 @@ def only_for_referential(ref_type=None, ref_categ=None, super_function=None, mod
                 if super_function:
                     return super_function(self, cr, uid, argument, *args, **kwargs)
                 else:
-                    # TODO REFACTOR this code
-                    # It's the first time I do something like that :S
-                    # I never use decorator before :(
-                    # My aim is to call the super method instead of original method
-                    # when the referential is not the appropriated referential
-                    # Can you check my code and share your experience about this kind of feature?
-                    # Can you help me to clean my code?
-                    # Thanks you for your help ;)
-
-                    #Due to some problem of recursivity I introduce the params "module_name"
-                    #It's not clean at all but it's work
-                    parent = False
                     name = func.__name__
+                    use_next_class = False
                     for base in self.__class__.mro()[1:]:
-                        if parent:
-                            if hasattr(base, name):
-                                return getattr(base, name)(self, cr, uid, argument, *args, **kwargs)
-                        if module_name:
-                            if module_name in str(base):
-                                #now I am at the good level of the class inherited
-                                parent = True
-                        elif str(base) == str(self.__class__):
-                            #now I am at the good level of the class inherited
-                            parent = True
+                        if use_next_class:
+                            return getattr(base, name)(self, cr, uid, argument, *args, **kwargs)
+                        class_func = base.__dict__.get(name)
+                        if class_func:
+                            original_func = class_func.__dict__.get("_original_func_before_wrap")
+                            if original_func is func:
+                                use_next_class = True
                     raise osv.except_osv(_("Not Implemented"), _("Not parent method found"))
-#                    ##### REFACTOR END
-
+        wrapped._original_func_before_wrap = func
         return wrapped
     return decorator
 

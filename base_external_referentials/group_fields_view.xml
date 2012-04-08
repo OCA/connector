@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record model="ir.ui.view" id="group_fields_search_view">
+            <field name="name">group.fields.search.view</field>
+            <field name="model">group.fields</field>
+            <field name="type">search</field>
+            <field name="arch" type="xml">
+                <search string="Group fields">
+                   <field name="name"/>
+                   <field name="model_id"/>
+                   <newline/>
+                   <group  expand='0' string='Group by...' groups="base.group_extended">
+                       <filter string='Model' icon="terp-stock_symbol-selection" domain="[]" context="{'group_by' : 'model_id'}" />
+                   </group>
+                </search>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="group_fields_form_view">
+            <field name="name">group_fields_form_view</field>
+            <field name="model">group.fields</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form>
+                    <field name="name" colspan="2"/>
+                    <field name="model_id" colspan="2"/>
+                    <field name="field_ids" colspan="4"/>
+                </form>
+            </field>
+        </record>
+
+
+        <record model="ir.ui.view" id="group_fields_tree_view">
+            <field name="name">group_fields_tree_view</field>
+            <field name="model">group.fields</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name" colspan="2"/>
+                    <field name="model_id" colspan="2"/>
+                </tree>
+            </field>
+        </record>
+
+
+        <record id="group_field_action_open_form" model="ir.actions.act_window">
+            <field name="name">Group fields</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">group.fields</field>
+            <field name="view_type">form</field>
+            <field name="view_id" ref="group_fields_tree_view"/>
+            <field name="search_view_id" ref="group_fields_search_view"/>
+        </record>
+
+        <menuitem id="ir_ui_menu_group_fields" name="Group Fields" parent="base.next_id_9" groups="base.group_extended" action="group_field_action_open_form" />
+
+        <record id="view_model_fields_form" model="ir.ui.view">
+            <field name="name">base.external.referentials.ir.model.fields.form</field>
+            <field name="model">ir.model.fields</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="base.view_model_fields_form"/>
+            <field name="arch" type="xml">
+                <field name="state" position="after">
+                    <field name="group_fields_id" />
+                </field>
+            </field>
+        </record>
+
+    </data>
+</openerp>

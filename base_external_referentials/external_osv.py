@@ -24,10 +24,12 @@
 from osv import fields, osv
 import base64
 import time
+import netsvc
 from datetime import datetime
 import logging
 import pooler
 from collections import defaultdict
+from tempfile import TemporaryFile
 
 from message_error import MappingError, ExtConnError
 from tools.translate import _
@@ -46,7 +48,6 @@ class ExternalSession(object):
 
     def is_categ(self, referential_category):
         return self.referential_id.categ_id.name.lower() == referential_category.lower()
-
 
 ########################################################################################################################
 #
@@ -641,6 +642,18 @@ osv.osv.oe_create = oe_create
 #
 ########################################################################################################################
 
+
+def send_report(self, cr, uid, external_session, ids, report_name, file_name, path, context=None):
+    service = netsvc.LocalService(report_name)
+    result, format = service.create(cr, uid, ids, {'model': self._name}, context=context)
+    output_file =TemporaryFile('w+b')
+    output_file.write(result)
+    output_file.seek(0)
+    import pdb; pdb.set_trace()
+    file_name = "%s.%s"%(file_name, format)
+    external_session.connection.send(path, file_name, output_file)
+    return True
+
 def _get_export_step(self, cr, uid, external_session, context=None):
     """
     Abstract function that return the step for importing data
@@ -664,9 +677,11 @@ def _get_default_export_values(self, cr, uid, external_session, mapping_id=None,
     return defaults
 
 def _get_last_exported_date(self, cr, uid, external_session, context=None):
+    print '======================get originalkkkkkkkkkkkkkkkkkkkkkkkkkk================'
     return False
 
 def _set_last_exported_date(self, cr, uid, external_session, date, context=None):
+    print '======================set originalkkkkkkkkkkkkkkkkkkkkkkkkkk================'
     return False
 
 
@@ -1091,6 +1106,7 @@ def ext_update(self, cr, uid, data, conn, method, oe_id, external_id, ir_model_d
 
 
 #######################        MONKEY PATCHING       #######################
+osv.osv.send_report = send_report
 
 osv.osv._get_default_export_values = _get_default_export_values
 osv.osv._get_export_step = _get_export_step

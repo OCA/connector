@@ -341,7 +341,7 @@ class external_referential(osv.osv):
             'debug': referential.debug,
         }
         csv.writerow(row)
-        return self.pool.get('output.file').open_output_file(cr, uid, 'external.referential.type.csv', output_file, 'Referential Type Export', context=context)
+        return self.pool.get('output.file').open_output_file(cr, uid, 'external.referential.csv', output_file, 'Referential Type Export', context=context)
 
     # Method to export external referential type
     def build_external_mapping_template(self, cr, uid, id, context=None):
@@ -401,7 +401,7 @@ class external_referential(osv.osv):
                     'datetime_format': line.datetime_format or '',
                 }
                 csv.writerow(row)
-        return self.pool.get('output.file').open_output_file(cr, uid, 'external.mapping.template.csv', output_file, 'Mapping Template Export', context=context)
+        return self.pool.get('output.file').open_output_file(cr, uid, 'external.mappinglines.template.csv', output_file, 'Mapping Template Export', context=context)
 
     _constraints = [
         (_test_dot_in_name, 'The name cannot contain a dot!', ['name']),

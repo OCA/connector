@@ -55,7 +55,8 @@ class external_referential_type(osv.osv):
     _columns = {
         'name': fields.char('Name', size=64, required=True), #dont allow creation of type from frontend
         'categ_id': fields.many2one('external.referential.category', 'Category', required=True),
-        'version_ids': fields.one2many('external.referential.version', 'type_id', 'Versions', required=True)
+        'version_ids': fields.one2many('external.referential.version', 'type_id', 'Versions', required=True),
+        'code': fields.char('code', size=64, required=True),
     }
 
     def get_absolute_id(self, cr, uid, id, context=None):
@@ -64,7 +65,7 @@ class external_referential_type(osv.osv):
         referential_type = self.browse(cr, uid, id, context=context)
         type_id = referential_type.get_external_id(context=context)[referential_type.id]
         if not type_id:
-            type_id = referential_type.name.replace('.','_').replace(' ','_')
+            type_id = referential_type.code.replace('.','_').replace(' ','_')
         return type_id
 
 external_referential_type()
@@ -80,7 +81,7 @@ class external_referential_version(osv.osv):
         version = self.browse(cr, uid, id, context=context)
         version_id = version.get_external_id(context=context)[version.id]
         if not version_id:
-            version_id = version.name.replace('.','_').replace(' ','_')
+            version_id = version.code.replace('.','_').replace(' ','_')
         return version_id
 
     def _get_full_name(self, cr, uid, ids, name, arg, context=None):
@@ -93,6 +94,7 @@ class external_referential_version(osv.osv):
         'full_name': fields.function(_get_full_name, store=True, type='char', size=64, string='Full Name'),
         'name': fields.char('name', size=64, required=True),
         'type_id': fields.many2one('external.referential.type', 'Type', required=True),
+        'code': fields.char('code', size=64, required=True),
     }
     
 external_referential_type()
@@ -127,11 +129,14 @@ class external_mappinglines_template(osv.osv):
     def _name_get_fnc(self, cr, uid, ids, name, arg, context=None):
         res = {}
         for mapping_line in self.browse(cr, uid, ids, context):
-            res[mapping_line.id] = mapping_line.field_id or mapping_line.external_field
+            res[mapping_line.id] = mapping_line.evaluation_type == 'function' \
+                                    and mapping_line.function_name \
+                                    or mapping_line.external_field \
+                                    or mapping_line.field_id.name
         return res
 
     _columns = {
-        'name': fields.function(_name_get_fnc, type="char", string='Full Name'),
+        'name': fields.function(_name_get_fnc, type="char", string='Name'),
         'version_id':fields.many2one('external.referential.version', 'External Referential Version', ondelete='cascade'),
         'field_id': fields.many2one('ir.model.fields', 'OpenERP Field', ondelete='cascade'),
         'mapping_id': fields.many2one('external.mapping.template', 'External Mapping', ondelete='cascade'),
@@ -151,6 +156,7 @@ class external_mappinglines_template(osv.osv):
         'alternative_key': fields.boolean('Alternative Key', help=("Only one field can be selected as alternative key,"
                                                                 "if no external id was found for the record the alternative key"
                                                                 "will be used to identify the resource")),
+        'function_name': fields.char('Function Name', size=32),
         }
 
 external_mappinglines_template()
@@ -235,6 +241,7 @@ class external_referential(osv.osv):
                         'out_function': each_mapping_line_rec['out_function'],
                         'field_id': each_mapping_line_rec['field_id'] and each_mapping_line_rec['field_id'][0] or False,
                         'alternative_key': each_mapping_line_rec['alternative_key'],
+                        'function_name': each_mapping_line_rec['function_name'],
                         }
                     mapping_line_id = mapping_line_obj.create(cr, uid, vals)
                     if each_mapping_line_rec['child_mapping_id']:
@@ -284,6 +291,7 @@ class external_referential(osv.osv):
             'id': referential.type_id.name,
             'name': referential.type_id.name,
             'categ_id:id': referential.categ_id.get_absolute_id(context=context),
+            'code': referential.type_id.code,
         }
         csv.writerow(row)
         return self.pool.get('output.file').open_output_file(cr, uid, 'external.referential.type.csv', output_file, 'Referential Type Export', context=context)
@@ -301,6 +309,7 @@ class external_referential(osv.osv):
             'type_id:id': referential.type_id.get_absolute_id(context=context),
             'id': referential.version_id.name,
             'name': referential.version_id.name,
+            'code': referential.version_id.code,
         }
         csv.writerow(row)
         return self.pool.get('output.file').open_output_file(cr, uid, 'external.referential.version.csv', output_file, 'Referential Version Export', context=context)
@@ -348,11 +357,14 @@ class external_mapping_line(osv.osv):
     def _name_get_fnc(self, cr, uid, ids, name, arg, context=None):
         res = {}
         for mapping_line in self.browse(cr, uid, ids, context):
-            res[mapping_line.id] = mapping_line.external_field or mapping_line.field_id.name
+            res[mapping_line.id] = mapping_line.evaluation_type == 'function' \
+                                    and mapping_line.function_name \
+                                    or mapping_line.external_field \
+                                    or mapping_line.field_id.name
         return res
     
     _columns = {
-        'name': fields.function(_name_get_fnc, type="char", string='Full Name'),
+        'name': fields.function(_name_get_fnc, type="char", string='Name'),
     }
 
 external_mapping_line()
@@ -429,9 +441,9 @@ class external_mapping(osv.osv):
         if mapping.template_id:
             mapping_id = mapping.template_id.get_external_id(context=context)[mapping.template_id.id]
         else:
-            version_name = mapping.referential_id.version_id.name.replace(' ','_')
+            version_code = mapping.referential_id.version_id.code.replace(' ','_')
             mapping_name = mapping.model + (mapping.extra_name and ('_' + mapping.extra_name) or '')
-            mapping_id = (version_name + '_' + mapping_name).replace('.','_')
+            mapping_id = (version_code + '_' + mapping_name).replace('.','_')
         return mapping_id
 
     # Method to export the mapping file
@@ -448,7 +460,7 @@ class external_mapping(osv.osv):
                 'id': line.get_absolute_id(context=context),
                 'mapping_id:id': line.mapping_id.get_absolute_id(context=context),
                 'external_field': line.external_field or '',
-                'field_id:id': line.field_id.get_external_id(context=context)[line.field_id.id],
+                'field_id:id': line.field_id and line.field_id.get_external_id(context=context)[line.field_id.id],
                 'type': line.type,
                 'evaluation_type': line.evaluation_type,
                 'external_type': line.external_type,
@@ -475,7 +487,8 @@ class external_mapping_line(osv.osv):
         'referential_id': fields.related('mapping_id', 'referential_id', type='many2one', relation='external.referential', string='Referential'),
         'field_id': fields.many2one('ir.model.fields', 'OpenERP Field', ondelete='cascade'),
         'internal_field': fields.related('field_id', 'name', type='char', relation='ir.model.field', string='Field name',readonly=True),
-        'external_field': fields.char('External Field', size=32, help="Leave empty if use a sub mapping line evaluation_type"),
+        'external_field': fields.char('External Field', size=32, help=("When importing flat csv file from file exchange,"
+                                "you can leave this field empty, because this field doesn't exist in your csv file'")),
         'mapping_id': fields.many2one('external.mapping', 'External Mapping', ondelete='cascade'),
         'related_model_id': fields.related('mapping_id', 'model_id', type='many2one', relation='ir.model', string='Related Model'),
         'type': fields.selection([('in_out', 'External <-> OpenERP'), ('in', 'External -> OpenERP'), ('out', 'External <- OpenERP')], 'Type'),
@@ -495,7 +508,8 @@ class external_mapping_line(osv.osv):
         'alternative_key': fields.boolean('Alternative Key', help=("Only one field can be selected as alternative key,"
                                                                 "if no external id was found for the record the alternative key"
                                                                 "will be used to identify the resource")),
-        'internal_type':fields.related('field_id','ttype', type="char", relation='ir.model.field', string='Internal Type'), 
+        'internal_type': fields.related('field_id','ttype', type="char", relation='ir.model.field', string='Internal Type'),
+        'function_name': fields.char('Function Name', size=32),
     }
     
     _defaults = {
@@ -510,9 +524,6 @@ class external_mapping_line(osv.osv):
                 return False
         return True
     
-    _constraints = [
-        (_check_mapping_line_name, "Error ! Invalid Mapping Line Name: Field and External Field cannot be both null", ['parent_id'])
-    ]
 
     _sql_constraints = [
         ('ref_template_uniq', 'unique (referential_id, template_id)', 'A referential can not have various mapping line imported from the same template mapping line')
@@ -527,10 +538,10 @@ class external_mapping_line(osv.osv):
         if line.template_id:
             line_id = line.template_id.get_external_id(context=context)[line.template_id.id]
         else:
-            version_name = line.referential_id.version_id.name.replace(' ','_')
+            version_code = line.referential_id.version_id.code.replace(' ','_')
             mapping_name = line.mapping_id.model + (line.mapping_id.extra_name and ('_' + line.mapping_id.extra_name) or '')
             line_name = line.name
-            line_id = (version_name + '_' + mapping_name + '_' + line_name).replace('.','_')
+            line_id = (version_code + '_' + mapping_name + '_' + line_name).replace('.','_')
         return line_id
 
 external_mapping_line()

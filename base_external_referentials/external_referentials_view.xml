@@ -129,26 +129,49 @@
             <field name="type">form</field>
             <field name="arch" type="xml">
                 <form>
-                    <field name="selected" />
-                    <field name="sequence" />
-                    <field name="type" />
-                    <field name="evaluation_type" />
-                    <separator string="External fields" colspan="2"/>
-                    <separator string="Internal fields" colspan="2"/>
-                    <field name="external_field" select="1"/>
-                    <field name="field_id" domain="[('model_id','in',parent.related_model_ids[0][2])]" />
-                    <field name="external_type" />
-                    <field name="datetime_format" attrs="{'invisible':[('external_type','!=','datetime')]}"/>
-                    <field name="internal_field" />
-                    <field name="alternative_key" />
-                    <field name="name" />
-                    <field name="mapping_id" />
-                    <field name="child_mapping_id" colspan="4" attrs="{'invisible':[('evaluation_type','!=','sub-mapping')]}"/>
+                    <group name="main" colspan="4">
+                        <field name="selected" />
+                        <field name="sequence" />
+                        <field name="type" />
+                        <field name="evaluation_type" />
+                    </group>
+                    <group attrs="{'invisible':[('evaluation_type','=','function')]}" colspan="4">
+                        <group name="external_field" colspan="2" col="2">
+                            <separator string="External fields" colspan="2"/>
+                            <field name="external_field" select="1"/>
+                            <field name="external_type" attrs="{'required':[('evaluation_type','=','direct')]}"/>
+                            <field name="datetime_format" attrs="{'invisible':[('external_type','!=','datetime')]}"/>
+                        </group>
+                        <group name="internal_field" colspan="2" col="2">
+                            <separator string="Internal fields" colspan="2"/>
+                            <field name="field_id" domain="[('model_id','in',parent.related_model_ids[0][2])]" 
+                                    attrs="{'required':[('evaluation_type','in',['direct', 'sub-mapping'])],
+                                            'invisible':[('evaluation_type', '=', 'function')]}"/>
+                            <field name="internal_type" readonly="True"/>
+                            <field name="child_mapping_id" colspan="2"
+                                    attrs="{'invisible':[('evaluation_type','!=','sub-mapping')],
+                                            'required':[('evaluation_type','=','sub-mapping')]}"/>
+                        </group>
+                    </group>
                     <group attrs="{'invisible':[('evaluation_type','!=','function')]}" colspan="4">
-                        <separator string="Import in OpenERP Mapping Python Function" colspan="2"/>
+                        <group name="import_function_field" colspan="2" col="2">
+                            <separator string="Import in OpenERP Mapping Python Function" colspan="2"/>
+                            <field name="in_function" colspan="2" nolabel="1"/>
+                        </group>
+                        <group name="export_function_field" colspan="2" col="2">
                         <separator string="Export from OpenERP Mapping Python Function" colspan="2"/>
-                        <field name="in_function" colspan="2" nolabel="1"/>
                         <field name="out_function" colspan="2" nolabel="1"/>
+                        </group>
+                    </group>
+                    <group name="other_information" colspan="4">
+                        <separator string="Other Information" colspan="4"/>
+                        <field name="alternative_key" />
+                        <group name='full_name'>
+                            <field name="function_name" string="Full Name"
+                                    attrs="{'invisible':[('evaluation_type','!=','function')],
+                                            'required':[('evaluation_type','=','function')]}"/>
+                            <field name="name" attrs="{'invisible':[('evaluation_type','=','function')]}"/>
+                        </group>
                     </group>
                 </form>
             </field>
@@ -174,6 +197,7 @@
             <field name="arch" type="xml">
                 <form>
                     <field name="name" />
+                    <field name="code"/>
                     <field name="full_name" />
                     <field name="type_id"/>
                 </form>
@@ -189,6 +213,7 @@
             <field name="arch" type="xml">
                 <form>
                     <field name="name" />
+                    <field name="code"/>
                     <field name="categ_id" />
                     <field name="version_ids" colspan="4"/>
                 </form>

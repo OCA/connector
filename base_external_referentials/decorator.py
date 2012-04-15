@@ -31,6 +31,7 @@ def only_for_referential(ref_type=None, ref_categ=None, super_function=None):
     This decorator will execute the code of the function decorated only if
     the referential_type match with the referential_type pass in the context
     If not super method will be call.
+    argument must be the referential or the referential_id or the external_session
     """
     def decorator(func):
         @functools.wraps(func)

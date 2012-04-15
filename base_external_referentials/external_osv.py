@@ -592,9 +592,13 @@ def retry_import(self, cr, uid, id, ext_id, referential_id, defaults=None, conte
     raise osv.except_osv(_("Not Implemented"), _("Not Implemented in abstract base module!"))
 
 def oe_update(self, cr, uid, existing_rec_id, vals, referential_id, defaults, context):
+    if not context: context={}
+    context['referential_id'] = referential_id
     return self.write(cr, uid, existing_rec_id, vals, context)
 
 def oe_create(self, cr, uid, vals, referential_id, defaults, context):
+    if not context: context={}
+    context['referential_id'] = referential_id
     return self.create(cr, uid, vals, context)
 
 
@@ -694,7 +698,6 @@ def get_ids_and_update_date(self, cr, uid, ids=None, last_exported_date=None, co
         query = """
             select %s as update_date, id
                 from %s
-                order by update_date asc;
             """%(greatest, table,)
     else:
         inherits_table = self.pool.get(self._inherits.keys()[0])._table
@@ -707,7 +710,7 @@ def get_ids_and_update_date(self, cr, uid, ids=None, last_exported_date=None, co
 
             """%(greatest, table, table, inherits_table, inherits_table, table, join_field)
     if ids:
-        query += " where %s.id in %s"%(table)
+        query += " where " + table + ".id in %s"
         params += (tuple(ids),)
     if last_exported_date:
         query += (ids and " and " or " where ") + greatest + " > %s"
@@ -723,7 +726,7 @@ def get_ids_and_update_date(self, cr, uid, ids=None, last_exported_date=None, co
     return ids, ids_2_dates
 
 
-def init_context_before_exporting_resource(self, cr, uid, object_id, resource_name, context=None):
+def init_context_before_exporting_resource(self, cr, uid, external_session, object_id, resource_name, context=None):
     if self._name != 'external.referential' and 'referential_id' in self._columns.keys():
         context['%s_id'%self._name.replace('.', '_')] = object_id
     return context
@@ -743,8 +746,8 @@ def export_resources(self, cr, uid, ids, resource_name, context=None):
             external_session = ExternalSession(browse_record)
         else:
             if hasattr(browse_record, 'referential_id'):
-                context = self.init_context_before_exporting_resource(cr, uid, browse_record.id, resource_name, context=context)
                 external_session = ExternalSession(browse_record.referential_id)
+                context = self.init_context_before_exporting_resource(cr, uid, external_session, browse_record.id, resource_name, context=context)
             else:
                 raise osv.except_osv(_("Not Implemented"), _("The field referential_id doesn't exist on the object %s." %(browse_record._name,)))
         self.pool.get(resource_name)._export_resources(cr, uid, external_session, context=context)
@@ -752,17 +755,37 @@ def export_resources(self, cr, uid, ids, resource_name, context=None):
 
 
 
-def send_to_external(self, cr, uid, external_session, resource, update_date, context=None):
-    print 'send this data to the external system', update_date
-    print 'data', resource
+def send_to_external(self, cr, uid, external_session, resources, update_date, context=None):
+    resources_to_update = {}
+    resources_to_create = {}
+    for resource_id, resource in resources.items():
+        ext_id = self.oeid_to_extid(cr, uid, resource_id, external_session.referential_id.id, context=context)
+        if ext_id:
+            for lang in resource:
+                resource[lang]['ext_id'] = ext_id
+            resources_to_update[resource_id] = resource
+        else:
+            resources_to_create[resource_id] = resource
+    self.ext_update(cr, uid, external_session, resources_to_update, context=context)
+    ext_create_ids = self.ext_create(cr, uid, external_session, resources_to_create, context=context)
+    for rec_id, ext_id in ext_create_ids.items():
+        self.create_external_id_vals(cr, uid, rec_id, ext_id, external_session.referential_id.id, context=context)
     self._set_last_exported_date(cr, uid, external_session, update_date, context=context)
-    return True
+    return ext_id
+
+def ext_create(self, cr, uid, external_session, resources, context=None):
+    """Not Implemented here"""
+    return False
+
+def ext_update(self, cr, uid, external_session, resources, context=None):
+    """Not Implemented here"""
+    return False
 
 def get_lang_to_export(self, cr, uid, external_session, context=None):
     if not context:
         return []
     else:
-        return [context.get('lang')]
+        return context.get('lang_to_export') or context.get('lang')
 
 def _export_resources(self, cr, uid, external_session, method="onebyone", context=None):
     defaults = self._get_default_export_values(cr, uid, external_session, context=context)
@@ -774,7 +797,10 @@ def _export_resources(self, cr, uid, external_session, method="onebyone", contex
 
     group_obj = self.pool.get('group.fields')
     group_ids = group_obj.search(cr, uid, [['model_id', '=', self._name]], context=context)
-    inherits_group_ids = group_obj.search(cr, uid, [['model_id', '=',self._inherits.keys()[0]]], context=context)
+    if self._inherits:
+        inherits_group_ids = group_obj.search(cr, uid, [['model_id', '=',self._inherits.keys()[0]]], context=context)
+    else:
+        inherits_group_ids=[]
     smart_export =  context.get('smart_export') and (group_ids or inherits_group_ids) and {'group_ids': group_ids, 'inherits_group_ids': inherits_group_ids}
 
     #TODO get lang to export 
@@ -799,7 +825,7 @@ def _export_resources(self, cr, uid, external_session, method="onebyone", contex
 
         if method == "onebyone":
             for id in ids_to_process:
-                self.send_to_external(cr, uid, external_session, resources[id], ids_2_date[id], context=context)
+                self.send_to_external(cr, uid, external_session, {id : resources[id]}, ids_2_date[id], context=context)
     now = datetime.now().strftime(DEFAULT_SERVER_DATETIME_FORMAT)
     self._set_last_exported_date(cr, uid, external_session, now, context=context)
     return True
@@ -808,7 +834,7 @@ def _export_one_resource(self, cr, uid, external_session, ids=None, fields=None,
     #TODO
     return True
 
-def multi_lang_read(self, cr, uid, ids, fields_to_read, langs, resources=None, context=None):
+def multi_lang_read(self, cr, uid, ids, fields_to_read, langs, resources=None, use_multi_lang = True, context=None):
     def is_translatable(field):
         if self._columns.get(field):
             return self._columns[field].translate
@@ -816,14 +842,18 @@ def multi_lang_read(self, cr, uid, ids, fields_to_read, langs, resources=None, c
             return self._inherit_fields[field][2].translate
 
     if not resources:
-        resources = defaultdict(lambda: defaultdict(dict))
+        resources = {}
     first = True
     for lang in langs:
         ctx = context.copy()
         ctx['lang'] = lang
         for resource in self.read(cr, uid, ids, fields_to_read, context=ctx):
+            if not resources.get(resource['id']): resources[resource['id']] = {}
             resources[resource['id']][lang] = resource
-        if first:
+        # Give the possibility to not use the field restriction to read
+        # Indeed for some e-commerce like magento the api is ugly and some not translatable field
+        # are required at each export :S
+        if use_multi_lang and first:
             fields_to_read = [field for field in fields_to_read if is_translatable(field)]
             first=False
     return resources
@@ -851,13 +881,13 @@ def smart_read(self, cr, uid, ids, langs, resources, group_ids, inherits_group_i
 
     if resource_ids_partial_read:
         for group in self.pool.get('group.fields').browse(cr, uid, group_ids, context=context):
-            resource_ids = self.search(cr, uid, [[group.column_name, '>=', last_exported_date]['id', 'in', resource_ids_partial_read]], context=context)
+            resource_ids = self.search(cr, uid, [[group.column_name, '>=', last_exported_date],['id', 'in', resource_ids_partial_read]], context=context)
             fields_to_read = [field.name for field in group.field_ids]
             resources = self.multi_lang_read(cr, uid, resource_ids, fields_to_read, langs, resources=resources, context=context)
     return resources
 
 def get_field_to_export(self, cr, uid, ids, mapping, mapping_id, context=None):
-    return []
+    return list(set(self._columns.keys() + self._inherit_fields.keys()))
 
 def _get_oe_resources(self, cr, uid, external_session, ids, langs, smart_export=None,
                                             last_exported_date=None, mapping=None, mapping_id=None, context=None):
@@ -1085,24 +1115,24 @@ def can_create_on_update_failure(self, error, data, context):
     return True
 
 #TODO check if still needed?
-def ext_create(self, cr, uid, data, conn, method, oe_id, context):
-    return conn.call(method, data)
+#def ext_create(self, cr, uid, data, conn, method, oe_id, context):
+#    return conn.call(method, data)
 
 #TODO check if still needed?
 def try_ext_update(self, cr, uid, data, conn, method, oe_id, external_id, ir_model_data_id, create_method, context):
     return conn.call(method, [external_id, data])
 
 #TODO check if still needed?
-def ext_update(self, cr, uid, data, conn, method, oe_id, external_id, ir_model_data_id, create_method, context):
-    try:
-        self.try_ext_update(cr, uid, data, conn, method, oe_id, external_id, ir_model_data_id, create_method, context)
-    except Exception, e:
-        logging.getLogger('external_synchro').exception("UPDATE ERROR: %s" % e)
-        if self.can_create_on_update_failure(e, data, context):
-            logging.getLogger('external_synchro').info("The resource maybe doesn't exist any more in the external referential, trying to re-create a new one")
-            crid = self.ext_create(cr, uid, data, conn, create_method, oe_id, context)
-            self.pool.get('ir.model.data').write(cr, uid, ir_model_data_id, {'name': self.prefixed_id(crid)})
-            return crid
+#def ext_update(self, cr, uid, data, conn, method, oe_id, external_id, ir_model_data_id, create_method, context):
+#    try:
+#        self.try_ext_update(cr, uid, data, conn, method, oe_id, external_id, ir_model_data_id, create_method, context)
+#    except Exception, e:
+#        logging.getLogger('external_synchro').exception("UPDATE ERROR: %s" % e)
+#        if self.can_create_on_update_failure(e, data, context):
+#            logging.getLogger('external_synchro').info("The resource maybe doesn't exist any more in the external referential, trying to re-create a new one")
+#            crid = self.ext_create(cr, uid, data, conn, create_method, oe_id, context)
+#            self.pool.get('ir.model.data').write(cr, uid, ir_model_data_id, {'name': self.prefixed_id(crid)})
+#            return crid
 
 
 #######################        MONKEY PATCHING       #######################
@@ -1217,8 +1247,8 @@ def _transform_one_resource(self, cr, uid, external_session, convertion_type, re
             from_field = mapping_line['internal_field']
             to_field = mapping_line['external_field']
 
-        if from_field in resource.keys():
-            field_value = resource[from_field]
+        if from_field in resource.keys() or mapping_line['evaluation_type'] == 'function': #function field should be always played as they can depend of every field
+            field_value = resource.get(from_field)
             if mapping_line['evaluation_type'] == 'sub-mapping':
                 sub_mapping_list.append(mapping_line)
             else:
@@ -1226,11 +1256,12 @@ def _transform_one_resource(self, cr, uid, external_session, convertion_type, re
                     vals[to_field] = self._transform_field(cr, uid, external_session, convertion_type, field_value, mapping_line, context=context)
                 else:
                     #Build the space for expr
+                    #Seb : removing ifield can be great ?
                     space = {'self': self,
                              'cr': cr,
                              'uid': uid,
                              'external_session': external_session,
-                             'data': resource,
+                             'resource': resource,
                              'referential_id': external_session.referential_id.id,
                              'defaults': defaults,
                              'context': context,
@@ -1240,7 +1271,6 @@ def _transform_one_resource(self, cr, uid, external_session, convertion_type, re
                              'vals': vals,
                              'previous_result': previous_result,
                         }
-
                     #The expression should return value in list of tuple format
                     #eg[('name','Sharoon'),('age',20)] -> vals = {'name':'Sharoon', 'age':20}
                     if convertion_type == 'from_external_to_openerp':
@@ -1306,7 +1336,7 @@ def _transform_field(self, cr, uid, external_session, convertion_type, field_val
                     #TODO it can be great if we can return on other field and not only the name
                     return field_value[1]
                 else:
-                    return related_obj.extid_to_oeid(cr, uid, external_session, field_value[0], context=context)
+                    return related_obj.oeid_to_extid(cr, uid, field_value[0],external_session.referential_id.id, context=context)
 
         elif external_type == "datetime":
             datetime_format = mapping_line['datetime_format']

@@ -24,7 +24,7 @@ import pooler
 from tools.translate import _
 from message_error import MappingError
 import functools
-
+import xmlrpclib
 
 def only_for_referential(ref_type=None, ref_categ=None, super_function=None):
     """ 
@@ -69,9 +69,9 @@ def open_report(func):
     And the object must have a field call "referential_id" related to the object "external.referential"
     """
     @functools.wraps(func)
-    def wrapper(self, cr, uid, external_session, object_id, *args, **kwargs):
-        if not self._columns.get('referential_id'):
-            raise osv.except_osv(_("Not Implemented"), _("The field referential_id doesn't exist on the object %s. Reporting system can not be used" %(self._name,)))
+    def wrapper(self, cr, uid, external_session, *args, **kwargs):
+        #if not self._columns.get('referential_id'):
+        #    raise osv.except_osv(_("Not Implemented"), _("The field referential_id doesn't exist on the object %s. Reporting system can not be used" %(self._name,)))
 
         report_obj = self.pool.get('external.report')
         context = kwargs.get('context')
@@ -80,12 +80,11 @@ def open_report(func):
             kwargs['context'] = context
         
         #Start the report
-        object = self.browse(cr, uid, object_id, context=context)
-        report_id = report_obj.start_report(cr, uid, id=None, method=func.__name__, object=object, context=context)
+        report_id = report_obj.start_report(cr, uid, id=None, method=func.__name__, object=external_session.sync_from_object, context=context)
 
         #Execute the original function and add the report_id to the context
         context['report_id'] = report_id
-        response = func(self, cr, uid, external_session, object_id, *args, **kwargs)
+        response = func(self, cr, uid, external_session, *args, **kwargs)
 
         #Close the report
         report_obj.end_report(cr, uid, report_id, context=context)
@@ -103,6 +102,7 @@ def catch_error_in_report(func):
     """
     @functools.wraps(func)
     def wrapper(self, cr, uid, external_session, resource, *args, **kwargs):
+        print 'start wrapper to catch '
         context = kwargs.get('context')
         if not (context and context.get('report_id')):
             raise osv.except_osv(_("Error"), _("There is no key report_id in the context you can not use the decorator in this case"))
@@ -117,12 +117,12 @@ def catch_error_in_report(func):
                                     self._name,
                                     func.__name__, 
                                     state='fail',
-                                    external_id=resource[context.get('external_id_for_report')],
-                                    #defaults=kwargs.get('defaults'),
+                                    #TODO manage external id and res_id in a good way
+                                    external_id=context.get('external_id_for_report') and resource[context.get('external_id_for_report')],
+                                    res_id= not context.get('external_id_for_report') and args[0],
                                     resource=resource,
                                     args = args,
-                                    kwargs = kwargs
-                                    #context=kwargs.get('context')
+                                    kwargs = kwargs,
                             )
         import_cr = pooler.get_db(cr.dbname).cursor()
         response = False
@@ -132,6 +132,11 @@ def catch_error_in_report(func):
             import_cr.rollback()
             report_line_obj.write(log_cr, uid, report_line_id, {
                             'error_message': 'Error with the mapping : %s. Error details : %s'%(e.mapping_name, e.value),
+                            }, context=context)
+            log_cr.commit()
+        except xmlrpclib.Fault as e:
+            report_line_obj.write(log_cr, uid, report_line_id, {
+                            'error_message': 'Error with xmlrpc protocole. Error details : error %s : %s'%(e.faultCode, e.faultString),
                             }, context=context)
             log_cr.commit()
         except osv.except_osv as e:

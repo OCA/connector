@@ -278,6 +278,22 @@ class external_referential(osv.osv):
                 return False
         return True
 
+    # Method to export external referential category
+    def build_external_ref_categ(self, cr, uid, id, context=None):
+        if isinstance(id,list):
+            id = id[0]
+        output_file = TemporaryFile('w+b')
+        fieldnames = ['id', 'name']
+        csv = FileCsvWriter(output_file, fieldnames, encoding="utf-8", writeheader=True, delimiter=',', quotechar='"')
+
+        referential = self.browse(cr, uid, id, context=context)
+        row = {
+            'id': "ref_categ_"+referential.type_id.categ_id.name,
+            'name': referential.type_id.categ_id.name,
+        }
+        csv.writerow(row)
+        return self.pool.get('output.file').open_output_file(cr, uid, 'external.referential.category.csv', output_file, 'Referential category export', context=context)
+
     # Method to export external referential type
     def build_external_ref_type(self, cr, uid, id, context=None):
         if isinstance(id,list):
@@ -288,7 +304,7 @@ class external_referential(osv.osv):
 
         referential = self.browse(cr, uid, id, context=context)
         row = {
-            'id': referential.type_id.name,
+            'id': "ref_type_"+referential.type_id.name,
             'name': referential.type_id.name,
             'categ_id:id': referential.categ_id.get_absolute_id(context=context),
             'code': referential.type_id.code,
@@ -301,45 +317,100 @@ class external_referential(osv.osv):
         if isinstance(id,list):
             id = id[0]
         output_file = TemporaryFile('w+b')
-        fieldnames = ['type_id:id', 'id', 'name']
+        fieldnames = ['id','name','type_id:id']
         csv = FileCsvWriter(output_file, fieldnames, encoding="utf-8", writeheader=True, delimiter=',', quotechar='"')
 
         referential = self.browse(cr, uid, id, context=context)
         row = {
-            'type_id:id': referential.type_id.get_absolute_id(context=context),
-            'id': referential.version_id.name,
+            'id': "ref_version_"+referential.version_id.name,
             'name': referential.version_id.name,
+            'type_id:id': referential.type_id.get_absolute_id(context=context),
             'code': referential.version_id.code,
         }
         csv.writerow(row)
         return self.pool.get('output.file').open_output_file(cr, uid, 'external.referential.version.csv', output_file, 'Referential Version Export', context=context)
 
+    # Method to export external referential
+    def build_external_ref(self, cr, uid, id, context=None):
+        if isinstance(id,list):
+            id = id[0]
+        output_file = TemporaryFile('w+b')
+        fieldnames = ['id', 'name', 'version_id:id','location','protocole','apiusername','apipass','debug']
+        csv = FileCsvWriter(output_file, fieldnames, encoding="utf-8", writeheader=True, delimiter=',', quotechar='"')
+
+        referential = self.browse(cr, uid, id, context=context)
+        row = {
+            'id': "ref_"+referential.type_id.name,
+            'name': referential.type_id.name,
+            'version_id:id': referential.version_id.get_absolute_id(context=context),
+            'location': referential.location,
+            'protocole': referential.protocole,
+            'apiusername': referential.apiusername,
+            'apipass': referential.apipass,
+            'debug': referential.debug,
+        }
+        csv.writerow(row)
+        return self.pool.get('output.file').open_output_file(cr, uid, 'external.referential.csv', output_file, 'Referential Type Export', context=context)
 
     # Method to export external referential type
     def build_external_mapping_template(self, cr, uid, id, context=None):
         if isinstance(id,list):
             id = id[0]
         output_file = TemporaryFile('w+b')
-        fieldnames = ['id', 'extra_name', 'version_id:id', 'model_id:id', 'external_list_method', 'external_get_method', 'external_update_method', 'external_create_method', 'external_delete_method', 'key_for_external_id', 'external_resource_name']
+        fieldnames = ['id','model_id:id','extra_name','external_list_method','external_search_method','external_get_method', 'external_update_method','external_create_method','external_delete_method','external_done_method','key_for_external_id','external_resource_name', 'version_id:id']
         csv = FileCsvWriter(output_file, fieldnames, encoding="utf-8", writeheader=True, delimiter=',', quotechar='"')
 
         referential = self.browse(cr, uid, id, context=context)
         for mapping in referential.mapping_ids:
             row = {
-                'id': mapping.get_absolute_id(context=context),
-                'extra_name': mapping.extra_name or '',
-                'version_id:id': referential.version_id.get_absolute_id(context=context),
+                'id': "mapping_"+mapping.get_absolute_id(context=context),
                 'model_id:id': mapping.model_id.get_external_id(context=context)[mapping.model_id.id],
+                'extra_name': mapping.extra_name or '',
                 'external_list_method': mapping.external_list_method or '',
+                'external_search_method': mapping.external_search_method or '',
                 'external_get_method': mapping.external_get_method or '',
                 'external_update_method': mapping.external_update_method or '',
                 'external_create_method': mapping.external_create_method or '',
                 'external_delete_method': mapping.external_delete_method or '',
+                'external_done_method': mapping.external_done_method or '',
                 'key_for_external_id': mapping.key_for_external_id or '',
                 'external_resource_name': mapping.external_resource_name or '',
+                'version_id:id': referential.version_id.get_absolute_id(context=context), # USEFULL ???
             }
             csv.writerow(row)
         return self.pool.get('output.file').open_output_file(cr, uid, 'external.mapping.template.csv', output_file, 'Mapping Template Export', context=context)
+
+
+    # Method to export external referential type
+    def build_external_mapping_lines(self, cr, uid, id, context=None):
+        if isinstance(id,list):
+            id = id[0]
+        output_file = TemporaryFile('w+b')
+        fieldnames = ['id', 'selected', 'sequence', 'type', 'evaluation_type', 'external_field', 'field_id:id', 'external_type', 'alternative_key', 'mapping_id:id', 'in_function','out_function','child_mapping_id:id','datetime_format']
+
+        csv = FileCsvWriter(output_file, fieldnames, encoding="utf-8", writeheader=True, delimiter=',', quotechar='"')
+
+        referential = self.browse(cr, uid, id, context=context)
+        for mapping in referential.mapping_ids:
+            for line in mapping.mapping_ids:
+                row = {
+                    'id': line.get_absolute_id(context=context),
+                    'selected': line.selected or '',
+                    'sequence': line.sequence or '',
+                    'type': line.type or '',
+                    'evaluation_type': line.evaluation_type or '',
+                    'external_field': line.external_field or '',
+                    'field_id:id': line.field_id.get_external_id(context=context)[line.field_id.id],
+                    'external_type': line.external_type or '',
+                    'alternative_key': str(line.alternative_key) or '',
+                    'mapping_id:id': line.mapping_id.get_absolute_id(context=context),
+                    'in_function': line.in_function or '',
+                    'out_function': line.out_function or '',
+                    'child_mapping_id:id': line.child_mapping_id and line.child_mapping_id.get_absolute_id(context=context) or '',
+                    'datetime_format': line.datetime_format or '',
+                }
+                csv.writerow(row)
+        return self.pool.get('output.file').open_output_file(cr, uid, 'external.mappinglines.template.csv', output_file, 'Mapping Template Export', context=context)
 
     _constraints = [
         (_test_dot_in_name, 'The name cannot contain a dot!', ['name']),
@@ -434,18 +505,6 @@ class external_mapping(osv.osv):
             mapping_line_obj.create(cr, uid, vals)
         return True
 
-    def get_absolute_id(self, cr, uid, id, context=None):
-        if isinstance(id,list):
-            id = id[0]
-        mapping = self.browse(cr, uid, id, context=context)
-        if mapping.template_id:
-            mapping_id = mapping.template_id.get_external_id(context=context)[mapping.template_id.id]
-        else:
-            version_code = mapping.referential_id.version_id.code.replace(' ','_')
-            mapping_name = mapping.model + (mapping.extra_name and ('_' + mapping.extra_name) or '')
-            mapping_id = (version_code + '_' + mapping_name).replace('.','_')
-        return mapping_id
-
     # Method to export the mapping file
     def create_mapping_file(self, cr, uid, id, context=None):
         if isinstance(id,list):
@@ -471,6 +530,18 @@ class external_mapping(osv.osv):
             }
             csv.writerow(row)
         return self.pool.get('output.file').open_output_file(cr, uid, 'external.mappinglines.template.csv', output_file, 'Mapping Line Export', context=context)
+        
+    def get_absolute_id(self, cr, uid, id, context=None):
+        if isinstance(id,list):
+            id = id[0]
+        mapping = self.browse(cr, uid, id, context=context)
+        if mapping.template_id:
+            mapping_id = mapping.template_id.get_external_id(context=context)[mapping.template_id.id]
+        else:
+            version_name = mapping.referential_id.version_id.name.replace(' ','_')
+            mapping_name = mapping.model + (mapping.extra_name and ('_' + mapping.extra_name) or '')
+            mapping_id = (version_name + '_' + mapping_name).replace('.','_')
+        return mapping_id
 
     _sql_constraints = [
         ('ref_template_uniq', 'unique (referential_id, template_id)', 'A referential can not have various mapping imported from the same template')

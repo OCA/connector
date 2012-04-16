@@ -288,7 +288,7 @@ class external_referential(osv.osv):
 
         referential = self.browse(cr, uid, id, context=context)
         row = {
-            'id': "ref_categ_"+referential.type_id.categ_id.name,
+            'id': referential.type_id.categ_id.name,
             'name': referential.type_id.categ_id.name,
         }
         csv.writerow(row)
@@ -304,7 +304,7 @@ class external_referential(osv.osv):
 
         referential = self.browse(cr, uid, id, context=context)
         row = {
-            'id': "ref_type_"+referential.type_id.name,
+            'id': referential.type_id.name,
             'name': referential.type_id.name,
             'categ_id:id': referential.categ_id.get_absolute_id(context=context),
             'code': referential.type_id.code,
@@ -322,7 +322,7 @@ class external_referential(osv.osv):
 
         referential = self.browse(cr, uid, id, context=context)
         row = {
-            'id': "ref_version_"+referential.version_id.name,
+            'id': referential.version_id.name,
             'name': referential.version_id.name,
             'type_id:id': referential.type_id.get_absolute_id(context=context),
             'code': referential.version_id.code,
@@ -340,7 +340,7 @@ class external_referential(osv.osv):
 
         referential = self.browse(cr, uid, id, context=context)
         row = {
-            'id': "ref_"+referential.type_id.name,
+            'id': referential.type_id.name,
             'name': referential.type_id.name,
             'version_id:id': referential.version_id.get_absolute_id(context=context),
             'location': referential.location,
@@ -363,7 +363,7 @@ class external_referential(osv.osv):
         referential = self.browse(cr, uid, id, context=context)
         for mapping in referential.mapping_ids:
             row = {
-                'id': "mapping_"+mapping.get_absolute_id(context=context),
+                'id': mapping.get_absolute_id(context=context),
                 'model_id:id': mapping.model_id.get_external_id(context=context)[mapping.model_id.id],
                 'extra_name': mapping.extra_name or '',
                 'external_list_method': mapping.external_list_method or '',
@@ -386,7 +386,7 @@ class external_referential(osv.osv):
         if isinstance(id,list):
             id = id[0]
         output_file = TemporaryFile('w+b')
-        fieldnames = ['id', 'selected', 'sequence', 'type', 'evaluation_type', 'external_field', 'field_id:id', 'external_type', 'alternative_key', 'mapping_id:id', 'in_function','out_function','child_mapping_id:id','datetime_format']
+        fieldnames = ['id', 'selected', 'sequence', 'type', 'evaluation_type', 'external_field', 'field_id:id', 'external_type', 'alternative_key', 'mapping_id:id', 'function_name', 'in_function','out_function','child_mapping_id:id','datetime_format']
 
         csv = FileCsvWriter(output_file, fieldnames, encoding="utf-8", writeheader=True, delimiter=',', quotechar='"')
 
@@ -404,6 +404,7 @@ class external_referential(osv.osv):
                     'external_type': line.external_type or '',
                     'alternative_key': str(line.alternative_key) or '',
                     'mapping_id:id': line.mapping_id.get_absolute_id(context=context),
+                    'function_name': line.function_name or '',
                     'in_function': line.in_function or '',
                     'out_function': line.out_function or '',
                     'child_mapping_id:id': line.child_mapping_id and line.child_mapping_id.get_absolute_id(context=context) or '',

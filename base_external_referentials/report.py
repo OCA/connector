@@ -129,7 +129,6 @@ class external_report(osv.osv):
         log_cr = pooler.get_db(cr.dbname).cursor()
         try:
             if report_id:
-                print 'report already exist'
                 self.write(log_cr, uid, report_id,
                            {'start_date': time.strftime(DEFAULT_SERVER_DATETIME_FORMAT),
                             'end_date': False},
@@ -137,13 +136,11 @@ class external_report(osv.osv):
                 # clean successful lines of the last report
                 self._clean_successful_lines(log_cr, uid, report_id, context)
             else:
-                print 'create report'
                 report_id = self.create(
                     log_cr, uid,
                     self._prepare_start_report(
                         cr, uid, method, object, context=context),
                     context=context)
-            print 'commit'
             log_cr.commit()
 
         finally:
@@ -273,77 +270,39 @@ class external_report_lines(osv.osv):
     def _log_base(self, cr, uid, model, action, state=None, res_id=None,
                   external_id=None,exception=None, resource=None,
                   args=None, kwargs=None):
-        #defaults = defaults or {}
-        #context = context or {}
-        defaults = kwargs.get('defaults')
+
         context = kwargs.get('context')
         existing_line_id = context.get('retry_report_line_id', False)
-
-        # We do not log any action if no report is started
-        # if the log was a fail, we raise to not let the import continue
-        # This ensure a backward compatibility, synchro will continue to
-        # work exactly the same way if no report is started
-        if not(existing_line_id or context.get('report_id', False)):
-            if state == 'fail':
-                raise
-            return False
-
         report_id = context['report_id']
-        log_cr = pooler.get_db(cr.dbname).cursor()
 
-        try:
-            # connection object can not be kept in text indeed
-            # FIXME : see if we have some problem with other objects
-            # and maybe remove from the conect all objects
-            # which are not string, boolean, list, dict, integer, float or ?
-            if existing_line_id:
-                self.write(log_cr, uid,
-                               existing_line_id,
-                               {'state': state,
-                                'date': time.strftime(DEFAULT_SERVER_DATETIME_FORMAT),
-                                'error_message': exception and str(exception) or False,
-                                'args': args,
-                                'kwargs': kwargs,
-                                })
-            else:
-                existing_line_id = self.create(log_cr, uid, {
-                                'report_id': report_id,
-                                'state': state,
-                                'res_model': model,
-                                'action': action,
-                                'date': time.strftime(DEFAULT_SERVER_DATETIME_FORMAT),
-                                'res_id': res_id,
-                                'external_id': external_id,
-                                'error_message': exception and str(exception) or False,
-                                'resource': resource,
-                                'args': args,
-                                'kwargs': kwargs,
+        # connection object can not be kept in text indeed
+        # FIXME : see if we have some problem with other objects
+        # and maybe remove from the conect all objects
+        # which are not string, boolean, list, dict, integer, float or ?
+        if existing_line_id:
+            self.write(cr, uid,
+                           existing_line_id,
+                           {'state': state,
+                            'date': time.strftime(DEFAULT_SERVER_DATETIME_FORMAT),
+                            'error_message': exception and str(exception) or False,
+                            'args': args,
+                            'kwargs': kwargs,
                             })
-                print existing_line_id
-            log_cr.commit()
-
-        finally:
-            log_cr.close()
+        else:
+            existing_line_id = self.create(cr, uid, {
+                            'report_id': report_id,
+                            'state': state,
+                            'res_model': model,
+                            'action': action,
+                            'date': time.strftime(DEFAULT_SERVER_DATETIME_FORMAT),
+                            'res_id': res_id,
+                            'external_id': external_id,
+                            'error_message': exception and str(exception) or False,
+                            'resource': resource,
+                            'args': args,
+                            'kwargs': kwargs,
+                        })
         return existing_line_id
-
-
-
-#Deprecated
-    def log_failed(self, cr, uid, model, action,
-                   res_id=None, external_id=None, exception=None,
-                   resource=None, defaults=None, context=None):
-        return self._log_base(cr, uid, model, action, 'fail', res_id=res_id,
-                             external_id=external_id, exception=exception,
-                             resource=resource, defaults=defaults,
-                             context=context)
-#Deprecated
-    def log_success(self, cr, uid, model, action,
-                    res_id=None, external_id=None, exception=None,
-                    resource=None, defaults=None, context=None):
-        return self._log_base(cr, uid,  model, action, 'success', res_id=res_id,
-                             external_id=external_id, exception=exception,
-                             resource=resource, defaults=defaults,
-                             context=context)
 
     def retry(self, cr, uid, ids, context=None):
         if isinstance(ids, int):

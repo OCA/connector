@@ -92,7 +92,11 @@ def prefixed_id(self, id):
     return self._name.replace('.', '_') + '/' + str(id)
 
 def id_from_prefixed_id(self, prefixed_id):
-    return prefixed_id.split(self._name.replace('.', '_') + '/')[1]
+    res = prefixed_id.split(self._name.replace('.', '_') + '/')[1]
+    if res.isdigit():
+        return int(res)
+    else:
+        return res
 
 
 #======================================NOT USED ANYWHERE
@@ -692,11 +696,9 @@ def _get_default_export_values(self, cr, uid, external_session, mapping_id=None,
     return defaults
 
 def _get_last_exported_date(self, cr, uid, external_session, context=None):
-    print '======================get originalkkkkkkkkkkkkkkkkkkkkkkkkkk================'
     return False
 
 def _set_last_exported_date(self, cr, uid, external_session, date, context=None):
-    print '======================set originalkkkkkkkkkkkkkkkkkkkkkkkkkk================'
     return False
 
 
@@ -751,7 +753,6 @@ def export_resources(self, cr, uid, ids, resource_name, context=None):
     :return: True
     :rtype: boolean
     """
-    print 'export resource'
     for browse_record in self.browse(cr, uid, ids, context=context):
         if browse_record._name == 'external.referential':
             external_session = ExternalSession(browse_record)
@@ -821,8 +822,6 @@ def _export_resources(self, cr, uid, external_session, method="onebyone", contex
     while ids:
         ids_to_process = ids[0:step]
         ids = ids[step:]
-        print 'read %s id'%len(ids_to_process)
-        print datetime.now()
         resources = self._get_oe_resources(cr, uid, external_session, ids_to_process, langs=langs,
                                     smart_export=smart_export, last_exported_date=last_exported_date,
                                     mapping=mapping, mapping_id=mapping_id, context=context)
@@ -832,8 +831,8 @@ def _export_resources(self, cr, uid, external_session, method="onebyone", contex
                                     mapping, mapping_id, defaults=defaults, context=context)
         else:
             raise osv.except_osv(_('Developper Error'), _('only method export onebyone is implemented in base_external_referentials'))
-    now = datetime.now().strftime(DEFAULT_SERVER_DATETIME_FORMAT)
-    self._set_last_exported_date(cr, uid, external_session, now, context=context)
+    #now = datetime.now().strftime(DEFAULT_SERVER_DATETIME_FORMAT)
+    #self._set_last_exported_date(cr, uid, external_session, now, context=context)
     return True
 
 def _transform_and_send_one_resource(self, cr, uid, external_session, resource, resource_id,

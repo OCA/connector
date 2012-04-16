@@ -41,6 +41,8 @@ class FileConnection(object):
 
     def send(self, filepath, filename, output_file, create_patch=None):
         if self.is_('ftp'):
+            print "filepath: ",filepath
+            print "current directory : ",self.connection.pwd()
             self.connection.cwd(filepath)
             self.connection.storbinary('STOR ' + filename, output_file)
             output_file.close()

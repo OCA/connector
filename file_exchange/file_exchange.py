@@ -229,6 +229,7 @@ class file_exchange(osv.osv):
         method.start_action('action_before_all', model_obj, context=context)
         defaults = self.get_export_default_fields_values(cr, uid, method_id, context=context)
         encoding = method.encoding
+
     #=== Get external file ids and fields
         fields_name_ids = file_fields_obj.search(cr, uid, [['file_id', '=', method.id]], context=context)
         fields_info = file_fields_obj.read(cr, uid, fields_name_ids, ['name', 'mapping_line_id'], context=context)
@@ -276,9 +277,9 @@ class file_exchange(osv.osv):
                         row[k.encode(encoding)] = "ERROR"
                     #TODO raise an error correctly
             dw.writerow(row)
+
         output_file.seek(0)
         method.start_action('action_after_all', model_obj, ids_to_export, context=context,external_session=external_session)
-
     #=== Export file
         external_session.connection.send(method.folder_path, filename, output_file)
         external_session.logger.info("File transfert have been done succesfully %s"%(method.name,))

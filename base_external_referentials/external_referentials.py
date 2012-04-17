@@ -455,11 +455,16 @@ class external_mapping(osv.osv):
             model_ids = [mapping.model_id.id] + self.pool.get('ir.model').search(cr, uid, [['model','in', inherits_model]], context=context)
             res[mapping.id] = model_ids
         return res
+
+    def _related_model_ids(self, cr, uid, model, context=None):
+        inherits_model = [x for x in self.pool.get(model.model)._inherits]
+        model_ids = [model.id] + self.pool.get('ir.model').search(cr, uid, [['model','in', inherits_model]], context=context)
+        return model_ids
     
-    def model_id_change(self, cr, uid, ids, model_id=None):
+    def model_id_change(self, cr, uid, ids, model_id=None, context=None):
         if model_id:
-            model = self.pool.get('ir.model').browse(cr, uid, model_id)
-            return {'value': {'related_model_ids': self._get_related_model_ids(cr, uid, model)}}
+            model = self.pool.get('ir.model').browse(cr, uid, model_id, context=context)
+            return {'value': {'related_model_ids': self._related_model_ids(cr, uid, model, context=context)}}
         else:
             return {}
 

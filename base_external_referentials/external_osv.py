@@ -37,8 +37,9 @@ from tools import DEFAULT_SERVER_DATETIME_FORMAT, DEFAULT_SERVER_DATE_FORMAT
 
 
 class ExternalSession(object):
-    def __init__(self, referential):
+    def __init__(self, referential, sync_from_object):
         self.referential_id = referential
+        self.sync_from_object = sync_from_object
         self.debug = referential.debug
         self.logger = logging.getLogger(referential.name)
         self.connection = referential.external_connection(debug=self.debug, logger = self.logger)

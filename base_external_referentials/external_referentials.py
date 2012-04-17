@@ -418,6 +418,15 @@ class external_referential(osv.osv):
     
     #TODO warning on name change if mapping exist: Implemented in attrs
     
+    def get_absolute_id(self, cr, uid, id, context=None):
+        if isinstance(id,list):
+            id = id[0]
+        referential = self.browse(cr, uid, id, context=context)
+        referential_id = referential.get_external_id(context=context)[version.id]
+        if not referential_id:
+            referential_id = referential.name.replace('.','_').replace(' ','_')
+        return referential_id
+
 external_referential()
 
 class external_mapping_line(osv.osv):

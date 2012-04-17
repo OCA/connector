@@ -357,22 +357,24 @@ class file_exchange(osv.osv):
         if isinstance(id,list):
             id = id[0]
         output_file = TemporaryFile('w+b')
-        fieldnames = ['id', 'name', 'type', 'mapping_template_id:id', 'encoding', 'format', 'delimiter', 'search_filter', 'folder_path', 'archive_folder_path', 'filename', 'do_not_update', 'action_before_all', 'action_after_all', 'action_before_each', 'action_after_each', 'check_if_import', 'pre_processing']
+        fieldnames = ['id', 'name','referential_id:id', 'type','do_not_update', 'mapping_template_id:id', 'encoding', 'format', 'search_filter','lang','delimiter', 'folder_path', 'archive_folder_path', 'filename', 'action_before_all', 'action_after_all', 'action_before_each', 'action_after_each', 'check_if_import', 'pre_processing']
         csv = FileCsvWriter(output_file, fieldnames, encoding="utf-8", writeheader=True, delimiter=',', quotechar='"')
         current_file = self.browse(cr, uid, id, context=context)
         row = {
             'id': current_file.get_absolute_id(context=context),
             'name': current_file.name,
+            'referential_id:id':current_file.referential_id.get_absolute_id(context=context),
             'type': current_file.type,
+            'do_not_update': str(current_file.do_not_update),
             'mapping_template_id:id': current_file.mapping_id.get_absolute_id(context=context),
             'encoding': current_file.encoding,
             'format': current_file.format,
-            'delimiter': current_file.delimiter,
             'search_filter': current_file.search_filter or '',
+            'lang'
+            'delimiter': current_file.delimiter,
             'folder_path': current_file.folder_path or '',
             'archive_folder_path': current_file.archive_folder_path or '',
             'filename': current_file.filename,
-            'do_not_update': str(current_file.do_not_update),
             'action_before_all': current_file.action_before_all or '',
             'action_after_all': current_file.action_after_all or '',
             'action_before_each': current_file.action_before_each or '',
@@ -393,14 +395,15 @@ class file_exchange(osv.osv):
         current_file = self.browse(cr, uid, id, context=context)
         for field in current_file.field_ids:
             row = {
-                'id': field.get_absolute_id(context=context),
-                'is_required': str(field.is_required),
+                'file_id:id': field.file_id.get_absolute_id(context=context),
                 'name': field.name,
-                'custom_name': field.custom_name or '',
+                'id': field.get_absolute_id(context=context),
                 'sequence': str(field.sequence),
                 'mappinglines_template_id:id': field.mapping_line_id and field.mapping_line_id.get_absolute_id(context=context) or '',
-                'file_id:id': field.file_id.get_absolute_id(context=context),
+                'custom_name': field.custom_name or '',
                 'default_value': field.default_value or '',
+                'is_required': str(field.is_required),
+                'alternative_key': str(field.alternative_key),
                 'advanced_default_value': field.advanced_default_value or '',
             }
             csv.writerow(row)

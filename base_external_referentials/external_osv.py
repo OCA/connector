@@ -759,10 +759,10 @@ def export_resources(self, cr, uid, ids, resource_name, context=None):
         else:
             if hasattr(browse_record, 'referential_id'):
                 external_session = ExternalSession(browse_record.referential_id)
-                context = self.init_context_before_exporting_resource(cr, uid, external_session, browse_record.id, resource_name, context=context)
             else:
                 raise osv.except_osv(_("Not Implemented"), _("The field referential_id doesn't exist on the object %s." %(browse_record._name,)))
         external_session.sync_from_object = browse_record
+        context = self.init_context_before_exporting_resource(cr, uid, external_session, browse_record.id, resource_name, context=context)
         self.pool.get(resource_name)._export_resources(cr, uid, external_session, context=context)
     return True
 
@@ -1194,7 +1194,7 @@ def _transform_field(self, cr, uid, external_session, convertion_type, field_val
     external_type = mapping_line['external_type']
     internal_type = mapping_line['internal_type']
     internal_field = mapping_line['internal_field']
-    if field_value:
+    if not (field_value is False or field_value is None):
         if internal_type == 'many2one' and mapping_line['evaluation_type']=='direct':
             if external_type not in ['int', 'unicode']:
                 raise osv.except_osv(_('User Error'), _('Wrong external type for mapping %s. One2Many object must have for external type string or integer')%(mapping_line['name'],))

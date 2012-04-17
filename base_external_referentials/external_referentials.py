@@ -386,7 +386,7 @@ class external_referential(osv.osv):
         if isinstance(id,list):
             id = id[0]
         output_file = TemporaryFile('w+b')
-        fieldnames = ['id', 'selected', 'sequence', 'type', 'evaluation_type', 'external_field', 'field_id:id', 'external_type', 'alternative_key', 'mapping_id:id', 'function_name', 'in_function','out_function','child_mapping_id:id','datetime_format']
+        fieldnames = ['id', 'sequence', 'type', 'evaluation_type', 'external_field', 'field_id:id', 'external_type', 'alternative_key', 'mapping_id:id', 'function_name', 'in_function','out_function','child_mapping_id:id','datetime_format']
 
         csv = FileCsvWriter(output_file, fieldnames, encoding="utf-8", writeheader=True, delimiter=',', quotechar='"')
 
@@ -395,12 +395,11 @@ class external_referential(osv.osv):
             for line in mapping.mapping_ids:
                 row = {
                     'id': line.get_absolute_id(context=context),
-                    'selected': line.selected or '',
                     'sequence': line.sequence or '',
                     'type': line.type or '',
                     'evaluation_type': line.evaluation_type or '',
                     'external_field': line.external_field or '',
-                    'field_id:id': line.field_id.get_external_id(context=context)[line.field_id.id],
+                    'field_id:id': line.field_id and line.field_id.get_external_id(context=context)[line.field_id.id],
                     'external_type': line.external_type or '',
                     'alternative_key': str(line.alternative_key) or '',
                     'mapping_id:id': line.mapping_id.get_absolute_id(context=context),
@@ -511,25 +510,29 @@ class external_mapping(osv.osv):
         if isinstance(id,list):
             id = id[0]
         output_file = TemporaryFile('w+b')
-        fieldnames = ['id', 'mapping_id:id', 'external_field', 'field_id:id', 'type', 'evaluation_type', 'external_type', 'child_mapping_id:id', 'alternative_key', 'in_function', 'out_function']
+        fieldnames = ['id', 'sequence', 'type', 'evaluation_type', 'external_field', 'field_id:id', 'external_type', 'alternative_key', 'mapping_id:id', 'function_name', 'in_function','out_function','child_mapping_id:id','datetime_format']
         csv = FileCsvWriter(output_file, fieldnames, encoding="utf-8", writeheader=True, delimiter=',', quotechar='"')
 
         mapping = self.browse(cr, uid, id, context=context)
         for line in mapping.mapping_ids:
-            row = {
-                'id': line.get_absolute_id(context=context),
-                'mapping_id:id': line.mapping_id.get_absolute_id(context=context),
-                'external_field': line.external_field or '',
-                'field_id:id': line.field_id and line.field_id.get_external_id(context=context)[line.field_id.id],
-                'type': line.type,
-                'evaluation_type': line.evaluation_type,
-                'external_type': line.external_type,
-                'child_mapping_id:id': line.child_mapping_id and line.child_mapping_id.get_absolute_id(context=context) or '',
-                'alternative_key': str(line.alternative_key),
-                'in_function': line.in_function or '',
-                'out_function': line.out_function or '',
-            }
-            csv.writerow(row)
+            if line.selected:
+                row = {
+                        'id': line.get_absolute_id(context=context),
+                        'sequence': line.sequence or '',
+                        'type': line.type or '',
+                        'evaluation_type': line.evaluation_type or '',
+                        'external_field': line.external_field or '',
+                        'field_id:id': line.field_id and line.field_id.get_external_id(context=context)[line.field_id.id],
+                        'external_type': line.external_type or '',
+                        'alternative_key': str(line.alternative_key) or '',
+                        'mapping_id:id': line.mapping_id.get_absolute_id(context=context),
+                        'function_name': line.function_name or '',
+                        'in_function': line.in_function or '',
+                        'out_function': line.out_function or '',
+                        'child_mapping_id:id': line.child_mapping_id and line.child_mapping_id.get_absolute_id(context=context) or '',
+                        'datetime_format': line.datetime_format or '',
+                    }
+                csv.writerow(row)
         return self.pool.get('output.file').open_output_file(cr, uid, 'external.mappinglines.template.csv', output_file, 'Mapping Line Export', context=context)
         
     def get_absolute_id(self, cr, uid, id, context=None):

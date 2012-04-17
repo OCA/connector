@@ -217,7 +217,7 @@ class file_exchange(osv.osv):
         method = self.browse(cr, uid, method_id, context=context)
 
     #=== Get connection
-        external_session = ExternalSession(method.referential_id)
+        external_session = ExternalSession(method.referential_id, method)
         sequence_obj = self.pool.get('ir.sequence')
         d = sequence_obj._interpolation_dict()
         filename = sequence_obj._interpolate(method.filename, d)

@@ -405,11 +405,11 @@ def import_resources(self, cr, uid, ids, resource_name, method="search_then_read
     result = {"create_ids" : [], "write_ids" : []}
     for browse_record in self.browse(cr, uid, ids, context=context):
         if browse_record._name == 'external.referential':
-            external_session = ExternalSession(browse_record)
+            external_session = ExternalSession(browse_record, browse_record)
         else:
             if hasattr(browse_record, 'referential_id'):
                 context['%s_id'%browse_record._name.replace('.', '_')] = browse_record.id
-                external_session = ExternalSession(browse_record.referential_id)
+                external_session = ExternalSession(browse_record.referential_id, browse_record)
             else:
                 raise osv.except_osv(_("Not Implemented"), _("The field referential_id doesn't exist on the object %s. Reporting system can not be used" %(browse_record._name,)))
         defaults = self.pool.get(resource_name)._get_default_import_values(cr, uid, external_session, context=context)
@@ -756,13 +756,12 @@ def export_resources(self, cr, uid, ids, resource_name, context=None):
     """
     for browse_record in self.browse(cr, uid, ids, context=context):
         if browse_record._name == 'external.referential':
-            external_session = ExternalSession(browse_record)
+            external_session = ExternalSession(browse_record, browse_record)
         else:
             if hasattr(browse_record, 'referential_id'):
-                external_session = ExternalSession(browse_record.referential_id)
+                external_session = ExternalSession(browse_record.referential_id, browse_record)
             else:
                 raise osv.except_osv(_("Not Implemented"), _("The field referential_id doesn't exist on the object %s." %(browse_record._name,)))
-        external_session.sync_from_object = browse_record
         context = self.init_context_before_exporting_resource(cr, uid, external_session, browse_record.id, resource_name, context=context)
         self.pool.get(resource_name)._export_resources(cr, uid, external_session, context=context)
     return True

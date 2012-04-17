@@ -148,7 +148,7 @@ class file_exchange(osv.osv):
         method = self.browse(cr, uid, method_id, context=context)
         defaults = self._get_import_default_fields_values(cr, uid, method_id, context=context)
         context['report_line_based_on'] = method.mapping_id.model_id.model
-        external_session = ExternalSession(method.referential_id)
+        external_session = ExternalSession(method.referential_id, method)
         model_obj = self.pool.get(method.mapping_id.model_id.model)
         mapping,mapping_id = model_obj._init_mapping(cr, uid, external_session.referential_id.id, convertion_type='from_external_to_openerp', mapping_id=method.mapping_id.id, context=context)
 
@@ -388,7 +388,7 @@ class file_exchange(osv.osv):
         if isinstance(id,list):
             id = id[0]
         output_file = TemporaryFile('w+b')
-        fieldnames = ['id', 'is_required', 'name', 'custom_name', 'sequence', 'mappinglines_template_id:id', 'file_id:id', 'default_value', 'advanced_default_value', 'alternative_key']
+        fieldnames = ['id', 'is_required', 'name', 'custom_name', 'sequence', 'mappinglines_template_id:id', 'file_id:id', 'default_value', 'advanced_default_value']
         csv = FileCsvWriter(output_file, fieldnames, encoding="utf-8", writeheader=True, delimiter=',', quotechar='"')
         current_file = self.browse(cr, uid, id, context=context)
         for field in current_file.field_ids:
@@ -402,7 +402,6 @@ class file_exchange(osv.osv):
                 'file_id:id': field.file_id.get_absolute_id(context=context),
                 'default_value': field.default_value or '',
                 'advanced_default_value': field.advanced_default_value or '',
-                'alternative_key': str(field.alternative_key),
             }
             csv.writerow(row)
         return self.pool.get('output.file').open_output_file(cr, uid, 'file.fields.csv', output_file, 'File Exchange Fields Export', context=context)
@@ -505,12 +504,12 @@ class file_default_import_values(osv.osv):
     _columns = {
         'import_default_field':fields.many2one('ir.model.fields', 'Default Field', domain="[('model_id', '=', related_model)]"),
         'import_default_value':fields.char('Default Value', size=128),
-        'file_id': fields.many2one('file.exchange', 'File Exchange', required=True),
-        'mapping_id':fields.many2one('external.mapping', 'External Mapping', required=True),
-        'mapping_template_id':fields.many2one('external.mapping.template', 'External Mapping Template', required=True),
+        'file_id': fields.many2one('file.exchange', 'File Exchange'),
+        'mapping_id':fields.many2one('external.mapping', 'External Mapping'),
+        'mapping_template_id':fields.many2one('external.mapping.template', 'External Mapping Template'),
         #'related_model_ids':fields.related('mapping_id', 'related_model_ids', type='many2many', relation="ir.model", string='Related Model'),
         'related_model':fields.related('mapping_id', 'model_id', type='many2one',relation="ir.model", string='Related Model'),
-        'type':fields.selection([('integer', 'Integer'), ('float', 'Float'),('char','String'),('dict','Dict'),('list','List')], 'Field Type', required=True),
+        'type':fields.selection([('integer', 'Integer'), ('float', 'Float'),('char','String'),('dict','Dict'),('list','List')], 'Field Type'),
     }
 
     def get_absolute_id(self, cr, uid, id, context=None):

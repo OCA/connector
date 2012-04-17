@@ -35,6 +35,7 @@ Goal : store file details and and file fields
     'update_xml': [ 
         'file_exchange_view.xml',
         'file_exchange_menu.xml',
+        'settings/external.referential.category.csv',
     ],
     'demo_xml': [],
     'installable': True,

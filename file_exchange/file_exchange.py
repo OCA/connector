@@ -357,7 +357,7 @@ class file_exchange(osv.osv):
         if isinstance(id,list):
             id = id[0]
         output_file = TemporaryFile('w+b')
-        fieldnames = ['id', 'name','referential_id:id', 'type','do_not_update', 'mapping_template_id:id', 'encoding', 'format', 'search_filter','lang','delimiter', 'folder_path', 'archive_folder_path', 'filename', 'action_before_all', 'action_after_all', 'action_before_each', 'action_after_each', 'check_if_import', 'pre_processing']
+        fieldnames = ['id', 'name','referential_id:id', 'type','do_not_update', 'mapping_template_id:id', 'encoding', 'format', 'search_filter','delimiter', 'folder_path', 'archive_folder_path', 'filename', 'action_before_all', 'action_after_all', 'action_before_each', 'action_after_each', 'check_if_import', 'pre_processing']
         csv = FileCsvWriter(output_file, fieldnames, encoding="utf-8", writeheader=True, delimiter=',', quotechar='"')
         current_file = self.browse(cr, uid, id, context=context)
         row = {
@@ -370,7 +370,7 @@ class file_exchange(osv.osv):
             'encoding': current_file.encoding,
             'format': current_file.format,
             'search_filter': current_file.search_filter or '',
-            'lang'
+#            'lang'
             'delimiter': current_file.delimiter,
             'folder_path': current_file.folder_path or '',
             'archive_folder_path': current_file.archive_folder_path or '',
@@ -403,7 +403,6 @@ class file_exchange(osv.osv):
                 'custom_name': field.custom_name or '',
                 'default_value': field.default_value or '',
                 'is_required': str(field.is_required),
-                'alternative_key': str(field.alternative_key),
                 'advanced_default_value': field.advanced_default_value or '',
             }
             csv.writerow(row)

@@ -299,7 +299,7 @@ class external_referential(osv.osv):
         if isinstance(id,list):
             id = id[0]
         output_file = TemporaryFile('w+b')
-        fieldnames = ['id', 'name', 'categ_id:id']
+        fieldnames = ['id', 'name', 'categ_id:id', 'code']
         csv = FileCsvWriter(output_file, fieldnames, encoding="utf-8", writeheader=True, delimiter=',', quotechar='"')
 
         referential = self.browse(cr, uid, id, context=context)
@@ -317,7 +317,7 @@ class external_referential(osv.osv):
         if isinstance(id,list):
             id = id[0]
         output_file = TemporaryFile('w+b')
-        fieldnames = ['id','name','type_id:id']
+        fieldnames = ['id','name','type_id:id', 'code']
         csv = FileCsvWriter(output_file, fieldnames, encoding="utf-8", writeheader=True, delimiter=',', quotechar='"')
 
         referential = self.browse(cr, uid, id, context=context)
@@ -459,7 +459,7 @@ class external_mapping(osv.osv):
     def model_id_change(self, cr, uid, ids, model_id=None):
         if model_id:
             model = self.pool.get('ir.model').browse(cr, uid, model_id)
-            return {'value': {'related_model_ids': self._related_model_ids(cr, uid, model)}}
+            return {'value': {'related_model_ids': self._get_related_model_ids(cr, uid, model)}}
         else:
             return {}
 

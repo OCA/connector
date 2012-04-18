@@ -441,7 +441,7 @@ class external_mapping_line(osv.osv):
                                     and mapping_line.function_name \
                                     or mapping_line.external_field \
                                     or mapping_line.field_id.name) \
-                                    + ('=>'+mapping_line.mapping_id.extra_name or '')
+                                    +'=>'+ (mapping_line.mapping_id.extra_name or '')
         return res
     
     _columns = {

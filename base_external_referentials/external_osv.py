@@ -1118,14 +1118,14 @@ def _transform_one_resource(self, cr, uid, external_session, convertion_type, re
     for mapping_line in mapping_lines:
         if convertion_type == 'from_external_to_openerp':
             from_field = mapping_line['external_field']
-            if not from_field:
+            if not from_field and mapping_line['evaluation_type'] != 'function':
                 from_field = "%s_%s" %(mapping_line['child_mapping_id'][1], mapping_line['child_mapping_id'][0])
             to_field = mapping_line['internal_field']
         elif convertion_type == 'from_openerp_to_external':
             from_field = mapping_line['internal_field']
             to_field = mapping_line['external_field']
 
-        if from_field in resource.keys() or mapping_line['evaluation_type'] == 'function': #function field should be always played as they can depend of every field
+        if mapping_line['evaluation_type'] == 'function' or from_field in resource.keys(): #function field should be always played as they can depend of every field
             field_value = resource.get(from_field)
             if mapping_line['evaluation_type'] == 'sub-mapping':
                 sub_mapping_list.append(mapping_line)
@@ -1140,6 +1140,7 @@ def _transform_one_resource(self, cr, uid, external_session, convertion_type, re
                              'uid': uid,
                              'external_session': external_session,
                              'resource': resource,
+                             'data': resource, #only for compatibility with the old version => deprecated
                              'referential_id': external_session.referential_id.id,
                              'defaults': defaults,
                              'context': context,

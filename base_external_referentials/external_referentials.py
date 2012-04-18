@@ -441,7 +441,8 @@ class external_mapping_line(osv.osv):
                                     and mapping_line.function_name \
                                     or mapping_line.external_field \
                                     or mapping_line.field_id.name) \
-                                    +'=>'+ (mapping_line.mapping_id.extra_name or '')
+                                    + (mapping_line.mapping_id.extra_name \
+                                    and ('=>' + mapping_line.mapping_id.extra_name) or '')
         return res
     
     _columns = {
@@ -557,9 +558,9 @@ class external_mapping(osv.osv):
         if mapping.template_id:
             mapping_id = mapping.template_id.get_external_id(context=context)[mapping.template_id.id]
         else:
-            version_name = mapping.referential_id.version_id.name.replace(' ','_')
+            version_code = mapping.referential_id.version_id.code.replace(' ','_')
             mapping_name = mapping.model + (mapping.extra_name and ('_' + mapping.extra_name) or '')
-            mapping_id = (version_name + '_' + mapping_name).replace('.','_')
+            mapping_id = (version_code + '_' + mapping_name).replace('.','_')
         return mapping_id
 
     _sql_constraints = [

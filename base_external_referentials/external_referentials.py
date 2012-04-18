@@ -422,7 +422,7 @@ class external_referential(osv.osv):
         if isinstance(id,list):
             id = id[0]
         referential = self.browse(cr, uid, id, context=context)
-        referential_id = referential.get_external_id(context=context)[version.id]
+        referential_id = referential.get_external_id(context=context)[referential.id]
         if not referential_id:
             referential_id = referential.name.replace('.','_').replace(' ','_')
         return referential_id

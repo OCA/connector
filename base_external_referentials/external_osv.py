@@ -1141,6 +1141,7 @@ def _transform_one_resource(self, cr, uid, external_session, convertion_type, re
                              'external_session': external_session,
                              'resource': resource,
                              'data': resource, #only for compatibility with the old version => deprecated
+                             'parent_resource': parent_data, #TODO rename parent_data to parent_resource
                              'referential_id': external_session.referential_id.id,
                              'defaults': defaults,
                              'context': context,

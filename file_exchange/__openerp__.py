@@ -30,7 +30,7 @@ Goal : store file details and and file fields
 """,
     'author': 'Akretion',
     'website': 'http://www.akretion.com/',
-    'depends': ['base_scheduler_creator', 'base_external_file_protocle'], 
+    'depends': ['base_scheduler_creator', 'base_external_file_protocole'], 
     'init_xml': [],
     'update_xml': [ 
         'file_exchange_view.xml',

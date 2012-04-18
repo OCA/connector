@@ -437,14 +437,15 @@ class external_mapping_line(osv.osv):
     def _name_get_fnc(self, cr, uid, ids, name, arg, context=None):
         res = {}
         for mapping_line in self.browse(cr, uid, ids, context):
-            res[mapping_line.id] = mapping_line.evaluation_type == 'function' \
+            res[mapping_line.id] = (mapping_line.evaluation_type == 'function' \
                                     and mapping_line.function_name \
                                     or mapping_line.external_field \
-                                    or mapping_line.field_id.name
+                                    or mapping_line.field_id.name) \
+                                    + ('=>'+mapping_line.mapping_id.extra_name or '')
         return res
     
     _columns = {
-        'name': fields.function(_name_get_fnc, type="char", string='Name'),
+        'name': fields.function(_name_get_fnc, type="char", string='Name', size=128),
     }
 
 external_mapping_line()

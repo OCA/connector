@@ -153,10 +153,10 @@ class external_report(osv.osv):
         Successful lines are cleaned at each start of a report
         so we historize their aggregation.
         """
-        report = self.browse(cr, uid, id, context=context)
+        log_cr = pooler.get_db(cr.dbname).cursor()
+        report = self.browse(log_cr, uid, id, context=context)
         lines_obj = self.pool.get('external.report.line')
         history_obj = self.pool.get('external.report.history')
-        log_cr = pooler.get_db(cr.dbname).cursor()
         try:
             line_ids = lines_obj.search(log_cr, uid,
                                      [('report_id', '=', id),

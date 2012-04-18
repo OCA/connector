@@ -1188,7 +1188,6 @@ def _transform_one_resource(self, cr, uid, external_session, convertion_type, re
             return {}
     vals = self._merge_with_default_values(cr, uid, external_session, resource, vals, sub_mapping_list, defaults=defaults, context=context)
     vals = self._transform_sub_mapping(cr, uid, external_session, convertion_type, resource, vals, sub_mapping_list, mapping, mapping_id, mapping_line_filter_ids=mapping_line_filter_ids, defaults=defaults, context=context)
-
     return vals
 
 def _transform_field(self, cr, uid, external_session, convertion_type, field_value, mapping_line, context=None):

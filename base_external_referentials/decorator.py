@@ -104,7 +104,8 @@ def catch_error_in_report(func):
     def wrapper(self, cr, uid, external_session, resource, *args, **kwargs):
         context = kwargs.get('context')
         if not (context and context.get('report_id')):
-            raise osv.except_osv(_("Error"), _("There is no key report_id in the context you can not use the decorator in this case"))
+            external_session.logger.debug(_("There is no key report_id in the context, error will be not catch"))
+            return func(self, cr, uid, external_session, resource, *args, **kwargs)
         if context.get('report_line_based_on'):
             if not context['report_line_based_on'] == self._name:
                 return func(self, cr, uid, external_session, resource, *args, **kwargs)

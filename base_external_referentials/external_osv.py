@@ -566,7 +566,7 @@ def _record_one_external_resource(self, cr, uid, external_session, resource, def
             if self.oe_update(cr, uid, existing_rec_id, vals, referential_id, defaults=defaults, context=context):
                 written = True
     else:
-        existing_rec_id = self.oe_create(cr, uid, vals, referential_id, defaults, context=context)
+        existing_rec_id = self.oe_create(cr, uid,  external_session, vals, resource, defaults, context=context)
         created = True
 
     if external_id_ok:
@@ -607,14 +607,14 @@ def retry_import(self, cr, uid, id, ext_id, referential_id, defaults=None, conte
     """
     raise osv.except_osv(_("Not Implemented"), _("Not Implemented in abstract base module!"))
 
-def oe_update(self, cr, uid, existing_rec_id, vals, referential_id, defaults, context):
+def oe_update(self, cr, uid, external_session, existing_rec_id, vals, resource, defaults, context):
     if not context: context={}
-    context['referential_id'] = referential_id
+    context['referential_id'] = external_session.referential_id.id #did it's needed somewhere?
     return self.write(cr, uid, existing_rec_id, vals, context)
 
-def oe_create(self, cr, uid, vals, referential_id, defaults, context):
+def oe_create(self, cr, uid, external_session, vals, resource, defaults, context):
     if not context: context={}
-    context['referential_id'] = referential_id
+    context['referential_id'] = external_session.referential_id.id  #did it's needed somewhere?
     return self.create(cr, uid, vals, context)
 
 

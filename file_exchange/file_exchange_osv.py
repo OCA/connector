@@ -56,3 +56,11 @@ def _get_default_import_values(self, cr, uid, external_session, mapping_id=None,
     return defaults
 
 osv.osv._get_default_import_values = _get_default_import_values
+
+def _get_oe_resources_into_external_format(self, cr, uid, external_session, ids, mapping=None, mapping_id=None, mapping_line_filter_ids=None, fields=[], defaults=None, context=None):
+    result = []
+    for resource in self.read_w_order(cr, uid, ids, fields, context):
+        result.append(self._transform_one_resource(cr, uid,  external_session, 'from_openerp_to_external', resource, mapping,mapping_id, mapping_line_filter_ids=mapping_line_filter_ids, parent_data=None, previous_result=None, defaults=defaults, context=context))
+    return result
+osv.osv._get_oe_resources_into_external_format = _get_oe_resources_into_external_format
+

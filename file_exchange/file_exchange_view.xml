@@ -152,7 +152,7 @@
                     <field name="file_id" />
                     <field name="mapping_id" />
                     <field name="type" />
-                    <field name="related_model" attrs="{'invisible':'1'}"/>
+                    <field name="related_model" invisible="1"/>
                 </form>
             </field>
         </record>
@@ -169,7 +169,7 @@
                     <field name="file_id" />
                     <field name="mapping_id" />
                     <field name="type" />
-                    <field name="related_model" attrs="{'invisible':'1'}" />
+                    <field name="related_model" invisible="1" />
                 </tree>
             </field>
         </record>

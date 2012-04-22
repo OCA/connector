@@ -563,7 +563,7 @@ def _record_one_external_resource(self, cr, uid, external_session, resource, def
 
     if existing_rec_id:
         if not self._name in context.get('do_not_update', []):
-            if self.oe_update(cr, uid, existing_rec_id, vals, referential_id, defaults=defaults, context=context):
+            if self.oe_update(cr, uid, external_session, existing_rec_id, vals,  resource, defaults=defaults, context=context):
                 written = True
     else:
         existing_rec_id = self.oe_create(cr, uid,  external_session, vals, resource, defaults, context=context)

@@ -126,8 +126,10 @@ def catch_error_in_report(func):
                             )
         import_cr = pooler.get_db(cr.dbname).cursor()
         response = False
+        response = func(self, import_cr, uid, external_session, resource, *args, **kwargs)
         try:
-            response = func(self, import_cr, uid, external_session, resource, *args, **kwargs)
+            print "ok"
+            #response = func(self, import_cr, uid, external_session, resource, *args, **kwargs)
         except MappingError as e:
             import_cr.rollback()
             report_line_obj.write(log_cr, uid, report_line_id, {

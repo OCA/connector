@@ -137,6 +137,7 @@ class external_mappinglines_template(osv.osv):
 
     _columns = {
         'name': fields.function(_name_get_fnc, type="char", string='Name'),
+        'sequence': fields.integer('Sequence'),
         'version_id':fields.many2one('external.referential.version', 'External Referential Version', ondelete='cascade'),
         'field_id': fields.many2one('ir.model.fields', 'OpenERP Field', ondelete='cascade'),
         'mapping_id': fields.many2one('external.mapping.template', 'External Mapping', ondelete='cascade'),
@@ -230,6 +231,7 @@ class external_referential(osv.osv):
                 mapping_lines_src_ids = self.pool.get('external.mappinglines.template').search(cr, uid, [('mapping_id', '=', each_mapping_rec['id'])])
                 for each_mapping_line_rec in  self.pool.get('external.mappinglines.template').read(cr, uid, mapping_lines_src_ids, []):
                     vals = {
+                        'sequence': each_mapping_line_rec['sequence'],
                         'external_field': each_mapping_line_rec['external_field'],
                         'template_id': each_mapping_line_rec['id'],
                         'mapping_id': mapping_id,
@@ -619,7 +621,7 @@ class external_mapping_line(osv.osv):
     _sql_constraints = [
         ('ref_template_uniq', 'unique (referential_id, template_id)', 'A referential can not have various mapping line imported from the same template mapping line')
     ]
-    _order = 'sequence'
+    _order = 'sequence desc'
     #TODO add constraint: not both field_id and external_field null
 
     def get_absolute_id(self, cr, uid, id, context=None):

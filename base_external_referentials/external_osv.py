@@ -704,7 +704,7 @@ def _set_last_exported_date(self, cr, uid, external_session, date, context=None)
 
 
 #For now it's just support 1 level of inherit TODO make it recursive
-def get_ids_and_update_date(self, cr, uid, ids=None, last_exported_date=None, context=None):
+def get_ids_and_update_date(self, cr, uid, external_session, ids=None, last_exported_date=None, context=None):
     table = self._table
     params = ()
     if not self._inherits:
@@ -805,8 +805,7 @@ def _export_resources(self, cr, uid, external_session, method="onebyone", contex
     defaults = self._get_default_export_values(cr, uid, external_session, context=context)
     mapping, mapping_id = self._init_mapping(cr, uid, external_session.referential_id.id, convertion_type='from_openerp_to_external', context=context)
     last_exported_date = self._get_last_exported_date(cr, uid, external_session, context=context)
-    ids, ids_2_date = self.get_ids_and_update_date(cr, uid, last_exported_date=last_exported_date, context=context)
-
+    ids, ids_2_date = self.get_ids_and_update_date(cr, uid, external_session, last_exported_date=last_exported_date, context=context)
     step = self._get_export_step(cr, uid, external_session, context=context)
 
     group_obj = self.pool.get('group.fields')
@@ -1161,9 +1160,9 @@ def _transform_one_resource(self, cr, uid, external_session, convertion_type, re
                         exec mapping_line[mapping_function_key] in space
                     except Exception, e:
                         external_session.logger.error('Error in import mapping: %s    Exception: %s' 
-                                                            % (mapping_line['external_field'],e,))
+                                                            % (mapping_line['name'],e,))
                         #del(space['__builtins__'])
-                        raise MappingError(e, mapping_line['external_field'], self._name)
+                        raise MappingError(e, mapping_line['name'], self._name)
                     
                     result = space.get('result', False)
                     # Check if result returned by the mapping function is correct : [('field1', value), ('field2', value))]
@@ -1188,6 +1187,8 @@ def _transform_one_resource(self, cr, uid, external_session, convertion_type, re
             return {}
     vals = self._merge_with_default_values(cr, uid, external_session, resource, vals, sub_mapping_list, defaults=defaults, context=context)
     vals = self._transform_sub_mapping(cr, uid, external_session, convertion_type, resource, vals, sub_mapping_list, mapping, mapping_id, mapping_line_filter_ids=mapping_line_filter_ids, defaults=defaults, context=context)
+
+    import pdb; pdb.set_trace()
     return vals
 
 def _transform_field(self, cr, uid, external_session, convertion_type, field_value, mapping_line, context=None):

@@ -312,7 +312,9 @@ class external_report_lines(osv.osv):
             method = getattr(self.pool.get(log.kwargs['context']['report_line_based_on']), log.action)
             args = log.args
             kwargs = log.kwargs
-            external_session = ExternalSession(log.report_id.referential_id)
+            sync_from_object = self.pool.get(log.report_id.object_related).browse(cr, uid, log.report_id.res_id, context=context)
+            external_session = ExternalSession(log.report_id.referential_id, sync_from_object)
+            import pdb;pdb.set_trace()
             resource = log.resource
             if not kwargs.get('context', False):
                 kwargs['context']={}

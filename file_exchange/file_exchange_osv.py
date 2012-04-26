@@ -48,11 +48,18 @@ osv.osv._feo_get_default_import_values = osv.osv._get_default_import_values #feo
 def _get_default_import_values(self, cr, uid, external_session, mapping_id=None, defaults=None, context=None):
     if not defaults:
         defaults = {}
-    method = self.pool.get('file.exchange').browse(cr, uid, context['file_exchange_id'], context=context)
+    method = external_session.sync_from_object
     mapping = self.pool.get('external.mapping').browse(cr, uid, mapping_id, context=context)
     for field in method.import_default_fields:
-        if field.mapping_id.model_id.model == mapping.model_id.model:
-            defaults[field.import_default_field.name] = field.import_default_value
+        if field.mapping_id.id == mapping.id:
+            if field.type == 'integer':
+                defaults[field.import_default_field.name] = int(field.import_default_value)
+            elif field.type == 'float':
+                defaults[field.import_default_field.name] = float(field.import_default_value.replace(',','.'))
+            elif field.type in ['list','dict']:
+                defaults[field.import_default_field.name] = eval(field.import_default_value)
+            else:
+                defaults[field.import_default_field.name] = str(field.import_default_value)
     return defaults
 
 osv.osv._get_default_import_values = _get_default_import_values

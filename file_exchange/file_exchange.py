@@ -75,21 +75,6 @@ class file_exchange(osv.osv):
                 res[field.name] = field.default_value
         return res
 
-    def _get_import_default_fields_values(self, cr, uid, method_id, context=None):
-        res = {}
-        method = self.browse(cr, uid, method_id, context=context)
-        for field in method.import_default_fields:
-            if field.file_id.mapping_id.id == field.mapping_id.id:
-                if field.type == 'integer':
-                    res[field.import_default_field.name] = int(field.import_default_value)
-                elif field.type == 'float':
-                    res[field.import_default_field.name] = float(field.import_default_value.replace(',','.'))
-                elif field.type in ['list','dict']:
-                    res[field.import_default_field.name] = eval(field.import_default_value)
-                else:
-                    res[field.import_default_field.name] = str(field.import_default_value)
-        return res
-    
     def _get_external_file_resources(self, cr, uid, external_session, filepath, filename, format, fields_name=None, mapping=None, mapping_id=None, context=None):
         external_file = external_session.connection.get(filepath, filename)
         method_id = context['file_exchange_id']
@@ -146,12 +131,12 @@ class file_exchange(osv.osv):
         context['file_exchange_id'] = method_id
         file_fields_obj = self.pool.get('file.fields')
         method = self.browse(cr, uid, method_id, context=context)
-        defaults = self._get_import_default_fields_values(cr, uid, method_id, context=context)
         context['report_line_based_on'] = method.mapping_id.model_id.model
         external_session = ExternalSession(method.referential_id, method)
         model_obj = self.pool.get(method.mapping_id.model_id.model)
         mapping,mapping_id = model_obj._init_mapping(cr, uid, external_session.referential_id.id, convertion_type='from_external_to_openerp', mapping_id=method.mapping_id.id, context=context)
 
+        defaults = self._get_default_import_values(cr, uid, external_session, mapping_id, context=context)
         fields_name_ids = file_fields_obj.search(cr, uid, [['file_id', '=', method.id]], context=context)
         fields_name = [x['name'] for x in file_fields_obj.read(cr, uid, fields_name_ids, ['name'], context=context)]
 

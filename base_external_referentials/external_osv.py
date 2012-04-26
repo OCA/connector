@@ -768,7 +768,7 @@ def export_resources(self, cr, uid, ids, resource_name, context=None):
 
 
 
-def send_to_external(self, cr, uid, external_session, resources, update_date=None, context=None):
+def send_to_external(self, cr, uid, external_session, resources, mapping, mapping_id, update_date=None, context=None):
     resources_to_update = {}
     resources_to_create = {}
     for resource_id, resource in resources.items():
@@ -780,7 +780,7 @@ def send_to_external(self, cr, uid, external_session, resources, update_date=Non
         else:
             resources_to_create[resource_id] = resource
     self.ext_update(cr, uid, external_session, resources_to_update, context=context)
-    ext_create_ids = self.ext_create(cr, uid, external_session, resources_to_create, context=context)
+    ext_create_ids = self.ext_create(cr, uid, external_session, resources_to_create, mapping, mapping_id, context=context)
     for rec_id, ext_id in ext_create_ids.items():
         self.create_external_id_vals(cr, uid, rec_id, ext_id, external_session.referential_id.id, context=context)
     if update_date:
@@ -826,8 +826,7 @@ def _export_resources(self, cr, uid, external_session, method="onebyone", contex
                                     mapping=mapping, mapping_id=mapping_id, context=context)
         if method == 'onebyone':
             for resource_id in ids_to_process:
-                self._transform_and_send_one_resource(cr, uid, external_session, resources[resource_id], resource_id, ids_2_date[resource_id],
-                                    mapping, mapping_id, defaults=defaults, context=context)
+                self._transform_and_send_one_resource(cr, uid, external_session, resources[resource_id], resource_id, ids_2_date.get(resource_id), mapping, mapping_id, defaults=defaults, context=context)
         else:
             raise osv.except_osv(_('Developper Error'), _('only method export onebyone is implemented in base_external_referentials'))
     #now = datetime.now().strftime(DEFAULT_SERVER_DATETIME_FORMAT)
@@ -840,7 +839,7 @@ def _transform_and_send_one_resource(self, cr, uid, external_session, resource, 
         resource[key_lang] = self._transform_one_resource(cr, uid, external_session, 'from_openerp_to_external', 
                                             resource[key_lang], mapping=mapping, mapping_id=mapping_id,
                                             defaults=defaults, context=context)
-    return self.send_to_external(cr, uid, external_session, {resource_id : resource}, update_date, context=context)
+    return self.send_to_external(cr, uid, external_session, {resource_id : resource}, mapping, mapping_id, update_date, context=context)
 
 def _export_one_resource(self, cr, uid, external_session, resource_id, context=None):
     defaults = self._get_default_export_values(cr, uid, external_session, context=context)
@@ -1124,7 +1123,7 @@ def _transform_one_resource(self, cr, uid, external_session, convertion_type, re
             from_field = mapping_line['internal_field']
             to_field = mapping_line['external_field']
 
-        if mapping_line['evaluation_type'] == 'function' or from_field in resource.keys(): #function field should be always played as they can depend of every field
+        if mapping_line['evaluation_type'] == 'function' or from_field in resource.keys(): #function field should be always played as they can depend on every field
             field_value = resource.get(from_field)
             if mapping_line['evaluation_type'] == 'sub-mapping':
                 sub_mapping_list.append(mapping_line)
@@ -1188,7 +1187,6 @@ def _transform_one_resource(self, cr, uid, external_session, convertion_type, re
     vals = self._merge_with_default_values(cr, uid, external_session, resource, vals, sub_mapping_list, defaults=defaults, context=context)
     vals = self._transform_sub_mapping(cr, uid, external_session, convertion_type, resource, vals, sub_mapping_list, mapping, mapping_id, mapping_line_filter_ids=mapping_line_filter_ids, defaults=defaults, context=context)
 
-    import pdb; pdb.set_trace()
     return vals
 
 def _transform_field(self, cr, uid, external_session, convertion_type, field_value, mapping_line, context=None):

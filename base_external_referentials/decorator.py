@@ -50,7 +50,7 @@ def only_for_referential(ref_type=None, ref_categ=None, super_function=None):
                     name = func.__name__
                     use_next_class = False
                     for base in self.__class__.mro()[1:]:
-                        if use_next_class:
+                        if use_next_class and hasattr(base, name):
                             return getattr(base, name)(self, cr, uid, argument, *args, **kwargs)
                         class_func = base.__dict__.get(name)
                         if class_func:

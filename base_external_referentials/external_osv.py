@@ -159,29 +159,42 @@ def get_all_oeid_from_referential(self, cr, uid, referential_id, context=None):
     claimed_oe_ids = [x['res_id'] for x in ir_model_data_obj.read(cr, uid, model_data_ids, ['res_id'], context=context)]
     return claimed_oe_ids and self.exists(cr, uid, claimed_oe_ids, context=context) or []
 
-def oeid_to_extid(self, cr, uid, external_session, resource_id, context=None):
+
+
+def get_or_create_extid(self, cr, uid, external_session, openerp_id, context=None):
     """Returns the external id of a resource by its OpenERP id.
     Returns False if the resource id does not exists."""
-    res = self.oeid_to_existing_extid(cr, uid, external_session.referential_id.id, resource_id, context=context)
+    res = self.get_extid(cr, uid, openerp_id, external_session.referential_id.id, context=context)
     if res is not False:
         return res
     else:
-        return self._export_one_resource(cr, uid, external_session, resource_id, context=context)
+        return self._export_one_resource(cr, uid, external_session, openerp_id, context=context)
 
-def oeid_to_existing_extid(self, cr, uid, referential_id, resource_id, context=None):
+def get_extid(self, cr, uid, openerp_id, referential_id, context=None):
     """Returns the external id of a resource by its OpenERP id.
     Returns False if the resource id does not exists."""
-    if isinstance(resource_id, list):
-        resource_id = resource_id[0]
-    model_data_ids = self.pool.get('ir.model.data').search(cr, uid, [('model', '=', self._name), ('res_id', '=', resource_id), ('referential_id', '=', referential_id)])
+    if isinstance(openerp_id, list):
+        openerp_id = openerp_id[0]
+    model_data_ids = self.pool.get('ir.model.data').search(cr, uid, [('model', '=', self._name), ('res_id', '=', openerp_id), ('referential_id', '=', referential_id)])
     if model_data_ids and len(model_data_ids) > 0:
         prefixed_id = self.pool.get('ir.model.data').read(cr, uid, model_data_ids[0], ['name'])['name']
         ext_id = self.id_from_prefixed_id(prefixed_id)
         return ext_id
     return False
 
+#TODO Deprecated remove for V7 version
+def oeid_to_existing_extid(self, cr, uid, referential_id, openerp_id, context=None):
+    """Returns the external id of a resource by its OpenERP id.
+    Returns False if the resource id does not exists."""
+    return self.get_extid(cr, uid, referential_id, openerp_id, context=context)
 
-def _extid_to_expected_oeid(self, cr, uid, referential_id, external_id, context=None):
+osv.osv.oeid_to_extid = get_or_create_extid
+osv.osv.oeid_to_existing_extid = oeid_to_existing_extid
+############# END OF DEPRECATED
+
+
+
+def _get_expected_oeid(self, cr, uid, external_id, referential_id, context=None):
     """
     Returns the id of the entry in ir.model.data and the expected id of the resource in the current model
     Warning the expected_oe_id may not exists in the model, that's the res_id registered in ir.model.data
@@ -201,60 +214,61 @@ def _extid_to_expected_oeid(self, cr, uid, referential_id, external_id, context=
         expected_oe_id = model_data_obj.read(cr, uid, model_data_id, ['res_id'])['res_id']
     return model_data_id, expected_oe_id
 
-def extid_to_existing_oeid(self, cr, uid, referential_id, external_id, context=None):
+
+
+def get_oeid(self, cr, uid, external_id, referential_id, context=None):
     """Returns the OpenERP id of a resource by its external id.
        Returns False if the resource does not exist."""
     if external_id:
-        ir_model_data_id, expected_oe_id = self._extid_to_expected_oeid\
-            (cr, uid, referential_id, external_id, context=context)
+        ir_model_data_id, expected_oe_id = self._get_expected_oeid\
+            (cr, uid, external_id, referential_id, context=context)
         # Note: OpenERP cleans up ir_model_data which res_id records have been deleted
         # only at server update because that would be a perf penalty, we returns the res_id only if
         # really existing and we delete the ir_model_data unused
         if expected_oe_id and self.exists(cr, uid, expected_oe_id, context=context):
             return expected_oe_id
-        elif ir_model_data_id:
-            # CHECK: do we have to unlink the result when we call to this method ? I propose just to ignore them
-            # see method _existing_oeid_for_extid_import
-            # the bad ir.model.data are cleaned up when we import again a external resource with the same id
-            # So I see 2 cons points:
-            # - perf penalty
-            # - by doing an unlink, we are writing to the database even if we just need to read a record (what about locks?)
-            self.pool.get('ir.model.data').unlink(cr, uid, ir_model_data_id, context=context)
     return False
 
-def extid_to_oeid(self, cr, uid, external_session, external_id, context=None):
+def get_or_create_oeid(self, cr, uid, external_session, external_id, context=None):
     """Returns the OpenERP ID of a resource by its external id.
     Creates the resource from the external connection if the resource does not exist."""
-    #First get the external key field name
-    #conversion external id -> OpenERP object using Object mapping_column_name key!
     if external_id:
-        existing_id = self.extid_to_existing_oeid(cr, uid, external_session.referential_id.id, external_id, context=context)
+        existing_id = self.get_oeid(cr, uid, external_id, external_session.referential_id.id, context=context)
         if existing_id:
             return existing_id
-        #TODO try except will be added latter
-        #try:
-        if context and context.get('alternative_key', False): #FIXME dirty fix for Magento product.info id/sku mix bug: https://bugs.launchpad.net/magentoerpconnect/+bug/688225
-            id = context.get('alternative_key', False)
-            context['id'] 
         return self._import_one_resource(cr, uid, external_session, external_id, context=context)
-        #except Exception, error: #external system might return error because no such record exists
-        #    raise osv.except_osv(_('Ext Synchro'), _("Error when importing on fly the object %s with the external_id %s and the external referential %s.\n Error : %s" %(self._name, id, referential_id, error)))
     return False
+
+#TODO Deprecated remove for V7 version
+def extid_to_existing_oeid(self, cr, uid, referential_id, external_id, context=None):
+    """Returns the OpenERP id of a resource by its external id.
+       Returns False if the resource does not exist."""
+    res = self.get_oeid(cr, uid, external_id, referential_id, context=context)
+    return res
+
+osv.osv.extid_to_oeid = get_or_create_extid
+osv.osv.extid_to_existing_oeid = extid_to_existing_oeid
+############# END OF DEPRECATED
+
+
+
 
 #######################        MONKEY PATCHING       #######################
 
 osv.osv.read_w_order = read_w_order
 osv.osv.browse_w_order = browse_w_order
 
+osv.osv.get_or_create_extid = get_or_create_extid
+osv.osv.get_extid = get_extid
+osv.osv.get_or_create_oeid = get_or_create_oeid
+osv.osv.get_oeid = get_oeid
+osv.osv._get_expected_oeid = _get_expected_oeid
+
 osv.osv.prefixed_id = prefixed_id
 osv.osv.id_from_prefixed_id = id_from_prefixed_id
 osv.osv.get_last_imported_external_id = get_last_imported_external_id
 osv.osv.get_modified_ids = get_modified_ids
-osv.osv.oeid_to_extid = oeid_to_extid
-osv.osv._extid_to_expected_oeid = _extid_to_expected_oeid
-osv.osv.extid_to_existing_oeid = extid_to_existing_oeid
-osv.osv.extid_to_oeid = extid_to_oeid
-osv.osv.oeid_to_existing_extid = oeid_to_existing_extid
+
 osv.osv.get_all_oeid_from_referential = get_all_oeid_from_referential
 osv.osv.get_all_extid_from_referential = get_all_extid_from_referential
 
@@ -787,11 +801,11 @@ def send_to_external(self, cr, uid, external_session, resources, mapping, mappin
         self._set_last_exported_date(cr, uid, external_session, update_date, context=context)
     return ext_id
 
-def ext_create(self, cr, uid, external_session, resources, context=None):
+def ext_create(self, cr, uid, external_session, resources, mapping=None, mapping_id=None, context=None):
     """Not Implemented here"""
     return False
 
-def ext_update(self, cr, uid, external_session, resources, context=None):
+def ext_update(self, cr, uid, external_session, resources, mapping=None, mapping_id=None, context=None):
     """Not Implemented here"""
     return False
 

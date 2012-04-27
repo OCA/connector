@@ -116,6 +116,7 @@
                     <field name="is_required"/>
                     <separator string="Advanced Default Value" colspan="4"/>
                     <field name='alternative_key'/>
+                    <field name='merge_key'/>
                     <field name="advanced_default_value" nolabel="1" colspan="4"/>
                 </form>
             </field>
@@ -135,6 +136,7 @@
                     <field name="name"/>
                     <field name="default_value"/>
                     <field name='alternative_key'/>
+                    <field name='merge_key'/>
                 </tree>
             </field>
         </record>

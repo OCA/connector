@@ -81,12 +81,14 @@ class file_exchange(osv.osv):
         method = self.browse(cr, uid, method_id, context=context)
         model_obj = self.pool.get(method.mapping_id.model_id.model)
         if format in ['csv_no_header','csv']:
-            alternative_key_id = self.pool.get('file.fields').search(cr, uid, [('alternative_key', '=', True), ('mapping_line_id.related_model_id', '=', method.mapping_id.model_id.id), ('file_id', '=', method.id)], context=context)[0]
-            alternative_key = self.pool.get('file.fields').read(cr, uid, alternative_key_id, ['name'], context=context)['name']
+            merge_key_id = self.pool.get('file.fields').search(cr, uid, [('merge_key', '=', True), ('mapping_line_id.related_model_id', '=', method.mapping_id.model_id.id), ('file_id', '=', method.id)], context=context)
+            merge_key = None
+            if merge_key_id:
+                merge_key = self.pool.get('file.fields').read(cr, uid, merge_key_id[0], ['name'], context=context)['name']
             mapping,mapping_id = model_obj._init_mapping(cr, uid, external_session.referential_id.id, convertion_type='from_external_to_openerp', mapping_id=method.mapping_id.id, context=context)
             mapping_tree, merge_keys = self._get_mapping_tree(cr, uid, mapping_id, context=context)
             csv = FileExchangeCsvReader(external_file, fieldnames= format=='csv_no_header' and fields_name or None, delimiter=method.delimiter.encode('utf-8'), encoding=method.encoding, pre_processing=method.pre_processing)
-            res = csv.reorganize(field_structure=mapping_tree, merge_keys=merge_keys, ref_field=alternative_key)
+            res = csv.reorganize(field_structure=mapping_tree, merge_keys=merge_keys, ref_field=merge_key)
         return res
     
     def _get_mapping_tree(self, cr, uid, mapping_id, parent_name=None, grand_parent_name=None, context=None):
@@ -375,7 +377,7 @@ class file_exchange(osv.osv):
         if isinstance(id,list):
             id = id[0]
         output_file = TemporaryFile('w+b')
-        fieldnames = ['id', 'is_required', 'name', 'custom_name', 'sequence', 'mappinglines_template_id:id', 'file_id:id', 'default_value', 'advanced_default_value']
+        fieldnames = ['id', 'is_required', 'name', 'custom_name', 'sequence', 'mappinglines_template_id:id', 'file_id:id', 'default_value', 'advanced_default_value', 'merge_key']
         csv = FileCsvWriter(output_file, fieldnames, encoding="utf-8", writeheader=True, delimiter=',', quotechar='"')
         current_file = self.browse(cr, uid, id, context=context)
         for field in current_file.field_ids:
@@ -389,6 +391,7 @@ class file_exchange(osv.osv):
                 'default_value': field.default_value or '',
                 'is_required': str(field.is_required),
                 'advanced_default_value': field.advanced_default_value or '',
+                'merge_key': str(field.merge_key),
             }
             csv.writerow(row)
         return self.pool.get('output.file').open_output_file(cr, uid, 'file.fields.csv', output_file, 'File Exchange Fields Export', context=context)
@@ -467,7 +470,8 @@ class file_fields(osv.osv):
                                                                         "in the varaible result will be used as defaut value")),
         'alternative_key': fields.related('mapping_line_id', 'alternative_key', type='boolean', string='Alternative Key'),
         'is_required' : fields.boolean('Is required', help="Is this field required in the exchange ?"),
-        'mappinglines_template_id':fields.many2one('external.mappinglines.template', 'External Mappinglines Template')
+        'mappinglines_template_id':fields.many2one('external.mappinglines.template', 'External Mappinglines Template'),
+        'merge_key': fields.boolean('Merge Key', help="Used to merge each line with the same value of this field")
     }
 
     def get_absolute_id(self, cr, uid, id, context=None):

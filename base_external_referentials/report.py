@@ -235,7 +235,7 @@ class external_report_lines(osv.osv):
             res[report_line.id] = simplejson.dumps(report_line.resource)
         return res
 
-    def _set_resource(self, cr, uid, ids, field_name, arg, context=None):
+    def _set_resource(self, cr, uid, ids, field_name, field_value, arg, context=None):
         res = {}
         for report_line in self.browse(cr, uid, ids, context=context):
             res[report_line.id] = simplejson.loads(report_line.resource)

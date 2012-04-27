@@ -107,7 +107,13 @@ class FileCsvReader(object):
         return self
 
     def reorganize(self, field_structure=None, merge_keys=None, ref_field=None):
-        result = {}
+        """
+        Function to reorganize the resource from the csv. It uses the mapping (field_structure) 
+        to deal with the different architecture of an object (sale order with sale order line ...)
+        the ref_field is used to merge the different lines (sale order with several sale order lines)
+        """
+        result_merge = {}
+        result = []
         for line in self:
             for child, parent in field_structure:
                 if not parent in line:
@@ -115,14 +121,20 @@ class FileCsvReader(object):
                 if line.get(child):
                     line[parent][child] = line[child]
                     del line[child]
-            if line[ref_field] in result:
-                for key in merge_keys:
-                    result[line[ref_field]][key].append(line[key])
+            if ref_field:
+                if line[ref_field] in result_merge:
+                    for key in merge_keys:
+                        result_merge[line[ref_field]][key].append(line[key])
+                else:
+                    result_merge[line[ref_field]] = line
+                    for key in merge_keys:
+                        result_merge[line[ref_field]][key] =  [result_merge[line[ref_field]][key]]
             else:
-                result[line[ref_field]] = line
-                for key in merge_keys:
-                    result[line[ref_field]][key] =  [result[line[ref_field]][key]]
-        return [result[key] for key in result]
+                result.append(line)
+        if ref_field:
+            return [result_merge[key] for key in result_merge]
+        else:
+            return result
 
 class FileCsvWriter(object):
     """

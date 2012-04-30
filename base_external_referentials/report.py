@@ -189,6 +189,15 @@ class external_report(osv.osv):
             log_cr.close()
         return id
 
+    def delete_failed_lines(self, cr, uid, ids, context=None):
+        if isinstance(ids, int):
+            ids = [ids]
+        for report in self.read(cr, uid, ids, ['failed_line_ids'], context=context):
+            failed_line_ids = report['failed_line_ids']
+            if failed_line_ids:
+                self.pool.get('external.report.line').unlink(cr, uid, failed_line_ids, context=context)
+        return True
+
 external_report()
 
 
@@ -235,11 +244,13 @@ class external_report_lines(osv.osv):
             res[report_line.id] = simplejson.dumps(report_line.resource)
         return res
 
-    def _set_resource(self, cr, uid, ids, field_name, arg, context=None):
+    def _set_resource(self, cr, uid, ids, field_name, field_value, arg, context=None):
         res = {}
+        if isinstance(ids, int) or isinstance(ids, long):
+            ids = [ids]
         for report_line in self.browse(cr, uid, ids, context=context):
-            res[report_line.id] = simplejson.loads(report_line.resource)
-        return res
+            self.write(cr, uid, report_line.id, {'resource': simplejson.loads(field_value)})
+        return True
 
     _columns = {
         'report_id': fields.many2one('external.report',
@@ -305,7 +316,7 @@ class external_report_lines(osv.osv):
         return existing_line_id
 
     def retry(self, cr, uid, ids, context=None):
-        if isinstance(ids, int):
+        if isinstance(ids, int) or isinstance(ids, long):
             ids = [ids]
 
         for log in self.browse(cr, uid, ids, context=context):

@@ -20,6 +20,8 @@
 				<data>
 					<field name="location" position="after">
 						<field name="protocole" />
+                        <field name="port"/>
+                        <field name="home_folder"/>
 					</field>
 				</data>
 			</field>

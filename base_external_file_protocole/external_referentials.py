@@ -32,12 +32,16 @@ class external_referential(osv.osv):
             id=id[0]
         referential = self.browse(cr, uid, id, context=context)
         try:
-            return FileConnection(referential.protocole, referential.location, referential.apiusername, referential.apipass)
+            return FileConnection(referential.protocole, referential.location, referential.apiusername,\
+                            referential.apipass, port=referential. port, allow_dir_creation = True, \
+                            home_folder=referential.home_folder)
         except Exception, e:
             raise osv.except_osv(_("Connection Error"), _("Could not connect to server\nCheck url & user & password.\n %s"%e))
 
     _columns={
-        'protocole': fields.selection([('ftp','ftp'), ('filestore', 'Filestore')], 'Protocole'),
+        'protocole': fields.selection([('ftp','ftp'), ('filestore', 'Filestore'), ('sftp', 'sftp')], 'Protocole'),
+        'port': fields.integer('Port'),
+        'home_folder': fields.char('Home Folder', size=64),
     }
 
 external_referential()

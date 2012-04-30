@@ -43,6 +43,9 @@ class ExternalSession(object):
         self.debug = referential.debug
         self.logger = logging.getLogger(referential.name)
         self.connection = referential.external_connection(debug=self.debug, logger = self.logger)
+        #TODO think about a better way to do it
+        if hasattr(referential, 'ext_file_referential_id') and referential.ext_file_referential_id:
+            self.file_session = ExternalSession(referential.ext_file_referential_id, sync_from_object)
 
     def is_type(self, referential_type):
         return self.referential_id.type_id.name.lower() == referential_type.lower()
@@ -246,7 +249,7 @@ def extid_to_existing_oeid(self, cr, uid, referential_id, external_id, context=N
     res = self.get_oeid(cr, uid, external_id, referential_id, context=context)
     return res
 
-osv.osv.extid_to_oeid = get_or_create_extid
+osv.osv.extid_to_oeid = get_or_create_oeid
 osv.osv.extid_to_existing_oeid = extid_to_existing_oeid
 ############# END OF DEPRECATED
 
@@ -569,7 +572,7 @@ def _record_one_external_resource(self, cr, uid, external_session, resource, def
     existing_ir_model_data_id = False
     if external_id_ok:
         del vals['external_id']
-    existing_ir_model_data_id, existing_rec_id = self._existing_oeid_for_extid_import\
+    existing_ir_model_data_id, existing_rec_id = self._get_oeid_from_extid_or_alternative_keys\
             (cr, uid, vals, external_id, referential_id, alternative_keys, context=context)
 
     if not (external_id_ok or alternative_keys):
@@ -683,10 +686,9 @@ def send_report(self, cr, uid, external_session, ids, report_name, file_name, pa
     output_file =TemporaryFile('w+b')
     output_file.write(result)
     output_file.seek(0)
-    import pdb; pdb.set_trace()
     file_name = "%s.%s"%(file_name, format)
-    external_session.connection.send(path, file_name, output_file)
-    return True
+    external_session.file_session.connection.send(path, file_name, output_file)
+    return file_name
 
 def _get_export_step(self, cr, uid, external_session, context=None):
     """
@@ -813,7 +815,7 @@ def get_lang_to_export(self, cr, uid, external_session, context=None):
     if not context:
         return []
     else:
-        return context.get('lang_to_export') or context.get('lang')
+        return context.get('lang_to_export') or [context.get('lang')]
 
 def _export_resources(self, cr, uid, external_session, method="onebyone", context=None):
     defaults = self._get_default_export_values(cr, uid, external_session, context=context)
@@ -933,7 +935,7 @@ def _get_oe_resources(self, cr, uid, external_session, ids, langs, smart_export=
 
 
 
-def _existing_oeid_for_extid_import(self, cr, uid, vals, external_id, referential_id, alternative_keys, context=None):
+def _get_oeid_from_extid_or_alternative_keys(self, cr, uid, vals, external_id, referential_id, alternative_keys, context=None):
     """
     Used in ext_import in order to search the OpenERP resource to update when importing an external resource.
     It searches the reference in ir.model.data and returns the id in ir.model.data and the id of the
@@ -954,8 +956,8 @@ def _existing_oeid_for_extid_import(self, cr, uid, vals, external_id, referentia
     """
     existing_ir_model_data_id = expected_res_id = False
     if not (external_id is None or external_id is False):
-        existing_ir_model_data_id, expected_res_id = self._extid_to_expected_oeid\
-        (cr, uid, referential_id, external_id, context=context)
+        existing_ir_model_data_id, expected_res_id = self._get_expected_oeid\
+        (cr, uid, external_id, referential_id, context=context)
     # Take care of deleted resource ids, cleans up ir.model.data
         if existing_ir_model_data_id and expected_res_id and not self.exists(cr, uid, expected_res_id, context=context):
             self.pool.get('ir.model.data').unlink(cr, uid, existing_ir_model_data_id, context=context)
@@ -1050,7 +1052,7 @@ osv.osv._export_one_resource = _export_one_resource
 osv.osv.export_resources = export_resources
 osv.osv._get_oe_resources = _get_oe_resources
 
-osv.osv._existing_oeid_for_extid_import = _existing_oeid_for_extid_import
+osv.osv._get_oeid_from_extid_or_alternative_keys = _get_oeid_from_extid_or_alternative_keys
 
 osv.osv.retry_export = retry_export
 osv.osv.can_create_on_update_failure = can_create_on_update_failure
@@ -1194,7 +1196,7 @@ def _transform_one_resource(self, cr, uid, external_session, convertion_type, re
     if self._name in context.get('do_not_update', []):
         # if the update of the object is not wanted, we skipped the sub_mapping update also. In the function _transform_one_resource, the creation will also be skipped.
         alternative_keys = mapping[mapping_id]['alternative_keys']
-        existing_ir_model_data_id, existing_rec_id = self._existing_oeid_for_extid_import\
+        existing_ir_model_data_id, existing_rec_id = self._get_oeid_from_extid_or_alternative_keys\
             (cr, uid, vals, ext_id, referential_id, alternative_keys, context=context)
         if existing_rec_id:
             return {}
@@ -1222,13 +1224,13 @@ def _transform_field(self, cr, uid, external_session, convertion_type, field_val
                     #TODO it can be great if we can search on other field
                     related_obj.search(cr, uid, [(related_obj._rec_name, '=', field_value)], context=context)
                 else:
-                    return related_obj.extid_to_oeid(cr, uid, external_session, field_value, context=context)
+                    return related_obj.get_or_create_oeid(cr, uid, external_session, field_value, context=context)
             else:
                 if external_type == 'unicode':
                     #TODO it can be great if we can return on other field and not only the name
                     return field_value[1]
                 else:
-                    return related_obj.oeid_to_extid(cr, uid,external_session, field_value[0], context=context)
+                    return related_obj.get_or_create_extid(cr, uid,external_session, field_value[0], context=context)
 
         elif external_type == "datetime":
             datetime_format = mapping_line['datetime_format']

@@ -42,6 +42,7 @@
                         </tree>
                     </field>
                     <button name="retry_failed_lines" string="Retry All Failed" icon="gtk-go-forward" type="object" colspan="2"/>
+                    <button name="delete_failed_lines" string="Delete All Failed" icon="gtk-cancel" type="object" colspan="2"/>
 				</form>
 			</field>
 		</record>

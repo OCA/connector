@@ -27,17 +27,48 @@ import sys
 import os
 import shutil
 import csv
+import paramiko
+import errno
+
+
+# Extend paramiko lib with the method mkdirs
+def mkdirs(self, path, mode=511):
+    try:
+        self.stat(path)
+    except IOError, e:
+        if e.errno == errno.ENOENT:
+            try:
+                self.mkdir(path, mode)
+            except IOError, e:
+                if e.errno == errno.ENOENT:
+                    self.mkdirs(os.path.dirname(path), mode)
+                    self.mkdir(path, mode)
+                else:
+                    raise e
+paramiko.SFTPClient.mkdirs = mkdirs
+
 
 class FileConnection(object):
 
     def is_(self, protocole):
         return self.protocole.lower() == protocole
 
-    def __init__(self, protocole, location, user, pwd):
+    def __init__(self, protocole, location, user, pwd, port=None, allow_dir_creation=None, home_folder='/'):
         self.protocole = protocole
+        self.allow_dir_creation = allow_dir_creation
+        self.location = location
+        self.home_folder = home_folder
         if self.is_('ftp'):
+            def home(self):
+                self.connection.cwd(self.location)
             self.connection = FTP(location)
-            self.connection .login(user, pwd)
+            self.connection.login(user, pwd)
+            self.connection.home = home
+        elif self.is_('sftp'):
+            transport = paramiko.Transport((location, port or 22))
+            transport.connect(username = user, password = pwd)
+            self.connection = paramiko.SFTPClient.from_transport(transport)
+
 
     def send(self, filepath, filename, output_file, create_patch=None):
         if self.is_('ftp'):
@@ -48,7 +79,22 @@ class FileConnection(object):
             output_file.close()
             return True
         elif self.is_('filestore'):
+            if not os.path.isabs(filepath):
+                filepath = os.path.join(self.location, filepath)
+            if self.allow_dir_creation:
+                os.makedirs(filepath)
             output = open(os.path.join(filepath, filename), 'w+b')
+            for line in output_file.readlines():
+                output.write(line)
+            output.close()
+            output_file.close()
+            return True
+        elif self.is_('sftp'):
+            if not os.path.isabs(filepath):
+                filepath = os.path.join(self.home_folder, filepath)
+            if self.allow_dir_creation:
+                self.connection.mkdirs(filepath)
+            output = self.connection.open(os.path.join(filepath, filename), 'w+b')
             for line in output_file.readlines():
                 output.write(line)
             output.close()

@@ -81,7 +81,7 @@ class FileConnection(object):
         elif self.is_('filestore'):
             if not os.path.isabs(filepath):
                 filepath = os.path.join(self.location, filepath)
-            if self.allow_dir_creation:
+            if self.allow_dir_creation and not os.path.exists(filepath):
                 os.makedirs(filepath)
             output = open(os.path.join(filepath, filename), 'w+b')
             for line in output_file.readlines():

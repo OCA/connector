@@ -36,7 +36,7 @@ class external_referential(osv.osv):
                             referential.apipass, port=referential. port, allow_dir_creation = True, \
                             home_folder=referential.home_folder)
         except Exception, e:
-            raise osv.except_osv(_("Connection Error"), _("Could not connect to server\nCheck url & user & password.\n %s"%e))
+            raise osv.except_osv(_("Base File Protocole Connection Error"), _("Could not connect to server\nCheck url & user & password.\n %s"%e))
 
     _columns={
         'protocole': fields.selection([('ftp','ftp'), ('filestore', 'Filestore'), ('sftp', 'sftp')], 'Protocole'),

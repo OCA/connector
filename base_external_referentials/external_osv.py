@@ -62,14 +62,14 @@ def overwrite(class_to_extend):
 
 
 class ExternalSession(object):
-    def __init__(self, referential, sync_from_object):
+    def __init__(self, referential, sync_from_object, load_linked_referential=False):
         self.referential_id = referential
         self.sync_from_object = sync_from_object
         self.debug = referential.debug
         self.logger = logging.getLogger(referential.name)
         self.connection = referential.external_connection(debug=self.debug, logger = self.logger)
         #TODO think about a better way to do it
-        if hasattr(referential, 'ext_file_referential_id') and referential.ext_file_referential_id:
+        if load_linked_referential and hasattr(referential, 'ext_file_referential_id') and referential.ext_file_referential_id:
             self.file_session = ExternalSession(referential.ext_file_referential_id, sync_from_object)
 
     def is_type(self, referential_type):
@@ -180,7 +180,7 @@ def get_extid(self, cr, uid, openerp_id, referential_id, context=None):
 def oeid_to_existing_extid(self, cr, uid, referential_id, openerp_id, context=None):
     """Returns the external id of a resource by its OpenERP id.
     Returns False if the resource id does not exists."""
-    return self.get_extid(cr, uid, referential_id, openerp_id, context=context)
+    return self.get_extid(cr, uid, openerp_id, referential_id, context=context)
 
 osv.osv.oeid_to_extid = osv.osv.get_or_create_extid
 ############## END OF DEPRECATED

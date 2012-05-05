@@ -742,7 +742,7 @@ def send_to_external(self, cr, uid, external_session, resources, mapping, mappin
     resources_to_update = {}
     resources_to_create = {}
     for resource_id, resource in resources.items():
-        ext_id = self.oeid_to_existing_extid(cr, uid, external_session.referential_id.id, resource_id, context=context)
+        ext_id = self.get_extid(cr, uid, resource_id, external_session.referential_id.id, context=context)
         if ext_id:
             for lang in resource:
                 resource[lang]['ext_id'] = ext_id
@@ -776,10 +776,13 @@ def get_lang_to_export(self, cr, uid, external_session, context=None):
 
 @extend(osv.osv)
 def _export_resources(self, cr, uid, external_session, method="onebyone", context=None):
+    external_session.logger.info("Start to export the ressource %s"%(self._name,))
     defaults = self._get_default_export_values(cr, uid, external_session, context=context)
     mapping, mapping_id = self._init_mapping(cr, uid, external_session.referential_id.id, convertion_type='from_openerp_to_external', context=context)
     last_exported_date = self._get_last_exported_date(cr, uid, external_session, context=context)
+    external_session.logger.info("Retrieve the list of ids to export for the ressource %s"%(self._name))
     ids, ids_2_date = self.get_ids_and_update_date(cr, uid, external_session, last_exported_date=last_exported_date, context=context)
+    external_session.logger.info("%s %s ressource will be exported"%(len(ids), self._name))
     step = self._get_export_step(cr, uid, external_session, context=context)
 
     group_obj = self.pool.get('group.fields')
@@ -795,11 +798,13 @@ def _export_resources(self, cr, uid, external_session, method="onebyone", contex
     while ids:
         ids_to_process = ids[0:step]
         ids = ids[step:]
+        external_session.logger.info("Start to read the ressource %s : %s"%(self._name, ids_to_process))
         resources = self._get_oe_resources(cr, uid, external_session, ids_to_process, langs=langs,
                                     smart_export=smart_export, last_exported_date=last_exported_date,
                                     mapping=mapping, mapping_id=mapping_id, context=context)
         if method == 'onebyone':
             for resource_id in ids_to_process:
+                external_session.logger.info("Start to transform and send the ressource %s : %s"%(self._name, resource_id))
                 self._transform_and_send_one_resource(cr, uid, external_session, resources[resource_id], resource_id, ids_2_date.get(resource_id), mapping, mapping_id, defaults=defaults, context=context)
         else:
             raise osv.except_osv(_('Developper Error'), _('only method export onebyone is implemented in base_external_referentials'))

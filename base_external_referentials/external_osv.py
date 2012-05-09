@@ -675,30 +675,56 @@ def _set_last_exported_date(self, cr, uid, external_session, date, context=None)
 #For now it's just support 1 level of inherit TODO make it recursive
 @extend(osv.osv)
 def get_ids_and_update_date(self, cr, uid, external_session, ids=None, last_exported_date=None, context=None):
-    table = self._table
+    object_table = self._table
     params = ()
     if not self._inherits:
-        greatest = "greatest(write_date, create_date)"
+        greatest = "GREATEST(%(object_table)s.write_date, %(object_table)s.create_date)"\
+                        %{'object_table': object_table}
+                
         query = """
-            select %s as update_date, id
-                from %s
-            """%(greatest, table,)
+            SELECT %(greatest)s as update_date, %(object_table)s.id as id, ir_model_data.res_id
+                FROM %(object_table)s
+            LEFT JOIN ir_model_data
+                ON %(object_table)s.id = ir_model_data.res_id
+                AND ir_model_data.model = '%(object_name)s'
+                AND ir_model_data.module = 'extref/%(ref_name)s'
+            """%{
+                    'greatest': greatest,
+                    'object_table': object_table,
+                    'object_name': self._name,
+                    'ref_name': external_session.referential_id.name,
+            }
     else:
-        inherits_table = self.pool.get(self._inherits.keys()[0])._table
+        inherits_object_table = self.pool.get(self._inherits.keys()[0])._table
         join_field = self._inherits[self._inherits.keys()[0]]
-        greatest = "greatest(%s.write_date, %s.create_date, %s.write_date, %s.create_date)"%(table, table, inherits_table, inherits_table)
-        query = """
-            select %s as update_date, %s.id as id
-                from %s
-                    join %s on %s.id = %s.%s
 
-            """%(greatest, table, table, inherits_table, inherits_table, table, join_field)
+        greatest = """GREATEST(%(object_table)s.write_date, %(object_table)s.create_date, 
+                    %(inherits_object_table)s.write_date, %(inherits_object_table)s.create_date)""" \
+                    %{'object_table': object_table, 'inherits_object_table': inherits_object_table}
+
+        query = """
+            select %(greatest)s as update_date, %(object_table)s.id as id, ir_model_data.res_id
+                from %(object_table)s
+                    join %(inherits_object_table)s on %(inherits_object_table)s.id = %(object_table)s.%(join_field)s
+                    LEFT JOIN ir_model_data
+                        ON %(object_table)s.id = ir_model_data.res_id
+                        AND ir_model_data.model = '%(object_name)s'
+                        AND ir_model_data.module = 'extref/%(ref_name)s'
+            """ %{
+                    'greatest': greatest,
+                    'object_table': object_table,
+                    'inherits_object_table': inherits_object_table,
+                    'join_field': join_field,
+                    'object_name': self._name,
+                    'ref_name': external_session.referential_id.name,
+                }
     if ids:
-        query += " where " + table + ".id in %s"
+        query += " WHERE " + object_table + ".id in %s"
         params += (tuple(ids),)
     if last_exported_date:
-        query += (ids and " and " or " where ") + greatest + " > %s"
+        query += (ids and " AND (" or " (WHERE ") + greatest + " > %s or ir_model_data.res_id is NULL)"
         params += (last_exported_date,)
+
     query += " order by update_date asc;"
     cr.execute(query, params)
     read = cr.dictfetchall()
@@ -753,7 +779,7 @@ def send_to_external(self, cr, uid, external_session, resources, mapping, mappin
     ext_create_ids = self.ext_create(cr, uid, external_session, resources_to_create, mapping, mapping_id, context=context)
     for rec_id, ext_id in ext_create_ids.items():
         self.create_external_id_vals(cr, uid, rec_id, ext_id, external_session.referential_id.id, context=context)
-    if update_date:
+    if update_date and self._get_last_exported_date(cr, uid, external_session, context=context) < update_date:
         self._set_last_exported_date(cr, uid, external_session, update_date, context=context)
     return ext_id
 
@@ -934,7 +960,7 @@ def _get_oeid_from_extid_or_alternative_keys(self, cr, uid, vals, external_id, r
             existing_ir_model_data_id = expected_res_id = False
 
     if not expected_res_id and alternative_keys:
-        domain = []
+        domain = ['|', ('active', '=', False), ('active', '=', True)]
         for alternative_key in alternative_keys:
             if vals.get(alternative_key):
                 domain.append((alternative_key, '=', vals[alternative_key]))

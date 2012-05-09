@@ -1205,6 +1205,11 @@ def _transform_field(self, cr, uid, external_session, convertion_type, field_val
             null_value['datetime'] = False
         else:
             null_value['datetime'] = ''
+        if convertion_type == 'from_external_to_openerp':
+            field = null_value[internal_type]
+        else:
+            field = null_value[external_type]
+
     return field
 
 @extend(osv.osv)

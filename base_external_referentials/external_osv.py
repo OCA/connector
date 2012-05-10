@@ -68,6 +68,7 @@ class ExternalSession(object):
         self.debug = referential.debug
         self.logger = logging.getLogger(referential.name)
         self.connection = referential.external_connection(debug=self.debug, logger = self.logger)
+        self.tmp = {}
         #TODO think about a better way to do it
         if load_linked_referential and hasattr(referential, 'ext_file_referential_id') and referential.ext_file_referential_id:
             self.file_session = ExternalSession(referential.ext_file_referential_id, sync_from_object)

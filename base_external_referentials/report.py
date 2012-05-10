@@ -33,50 +33,42 @@ class external_report(osv.osv):
     _description = 'External Report'
     _order = 'end_date desc'
 
+
+    def _get_full_name(self, cr, uid, ids, name, arg, context=None):
+        res = {}
+        model_obj = self.pool.get('ir.model')
+        for report in self.browse(cr, uid, ids, context=context):
+            obj = self.pool.get(report.sync_from_object_model.model)
+            object_name = obj.browse(cr, uid, report.sync_from_object_id, context=context)
+            name = "%s %s from %s"%(report.action, report.action_on.name, object_name.name)
+            name = name.replace('_', ' ').lower().strip()
+            res[report.id] = name
+        return res
+
     _columns = {
-        'name': fields.char('Action', size=32, required=True,
-                            readonly=True),
-        'object_name': fields.char('Ressource Name', size=64, required=True,
-                            readonly=True),
-        'object_related': fields.char('Report Related To', size=64, required=True,
-                            readonly=True),
-        'object_related_description': fields.char('Report Related To', size=64, required=True,
-                            readonly=True),
-        'res_id': fields.integer('Ressource id', required=True, readonly=True), 
-        'method': fields.char('Method', size=64, required=True,
-                           readonly=True,
-                           help="Method linked to the report"),
-        'start_date': fields.datetime('Last Start Date', readonly=True),
-        'end_date': fields.datetime('Last End Date', readonly=True),
-        'referential_id': fields.many2one('external.referential',
-                                                   'External Referential',
-                                                   required=True,
-                                                   readonly=True),
-        'line_ids': fields.one2many('external.report.line',
-                                    'report_id', 'Report Lines'),
-        'failed_line_ids': fields.one2many('external.report.line',
-                                           'report_id',
-                                           'Failed Report Lines',
-                                           domain=[('state', '!=', 'success')]),
-        'history_ids': fields.one2many('external.report.history',
-                                       'report_id', 'History'),
+        'name': fields.function(_get_full_name, store=True, type='char', size=256, string='Name'),
+        'action': fields.char('Action', size=32, required=True, readonly=True),
+        'action_on': fields.many2one('ir.model', 'Action On',required=True, readonly=True),
+        'sync_from_object_model': fields.many2one('ir.model', 'Sync From Object',
+                                                        required=True, readonly=True),
+        'sync_from_object_id': fields.integer('Sync From Object ID', required=True, readonly=True),
+        'referential_id': fields.many2one('external.referential','External Referential',
+                                                        required=True,readonly=True),
+        'line_ids': fields.one2many('external.report.line','report_id', 'Report Lines'),
+        'failed_line_ids': fields.one2many('external.report.line', 'report_id',
+                                        'Failed Report Lines', domain=[('state', '!=', 'success')]),
+        'history_ids': fields.one2many('external.report.history','report_id', 'History'),
     }
 
-    def get_report_filter(self, cr, uid, method, object, context=None):
-        return [
-            ('method', '=', method),
-            ('res_id', '=', object.id),
-            ('object_related', '=', object._name),
-        ]       
-                   
-
-    def get_report(self, cr, uid, method, object, context=None):
-        report_id = False
-        filter = self.get_report_filter(cr, uid, method, object, context=context)
-        report = self.search(cr, uid, filter, context=context)
-        if report:
-            report_id = report[0]
-        return report_id
+    def _get_report(self, cr, uid, action, action_on, sync_from_object, context=None):
+        report_id = self.search(cr, uid, 
+                [
+                    ('action', '=', action),
+                    ('action_on', '=', action_on),
+                    ('sync_from_object_model', '=', sync_from_object._name),
+                    ('sync_from_object_id', '=', sync_from_object.id),
+                ], context=context)
+        return report_id and report_id[0] or False
 
     def _clean_successful_lines(self, cr, uid, report_id, context=None):
         lines_obj = self.pool.get('external.report.line')
@@ -101,89 +93,68 @@ class external_report(osv.osv):
                 self.pool.get('external.report.line').retry(cr, uid, failed_line_ids, context=context)
         return True
 
-    def _prepare_start_report(self, cr, uid, method, object, context=None):
-        return {'name': method.replace('_', ' ').strip() + " " + getattr(object, object._rec_name),
-                'object_name': getattr(object, object._rec_name),
-                'object_related': object._name,
-                'object_related_description': object._description,
-                'res_id': object.id,
-                'method': method,
-                'referential_id': object.referential_id.id,
-                'start_date': time.strftime(DEFAULT_SERVER_DATETIME_FORMAT),}
+    def _prepare_start_report(self, cr, uid, action, action_on, sync_from_object, context=None):
+        model_obj = self.pool.get('ir.model')
+        model_id = model_obj.search(cr, uid, [['model', '=', sync_from_object._name]])[0]
+        action_on_model_id = model_obj.search(cr, uid, [['model', '=', action_on]])[0]
+        return {
+            'action': action,
+            'action_on': action_on_model_id,
+            'sync_from_object_model': model_id,
+            'sync_from_object_id': sync_from_object.id,
+            'referential_id': sync_from_object.referential_id.id,
+        }
 
-    def start_report(self, cr, uid, id=None, method=None,
-                     object=None, context=None):
+    def start_report(self, cr, uid, external_session, id=None, action=None,
+                            action_on=None, context=None):
         """ Start a report, use the report with the id in the parameter
         if given. Otherwise, try to find the report which have the same method
          and object (we use the same report to avoid a
          multiplication of reports) If nothing is found, it create a new report
         """
 
-        if not id and (not method or not object):
+        if not id and not (action and action_on):
             raise Exception('No reference to create the report!')
         if id:
             report_id = id
         else:
-            report_id = self.get_report(cr, uid, method, object, context)
-                                               
+            report_id = self._get_report(cr, uid, action, action_on, external_session.sync_from_object, context)
         log_cr = pooler.get_db(cr.dbname).cursor()
         try:
             if report_id:
-                self.write(log_cr, uid, report_id,
-                           {'start_date': time.strftime(DEFAULT_SERVER_DATETIME_FORMAT),
-                            'end_date': False},
-                           context=context)
-                # clean successful lines of the last report
                 self._clean_successful_lines(log_cr, uid, report_id, context)
             else:
                 report_id = self.create(
                     log_cr, uid,
                     self._prepare_start_report(
-                        cr, uid, method, object, context=context),
+                        cr, uid, action, action_on, external_session.sync_from_object, context=context),
                     context=context)
+            history_id = self.pool.get('external.report.history').\
+                        create(log_cr, uid, {'report_id': report_id, 'user_id': uid}, context=context)
+            external_session.tmp['history_id'] = history_id
             log_cr.commit()
-
+        except:
+            raise
         finally:
             log_cr.close()
 
         return report_id
 
-    def end_report(self, cr, uid, id, context=None):
+    def end_report(self, cr, uid, external_session, id, context=None):
         """ Create history lines based on lines
         Successful lines are cleaned at each start of a report
         so we historize their aggregation.
         """
         log_cr = pooler.get_db(cr.dbname).cursor()
-        report = self.browse(log_cr, uid, id, context=context)
-        lines_obj = self.pool.get('external.report.line')
         history_obj = self.pool.get('external.report.history')
         try:
-            line_ids = lines_obj.search(log_cr, uid,
-                                     [('report_id', '=', id),
-                                     '|', ('write_date', '>', report.start_date),
-                                     ('create_date', '>', report.start_date)],
-                                     context=context)
-
-            grouped_lines = lines_obj.aggregate_actions(log_cr, uid,
-                                                        line_ids,
-                                                        context)
-
-            for line in grouped_lines:
-                history_obj.create(log_cr, uid,
-                                   {
-                        'report_id': id,
-                        'res_model': line[1],
-                        'action': line[2],
-                        'count': grouped_lines[line],
-                        'user_id': uid,
-                        'state': line[0],
-                        'origin': context.get('origin', False),
-                    }, context=context)
-
-            self.write(log_cr, uid, id,
-                       {'end_date': time.strftime(DEFAULT_SERVER_DATETIME_FORMAT)},
-                       context=context)
-
+            history_obj.write(log_cr, uid, external_session.tmp['history_id'], 
+                    {'end_date': time.strftime(DEFAULT_SERVER_DATETIME_FORMAT)}, context=context)
+            log_cr.commit()
+        except:
+            log_cr.rollback()
+            raise
+        else:
             log_cr.commit()
         finally:
             log_cr.close()
@@ -205,7 +176,7 @@ class external_report_history(osv.osv):
     _name = 'external.report.history'
     _description = 'External Report History'
     _rec_name = 'report_id'
-    _order = 'date desc'
+    _order = 'start_date desc'
 
     _columns = {
         'report_id': fields.many2one('external.report',
@@ -213,21 +184,34 @@ class external_report_history(osv.osv):
                                               required=True,
                                               readonly=True,
                                               ondelete='cascade'),
-        'date': fields.datetime('End Date', required=True, readonly=True),
-        'res_model': fields.char('Resource Object', size=64,
-                                 required=True, readonly=True),
-        'action': fields.char('Action', size=64, required=True, readonly=True),
-        'count': fields.integer('Count', readonly=True),
+        'start_date': fields.datetime('Start Date', required=True, readonly=True),
+        'end_date': fields.datetime('End Date', required=True, readonly=True),
+        'count_success': fields.integer('Count Success', readonly=True),
+        'count_failed': fields.integer('Count Failed', readonly=True),
         'user_id': fields.many2one('res.users', 'User', required=True, readonly=True),
-        'state': fields.selection((('success', 'Success'),
-                                   ('fail', 'Failed')),
-                                   'Status', required=True, readonly=True),
-        'origin': fields.char('Origin', size=64, readonly=True),
     }
 
     _defaults = {
-        "date": lambda *a: time.strftime(DEFAULT_SERVER_DATETIME_FORMAT)
-    }
+        "start_date": lambda *a: time.strftime(DEFAULT_SERVER_DATETIME_FORMAT)
+     }
+
+    def add_one(self, cr, uid, history_id, state, context=None):
+        history_cr = pooler.get_db(cr.dbname).cursor()
+        try:
+            history = self.browse(history_cr, uid, history_id, context=context)
+            if state == 'failed':
+                vals = {'count_failed': history.count_failed + 1}
+            else:
+                vals = {'count_success': history.count_success + 1}
+            self.write(history_cr, uid, history_id, vals, context=context)
+        except:
+            history_cr.rollback()
+            raise
+        else:
+            history_cr.commit()
+        finally:
+            history_cr.close()
+        return True
 
 external_report_history()
 
@@ -261,10 +245,9 @@ class external_report_lines(osv.osv):
         'state': fields.selection((('success', 'Success'),
                                    ('fail', 'Failed')),
                                    'Status', required=True, readonly=True),
-        'res_model': fields.char('Resource Object', size=64,
-                                 required=True, readonly=True),
-        'res_id': fields.integer('Resource Id', readonly=True),
         'action': fields.char('Action', size=32, required=True, readonly=True),
+        'action_on': fields.many2one('ir.model', 'Action On',required=True, readonly=True),
+        'res_id': fields.integer('Resource Id', readonly=True),
         'date': fields.datetime('Date', required=True, readonly=True),
         'external_id': fields.char('External ID', size=64, readonly=True),
         'error_message': fields.text('Error Message', readonly=True),
@@ -278,10 +261,14 @@ class external_report_lines(osv.osv):
         "date": lambda *a: time.strftime(DEFAULT_SERVER_DATETIME_FORMAT)
     }
 
-    def _log_base(self, cr, uid, model, action, state=None, res_id=None,
+
+    #TODO
+    #1 - Did it usefull to log sucessfull entry?
+    #2 - We should not recreate a new entry for an existing line created from a previous report
+    #3 - Move the existing line id in the external_session.tmp ;)
+    def _log_base(self, cr, uid, action_on, action, state=None, res_id=None,
                   external_id=None,exception=None, resource=None,
                   args=None, kwargs=None):
-
         context = kwargs.get('context')
         existing_line_id = context.get('retry_report_line_id', False)
         report_id = context['report_id']
@@ -300,10 +287,11 @@ class external_report_lines(osv.osv):
                             'kwargs': kwargs,
                             })
         else:
+            action_on_model_id = self.pool.get('ir.model').search(cr, uid, [['model', '=', action_on]])[0]
             existing_line_id = self.create(cr, uid, {
                             'report_id': report_id,
                             'state': state,
-                            'res_model': model,
+                            'action_on': action_on_model_id,
                             'action': action,
                             'date': time.strftime(DEFAULT_SERVER_DATETIME_FORMAT),
                             'res_id': res_id,
@@ -320,10 +308,11 @@ class external_report_lines(osv.osv):
             ids = [ids]
 
         for log in self.browse(cr, uid, ids, context=context):
-            method = getattr(self.pool.get(log.kwargs['context']['report_line_based_on']), log.action)
+            method = getattr(self.pool.get(log.action_on.model), log.action)
             args = log.args
             kwargs = log.kwargs
-            sync_from_object = self.pool.get(log.report_id.object_related).browse(cr, uid, log.report_id.res_id, context=context)
+            sync_from_object = self.pool.get(log.report_id.sync_from_object_model.model).\
+                                browse(cr, uid, log.report_id.sync_from_object_id, context=context)
             external_session = ExternalSession(log.report_id.referential_id, sync_from_object)
             resource = log.resource
             if not kwargs.get('context', False):

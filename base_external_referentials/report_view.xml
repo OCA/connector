@@ -10,39 +10,18 @@
 			<field name="arch" type="xml">
 				<form string="External Referential Reports">
                     <field name="name"/>
-                    <field name="object_name"/>
-                    <field name="object_related_description"/>
                     <newline/>
-                    <field name="start_date"/>
-                    <field name="end_date"/>
+                    <field name="action"/>
+                    <field name="action_on"/>
+                    <field name="sync_from_object_model"/>
+                    <field name="sync_from_object_id"/>
                     <field name="referential_id"/>
                     <newline/>
-                    <field name="failed_line_ids" nolabel="1" colspan="4">
-                        <tree colors="red:state=='fail'" string="Fails">
-                            <field name="state" invisible="True"/>
-                            <field name="res_model"/>
-                            <field name="action"/>
-                            <field name="date"/>
-                            <field name="res_id"/>
-                            <field name="external_id"/>
-                            <field name="error_message"/>
-                            <button name="retry" string="Retry" icon="gtk-go-forward" type="object" colspan="2"/>
-                        </tree>
-                     </field>
-                    <newline/>
-                    <field name="history_ids" nolabel="1" colspan="4">
-                        <tree colors="red:state=='fail'" string="History">
-                            <field name="date"/>
-                            <field name="count"/>
-                            <field name="res_model"/>
-                            <field name="action"/>
-                            <field name="user_id"/>
-                            <field name="origin"/>
-                            <field name="state"/>
-                        </tree>
-                    </field>
+                    <field name="failed_line_ids" nolabel="1" colspan="4"/>
                     <button name="retry_failed_lines" string="Retry All Failed" icon="gtk-go-forward" type="object" colspan="2"/>
                     <button name="delete_failed_lines" string="Delete All Failed" icon="gtk-cancel" type="object" colspan="2"/>
+                    <newline/>
+                    <field name="history_ids" nolabel="1" colspan="4"/>
 				</form>
 			</field>
 		</record>
@@ -54,11 +33,9 @@
 			<field name="arch" type="xml">
 				<tree string="External Reports" colors="red:failed_line_ids">
                     <field name="referential_id"/>
-                    <field name="object_related_description"/>
-                    <field name="object_name"/>
                     <field name="name"/>
-                    <field name="start_date"/>
-                    <field name="end_date"/>
+                    <field name="sync_from_object_model"/>
+                    <field name="sync_from_object_id"/>
                     <field name="failed_line_ids" invisible="1"/>
 				</tree>
 			</field>
@@ -72,11 +49,10 @@
                 <search string="External Referential Reports">
                    <field name="name"/>
                    <field name="referential_id"/>
-                   <field name="end_date"/>
                    <newline/>
                    <group  expand='0' string='Group by...' groups="base.group_extended">
                        <filter string='External Referential' icon="terp-stock_symbol-selection" domain="[]" context="{'group_by' : 'referential_id'}" />
-                       <filter string='Object Related' icon="terp-stock_symbol-selection" domain="[]" context="{'group_by' : 'object_related_description'}" />
+                       <!--<filter string='Object Related' icon="terp-stock_symbol-selection" domain="[]" context="{'group_by' : 'sync_from_object_id'}" />-->
                    </group>
                 </search>
             </field>
@@ -89,13 +65,12 @@
 			<field name="type">form</field>
 			<field name="arch" type="xml">
 				<form string="External Report History">
-                    <field name="report_id"/>
-                    <field name="date"/>
-                    <field name="count"/>
-                    <field name="res_model"/>
-                    <field name="action"/>
+                    <field name="report_id" invisible="not context.get('main_view')"/>
+                    <field name="start_date"/>
+                    <field name="end_date"/>
+                    <field name="count_failed"/>
+                    <field name="count_success"/>
                     <field name="user_id"/>
-                    <field name="state"/>
 				</form>
 			</field>
 		</record>
@@ -105,14 +80,13 @@
 			<field name="model">external.report.history</field>
 			<field name="type">tree</field>
 			<field name="arch" type="xml">
-				<tree string="External Report History" colors="red:state=='fail'">
-                    <field name="report_id"/>
-                    <field name="date"/>
-                    <field name="count"/>
-                    <field name="res_model"/>
-                    <field name="action"/>
+				<tree string="External Report History">
+                    <field name="report_id" invisible="not context.get('main_view')"/>
+                    <field name="start_date"/>
+                    <field name="end_date"/>
+                    <field name="count_failed"/>
+                    <field name="count_success"/>
                     <field name="user_id"/>
-                    <field name="state"/>
 				</tree>
 			</field>
 		</record>
@@ -127,17 +101,13 @@
                    <filter string="Failures" icon="terp-accessories-archiver" domain="[('state','=','fail')]"/>
                    <separator orientation="vertical"/>
                    <field name="report_id"/>
-                   <field name="date"/>
-                   <field name="res_model"/>
-                   <field name="action"/>
+                   <field name="start_date"/>
+                   <field name="end_date"/>
                    <field name="user_id"/>
-                   <field name="state"/>
                    <newline/>
                    <group  expand='0' string='Group by...' groups="base.group_extended">
                        <filter string='Report' icon="terp-stock_symbol-selection" domain="[]" context="{'group_by' : 'report_id'}" />
-                       <filter string='Date' icon="terp-stock_symbol-selection" domain="[]" context="{'group_by' : 'date'}" />
-                       <filter string='Model' icon="terp-stock_symbol-selection" domain="[]" context="{'group_by' : 'res_model'}" />
-                       <filter string='Action' icon="terp-stock_symbol-selection" domain="[]" context="{'group_by' : 'action'}" />
+                       <filter string='Date' icon="terp-stock_symbol-selection" domain="[]" context="{'group_by' : 'start_date'}" />
                    </group>
                 </search>
             </field>
@@ -154,14 +124,14 @@
                    <separator orientation="vertical"/>
                    <field name="report_id"/>
                    <field name="date"/>
-                   <field name="res_model"/>
+                   <field name="action_on"/>
                    <field name="action"/>
                    <field name="state"/>
                    <newline/>
                    <group  expand='0' string='Group by...' groups="base.group_extended">
                        <filter string='Report' icon="terp-stock_symbol-selection" domain="[]" context="{'group_by' : 'report_id'}" />
                        <filter string='Date' icon="terp-stock_symbol-selection" domain="[]" context="{'group_by' : 'date'}" />
-                       <filter string='Model' icon="terp-stock_symbol-selection" domain="[]" context="{'group_by' : 'res_model'}" />
+                       <filter string='Action On Model' icon="terp-stock_symbol-selection" domain="[]" context="{'group_by' : 'action_on'}" />
                        <filter string='Action' icon="terp-stock_symbol-selection" domain="[]" context="{'group_by' : 'action'}" />
                    </group>
                 </search>
@@ -175,7 +145,7 @@
 			<field name="type">form</field>
 			<field name="arch" type="xml">
 				<form string="External Report Line">
-                    <field name="report_id"/>
+                    <field name="report_id" invisible="not context.get('main_view')"/>
                     <field name="res_model"/>
                     <field name="res_id"/>
                     <field name="external_id"/>
@@ -196,9 +166,9 @@
 			<field name="type">tree</field>
 			<field name="arch" type="xml">
 				<tree colors="red:state=='fail'" string="External Report Lines">
-                    <field name="report_id" invisible="True"/>
+                    <field name="report_id" invisible="not context.get('main_view')"/>
                     <field name="state"/>
-                    <field name="res_model"/>
+                    <field name="action_on"/>
                     <field name="action"/>
                     <field name="date"/>
                     <field name="res_id"/>

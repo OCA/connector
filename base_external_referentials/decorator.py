@@ -80,14 +80,14 @@ def open_report(func):
             kwargs['context'] = context
         
         #Start the report
-        report_id = report_obj.start_report(cr, uid, id=None, method=func.__name__, object=external_session.sync_from_object, context=context)
+        report_id = report_obj.start_report(cr, uid, external_session, id=None, action=func.__name__, action_on=self._name, context=context)
 
         #Execute the original function and add the report_id to the context
         context['report_id'] = report_id
         response = func(self, cr, uid, external_session, *args, **kwargs)
 
         #Close the report
-        report_obj.end_report(cr, uid, report_id, context=context)
+        report_obj.end_report(cr, uid, external_session, report_id, context=context)
 
         return response
     return wrapper
@@ -110,10 +110,11 @@ def catch_error_in_report(func):
             if not context['report_line_based_on'] == self._name:
                 return func(self, cr, uid, external_session, resource, *args, **kwargs)
         report_line_obj = self.pool.get('external.report.line')
+        report_history = self.pool.get('external.report.history')
         log_cr = pooler.get_db(cr.dbname).cursor()
         report_line_id = report_line_obj._log_base(
                                     log_cr,
-                                    uid, 
+                                    uid,
                                     self._name,
                                     func.__name__, 
                                     state='fail',
@@ -133,11 +134,13 @@ def catch_error_in_report(func):
             report_line_obj.write(log_cr, uid, report_line_id, {
                             'error_message': 'Error with the mapping : %s. Error details : %s'%(e.mapping_name, e.value),
                             }, context=context)
+            report_history.add_one(log_cr, uid, external_session.tmp['history_id'], 'failed', context=context)
             log_cr.commit()
         except xmlrpclib.Fault as e:
             report_line_obj.write(log_cr, uid, report_line_id, {
                             'error_message': 'Error with xmlrpc protocole. Error details : error %s : %s'%(e.faultCode, e.faultString),
                             }, context=context)
+            report_history.add_one(log_cr, uid, external_session.tmp['history_id'], 'failed', context=context)
             log_cr.commit()
         except osv.except_osv as e:
             #TODO write correctly the message in the report
@@ -146,11 +149,12 @@ def catch_error_in_report(func):
         except Exception as e:
             #TODO write correctly the message in the report
             import_cr.rollback()
-            raise Exception(e)
+            raise
         else:
             report_line_obj.write(log_cr, uid, report_line_id, {    
                         'state': 'success',
                         }, context=context)
+            report_history.add_one(log_cr, uid, external_session.tmp['history_id'], 'success', context=context)
             log_cr.commit()
             import_cr.commit()
         finally:

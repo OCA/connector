@@ -722,7 +722,7 @@ def get_ids_and_update_date(self, cr, uid, external_session, ids=None, last_expo
         query += " WHERE " + object_table + ".id in %s"
         params += (tuple(ids),)
     if last_exported_date:
-        query += (ids and " AND (" or " (WHERE ") + greatest + " > %s or ir_model_data.res_id is NULL)"
+        query += (ids and " AND (" or " WHERE (") + greatest + " > %s or ir_model_data.res_id is NULL)"
         params += (last_exported_date,)
 
     query += " order by update_date asc;"

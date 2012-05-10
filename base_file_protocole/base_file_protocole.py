@@ -29,7 +29,25 @@ import shutil
 import csv
 import paramiko
 import errno
+import functools
 
+def open_and_close_connection(func):
+    """
+    Open And Close Decorator will automatically launch the connection
+    to the external storage system.
+    Then the function is excecuted and the connection is closed
+    """
+    @functools.wraps(func)
+    def wrapper(self, *args, **kwargs):
+        self.connect()
+        try:
+            response = func(self, *args, **kwargs)
+        except:
+            raise
+        finally:
+            self.close()
+        return response
+    return wrapper
 
 # Extend paramiko lib with the method mkdirs
 def mkdirs(self, path, mode=511):
@@ -44,7 +62,7 @@ def mkdirs(self, path, mode=511):
                     self.mkdirs(os.path.dirname(path), mode)
                     self.mkdir(path, mode)
                 else:
-                    raise e
+                    raise
 paramiko.SFTPClient.mkdirs = mkdirs
 
 
@@ -58,22 +76,27 @@ class FileConnection(object):
         self.allow_dir_creation = allow_dir_creation
         self.location = location
         self.home_folder = home_folder
+        self.port = port
+        self.user = user
+        self.pwd = pwd
+
+
+    def connect(self):
         if self.is_('ftp'):
-            def home(self):
-                self.connection.cwd(self.location)
-            self.connection = FTP(location)
-            self.connection.login(user, pwd)
-            self.connection.home = home
+            self.connection = FTP(self.location)
+            self.connection.login(self.user, self.pwd)
         elif self.is_('sftp'):
-            transport = paramiko.Transport((location, port or 22))
-            transport.connect(username = user, password = pwd)
-            self.connection = paramiko.SFTPClient.from_transport(transport)
+            transport = paramiko.Transport((self.location, self.port or 22))
+            transport.connect(username = self.user, password = self.pwd)
+            self.connection = paramiko.SFTPClient.from_transport(self.transport)
 
+    def close(self):
+        if self.is_('ftp') or self.is_('sftp'):
+            self.connection.close()
 
+    @open_and_close_connection
     def send(self, filepath, filename, output_file, create_patch=None):
         if self.is_('ftp'):
-            print "filepath: ",filepath
-            print "current directory : ",self.connection.pwd()
             self.connection.cwd(filepath)
             self.connection.storbinary('STOR ' + filename, output_file)
             output_file.close()
@@ -101,10 +124,10 @@ class FileConnection(object):
             output_file.close()
             return True
 
+    @open_and_close_connection
     def get(self, filepath, filename):
         if self.is_('ftp'):
             outfile = TemporaryFile('w+b')
-            self.connection.cwd('/') #go to root menu by security
             self.connection.cwd(filepath)
             self.connection.retrbinary("RETR " + filename, outfile.write)
             outfile.seek(0)
@@ -112,15 +135,16 @@ class FileConnection(object):
         elif self.is_('filestore'):
             return open(os.path.join(filepath, filename), 'r+b')
 
+    @open_and_close_connection
     def search(self, filepath, filename):
         if self.is_('ftp'):
-            self.connection.cwd('/') #go to root menu by security
             self.connection.cwd(filepath)
             #Take care that ftp lib use utf-8 and not unicode
             return [x for x in self.connection.nlst() if filename.encode('utf-8') in x]
         elif self.is_('filestore'):
             return [x for x in os.listdir(filepath) if filename in x]
 
+    @open_and_close_connection
     def move(self, oldfilepath, newfilepath, filename):
         if self.is_('ftp'):
             self.connection.rename(os.path.join(oldfilepath, filename), os.path.join(newfilepath, filename))
@@ -139,7 +163,6 @@ class FileCsvReader(object):
 
     def next(self):
         row = self.reader.next()
-#        print "next row=", row
         res = {}
         for key, value in row.items():
             if not isinstance(key, unicode) and key:

@@ -1193,9 +1193,9 @@ def _transform_field(self, cr, uid, external_session, convertion_type, field_val
     if field in ['None', 'False']:
         field = False
 
-    #Set correct null value for each type
+    #Set correct empty value for each type
     if field is False or field is None:
-        null_value = {
+        empty_value = {
             'unicode': '', 
             'char': '',
             'date': False,
@@ -1203,15 +1203,28 @@ def _transform_field(self, cr, uid, external_session, convertion_type, field_val
             'float': 0,
             'list': [],
             'dict': {},
+            'boolean': False,
+            'many2one': False,
+            'one2many': [],
+            'many2many': [],
+            # external types
+            'text': '',
+            'textarea': '',
+            'selection': 0,
+            'multiselect': [],
         }
         if convertion_type == 'from_external_to_openerp':
-            null_value['datetime'] = False
+            empty_value['datetime'] = False
         else:
-            null_value['datetime'] = ''
+            empty_value['datetime'] = ''
         if internal_type and convertion_type == 'from_external_to_openerp':
-            field = null_value[internal_type]
+            field = empty_value[internal_type]
         elif external_type:
-            field = null_value[external_type]
+            # if the type is not specified in empty_value,
+            # then we consider it will be False, if it
+            # should not for an external_type, please add it 
+            # in empty_value
+            field = empty_value.get(external_type, False)
 
     return field
 

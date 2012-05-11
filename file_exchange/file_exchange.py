@@ -306,7 +306,7 @@ class file_exchange(osv.osv):
         'type': fields.selection([('in','IN'),('out','OUT'),], 'Type',help=("IN for files coming from the other system"
                                                                 "and to be imported in the ERP ; OUT for files to be"
                                                                 "generated from the ERP and send to the other system")),
-        'mapping_id':fields.many2one('external.mapping', 'External Mapping', require="True"),
+        'mapping_id':fields.many2one('external.mapping', 'External Mapping', require="True", domain="[('referential_id', '=', referential_id)]"),
         'format' : fields.selection([('csv','CSV'),('csv_no_header','CSV WITHOUT HEADER')], 'File format'),
         'referential_id':fields.many2one('external.referential', 'Referential',help="Referential to use for connection and mapping", require=True),
         'scheduler':fields.many2one('ir.cron', 'Scheduler',help="Scheduler that will execute the cron task"),
@@ -463,7 +463,7 @@ class file_fields(osv.osv):
         'custom_name': fields.char('Custom Name', size=64),
         'sequence': fields.integer('Sequence', required=True, help="The sequence field is used to define the order of the fields"),
         #TODO add a filter only fields that belong to the main object or to sub-object should be available
-        'mapping_line_id': fields.many2one('external.mapping.line', 'OpenERP Mapping', domain = "[('referential_id', '=', parent.referential_id)]"),
+        'mapping_line_id': fields.many2one('external.mapping.line', 'OpenERP Mapping', domain = "[('referential_id', '=', parent.referential_id),('mapping_id', '=', parent.mapping_id)]"),
         'file_id': fields.many2one('file.exchange', 'File Exchange', require="True"),
         'default_value': fields.char('Default Value', size=64),
         'advanced_default_value': fields.text('Advanced Default Value', help=("This python code will be evaluate and the value"

@@ -1197,6 +1197,8 @@ def _transform_field(self, cr, uid, external_session, convertion_type, field_val
     if field is False or field is None:
         null_value = {
             'unicode': '', 
+            'char': '',
+            'date': False,
             'int': 0,
             'float': 0,
             'list': [],
@@ -1206,9 +1208,9 @@ def _transform_field(self, cr, uid, external_session, convertion_type, field_val
             null_value['datetime'] = False
         else:
             null_value['datetime'] = ''
-        if convertion_type == 'from_external_to_openerp':
+        if internal_type and convertion_type == 'from_external_to_openerp':
             field = null_value[internal_type]
-        else:
+        elif external_type:
             field = null_value[external_type]
 
     return field
@@ -1276,6 +1278,8 @@ def _transform_sub_mapping(self, cr, uid, external_session, convertion_type, res
             }
 
             if sub_mapping['internal_type'] in ['one2many', 'many2many']:
+                if not isinstance(field_value, list):
+                    transform_args[4] = [field_value]
                 vals[to_field] = []
                 if convertion_type == 'from_external_to_openerp':
                     lines = sub_mapping_obj._transform_resources(*transform_args, **transform_kwargs)

@@ -672,10 +672,9 @@ def _get_last_exported_date(self, cr, uid, external_session, context=None):
 def _set_last_exported_date(self, cr, uid, external_session, date, context=None):
     return False
 
-
 #For now it's just support 1 level of inherit TODO make it recursive
 @extend(osv.osv)
-def get_ids_and_update_date(self, cr, uid, external_session, ids=None, last_exported_date=None, context=None):
+def _get_query_and_params_for_ids_and_date(self, cr, uid, external_session, ids=None, last_exported_date=None, context=None):
     object_table = self._table
     params = ()
     if not self._inherits:
@@ -727,6 +726,11 @@ def get_ids_and_update_date(self, cr, uid, external_session, ids=None, last_expo
         params += (last_exported_date,)
 
     query += " order by update_date asc;"
+    return query, params
+
+@extend(osv.osv)
+def get_ids_and_update_date(self, cr, uid, external_session, ids=None, last_exported_date=None, context=None):
+    query, params = self._get_query_and_params_for_ids_and_date(cr, uid, external_session, ids=ids, last_exported_date=last_exported_date, context=context)
     cr.execute(query, params)
     read = cr.dictfetchall()
     ids = []
@@ -776,7 +780,7 @@ def send_to_external(self, cr, uid, external_session, resources, mapping, mappin
             resources_to_update[resource_id] = resource
         else:
             resources_to_create[resource_id] = resource
-    self.ext_update(cr, uid, external_session, resources_to_update, context=context)
+    self.ext_update(cr, uid, external_session, resources_to_update, mapping, mapping_id, context=context)
     ext_create_ids = self.ext_create(cr, uid, external_session, resources_to_create, mapping, mapping_id, context=context)
     for rec_id, ext_id in ext_create_ids.items():
         self.create_external_id_vals(cr, uid, rec_id, ext_id, external_session.referential_id.id, context=context)
@@ -1297,8 +1301,13 @@ def _transform_sub_mapping(self, cr, uid, external_session, convertion_type, res
                 if convertion_type == 'from_external_to_openerp':
                     lines = sub_mapping_obj._transform_resources(*transform_args, **transform_kwargs)
                 else:
+                    mapping, sub_mapping_id = self._init_mapping(cr, uid, external_session.referential_id.id, \
+                                                                    convertion_type=convertion_type,
+                                                                    mapping=mapping,
+                                                                    mapping_id=sub_mapping_id,
+                                                                    context=context)
                     field_to_read = [x['internal_field'] for x in mapping[sub_mapping_id]['mapping_lines']]
-                    sub_resources = self.read(cr, uid, field_value, field_to_read, context=context)
+                    sub_resources = sub_mapping_obj.read(cr, uid, field_value, field_to_read, context=context)
                     transform_args[4] = sub_resources
                     lines = sub_mapping_obj._transform_resources(*transform_args, **transform_kwargs)
                 for line in lines:

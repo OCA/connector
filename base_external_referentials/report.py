@@ -129,8 +129,12 @@ class external_report(osv.osv):
                     self._prepare_start_report(
                         cr, uid, action, action_on, external_session.sync_from_object, context=context),
                     context=context)
-            history_id = self.pool.get('external.report.history').\
-                        create(log_cr, uid, {'report_id': report_id, 'user_id': uid}, context=context)
+            history_id = self.pool.get('external.report.history').create(
+                log_cr, uid,
+                {'report_id': report_id,
+                 'user_id': uid,
+                 'start_date': time.strftime(DEFAULT_SERVER_DATETIME_FORMAT)},
+                context=context)
             external_session.tmp['history_id'] = history_id
             log_cr.commit()
         except:
@@ -148,8 +152,11 @@ class external_report(osv.osv):
         log_cr = pooler.get_db(cr.dbname).cursor()
         history_obj = self.pool.get('external.report.history')
         try:
-            history_obj.write(log_cr, uid, external_session.tmp['history_id'], 
-                    {'end_date': time.strftime(DEFAULT_SERVER_DATETIME_FORMAT)}, context=context)
+            history_obj.write(
+                log_cr, uid,
+                external_session.tmp['history_id'], 
+                {'end_date': time.strftime(DEFAULT_SERVER_DATETIME_FORMAT)},
+                context=context)
             log_cr.commit()
         except:
             log_cr.rollback()
@@ -185,7 +192,7 @@ class external_report_history(osv.osv):
                                               readonly=True,
                                               ondelete='cascade'),
         'start_date': fields.datetime('Start Date', required=True, readonly=True),
-        'end_date': fields.datetime('End Date', required=True, readonly=True),
+        'end_date': fields.datetime('End Date', readonly=True),
         'count_success': fields.integer('Count Success', readonly=True),
         'count_failed': fields.integer('Count Failed', readonly=True),
         'user_id': fields.many2one('res.users', 'User', required=True, readonly=True),

@@ -146,7 +146,6 @@
 			<field name="arch" type="xml">
 				<form string="External Report Line">
                     <field name="report_id" invisible="not context.get('main_view')"/>
-                    <field name="res_model"/>
                     <field name="res_id"/>
                     <field name="external_id"/>
                     <field name="action"/>

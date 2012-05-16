@@ -31,7 +31,7 @@ from base_external_referentials.external_osv import ExternalSession
 class external_report(osv.osv):
     _name = 'external.report'
     _description = 'External Report'
-    _order = 'end_date desc'
+    _order = 'name desc'
 
 
     def _get_full_name(self, cr, uid, ids, name, arg, context=None):

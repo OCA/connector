@@ -127,6 +127,7 @@ def catch_error_in_report(func):
                             )
         import_cr = pooler.get_db(cr.dbname).cursor()
         response = False
+        #response = func(self, import_cr, uid, external_session, resource, *args, **kwargs)
         try:
             response = func(self, import_cr, uid, external_session, resource, *args, **kwargs)
         except MappingError as e:
@@ -134,13 +135,15 @@ def catch_error_in_report(func):
             report_line_obj.write(log_cr, uid, report_line_id, {
                             'error_message': 'Error with the mapping : %s. Error details : %s'%(e.mapping_name, e.value),
                             }, context=context)
-            report_history.add_one(log_cr, uid, external_session.tmp['history_id'], 'failed', context=context)
+            if external_session.tmp.get('history_id'):
+                report_history.add_one(log_cr, uid, external_session.tmp['history_id'], 'failed', context=context)
             log_cr.commit()
         except xmlrpclib.Fault as e:
             report_line_obj.write(log_cr, uid, report_line_id, {
                             'error_message': 'Error with xmlrpc protocole. Error details : error %s : %s'%(e.faultCode, e.faultString),
                             }, context=context)
-            report_history.add_one(log_cr, uid, external_session.tmp['history_id'], 'failed', context=context)
+            if external_session.tmp.get('history_id'):
+                report_history.add_one(log_cr, uid, external_session.tmp['history_id'], 'failed', context=context)
             log_cr.commit()
         except osv.except_osv as e:
             #TODO write correctly the message in the report
@@ -154,7 +157,8 @@ def catch_error_in_report(func):
             report_line_obj.write(log_cr, uid, report_line_id, {    
                         'state': 'success',
                         }, context=context)
-            report_history.add_one(log_cr, uid, external_session.tmp['history_id'], 'success', context=context)
+            if external_session.tmp.get('history_id'):
+                report_history.add_one(log_cr, uid, external_session.tmp['history_id'], 'success', context=context)
             log_cr.commit()
             import_cr.commit()
         finally:

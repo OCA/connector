@@ -40,6 +40,7 @@
                         <button name="start_task" string="Export files" type="object" attrs="{'invisible':[('type','!=','out')]}"/>
                         <button name="load_mapping" string="Load Mapping" type="object" attrs="{'invisible':[('referential_id', '=', False)]}"/>
                     </group>
+                    <field name="related_mapping_ids" invisible="1" />
                     <notebook colspan="4">
                         <page string="Fields">
                             <field name="field_ids" colspan="4" nolabel="1"/>

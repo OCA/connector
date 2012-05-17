@@ -163,7 +163,8 @@ class file_exchange(osv.osv):
         res = self.pool.get(method.mapping_id.model_id.model)._record_external_resources(cr, uid, external_session, resources, defaults=defaults, mapping=mapping, mapping_id=mapping_id, context=context)
         ids_imported += res['create_ids'] + res['write_ids']
         method.start_action('action_after_all', model_obj, ids_imported, context=context)
-        external_session.connection.move(method.folder_path, method.archive_folder_path, filename)
+        if method.archive_folder_path:
+            external_session.connection.move(method.folder_path, method.archive_folder_path, filename)
         external_session.logger.info("Finish to import the file %s"%(filename,))
         return res
 
@@ -301,6 +302,15 @@ class file_exchange(osv.osv):
         result.sort()
         return result
 
+    def _get_related_mapping_ids(self, cr, uid, ids, field_name, arg, context=None):
+        res = {}
+        for parent in self.browse(cr, uid, ids, context=context):
+            if parent.mapping_id:
+                res[parent.id] =  [parent.mapping_id.id] + parent.mapping_id._get_related_child_mapping_ids()
+            else:
+                res[parent.id] = []
+        return res
+
     _columns = {
         'name': fields.char('Name', size=64, help="Exchange description like the name of the supplier, bank,...", require=True),
         'type': fields.selection([('in','IN'),('out','OUT'),], 'Type',help=("IN for files coming from the other system"
@@ -328,6 +338,7 @@ class file_exchange(osv.osv):
         'pre_processing': fields.text('Pre-Processing', help="This python code will be executed before merge of elements of the import"),
         'mapping_template_id':fields.many2one('external.mapping.template', 'External Mapping Template', require="True"),
         'notes': fields.text('Notes'),
+        'related_mapping_ids': fields.function(_get_related_mapping_ids, type="many2many", relation="external.mapping", string='Related Mappings'),
     }
 
     def get_absolute_id(self, cr, uid, id, context=None):
@@ -463,7 +474,7 @@ class file_fields(osv.osv):
         'custom_name': fields.char('Custom Name', size=64),
         'sequence': fields.integer('Sequence', required=True, help="The sequence field is used to define the order of the fields"),
         #TODO add a filter only fields that belong to the main object or to sub-object should be available
-        'mapping_line_id': fields.many2one('external.mapping.line', 'OpenERP Mapping', domain = "[('referential_id', '=', parent.referential_id),('mapping_id', '=', parent.mapping_id)]"),
+        'mapping_line_id': fields.many2one('external.mapping.line', 'OpenERP Mapping', domain = "[('referential_id', '=', parent.referential_id),('mapping_id', '=', parent.related_mapping_ids[0][2])]"),
         'file_id': fields.many2one('file.exchange', 'File Exchange', require="True"),
         'default_value': fields.char('Default Value', size=64),
         'advanced_default_value': fields.text('Advanced Default Value', help=("This python code will be evaluate and the value"

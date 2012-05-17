@@ -565,6 +565,16 @@ class external_mapping(osv.osv):
             mapping_id = (version_code + '_' + mapping_name).replace('.','_')
         return mapping_id
 
+    def _get_related_child_mapping_ids(self, cr, uid, ids, context=None):
+        res = []
+        tmp_res = []
+        for parent_mapping in self.browse(cr, uid, ids, context=context):
+            for child in parent_mapping.mapping_ids:
+                if child.evaluation_type == 'sub-mapping':
+                    res.append(child.child_mapping_id.id)
+                    tmp_res += (self._get_related_child_mapping_ids(cr, uid, [child.child_mapping_id.id], context=context))
+        return res + tmp_res
+
     _sql_constraints = [
         ('ref_template_uniq', 'unique (referential_id, template_id)', 'A referential can not have various mapping imported from the same template')
     ]

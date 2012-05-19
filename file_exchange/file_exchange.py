@@ -75,19 +75,31 @@ class file_exchange(osv.osv):
                 res[field.name] = field.default_value
         return res
 
-    def _get_external_file_resources(self, cr, uid, external_session, filepath, filename, format, fields_name=None, mapping=None, mapping_id=None, context=None):
-        external_file = external_session.connection.get(filepath, filename)
-        method_id = context['file_exchange_id']
-        method = self.browse(cr, uid, method_id, context=context)
+    def _get_external_file_resources(self, cr, uid, external_session, filepath, filename, format, 
+                    fields_name=None, mapping=None, mapping_id=None, external_file=None, context=None):
+        if not external_file:
+            external_file = external_session.connection.get(filepath, filename)
+        method = external_session.sync_from_object
         model_obj = self.pool.get(method.mapping_id.model_id.model)
         if format in ['csv_no_header','csv']:
-            merge_key_id = self.pool.get('file.fields').search(cr, uid, [('merge_key', '=', True), ('mapping_line_id.related_model_id', '=', method.mapping_id.model_id.id), ('file_id', '=', method.id)], context=context)
+            merge_key_id = self.pool.get('file.fields').search(cr, uid, [
+                                ('merge_key', '=', True), 
+                                ('mapping_line_id.related_model_id', '=', method.mapping_id.model_id.id), 
+                                ('file_id', '=', method.id)
+                            ], context=context)
             merge_key = None
             if merge_key_id:
                 merge_key = self.pool.get('file.fields').read(cr, uid, merge_key_id[0], ['name'], context=context)['name']
-            mapping,mapping_id = model_obj._init_mapping(cr, uid, external_session.referential_id.id, convertion_type='from_external_to_openerp', mapping_id=method.mapping_id.id, context=context)
+            mapping,mapping_id = model_obj._init_mapping(cr, uid, external_session.referential_id.id, 
+                                                        convertion_type='from_external_to_openerp',
+                                                        mapping_id=method.mapping_id.id,
+                                                        context=context)
             mapping_tree, merge_keys = self._get_mapping_tree(cr, uid, mapping_id, context=context)
-            csv = FileExchangeCsvReader(external_file, fieldnames= format=='csv_no_header' and fields_name or None, delimiter=method.delimiter.encode('utf-8'), encoding=method.encoding, pre_processing=method.pre_processing)
+            csv = FileExchangeCsvReader(external_file,
+                                        fieldnames= format=='csv_no_header' and fields_name or None,
+                                        delimiter=method.delimiter.encode('utf-8'),
+                                        encoding=method.encoding,
+                                        pre_processing=method.pre_processing)
             res = csv.reorganize(field_structure=mapping_tree, merge_keys=merge_keys, ref_field=merge_key)
         return res
     
@@ -113,18 +125,42 @@ class file_exchange(osv.osv):
             result = list(set(result))
         return result, merge_keys
 
-    def start_task(self, cr, uid, ids, context=None):
-        if not context:
-            context={}
-        for method in self.browse(cr, uid, ids, context=context):
-            ctx = context.copy()
-            ctx['lang'] = method.lang.code
-            ctx['do_not_update'] = method.do_not_update and [method.mapping_id.model_id.model] or []
-            ctx['file_exchange_id'] = method.id
-            if method.type == 'in':
-                self._import_files(cr, uid, method.id, context=ctx)
-            elif method.type == 'out':
-                self._export_files(cr, uid, method.id, context=ctx)
+
+
+    def import_task(self, cr, uid, method_id, context=None):
+        if hasattr(method_id, '__iter__'):
+            method_id = method_id[0]
+        method = self.browse(cr, uid, method_id, context=context)
+        if method.synchronize_from == 'pop_up':
+            return self.import_file_form_pop_up(cr, uid, method.id, context=context)
+        else:
+            return self._import_files(cr, uid, method.id, context=context)
+
+    def export_task(self, cr, uid, method_id, context=None):
+        if hasattr(method_id, '__iter__'):
+            method_id = method_id[0]
+        method = self.browse(cr, uid, method_id, context=context)
+        return self._export_files(cr, uid, method.id, context=context)
+
+
+    def import_file_form_pop_up(self, cr, uid, ids, context=None):
+        return self.pool.get('pop.up.file').open_input_file(cr, uid, 'import file', self._import_file_from_pop_up, [1], context=context)
+
+    def _import_file_from_pop_up(self, cr, uid, method_id, input_file, input_filename, context=None):
+        #TODO remove this duplicated code from import_file
+        method = self.browse(cr, uid, method_id, context=context)
+        external_session = ExternalSession(method.referential_id, method)
+        file_fields_obj = self.pool.get('file.fields')
+        model_obj = self.pool.get(method.mapping_id.model_id.model)
+        mapping,mapping_id = model_obj._init_mapping(cr, uid, external_session.referential_id.id,
+                                                        convertion_type='from_external_to_openerp',
+                                                        mapping_id=method.mapping_id.id,
+                                                        context=context)
+        defaults = self._get_default_import_values(cr, uid, external_session, mapping_id, context=context)
+        fields_name_ids = file_fields_obj.search(cr, uid, [['file_id', '=', method.id]], context=context)
+        fields_name = [x['name'] for x in file_fields_obj.read(cr, uid, fields_name_ids, ['name'], context=context)]
+        self._import_one_file(cr, uid, external_session, method_id, input_filename, defaults, mapping, 
+                                            mapping_id, fields_name, external_file=input_file, context=context)
         return True
 
     def _import_files(self, cr, uid, method_id, context=None):
@@ -136,7 +172,10 @@ class file_exchange(osv.osv):
         context['report_line_based_on'] = method.mapping_id.model_id.model
         external_session = ExternalSession(method.referential_id, method)
         model_obj = self.pool.get(method.mapping_id.model_id.model)
-        mapping,mapping_id = model_obj._init_mapping(cr, uid, external_session.referential_id.id, convertion_type='from_external_to_openerp', mapping_id=method.mapping_id.id, context=context)
+        mapping,mapping_id = model_obj._init_mapping(cr, uid, external_session.referential_id.id,
+                                                        convertion_type='from_external_to_openerp',
+                                                        mapping_id=method.mapping_id.id,
+                                                        context=context)
 
         defaults = self._get_default_import_values(cr, uid, external_session, mapping_id, context=context)
         fields_name_ids = file_fields_obj.search(cr, uid, [['file_id', '=', method.id]], context=context)
@@ -147,23 +186,35 @@ class file_exchange(osv.osv):
         if not list_filename:
             external_session.logger.info("No file '%s' found on the server"%(method.filename,))
         for filename in list_filename:
-            res = self._import_one_file(cr, uid, external_session, method_id, filename, defaults, mapping, mapping_id, fields_name, context=context)
+            res = self._import_one_file(cr, uid, external_session, method_id, filename, defaults,
+                                                    mapping, mapping_id, fields_name, context=context)
             result["create_ids"] += res.get('create_ids',[])
             result["write_ids"] += res.get('write_ids',[])
         return result
 
     @open_report
-    def _import_one_file(self, cr, uid, external_session, method_id, filename, defaults, mapping, mapping_id, fields_name, context=None):
+    def _import_one_file(self, cr, uid, external_session, method_id, filename, defaults, mapping, 
+                                            mapping_id, fields_name, external_file=None, context=None):
         ids_imported = []
         method = self.browse(cr, uid, method_id, context=context)
         model_obj = self.pool.get(method.mapping_id.model_id.model)
         external_session.logger.info("Start to import the file %s"%(filename,))
         method.start_action('action_before_all', model_obj, context=context)
-        resources = self._get_external_file_resources(cr, uid, external_session, method.folder_path, filename, method.format, fields_name, mapping=mapping, mapping_id=mapping_id, context=context)
-        res = self.pool.get(method.mapping_id.model_id.model)._record_external_resources(cr, uid, external_session, resources, defaults=defaults, mapping=mapping, mapping_id=mapping_id, context=context)
+        resources = self._get_external_file_resources(cr, uid, external_session, method.folder_path,
+                                                        filename, method.format, fields_name,
+                                                        mapping=mapping,
+                                                        mapping_id=mapping_id,
+                                                        external_file=external_file,
+                                                        context=context)
+        res = self.pool.get(method.mapping_id.model_id.model)._record_external_resources(cr, uid, 
+                                                                        external_session, resources, 
+                                                                        defaults=defaults,
+                                                                        mapping=mapping,
+                                                                        mapping_id=mapping_id,
+                                                                        context=context)
         ids_imported += res['create_ids'] + res['write_ids']
         method.start_action('action_after_all', model_obj, ids_imported, context=context)
-        if method.archive_folder_path:
+        if method.synchronize_from == 'referential' and method.archive_folder_path:
             external_session.connection.move(method.folder_path, method.archive_folder_path, filename)
         external_session.logger.info("Finish to import the file %s"%(filename,))
         return res
@@ -210,7 +261,8 @@ class file_exchange(osv.osv):
         d = sequence_obj._interpolation_dict()
         filename = sequence_obj._interpolate(method.filename, d)
     #=== Check if file already exist in specified folder. If so, raise an alert
-        self._check_if_file_exist(cr, uid, external_session, method.folder_path, filename, context=context)
+        if method.synchronize_from != 'pop_up':
+            self._check_if_file_exist(cr, uid, external_session, method.folder_path, filename, context=context)
     #=== Start export
         external_session.logger.info("Start to export %s"%(method.name,))
         model_obj = self.pool.get(method.mapping_id.model_id.model)
@@ -231,10 +283,20 @@ class file_exchange(osv.osv):
             ids_filter = method.search_filter
         ids_to_export = model_obj.search(cr, uid, eval(ids_filter), context=context)
     #=== Start mapping
-        mapping,mapping_id = model_obj._init_mapping(cr, uid, external_session.referential_id.id, convertion_type='from_openerp_to_external', mapping_line_filter_ids=mapping_line_filter_ids,mapping_id=method.mapping_id.id, context=context)
+        mapping,mapping_id = model_obj._init_mapping(cr, uid, external_session.referential_id.id,
+                                                    convertion_type='from_openerp_to_external',
+                                                    mapping_line_filter_ids=mapping_line_filter_ids,
+                                                    mapping_id=method.mapping_id.id,
+                                                    context=context)
         fields_to_read = [x['internal_field'] for x in mapping[mapping_id]['mapping_lines']]
         # TODO : CASE fields_to_read is False !!!
-        resources = model_obj._get_oe_resources_into_external_format(cr, uid, external_session, ids_to_export, mapping=mapping,mapping_id=mapping_id, mapping_line_filter_ids=mapping_line_filter_ids, fields=fields_to_read, defaults=defaults, context=context)
+        resources = model_obj._get_oe_resources_into_external_format(cr, uid, external_session,
+                                                    ids_to_export,
+                                                    mapping=mapping,mapping_id=mapping_id,
+                                                    mapping_line_filter_ids=mapping_line_filter_ids,
+                                                    fields=fields_to_read,
+                                                    defaults=defaults,
+                                                    context=context)
     #=== Check if content to export
         if not resources:
             external_session.logger.info("Not data to export for %s"%(method.name,))
@@ -268,12 +330,18 @@ class file_exchange(osv.osv):
 
         output_file.seek(0)
         method.start_action('action_after_all', model_obj, ids_to_export, context=context,external_session=external_session)
-    #=== Export file
-        external_session.connection.send(method.folder_path, filename, output_file)
-        external_session.logger.info("File transfert have been done succesfully %s"%(method.name,))
+        return self._send_output(cr, uid, method, filename, output_file, context=context)
+
+    def _send_output(self, cr, uid, method, filename, output_file, context=None):
+        if method.synchronize_from == 'pop_up':
+            return self.pool.get('pop.up.file').open_output_file(cr, uid, filename, output_file, 'File export', context=context)
+        else:
+            external_session.connection.send(method.folder_path, filename, output_file)
+            external_session.logger.info("File transfert have been done succesfully %s"%(method.name,))
         return True
 
-    def start_action(self, cr, uid, id, action_name, self_object, object_ids=None, resource=None, context=None,external_session=None):
+    def start_action(self, cr, uid, id, action_name, self_object, object_ids=None, resource=None,
+                                                                context=None,external_session=None):
         if not context:
             context={}
         if isinstance(id, list):
@@ -292,7 +360,8 @@ class file_exchange(osv.osv):
             try:
                 exec action_code in space
             except Exception, e:
-                raise osv.except_osv(_('Error !'), _('Error can not apply the python action default value: %s \n Exception: %s' %(method.name,e)))
+                raise osv.except_osv(_('Error !'), _("Error can not apply the python action default", 
+                                                "value: %s \n Exception: %s" %(method.name,e)))
             if 'result' in space:
                 return space['result']
         return True
@@ -313,7 +382,7 @@ class file_exchange(osv.osv):
 
     _columns = {
         'name': fields.char('Name', size=64, help="Exchange description like the name of the supplier, bank,...", require=True),
-        'type': fields.selection([('in','IN'),('out','OUT'),], 'Type',help=("IN for files coming from the other system"
+        'type': fields.selection([('in','IN'),('out','OUT'),('in-out', 'IN & OUT')], 'Type',help=("IN for files coming from the other system"
                                                                 "and to be imported in the ERP ; OUT for files to be"
                                                                 "generated from the ERP and send to the other system")),
         'mapping_id':fields.many2one('external.mapping', 'External Mapping', require="True", domain="[('referential_id', '=', referential_id)]"),
@@ -339,6 +408,7 @@ class file_exchange(osv.osv):
         'mapping_template_id':fields.many2one('external.mapping.template', 'External Mapping Template', require="True"),
         'notes': fields.text('Notes'),
         'related_mapping_ids': fields.function(_get_related_mapping_ids, type="many2many", relation="external.mapping", string='Related Mappings'),
+        'synchronize_from': fields.selection([('referential', 'Referential'), ('pop_up', 'Pop Up')], string='Synchronize From'),
     }
 
     def get_absolute_id(self, cr, uid, id, context=None):
@@ -381,7 +451,7 @@ class file_exchange(osv.osv):
             'pre_processing': current_file.pre_processing or '',
         }
         csv.writerow(row)
-        return self.pool.get('output.file').open_output_file(cr, uid, 'file.exchange.csv', output_file, 'File Exchange Export', context=context)
+        return self.pool.get('pop.up.file').open_output_file(cr, uid, 'file.exchange.csv', output_file, 'File Exchange Export', context=context)
         
     # Method to export the mapping file
     def create_file_fields(self, cr, uid, id, context=None):
@@ -405,7 +475,7 @@ class file_exchange(osv.osv):
                 'merge_key': str(field.merge_key),
             }
             csv.writerow(row)
-        return self.pool.get('output.file').open_output_file(cr, uid, 'file.fields.csv', output_file, 'File Exchange Fields Export', context=context)
+        return self.pool.get('pop.up.file').open_output_file(cr, uid, 'file.fields.csv', output_file, 'File Exchange Fields Export', context=context)
 
     # Method to export the default fields file
     def create_file_default_fields(self, cr, uid, id, context=None):
@@ -425,7 +495,7 @@ class file_exchange(osv.osv):
                 'type': field.type,
             }
             csv.writerow(row)
-        return self.pool.get('output.file').open_output_file(cr, uid, 'file.default.import.values.csv', output_file, 'File Exchange Fields Export', context=context)
+        return self.pool.get('pop.up.file').open_output_file(cr, uid, 'file.default.import.values.csv', output_file, 'File Exchange Fields Export', context=context)
 
     def load_mapping(self, cr, uid, ids, context=None):
         for method in self.browse(cr, uid, ids, context=context):

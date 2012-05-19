@@ -32,12 +32,17 @@
                         <field name="lang" />
                         <field name="delimiter" />
                     </group>
-                    <field name="folder_path" />
-                    <field name="archive_folder_path"  attrs="{'invisible':[('type','!=','in')]}"/>
-                    <field name="filename"/>
+                    <group name="file_option" colspan="2" col="4">
+                        <field name="synchronize_from" />
+                        <field name="filename" attrs="{'invisible':[('synchronize_from','=','pop_up'), ('type','=','out')]}"/>
+                    </group>
+                    <group name="file_folder" colspan="2" col="4" attrs="{'invisible':[('synchronize_from','=','pop_up')]}">
+                        <field name="folder_path" />
+                        <field name="archive_folder_path"  attrs="{'invisible':[('type','=','out')]}"/>
+                    </group>
                     <group name="Start Task" colspan="2" col="4">
-                        <button name="start_task" string="Import files" type="object" attrs="{'invisible':[('type','!=','in')]}"/>
-                        <button name="start_task" string="Export files" type="object" attrs="{'invisible':[('type','!=','out')]}"/>
+                        <button name="import_task" string="Import files" type="object" attrs="{'invisible':[('type','=','out')]}"/>
+                        <button name="export_task" string="Export files" type="object" attrs="{'invisible':[('type','=','in')]}"/>
                         <button name="load_mapping" string="Load Mapping" type="object" attrs="{'invisible':[('referential_id', '=', False)]}"/>
                     </group>
                     <field name="related_mapping_ids" invisible="1" />

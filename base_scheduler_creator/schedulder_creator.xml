@@ -5,7 +5,6 @@
 
 		<record id="scheduler_creator_wizard" model="ir.ui.view">
 			<field name="name">scheduler.creator.wizard.form</field>
-			<field name="priority">20</field>
 			<field name="model">scheduler.creator.wizard</field>
 			<field name="type">form</field>
 			<field name="arch" type="xml">
@@ -21,7 +20,7 @@
 		</record>
 		
 		<record id="action_scheduler_creator_wizard" model="ir.actions.act_window">
-			<field name="name">create a scheduler</field>
+			<field name="name">Create a scheduler</field>
 			<field name="type">ir.actions.act_window</field>
 			<field name="res_model">scheduler.creator.wizard</field>
 			<field name="view_type">form</field>

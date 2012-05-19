@@ -26,7 +26,7 @@ from tools.safe_eval import safe_eval
 from tools import DEFAULT_SERVER_DATETIME_FORMAT
 import simplejson
 from base_external_referentials.external_osv import ExternalSession
-
+from base_external_referentials.decorator import commit_now
 
 class external_report(osv.osv):
     _name = 'external.report'
@@ -105,6 +105,7 @@ class external_report(osv.osv):
             'referential_id': sync_from_object.referential_id.id,
         }
 
+    @commit_now
     def start_report(self, cr, uid, external_session, id=None, action=None,
                             action_on=None, context=None):
         """ Start a report, use the report with the id in the parameter
@@ -119,52 +120,34 @@ class external_report(osv.osv):
             report_id = id
         else:
             report_id = self._get_report(cr, uid, action, action_on, external_session.sync_from_object, context)
-        log_cr = pooler.get_db(cr.dbname).cursor()
-        try:
-            if report_id:
-                self._clean_successful_lines(log_cr, uid, report_id, context)
-            else:
-                report_id = self.create(
-                    log_cr, uid,
-                    self._prepare_start_report(
-                        cr, uid, action, action_on, external_session.sync_from_object, context=context),
-                    context=context)
-            history_id = self.pool.get('external.report.history').create(
-                log_cr, uid,
-                {'report_id': report_id,
-                 'user_id': uid,
-                 'start_date': time.strftime(DEFAULT_SERVER_DATETIME_FORMAT)},
-                context=context)
-            external_session.tmp['history_id'] = history_id
-            log_cr.commit()
-        except:
-            raise
-        finally:
-            log_cr.close()
 
+        if report_id:
+            self._clean_successful_lines(cr, uid, report_id, context)
+        else:
+            report_id = self.create(
+                cr, uid,
+                self._prepare_start_report(
+                    cr, uid, action, action_on, external_session.sync_from_object, context=context),
+                context=context)
+        history_id = self.pool.get('external.report.history').create(
+            cr, uid,
+            {'report_id': report_id,
+             'user_id': uid,
+             'start_date': time.strftime(DEFAULT_SERVER_DATETIME_FORMAT)},
+            context=context)
+        external_session.tmp['history_id'] = history_id
         return report_id
 
+    @commit_now
     def end_report(self, cr, uid, external_session, id, context=None):
         """ Create history lines based on lines
         Successful lines are cleaned at each start of a report
         so we historize their aggregation.
         """
-        log_cr = pooler.get_db(cr.dbname).cursor()
         history_obj = self.pool.get('external.report.history')
-        try:
-            history_obj.write(
-                log_cr, uid,
-                external_session.tmp['history_id'], 
-                {'end_date': time.strftime(DEFAULT_SERVER_DATETIME_FORMAT)},
-                context=context)
-            log_cr.commit()
-        except:
-            log_cr.rollback()
-            raise
-        else:
-            log_cr.commit()
-        finally:
-            log_cr.close()
+        history_obj.write(cr, uid, external_session.tmp['history_id'], 
+            {'end_date': time.strftime(DEFAULT_SERVER_DATETIME_FORMAT)},
+            context=context)
         return id
 
     def delete_failed_lines(self, cr, uid, ids, context=None):
@@ -202,22 +185,20 @@ class external_report_history(osv.osv):
         "start_date": lambda *a: time.strftime(DEFAULT_SERVER_DATETIME_FORMAT)
      }
 
-    def add_one(self, cr, uid, history_id, state, context=None):
-        history_cr = pooler.get_db(cr.dbname).cursor()
-        try:
-            history = self.browse(history_cr, uid, history_id, context=context)
-            if state == 'failed':
-                vals = {'count_failed': history.count_failed + 1}
-            else:
-                vals = {'count_success': history.count_success + 1}
-            self.write(history_cr, uid, history_id, vals, context=context)
-        except:
-            history_cr.rollback()
-            raise
+    def add_one_fail(self, cr, uid, history_id, context=None):
+        return self._add_one(cr, uid, history_id, 'fail', context=context)
+
+    def add_one_success(self, cr, uid, history_id, context=None):
+        return self._add_one(cr, uid, history_id, 'success', context=context)
+
+    @commit_now
+    def _add_one(self, cr, uid, history_id, state, context=None):
+        history = self.browse(cr, uid, history_id, context=context)
+        if state == 'failed':
+            vals = {'count_failed': history.count_failed + 1}
         else:
-            history_cr.commit()
-        finally:
-            history_cr.close()
+            vals = {'count_success': history.count_success + 1}
+        self.write(cr, uid, history_id, vals, context=context)
         return True
 
 external_report_history()
@@ -273,23 +254,18 @@ class external_report_lines(osv.osv):
     #1 - Did it usefull to log sucessfull entry?
     #2 - We should not recreate a new entry for an existing line created from a previous report
     #3 - Move the existing line id in the external_session.tmp ;)
-    def _log_base(self, cr, uid, action_on, action, state=None, res_id=None,
-                  external_id=None,exception=None, resource=None,
-                  args=None, kwargs=None):
+    @commit_now
+    def start_log(self, cr, uid, action_on, action, res_id=None,
+                  external_id=None, resource=None, args=None, kwargs=None):
         context = kwargs.get('context')
         existing_line_id = context.get('retry_report_line_id', False)
         report_id = context['report_id']
 
-        # connection object can not be kept in text indeed
-        # FIXME : see if we have some problem with other objects
-        # and maybe remove from the conect all objects
-        # which are not string, boolean, list, dict, integer, float or ?
         if existing_line_id:
             self.write(cr, uid,
                            existing_line_id,
-                           {'state': state,
+                           {'state': 'fail',
                             'date': time.strftime(DEFAULT_SERVER_DATETIME_FORMAT),
-                            'error_message': exception and str(exception) or False,
                             'args': args,
                             'kwargs': kwargs,
                             })
@@ -297,18 +273,37 @@ class external_report_lines(osv.osv):
             action_on_model_id = self.pool.get('ir.model').search(cr, uid, [['model', '=', action_on]])[0]
             existing_line_id = self.create(cr, uid, {
                             'report_id': report_id,
-                            'state': state,
+                            'state': 'fail',
                             'action_on': action_on_model_id,
                             'action': action,
                             'date': time.strftime(DEFAULT_SERVER_DATETIME_FORMAT),
                             'res_id': res_id,
                             'external_id': external_id,
-                            'error_message': exception and str(exception) or False,
                             'resource': resource,
                             'args': args,
                             'kwargs': kwargs,
                         })
         return existing_line_id
+
+    @commit_now
+    def log_fail(self, cr, uid, external_session, report_line_id, error_message, context=None):
+        external_session.connection.logger.error(error_message)
+        self.write(cr, uid, report_line_id, {
+                            'error_message': error_message,
+                            'state': 'fail',
+                            }, context=context)
+        if external_session.tmp.get('history_id'):
+            self.pool.get('external.report.history').add_one_fail(cr, uid, \
+                                            external_session.tmp['history_id'], context=context)
+        return True
+
+    @commit_now
+    def log_sucess(self, cr, uid, external_session, report_line_id, context=None):
+        self.write(cr, uid, report_line_id, {'state': 'success'}, context=context)
+        if external_session.tmp.get('history_id'):
+            self.pool.get('external.report.history').add_one_success(cr, uid, \
+                                            external_session.tmp['history_id'], context=context)
+        return True
 
     def retry(self, cr, uid, ids, context=None):
         if isinstance(ids, int) or isinstance(ids, long):

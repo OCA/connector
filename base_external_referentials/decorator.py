@@ -26,6 +26,9 @@ from message_error import MappingError
 import functools
 import xmlrpclib
 
+#TODO refactor me we should create 2 decorator
+# 1 only_for_referential
+# 2 only_for_referential_category
 def only_for_referential(ref_type=None, ref_categ=None, super_function=None):
     """ 
     This decorator will execute the code of the function decorated only if
@@ -93,8 +96,6 @@ def open_report(func):
     return wrapper
 
 
-
-
 def catch_error_in_report(func):
     """ This decorator open and close a new cursor and if an error occure it will generate a error line in the reporting system
     The function must start with "self, cr, uid, object"
@@ -110,14 +111,11 @@ def catch_error_in_report(func):
             if not context['report_line_based_on'] == self._name:
                 return func(self, cr, uid, external_session, resource, *args, **kwargs)
         report_line_obj = self.pool.get('external.report.line')
-        report_history = self.pool.get('external.report.history')
-        log_cr = pooler.get_db(cr.dbname).cursor()
-        report_line_id = report_line_obj._log_base(
-                                    log_cr,
+        report_line_id = report_line_obj.start_log(
+                                    cr,
                                     uid,
                                     self._name,
                                     func.__name__, 
-                                    state='fail',
                                     #TODO manage external id and res_id in a good way
                                     external_id=context.get('external_id_for_report') and resource[context.get('external_id_for_report')],
                                     res_id= not context.get('external_id_for_report') and args and args[0],
@@ -127,43 +125,49 @@ def catch_error_in_report(func):
                             )
         import_cr = pooler.get_db(cr.dbname).cursor()
         response = False
-        #response = func(self, import_cr, uid, external_session, resource, *args, **kwargs)
         try:
             response = func(self, import_cr, uid, external_session, resource, *args, **kwargs)
         except MappingError as e:
             import_cr.rollback()
-            report_line_obj.write(log_cr, uid, report_line_id, {
-                            'error_message': 'Error with the mapping : %s. Error details : %s'%(e.mapping_name, e.value),
-                            }, context=context)
-            if external_session.tmp.get('history_id'):
-                report_history.add_one(log_cr, uid, external_session.tmp['history_id'], 'failed', context=context)
-            log_cr.commit()
+            error_message = 'Error with the mapping : %s. Error details : %s'%(e.mapping_name, e.value),
+            report_line_obj.log_fail(cr, uid, external_session, report_line_id, error_message, context=context)
         except xmlrpclib.Fault as e:
-            report_line_obj.write(log_cr, uid, report_line_id, {
-                            'error_message': 'Error with xmlrpc protocole. Error details : error %s : %s'%(e.faultCode, e.faultString),
-                            }, context=context)
-            if external_session.tmp.get('history_id'):
-                report_history.add_one(log_cr, uid, external_session.tmp['history_id'], 'failed', context=context)
-            log_cr.commit()
-        except osv.except_osv as e:
-            #TODO write correctly the message in the report
             import_cr.rollback()
-            raise osv.except_osv(*e)
+            error_message = 'Error with xmlrpc protocole. Error details : error %s : %s'%(e.faultCode, e.faultString)
+            report_line_obj.log_fail(cr, uid, external_session, report_line_id, error_message, context=context)
+        except osv.except_osv as e:
+            import_cr.rollback()
+            error_message = '%s : %s'%(e.name, e.value)
+            report_line_obj.log_fail(cr, uid, external_session, report_line_id, error_message, context=context)
         except Exception as e:
             #TODO write correctly the message in the report
             import_cr.rollback()
             raise
         else:
-            report_line_obj.write(log_cr, uid, report_line_id, {    
-                        'state': 'success',
-                        }, context=context)
-            if external_session.tmp.get('history_id'):
-                report_history.add_one(log_cr, uid, external_session.tmp['history_id'], 'success', context=context)
-            log_cr.commit()
+            report_line_obj.log_success(cr, uid, external_session, report_line_id, context=context)
             import_cr.commit()
         finally:
             import_cr.close()
-            log_cr.close()
+        return response
+    return wrapper
+
+
+def commit_now(func):
+    """ This decorator open and close a new cursor and if an error occure it raise an error
+    The function must start with "self, cr"
+    """
+    @functools.wraps(func)
+    def wrapper(self, cr, *args, **kwargs):
+        new_cr = pooler.get_db(cr.dbname).cursor()
+        try:
+            response = func(self, new_cr, *args, **kwargs)
+        except:
+            new_cr.rollback()
+            raise
+        else:
+            new_cr.commit()
+        finally:
+            new_cr.close()
         return response
     return wrapper
 

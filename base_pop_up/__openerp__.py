@@ -31,7 +31,7 @@
     'depends': ['base'], 
     'init_xml': [],
     'update_xml': [ 
-           'output_file_view.xml',
+           'pop_up_file_view.xml',
     ],
     'demo_xml': [],
     'installable': True,

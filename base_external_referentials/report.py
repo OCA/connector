@@ -298,7 +298,7 @@ class external_report_lines(osv.osv):
         return True
 
     @commit_now
-    def log_sucess(self, cr, uid, external_session, report_line_id, context=None):
+    def log_success(self, cr, uid, external_session, report_line_id, context=None):
         self.write(cr, uid, report_line_id, {'state': 'success'}, context=context)
         if external_session.tmp.get('history_id'):
             self.pool.get('external.report.history').add_one_success(cr, uid, \

@@ -294,7 +294,7 @@ class external_referential(osv.osv):
             'name': referential.type_id.categ_id.name,
         }
         csv.writerow(row)
-        return self.pool.get('output.file').open_output_file(cr, uid, 'external.referential.category.csv', output_file, 'Referential category export', context=context)
+        return self.pool.get('pop.up.file').open_output_file(cr, uid, 'external.referential.category.csv', output_file, 'Referential category export', context=context)
 
     # Method to export external referential type
     def build_external_ref_type(self, cr, uid, id, context=None):
@@ -312,7 +312,7 @@ class external_referential(osv.osv):
             'code': referential.type_id.code,
         }
         csv.writerow(row)
-        return self.pool.get('output.file').open_output_file(cr, uid, 'external.referential.type.csv', output_file, 'Referential Type Export', context=context)
+        return self.pool.get('pop.up.file').open_output_file(cr, uid, 'external.referential.type.csv', output_file, 'Referential Type Export', context=context)
 
     # Method to export external referential version
     def build_external_ref_version(self, cr, uid, id, context=None):
@@ -330,7 +330,7 @@ class external_referential(osv.osv):
             'code': referential.version_id.code,
         }
         csv.writerow(row)
-        return self.pool.get('output.file').open_output_file(cr, uid, 'external.referential.version.csv', output_file, 'Referential Version Export', context=context)
+        return self.pool.get('pop.up.file').open_output_file(cr, uid, 'external.referential.version.csv', output_file, 'Referential Version Export', context=context)
 
     # Method to export external referential
     def build_external_ref(self, cr, uid, id, context=None):
@@ -352,7 +352,7 @@ class external_referential(osv.osv):
             'debug': referential.debug,
         }
         csv.writerow(row)
-        return self.pool.get('output.file').open_output_file(cr, uid, 'external.referential.csv', output_file, 'Referential Type Export', context=context)
+        return self.pool.get('pop.up.file').open_output_file(cr, uid, 'external.referential.csv', output_file, 'Referential Type Export', context=context)
 
     # Method to export external referential type
     def build_external_mapping_template(self, cr, uid, id, context=None):
@@ -380,7 +380,7 @@ class external_referential(osv.osv):
                 'version_id:id': referential.version_id.get_absolute_id(context=context), # USEFULL ???
             }
             csv.writerow(row)
-        return self.pool.get('output.file').open_output_file(cr, uid, 'external.mapping.template.csv', output_file, 'Mapping Template Export', context=context)
+        return self.pool.get('pop.up.file').open_output_file(cr, uid, 'external.mapping.template.csv', output_file, 'Mapping Template Export', context=context)
 
 
     # Method to export external referential type
@@ -412,7 +412,7 @@ class external_referential(osv.osv):
                     'datetime_format': line.datetime_format or '',
                 }
                 csv.writerow(row)
-        return self.pool.get('output.file').open_output_file(cr, uid, 'external.mappinglines.template.csv', output_file, 'Mapping Template Export', context=context)
+        return self.pool.get('pop.up.file').open_output_file(cr, uid, 'external.mappinglines.template.csv', output_file, 'Mapping Template Export', context=context)
 
     _constraints = [
         (_test_dot_in_name, 'The name cannot contain a dot!', ['name']),
@@ -551,7 +551,7 @@ class external_mapping(osv.osv):
                         'datetime_format': line.datetime_format or '',
                     }
                 csv.writerow(row)
-        return self.pool.get('output.file').open_output_file(cr, uid, 'external.mappinglines.template.csv', output_file, 'Mapping Line Export', context=context)
+        return self.pool.get('pop.up.file').open_output_file(cr, uid, 'external.mappinglines.template.csv', output_file, 'Mapping Line Export', context=context)
         
     def get_absolute_id(self, cr, uid, id, context=None):
         if isinstance(id,list):

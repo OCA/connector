@@ -631,7 +631,7 @@ class external_mapping_line(osv.osv):
     _sql_constraints = [
         ('ref_template_uniq', 'unique (referential_id, template_id)', 'A referential can not have various mapping line imported from the same template mapping line')
     ]
-    _order = 'sequence desc'
+    _order = 'sequence asc'
     #TODO add constraint: not both field_id and external_field null
 
     def get_absolute_id(self, cr, uid, id, context=None):

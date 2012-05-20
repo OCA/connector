@@ -603,13 +603,13 @@ def retry_import(self, cr, uid, id, ext_id, referential_id, defaults=None, conte
     raise osv.except_osv(_("Not Implemented"), _("Not Implemented in abstract base module!"))
 
 @extend(osv.osv)
-def oe_update(self, cr, uid, external_session, existing_rec_id, vals, resource, defaults, context):
+def oe_update(self, cr, uid, external_session, existing_rec_id, vals, resource, defaults, context=None):
     if not context: context={}
     context['referential_id'] = external_session.referential_id.id #did it's needed somewhere?
     return self.write(cr, uid, existing_rec_id, vals, context)
 
 @extend(osv.osv)
-def oe_create(self, cr, uid, external_session, vals, resource, defaults, context):
+def oe_create(self, cr, uid, external_session, vals, resource, defaults, context=None):
     if not context: context={}
     context['referential_id'] = external_session.referential_id.id  #did it's needed somewhere?
     return self.create(cr, uid, vals, context)

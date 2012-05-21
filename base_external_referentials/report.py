@@ -287,7 +287,7 @@ class external_report_lines(osv.osv):
 
     @commit_now
     def log_fail(self, cr, uid, external_session, report_line_id, error_message, context=None):
-        external_session.connection.logger.error(error_message)
+        external_session.logger.error(error_message)
         self.write(cr, uid, report_line_id, {
                             'error_message': error_message,
                             'state': 'fail',

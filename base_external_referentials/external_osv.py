@@ -965,7 +965,9 @@ def _get_oeid_from_extid_or_alternative_keys(self, cr, uid, vals, external_id, r
             existing_ir_model_data_id = expected_res_id = False
 
     if not expected_res_id and alternative_keys:
-        domain = ['|', ('active', '=', False), ('active', '=', True)]
+        domain = []
+        if 'active' in self._columns.keys():
+            domain = ['|', ('active', '=', False), ('active', '=', True)]
         for alternative_key in alternative_keys:
             if vals.get(alternative_key):
                 domain.append((alternative_key, '=', vals[alternative_key]))

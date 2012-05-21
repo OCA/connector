@@ -1,23 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <openerp>
-	<data>
+    <data>
 
         <menuitem id="ir_ui_menu_external_referentials" name="External Referentials" parent="base.menu_administration" />
 
         <!-- External Referentials -->
 
         <record id="ir_actions_act_window_externalreferential0" model="ir.actions.act_window">
-			<field eval="&quot;&quot;&quot;form&quot;&quot;&quot;" name="view_type" />
-			<field eval="&quot;&quot;&quot;external.referential&quot;&quot;&quot;" name="res_model" />
-			<field eval="&quot;&quot;&quot;tree,form&quot;&quot;&quot;" name="view_mode" />
-			<field eval="&quot;&quot;&quot;current&quot;&quot;&quot;" name="target" />
-			<field eval="&quot;&quot;&quot;external_referential&quot;&quot;&quot;" name="name" />
-			<field eval="80" name="limit" />
-			<field eval="&quot;&quot;&quot;{}&quot;&quot;&quot;" name="context" />
-			<field eval="&quot;&quot;&quot;ir.actions.act_window&quot;&quot;&quot;" name="type" />
-		</record>
+            <field name="name">External Referentials</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">external.referential</field>
+            <field name="view_type">form</field>
+            <field name="context">{}</field>
+            <field name="view_id" ref="external_referential_tree_view"/>
+            <field name="search_view_id" ref="external_referential_search_view"/>
+        </record>
 
-		<menuitem id="ir_ui_menu_extref0" name="External Referentials" parent="ir_ui_menu_external_referentials" action="ir_actions_act_window_externalreferential0" />
+        <menuitem id="ir_ui_menu_extref0" name="External Referentials" parent="ir_ui_menu_external_referentials" action="ir_actions_act_window_externalreferential0" />
 
         <!-- External Referentials Types -->
 
@@ -34,33 +33,33 @@
 
         <!-- External Report -->
 
-		<record id="ir_actions_act_window_external_report" model="ir.actions.act_window">
+        <record id="ir_actions_act_window_external_report" model="ir.actions.act_window">
             <field name="name">External Reports</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">external.report</field>
             <field name="view_type">form</field>
             <field name="view_id" ref="external_report_tree_view"/>
             <field name="search_view_id" ref="external_report_search_form_view"/>
-		</record>
+        </record>
 
-		<menuitem id="ir_ui_menu_external_report" name="External Report" parent="ir_ui_menu_external_referentials" action="ir_actions_act_window_external_report" />
+        <menuitem id="ir_ui_menu_external_report" name="External Report" parent="ir_ui_menu_external_referentials" action="ir_actions_act_window_external_report" />
 
         <!-- External Report History -->
 
-		<record id="ir_actions_act_window_external_report_history" model="ir.actions.act_window">
+        <record id="ir_actions_act_window_external_report_history" model="ir.actions.act_window">
             <field name="name">External Report History</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">external.report.history</field>
             <field name="view_type">form</field>
             <field name="view_id" ref="external_report_history_tree_view"/>
             <field name="search_view_id" ref="external_report_history_search_view"/>
-		</record>
+        </record>
 
-		<menuitem id="ir_ui_menu_external_report_history" name="External Report History" parent="ir_ui_menu_external_referentials" action="ir_actions_act_window_external_report_history" />
+        <menuitem id="ir_ui_menu_external_report_history" name="External Report History" parent="ir_ui_menu_external_referentials" action="ir_actions_act_window_external_report_history" />
 
         <!-- External Report Line -->
 
-		<record id="ir_actions_act_window_external_report_line" model="ir.actions.act_window">
+        <record id="ir_actions_act_window_external_report_line" model="ir.actions.act_window">
             <field name="name">External Report Lines</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">external.report.line</field>
@@ -68,9 +67,9 @@
             <field name="context">{'main_view': True}</field>
             <field name="view_id" ref="external_report_line_tree_view"/>
             <field name="search_view_id" ref="external_report_line_search_view"/>
-		</record>
+        </record>
 
-		<menuitem id="ir_ui_menu_external_report_line" name="External Report Lines" parent="ir_ui_menu_external_referentials" action="ir_actions_act_window_external_report_line" />
+        <menuitem id="ir_ui_menu_external_report_line" name="External Report Lines" parent="ir_ui_menu_external_referentials" action="ir_actions_act_window_external_report_line" />
 
     </data>
 </openerp>

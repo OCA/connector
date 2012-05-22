@@ -1185,7 +1185,10 @@ def _transform_field(self, cr, uid, external_session, convertion_type, field_val
 
         elif external_type == 'list' and isinstance(field_value, (str, unicode)):
             # external data sometimes returns ',1,2,3' for a list...
-            casted_field = eval(field_value.strip(','))
+            if field_value:
+                casted_field = eval(field_value.strip(','))
+            else:
+                casted_field= []
             # For a list, external data may returns something like '1,2,3' but also '1' if only
             # one item has been selected. So if the casted field is not iterable, we put it in a tuple: (1,)
             if not hasattr(casted_field, '__iter__'):

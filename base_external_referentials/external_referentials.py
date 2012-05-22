@@ -137,7 +137,7 @@ class external_mappinglines_template(osv.osv):
 
     _columns = {
         'name': fields.function(_name_get_fnc, type="char", string='Name'),
-        'sequence': fields.integer('Sequence'),
+        'sequence': fields.integer('Sequence', required=True),
         'version_id':fields.many2one('external.referential.version', 'External Referential Version', ondelete='cascade'),
         'field_id': fields.many2one('ir.model.fields', 'OpenERP Field', ondelete='cascade'),
         'mapping_id': fields.many2one('external.mapping.template', 'External Mapping', ondelete='cascade'),

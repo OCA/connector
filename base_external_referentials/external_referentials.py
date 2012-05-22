@@ -137,7 +137,7 @@ class external_mappinglines_template(osv.osv):
 
     _columns = {
         'name': fields.function(_name_get_fnc, type="char", string='Name'),
-        'sequence': fields.integer('Sequence', required=True),
+        'sequence': fields.integer('Sequence'),
         'version_id':fields.many2one('external.referential.version', 'External Referential Version', ondelete='cascade'),
         'field_id': fields.many2one('ir.model.fields', 'OpenERP Field', ondelete='cascade'),
         'mapping_id': fields.many2one('external.mapping.template', 'External Mapping', ondelete='cascade'),
@@ -231,7 +231,7 @@ class external_referential(osv.osv):
                 mapping_lines_src_ids = self.pool.get('external.mappinglines.template').search(cr, uid, [('mapping_id', '=', each_mapping_rec['id'])])
                 for each_mapping_line_rec in  self.pool.get('external.mappinglines.template').read(cr, uid, mapping_lines_src_ids, []):
                     vals = {
-                        'sequence': each_mapping_line_rec['sequence'],
+                        'sequence': each_mapping_line_rec['sequence'] or 0,
                         'external_field': each_mapping_line_rec['external_field'],
                         'template_id': each_mapping_line_rec['id'],
                         'mapping_id': mapping_id,
@@ -397,7 +397,7 @@ class external_referential(osv.osv):
             for line in mapping.mapping_ids:
                 row = {
                     'id': line.get_absolute_id(context=context),
-                    'sequence': line.sequence or '',
+                    'sequence': line.sequence or 0,
                     'type': line.type or '',
                     'evaluation_type': line.evaluation_type or '',
                     'external_field': line.external_field or '',
@@ -536,7 +536,7 @@ class external_mapping(osv.osv):
             if line.selected:
                 row = {
                         'id': line.get_absolute_id(context=context),
-                        'sequence': line.sequence or '',
+                        'sequence': line.sequence or 0,
                         'type': line.type or '',
                         'evaluation_type': line.evaluation_type or '',
                         'external_field': line.external_field or '',
@@ -600,7 +600,7 @@ class external_mapping_line(osv.osv):
         'evaluation_type': fields.selection([('function', 'Function'), ('sub-mapping','Sub Mapping Line'), ('direct', 'Direct Mapping')], 'Evalution Type', required=True),
         'in_function': fields.text('Import in OpenERP Mapping Python Function'),
         'out_function': fields.text('Export from OpenERP Mapping Python Function'),
-        'sequence': fields.integer('Sequence'),
+        'sequence': fields.integer('Sequence', required=True),
         'selected': fields.boolean('Selected', help="to select for mapping"),
         'child_mapping_id': fields.many2one('external.mapping', 'Child Mapping',
             help=('This give you the possibility to import data with a structure of Parent/child'

@@ -141,7 +141,7 @@ class external_mappinglines_template(osv.osv):
         'version_id':fields.many2one('external.referential.version', 'External Referential Version', ondelete='cascade'),
         'field_id': fields.many2one('ir.model.fields', 'OpenERP Field', ondelete='cascade'),
         'mapping_id': fields.many2one('external.mapping.template', 'External Mapping', ondelete='cascade'),
-        'external_field': fields.char('External Field', size=32),
+        'external_field': fields.char('External Field', size=128),
         'type': fields.selection([('in_out', 'External <-> OpenERP'), ('in', 'External -> OpenERP'), ('out', 'External <- OpenERP')], 'Type'),
         'evaluation_type': fields.selection([('function', 'Function'), ('sub-mapping','Sub Mapping Line'), ('direct', 'Direct Mapping')], 'Evalution Type', required=True),
         'external_type': fields.selection([('datetime', 'Datetime'), ('unicode', 'String'), ('bool', 'Boolean'), ('int', 'Integer'), ('float', 'Float'), ('list', 'List'), ('dict', 'Dictionnary')], 'External Type', required=True),
@@ -157,7 +157,7 @@ class external_mappinglines_template(osv.osv):
         'alternative_key': fields.boolean('Alternative Key', help=("Only one field can be selected as alternative key,"
                                                                 "if no external id was found for the record the alternative key"
                                                                 "will be used to identify the resource")),
-        'function_name': fields.char('Function Name', size=32),
+        'function_name': fields.char('Function Name', size=128),
         }
 
 external_mappinglines_template()
@@ -448,7 +448,7 @@ class external_mapping_line(osv.osv):
         return res
     
     _columns = {
-        'name': fields.function(_name_get_fnc, type="char", string='Name', size=128),
+        'name': fields.function(_name_get_fnc, type="char", string='Name', size=256),
     }
 
 external_mapping_line()
@@ -590,7 +590,7 @@ class external_mapping_line(osv.osv):
         'referential_id': fields.related('mapping_id', 'referential_id', type='many2one', relation='external.referential', string='Referential'),
         'field_id': fields.many2one('ir.model.fields', 'OpenERP Field', ondelete='cascade'),
         'internal_field': fields.related('field_id', 'name', type='char', relation='ir.model.field', string='Field name',readonly=True),
-        'external_field': fields.char('External Field', size=32, help=("When importing flat csv file from file exchange,"
+        'external_field': fields.char('External Field', size=128, help=("When importing flat csv file from file exchange,"
                                 "you can leave this field empty, because this field doesn't exist in your csv file'")),
         'mapping_id': fields.many2one('external.mapping', 'External Mapping', ondelete='cascade'),
         'related_model_id': fields.related('mapping_id', 'model_id', type='many2one', relation='ir.model', string='Related Model'),
@@ -612,7 +612,7 @@ class external_mapping_line(osv.osv):
                                                                 "if no external id was found for the record the alternative key"
                                                                 "will be used to identify the resource")),
         'internal_type': fields.related('field_id','ttype', type="char", relation='ir.model.field', string='Internal Type'),
-        'function_name': fields.char('Function Name', size=32),
+        'function_name': fields.char('Function Name', size=128),
     }
     
     _defaults = {

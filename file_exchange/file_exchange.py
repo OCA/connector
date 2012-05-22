@@ -143,8 +143,8 @@ class file_exchange(osv.osv):
         return self._export_files(cr, uid, method.id, context=context)
 
 
-    def import_file_form_pop_up(self, cr, uid, ids, context=None):
-        return self.pool.get('pop.up.file').open_input_file(cr, uid, 'import file', self._import_file_from_pop_up, [1], context=context)
+    def import_file_form_pop_up(self, cr, uid, method_id, context=None):
+        return self.pool.get('pop.up.file').open_input_file(cr, uid, 'import file', self._import_file_from_pop_up, [method_id], context=context)
 
     def _import_file_from_pop_up(self, cr, uid, method_id, input_file, input_filename, context=None):
         #TODO remove this duplicated code from import_file
@@ -330,9 +330,9 @@ class file_exchange(osv.osv):
 
         output_file.seek(0)
         method.start_action('action_after_all', model_obj, ids_to_export, context=context,external_session=external_session)
-        return self._send_output(cr, uid, method, filename, output_file, context=context)
+        return self._send_output(cr, uid, external_session, method, filename, output_file, context=context)
 
-    def _send_output(self, cr, uid, method, filename, output_file, context=None):
+    def _send_output(self, cr, uid, external_session, method, filename, output_file, context=None):
         if method.synchronize_from == 'pop_up':
             return self.pool.get('pop.up.file').open_output_file(cr, uid, filename, output_file, 'File export', context=context)
         else:
@@ -360,7 +360,7 @@ class file_exchange(osv.osv):
             try:
                 exec action_code in space
             except Exception, e:
-                raise osv.except_osv(_('Error !'), _("Error can not apply the python action default", 
+                raise osv.except_osv(_('Error !'), _("Error can not apply the python action default" 
                                                 "value: %s \n Exception: %s" %(method.name,e)))
             if 'result' in space:
                 return space['result']

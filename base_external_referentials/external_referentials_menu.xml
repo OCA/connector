@@ -31,6 +31,32 @@
 
         <menuitem id="ir_ui_menu_external_types" name="External Referentials Types" parent="ir_ui_menu_external_referentials" action="ir_actions_act_window_external_type" />
 
+        <!-- External Mappings -->
+
+        <record id="ir_actions_act_window_external_mapping" model="ir.actions.act_window">
+            <field name="name">External Mappings</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">external.mapping</field>
+            <field name="view_type">form</field>
+            <field name="view_id" ref="external_mapping_tree_view"/>
+            <field name="search_view_id" ref="external_mapping_search_view"/>
+        </record>
+
+        <menuitem id="ir_ui_menu_external_mappings" name="External Mappings" parent="ir_ui_menu_external_referentials" action="ir_actions_act_window_external_mapping" />
+
+        <!-- External Mapping Lines-->
+
+        <record id="ir_actions_act_window_external_mapping_line" model="ir.actions.act_window">
+            <field name="name">External Mapping Lines</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">external.mapping.line</field>
+            <field name="view_type">form</field>
+            <field name="view_id" ref="external_mapping_line_tree_view"/>
+            <field name="search_view_id" ref="external_mapping_line_search_view"/>
+        </record>
+
+        <menuitem id="ir_ui_menu_external_mapping_lines" name="External Mapping Lines" parent="ir_ui_menu_external_referentials" action="ir_actions_act_window_external_mapping_line" />
+
         <!-- External Report -->
 
         <record id="ir_actions_act_window_external_report" model="ir.actions.act_window">

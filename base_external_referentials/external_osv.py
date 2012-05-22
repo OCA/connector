@@ -1263,7 +1263,6 @@ def _transform_sub_mapping(self, cr, uid, external_session, convertion_type, res
     @param defauls: defaults value for the data imported
     @return: dictionary of converted data in OpenERP format 
     """
-
     if not defaults:
         defaults={}
     ir_model_field_obj = self.pool.get('ir.model.fields')
@@ -1299,7 +1298,8 @@ def _transform_sub_mapping(self, cr, uid, external_session, convertion_type, res
             if sub_mapping['internal_type'] in ['one2many', 'many2many']:
                 if not isinstance(field_value, list):
                     transform_args[4] = [field_value]
-                vals[to_field] = []
+                if not to_field in vals:
+                    vals[to_field] = []
                 if convertion_type == 'from_external_to_openerp':
                     lines = sub_mapping_obj._transform_resources(*transform_args, **transform_kwargs)
                 else:

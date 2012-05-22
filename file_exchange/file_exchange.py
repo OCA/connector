@@ -541,7 +541,7 @@ class file_fields(osv.osv):
     _columns = {
         #TODO the field name should be autocompleted bey the external field when selecting a mapping
         'name': fields.function(_name_get_fnc, type="char", string='Name', method=True),
-        'custom_name': fields.char('Custom Name', size=64),
+        'custom_name': fields.char('Custom Name', size=128),
         'sequence': fields.integer('Sequence', required=True, help="The sequence field is used to define the order of the fields"),
         #TODO add a filter only fields that belong to the main object or to sub-object should be available
         'mapping_line_id': fields.many2one('external.mapping.line', 'OpenERP Mapping', domain = "[('referential_id', '=', parent.referential_id),('mapping_id', '=', parent.related_mapping_ids[0][2])]"),

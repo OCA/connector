@@ -306,7 +306,7 @@ class external_referential(osv.osv):
 
         referential = self.browse(cr, uid, id, context=context)
         row = {
-            'id': referential.type_id.name,
+            'id': referential.type_id.get_absolute_id(context=context),
             'name': referential.type_id.name,
             'categ_id:id': referential.categ_id.get_absolute_id(context=context),
             'code': referential.type_id.code,
@@ -324,7 +324,7 @@ class external_referential(osv.osv):
 
         referential = self.browse(cr, uid, id, context=context)
         row = {
-            'id': referential.version_id.name,
+            'id': referential.version_id.get_absolute_id(context=context),
             'name': referential.version_id.name,
             'type_id:id': referential.type_id.get_absolute_id(context=context),
             'code': referential.version_id.code,
@@ -342,7 +342,7 @@ class external_referential(osv.osv):
 
         referential = self.browse(cr, uid, id, context=context)
         row = {
-            'id': referential.type_id.name,
+            'id': referential.get_absolute_id(context=context),
             'name': referential.type_id.name,
             'version_id:id': referential.version_id.get_absolute_id(context=context),
             'location': referential.location,

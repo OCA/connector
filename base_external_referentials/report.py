@@ -194,7 +194,7 @@ class external_report_history(osv.osv):
     @commit_now
     def _add_one(self, cr, uid, history_id, state, context=None):
         history = self.browse(cr, uid, history_id, context=context)
-        if state == 'failed':
+        if state == 'fail':
             vals = {'count_failed': history.count_failed + 1}
         else:
             vals = {'count_success': history.count_success + 1}

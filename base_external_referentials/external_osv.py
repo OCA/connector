@@ -1321,7 +1321,35 @@ def _transform_sub_mapping(self, cr, uid, external_session, convertion_type, res
                     if 'external_id' in line:
                         del line['external_id']
                     if convertion_type == 'from_external_to_openerp':
-                        vals[to_field].append((0, 0, line))
+                        if sub_mapping['internal_type'] == 'one2many':
+                            #TODO refactor to search the id and alternative keys before the update
+                            external_id = vals.get('external_id')
+                            alternative_keys = mapping[mapping_id]['alternative_keys']
+                            #search id of the parent
+                            existing_ir_model_data_id, existing_rec_id = self._get_oeid_from_extid_or_alternative_keys\
+                            (cr, uid, vals, external_id, external_session.referential_id, alternative_keys, context=context)
+                            if existing_rec_id:
+                                sub_external_id = line.get('external_id')
+                                sub_alternative_keys = list(mapping[sub_mapping_id]['alternative_keys'])
+                                related_field = self._columns[to_field]._fields_id
+                                sub_alternative_keys.append(related_field)
+                                line[related_field] = existing_rec_id
+                                #search id of the sub_mapping related to the id of the parent
+                                sub_existing_ir_model_data_id, sub_existing_rec_id = \
+                                            sub_mapping_obj._get_oeid_from_extid_or_alternative_keys(
+                                                                cr, uid, line, sub_external_id,
+                                                                external_session.referential_id,
+                                                                sub_alternative_keys, context=context)
+                                del line[related_field]
+                                if sub_existing_rec_id:
+                                    vals[to_field].append((1, sub_existing_rec_id, line))
+                                else:
+                                    vals[to_field].append((0, 0, line))
+                            else:
+                                vals[to_field].append((0, 0, line))
+                        #TODO support many2many update fields
+                        else:
+                            vals[to_field].append((0, 0, line))
                     else:
                         vals[to_field].append(line)
 

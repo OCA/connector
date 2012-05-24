@@ -134,7 +134,8 @@ class file_exchange(osv.osv):
         if method.synchronize_from == 'pop_up':
             return self.import_file_form_pop_up(cr, uid, method.id, context=context)
         else:
-            return self._import_files(cr, uid, method.id, context=context)
+            self._import_files(cr, uid, method.id, context=context)
+            return True
 
     def export_task(self, cr, uid, method_id, context=None):
         if hasattr(method_id, '__iter__'):
@@ -360,8 +361,8 @@ class file_exchange(osv.osv):
             try:
                 exec action_code in space
             except Exception, e:
-                raise osv.except_osv(_('Error !'), _("Error can not apply the python action default" 
-                                                "value: %s \n Exception: %s" %(method.name,e)))
+                raise osv.except_osv(_('Error !'), _("Error can not apply the python action '%s'" 
+                                                " for the method: '%s' \n Exception: '%s'" %(action_name, method.name,e)))
             if 'result' in space:
                 return space['result']
         return True

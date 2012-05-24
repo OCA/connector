@@ -1109,8 +1109,6 @@ def _transform_one_resource(self, cr, uid, external_session, convertion_type, re
                     try:
                         exec mapping_line[mapping_function_key] in space
                     except Exception, e:
-                        external_session.logger.error('Error in import mapping: %s    Exception: %s' 
-                                                            % (mapping_line['name'],e,))
                         #del(space['__builtins__'])
                         raise MappingError(e, mapping_line['name'], self._name)
                     
@@ -1326,30 +1324,29 @@ def _transform_sub_mapping(self, cr, uid, external_session, convertion_type, res
                             external_id = vals.get('external_id')
                             alternative_keys = mapping[mapping_id]['alternative_keys']
                             #search id of the parent
-                            existing_ir_model_data_id, existing_rec_id = self._get_oeid_from_extid_or_alternative_keys\
-                            (cr, uid, vals, external_id, external_session.referential_id, alternative_keys, context=context)
+                            existing_ir_model_data_id, existing_rec_id = \
+                                         self._get_oeid_from_extid_or_alternative_keys(
+                                                                cr, uid, vals, external_id, 
+                                                                external_session.referential_id.id, 
+                                                                alternative_keys, context=context)
+                            vals_to_append = (0, 0, line)
                             if existing_rec_id:
                                 sub_external_id = line.get('external_id')
-                                sub_alternative_keys = list(mapping[sub_mapping_id]['alternative_keys'])
-                                related_field = self._columns[to_field]._fields_id
-                                sub_alternative_keys.append(related_field)
-                                line[related_field] = existing_rec_id
-                                #search id of the sub_mapping related to the id of the parent
-                                sub_existing_ir_model_data_id, sub_existing_rec_id = \
-                                            sub_mapping_obj._get_oeid_from_extid_or_alternative_keys(
-                                                                cr, uid, line, sub_external_id,
-                                                                external_session.referential_id,
-                                                                sub_alternative_keys, context=context)
-                                del line[related_field]
-                                if sub_existing_rec_id:
-                                    vals[to_field].append((1, sub_existing_rec_id, line))
-                                else:
-                                    vals[to_field].append((0, 0, line))
-                            else:
-                                vals[to_field].append((0, 0, line))
-                        #TODO support many2many update fields
-                        else:
-                            vals[to_field].append((0, 0, line))
+                                if mapping[sub_mapping_id].get('alternative_keys'):
+                                    sub_alternative_keys = list(mapping[sub_mapping_id]['alternative_keys'])
+                                    related_field = self._columns[to_field]._fields_id
+                                    sub_alternative_keys.append(related_field)
+                                    line[related_field] = existing_rec_id
+                                    #search id of the sub_mapping related to the id of the parent
+                                    sub_existing_ir_model_data_id, sub_existing_rec_id = \
+                                                sub_mapping_obj._get_oeid_from_extid_or_alternative_keys(
+                                                                    cr, uid, line, sub_external_id,
+                                                                    external_session.referential_id.id,
+                                                                    sub_alternative_keys, context=context)
+                                    del line[related_field]
+                                    if sub_existing_rec_id:
+                                        vals_to_append = (1, sub_existing_rec_id, line)
+                        vals[to_field].append(vals_to_append)
                     else:
                         vals[to_field].append(line)
 

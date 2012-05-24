@@ -213,6 +213,8 @@ class FileCsvWriter(object):
 
     def __init__(self, f, fieldnames, encoding="utf-8", writeheader=False, **kwds):
         self.encoding = encoding
+        if not kwds.get('dialect'):
+            kwds['dialect'] = 'UNIX'
         self.writer = csv.DictWriter(f, fieldnames, **kwds)
         if writeheader:
             row = {}

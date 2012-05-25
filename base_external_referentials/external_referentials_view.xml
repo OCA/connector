@@ -60,7 +60,33 @@
                             </page>
                         </notebook>
                     </group>
-                    <field name="mapping_ids" widget="one2many_list" nolabel="1"/>
+                    <field name="mapping_ids" widget="one2many_list" nolabel="1">
+                        <tree string="Object Mappings">
+                            <field name="model_id" />
+                            <field name="extra_name" />
+<!--                            <field name="related_model_ids" invisible="1" />-->
+<!--                            <field name="mapping_ids" />-->
+                        </tree>
+                        <form string="Object Mappings">
+                            <field name="model_id" on_change="model_id_change(model_id)" />
+                            <field name="extra_name" />
+                            <field name="related_model_ids" invisible="1" />
+                            <group col="4" colspan="4">
+                                <field name="external_list_method" />
+                                <field name="external_search_method" />
+                                <field name="external_get_method" />
+                                <field name="external_update_method" />
+                                <field name="external_create_method" />
+                                <field name="external_delete_method" />
+                                <field name="external_done_method" />
+                                <field name="key_for_external_id" />
+                                <field name="external_resource_name" />
+                            </group>
+                            <button name="add_all_fields" string="Add all object fields" colspan="2" type="object" />
+                            <button name="create_mapping_file" string="Export mapping file" colspan="2" type="object" groups="base_external_referentials.group_export_mapping"/>
+                            <field colspan="4" name="mapping_ids" widget="one2many_list" nolabel="1" context="{'model_id':model_id}" />
+                        </form>
+                    </field>
                 </form>
             </field>
         </record>

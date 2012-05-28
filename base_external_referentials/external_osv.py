@@ -860,7 +860,6 @@ def _export_one_resource(self, cr, uid, external_session, resource_id, context=N
     resource = self._get_oe_resources(cr, uid, external_session, [resource_id], langs=langs,
                                 smart_export=False, last_exported_date=False,
                                 mapping=mapping, mapping_id=mapping_id, context=context)[resource_id]
-
     return self._transform_and_send_one_resource(cr, uid, external_session, resource, resource_id,
                             False, mapping, mapping_id, defaults=defaults, context=context)
 
@@ -1135,7 +1134,6 @@ def _transform_one_resource(self, cr, uid, external_session, convertion_type, re
             return {}
     vals = self._merge_with_default_values(cr, uid, external_session, resource, vals, sub_mapping_list, defaults=defaults, context=context)
     vals = self._transform_sub_mapping(cr, uid, external_session, convertion_type, resource, vals, sub_mapping_list, mapping, mapping_id, mapping_line_filter_ids=mapping_line_filter_ids, defaults=defaults, context=context)
-
     return vals
 
 @extend(osv.osv)
@@ -1198,7 +1196,6 @@ def _transform_field(self, cr, uid, external_session, convertion_type, field_val
                 if not field_value:
                     field_value = 0
             field = eval(external_type)(field_value)
-
     if field in ['None', 'False']:
         field = False
 
@@ -1283,11 +1280,10 @@ def _transform_sub_mapping(self, cr, uid, external_session, convertion_type, res
             to_field = sub_mapping['external_field'] or 'hidden_field_to_split_%s'%from_field # if the field doesn't have any name we assume at that we will split it
             
         field_value = resource[from_field]
-      
-        sub_mapping_defaults = self._get_default_import_values(cr, uid, external_session, sub_mapping_id, defaults.get(to_field), context=context)
+        sub_mapping_obj = self.pool.get(sub_object_name)
+        sub_mapping_defaults = sub_mapping_obj._get_default_import_values(cr, uid, external_session, sub_mapping_id, defaults.get(to_field), context=context)
 
         if field_value:
-            sub_mapping_obj = self.pool.get(sub_object_name)
             transform_args = [cr, uid, external_session, convertion_type, field_value]
             transform_kwargs = {
                 'defaults': sub_mapping_defaults,

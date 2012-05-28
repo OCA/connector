@@ -88,7 +88,7 @@ class FileConnection(object):
         elif self.is_('sftp'):
             transport = paramiko.Transport((self.location, self.port or 22))
             transport.connect(username = self.user, password = self.pwd)
-            self.connection = paramiko.SFTPClient.from_transport(self.transport)
+            self.connection = paramiko.SFTPClient.from_transport(transport)
 
     def close(self):
         if self.is_('ftp') or self.is_('sftp'):
@@ -184,12 +184,14 @@ class FileCsvReader(object):
         result_merge = {}
         result = []
         for line in self:
+            line_tmp = line.copy()
             for child, parent in field_structure:
                 if not parent in line:
                     line[parent] = {}
-                if line.get(child):
-                    line[parent][child] = line[child]
-                    del line[child]
+                if line.get(child) or line_tmp.get(child):
+                    line[parent][child] = line.get(child) or line_tmp.get(child)
+                    if line.get(child):
+                        del line[child]
             if ref_field:
                 if line[ref_field] in result_merge:
                     for key in merge_keys:

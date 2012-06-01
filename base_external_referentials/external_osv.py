@@ -510,7 +510,7 @@ def _record_external_resources(self, cr, uid, external_session, resources, defau
     result = {'write_ids': [], 'create_ids': []}
     mapping, mapping_id = self._init_mapping(cr, uid, external_session.referential_id.id, mapping=mapping, mapping_id=mapping_id, context=context)
     if mapping[mapping_id]['key_for_external_id']:
-        context['external_id_key_for_report'] = field['key_for_external_id']
+        context['external_id_key_for_report'] = mapping[mapping_id]['key_for_external_id']
     else:
         for field in mapping[mapping_id]['mapping_lines']:
             if field['alternative_key']:

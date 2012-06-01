@@ -374,7 +374,6 @@ def _get_mapping(self, cr, uid, referential_id, convertion_type='from_external_t
             mapping_lines = self.pool.get('external.mapping.line').read(cr, uid, mapping_line_ids, [], context=context)
         else:
             mapping_lines = []
-
         res = self.pool.get('external.mapping').read(cr, uid, mapping_id, context=context)
         alternative_key = [x['internal_field'] for x in mapping_lines if x['alternative_key']]
         res['alternative_keys'] = alternative_key or False
@@ -510,10 +509,14 @@ def _record_external_resources(self, cr, uid, external_session, resources, defau
     """
     result = {'write_ids': [], 'create_ids': []}
     mapping, mapping_id = self._init_mapping(cr, uid, external_session.referential_id.id, mapping=mapping, mapping_id=mapping_id, context=context)
-    for resource in resources:
+    if mapping[mapping_id]['key_for_external_id']:
+        context['external_id_key_for_report'] = field['key_for_external_id']
+    else:
         for field in mapping[mapping_id]['mapping_lines']:
             if field['alternative_key']:
-                context['external_id_for_report'] = field['external_field']
+                context['external_id_key_for_report'] = field['external_field']
+                break
+    for resource in resources:
         res = self._record_one_external_resource(cr, uid, external_session, resource, defaults=defaults, mapping=mapping, mapping_id=mapping_id, context=context)
         if res:
             if res.get('create_id'): result['create_ids'].append(res['create_id'])
@@ -554,7 +557,7 @@ def _record_one_external_resource(self, cr, uid, external_session, resource, def
 
     if existing_rec_id:
         if not self._name in context.get('do_not_update', []):
-            if self.oe_update(cr, uid, external_session, existing_rec_id, vals,  resource, defaults=defaults, context=context):
+            if self.oe_update(cr, uid, external_session, existing_rec_id, vals, resource, defaults=defaults, context=context):
                 written = True
     else:
         existing_rec_id = self.oe_create(cr, uid,  external_session, vals, resource, defaults, context=context)
@@ -636,7 +639,7 @@ def _get_export_step(self, cr, uid, external_session, context=None):
     :return: a integer that corespond to the limit of object to import
     :rtype: int
     """
-    return 100
+    return 10
 
 @extend(osv.osv)
 def _get_default_export_values(self, cr, uid, external_session, mapping_id=None, defaults=None, context=None):
@@ -1188,6 +1191,7 @@ def _transform_field(self, cr, uid, external_session, convertion_type, field_val
     #Set correct empty value for each type
     if field is False or field is None:
         empty_value = {
+            'integer': 0,
             'unicode': '', 
             'char': '',
             'date': False,

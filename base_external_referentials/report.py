@@ -266,6 +266,8 @@ class external_report_lines(osv.osv):
                            existing_line_id,
                            {'state': 'fail',
                             'date': time.strftime(DEFAULT_SERVER_DATETIME_FORMAT),
+                            'res_id': res_id,
+                            'external_id': external_id,
                             'args': args,
                             'kwargs': kwargs,
                             })

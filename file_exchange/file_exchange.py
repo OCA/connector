@@ -125,7 +125,15 @@ class file_exchange(osv.osv):
             result = list(set(result))
         return result, merge_keys
 
-
+    #needed for cron task
+    def start_task(self, cr, uid, ids, context=None):
+        if not context:
+            context={}
+        for method in self.browse(cr, uid, ids, context=context):
+            if method.type == 'in':
+                self.import_task(cr, uid, method.id, context=context)
+            elif method.type == 'out':
+                self.export_task(cr, uid, method.id, context=context)
 
     def import_task(self, cr, uid, method_id, context=None):
         if hasattr(method_id, '__iter__'):

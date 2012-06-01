@@ -29,7 +29,7 @@ from datetime import datetime
 import logging
 import pooler
 from collections import defaultdict
-from tempfile import TemporaryFile
+
 
 from message_error import MappingError, ExtConnError
 from tools.translate import _
@@ -62,16 +62,13 @@ def overwrite(class_to_extend):
 
 
 class ExternalSession(object):
-    def __init__(self, referential, sync_from_object, load_linked_referential=False):
+    def __init__(self, referential, sync_from_object):
         self.referential_id = referential
         self.sync_from_object = sync_from_object
         self.debug = referential.debug
         self.logger = logging.getLogger(referential.name)
         self.connection = referential.external_connection(debug=self.debug, logger = self.logger)
         self.tmp = {}
-        #TODO think about a better way to do it
-        if load_linked_referential and hasattr(referential, 'ext_file_referential_id') and referential.ext_file_referential_id:
-            self.file_session = ExternalSession(referential.ext_file_referential_id, sync_from_object)
 
     def is_type(self, referential_type):
         return self.referential_id.type_id.name.lower() == referential_type.lower()
@@ -628,17 +625,6 @@ def oe_create(self, cr, uid, external_session, vals, resource, defaults, context
 #                                             EXPORT FEATURES
 #
 ########################################################################################################################
-
-@extend(osv.osv)
-def send_report(self, cr, uid, external_session, ids, report_name, file_name, path, context=None):
-    service = netsvc.LocalService(report_name)
-    result, format = service.create(cr, uid, ids, {'model': self._name}, context=context)
-    output_file =TemporaryFile('w+b')
-    output_file.write(result)
-    output_file.seek(0)
-    file_name = "%s.%s"%(file_name, format)
-    external_session.file_session.connection.send(path, file_name, output_file)
-    return file_name
 
 @extend(osv.osv)
 def _get_export_step(self, cr, uid, external_session, context=None):

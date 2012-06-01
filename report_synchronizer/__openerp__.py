@@ -29,7 +29,7 @@
     'description': """Abstract module to send report to external system""",
     'author': 'Akretion',
     'website': 'http://www.akretion.com/',
-    'depends': ['base_external_referentials','base_file_protocole'], 
+    'depends': ['base_external_file_protocole'], 
     'init_xml': [],
     'update_xml': [
     ],

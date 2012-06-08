@@ -117,7 +117,7 @@ def catch_error_in_report(func):
                                     self._name,
                                     func.__name__, 
                                     #TODO manage external id and res_id in a good way
-                                    external_id=context.get('external_id_key_for_report') and resource[context.get('external_id_key_for_report')],
+                                    external_id=context.get('external_id_key_for_report') and resource.get(context.get('external_id_key_for_report')),
                                     res_id= not context.get('external_id_key_for_report') and args and args[0],
                                     resource=resource,
                                     args = args,

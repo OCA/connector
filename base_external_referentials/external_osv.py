@@ -1154,19 +1154,22 @@ def _transform_field(self, cr, uid, external_session, convertion_type, field_val
                     return related_obj.get_or_create_extid(cr, uid,external_session, field_value[0], context=context)
 
         elif external_type == "datetime":
-            datetime_format = mapping_line['datetime_format']
-            if convertion_type == 'from_external_to_openerp':
-                datetime_value = datetime.strptime(field_value, datetime_format)
-                if internal_type == 'date':
-                    return datetime_value.strftime(DEFAULT_SERVER_DATE_FORMAT)
-                elif internal_type == 'datetime':
-                    return datetime_value.strftime(DEFAULT_SERVER_DATETIME_FORMAT)
+            if not field_value:
+                field_value = False
             else:
-                if internal_type == 'date':
-                    datetime_value = datetime.strptime(field_value, DEFAULT_SERVER_DATE_FORMAT)
-                elif internal_type == 'datetime':
-                    datetime_value = datetime.strptime(field_value, DEFAULT_SERVER_DATETIME_FORMAT)
-                return datetime_value.strftime(datetime_format)
+                datetime_format = mapping_line['datetime_format']
+                if convertion_type == 'from_external_to_openerp':
+                    datetime_value = datetime.strptime(field_value, datetime_format)
+                    if internal_type == 'date':
+                        return datetime_value.strftime(DEFAULT_SERVER_DATE_FORMAT)
+                    elif internal_type == 'datetime':
+                        return datetime_value.strftime(DEFAULT_SERVER_DATETIME_FORMAT)
+                else:
+                    if internal_type == 'date':
+                        datetime_value = datetime.strptime(field_value, DEFAULT_SERVER_DATE_FORMAT)
+                    elif internal_type == 'datetime':
+                        datetime_value = datetime.strptime(field_value, DEFAULT_SERVER_DATETIME_FORMAT)
+                    return datetime_value.strftime(datetime_format)
 
         elif external_type == 'list' and isinstance(field_value, (str, unicode)):
             # external data sometimes returns ',1,2,3' for a list...

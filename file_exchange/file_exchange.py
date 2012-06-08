@@ -3,6 +3,7 @@
 #                                                                             #
 #   file_exchange for OpenERP                                                 #
 #   Copyright (C) 2012 Akretion Emmanuel Samyn <emmanuel.samyn@akretion.com>  #
+#   Copyright (C) 2011 Akretion Sébastien BEAU <sebastien.beau@akretion.com>  #
 #                                                                             #
 #   This program is free software: you can redistribute it and/or modify      #
 #   it under the terms of the GNU Affero General Public License as            #
@@ -290,7 +291,7 @@ class file_exchange(osv.osv):
         ids_filter = "()" # In case not filter is filed in the form
         if method.search_filter != False:
             ids_filter = method.search_filter
-        ids_to_export = model_obj.search(cr, uid, eval(ids_filter), context=context)
+        ids_to_export = model_obj.search(cr, uid, eval(ids_filter, {'context': context}), context=context)
     #=== Start mapping
         mapping,mapping_id = model_obj._init_mapping(cr, uid, external_session.referential_id.id,
                                                     convertion_type='from_openerp_to_external',
@@ -339,7 +340,14 @@ class file_exchange(osv.osv):
 
         output_file.seek(0)
         method.start_action('action_after_all', model_obj, ids_to_export, context=context,external_session=external_session)
-        return self._send_output(cr, uid, external_session, method, filename, output_file, context=context)
+        output = self._send_output(cr, uid, external_session, method, filename, output_file, context=context)
+        
+        #Start linked task
+        if method.linked_task:
+            context['parent_ids'] = ids_to_export
+            method.linked_task.start_task(context=context)
+        
+        return output
 
     def _send_output(self, cr, uid, external_session, method, filename, output_file, context=None):
         if method.synchronize_from == 'pop_up':
@@ -418,6 +426,7 @@ class file_exchange(osv.osv):
         'notes': fields.text('Notes'),
         'related_mapping_ids': fields.function(_get_related_mapping_ids, type="many2many", relation="external.mapping", string='Related Mappings'),
         'synchronize_from': fields.selection([('referential', 'Referential'), ('pop_up', 'Pop Up')], string='Synchronize From'),
+        'linked_task': fields.many2one('file.exchange', 'Linked Task'),
     }
 
     def get_absolute_id(self, cr, uid, id, context=None):

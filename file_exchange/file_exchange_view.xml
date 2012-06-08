@@ -20,6 +20,7 @@
                     <field name="name" />
                     <field name="referential_id" />
                     <field name="scheduler" />
+                    <field name="linked_task" />
                     <field name="type" />
                     <field name="do_not_update" />
                     <field name="mapping_id" />

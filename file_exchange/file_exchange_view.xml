@@ -151,10 +151,9 @@
             <field name="type">form</field>
             <field name="arch" type="xml">
                 <form string="file default import values">
+                    <field name="mapping_id" on_change="on_change_models(mapping_id)"/>
                     <field name="import_default_field" />
                     <field name="import_default_value" />
-                    <field name="file_id" />
-                    <field name="mapping_id" />
                     <field name="type" />
                     <field name="related_model" invisible="1"/>
                 </form>
@@ -168,10 +167,9 @@
             <field name="type">tree</field>
             <field name="arch" type="xml">
                 <tree editable="top" string="file default import values">
+                    <field name="mapping_id" on_change="on_change_models(mapping_id)"/>
                     <field name="import_default_field" />
                     <field name="import_default_value" />
-                    <field name="file_id" />
-                    <field name="mapping_id" />
                     <field name="type" />
                     <field name="related_model" invisible="1" />
                 </tree>

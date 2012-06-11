@@ -562,7 +562,7 @@ class file_fields(osv.osv):
         'custom_name': fields.char('Custom Name', size=128),
         'sequence': fields.integer('Sequence', required=True, help="The sequence field is used to define the order of the fields"),
         #TODO add a filter only fields that belong to the main object or to sub-object should be available
-        'mapping_line_id': fields.many2one('external.mapping.line', 'OpenERP Mapping', domain = "[('referential_id', '=', parent.referential_id),('mapping_id', '=', parent.related_mapping_ids[0][2])]"),
+        'mapping_line_id': fields.many2one('external.mapping.line', 'OpenERP Mapping', domain = "[('referential_id', '=', parent.referential_id),('mapping_id', 'in', parent.related_mapping_ids[0][2])]"),
         'file_id': fields.many2one('file.exchange', 'File Exchange', require="True"),
         'default_value': fields.char('Default Value', size=64),
         'advanced_default_value': fields.text('Advanced Default Value', help=("This python code will be evaluate and the value"
@@ -592,7 +592,7 @@ class file_default_import_values(osv.osv):
     _description = "file default import values"
 
     _columns = {
-        'import_default_field':fields.many2one('ir.model.fields', 'Default Field', domain="[('model_id', '=', related_model)]"),
+        'import_default_field':fields.many2one('ir.model.fields', 'Default Field'),
         'import_default_value':fields.char('Default Value', size=128),
         'file_id': fields.many2one('file.exchange', 'File Exchange'),
         'mapping_id':fields.many2one('external.mapping', 'External Mapping'),
@@ -613,3 +613,11 @@ class file_default_import_values(osv.osv):
             field_id = (file_name + '_' + field_name).replace('.','_')
         return field_id
 
+    def on_change_models(self, cr, uid, ids, mapping_id=False, context=None):
+        res = {}
+        if mapping_id:
+            mapping = self.pool.get('external.mapping').browse(cr, uid, mapping_id, context=context)
+            models = [x for x in self.pool.get(mapping.model_id.model)._inherits]
+            models.append(mapping.model_id.model)
+            res['import_default_field'] = [('model', 'in', models)]
+        return {'domain': res}

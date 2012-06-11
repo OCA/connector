@@ -29,6 +29,7 @@ from datetime import datetime
 import logging
 import pooler
 from collections import defaultdict
+from lxml import objectify
 
 
 from message_error import MappingError, ExtConnError
@@ -75,6 +76,31 @@ class ExternalSession(object):
 
     def is_categ(self, referential_category):
         return self.referential_id.categ_id.name.lower() == referential_category.lower()
+
+
+#TODO think about the generic method to use
+class Resource(object):
+    
+    def __init__(self, data):
+        self.data = data
+    
+    def get(self, key):
+        if isinstance(self.data, objectify.ObjectifiedElement):
+            result = self.data.__dict__.get(key)
+            if hasattr(result, 'pyval'):
+                return result.pyval
+            else:
+                return Resource(result)
+    
+    def __getitem__(self, key):
+        if isinstance(self.data, objectify.ObjectifiedElement):
+            return self.get(key)
+    
+    def keys(self):
+        if isinstance(self.data, objectify.ObjectifiedElement):
+            return self.data.__dict__.keys()
+
+
 
 ########################################################################################################################
 #
@@ -284,7 +310,7 @@ def _get_external_resource_ids(self, cr, uid, external_session, resource_filter=
     :return: a list of external_id
     :rtype: list
     """
-    raise osv.except_osv(_("Not Implemented"), _("Not Implemented in abstract base module!"))
+    raise osv.except_osv(_("Not Implemented"), _("The method _get_external_resource_ids is not implemented in abstract base module!"))
 
 @extend(osv.osv)
 def _get_default_import_values(self, cr, uid, external_session, mapping_id=None, defaults=None, context=None):
@@ -324,7 +350,7 @@ def _get_external_resources(self, cr, uid, external_session, external_id=None, r
     :return: a list of dict that contain resource information
     :rtype: list
     """
-    raise osv.except_osv(_("Not Implemented"), _("Not Implemented in abstract base module!"))
+    raise osv.except_osv(_("Not Implemented"), _("The method _get_external_resources is not implemented in abstract base module!"))
 
 @extend(osv.osv)
 def _get_mapping_id(self, cr, uid, referential_id, context=None):
@@ -1031,13 +1057,17 @@ def _transform_one_resource(self, cr, uid, external_session, convertion_type, re
     Used in _transform_external_resources in order to convert external row of data into OpenERP data
 
     @param referential_id: external referential id from where we import the resource
-    @param resource: a dictionnary of data to convert into OpenERP data
+    @param resource: a dictionnary of data, an lxml.objectify object...
     @param mapping dict: dictionnary of mapping {'product.product' : {'mapping_lines' : [...], 'key_for_external_id':'...'}}
     @param previous_result: list of the previous line converted. This is not used here but it's necessary for playing on change on sale order line
     @param defaults: defaults value for the data imported
     @return: dictionary of converted data in OpenERP format 
     """
 
+    #Encapsulation of the resource if it not a dictionnary
+    #So we can use the same method to read it
+    if not isinstance(resource, dict):
+        resource = Resource(resource)
 
     if context is None:
         context = {}
@@ -1250,7 +1280,7 @@ def _transform_sub_mapping(self, cr, uid, external_session, convertion_type, res
     Used in _transform_one_external_resource in order to call the sub mapping
 
     @param sub_mapping_list: list of sub-mapping to apply
-    @param external_data: list of data to convert into OpenERP data
+    @param resource: resource encapsulated in the object Resource or a dictionnary
     @param referential_id: external referential id from where we import the resource
     @param vals: dictionnary of value previously converted
     @param defauls: defaults value for the data imported

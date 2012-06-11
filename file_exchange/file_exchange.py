@@ -597,8 +597,6 @@ class file_default_import_values(osv.osv):
         'file_id': fields.many2one('file.exchange', 'File Exchange'),
         'mapping_id':fields.many2one('external.mapping', 'External Mapping'),
         'mapping_template_id':fields.many2one('external.mapping.template', 'External Mapping Template'),
-        #'related_model_ids':fields.related('mapping_id', 'related_model_ids', type='many2many', relation="ir.model", string='Related Model'),
-        'related_model':fields.related('mapping_id', 'model_id', type='many2one',relation="ir.model", string='Related Model'),
         'type':fields.selection([('integer', 'Integer'), ('float', 'Float'),('char','String'),('dict','Dict'),('list','List')], 'Field Type'),
     }
 

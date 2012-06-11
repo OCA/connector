@@ -155,7 +155,6 @@
                     <field name="import_default_field" />
                     <field name="import_default_value" />
                     <field name="type" />
-                    <field name="related_model" invisible="1"/>
                 </form>
             </field>
         </record>
@@ -171,7 +170,6 @@
                     <field name="import_default_field" />
                     <field name="import_default_value" />
                     <field name="type" />
-                    <field name="related_model" invisible="1" />
                 </tree>
             </field>
         </record>

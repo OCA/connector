@@ -1353,7 +1353,10 @@ def _transform_sub_mapping(self, cr, uid, external_session, convertion_type, res
                                 sub_external_id = line.get('external_id')
                                 if mapping[sub_mapping_id].get('alternative_keys'):
                                     sub_alternative_keys = list(mapping[sub_mapping_id]['alternative_keys'])
-                                    related_field = self._columns[to_field]._fields_id
+                                    if self._columns.get(to_field):
+                                        related_field = self._columns[to_field]._fields_id
+                                    elif self._inherit_fields.get(to_field):
+                                        related_field = self._inherit_fields[to_field][2]._fields_id
                                     sub_alternative_keys.append(related_field)
                                     line[related_field] = existing_rec_id
                                     #search id of the sub_mapping related to the id of the parent

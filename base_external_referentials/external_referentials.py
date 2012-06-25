@@ -97,7 +97,7 @@ class external_referential_version(osv.osv):
         'code': fields.char('code', size=64, required=True),
     }
     
-external_referential_type()
+external_referential_version()
 
 class external_mapping_template(osv.osv):
     _name = "external.mapping.template"
@@ -343,7 +343,7 @@ class external_referential(osv.osv):
         referential = self.browse(cr, uid, id, context=context)
         row = {
             'id': referential.get_absolute_id(context=context),
-            'name': referential.type_id.name,
+            'name': referential.name,
             'version_id:id': referential.version_id.get_absolute_id(context=context),
             'location': referential.location,
             'protocole': referential.protocole,

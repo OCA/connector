@@ -63,7 +63,7 @@ def overwrite(class_to_extend):
 
 
 class ExternalSession(object):
-    def __init__(self, referential, sync_from_object):
+    def __init__(self, referential, sync_from_object=None):
         self.referential_id = referential
         self.sync_from_object = sync_from_object
         self.debug = referential.debug
@@ -86,7 +86,10 @@ class Resource(object):
 
     def get(self, key):
         if isinstance(self.data, objectify.ObjectifiedElement):
-            result = self.data.__dict__.get(key)
+            if key in self.data.__dict__:
+                result = self.data.__dict__.get(key)
+            else:
+                return None
             if hasattr(result, 'pyval'):
                 return result.pyval
             else:
@@ -266,6 +269,7 @@ def extid_to_existing_oeid(self, cr, uid, referential_id, external_id, context=N
 
 osv.osv.extid_to_oeid = osv.osv.get_or_create_oeid
 ############## END OF DEPRECATED
+
 
 ########################################################################################################################
 #
@@ -495,7 +499,7 @@ def _import_resources(self, cr, uid, external_session, defaults=None, method="se
             resource_filter = self._get_filter(cr, uid, external_session, step, previous_filter=resource_filter, context=context)
             #TODO import only the field needed to improve speed import ;)
             resources = self._get_external_resources(cr, uid, external_session, resource_filter=resource_filter, mapping=mapping, fields=None, context=context)
-            if not isinstance(resources, list):
+            if not hasattr(resources, '__iter__'):
                 resources = [resources]
             res = self._record_external_resources(cr, uid, external_session, resources, defaults=defaults, mapping=mapping, mapping_id=mapping_id, context=context)
             for key in result:
@@ -805,13 +809,32 @@ def send_to_external(self, cr, uid, external_session, resources, mapping, mappin
 
 @extend(osv.osv)
 def ext_create(self, cr, uid, external_session, resources, mapping=None, mapping_id=None, context=None):
-    """Not Implemented here"""
-    return False
+    res = {}
+    mapping, mapping_id = self._init_mapping(cr, uid, external_session.referential_id.id, mapping=mapping, mapping_id=mapping_id, context=context)
+    for resource_id, resource in resources.items():
+        # TODO support multilanguages. for now we only export the first one
+        res[resource_id] = getattr(external_session.connection, mapping[mapping_id]['external_create_method'])(mapping[mapping_id]['external_resource_name'], resource[resource.keys()[0]])
+    return res
 
 @extend(osv.osv)
 def ext_update(self, cr, uid, external_session, resources, mapping=None, mapping_id=None, context=None):
     """Not Implemented here"""
     return False
+
+@extend(osv.osv)
+def ext_unlink(self, cr, uid, ids, context=None):
+    ir_model_obj = self.pool.get('ir.model.data')
+    for object_id in ids:
+        ir_model_ids = ir_model_obj.search(cr, uid, [('res_id','=',object_id),('model','=',self._name)])
+        for ir_model in ir_model_obj.browse(cr, uid, ir_model_ids, context=context):
+            ext_id = self.id_from_prefixed_id(ir_model.name)
+            ref_id = ir_model.referential_id.id
+            external_session = ExternalSession(ir_model.referential_id)
+            mapping = self._get_mapping(cr, uid, ref_id)
+            getattr(external_session.connection, mapping['external_delete_method'])(mapping['external_resource_name'], ext_id)
+            commit_now(ir_model.unlink())
+
+    return True
 
 @extend(osv.osv)
 def get_lang_to_export(self, cr, uid, external_session, context=None):
@@ -1143,7 +1166,9 @@ def _transform_one_resource(self, cr, uid, external_session, convertion_type, re
     ext_id = False
     if convertion_type == 'from_external_to_openerp' and key_for_external_id and resource.get(key_for_external_id):
         ext_id = resource[key_for_external_id]
-        vals.update({'external_id': ext_id.isdigit() and int(ext_id) or ext_id})
+        if isinstance(ext_id, str):
+            ext_id = ext_id.isdigit() and int(ext_id) or ext_id
+        vals.update({'external_id': ext_id})
     if self._name in context.get('do_not_update', []):
         # if the update of the object is not wanted, we skipped the sub_mapping update also. In the function _transform_one_resource, the creation will also be skipped.
         alternative_keys = mapping[mapping_id]['alternative_keys']

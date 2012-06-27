@@ -61,7 +61,7 @@ class external_report(osv.osv):
     }
 
     def _get_report(self, cr, uid, action, action_on, sync_from_object, context=None):
-        report_id = self.search(cr, uid, 
+        report_id = self.search(cr, uid,
                 [
                     ('action', '=', action),
                     ('action_on', '=', action_on),
@@ -145,7 +145,7 @@ class external_report(osv.osv):
         so we historize their aggregation.
         """
         history_obj = self.pool.get('external.report.history')
-        history_obj.write(cr, uid, external_session.tmp['history_id'], 
+        history_obj.write(cr, uid, external_session.tmp['history_id'],
             {'end_date': time.strftime(DEFAULT_SERVER_DATETIME_FORMAT)},
             context=context)
         return id
@@ -324,7 +324,7 @@ class external_report_lines(osv.osv):
 
             # keep the id of the line to update it with the result
             kwargs['context']['retry_report_line_id'] = log.id
-        
+
             method(cr, uid, external_session, resource, *args, **kwargs)
         return True
 

@@ -39,7 +39,7 @@ from tools import DEFAULT_SERVER_DATETIME_FORMAT, DEFAULT_SERVER_DATE_FORMAT
 def extend(class_to_extend):
     def decorator(func):
         if hasattr(class_to_extend, func.func_name):
-            raise osv.except_osv(_("Developper Error"), 
+            raise osv.except_osv(_("Developper Error"),
                 _("You can extend the class %s with the method %s.",
                 "Indeed this method already exist use the decorator 'replace' instead"))
         setattr(class_to_extend, func.func_name, func)
@@ -52,7 +52,7 @@ def overwrite(class_to_extend):
     def decorator(func):
         original_func = hasattr(class_to_extend, func.func_name)
         if not original_func:
-            raise osv.except_osv(_("Developper Error"), 
+            raise osv.except_osv(_("Developper Error"),
                 _("You can replace the method %s of the class %s.",
                 "Indeed this method doesn't exist"))
         func.original_func = original_func
@@ -80,10 +80,10 @@ class ExternalSession(object):
 
 #TODO think about the generic method to use
 class Resource(object):
-    
+
     def __init__(self, data):
         self.data = data
-    
+
     def get(self, key):
         if isinstance(self.data, objectify.ObjectifiedElement):
             result = self.data.__dict__.get(key)
@@ -91,11 +91,11 @@ class Resource(object):
                 return result.pyval
             else:
                 return Resource(result)
-    
+
     def __getitem__(self, key):
         if isinstance(self.data, objectify.ObjectifiedElement):
             return self.get(key)
-    
+
     def keys(self):
         if isinstance(self.data, objectify.ObjectifiedElement):
             return self.data.__dict__.keys()
@@ -306,7 +306,7 @@ def _get_external_resource_ids(self, cr, uid, external_session, resource_filter=
 
     :param ExternalSession external_session : External_session that contain all params of connection
     :param dict resource_filter: the filter to apply to the external search method
-    :param dict mapping: dictionnary of mapping, the key is the openerp object's name 
+    :param dict mapping: dictionnary of mapping, the key is the openerp object's name
     :return: a list of external_id
     :rtype: list
     """
@@ -695,7 +695,7 @@ def _get_query_and_params_for_ids_and_date(self, cr, uid, external_session, ids=
     if not self._inherits:
         greatest = "GREATEST(%(object_table)s.write_date, %(object_table)s.create_date)"\
                         %{'object_table': object_table}
-                
+
         query = """
             SELECT %(greatest)s as update_date, %(object_table)s.id as id, ir_model_data.res_id
                 FROM %(object_table)s
@@ -713,7 +713,7 @@ def _get_query_and_params_for_ids_and_date(self, cr, uid, external_session, ids=
         inherits_object_table = self.pool.get(self._inherits.keys()[0])._table
         join_field = self._inherits[self._inherits.keys()[0]]
 
-        greatest = """GREATEST(%(object_table)s.write_date, %(object_table)s.create_date, 
+        greatest = """GREATEST(%(object_table)s.write_date, %(object_table)s.create_date,
                     %(inherits_object_table)s.write_date, %(inherits_object_table)s.create_date)""" \
                     %{'object_table': object_table, 'inherits_object_table': inherits_object_table}
 
@@ -862,7 +862,7 @@ def _export_resources(self, cr, uid, external_session, method="onebyone", contex
 def _transform_and_send_one_resource(self, cr, uid, external_session, resource, resource_id,
                             update_date, mapping, mapping_id, defaults=None, context=None):
     for key_lang in resource:
-        resource[key_lang] = self._transform_one_resource(cr, uid, external_session, 'from_openerp_to_external', 
+        resource[key_lang] = self._transform_one_resource(cr, uid, external_session, 'from_openerp_to_external',
                                             resource[key_lang], mapping=mapping, mapping_id=mapping_id,
                                             defaults=defaults, context=context)
     return self.send_to_external(cr, uid, external_session, {resource_id : resource}, mapping, mapping_id, update_date, context=context)
@@ -1045,8 +1045,8 @@ def _transform_resources(self, cr, uid, external_session, convertion_type, resou
         mapping, mapping_id = self._init_mapping(cr, uid, external_session.referential_id.id, convertion_type=convertion_type, mapping_line_filter_ids=mapping_line_filter_ids, mapping=mapping, mapping_id=mapping_id, context=context)
         if mapping[mapping_id].get("mapping_lines"):
             for resource in resources:
-                result.append(self._transform_one_resource(cr, uid, external_session, convertion_type, resource, 
-                                                            mapping, mapping_id, mapping_line_filter_ids, parent_data=parent_data, 
+                result.append(self._transform_one_resource(cr, uid, external_session, convertion_type, resource,
+                                                            mapping, mapping_id, mapping_line_filter_ids, parent_data=parent_data,
                                                             previous_result=result, defaults=defaults, context=context))
     return result
 
@@ -1061,7 +1061,7 @@ def _transform_one_resource(self, cr, uid, external_session, convertion_type, re
     @param mapping dict: dictionnary of mapping {'product.product' : {'mapping_lines' : [...], 'key_for_external_id':'...'}}
     @param previous_result: list of the previous line converted. This is not used here but it's necessary for playing on change on sale order line
     @param defaults: defaults value for the data imported
-    @return: dictionary of converted data in OpenERP format 
+    @return: dictionary of converted data in OpenERP format
     """
 
     #Encapsulation of the resource if it not a dictionnary
@@ -1129,7 +1129,7 @@ def _transform_one_resource(self, cr, uid, external_session, convertion_type, re
                     except Exception, e:
                         #del(space['__builtins__'])
                         raise MappingError(e, mapping_line['name'], self._name)
-                    
+
                     result = space.get('result', False)
                     # Check if result returned by the mapping function is correct : [('field1', value), ('field2', value))]
                     # And fill the vals dict with the results
@@ -1225,7 +1225,7 @@ def _transform_field(self, cr, uid, external_session, convertion_type, field_val
     if field is False or field is None:
         empty_value = {
             'integer': 0,
-            'unicode': '', 
+            'unicode': '',
             'char': '',
             'date': False,
             'int': 0,
@@ -1251,7 +1251,7 @@ def _transform_field(self, cr, uid, external_session, convertion_type, field_val
         elif external_type:
             # if the type is not specified in empty_value,
             # then we consider it will be False, if it
-            # should not for an external_type, please add it 
+            # should not for an external_type, please add it
             # in empty_value
             field = empty_value.get(external_type, False)
 
@@ -1267,7 +1267,7 @@ def _merge_with_default_values(self, cr, uid, external_session, ressource, vals,
     @param referential_id: external referential id from where we import the resource
     @param vals: dictionnary of value previously converted
     @param defauls: defaults value for the data imported
-    @return: dictionary of converted data in OpenERP format 
+    @return: dictionary of converted data in OpenERP format
     """
     for key in defaults:
         if not key in vals:
@@ -1284,7 +1284,7 @@ def _transform_sub_mapping(self, cr, uid, external_session, convertion_type, res
     @param referential_id: external referential id from where we import the resource
     @param vals: dictionnary of value previously converted
     @param defauls: defaults value for the data imported
-    @return: dictionary of converted data in OpenERP format 
+    @return: dictionary of converted data in OpenERP format
     """
     if not defaults:
         defaults={}
@@ -1301,7 +1301,7 @@ def _transform_sub_mapping(self, cr, uid, external_session, convertion_type, res
         elif convertion_type == 'from_openerp_to_external':
             from_field = sub_mapping['internal_field']
             to_field = sub_mapping['external_field'] or 'hidden_field_to_split_%s'%from_field # if the field doesn't have any name we assume at that we will split it
-            
+
         field_value = resource[from_field]
         sub_mapping_obj = self.pool.get(sub_object_name)
         sub_mapping_defaults = sub_mapping_obj._get_default_import_values(cr, uid, external_session, sub_mapping_id, defaults.get(to_field), context=context)
@@ -1310,7 +1310,7 @@ def _transform_sub_mapping(self, cr, uid, external_session, convertion_type, res
             transform_args = [cr, uid, external_session, convertion_type, field_value]
             transform_kwargs = {
                 'defaults': sub_mapping_defaults,
-                'mapping': mapping, 
+                'mapping': mapping,
                 'mapping_id': sub_mapping_id,
                 'mapping_line_filter_ids': mapping_line_filter_ids,
                 'parent_data': vals,
@@ -1345,8 +1345,8 @@ def _transform_sub_mapping(self, cr, uid, external_session, convertion_type, res
                             #search id of the parent
                             existing_ir_model_data_id, existing_rec_id = \
                                          self._get_oeid_from_extid_or_alternative_keys(
-                                                                cr, uid, vals, external_id, 
-                                                                external_session.referential_id.id, 
+                                                                cr, uid, vals, external_id,
+                                                                external_session.referential_id.id,
                                                                 alternative_keys, context=context)
                             vals_to_append = (0, 0, line)
                             if existing_rec_id:

@@ -31,7 +31,7 @@ import time
 class external_referential_category(osv.osv):
     _name = 'external.referential.category'
     _description = 'External Referential Category (Ex: e-commerce, crm, warehouse)'
-    
+
     _columns = {
         'name': fields.char('Name', size=64, required=True), #dont allow creation of type from frontend
         'type_ids': fields.one2many('external.referential.type', 'categ_id', 'Types', required=True)
@@ -51,7 +51,7 @@ external_referential_category()
 class external_referential_type(osv.osv):
     _name = 'external.referential.type'
     _description = 'External Referential Type (Ex.Magento,Spree)'
-    
+
     _columns = {
         'name': fields.char('Name', size=64, required=True), #dont allow creation of type from frontend
         'categ_id': fields.many2one('external.referential.category', 'Category', required=True),
@@ -96,14 +96,14 @@ class external_referential_version(osv.osv):
         'type_id': fields.many2one('external.referential.type', 'Type', required=True),
         'code': fields.char('code', size=64, required=True),
     }
-    
+
 external_referential_version()
 
 class external_mapping_template(osv.osv):
     _name = "external.mapping.template"
     _description = "The source mapping records"
     _rec_name = 'model'
-    
+
     _columns = {
         'version_id':fields.many2one('external.referential.version', 'External Referential Version', ondelete='cascade'),
         'model_id': fields.many2one('ir.model', 'OpenERP Model', required=True, ondelete='cascade'),
@@ -125,7 +125,7 @@ class external_mappinglines_template(osv.osv):
     _name = 'external.mappinglines.template'
     _description = 'The source mapping line records'
     _rec_name = 'name'
-    
+
     def _name_get_fnc(self, cr, uid, ids, name, arg, context=None):
         res = {}
         for mapping_line in self.browse(cr, uid, ids, context):
@@ -194,7 +194,7 @@ class external_referential(osv.osv):
             mappings_obj = self.pool.get('external.mapping')
             mapping_line_obj = self.pool.get('external.mapping.line')
             mapping_tmpl_obj = self.pool.get('external.mapping.template')
-            
+
             existing_mapping_line_ids = mapping_line_obj.search(cr, uid, [['mapping_id.referential_id', '=', id], ['template_id', '!=', False]], context=context)
             mapping_line_obj.unlink(cr, uid, existing_mapping_line_ids)
 
@@ -254,8 +254,8 @@ class external_referential(osv.osv):
                 mapping_id = template_mapping_id_to_mapping_id[mapping_tmpl_id]
                 mapping_line_obj.write(cr, uid, mapping_line_id, {'child_mapping_id': mapping_id}, context=context)
         return True
-            
-                
+
+
     _columns = {
         'name': fields.char('Name', size=32, required=True),
         'type_id': fields.related('version_id', 'type_id', type='many2one', relation='external.referential.type', string='External Type'),
@@ -269,7 +269,7 @@ class external_referential(osv.osv):
         'create_date': fields.datetime('Creation Date', readonly=True, help="Date on which external referential is created."),
         'debug': fields.boolean('Debug', help='If debug mode is active all request between the external referential and OpenERP will be in the log')
     }
-    
+
     _sql_constraints = [
         ('name_uniq', 'unique (name)', 'Referential names must be unique !')
     ]
@@ -417,9 +417,9 @@ class external_referential(osv.osv):
     _constraints = [
         (_test_dot_in_name, 'The name cannot contain a dot!', ['name']),
     ]
-    
+
     #TODO warning on name change if mapping exist: Implemented in attrs
-    
+
     def get_absolute_id(self, cr, uid, id, context=None):
         if isinstance(id,list):
             id = id[0]
@@ -435,7 +435,7 @@ class external_mapping_line(osv.osv):
     _name = 'external.mapping.line'
     _description = 'Field Mapping'
     _rec_name = 'name'
-    
+
     def _name_get_fnc(self, cr, uid, ids, name, arg, context=None):
         res = {}
         for mapping_line in self.browse(cr, uid, ids, context):
@@ -446,7 +446,7 @@ class external_mapping_line(osv.osv):
                                     + (mapping_line.mapping_id.extra_name \
                                     and ('=>' + mapping_line.mapping_id.extra_name) or '')
         return res
-    
+
     _columns = {
         'name': fields.function(_name_get_fnc, type="char", string='Name', size=256),
     }
@@ -458,7 +458,7 @@ class external_mapping(osv.osv):
     _name = 'external.mapping'
     _description = 'External Mapping'
     _rec_name = 'model'
-    
+
     def _get_related_model_ids(self, cr, uid, ids, name, arg, context=None):
         "Used to retrieve model field one can map without ambiguity. Fields come from Inherited objects"
         res = {}
@@ -473,7 +473,7 @@ class external_mapping(osv.osv):
         inherits_model = [x for x in self.pool.get(model.model)._inherits]
         model_ids = [model.id] + self.pool.get('ir.model').search(cr, uid, [['model','in', inherits_model]], context=context)
         return model_ids
-    
+
     def model_id_change(self, cr, uid, ids, model_id=None, context=None):
         if model_id:
             model = self.pool.get('ir.model').browse(cr, uid, model_id, context=context)
@@ -491,7 +491,7 @@ class external_mapping(osv.osv):
         if vals.get('model_id'):
             self.pool.get('ir.model').create_external_link(cr, uid, vals['model_id'], context=context)
         return res
-    
+
     _columns = {
         'extra_name': fields.char('Extra Name', size=100, help="In case you need to make many mappings on the same object"),
         'template_id': fields.many2one('external.mapping.template', 'External Mapping Template'),
@@ -551,7 +551,7 @@ class external_mapping(osv.osv):
                 }
             csv.writerow(row)
         return self.pool.get('pop.up.file').open_output_file(cr, uid, 'external.mappinglines.template.csv', output_file, 'Mapping Line Export', context=context)
-        
+
     def get_absolute_id(self, cr, uid, id, context=None):
         if isinstance(id,list):
             id = id[0]
@@ -583,7 +583,7 @@ external_mapping()
 
 class external_mapping_line(osv.osv):
     _inherit = 'external.mapping.line'
-    
+
     _columns = {
         'template_id': fields.many2one('external.mappinglines.template', 'External Mapping Lines Template'),
         'referential_id': fields.related('mapping_id', 'referential_id', type='many2one', relation='external.referential', string='Referential'),
@@ -613,19 +613,19 @@ class external_mapping_line(osv.osv):
         'internal_type': fields.related('field_id','ttype', type="char", relation='ir.model.field', string='Internal Type'),
         'function_name': fields.char('Function Name', size=128),
     }
-    
+
     _defaults = {
          'type' : lambda * a: 'in_out',
          'external_type': lambda *a: 'unicode',
          'evaluation_type': lambda *a: 'direct',
     }
-    
+
     def _check_mapping_line_name(self, cr, uid, ids):
         for mapping_line in self.browse(cr, uid, ids):
             if (not mapping_line.field_id) and (not mapping_line.external_field):
                 return False
         return True
-    
+
 
     _sql_constraints = [
         ('ref_template_uniq', 'unique (referential_id, template_id)', 'A referential can not have various mapping line imported from the same template mapping line')
@@ -650,7 +650,7 @@ external_mapping_line()
 
 class ir_model_data(osv.osv):
     _inherit = "ir.model.data"
-    
+
     def init(self, cr):
       #FIXME: migration workaround: we changed the ir_model_data usage to make standard CSV import work again
       cr.execute("select name from external_referential;")
@@ -683,7 +683,7 @@ class ir_model_data(osv.osv):
         #'create_date': fields.datetime('Created date', readonly=True), #TODO used?
         #'write_date': fields.datetime('Updated date', readonly=True), #TODO used?
     }
-    
+
     _sql_constraints = [
         ('external_reference_uniq_per_object', 'unique(model, res_id, referential_id)', 'You cannot have on record with multiple external id for a sae referential'),
     ]

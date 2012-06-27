@@ -30,7 +30,7 @@ import xmlrpclib
 # 1 only_for_referential
 # 2 only_for_referential_category
 def only_for_referential(ref_type=None, ref_categ=None, super_function=None):
-    """ 
+    """
     This decorator will execute the code of the function decorated only if
     the referential_type match with the referential_type pass in the context
     If not super method will be call.
@@ -81,7 +81,7 @@ def open_report(func):
         if not context:
             context={}
             kwargs['context'] = context
-        
+
         #Start the report
         report_id = report_obj.start_report(cr, uid, external_session, id=None, action=func.__name__, action_on=self._name, context=context)
 
@@ -115,7 +115,7 @@ def catch_error_in_report(func):
                                     cr,
                                     uid,
                                     self._name,
-                                    func.__name__, 
+                                    func.__name__,
                                     #TODO manage external id and res_id in a good way
                                     external_id=context.get('external_id_key_for_report') and resource.get(context.get('external_id_key_for_report')),
                                     res_id= not context.get('external_id_key_for_report') and args and args[0],

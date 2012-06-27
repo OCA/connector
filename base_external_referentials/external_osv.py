@@ -30,11 +30,11 @@ import logging
 import pooler
 from collections import defaultdict
 from lxml import objectify
-
-
 from message_error import MappingError, ExtConnError
 from tools.translate import _
 from tools import DEFAULT_SERVER_DATETIME_FORMAT, DEFAULT_SERVER_DATE_FORMAT
+#TODO fix me import do not work
+#from base_external_referentials.decorator import commit_now
 
 def extend(class_to_extend):
     def decorator(func):
@@ -832,8 +832,8 @@ def ext_unlink(self, cr, uid, ids, context=None):
             external_session = ExternalSession(ir_model.referential_id)
             mapping = self._get_mapping(cr, uid, ref_id)
             getattr(external_session.connection, mapping['external_delete_method'])(mapping['external_resource_name'], ext_id)
-            commit_now(ir_model.unlink())
-
+            #commit_now(ir_model.unlink())
+            ir_model.unlink()
     return True
 
 @extend(osv.osv)

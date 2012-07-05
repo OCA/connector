@@ -142,7 +142,8 @@ def catch_error_in_report(func):
         except Exception as e:
             #TODO write correctly the message in the report
             import_cr.rollback()
-            raise
+            error_message = str(e)
+            report_line_obj.log_fail(cr, uid, external_session, report_line_id, error_message, context=context)
         else:
             report_line_obj.log_success(cr, uid, external_session, report_line_id, context=context)
             import_cr.commit()

@@ -151,7 +151,7 @@
                         </group>
                         <group name="internal_field" colspan="2" col="2">
                             <separator string="Internal fields" colspan="2"/>
-                            <field name="field_id" domain="[('model_id','in',parent.related_model_ids[0][2])]" 
+                            <field name="field_id" domain="[('model_id','in',parent.related_model_ids[0][2])]"
                                     attrs="{'required':[('evaluation_type','in',['direct', 'sub-mapping'])],
                                             'invisible':[('evaluation_type', '=', 'function')]}"/>
                             <field name="internal_type" readonly="True"/>

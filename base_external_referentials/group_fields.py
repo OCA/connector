@@ -26,7 +26,7 @@ from osv import osv, fields
 class group_fields(osv.osv):
     _name = 'group.fields'
     _description = 'trigger last write date by group of field'
-    
+
     _columns = {
         'name': fields.char('Name', size=64, required=True),
         'column_name': fields.char('Column Name', size=64),

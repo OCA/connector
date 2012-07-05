@@ -984,7 +984,7 @@ def _get_oeid_from_extid_or_alternative_keys(self, cr, uid, vals, external_id, r
             domain = ['|', ('active', '=', False), ('active', '=', True)]
         for alternative_key in alternative_keys:
             if vals.get(alternative_key):
-                domain.append((alternative_key, '=', vals[alternative_key]))
+                domain.append((alternative_key, '=ilike', vals[alternative_key]))
         if domain:
             expected_res_id = self.search(cr, uid, domain, context=context)
             expected_res_id = expected_res_id and expected_res_id[0] or False

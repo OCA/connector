@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  file_exchange for OpenERP
+  Copyright (C) 2011 Akretion Beau Sébastien <sebastien.beau@akretion.com>
+  The licence is in the file __openerp__.py
+-->
+
+<openerp>
+    <data>
+
+    <record id="file_exchange.group_manager" model="res.groups">
+        <field name="name">File Exchange Manager</field>
+    </record>
+
+    </data>
+</openerp>

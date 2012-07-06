@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_file_exchange_user,file_exchange_file_exchange,model_file_exchange,base.group_user,1,0,0,0
+access_file_exchange_manager,file_exchange_file_exchange,model_file_exchange,file_exchange.group_manager,1,1,1,1
+access_file_fields_user,file_exchange_file_fields,model_file_fields,base.group_user,1,0,0,0
+access_file_fields_manager,file_exchange_file_fields,model_file_fields,file_exchange.group_manager,1,1,1,1
+access_file_default_import_values_user,file_exchange_file_default_import_values,model_file_default_import_values,base.group_user,1,0,0,0
+access_file_default_import_values_manager,file_exchange_file_default_import_values,model_file_default_import_values,file_exchange.group_manager,1,1,1,1

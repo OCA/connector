@@ -37,6 +37,14 @@ from tools.translate import _
 from tools import DEFAULT_SERVER_DATETIME_FORMAT, DEFAULT_SERVER_DATE_FORMAT
 
 def extend(class_to_extend):
+    """
+    Decorator for extending a class
+    
+    @extend(osv.osv)
+    def new_method(self, *args, **kwargs):
+        print 'I am in the new_method', self._name
+        return True
+    """
     def decorator(func):
         if hasattr(class_to_extend, func.func_name):
             raise osv.except_osv(_("Developper Error"),
@@ -46,21 +54,42 @@ def extend(class_to_extend):
         return class_to_extend
     return decorator
 
+def override(class_to_extend, prefix):
+    """
+    Decorator for overiding an existing method in a class
+    
+    Example of use:
+    
+    @override(osv.osv, 'magento_')
+    def write(self, *args, **kwargs):
+        print 'I am in the write overwrited 1', self._name
+        return osv.osv.magento_write(self, *args, **kwargs)
 
-#TODO finish me Work in progress
-def overwrite(class_to_extend):
+    @override(osv.osv, 'amazon_')
+    def write(self, *args, **kwargs):
+        print 'I am in the write overwrited 2', self._name
+        return osv.osv.amazon_write(self, *args, **kwargs)
+
+    @override(osv.osv, 'ebay_')
+    def write(self, *args, **kwargs):
+        print 'I am in the write overwrited 3', self._name
+        return osv.osv.ebay_write(self, *args, **kwargs)
+
+    """
     def decorator(func):
-        original_func = hasattr(class_to_extend, func.func_name)
-        if not original_func:
+        if not hasattr(class_to_extend, func.func_name):
             raise osv.except_osv(_("Developper Error"),
-                _("You can replace the method %s of the class %s.",
-                "Indeed this method doesn't exist"))
-        func.original_func = original_func
+                _("You can replace the method %s of the class %s. "
+                "Indeed this method doesn't exist")%func.func_name)
+        original_function_name = prefix + func.func_name
+        if hasattr(class_to_extend, original_function_name):
+            raise osv.except_osv(_("Developper Error"),
+                _("The method %s already exist. "
+                "Please change the prefix name")%original_function_name)
+        setattr(class_to_extend, original_function_name, getattr(class_to_extend, func.func_name))
         setattr(class_to_extend, func.func_name, func)
         return class_to_extend
     return decorator
-
-
 
 class ExternalSession(object):
     def __init__(self, referential, sync_from_object=None):

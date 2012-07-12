@@ -36,14 +36,19 @@ from message_error import MappingError, ExtConnError
 from tools.translate import _
 from tools import DEFAULT_SERVER_DATETIME_FORMAT, DEFAULT_SERVER_DATE_FORMAT
 
+#TODO refactor the mapping are stored in a dictionnary to avoid useless read during all of the process.
+#It should be better to use the orm cache or something similare
+
+
 def extend(class_to_extend):
     """
-    Decorator for extending a class
-    
+    Decorator to use to extend a existing class with a new method
+    Example : 
     @extend(osv.osv)
     def new_method(self, *args, **kwargs):
         print 'I am in the new_method', self._name
         return True
+    Will add the method new_method to the class osv.osv
     """
     def decorator(func):
         if hasattr(class_to_extend, func.func_name):
@@ -91,8 +96,19 @@ def override(class_to_extend, prefix):
         return class_to_extend
     return decorator
 
+
 class ExternalSession(object):
     def __init__(self, referential, sync_from_object=None):
+        """External Session in an object to store the information about a connection with an
+        extenal system, like Magento, Prestashop, Ebay, ftp....
+        This class have for fields
+        - referential_id : a many2one related to the referential used for this connection
+        - sync_from_object : a many2one related to the object that launch the synchronization
+           for example if you import the product from the shop, the shop will be store in this field1
+        - debug : boolean to active or not the debug
+        - connection : the connection object of the external system
+        - tmp : a temporary dict to store data
+        """
         self.referential_id = referential
         self.sync_from_object = sync_from_object
         self.debug = referential.debug
@@ -109,7 +125,17 @@ class ExternalSession(object):
 
 #TODO think about the generic method to use
 class Resource(object):
-
+    """Resource class in a container for using other class like objectify as a dictionnary
+    The implemented dict fonctionality are "get", "__getitem__", "keys"
+    The original object is store in the data field
+    
+    Example :
+      resource = Resource(objectify_resource)
+      my_keys = resource.keys()
+      one_key = my_keys[0]
+      my_item = resource[one_key]
+      my_item = resource.get(one_key)
+    """
     def __init__(self, data):
         self.data = data
 
@@ -142,14 +168,14 @@ class Resource(object):
 
 @extend(osv.osv)
 def read_w_order(self, cr, uid, ids, fields_to_read=None, context=None, load='_classic_read'):
-    """ Read records with given ids with the given fields and return it respecting the order of the ids
+    """Read records with given ids with the given fields and return it respecting the order of the ids
     This is very usefull for synchronizing data in a special order with an external system
 
     :param list ids: list of the ids of the records to read
-    :param list fields: optional list of field names to return (default: all fields would be returned)
+    :param list fields_to_read: optional list of field names to return (default: all fields would be returned)
     :param dict context: context arguments, like lang, time zone
-    :return: ordered list of dictionaries((dictionary per record asked)) with requested field values
     :rtype: [{‘name_of_the_field’: value, ...}, ...]
+    :return: ordered list of dictionaries((dictionary per record asked)) with requested field values
     """
     res = self.read(cr, uid, ids, fields_to_read, context, load)
     resultat = []
@@ -164,8 +190,8 @@ def browse_w_order(self, cr, uid, ids, context=None, list_class=None, fields_pro
 
     :param list ids: id or list of ids.
     :param dict context: context arguments, like lang, time zone
-    :return: ordered list of object
     :rtype: list of objects requested
+    :return: ordered list of object
     """
     res = self.browse(cr, uid, ids, context, list_class, fields_process)
     resultat = []
@@ -175,11 +201,23 @@ def browse_w_order(self, cr, uid, ids, context=None, list_class=None, fields_pro
 
 @extend(osv.osv)
 def prefixed_id(self, id):
-    """The reason why we don't just use the external id and put the model as the prefix is to avoid unique ir_model_data#name per module constraint violation."""
+    """Return the prefixed_id for an id given
+    :param str or int id: external id
+    :rtype str
+    :return the prefixed id
+    """
+    #The reason why we don't just use the external id and put the model as the prefix
+    #is to avoid unique ir_model_data#name per module constraint violation.
     return self._name.replace('.', '_') + '/' + str(id)
 
 @extend(osv.osv)
 def id_from_prefixed_id(self, prefixed_id):
+    """Return the external id extracted from an prefixed_id
+    
+    :param str prefixed_id: prefixed_id to process
+    :rtype int/str
+    :return the id extracted
+    """
     res = prefixed_id.split(self._name.replace('.', '_') + '/')[1]
     if res.isdigit():
         return int(res)
@@ -188,7 +226,11 @@ def id_from_prefixed_id(self, prefixed_id):
 
 @extend(osv.osv)
 def get_all_extid_from_referential(self, cr, uid, referential_id, context=None):
-    """Returns the external ids of the ressource which have an ext_id in the referential"""
+    """Returns the external ids of the ressource which have an ext_id in the referential
+    :param int referential_id : id of the external referential
+    :rtype: list
+    :return: the list of all of the external_ids from the referential specified
+    """
     ir_model_data_obj = self.pool.get('ir.model.data')
     model_data_ids = ir_model_data_obj.search(cr, uid, [('model', '=', self._name), ('referential_id', '=', referential_id)])
     #because OpenERP might keep ir_model_data (is it a bug?) for deleted records, we check if record exists:
@@ -201,7 +243,12 @@ def get_all_extid_from_referential(self, cr, uid, referential_id, context=None):
 
 @extend(osv.osv)
 def get_all_oeid_from_referential(self, cr, uid, referential_id, context=None):
-    """Returns the openerp ids of the ressource which have an ext_id in the referential"""
+    """Returns the openerp ids of the ressource which have an ext_id in the referential
+    :param int referential_id : id of the external referential
+    :rtype: list
+    :return: the list of all of the openerp ids which have an ext_id in the referential specified
+    """
+    
     ir_model_data_obj = self.pool.get('ir.model.data')
     model_data_ids = ir_model_data_obj.search(cr, uid, [('model', '=', self._name), ('referential_id', '=', referential_id)])
     #because OpenERP might keep ir_model_data (is it a bug?) for deleted records, we check if record exists:
@@ -211,7 +258,12 @@ def get_all_oeid_from_referential(self, cr, uid, referential_id, context=None):
 @extend(osv.osv)
 def get_or_create_extid(self, cr, uid, external_session, openerp_id, context=None):
     """Returns the external id of a resource by its OpenERP id.
-    Returns False if the resource id does not exists."""
+    If not external id have been found, the resource will be automatically exported
+    :param ExternalSession external_session : External_session that contain all params of connection
+    :param int openerp_id : openerp id of the resource
+    :return: the external id of the resource
+    :rtype: int
+    """
     res = self.get_extid(cr, uid, openerp_id, external_session.referential_id.id, context=context)
     if res is not False:
         return res
@@ -221,7 +273,12 @@ def get_or_create_extid(self, cr, uid, external_session, openerp_id, context=Non
 @extend(osv.osv)
 def get_extid(self, cr, uid, openerp_id, referential_id, context=None):
     """Returns the external id of a resource by its OpenERP id.
-    Returns False if the resource id does not exists."""
+    Return False If not external id have been found
+    :param int openerp_id : openerp id of the resource
+    :param int referential_id : referential id 
+    :return: the external id of the resource or False if not exist
+    :rtype: int 
+    """
     if isinstance(openerp_id, list):
         openerp_id = openerp_id[0]
     model_data_ids = self.pool.get('ir.model.data').search(cr, uid, [('model', '=', self._name), ('res_id', '=', openerp_id), ('referential_id', '=', referential_id)])
@@ -244,13 +301,13 @@ osv.osv.oeid_to_extid = osv.osv.get_or_create_extid
 
 @extend(osv.osv)
 def _get_expected_oeid(self, cr, uid, external_id, referential_id, context=None):
-    """
-    Returns the id of the entry in ir.model.data and the expected id of the resource in the current model
+    """Returns the id of the entry in ir.model.data and the expected id of the resource in the current model
     Warning the expected_oe_id may not exists in the model, that's the res_id registered in ir.model.data
 
-    @param external_id: id in the external referential
-    @param referential_id: id of the external referential
-    @return: tuple of (ir.model.data entry id, expected resource id in the current model)
+    :param int/str external_id: id in the external referential
+    :param int referential_id: id of the external referential
+    :return: tuple of (ir.model.data entry id, expected resource id in the current model)
+    :rtype: tuple
     """
     model_data_obj = self.pool.get('ir.model.data')
     model_data_ids = model_data_obj.search(cr, uid,
@@ -266,7 +323,13 @@ def _get_expected_oeid(self, cr, uid, external_id, referential_id, context=None)
 @extend(osv.osv)
 def get_oeid(self, cr, uid, external_id, referential_id, context=None):
     """Returns the OpenERP id of a resource by its external id.
-       Returns False if the resource does not exist."""
+    Returns False if the resource does not exist.
+    
+    :param int/str external_id : external id of the resource
+    :param int referential_id : referential id 
+    :return: the openerp id of the resource or False if not exist
+    :rtype: int
+       """
     if external_id:
         ir_model_data_id, expected_oe_id = self._get_expected_oeid\
             (cr, uid, external_id, referential_id, context=context)
@@ -280,7 +343,13 @@ def get_oeid(self, cr, uid, external_id, referential_id, context=None):
 @extend(osv.osv)
 def get_or_create_oeid(self, cr, uid, external_session, external_id, context=None):
     """Returns the OpenERP ID of a resource by its external id.
-    Creates the resource from the external connection if the resource does not exist."""
+    Creates the resource from the external connection if the resource does not exist.
+    
+    :param ExternalSession external_session : External_session that contain all params of connection
+    :param int/str external_id : external id of the resource
+    :return: the openerp id of the resource
+    :rtype: int
+    """
     if external_id:
         existing_id = self.get_oeid(cr, uid, external_id, external_session.referential_id.id, context=context)
         if existing_id:
@@ -319,60 +388,56 @@ osv.osv.extid_to_oeid = osv.osv.get_or_create_oeid
 
 @extend(osv.osv)
 def _get_filter(self, cr, uid, external_session, step, previous_filter=None, context=None):
-    """
-    Abstract function that return the filter
+    """Abstract function that return the filter
     Can be overwriten in your module
 
     :param ExternalSession external_session : External_session that contain all params of connection
     :param int step: Step the of the import, 100 meant you will import data per 100
     :param dict previous_filter: the previous filter
-    :return: dictionary with a filter
     :rtype: dict
+    :return: dictionary with a filter
     """
     return None
 
 @extend(osv.osv)
 def _get_external_resource_ids(self, cr, uid, external_session, resource_filter=None, mapping=None, context=None):
-    """
-    Abstract function that return the external resource ids
+    """Abstract function that return the external resource ids
     Can be overwriten in your module
 
     :param ExternalSession external_session : External_session that contain all params of connection
     :param dict resource_filter: the filter to apply to the external search method
-    :param dict mapping: dictionnary of mapping, the key is the openerp object's name
-    :return: a list of external_id
+    :param dict mapping: dictionnary of mapping, the key is the mapping id
     :rtype: list
+    :return: a list of external_id
     """
     raise osv.except_osv(_("Not Implemented"), _("The method _get_external_resource_ids is not implemented in abstract base module!"))
 
 @extend(osv.osv)
 def _get_default_import_values(self, cr, uid, external_session, mapping_id=None, defaults=None, context=None):
-    """
-    Abstract function that return the default value for on object
+    """Abstract function that return the default value for on object
     Can be overwriten in your module
 
     :param ExternalSession external_session : External_session that contain all params of connection
-    :return: a dictionnary of default value
+    :param int mapping_id: id of the mapping
     :rtype: dict
+    :return: a dictionnary of default values
     """
     return defaults
 
 @extend(osv.osv)
 def _get_import_step(self, cr, uid, external_session, context=None):
-    """
-    Abstract function that return the step for importing data
+    """Abstract function that return the step for importing data
     Can be overwriten in your module
 
     :param ExternalSession external_session : External_session that contain all params of connection
-    :return: a integer that corespond to the limit of object to import
     :rtype: int
+    :return: a integer that corespond to the limit of object to import
     """
     return 100
 
 @extend(osv.osv)
 def _get_external_resources(self, cr, uid, external_session, external_id=None, resource_filter=None, mapping=None, fields=None, context=None):
-    """
-    Abstract function that return the external resource
+    """Abstract function that return the external resource
     Can be overwriten in your module
 
     :param ExternalSession external_session : External_session that contain all params of connection
@@ -380,25 +445,33 @@ def _get_external_resources(self, cr, uid, external_session, external_id=None, r
     :param dict resource_filter: the filter to apply to the external search method
     :param dict mapping: dictionnary of mapping, the key is the openerp object's name
     :param list fields: list of field to read
-    :return: a list of dict that contain resource information
     :rtype: list
+    :return: a list of dict that contain resource information
     """
     raise osv.except_osv(_("Not Implemented"), _("The method _get_external_resources is not implemented in abstract base module!"))
 
 @extend(osv.osv)
 def _get_mapping_id(self, cr, uid, referential_id, context=None):
-    """
-    Function that return the mapping id for the corresponding object
+    """Function that return the mapping id for the corresponding object
 
-    :params int referential_id: the referential id
-    :return the id of the mapping
+    :param int referential_id: the referential id
     :rtype integer
+    :return the id of the mapping
     """
     mapping_id = self.pool.get('external.mapping').search(cr, uid, [('model', '=', self._name), ('referential_id', '=', referential_id)], context=context)
     return mapping_id and mapping_id[0] or False
 
 @extend(osv.osv)
 def _init_mapping(self, cr, uid, referential_id, convertion_type='from_external_to_openerp', mapping_line_filter_ids=None, mapping=None, mapping_id=None, context=None):
+    """Function to initialise mapping
+    :param int referential_id: the referential id
+    :param str convertion_type: the type of convertion 'from_external_to_openerp' or 'from_openerp_to_external'
+    :param list mapping_line_filter_ids: list of mappin line allowed to used
+    :param dict mapping: dict of mapping already loaded
+    :param int mapping_id: mapping id
+    :rtype int
+    :return the id of the mapping
+    """
     if not mapping:
         mapping={}
     if not mapping_id:
@@ -409,12 +482,14 @@ def _init_mapping(self, cr, uid, referential_id, convertion_type='from_external_
 
 @extend(osv.osv)
 def _get_mapping(self, cr, uid, referential_id, convertion_type='from_external_to_openerp', mapping_line_filter_ids=None, mapping_id=None, context=None):
-    """
-    Function that return the mapping line for the corresponding object
+    """Function that return the mapping line for the corresponding object
 
     :param  int referential_id: the referential id
-    :return: dictionary with the key "mapping_lines" and "key_for_external_id"
+    :param str convertion_type: the type of convertion 'from_external_to_openerp' or 'from_openerp_to_external'
+    :param list mapping_line_filter_ids: list of mappin line allowed to used
+    :param int mapping_id: mapping id
     :rtype: dict
+    :return: dictionary with the key "mapping_lines" and "key_for_external_id"
     """
     if not mapping_id:
         mapping_id = self._get_mapping_id(cr, uid, referential_id, context=context)
@@ -442,13 +517,14 @@ def _get_mapping(self, cr, uid, referential_id, convertion_type='from_external_t
 
 @extend(osv.osv)
 def import_resources(self, cr, uid, ids, resource_name, method="search_then_read", context=None):
-    """
-    Abstract function to import resources from a shop / a referential...
+    """Abstract function to import resources from a shop / a referential...
 
     :param list ids: list of id
-    :param string ressource_name: the resource name to import
-    :return: dictionary with the key "create_ids" and "write_ids" which containt the id created/written
+    :param str ressource_name: the resource name to import
+    :param str method: method used for importing the resource (search_then_read,
+                            search_then_read_no_loop, search_read, search_read_no_loop )
     :rtype: dict
+    :return: dictionary with the key "create_ids" and "write_ids" which containt the id created/written
     """
     result = {"create_ids" : [], "write_ids" : []}
     for browse_record in self.browse(cr, uid, ids, context=context):
@@ -469,14 +545,14 @@ def import_resources(self, cr, uid, ids, resource_name, method="search_then_read
 
 @extend(osv.osv)
 def _import_resources(self, cr, uid, external_session, defaults=None, method="search_then_read", context=None):
-    """
-    Abstract function to import resources form a specific object (like shop, referential...)
+    """Abstract function to import resources form a specific object (like shop, referential...)
 
     :param ExternalSession external_session : External_session that contain all params of connection
     :param dict defaults: default value for the resource to create
-    :param str method: method to use to import resource
-    :return: dictionary with the key "create_ids" and "write_ids" which containt the id created/written
+    :param str method: method used for importing the resource (search_then_read,
+                            search_then_read_no_loop, search_read, search_read_no_loop )
     :rtype: dict
+    :return: dictionary with the key "create_ids" and "write_ids" which containt the id created/written
     """
     external_session.logger.info("Start to import the ressource %s"%(self._name,))
     result = {"create_ids" : [], "write_ids" : []}
@@ -537,8 +613,7 @@ def _import_resources(self, cr, uid, external_session, defaults=None, method="se
 
 @extend(osv.osv)
 def _import_one_resource(self, cr, uid, external_session, external_id, context=None):
-    """
-    Abstract function to import one resource
+    """Abstract function to import one resource
 
     :param ExternalSession external_session : External_session that contain all params of connection
     :param int external_id : resource external id to import
@@ -556,15 +631,15 @@ def _import_one_resource(self, cr, uid, external_session, external_id, context=N
 
 @extend(osv.osv)
 def _record_external_resources(self, cr, uid, external_session, resources, defaults=None, mapping=None, mapping_id=None, context=None):
-    """
-    Abstract function to record external resources (this will convert the data and create/update the object in openerp)
+    """Abstract function to record external resources (this will convert the data and create/update the object in openerp)
 
     :param ExternalSession external_session : External_session that contain all params of connection
     :param list resource: list of resource to import
     :param dict defaults: default value for the resource to create
-    :param dict mapping: dictionnary of mapping, the key is the openerp object's name
-    :return: dictionary with the key "create_ids" and "write_ids" which containt the id created/written
+    :param dict mapping: dictionnary of mapping, the key is the mapping id
+    :param int mapping_id: mapping id
     :rtype: dict
+    :return: dictionary with the key "create_ids" and "write_ids" which containt the id created/written
     """
     result = {'write_ids': [], 'create_ids': []}
     mapping, mapping_id = self._init_mapping(cr, uid, external_session.referential_id.id, mapping=mapping, mapping_id=mapping_id, context=context)
@@ -584,14 +659,16 @@ def _record_external_resources(self, cr, uid, external_session, resources, defau
 
 @extend(osv.osv)
 def _record_one_external_resource(self, cr, uid, external_session, resource, defaults=None, mapping=None, mapping_id=None, context=None):
-    """
-    Used in _record_external_resources
+    """Used in _record_external_resources
     The resource will converted into OpenERP data by using the function _transform_external_resources
     And then created or updated, and an external id will be added into the table ir.model.data
 
+    :param ExternalSession external_session : External_session that contain all params of connection
     :param dict resource: resource to convert into OpenERP data
-    :param int referential_id: external referential id from where we import the resource
-    :param dict defaults: defaults value
+    :param dict defaults: default values
+    :param dict mapping: dictionnary of mapping, the key is the mapping id
+    :param int mapping_id: mapping id
+    :rtype: dict
     :return: dictionary with the key "create_id" and "write_id" which containt the id created/written
     """
     mapping, mapping_id = self._init_mapping(cr, uid, external_session.referential_id.id, mapping=mapping, mapping_id=mapping_id, context=context)
@@ -663,12 +740,31 @@ def retry_import(self, cr, uid, id, ext_id, referential_id, defaults=None, conte
 
 @extend(osv.osv)
 def oe_update(self, cr, uid, external_session, existing_rec_id, vals, resource, defaults, context=None):
+    """Update an existing resource in OpenERP
+    
+    :param ExternalSession external_session : External_session that contain all params of connection
+    :param int existing_rec_id: openerp id to update
+    :param dict vals: vals to write
+    :param dict resource: resource to convert into OpenERP data
+    :param dict defaults: default values
+    :rtype boolean
+    :return: True
+    """
     if not context: context={}
     context['referential_id'] = external_session.referential_id.id #did it's needed somewhere?
     return self.write(cr, uid, existing_rec_id, vals, context)
 
 @extend(osv.osv)
 def oe_create(self, cr, uid, external_session, vals, resource, defaults, context=None):
+    """Create an new resource in OpenERP
+    
+    :param ExternalSession external_session : External_session that contain all params of connection
+    :param dict vals: vals to create
+    :param dict resource: resource to convert into OpenERP data
+    :param dict defaults: default values
+    :rtype int
+    :return: the id of the resource created
+    """
     if not context: context={}
     context['referential_id'] = external_session.referential_id.id  #did it's needed somewhere?
     return self.create(cr, uid, vals, context)
@@ -690,39 +786,62 @@ def oe_create(self, cr, uid, external_session, vals, resource, defaults, context
 
 @extend(osv.osv)
 def _get_export_step(self, cr, uid, external_session, context=None):
-    """
-    Abstract function that return the step for importing data
+    """Abstract function that return the step for importing data
     Can be overwriten in your module
 
     :param ExternalSession external_session : External_session that contain all params of connection
-    :return: a integer that corespond to the limit of object to import
     :rtype: int
+    :return: a integer that corespond to the limit of object to import
     """
     return 10
 
 @extend(osv.osv)
 def _get_default_export_values(self, cr, uid, external_session, mapping_id=None, defaults=None, context=None):
-    """
-    Abstract function that return the default value for on object
+    """Abstract function that return the default value for on object
     Can be overwriten in your module
 
     :param ExternalSession external_session : External_session that contain all params of connection
-    :return: a dictionnary of default value
+    :param int mapping_id: mapping id
+    :param dict defaults: default values
     :rtype: dict
+    :return: a dictionnary of default values
     """
     return defaults
 
 @extend(osv.osv)
 def _get_last_exported_date(self, cr, uid, external_session, context=None):
+    """Abstract function that return the last export date for on object
+    Can be overwriten in your module
+
+    :param ExternalSession external_session : External_session that contain all params of connection
+    :rtype: str
+    :return: the last export date or False
+    """
     return False
 
 @extend(osv.osv)
 def _set_last_exported_date(self, cr, uid, external_session, date, context=None):
-    return False
+    """Abstract function that update the last exported date
+    Can be overwriten in your module
+
+    :param ExternalSession external_session : External_session that contain all params of connection
+    :param date : date
+    :rtype: boolean
+    :return: True
+    """
+    return True
 
 #For now it's just support 1 level of inherit TODO make it recursive
 @extend(osv.osv)
 def _get_query_and_params_for_ids_and_date(self, cr, uid, external_session, ids=None, last_exported_date=None, context=None):
+    """Function that build the sql query for getting the ids and the udpate date of each record
+
+    :param ExternalSession external_session : External_session that contain all params of connection
+    :param list ids : if not empty the ids will be used in the sql request in order to filter the record
+    :param str last_exported_date : last exported date
+    :rtype: tuple
+    :return: an tuple of query and params
+    """
     object_table = self._table
     params = ()
     if not self._inherits:
@@ -778,6 +897,14 @@ def _get_query_and_params_for_ids_and_date(self, cr, uid, external_session, ids=
 
 @extend(osv.osv)
 def get_ids_and_update_date(self, cr, uid, external_session, ids=None, last_exported_date=None, context=None):
+    """This function will return the list of ids and the update date of each record_dicts
+
+    :param ExternalSession external_session : External_session that contain all params of connection
+    :param list ids : if not empty the ids will be used in the sql request in order to filter the record
+    :param str last_exported_date : last exported date
+    :rtype: tuple
+    :return: an tuple of ids and ids_2_dates (dict with key => 'id' and val => 'last_update_date')
+    """
     query, params = self._get_query_and_params_for_ids_and_date(cr, uid, external_session, ids=ids, last_exported_date=last_exported_date, context=context)
     cr.execute(query, params)
     read = cr.dictfetchall()
@@ -788,6 +915,8 @@ def get_ids_and_update_date(self, cr, uid, external_session, ids=None, last_expo
         ids_2_dates[data['id']] = data['update_date']
     return ids, ids_2_dates
 
+
+#Deprecated
 @extend(osv.osv)
 def init_context_before_exporting_resource(self, cr, uid, external_session, object_id, resource_name, context=None):
     if self._name != 'external.referential' and 'referential_id' in self._columns.keys():
@@ -816,8 +945,21 @@ def export_resources(self, cr, uid, ids, resource_name, context=None):
         self.pool.get(resource_name)._export_resources(cr, uid, external_session, context=context)
     return True
 
+
+#TODO refactor update date,maybe it will be better to have an update date per resource
+#TODO deal correctly with multi resource
 @extend(osv.osv)
 def send_to_external(self, cr, uid, external_session, resources, mapping, mapping_id, update_date=None, context=None):
+    """Generic method that send the resource to an external referential
+
+    :param ExternalSession external_session : External_session that contain all params of connection
+    :param list resources: list of resources to export
+    :param dict mapping: dictionnary of mapping, the key is the mapping id
+    :param date update_date: if not empty the update date will be write in the last update date of the objec
+    :rtype: int/str
+    :return: the external resource exported
+
+    """
     resources_to_update = {}
     resources_to_create = {}
     for resource_id, resource in resources.items():
@@ -867,6 +1009,13 @@ def ext_unlink(self, cr, uid, ids, context=None):
 
 @extend(osv.osv)
 def get_lang_to_export(self, cr, uid, external_session, context=None):
+    """Get the list of lang to export
+    
+    :param ExternalSession external_session : External_session that contain all params of connection
+    :rtype: list
+    return: the list of lang to export
+    """
+    
     if not context:
         return []
     else:
@@ -874,6 +1023,13 @@ def get_lang_to_export(self, cr, uid, external_session, context=None):
 
 @extend(osv.osv)
 def _export_resources(self, cr, uid, external_session, method="onebyone", context=None):
+    """Export resource
+    
+    :param ExternalSession external_session : External_session that contain all params of connection
+    :param str method: method to export data (for now only onebyone)
+    :rtype: boolean
+    return: True
+    """
     external_session.logger.info("Start to export the ressource %s"%(self._name,))
     defaults = self._get_default_export_values(cr, uid, external_session, context=context)
     mapping, mapping_id = self._init_mapping(cr, uid, external_session.referential_id.id, convertion_type='from_openerp_to_external', context=context)
@@ -913,6 +1069,20 @@ def _export_resources(self, cr, uid, external_session, method="onebyone", contex
 @extend(osv.osv)
 def _transform_and_send_one_resource(self, cr, uid, external_session, resource, resource_id,
                             update_date, mapping, mapping_id, defaults=None, context=None):
+    """Transform and send one resource
+    The resource will converted into External format by using the function _transform_one_resource
+    And then send to the external system using the method send_to_external
+
+    :param ExternalSession external_session : External_session that contain all params of connection
+    :param dict resource: resource to convert into OpenERP data
+    :param int resource_id: openerp id of the resource to send
+    :param str method: method to export data (for now only onebyone)
+    :param dict mapping: dictionnary of mapping, the key is the mapping id
+    :param int mapping_id: mapping id
+    :param dict defaults: default values
+    :rtype: str/int
+    :return: the external id
+    """
     for key_lang in resource:
         resource[key_lang] = self._transform_one_resource(cr, uid, external_session, 'from_openerp_to_external',
                                             resource[key_lang], mapping=mapping, mapping_id=mapping_id,
@@ -921,6 +1091,14 @@ def _transform_and_send_one_resource(self, cr, uid, external_session, resource, 
 
 @extend(osv.osv)
 def _export_one_resource(self, cr, uid, external_session, resource_id, context=None):
+    """Export one resource
+    Export an OpenERP resource into an external system
+
+    :param ExternalSession external_session : External_session that contain all params of connection
+    :param int resource_id: openerp id of the resource to send
+    :rtype: str/int
+    :return: the external id
+    """
     defaults = self._get_default_export_values(cr, uid, external_session, context=context)
     mapping, mapping_id = self._init_mapping(cr, uid, external_session.referential_id.id, convertion_type='from_openerp_to_external', context=context)
     langs = self.get_lang_to_export(cr, uid, external_session, context=context)
@@ -929,6 +1107,8 @@ def _export_one_resource(self, cr, uid, external_session, resource_id, context=N
                                 mapping=mapping, mapping_id=mapping_id, context=context)[resource_id]
     return self._transform_and_send_one_resource(cr, uid, external_session, resource, resource_id,
                             False, mapping, mapping_id, defaults=defaults, context=context)
+
+#TODO finish docstring
 
 @extend(osv.osv)
 def multi_lang_read(self, cr, uid, ids, fields_to_read, langs, resources=None, use_multi_lang = True, context=None):

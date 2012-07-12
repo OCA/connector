@@ -152,6 +152,8 @@
                     <field name="action"/>
                     <field name="date"/>
                     <field name="state"/>
+                    <separator string="Error Message" colspan="4"/>
+                        <field name="error_message" colspan="4" nolabel="1"/>
                     <separator string="External Data" colspan="4"/>
                         <field name="resource_text" colspan="4" nolabel="1"/>
                     <separator colspan="4"/>

@@ -110,7 +110,7 @@ class ExternalSession(object):
         - tmp : a temporary dict to store data
         """
         self.referential_id = referential
-        self.sync_from_object = sync_from_object
+        self.sync_from_object = sync_from_object or referential
         self.debug = referential.debug
         self.logger = logging.getLogger(referential.name)
         self.connection = referential.external_connection(debug=self.debug, logger = self.logger)
@@ -733,12 +733,6 @@ def _record_one_external_resource(self, cr, uid, external_session, resource, def
     return {}
 
 @extend(osv.osv)
-def retry_import(self, cr, uid, id, ext_id, referential_id, defaults=None, context=None):
-    """ When we import again a previously failed import
-    """
-    raise osv.except_osv(_("Not Implemented"), _("Not Implemented in abstract base module!"))
-
-@extend(osv.osv)
 def oe_update(self, cr, uid, external_session, existing_rec_id, vals, resource, defaults, context=None):
     """Update an existing resource in OpenERP
     
@@ -1216,7 +1210,7 @@ def _get_oeid_from_extid_or_alternative_keys(self, cr, uid, vals, external_id, r
             domain = ['|', ('active', '=', False), ('active', '=', True)]
         for alternative_key in alternative_keys:
             if vals.get(alternative_key):
-                domain.append((alternative_key, '=ilike', vals[alternative_key]))
+                domain.append((alternative_key, '=', vals[alternative_key]))
         if domain:
             expected_res_id = self.search(cr, uid, domain, context=context)
             expected_res_id = expected_res_id and expected_res_id[0] or False

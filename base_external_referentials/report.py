@@ -20,6 +20,8 @@
 import time
 import pooler
 import logging
+import sys
+import traceback
 from osv import osv, fields
 from tools.translate import _
 from tools.safe_eval import safe_eval
@@ -239,6 +241,8 @@ class external_report_lines(osv.osv):
         'date': fields.datetime('Date', required=True, readonly=True),
         'external_id': fields.char('External ID', size=64, readonly=True),
         'error_message': fields.text('Error Message', readonly=True),
+        'traceback': fields.text('Traceback', readonly=True),
+        'exception_type': fields.char('Exception Type', size=128, readonly=True),
         'resource': fields.serialized('External Data', readonly=True),
         'resource_text':fields.function(_get_resource, fnct_inv=_set_resource, type="text", string='External Data'),
         'args': fields.serialized('Args', readonly=True),
@@ -289,9 +293,14 @@ class external_report_lines(osv.osv):
 
     @commit_now
     def log_fail(self, cr, uid, external_session, report_line_id, error_message, context=None):
-        external_session.logger.error(error_message)
+        exc_type, exc_value, exc_traceback = sys.exc_info()
+
+        external_session.logger.exception(error_message)
         self.write(cr, uid, report_line_id, {
                             'error_message': error_message,
+                            'exception_type': exc_type,
+                            'traceback': ''.join(traceback.format_exception(
+                                exc_type, exc_value, exc_traceback)),
                             'state': 'fail',
                             }, context=context)
         if external_session.tmp.get('history_id'):

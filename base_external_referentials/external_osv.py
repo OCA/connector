@@ -354,7 +354,11 @@ def _get_external_resources(self, cr, uid, external_session, external_id=None, r
     :return: a list of dict that contain resource information
     :rtype: list
     """
-    raise osv.except_osv(_("Not Implemented"), _("The method _get_external_resources is not implemented in abstract base module!"))
+    mapping, mapping_id = self._init_mapping(cr, uid, external_session.referential_id.id, mapping=mapping, context=context)
+    if not resource_filter: resource_filter = {}
+    if external_id: resource_filter[mapping[mapping_id]['key_for_external_id']] = external_id
+
+    return getattr(external_session.connection, mapping[mapping_id]['external_get_method'])(mapping[mapping_id]['external_resource_name'], resource_filter)
 
 @extend(osv.osv)
 def _get_mapping_id(self, cr, uid, referential_id, context=None):
@@ -501,6 +505,7 @@ def _import_resources(self, cr, uid, external_session, defaults=None, method="se
             resources = self._get_external_resources(cr, uid, external_session, resource_filter=resource_filter, mapping=mapping, fields=None, context=context)
             if not hasattr(resources, '__iter__'):
                 resources = [resources]
+            import pdb; pdb.set_trace()
             res = self._record_external_resources(cr, uid, external_session, resources, defaults=defaults, mapping=mapping, mapping_id=mapping_id, context=context)
             for key in result:
                 result[key].append(res.get(key, []))
@@ -996,10 +1001,6 @@ def _get_oeid_from_extid_or_alternative_keys(self, cr, uid, vals, external_id, r
     if not (external_id is None or external_id is False):
         existing_ir_model_data_id, expected_res_id = self._get_expected_oeid\
         (cr, uid, external_id, referential_id, context=context)
-    # Take care of deleted resource ids, cleans up ir.model.data
-        if existing_ir_model_data_id and expected_res_id and not self.exists(cr, uid, expected_res_id, context=context):
-            self.pool.get('ir.model.data').unlink(cr, uid, existing_ir_model_data_id, context=context)
-            existing_ir_model_data_id = expected_res_id = False
 
     if not expected_res_id and alternative_keys:
         domain = []
@@ -1178,6 +1179,7 @@ def _transform_one_resource(self, cr, uid, external_session, convertion_type, re
             return {}
     vals = self._merge_with_default_values(cr, uid, external_session, resource, vals, sub_mapping_list, defaults=defaults, context=context)
     vals = self._transform_sub_mapping(cr, uid, external_session, convertion_type, resource, vals, sub_mapping_list, mapping, mapping_id, mapping_line_filter_ids=mapping_line_filter_ids, defaults=defaults, context=context)
+
     return vals
 
 @extend(osv.osv)

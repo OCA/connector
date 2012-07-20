@@ -44,5 +44,10 @@ class external_referential(osv.osv):
         'home_folder': fields.char('Home Folder', size=64),
     }
 
+    def get_file_to_import(cr, uid, referential_id, mapping_id, context=None):
+        '''
+        return les file_buffer qui sont a l’état waiting pour le referential et le mapping_id choisi
+        '''
+
 external_referential()
 

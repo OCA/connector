@@ -30,6 +30,7 @@ import logging
 import pooler
 from collections import defaultdict
 from lxml import objectify
+from openerp.tools.config import config
 
 
 from message_error import MappingError, ExtConnError
@@ -1354,6 +1355,7 @@ def _transform_one_resource(self, cr, uid, external_session, convertion_type, re
                         exec mapping_line[mapping_function_key] in space
                     except Exception, e:
                         #del(space['__builtins__'])
+                        if config['debug_mode']: raise
                         raise MappingError(e, mapping_line['name'], self._name)
 
                     result = space.get('result', False)

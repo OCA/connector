@@ -30,11 +30,13 @@ import logging
 import pooler
 from collections import defaultdict
 from lxml import objectify
-
+from openerp.tools.config import config
 
 from message_error import MappingError, ExtConnError
 from tools.translate import _
 from tools import DEFAULT_SERVER_DATETIME_FORMAT, DEFAULT_SERVER_DATE_FORMAT
+#TODO fix me import do not work
+#from base_external_referentials.decorator import commit_now
 
 #TODO refactor the mapping are stored in a dictionnary to avoid useless read during all of the process.
 #It should be better to use the orm cache or something similare
@@ -448,7 +450,11 @@ def _get_external_resources(self, cr, uid, external_session, external_id=None, r
     :rtype: list
     :return: a list of dict that contain resource information
     """
-    raise osv.except_osv(_("Not Implemented"), _("The method _get_external_resources is not implemented in abstract base module!"))
+    mapping, mapping_id = self._init_mapping(cr, uid, external_session.referential_id.id, mapping=mapping, context=context)
+    if not resource_filter: resource_filter = {}
+    if external_id: resource_filter[mapping[mapping_id]['key_for_external_id']] = external_id
+
+    return getattr(external_session.connection, mapping[mapping_id]['external_get_method'])(mapping[mapping_id]['external_resource_name'], resource_filter)
 
 @extend(osv.osv)
 def _get_mapping_id(self, cr, uid, referential_id, context=None):
@@ -997,8 +1003,8 @@ def ext_unlink(self, cr, uid, ids, context=None):
             external_session = ExternalSession(ir_model.referential_id)
             mapping = self._get_mapping(cr, uid, ref_id)
             getattr(external_session.connection, mapping['external_delete_method'])(mapping['external_resource_name'], ext_id)
-            commit_now(ir_model.unlink())
-
+            #commit_now(ir_model.unlink())
+            ir_model.unlink()
     return True
 
 @extend(osv.osv)
@@ -1199,10 +1205,6 @@ def _get_oeid_from_extid_or_alternative_keys(self, cr, uid, vals, external_id, r
     if not (external_id is None or external_id is False):
         existing_ir_model_data_id, expected_res_id = self._get_expected_oeid\
         (cr, uid, external_id, referential_id, context=context)
-    # Take care of deleted resource ids, cleans up ir.model.data
-        if existing_ir_model_data_id and expected_res_id and not self.exists(cr, uid, expected_res_id, context=context):
-            self.pool.get('ir.model.data').unlink(cr, uid, existing_ir_model_data_id, context=context)
-            existing_ir_model_data_id = expected_res_id = False
 
     if not expected_res_id and alternative_keys:
         domain = []
@@ -1354,6 +1356,7 @@ def _transform_one_resource(self, cr, uid, external_session, convertion_type, re
                         exec mapping_line[mapping_function_key] in space
                     except Exception, e:
                         #del(space['__builtins__'])
+                        if config['debug_mode']: raise
                         raise MappingError(e, mapping_line['name'], self._name)
 
                     result = space.get('result', False)
@@ -1381,6 +1384,7 @@ def _transform_one_resource(self, cr, uid, external_session, convertion_type, re
             return {}
     vals = self._merge_with_default_values(cr, uid, external_session, resource, vals, sub_mapping_list, defaults=defaults, context=context)
     vals = self._transform_sub_mapping(cr, uid, external_session, convertion_type, resource, vals, sub_mapping_list, mapping, mapping_id, mapping_line_filter_ids=mapping_line_filter_ids, defaults=defaults, context=context)
+
     return vals
 
 @extend(osv.osv)

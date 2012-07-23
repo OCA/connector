@@ -226,7 +226,6 @@ class external_referential(osv.osv):
                     self.pool.get('external.mapping').write(cr, uid, mapping_id, vals, context=context)
 
                 template_mapping_id_to_mapping_id[each_mapping_rec['id']] = mapping_id
-
                 #Now create mapping lines of the created mapping model
                 mapping_lines_src_ids = self.pool.get('external.mappinglines.template').search(cr, uid, [('mapping_id', '=', each_mapping_rec['id'])])
                 for each_mapping_line_rec in  self.pool.get('external.mappinglines.template').read(cr, uid, mapping_lines_src_ids, []):
@@ -359,7 +358,22 @@ class external_referential(osv.osv):
         if isinstance(id,list):
             id = id[0]
         output_file = TemporaryFile('w+b')
-        fieldnames = ['id','model_id:id','extra_name','external_list_method','external_search_method','external_get_method', 'external_update_method','external_create_method','external_delete_method','external_done_method','key_for_external_id','external_resource_name', 'version_id:id']
+        fieldnames = [
+          'id',
+          'version_id:id',
+          'model_id:id',
+          'extra_name',
+          'external_resource_name',
+          'key_for_external_id',
+          'external_list_method',
+          'external_search_method',
+          'external_get_method',
+          'external_update_method',
+          'external_create_method',
+          'external_delete_method',
+          'external_done_method',
+        ]
+
         csv = FileCsvWriter(output_file, fieldnames, encoding="utf-8", writeheader=True, delimiter=',', quotechar='"')
 
         referential = self.browse(cr, uid, id, context=context)
@@ -388,7 +402,22 @@ class external_referential(osv.osv):
         if isinstance(id,list):
             id = id[0]
         output_file = TemporaryFile('w+b')
-        fieldnames = ['id', 'sequence', 'type', 'evaluation_type', 'external_field', 'field_id:id', 'external_type', 'alternative_key', 'mapping_id:id', 'function_name', 'in_function','out_function','child_mapping_id:id','datetime_format']
+        fieldnames = [
+          'id',
+          'mapping_id:id',
+          'sequence',
+          'type',
+          'evaluation_type',
+          'field_id:id',
+          'external_field',
+          'external_type',
+          'datetime_format',
+          'function_name',
+          'in_function',
+          'out_function',
+          'child_mapping_id:id',
+          'alternative_key',
+        ]
 
         csv = FileCsvWriter(output_file, fieldnames, encoding="utf-8", writeheader=True, delimiter=',', quotechar='"')
 

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  file_buffer for OpenERP
+  Copyright (C) 2012 Akretion David BEAL <david.beal@akretion.com>
+  The licence is in the file __openerp__.py -->
+
+<openerp>
+    <data>
+
+
+<!-- VIEW FOR THE OBJECT : file_buffer -->
+<record id="file_buffer_view_form" model="ir.ui.view">
+    <field name="name">file_buffer.file_buffer.view_form</field>
+    <field name="model">file.buffer</field>
+    <field eval="16" name="priority"/>
+    <field name="type">form</field>
+    <field name="arch" type="xml">
+    <form string="file_buffer">
+        <field name="name" />
+        <field name="state" />
+        <field name="mapping_id" />
+        <field name="file_id" />
+        <field name="referential_id"/>
+        <field name="job_ended" />
+        <field name="active"/>
+        <button name="run" string="Run" colspan="2" type="object" />
+    </form>
+    </field>
+</record>
+
+<record id="file_buffer_view_tree" model="ir.ui.view">
+    <field name="name">file_buffer.file_buffer.view_tree</field>
+    <field name="model">file.buffer</field>
+    <field eval="16" name="priority"/>
+    <field name="type">tree</field>
+    <field name="arch" type="xml">
+        <tree string="file_buffer">
+            <field name="name" />
+            <field name="state" />
+            <field name="active" string="act." />
+            <field name="mapping_id" />
+            <field name="file_id" />
+            <field name="job_ended" />
+            <field name="referential_id" string="ex ref"/>
+        </tree>
+    </field>
+</record>
+
+<!-- Action used by menu -->
+<record id="action_external_file_buffer" model="ir.actions.act_window">
+    <field name="name">File buffer</field>
+    <field name="res_model">file.buffer</field>
+    <field name="view_type">form</field>
+    <field name="view_mode">tree,form</field>
+</record>
+
+<menuitem id="act_menu_external_file_buffer" action="action_external_file_buffer" parent="base_external_referentials.ir_ui_menu_external_referentials" sequence="25" />
+
+
+    </data>
+</openerp>

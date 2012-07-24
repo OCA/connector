@@ -335,7 +335,7 @@ def _get_import_step(self, cr, uid, external_session, context=None):
     Can be overwriten in your module
 
     :param ExternalSession external_session : External_session that contain all params of connection
-    :return: a integer that corespond to the limit of object to import
+    :return: a integer that correspond to the limit of object to import
     :rtype: int
     """
     return 100
@@ -463,6 +463,7 @@ def _import_resources(self, cr, uid, external_session, defaults=None, method="se
         if method == 'search_then_read':
             while True:
                 resource_filter = self._get_filter(cr, uid, external_session, step, previous_filter=resource_filter, context=context)
+                import pdb; pdb.set_trace()
                 ext_ids = self._get_external_resource_ids(cr, uid, external_session, resource_filter, mapping=mapping, context=context)
                 if not ext_ids:
                     break

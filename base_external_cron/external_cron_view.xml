@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  base_external_cron for OpenERP
+  Copyright (C) 2012 Akretion David BEAL <david.beal@akretion.com>
+  The licence is in the file __openerp__.py
+-->
+
+<openerp>
+    <data>
+
+        <!-- VIEWS FOR THE OBJECT : external.cron -->
+        <!-- form -->
+        <record id="external_cron_view_form" model="ir.ui.view">
+            <field name="name">base_external_cron.external.cron.view_form</field>
+            <field name="model">external.cron</field>
+            <field eval="16" name="priority"/>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="external.cron">
+                    <field name="name" />
+                    <field name="active" />
+                    <field name="period" />
+                    <field name="frequency" />
+<!--
+                    <field name="repeat" readonly="1" />
+-->
+                    <field name="repeat" />
+                    <field name="report_type" />
+                    <field name="referential_id" />
+                    <button colspan='2' name="action_test" string="infos" type="object" />
+                </form>
+            </field>
+        </record>
+
+        <!-- tree -->
+        <record id="external_cron_view_tree" model="ir.ui.view">
+            <field name="name">base_external_cron.external.cron.view_tree</field>
+            <field name="model">external.cron</field>
+            <field eval="16" name="priority"/>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="external.cron">
+                    <field name="name" />
+                    <field name="active" />
+                    <field name="period" />
+                    <field name="report_type" />
+                    <field name="frequency" />
+                    <field name="repeat" />
+                    <field name="referential_id" />
+                </tree>
+            </field>
+        </record>
+
+        <!-- Action used by menu -->
+        <record id="action_external_cron" model="ir.actions.act_window">
+            <field name="name">External Cron</field>
+            <field name="res_model">external.cron</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem id="act_menu_external_cron" action="action_external_cron"
+            parent="base_external_referentials.ir_ui_menu_external_referentials" sequence="30" />
+
+    </data>
+</openerp>

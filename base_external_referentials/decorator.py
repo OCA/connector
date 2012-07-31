@@ -25,6 +25,7 @@ from tools.translate import _
 from message_error import MappingError
 import functools
 import xmlrpclib
+from openerp.tools.config import config
 
 #TODO refactor me we should create 2 decorator
 # 1 only_for_referential
@@ -128,18 +129,22 @@ def catch_error_in_report(func):
         try:
             response = func(self, import_cr, uid, external_session, resource, *args, **kwargs)
         except MappingError as e:
+            if config['debug_mode']: raise
             import_cr.rollback()
             error_message = 'Error with the mapping : %s. Error details : %s'%(e.mapping_name, e.value),
             report_line_obj.log_fail(cr, uid, external_session, report_line_id, error_message, context=context)
         except xmlrpclib.Fault as e:
+            if config['debug_mode']: raise
             import_cr.rollback()
             error_message = 'Error with xmlrpc protocole. Error details : error %s : %s'%(e.faultCode, e.faultString)
             report_line_obj.log_fail(cr, uid, external_session, report_line_id, error_message, context=context)
         except osv.except_osv as e:
+            if config['debug_mode']: raise
             import_cr.rollback()
             error_message = '%s : %s'%(e.name, e.value)
             report_line_obj.log_fail(cr, uid, external_session, report_line_id, error_message, context=context)
         except Exception as e:
+            if config['debug_mode']: raise
             #TODO write correctly the message in the report
             import_cr.rollback()
             error_message = str(e)

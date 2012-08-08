@@ -87,7 +87,7 @@ def override(class_to_extend, prefix):
         if not hasattr(class_to_extend, func.func_name):
             raise osv.except_osv(_("Developper Error"),
                 _("You can replace the method %s of the class %s. "
-                "Indeed this method doesn't exist")%func.func_name)
+                "Indeed this method doesn't exist")%(func.func_name, class_to_extend))
         original_function_name = prefix + func.func_name
         if hasattr(class_to_extend, original_function_name):
             raise osv.except_osv(_("Developper Error"),
@@ -1048,6 +1048,8 @@ def _export_resources(self, cr, uid, external_session, method="onebyone", contex
     smart_export =  context.get('smart_export') and (group_ids or inherits_group_ids) and {'group_ids': group_ids, 'inherits_group_ids': inherits_group_ids}
 
     langs = self.get_lang_to_export(cr, uid, external_session, context=context)
+    context['main_lang_to_export'] = langs[0]
+    context['other_langs_to_export'] = langs[1:]
 
     while ids:
         ids_to_process = ids[0:step]
@@ -1102,25 +1104,32 @@ def _export_one_resource(self, cr, uid, external_session, resource_id, context=N
     defaults = self._get_default_export_values(cr, uid, external_session, context=context)
     mapping, mapping_id = self._init_mapping(cr, uid, external_session.referential_id.id, convertion_type='from_openerp_to_external', context=context)
     langs = self.get_lang_to_export(cr, uid, external_session, context=context)
+    context['main_lang_to_export'] = langs[0]
+    context['other_langs_to_export'] = langs[1:]
     resource = self._get_oe_resources(cr, uid, external_session, [resource_id], langs=langs,
                                 smart_export=False, last_exported_date=False,
                                 mapping=mapping, mapping_id=mapping_id, context=context)[resource_id]
     return self._transform_and_send_one_resource(cr, uid, external_session, resource, resource_id,
                             False, mapping, mapping_id, defaults=defaults, context=context)
 
-#TODO finish docstring
-
 @extend(osv.osv)
-def multi_lang_read(self, cr, uid, ids, fields_to_read, langs, resources=None, use_multi_lang = True, context=None):
+def get_translatable_fields(self, cr, uid, fields, context=None):
+    #TODO make fields parameter optionnal
     def is_translatable(field):
         if self._columns.get(field):
             return self._columns[field].translate
         else:
             return self._inherit_fields[field][2].translate
 
+    return [field for field in fields if is_translatable(field)]
+
+#TODO finish docstring
+
+@extend(osv.osv)
+def multi_lang_read(self, cr, uid, ids, fields_to_read, langs, resources=None, use_multi_lang = True, context=None):
     if not resources:
         resources = {}
-    first = True
+
     for lang in langs:
         ctx = context.copy()
         ctx['lang'] = lang
@@ -1130,9 +1139,10 @@ def multi_lang_read(self, cr, uid, ids, fields_to_read, langs, resources=None, u
         # Give the possibility to not use the field restriction to read
         # Indeed for some e-commerce like magento the api is ugly and some not translatable field
         # are required at each export :S
-        if use_multi_lang and first:
-            fields_to_read = [field for field in fields_to_read if is_translatable(field)]
-            first=False
+        if use_multi_lang:
+            fields_to_read = self.get_translatable_fields(cr, uid, fields_to_read, context=context)
+            if not fields_to_read:
+                break
     return resources
 
 @extend(osv.osv)

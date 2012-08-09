@@ -1048,8 +1048,6 @@ def _export_resources(self, cr, uid, external_session, method="onebyone", contex
     smart_export =  context.get('smart_export') and (group_ids or inherits_group_ids) and {'group_ids': group_ids, 'inherits_group_ids': inherits_group_ids}
 
     langs = self.get_lang_to_export(cr, uid, external_session, context=context)
-    context['main_lang_to_export'] = langs[0]
-    context['other_langs_to_export'] = langs[1:]
 
     while ids:
         ids_to_process = ids[0:step]
@@ -1104,13 +1102,14 @@ def _export_one_resource(self, cr, uid, external_session, resource_id, context=N
     defaults = self._get_default_export_values(cr, uid, external_session, context=context)
     mapping, mapping_id = self._init_mapping(cr, uid, external_session.referential_id.id, convertion_type='from_openerp_to_external', context=context)
     langs = self.get_lang_to_export(cr, uid, external_session, context=context)
-    context['main_lang_to_export'] = langs[0]
-    context['other_langs_to_export'] = langs[1:]
     resource = self._get_oe_resources(cr, uid, external_session, [resource_id], langs=langs,
                                 smart_export=False, last_exported_date=False,
                                 mapping=mapping, mapping_id=mapping_id, context=context)[resource_id]
     return self._transform_and_send_one_resource(cr, uid, external_session, resource, resource_id,
                             False, mapping, mapping_id, defaults=defaults, context=context)
+
+
+#TODO finish docstring
 
 @extend(osv.osv)
 def get_translatable_fields(self, cr, uid, fields, context=None):
@@ -1120,38 +1119,47 @@ def get_translatable_fields(self, cr, uid, fields, context=None):
             return self._columns[field].translate
         else:
             return self._inherit_fields[field][2].translate
-
-    return [field for field in fields if is_translatable(field)]
-
-#TODO finish docstring
+    translatable_fields = []
+    untranslatable_fields = []
+    for field in fields:
+        if is_translatable(field):
+            translatable_fields.append(field)
+        else:
+            untranslatable_fields.append(field)
+    return translatable_fields, untranslatable_fields
 
 @extend(osv.osv)
-def multi_lang_read(self, cr, uid, ids, fields_to_read, langs, resources=None, use_multi_lang = True, context=None):
+def multi_lang_read(self, cr, uid, external_session, ids, fields_to_read, langs, resources=None, use_multi_lang = True, context=None):
     if not resources:
         resources = {}
-
+    translatable_fields, untranslatable_fields = self.get_translatable_fields(cr, uid, fields_to_read, context=context)
+    lang_support = external_session.referential_id._lang_support
+    if lang_support == 'fields_with_no_lang':
+        langs.insert(0, 'no_lang')
+    first=True
+    fields = fields_to_read
     for lang in langs:
         ctx = context.copy()
-        ctx['lang'] = lang
-        for resource in self.read(cr, uid, ids, fields_to_read, context=ctx):
+        if lang == 'no_lang':
+            fields = untranslatable_fields
+        else:
+            if not first and lang_support == 'fields_with_main_lang' or lang_support == 'fields_with_no_lang':
+                fields = translatable_fields
+            ctx['lang'] = lang
+
+        for resource in self.read(cr, uid, ids, fields, context=ctx):
             if not resources.get(resource['id']): resources[resource['id']] = {}
             resources[resource['id']][lang] = resource
-        # Give the possibility to not use the field restriction to read
-        # Indeed for some e-commerce like magento the api is ugly and some not translatable field
-        # are required at each export :S
-        if use_multi_lang:
-            fields_to_read = self.get_translatable_fields(cr, uid, fields_to_read, context=context)
-            if not fields_to_read:
-                break
+        first = False
     return resources
 
 @extend(osv.osv)
-def full_read(self, cr, uid, ids, langs, resources, mapping=None, mapping_id=None, context=None):
+def full_read(self, cr, uid, external_session, ids, langs, resources, mapping=None, mapping_id=None, context=None):
     fields_to_read = self.get_field_to_export(cr, uid, ids, mapping, mapping_id, context=context)
-    return self.multi_lang_read(cr, uid, ids, fields_to_read, langs, resources=resources, context=context)
+    return self.multi_lang_read(cr, uid, external_session, ids, fields_to_read, langs, resources=resources, context=context)
 
 @extend(osv.osv)
-def smart_read(self, cr, uid, ids, langs, resources, group_ids, inherits_group_ids, last_exported_date=None,
+def smart_read(self, cr, uid, external_session, ids, langs, resources, group_ids, inherits_group_ids, last_exported_date=None,
                                                                         mapping=None, mapping_id=None, context=None):
     if last_exported_date:
         search_filter = []
@@ -1166,13 +1174,13 @@ def smart_read(self, cr, uid, ids, langs, resources, group_ids, inherits_group_i
         resource_ids_full_read = ids
         resource_ids_partial_read = []
 
-    resources = self.full_read(cr, uid, resource_ids_full_read, langs, resources, context=context)
+    resources = self.full_read(cr, uid, external_session, resource_ids_full_read, langs, resources, context=context)
 
     if resource_ids_partial_read:
         for group in self.pool.get('group.fields').browse(cr, uid, group_ids, context=context):
             resource_ids = self.search(cr, uid, [[group.column_name, '>=', last_exported_date],['id', 'in', resource_ids_partial_read]], context=context)
             fields_to_read = [field.name for field in group.field_ids]
-            resources = self.multi_lang_read(cr, uid, resource_ids, fields_to_read, langs, resources=resources, context=context)
+            resources = self.multi_lang_read(cr, uid, external_session, resource_ids, fields_to_read, langs, resources=resources, context=context)
     return resources
 
 @extend(osv.osv)
@@ -1184,10 +1192,10 @@ def _get_oe_resources(self, cr, uid, external_session, ids, langs, smart_export=
                                             last_exported_date=None, mapping=None, mapping_id=None, context=None):
     resources = None
     if smart_export:
-        resources = self.smart_read(cr, uid, ids, langs, resources, smart_export['group_ids'], smart_export['inherits_group_ids'],
+        resources = self.smart_read(cr, uid, external_session, ids, langs, resources, smart_export['group_ids'], smart_export['inherits_group_ids'],
                             last_exported_date=last_exported_date, mapping=mapping, mapping_id=mapping_id, context=context)
     else:
-        resources = self.full_read(cr, uid, ids, langs, resources, mapping=mapping, mapping_id=mapping_id, context=context)
+        resources = self.full_read(cr, uid, external_session, ids, langs, resources, mapping=mapping, mapping_id=mapping_id, context=context)
     return resources
 
 

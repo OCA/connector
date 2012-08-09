@@ -163,8 +163,14 @@ class external_mappinglines_template(osv.osv):
 external_mappinglines_template()
 
 class external_referential(osv.osv):
+    """External referential can have the option _lang_support. It can be equal to : 
+            - fields_with_main_lang : the fields to create will be organized all in the main lang and only the translatable fields in the others.example : {'main_lang': {trad_field : value, untrad_field: value, trad_field : value, untrad_field : value ...}, 'other_lang': {trad_field: value, trad_field: value}, ...}
+            - fields_with_no_lang : all the fields untranslatable are grouped and the translatable fields are grouped in each lang. example : {'no_lang' : {untrad_field: value, untrad_field: value, untrad_field: value}, 'lang_one' : {trad_field: value, trad_field: value}, 'lang_two' : {trad_field: value, trad_field: value} ...}
+            - all_fields : all the fields are in all languagues. example = {'lang_one' : {all_fields}, 'lang_two': {all_fields}...}"""
     _name = 'external.referential'
     _description = 'External Referential'
+
+    _lang_support = 'fields_with_main_lang'
 
     #Only user that can write crypted field can read it
     _crypted_field = ['apiusername', 'apipass', 'location']

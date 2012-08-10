@@ -49,5 +49,15 @@ class external_referential(osv.osv):
         return les file_buffer qui sont a l’état waiting pour le referential et le mapping_id choisi
         '''
 
+    def _prepare_external_referential_fieldnames(self, cr, uid, context=None):
+        res = super(external_referential, self)._prepare_external_referential_fieldnames(cr, uid, context=context)
+        res.append('protocole')
+        return res
+
+    def _prepare_external_referential_vals(self, cr, uid, referential, context=None):
+        res = super(external_referential, self)._prepare_external_referential_vals(cr, uid, mapping, context=context)
+        res['protocole'] = referential.protocole
+        return res
+
 external_referential()
 

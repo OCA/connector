@@ -344,25 +344,30 @@ class external_referential(osv.osv):
         csv.writerow(row)
         return self.pool.get('pop.up.file').open_output_file(cr, uid, 'external.referential.version.csv', output_file, 'Referential Version Export', context=context)
 
+    def _prepare_external_referential_fieldnames(self, cr, uid, context=None):
+        return ['id', 'name', 'version_id:id','location','apiusername','apipass','debug']
+
+    def _prepare_external_referential_vals(self, cr, uid, referential, context=None):
+        return {
+            'id': referential.get_absolute_id(context=context),
+            'name': referential.name,
+            'version_id:id': referential.version_id.get_absolute_id(context=context),
+            'location': referential.location,
+            'apiusername': referential.apiusername,
+            'apipass': referential.apipass,
+            'debug': referential.debug,
+        }
+
     # Method to export external referential
     def build_external_ref(self, cr, uid, id, context=None):
         if isinstance(id,list):
             id = id[0]
         output_file = TemporaryFile('w+b')
-        fieldnames = ['id', 'name', 'version_id:id','location','protocole','apiusername','apipass','debug']
+        fieldnames = self._prepare_external_referential_fieldnames(cr, uid, context=context)
         csv = FileCsvWriter(output_file, fieldnames, encoding="utf-8", writeheader=True, delimiter=',', quotechar='"')
 
         referential = self.browse(cr, uid, id, context=context)
-        row = {
-            'id': referential.get_absolute_id(context=context),
-            'name': referential.name,
-            'version_id:id': referential.version_id.get_absolute_id(context=context),
-            'location': referential.location,
-            'protocole': referential.protocole,
-            'apiusername': referential.apiusername,
-            'apipass': referential.apipass,
-            'debug': referential.debug,
-        }
+        row = self._prepare_external_referential_vals(cr, uid, referential, context=context)
         csv.writerow(row)
         return self.pool.get('pop.up.file').open_output_file(cr, uid, 'external.referential.csv', output_file, 'Referential Type Export', context=context)
 

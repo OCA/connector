@@ -104,7 +104,7 @@ class external_report(osv.osv):
             'action_on': action_on_model_id,
             'sync_from_object_model': model_id,
             'sync_from_object_id': sync_from_object.id,
-            'referential_id': sync_from_object.referential_id.id,
+            'referential_id': sync_from_object._name == 'external.referential' and sync_from_object.id or sync_from_object.referential_id.id,
         }
 
     @commit_now

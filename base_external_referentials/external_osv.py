@@ -555,8 +555,11 @@ def _import_resources(self, cr, uid, external_session, defaults=None, method="se
 
     :param ExternalSession external_session : External_session that contain all params of connection
     :param dict defaults: default value for the resource to create
-    :param str method: method used for importing the resource (search_then_read,
-                            search_then_read_no_loop, search_read, search_read_no_loop )
+    :param str method: method used for importing the resource (
+                        search_then_read,
+                        search_then_read_no_loop,
+                        search_read,
+                        search_read_no_loop )
     :rtype: dict
     :return: dictionary with the key "create_ids" and "write_ids" which containt the id created/written
     """
@@ -1036,7 +1039,7 @@ def _export_resources(self, cr, uid, external_session, method="onebyone", contex
     last_exported_date = self._get_last_exported_date(cr, uid, external_session, context=context)
     external_session.logger.info("Retrieve the list of ids to export for the ressource %s"%(self._name))
     ids, ids_2_date = self.get_ids_and_update_date(cr, uid, external_session, last_exported_date=last_exported_date, context=context)
-    external_session.logger.info("%s %s ressource will be exported"%(len(ids), self._name))
+    external_session.logger.info("%s %s ressource will be exported"%((ids and len(ids) or 0), self._name))
     step = self._get_export_step(cr, uid, external_session, context=context)
 
     group_obj = self.pool.get('group.fields')

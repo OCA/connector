@@ -157,6 +157,59 @@ def catch_error_in_report(func):
         return response
     return wrapper
 
+#This decorator is for now a prototype it will be improve latter, maybe the best will to have to kind of decorator (import and export)
+def catch_action(func):
+    """ This decorator open and close a new cursor and if an error occure it will generate a error line in the reporting system
+    The function must start with "self, cr, uid, object"
+    And the object must have a field call "referential_id" related to the object "external.referential"
+    """
+    @functools.wraps(func)
+    def wrapper(self, cr, uid, *args, **kwargs):
+        context = kwargs.get('context', {})
+        report_line_obj = self.pool.get('external.report.line')
+        report_line_id = report_line_obj.start_log(
+                                    cr,
+                                    uid,
+                                    self._name,
+                                    func.__name__,
+                                    res_id= args[0],
+                                    args = args,
+                                    kwargs = kwargs,
+                            )
+        import_cr = pooler.get_db(cr.dbname).cursor()
+        response = False
+        try:
+            response = func(self, import_cr, uid, *args, **kwargs)
+        except MappingError as e:
+            if config['debug_mode']: raise
+            import_cr.rollback()
+            error_message = 'Error with the mapping : %s. Error details : %s'%(e.mapping_name, e.value),
+            report_line_obj.log_fail(cr, uid, None, report_line_id, error_message, context=context)
+        except xmlrpclib.Fault as e:
+            if config['debug_mode']: raise
+            import_cr.rollback()
+            error_message = 'Error with xmlrpc protocole. Error details : error %s : %s'%(e.faultCode, e.faultString)
+            report_line_obj.log_fail(cr, uid, None, report_line_id, error_message, context=context)
+        except osv.except_osv as e:
+            if config['debug_mode']: raise
+            import_cr.rollback()
+            error_message = '%s : %s'%(e.name, e.value)
+            report_line_obj.log_fail(cr, uid, None, report_line_id, error_message, context=context)
+        except Exception as e:
+            if config['debug_mode']: raise
+            #TODO write correctly the message in the report
+            import_cr.rollback()
+            error_message = str(e)
+            report_line_obj.log_fail(cr, uid, None, report_line_id, error_message, context=context)
+        else:
+            report_line_obj.log_success(cr, uid, None, report_line_id, context=context)
+            import_cr.commit()
+        finally:
+            import_cr.close()
+        return response
+    return wrapper
+
+
 
 def commit_now(func):
     """ This decorator open and close a new cursor and if an error occure it raise an error

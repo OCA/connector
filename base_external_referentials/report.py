@@ -215,7 +215,11 @@ class external_report_lines(osv.osv):
     def _get_resource(self, cr, uid, ids, field_name, arg, context=None):
         res = {}
         for report_line in self.browse(cr, uid, ids, context=context):
-            res[report_line.id] = simplejson.dumps(report_line.resource)
+            res[report_line.id] = {
+                'resource_text': simplejson.dumps(report_line.resource),
+                'args_text': simplejson.dumps(report_line.args),
+                'kwargs_text': simplejson.dumps(report_line.kwargs),
+            }
         return res
 
     def _set_resource(self, cr, uid, ids, field_name, field_value, arg, context=None):
@@ -223,13 +227,12 @@ class external_report_lines(osv.osv):
         if isinstance(ids, int) or isinstance(ids, long):
             ids = [ids]
         for report_line in self.browse(cr, uid, ids, context=context):
-            self.write(cr, uid, report_line.id, {'resource': simplejson.loads(field_value)})
+            self.write(cr, uid, report_line.id, {field_name.replace('_text', ''): simplejson.loads(field_value)})
         return True
 
     _columns = {
         'report_id': fields.many2one('external.report',
                                               'External Report',
-                                              required=True,
                                               readonly=True,
                                               ondelete='restrict'),
         'state': fields.selection((('success', 'Success'),
@@ -244,9 +247,11 @@ class external_report_lines(osv.osv):
         'traceback': fields.text('Traceback', readonly=True),
         'exception_type': fields.char('Exception Type', size=128, readonly=True),
         'resource': fields.serialized('External Data', readonly=True),
-        'resource_text':fields.function(_get_resource, fnct_inv=_set_resource, type="text", string='External Data'),
+        'resource_text':fields.function(_get_resource, fnct_inv=_set_resource, type="text", string='External Data', multi='into_text'),
         'args': fields.serialized('Args', readonly=True),
+        'args_text':fields.function(_get_resource, fnct_inv=_set_resource, type="text", string='Args Data', multi='into_text'),
         'kwargs': fields.serialized('Kwargs', readonly=True),
+        'kwargs_text':fields.function(_get_resource, fnct_inv=_set_resource, type="text", string='Kwargs Data', multi='into_text'),
     }
 
     _defaults = {
@@ -261,9 +266,9 @@ class external_report_lines(osv.osv):
     @commit_now
     def start_log(self, cr, uid, action_on, action, res_id=None,
                   external_id=None, resource=None, args=None, kwargs=None):
-        context = kwargs.get('context')
+        context = kwargs.get('context') or {}
         existing_line_id = context.get('retry_report_line_id', False)
-        report_id = context['report_id']
+        report_id = context.get('report_id')
 
         if existing_line_id:
             self.write(cr, uid,
@@ -295,7 +300,7 @@ class external_report_lines(osv.osv):
     def log_fail(self, cr, uid, external_session, report_line_id, error_message, context=None):
         exc_type, exc_value, exc_traceback = sys.exc_info()
 
-        external_session.logger.exception(error_message)
+        external_session and external_session.logger.exception(error_message)
         self.write(cr, uid, report_line_id, {
                             'error_message': error_message,
                             'exception_type': exc_type,
@@ -303,7 +308,7 @@ class external_report_lines(osv.osv):
                                 exc_type, exc_value, exc_traceback)),
                             'state': 'fail',
                             }, context=context)
-        if external_session.tmp.get('history_id'):
+        if external_session and external_session.tmp.get('history_id'):
             self.pool.get('external.report.history').add_one_fail(cr, uid, \
                                             external_session.tmp['history_id'], context=context)
         return True
@@ -311,7 +316,7 @@ class external_report_lines(osv.osv):
     @commit_now
     def log_success(self, cr, uid, external_session, report_line_id, context=None):
         self.write(cr, uid, report_line_id, {'state': 'success'}, context=context)
-        if external_session.tmp.get('history_id'):
+        if external_session and external_session.tmp.get('history_id'):
             self.pool.get('external.report.history').add_one_success(cr, uid, \
                                             external_session.tmp['history_id'], context=context)
         return True
@@ -324,17 +329,23 @@ class external_report_lines(osv.osv):
             method = getattr(self.pool.get(log.action_on.model), log.action)
             args = log.args
             kwargs = log.kwargs
-            sync_from_object = self.pool.get(log.report_id.sync_from_object_model.model).\
-                                browse(cr, uid, log.report_id.sync_from_object_id, context=context)
-            external_session = ExternalSession(log.report_id.referential_id, sync_from_object)
-            resource = log.resource
-            if not kwargs.get('context', False):
-                kwargs['context']={}
+            if log.report_id:
+                sync_from_object = self.pool.get(log.report_id.sync_from_object_model.model).\
+                                    browse(cr, uid, log.report_id.sync_from_object_id, context=context)
+                external_session = ExternalSession(log.report_id.referential_id, sync_from_object)
+                resource = log.resource
+                if not kwargs.get('context', False):
+                    kwargs['context']={}
 
-            # keep the id of the line to update it with the result
-            kwargs['context']['retry_report_line_id'] = log.id
+                # keep the id of the line to update it with the result
+                kwargs['context']['retry_report_line_id'] = log.id
 
-            method(cr, uid, external_session, resource, *args, **kwargs)
+                method(cr, uid, external_session, resource, *args, **kwargs)
+            else:
+                if not kwargs.get('context', False):
+                    kwargs['context']={}
+                kwargs['context']['retry_report_line_id'] = log.id
+                method(cr, uid, *args, **kwargs)
         return True
 
     def aggregate_actions(self, cr, uid, ids, context=None):

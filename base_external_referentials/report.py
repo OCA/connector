@@ -85,7 +85,7 @@ class external_report(osv.osv):
         logging.getLogger('external_synchro').info("retry the failed lines of the reports ids %s" % (ids,))
         if isinstance(ids, int):
             ids = [ids]
-        if not context:
+        if context is None:
             context={}
         context['origin'] = 'retry'
         for report in self.read(cr, uid, ids, ['failed_line_ids'], context=context):

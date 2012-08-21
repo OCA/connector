@@ -28,9 +28,9 @@
     'description': """empty""",
     'author': 'Akretion',
     'website': 'http://www.akretion.com/',
-    'depends': ['base'], 
+    'depends': ['base'],
     'init_xml': [],
-    'update_xml': [ 
+    'update_xml': [
            'pop_up_file_view.xml',
     ],
     'demo_xml': [],

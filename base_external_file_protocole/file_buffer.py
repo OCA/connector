@@ -19,12 +19,12 @@
 #                                                                             #
 ###############################################################################
 
-
-from osv import osv, fields
+from openerp.osv.orm import Model
+from openerp.osv import fields
 import base64
 from base_external_referentials.external_osv import ExternalSession
 
-class file_buffer(osv.osv):
+class file_buffer(Model):
 
     _name = "file.buffer"
     _description = "File Buffer"
@@ -47,12 +47,6 @@ class file_buffer(osv.osv):
         'active': 1,
         'state': 'waiting',
     }
-
-    def import_file():
-        '''
-        method qui import le fichier, on a tout ce qu’il faut, via le mapping on sait quel mapping on    doit appliqué et sur quel resource on applique l’import (product.product...)
-        '''
-        return True
 
     def get_file(self, cr, uid, file_id, context=None):
         """
@@ -81,9 +75,9 @@ class file_buffer(osv.osv):
         if context is None: context = {}
         for filebuffer in self.browse(cr, uid, ids, context=context):
             external_session = ExternalSession(filebuffer.referential_id, filebuffer)
-            self._run(cr, uid, external_session, filebuffer, context=context) 
+            self._run(cr, uid, external_session, filebuffer, context=context)
         return True
-    
+
     def _run(self, cr, uid, external_session, filebuffer, context=None):
         filebuffer._set_state('running', context=context)
 

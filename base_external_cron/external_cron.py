@@ -19,15 +19,11 @@
 #                                                                             #
 ###############################################################################
 
-from osv import osv, fields
-import netsvc
-from base_external_referentials.external_osv import ExternalSession
-import sys
-sys.path.append('/home/dav/dvp/py/ebay/ebaypyt/lib')
-from ebaypyt import EbayWebService
+from openerp.osv.orm import Model
+from openerp.osv import fields
 
 
-class external_cron(osv.osv):
+class external_cron(Model):
 
     _name = "external.cron"
     _description = "external.cron"
@@ -66,6 +62,7 @@ class external_cron(osv.osv):
             # external_session = ExternalSession(referential, referential)
             # external_session.connection.delete('RecurringJob', cron.name)
 
+    # XXX this does not belong here
     def action_test(self, cr, uid, ids, context=None):
         # TODO to delete
         developer_key   = "d7e26236-db06-4ad5-b050-228794d29228"

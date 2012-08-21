@@ -21,3 +21,4 @@
 ###############################################################################
 import external_referentials
 import file_buffer
+import sale

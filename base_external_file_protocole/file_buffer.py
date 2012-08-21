@@ -22,6 +22,7 @@
 
 from osv import osv, fields
 import base64
+from base_external_referentials.external_osv import ExternalSession
 
 class file_buffer(osv.osv):
 
@@ -74,9 +75,19 @@ class file_buffer(osv.osv):
 
 
     def run(self, cr, uid, ids, context=None):
-        self._set_state(cr, uid, ids, 'running', context=context)
+        """
+        Run the process for each file buffer
+        """
+        if context is None: context = {}
+        for filebuffer in self.browse(cr, uid, ids, context=context):
+            external_session = ExternalSession(filebuffer.referential_id, filebuffer)
+            self._run(cr, uid, external_session, filebuffer, context=context) 
+        return True
+    
+    def _run(self, cr, uid, external_session, filebuffer, context=None):
+        filebuffer._set_state('running', context=context)
 
-    def done(self, cr, uid, id, context=None):
+    def done(self, cr, uid, ids, context=None):
         self._set_state(cr, uid, ids, 'done', context=context)
 
     def _set_state(self, cr, uid, ids, state, context=None):

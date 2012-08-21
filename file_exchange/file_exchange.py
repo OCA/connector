@@ -128,7 +128,7 @@ class file_exchange(osv.osv):
 
     #needed for cron task
     def start_task(self, cr, uid, ids, context=None):
-        if not context:
+        if context is None:
             context={}
         for method in self.browse(cr, uid, ids, context=context):
             if method.type == 'in':
@@ -158,6 +158,8 @@ class file_exchange(osv.osv):
 
     def _import_file_from_pop_up(self, cr, uid, method_id, input_file, input_filename, context=None):
         #TODO remove this duplicated code from import_file
+        context['pop_up_callback'] = False
+        context['file_exchange_id'] = method_id
         method = self.browse(cr, uid, method_id, context=context)
         external_session = ExternalSession(method.referential_id, method)
         file_fields_obj = self.pool.get('file.fields')
@@ -174,7 +176,7 @@ class file_exchange(osv.osv):
         return True
 
     def _import_files(self, cr, uid, method_id, context=None):
-        if not context:
+        if context is None:
             context={}
         context['file_exchange_id'] = method_id
         file_fields_obj = self.pool.get('file.fields')
@@ -359,7 +361,7 @@ class file_exchange(osv.osv):
 
     def start_action(self, cr, uid, id, action_name, self_object, object_ids=None, resource=None,
                                                                 context=None,external_session=None):
-        if not context:
+        if context is None:
             context={}
         if isinstance(id, list):
             id = id[0]

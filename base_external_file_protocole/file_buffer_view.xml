@@ -7,6 +7,18 @@
 <openerp>
     <data>
 
+<record id="file_buffer_view_search" model="ir.ui.view">
+    <field name="name">file.buffer.search</field>
+    <field name="model">file.buffer</field>
+    <field name="type">search</field>
+    <field name="arch" type="xml">
+        <search string="Search Sales Order">
+            <filter icon="terp-document-new" name="wait" string="Waiting" domain="[('state','=','waiting')]"/>
+            <filter icon="terp-check" string="Done" domain="[('state','=','done')]"/>
+       </search>
+    </field>
+</record>
+
 
 <!-- VIEW FOR THE OBJECT : file_buffer -->
 <record id="file_buffer_view_form" model="ir.ui.view">
@@ -42,6 +54,7 @@
             <field name="file_id" />
             <field name="job_ended" />
             <field name="referential_id" string="ex ref"/>
+            <button name="run" string="Run" icon="gtk-go-forward" type="object"/>
         </tree>
     </field>
 </record>
@@ -52,6 +65,7 @@
     <field name="res_model">file.buffer</field>
     <field name="view_type">form</field>
     <field name="view_mode">tree,form</field>
+    <field name="context">{"search_default_wait":1}</field>
 </record>
 
 <menuitem id="act_menu_external_file_buffer" action="action_external_file_buffer" parent="base_external_referentials.ir_ui_menu_external_referentials" sequence="25" />

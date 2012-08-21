@@ -221,16 +221,16 @@ class FileCsvWriter(object):
         if writeheader:
             row = {}
             for field in fieldnames:
-                row[field.encode(self.encoding)] = field.encode(self.encoding)
+                row[field] = field.encode(self.encoding)
             self.writer.writerow(row)
 
     def writerow(self, row):
         write_row = {}
         for k,v in row.items():
             if isinstance(v, unicode) and v!=False:
-                write_row[k.encode(self.encoding)] = v.encode(self.encoding)
+                write_row[k] = v.encode(self.encoding)
             else:
-                write_row[k.encode(self.encoding)] = v
+                write_row[k] = v
         self.writer.writerow(write_row)
 
     def writerows(self, rows):

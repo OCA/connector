@@ -22,6 +22,7 @@
 from osv import osv
 import netsvc
 from tools.translate import _
+from openerp.tools.config import config
 
 def call_onchange(self, cr, uid, onchange_name, vals, defaults=None, **kwargs):
     """
@@ -41,6 +42,7 @@ def call_onchange(self, cr, uid, onchange_name, vals, defaults=None, **kwargs):
     try :
         kwargs2 = eval("self._get_kwargs_%s"%onchange_name)(cr, uid, vals_with_default, **kwargs)
     except Exception, e:
+        if config['debug_mode']: raise
         raise osv.except_osv(_('On Change Player'), _("Error when trying to get the kwargs for the onchange %s on \
                                                     the object %s. Error message : %s" %(onchange_name, self._name, e)))
     try :
@@ -53,6 +55,7 @@ def call_onchange(self, cr, uid, onchange_name, vals, defaults=None, **kwargs):
                 if res['value'][key] or self._columns[key]._type == 'bool':
                     vals[key] = res['value'][key]
     except Exception, e:
+        if config['debug_mode']: raise
         raise osv.except_osv(_('On Change Player'), _("Error when trying to playing the onchange %s on the object %s. \
                                                                 Error message : %s" %(onchange_name, self._name, e)))
     return vals

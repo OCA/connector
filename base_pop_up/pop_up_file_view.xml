@@ -18,8 +18,8 @@
             <field name="arch" type="xml">
                 <form>
                     <group name="output file" colspan="4" col="2">
-                        <field name="name" />
-                        <field name="file"/>
+                        <field name="name" invisible="1"/>
+                        <field name="file" filename="name" readonly="1"/>
                     </group>
                     <button name="close" colspan="1" string="Close" type="object" icon="gtk-go-forward"/>
                 </form>
@@ -33,7 +33,7 @@
             <field name="arch" type="xml">
                 <form>
                     <group name="input file" colspan="4" col="2">
-                        <field name="name" />
+                        <field name="name" invisible="1"/>
                         <field name="file" filename="name"/>
                     </group>
                     <button icon="gtk-cancel" special="cancel" string="Cancel"/>

@@ -532,7 +532,7 @@ def import_resources(self, cr, uid, ids, resource_name, method="search_then_read
     :rtype: dict
     :return: dictionary with the key "create_ids" and "write_ids" which containt the id created/written
     """
-    if not context: context={}
+    if context is None: context={}
     result = {"create_ids" : [], "write_ids" : []}
     for browse_record in self.browse(cr, uid, ids, context=context):
         if browse_record._name == 'external.referential':
@@ -754,7 +754,7 @@ def oe_update(self, cr, uid, external_session, existing_rec_id, vals, resource, 
     :rtype boolean
     :return: True
     """
-    if not context: context={}
+    if context is None: context={}
     context['referential_id'] = external_session.referential_id.id #did it's needed somewhere?
     return self.write(cr, uid, existing_rec_id, vals, context)
 
@@ -769,7 +769,7 @@ def oe_create(self, cr, uid, external_session, vals, resource, defaults, context
     :rtype int
     :return: the id of the resource created
     """
-    if not context: context={}
+    if context is None: context={}
     context['referential_id'] = external_session.referential_id.id  #did it's needed somewhere?
     return self.create(cr, uid, vals, context)
 
@@ -1020,7 +1020,7 @@ def get_lang_to_export(self, cr, uid, external_session, context=None):
     return: the list of lang to export
     """
     
-    if not context:
+    if context is None:
         return []
     else:
         return context.get('lang_to_export') or [context.get('lang')]

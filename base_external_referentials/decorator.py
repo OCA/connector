@@ -79,7 +79,7 @@ def open_report(func):
 
         report_obj = self.pool.get('external.report')
         context = kwargs.get('context')
-        if not context:
+        if context is None:
             context={}
             kwargs['context'] = context
 
@@ -109,7 +109,7 @@ def catch_error_in_report(func):
             external_session.logger.debug(_("There is no key report_id in the context, error will be not catch"))
             return func(self, cr, uid, external_session, resource, *args, **kwargs)
         if context.get('report_line_based_on'):
-            if not context['report_line_based_on'] == self._name:
+            if context is None['report_line_based_on'] == self._name:
                 return func(self, cr, uid, external_session, resource, *args, **kwargs)
         report_line_obj = self.pool.get('external.report.line')
         report_line_id = report_line_obj.start_log(

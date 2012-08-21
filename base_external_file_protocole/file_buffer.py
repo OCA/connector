@@ -78,7 +78,7 @@ class file_buffer(osv.osv):
         """
         Run the process for each file buffer
         """
-        if not context: context = {}
+        if context is None: context = {}
         for filebuffer in self.browse(cr, uid, ids, context=context):
             external_session = ExternalSession(filebuffer.referential_id, filebuffer)
             self._run(cr, uid, external_session, filebuffer, context=context) 

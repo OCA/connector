@@ -613,7 +613,7 @@ def _import_resources(self, cr, uid, external_session, defaults=None, method="se
             resource_filter = self._get_filter(cr, uid, external_session, step, previous_filter=resource_filter, context=context)
             #TODO import only the field needed to improve speed import ;)
             resources = self._get_external_resources(cr, uid, external_session, resource_filter=resource_filter, mapping=mapping, fields=None, context=context)
-            if not hasattr(resources, '__iter__'):
+            if not isinstance(resources, list):
                 resources = [resources]
             res = self._record_external_resources(cr, uid, external_session, resources, defaults=defaults, mapping=mapping, mapping_id=mapping_id, context=context)
             for key in result:

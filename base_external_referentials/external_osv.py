@@ -1522,6 +1522,7 @@ def _merge_with_default_values(self, cr, uid, external_session, ressource, vals,
     @param defauls: defaults value for the data imported
     @return: dictionary of converted data in OpenERP format
     """
+    if not defaults: return vals
     for key in defaults:
         if not key in vals:
             vals[key] = defaults[key]

@@ -532,6 +532,7 @@ def import_resources(self, cr, uid, ids, resource_name, method="search_then_read
     :rtype: dict
     :return: dictionary with the key "create_ids" and "write_ids" which containt the id created/written
     """
+    if not context: context={}
     result = {"create_ids" : [], "write_ids" : []}
     for browse_record in self.browse(cr, uid, ids, context=context):
         if browse_record._name == 'external.referential':

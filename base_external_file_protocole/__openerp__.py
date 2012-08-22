@@ -35,7 +35,6 @@ Also it's used in file_exchange
     'depends': ['base_external_referentials', 'base_file_protocole'],
     'init_xml': [],
     'update_xml': [
-        'external_referentials_view.xml',
         'file_buffer_view.xml',
         'settings/external.referential.category.csv',
     ],

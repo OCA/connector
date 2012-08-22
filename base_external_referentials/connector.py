@@ -51,7 +51,17 @@ REGISTRY = ConnectorRegistry()
 class AbstractConnector(object):
     """base class for the connector
 
+    subclasses can implement default implementations shared by different models for
+
+    * _default_import_resource
+    * _default_ext_read
+    * _default_ext_search
+    * _default_ext_search_read
+
     subclasses can implement the following specialization point:
+    * _ext_read_<model_name>
+    * _ext_search_<model_name>
+    * _ext_search_read_<model_name>
     * _import_<model_name>(cr, uid, res_obj, defaults, context)
     * _get_import_defaults_<model_name>(cr, uid, context=context)
     * _import_<model_name>(cr, uid, res_obj, defaults, context)
@@ -159,15 +169,27 @@ class AbstractConnector(object):
 
     def ext_read(self, res_obj, ext_ids, context=None):
         """return iterator over dict of object attributes"""
+        meth = self._get_meth('_ext_read_%s', res_obj, self._default_ext_read)
+        meth(res_obj, ext_ids, context=None)
+
+    def _default_ext_read(self, res_obj, ext_ids, context=None):
         raise NotImplementedError
 
     def ext_search(self, res_obj, ext_filter, context=None):
         """return list of ext ids"""
+        meth = self._get_meth('_ext_search_%s', res_obj, self._default_ext_search)
+        meth(res_obj, ext_filter, context=None)
+
+    def _default_ext_search(self, res_obj, ext_ids, context=None):
         raise NotImplementedError
 
     def ext_search_read(self, res_obj, ext_filter, context=None):
         """return list of dict of object attributes"""
         # default implementation, override with something smart if your backend allows / requires it
+        meth = self._get_meth('_ext_search_read_%s', res_obj, self._default_ext_search_read)
+        return meth(res_obj, ext_filter, context)
+
+    def _default_ext_search_read(self, res_obj, ext_filter, context=None):
         ext_ids = self.ext_search(res_obj, ext_filter, context)
         return self.ext_read(res_obj, ext_ids, context)
 
@@ -314,14 +336,14 @@ class AbstractMapping(object):
         return False # must be reimplemented in concrete class
 
     @classmethod
-    def register_model_map(cls, res_obj, map):
-        cls.maps[res_obj._table] = map
+    def register_model_map(cls, map):
+        cls.maps[map.model_name] = map
 
     def __init__(self, connector):
         self.connector = connector
 
     def map(self, res_obj):
-        return self.maps[res_obj._table](self.connector)
+        return self.maps[res_obj._name](self.connector)
 
     def to_oerp(self, cr, uid, res_obj, resource, defaults, context):
         return self.map(res_obj).to_oerp(cr, uid, resource, defaults, context)

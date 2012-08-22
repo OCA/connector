@@ -1,4 +1,4 @@
- -*- encoding: utf-8 -*-
+# -*- encoding: utf-8 -*-
 ##############################################################################
 #
 #    OpenERP, Open Source Management Solution
@@ -121,7 +121,7 @@ class ExternalSession(object):
     def is_categ(self, referential_category):
         return self.referential_id.categ_id.name.lower() == referential_category.lower()
 
-
+# XXX unused ?
 #TODO think about the generic method to use
 class Resource(object):
     """Resource class in a container for using other class like objectify as a dictionnary
@@ -385,6 +385,7 @@ Model.extid_to_oeid = Model.get_or_create_oeid
 ########################################################################################################################
 
 
+# XXX a degager
 @extend(Model)
 def _get_filter(self, cr, uid, external_session, step, previous_filter=None, context=None):
     """Abstract function that return the filter
@@ -398,6 +399,7 @@ def _get_filter(self, cr, uid, external_session, step, previous_filter=None, con
     """
     return None
 
+# XXX a degager
 @extend(Model)
 def _get_external_resource_ids(self, cr, uid, external_session, resource_filter=None, mapping=None, context=None):
     """Abstract function that return the external resource ids
@@ -411,6 +413,7 @@ def _get_external_resource_ids(self, cr, uid, external_session, resource_filter=
     """
     raise except_osv(_("Not Implemented"), _("The method _get_external_resource_ids is not implemented in abstract base module!"))
 
+# XXX a degager
 @extend(Model)
 def _get_default_import_values(self, cr, uid, external_session, mapping_id=None, defaults=None, context=None):
     """Abstract function that return the default value for on object
@@ -423,6 +426,7 @@ def _get_default_import_values(self, cr, uid, external_session, mapping_id=None,
     """
     return defaults
 
+# XXX a degager
 @extend(Model)
 def _get_import_step(self, cr, uid, external_session, context=None):
     """Abstract function that return the step for importing data
@@ -434,6 +438,7 @@ def _get_import_step(self, cr, uid, external_session, context=None):
     """
     return 100
 
+# XXX a degager
 @extend(Model)
 def _get_external_resources(self, cr, uid, external_session, external_id=None, resource_filter=None, mapping=None, fields=None, context=None):
     """Abstract function that return the external resource
@@ -461,6 +466,7 @@ def _get_external_resources(self, cr, uid, external_session, external_id=None, r
                                 mapping[mapping_id]['external_get_method'])
     return external_get_meth(mapping[mapping_id]['external_resource_name'], resource_filter)
 
+# XXX a degager
 @extend(Model)
 def _get_mapping_id(self, cr, uid, referential_id, context=None):
     """Function that return the mapping id for the corresponding object
@@ -644,6 +650,7 @@ def _get_mapping(self, cr, uid, referential_id, convertion_type='from_external_t
 ##                 result[key] += res.get(key, [])
 ##     return result
 
+# XXX a degager
 @extend(Model)
 def _import_one_resource(self, cr, uid, external_session, external_id, context=None):
     """Abstract function to import one resource
@@ -665,6 +672,7 @@ def _import_one_resource(self, cr, uid, external_session, external_id, context=N
             id = res.get('create_id')
     return id
 
+# XXX a degager
 @extend(Model)
 def _record_external_resources(self, cr, uid, external_session, resources, defaults=None, mapping=None, mapping_id=None, context=None):
     """Abstract function to record external resources (this will convert the data and create/update the object in openerp)
@@ -695,6 +703,7 @@ def _record_external_resources(self, cr, uid, external_session, resources, defau
                 result['write_ids'].append(res['write_id'])
     return result
 
+# XXX a degager
 @extend(Model)
 def _record_one_external_resource(self, cr, uid, external_session, resource, defaults=None, mapping=None, mapping_id=None, context=None):
     """Used in _record_external_resources
@@ -770,6 +779,7 @@ def _record_one_external_resource(self, cr, uid, external_session, resource, def
         return {'write_id' : existing_rec_id}
     return {}
 
+# XXX a degager
 @extend(Model)
 def oe_update(self, cr, uid, external_session, existing_rec_id, vals, resource, defaults, context=None):
     """Update an existing resource in OpenERP
@@ -786,6 +796,7 @@ def oe_update(self, cr, uid, external_session, existing_rec_id, vals, resource, 
     context['referential_id'] = external_session.referential_id.id #did it's needed somewhere?
     return self.write(cr, uid, existing_rec_id, vals, context)
 
+# XXX a degager
 @extend(Model)
 def oe_create(self, cr, uid, external_session, vals, resource, defaults, context=None):
     """Create an new resource in OpenERP
@@ -1231,6 +1242,7 @@ def _get_oe_resources(self, cr, uid, external_session, ids, langs, smart_export=
     return resources
 
 
+# XXX rename me
 @extend(Model)
 def _get_oeid_from_extid_or_alternative_keys(self, cr, uid, vals, external_id, referential_id, alternative_keys, context=None):
     """
@@ -1269,6 +1281,7 @@ def _get_oeid_from_extid_or_alternative_keys(self, cr, uid, vals, external_id, r
             expected_res_id = expected_res_id and expected_res_id[0] or False
     return existing_ir_model_data_id, expected_res_id
 
+# XXX move to connector or referential
 @extend(Model)
 def _prepare_external_id_vals(self, cr, uid, res_id, ext_id, referential_id, context=None):
     """ Create an external reference for a resource id in the ir.model.data table"""
@@ -1282,6 +1295,7 @@ def _prepare_external_id_vals(self, cr, uid, res_id, ext_id, referential_id, con
                           }
     return ir_model_data_vals
 
+# XXX move to connector or referential
 @extend(Model)
 def create_external_id_vals(self, cr, uid, existing_rec_id, external_id, referential_id, context=None):
     """Add the external id in the table ir_model_data"""

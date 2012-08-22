@@ -236,7 +236,7 @@ class external_referential(Model):
         result = {"create_ids" : [], "write_ids" : []}
         for referential in self.browse(cr, uid, ids, context=context):
             connector_cls = REGISTRY.get_connector(referential.type, referential.version) # XXX checkme
-            ext_session = ExternalSession(referential)
+            ext_session = ExternalSession(referential) # when implementing this on a shop, pass the shop as 2nd argument
             connector = connector_cls(ext_session, referential) # XXX the session knows the referential, so do we need both?
             res = connector.import_resource(cr, uid, resource_name)
             for key in result:

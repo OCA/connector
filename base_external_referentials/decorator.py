@@ -27,45 +27,6 @@ import functools
 import xmlrpclib
 from openerp.tools.config import config
 
-#TODO refactor me we should create 2 decorator
-# 1 only_for_referential
-# 2 only_for_referential_category
-def only_for_referential(ref_type=None, ref_categ=None, super_function=None):
-    """
-    This decorator will execute the code of the function decorated only if
-    the referential_type match with the referential_type pass in the context
-    If not super method will be call.
-    argument must be the referential or the referential_id or the external_session
-    """
-    def decorator(func):
-        @functools.wraps(func)
-        def wrapped(self, cr, uid, argument, *args, **kwargs):
-            if self._name == 'external.referential' and (isinstance(argument, list) or isinstance(argument, int)):
-                referential_id = isinstance(argument, list) and argument[0] or argument
-                referential = self.browse(cr, uid, referential_id)
-            else:
-                referential = argument.referential_id
-            if ref_type and referential.type_id.name.lower() == ref_type.lower() or ref_categ and referential.categ_id.name.lower() == ref_categ.lower():
-                return func(self, cr, uid, argument, *args, **kwargs)
-            else:
-                if super_function:
-                    return super_function(self, cr, uid, argument, *args, **kwargs)
-                else:
-                    name = func.__name__
-                    use_next_class = False
-                    for base in self.__class__.mro()[1:]:
-                        if use_next_class and hasattr(base, name):
-                            return getattr(base, name)(self, cr, uid, argument, *args, **kwargs)
-                        class_func = base.__dict__.get(name)
-                        if class_func:
-                            original_func = class_func.__dict__.get("_original_func_before_wrap")
-                            if original_func is func:
-                                use_next_class = True
-                    raise except_osv(_("Not Implemented"), _("Not parent method found"))
-        wrapped._original_func_before_wrap = func
-        return wrapped
-    return decorator
-
 
 def open_report(func):
     """ This decorator will start and close a report for the function call

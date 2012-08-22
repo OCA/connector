@@ -75,6 +75,14 @@ class file_buffer(osv.osv):
 
             return base64.decodestring(attachment.datas)
 
+    def run_file_buffer_scheduler(self, cr, uid, domain=None, context=None):
+        if not domain: domain = []
+        domain.append(('state', '=', 'waiting'))
+        ids = self.search(cr, uid, domain, context=context)
+        if ids:
+            return self.run(cr, uid, ids, context=context)
+        return True
+
 
     def run(self, cr, uid, ids, context=None):
         """
@@ -84,6 +92,7 @@ class file_buffer(osv.osv):
         for filebuffer in self.browse(cr, uid, ids, context=context):
             external_session = ExternalSession(filebuffer.referential_id, filebuffer)
             self._run(cr, uid, external_session, filebuffer, context=context) 
+            filebuffer.done()
         return True
     
     def _run(self, cr, uid, external_session, filebuffer, context=None):

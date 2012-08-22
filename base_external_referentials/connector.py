@@ -51,8 +51,15 @@ REGISTRY = ConnectorRegistry()
 class AbstractConnector(object):
     """base class for the connector
 
-    subclasses must implement the _import_<resource_name>(cursor,
-    uid, res_obj, defaults, context) methods for the various resources
+    subclasses can implement the following specialization point:
+    * _import_<model_name>(cr, uid, res_obj, defaults, context)
+    * _get_import_defaults_<model_name>(cr, uid, context=context)
+    * _import_<model_name>(cr, uid, res_obj, defaults, context)
+    * _get_import_step_<model_name>(res_obj, context)
+    * _get_filter_<model_name>(cr, uid, res_obj, step, previous_filter, context)
+    * _record_one_<model_name>(cr, uid, res_obj, resource, defaults, context)
+    * _oe_update_<model_name>(cr, uid, res_obj, existing_rec_id, vals, resource, defaults, context)
+    * _oe_create_<model_name>(cr, uid, res_obj, vals, resource, defaults, context)
     """
     default_import_step = 100
     @classmethod

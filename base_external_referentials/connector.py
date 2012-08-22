@@ -140,11 +140,6 @@ class AbstractConnector(object):
             result[key] += res.get(key, [])
         return result
 
-
-    def update_filter_with_id(self, resource_filter, ext_id):
-        filter_key = self.mapping['key_for_external_id']
-        resource_filter[filter_key] = external_id
-
     def ext_read(self, res_obj, ext_ids, context=None):
         """return iterator over dict of object attributes"""
         raise NotImplementedError

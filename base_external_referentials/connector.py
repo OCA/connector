@@ -401,34 +401,3 @@ class ModelMap(object):
     def alternative_key(self):
         raise NotImplementedError
 
-class SaleOrderLineMap(ModelMap):
-    model_name = 'sale.order.line'
-
-class ResPartnerAddressMap(ModelMap):
-    model_name = 'res.partner.address'
-
-class SaleOrderMap(ModelMap):
-    model_name = 'sale.order'
-    _external_id_key = 'increment_id'
-    direct_import = [('increment_id', 'name'),
-                     ('grand_total', 'ext_total_amount'),
-                     ('customer_id', 'partner_id'),
-                     ('created_at', 'date_order'),
-                     ('cod_fee', 'gift_certificate_amount'),
-                     ('shipping_amount', 'shipping_amount_tax_excluded'),
-                     ('base_shipping_incl_tax', 'shipping_amount_tax_included'),
-                     ('giftcert_code', 'gift_certificates_code'),
-                     ('giftcert_amount', 'gift_certificates_amount'),
-                     ]
-
-    def import_payment(self, cr, uid, ext_attr, ext_resource, oerp_value, context=None):
-        pass
-    def import_shipping_method(self, cr, uid, ext_attr, ext_resource, oerp_value, context=None):
-        pass
-    function_import = [('payment', import_payment),
-                       ('shipping_method', import_shipping_method),
-                       ]
-    submapping_import = [('items', ('order_line', SaleOrderLineMap)),
-                         ('shipping_address', ('partner_shipping_id', ResPartnerAddressMap)),
-                         ('billing_address', ('partner_invoice_id', ResPartnerAddressMap)),
-                         ]

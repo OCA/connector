@@ -39,6 +39,8 @@ class file_buffer(osv.osv):
             help=""),
         'job_ended': fields.datetime('Job ended'),
         'referential_id': fields.related('mapping_id', 'referential_id', type='many2one', relation='external.referential', string='Ext. referential', store=True),
+        #This field add a dependency on sale (maybe move it into an other module if it's problematic)
+        'shop_id': fields.many2one('sale.shop', 'Shop'),
     }
 
     _order = 'name desc'

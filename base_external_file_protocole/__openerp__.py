@@ -32,7 +32,7 @@ Also it's used in file_exchange
 """,
     'author': 'Akretion',
     'website': 'http://www.akretion.com/',
-    'depends': ['base_external_referentials', 'base_file_protocole'],
+    'depends': ['base_external_referentials', 'base_file_protocole', 'sale'],
     'init_xml': [],
     'update_xml': [
         'file_buffer_view.xml',

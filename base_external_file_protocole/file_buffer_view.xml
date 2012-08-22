@@ -33,6 +33,7 @@
         <field name="mapping_id" />
         <field name="file_id" />
         <field name="referential_id"/>
+        <field name="shop_id"/>
         <field name="job_ended" />
         <field name="active"/>
         <button name="run" string="Run" colspan="2" type="object" />

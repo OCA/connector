@@ -50,29 +50,19 @@ class file_buffer(osv.osv):
         'state': 'waiting',
     }
 
-    def import_file():
-        '''
-        method qui import le fichier, on a tout ce qu’il faut, via le mapping on sait quel mapping on    doit appliqué et sur quel resource on applique l’import (product.product...)
-        '''
-        return True
-
     def get_file(self, cr, uid, file_id, context=None):
         """
-        Blabla
-        :param int file_id: mystr
-        :param list mlist: mylist
+        Fonction that return the content of the attachment
+        :param int file_id : id of the file buffer
         :rtype: str
-        :return: __
+        :return: the content attachment
         """
-
-
         attach_obj = self.pool.get('ir.attachment')
         attachment_id = attach_obj.search(cr, uid, [('res_model','=','file.buffer'), ('res_id','=', file_id)])
         if not attachment_id:
             return False
         else:
             attachment = attach_obj.browse(cr, uid, attachment_id[0], context=context)
-
             return base64.decodestring(attachment.datas)
 
     def run_file_buffer_scheduler(self, cr, uid, domain=None, context=None):
@@ -82,7 +72,6 @@ class file_buffer(osv.osv):
         if ids:
             return self.run(cr, uid, ids, context=context)
         return True
-
 
     def run(self, cr, uid, ids, context=None):
         """

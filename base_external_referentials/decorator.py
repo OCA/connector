@@ -27,6 +27,7 @@ import functools
 import xmlrpclib
 from openerp.tools.config import config
 
+# Would these decorators be nicer as Context Managers?
 
 def open_report(func):
     """ This decorator will start and close a report for the function call

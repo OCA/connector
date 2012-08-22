@@ -91,7 +91,7 @@ class AbstractConnector(object):
     ##     return self._do_import_xxxx(cr, uid, res_obj, defaults, context)
     ##     return {'create_ids': [], write_ids:[]}
 
-    def _do_import_searchread(self, cr, uid, res_obj, defaults, context=None):
+    def _do_import(self, cr, uid, res_obj, defaults, context=None):
         result = {"create_ids" : [], "write_ids" : []}
         step = res_obj._get_import_step(cr, uid, self.ext_session, context=context)
         resource_filter = None
@@ -102,12 +102,7 @@ class AbstractConnector(object):
                                                   previous_filter=resource_filter,
                                                   context=context)
             #TODO import only the field needed to improve speed import ;)
-            resources = res_obj._get_external_resources(cr, uid,
-                                                        self.ext_session,
-                                                        resource_filter=resource_filter,
-                                                        mapping=self.mapping,
-                                                        fields=None,
-                                                        context=context)
+            resources = self.ext_search_read(res_obj, resource_filter, context)
             if not resources:
                 break
             if not isinstance(resources, list):
@@ -122,58 +117,17 @@ class AbstractConnector(object):
                 result[key] += res.get(key, [])
         return result
 
-    def _do_import_search_then_read(self, cr, uid, res_obj, defaults, context=None):
-        result = {"create_ids" : [], "write_ids" : []}
-        step = res_obj._get_import_step(cr, uid, self.ext_session, context=context)
-        resource_filter = None
-        while True:
-            resource_filter = res_obj._get_filter(cr, uid,
-                                                  self.ext_session,
-                                                  step,
-                                                  previous_filter=resource_filter,
-                                                  context=context)
-            ext_ids = res_obj._get_external_resource_ids(cr, uid,
-                                                         self.ext_session,
-                                                         resource_filter,
-                                                         mapping=self.mapping,
-                                                         context=context)
-            if not ext_ids:
-                break
-            for ext_id in ext_ids:
-                #TODO import only the field needed to improve speed import ;)
-                resources = res_obj._get_external_resources(cr, uid,
-                                                            self.ext_session,
-                                                            ext_id,
-                                                            mapping=self.mapping,
-                                                            fields=None,
-                                                            context=context)
-                if not isinstance(resources, list):
-                    resources = [resources]
-                res = res_obj._record_external_resources(cr, uid,
-                                                         self.ext_session,
-                                                         resources,
-                                                         defaults=defaults,
-                                                         mapping=self.mapping,
-                                                         context=context)
-                for key in result:
-                    result[key] += res.get(key, [])
-        return result
 
-    def _do_import_searchread_noloop(self, cr, uid, res_obj, defaults, context=None):
+    def _do_import_noloop(self, cr, uid, res_obj, defaults, context=None):
         result = {"create_ids" : [], "write_ids" : []}
-        step = res_obj._get_import_step(cr, uid, self.ext_session, context=context)
+        step = None
         #Magento API do not support step import so we can not use a loop
         resource_filter = res_obj._get_filter(cr, uid,
                                               self.ext_session,
                                               step,
                                               context=context)
         #TODO import only the field needed to improve speed import ;)
-        resources = res_obj._get_external_resources(cr, uid,
-                                                    self.ext_session,
-                                                    resource_filter=resource_filter,
-                                                    mapping=self.mapping,
-                                                    fields=None,
-                                                    context=context)
+        resources = self.ext_search_read(res_obj, resource_filter, context)
         if not isinstance(resources, list):
             resources = [resources]
         res = res_obj._record_external_resources(cr, uid,
@@ -186,54 +140,24 @@ class AbstractConnector(object):
             result[key] += res.get(key, [])
         return result
 
-    def _do_import_search_then_read_noloop(self, cr, uid, res_obj, defaults, context=None):
-        result = {"create_ids" : [], "write_ids" : []}
-        step = res_obj._get_import_step(cr, uid, self.ext_session, context=context)
-        #Magento API do not support step import so we can not use a loop
-        resource_filter = res_obj._get_filter(cr, uid,
-                                              self.ext_session,
-                                              step,
-                                              context=context)
-        ext_ids = res_obj._get_external_resource_ids(cr, uid,
-                                                     self.ext_session,
-                                                     resource_filter,
-                                                     mapping=self.mapping,
-                                                     context=context)
-        for ext_id in ext_ids:
-            #TODO import only the field needed to improve speed import ;)
-            self.update_filter_with_id(resource_filter, ext_id)
-            resources = res_obj._get_external_resources(cr, uid,
-                                                        self.ext_session,
-                                                        ext_id,
-                                                        mapping=self.mapping,
-                                                        fields=None,
-                                                        context=context)
-            if not isinstance(resources, list):
-                resources = [resources]
-            res = res_obj._record_external_resources(cr, uid, self.ext_session,
-                                                     resources,
-                                                     defaults=defaults,
-                                                     mapping=self.mapping,
-                                                     context=context)
-            for key in result:
-                result[key] += res.get(key, [])
-        return result
 
     def update_filter_with_id(self, resource_filter, ext_id):
         filter_key = self.mapping['key_for_external_id']
         resource_filter[filter_key] = external_id
 
-    def ext_read(self, ext_ids, context=None):
-        """return list dict of object attributes"""
+    def ext_read(self, res_obj, ext_ids, context=None):
+        """return iterator over dict of object attributes"""
         raise NotImplementedError
 
-    def ext_search(self, ext_filter, context=None):
+    def ext_search(self, res_obj, ext_filter, context=None):
         """return list of ext ids"""
         raise NotImplementedError
 
-    def ext_search_read(self, ext_filter, context=None):
+    def ext_search_read(self, res_obj, ext_filter, context=None):
         """return list of dict of object attributes"""
-        raise NotImplementedError
+        # default implementation, override with something smart if your backend allows / requires it
+        ext_ids = self.ext_search(res_obj, ext_filter, context)
+        return self.ext_read(res_obj, ext_ids, context)
 
 class AbstractMapping(object):
     @classmethod

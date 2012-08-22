@@ -20,11 +20,14 @@
 #
 ##############################################################################
 
+from tempfile import TemporaryFile
+
 from openerp.osv.orm import Model
 from openerp.osv import fields
-from tempfile import TemporaryFile
-from base_file_protocole.base_file_protocole import FileCsvWriter
 
+from base_file_protocole.base_file_protocole import FileCsvWriter
+from .connector import REGISTRY
+from .external_osv import ExternalSession
 
 class external_referential_category(Model):
     _name = 'external.referential.category'
@@ -218,6 +221,30 @@ class external_referential(Model):
                     'alternative_key': mapping_line_vals['alternative_key'],
                     'function_name': mapping_line_vals['function_name'],
                         }
+
+
+    def import_resources(self, cr, uid, ids, resource_name, method="search_then_read", context=None):
+        """Abstract function to import resources from a shop / a referential...
+
+        :param list ids: list of id
+        :param str ressource_name: the resource name to import
+        :param str method: method used for importing the resource (search_then_read,
+            search_then_read_no_loop, search_read, search_read_no_loop )
+        :rtype: dict
+        :return: dictionary with the key "create_ids" and "write_ids" which containt the id created/written
+        """
+        result = {"create_ids" : [], "write_ids" : []}
+        for referential in self.browse(cr, uid, ids, context=context):
+            connector_cls = REGISTRY.get_connector(referential.type, referential.version) # XXX checkme
+            ext_session = ExternalSession(referential)
+            connector = connector_cls(ext_session, referential) # XXX the session knows the referential, so do we need both?
+            res = connector.import_resource(cr, uid, resource_name)
+            for key in result:
+                result[key] += res.get(key, [])
+        return result # XXX xmlrpc error
+
+
+
 
     def refresh_mapping(self, cr, uid, ids, context=None):
         #This function will reinstate mapping & mapping_lines for registered objects

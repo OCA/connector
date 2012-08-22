@@ -1,4 +1,4 @@
-# -*- encoding: utf-8 -*-
+ -*- encoding: utf-8 -*-
 ##############################################################################
 #
 #    OpenERP, Open Source Management Solution
@@ -96,7 +96,7 @@ def override(class_to_extend, prefix):
     return decorator
 
 
-class ExternalSession(object):
+class ExternalSession(object): 
     def __init__(self, referential, sync_from_object=None):
         """External Session in an object to store the information about a connection with an
         extenal system, like Magento, Prestashop, Ebay, ftp....
@@ -447,11 +447,19 @@ def _get_external_resources(self, cr, uid, external_session, external_id=None, r
     :rtype: list
     :return: a list of dict that contain resource information
     """
-    mapping, mapping_id = self._init_mapping(cr, uid, external_session.referential_id.id, mapping=mapping, context=context)
-    if not resource_filter: resource_filter = {}
-    if external_id: resource_filter[mapping[mapping_id]['key_for_external_id']] = external_id
+    mapping, mapping_id = self._init_mapping(cr, uid,
+                                             external_session.referential_id.id,
+                                             mapping=mapping,
+                                             context=context)
+    if not resource_filter:
+        resource_filter = {}
+    if external_id:
+        filter_key = mapping[mapping_id]['key_for_external_id']
+        resource_filter[filter_key] = external_id
 
-    return getattr(external_session.connection, mapping[mapping_id]['external_get_method'])(mapping[mapping_id]['external_resource_name'], resource_filter)
+    external_get_meth = getattr(external_session.connection,
+                                mapping[mapping_id]['external_get_method'])
+    return external_get_meth(mapping[mapping_id]['external_resource_name'], resource_filter)
 
 @extend(Model)
 def _get_mapping_id(self, cr, uid, referential_id, context=None):
@@ -466,6 +474,7 @@ def _get_mapping_id(self, cr, uid, referential_id, context=None):
                                                           context=context)
     return mapping_id and mapping_id[0] or False
 
+# XXX a degager
 @extend(Model)
 def _init_mapping(self, cr, uid, referential_id, convertion_type='from_external_to_openerp',
                   mapping_line_filter_ids=None, mapping=None, mapping_id=None, context=None):
@@ -490,6 +499,7 @@ def _init_mapping(self, cr, uid, referential_id, convertion_type='from_external_
                                                 context=context)
     return mapping, mapping_id
 
+# XXX a degager
 @extend(Model)
 def _get_mapping(self, cr, uid, referential_id, convertion_type='from_external_to_openerp',
                  mapping_line_filter_ids=None, mapping_id=None, context=None):
@@ -529,106 +539,110 @@ def _get_mapping(self, cr, uid, referential_id, convertion_type='from_external_t
         res['mapping_lines'] = mapping_lines
         return res
 
-@extend(Model)
-def import_resources(self, cr, uid, ids, resource_name, method="search_then_read", context=None):
-    """Abstract function to import resources from a shop / a referential...
 
-    :param list ids: list of id
-    :param str ressource_name: the resource name to import
-    :param str method: method used for importing the resource (search_then_read,
-                            search_then_read_no_loop, search_read, search_read_no_loop )
-    :rtype: dict
-    :return: dictionary with the key "create_ids" and "write_ids" which containt the id created/written
-    """
-    if context is None: context={}
-    result = {"create_ids" : [], "write_ids" : []}
-    for browse_record in self.browse(cr, uid, ids, context=context):
-        if browse_record._name == 'external.referential':
-            external_session = ExternalSession(browse_record, browse_record)
-        else:
-            if hasattr(browse_record, 'referential_id'):
-                context['%s_id'%browse_record._name.replace('.', '_')] = browse_record.id
-                external_session = ExternalSession(browse_record.referential_id, browse_record)
-            else:
-                raise except_osv(_("Not Implemented"),
-                                     _("The field referential_id doesn't exist on the object %s. Reporting system can not be used") % (browse_record._name,))
-        defaults = self.pool.get(resource_name)._get_default_import_values(cr, uid, external_session, context=context)
-        res = self.pool.get(resource_name)._import_resources(cr, uid, external_session, defaults, method=method, context=context)
-        for key in result:
-            result[key].append(res.get(key, []))
-    return result
+## # XXX move this method to the referential class
+## # add specific implementaiton in e-commerce-addons for shops (in base_sale_multichannel)
+## @extend(Model)
+## def import_resources(self, cr, uid, ids, resource_name, method="search_then_read", context=None):
+##     """Abstract function to import resources from a shop / a referential...
+
+##     :param list ids: list of id
+##     :param str ressource_name: the resource name to import
+##     :param str method: method used for importing the resource (search_then_read,
+##                             search_then_read_no_loop, search_read, search_read_no_loop )
+##     :rtype: dict
+##     :return: dictionary with the key "create_ids" and "write_ids" which containt the id created/written
+##     """
+##     if context is None: context={}
+##     result = {"create_ids" : [], "write_ids" : []}
+##     for browse_record in self.browse(cr, uid, ids, context=context):
+##         if browse_record._name == 'external.referential':
+##             external_session = ExternalSession(browse_record, browse_record)
+##         else:
+##             if hasattr(browse_record, 'referential_id'):
+##                 context['%s_id'%browse_record._name.replace('.', '_')] = browse_record.id
+##                 external_session = ExternalSession(browse_record.referential_id, browse_record)
+##             else:
+##                 raise except_osv(_("Not Implemented"),
+##                                  _("The field referential_id doesn't exist on the object %s. Reporting system can not be used") % (browse_record._name,))
+##         defaults = self.pool.get(resource_name)._get_default_import_values(cr, uid, external_session, context=context)
+##         res = self.pool.get(resource_name)._import_resources(cr, uid, external_session, defaults, method=method, context=context)
+##         for key in result:
+##             result[key].append(res.get(key, []))
+##     return result
 
 
-@extend(Model)
-def _import_resources(self, cr, uid, external_session, defaults=None, method="search_then_read", context=None):
-    """Abstract function to import resources form a specific object (like shop, referential...)
+## # XXX move this to the connector class
+## @extend(Model)
+## def _import_resources(self, cr, uid, external_session, defaults=None, method="search_then_read", context=None):
+##     """Abstract function to import resources form a specific object (like shop, referential...)
 
-    :param ExternalSession external_session : External_session that contain all params of connection
-    :param dict defaults: default value for the resource to create
-    :param str method: method used for importing the resource (
-                        search_then_read,
-                        search_then_read_no_loop,
-                        search_read,
-                        search_read_no_loop )
-    :rtype: dict
-    :return: dictionary with the key "create_ids" and "write_ids" which containt the id created/written
-    """
-    external_session.logger.info("Start to import the ressource %s"%(self._name,))
-    result = {"create_ids" : [], "write_ids" : []}
-    mapping, mapping_id = self._init_mapping(cr, uid, external_session.referential_id.id, context=context)
-    if mapping[mapping_id].get('mapping_lines'):
-        step = self._get_import_step(cr, uid, external_session, context=context)
-        resource_filter = None
-        #TODO refactor improve and simplify this code
-        if method == 'search_then_read':
-            while True:
-                resource_filter = self._get_filter(cr, uid, external_session, step, previous_filter=resource_filter, context=context)
-                ext_ids = self._get_external_resource_ids(cr, uid, external_session, resource_filter, mapping=mapping, context=context)
-                if not ext_ids:
-                    break
-                for ext_id in ext_ids:
-                    #TODO import only the field needed to improve speed import ;)
-                    resources = self._get_external_resources(cr, uid, external_session, ext_id, mapping=mapping, fields=None, context=context)
-                    if not isinstance(resources, list):
-                        resources = [resources]
-                    res = self._record_external_resources(cr, uid, external_session, resources, defaults=defaults, mapping=mapping, mapping_id=mapping_id, context=context)
-                    for key in result:
-                        result[key].append(res.get(key, []))
-        elif method == 'search_then_read_no_loop':
-            #Magento API do not support step import so we can not use a loop
-            resource_filter = self._get_filter(cr, uid, external_session, step, previous_filter=resource_filter, context=context)
-            ext_ids = self._get_external_resource_ids(cr, uid, external_session, resource_filter, mapping=mapping, context=context)
-            for ext_id in ext_ids:
-                #TODO import only the field needed to improve speed import ;)
-                resources = self._get_external_resources(cr, uid, external_session, ext_id, mapping=mapping, fields=None, context=context)
-                if not isinstance(resources, list):
-                    resources = [resources]
-                res = self._record_external_resources(cr, uid, external_session, resources, defaults=defaults, mapping=mapping, mapping_id=mapping_id, context=context)
-                for key in result:
-                    result[key].append(res.get(key, []))
-        elif method == 'search_read':
-            while True:
-                resource_filter = self._get_filter(cr, uid, external_session, step, previous_filter=resource_filter, context=context)
-                #TODO import only the field needed to improve speed import ;)
-                resources = self._get_external_resources(cr, uid, external_session, resource_filter=resource_filter, mapping=mapping, fields=None, context=context)
-                if not resources:
-                    break
-                if not isinstance(resources, list):
-                    resources = [resources]
-                res = self._record_external_resources(cr, uid, external_session, resources, defaults=defaults, mapping=mapping, mapping_id=mapping_id, context=context)
-                for key in result:
-                    result[key].append(res.get(key, []))
-        elif method == 'search_read_no_loop':
-            #Magento API do not support step import so we can not use a loop
-            resource_filter = self._get_filter(cr, uid, external_session, step, previous_filter=resource_filter, context=context)
-            #TODO import only the field needed to improve speed import ;)
-            resources = self._get_external_resources(cr, uid, external_session, resource_filter=resource_filter, mapping=mapping, fields=None, context=context)
-            if not isinstance(resources, list):
-                resources = [resources]
-            res = self._record_external_resources(cr, uid, external_session, resources, defaults=defaults, mapping=mapping, mapping_id=mapping_id, context=context)
-            for key in result:
-                result[key].append(res.get(key, []))
-    return result
+##     :param ExternalSession external_session : External_session that contain all params of connection
+##     :param dict defaults: default value for the resource to create
+##     :param str method: method used for importing the resource (
+##                         search_then_read,
+##                         search_then_read_no_loop,
+##                         search_read,
+##                         search_read_no_loop )
+##     :rtype: dict
+##     :return: dictionary with the key "create_ids" and "write_ids" which containt the id created/written
+##     """
+##     external_session.logger.info("Start to import the ressource %s"%(self._name,))
+##     result = {"create_ids" : [], "write_ids" : []}
+##     mapping, mapping_id = self._init_mapping(cr, uid, external_session.referential_id.id, context=context)
+##     if mapping[mapping_id].get('mapping_lines'):
+##         step = self._get_import_step(cr, uid, external_session, context=context)
+##         resource_filter = None
+##         #TODO refactor improve and simplify this code
+##         if method == 'search_then_read':
+##             while True:
+##                 resource_filter = self._get_filter(cr, uid, external_session, step, previous_filter=resource_filter, context=context)
+##                 ext_ids = self._get_external_resource_ids(cr, uid, external_session, resource_filter, mapping=mapping, context=context)
+##                 if not ext_ids:
+##                     break
+##                 for ext_id in ext_ids:
+##                     #TODO import only the field needed to improve speed import ;)
+##                     resources = self._get_external_resources(cr, uid, external_session, ext_id, mapping=mapping, fields=None, context=context)
+##                     if not isinstance(resources, list):
+##                         resources = [resources]
+##                     res = self._record_external_resources(cr, uid, external_session, resources, defaults=defaults, mapping=mapping, mapping_id=mapping_id, context=context)
+##                     for key in result:
+##                         result[key] += res.get(key, [])
+##         elif method == 'search_then_read_no_loop':
+##             #Magento API do not support step import so we can not use a loop
+##             resource_filter = self._get_filter(cr, uid, external_session, step, previous_filter=resource_filter, context=context)
+##             ext_ids = self._get_external_resource_ids(cr, uid, external_session, resource_filter, mapping=mapping, context=context)
+##             for ext_id in ext_ids:
+##                 #TODO import only the field needed to improve speed import ;)
+##                 resources = self._get_external_resources(cr, uid, external_session, ext_id, mapping=mapping, fields=None, context=context)
+##                 if not isinstance(resources, list):
+##                     resources = [resources]
+##                 res = self._record_external_resources(cr, uid, external_session, resources, defaults=defaults, mapping=mapping, mapping_id=mapping_id, context=context)
+##                 for key in result:
+##                     result[key] += res.get(key, [])
+##         elif method == 'search_read':
+##             while True:
+##                 resource_filter = self._get_filter(cr, uid, external_session, step, previous_filter=resource_filter, context=context)
+##                 #TODO import only the field needed to improve speed import ;)
+##                 resources = self._get_external_resources(cr, uid, external_session, resource_filter=resource_filter, mapping=mapping, fields=None, context=context)
+##                 if not resources:
+##                     break
+##                 if not isinstance(resources, list):
+##                     resources = [resources]
+##                 res = self._record_external_resources(cr, uid, external_session, resources, defaults=defaults, mapping=mapping, mapping_id=mapping_id, context=context)
+##                 for key in result:
+##                     result[key] += res.get(key, [])
+##         elif method == 'search_read_no_loop':
+##             #Magento API do not support step import so we can not use a loop
+##             resource_filter = self._get_filter(cr, uid, external_session, step, previous_filter=resource_filter, context=context)
+##             #TODO import only the field needed to improve speed import ;)
+##             resources = self._get_external_resources(cr, uid, external_session, resource_filter=resource_filter, mapping=mapping, fields=None, context=context)
+##             if not isinstance(resources, list):
+##                 resources = [resources]
+##             res = self._record_external_resources(cr, uid, external_session, resources, defaults=defaults, mapping=mapping, mapping_id=mapping_id, context=context)
+##             for key in result:
+##                 result[key] += res.get(key, [])
+##     return result
 
 @extend(Model)
 def _import_one_resource(self, cr, uid, external_session, external_id, context=None):
@@ -642,10 +656,13 @@ def _import_one_resource(self, cr, uid, external_session, external_id, context=N
     resources = self._get_external_resources(cr, uid, external_session, external_id, context=context)
     if isinstance(resources, list):
         res = self._record_external_resources(cr, uid, external_session, resources, context=context)
-        id = res.get('write_ids') and res['write_ids'][0] or res['create_ids'][0]
+        id = res['write_ids'][0] if res.get('write_ids') else res['create_ids'][0]
     else:
         res = self._record_one_external_resource(cr, uid, external_session, resources, context=context)
-        id = res.get('write_id') or res.get('create_id')
+        if res.get('write_id'):
+            id = res.get('write_id')
+        else:
+            id = res.get('create_id')
     return id
 
 @extend(Model)
@@ -672,8 +689,10 @@ def _record_external_resources(self, cr, uid, external_session, resources, defau
     for resource in resources:
         res = self._record_one_external_resource(cr, uid, external_session, resource, defaults=defaults, mapping=mapping, mapping_id=mapping_id, context=context)
         if res:
-            if res.get('create_id'): result['create_ids'].append(res['create_id'])
-            if res.get('write_id'): result['write_ids'].append(res['write_id'])
+            if 'create_id' in res:
+                result['create_ids'].append(res['create_id'])
+            if 'write_id'in res:
+                result['write_ids'].append(res['write_id'])
     return result
 
 @extend(Model)

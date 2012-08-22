@@ -703,7 +703,7 @@ def _record_external_resources(self, cr, uid, external_session, resources, defau
                 result['write_ids'].append(res['write_id'])
     return result
 
-# XXX a degager
+# XXX a degager # alexandre scan stopped here. TODO sebastien: la suite :-)
 @extend(Model)
 def _record_one_external_resource(self, cr, uid, external_session, resource, defaults=None, mapping=None, mapping_id=None, context=None):
     """Used in _record_external_resources

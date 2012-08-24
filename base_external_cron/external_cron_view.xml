@@ -27,7 +27,6 @@
                     <field name="repeat" />
                     <field name="report_type" />
                     <field name="referential_id" />
-                    <button colspan='2' name="action_test" string="infos" type="object" />
                 </form>
             </field>
         </record>

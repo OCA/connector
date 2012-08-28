@@ -163,7 +163,7 @@ class external_mappinglines_template(osv.osv):
 external_mappinglines_template()
 
 class external_referential(osv.osv):
-    """External referential can have the option _lang_support. It can be equal to : 
+    """External referential can have the option _lang_support. It can be equal to :
             - fields_with_main_lang : the fields to create will be organized all in the main lang and only the translatable fields in the others.example : {'main_lang': {trad_field : value, untrad_field: value, trad_field : value, untrad_field : value ...}, 'other_lang': {trad_field: value, trad_field: value}, ...}
             - fields_with_no_lang : all the fields untranslatable are grouped and the translatable fields are grouped in each lang. example : {'no_lang' : {untrad_field: value, untrad_field: value, untrad_field: value}, 'lang_one' : {trad_field: value, trad_field: value}, 'lang_two' : {trad_field: value, trad_field: value} ...}
             - all_fields : all the fields are in all languagues. example = {'lang_one' : {all_fields}, 'lang_two': {all_fields}...}"""
@@ -271,10 +271,11 @@ class external_referential(osv.osv):
     _columns = {
         'name': fields.char('Name', size=32, required=True),
         'type_id': fields.related('version_id', 'type_id', type='many2one', relation='external.referential.type', string='External Type'),
+        'type_name': fields.related('type_id', 'name', type='char', string='External Type Name'),
         'categ_id': fields.related('type_id', 'categ_id', type='many2one', relation='external.referential.category', string='External Category'),
         'categ_name': fields.related('categ_id', 'name', type='char', string='External Category Name'),
         'version_id': fields.many2one('external.referential.version', 'Referential Version', required=True),
-        'location': fields.char('Location', size=200, required=True),
+        'location': fields.char('Location', size=200),
         'apiusername': fields.char('User Name', size=64),
         'apipass': fields.char('Password', size=64),
         'mapping_ids': fields.one2many('external.mapping', 'referential_id', 'Mappings'),

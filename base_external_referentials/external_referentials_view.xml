@@ -25,22 +25,13 @@
             <field name="type">form</field>
             <field name="arch" type="xml">
                 <form>
-                    <group col="4" colspan="4">
+                    <group col="6" colspan="4" name='name'>
                         <field name="name" attrs="{'readonly':[('create_date','!=',False)]}"/>
+                        <field name="version_id"/>
+                        <field name="debug"/>
                         <field name="create_date" invisible="True"/>
-                        <notebook colspan="4">
-                            <page string="General">
-                                <field name="version_id"/>
-                                <field name="location"/>
-                                <field name="categ_name" invisible="True"/>
-                            </page>
-                            <page string="Authentication">
-                                <field name="apiusername" />
-                                <field name="apipass" />
-                            <!-- TODO improve view -->
-                                <field name="debug" />
-                            </page>
-                        </notebook>
+                        <field name="categ_name" invisible="True"/>
+                        <field name="type_name" invisible="True"/>
                     </group>
                     <group col="4" colspan="4">
                         <separator string="Core Components" colspan="4" />

@@ -19,12 +19,12 @@
 #                                                                             #
 ###############################################################################
 
-from osv import osv, fields
+from openerp.osv.orm import Model
 import netsvc
 from base_external_referentials.external_osv import extend
 from tempfile import TemporaryFile
 
-@extend(osv.osv)
+@extend(Model)
 def send_report(self, cr, uid, external_session, ids, report_name, file_name, path, context=None):
     service = netsvc.LocalService(report_name)
     result, format = service.create(cr, uid, ids, {'model': self._name}, context=context)

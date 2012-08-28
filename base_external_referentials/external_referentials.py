@@ -20,15 +20,13 @@
 #
 ##############################################################################
 
-from osv import fields, osv
-from sets import Set
-from tools.translate import _
+from openerp.osv.orm import Model
+from openerp.osv import fields
 from tempfile import TemporaryFile
 from base_file_protocole.base_file_protocole import FileCsvWriter
-import time
 
 
-class external_referential_category(osv.osv):
+class external_referential_category(Model):
     _name = 'external.referential.category'
     _description = 'External Referential Category (Ex: e-commerce, crm, warehouse)'
 
@@ -46,9 +44,7 @@ class external_referential_category(osv.osv):
             categ_id = referential_categ.name.replace('.','_').replace(' ','_')
         return categ_id
 
-external_referential_category()
-
-class external_referential_type(osv.osv):
+class external_referential_type(Model):
     _name = 'external.referential.type'
     _description = 'External Referential Type (Ex.Magento,Spree)'
 
@@ -68,9 +64,8 @@ class external_referential_type(osv.osv):
             type_id = referential_type.code.replace('.','_').replace(' ','_')
         return type_id
 
-external_referential_type()
 
-class external_referential_version(osv.osv):
+class external_referential_version(Model):
     _name = 'external.referential.version'
     _description = 'External Referential Version (Ex: v1.5.0.0 +, v1.3.2.4 +)'
     _rec_name = 'full_name'
@@ -97,9 +92,8 @@ class external_referential_version(osv.osv):
         'code': fields.char('code', size=64, required=True),
     }
 
-external_referential_version()
 
-class external_mapping_template(osv.osv):
+class external_mapping_template(Model):
     _name = "external.mapping.template"
     _description = "The source mapping records"
     _rec_name = 'model'
@@ -119,9 +113,8 @@ class external_mapping_template(osv.osv):
         'external_resource_name':fields.char('External Resource Name', size=64),
         'extra_name': fields.char('Extra Name', size=100),
                 }
-external_mapping_template()
 
-class external_mappinglines_template(osv.osv):
+class external_mappinglines_template(Model):
     _name = 'external.mappinglines.template'
     _description = 'The source mapping line records'
     _rec_name = 'name'
@@ -160,10 +153,9 @@ class external_mappinglines_template(osv.osv):
         'function_name': fields.char('Function Name', size=128),
         }
 
-external_mappinglines_template()
 
-class external_referential(osv.osv):
-    """External referential can have the option _lang_support. It can be equal to : 
+class external_referential(Model):
+    """External referential can have the option _lang_support. It can be equal to :
             - fields_with_main_lang : the fields to create will be organized all in the main lang and only the translatable fields in the others.example : {'main_lang': {trad_field : value, untrad_field: value, trad_field : value, untrad_field : value ...}, 'other_lang': {trad_field: value, trad_field: value}, ...}
             - fields_with_no_lang : all the fields untranslatable are grouped and the translatable fields are grouped in each lang. example : {'no_lang' : {untrad_field: value, untrad_field: value, untrad_field: value}, 'lang_one' : {trad_field: value, trad_field: value}, 'lang_two' : {trad_field: value, trad_field: value} ...}
             - all_fields : all the fields are in all languagues. example = {'lang_one' : {all_fields}, 'lang_two': {all_fields}...}"""
@@ -487,9 +479,8 @@ class external_referential(osv.osv):
             referential_id = referential.name.replace('.','_').replace(' ','_')
         return referential_id
 
-external_referential()
 
-class external_mapping_line(osv.osv):
+class external_mapping_line(Model):
     _name = 'external.mapping.line'
     _description = 'Field Mapping'
     _rec_name = 'name'
@@ -509,10 +500,8 @@ class external_mapping_line(osv.osv):
         'name': fields.function(_name_get_fnc, type="char", string='Name', size=256),
     }
 
-external_mapping_line()
 
-
-class external_mapping(osv.osv):
+class external_mapping(Model):
     _name = 'external.mapping'
     _description = 'External Mapping'
     _rec_name = 'model'
@@ -621,10 +610,8 @@ class external_mapping(osv.osv):
         ('ref_template_uniq', 'unique (referential_id, template_id)', 'A referential can not have various mapping imported from the same template')
     ]
 
-external_mapping()
 
-
-class external_mapping_line(osv.osv):
+class external_mapping_line(Model): # FIXME : tidy up this remnant of old OERP version
     _inherit = 'external.mapping.line'
 
     _columns = {
@@ -689,9 +676,8 @@ class external_mapping_line(osv.osv):
             line_id = (version_code + '_' + mapping_name + '_' + line_name).replace('.','_')
         return line_id
 
-external_mapping_line()
 
-class ir_model_data(osv.osv):
+class ir_model_data(Model):
     _inherit = "ir.model.data"
 
     def init(self, cr):
@@ -731,4 +717,3 @@ class ir_model_data(osv.osv):
         ('external_reference_uniq_per_object', 'unique(model, res_id, referential_id)', 'You cannot have on record with multiple external id for a sae referential'),
     ]
 
-ir_model_data()

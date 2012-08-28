@@ -19,7 +19,7 @@
 #                                                                             #
 ###############################################################################
 
-from osv import osv
+from openerp.osv.osv import except_osv
 import pooler
 from tools.translate import _
 from message_error import MappingError
@@ -61,7 +61,7 @@ def only_for_referential(ref_type=None, ref_categ=None, super_function=None):
                             original_func = class_func.__dict__.get("_original_func_before_wrap")
                             if original_func is func:
                                 use_next_class = True
-                    raise osv.except_osv(_("Not Implemented"), _("Not parent method found"))
+                    raise except_osv(_("Not Implemented"), _("Not parent method found"))
         wrapped._original_func_before_wrap = func
         return wrapped
     return decorator
@@ -75,7 +75,7 @@ def open_report(func):
     @functools.wraps(func)
     def wrapper(self, cr, uid, external_session, *args, **kwargs):
         #if not self._columns.get('referential_id'):
-        #    raise osv.except_osv(_("Not Implemented"), _("The field referential_id doesn't exist on the object %s. Reporting system can not be used" %(self._name,)))
+        #    raise except_osv(_("Not Implemented"), _("The field referential_id doesn't exist on the object %s. Reporting system can not be used" %(self._name,)))
 
         report_obj = self.pool.get('external.report')
         context = kwargs.get('context')
@@ -138,7 +138,7 @@ def catch_error_in_report(func):
             import_cr.rollback()
             error_message = 'Error with xmlrpc protocole. Error details : error %s : %s'%(e.faultCode, e.faultString)
             report_line_obj.log_fail(cr, uid, external_session, report_line_id, error_message, context=context)
-        except osv.except_osv as e:
+        except except_osv as e:
             if config['debug_mode']: raise
             import_cr.rollback()
             error_message = '%s : %s'%(e.name, e.value)
@@ -190,7 +190,7 @@ def catch_action(func):
             import_cr.rollback()
             error_message = 'Error with xmlrpc protocole. Error details : error %s : %s'%(e.faultCode, e.faultString)
             report_line_obj.log_fail(cr, uid, None, report_line_id, error_message, context=context)
-        except osv.except_osv as e:
+        except except_osv as e:
             if config['debug_mode']: raise
             import_cr.rollback()
             error_message = '%s : %s'%(e.name, e.value)

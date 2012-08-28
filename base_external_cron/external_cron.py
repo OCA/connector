@@ -19,13 +19,10 @@
 #                                                                             #
 ###############################################################################
 
-from osv import osv, fields
-import netsvc
-from base_external_referentials.external_osv import ExternalSession
-import sys
-from ebaypyt import EbayWebService
+from openerp.osv.orm import Model
+from openerp.osv import fields
 
-class external_cron(osv.osv):
+class external_cron(Model):
 
     _name = "external.cron"
     _description = "external.cron"

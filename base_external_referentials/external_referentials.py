@@ -179,6 +179,11 @@ class external_referential(Model):
     #Only user that can write crypted field can read it
     _crypted_field = ['apiusername', 'apipass', 'location']
 
+
+    def onchange_version_id(self, cr, uid, ids, version_id, context=None):
+        version = self.pool.get('external.referential.version').browse(cr, uid, version_id, context=context)
+        return {'value': {'type_name': version.type_id.name}}
+
     def read(self,cr, uid, ids, fields=None, context=None, load='_classic_read'):
         canwrite = self.check_write(cr, uid, raise_exception=False)
         res = super(external_referential, self).read(cr, uid, ids, fields=fields, context=context, load=load)
@@ -308,7 +313,8 @@ class external_referential(Model):
     _columns = {
         'name': fields.char('Name', size=32, required=True),
         'type_id': fields.related('version_id', 'type_id', type='many2one', relation='external.referential.type', string='External Type'),
-        'type_name': fields.related('type_id', 'name', type='char', string='External Type Name'),
+        'type_name': fields.related('type_id', 'name', type='char', string='External Type Name',
+                                    store=True),
         'categ_id': fields.related('type_id', 'categ_id', type='many2one', relation='external.referential.category', string='External Category'),
         'categ_name': fields.related('categ_id', 'name', type='char', string='External Category Name'),
         'version_id': fields.many2one('external.referential.version', 'Referential Version', required=True),

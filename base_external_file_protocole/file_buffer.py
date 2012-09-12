@@ -32,15 +32,18 @@ class file_buffer(osv.osv):
 
     _columns = {
         'name': fields.char('Name', size=64),
-        'file_id': fields.char('Ext. file', size=64),
-        'state': fields.selection((('waiting','Waiting'), ('running','Running'), ('done','Done')), 'State'),
+        'file_id': fields.char('Ext. file', size=64, help="external application id file"),
+        'state': fields.selection((('waiting','Waiting'), ('running','Running'), ('done','Done')),
+                                                                                     'State'),
         'active': fields.boolean('Active'),
-        'mapping_id': fields.many2one('external.mapping', 'Mapping',
-            help=""),
-        'job_ended': fields.datetime('Job ended'),
-        'referential_id': fields.related('mapping_id', 'referential_id', type='many2one', relation='external.referential', string='Ext. referential', store=True),
+        'mapping_id': fields.many2one('external.mapping', 'Mapping'),
+        'job_ended': fields.datetime('Job ended', help="GMT date given by external application"),
+        'referential_id': fields.related('mapping_id', 'referential_id', type='many2one',
+                        relation='external.referential', string='Ext. referential', store=True),
         #This field add a dependency on sale (maybe move it into an other module if it's problematic)
         'shop_id': fields.many2one('sale.shop', 'Shop'),
+        'direction': fields.selection([('input', 'Input'),('output', 'Output')], 'Direction',
+                                      help='flow direction of the file')
     }
 
     _order = 'name desc'
@@ -65,6 +68,16 @@ class file_buffer(osv.osv):
             attachment = attach_obj.browse(cr, uid, attachment_id[0], context=context)
             return base64.decodestring(attachment.datas)
 
+    def create_file_buffer_attachment(self, cr, uid, file_buffer_id, datas, file_id,
+                                      context=None, extension='csv', prefix_file_name='report'):
+        datas_encoded = base64.encodestring(datas)
+        attach_name = prefix_file_name + '_' + file_id + '.' + extension
+        params_attachment = {'name': attach_name, 'datas': datas_encoded,
+                                                                    'datas_fname': attach_name}
+        attachment_id = self.pool.get('ir.attachment').create(cr, uid, params_attachment , context)
+
+        return True
+
     def run_file_buffer_scheduler(self, cr, uid, domain=None, context=None):
         if not domain: domain = []
         domain.append(('state', '=', 'waiting'))
@@ -80,10 +93,10 @@ class file_buffer(osv.osv):
         if context is None: context = {}
         for filebuffer in self.browse(cr, uid, ids, context=context):
             external_session = ExternalSession(filebuffer.referential_id, filebuffer)
-            self._run(cr, uid, external_session, filebuffer, context=context) 
+            self._run(cr, uid, external_session, filebuffer, context=context)
             filebuffer.done()
         return True
-    
+
     def _run(self, cr, uid, external_session, filebuffer, context=None):
         filebuffer._set_state('running', context=context)
 

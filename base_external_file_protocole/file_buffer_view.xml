@@ -36,6 +36,8 @@
         <field name="shop_id"/>
         <field name="job_ended" />
         <field name="active"/>
+        <field name="direction"/>
+        <newline />
         <button name="run" string="Run" colspan="2" type="object" />
     </form>
     </field>
@@ -54,6 +56,7 @@
             <field name="mapping_id" />
             <field name="file_id" />
             <field name="job_ended" />
+            <field name="direction" string="direct." />
             <field name="referential_id" string="ex ref"/>
             <button name="run" string="Run" icon="gtk-go-forward" type="object"/>
         </tree>

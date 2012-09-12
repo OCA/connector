@@ -43,11 +43,12 @@
             <field name="view_id" ref="view_dbsource_tree"/>
         </record>
 
-        <menuitem name="Sources" 
+        <menuitem name="Database Sources"
                   id="menu_dbsource" 
                   parent="base.next_id_15" 
                   action="action_dbsource"/>
 
     </data>
 </openerp>
+
 

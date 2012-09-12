@@ -20,8 +20,6 @@
 ##############################################################################
 
 import os
-import sys
-import datetime
 from osv import fields, osv
 from openerp.tools.translate import _
 import openerp.tools as tools
@@ -29,6 +27,7 @@ import logging
 _logger = logging.getLogger(__name__)
 
 CONNECTORS = []
+
 try:
     import sqlalchemy
     import pymssql 
@@ -55,6 +54,7 @@ try:
 except:
     _logger.info('Oracle libraries not available. Please install "cx_Oracle" python package.')
 
+import psycopg2
 CONNECTORS.append( ('postgresql', 'PostgreSQL') )
 
 try:
@@ -64,13 +64,23 @@ except:
     _logger.info('SQLAlchemy not available. Please install "slqalchemy" python package.')
  
 class base_external_dbsource(osv.osv):
-    _name="base.external.dbsource"
+    _name = "base.external.dbsource"
     _description = 'External Database Sources'
     _columns = {
         'name': fields.char('Datasource name', required=True, size=64),
-        'conn_string': fields.text('Connection string', help="Microsoft SQL Server Sample: mssql+pymssql://username:%s@server:port/dbname?charset=utf8\nMySQL Sample: mysql://user:%s@server:port/dbname\nODBC Sample: DRIVER={FreeTDS};SERVER=server.address;Database=mydb;UID=sa\nORACLE Sample: username/{'view_dbsource_tree': 486}@//server.address:port/instance\nPostgreSQL Sample: dbname='template1' user='dbuser' host='localhost' port='5432'password=%s\nSQLite Sample: sqlite:///test.db"),
+        'conn_string': fields.text('Connection string', help="""\
+Sample connection strings:
+- Microsoft SQL Server: mssql+pymssql://username:%s@server:port/dbname?charset=utf8
+- MySQL: mysql://user:%s@server:port/dbname
+- ODBC: DRIVER={FreeTDS};SERVER=server.address;Database=mydb;UID=sa
+- ORACLE: username/%s@//server.address:port/instance
+- PostgreSQL: dbname='template1' user='dbuser' host='localhost' port='5432' password=%s
+- SQLite: sqlite:///test.db
+"""),
         'password': fields.char('Password' , size=40),
-        'connector': fields.selection(CONNECTORS, 'Connector', required=True),
+        'connector': fields.selection(CONNECTORS, 'Connector', required=True,
+            help = "If a connector is missing from the list, check the " \
+                 + "server log to confirm that the required componentes were detected."),
     }
 
     def conn_open(self, cr, uid, id1):
@@ -95,24 +105,40 @@ class base_external_dbsource(osv.osv):
 
         return conn
 
-    def execute(self, cr, uid, ids, sqlquery, context=None):
+    def execute_and_inspect(self, cr, uid, ids, sqlquery, sqlparams=None, context=None):
+        """Executes SQL and returns a dict with the rows and the list of columns.
+        
+            "sqlparams" can be a dict of values, that can be referenced in the SQL statement
+            using "%(key)s" or, in the case of Oracle, ":key".
+            Example: 
+                sqlquery = "select * from mytable where city = %(city)s and date > %(dt)s"
+                params   = {'city': 'Lisbon', 'dt': datetime.datetime(2000, 12, 31)}
+                
+            Sample result:  { 'colnames'; ['col_a', 'col_b', ...]
+                            , 'rows': [ (a0, b0, ...), (a1, b1, ...), ...] }
+        """
         data = self.browse(cr, uid, ids)
-        res = []
+        nams = dict()
+        rows = list()
         for obj in data:
             conn = self.conn_open(cr, uid, obj.id)
-            
-            if obj.connector in ["sqlite","mysql","mssql"]:
-                res_prox = conn.execute(sqlquery)
-                for row in res_prox:
-                    res.append(row)
-            else:
+            if obj.connector in ["sqlite","mysql","mssql"]: 
+                #using sqlalchemy
+                cur = conn.execute(sqlquery, sqlparams)
+                nams = cur.keys()
+                rows = [r for r in cur]
+            else: 
+                #using other db connectors
                 cur = conn.cursor()
-                cur.execute(sqlquery)
-                res = cur.fetchall()
-
+                cur.execute(sqlquery, sqlparams)
+                nams = [d[0] for d in cur.description]
+                rows = cur.fetchall()
             conn.close()
-        return res
+        return {'colnames': nams, 'rows': rows}
 
+    def execute(self, cr, uid, ids, sqlquery, sqlparams=None, context=None):
+        return self.execute_and_inspect(self, cr, uid, ids, sqlquery, sqlparams)['rows']
+        
     def connection_test(self, cr, uid, ids, context=None):
         for obj in self.browse(cr, uid, ids, context):
             conn = False
@@ -126,6 +152,7 @@ class base_external_dbsource(osv.osv):
                 except Exception:
                     # ignored, just a consequence of the previous exception
                     pass
+        #TODO: if OK a (wizard) message box should be displayed
         raise osv.except_osv(_("Connection test succeeded!"), _("Everything seems properly set up!"))
     
 base_external_dbsource()

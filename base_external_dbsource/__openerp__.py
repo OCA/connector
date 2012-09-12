@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    Daniel Reis
-#    2011
+#    Daniel Reis, 2011 
+#    Additional contributions by Maxime Chambreuil, Savoir-faire Linux
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -49,8 +49,12 @@ Depending on the database, you need:
         'base_external_dbsource_view.xml',
         'security/ir.model.access.csv',
     ],
-    'demo': [],
-    'test': [], 
+    'demo': [
+        'base_external_dbsource_demo.xml',
+    ],
+    'test': [
+        'dbsource_connect.yml',
+    ], 
     'installable': True,
     'active': False,
 }

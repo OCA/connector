@@ -20,7 +20,7 @@
 #########################################################################
 
 from openerp.osv.orm import TransientModel
-from openerp.osv import except_osv
+from openerp.osv.osv import except_osv
 from tools.translate import _
 
 class scheduler_creator_wizard(TransientModel):

@@ -28,6 +28,18 @@ from openerp.osv import fields
 from base_file_protocole.base_file_protocole import FileCsvWriter
 from .connector import REGISTRY
 from .external_osv import ExternalSession
+from lxml import etree
+from openerp.osv import orm
+
+
+REF_FIELDS = ['location', 'apiusername', 'apipass']
+#In your custom module you can specify which field will be visible
+#example for making visible the fields location, apiusername and apipass
+#for the referential type Magento :
+#from base_external_referentials.external_referentials import REF_VISIBLE_FIELDS
+#REF_VISIBLE_FIELDS['Magento'] = ['location', 'apiusername', 'apipass']
+
+REF_VISIBLE_FIELDS = {}
 
 
 class external_referential_category(Model):
@@ -171,6 +183,11 @@ class external_referential(Model):
     #Only user that can write crypted field can read it
     _crypted_field = ['apiusername', 'apipass', 'location']
 
+
+    def onchange_version_id(self, cr, uid, ids, version_id, context=None):
+        version = self.pool.get('external.referential.version').browse(cr, uid, version_id, context=context)
+        return {'value': {'type_name': version.type_id.name}}
+
     def read(self,cr, uid, ids, fields=None, context=None, load='_classic_read'):
         canwrite = self.check_write(cr, uid, raise_exception=False)
         res = super(external_referential, self).read(cr, uid, ids, fields=fields, context=context, load=load)
@@ -180,6 +197,39 @@ class external_referential(Model):
                     if val.get(crypted_field):
                         val[crypted_field]='********'
         return res
+
+
+    def fields_view_get(self, cr, uid, view_id=None, view_type='form', context=None, toolbar=False, submenu=False):
+        """
+        Override the original field view get in order to insert dynamically the various fields need
+        for the configuration of the referential
+        """
+        # use lxml to compose the arch XML
+        result = super(external_referential, self).fields_view_get(cr, uid,
+                                                                    view_id=view_id,
+                                                                    view_type=view_type,
+                                                                    context=context,
+                                                                    toolbar=toolbar,
+                                                                    submenu=submenu,
+                                                                )
+        if view_type == 'form':
+            eview = etree.fromstring(result['arch'])
+            toupdate_fields = []
+            for field_name in REF_FIELDS:
+                field = eview.xpath("//field[@name='%s']"%field_name)
+                if field:
+                    field = field[0]
+                    referentials = []
+                    for ref_type, visible_fields in REF_VISIBLE_FIELDS.items():
+                        if field_name in visible_fields:
+                            referentials.append(ref_type)
+                    field.set('attrs', """{
+                                    'invisible': [('type_name', 'not in', %s)],
+                                    'required': [('type_name', 'in', %s)]
+                                        }"""%(referentials, referentials))
+                    orm.setup_modifiers(field, field=result['fields'][field_name], context=context)
+                    result['arch'] = etree.tostring(eview, pretty_print=True)
+        return result
 
     def external_connection(self, cr, uid, referential, debug=False, context=None):
         """Should be overridden to provide valid external referential connection"""
@@ -293,10 +343,12 @@ class external_referential(Model):
     _columns = {
         'name': fields.char('Name', size=32, required=True),
         'type_id': fields.related('version_id', 'type_id', type='many2one', relation='external.referential.type', string='External Type'),
+        'type_name': fields.related('type_id', 'name', type='char', string='External Type Name',
+                                    store=True),
         'categ_id': fields.related('type_id', 'categ_id', type='many2one', relation='external.referential.category', string='External Category'),
         'categ_name': fields.related('categ_id', 'name', type='char', string='External Category Name'),
         'version_id': fields.many2one('external.referential.version', 'Referential Version', required=True),
-        'location': fields.char('Location', size=200, required=True),
+        'location': fields.char('Location', size=200),
         'apiusername': fields.char('User Name', size=64),
         'apipass': fields.char('Password', size=64),
         'mapping_ids': fields.one2many('external.mapping', 'referential_id', 'Mappings'),

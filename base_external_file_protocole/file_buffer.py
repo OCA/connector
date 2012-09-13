@@ -39,6 +39,8 @@ class file_buffer(Model):
             help=""),
         'job_ended': fields.datetime('Job ended'),
         'referential_id': fields.related('mapping_id', 'referential_id', type='many2one', relation='external.referential', string='Ext. referential', store=True),
+        #This field add a dependency on sale (maybe move it into an other module if it's problematic)
+        'shop_id': fields.many2one('sale.shop', 'Shop'),
     }
 
     _order = 'name desc'
@@ -50,23 +52,26 @@ class file_buffer(Model):
 
     def get_file(self, cr, uid, file_id, context=None):
         """
-        Blabla
-        :param int file_id: mystr
-        :param list mlist: mylist
+        Fonction that return the content of the attachment
+        :param int file_id : id of the file buffer
         :rtype: str
-        :return: __
+        :return: the content attachment
         """
-
-
         attach_obj = self.pool.get('ir.attachment')
         attachment_id = attach_obj.search(cr, uid, [('res_model','=','file.buffer'), ('res_id','=', file_id)])
         if not attachment_id:
             return False
         else:
             attachment = attach_obj.browse(cr, uid, attachment_id[0], context=context)
-
             return base64.decodestring(attachment.datas)
 
+    def run_file_buffer_scheduler(self, cr, uid, domain=None, context=None):
+        if not domain: domain = []
+        domain.append(('state', '=', 'waiting'))
+        ids = self.search(cr, uid, domain, context=context)
+        if ids:
+            return self.run(cr, uid, ids, context=context)
+        return True
 
     def run(self, cr, uid, ids, context=None):
         """
@@ -76,6 +81,7 @@ class file_buffer(Model):
         for filebuffer in self.browse(cr, uid, ids, context=context):
             external_session = ExternalSession(filebuffer.referential_id, filebuffer)
             self._run(cr, uid, external_session, filebuffer, context=context)
+            filebuffer.done()
         return True
 
     def _run(self, cr, uid, external_session, filebuffer, context=None):

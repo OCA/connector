@@ -22,12 +22,10 @@
 from openerp.osv.orm import Model
 from openerp.osv import fields
 
-
 class external_cron(Model):
 
     _name = "external.cron"
     _description = "external.cron"
-
 
     _columns = {
         'name': fields.char('Name', size=50, required=True),
@@ -44,67 +42,6 @@ class external_cron(Model):
     _defaults = {
         'active': 1
     }
-
-    # def external_unlink(self, cr, uid, ids, context=None):
-        # model = self.pool.get('ir.model.data')
-        # for cron in self.browse(cr, uid, ids, context=context):
-            # irs = model.search(cr, uid, [('res_id','=',cron.id),('model','=','external.cron')])
-            # for ext_cron in model.browse(cr, uid, irs, context=context):
-                # referential = ext_cron.referential_id.id
-                # ext_cron.unlink(cr, uid, ids, context=context)
-                # external_session = ExternalSession(referential, referential)
-                # external_session.connection.delete('RecurringJob', cron.name)
-
-        # for cron in self.browse(cr, uid, ids, context=context):
-            # recuoere les id externe et les referentiel
-            # pr chaque ref
-            # referential = 1
-            # external_session = ExternalSession(referential, referential)
-            # external_session.connection.delete('RecurringJob', cron.name)
-
-    # XXX this does not belong here
-    def action_test(self, cr, uid, ids, context=None):
-        # TODO to delete
-        developer_key   = "d7e26236-db06-4ad5-b050-228794d29228"
-        application_key = "akretion-74cb-402c-b8b4-45cc8087b8a1"
-        certificate_key = "9dbb492e-503d-47e0-9587-cc9ef0aab462"
-
-        o_ext_ref = self.pool.get('external.referential')
-        ext_ref_ids = o_ext_ref.search(cr, uid, [('name','=','ebay')])
-        for ext_ref in o_ext_ref.browse(cr, uid, ext_ref_ids):
-            print o_ext_ref._columns.keys()
-            print ext_ref.__dict__
-            print '    ext. referential ',ext_ref.id, ext_ref.name
-            ews = EbayWebService(developer_key,application_key,certificate_key,ext_ref.ebay_auth_token)
-
-        o_ir_model = self.pool.get('ir.model.data')
-        # o_ext_cron = self.pool.get('external.cron')
-        for cron in self.browse(cr, uid, ids, context=context):
-            irs = o_ir_model.search(cr, uid, [('res_id','=',cron.id),('model','=','external.cron')])
-            print '     cron.id :', cron.id, '     cron name:', cron.name
-            for ext_cron in o_ir_model.browse(cr, uid, irs, context=context):
-                print '     ext_cron.id :', ext_cron.id
-                jobId = ext_cron.name[14:]
-                un_ext_cron = o_ir_model.unlink(cr, uid, ext_cron.id, context=context)
-                print '     unlink ext_cron :',un_ext_cron
-                print '      job id :', jobId
-                recc = ews.delete('RecurringJob', jobId)
-            print '      cron deleted :', cron.id
-            un_cron = self.unlink(cr, uid, cron.id, context=context)
-
-            # print '     da cron:', cron
-            # print '     da cron:', cron.referential_id
-            # print '     da cron:', cron.referential_id.id
-            # print '     da vers:', cron.referential_id.version_id
-            # print '     da vers:', cron.referential_id.name
-            # print '     da map:', cron.referential_id.mapping_ids
-            # print '     da map name:', cron.referential_id.mapping_ids[0]
-            # print '     da map get:', cron.referential_id.mapping_ids[0].external_get_method
-            # print '     da mapping eval:', cron.referential_id.mapping_ids[0].mapping_ids[1].evaluation_type
-            # print '     da in_function :', cron.referential_id.mapping_ids[0].mapping_ids[1].in_function
-
-        return True
-
 
     def unlink(self, cr, uid, ids, context=None):
         self.ext_unlink(cr, uid, ids, context=context)

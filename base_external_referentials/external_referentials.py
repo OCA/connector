@@ -29,6 +29,7 @@ from base_file_protocole.base_file_protocole import FileCsvWriter
 from .connector import REGISTRY
 from .external_osv import ExternalSession
 
+
 class external_referential_category(Model):
     _name = 'external.referential.category'
     _description = 'External Referential Category (Ex: e-commerce, crm, warehouse)'
@@ -185,7 +186,9 @@ class external_referential(Model):
         return False
 
     def import_referentials(self, cr, uid, ids, context=None):
-        self.import_resources(cr, uid, ids, 'external.referential', context=context)
+        for referential in self.browse(cr, uid, ids, context=context):
+            connector = REGESTRY.get_connector(referential.type, referential.version)
+            connector.import_resource(cr, uid, 'external.referential', context=context)
         return True
 
     def _prepare_mapping_vals(self, cr, uid, referential_id, mapping_vals, context=None):

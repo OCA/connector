@@ -96,7 +96,7 @@ def override(class_to_extend, prefix):
     return decorator
 
 
-class ExternalSession(object): 
+class ExternalSession(object):
     def __init__(self, referential, sync_from_object=None):
         """External Session in an object to store the information about a connection with an
         extenal system, like Magento, Prestashop, Ebay, ftp....
@@ -703,7 +703,7 @@ def _record_external_resources(self, cr, uid, external_session, resources, defau
                 result['write_ids'].append(res['write_id'])
     return result
 
-# XXX a degager # alexandre scan stopped here. TODO sebastien: la suite :-)
+# XXX a degager
 @extend(Model)
 def _record_one_external_resource(self, cr, uid, external_session, resource, defaults=None, mapping=None, mapping_id=None, context=None):
     """Used in _record_external_resources

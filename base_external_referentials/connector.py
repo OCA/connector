@@ -103,7 +103,8 @@ class AbstractConnector(object):
         defaults = self.get_default_import_values(cr, uid, res_obj,
                                                   context=context)
         import_meth = self._get_meth('_import_%s', res_obj,
-                                    self._default_import_resource)
+                                    self._default_import_resource,
+                                    context=context)
         return import_meth(cr, uid, res_obj, defaults, context)
 
     def _default_import_resource(self, cr, uid, res_obj, defaults, context=None):
@@ -151,7 +152,7 @@ class AbstractConnector(object):
 
 
     def _do_import_noloop(self, cr, uid, res_obj, defaults, context=None):
-        result = {"create_ids" : [], "write_ids" : []}
+        result = {"create_ids" : [],  "write_ids" : []}
         #Magento API do not support step import so we can not use a loop
         resource_filter = self.get_filter(cr, uid, res_obj, context=context)
         #TODO import only the field needed to improve speed import ;)
@@ -159,7 +160,7 @@ class AbstractConnector(object):
         if not isinstance(resources, list):
             resources = [resources]
         res = self.record_ext_resources(cr, uid,
-                                        res_obj,
+                                         res_obj,
                                         resources,
                                         defaults=defaults,
                                         context=context)

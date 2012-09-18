@@ -32,7 +32,7 @@ class file_buffer(osv.osv):
 
     _columns = {
         'name': fields.char('Name', size=64),
-        'file_id': fields.char('Ext. file', size=64, help="external application id file"),
+        'file_id': fields.char('Exch. file', size=64, help="Exchange id file"),
         'state': fields.selection((('waiting','Waiting'), ('running','Running'), ('done','Done')),
                                                                                      'State'),
         'active': fields.boolean('Active'),
@@ -46,7 +46,7 @@ class file_buffer(osv.osv):
                                       help='flow direction of the file')
     }
 
-    _order = 'name desc'
+    _order = 'job_ended desc'
 
     _defaults = {
         'active': 1,
@@ -68,13 +68,24 @@ class file_buffer(osv.osv):
             attachment = attach_obj.browse(cr, uid, attachment_id[0], context=context)
             return base64.decodestring(attachment.datas)
 
-    def create_file_buffer_attachment(self, cr, uid, file_buffer_id, datas, file_id,
+    def create_file_buffer_attachment(self, cr, uid, file_buffer_id, datas, file_name,
                                       context=None, extension='csv', prefix_file_name='report'):
+        """
+        Create file attachment to file.buffer object
+        :param int file_buffer_id:
+        :param str datas: file content
+        :param str file_id: file name component
+        :param str extension: file extension
+        :param str prefix_file_name:
+        :rtype: boolean
+        :return: True
+        """
+        context.update({'default_res_id': file_buffer_id, 'default_res_model': 'file.buffer'})
         datas_encoded = base64.encodestring(datas)
-        attach_name = prefix_file_name + '_' + file_id + '.' + extension
+        attach_name = prefix_file_name + '_' + file_name + '.' + extension
         params_attachment = {'name': attach_name, 'datas': datas_encoded,
                                                                     'datas_fname': attach_name}
-        attachment_id = self.pool.get('ir.attachment').create(cr, uid, params_attachment , context)
+        attachment_id = self.pool.get('ir.attachment').create(cr, uid, params_attachment, context)
 
         return True
 

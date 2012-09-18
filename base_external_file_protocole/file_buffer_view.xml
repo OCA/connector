@@ -12,9 +12,11 @@
     <field name="model">file.buffer</field>
     <field name="type">search</field>
     <field name="arch" type="xml">
-        <search string="Search Sales Order">
+        <search string="Search Files Buffer">
             <filter icon="terp-document-new" name="wait" string="Waiting" domain="[('state','=','waiting')]"/>
             <filter icon="terp-check" string="Done" domain="[('state','=','done')]"/>
+            <field name="name" />
+            <field name="file_id" string="Exchange file"/>
        </search>
     </field>
 </record>

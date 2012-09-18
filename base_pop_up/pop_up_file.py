@@ -20,12 +20,12 @@
 #                                                                               #
 #################################################################################
 
-from osv import osv, fields
-import netsvc
+from openerp.osv.orm import TransientModel
+from osv import fields
 import base64
 from tempfile import TemporaryFile
 
-class pop_up_file(osv.osv_memory):
+class pop_up_file(TransientModel):
     _name = "pop.up.file"
     _description = "Output File"
 

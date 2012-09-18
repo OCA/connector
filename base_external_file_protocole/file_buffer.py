@@ -19,12 +19,12 @@
 #                                                                             #
 ###############################################################################
 
-
-from osv import osv, fields
+from openerp.osv.orm import Model
+from openerp.osv import fields
 import base64
 from base_external_referentials.external_osv import ExternalSession
 
-class file_buffer(osv.osv):
+class file_buffer(Model):
 
     _name = "file.buffer"
     _description = "File Buffer"

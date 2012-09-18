@@ -19,17 +19,30 @@
 #                                                                             #
 ###############################################################################
 
-from osv import osv
+from openerp.osv.orm import Model
 
 
-class ir_model(osv.osv):
+class ir_model(Model):
     _inherit='ir.model'
 
     def create_external_link(self, cr, uid, model_id, context=None):
         model = self.pool.get('ir.model').browse(cr, uid, model_id, context=context)
-        vals = {'domain': "[('res_id', '=', active_id), ('model', '=', '%s')]" %(model.model,), 'name': 'External %s'%(model.name), 'res_model': 'ir.model.data', 'src_model': model.model, 'view_type': 'form'}
+        vals = {'domain': "[('res_id', '=', active_id), ('model', '=', '%s')]" %(model.model,),
+                'name': 'External %s'%(model.name),
+                'res_model': 'ir.model.data',
+                'src_model': model.model,
+                'view_type': 'form',
+                }
         xml_id = "ext_" + model.model.replace(".", "_")
-        ir_model_data_id = self.pool.get('ir.model.data')._update(cr, uid, 'ir.actions.act_window', "base_external_referentials", vals, xml_id, False, 'update')
+        ir_model_data_id = self.pool.get('ir.model.data')._update(cr, uid,
+                                                                  'ir.actions.act_window',
+                                                                  "base_external_referentials",
+                                                                  vals, xml_id, False, 'update')
         value = 'ir.actions.act_window,'+str(ir_model_data_id)
-        return self.pool.get('ir.model.data').ir_set(cr, uid, 'action', 'client_action_relate', xml_id, [model.model], value, replace=True, isobject=True, xml_id=xml_id)
+        return self.pool.get('ir.model.data').ir_set(cr, uid, 'action',
+                                                     'client_action_relate',
+                                                     xml_id, [model.model],
+                                                     value, replace=True,
+                                                     isobject=True,
+                                                     xml_id=xml_id)
 

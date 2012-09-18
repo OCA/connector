@@ -20,15 +20,25 @@
 #
 ##############################################################################
 
-from osv import fields, osv
-from sets import Set
-from tools.translate import _
+from openerp.osv.orm import Model
+from openerp.osv import fields
 from tempfile import TemporaryFile
 from base_file_protocole.base_file_protocole import FileCsvWriter
-import time
+from lxml import etree
+from openerp.osv import orm
 
 
-class external_referential_category(osv.osv):
+REF_FIELDS = ['location', 'apiusername', 'apipass']
+#In your custom module you can specify which field will be visible
+#example for making visible the fields location, apiusername and apipass
+#for the referential type Magento :
+#from base_external_referentials.external_referentials import REF_VISIBLE_FIELDS
+#REF_VISIBLE_FIELDS['Magento'] = ['location', 'apiusername', 'apipass']
+
+REF_VISIBLE_FIELDS = {}
+
+
+class external_referential_category(Model):
     _name = 'external.referential.category'
     _description = 'External Referential Category (Ex: e-commerce, crm, warehouse)'
 
@@ -46,9 +56,7 @@ class external_referential_category(osv.osv):
             categ_id = referential_categ.name.replace('.','_').replace(' ','_')
         return categ_id
 
-external_referential_category()
-
-class external_referential_type(osv.osv):
+class external_referential_type(Model):
     _name = 'external.referential.type'
     _description = 'External Referential Type (Ex.Magento,Spree)'
 
@@ -68,9 +76,8 @@ class external_referential_type(osv.osv):
             type_id = referential_type.code.replace('.','_').replace(' ','_')
         return type_id
 
-external_referential_type()
 
-class external_referential_version(osv.osv):
+class external_referential_version(Model):
     _name = 'external.referential.version'
     _description = 'External Referential Version (Ex: v1.5.0.0 +, v1.3.2.4 +)'
     _rec_name = 'full_name'
@@ -97,9 +104,8 @@ class external_referential_version(osv.osv):
         'code': fields.char('code', size=64, required=True),
     }
 
-external_referential_version()
 
-class external_mapping_template(osv.osv):
+class external_mapping_template(Model):
     _name = "external.mapping.template"
     _description = "The source mapping records"
     _rec_name = 'model'
@@ -119,9 +125,8 @@ class external_mapping_template(osv.osv):
         'external_resource_name':fields.char('External Resource Name', size=64),
         'extra_name': fields.char('Extra Name', size=100),
                 }
-external_mapping_template()
 
-class external_mappinglines_template(osv.osv):
+class external_mappinglines_template(Model):
     _name = 'external.mappinglines.template'
     _description = 'The source mapping line records'
     _rec_name = 'name'
@@ -160,9 +165,8 @@ class external_mappinglines_template(osv.osv):
         'function_name': fields.char('Function Name', size=128),
         }
 
-external_mappinglines_template()
 
-class external_referential(osv.osv):
+class external_referential(Model):
     """External referential can have the option _lang_support. It can be equal to :
             - fields_with_main_lang : the fields to create will be organized all in the main lang and only the translatable fields in the others.example : {'main_lang': {trad_field : value, untrad_field: value, trad_field : value, untrad_field : value ...}, 'other_lang': {trad_field: value, trad_field: value}, ...}
             - fields_with_no_lang : all the fields untranslatable are grouped and the translatable fields are grouped in each lang. example : {'no_lang' : {untrad_field: value, untrad_field: value, untrad_field: value}, 'lang_one' : {trad_field: value, trad_field: value}, 'lang_two' : {trad_field: value, trad_field: value} ...}
@@ -175,6 +179,11 @@ class external_referential(osv.osv):
     #Only user that can write crypted field can read it
     _crypted_field = ['apiusername', 'apipass', 'location']
 
+
+    def onchange_version_id(self, cr, uid, ids, version_id, context=None):
+        version = self.pool.get('external.referential.version').browse(cr, uid, version_id, context=context)
+        return {'value': {'type_name': version.type_id.name}}
+
     def read(self,cr, uid, ids, fields=None, context=None, load='_classic_read'):
         canwrite = self.check_write(cr, uid, raise_exception=False)
         res = super(external_referential, self).read(cr, uid, ids, fields=fields, context=context, load=load)
@@ -184,6 +193,39 @@ class external_referential(osv.osv):
                     if val.get(crypted_field):
                         val[crypted_field]='********'
         return res
+
+
+    def fields_view_get(self, cr, uid, view_id=None, view_type='form', context=None, toolbar=False, submenu=False):
+        """
+        Override the original field view get in order to insert dynamically the various fields need
+        for the configuration of the referential
+        """
+        # use lxml to compose the arch XML
+        result = super(external_referential, self).fields_view_get(cr, uid,
+                                                                    view_id=view_id,
+                                                                    view_type=view_type,
+                                                                    context=context,
+                                                                    toolbar=toolbar,
+                                                                    submenu=submenu,
+                                                                )
+        if view_type == 'form':
+            eview = etree.fromstring(result['arch'])
+            toupdate_fields = []
+            for field_name in REF_FIELDS:
+                field = eview.xpath("//field[@name='%s']"%field_name)
+                if field:
+                    field = field[0]
+                    referentials = []
+                    for ref_type, visible_fields in REF_VISIBLE_FIELDS.items():
+                        if field_name in visible_fields:
+                            referentials.append(ref_type)
+                    field.set('attrs', """{
+                                    'invisible': [('type_name', 'not in', %s)],
+                                    'required': [('type_name', 'in', %s)]
+                                        }"""%(referentials, referentials))
+                    orm.setup_modifiers(field, field=result['fields'][field_name], context=context)
+                    result['arch'] = etree.tostring(eview, pretty_print=True)
+        return result
 
     def external_connection(self, cr, uid, referential, debug=False, context=None):
         """Should be overridden to provide valid external referential connection"""
@@ -271,7 +313,8 @@ class external_referential(osv.osv):
     _columns = {
         'name': fields.char('Name', size=32, required=True),
         'type_id': fields.related('version_id', 'type_id', type='many2one', relation='external.referential.type', string='External Type'),
-        'type_name': fields.related('type_id', 'name', type='char', string='External Type Name'),
+        'type_name': fields.related('type_id', 'name', type='char', string='External Type Name',
+                                    store=True),
         'categ_id': fields.related('type_id', 'categ_id', type='many2one', relation='external.referential.category', string='External Category'),
         'categ_name': fields.related('categ_id', 'name', type='char', string='External Category Name'),
         'version_id': fields.many2one('external.referential.version', 'Referential Version', required=True),
@@ -488,9 +531,8 @@ class external_referential(osv.osv):
             referential_id = referential.name.replace('.','_').replace(' ','_')
         return referential_id
 
-external_referential()
 
-class external_mapping_line(osv.osv):
+class external_mapping_line(Model):
     _name = 'external.mapping.line'
     _description = 'Field Mapping'
     _rec_name = 'name'
@@ -510,10 +552,8 @@ class external_mapping_line(osv.osv):
         'name': fields.function(_name_get_fnc, type="char", string='Name', size=256),
     }
 
-external_mapping_line()
 
-
-class external_mapping(osv.osv):
+class external_mapping(Model):
     _name = 'external.mapping'
     _description = 'External Mapping'
     _rec_name = 'model'
@@ -622,10 +662,8 @@ class external_mapping(osv.osv):
         ('ref_template_uniq', 'unique (referential_id, template_id)', 'A referential can not have various mapping imported from the same template')
     ]
 
-external_mapping()
 
-
-class external_mapping_line(osv.osv):
+class external_mapping_line(Model): # FIXME : tidy up this remnant of old OERP version
     _inherit = 'external.mapping.line'
 
     _columns = {
@@ -690,9 +728,8 @@ class external_mapping_line(osv.osv):
             line_id = (version_code + '_' + mapping_name + '_' + line_name).replace('.','_')
         return line_id
 
-external_mapping_line()
 
-class ir_model_data(osv.osv):
+class ir_model_data(Model):
     _inherit = "ir.model.data"
 
     def init(self, cr):
@@ -732,4 +769,3 @@ class ir_model_data(osv.osv):
         ('external_reference_uniq_per_object', 'unique(model, res_id, referential_id)', 'You cannot have on record with multiple external id for a sae referential'),
     ]
 
-ir_model_data()

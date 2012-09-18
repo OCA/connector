@@ -19,9 +19,10 @@
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.     #
 #                                                                             #
 ###############################################################################
-from tools.safe_eval import safe_eval as eval
-from osv import osv, fields
-import netsvc
+from tools.safe_eval import safe_eval
+from openerp.osv.orm import Model
+from openerp.osv import fields
+from openerp.osv.osv import except_osv
 from base_external_referentials.external_osv import ExternalSession
 from base_file_protocole.base_file_protocole import FileCsvReader, FileCsvWriter
 from base_external_referentials.decorator import open_report
@@ -35,9 +36,8 @@ import csv
 
 class FileExchangeCsvReader(FileCsvReader):
     def __init__(self, f, pre_processing=None, **kwds):
-        init = super(FileExchangeCsvReader, self).__init__(f, **kwds)
+        super(FileExchangeCsvReader, self).__init__(f, **kwds)
         self.pre_processing = pre_processing
-        return init
 
     def next(self):
         row = super(FileExchangeCsvReader, self).next()
@@ -47,10 +47,10 @@ class FileExchangeCsvReader(FileCsvReader):
             try:
                 exec self.pre_processing in space
             except Exception, e:
-                raise osv.except_osv(_('Error !'), _('Error can not apply the python action pre-processing value'))
+                raise except_osv(_('Error !'), _('Error can not apply the python action pre-processing value'))
         return row
 
-class file_exchange(osv.osv):
+class file_exchange(Model):
     _name = "file.exchange"
     _description = "file exchange"
 
@@ -70,13 +70,14 @@ class file_exchange(osv.osv):
                 try:
                     exec field.advanced_default_value in space
                 except Exception, e:
-                    raise osv.except_osv(_('Error !'), _('Error when evaluating advanced default value: %s \n Exception: %s' %(fields.name,e)))
+                    raise except_osv(_('Error !'),
+                                     _('Error when evaluating advanced default value: %s \n Exception: %s') % (fields.name,e))
                 res[field.name] = space.get('result', False)
             elif field.default_value:
                 res[field.name] = field.default_value
         return res
 
-    def _get_external_file_resources(self, cr, uid, external_session, filepath, filename, format, 
+    def _get_external_file_resources(self, cr, uid, external_session, filepath, filename, format,
                     fields_name=None, mapping=None, mapping_id=None, external_file=None, context=None):
         if not external_file:
             external_file = external_session.connection.get(filepath, filename)
@@ -84,14 +85,14 @@ class file_exchange(osv.osv):
         model_obj = self.pool.get(method.mapping_id.model_id.model)
         if format in ['csv_no_header','csv']:
             merge_key_id = self.pool.get('file.fields').search(cr, uid, [
-                                ('merge_key', '=', True), 
-                                ('mapping_line_id.related_model_id', '=', method.mapping_id.model_id.id), 
+                                ('merge_key', '=', True),
+                                ('mapping_line_id.related_model_id', '=', method.mapping_id.model_id.id),
                                 ('file_id', '=', method.id)
                             ], context=context)
             merge_key = None
             if merge_key_id:
                 merge_key = self.pool.get('file.fields').read(cr, uid, merge_key_id[0], ['name'], context=context)['name']
-            mapping,mapping_id = model_obj._init_mapping(cr, uid, external_session.referential_id.id, 
+            mapping,mapping_id = model_obj._init_mapping(cr, uid, external_session.referential_id.id,
                                                         convertion_type='from_external_to_openerp',
                                                         mapping_id=method.mapping_id.id,
                                                         context=context)
@@ -103,7 +104,7 @@ class file_exchange(osv.osv):
                                         pre_processing=method.pre_processing)
             res = csv.reorganize(field_structure=mapping_tree, merge_keys=merge_keys, ref_field=merge_key)
         return res
-    
+
     def _get_mapping_tree(self, cr, uid, mapping_id, parent_name=None, grand_parent_name=None, context=None):
         mapping_tree = []
         result = []
@@ -171,7 +172,7 @@ class file_exchange(osv.osv):
         defaults = self._get_default_import_values(cr, uid, external_session, mapping_id, context=context)
         fields_name_ids = file_fields_obj.search(cr, uid, [['file_id', '=', method.id]], context=context)
         fields_name = [x['name'] for x in file_fields_obj.read(cr, uid, fields_name_ids, ['name'], context=context)]
-        self._import_one_file(cr, uid, external_session, method_id, input_filename, defaults, mapping, 
+        self._import_one_file(cr, uid, external_session, method_id, input_filename, defaults, mapping,
                                             mapping_id, fields_name, external_file=input_file, context=context)
         return True
 
@@ -205,7 +206,7 @@ class file_exchange(osv.osv):
         return result
 
     @open_report
-    def _import_one_file(self, cr, uid, external_session, method_id, filename, defaults, mapping, 
+    def _import_one_file(self, cr, uid, external_session, method_id, filename, defaults, mapping,
                                             mapping_id, fields_name, external_file=None, context=None):
         ids_imported = []
         method = self.browse(cr, uid, method_id, context=context)
@@ -218,8 +219,8 @@ class file_exchange(osv.osv):
                                                         mapping_id=mapping_id,
                                                         external_file=external_file,
                                                         context=context)
-        res = self.pool.get(method.mapping_id.model_id.model)._record_external_resources(cr, uid, 
-                                                                        external_session, resources, 
+        res = self.pool.get(method.mapping_id.model_id.model)._record_external_resources(cr, uid,
+                                                                        external_session, resources,
                                                                         defaults=defaults,
                                                                         mapping=mapping,
                                                                         mapping_id=mapping_id,
@@ -234,7 +235,7 @@ class file_exchange(osv.osv):
     def _check_if_file_exist(self, cr, uid, external_session, folder_path, filename, context=None):
         exist = external_session.connection.search(folder_path, filename)
         if exist:
-            raise osv.except_osv(_('Error !'), _('The file "%s" already exist in the folder "%s"' %(filename, folder_path)))
+            raise except_osv(_('Error !'), _('The file "%s" already exist in the folder "%s"' %(filename, folder_path)))
         return False
 
     def _export_files(self, cr, uid, method_id, context=None):
@@ -248,7 +249,7 @@ class file_exchange(osv.osv):
                         if 'hidden_field_to_split_' in key:
                             if isinstance(value, list):
                                 if row_to_flat:
-                                    raise osv.except_osv(_('Error !'), _('Can not flat two row in the same resource'))
+                                    raise except_osv(_('Error !'), _('Can not flat two row in the same resource'))
                                 row_to_flat = value
                             elif isinstance(value, dict):
                                 for k,v in flat_resources([value])[0].items():
@@ -293,7 +294,7 @@ class file_exchange(osv.osv):
         ids_filter = "()" # In case not filter is filed in the form
         if method.search_filter != False:
             ids_filter = method.search_filter
-        ids_to_export = model_obj.search(cr, uid, eval(ids_filter, {'context': context}), context=context)
+        ids_to_export = model_obj.search(cr, uid, safe_eval(ids_filter, {'context': context}), context=context)
     #=== Start mapping
         mapping,mapping_id = model_obj._init_mapping(cr, uid, external_session.referential_id.id,
                                                     convertion_type='from_openerp_to_external',
@@ -343,12 +344,12 @@ class file_exchange(osv.osv):
         output_file.seek(0)
         method.start_action('action_after_all', model_obj, ids_to_export, context=context,external_session=external_session)
         output = self._send_output(cr, uid, external_session, method, filename, output_file, context=context)
-        
+
         #Start linked task
         if method.linked_task:
             context['parent_ids'] = ids_to_export
             method.linked_task.start_task(context=context)
-        
+
         return output
 
     def _send_output(self, cr, uid, external_session, method, filename, output_file, context=None):
@@ -379,8 +380,9 @@ class file_exchange(osv.osv):
             try:
                 exec action_code in space
             except Exception, e:
-                raise osv.except_osv(_('Error !'), _("Error can not apply the python action '%s'" 
-                                                " for the method: '%s' \n Exception: '%s'" %(action_name, method.name,e)))
+                raise except_osv(_('Error !'),
+                                 _("Error can not apply the python action '%s'"
+                                   " for the method: '%s' \n Exception: '%s'") % (action_name, method.name,e))
             if 'result' in space:
                 return space['result']
         return True
@@ -416,9 +418,9 @@ class file_exchange(osv.osv):
         'field_ids': fields.one2many('file.fields', 'file_id', 'Fields'),
         'action_before_all': fields.text('Action Before All', help="This python code will executed after the import/export"),
         'action_after_all': fields.text('Action After All', help="This python code will executed after the import/export"),
-        'action_before_each': fields.text('Action Before Each', help="This python code will executed after each element of the import/export"), 
+        'action_before_each': fields.text('Action Before Each', help="This python code will executed after each element of the import/export"),
         'action_after_each': fields.text('Action After Each', help="This python code will executed after each element of the import/export"),
-        'check_if_import': fields.text('Check If Import', help="This python code will be executed before each element of the import"), 
+        'check_if_import': fields.text('Check If Import', help="This python code will be executed before each element of the import"),
         'delimiter':fields.char('Fields delimiter', size=64, help="Delimiter used in the CSV file"),
         'lang': fields.many2one('res.lang', 'Language'),
         'import_default_fields':fields.one2many('file.default.import.values', 'file_id', 'Default Field'),
@@ -472,7 +474,7 @@ class file_exchange(osv.osv):
         }
         csv.writerow(row)
         return self.pool.get('pop.up.file').open_output_file(cr, uid, 'file.exchange.csv', output_file, 'File Exchange Export', context=context)
-        
+
     # Method to export the mapping file
     def create_file_fields(self, cr, uid, id, context=None):
         if isinstance(id,list):
@@ -530,9 +532,8 @@ class file_exchange(osv.osv):
                     field.write({'mapping_line_id': field_mapping_line_id}, context=context)
         return True
 
-file_exchange()
 
-class file_fields(osv.osv):
+class file_fields(Model):
     _name = "file.fields"
     _description = "file fields"
     _order='sequence'
@@ -587,9 +588,8 @@ class file_fields(osv.osv):
             field_id = (file_name + '_' + field_name + '_' + sequence).replace('.','_')
         return field_id
 
-file_fields()
 
-class file_default_import_values(osv.osv):
+class file_default_import_values(Model):
     _name = "file.default.import.values"
     _description = "file default import values"
 

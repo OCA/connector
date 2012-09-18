@@ -1,7 +1,7 @@
 # -*- encoding: utf-8 -*-
 ##############################################################################
 #
-#    OpenERP, Open Source Management Solution    
+#    OpenERP, Open Source Management Solution
 #    Copyright (C) 2009 Akretion (<http://www.akretion.com>). All Rights Reserved
 #    authors: Raphaël Valyi, Sharoon Thomas
 #

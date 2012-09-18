@@ -19,13 +19,9 @@
 #                                                                             #
 ###############################################################################
 
-from osv import osv, fields
-import netsvc
 from tempfile import TemporaryFile
 from ftplib import FTP
-import sys
 import os
-import shutil
 import csv
 import paramiko
 import errno
@@ -79,6 +75,7 @@ class FileConnection(object):
         self.port = port
         self.user = user
         self.pwd = pwd
+        self.connection = None
 
 
     def connect(self):
@@ -91,7 +88,7 @@ class FileConnection(object):
             self.connection = paramiko.SFTPClient.from_transport(transport)
 
     def close(self):
-        if self.is_('ftp') or self.is_('sftp'):
+        if self.is_('ftp') or self.is_('sftp') and self.connection is not None:
             self.connection.close()
 
     @open_and_close_connection
@@ -157,7 +154,7 @@ class FileCsvReader(object):
     which is encoded in the given encoding.
     """
 
-    def __init__(self, f, encoding="utf-8", **kwds):            
+    def __init__(self, f, encoding="utf-8", **kwds):
         self.encoding = encoding
         self.reader = csv.DictReader(f, **kwds)
 
@@ -177,7 +174,7 @@ class FileCsvReader(object):
 
     def reorganize(self, field_structure=None, merge_keys=None, ref_field=None):
         """
-        Function to reorganize the resource from the csv. It uses the mapping (field_structure) 
+        Function to reorganize the resource from the csv. It uses the mapping (field_structure)
         to deal with the different architecture of an object (sale order with sale order line ...)
         the ref_field is used to merge the different lines (sale order with several sale order lines)
         """

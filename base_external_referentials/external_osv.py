@@ -1159,10 +1159,11 @@ def multi_lang_read(self, cr, uid, external_session, ids, fields_to_read, langs,
             if not first and lang_support == 'fields_with_main_lang' or lang_support == 'fields_with_no_lang':
                 fields = translatable_fields
             ctx['lang'] = lang
-
-        for resource in self.read(cr, uid, ids, fields, context=ctx):
-            if not resources.get(resource['id']): resources[resource['id']] = {}
-            resources[resource['id']][lang] = resource
+            
+        if fields:
+            for resource in self.read(cr, uid, ids, fields, context=ctx):
+                if not resources.get(resource['id']): resources[resource['id']] = {}
+                resources[resource['id']][lang] = resource
         first = False
     return resources
 

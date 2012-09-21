@@ -24,6 +24,9 @@
 from openerp.osv.orm import Model
 from openerp.osv.osv import except_osv
 import base64
+import urllib
+import time
+import netsvc
 from datetime import datetime
 import logging
 from lxml import objectify
@@ -1159,7 +1162,7 @@ def multi_lang_read(self, cr, uid, external_session, ids, fields_to_read, langs,
             if not first and lang_support == 'fields_with_main_lang' or lang_support == 'fields_with_no_lang':
                 fields = translatable_fields
             ctx['lang'] = lang
-            
+
         if fields:
             for resource in self.read(cr, uid, ids, fields, context=ctx):
                 if not resources.get(resource['id']): resources[resource['id']] = {}
@@ -1500,6 +1503,14 @@ def _transform_field(self, cr, uid, external_session, convertion_type, field_val
             if not hasattr(casted_field, '__iter__'):
                 casted_field = (casted_field,)
             field = list(casted_field)
+        elif external_type == 'url' and internal_type == "binary":
+            (filename, header) = urllib.urlretrieve(field_value)
+            try:
+                f = open(filename , 'rb')
+                data = f.read()
+            finally:
+                f.close()
+            return base64.encodestring(data)
         else:
             if external_type == 'float' and isinstance(field_value, (str, unicode)):
                 field_value = field_value.replace(',','.')

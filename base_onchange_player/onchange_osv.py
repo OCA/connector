@@ -51,7 +51,7 @@ def call_onchange(self, cr, uid, onchange_name, vals, defaults=None, **kwargs):
         for key in res['value']:
             if not key in vals:
                 # If the value is false and the field is not a boolean we don't pass it as it useless
-                # If it's a problem for you please contact me sebastien.beau@akretion.com, 
+                # If it's a problem for you please contact me sebastien.beau@akretion.com,
                 # because pass empty value will provoque some conflict with magentoerpconnect. Thanks
                 if res['value'][key] or self._columns[key]._type == 'bool':
                     vals[key] = res['value'][key]

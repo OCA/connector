@@ -52,8 +52,7 @@ class external_referential(Model):
         return res
 
     def _prepare_external_referential_vals(self, cr, uid, referential, context=None):
-        # XXX BUG : NameError mapping is not defined
-        res = super(external_referential, self)._prepare_external_referential_vals(cr, uid, mapping, context=context)
+        res = super(external_referential, self)._prepare_external_referential_vals(cr, uid, referential, context=context)
         res['protocole'] = referential.protocole
         return res
 

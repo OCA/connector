@@ -668,7 +668,7 @@ class external_mapping_line(Model): # FIXME : tidy up this remnant of old OERP v
 
     _columns = {
         'template_id': fields.many2one('external.mappinglines.template', 'External Mapping Lines Template'),
-        'referential_id': fields.related('mapping_id', 'referential_id', type='many2one', relation='external.referential', string='Referential'),
+        'referential_id': fields.related('mapping_id', 'referential_id', type='many2one', relation='external.referential', string='Referential', store=True),
         'field_id': fields.many2one('ir.model.fields', 'OpenERP Field', ondelete='cascade'),
         'internal_field': fields.related('field_id', 'name', type='char', relation='ir.model.field', string='Field name',readonly=True),
         'external_field': fields.char('External Field', size=128, help=("When importing flat csv file from file exchange,"

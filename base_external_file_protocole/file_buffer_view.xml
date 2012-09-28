@@ -13,10 +13,17 @@
     <field name="type">search</field>
     <field name="arch" type="xml">
         <search string="Search Files Buffer">
-            <filter icon="terp-document-new" name="wait" string="Waiting" domain="[('state','=','waiting')]"/>
-            <filter icon="terp-check" string="Done" domain="[('state','=','done')]"/>
-            <field name="name" />
-            <field name="file_id" string="Exchange file"/>
+            <group>
+                <filter icon="terp-document-new" name="wait" string="Waiting" domain="[('state','=','waiting')]"/>
+                <filter icon="terp-check" string="Done" domain="[('state','=','done')]"/>
+                <filter icon="STOCK_EXECUTE" string="Running" domain="[('state','=','running')]"/>
+            </group>
+            <group>
+                <filter string="In" domain="[('direction','=','input')]"/>
+                <filter string="Out" domain="[('direction','=','output')]"/>
+                <field name="name" />
+                <field name="file_id" string="Exchange file"/>
+            </group>
        </search>
     </field>
 </record>
@@ -31,16 +38,23 @@
     <field name="arch" type="xml">
     <form string="file_buffer">
         <field name="name" />
-        <field name="state" />
+        <field name="state" readonly="1"/>
         <field name="mapping_id" />
         <field name="file_id" />
-        <field name="referential_id"/>
+        <field name="referential_id" readonly="1"/>
         <field name="shop_id"/>
         <field name="job_ended" />
         <field name="active"/>
-        <field name="direction"/>
+        <field name="direction" readonly="1" />
         <newline />
-        <button name="run" string="Run" colspan="2" type="object" />
+        <button name="run" string="Run" colspan="2" type="object" attrs="{'invisible':[('state','in', ('running','done'))]}"/>
+        <newline />
+        <button name="check_state" string="Check state" colspan="2" type="object" attrs="{'invisible':[('state','!=', 'running')]}"/>
+        <newline />
+        <button name="run" string="Run" colspan="2" type="object"/>
+        <button name="check_state" string="Check status" colspan="2" type="object"/>
+        <separator string="External application response" colspan="4"/>
+        <field name="response" nolabel="1" readonly="1" colspan="4" />
     </form>
     </field>
 </record>

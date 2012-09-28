@@ -99,7 +99,7 @@ def override(class_to_extend, prefix):
 class ExternalSession(object):
     def __init__(self, referential, sync_from_object=None):
         """External Session in an object to store the information about a connection with an
-        extenal system, like Magento, Prestashop, Ebay, ftp....
+        external system, like Magento, Prestashop, Ebay, ftp....
         This class have for fields
         - referential_id : a many2one related to the referential used for this connection
         - sync_from_object : a many2one related to the object that launch the synchronization
@@ -272,10 +272,8 @@ def get_or_create_extid(self, cr, uid, external_session, openerp_id, context=Non
 @extend(Model)
 def get_extid(self, cr, uid, openerp_id, referential_id, context=None):
     """Returns the external id of a resource by its OpenERP id.
-    Return False If not external id have been found
     :param int openerp_id : openerp id of the resource
     :param int referential_id : referential id
-    :return: the external id of the resource or False if not exist
     :rtype: int
     """
     if isinstance(openerp_id, list):
@@ -1265,7 +1263,14 @@ def _prepare_external_id_vals(self, cr, uid, res_id, ext_id, referential_id, con
 
 @extend(Model)
 def create_external_id_vals(self, cr, uid, existing_rec_id, external_id, referential_id, context=None):
-    """Add the external id in the table ir_model_data"""
+    """
+    Add the external id in the table ir_model_data
+    :param id existing_rec_id: erp id object
+    :param id external_id: external application id
+    :param id referential_id: external id
+    :rtype: int
+    :return:
+    """
     ir_model_data_vals = \
     self._prepare_external_id_vals(cr, uid, existing_rec_id,
                                    external_id, referential_id,
@@ -1683,7 +1688,3 @@ def _transform_sub_mapping(self, cr, uid, external_session, convertion_type, res
 #                                           END GENERIC TRANSFORM FEATURES
 #
 ########################################################################################################################
-
-
-
-

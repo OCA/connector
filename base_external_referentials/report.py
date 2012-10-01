@@ -28,6 +28,12 @@ import simplejson
 from base_external_referentials.external_osv import ExternalSession
 from base_external_referentials.decorator import commit_now
 
+MODEL_WITH_UNIQUE_REPORT_LINE = [
+    'product.product',
+    'product.category',
+    ]
+
+
 class external_report(Model):
     _name = 'external.report'
     _description = 'External Report'
@@ -252,6 +258,18 @@ class external_report_lines(Model):
         "date": lambda *a: time.strftime(DEFAULT_SERVER_DATETIME_FORMAT)
     }
 
+    def get_existing_line_id(self, cr, uid, action_on, action, res_id=None, external_id=None, context=None):
+        if context.get('retry_report_line_id'):
+            return context['retry_report_line_id']
+        elif action_on in MODEL_WITH_UNIQUE_REPORT_LINE:
+            existing_line_id = self.search(cr, uid, [
+                              ('action_on', '=', action_on),
+                              ('action', '=', action),
+                              ('res_id', '=', res_id),
+                              ('external_id', '=', external_id),
+                        ], context=context)
+            return existing_line_id and existing_line_id[0] or False
+        return False
 
     #TODO
     #1 - Did it usefull to log sucessfull entry?
@@ -261,7 +279,8 @@ class external_report_lines(Model):
     def start_log(self, cr, uid, action_on, action, res_id=None,
                   external_id=None, resource=None, args=None, kwargs=None):
         context = kwargs.get('context') or {}
-        existing_line_id = context.get('retry_report_line_id', False)
+        existing_line_id = self.get_existing_line_id(cr, uid,action_on, action,
+                                          res_id=res_id, external_id=external_id, context=context)
         report_id = context.get('report_id')
 
         if existing_line_id:

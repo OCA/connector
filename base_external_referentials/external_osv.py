@@ -921,6 +921,8 @@ def get_ids_and_update_date(self, cr, uid, external_session, ids=None, last_expo
     :rtype: tuple
     :return: an tuple of ids and ids_2_dates (dict with key => 'id' and val => 'last_update_date')
     """
+    if ids in [[], ()]:
+        return [], {}
     query, params = self._get_query_and_params_for_ids_and_date(cr, uid, external_session, ids=ids, last_exported_date=last_exported_date, context=context)
     cr.execute(query, params)
     read = cr.dictfetchall()

@@ -26,6 +26,8 @@ import csv
 import paramiko
 import errno
 import functools
+import xlrd
+
 
 def open_and_close_connection(func):
     """
@@ -233,3 +235,27 @@ class FileCsvWriter(object):
     def writerows(self, rows):
         for row in rows:
             self.writerow(row)
+
+
+class FileXlsReader(object):
+
+    def __init__(self, file_contents):
+        self.file_contents = file_contents
+
+    def read(self):
+        wb = xlrd.open_workbook(file_contents=self.file_contents)
+        sheet_name = wb.sheet_names()[0]
+        sh = wb.sheet_by_name(sheet_name)
+        header = sh.row_values(0)
+        result = []
+        for rownum in range(1, sh.nrows):
+            row = {}
+            index = 0
+            for val in sh.row_values(rownum):
+                row[header[index]] = val
+                index += 1
+            result.append(row)
+        return result
+
+
+

@@ -604,11 +604,12 @@ def _import_resources(self, cr, uid, external_session, defaults=None, method="se
             for ext_id in ext_ids:
                 #TODO import only the field needed to improve speed import ;)
                 resources = self._get_external_resources(cr, uid, external_session, ext_id, mapping=mapping, fields=None, context=context)
-                if not isinstance(resources, list):
-                    resources = [resources]
-                res = self._record_external_resources(cr, uid, external_session, resources, defaults=defaults, mapping=mapping, mapping_id=mapping_id, context=context)
-                for key in result:
-                    result[key].append(res.get(key, []))
+                if resources:
+                    if not isinstance(resources, list):
+                        resources = [resources]
+                    res = self._record_external_resources(cr, uid, external_session, resources, defaults=defaults, mapping=mapping, mapping_id=mapping_id, context=context)
+                    for key in result:
+                        result[key].append(res.get(key, []))
         elif method == 'search_read':
             while True:
                 resource_filter = self._get_filter(cr, uid, external_session, step, previous_filter=resource_filter, context=context)
@@ -626,11 +627,12 @@ def _import_resources(self, cr, uid, external_session, defaults=None, method="se
             resource_filter = self._get_filter(cr, uid, external_session, step, previous_filter=resource_filter, context=context)
             #TODO import only the field needed to improve speed import ;)
             resources = self._get_external_resources(cr, uid, external_session, resource_filter=resource_filter, mapping=mapping, fields=None, context=context)
-            if not isinstance(resources, list):
-                resources = [resources]
-            res = self._record_external_resources(cr, uid, external_session, resources, defaults=defaults, mapping=mapping, mapping_id=mapping_id, context=context)
-            for key in result:
-                result[key].append(res.get(key, []))
+            if resources:
+                if not isinstance(resources, list):
+                    resources = [resources]
+                res = self._record_external_resources(cr, uid, external_session, resources, defaults=defaults, mapping=mapping, mapping_id=mapping_id, context=context)
+                for key in result:
+                    result[key].append(res.get(key, []))
     return result
 
 @extend(Model)
@@ -663,6 +665,7 @@ def _record_external_resources(self, cr, uid, external_session, resources, defau
     :rtype: dict
     :return: dictionary with the key "create_ids" and "write_ids" which containt the id created/written
     """
+    if context is None: context = {}
     result = {'write_ids': [], 'create_ids': []}
     mapping, mapping_id = self._init_mapping(cr, uid, external_session.referential_id.id, mapping=mapping, mapping_id=mapping_id, context=context)
     if mapping[mapping_id]['key_for_external_id']:

@@ -24,7 +24,7 @@ from openerp.osv.orm import Model
 from openerp.osv import fields
 from openerp.osv.osv import except_osv
 from base_external_referentials.external_osv import ExternalSession
-from base_file_protocole.base_file_protocole import FileCsvReader, FileCsvWriter
+from base_file_protocole.base_file_protocole import FileCsvReader, FileCsvWriter, FileXlsReader
 from base_external_referentials.decorator import open_report
 from tempfile import TemporaryFile
 from encodings.aliases import aliases
@@ -103,6 +103,8 @@ class file_exchange(Model):
                                         encoding=method.encoding,
                                         pre_processing=method.pre_processing)
             res = csv.reorganize(field_structure=mapping_tree, merge_keys=merge_keys, ref_field=merge_key)
+        elif format in ['xls']:
+            res = FileXlsReader(external_file.read()).read()
         return res
 
     def _get_mapping_tree(self, cr, uid, mapping_id, parent_name=None, grand_parent_name=None, context=None):
@@ -407,7 +409,7 @@ class file_exchange(Model):
                                                                 "and to be imported in the ERP ; OUT for files to be"
                                                                 "generated from the ERP and send to the other system")),
         'mapping_id':fields.many2one('external.mapping', 'External Mapping', require="True", domain="[('referential_id', '=', referential_id)]"),
-        'format' : fields.selection([('csv','CSV'),('csv_no_header','CSV WITHOUT HEADER')], 'File format'),
+        'format' : fields.selection([('csv','CSV'),('csv_no_header','CSV WITHOUT HEADER'), ('xls', 'XLS')], 'File format'),
         'referential_id':fields.many2one('external.referential', 'Referential',help="Referential to use for connection and mapping", require=True),
         'scheduler':fields.many2one('ir.cron', 'Scheduler',help="Scheduler that will execute the cron task"),
         'search_filter':  fields.char('Search Filter', size=256),

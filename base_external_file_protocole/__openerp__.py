@@ -36,8 +36,11 @@ Also it's used in file_exchange
     'init_xml': [],
     'update_xml': [
         'file_buffer_view.xml',
-        'settings/external.referential.category.csv',
         'file_buffer_data.xml',
+        'external_referential_view.xml',
+        'settings/external.referential.category.csv',
+        'settings/external.referential.type.csv',
+        'settings/external.referential.version.csv',
     ],
     'demo_xml': [],
     'installable': True,

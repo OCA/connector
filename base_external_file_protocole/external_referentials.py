@@ -1,4 +1,4 @@
-    # -*- encoding: utf-8 -*-
+        # -*- encoding: utf-8 -*-
 ###############################################################################
 #                                                                             #
 #   file_exchange for OpenERP                                                 #
@@ -24,6 +24,14 @@ from openerp.osv import fields
 from openerp.osv.osv import except_osv
 from base_file_protocole.base_file_protocole import FileConnection
 from tools.translate import _
+from base_external_referentials.external_referentials import REF_VISIBLE_FIELDS
+
+REF_VISIBLE_FIELDS.update({
+    'SFTP': ['location', 'apiusername', 'apipass'],
+    'FTP': ['location', 'apiusername', 'apipass'],
+})
+
+
 
 class external_referential(Model):
     _inherit = "external.referential"
@@ -33,7 +41,7 @@ class external_referential(Model):
             id=id[0]
         referential = self.browse(cr, uid, id, context=context)
         try:
-            return FileConnection(referential.protocole, referential.location, referential.apiusername,\
+            return FileConnection(referential.type_id.code, referential.location, referential.apiusername,\
                             referential.apipass, port=referential. port, allow_dir_creation = True, \
                             home_folder=referential.home_folder)
         except Exception, e:
@@ -41,7 +49,6 @@ class external_referential(Model):
                              _("Could not connect to server\nCheck url & user & password.\n %s") % e)
 
     _columns={
-        'protocole': fields.selection([('ftp','ftp'), ('filestore', 'Filestore'), ('sftp', 'sftp')], 'Protocole'),
         'port': fields.integer('Port'),
         'home_folder': fields.char('Home Folder', size=64),
     }
@@ -55,6 +62,4 @@ class external_referential(Model):
         res = super(external_referential, self)._prepare_external_referential_vals(cr, uid, referential, context=context)
         res['protocole'] = referential.protocole
         return res
-
-external_referential()
 

@@ -1,0 +1,4 @@
+id,name,categ_id:id,code
+t-sftp,SFTP,file-protocole,sftp
+t-ftp,FTP,file-protocole,ftp
+t-filesystem,File System,file-protocole,filesystem

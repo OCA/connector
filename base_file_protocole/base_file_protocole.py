@@ -20,7 +20,7 @@
 ###############################################################################
 
 from tempfile import TemporaryFile
-from ftplib import FTP
+import ftplib
 import os
 import csv
 import paramiko
@@ -48,7 +48,7 @@ def open_and_close_connection(func):
     return wrapper
 
 # Extend paramiko lib with the method mkdirs
-def mkdirs(self, path, mode=511):
+def stfp_mkdirs(self, path, mode=511):
     try:
         self.stat(path)
     except IOError, e:
@@ -61,7 +61,23 @@ def mkdirs(self, path, mode=511):
                     self.mkdir(path, mode)
                 else:
                     raise
-paramiko.SFTPClient.mkdirs = mkdirs
+paramiko.SFTPClient.mkdirs = stfp_mkdirs
+
+# Extend ftplib with the method mkdirs
+def ftp_mkdirs(self, path):
+    try:
+        self.cwd(path)
+    except ftplib.error_perm, e:
+        if "550" in str(e):
+            try:
+                self.mkd(path)
+            except ftplib.error_perm, e:
+                if "550" in str(e):
+                    self.mkdirs(os.path.dirname(path))
+                    self.mkd(path)
+                else:
+                    raise
+ftplib.FTP.mkdirs = ftp_mkdirs
 
 
 class FileConnection(object):
@@ -82,7 +98,7 @@ class FileConnection(object):
 
     def connect(self):
         if self.is_('ftp'):
-            self.connection = FTP(self.location)
+            self.connection = ftplib.FTP(self.location)
             self.connection.login(self.user, self.pwd)
         elif self.is_('sftp'):
             transport = paramiko.Transport((self.location, self.port or 22))
@@ -96,6 +112,9 @@ class FileConnection(object):
     @open_and_close_connection
     def send(self, filepath, filename, output_file, create_patch=None):
         if self.is_('ftp'):
+            filepath = os.path.join(self.home_folder, filepath)
+            if self.allow_dir_creation:
+                self.connection.mkdirs(filepath)
             self.connection.cwd(filepath)
             self.connection.storbinary('STOR ' + filename, output_file)
             output_file.close()

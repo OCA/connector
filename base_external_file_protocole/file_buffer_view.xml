@@ -6,7 +6,7 @@
 
 <openerp>
     <data>
-
+<!-- SEARCH -->
 <record id="file_buffer_view_search" model="ir.ui.view">
     <field name="name">file.buffer.search</field>
     <field name="model">file.buffer</field>
@@ -14,13 +14,14 @@
     <field name="arch" type="xml">
         <search string="Search Files Buffer">
             <group>
-                <filter icon="terp-document-new" name="wait" string="Waiting" domain="[('state','=','waiting')]"/>
-                <filter icon="terp-check" string="Done" domain="[('state','=','done')]"/>
-                <filter icon="STOCK_EXECUTE" string="Running" domain="[('state','=','running')]"/>
+                <filter icon="kanban-pause" name="wait" string="Waiting" domain="[('state','=','waiting')]"/>
+                <filter icon="gtk-apply" string="Done" domain="[('state','=','done')]"/>
+                <filter icon="gtk-execute" string="Running" domain="[('state','=','running')]"/>
+                <filter icon="terp-gtk-stop" string="Fail" domain="[('state','=','fail')]"/>
             </group>
             <group>
-                <filter string="In" domain="[('direction','=','input')]"/>
-                <filter string="Out" domain="[('direction','=','output')]"/>
+                <filter icon="gtk-go-down" string="In" domain="[('direction','=','input')]"/>
+                <filter icon="gtk-go-up" string="Out" domain="[('direction','=','output')]"/>
                 <field name="name" />
                 <field name="file_id" string="Exchange file"/>
             </group>
@@ -28,8 +29,7 @@
     </field>
 </record>
 
-
-<!-- VIEW FOR THE OBJECT : file_buffer -->
+<!-- FORM -->
 <record id="file_buffer_view_form" model="ir.ui.view">
     <field name="name">file_buffer.file_buffer.view_form</field>
     <field name="model">file.buffer</field>
@@ -51,14 +51,13 @@
         <newline />
         <button name="check_state" string="Check state" colspan="2" type="object" attrs="{'invisible':[('state','!=', 'running')]}"/>
         <newline />
-        <button name="run" string="Run" colspan="2" type="object"/>
-        <button name="check_state" string="Check status" colspan="2" type="object"/>
-        <separator string="External application response" colspan="4"/>
+        <separator string="External application response (for output direction)" colspan="4"/>
         <field name="response" nolabel="1" readonly="1" colspan="4" />
     </form>
     </field>
 </record>
 
+<!-- TREE -->
 <record id="file_buffer_view_tree" model="ir.ui.view">
     <field name="name">file_buffer.file_buffer.view_tree</field>
     <field name="model">file.buffer</field>

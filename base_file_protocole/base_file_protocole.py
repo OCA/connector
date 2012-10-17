@@ -26,8 +26,13 @@ import csv
 import paramiko
 import errno
 import functools
-import xlrd
+import logging
 
+_logger = logging.getLogger(__name__)
+try:
+    import xlrd
+except ImportError:
+    _logger.warning('You must install xlrd, if you need to read xls file')
 
 def open_and_close_connection(func):
     """

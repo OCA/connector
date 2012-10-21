@@ -54,6 +54,7 @@ def open_and_close_connection(func):
 
 # Extend paramiko lib with the method mkdirs
 def stfp_mkdirs(self, path, mode=511):
+    current_dir = self.getcwd()
     try:
         self.stat(path)
     except IOError, e:
@@ -66,10 +67,12 @@ def stfp_mkdirs(self, path, mode=511):
                     self.mkdir(path, mode)
                 else:
                     raise
+    self.stat(current_dir)
 paramiko.SFTPClient.mkdirs = stfp_mkdirs
 
 # Extend ftplib with the method mkdirs
 def ftp_mkdirs(self, path):
+    current_dir = self.pwd()
     try:
         self.cwd(path)
     except ftplib.error_perm, e:
@@ -82,6 +85,7 @@ def ftp_mkdirs(self, path):
                     self.mkd(path)
                 else:
                     raise
+    self.cwd(current_dir)
 ftplib.FTP.mkdirs = ftp_mkdirs
 
 
@@ -94,7 +98,7 @@ class FileConnection(object):
         self.protocole = protocole
         self.allow_dir_creation = allow_dir_creation
         self.location = location
-        self.home_folder = home_folder
+        self.home_folder = home_folder or '/'
         self.port = port
         self.user = user
         self.pwd = pwd

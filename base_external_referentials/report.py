@@ -53,7 +53,7 @@ class external_report(Model):
 
     _columns = {
         'name': fields.function(_get_full_name, store=True, type='char', size=256, string='Name'),
-        'action': fields.char('Action', size=32, required=True, readonly=True),
+        'action': fields.char('Action', size=256, required=True, readonly=True),
         'action_on': fields.many2one('ir.model', 'Action On',required=True, readonly=True),
         'sync_from_object_model': fields.many2one('ir.model', 'Sync From Object',
                                                         required=True, readonly=True),
@@ -238,7 +238,7 @@ class external_report_lines(Model):
         'state': fields.selection((('success', 'Success'),
                                    ('fail', 'Failed')),
                                    'Status', required=True, readonly=True),
-        'action': fields.char('Action', size=32, required=True, readonly=True),
+        'action': fields.char('Action', size=256, required=True, readonly=True),
         'action_on': fields.many2one('ir.model', 'Action On',required=True, readonly=True),
         'res_id': fields.integer('Resource Id', readonly=True),
         'date': fields.datetime('Date', required=True, readonly=True),

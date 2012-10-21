@@ -157,10 +157,10 @@ def catch_error_in_report(func):
         return response
     return wrapper
 
-#This decorator is for now a prototype it will be improve latter, maybe the best will to have to kind of decorator (import and export)
+#This decorator is for now a prototype it will be improve latter, maybe the best will to have two kind of decorator (import and export)
 def catch_action(func):
     """ This decorator open and close a new cursor and if an error occure it will generate a error line in the reporting system
-    The function must start with "self, cr, uid, object"
+    The function must start with "self, cr, uid, object_id"
     And the object must have a field call "referential_id" related to the object "external.referential"
     """
     @functools.wraps(func)

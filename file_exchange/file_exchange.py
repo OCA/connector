@@ -29,6 +29,7 @@ from base_external_referentials.decorator import open_report
 from tempfile import TemporaryFile
 from encodings.aliases import aliases
 from tools.translate import _
+from openerp.tools.config import config
 
 
 #TODO implement the FileCsvWriter in base_file_protocole and remove import csv
@@ -382,6 +383,7 @@ class file_exchange(Model):
             try:
                 exec action_code in space
             except Exception, e:
+                if config['debug_mode']: raise
                 raise except_osv(_('Error !'),
                                  _("Error can not apply the python action '%s'"
                                    " for the method: '%s' \n Exception: '%s'") % (action_name, method.name,e))

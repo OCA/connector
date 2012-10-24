@@ -781,6 +781,6 @@ class ir_model_data(Model):
     }
 
     _sql_constraints = [
-        ('external_reference_uniq_per_object', 'unique(model, res_id, referential_id)', 'You cannot have on record with multiple external id for a sae referential'),
+        ('external_reference_uniq_per_object', 'unique(model, res_id, referential_id)', 'You cannot have on record with multiple external id for a same referential'),
     ]
 

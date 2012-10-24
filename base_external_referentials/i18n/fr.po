@@ -1,0 +1,2334 @@
+# Translation of OpenERP Server.
+# This file contains the translation of the following modules:
+#	* base_external_referentials
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: OpenERP Server 6.1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-10-24 13:11+0000\n"
+"PO-Revision-Date: 2012-10-24 13:11+0000\n"
+"Last-Translator: <Benoît Guillot>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: base_external_referentials
+#: field:external.referential.type,code:0
+#: field:external.referential.version,code:0
+msgid "code"
+msgstr "code"
+
+#. module: base_external_referentials
+#: view:external.mapping.line:0
+msgid "Mapping line"
+msgstr "Ligne de mapping"
+
+#. module: base_external_referentials
+#: field:external.mapping.line,selected:0
+msgid "Selected"
+msgstr "Sélectionné"
+
+#. module: base_external_referentials
+#: code:addons/base_external_referentials/decorator.py:78
+#, python-format
+msgid "The field referential_id doesn't exist on the object %s. Reporting system can not be used\" %(self._name,)))\n"
+"\n"
+"        report_obj = self.pool.get('external.report')\n"
+"        context = kwargs.get('context')\n"
+"        if context is None:\n"
+"            context={}\n"
+"            kwargs['context'] = context\n"
+"\n"
+"        #Start the report\n"
+"        report_id = report_obj.start_report(cr, uid, external_session, id=None, action=func.__name__, action_on=self._name, context=context)\n"
+"\n"
+"        #Execute the original function and add the report_id to the context\n"
+"        context['report_id'] = report_id\n"
+"        response = func(self, cr, uid, external_session, *args, **kwargs)\n"
+"\n"
+"        #Close the report\n"
+"        report_obj.end_report(cr, uid, external_session, report_id, context=context)\n"
+"\n"
+"        return response\n"
+"    return wrapper\n"
+"\n"
+"\n"
+"def catch_error_in_report(func):\n"
+"    \" This decorator open and close a new cursor and if an error occure it will generate a error line in the reporting system\n"
+"    The function must start with \"self, cr, uid, object\"\n"
+"    And the object must have a field call \"referential_id\" related to the object \"external.referential\"\"\n"
+"    @functools.wraps(func)\n"
+"    def wrapper(self, cr, uid, external_session, resource, *args, **kwargs):\n"
+"        context = kwargs.get('context')\n"
+"        if not (context and context.get('report_id')):\n"
+"            external_session.logger.debug(_(\"There is no key report_id in the context, error will be not catch"
+msgstr "The field referential_id doesn't exist on the object %s. Reporting system can not be used\" %(self._name,)))\n"
+"\n"
+"        report_obj = self.pool.get('external.report')\n"
+"        context = kwargs.get('context')\n"
+"        if context is None:\n"
+"            context={}\n"
+"            kwargs['context'] = context\n"
+"\n"
+"        #Start the report\n"
+"        report_id = report_obj.start_report(cr, uid, external_session, id=None, action=func.__name__, action_on=self._name, context=context)\n"
+"\n"
+"        #Execute the original function and add the report_id to the context\n"
+"        context['report_id'] = report_id\n"
+"        response = func(self, cr, uid, external_session, *args, **kwargs)\n"
+"\n"
+"        #Close the report\n"
+"        report_obj.end_report(cr, uid, external_session, report_id, context=context)\n"
+"\n"
+"        return response\n"
+"    return wrapper\n"
+"\n"
+"\n"
+"def catch_error_in_report(func):\n"
+"    \" This decorator open and close a new cursor and if an error occure it will generate a error line in the reporting system\n"
+"    The function must start with \"self, cr, uid, object\"\n"
+"    And the object must have a field call \"referential_id\" related to the object \"external.referential\"\"\n"
+"    @functools.wraps(func)\n"
+"    def wrapper(self, cr, uid, external_session, resource, *args, **kwargs):\n"
+"        context = kwargs.get('context')\n"
+"        if not (context and context.get('report_id')):\n"
+"            external_session.logger.debug(_(\"There is no key report_id in the context, error will be not catch"
+
+#. module: base_external_referentials
+#: help:external.mapping.line,external_field:0
+msgid "When importing flat csv file from file exchange,you can leave this field empty, because this field doesn't exist in your csv file'"
+msgstr "Lors de l'import d'un fichier csv plat depuis file_exchange, vous pouvez laisser ce champ vide parce qu'il n'existe pas dans votre fichier csv."
+
+#. module: base_external_referentials
+#: model:ir.model,name:base_external_referentials.model_external_referential_type
+msgid "External Referential Type (Ex.Magento,Spree)"
+msgstr "Type de référentiel externe (Ex.Magento,Spree)"
+
+#. module: base_external_referentials
+#: view:group.fields:0
+#: model:ir.actions.act_window,name:base_external_referentials.group_field_action_open_form
+msgid "Group fields"
+msgstr "Champs groupés"
+
+#. module: base_external_referentials
+#: view:external.referential:0
+msgid "CSV file generation"
+msgstr "Génération de fichiers CSV"
+
+#. module: base_external_referentials
+#: view:external.report.line:0
+msgid "Action On Model"
+msgstr "Action sur le modèle"
+
+#. module: base_external_referentials
+#: code:addons/base_external_referentials/external_osv.py:413
+#, python-format
+msgid "The method _get_external_resource_ids is not implemented in abstract base module!"
+msgstr "La méthode _get_external_resource_ids n'est pas implémentée dans le module d'abstraction!"
+
+#. module: base_external_referentials
+#: code:addons/base_external_referentials/external_osv.py:1468
+#, python-format
+msgid "Wrong external type for mapping %s. One2Many object must have for external type string or integer"
+msgstr "Mauvais type externe pour le mapping %s. Les objects One2Many doivent avoir pour type externe string ou integer"
+
+#. module: base_external_referentials
+#: field:external.report.line,args:0
+msgid "Args"
+msgstr "Args"
+
+#. module: base_external_referentials
+#: sql_constraint:ir.model.data:0
+msgid "You cannot have multiple records with the same external ID in the same module!"
+msgstr "Vous ne pouvez pas avoir plusieurs enregistrements avec le même ID externe dans le même module!"
+
+#. module: base_external_referentials
+#: field:external.mapping.line,related_model_id:0
+msgid "Related Model"
+msgstr "Modèle lié"
+
+#. module: base_external_referentials
+#: model:ir.actions.act_window,name:base_external_referentials.ext_sale_order
+msgid "External Order"
+msgstr "Commande externe"
+
+#. module: base_external_referentials
+#: code:addons/base_external_referentials/external_osv.py:94
+#, python-format
+msgid "The method %s already exist. Please change the prefix name"
+msgstr "La méthode %s existe déjà. Veuillez changer le nom préfixé"
+
+#. module: base_external_referentials
+#: field:external.mapping,model:0
+#: field:external.mapping.template,model:0
+msgid "Model Name"
+msgstr "Nom du modèle"
+
+#. module: base_external_referentials
+#: field:external.report,history_ids:0
+msgid "History"
+msgstr "Historique"
+
+#. module: base_external_referentials
+#: view:external.referential:0
+msgid "Compulsory"
+msgstr "Obligatoire"
+
+#. module: base_external_referentials
+#: view:external.report:0
+msgid "Retry All Failed"
+msgstr "Réessayer tous les échecs"
+
+#. module: base_external_referentials
+#: code:addons/base_external_referentials/external_osv.py:1467
+#: code:addons/base_external_referentials/external_osv.py:1698
+#: code:addons/base_external_referentials/group_fields.py:68
+#, python-format
+msgid "User Error"
+msgstr "Erreur utilisateur"
+
+#. module: base_external_referentials
+#: model:ir.model,name:base_external_referentials.model_external_mapping_template
+msgid "The source mapping records"
+msgstr "Enregistrement du mapping source"
+
+#. module: base_external_referentials
+#: view:external.referential.type:0
+msgid "External Referential Types"
+msgstr "Types de référentiel externe"
+
+#. module: base_external_referentials
+#: model:ir.actions.act_window,name:base_external_referentials.ir_actions_act_window_external_mapping_line
+#: model:ir.ui.menu,name:base_external_referentials.ir_ui_menu_external_mapping_lines
+msgid "External Mapping Lines"
+msgstr "Lignes de mapping externes"
+
+#. module: base_external_referentials
+#: field:external.referential,categ_id:0
+#: model:ir.actions.act_window,name:base_external_referentials.ext_product_category
+msgid "External Category"
+msgstr "Catégorie externe"
+
+#. module: base_external_referentials
+#: code:addons/base_external_referentials/external_osv.py:510
+#, python-format
+msgid "The object %s doesn't have an external mapping\" % self._name))\n"
+"    else:\n"
+"        #If a mapping exists for current model, search for mapping lines\n"
+"\n"
+"        mapping_type = convertion_type == 'from_external_to_openerp' and 'in' or 'out'\n"
+"        mapping_line_filter = [('mapping_id', '=', mapping_id),\n"
+"                            ('type', 'in', ['in_out', mapping_type])]\n"
+"        if mapping_line_filter_ids:\n"
+"            mapping_line_filter += ['|',\n"
+"                                    ('id', 'in', mapping_line_filter_ids),\n"
+"                                    ('evaluation_type', '=', 'sub-mapping')]\n"
+"        mapping_line_ids = self.pool.get('external.mapping.line').search(cr, uid, mapping_line_filter, context=context)\n"
+"        if mapping_line_ids:\n"
+"            mapping_lines = self.pool.get('external.mapping.line').read(cr, uid, mapping_line_ids, [], context=context)\n"
+"        else:\n"
+"            mapping_lines = []\n"
+"        res = self.pool.get('external.mapping').read(cr, uid, mapping_id, context=context)\n"
+"        alternative_key = [x['internal_field'] for x in mapping_lines if x['alternative_key']]\n"
+"        res['alternative_keys'] = alternative_key or False\n"
+"        res['key_for_external_id'] = res['key_for_external_id'] or 'id'\n"
+"        res['mapping_lines'] = mapping_lines\n"
+"        return res\n"
+"\n"
+"@extend(Model)\n"
+"def import_resources(self, cr, uid, ids, resource_name, method=\"search_then_read\", context=None):\n"
+"    \"Abstract function to import resources from a shop / a referential...\n"
+"\n"
+"    :param list ids: list of id\n"
+"    :param str ressource_name: the resource name to import\n"
+"    :param str method: method used for importing the resource (search_then_read,\n"
+"                            search_then_read_no_loop, search_read, search_read_no_loop )\n"
+"    :rtype: dict\n"
+"    :return: dictionary with the key \"create_ids\" and \"write_ids\" which containt the id created/written\n"
+"    \"\n"
+"    if context is None: context={}\n"
+"    result = {\"create_ids\" : [], \"write_ids\" : []}\n"
+"    for browse_record in self.browse(cr, uid, ids, context=context):\n"
+"        if browse_record._name == 'external.referential':\n"
+"            external_session = ExternalSession(browse_record, browse_record)\n"
+"        else:\n"
+"            if hasattr(browse_record, 'referential_id'):\n"
+"                context['%s_id'%browse_record._name.replace('.', '_')] = browse_record.id\n"
+"                external_session = ExternalSession(browse_record.referential_id, browse_record)\n"
+"            else:\n"
+"                raise except_osv(_(\"Not Implemented"
+msgstr "The object %s doesn't have an external mapping\" % self._name))\n"
+"    else:\n"
+"        #If a mapping exists for current model, search for mapping lines\n"
+"\n"
+"        mapping_type = convertion_type == 'from_external_to_openerp' and 'in' or 'out'\n"
+"        mapping_line_filter = [('mapping_id', '=', mapping_id),\n"
+"                            ('type', 'in', ['in_out', mapping_type])]\n"
+"        if mapping_line_filter_ids:\n"
+"            mapping_line_filter += ['|',\n"
+"                                    ('id', 'in', mapping_line_filter_ids),\n"
+"                                    ('evaluation_type', '=', 'sub-mapping')]\n"
+"        mapping_line_ids = self.pool.get('external.mapping.line').search(cr, uid, mapping_line_filter, context=context)\n"
+"        if mapping_line_ids:\n"
+"            mapping_lines = self.pool.get('external.mapping.line').read(cr, uid, mapping_line_ids, [], context=context)\n"
+"        else:\n"
+"            mapping_lines = []\n"
+"        res = self.pool.get('external.mapping').read(cr, uid, mapping_id, context=context)\n"
+"        alternative_key = [x['internal_field'] for x in mapping_lines if x['alternative_key']]\n"
+"        res['alternative_keys'] = alternative_key or False\n"
+"        res['key_for_external_id'] = res['key_for_external_id'] or 'id'\n"
+"        res['mapping_lines'] = mapping_lines\n"
+"        return res\n"
+"\n"
+"@extend(Model)\n"
+"def import_resources(self, cr, uid, ids, resource_name, method=\"search_then_read\", context=None):\n"
+"    \"Abstract function to import resources from a shop / a referential...\n"
+"\n"
+"    :param list ids: list of id\n"
+"    :param str ressource_name: the resource name to import\n"
+"    :param str method: method used for importing the resource (search_then_read,\n"
+"                            search_then_read_no_loop, search_read, search_read_no_loop )\n"
+"    :rtype: dict\n"
+"    :return: dictionary with the key \"create_ids\" and \"write_ids\" which containt the id created/written\n"
+"    \"\n"
+"    if context is None: context={}\n"
+"    result = {\"create_ids\" : [], \"write_ids\" : []}\n"
+"    for browse_record in self.browse(cr, uid, ids, context=context):\n"
+"        if browse_record._name == 'external.referential':\n"
+"            external_session = ExternalSession(browse_record, browse_record)\n"
+"        else:\n"
+"            if hasattr(browse_record, 'referential_id'):\n"
+"                context['%s_id'%browse_record._name.replace('.', '_')] = browse_record.id\n"
+"                external_session = ExternalSession(browse_record.referential_id, browse_record)\n"
+"            else:\n"
+"                raise except_osv(_(\"Not Implemented"
+
+#. module: base_external_referentials
+#: model:ir.model,name:base_external_referentials.model_ir_model
+msgid "Models"
+msgstr "Modèles"
+
+#. module: base_external_referentials
+#: view:external.report.history:0
+#: view:external.report.line:0
+msgid "Report"
+msgstr "Rapport"
+
+#. module: base_external_referentials
+#: model:ir.model,name:base_external_referentials.model_external_referential_category
+msgid "External Referential Category (Ex: e-commerce, crm, warehouse)"
+msgstr "Catégorie du référentiel externe (Ex: e-commerce, crm, entrepôt)"
+
+#. module: base_external_referentials
+#: view:external.mapping.line:0
+msgid "Other Information"
+msgstr "Autre information"
+
+#. module: base_external_referentials
+#: field:external.referential,debug:0
+msgid "Debug"
+msgstr "Debug"
+
+#. module: base_external_referentials
+#: view:external.report.history:0
+#: view:external.report.line:0
+msgid "Failures"
+msgstr "Echecs"
+
+#. module: base_external_referentials
+#: model:ir.model,name:base_external_referentials.model_external_mappinglines_template
+msgid "The source mapping line records"
+msgstr "Enregistrement de la ligne de mapping source"
+
+#. module: base_external_referentials
+#: view:external.referential:0
+msgid "2- Export type"
+msgstr "2- Export du type de référentiel"
+
+#. module: base_external_referentials
+#: field:external.mapping,external_done_method:0
+#: field:external.mapping.template,external_done_method:0
+msgid "Done Method"
+msgstr "Méthode de finalisation"
+
+#. module: base_external_referentials
+#: model:ir.model,name:base_external_referentials.model_external_mapping_line
+msgid "Field Mapping"
+msgstr "Mapping du champ"
+
+#. module: base_external_referentials
+#: field:external.referential.version,name:0
+msgid "name"
+msgstr "Nom"
+
+#. module: base_external_referentials
+#: constraint:external.referential:0
+msgid "The name cannot contain a dot!"
+msgstr "Le nom ne doit pas contenir de point!"
+
+#. module: base_external_referentials
+#: model:ir.actions.act_window,name:base_external_referentials.ir_actions_act_window_external_type
+#: model:ir.ui.menu,name:base_external_referentials.ir_ui_menu_external_types
+msgid "External Referentials Types"
+msgstr "Types de référentiels externes"
+
+#. module: base_external_referentials
+#: field:external.mapping,related_model_ids:0
+msgid "Related Inherited Models"
+msgstr "Modèles liés hérités"
+
+#. module: base_external_referentials
+#: view:external.report:0
+msgid "External Referential Reports"
+msgstr "Rapports des référentiels externes"
+
+#. module: base_external_referentials
+#: field:external.mapping,external_create_method:0
+#: field:external.mapping.template,external_create_method:0
+msgid "Create Method"
+msgstr "Méthode de création"
+
+#. module: base_external_referentials
+#: selection:external.mapping.line,external_type:0
+#: selection:external.mappinglines.template,external_type:0
+msgid "Datetime"
+msgstr "Datetime"
+
+#. module: base_external_referentials
+#: field:ir.model.data,referential_id:0
+msgid "Ext. Referential"
+msgstr "Référentiel externe"
+
+#. module: base_external_referentials
+#: code:addons/base_external_referentials/external_osv.py:715
+#, python-format
+msgid "The object imported need an external_id, maybe the mapping doesn't exist for the object : %s\" %self._name))\n"
+"\n"
+"    if existing_rec_id:\n"
+"        if not self._name in context.get('do_not_update', []):\n"
+"            if self.oe_update(cr, uid, external_session, existing_rec_id, vals, resource, defaults=defaults, context=context):\n"
+"                written = True\n"
+"    else:\n"
+"        existing_rec_id = self.oe_create(cr, uid,  external_session, vals, resource, defaults, context=context)\n"
+"        created = True\n"
+"\n"
+"    if external_id_ok:\n"
+"        if existing_ir_model_data_id:\n"
+"            if created:\n"
+"                # means the external ressource is registred in ir.model.data but the ressource doesn't exist\n"
+"                # in this case we have to update the ir.model.data in order to point to the ressource created\n"
+"                self.pool.get('ir.model.data').write(cr, uid, existing_ir_model_data_id, {'res_id': existing_rec_id}, context=context)\n"
+"        else:\n"
+"            ir_model_data_vals =             self.create_external_id_vals(cr, uid, existing_rec_id, external_id, referential_id, context=context)\n"
+"            if not created:\n"
+"                # means the external resource is bound to an already existing resource\n"
+"                # but not registered in ir.model.data, we log it to inform the success of the binding\n"
+"                external_session.logger.info(\"Bound in OpenERP %s from External Ref with external_id %s and OpenERP id %s successfully\" %(self._name, external_id, existing_rec_id))\n"
+"\n"
+"    if created:\n"
+"        if external_id:\n"
+"            external_session.logger.info((\"Created in OpenERP %s from External Ref withexternal_id %s and OpenERP id %s successfully\" %(self._name, external_id_ok and str(external_id), existing_rec_id)))\n"
+"        elif alternative_keys:\n"
+"            external_session.logger.info((\"Created in OpenERP %s from External Ref withalternative_keys %s and OpenERP id %s successfully\" %(self._name, external_id_ok and str (vals.get(alternative_keys)), existing_rec_id)))\n"
+"        return {'create_id' : existing_rec_id}\n"
+"    elif written:\n"
+"        if external_id:\n"
+"            external_session.logger.info((\"Updated in OpenERP %s from External Ref withexternal_id %s and OpenERP id %s successfully\" %(self._name, external_id_ok and str(external_id), existing_rec_id)))\n"
+"        elif alternative_keys:\n"
+"            external_session.logger.info((\"Updated in OpenERP %s from External Ref withalternative_keys %s and OpenERP id %s successfully\" %(self._name, external_id_ok and str (vals.get(alternative_keys)), existing_rec_id)))\n"
+"        return {'write_id' : existing_rec_id}\n"
+"    return {}\n"
+"\n"
+"@extend(Model)\n"
+"def oe_update(self, cr, uid, external_session, existing_rec_id, vals, resource, defaults, context=None):\n"
+"    \"Update an existing resource in OpenERP\n"
+"\n"
+"    :param ExternalSession external_session : External_session that contain all params of connection\n"
+"    :param int existing_rec_id: openerp id to update\n"
+"    :param dict vals: vals to write\n"
+"    :param dict resource: resource to convert into OpenERP data\n"
+"    :param dict defaults: default values\n"
+"    :rtype boolean\n"
+"    :return: True\n"
+"    \"\n"
+"    if context is None: context={}\n"
+"    context['referential_id'] = external_session.referential_id.id #did it's needed somewhere?\n"
+"    return self.write(cr, uid, existing_rec_id, vals, context)\n"
+"\n"
+"@extend(Model)\n"
+"def oe_create(self, cr, uid, external_session, vals, resource, defaults, context=None):\n"
+"    \"Create an new resource in OpenERP\n"
+"\n"
+"    :param ExternalSession external_session : External_session that contain all params of connection\n"
+"    :param dict vals: vals to create\n"
+"    :param dict resource: resource to convert into OpenERP data\n"
+"    :param dict defaults: default values\n"
+"    :rtype int\n"
+"    :return: the id of the resource created\n"
+"    \"\n"
+"    if context is None: context={}\n"
+"    context['referential_id'] = external_session.referential_id.id  #did it's needed somewhere?\n"
+"    return self.create(cr, uid, vals, context)\n"
+"\n"
+"########################################################################################################################\n"
+"#\n"
+"#                                             END OF IMPORT FEATURES\n"
+"#\n"
+"########################################################################################################################\n"
+"\n"
+"\n"
+"\n"
+"\n"
+"########################################################################################################################\n"
+"#\n"
+"#                                             EXPORT FEATURES\n"
+"#\n"
+"########################################################################################################################\n"
+"\n"
+"@extend(Model)\n"
+"def _get_export_step(self, cr, uid, external_session, context=None):\n"
+"    \"Abstract function that return the step for importing data\n"
+"    Can be overwriten in your module\n"
+"\n"
+"    :param ExternalSession external_session : External_session that contain all params of connection\n"
+"    :rtype: int\n"
+"    :return: a integer that corespond to the limit of object to import\n"
+"    \"\n"
+"    return 10\n"
+"\n"
+"@extend(Model)\n"
+"def _get_default_export_values(self, cr, uid, external_session, mapping_id=None, defaults=None, context=None):\n"
+"    \"Abstract function that return the default value for on object\n"
+"    Can be overwriten in your module\n"
+"\n"
+"    :param ExternalSession external_session : External_session that contain all params of connection\n"
+"    :param int mapping_id: mapping id\n"
+"    :param dict defaults: default values\n"
+"    :rtype: dict\n"
+"    :return: a dictionnary of default values\n"
+"    \"\n"
+"    return defaults\n"
+"\n"
+"@extend(Model)\n"
+"def _get_last_exported_date(self, cr, uid, external_session, context=None):\n"
+"    \"Abstract function that return the last export date for on object\n"
+"    Can be overwriten in your module\n"
+"\n"
+"    :param ExternalSession external_session : External_session that contain all params of connection\n"
+"    :rtype: str\n"
+"    :return: the last export date or False\n"
+"    \"\n"
+"    return False\n"
+"\n"
+"@extend(Model)\n"
+"def _set_last_exported_date(self, cr, uid, external_session, date, context=None):\n"
+"    \"Abstract function that update the last exported date\n"
+"    Can be overwriten in your module\n"
+"\n"
+"    :param ExternalSession external_session : External_session that contain all params of connection\n"
+"    :param date : date\n"
+"    :rtype: boolean\n"
+"    :return: True\n"
+"    \"\n"
+"    return True\n"
+"\n"
+"#For now it's just support 1 level of inherit TODO make it recursive\n"
+"@extend(Model)\n"
+"def _get_query_and_params_for_ids_and_date(self, cr, uid, external_session, ids=None, last_exported_date=None, context=None):\n"
+"    \"Function that build the sql query for getting the ids and the udpate date of each record\n"
+"\n"
+"    :param ExternalSession external_session : External_session that contain all params of connection\n"
+"    :param list ids : if not empty the ids will be used in the sql request in order to filter the record\n"
+"    :param str last_exported_date : last exported date\n"
+"    :rtype: tuple\n"
+"    :return: an tuple of query and params\n"
+"    \"\n"
+"    object_table = self._table\n"
+"    params = ()\n"
+"    if not self._inherits:\n"
+"        greatest = \"GREATEST(%(object_table)s.write_date, %(object_table)s.create_date)\"                        %{'object_table': object_table}\n"
+"\n"
+"        query = \"\n"
+"            SELECT %(greatest)s as update_date, %(object_table)s.id as id, ir_model_data.res_id\n"
+"                FROM %(object_table)s\n"
+"            LEFT JOIN ir_model_data\n"
+"                ON %(object_table)s.id = ir_model_data.res_id\n"
+"                AND ir_model_data.model = '%(object_name)s'\n"
+"                AND ir_model_data.module = 'extref/%(ref_name)s'\n"
+"            \"%{\n"
+"                    'greatest': greatest,\n"
+"                    'object_table': object_table,\n"
+"                    'object_name': self._name,\n"
+"                    'ref_name': external_session.referential_id.name,\n"
+"            }\n"
+"    else:\n"
+"        inherits_object_table = self.pool.get(self._inherits.keys()[0])._table\n"
+"        join_field = self._inherits[self._inherits.keys()[0]]\n"
+"\n"
+"        greatest = \"GREATEST(%(object_table)s.write_date, %(object_table)s.create_date,\n"
+"                    %(inherits_object_table)s.write_date, %(inherits_object_table)s.create_date)\"                     %{'object_table': object_table, 'inherits_object_table': inherits_object_table}\n"
+"\n"
+"        query = \"\n"
+"            select %(greatest)s as update_date, %(object_table)s.id as id, ir_model_data.res_id\n"
+"                from %(object_table)s\n"
+"                    join %(inherits_object_table)s on %(inherits_object_table)s.id = %(object_table)s.%(join_field)s\n"
+"                    LEFT JOIN ir_model_data\n"
+"                        ON %(object_table)s.id = ir_model_data.res_id\n"
+"                        AND ir_model_data.model = '%(object_name)s'\n"
+"                        AND ir_model_data.module = 'extref/%(ref_name)s'\n"
+"            \" %{\n"
+"                    'greatest': greatest,\n"
+"                    'object_table': object_table,\n"
+"                    'inherits_object_table': inherits_object_table,\n"
+"                    'join_field': join_field,\n"
+"                    'object_name': self._name,\n"
+"                    'ref_name': external_session.referential_id.name,\n"
+"                }\n"
+"    if ids:\n"
+"        query += \" WHERE \" + object_table + \".id in %s\"\n"
+"        params += (tuple(ids),)\n"
+"    if last_exported_date:\n"
+"        query += (ids and \" AND (\" or \" WHERE ("
+msgstr "The object imported need an external_id, maybe the mapping doesn't exist for the object : %s\" %self._name))\n"
+"\n"
+"    if existing_rec_id:\n"
+"        if not self._name in context.get('do_not_update', []):\n"
+"            if self.oe_update(cr, uid, external_session, existing_rec_id, vals, resource, defaults=defaults, context=context):\n"
+"                written = True\n"
+"    else:\n"
+"        existing_rec_id = self.oe_create(cr, uid,  external_session, vals, resource, defaults, context=context)\n"
+"        created = True\n"
+"\n"
+"    if external_id_ok:\n"
+"        if existing_ir_model_data_id:\n"
+"            if created:\n"
+"                # means the external ressource is registred in ir.model.data but the ressource doesn't exist\n"
+"                # in this case we have to update the ir.model.data in order to point to the ressource created\n"
+"                self.pool.get('ir.model.data').write(cr, uid, existing_ir_model_data_id, {'res_id': existing_rec_id}, context=context)\n"
+"        else:\n"
+"            ir_model_data_vals =             self.create_external_id_vals(cr, uid, existing_rec_id, external_id, referential_id, context=context)\n"
+"            if not created:\n"
+"                # means the external resource is bound to an already existing resource\n"
+"                # but not registered in ir.model.data, we log it to inform the success of the binding\n"
+"                external_session.logger.info(\"Bound in OpenERP %s from External Ref with external_id %s and OpenERP id %s successfully\" %(self._name, external_id, existing_rec_id))\n"
+"\n"
+"    if created:\n"
+"        if external_id:\n"
+"            external_session.logger.info((\"Created in OpenERP %s from External Ref withexternal_id %s and OpenERP id %s successfully\" %(self._name, external_id_ok and str(external_id), existing_rec_id)))\n"
+"        elif alternative_keys:\n"
+"            external_session.logger.info((\"Created in OpenERP %s from External Ref withalternative_keys %s and OpenERP id %s successfully\" %(self._name, external_id_ok and str (vals.get(alternative_keys)), existing_rec_id)))\n"
+"        return {'create_id' : existing_rec_id}\n"
+"    elif written:\n"
+"        if external_id:\n"
+"            external_session.logger.info((\"Updated in OpenERP %s from External Ref withexternal_id %s and OpenERP id %s successfully\" %(self._name, external_id_ok and str(external_id), existing_rec_id)))\n"
+"        elif alternative_keys:\n"
+"            external_session.logger.info((\"Updated in OpenERP %s from External Ref withalternative_keys %s and OpenERP id %s successfully\" %(self._name, external_id_ok and str (vals.get(alternative_keys)), existing_rec_id)))\n"
+"        return {'write_id' : existing_rec_id}\n"
+"    return {}\n"
+"\n"
+"@extend(Model)\n"
+"def oe_update(self, cr, uid, external_session, existing_rec_id, vals, resource, defaults, context=None):\n"
+"    \"Update an existing resource in OpenERP\n"
+"\n"
+"    :param ExternalSession external_session : External_session that contain all params of connection\n"
+"    :param int existing_rec_id: openerp id to update\n"
+"    :param dict vals: vals to write\n"
+"    :param dict resource: resource to convert into OpenERP data\n"
+"    :param dict defaults: default values\n"
+"    :rtype boolean\n"
+"    :return: True\n"
+"    \"\n"
+"    if context is None: context={}\n"
+"    context['referential_id'] = external_session.referential_id.id #did it's needed somewhere?\n"
+"    return self.write(cr, uid, existing_rec_id, vals, context)\n"
+"\n"
+"@extend(Model)\n"
+"def oe_create(self, cr, uid, external_session, vals, resource, defaults, context=None):\n"
+"    \"Create an new resource in OpenERP\n"
+"\n"
+"    :param ExternalSession external_session : External_session that contain all params of connection\n"
+"    :param dict vals: vals to create\n"
+"    :param dict resource: resource to convert into OpenERP data\n"
+"    :param dict defaults: default values\n"
+"    :rtype int\n"
+"    :return: the id of the resource created\n"
+"    \"\n"
+"    if context is None: context={}\n"
+"    context['referential_id'] = external_session.referential_id.id  #did it's needed somewhere?\n"
+"    return self.create(cr, uid, vals, context)\n"
+"\n"
+"########################################################################################################################\n"
+"#\n"
+"#                                             END OF IMPORT FEATURES\n"
+"#\n"
+"########################################################################################################################\n"
+"\n"
+"\n"
+"\n"
+"\n"
+"########################################################################################################################\n"
+"#\n"
+"#                                             EXPORT FEATURES\n"
+"#\n"
+"########################################################################################################################\n"
+"\n"
+"@extend(Model)\n"
+"def _get_export_step(self, cr, uid, external_session, context=None):\n"
+"    \"Abstract function that return the step for importing data\n"
+"    Can be overwriten in your module\n"
+"\n"
+"    :param ExternalSession external_session : External_session that contain all params of connection\n"
+"    :rtype: int\n"
+"    :return: a integer that corespond to the limit of object to import\n"
+"    \"\n"
+"    return 10\n"
+"\n"
+"@extend(Model)\n"
+"def _get_default_export_values(self, cr, uid, external_session, mapping_id=None, defaults=None, context=None):\n"
+"    \"Abstract function that return the default value for on object\n"
+"    Can be overwriten in your module\n"
+"\n"
+"    :param ExternalSession external_session : External_session that contain all params of connection\n"
+"    :param int mapping_id: mapping id\n"
+"    :param dict defaults: default values\n"
+"    :rtype: dict\n"
+"    :return: a dictionnary of default values\n"
+"    \"\n"
+"    return defaults\n"
+"\n"
+"@extend(Model)\n"
+"def _get_last_exported_date(self, cr, uid, external_session, context=None):\n"
+"    \"Abstract function that return the last export date for on object\n"
+"    Can be overwriten in your module\n"
+"\n"
+"    :param ExternalSession external_session : External_session that contain all params of connection\n"
+"    :rtype: str\n"
+"    :return: the last export date or False\n"
+"    \"\n"
+"    return False\n"
+"\n"
+"@extend(Model)\n"
+"def _set_last_exported_date(self, cr, uid, external_session, date, context=None):\n"
+"    \"Abstract function that update the last exported date\n"
+"    Can be overwriten in your module\n"
+"\n"
+"    :param ExternalSession external_session : External_session that contain all params of connection\n"
+"    :param date : date\n"
+"    :rtype: boolean\n"
+"    :return: True\n"
+"    \"\n"
+"    return True\n"
+"\n"
+"#For now it's just support 1 level of inherit TODO make it recursive\n"
+"@extend(Model)\n"
+"def _get_query_and_params_for_ids_and_date(self, cr, uid, external_session, ids=None, last_exported_date=None, context=None):\n"
+"    \"Function that build the sql query for getting the ids and the udpate date of each record\n"
+"\n"
+"    :param ExternalSession external_session : External_session that contain all params of connection\n"
+"    :param list ids : if not empty the ids will be used in the sql request in order to filter the record\n"
+"    :param str last_exported_date : last exported date\n"
+"    :rtype: tuple\n"
+"    :return: an tuple of query and params\n"
+"    \"\n"
+"    object_table = self._table\n"
+"    params = ()\n"
+"    if not self._inherits:\n"
+"        greatest = \"GREATEST(%(object_table)s.write_date, %(object_table)s.create_date)\"                        %{'object_table': object_table}\n"
+"\n"
+"        query = \"\n"
+"            SELECT %(greatest)s as update_date, %(object_table)s.id as id, ir_model_data.res_id\n"
+"                FROM %(object_table)s\n"
+"            LEFT JOIN ir_model_data\n"
+"                ON %(object_table)s.id = ir_model_data.res_id\n"
+"                AND ir_model_data.model = '%(object_name)s'\n"
+"                AND ir_model_data.module = 'extref/%(ref_name)s'\n"
+"            \"%{\n"
+"                    'greatest': greatest,\n"
+"                    'object_table': object_table,\n"
+"                    'object_name': self._name,\n"
+"                    'ref_name': external_session.referential_id.name,\n"
+"            }\n"
+"    else:\n"
+"        inherits_object_table = self.pool.get(self._inherits.keys()[0])._table\n"
+"        join_field = self._inherits[self._inherits.keys()[0]]\n"
+"\n"
+"        greatest = \"GREATEST(%(object_table)s.write_date, %(object_table)s.create_date,\n"
+"                    %(inherits_object_table)s.write_date, %(inherits_object_table)s.create_date)\"                     %{'object_table': object_table, 'inherits_object_table': inherits_object_table}\n"
+"\n"
+"        query = \"\n"
+"            select %(greatest)s as update_date, %(object_table)s.id as id, ir_model_data.res_id\n"
+"                from %(object_table)s\n"
+"                    join %(inherits_object_table)s on %(inherits_object_table)s.id = %(object_table)s.%(join_field)s\n"
+"                    LEFT JOIN ir_model_data\n"
+"                        ON %(object_table)s.id = ir_model_data.res_id\n"
+"                        AND ir_model_data.model = '%(object_name)s'\n"
+"                        AND ir_model_data.module = 'extref/%(ref_name)s'\n"
+"            \" %{\n"
+"                    'greatest': greatest,\n"
+"                    'object_table': object_table,\n"
+"                    'inherits_object_table': inherits_object_table,\n"
+"                    'join_field': join_field,\n"
+"                    'object_name': self._name,\n"
+"                    'ref_name': external_session.referential_id.name,\n"
+"                }\n"
+"    if ids:\n"
+"        query += \" WHERE \" + object_table + \".id in %s\"\n"
+"        params += (tuple(ids),)\n"
+"    if last_exported_date:\n"
+"        query += (ids and \" AND (\" or \" WHERE ("
+
+#. module: base_external_referentials
+#: help:external.mapping.line,selected:0
+msgid "to select for mapping"
+msgstr "A selectionner pour mapper"
+
+#. module: base_external_referentials
+#: field:external.referential,version_id:0
+msgid "Referential Version"
+msgstr "Version du référentiel"
+
+#. module: base_external_referentials
+#: view:external.report.line:0
+msgid "Retry"
+msgstr "Réessayer"
+
+#. module: base_external_referentials
+#: field:external.report.history,end_date:0
+msgid "End Date"
+msgstr "Date de fin"
+
+#. module: base_external_referentials
+#: selection:external.report.line,state:0
+msgid "Failed"
+msgstr "Echecs"
+
+#. module: base_external_referentials
+#: view:external.mapping:0
+#: field:external.mapping.line,referential_id:0
+msgid "Referential"
+msgstr "Référentiel"
+
+#. module: base_external_referentials
+#: view:external.referential:0
+msgid "Referential Actions"
+msgstr "Actions du référentiel"
+
+#. module: base_external_referentials
+#: field:external.referential,location:0
+msgid "Location"
+msgstr "Emplacement"
+
+#. module: base_external_referentials
+#: selection:external.mapping.line,evaluation_type:0
+#: selection:external.mappinglines.template,evaluation_type:0
+msgid "Sub Mapping Line"
+msgstr "Ligne de sous-mapping"
+
+#. module: base_external_referentials
+#: field:external.report,failed_line_ids:0
+msgid "Failed Report Lines"
+msgstr "Lignes de rapport en échecs"
+
+#. module: base_external_referentials
+#: selection:external.mapping.line,external_type:0
+#: selection:external.mappinglines.template,external_type:0
+msgid "Dictionnary"
+msgstr "Dictionnary"
+
+#. module: base_external_referentials
+#: field:external.mapping,key_for_external_id:0
+#: field:external.mapping.template,key_for_external_id:0
+msgid "External field used as key"
+msgstr "Champ externe utilisé comme clé"
+
+#. module: base_external_referentials
+#: field:external.mapping.line,type:0
+#: field:external.mappinglines.template,type:0
+#: field:external.referential.version,type_id:0
+msgid "Type"
+msgstr "Type"
+
+#. module: base_external_referentials
+#: field:external.mapping.line,field_id:0
+#: field:external.mappinglines.template,field_id:0
+msgid "OpenERP Field"
+msgstr "Champ d'OpenERP"
+
+#. module: base_external_referentials
+#: field:external.mapping.line,name:0
+#: field:external.mappinglines.template,name:0
+#: field:external.referential,name:0
+#: field:external.referential.category,name:0
+#: field:external.referential.type,name:0
+#: field:external.report,name:0
+#: field:group.fields,name:0
+msgid "Name"
+msgstr "Nom"
+
+#. module: base_external_referentials
+#: selection:external.mapping.line,type:0
+#: selection:external.mappinglines.template,type:0
+msgid "External -> OpenERP"
+msgstr "Externe -> OpenERP"
+
+#. module: base_external_referentials
+#: selection:external.mapping.line,external_type:0
+#: selection:external.mappinglines.template,external_type:0
+msgid "String"
+msgstr "String"
+
+#. module: base_external_referentials
+#: field:external.referential,create_date:0
+msgid "Creation Date"
+msgstr "Date de création"
+
+#. module: base_external_referentials
+#: view:external.report.line:0
+#: field:external.report.line,error_message:0
+msgid "Error Message"
+msgstr "Message d'erreur"
+
+#. module: base_external_referentials
+#: field:external.mapping,external_get_method:0
+#: field:external.mapping.template,external_get_method:0
+msgid "Get Method"
+msgstr "Méthode d'optention"
+
+#. module: base_external_referentials
+#: code:addons/base_external_referentials/group_fields.py:68
+#, python-format
+msgid "Changing Column name is not supported yet"
+msgstr "Le changement de nom de colonne n'est pas supporté pour l'instant"
+
+#. module: base_external_referentials
+#: field:external.mapping,extra_name:0
+#: field:external.mapping.template,extra_name:0
+msgid "Extra Name"
+msgstr "Nom supplémentaire"
+
+#. module: base_external_referentials
+#: view:external.mapping.line:0
+msgid "Internal fields"
+msgstr "Field interne"
+
+#. module: base_external_referentials
+#: view:external.referential:0
+msgid "Configuration"
+msgstr "Configuration"
+
+#. module: base_external_referentials
+#: model:ir.ui.menu,name:base_external_referentials.ir_ui_menu_group_fields
+msgid "Group Fields"
+msgstr "Groupe de champs"
+
+#. module: base_external_referentials
+#: field:external.mapping,mapping_ids:0
+msgid "Mappings Lines"
+msgstr "Lignes de mapping"
+
+#. module: base_external_referentials
+#: field:ir.model.fields,group_fields_id:0
+msgid "Trigger Group"
+msgstr "Trigger Group"
+
+#. module: base_external_referentials
+#: field:external.mapping,template_id:0
+msgid "External Mapping Template"
+msgstr "Template de mapping"
+
+#. module: base_external_referentials
+#: field:external.referential.type,version_ids:0
+msgid "Versions"
+msgstr "Versions"
+
+#. module: base_external_referentials
+#: view:external.report:0
+#: model:ir.actions.act_window,name:base_external_referentials.ir_actions_act_window_external_report
+msgid "External Reports"
+msgstr "Rapports externes"
+
+#. module: base_external_referentials
+#: code:addons/base_external_referentials/external_osv.py:1432
+#, python-format
+msgid "Invalid format for the variable result."
+msgstr "Le format de la variable result est incorrect."
+
+#. module: base_external_referentials
+#: field:external.report.line,traceback:0
+msgid "Traceback"
+msgstr "Traceback"
+
+#. module: base_external_referentials
+#: selection:external.mapping.line,type:0
+#: selection:external.mappinglines.template,type:0
+msgid "External <- OpenERP"
+msgstr "Externe <- OpenERP"
+
+#. module: base_external_referentials
+#: field:external.mapping,referential_id:0
+#: view:external.referential:0
+#: view:external.referential.type:0
+#: view:external.report:0
+#: field:external.report,referential_id:0
+#: model:ir.model,name:base_external_referentials.model_external_referential
+msgid "External Referential"
+msgstr "Référentiel externe"
+
+#. module: base_external_referentials
+#: field:external.mapping.line,child_mapping_id:0
+#: field:external.mappinglines.template,child_mapping_id:0
+msgid "Child Mapping"
+msgstr "Mapping enfant"
+
+#. module: base_external_referentials
+#: field:external.mapping.line,sequence:0
+#: field:external.mappinglines.template,sequence:0
+msgid "Sequence"
+msgstr "Séquence"
+
+#. module: base_external_referentials
+#: code:addons/base_external_referentials/decorator.py:64
+#: code:addons/base_external_referentials/decorator.py:78
+#: code:addons/base_external_referentials/external_osv.py:413
+#: code:addons/base_external_referentials/external_osv.py:962
+#, python-format
+msgid "Not Implemented"
+msgstr "Non implémenté"
+
+#. module: base_external_referentials
+#: view:external.report.line:0
+#: field:external.report.line,resource:0
+#: field:external.report.line,resource_text:0
+msgid "External Data"
+msgstr "Données externe"
+
+#. module: base_external_referentials
+#: view:external.mapping.line:0
+#: field:external.referential.version,full_name:0
+msgid "Full Name"
+msgstr "Nom entier"
+
+#. module: base_external_referentials
+#: field:external.referential,categ_name:0
+msgid "External Category Name"
+msgstr "Nom de la catégorie du référentiel"
+
+#. module: base_external_referentials
+#: view:external.mapping.line:0
+#: field:external.mapping.line,in_function:0
+#: field:external.mappinglines.template,in_function:0
+msgid "Import in OpenERP Mapping Python Function"
+msgstr "Import in OpenERP Mapping Python Function"
+
+#. module: base_external_referentials
+#: selection:external.mapping.line,evaluation_type:0
+#: selection:external.mappinglines.template,evaluation_type:0
+msgid "Direct Mapping"
+msgstr "Direct Mapping"
+
+#. module: base_external_referentials
+#: view:external.referential:0
+msgid "Core Components"
+msgstr "Composants du coeur"
+
+#. module: base_external_referentials
+#: sql_constraint:external.mapping.line:0
+msgid "A referential can not have various mapping line imported from the same template mapping line"
+msgstr "Un référentiel ne peut pas avoir de différentes lignes de mapping importées depuis le même template de ligne de mapping"
+
+#. module: base_external_referentials
+#: view:external.referential:0
+msgid "6- Export mapping lines"
+msgstr "6- Export des lignes de mapping"
+
+#. module: base_external_referentials
+#: view:external.mapping:0
+#: view:external.mapping.line:0
+#: view:external.referential:0
+#: view:external.referential.type:0
+#: view:external.report:0
+#: view:external.report.history:0
+#: view:external.report.line:0
+#: view:group.fields:0
+msgid "Group by..."
+msgstr "Regrouper par..."
+
+#. module: base_external_referentials
+#: field:external.mapping,external_resource_name:0
+#: field:external.mapping.template,external_resource_name:0
+msgid "External Resource Name"
+msgstr "Nom de la resource externe"
+
+#. module: base_external_referentials
+#: sql_constraint:external.mapping:0
+msgid "A referential can not have various mapping imported from the same template"
+msgstr "Un référentiel ne peut pas avoir de différents mapping importés depuis le même template"
+
+#. module: base_external_referentials
+#: field:external.report.history,start_date:0
+msgid "Start Date"
+msgstr "Date de départ"
+
+#. module: base_external_referentials
+#: code:addons/base_external_referentials/external_osv.py:1083
+#, python-format
+msgid "only method export onebyone is implemented in base_external_referentials"
+msgstr "Seule la méthode d'export un par un est implémenté dans base_external_referentials"
+
+#. module: base_external_referentials
+#: model:ir.actions.act_window,name:base_external_referentials.act_window_external_referential
+#: model:ir.ui.menu,name:base_external_referentials.ir_ui_menu_external_referentials
+#: model:ir.ui.menu,name:base_external_referentials.menu_external_referential
+msgid "External Referentials"
+msgstr "Référentiels externes"
+
+#. module: base_external_referentials
+#: code:addons/base_external_referentials/external_osv.py:1699
+#, python-format
+msgid "Error with mapping : %s. Sub mapping can be only apply on one2many, many2one or many2many fields"
+msgstr "Erreur avec le mapping : %s. Un sous-mapping ne peut être appliqué seulement sur des champs : one2many, many2one ou many2many"
+
+#. module: base_external_referentials
+#: selection:external.mapping.line,type:0
+#: selection:external.mappinglines.template,type:0
+msgid "External <-> OpenERP"
+msgstr "Externe <-> OpenERP"
+
+#. module: base_external_referentials
+#: view:external.referential:0
+#: field:external.referential.type,categ_id:0
+msgid "Category"
+msgstr "Catégorie"
+
+#. module: base_external_referentials
+#: field:external.referential,mapping_ids:0
+msgid "Mappings"
+msgstr "Mappings"
+
+#. module: base_external_referentials
+#: selection:external.mapping.line,external_type:0
+#: selection:external.mappinglines.template,external_type:0
+msgid "URL"
+msgstr "URL"
+
+#. module: base_external_referentials
+#: view:external.mapping:0
+#: view:external.referential:0
+msgid "Object Mappings"
+msgstr "Object du mapping"
+
+#. module: base_external_referentials
+#: model:ir.model,name:base_external_referentials.model_ir_model_data
+msgid "ir.model.data"
+msgstr "ir.model.data"
+
+#. module: base_external_referentials
+#: field:external.mapping,external_search_method:0
+#: field:external.mapping.template,external_search_method:0
+msgid "Search Method"
+msgstr "Méthode de recherche"
+
+#. module: base_external_referentials
+#: model:ir.actions.act_window,name:base_external_referentials.ext_res_partner
+msgid "External Partner"
+msgstr "Partenaire externe"
+
+#. module: base_external_referentials
+#: view:external.report.history:0
+#: view:external.report.line:0
+#: model:ir.actions.act_window,name:base_external_referentials.ir_actions_act_window_external_report_history
+#: model:ir.model,name:base_external_referentials.model_external_report_history
+#: model:ir.ui.menu,name:base_external_referentials.ir_ui_menu_external_report_history
+msgid "External Report History"
+msgstr "Historique des rapports externes"
+
+#. module: base_external_referentials
+#: field:external.mapping.line,datetime_format:0
+#: field:external.mappinglines.template,datetime_format:0
+msgid "Datetime Format"
+msgstr "Datetime Format"
+
+#. module: base_external_referentials
+#: model:ir.actions.act_window,name:base_external_referentials.ext_product_product
+msgid "External Product"
+msgstr "Produit externe"
+
+#. module: base_external_referentials
+#: field:external.report.line,state:0
+msgid "Status"
+msgstr "Status"
+
+#. module: base_external_referentials
+#: sql_constraint:ir.model:0
+msgid "Each model must be unique!"
+msgstr "Chaque modèle doit être unique!"
+
+#. module: base_external_referentials
+#: field:external.mapping.template,version_id:0
+#: field:external.mappinglines.template,version_id:0
+msgid "External Referential Version"
+msgstr "Version du référentiel externe"
+
+#. module: base_external_referentials
+#: sql_constraint:external.referential:0
+msgid "Referential names must be unique !"
+msgstr "Les noms des référentiels doivent être unique !"
+
+#. module: base_external_referentials
+#: field:external.mapping,external_list_method:0
+#: field:external.mapping.template,external_list_method:0
+msgid "List Method"
+msgstr "Méthode de listage"
+
+#. module: base_external_referentials
+#: code:addons/base_external_referentials/external_osv.py:57
+#: code:addons/base_external_referentials/external_osv.py:88
+#: code:addons/base_external_referentials/external_osv.py:93
+#: code:addons/base_external_referentials/external_osv.py:1083
+#, python-format
+msgid "Developper Error"
+msgstr "Erreur développeur"
+
+#. module: base_external_referentials
+#: view:external.referential:0
+msgid "1 - Reload Referential Mapping Templates"
+msgstr "1 - Rechercher les templates de mapping externe"
+
+#. module: base_external_referentials
+#: field:external.referential,apiusername:0
+msgid "User Name"
+msgstr "Nom d'utilisateur"
+
+#. module: base_external_referentials
+#: help:external.mapping,related_model_ids:0
+msgid "potentially inherited through '_inherits' model, used for mapping field selection"
+msgstr "potentielement héritable grâce au modèle '_inherits', utilisé pour la séléction des champs de mapping"
+
+#. module: base_external_referentials
+#: view:external.referential:0
+msgid "1- Export category"
+msgstr "1- Export de la catégorie"
+
+#. module: base_external_referentials
+#: model:res.groups,name:base_external_referentials.group_export_mapping
+msgid "Export Mapping Manager"
+msgstr "Responsable des mappings d'export"
+
+#. module: base_external_referentials
+#: view:external.report.history:0
+#: view:external.report.line:0
+#: field:external.report.line,date:0
+msgid "Date"
+msgstr "Date"
+
+#. module: base_external_referentials
+#: selection:external.mapping.line,external_type:0
+#: selection:external.mappinglines.template,external_type:0
+msgid "Integer"
+msgstr "Integer"
+
+#. module: base_external_referentials
+#: field:external.report,sync_from_object_id:0
+msgid "Sync From Object ID"
+msgstr "Synchro depuis l'ID d'objet"
+
+#. module: base_external_referentials
+#: code:addons/base_external_referentials/external_osv.py:555
+#, python-format
+msgid "The field referential_id doesn't exist on the object %s. Reporting system can not be used"
+msgstr "Le champ référential_id n'existe pas sur l'object %s. Le système de rapports d'erreurs ne peut pas être utilisé"
+
+#. module: base_external_referentials
+#: field:external.referential,type_name:0
+msgid "External Type Name"
+msgstr "Nom du type  de référentiel externe"
+
+#. module: base_external_referentials
+#: field:external.report.history,user_id:0
+msgid "User"
+msgstr "Utilisateur"
+
+#. module: base_external_referentials
+#: field:external.mapping.line,external_field:0
+#: field:external.mappinglines.template,external_field:0
+msgid "External Field"
+msgstr "Champ externe"
+
+#. module: base_external_referentials
+#: view:external.report.history:0
+#: view:external.report.line:0
+#: selection:external.report.line,state:0
+msgid "Success"
+msgstr "Succès"
+
+#. module: base_external_referentials
+#: field:external.report,email_tmpl_id:0
+msgid "Email Template"
+msgstr "Email Template"
+
+#. module: base_external_referentials
+#: code:addons/base_external_referentials/external_osv.py:58
+#, python-format
+msgid "You can extend the class %s with the method %s.\",\n"
+"                \"Indeed this method already exist use the decorator 'replace' instead"
+msgstr "Vous pouvez étendre la classe %s avec la méthode %s.\",\n"
+"                \"En effet, cette méthode éxiste déjà. Veuillez utiliser le décorateur 'replace' à la place"
+
+#. module: base_external_referentials
+#: code:addons/base_external_referentials/external_osv.py:509
+#, python-format
+msgid "External Import Error"
+msgstr "Erreur d'import externe"
+
+#. module: base_external_referentials
+#: field:external.mapping.line,alternative_key:0
+#: field:external.mappinglines.template,alternative_key:0
+msgid "Alternative Key"
+msgstr "Alternative Key"
+
+#. module: base_external_referentials
+#: code:addons/base_external_referentials/external_osv.py:962
+#, python-format
+msgid "The field referential_id doesn't exist on the object %s.\" %(browse_record._name,)))\n"
+"        context = self.init_context_before_exporting_resource(cr, uid, external_session, browse_record.id, resource_name, context=context)\n"
+"        self.pool.get(resource_name)._export_resources(cr, uid, external_session, context=context)\n"
+"    return True\n"
+"\n"
+"\n"
+"#TODO refactor update date,maybe it will be better to have an update date per resource\n"
+"#TODO deal correctly with multi resource\n"
+"@extend(Model)\n"
+"def send_to_external(self, cr, uid, external_session, resources, mapping, mapping_id, update_date=None, context=None):\n"
+"    \"Generic method that send the resource to an external referential\n"
+"\n"
+"    :param ExternalSession external_session : External_session that contain all params of connection\n"
+"    :param list resources: list of resources to export\n"
+"    :param dict mapping: dictionnary of mapping, the key is the mapping id\n"
+"    :param date update_date: if not empty the update date will be write in the last update date of the objec\n"
+"    :rtype: int/str\n"
+"    :return: the external resource exported\n"
+"\n"
+"    \"\n"
+"    resources_to_update = {}\n"
+"    resources_to_create = {}\n"
+"    for resource_id, resource in resources.items():\n"
+"        ext_id = self.get_extid(cr, uid, resource_id, external_session.referential_id.id, context=context)\n"
+"        if ext_id:\n"
+"            for lang in resource:\n"
+"                resource[lang]['ext_id'] = ext_id\n"
+"            resources_to_update[resource_id] = resource\n"
+"        else:\n"
+"            resources_to_create[resource_id] = resource\n"
+"    self.ext_update(cr, uid, external_session, resources_to_update, mapping, mapping_id, context=context)\n"
+"    ext_create_ids = self.ext_create(cr, uid, external_session, resources_to_create, mapping, mapping_id, context=context)\n"
+"    for rec_id, ext_id in ext_create_ids.items():\n"
+"        self.create_external_id_vals(cr, uid, rec_id, ext_id, external_session.referential_id.id, context=context)\n"
+"    if update_date and self._get_last_exported_date(cr, uid, external_session, context=context) < update_date:\n"
+"        self._set_last_exported_date(cr, uid, external_session, update_date, context=context)\n"
+"    return ext_id\n"
+"\n"
+"@extend(Model)\n"
+"def ext_create(self, cr, uid, external_session, resources, mapping=None, mapping_id=None, context=None):\n"
+"    res = {}\n"
+"    mapping, mapping_id = self._init_mapping(cr, uid, external_session.referential_id.id, mapping=mapping, mapping_id=mapping_id, context=context)\n"
+"    for resource_id, resource in resources.items():\n"
+"        # TODO support multilanguages. for now we only export the first one\n"
+"        res[resource_id] = getattr(external_session.connection, mapping[mapping_id]['external_create_method'])(mapping[mapping_id]['external_resource_name'], resource[resource.keys()[0]])\n"
+"    return res\n"
+"\n"
+"@extend(Model)\n"
+"def ext_update(self, cr, uid, external_session, resources, mapping=None, mapping_id=None, context=None):\n"
+"    \"Not Implemented here\"\n"
+"    return False\n"
+"\n"
+"@extend(Model)\n"
+"def ext_unlink(self, cr, uid, ids, context=None):\n"
+"    ir_model_obj = self.pool.get('ir.model.data')\n"
+"    for object_id in ids:\n"
+"        ir_model_ids = ir_model_obj.search(cr, uid, [('res_id','=',object_id),('model','=',self._name)])\n"
+"        for ir_model in ir_model_obj.browse(cr, uid, ir_model_ids, context=context):\n"
+"            ext_id = self.id_from_prefixed_id(ir_model.name)\n"
+"            ref_id = ir_model.referential_id.id\n"
+"            external_session = ExternalSession(ir_model.referential_id)\n"
+"            mapping = self._get_mapping(cr, uid, ref_id)\n"
+"            getattr(external_session.connection, mapping['external_delete_method'])(mapping['external_resource_name'], ext_id)\n"
+"            #commit_now(ir_model.unlink())\n"
+"            ir_model.unlink()\n"
+"    return True\n"
+"\n"
+"@extend(Model)\n"
+"def get_lang_to_export(self, cr, uid, external_session, context=None):\n"
+"    \"Get the list of lang to export\n"
+"\n"
+"    :param ExternalSession external_session : External_session that contain all params of connection\n"
+"    :rtype: list\n"
+"    return: the list of lang to export\n"
+"    \"\n"
+"\n"
+"    if context is None:\n"
+"        return []\n"
+"    else:\n"
+"        return context.get('lang_to_export') or [context.get('lang')]\n"
+"\n"
+"@extend(Model)\n"
+"def _export_resources(self, cr, uid, external_session, method=\"onebyone\", context=None):\n"
+"    \"Export resource\n"
+"\n"
+"    :param ExternalSession external_session : External_session that contain all params of connection\n"
+"    :param str method: method to export data (for now only onebyone)\n"
+"    :rtype: boolean\n"
+"    return: True\n"
+"    \"\n"
+"    external_session.logger.info(\"Start to export the ressource %s\"%(self._name,))\n"
+"    defaults = self._get_default_export_values(cr, uid, external_session, context=context)\n"
+"    mapping, mapping_id = self._init_mapping(cr, uid, external_session.referential_id.id, convertion_type='from_openerp_to_external', context=context)\n"
+"    last_exported_date = self._get_last_exported_date(cr, uid, external_session, context=context)\n"
+"    external_session.logger.info(\"Retrieve the list of ids to export for the ressource %s\"%(self._name))\n"
+"    ids, ids_2_date = self.get_ids_and_update_date(cr, uid, external_session, last_exported_date=last_exported_date, context=context)\n"
+"    external_session.logger.info(\"%s %s ressource will be exported\"%((ids and len(ids) or 0), self._name))\n"
+"    step = self._get_export_step(cr, uid, external_session, context=context)\n"
+"\n"
+"    group_obj = self.pool.get('group.fields')\n"
+"    group_ids = group_obj.search(cr, uid, [['model_id', '=', self._name]], context=context)\n"
+"    if self._inherits:\n"
+"        inherits_group_ids = group_obj.search(cr, uid, [['model_id', '=',self._inherits.keys()[0]]], context=context)\n"
+"    else:\n"
+"        inherits_group_ids=[]\n"
+"    smart_export =  context.get('smart_export') and (group_ids or inherits_group_ids) and {'group_ids': group_ids, 'inherits_group_ids': inherits_group_ids}\n"
+"\n"
+"    langs = self.get_lang_to_export(cr, uid, external_session, context=context)\n"
+"\n"
+"    while ids:\n"
+"        ids_to_process = ids[0:step]\n"
+"        ids = ids[step:]\n"
+"        external_session.logger.info(\"Start to read the ressource %s : %s\"%(self._name, ids_to_process))\n"
+"        resources = self._get_oe_resources(cr, uid, external_session, ids_to_process, langs=langs,\n"
+"                                    smart_export=smart_export, last_exported_date=last_exported_date,\n"
+"                                    mapping=mapping, mapping_id=mapping_id, context=context)\n"
+"        if method == 'onebyone':\n"
+"            for resource_id in ids_to_process:\n"
+"                external_session.logger.info(\"Start to transform and send the ressource %s : %s\"%(self._name, resource_id))\n"
+"                self._transform_and_send_one_resource(cr, uid, external_session, resources[resource_id], resource_id, ids_2_date.get(resource_id), mapping, mapping_id, defaults=defaults, context=context)\n"
+"        else:\n"
+"            raise except_osv(_('Developper Error'), _('only method export onebyone is implemented in base_external_referentials'))\n"
+"    #now = datetime.now().strftime(DEFAULT_SERVER_DATETIME_FORMAT)\n"
+"    #self._set_last_exported_date(cr, uid, external_session, now, context=context)\n"
+"    return True\n"
+"\n"
+"@extend(Model)\n"
+"def _transform_and_send_one_resource(self, cr, uid, external_session, resource, resource_id,\n"
+"                            update_date, mapping, mapping_id, defaults=None, context=None):\n"
+"    \"Transform and send one resource\n"
+"    The resource will converted into External format by using the function _transform_one_resource\n"
+"    And then send to the external system using the method send_to_external\n"
+"\n"
+"    :param ExternalSession external_session : External_session that contain all params of connection\n"
+"    :param dict resource: resource to convert into OpenERP data\n"
+"    :param int resource_id: openerp id of the resource to send\n"
+"    :param str method: method to export data (for now only onebyone)\n"
+"    :param dict mapping: dictionnary of mapping, the key is the mapping id\n"
+"    :param int mapping_id: mapping id\n"
+"    :param dict defaults: default values\n"
+"    :rtype: str/int\n"
+"    :return: the external id\n"
+"    \"\n"
+"    for key_lang in resource:\n"
+"        resource[key_lang] = self._transform_one_resource(cr, uid, external_session, 'from_openerp_to_external',\n"
+"                                            resource[key_lang], mapping=mapping, mapping_id=mapping_id,\n"
+"                                            defaults=defaults, context=context)\n"
+"    return self.send_to_external(cr, uid, external_session, {resource_id : resource}, mapping, mapping_id, update_date, context=context)\n"
+"\n"
+"@extend(Model)\n"
+"def _export_one_resource(self, cr, uid, external_session, resource_id, context=None):\n"
+"    \"Export one resource\n"
+"    Export an OpenERP resource into an external system\n"
+"\n"
+"    :param ExternalSession external_session : External_session that contain all params of connection\n"
+"    :param int resource_id: openerp id of the resource to send\n"
+"    :rtype: str/int\n"
+"    :return: the external id\n"
+"    \"\n"
+"    defaults = self._get_default_export_values(cr, uid, external_session, context=context)\n"
+"    mapping, mapping_id = self._init_mapping(cr, uid, external_session.referential_id.id, convertion_type='from_openerp_to_external', context=context)\n"
+"    langs = self.get_lang_to_export(cr, uid, external_session, context=context)\n"
+"    resource = self._get_oe_resources(cr, uid, external_session, [resource_id], langs=langs,\n"
+"                                smart_export=False, last_exported_date=False,\n"
+"                                mapping=mapping, mapping_id=mapping_id, context=context)[resource_id]\n"
+"    return self._transform_and_send_one_resource(cr, uid, external_session, resource, resource_id,\n"
+"                            False, mapping, mapping_id, defaults=defaults, context=context)\n"
+"\n"
+"\n"
+"#TODO finish docstring\n"
+"\n"
+"@extend(Model)\n"
+"def get_translatable_fields(self, cr, uid, fields, context=None):\n"
+"    #TODO make fields parameter optionnal\n"
+"    def is_translatable(field):\n"
+"        if self._columns.get(field):\n"
+"            return self._columns[field].translate\n"
+"        else:\n"
+"            return self._inherit_fields[field][2].translate\n"
+"    translatable_fields = []\n"
+"    untranslatable_fields = []\n"
+"    for field in fields:\n"
+"        if is_translatable(field):\n"
+"            translatable_fields.append(field)\n"
+"        else:\n"
+"            untranslatable_fields.append(field)\n"
+"    return translatable_fields, untranslatable_fields\n"
+"\n"
+"@extend(Model)\n"
+"def multi_lang_read(self, cr, uid, external_session, ids, fields_to_read, langs, resources=None, use_multi_lang = True, context=None):\n"
+"    if not resources:\n"
+"        resources = {}\n"
+"    translatable_fields, untranslatable_fields = self.get_translatable_fields(cr, uid, fields_to_read, context=context)\n"
+"    lang_support = external_session.referential_id._lang_support\n"
+"    if lang_support == 'fields_with_no_lang':\n"
+"        langs.insert(0, 'no_lang')\n"
+"    first=True\n"
+"    fields = fields_to_read\n"
+"    for lang in langs:\n"
+"        ctx = context.copy()\n"
+"        if lang == 'no_lang':\n"
+"            fields = untranslatable_fields\n"
+"        else:\n"
+"            if not first and lang_support == 'fields_with_main_lang' or lang_support == 'fields_with_no_lang':\n"
+"                fields = translatable_fields\n"
+"            ctx['lang'] = lang\n"
+"\n"
+"        if fields:\n"
+"            for resource in self.read(cr, uid, ids, fields, context=ctx):\n"
+"                if not resources.get(resource['id']): resources[resource['id']] = {}\n"
+"                resources[resource['id']][lang] = resource\n"
+"        first = False\n"
+"    return resources\n"
+"\n"
+"@extend(Model)\n"
+"def full_read(self, cr, uid, external_session, ids, langs, resources, mapping=None, mapping_id=None, context=None):\n"
+"    fields_to_read = self.get_field_to_export(cr, uid, ids, mapping, mapping_id, context=context)\n"
+"    return self.multi_lang_read(cr, uid, external_session, ids, fields_to_read, langs, resources=resources, context=context)\n"
+"\n"
+"@extend(Model)\n"
+"def smart_read(self, cr, uid, external_session, ids, langs, resources, group_ids, inherits_group_ids, last_exported_date=None,\n"
+"                                                                        mapping=None, mapping_id=None, context=None):\n"
+"    if last_exported_date:\n"
+"        search_filter = []\n"
+"        if group_ids:\n"
+"            if inherits_group_ids:\n"
+"                search_filter = ['|', ['x_last_update', '>=', last_exported_date], ['%s.x_last_update'%self._inherits[self._inherits.keys()[0]], '>=', last_exported_date]]\n"
+"        if inherits_group_ids:\n"
+"            search_filter = [['%s.x_last_update'%self._inherits[self._inherits.keys()[0]], '>=', last_exported_date]]\n"
+"        resource_ids_full_read = self.search(cr, uid, search_filter, context=context)\n"
+"        resource_ids_partial_read = [id for id in ids if not id in resource_ids_full_read]\n"
+"    else:\n"
+"        resource_ids_full_read = ids\n"
+"        resource_ids_partial_read = []\n"
+"\n"
+"    resources = self.full_read(cr, uid, external_session, resource_ids_full_read, langs, resources, context=context)\n"
+"\n"
+"    if resource_ids_partial_read:\n"
+"        for group in self.pool.get('group.fields').browse(cr, uid, group_ids, context=context):\n"
+"            resource_ids = self.search(cr, uid, [[group.column_name, '>=', last_exported_date],['id', 'in', resource_ids_partial_read]], context=context)\n"
+"            fields_to_read = [field.name for field in group.field_ids]\n"
+"            resources = self.multi_lang_read(cr, uid, external_session, resource_ids, fields_to_read, langs, resources=resources, context=context)\n"
+"    return resources\n"
+"\n"
+"@extend(Model)\n"
+"def get_field_to_export(self, cr, uid, ids, mapping, mapping_id, context=None):\n"
+"    return list(set(self._columns.keys() + self._inherit_fields.keys()))\n"
+"\n"
+"@extend(Model)\n"
+"def _get_oe_resources(self, cr, uid, external_session, ids, langs, smart_export=None,\n"
+"                                            last_exported_date=None, mapping=None, mapping_id=None, context=None):\n"
+"    resources = None\n"
+"    if smart_export:\n"
+"        resources = self.smart_read(cr, uid, external_session, ids, langs, resources, smart_export['group_ids'], smart_export['inherits_group_ids'],\n"
+"                            last_exported_date=last_exported_date, mapping=mapping, mapping_id=mapping_id, context=context)\n"
+"    else:\n"
+"        resources = self.full_read(cr, uid, external_session, ids, langs, resources, mapping=mapping, mapping_id=mapping_id, context=context)\n"
+"    return resources\n"
+"\n"
+"\n"
+"@extend(Model)\n"
+"def _get_oeid_from_extid_or_alternative_keys(self, cr, uid, vals, external_id, referential_id, alternative_keys, context=None):\n"
+"    \"\n"
+"    Used in ext_import in order to search the OpenERP resource to update when importing an external resource.\n"
+"    It searches the reference in ir.model.data and returns the id in ir.model.data and the id of the\n"
+"    current's model resource, if it really exists (it may not exists, see below)\n"
+"\n"
+"    As OpenERP cleans up ir_model_data which res_id records have been deleted only at server update\n"
+"    because that would be a perf penalty, so we take care of it here.\n"
+"\n"
+"    This method can also be used by inheriting, in order to find and bind resources by another way than ir.model.data when\n"
+"    the resource is not already imported.\n"
+"    As instance, search and bind partners by their mails. In such case, it must returns False for the ir_model_data.id and\n"
+"    the partner to bind for the resource id\n"
+"\n"
+"    @param vals: vals to create in OpenERP, already evaluated by _transform_one_external_resource\n"
+"    @param external_id: external id of the resource to create\n"
+"    @param referential_id: external referential id from where we import the resource\n"
+"    @return: tuple of (ir.model.data id / False: external id to create in ir.model.data, model resource id / False: resource to create)\n"
+"    \"\n"
+"    existing_ir_model_data_id = expected_res_id = False\n"
+"    if not (external_id is None or external_id is False):\n"
+"        existing_ir_model_data_id, expected_res_id = self._get_expected_oeid        (cr, uid, external_id, referential_id, context=context)\n"
+"\n"
+"    if not expected_res_id and alternative_keys:\n"
+"        domain = []\n"
+"        if 'active' in self._columns.keys():\n"
+"            domain = ['|', ('active', '=', False), ('active', '=', True)]\n"
+"        for alternative_key in alternative_keys:\n"
+"            if vals.get(alternative_key):\n"
+"                exp = type(vals[alternative_key]) in (str, unicode) and \"=ilike\" or \"=\"\n"
+"                domain.append((alternative_key, exp, vals[alternative_key]))\n"
+"        if domain:\n"
+"            expected_res_id = self.search(cr, uid, domain, context=context)\n"
+"            expected_res_id = expected_res_id and expected_res_id[0] or False\n"
+"    return existing_ir_model_data_id, expected_res_id\n"
+"\n"
+"@extend(Model)\n"
+"def _prepare_external_id_vals(self, cr, uid, res_id, ext_id, referential_id, context=None):\n"
+"    \" Create an external reference for a resource id in the ir.model.data table\"\n"
+"    ir_model_data_vals = {\n"
+"                            'name': self.prefixed_id(ext_id),\n"
+"                            'model': self._name,\n"
+"                            'res_id': res_id,\n"
+"                            'referential_id': referential_id,\n"
+"                            'module': 'extref/' + self.pool.get('external.referential').                            read(cr, uid, referential_id, ['name'])['name']\n"
+"                          }\n"
+"    return ir_model_data_vals\n"
+"\n"
+"@extend(Model)\n"
+"def create_external_id_vals(self, cr, uid, existing_rec_id, external_id, referential_id, context=None):\n"
+"    \"\n"
+"    Add the external id in the table ir_model_data\n"
+"    :param id existing_rec_id: erp id object\n"
+"    :param id external_id: external application id\n"
+"    :param id referential_id: external id\n"
+"    :rtype: int\n"
+"    :return:\n"
+"    \"\n"
+"    ir_model_data_vals =     self._prepare_external_id_vals(cr, uid, existing_rec_id,\n"
+"                                   external_id, referential_id,\n"
+"                                   context=context)\n"
+"    return self.pool.get('ir.model.data').create(cr, uid, ir_model_data_vals, context=context)\n"
+"\n"
+"########################################################################################################################\n"
+"#\n"
+"#                                             END OF EXPORT FEATURES\n"
+"#\n"
+"########################################################################################################################\n"
+"\n"
+"\n"
+"\n"
+"\n"
+"\n"
+"########################################################################################################################\n"
+"#\n"
+"#                                             GENERIC TRANSFORM FEATURES\n"
+"#\n"
+"########################################################################################################################\n"
+"\n"
+"@extend(Model)\n"
+"def _transform_resources(self, cr, uid, external_session, convertion_type, resources, mapping=None, mapping_id=None,\n"
+"                    mapping_line_filter_ids=None, parent_data=None, defaults=None, context=None):\n"
+"    \"\n"
+"    Used in ext_import in order to convert all of the external data into OpenERP data\n"
+"\n"
+"    @param external_data: list of external_data to convert into OpenERP data\n"
+"    @param referential_id: external referential id from where we import the resource\n"
+"    @param parent_data: data of the parent, only use when a mapping line have the type 'sub mapping'\n"
+"    @param defaults: defaults value for data converted\n"
+"    @return: list of the line converted into OpenERP value\n"
+"    \"\n"
+"    result= []\n"
+"    if resources:\n"
+"        mapping, mapping_id = self._init_mapping(cr, uid, external_session.referential_id.id,\n"
+"                                                 convertion_type=convertion_type,\n"
+"                                                 mapping_line_filter_ids=mapping_line_filter_ids,\n"
+"                                                 mapping=mapping,\n"
+"                                                 mapping_id=mapping_id,\n"
+"                                                 context=context)\n"
+"        if mapping[mapping_id].get(\"mapping_lines"
+msgstr "The field referential_id doesn't exist on the object %s.\" %(browse_record._name,)))\n"
+"        context = self.init_context_before_exporting_resource(cr, uid, external_session, browse_record.id, resource_name, context=context)\n"
+"        self.pool.get(resource_name)._export_resources(cr, uid, external_session, context=context)\n"
+"    return True\n"
+"\n"
+"\n"
+"#TODO refactor update date,maybe it will be better to have an update date per resource\n"
+"#TODO deal correctly with multi resource\n"
+"@extend(Model)\n"
+"def send_to_external(self, cr, uid, external_session, resources, mapping, mapping_id, update_date=None, context=None):\n"
+"    \"Generic method that send the resource to an external referential\n"
+"\n"
+"    :param ExternalSession external_session : External_session that contain all params of connection\n"
+"    :param list resources: list of resources to export\n"
+"    :param dict mapping: dictionnary of mapping, the key is the mapping id\n"
+"    :param date update_date: if not empty the update date will be write in the last update date of the objec\n"
+"    :rtype: int/str\n"
+"    :return: the external resource exported\n"
+"\n"
+"    \"\n"
+"    resources_to_update = {}\n"
+"    resources_to_create = {}\n"
+"    for resource_id, resource in resources.items():\n"
+"        ext_id = self.get_extid(cr, uid, resource_id, external_session.referential_id.id, context=context)\n"
+"        if ext_id:\n"
+"            for lang in resource:\n"
+"                resource[lang]['ext_id'] = ext_id\n"
+"            resources_to_update[resource_id] = resource\n"
+"        else:\n"
+"            resources_to_create[resource_id] = resource\n"
+"    self.ext_update(cr, uid, external_session, resources_to_update, mapping, mapping_id, context=context)\n"
+"    ext_create_ids = self.ext_create(cr, uid, external_session, resources_to_create, mapping, mapping_id, context=context)\n"
+"    for rec_id, ext_id in ext_create_ids.items():\n"
+"        self.create_external_id_vals(cr, uid, rec_id, ext_id, external_session.referential_id.id, context=context)\n"
+"    if update_date and self._get_last_exported_date(cr, uid, external_session, context=context) < update_date:\n"
+"        self._set_last_exported_date(cr, uid, external_session, update_date, context=context)\n"
+"    return ext_id\n"
+"\n"
+"@extend(Model)\n"
+"def ext_create(self, cr, uid, external_session, resources, mapping=None, mapping_id=None, context=None):\n"
+"    res = {}\n"
+"    mapping, mapping_id = self._init_mapping(cr, uid, external_session.referential_id.id, mapping=mapping, mapping_id=mapping_id, context=context)\n"
+"    for resource_id, resource in resources.items():\n"
+"        # TODO support multilanguages. for now we only export the first one\n"
+"        res[resource_id] = getattr(external_session.connection, mapping[mapping_id]['external_create_method'])(mapping[mapping_id]['external_resource_name'], resource[resource.keys()[0]])\n"
+"    return res\n"
+"\n"
+"@extend(Model)\n"
+"def ext_update(self, cr, uid, external_session, resources, mapping=None, mapping_id=None, context=None):\n"
+"    \"Not Implemented here\"\n"
+"    return False\n"
+"\n"
+"@extend(Model)\n"
+"def ext_unlink(self, cr, uid, ids, context=None):\n"
+"    ir_model_obj = self.pool.get('ir.model.data')\n"
+"    for object_id in ids:\n"
+"        ir_model_ids = ir_model_obj.search(cr, uid, [('res_id','=',object_id),('model','=',self._name)])\n"
+"        for ir_model in ir_model_obj.browse(cr, uid, ir_model_ids, context=context):\n"
+"            ext_id = self.id_from_prefixed_id(ir_model.name)\n"
+"            ref_id = ir_model.referential_id.id\n"
+"            external_session = ExternalSession(ir_model.referential_id)\n"
+"            mapping = self._get_mapping(cr, uid, ref_id)\n"
+"            getattr(external_session.connection, mapping['external_delete_method'])(mapping['external_resource_name'], ext_id)\n"
+"            #commit_now(ir_model.unlink())\n"
+"            ir_model.unlink()\n"
+"    return True\n"
+"\n"
+"@extend(Model)\n"
+"def get_lang_to_export(self, cr, uid, external_session, context=None):\n"
+"    \"Get the list of lang to export\n"
+"\n"
+"    :param ExternalSession external_session : External_session that contain all params of connection\n"
+"    :rtype: list\n"
+"    return: the list of lang to export\n"
+"    \"\n"
+"\n"
+"    if context is None:\n"
+"        return []\n"
+"    else:\n"
+"        return context.get('lang_to_export') or [context.get('lang')]\n"
+"\n"
+"@extend(Model)\n"
+"def _export_resources(self, cr, uid, external_session, method=\"onebyone\", context=None):\n"
+"    \"Export resource\n"
+"\n"
+"    :param ExternalSession external_session : External_session that contain all params of connection\n"
+"    :param str method: method to export data (for now only onebyone)\n"
+"    :rtype: boolean\n"
+"    return: True\n"
+"    \"\n"
+"    external_session.logger.info(\"Start to export the ressource %s\"%(self._name,))\n"
+"    defaults = self._get_default_export_values(cr, uid, external_session, context=context)\n"
+"    mapping, mapping_id = self._init_mapping(cr, uid, external_session.referential_id.id, convertion_type='from_openerp_to_external', context=context)\n"
+"    last_exported_date = self._get_last_exported_date(cr, uid, external_session, context=context)\n"
+"    external_session.logger.info(\"Retrieve the list of ids to export for the ressource %s\"%(self._name))\n"
+"    ids, ids_2_date = self.get_ids_and_update_date(cr, uid, external_session, last_exported_date=last_exported_date, context=context)\n"
+"    external_session.logger.info(\"%s %s ressource will be exported\"%((ids and len(ids) or 0), self._name))\n"
+"    step = self._get_export_step(cr, uid, external_session, context=context)\n"
+"\n"
+"    group_obj = self.pool.get('group.fields')\n"
+"    group_ids = group_obj.search(cr, uid, [['model_id', '=', self._name]], context=context)\n"
+"    if self._inherits:\n"
+"        inherits_group_ids = group_obj.search(cr, uid, [['model_id', '=',self._inherits.keys()[0]]], context=context)\n"
+"    else:\n"
+"        inherits_group_ids=[]\n"
+"    smart_export =  context.get('smart_export') and (group_ids or inherits_group_ids) and {'group_ids': group_ids, 'inherits_group_ids': inherits_group_ids}\n"
+"\n"
+"    langs = self.get_lang_to_export(cr, uid, external_session, context=context)\n"
+"\n"
+"    while ids:\n"
+"        ids_to_process = ids[0:step]\n"
+"        ids = ids[step:]\n"
+"        external_session.logger.info(\"Start to read the ressource %s : %s\"%(self._name, ids_to_process))\n"
+"        resources = self._get_oe_resources(cr, uid, external_session, ids_to_process, langs=langs,\n"
+"                                    smart_export=smart_export, last_exported_date=last_exported_date,\n"
+"                                    mapping=mapping, mapping_id=mapping_id, context=context)\n"
+"        if method == 'onebyone':\n"
+"            for resource_id in ids_to_process:\n"
+"                external_session.logger.info(\"Start to transform and send the ressource %s : %s\"%(self._name, resource_id))\n"
+"                self._transform_and_send_one_resource(cr, uid, external_session, resources[resource_id], resource_id, ids_2_date.get(resource_id), mapping, mapping_id, defaults=defaults, context=context)\n"
+"        else:\n"
+"            raise except_osv(_('Developper Error'), _('only method export onebyone is implemented in base_external_referentials'))\n"
+"    #now = datetime.now().strftime(DEFAULT_SERVER_DATETIME_FORMAT)\n"
+"    #self._set_last_exported_date(cr, uid, external_session, now, context=context)\n"
+"    return True\n"
+"\n"
+"@extend(Model)\n"
+"def _transform_and_send_one_resource(self, cr, uid, external_session, resource, resource_id,\n"
+"                            update_date, mapping, mapping_id, defaults=None, context=None):\n"
+"    \"Transform and send one resource\n"
+"    The resource will converted into External format by using the function _transform_one_resource\n"
+"    And then send to the external system using the method send_to_external\n"
+"\n"
+"    :param ExternalSession external_session : External_session that contain all params of connection\n"
+"    :param dict resource: resource to convert into OpenERP data\n"
+"    :param int resource_id: openerp id of the resource to send\n"
+"    :param str method: method to export data (for now only onebyone)\n"
+"    :param dict mapping: dictionnary of mapping, the key is the mapping id\n"
+"    :param int mapping_id: mapping id\n"
+"    :param dict defaults: default values\n"
+"    :rtype: str/int\n"
+"    :return: the external id\n"
+"    \"\n"
+"    for key_lang in resource:\n"
+"        resource[key_lang] = self._transform_one_resource(cr, uid, external_session, 'from_openerp_to_external',\n"
+"                                            resource[key_lang], mapping=mapping, mapping_id=mapping_id,\n"
+"                                            defaults=defaults, context=context)\n"
+"    return self.send_to_external(cr, uid, external_session, {resource_id : resource}, mapping, mapping_id, update_date, context=context)\n"
+"\n"
+"@extend(Model)\n"
+"def _export_one_resource(self, cr, uid, external_session, resource_id, context=None):\n"
+"    \"Export one resource\n"
+"    Export an OpenERP resource into an external system\n"
+"\n"
+"    :param ExternalSession external_session : External_session that contain all params of connection\n"
+"    :param int resource_id: openerp id of the resource to send\n"
+"    :rtype: str/int\n"
+"    :return: the external id\n"
+"    \"\n"
+"    defaults = self._get_default_export_values(cr, uid, external_session, context=context)\n"
+"    mapping, mapping_id = self._init_mapping(cr, uid, external_session.referential_id.id, convertion_type='from_openerp_to_external', context=context)\n"
+"    langs = self.get_lang_to_export(cr, uid, external_session, context=context)\n"
+"    resource = self._get_oe_resources(cr, uid, external_session, [resource_id], langs=langs,\n"
+"                                smart_export=False, last_exported_date=False,\n"
+"                                mapping=mapping, mapping_id=mapping_id, context=context)[resource_id]\n"
+"    return self._transform_and_send_one_resource(cr, uid, external_session, resource, resource_id,\n"
+"                            False, mapping, mapping_id, defaults=defaults, context=context)\n"
+"\n"
+"\n"
+"#TODO finish docstring\n"
+"\n"
+"@extend(Model)\n"
+"def get_translatable_fields(self, cr, uid, fields, context=None):\n"
+"    #TODO make fields parameter optionnal\n"
+"    def is_translatable(field):\n"
+"        if self._columns.get(field):\n"
+"            return self._columns[field].translate\n"
+"        else:\n"
+"            return self._inherit_fields[field][2].translate\n"
+"    translatable_fields = []\n"
+"    untranslatable_fields = []\n"
+"    for field in fields:\n"
+"        if is_translatable(field):\n"
+"            translatable_fields.append(field)\n"
+"        else:\n"
+"            untranslatable_fields.append(field)\n"
+"    return translatable_fields, untranslatable_fields\n"
+"\n"
+"@extend(Model)\n"
+"def multi_lang_read(self, cr, uid, external_session, ids, fields_to_read, langs, resources=None, use_multi_lang = True, context=None):\n"
+"    if not resources:\n"
+"        resources = {}\n"
+"    translatable_fields, untranslatable_fields = self.get_translatable_fields(cr, uid, fields_to_read, context=context)\n"
+"    lang_support = external_session.referential_id._lang_support\n"
+"    if lang_support == 'fields_with_no_lang':\n"
+"        langs.insert(0, 'no_lang')\n"
+"    first=True\n"
+"    fields = fields_to_read\n"
+"    for lang in langs:\n"
+"        ctx = context.copy()\n"
+"        if lang == 'no_lang':\n"
+"            fields = untranslatable_fields\n"
+"        else:\n"
+"            if not first and lang_support == 'fields_with_main_lang' or lang_support == 'fields_with_no_lang':\n"
+"                fields = translatable_fields\n"
+"            ctx['lang'] = lang\n"
+"\n"
+"        if fields:\n"
+"            for resource in self.read(cr, uid, ids, fields, context=ctx):\n"
+"                if not resources.get(resource['id']): resources[resource['id']] = {}\n"
+"                resources[resource['id']][lang] = resource\n"
+"        first = False\n"
+"    return resources\n"
+"\n"
+"@extend(Model)\n"
+"def full_read(self, cr, uid, external_session, ids, langs, resources, mapping=None, mapping_id=None, context=None):\n"
+"    fields_to_read = self.get_field_to_export(cr, uid, ids, mapping, mapping_id, context=context)\n"
+"    return self.multi_lang_read(cr, uid, external_session, ids, fields_to_read, langs, resources=resources, context=context)\n"
+"\n"
+"@extend(Model)\n"
+"def smart_read(self, cr, uid, external_session, ids, langs, resources, group_ids, inherits_group_ids, last_exported_date=None,\n"
+"                                                                        mapping=None, mapping_id=None, context=None):\n"
+"    if last_exported_date:\n"
+"        search_filter = []\n"
+"        if group_ids:\n"
+"            if inherits_group_ids:\n"
+"                search_filter = ['|', ['x_last_update', '>=', last_exported_date], ['%s.x_last_update'%self._inherits[self._inherits.keys()[0]], '>=', last_exported_date]]\n"
+"        if inherits_group_ids:\n"
+"            search_filter = [['%s.x_last_update'%self._inherits[self._inherits.keys()[0]], '>=', last_exported_date]]\n"
+"        resource_ids_full_read = self.search(cr, uid, search_filter, context=context)\n"
+"        resource_ids_partial_read = [id for id in ids if not id in resource_ids_full_read]\n"
+"    else:\n"
+"        resource_ids_full_read = ids\n"
+"        resource_ids_partial_read = []\n"
+"\n"
+"    resources = self.full_read(cr, uid, external_session, resource_ids_full_read, langs, resources, context=context)\n"
+"\n"
+"    if resource_ids_partial_read:\n"
+"        for group in self.pool.get('group.fields').browse(cr, uid, group_ids, context=context):\n"
+"            resource_ids = self.search(cr, uid, [[group.column_name, '>=', last_exported_date],['id', 'in', resource_ids_partial_read]], context=context)\n"
+"            fields_to_read = [field.name for field in group.field_ids]\n"
+"            resources = self.multi_lang_read(cr, uid, external_session, resource_ids, fields_to_read, langs, resources=resources, context=context)\n"
+"    return resources\n"
+"\n"
+"@extend(Model)\n"
+"def get_field_to_export(self, cr, uid, ids, mapping, mapping_id, context=None):\n"
+"    return list(set(self._columns.keys() + self._inherit_fields.keys()))\n"
+"\n"
+"@extend(Model)\n"
+"def _get_oe_resources(self, cr, uid, external_session, ids, langs, smart_export=None,\n"
+"                                            last_exported_date=None, mapping=None, mapping_id=None, context=None):\n"
+"    resources = None\n"
+"    if smart_export:\n"
+"        resources = self.smart_read(cr, uid, external_session, ids, langs, resources, smart_export['group_ids'], smart_export['inherits_group_ids'],\n"
+"                            last_exported_date=last_exported_date, mapping=mapping, mapping_id=mapping_id, context=context)\n"
+"    else:\n"
+"        resources = self.full_read(cr, uid, external_session, ids, langs, resources, mapping=mapping, mapping_id=mapping_id, context=context)\n"
+"    return resources\n"
+"\n"
+"\n"
+"@extend(Model)\n"
+"def _get_oeid_from_extid_or_alternative_keys(self, cr, uid, vals, external_id, referential_id, alternative_keys, context=None):\n"
+"    \"\n"
+"    Used in ext_import in order to search the OpenERP resource to update when importing an external resource.\n"
+"    It searches the reference in ir.model.data and returns the id in ir.model.data and the id of the\n"
+"    current's model resource, if it really exists (it may not exists, see below)\n"
+"\n"
+"    As OpenERP cleans up ir_model_data which res_id records have been deleted only at server update\n"
+"    because that would be a perf penalty, so we take care of it here.\n"
+"\n"
+"    This method can also be used by inheriting, in order to find and bind resources by another way than ir.model.data when\n"
+"    the resource is not already imported.\n"
+"    As instance, search and bind partners by their mails. In such case, it must returns False for the ir_model_data.id and\n"
+"    the partner to bind for the resource id\n"
+"\n"
+"    @param vals: vals to create in OpenERP, already evaluated by _transform_one_external_resource\n"
+"    @param external_id: external id of the resource to create\n"
+"    @param referential_id: external referential id from where we import the resource\n"
+"    @return: tuple of (ir.model.data id / False: external id to create in ir.model.data, model resource id / False: resource to create)\n"
+"    \"\n"
+"    existing_ir_model_data_id = expected_res_id = False\n"
+"    if not (external_id is None or external_id is False):\n"
+"        existing_ir_model_data_id, expected_res_id = self._get_expected_oeid        (cr, uid, external_id, referential_id, context=context)\n"
+"\n"
+"    if not expected_res_id and alternative_keys:\n"
+"        domain = []\n"
+"        if 'active' in self._columns.keys():\n"
+"            domain = ['|', ('active', '=', False), ('active', '=', True)]\n"
+"        for alternative_key in alternative_keys:\n"
+"            if vals.get(alternative_key):\n"
+"                exp = type(vals[alternative_key]) in (str, unicode) and \"=ilike\" or \"=\"\n"
+"                domain.append((alternative_key, exp, vals[alternative_key]))\n"
+"        if domain:\n"
+"            expected_res_id = self.search(cr, uid, domain, context=context)\n"
+"            expected_res_id = expected_res_id and expected_res_id[0] or False\n"
+"    return existing_ir_model_data_id, expected_res_id\n"
+"\n"
+"@extend(Model)\n"
+"def _prepare_external_id_vals(self, cr, uid, res_id, ext_id, referential_id, context=None):\n"
+"    \" Create an external reference for a resource id in the ir.model.data table\"\n"
+"    ir_model_data_vals = {\n"
+"                            'name': self.prefixed_id(ext_id),\n"
+"                            'model': self._name,\n"
+"                            'res_id': res_id,\n"
+"                            'referential_id': referential_id,\n"
+"                            'module': 'extref/' + self.pool.get('external.referential').                            read(cr, uid, referential_id, ['name'])['name']\n"
+"                          }\n"
+"    return ir_model_data_vals\n"
+"\n"
+"@extend(Model)\n"
+"def create_external_id_vals(self, cr, uid, existing_rec_id, external_id, referential_id, context=None):\n"
+"    \"\n"
+"    Add the external id in the table ir_model_data\n"
+"    :param id existing_rec_id: erp id object\n"
+"    :param id external_id: external application id\n"
+"    :param id referential_id: external id\n"
+"    :rtype: int\n"
+"    :return:\n"
+"    \"\n"
+"    ir_model_data_vals =     self._prepare_external_id_vals(cr, uid, existing_rec_id,\n"
+"                                   external_id, referential_id,\n"
+"                                   context=context)\n"
+"    return self.pool.get('ir.model.data').create(cr, uid, ir_model_data_vals, context=context)\n"
+"\n"
+"########################################################################################################################\n"
+"#\n"
+"#                                             END OF EXPORT FEATURES\n"
+"#\n"
+"########################################################################################################################\n"
+"\n"
+"\n"
+"\n"
+"\n"
+"\n"
+"########################################################################################################################\n"
+"#\n"
+"#                                             GENERIC TRANSFORM FEATURES\n"
+"#\n"
+"########################################################################################################################\n"
+"\n"
+"@extend(Model)\n"
+"def _transform_resources(self, cr, uid, external_session, convertion_type, resources, mapping=None, mapping_id=None,\n"
+"                    mapping_line_filter_ids=None, parent_data=None, defaults=None, context=None):\n"
+"    \"\n"
+"    Used in ext_import in order to convert all of the external data into OpenERP data\n"
+"\n"
+"    @param external_data: list of external_data to convert into OpenERP data\n"
+"    @param referential_id: external referential id from where we import the resource\n"
+"    @param parent_data: data of the parent, only use when a mapping line have the type 'sub mapping'\n"
+"    @param defaults: defaults value for data converted\n"
+"    @return: list of the line converted into OpenERP value\n"
+"    \"\n"
+"    result= []\n"
+"    if resources:\n"
+"        mapping, mapping_id = self._init_mapping(cr, uid, external_session.referential_id.id,\n"
+"                                                 convertion_type=convertion_type,\n"
+"                                                 mapping_line_filter_ids=mapping_line_filter_ids,\n"
+"                                                 mapping=mapping,\n"
+"                                                 mapping_id=mapping_id,\n"
+"                                                 context=context)\n"
+"        if mapping[mapping_id].get(\"mapping_lines"
+
+#. module: base_external_referentials
+#: field:external.report,action:0
+#: view:external.report.line:0
+#: field:external.report.line,action:0
+msgid "Action"
+msgstr "Action"
+
+#. module: base_external_referentials
+#: field:external.report,line_ids:0
+msgid "Report Lines"
+msgstr "Lignes de rapports"
+
+#. module: base_external_referentials
+#: view:external.report:0
+msgid "Delete All Failed"
+msgstr "Supprimer tous les échecs"
+
+#. module: base_external_referentials
+#: view:external.referential:0
+msgid "3- Export version"
+msgstr "3- Export de la version du référentiel"
+
+#. module: base_external_referentials
+#: view:external.mapping.line:0
+#: field:external.mapping.line,out_function:0
+#: field:external.mappinglines.template,out_function:0
+msgid "Export from OpenERP Mapping Python Function"
+msgstr "Export from OpenERP Mapping Python Function"
+
+#. module: base_external_referentials
+#: view:external.mapping:0
+#: view:external.mapping.line:0
+#: field:external.mapping.line,mapping_id:0
+#: field:external.mappinglines.template,mapping_id:0
+#: model:ir.model,name:base_external_referentials.model_external_mapping
+msgid "External Mapping"
+msgstr "Mapping externe"
+
+#. module: base_external_referentials
+#: view:external.referential:0
+msgid "2 - Synchronize Referential Settings"
+msgstr "2 - Synchroniser les paramètres du référentiel"
+
+#. module: base_external_referentials
+#: field:external.mapping,external_delete_method:0
+#: field:external.mapping.template,external_delete_method:0
+msgid "Delete Method"
+msgstr "Méthode de suppression"
+
+#. module: base_external_referentials
+#: field:external.report.history,report_id:0
+#: field:external.report.line,report_id:0
+#: model:ir.model,name:base_external_referentials.model_external_report
+#: model:ir.ui.menu,name:base_external_referentials.ir_ui_menu_external_report
+msgid "External Report"
+msgstr "Rapports externes"
+
+#. module: base_external_referentials
+#: model:ir.model,name:base_external_referentials.model_external_referential_version
+msgid "External Referential Version (Ex: v1.5.0.0 +, v1.3.2.4 +)"
+msgstr "Version du référentiel externe (Ex: v1.5.0.0 +, v1.3.2.4 +)"
+
+#. module: base_external_referentials
+#: selection:external.mapping.line,external_type:0
+#: selection:external.mappinglines.template,external_type:0
+msgid "Float"
+msgstr "Float"
+
+#. module: base_external_referentials
+#: field:external.report,action_on:0
+#: field:external.report.line,action_on:0
+msgid "Action On"
+msgstr "Action sur"
+
+#. module: base_external_referentials
+#: view:external.report.line:0
+#: field:external.report.line,kwargs_text:0
+msgid "Kwargs Data"
+msgstr "Kwargs Data"
+
+#. module: base_external_referentials
+#: view:external.report.line:0
+#: field:external.report.line,args_text:0
+msgid "Args Data"
+msgstr "Args Data"
+
+#. module: base_external_referentials
+#: model:ir.actions.act_window,name:base_external_referentials.ext_sale_shop
+msgid "External Shop"
+msgstr "Boutique externe"
+
+#. module: base_external_referentials
+#: model:ir.model,name:base_external_referentials.model_group_fields
+msgid "trigger last write date by group of field"
+msgstr "trigger last write date by group of field"
+
+#. module: base_external_referentials
+#: field:external.report.line,kwargs:0
+msgid "Kwargs"
+msgstr "Kwargs"
+
+#. module: base_external_referentials
+#: help:external.mapping,extra_name:0
+msgid "In case you need to make many mappings on the same object"
+msgstr "En cas de besoin de créer plusieurs mappings pour le même objet"
+
+#. module: base_external_referentials
+#: selection:external.mapping.line,evaluation_type:0
+#: selection:external.mappinglines.template,evaluation_type:0
+msgid "Function"
+msgstr "Fonction"
+
+#. module: base_external_referentials
+#: field:external.report.line,res_id:0
+msgid "Resource Id"
+msgstr "Resource Id"
+
+#. module: base_external_referentials
+#: code:addons/base_external_referentials/decorator.py:64
+#, python-format
+msgid "Not parent method found"
+msgstr "Aucune méthode parent n'a été trouvée"
+
+#. module: base_external_referentials
+#: help:external.referential,create_date:0
+msgid "Date on which external referential is created."
+msgstr "Date de création du référentiel externe."
+
+#. module: base_external_referentials
+#: field:external.mapping.line,internal_field:0
+msgid "Field name"
+msgstr "Nom du champ"
+
+#. module: base_external_referentials
+#: view:external.mapping:0
+#: view:external.referential:0
+msgid "Add all object fields"
+msgstr "Ajouter tous les champs de l'objet"
+
+#. module: base_external_referentials
+#: field:external.mapping.line,internal_type:0
+msgid "Internal Type"
+msgstr "Type interne"
+
+#. module: base_external_referentials
+#: help:external.mapping.line,alternative_key:0
+#: help:external.mappinglines.template,alternative_key:0
+msgid "Only one field can be selected as alternative key,if no external id was found for the record the alternative keywill be used to identify the resource"
+msgstr "Seulement un champ peut être séléctionner en tant qu'alternative key, Si aucune id externe n'est trouvée pour l'enregistrement, l'alternative key sera utilisée pour identifier la resource"
+
+#. module: base_external_referentials
+#: field:external.referential,apipass:0
+msgid "Password"
+msgstr "Mot de passe"
+
+#. module: base_external_referentials
+#: view:external.mapping:0
+#: view:external.referential:0
+msgid "Export mapping file"
+msgstr "Export des fichers de mapping"
+
+#. module: base_external_referentials
+#: field:external.referential.category,type_ids:0
+msgid "Types"
+msgstr "Types"
+
+#. module: base_external_referentials
+#: field:external.report,sync_from_object_model:0
+msgid "Sync From Object"
+msgstr "Synchro depuis l'objet"
+
+#. module: base_external_referentials
+#: model:ir.actions.act_window,name:base_external_referentials.ext_res_partner_address
+msgid "External Address"
+msgstr "Adresse externe"
+
+#. module: base_external_referentials
+#: code:addons/base_external_referentials/external_osv.py:89
+#, python-format
+msgid "You can replace the method %s of the class %s. Indeed this method doesn't exist"
+msgstr "vous pouvez remplacer la méthode %s de la classe %s. En effet, cette méthode n'existe pas"
+
+#. module: base_external_referentials
+#: field:external.mapping.line,function_name:0
+#: field:external.mappinglines.template,function_name:0
+msgid "Function Name"
+msgstr "Function Name"
+
+#. module: base_external_referentials
+#: field:external.report.history,count_success:0
+msgid "Count Success"
+msgstr "Somme des succès"
+
+#. module: base_external_referentials
+#: model:ir.actions.act_window,name:base_external_referentials.ir_actions_act_window_external_mapping
+#: model:ir.ui.menu,name:base_external_referentials.ir_ui_menu_external_mappings
+msgid "External Mappings"
+msgstr "Mappings externes"
+
+#. module: base_external_referentials
+#: field:external.report.history,count_failed:0
+msgid "Count Failed"
+msgstr "Somme des échecs"
+
+#. module: base_external_referentials
+#: field:group.fields,field_ids:0
+#: model:ir.model,name:base_external_referentials.model_ir_model_fields
+msgid "Fields"
+msgstr "Champs"
+
+#. module: base_external_referentials
+#: selection:external.mapping.line,external_type:0
+#: selection:external.mappinglines.template,external_type:0
+msgid "List"
+msgstr "List"
+
+#. module: base_external_referentials
+#: field:external.mapping.line,external_type:0
+#: field:external.mappinglines.template,external_type:0
+#: field:external.referential,type_id:0
+msgid "External Type"
+msgstr "Type externe"
+
+#. module: base_external_referentials
+#: help:external.mapping.line,child_mapping_id:0
+#: help:external.mappinglines.template,child_mapping_id:0
+msgid "This give you the possibility to import data with a structure of Parent/childFor example when you import a sale order, the sale order is the parent of the sale order lineIn this case you have to select the child mapping in order to convert the data"
+msgstr "Ceci vous donne la possibilité d'importer des données avec une structure de parents/enfants. Par exemple, lors de l'import d'une commande de vente, la commande est le parent des lignes de commandes de vente. Dans ce cas, veuillez sélectionner le mapping enfant afin de convertir les données."
+
+#. module: base_external_referentials
+#: view:group.fields:0
+#: field:group.fields,model_id:0
+msgid "Model"
+msgstr "Modèle"
+
+#. module: base_external_referentials
+#: field:external.mapping,external_update_method:0
+#: field:external.mapping.template,external_update_method:0
+msgid "Update Method"
+msgstr "Méthode de mise à jour"
+
+#. module: base_external_referentials
+#: view:external.report.line:0
+msgid "External Report Line"
+msgstr "Ligne de rapport externe"
+
+#. module: base_external_referentials
+#: field:external.mapping,model_id:0
+#: field:external.mapping.template,model_id:0
+msgid "OpenERP Model"
+msgstr "Modèle OpenERP"
+
+#. module: base_external_referentials
+#: sql_constraint:ir.model.data:0
+msgid "You cannot have on record with multiple external id for a same referential"
+msgstr "Vous ne pouvez pas avoir un enregistrement avec plusieurs id externe pour un même référentiel"
+
+#. module: base_external_referentials
+#: field:external.report.line,exception_type:0
+msgid "Exception Type"
+msgstr "Type d'exception"
+
+#. module: base_external_referentials
+#: field:external.report.line,external_id:0
+msgid "External ID"
+msgstr "ID externe"
+
+#. module: base_external_referentials
+#: view:external.referential:0
+msgid "5- Export mapping template"
+msgstr "5- Export des template de mapping"
+
+#. module: base_external_referentials
+#: field:external.mapping.line,template_id:0
+msgid "External Mapping Lines Template"
+msgstr "Template de lignes de mapping externe"
+
+#. module: base_external_referentials
+#: help:external.referential,debug:0
+msgid "If debug mode is active all request between the external referential and OpenERP will be in the log"
+msgstr "Si le mode debug est activé, toutes les requètes entre le référentiel externe et OpenERP apparaitront dans les logs"
+
+#. module: base_external_referentials
+#: selection:external.mapping.line,external_type:0
+#: selection:external.mappinglines.template,external_type:0
+msgid "Boolean"
+msgstr "Boolean"
+
+#. module: base_external_referentials
+#: field:group.fields,column_name:0
+msgid "Column Name"
+msgstr "Nom de la colonne"
+
+#. module: base_external_referentials
+#: field:external.mapping.line,evaluation_type:0
+#: field:external.mappinglines.template,evaluation_type:0
+msgid "Evalution Type"
+msgstr "Type pour l'évaluation"
+
+#. module: base_external_referentials
+#: view:external.referential:0
+msgid "4- Export referential"
+msgstr "4- Export du référentiel"
+
+#. module: base_external_referentials
+#: view:external.mapping.line:0
+msgid "External fields"
+msgstr "Champs externes"
+
+#. module: base_external_referentials
+#: view:external.report.line:0
+#: model:ir.actions.act_window,name:base_external_referentials.ir_actions_act_window_external_report_line
+#: model:ir.model,name:base_external_referentials.model_external_report_line
+#: model:ir.ui.menu,name:base_external_referentials.ir_ui_menu_external_report_line
+msgid "External Report Lines"
+msgstr "Lignes des rapports externes"
+

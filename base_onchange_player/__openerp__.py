@@ -2,7 +2,8 @@
 #################################################################################
 #                                                                               #
 #    base_onchange_player for OpenERP                                           #
-#    Copyright (C) 2011 Akretion Sébastien BEAU <sebastien.beau@akretion.com>   #
+#    Copyright (C) 2011 Akretion http://www.akretion.com/                       #
+#    @author Sébastien BEAU <sebastien.beau@akretion.com>                       #
 #                                                                               #
 #    This program is free software: you can redistribute it and/or modify       #
 #    it under the terms of the GNU Affero General Public License as             #
@@ -25,15 +26,15 @@
     'version': '0.1',
     'category': 'ORM Extention',
     'license': 'AGPL-3',
-    'description': """This module give the possibility to call onchange method easily in your code, it's just an Abstract Module that add some abstraction when you need to call onchange method.
-        A sample of call is done in the module base_sale_multichannels
+    'description': """This module gives the possibility to call onchange methods easily in your code. This module just adds some abstraction when you need to call onchange methods.
+
+To get an example of how you should use this code, look at the module base_sale_multichannels.
         """,
     'author': 'Akretion',
     'website': 'http://www.akretion.com/',
     'depends': ['base'],
     'init_xml': [],
-    'update_xml': [
-    ],
+    'update_xml': [],
     'demo_xml': [],
     'installable': True,
     'active': False,

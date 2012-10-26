@@ -41,14 +41,14 @@ def call_onchange(self, cr, uid, onchange_name, vals, defaults=None, **kwargs):
     vals_with_default = defaults.copy()
     vals_with_default.update(vals)
     try :
-        kwargs2 = eval("self._get_kwargs_%s" % onchange_name)(cr, uid, vals_with_default, **kwargs)
+        args2, kwargs2 = getattr(self, "_get_params_%s" % onchange_name)(cr, uid, vals_with_default, **kwargs)
     except Exception, e:
         if config['debug_mode']: raise
         raise except_osv(_('On Change Player'),
-                         _("Error when trying to get the kwargs for the onchange %s on "
+                         _("Error when trying to get the params for the onchange %s on "
                            "the object %s. Error message : %s") % (onchange_name, self._name, e))
     try :
-        res = eval("self.%s" % onchange_name)(cr, uid, **kwargs2)
+        res = getattr(self, onchange_name)(cr, uid, *args2, **kwargs2)
         for key in res['value']:
             if not key in vals:
                 # If the value is false and the field is not a boolean, we don't pass it as it is useless

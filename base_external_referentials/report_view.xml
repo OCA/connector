@@ -16,6 +16,7 @@
           <field name="sync_from_object_model"/>
           <field name="sync_from_object_id"/>
           <field name="referential_id"/>
+          <field name="email_tmpl_id"/>
           <newline/>
           <field name="failed_line_ids" nolabel="1" colspan="4"/>
           <button name="retry_failed_lines" string="Retry All Failed" icon="gtk-go-forward" type="object" colspan="2"/>

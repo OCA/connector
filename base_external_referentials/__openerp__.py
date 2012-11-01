@@ -48,7 +48,7 @@ to customize their field mapping directly in OpenERP to accomodate the external 
     """,
     'author': 'Raphaël Valyi (Akretion.com), Sharoon Thomas (Openlabs.co.in)',
     'website': 'http://www.akretion.com, http://openlabs.co.in/',
-    'depends': ['base','base_pop_up', 'base_file_protocole'],
+    'depends': ['base','base_pop_up', 'base_file_protocole', 'email_template'],
     'init_xml': [],
     'update_xml': [
         'external_referentials_view.xml',
@@ -57,6 +57,7 @@ to customize their field mapping directly in OpenERP to accomodate the external 
         'security/ir.model.access.csv',
         'group_fields_view.xml',
         'security/base_external_referentials_security.xml',
+        'report_mail_template.xml',
     ],
     'demo_xml': [],
     'installable': True,

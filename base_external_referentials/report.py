@@ -64,6 +64,7 @@ class external_report(Model):
         'failed_line_ids': fields.one2many('external.report.line', 'report_id',
                                         'Failed Report Lines', domain=[('state', '!=', 'success')]),
         'history_ids': fields.one2many('external.report.history','report_id', 'History'),
+        'email_tmpl_id': fields.many2one('email.template', 'Email Template', help="Email template used to send an email every time a failed report line is created"),
     }
 
     def _get_report(self, cr, uid, action, action_on, sync_from_object, context=None):
@@ -309,10 +310,15 @@ class external_report_lines(Model):
                         })
         return existing_line_id
 
-    @commit_now
     def log_fail(self, cr, uid, external_session, report_line_id, error_message, context=None):
-        exc_type, exc_value, exc_traceback = sys.exc_info()
+        self._log_fail(cr, uid, external_session, report_line_id, error_message, context=context)
+        if not context.get('no_mail'):
+            self._send_mail(cr, uid, report_line_id, context=context)
+        return True
 
+    @commit_now
+    def _log_fail(self, cr, uid, external_session, report_line_id, error_message, context=None):
+        exc_type, exc_value, exc_traceback = sys.exc_info()
         if external_session:
             external_session.logger.exception(error_message)
         self.write(cr, uid, report_line_id, {
@@ -327,6 +333,14 @@ class external_report_lines(Model):
                                             external_session.tmp['history_id'], context=context)
         return True
 
+    @commit_now
+    def _send_mail(self, cr, uid, report_line_id, context=None):
+        line = self.browse(cr, uid, report_line_id, context=context)
+        if line.report_id.email_tmpl_id:
+            self.pool.get('email.template').send_mail(cr, uid, line.report_id.email_tmpl_id.id,\
+                                                  report_line_id, force_send=True, context=context)
+        return True
+    
     @commit_now
     def log_success(self, cr, uid, external_session, report_line_id, context=None):
         self.write(cr, uid, report_line_id, {'state': 'success'}, context=context)
@@ -351,6 +365,8 @@ class external_report_lines(Model):
                 if not kwargs.get('context', False):
                     kwargs['context']={}
 
+                #don't send email when retry
+                kwargs['context']['no_mail'] = True
                 # keep the id of the line to update it with the result
                 kwargs['context']['retry_report_line_id'] = log.id
 
@@ -358,6 +374,8 @@ class external_report_lines(Model):
             else:
                 if not kwargs.get('context', False):
                     kwargs['context']={}
+                #don't send email when retry
+                kwargs['context']['no_mail'] = True
                 kwargs['context']['retry_report_line_id'] = log.id
                 method(cr, uid, *args, **kwargs)
         return True

@@ -24,7 +24,7 @@
     'version': '0.1',
     'category': 'Generic Modules/Others',
     'license': 'AGPL-3',
-    'description': """This module provides methods to """,
+    'description': """This module provides methods for the framework.""",
     'author': 'Akretion',
     'website': 'http://www.akretion.com/',
     'depends': ['base'], 

@@ -81,6 +81,7 @@ class file_buffer(Model):
         :rtype: boolean
         :return: True
         """
+        if context is None: context = {} 
         context.update({'default_res_id': file_buffer_id, 'default_res_model': 'file.buffer'})
         datas_encoded = base64.encodestring(datas)
         attach_name = prefix_file_name + '_' + file_name + '.' + extension

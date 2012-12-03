@@ -61,7 +61,7 @@ def only_for_referential(ref_type=None, ref_categ=None, super_function=None):
                             original_func = class_func.__dict__.get("_original_func_before_wrap")
                             if original_func is func:
                                 use_next_class = True
-                    raise except_osv(_("Not Implemented"), _("Not parent method found"))
+                    raise except_osv(_("Not Implemented"), _("No parent method found"))
         wrapped._original_func_before_wrap = func
         return wrapped
     return decorator

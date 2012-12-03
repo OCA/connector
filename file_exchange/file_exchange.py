@@ -48,7 +48,7 @@ class FileExchangeCsvReader(FileCsvReader):
             try:
                 exec self.pre_processing in space
             except Exception, e:
-                raise except_osv(_('Error !'), _('Error can not apply the python action pre-processing value'))
+                raise except_osv(_('Error!'), _('Error can not apply the python action pre-processing value'))
         return row
 
 class file_exchange(Model):
@@ -71,7 +71,7 @@ class file_exchange(Model):
                 try:
                     exec field.advanced_default_value in space
                 except Exception, e:
-                    raise except_osv(_('Error !'),
+                    raise except_osv(_('Error!'),
                                      _('Error when evaluating advanced default value: %s \n Exception: %s') % (fields.name,e))
                 res[field.name] = space.get('result', False)
             elif field.default_value:
@@ -238,7 +238,7 @@ class file_exchange(Model):
     def _check_if_file_exist(self, cr, uid, external_session, folder_path, filename, context=None):
         exist = external_session.connection.search(folder_path, filename)
         if exist:
-            raise except_osv(_('Error !'), _('The file "%s" already exist in the folder "%s"' %(filename, folder_path)))
+            raise except_osv(_('Error!'), _('The file "%s" already exist in the folder "%s"' %(filename, folder_path)))
         return False
 
     def _export_files(self, cr, uid, method_id, context=None):
@@ -252,7 +252,7 @@ class file_exchange(Model):
                         if 'hidden_field_to_split_' in key:
                             if isinstance(value, list):
                                 if row_to_flat:
-                                    raise except_osv(_('Error !'), _('Can not flat two row in the same resource'))
+                                    raise except_osv(_('Error!'), _('Can not flat two row in the same resource'))
                                 row_to_flat = value
                             elif isinstance(value, dict):
                                 for k,v in flat_resources([value])[0].items():
@@ -384,7 +384,7 @@ class file_exchange(Model):
                 exec action_code in space
             except Exception, e:
                 if config['debug_mode']: raise
-                raise except_osv(_('Error !'),
+                raise except_osv(_('Error!'),
                                  _("Error can not apply the python action '%s'"
                                    " for the method: '%s' \n Exception: '%s'") % (action_name, method.name,e))
             if 'result' in space:

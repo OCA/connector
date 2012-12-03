@@ -23,8 +23,10 @@ from openerp.osv.orm import Model, except_orm
 from openerp.osv import fields
 from tools.translate import _
 
-EXT_CRON_MINIMUM_FREQUENCY = 10
+#TODO refactor the constraint on ext_cron, this should be not harcoded
+EXT_CRON_MINIMUM_FREQUENCY = 10 #in minute
 
+#TODO rename the fields, do not mix frequency with period :S
 
 class external_cron(Model):
 
@@ -73,10 +75,11 @@ class external_cron(Model):
         'name': 'external cron',
     }
 
+#TODO refactor the constraint (only used by the prototype, ebayerpconnect)
     def _check_field_frequency(self, cr, uid, ids, context=None):
         for cron in self.browse(cr, uid, ids):
             if cron.frequency <= EXT_CRON_MINIMUM_FREQUENCY and cron.period == 'minute':
-                raise except_orm(_('Invalid field value :'), _("'Frequency' field must be upper than %s minutes" %EXT_CRON_MINIMUM_FREQUENCY))
+                raise except_orm(_('Invalid field value :'), _("'Frequency' field must be greater than %s minutes" %EXT_CRON_MINIMUM_FREQUENCY))
         return True
 
     def _count_duplicate_report(self, cr, uid, vals, context=None):
@@ -93,8 +96,8 @@ class external_cron(Model):
             if cron.active == True:
                 report_count = self._count_duplicate_report(cr, uid, vals, context=context)
                 if report_count > 1:
-                    raise except_orm(_('Too many reports of the same type for this referential  :'),
-                        _("There are %s 'Reports' of '%s' type  with 'active' value checked. \nOnly 1 is authorized !" % (report_count, cron.report_type)))
+                    raise except_orm(_('Too many reports of the same type for this referential:'),
+                        _("There are %s 'Reports' of '%s' type  with 'active' value checked. \nOnly 1 is authorized!" % (report_count, cron.report_type)))
         return True
 
     def copy(self, cr, uid, id, default=None, context=None):

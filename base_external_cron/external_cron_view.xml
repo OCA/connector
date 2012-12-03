@@ -53,13 +53,13 @@
         <!-- Action used by menu -->
         <record id="action_external_cron" model="ir.actions.act_window">
             <field name="help">
-'Repeat' field behavior : only visible if 'Periodicity' is in 'Month/Day/Week' -------
-'Repeat' format is 'mm/dd/YYYY HH:MM:SS' : example : 12/24/2013 12:05:32  (Tuesday) -------
-If 'Periodicity' is 'Month' : next cron will be each 24th day of the month at 12:05:32 -------
+'Repeat' field behavior: only visible if 'Periodicity' is in 'Month/Day/Week' -------
+'Repeat' format is 'mm/dd/YYYY HH:MM:SS': example: 12/24/2013 12:05:32  (Tuesday) -------
+If 'Periodicity' is 'Month': next cron will be each 24th day of the month at 12:05:32 -------
 If 'Periodicity' is 'Month' and you set 29, 30 or 31 instead of 24th day next execution always will be the last day of the month-------
-If 'Periodicity' is 'Week' : next cron will be each Tuesday at 12:05:32 -------
-If 'Periodicity' is 'Day' : next cron will be each day at 12:05:32 ----------------
-If 'Periodicity' is 'Minute' : next cron will be each X minutes (depends on 'frequency' field value)------
+If 'Periodicity' is 'Week': next cron will be each Tuesday at 12:05:32 -------
+If 'Periodicity' is 'Day': next cron will be each day at 12:05:32 ----------------
+If 'Periodicity' is 'Minute': next cron will be each X minutes (depends on 'frequency' field value)------
             </field>
             <field name="name">External Cron</field>
             <field name="res_model">external.cron</field>

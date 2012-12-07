@@ -19,19 +19,20 @@
 #                                                                             #
 ###############################################################################
 
-from osv import osv, fields
+from openerp.osv.orm import Model
 import netsvc
 from base_external_referentials.external_osv import extend
 from tempfile import TemporaryFile
 
-@extend(osv.osv)
-def send_report(self, cr, uid, external_session, ids, report_name, file_name, path, context=None):
+@extend(Model)
+def send_report(self, cr, uid, external_session, ids, report_name, file_name, path, add_extension=True, context=None):
     service = netsvc.LocalService(report_name)
     result, format = service.create(cr, uid, ids, {'model': self._name}, context=context)
     output_file = TemporaryFile('w+b')
     output_file.write(result)
     output_file.seek(0)
-    file_name = "%s.%s"%(file_name, format)
+    if add_extension:
+        file_name = "%s.%s"%(file_name, format)
     external_session.connection.send(path, file_name, output_file)
     return file_name
 

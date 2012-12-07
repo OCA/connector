@@ -1,4 +1,4 @@
-    # -*- encoding: utf-8 -*-
+        # -*- encoding: utf-8 -*-
 ###############################################################################
 #                                                                             #
 #   file_exchange for OpenERP                                                 #
@@ -19,12 +19,21 @@
 #                                                                             #
 ###############################################################################
 
-from osv import osv, fields
-import netsvc
+from openerp.osv.orm import Model
+from openerp.osv import fields
+from openerp.osv.osv import except_osv
 from base_file_protocole.base_file_protocole import FileConnection
 from tools.translate import _
+from base_external_referentials.external_referentials import REF_VISIBLE_FIELDS
 
-class external_referential(osv.osv):
+REF_VISIBLE_FIELDS.update({
+    'SFTP': ['location', 'apiusername', 'apipass'],
+    'FTP': ['location', 'apiusername', 'apipass'],
+})
+
+
+
+class external_referential(Model):
     _inherit = "external.referential"
 
     def external_connection(self, cr, uid, id, debug=False, logger=False, context=None):
@@ -32,22 +41,17 @@ class external_referential(osv.osv):
             id=id[0]
         referential = self.browse(cr, uid, id, context=context)
         try:
-            return FileConnection(referential.protocole, referential.location, referential.apiusername,\
+            return FileConnection(referential.type_id.code, referential.location, referential.apiusername,\
                             referential.apipass, port=referential. port, allow_dir_creation = True, \
                             home_folder=referential.home_folder)
         except Exception, e:
-            raise osv.except_osv(_("Base File Protocole Connection Error"), _("Could not connect to server\nCheck url & user & password.\n %s"%e))
+            raise except_osv(_("Base File Protocole Connection Error"),
+                             _("Could not connect to server\nCheck url & user & password.\n %s") % e)
 
     _columns={
-        'protocole': fields.selection([('ftp','ftp'), ('filestore', 'Filestore'), ('sftp', 'sftp')], 'Protocole'),
         'port': fields.integer('Port'),
         'home_folder': fields.char('Home Folder', size=64),
     }
-
-    def get_file_to_import(cr, uid, referential_id, mapping_id, context=None):
-        '''
-        return les file_buffer qui sont a l’état waiting pour le referential et le mapping_id choisi
-        '''
 
     def _prepare_external_referential_fieldnames(self, cr, uid, context=None):
         res = super(external_referential, self)._prepare_external_referential_fieldnames(cr, uid, context=context)
@@ -55,9 +59,7 @@ class external_referential(osv.osv):
         return res
 
     def _prepare_external_referential_vals(self, cr, uid, referential, context=None):
-        res = super(external_referential, self)._prepare_external_referential_vals(cr, uid, mapping, context=context)
+        res = super(external_referential, self)._prepare_external_referential_vals(cr, uid, referential, context=context)
         res['protocole'] = referential.protocole
         return res
-
-external_referential()
 

@@ -19,7 +19,7 @@
 #                                                                             #
 ###############################################################################
 
-from osv import osv
+from openerp.osv.osv import except_osv
 import pooler
 from tools.translate import _
 from message_error import MappingError
@@ -61,7 +61,7 @@ def only_for_referential(ref_type=None, ref_categ=None, super_function=None):
                             original_func = class_func.__dict__.get("_original_func_before_wrap")
                             if original_func is func:
                                 use_next_class = True
-                    raise osv.except_osv(_("Not Implemented"), _("Not parent method found"))
+                    raise except_osv(_("Not Implemented"), _("No parent method found"))
         wrapped._original_func_before_wrap = func
         return wrapped
     return decorator
@@ -75,7 +75,7 @@ def open_report(func):
     @functools.wraps(func)
     def wrapper(self, cr, uid, external_session, *args, **kwargs):
         #if not self._columns.get('referential_id'):
-        #    raise osv.except_osv(_("Not Implemented"), _("The field referential_id doesn't exist on the object %s. Reporting system can not be used" %(self._name,)))
+        #    raise except_osv(_("Not Implemented"), _("The field referential_id doesn't exist on the object %s. Reporting system can not be used" %(self._name,)))
 
         report_obj = self.pool.get('external.report')
         context = kwargs.get('context')
@@ -109,7 +109,7 @@ def catch_error_in_report(func):
             external_session.logger.debug(_("There is no key report_id in the context, error will be not catch"))
             return func(self, cr, uid, external_session, resource, *args, **kwargs)
         if context.get('report_line_based_on'):
-            if context is None['report_line_based_on'] == self._name:
+            if not context['report_line_based_on'] == self._name:
                 return func(self, cr, uid, external_session, resource, *args, **kwargs)
         report_line_obj = self.pool.get('external.report.line')
         report_line_id = report_line_obj.start_log(
@@ -138,7 +138,7 @@ def catch_error_in_report(func):
             import_cr.rollback()
             error_message = 'Error with xmlrpc protocole. Error details : error %s : %s'%(e.faultCode, e.faultString)
             report_line_obj.log_fail(cr, uid, external_session, report_line_id, error_message, context=context)
-        except osv.except_osv as e:
+        except except_osv as e:
             if config['debug_mode']: raise
             import_cr.rollback()
             error_message = '%s : %s'%(e.name, e.value)
@@ -157,10 +157,10 @@ def catch_error_in_report(func):
         return response
     return wrapper
 
-#This decorator is for now a prototype it will be improve latter, maybe the best will to have to kind of decorator (import and export)
+#This decorator is for now a prototype it will be improve latter, maybe the best will to have two kind of decorator (import and export)
 def catch_action(func):
     """ This decorator open and close a new cursor and if an error occure it will generate a error line in the reporting system
-    The function must start with "self, cr, uid, object"
+    The function must start with "self, cr, uid, object_id"
     And the object must have a field call "referential_id" related to the object "external.referential"
     """
     @functools.wraps(func)
@@ -190,7 +190,7 @@ def catch_action(func):
             import_cr.rollback()
             error_message = 'Error with xmlrpc protocole. Error details : error %s : %s'%(e.faultCode, e.faultString)
             report_line_obj.log_fail(cr, uid, None, report_line_id, error_message, context=context)
-        except osv.except_osv as e:
+        except except_osv as e:
             if config['debug_mode']: raise
             import_cr.rollback()
             error_message = '%s : %s'%(e.name, e.value)

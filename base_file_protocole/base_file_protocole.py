@@ -19,17 +19,20 @@
 #                                                                             #
 ###############################################################################
 
-from osv import osv, fields
-import netsvc
 from tempfile import TemporaryFile
-from ftplib import FTP
-import sys
+import ftplib
 import os
-import shutil
 import csv
 import paramiko
 import errno
 import functools
+import logging
+
+_logger = logging.getLogger(__name__)
+try:
+    import xlrd
+except ImportError:
+    _logger.warning('You must install xlrd, if you need to read xls file')
 
 def open_and_close_connection(func):
     """
@@ -50,7 +53,8 @@ def open_and_close_connection(func):
     return wrapper
 
 # Extend paramiko lib with the method mkdirs
-def mkdirs(self, path, mode=511):
+def stfp_mkdirs(self, path, mode=511):
+    current_dir = self.getcwd()
     try:
         self.stat(path)
     except IOError, e:
@@ -63,7 +67,26 @@ def mkdirs(self, path, mode=511):
                     self.mkdir(path, mode)
                 else:
                     raise
-paramiko.SFTPClient.mkdirs = mkdirs
+    self.stat(current_dir)
+paramiko.SFTPClient.mkdirs = stfp_mkdirs
+
+# Extend ftplib with the method mkdirs
+def ftp_mkdirs(self, path):
+    current_dir = self.pwd()
+    try:
+        self.cwd(path)
+    except ftplib.error_perm, e:
+        if "550" in str(e):
+            try:
+                self.mkd(path)
+            except ftplib.error_perm, e:
+                if "550" in str(e):
+                    self.mkdirs(os.path.dirname(path))
+                    self.mkd(path)
+                else:
+                    raise
+    self.cwd(current_dir)
+ftplib.FTP.mkdirs = ftp_mkdirs
 
 
 class FileConnection(object):
@@ -75,15 +98,16 @@ class FileConnection(object):
         self.protocole = protocole
         self.allow_dir_creation = allow_dir_creation
         self.location = location
-        self.home_folder = home_folder
+        self.home_folder = home_folder or '/'
         self.port = port
         self.user = user
         self.pwd = pwd
+        self.connection = None
 
 
     def connect(self):
         if self.is_('ftp'):
-            self.connection = FTP(self.location)
+            self.connection = ftplib.FTP(self.location)
             self.connection.login(self.user, self.pwd)
         elif self.is_('sftp'):
             transport = paramiko.Transport((self.location, self.port or 22))
@@ -91,12 +115,15 @@ class FileConnection(object):
             self.connection = paramiko.SFTPClient.from_transport(transport)
 
     def close(self):
-        if self.is_('ftp') or self.is_('sftp'):
+        if self.is_('ftp') or self.is_('sftp') and self.connection is not None:
             self.connection.close()
 
     @open_and_close_connection
     def send(self, filepath, filename, output_file, create_patch=None):
         if self.is_('ftp'):
+            filepath = os.path.join(self.home_folder, filepath)
+            if self.allow_dir_creation:
+                self.connection.mkdirs(filepath)
             self.connection.cwd(filepath)
             self.connection.storbinary('STOR ' + filename, output_file)
             output_file.close()
@@ -157,7 +184,7 @@ class FileCsvReader(object):
     which is encoded in the given encoding.
     """
 
-    def __init__(self, f, encoding="utf-8", **kwds):            
+    def __init__(self, f, encoding="utf-8", **kwds):
         self.encoding = encoding
         self.reader = csv.DictReader(f, **kwds)
 
@@ -177,7 +204,7 @@ class FileCsvReader(object):
 
     def reorganize(self, field_structure=None, merge_keys=None, ref_field=None):
         """
-        Function to reorganize the resource from the csv. It uses the mapping (field_structure) 
+        Function to reorganize the resource from the csv. It uses the mapping (field_structure)
         to deal with the different architecture of an object (sale order with sale order line ...)
         the ref_field is used to merge the different lines (sale order with several sale order lines)
         """
@@ -236,3 +263,27 @@ class FileCsvWriter(object):
     def writerows(self, rows):
         for row in rows:
             self.writerow(row)
+
+
+class FileXlsReader(object):
+
+    def __init__(self, file_contents):
+        self.file_contents = file_contents
+
+    def read(self):
+        wb = xlrd.open_workbook(file_contents=self.file_contents)
+        sheet_name = wb.sheet_names()[0]
+        sh = wb.sheet_by_name(sheet_name)
+        header = sh.row_values(0)
+        result = []
+        for rownum in range(1, sh.nrows):
+            row = {}
+            index = 0
+            for val in sh.row_values(rownum):
+                row[header[index]] = val
+                index += 1
+            result.append(row)
+        return result
+
+
+

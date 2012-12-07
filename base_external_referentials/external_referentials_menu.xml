@@ -16,8 +16,7 @@
             <field name="search_view_id" ref="external_referential_search_view"/>
         </record>
 
-        <menuitem id="menu_external_referential" name="External Referentials" parent="ir_ui_menu_external_referentials" />
-        <menuitem id="menu_all_external_referential" name="All Referentials" parent="menu_external_referential" action="act_window_external_referential" />
+        <menuitem id="menu_external_referential" name="External Referentials" parent="ir_ui_menu_external_referentials" action="act_window_external_referential"/>
         <!-- External Referentials Types -->
 
         <record id="ir_actions_act_window_external_type" model="ir.actions.act_window">

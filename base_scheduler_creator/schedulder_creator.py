@@ -19,18 +19,19 @@
 #
 #########################################################################
 
-from osv import fields,osv
+from openerp.osv.orm import TransientModel
+from openerp.osv.osv import except_osv
 from tools.translate import _
 
-class scheduler_creator_wizard(osv.osv_memory):
+class scheduler_creator_wizard(TransientModel):
     _name = 'scheduler.creator.wizard'
     _description = 'scheduler creator wizard'
-    
+
     def action_create(self, cr, uid, id, context):
         for id in context['active_ids']:
             if context.get('object_link', False) and self.pool.get(context['object_link']).read(cr, uid, id, ['scheduler'], context)['scheduler']:
-                raise osv.except_osv(_('USER ERROR'), _('A scheduler already exists !'))
-            
+                raise except_osv(_('USER ERROR'), _('A scheduler already exists !'))
+
             vals = {'name':self.pool.get(context['object_link']).read(cr, uid, id, ['name'], context)['name'],
                     'active':False,
                     'user_id':uid,
@@ -46,5 +47,3 @@ class scheduler_creator_wizard(osv.osv_memory):
             if context.get('object_link', False):
                 self.pool.get(context['object_link']).write(cr, uid, id, {'scheduler' : cron_id}, context)
         return {'type': 'ir.actions.act_window_close'}
-
-scheduler_creator_wizard()

@@ -19,11 +19,12 @@
 #                                                                             #
 ###############################################################################
 
+from openerp.osv.orm import Model
+from openerp.osv import fields
+from openerp.osv.osv import except_osv
+from openerp.tools.translate import _
 
-from osv import osv, fields
-
-
-class group_fields(osv.osv):
+class group_fields(Model):
     _name = 'group.fields'
     _description = 'trigger last write date by group of field'
 
@@ -64,10 +65,10 @@ class group_fields(osv.osv):
 
     def write(self, cr, uid, ids, vals, context=None):
         if vals.get('column_name'):
-            raise osv.except_osv(_("User Error"), _("Changing Column name is not supported yet"))
+            raise except_osv(_("User Error"), _("Changing Column name is not supported yet"))
         return super(group_fields, self).write(cr, uid, ids, vals, context=context)
 
-class ir_model_fields(osv.osv):
+class ir_model_fields(Model):
     _inherit = "ir.model.fields"
 
     _columns = {

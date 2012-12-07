@@ -1,0 +1,1070 @@
+# Translation of OpenERP Server.
+# This file contains the translation of the following modules:
+#	* base_external_referentials
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: OpenERP Server 6.1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-10-24 13:11+0000\n"
+"PO-Revision-Date: 2012-10-24 13:11+0000\n"
+"Last-Translator: <Benoît Guillot>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: base_external_referentials
+#: field:external.referential.type,code:0
+#: field:external.referential.version,code:0
+msgid "code"
+msgstr "code"
+
+#. module: base_external_referentials
+#: view:external.mapping.line:0
+msgid "Mapping line"
+msgstr "Ligne de mapping"
+
+#. module: base_external_referentials
+#: field:external.mapping.line,selected:0
+msgid "Selected"
+msgstr "Sélectionné"
+
+#. module: base_external_referentials
+#: help:external.mapping.line,external_field:0
+msgid "When importing flat csv file from file exchange,you can leave this field empty, because this field doesn't exist in your csv file'"
+msgstr "Lors de l'import d'un fichier csv plat depuis file_exchange, vous pouvez laisser ce champ vide parce qu'il n'existe pas dans votre fichier csv."
+
+#. module: base_external_referentials
+#: model:ir.model,name:base_external_referentials.model_external_referential_type
+msgid "External Referential Type (Ex.Magento,Spree)"
+msgstr "Type de référentiel externe (Ex.Magento,Spree)"
+
+#. module: base_external_referentials
+#: view:group.fields:0
+#: model:ir.actions.act_window,name:base_external_referentials.group_field_action_open_form
+msgid "Group fields"
+msgstr "Champs groupés"
+
+#. module: base_external_referentials
+#: view:external.referential:0
+msgid "CSV file generation"
+msgstr "Génération de fichiers CSV"
+
+#. module: base_external_referentials
+#: view:external.report.line:0
+msgid "Action On Model"
+msgstr "Action sur le modèle"
+
+#. module: base_external_referentials
+#: code:addons/base_external_referentials/external_osv.py:413
+#, python-format
+msgid "The method _get_external_resource_ids is not implemented in abstract base module!"
+msgstr "La méthode _get_external_resource_ids n'est pas implémentée dans le module d'abstraction!"
+
+#. module: base_external_referentials
+#: code:addons/base_external_referentials/external_osv.py:1468
+#, python-format
+msgid "Wrong external type for mapping %s. One2Many object must have for external type string or integer"
+msgstr "Mauvais type externe pour le mapping %s. Les objects One2Many doivent avoir pour type externe string ou integer"
+
+#. module: base_external_referentials
+#: field:external.report.line,args:0
+msgid "Args"
+msgstr "Args"
+
+#. module: base_external_referentials
+#: sql_constraint:ir.model.data:0
+msgid "You cannot have multiple records with the same external ID in the same module!"
+msgstr "Vous ne pouvez pas avoir plusieurs enregistrements avec le même ID externe dans le même module!"
+
+#. module: base_external_referentials
+#: field:external.mapping.line,related_model_id:0
+msgid "Related Model"
+msgstr "Modèle lié"
+
+#. module: base_external_referentials
+#: model:ir.actions.act_window,name:base_external_referentials.ext_sale_order
+msgid "External Order"
+msgstr "Commande externe"
+
+#. module: base_external_referentials
+#: code:addons/base_external_referentials/external_osv.py:94
+#, python-format
+msgid "The method %s already exist. Please change the prefix name"
+msgstr "La méthode %s existe déjà. Veuillez changer le nom préfixé"
+
+#. module: base_external_referentials
+#: field:external.mapping,model:0
+#: field:external.mapping.template,model:0
+msgid "Model Name"
+msgstr "Nom du modèle"
+
+#. module: base_external_referentials
+#: field:external.report,history_ids:0
+msgid "History"
+msgstr "Historique"
+
+#. module: base_external_referentials
+#: view:external.referential:0
+msgid "Compulsory"
+msgstr "Obligatoire"
+
+#. module: base_external_referentials
+#: view:external.report:0
+msgid "Retry All Failed"
+msgstr "Réessayer tous les échecs"
+
+#. module: base_external_referentials
+#: code:addons/base_external_referentials/external_osv.py:1467
+#: code:addons/base_external_referentials/external_osv.py:1698
+#: code:addons/base_external_referentials/group_fields.py:68
+#, python-format
+msgid "User Error"
+msgstr "Erreur utilisateur"
+
+#. module: base_external_referentials
+#: model:ir.model,name:base_external_referentials.model_external_mapping_template
+msgid "The source mapping records"
+msgstr "Enregistrement du mapping source"
+
+#. module: base_external_referentials
+#: view:external.referential.type:0
+msgid "External Referential Types"
+msgstr "Types de référentiel externe"
+
+#. module: base_external_referentials
+#: model:ir.actions.act_window,name:base_external_referentials.ir_actions_act_window_external_mapping_line
+#: model:ir.ui.menu,name:base_external_referentials.ir_ui_menu_external_mapping_lines
+msgid "External Mapping Lines"
+msgstr "Lignes de mapping externes"
+
+#. module: base_external_referentials
+#: field:external.referential,categ_id:0
+#: model:ir.actions.act_window,name:base_external_referentials.ext_product_category
+msgid "External Category"
+msgstr "Catégorie externe"
+
+#. module: base_external_referentials
+#: model:ir.model,name:base_external_referentials.model_ir_model
+msgid "Models"
+msgstr "Modèles"
+
+#. module: base_external_referentials
+#: view:external.report.history:0
+#: view:external.report.line:0
+msgid "Report"
+msgstr "Rapport"
+
+#. module: base_external_referentials
+#: model:ir.model,name:base_external_referentials.model_external_referential_category
+msgid "External Referential Category (Ex: e-commerce, crm, warehouse)"
+msgstr "Catégorie du référentiel externe (Ex: e-commerce, crm, entrepôt)"
+
+#. module: base_external_referentials
+#: view:external.mapping.line:0
+msgid "Other Information"
+msgstr "Autre information"
+
+#. module: base_external_referentials
+#: field:external.referential,debug:0
+msgid "Debug"
+msgstr "Debug"
+
+#. module: base_external_referentials
+#: view:external.report.history:0
+#: view:external.report.line:0
+msgid "Failures"
+msgstr "Echecs"
+
+#. module: base_external_referentials
+#: model:ir.model,name:base_external_referentials.model_external_mappinglines_template
+msgid "The source mapping line records"
+msgstr "Enregistrement de la ligne de mapping source"
+
+#. module: base_external_referentials
+#: view:external.referential:0
+msgid "2- Export type"
+msgstr "2- Export du type de référentiel"
+
+#. module: base_external_referentials
+#: field:external.mapping,external_done_method:0
+#: field:external.mapping.template,external_done_method:0
+msgid "Done Method"
+msgstr "Méthode de finalisation"
+
+#. module: base_external_referentials
+#: model:ir.model,name:base_external_referentials.model_external_mapping_line
+msgid "Field Mapping"
+msgstr "Mapping du champ"
+
+#. module: base_external_referentials
+#: field:external.referential.version,name:0
+msgid "name"
+msgstr "Nom"
+
+#. module: base_external_referentials
+#: constraint:external.referential:0
+msgid "The name cannot contain a dot!"
+msgstr "Le nom ne doit pas contenir de point!"
+
+#. module: base_external_referentials
+#: model:ir.actions.act_window,name:base_external_referentials.ir_actions_act_window_external_type
+#: model:ir.ui.menu,name:base_external_referentials.ir_ui_menu_external_types
+msgid "External Referentials Types"
+msgstr "Types de référentiels externes"
+
+#. module: base_external_referentials
+#: field:external.mapping,related_model_ids:0
+msgid "Related Inherited Models"
+msgstr "Modèles liés hérités"
+
+#. module: base_external_referentials
+#: view:external.report:0
+msgid "External Referential Reports"
+msgstr "Rapports des référentiels externes"
+
+#. module: base_external_referentials
+#: field:external.mapping,external_create_method:0
+#: field:external.mapping.template,external_create_method:0
+msgid "Create Method"
+msgstr "Méthode de création"
+
+#. module: base_external_referentials
+#: selection:external.mapping.line,external_type:0
+#: selection:external.mappinglines.template,external_type:0
+msgid "Datetime"
+msgstr "Datetime"
+
+#. module: base_external_referentials
+#: field:ir.model.data,referential_id:0
+msgid "Ext. Referential"
+msgstr "Référentiel externe"
+
+#. module: base_external_referentials
+#: help:external.mapping.line,selected:0
+msgid "to select for mapping"
+msgstr "A selectionner pour mapper"
+
+#. module: base_external_referentials
+#: field:external.referential,version_id:0
+msgid "Referential Version"
+msgstr "Version du référentiel"
+
+#. module: base_external_referentials
+#: view:external.report.line:0
+msgid "Retry"
+msgstr "Réessayer"
+
+#. module: base_external_referentials
+#: field:external.report.history,end_date:0
+msgid "End Date"
+msgstr "Date de fin"
+
+#. module: base_external_referentials
+#: selection:external.report.line,state:0
+msgid "Failed"
+msgstr "Echecs"
+
+#. module: base_external_referentials
+#: view:external.mapping:0
+#: field:external.mapping.line,referential_id:0
+msgid "Referential"
+msgstr "Référentiel"
+
+#. module: base_external_referentials
+#: view:external.referential:0
+msgid "Referential Actions"
+msgstr "Actions du référentiel"
+
+#. module: base_external_referentials
+#: field:external.referential,location:0
+msgid "Location"
+msgstr "Emplacement"
+
+#. module: base_external_referentials
+#: selection:external.mapping.line,evaluation_type:0
+#: selection:external.mappinglines.template,evaluation_type:0
+msgid "Sub Mapping Line"
+msgstr "Ligne de sous-mapping"
+
+#. module: base_external_referentials
+#: field:external.report,failed_line_ids:0
+msgid "Failed Report Lines"
+msgstr "Lignes de rapport en échecs"
+
+#. module: base_external_referentials
+#: selection:external.mapping.line,external_type:0
+#: selection:external.mappinglines.template,external_type:0
+msgid "Dictionnary"
+msgstr "Dictionnary"
+
+#. module: base_external_referentials
+#: field:external.mapping,key_for_external_id:0
+#: field:external.mapping.template,key_for_external_id:0
+msgid "External field used as key"
+msgstr "Champ externe utilisé comme clé"
+
+#. module: base_external_referentials
+#: field:external.mapping.line,type:0
+#: field:external.mappinglines.template,type:0
+#: field:external.referential.version,type_id:0
+msgid "Type"
+msgstr "Type"
+
+#. module: base_external_referentials
+#: field:external.mapping.line,field_id:0
+#: field:external.mappinglines.template,field_id:0
+msgid "OpenERP Field"
+msgstr "Champ d'OpenERP"
+
+#. module: base_external_referentials
+#: field:external.mapping.line,name:0
+#: field:external.mappinglines.template,name:0
+#: field:external.referential,name:0
+#: field:external.referential.category,name:0
+#: field:external.referential.type,name:0
+#: field:external.report,name:0
+#: field:group.fields,name:0
+msgid "Name"
+msgstr "Nom"
+
+#. module: base_external_referentials
+#: selection:external.mapping.line,type:0
+#: selection:external.mappinglines.template,type:0
+msgid "External -> OpenERP"
+msgstr "Externe -> OpenERP"
+
+#. module: base_external_referentials
+#: selection:external.mapping.line,external_type:0
+#: selection:external.mappinglines.template,external_type:0
+msgid "String"
+msgstr "String"
+
+#. module: base_external_referentials
+#: field:external.referential,create_date:0
+msgid "Creation Date"
+msgstr "Date de création"
+
+#. module: base_external_referentials
+#: view:external.report.line:0
+#: field:external.report.line,error_message:0
+msgid "Error Message"
+msgstr "Message d'erreur"
+
+#. module: base_external_referentials
+#: field:external.mapping,external_get_method:0
+#: field:external.mapping.template,external_get_method:0
+msgid "Get Method"
+msgstr "Méthode d'optention"
+
+#. module: base_external_referentials
+#: code:addons/base_external_referentials/group_fields.py:68
+#, python-format
+msgid "Changing Column name is not supported yet"
+msgstr "Le changement de nom de colonne n'est pas supporté pour l'instant"
+
+#. module: base_external_referentials
+#: field:external.mapping,extra_name:0
+#: field:external.mapping.template,extra_name:0
+msgid "Extra Name"
+msgstr "Nom supplémentaire"
+
+#. module: base_external_referentials
+#: view:external.mapping.line:0
+msgid "Internal fields"
+msgstr "Field interne"
+
+#. module: base_external_referentials
+#: view:external.referential:0
+msgid "Configuration"
+msgstr "Configuration"
+
+#. module: base_external_referentials
+#: model:ir.ui.menu,name:base_external_referentials.ir_ui_menu_group_fields
+msgid "Group Fields"
+msgstr "Groupe de champs"
+
+#. module: base_external_referentials
+#: field:external.mapping,mapping_ids:0
+msgid "Mappings Lines"
+msgstr "Lignes de mapping"
+
+#. module: base_external_referentials
+#: field:ir.model.fields,group_fields_id:0
+msgid "Trigger Group"
+msgstr "Trigger Group"
+
+#. module: base_external_referentials
+#: field:external.mapping,template_id:0
+msgid "External Mapping Template"
+msgstr "Template de mapping"
+
+#. module: base_external_referentials
+#: field:external.referential.type,version_ids:0
+msgid "Versions"
+msgstr "Versions"
+
+#. module: base_external_referentials
+#: view:external.report:0
+#: model:ir.actions.act_window,name:base_external_referentials.ir_actions_act_window_external_report
+msgid "External Reports"
+msgstr "Rapports externes"
+
+#. module: base_external_referentials
+#: code:addons/base_external_referentials/external_osv.py:1432
+#, python-format
+msgid "Invalid format for the variable result."
+msgstr "Le format de la variable result est incorrect."
+
+#. module: base_external_referentials
+#: field:external.report.line,traceback:0
+msgid "Traceback"
+msgstr "Traceback"
+
+#. module: base_external_referentials
+#: selection:external.mapping.line,type:0
+#: selection:external.mappinglines.template,type:0
+msgid "External <- OpenERP"
+msgstr "Externe <- OpenERP"
+
+#. module: base_external_referentials
+#: field:external.mapping,referential_id:0
+#: view:external.referential:0
+#: view:external.referential.type:0
+#: view:external.report:0
+#: field:external.report,referential_id:0
+#: model:ir.model,name:base_external_referentials.model_external_referential
+msgid "External Referential"
+msgstr "Référentiel externe"
+
+#. module: base_external_referentials
+#: field:external.mapping.line,child_mapping_id:0
+#: field:external.mappinglines.template,child_mapping_id:0
+msgid "Child Mapping"
+msgstr "Mapping enfant"
+
+#. module: base_external_referentials
+#: field:external.mapping.line,sequence:0
+#: field:external.mappinglines.template,sequence:0
+msgid "Sequence"
+msgstr "Séquence"
+
+#. module: base_external_referentials
+#: code:addons/base_external_referentials/decorator.py:64
+#: code:addons/base_external_referentials/decorator.py:78
+#: code:addons/base_external_referentials/external_osv.py:413
+#: code:addons/base_external_referentials/external_osv.py:962
+#, python-format
+msgid "Not Implemented"
+msgstr "Non implémenté"
+
+#. module: base_external_referentials
+#: view:external.report.line:0
+#: field:external.report.line,resource:0
+#: field:external.report.line,resource_text:0
+msgid "External Data"
+msgstr "Données externe"
+
+#. module: base_external_referentials
+#: view:external.mapping.line:0
+#: field:external.referential.version,full_name:0
+msgid "Full Name"
+msgstr "Nom entier"
+
+#. module: base_external_referentials
+#: field:external.referential,categ_name:0
+msgid "External Category Name"
+msgstr "Nom de la catégorie du référentiel"
+
+#. module: base_external_referentials
+#: view:external.mapping.line:0
+#: field:external.mapping.line,in_function:0
+#: field:external.mappinglines.template,in_function:0
+msgid "Import in OpenERP Mapping Python Function"
+msgstr "Import in OpenERP Mapping Python Function"
+
+#. module: base_external_referentials
+#: selection:external.mapping.line,evaluation_type:0
+#: selection:external.mappinglines.template,evaluation_type:0
+msgid "Direct Mapping"
+msgstr "Direct Mapping"
+
+#. module: base_external_referentials
+#: view:external.referential:0
+msgid "Core Components"
+msgstr "Composants du coeur"
+
+#. module: base_external_referentials
+#: sql_constraint:external.mapping.line:0
+msgid "A referential can not have various mapping line imported from the same template mapping line"
+msgstr "Un référentiel ne peut pas avoir de différentes lignes de mapping importées depuis le même template de ligne de mapping"
+
+#. module: base_external_referentials
+#: view:external.referential:0
+msgid "6- Export mapping lines"
+msgstr "6- Export des lignes de mapping"
+
+#. module: base_external_referentials
+#: view:external.mapping:0
+#: view:external.mapping.line:0
+#: view:external.referential:0
+#: view:external.referential.type:0
+#: view:external.report:0
+#: view:external.report.history:0
+#: view:external.report.line:0
+#: view:group.fields:0
+msgid "Group by..."
+msgstr "Regrouper par..."
+
+#. module: base_external_referentials
+#: field:external.mapping,external_resource_name:0
+#: field:external.mapping.template,external_resource_name:0
+msgid "External Resource Name"
+msgstr "Nom de la resource externe"
+
+#. module: base_external_referentials
+#: sql_constraint:external.mapping:0
+msgid "A referential can not have various mapping imported from the same template"
+msgstr "Un référentiel ne peut pas avoir de différents mapping importés depuis le même template"
+
+#. module: base_external_referentials
+#: field:external.report.history,start_date:0
+msgid "Start Date"
+msgstr "Date de départ"
+
+#. module: base_external_referentials
+#: code:addons/base_external_referentials/external_osv.py:1083
+#, python-format
+msgid "only method export onebyone is implemented in base_external_referentials"
+msgstr "Seule la méthode d'export un par un est implémenté dans base_external_referentials"
+
+#. module: base_external_referentials
+#: model:ir.actions.act_window,name:base_external_referentials.act_window_external_referential
+#: model:ir.ui.menu,name:base_external_referentials.ir_ui_menu_external_referentials
+#: model:ir.ui.menu,name:base_external_referentials.menu_external_referential
+msgid "External Referentials"
+msgstr "Référentiels externes"
+
+#. module: base_external_referentials
+#: code:addons/base_external_referentials/external_osv.py:1699
+#, python-format
+msgid "Error with mapping : %s. Sub mapping can be only apply on one2many, many2one or many2many fields"
+msgstr "Erreur avec le mapping : %s. Un sous-mapping ne peut être appliqué seulement sur des champs : one2many, many2one ou many2many"
+
+#. module: base_external_referentials
+#: selection:external.mapping.line,type:0
+#: selection:external.mappinglines.template,type:0
+msgid "External <-> OpenERP"
+msgstr "Externe <-> OpenERP"
+
+#. module: base_external_referentials
+#: view:external.referential:0
+#: field:external.referential.type,categ_id:0
+msgid "Category"
+msgstr "Catégorie"
+
+#. module: base_external_referentials
+#: field:external.referential,mapping_ids:0
+msgid "Mappings"
+msgstr "Mappings"
+
+#. module: base_external_referentials
+#: selection:external.mapping.line,external_type:0
+#: selection:external.mappinglines.template,external_type:0
+msgid "URL"
+msgstr "URL"
+
+#. module: base_external_referentials
+#: view:external.mapping:0
+#: view:external.referential:0
+msgid "Object Mappings"
+msgstr "Object du mapping"
+
+#. module: base_external_referentials
+#: model:ir.model,name:base_external_referentials.model_ir_model_data
+msgid "ir.model.data"
+msgstr "ir.model.data"
+
+#. module: base_external_referentials
+#: field:external.mapping,external_search_method:0
+#: field:external.mapping.template,external_search_method:0
+msgid "Search Method"
+msgstr "Méthode de recherche"
+
+#. module: base_external_referentials
+#: model:ir.actions.act_window,name:base_external_referentials.ext_res_partner
+msgid "External Partner"
+msgstr "Partenaire externe"
+
+#. module: base_external_referentials
+#: view:external.report.history:0
+#: view:external.report.line:0
+#: model:ir.actions.act_window,name:base_external_referentials.ir_actions_act_window_external_report_history
+#: model:ir.model,name:base_external_referentials.model_external_report_history
+#: model:ir.ui.menu,name:base_external_referentials.ir_ui_menu_external_report_history
+msgid "External Report History"
+msgstr "Historique des rapports externes"
+
+#. module: base_external_referentials
+#: field:external.mapping.line,datetime_format:0
+#: field:external.mappinglines.template,datetime_format:0
+msgid "Datetime Format"
+msgstr "Datetime Format"
+
+#. module: base_external_referentials
+#: model:ir.actions.act_window,name:base_external_referentials.ext_product_product
+msgid "External Product"
+msgstr "Produit externe"
+
+#. module: base_external_referentials
+#: field:external.report.line,state:0
+msgid "Status"
+msgstr "Status"
+
+#. module: base_external_referentials
+#: sql_constraint:ir.model:0
+msgid "Each model must be unique!"
+msgstr "Chaque modèle doit être unique!"
+
+#. module: base_external_referentials
+#: field:external.mapping.template,version_id:0
+#: field:external.mappinglines.template,version_id:0
+msgid "External Referential Version"
+msgstr "Version du référentiel externe"
+
+#. module: base_external_referentials
+#: sql_constraint:external.referential:0
+msgid "Referential names must be unique !"
+msgstr "Les noms des référentiels doivent être unique !"
+
+#. module: base_external_referentials
+#: field:external.mapping,external_list_method:0
+#: field:external.mapping.template,external_list_method:0
+msgid "List Method"
+msgstr "Méthode de listage"
+
+#. module: base_external_referentials
+#: code:addons/base_external_referentials/external_osv.py:57
+#: code:addons/base_external_referentials/external_osv.py:88
+#: code:addons/base_external_referentials/external_osv.py:93
+#: code:addons/base_external_referentials/external_osv.py:1083
+#, python-format
+msgid "Developper Error"
+msgstr "Erreur développeur"
+
+#. module: base_external_referentials
+#: view:external.referential:0
+msgid "1 - Reload Referential Mapping Templates"
+msgstr "1 - Rechercher les templates de mapping externe"
+
+#. module: base_external_referentials
+#: field:external.referential,apiusername:0
+msgid "User Name"
+msgstr "Nom d'utilisateur"
+
+#. module: base_external_referentials
+#: help:external.mapping,related_model_ids:0
+msgid "potentially inherited through '_inherits' model, used for mapping field selection"
+msgstr "potentielement héritable grâce au modèle '_inherits', utilisé pour la séléction des champs de mapping"
+
+#. module: base_external_referentials
+#: view:external.referential:0
+msgid "1- Export category"
+msgstr "1- Export de la catégorie"
+
+#. module: base_external_referentials
+#: model:res.groups,name:base_external_referentials.group_export_mapping
+msgid "Export Mapping Manager"
+msgstr "Responsable des mappings d'export"
+
+#. module: base_external_referentials
+#: view:external.report.history:0
+#: view:external.report.line:0
+#: field:external.report.line,date:0
+msgid "Date"
+msgstr "Date"
+
+#. module: base_external_referentials
+#: selection:external.mapping.line,external_type:0
+#: selection:external.mappinglines.template,external_type:0
+msgid "Integer"
+msgstr "Integer"
+
+#. module: base_external_referentials
+#: field:external.report,sync_from_object_id:0
+msgid "Sync From Object ID"
+msgstr "Synchro depuis l'ID d'objet"
+
+#. module: base_external_referentials
+#: code:addons/base_external_referentials/external_osv.py:555
+#, python-format
+msgid "The field referential_id doesn't exist on the object %s. Reporting system can not be used"
+msgstr "Le champ référential_id n'existe pas sur l'object %s. Le système de rapports d'erreurs ne peut pas être utilisé"
+
+#. module: base_external_referentials
+#: field:external.referential,type_name:0
+msgid "External Type Name"
+msgstr "Nom du type  de référentiel externe"
+
+#. module: base_external_referentials
+#: field:external.report.history,user_id:0
+msgid "User"
+msgstr "Utilisateur"
+
+#. module: base_external_referentials
+#: field:external.mapping.line,external_field:0
+#: field:external.mappinglines.template,external_field:0
+msgid "External Field"
+msgstr "Champ externe"
+
+#. module: base_external_referentials
+#: view:external.report.history:0
+#: view:external.report.line:0
+#: selection:external.report.line,state:0
+msgid "Success"
+msgstr "Succès"
+
+#. module: base_external_referentials
+#: field:external.report,email_tmpl_id:0
+msgid "Email Template"
+msgstr "Email Template"
+
+#. module: base_external_referentials
+#: code:addons/base_external_referentials/external_osv.py:58
+#, python-format
+msgid "You can extend the class %s with the method %s.\",\n"
+"                \"Indeed this method already exist use the decorator 'replace' instead"
+msgstr "Vous pouvez étendre la classe %s avec la méthode %s.\",\n"
+"                \"En effet, cette méthode éxiste déjà. Veuillez utiliser le décorateur 'replace' à la place"
+
+#. module: base_external_referentials
+#: code:addons/base_external_referentials/external_osv.py:509
+#, python-format
+msgid "External Import Error"
+msgstr "Erreur d'import externe"
+
+#. module: base_external_referentials
+#: field:external.mapping.line,alternative_key:0
+#: field:external.mappinglines.template,alternative_key:0
+msgid "Alternative Key"
+msgstr "Alternative Key"
+
+#. module: base_external_referentials
+#: field:external.report,action:0
+#: view:external.report.line:0
+#: field:external.report.line,action:0
+msgid "Action"
+msgstr "Action"
+
+#. module: base_external_referentials
+#: field:external.report,line_ids:0
+msgid "Report Lines"
+msgstr "Lignes de rapports"
+
+#. module: base_external_referentials
+#: view:external.report:0
+msgid "Delete All Failed"
+msgstr "Supprimer tous les échecs"
+
+#. module: base_external_referentials
+#: view:external.referential:0
+msgid "3- Export version"
+msgstr "3- Export de la version du référentiel"
+
+#. module: base_external_referentials
+#: view:external.mapping.line:0
+#: field:external.mapping.line,out_function:0
+#: field:external.mappinglines.template,out_function:0
+msgid "Export from OpenERP Mapping Python Function"
+msgstr "Export from OpenERP Mapping Python Function"
+
+#. module: base_external_referentials
+#: view:external.mapping:0
+#: view:external.mapping.line:0
+#: field:external.mapping.line,mapping_id:0
+#: field:external.mappinglines.template,mapping_id:0
+#: model:ir.model,name:base_external_referentials.model_external_mapping
+msgid "External Mapping"
+msgstr "Mapping externe"
+
+#. module: base_external_referentials
+#: view:external.referential:0
+msgid "2 - Synchronize Referential Settings"
+msgstr "2 - Synchroniser les paramètres du référentiel"
+
+#. module: base_external_referentials
+#: field:external.mapping,external_delete_method:0
+#: field:external.mapping.template,external_delete_method:0
+msgid "Delete Method"
+msgstr "Méthode de suppression"
+
+#. module: base_external_referentials
+#: field:external.report.history,report_id:0
+#: field:external.report.line,report_id:0
+#: model:ir.model,name:base_external_referentials.model_external_report
+#: model:ir.ui.menu,name:base_external_referentials.ir_ui_menu_external_report
+msgid "External Report"
+msgstr "Rapports externes"
+
+#. module: base_external_referentials
+#: model:ir.model,name:base_external_referentials.model_external_referential_version
+msgid "External Referential Version (Ex: v1.5.0.0 +, v1.3.2.4 +)"
+msgstr "Version du référentiel externe (Ex: v1.5.0.0 +, v1.3.2.4 +)"
+
+#. module: base_external_referentials
+#: selection:external.mapping.line,external_type:0
+#: selection:external.mappinglines.template,external_type:0
+msgid "Float"
+msgstr "Float"
+
+#. module: base_external_referentials
+#: field:external.report,action_on:0
+#: field:external.report.line,action_on:0
+msgid "Action On"
+msgstr "Action sur"
+
+#. module: base_external_referentials
+#: view:external.report.line:0
+#: field:external.report.line,kwargs_text:0
+msgid "Kwargs Data"
+msgstr "Kwargs Data"
+
+#. module: base_external_referentials
+#: view:external.report.line:0
+#: field:external.report.line,args_text:0
+msgid "Args Data"
+msgstr "Args Data"
+
+#. module: base_external_referentials
+#: model:ir.actions.act_window,name:base_external_referentials.ext_sale_shop
+msgid "External Shop"
+msgstr "Boutique externe"
+
+#. module: base_external_referentials
+#: model:ir.model,name:base_external_referentials.model_group_fields
+msgid "trigger last write date by group of field"
+msgstr "trigger last write date by group of field"
+
+#. module: base_external_referentials
+#: field:external.report.line,kwargs:0
+msgid "Kwargs"
+msgstr "Kwargs"
+
+#. module: base_external_referentials
+#: help:external.mapping,extra_name:0
+msgid "In case you need to make many mappings on the same object"
+msgstr "En cas de besoin de créer plusieurs mappings pour le même objet"
+
+#. module: base_external_referentials
+#: selection:external.mapping.line,evaluation_type:0
+#: selection:external.mappinglines.template,evaluation_type:0
+msgid "Function"
+msgstr "Fonction"
+
+#. module: base_external_referentials
+#: field:external.report.line,res_id:0
+msgid "Resource Id"
+msgstr "Resource Id"
+
+#. module: base_external_referentials
+#: code:addons/base_external_referentials/decorator.py:64
+#, python-format
+msgid "Not parent method found"
+msgstr "Aucune méthode parent n'a été trouvée"
+
+#. module: base_external_referentials
+#: help:external.referential,create_date:0
+msgid "Date on which external referential is created."
+msgstr "Date de création du référentiel externe."
+
+#. module: base_external_referentials
+#: field:external.mapping.line,internal_field:0
+msgid "Field name"
+msgstr "Nom du champ"
+
+#. module: base_external_referentials
+#: view:external.mapping:0
+#: view:external.referential:0
+msgid "Add all object fields"
+msgstr "Ajouter tous les champs de l'objet"
+
+#. module: base_external_referentials
+#: field:external.mapping.line,internal_type:0
+msgid "Internal Type"
+msgstr "Type interne"
+
+#. module: base_external_referentials
+#: help:external.mapping.line,alternative_key:0
+#: help:external.mappinglines.template,alternative_key:0
+msgid "Only one field can be selected as alternative key,if no external id was found for the record the alternative keywill be used to identify the resource"
+msgstr "Seulement un champ peut être séléctionner en tant qu'alternative key, Si aucune id externe n'est trouvée pour l'enregistrement, l'alternative key sera utilisée pour identifier la resource"
+
+#. module: base_external_referentials
+#: field:external.referential,apipass:0
+msgid "Password"
+msgstr "Mot de passe"
+
+#. module: base_external_referentials
+#: view:external.mapping:0
+#: view:external.referential:0
+msgid "Export mapping file"
+msgstr "Export des fichers de mapping"
+
+#. module: base_external_referentials
+#: field:external.referential.category,type_ids:0
+msgid "Types"
+msgstr "Types"
+
+#. module: base_external_referentials
+#: field:external.report,sync_from_object_model:0
+msgid "Sync From Object"
+msgstr "Synchro depuis l'objet"
+
+#. module: base_external_referentials
+#: model:ir.actions.act_window,name:base_external_referentials.ext_res_partner_address
+msgid "External Address"
+msgstr "Adresse externe"
+
+#. module: base_external_referentials
+#: code:addons/base_external_referentials/external_osv.py:89
+#, python-format
+msgid "You can replace the method %s of the class %s. Indeed this method doesn't exist"
+msgstr "vous pouvez remplacer la méthode %s de la classe %s. En effet, cette méthode n'existe pas"
+
+#. module: base_external_referentials
+#: field:external.mapping.line,function_name:0
+#: field:external.mappinglines.template,function_name:0
+msgid "Function Name"
+msgstr "Function Name"
+
+#. module: base_external_referentials
+#: field:external.report.history,count_success:0
+msgid "Count Success"
+msgstr "Somme des succès"
+
+#. module: base_external_referentials
+#: model:ir.actions.act_window,name:base_external_referentials.ir_actions_act_window_external_mapping
+#: model:ir.ui.menu,name:base_external_referentials.ir_ui_menu_external_mappings
+msgid "External Mappings"
+msgstr "Mappings externes"
+
+#. module: base_external_referentials
+#: field:external.report.history,count_failed:0
+msgid "Count Failed"
+msgstr "Somme des échecs"
+
+#. module: base_external_referentials
+#: field:group.fields,field_ids:0
+#: model:ir.model,name:base_external_referentials.model_ir_model_fields
+msgid "Fields"
+msgstr "Champs"
+
+#. module: base_external_referentials
+#: selection:external.mapping.line,external_type:0
+#: selection:external.mappinglines.template,external_type:0
+msgid "List"
+msgstr "List"
+
+#. module: base_external_referentials
+#: field:external.mapping.line,external_type:0
+#: field:external.mappinglines.template,external_type:0
+#: field:external.referential,type_id:0
+msgid "External Type"
+msgstr "Type externe"
+
+#. module: base_external_referentials
+#: help:external.mapping.line,child_mapping_id:0
+#: help:external.mappinglines.template,child_mapping_id:0
+msgid "This give you the possibility to import data with a structure of Parent/childFor example when you import a sale order, the sale order is the parent of the sale order lineIn this case you have to select the child mapping in order to convert the data"
+msgstr "Ceci vous donne la possibilité d'importer des données avec une structure de parents/enfants. Par exemple, lors de l'import d'une commande de vente, la commande est le parent des lignes de commandes de vente. Dans ce cas, veuillez sélectionner le mapping enfant afin de convertir les données."
+
+#. module: base_external_referentials
+#: view:group.fields:0
+#: field:group.fields,model_id:0
+msgid "Model"
+msgstr "Modèle"
+
+#. module: base_external_referentials
+#: field:external.mapping,external_update_method:0
+#: field:external.mapping.template,external_update_method:0
+msgid "Update Method"
+msgstr "Méthode de mise à jour"
+
+#. module: base_external_referentials
+#: view:external.report.line:0
+msgid "External Report Line"
+msgstr "Ligne de rapport externe"
+
+#. module: base_external_referentials
+#: field:external.mapping,model_id:0
+#: field:external.mapping.template,model_id:0
+msgid "OpenERP Model"
+msgstr "Modèle OpenERP"
+
+#. module: base_external_referentials
+#: sql_constraint:ir.model.data:0
+msgid "You cannot have on record with multiple external id for a same referential"
+msgstr "Vous ne pouvez pas avoir un enregistrement avec plusieurs id externe pour un même référentiel"
+
+#. module: base_external_referentials
+#: field:external.report.line,exception_type:0
+msgid "Exception Type"
+msgstr "Type d'exception"
+
+#. module: base_external_referentials
+#: field:external.report.line,external_id:0
+msgid "External ID"
+msgstr "ID externe"
+
+#. module: base_external_referentials
+#: view:external.referential:0
+msgid "5- Export mapping template"
+msgstr "5- Export des template de mapping"
+
+#. module: base_external_referentials
+#: field:external.mapping.line,template_id:0
+msgid "External Mapping Lines Template"
+msgstr "Template de lignes de mapping externe"
+
+#. module: base_external_referentials
+#: help:external.referential,debug:0
+msgid "If debug mode is active all request between the external referential and OpenERP will be in the log"
+msgstr "Si le mode debug est activé, toutes les requètes entre le référentiel externe et OpenERP apparaitront dans les logs"
+
+#. module: base_external_referentials
+#: selection:external.mapping.line,external_type:0
+#: selection:external.mappinglines.template,external_type:0
+msgid "Boolean"
+msgstr "Boolean"
+
+#. module: base_external_referentials
+#: field:group.fields,column_name:0
+msgid "Column Name"
+msgstr "Nom de la colonne"
+
+#. module: base_external_referentials
+#: field:external.mapping.line,evaluation_type:0
+#: field:external.mappinglines.template,evaluation_type:0
+msgid "Evalution Type"
+msgstr "Type pour l'évaluation"
+
+#. module: base_external_referentials
+#: view:external.referential:0
+msgid "4- Export referential"
+msgstr "4- Export du référentiel"
+
+#. module: base_external_referentials
+#: view:external.mapping.line:0
+msgid "External fields"
+msgstr "Champs externes"
+
+#. module: base_external_referentials
+#: view:external.report.line:0
+#: model:ir.actions.act_window,name:base_external_referentials.ir_actions_act_window_external_report_line
+#: model:ir.model,name:base_external_referentials.model_external_report_line
+#: model:ir.ui.menu,name:base_external_referentials.ir_ui_menu_external_report_line
+msgid "External Report Lines"
+msgstr "Lignes des rapports externes"
+

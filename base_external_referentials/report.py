@@ -18,19 +18,23 @@
 #
 ##############################################################################
 import time
-import pooler
 import logging
 import sys
 import traceback
-from osv import osv, fields
-from tools.translate import _
-from tools.safe_eval import safe_eval
+from openerp.osv.orm import Model
+from openerp.osv import fields
 from tools import DEFAULT_SERVER_DATETIME_FORMAT
 import simplejson
 from base_external_referentials.external_osv import ExternalSession
 from base_external_referentials.decorator import commit_now
 
-class external_report(osv.osv):
+MODEL_WITH_UNIQUE_REPORT_LINE = [
+    'product.product',
+    'product.category',
+    ]
+
+
+class external_report(Model):
     _name = 'external.report'
     _description = 'External Report'
     _order = 'name desc'
@@ -49,7 +53,7 @@ class external_report(osv.osv):
 
     _columns = {
         'name': fields.function(_get_full_name, store=True, type='char', size=256, string='Name'),
-        'action': fields.char('Action', size=32, required=True, readonly=True),
+        'action': fields.char('Action', size=256, required=True, readonly=True),
         'action_on': fields.many2one('ir.model', 'Action On',required=True, readonly=True),
         'sync_from_object_model': fields.many2one('ir.model', 'Sync From Object',
                                                         required=True, readonly=True),
@@ -60,6 +64,7 @@ class external_report(osv.osv):
         'failed_line_ids': fields.one2many('external.report.line', 'report_id',
                                         'Failed Report Lines', domain=[('state', '!=', 'success')]),
         'history_ids': fields.one2many('external.report.history','report_id', 'History'),
+        'email_tmpl_id': fields.many2one('email.template', 'Email Template', help="Email template used to send an email every time a failed report line is created"),
     }
 
     def _get_report(self, cr, uid, action, action_on, sync_from_object, context=None):
@@ -104,7 +109,7 @@ class external_report(osv.osv):
             'action_on': action_on_model_id,
             'sync_from_object_model': model_id,
             'sync_from_object_id': sync_from_object.id,
-            'referential_id': sync_from_object._name == 'external.referential' and sync_from_object.id or sync_from_object.referential_id.id,
+            'referential_id': sync_from_object.id if sync_from_object._name == 'external.referential' else sync_from_object.referential_id.id,
         }
 
     @commit_now
@@ -161,10 +166,8 @@ class external_report(osv.osv):
                 self.pool.get('external.report.line').unlink(cr, uid, failed_line_ids, context=context)
         return True
 
-external_report()
 
-
-class external_report_history(osv.osv):
+class external_report_history(Model):
     _name = 'external.report.history'
     _description = 'External Report History'
     _rec_name = 'report_id'
@@ -203,10 +206,8 @@ class external_report_history(osv.osv):
         self.write(cr, uid, history_id, vals, context=context)
         return True
 
-external_report_history()
 
-
-class external_report_lines(osv.osv):
+class external_report_lines(Model):
     _name = 'external.report.line'
     _description = 'External Report Lines'
     _rec_name = 'res_id'
@@ -238,7 +239,7 @@ class external_report_lines(osv.osv):
         'state': fields.selection((('success', 'Success'),
                                    ('fail', 'Failed')),
                                    'Status', required=True, readonly=True),
-        'action': fields.char('Action', size=32, required=True, readonly=True),
+        'action': fields.char('Action', size=256, required=True, readonly=True),
         'action_on': fields.many2one('ir.model', 'Action On',required=True, readonly=True),
         'res_id': fields.integer('Resource Id', readonly=True),
         'date': fields.datetime('Date', required=True, readonly=True),
@@ -258,6 +259,18 @@ class external_report_lines(osv.osv):
         "date": lambda *a: time.strftime(DEFAULT_SERVER_DATETIME_FORMAT)
     }
 
+    def get_existing_line_id(self, cr, uid, action_on, action, res_id=None, external_id=None, context=None):
+        if context.get('retry_report_line_id'):
+            return context['retry_report_line_id']
+        elif action_on in MODEL_WITH_UNIQUE_REPORT_LINE:
+            existing_line_id = self.search(cr, uid, [
+                              ('action_on', '=', action_on),
+                              ('action', '=', action),
+                              ('res_id', '=', res_id),
+                              ('external_id', '=', external_id),
+                        ], context=context)
+            return existing_line_id and existing_line_id[0] or False
+        return False
 
     #TODO
     #1 - Did it usefull to log sucessfull entry?
@@ -267,7 +280,8 @@ class external_report_lines(osv.osv):
     def start_log(self, cr, uid, action_on, action, res_id=None,
                   external_id=None, resource=None, args=None, kwargs=None):
         context = kwargs.get('context') or {}
-        existing_line_id = context.get('retry_report_line_id', False)
+        existing_line_id = self.get_existing_line_id(cr, uid,action_on, action,
+                                          res_id=res_id, external_id=external_id, context=context)
         report_id = context.get('report_id')
 
         if existing_line_id:
@@ -296,11 +310,17 @@ class external_report_lines(osv.osv):
                         })
         return existing_line_id
 
-    @commit_now
     def log_fail(self, cr, uid, external_session, report_line_id, error_message, context=None):
-        exc_type, exc_value, exc_traceback = sys.exc_info()
+        self._log_fail(cr, uid, external_session, report_line_id, error_message, context=context)
+        if not context.get('no_mail'):
+            self._send_mail(cr, uid, report_line_id, context=context)
+        return True
 
-        external_session and external_session.logger.exception(error_message)
+    @commit_now
+    def _log_fail(self, cr, uid, external_session, report_line_id, error_message, context=None):
+        exc_type, exc_value, exc_traceback = sys.exc_info()
+        if external_session:
+            external_session.logger.exception(error_message)
         self.write(cr, uid, report_line_id, {
                             'error_message': error_message,
                             'exception_type': exc_type,
@@ -313,6 +333,14 @@ class external_report_lines(osv.osv):
                                             external_session.tmp['history_id'], context=context)
         return True
 
+    @commit_now
+    def _send_mail(self, cr, uid, report_line_id, context=None):
+        line = self.browse(cr, uid, report_line_id, context=context)
+        if line.report_id.email_tmpl_id:
+            self.pool.get('email.template').send_mail(cr, uid, line.report_id.email_tmpl_id.id,\
+                                                  report_line_id, force_send=True, context=context)
+        return True
+    
     @commit_now
     def log_success(self, cr, uid, external_session, report_line_id, context=None):
         self.write(cr, uid, report_line_id, {'state': 'success'}, context=context)
@@ -337,6 +365,8 @@ class external_report_lines(osv.osv):
                 if not kwargs.get('context', False):
                     kwargs['context']={}
 
+                #don't send email when retry
+                kwargs['context']['no_mail'] = True
                 # keep the id of the line to update it with the result
                 kwargs['context']['retry_report_line_id'] = log.id
 
@@ -344,6 +374,8 @@ class external_report_lines(osv.osv):
             else:
                 if not kwargs.get('context', False):
                     kwargs['context']={}
+                #don't send email when retry
+                kwargs['context']['no_mail'] = True
                 kwargs['context']['retry_report_line_id'] = log.id
                 method(cr, uid, *args, **kwargs)
         return True
@@ -361,4 +393,3 @@ class external_report_lines(osv.osv):
 
         return res
 
-external_report_lines()

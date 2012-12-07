@@ -643,11 +643,12 @@ def _import_one_resource(self, cr, uid, external_session, external_id, context=N
     :rtype: int
     """
     resources = self._get_external_resources(cr, uid, external_session, external_id, context=context)
+    defaults = self._get_default_import_values(cr, uid, external_session, context=context)
     if isinstance(resources, list):
-        res = self._record_external_resources(cr, uid, external_session, resources, context=context)
+        res = self._record_external_resources(cr, uid, external_session, resources, defaults=defaults, context=context)
         id = res.get('write_ids') and res['write_ids'][0] or res['create_ids'][0]
     else:
-        res = self._record_one_external_resource(cr, uid, external_session, resources, context=context)
+        res = self._record_one_external_resource(cr, uid, external_session, resources, defaults=defaults, context=context)
         id = res.get('write_id') or res.get('create_id')
     return id
 

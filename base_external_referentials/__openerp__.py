@@ -23,7 +23,7 @@
 
 {
     'name': 'Base External Referentials',
-    'version': '1.0',
+    'version': '6.1.0',
     'category': 'Generic Modules/Base',
     'description': """
 Definition : a referential is an external system that will interacts with OpenERP

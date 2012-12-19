@@ -23,7 +23,7 @@
 
 {
     'name': 'base_onchange_player',
-    'version': '0.1',
+    'version': '6.1.0',
     'category': 'ORM Extention',
     'license': 'AGPL-3',
     'description': """This module gives the possibility to call onchange methods easily in your code. This module just adds some abstraction when you need to call onchange methods.

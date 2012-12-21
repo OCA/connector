@@ -42,19 +42,23 @@ def open_and_close_connection(func):
     """
     @functools.wraps(func)
     def wrapper(self, *args, **kwargs):
-        self.connect()
-        try:
-            response = func(self, *args, **kwargs)
-        except:
-            raise
-        finally:
-            self.close()
-        return response
+        if self.persistant:
+            if not self.connection:
+                self.connect()
+            return func(self, *args, **kwargs)
+        else:
+            self.connect()
+            try:
+                response = func(self, *args, **kwargs)
+            except:
+                raise
+            finally:
+                self.close()
+            return response
     return wrapper
 
 # Extend paramiko lib with the method mkdirs
 def stfp_mkdirs(self, path, mode=511):
-    current_dir = self.getcwd()
     try:
         self.stat(path)
     except IOError, e:
@@ -67,7 +71,6 @@ def stfp_mkdirs(self, path, mode=511):
                     self.mkdir(path, mode)
                 else:
                     raise
-    self.stat(current_dir)
 paramiko.SFTPClient.mkdirs = stfp_mkdirs
 
 # Extend ftplib with the method mkdirs
@@ -94,7 +97,7 @@ class FileConnection(object):
     def is_(self, protocole):
         return self.protocole.lower() == protocole
 
-    def __init__(self, protocole, location, user, pwd, port=None, allow_dir_creation=None, home_folder='/'):
+    def __init__(self, protocole, location, user, pwd, port=None, allow_dir_creation=None, home_folder='/', persistant=False):
         self.protocole = protocole
         self.allow_dir_creation = allow_dir_creation
         self.location = location
@@ -103,7 +106,7 @@ class FileConnection(object):
         self.user = user
         self.pwd = pwd
         self.connection = None
-
+        self.persistant = False
 
     def connect(self):
         if self.is_('ftp'):

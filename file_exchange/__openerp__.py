@@ -42,7 +42,7 @@ Goal : store file details and and file fields
         'security/ir.model.access.csv',
     ],
     'demo_xml': [],
-    'installable': True,
+    'installable': False,
     'active': False,
 }
 

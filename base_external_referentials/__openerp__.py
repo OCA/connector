@@ -60,7 +60,7 @@ to customize their field mapping directly in OpenERP to accomodate the external 
         'report_mail_template.xml',
     ],
     'demo_xml': [],
-    'installable': True,
+    'installable': False,
     'certificate': '',
 }
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

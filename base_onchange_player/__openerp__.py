@@ -36,7 +36,7 @@ To get an example of how you should use this code, look at the module base_sale_
     'init_xml': [],
     'update_xml': [],
     'demo_xml': [],
-    'installable': True,
+    'installable': False,
     'active': False,
 }
 

@@ -34,7 +34,7 @@
            'pop_up_file_view.xml',
     ],
     'demo_xml': [],
-    'installable': True,
+    'installable': False,
     'active': False,
 }
 

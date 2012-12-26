@@ -32,5 +32,5 @@
     "demo_xml" : [],
     "update_xml" : ["schedulder_creator.xml"],
     "active": False,
-    "installable": True,
+    "installable": False,
 }

@@ -43,7 +43,7 @@ Also it's used in file_exchange
         'settings/external.referential.version.csv',
     ],
     'demo_xml': [],
-    'installable': True,
+    'installable': False,
     'active': False,
 }
 

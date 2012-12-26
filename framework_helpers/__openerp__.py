@@ -21,7 +21,7 @@
 
 {
     'name': 'framework_helpers',
-    'version': '6.1.0',
+    'version': '0.1',
     'category': 'Generic Modules/Others',
     'license': 'AGPL-3',
     'description': """This module provides methods for the framework.""",
@@ -31,7 +31,7 @@
     'init_xml': [],
     'update_xml': [],
     'demo_xml': [],
-    'installable': False,
+    'installable': True,
     'active': False,
 }
 

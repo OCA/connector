@@ -153,7 +153,7 @@ class external_mappinglines_template(Model):
         'external_field': fields.char('External Field', size=128),
         'type': fields.selection([('in_out', 'External <-> OpenERP'), ('in', 'External -> OpenERP'), ('out', 'External <- OpenERP')], 'Type'),
         'evaluation_type': fields.selection([('function', 'Function'), ('sub-mapping','Sub Mapping Line'), ('direct', 'Direct Mapping')], 'Evalution Type', required=True),
-        'external_type': fields.selection([('datetime', 'Datetime'), ('unicode', 'String'), ('bool', 'Boolean'), ('int', 'Integer'), ('float', 'Float'), ('list', 'List'), ('dict', 'Dictionnary')], 'External Type', required=True),
+        'external_type': fields.selection([('url', 'URL'), ('datetime', 'Datetime'), ('unicode', 'String'), ('bool', 'Boolean'), ('int', 'Integer'), ('float', 'Float'), ('list', 'List'), ('dict', 'Dictionnary')], 'External Type', required=True),
         'datetime_format': fields.char('Datetime Format', size=32),
         'in_function': fields.text('Import in OpenERP Mapping Python Function'),
         'out_function': fields.text('Export from OpenERP Mapping Python Function'),
@@ -692,13 +692,20 @@ class external_mapping(Model):
         ('ref_template_uniq', 'unique (referential_id, template_id)', 'A referential can not have various mapping imported from the same template')
     ]
 
+    def copy(self, cr, uid, id, default=None, context=None):
+        if default is None:
+            default = {}
+
+        default['template_id'] = False
+
+        return super(external_mapping, self).copy(cr, uid, id, default=default, context=context)
 
 class external_mapping_line(Model): # FIXME : tidy up this remnant of old OERP version
     _inherit = 'external.mapping.line'
 
     _columns = {
         'template_id': fields.many2one('external.mappinglines.template', 'External Mapping Lines Template'),
-        'referential_id': fields.related('mapping_id', 'referential_id', type='many2one', relation='external.referential', string='Referential'),
+        'referential_id': fields.related('mapping_id', 'referential_id', type='many2one', relation='external.referential', string='Referential', store=True),
         'field_id': fields.many2one('ir.model.fields', 'OpenERP Field', ondelete='cascade'),
         'internal_field': fields.related('field_id', 'name', type='char', relation='ir.model.field', string='Field name',readonly=True),
         'external_field': fields.char('External Field', size=128, help=("When importing flat csv file from file exchange,"
@@ -706,7 +713,7 @@ class external_mapping_line(Model): # FIXME : tidy up this remnant of old OERP v
         'mapping_id': fields.many2one('external.mapping', 'External Mapping', ondelete='cascade'),
         'related_model_id': fields.related('mapping_id', 'model_id', type='many2one', relation='ir.model', string='Related Model'),
         'type': fields.selection([('in_out', 'External <-> OpenERP'), ('in', 'External -> OpenERP'), ('out', 'External <- OpenERP')], 'Type'),
-        'external_type': fields.selection([('datetime', 'Datetime'), ('unicode', 'String'), ('bool', 'Boolean'), ('int', 'Integer'), ('float', 'Float'), ('list', 'List'), ('dict', 'Dictionnary')], 'External Type', required=True),
+        'external_type': fields.selection([('url', 'URL'),('datetime', 'Datetime'), ('unicode', 'String'), ('bool', 'Boolean'), ('int', 'Integer'), ('float', 'Float'), ('list', 'List'), ('dict', 'Dictionnary')], 'External Type', required=True),
         'datetime_format': fields.char('Datetime Format', size=32),
         'evaluation_type': fields.selection([('function', 'Function'), ('sub-mapping','Sub Mapping Line'), ('direct', 'Direct Mapping')], 'Evalution Type', required=True),
         'in_function': fields.text('Import in OpenERP Mapping Python Function'),
@@ -758,6 +765,14 @@ class external_mapping_line(Model): # FIXME : tidy up this remnant of old OERP v
             line_id = (version_code + '_' + mapping_name + '_' + line_name).replace('.','_')
         return line_id
 
+    def copy(self, cr, uid, id, default=None, context=None):
+        if default is None:
+            default = {}
+
+        default['template_id'] = False
+
+        return super(external_mapping_line, self).copy(cr, uid, id, default=default, context=context)
+
 
 class ir_model_data(Model):
     _inherit = "ir.model.data"
@@ -796,6 +811,6 @@ class ir_model_data(Model):
     }
 
     _sql_constraints = [
-        ('external_reference_uniq_per_object', 'unique(model, res_id, referential_id)', 'You cannot have on record with multiple external id for a sae referential'),
+        ('external_reference_uniq_per_object', 'unique(model, res_id, referential_id)', 'You cannot have on record with multiple external id for a same referential'),
     ]
 

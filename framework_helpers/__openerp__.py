@@ -1,8 +1,8 @@
 # -*- encoding: utf-8 -*-
 #################################################################################
 #                                                                               #
-#    base_pop_up for OpenERP                                          #
-#    Copyright (C) 2011 Akretion Benoît Guillot <benoit.guillot@akretion.com>   #
+#    framework_helpers for OpenERP                                              #
+#    Copyright (C) 2012 Akretion Benoît Guillot <benoit.guillot@akretion.com>   #
 #                                                                               #
 #    This program is free software: you can redistribute it and/or modify       #
 #    it under the terms of the GNU Affero General Public License as             #
@@ -19,20 +19,17 @@
 #                                                                               #
 #################################################################################
 
-
 {
-    'name': 'base_pop_up',
+    'name': 'framework_helpers',
     'version': '6.1.0',
     'category': 'Generic Modules/Others',
     'license': 'AGPL-3',
-    'description': """empty""",
+    'description': """This module provides methods for the framework.""",
     'author': 'Akretion',
     'website': 'http://www.akretion.com/',
-    'depends': ['base'],
+    'depends': ['base'], 
     'init_xml': [],
-    'update_xml': [
-           'pop_up_file_view.xml',
-    ],
+    'update_xml': [],
     'demo_xml': [],
     'installable': True,
     'active': False,

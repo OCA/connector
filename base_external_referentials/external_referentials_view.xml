@@ -41,9 +41,11 @@
                         <separator string="Core Components" colspan="4" />
                         <notebook colspan="4">
                             <page string="Referential Actions">
-                                <separator string="Compulsory" colspan="4" />
-                                <button name="refresh_mapping" string="1 - Reload Referential Mapping Templates" colspan="2" type="object" />
-                                <button name="import_referentials" string="2 - Synchronize Referential Settings" colspan="2" type="object" attrs="{'readonly':[('mapping_ids','=',[])]}"/>
+                                <group name="compulsory" col="4" colspan="4">
+                                    <separator string="Compulsory" colspan="4" />
+                                    <button name="refresh_mapping" string="1 - Reload Referential Mapping Templates" colspan="2" type="object" />
+                                    <button name="import_referentials" string="2 - Synchronize Referential Settings" colspan="2" type="object" attrs="{'readonly':[('mapping_ids','=',[])]}"/>
+                                </group>
                             </page>
                             <page string="CSV file generation" groups="base_external_referentials.group_export_mapping" >
                                 <button name="build_external_ref_categ" string="1- Export category" colspan="1" type="object" />

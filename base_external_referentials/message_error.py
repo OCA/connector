@@ -26,7 +26,7 @@ class MappingError(Exception):
         self.mapping_name = mapping_name
         self.mapping_object = mapping_object
     def __str__(self):
-        return 'the mapping line: %s for the object %s have an error: %s' % (self.mapping_name,
+        return 'the mapping line: %s for the object %s has this error: %s' % (self.mapping_name,
                                                                              self.mapping_object,
                                                                              self.value)
 

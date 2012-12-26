@@ -71,7 +71,7 @@ def catch_error_in_report(func):
             external_session.logger.debug(_("There is no key report_id in the context, error will be not catch"))
             return func(self, cr, uid, external_session, resource, *args, **kwargs)
         if context.get('report_line_based_on'):
-            if context is None['report_line_based_on'] == self._name:
+            if not context['report_line_based_on'] == self._name:
                 return func(self, cr, uid, external_session, resource, *args, **kwargs)
         report_line_obj = self.pool.get('external.report.line')
         report_line_id = report_line_obj.start_log(
@@ -119,10 +119,10 @@ def catch_error_in_report(func):
         return response
     return wrapper
 
-#This decorator is for now a prototype it will be improve latter, maybe the best will to have to kind of decorator (import and export)
+#This decorator is for now a prototype it will be improve latter, maybe the best will to have two kind of decorator (import and export)
 def catch_action(func):
     """ This decorator open and close a new cursor and if an error occure it will generate a error line in the reporting system
-    The function must start with "self, cr, uid, object"
+    The function must start with "self, cr, uid, object_id"
     And the object must have a field call "referential_id" related to the object "external.referential"
     """
     @functools.wraps(func)

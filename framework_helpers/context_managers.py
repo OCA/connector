@@ -1,7 +1,7 @@
 # -*- encoding: utf-8 -*-
 #################################################################################
 #                                                                               #
-#    base_pop_up for OpenERP                                          #
+#    framework_helpers for OpenERP                                              #
 #    Copyright (C) 2011 Akretion Benoît Guillot <benoit.guillot@akretion.com>   #
 #                                                                               #
 #    This program is free software: you can redistribute it and/or modify       #
@@ -19,22 +19,48 @@
 #                                                                               #
 #################################################################################
 
+import pooler
+from contextlib import contextmanager
 
-{
-    'name': 'base_pop_up',
-    'version': '6.1.0',
-    'category': 'Generic Modules/Others',
-    'license': 'AGPL-3',
-    'description': """empty""",
-    'author': 'Akretion',
-    'website': 'http://www.akretion.com/',
-    'depends': ['base'],
-    'init_xml': [],
-    'update_xml': [
-           'pop_up_file_view.xml',
-    ],
-    'demo_xml': [],
-    'installable': True,
-    'active': False,
-}
+@contextmanager
+def commit_now(cr, logger, raise_error=False):
+    """
+    Context Manager to use in order to commit into a cursor
+    correctly with a try/except method and a rollback if necessary
+    :param cr cursor: cursor to commit
+    :param logger logger: logger used to logging the message
+    :param raise_error boolean: Set to true only if you want
+             to stop the process if an error occured
+    """
+    try:
+        yield cr
+    except Exception, e:
+        cr.rollback()
+        logger.exception(e)
+        if raise_error:
+            raise
+    else:
+        cr.commit()
 
+@contextmanager
+def new_cursor(cr, logger, raise_error=False):
+    """
+    Context Manager to use in order to commit into a new cursor
+    correctly with a try/except method and a rollback if necessary
+    :param cr cursor: cursor to copy
+    :param logger logger: logger used to logging the message
+    :param raise_error boolean: Set to true only if you want
+             to stop the process if an error occured
+    """
+    new_cr = pooler.get_db(cr.dbname).cursor()
+    try:
+        yield new_cr
+    except Exception, e:
+        new_cr.rollback()
+        logger.exception(e)
+        if raise_error:
+            raise
+    else:
+        new_cr.commit()
+    finally:
+        new_cr.close()

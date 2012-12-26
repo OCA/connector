@@ -21,7 +21,7 @@
 
 {
     'name': 'file_exchange',
-    'version': '0.1',
+    'version': '6.1.0',
     'category': 'Generic Modules/Others',
     'license': 'AGPL-3',
     'description': """
@@ -36,6 +36,7 @@ Goal : store file details and and file fields
         'file_exchange_view.xml',
         'file_exchange_menu.xml',
         'settings/external.referential.category.csv',
+        'settings/external.referential.type.csv',
         'security/file_exchange_security.xml',
         'security/file_exchange_security.xml',
         'security/ir.model.access.csv',

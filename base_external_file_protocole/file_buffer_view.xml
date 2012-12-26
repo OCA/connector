@@ -6,21 +6,30 @@
 
 <openerp>
     <data>
-
+<!-- SEARCH -->
 <record id="file_buffer_view_search" model="ir.ui.view">
     <field name="name">file.buffer.search</field>
     <field name="model">file.buffer</field>
     <field name="type">search</field>
     <field name="arch" type="xml">
-        <search string="Search Sales Order">
-            <filter icon="terp-document-new" name="wait" string="Waiting" domain="[('state','=','waiting')]"/>
-            <filter icon="terp-check" string="Done" domain="[('state','=','done')]"/>
+        <search string="Search Files Buffer">
+            <group>
+                <filter icon="kanban-pause" name="wait" string="Waiting" domain="[('state','=','waiting')]"/>
+                <filter icon="gtk-apply" string="Done" domain="[('state','=','done')]"/>
+                <filter icon="gtk-execute" string="Running" domain="[('state','=','running')]"/>
+                <filter icon="terp-gtk-stop" string="Fail" domain="[('state','=','fail')]"/>
+            </group>
+            <group>
+                <filter icon="gtk-go-down" string="In" domain="[('direction','=','input')]"/>
+                <filter icon="gtk-go-up" string="Out" domain="[('direction','=','output')]"/>
+                <field name="name" />
+                <field name="file_id" string="Exchange file"/>
+            </group>
        </search>
     </field>
 </record>
 
-
-<!-- VIEW FOR THE OBJECT : file_buffer -->
+<!-- FORM -->
 <record id="file_buffer_view_form" model="ir.ui.view">
     <field name="name">file_buffer.file_buffer.view_form</field>
     <field name="model">file.buffer</field>
@@ -29,18 +38,26 @@
     <field name="arch" type="xml">
     <form string="file_buffer">
         <field name="name" />
-        <field name="state" />
+        <field name="state" readonly="1"/>
         <field name="mapping_id" />
         <field name="file_id" />
-        <field name="referential_id"/>
+        <field name="referential_id" readonly="1"/>
         <field name="shop_id"/>
         <field name="job_ended" />
         <field name="active"/>
-        <button name="run" string="Run" colspan="2" type="object" />
+        <field name="direction" readonly="1" />
+        <newline />
+        <button name="run" string="Run" colspan="2" type="object" attrs="{'invisible':[('state','in', ('running','done'))]}"/>
+        <newline />
+        <button name="check_state" string="Check state" colspan="2" type="object" attrs="{'invisible':[('state','!=', 'running')]}"/>
+        <newline />
+        <separator string="External application response (for output direction)" colspan="4"/>
+        <field name="response" nolabel="1" readonly="1" colspan="4" />
     </form>
     </field>
 </record>
 
+<!-- TREE -->
 <record id="file_buffer_view_tree" model="ir.ui.view">
     <field name="name">file_buffer.file_buffer.view_tree</field>
     <field name="model">file.buffer</field>
@@ -54,6 +71,7 @@
             <field name="mapping_id" />
             <field name="file_id" />
             <field name="job_ended" />
+            <field name="direction" string="direct." />
             <field name="referential_id" string="ex ref"/>
             <button name="run" string="Run" icon="gtk-go-forward" type="object"/>
         </tree>

@@ -1,0 +1,3 @@
+id,name,categ_id:id,code
+ref_type_FTP-file-exchange,FTP,file-exchange,FTP
+ref_type_SFTP-file-exchange,SFTP,file-exchange,SFTP

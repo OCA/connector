@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  base_sale_report_synchronizer for OpenERP
+  Copyright (C) 2012 Akretion Sébastien BEAU <sebastien.beau@akretion.com>
+  The licence is in the file __openerp__.py
+-->
+
+<openerp>
+    <data>
+        <record id="external_referential_form_view" model="ir.ui.view">
+            <field name="name">base_external_file_protocole.external_referential_form_view</field>
+            <field name="model">external.referential</field>
+            <field name="inherit_id" ref="base_external_referentials.external_referential_form_view" />
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <field name="location" position="after">
+                    <field name="port" attrs="{'invisible': [['type_name', 'not in', ['SFTP', 'FTP']]],
+                                                'required': [['type_name', 'in', ['SFTP', 'FTP']]]}"/>
+                    <field name="home_folder" attrs="{'invisible': [['type_name', 'not in', ['SFTP', 'FTP', 'File System']]]}"/>
+                </field>
+            </field>
+        </record>
+    </data>
+</openerp>

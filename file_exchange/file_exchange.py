@@ -24,11 +24,12 @@ from openerp.osv.orm import Model
 from openerp.osv import fields
 from openerp.osv.osv import except_osv
 from base_external_referentials.external_osv import ExternalSession
-from base_file_protocole.base_file_protocole import FileCsvReader, FileCsvWriter
+from base_file_protocole.base_file_protocole import FileCsvReader, FileCsvWriter, FileXlsReader
 from base_external_referentials.decorator import open_report
 from tempfile import TemporaryFile
 from encodings.aliases import aliases
 from tools.translate import _
+from openerp.tools.config import config
 
 
 #TODO implement the FileCsvWriter in base_file_protocole and remove import csv
@@ -47,7 +48,7 @@ class FileExchangeCsvReader(FileCsvReader):
             try:
                 exec self.pre_processing in space
             except Exception, e:
-                raise except_osv(_('Error !'), _('Error can not apply the python action pre-processing value'))
+                raise except_osv(_('Error!'), _('Error can not apply the python action pre-processing value'))
         return row
 
 class file_exchange(Model):
@@ -70,7 +71,7 @@ class file_exchange(Model):
                 try:
                     exec field.advanced_default_value in space
                 except Exception, e:
-                    raise except_osv(_('Error !'),
+                    raise except_osv(_('Error!'),
                                      _('Error when evaluating advanced default value: %s \n Exception: %s') % (fields.name,e))
                 res[field.name] = space.get('result', False)
             elif field.default_value:
@@ -103,6 +104,8 @@ class file_exchange(Model):
                                         encoding=method.encoding,
                                         pre_processing=method.pre_processing)
             res = csv.reorganize(field_structure=mapping_tree, merge_keys=merge_keys, ref_field=merge_key)
+        elif format in ['xls']:
+            res = FileXlsReader(external_file.read()).read()
         return res
 
     def _get_mapping_tree(self, cr, uid, mapping_id, parent_name=None, grand_parent_name=None, context=None):
@@ -235,7 +238,7 @@ class file_exchange(Model):
     def _check_if_file_exist(self, cr, uid, external_session, folder_path, filename, context=None):
         exist = external_session.connection.search(folder_path, filename)
         if exist:
-            raise except_osv(_('Error !'), _('The file "%s" already exist in the folder "%s"' %(filename, folder_path)))
+            raise except_osv(_('Error!'), _('The file "%s" already exist in the folder "%s"' %(filename, folder_path)))
         return False
 
     def _export_files(self, cr, uid, method_id, context=None):
@@ -249,7 +252,7 @@ class file_exchange(Model):
                         if 'hidden_field_to_split_' in key:
                             if isinstance(value, list):
                                 if row_to_flat:
-                                    raise except_osv(_('Error !'), _('Can not flat two row in the same resource'))
+                                    raise except_osv(_('Error!'), _('Can not flat two row in the same resource'))
                                 row_to_flat = value
                             elif isinstance(value, dict):
                                 for k,v in flat_resources([value])[0].items():
@@ -380,7 +383,8 @@ class file_exchange(Model):
             try:
                 exec action_code in space
             except Exception, e:
-                raise except_osv(_('Error !'),
+                if config['debug_mode']: raise
+                raise except_osv(_('Error!'),
                                  _("Error can not apply the python action '%s'"
                                    " for the method: '%s' \n Exception: '%s'") % (action_name, method.name,e))
             if 'result' in space:
@@ -407,7 +411,7 @@ class file_exchange(Model):
                                                                 "and to be imported in the ERP ; OUT for files to be"
                                                                 "generated from the ERP and send to the other system")),
         'mapping_id':fields.many2one('external.mapping', 'External Mapping', require="True", domain="[('referential_id', '=', referential_id)]"),
-        'format' : fields.selection([('csv','CSV'),('csv_no_header','CSV WITHOUT HEADER')], 'File format'),
+        'format' : fields.selection([('csv','CSV'),('csv_no_header','CSV WITHOUT HEADER'), ('xls', 'XLS')], 'File format'),
         'referential_id':fields.many2one('external.referential', 'Referential',help="Referential to use for connection and mapping", require=True),
         'scheduler':fields.many2one('ir.cron', 'Scheduler',help="Scheduler that will execute the cron task"),
         'search_filter':  fields.char('Search Filter', size=256),

@@ -24,6 +24,9 @@
 from openerp.osv.orm import Model
 from openerp.osv.osv import except_osv
 import base64
+import urllib
+import time
+import netsvc
 from datetime import datetime
 import logging
 from lxml import objectify
@@ -99,7 +102,7 @@ def override(class_to_extend, prefix):
 class ExternalSession(object):
     def __init__(self, referential, sync_from_object=None):
         """External Session in an object to store the information about a connection with an
-        extenal system, like Magento, Prestashop, Ebay, ftp....
+        external system, like Magento, Prestashop, Ebay, ftp....
         This class have for fields
         - referential_id : a many2one related to the referential used for this connection
         - sync_from_object : a many2one related to the object that launch the synchronization
@@ -272,10 +275,8 @@ def get_or_create_extid(self, cr, uid, external_session, openerp_id, context=Non
 @extend(Model)
 def get_extid(self, cr, uid, openerp_id, referential_id, context=None):
     """Returns the external id of a resource by its OpenERP id.
-    Return False If not external id have been found
     :param int openerp_id : openerp id of the resource
     :param int referential_id : referential id
-    :return: the external id of the resource or False if not exist
     :rtype: int
     """
     if isinstance(openerp_id, list):
@@ -661,11 +662,12 @@ def _import_one_resource(self, cr, uid, external_session, external_id, context=N
     :rtype: int
     """
     resources = self._get_external_resources(cr, uid, external_session, external_id, context=context)
+    defaults = self._get_default_import_values(cr, uid, external_session, context=context)
     if isinstance(resources, list):
-        res = self._record_external_resources(cr, uid, external_session, resources, context=context)
+        res = self._record_external_resources(cr, uid, external_session, resources, defaults=defaults, context=context)
         id = res['write_ids'][0] if res.get('write_ids') else res['create_ids'][0]
     else:
-        res = self._record_one_external_resource(cr, uid, external_session, resources, context=context)
+        res = self._record_one_external_resource(cr, uid, external_session, resources, defaults=defaults, context=context)
         if res.get('write_id'):
             id = res.get('write_id')
         else:
@@ -685,6 +687,7 @@ def _record_external_resources(self, cr, uid, external_session, resources, defau
     :rtype: dict
     :return: dictionary with the key "create_ids" and "write_ids" which containt the id created/written
     """
+    if context is None: context = {}
     result = {'write_ids': [], 'create_ids': []}
     mapping, mapping_id = self._init_mapping(cr, uid, external_session.referential_id.id, mapping=mapping, mapping_id=mapping_id, context=context)
     if mapping[mapping_id]['key_for_external_id']:
@@ -948,6 +951,8 @@ def get_ids_and_update_date(self, cr, uid, external_session, ids=None, last_expo
     :rtype: tuple
     :return: an tuple of ids and ids_2_dates (dict with key => 'id' and val => 'last_update_date')
     """
+    if ids in [[], ()]:
+        return [], {}
     query, params = self._get_query_and_params_for_ids_and_date(cr, uid, external_session, ids=ids, last_exported_date=last_exported_date, context=context)
     cr.execute(query, params)
     read = cr.dictfetchall()
@@ -1190,9 +1195,10 @@ def multi_lang_read(self, cr, uid, external_session, ids, fields_to_read, langs,
                 fields = translatable_fields
             ctx['lang'] = lang
 
-        for resource in self.read(cr, uid, ids, fields, context=ctx):
-            if not resources.get(resource['id']): resources[resource['id']] = {}
-            resources[resource['id']][lang] = resource
+        if fields:
+            for resource in self.read(cr, uid, ids, fields, context=ctx):
+                if not resources.get(resource['id']): resources[resource['id']] = {}
+                resources[resource['id']][lang] = resource
         first = False
     return resources
 
@@ -1210,7 +1216,7 @@ def smart_read(self, cr, uid, external_session, ids, langs, resources, group_ids
             if inherits_group_ids:
                 search_filter = ['|', ['x_last_update', '>=', last_exported_date], ['%s.x_last_update'%self._inherits[self._inherits.keys()[0]], '>=', last_exported_date]]
         if inherits_group_ids:
-            search_filter = [['%s.x_last_update'%self._inherits[self._inherits.keys()[0]], '>=', last_exported_date]]
+		search_filter = [['%s.x_last_update'%self._inherits[self._inherits.keys()[0]], '>=', last_exported_date]]
         resource_ids_full_read = self.search(cr, uid, search_filter, context=context)
         resource_ids_partial_read = [id for id in ids if not id in resource_ids_full_read]
     else:
@@ -1298,7 +1304,14 @@ def _prepare_external_id_vals(self, cr, uid, res_id, ext_id, referential_id, con
 # XXX move to connector or referential
 @extend(Model)
 def create_external_id_vals(self, cr, uid, existing_rec_id, external_id, referential_id, context=None):
-    """Add the external id in the table ir_model_data"""
+    """
+    Add the external id in the table ir_model_data
+    :param id existing_rec_id: erp id object
+    :param id external_id: external application id
+    :param id referential_id: external id
+    :rtype: int
+    :return:
+    """
     ir_model_data_vals = \
     self._prepare_external_id_vals(cr, uid, existing_rec_id,
                                    external_id, referential_id,
@@ -1532,6 +1545,14 @@ def _transform_field(self, cr, uid, external_session, convertion_type, field_val
             if not hasattr(casted_field, '__iter__'):
                 casted_field = (casted_field,)
             field = list(casted_field)
+        elif external_type == 'url' and internal_type == "binary":
+            (filename, header) = urllib.urlretrieve(field_value)
+            try:
+                f = open(filename , 'rb')
+                data = f.read()
+            finally:
+                f.close()
+            return base64.encodestring(data)
         else:
             if external_type == 'float' and isinstance(field_value, (str, unicode)):
                 field_value = field_value.replace(',','.')
@@ -1716,7 +1737,3 @@ def _transform_sub_mapping(self, cr, uid, external_session, convertion_type, res
 #                                           END GENERIC TRANSFORM FEATURES
 #
 ########################################################################################################################
-
-
-
-

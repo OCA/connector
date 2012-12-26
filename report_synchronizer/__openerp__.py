@@ -23,7 +23,7 @@
 
 {
     'name': 'report_synchronizer',
-    'version': '0.1',
+    'version': '6.1.0',
     'category': 'Generic Modules/Others',
     'license': 'AGPL-3',
     'description': """Abstract module to send report to external system""",

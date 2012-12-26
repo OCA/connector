@@ -28,6 +28,12 @@ import simplejson
 from base_external_referentials.external_osv import ExternalSession
 from base_external_referentials.decorator import commit_now
 
+MODEL_WITH_UNIQUE_REPORT_LINE = [
+    'product.product',
+    'product.category',
+    ]
+
+
 class external_report(Model):
     _name = 'external.report'
     _description = 'External Report'
@@ -47,7 +53,7 @@ class external_report(Model):
 
     _columns = {
         'name': fields.function(_get_full_name, store=True, type='char', size=256, string='Name'),
-        'action': fields.char('Action', size=32, required=True, readonly=True),
+        'action': fields.char('Action', size=256, required=True, readonly=True),
         'action_on': fields.many2one('ir.model', 'Action On',required=True, readonly=True),
         'sync_from_object_model': fields.many2one('ir.model', 'Sync From Object',
                                                         required=True, readonly=True),
@@ -58,6 +64,7 @@ class external_report(Model):
         'failed_line_ids': fields.one2many('external.report.line', 'report_id',
                                         'Failed Report Lines', domain=[('state', '!=', 'success')]),
         'history_ids': fields.one2many('external.report.history','report_id', 'History'),
+        'email_tmpl_id': fields.many2one('email.template', 'Email Template', help="Email template used to send an email every time a failed report line is created"),
     }
 
     def _get_report(self, cr, uid, action, action_on, sync_from_object, context=None):
@@ -232,7 +239,7 @@ class external_report_lines(Model):
         'state': fields.selection((('success', 'Success'),
                                    ('fail', 'Failed')),
                                    'Status', required=True, readonly=True),
-        'action': fields.char('Action', size=32, required=True, readonly=True),
+        'action': fields.char('Action', size=256, required=True, readonly=True),
         'action_on': fields.many2one('ir.model', 'Action On',required=True, readonly=True),
         'res_id': fields.integer('Resource Id', readonly=True),
         'date': fields.datetime('Date', required=True, readonly=True),
@@ -252,6 +259,18 @@ class external_report_lines(Model):
         "date": lambda *a: time.strftime(DEFAULT_SERVER_DATETIME_FORMAT)
     }
 
+    def get_existing_line_id(self, cr, uid, action_on, action, res_id=None, external_id=None, context=None):
+        if context.get('retry_report_line_id'):
+            return context['retry_report_line_id']
+        elif action_on in MODEL_WITH_UNIQUE_REPORT_LINE:
+            existing_line_id = self.search(cr, uid, [
+                              ('action_on', '=', action_on),
+                              ('action', '=', action),
+                              ('res_id', '=', res_id),
+                              ('external_id', '=', external_id),
+                        ], context=context)
+            return existing_line_id and existing_line_id[0] or False
+        return False
 
     #TODO
     #1 - Did it usefull to log sucessfull entry?
@@ -261,7 +280,8 @@ class external_report_lines(Model):
     def start_log(self, cr, uid, action_on, action, res_id=None,
                   external_id=None, resource=None, args=None, kwargs=None):
         context = kwargs.get('context') or {}
-        existing_line_id = context.get('retry_report_line_id', False)
+        existing_line_id = self.get_existing_line_id(cr, uid,action_on, action,
+                                          res_id=res_id, external_id=external_id, context=context)
         report_id = context.get('report_id')
 
         if existing_line_id:
@@ -290,10 +310,15 @@ class external_report_lines(Model):
                         })
         return existing_line_id
 
-    @commit_now
     def log_fail(self, cr, uid, external_session, report_line_id, error_message, context=None):
-        exc_type, exc_value, exc_traceback = sys.exc_info()
+        self._log_fail(cr, uid, external_session, report_line_id, error_message, context=context)
+        if not context.get('no_mail'):
+            self._send_mail(cr, uid, report_line_id, context=context)
+        return True
 
+    @commit_now
+    def _log_fail(self, cr, uid, external_session, report_line_id, error_message, context=None):
+        exc_type, exc_value, exc_traceback = sys.exc_info()
         if external_session:
             external_session.logger.exception(error_message)
         self.write(cr, uid, report_line_id, {
@@ -308,6 +333,14 @@ class external_report_lines(Model):
                                             external_session.tmp['history_id'], context=context)
         return True
 
+    @commit_now
+    def _send_mail(self, cr, uid, report_line_id, context=None):
+        line = self.browse(cr, uid, report_line_id, context=context)
+        if line.report_id.email_tmpl_id:
+            self.pool.get('email.template').send_mail(cr, uid, line.report_id.email_tmpl_id.id,\
+                                                  report_line_id, force_send=True, context=context)
+        return True
+    
     @commit_now
     def log_success(self, cr, uid, external_session, report_line_id, context=None):
         self.write(cr, uid, report_line_id, {'state': 'success'}, context=context)
@@ -332,6 +365,8 @@ class external_report_lines(Model):
                 if not kwargs.get('context', False):
                     kwargs['context']={}
 
+                #don't send email when retry
+                kwargs['context']['no_mail'] = True
                 # keep the id of the line to update it with the result
                 kwargs['context']['retry_report_line_id'] = log.id
 
@@ -339,6 +374,8 @@ class external_report_lines(Model):
             else:
                 if not kwargs.get('context', False):
                     kwargs['context']={}
+                #don't send email when retry
+                kwargs['context']['no_mail'] = True
                 kwargs['context']['retry_report_line_id'] = log.id
                 method(cr, uid, *args, **kwargs)
         return True

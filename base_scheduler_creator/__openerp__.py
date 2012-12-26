@@ -21,7 +21,7 @@
 
 {
     "name" : "base_scheduler_creator",
-    "version" : "1.0",
+    "version" : "6.1.0",
     "license": "AGPL-3",
     "depends" : ["base"],
     "author" : "Akretion",

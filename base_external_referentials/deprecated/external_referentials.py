@@ -176,6 +176,7 @@ class external_referential(Model):
             - fields_with_no_lang : all the fields untranslatable are grouped and the translatable fields are grouped in each lang. example : {'no_lang' : {untrad_field: value, untrad_field: value, untrad_field: value}, 'lang_one' : {trad_field: value, trad_field: value}, 'lang_two' : {trad_field: value, trad_field: value} ...}
             - all_fields : all the fields are in all languagues. example = {'lang_one' : {all_fields}, 'lang_two': {all_fields}...}"""
     _name = 'external.referential'
+    _inherit = 'external.referential'
     _description = 'External Referential'
 
     _lang_support = 'fields_with_main_lang'
@@ -189,7 +190,8 @@ class external_referential(Model):
         return {'value': {'type_name': version.type_id.name}}
 
     def read(self,cr, uid, ids, fields=None, context=None, load='_classic_read'):
-        canwrite = self.check_write(cr, uid, raise_exception=False)
+        canwrite = self.check_access_rights(cr, uid, 'write',
+                                            raise_exception=False)
         res = super(external_referential, self).read(cr, uid, ids, fields=fields, context=context, load=load)
         if not canwrite:
             for val in res:
@@ -341,30 +343,16 @@ class external_referential(Model):
 
 
     _columns = {
-        'name': fields.char('Name', size=32, required=True),
         'type_id': fields.related('version_id', 'type_id', type='many2one', relation='external.referential.type', string='External Type'),
         'type_name': fields.related('type_id', 'name', type='char', string='External Type Name',
                                     store=True),
         'categ_id': fields.related('type_id', 'categ_id', type='many2one', relation='external.referential.category', string='External Category'),
         'categ_name': fields.related('categ_id', 'name', type='char', string='External Category Name'),
         'version_id': fields.many2one('external.referential.version', 'Referential Version', required=True),
-        'location': fields.char('Location', size=200),
-        'apiusername': fields.char('User Name', size=64),
-        'apipass': fields.char('Password', size=64),
         'mapping_ids': fields.one2many('external.mapping', 'referential_id', 'Mappings'),
         'create_date': fields.datetime('Creation Date', readonly=True, help="Date on which external referential is created."),
         'debug': fields.boolean('Debug', help='If debug mode is active all request between the external referential and OpenERP will be in the log')
     }
-
-    _sql_constraints = [
-        ('name_uniq', 'unique (name)', 'Referential names must be unique !')
-    ]
-
-    def _test_dot_in_name(self, cr, uid, ids, context=None):
-        for referential in self.browse(cr, uid, ids):
-            if '.' in referential.name:
-                return False
-        return True
 
     # Method to export external referential category
     def build_external_ref_categ(self, cr, uid, id, context=None):
@@ -545,10 +533,6 @@ class external_referential(Model):
                 row = self._prepare_mappingline_template_vals(cr, uid, line, context=context)
                 csv.writerow(row)
         return self.pool.get('pop.up.file').open_output_file(cr, uid, 'external.mappinglines.template.csv', output_file, 'Mapping Template Export', context=context)
-
-    _constraints = [
-        (_test_dot_in_name, 'The name cannot contain a dot!', ['name']),
-    ]
 
     #TODO warning on name change if mapping exist: Implemented in attrs
 

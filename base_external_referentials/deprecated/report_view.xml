@@ -51,7 +51,7 @@
           <field name="name"/>
           <field name="referential_id"/>
           <newline/>
-          <group  expand='0' string='Group by...' groups="base.group_extended">
+          <group  expand='0' string='Group by...'>
             <filter string='External Referential' icon="terp-stock_symbol-selection" domain="[]" context="{'group_by' : 'referential_id'}" />
             <!--<filter string='Object Related' icon="terp-stock_symbol-selection" domain="[]" context="{'group_by' : 'sync_from_object_id'}" />-->
           </group>
@@ -106,7 +106,7 @@
           <field name="end_date"/>
           <field name="user_id"/>
           <newline/>
-          <group  expand='0' string='Group by...' groups="base.group_extended">
+          <group  expand='0' string='Group by...'>
             <filter string='Report' icon="terp-stock_symbol-selection" domain="[]" context="{'group_by' : 'report_id'}" />
             <filter string='Date' icon="terp-stock_symbol-selection" domain="[]" context="{'group_by' : 'start_date'}" />
           </group>
@@ -129,7 +129,7 @@
           <field name="action"/>
           <field name="state"/>
           <newline/>
-          <group  expand='0' string='Group by...' groups="base.group_extended">
+          <group  expand='0' string='Group by...'>
             <filter string='Report' icon="terp-stock_symbol-selection" domain="[]" context="{'group_by' : 'report_id'}" />
             <filter string='Date' icon="terp-stock_symbol-selection" domain="[]" context="{'group_by' : 'date'}" />
             <filter string='Action On Model' icon="terp-stock_symbol-selection" domain="[]" context="{'group_by' : 'action_on'}" />

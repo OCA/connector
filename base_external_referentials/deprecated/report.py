@@ -64,7 +64,7 @@ class external_report(Model):
         'failed_line_ids': fields.one2many('external.report.line', 'report_id',
                                         'Failed Report Lines', domain=[('state', '!=', 'success')]),
         'history_ids': fields.one2many('external.report.history','report_id', 'History'),
-        'email_tmpl_id': fields.many2one('email.template', 'Email Template', help="Email template used to send an email every time a failed report line is created"),
+        'email_tmpl_id': fields.many2one('email.template', string='Email Template', help="Email template used to send an email every time a failed report line is created"),
     }
 
     def _get_report(self, cr, uid, action, action_on, sync_from_object, context=None):

@@ -1,3 +1,5 @@
+import external_referential
+
 from .deprecated import *
 import decorator
 import external_osv

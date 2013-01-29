@@ -48,15 +48,17 @@ to customize their field mapping directly in OpenERP to accomodate the external 
     """,
     'author': 'Magentoerpconnect Core Editors',
     'website': 'http://www.magentoerpconnect.com',
-    'depends': [],
+    'depends': [
+        'email_template'
+        ],
     'data': [
         'deprecated/external_referentials_view.xml',
         'deprecated/report_view.xml',
         'deprecated/external_referentials_menu.xml',
         'security/ir.model.access.csv',
         'deprecated/group_fields_view.xml',
-        'deprecated/base_external_referentials_security.xml',
+        'security/base_external_referentials_security.xml',
         'deprecated/report_mail_template.xml',
         ],
-    'installable': False,
+    'installable': True,
 }

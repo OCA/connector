@@ -11,7 +11,7 @@
                    <field name="name"/>
                    <field name="model_id"/>
                    <newline/>
-                   <group  expand='0' string='Group by...' groups="base.group_extended">
+                   <group  expand='0' string='Group by...'>
                        <filter string='Model' icon="terp-stock_symbol-selection" domain="[]" context="{'group_by' : 'model_id'}" />
                    </group>
                 </search>
@@ -23,7 +23,7 @@
             <field name="model">group.fields</field>
             <field name="type">form</field>
             <field name="arch" type="xml">
-                <form>
+                <form string="Group Fields">
                     <field name="name" colspan="2"/>
                     <field name="model_id" colspan="2"/>
                     <field name="field_ids" colspan="4"/>
@@ -37,7 +37,7 @@
             <field name="model">group.fields</field>
             <field name="type">tree</field>
             <field name="arch" type="xml">
-                <tree>
+                <tree string="Group Fields">
                     <field name="name" colspan="2"/>
                     <field name="model_id" colspan="2"/>
                 </tree>
@@ -54,7 +54,7 @@
             <field name="search_view_id" ref="group_fields_search_view"/>
         </record>
 
-        <menuitem id="ir_ui_menu_group_fields" name="Group Fields" parent="base.next_id_9" groups="base.group_extended" action="group_field_action_open_form" />
+        <menuitem id="ir_ui_menu_group_fields" name="Group Fields" parent="base.next_id_9" groups="base.group_no_one" action="group_field_action_open_form" />
 
         <record id="view_model_fields_form" model="ir.ui.view">
             <field name="name">base.external.referentials.ir.model.fields.form</field>

@@ -12,7 +12,7 @@
                    <field name="type_id"/>
                    <field name="categ_id"/>
                    <newline/>
-                   <group  expand='0' string='Group by...' groups="base.group_extended">
+                   <group  expand='0' string='Group by...'>
                        <filter string='Category' icon="terp-stock_symbol-selection" domain="[]" context="{'group_by' : 'categ_id'}" />
                    </group>
                 </search>
@@ -24,7 +24,7 @@
             <field name="model">external.referential</field>
             <field name="type">form</field>
             <field name="arch" type="xml">
-                <form>
+                <form string="External Referential">
                     <group col="6" colspan="4" name='name'>
                         <separator string="Configuration" colspan="6"/>
                         <field name="name" attrs="{'readonly':[('create_date','!=',False)]}"/>
@@ -99,7 +99,7 @@
                    <field name="name"/>
                    <field name="mapping_id" />
                    <newline/>
-                   <group  expand='0' string='Group by...' groups="base.group_extended">
+                   <group  expand='0' string='Group by...'>
                        <filter string='External Mapping' icon="terp-stock_symbol-selection" domain="[]" context="{'group_by' : 'mapping_id'}" />
                    </group>
                 </search>
@@ -111,7 +111,7 @@
             <field name="model">external.mapping.line</field>
             <field name="type">tree</field>
             <field name="arch" type="xml">
-                <tree>
+                <tree string="Mapping line">
                     <field name="selected" />
                     <field name="sequence" />
                     <field name="field_id" />
@@ -132,7 +132,7 @@
             <field name="model">external.mapping.line</field>
             <field name="type">form</field>
             <field name="arch" type="xml">
-                <form>
+                <form string="Mapping line">
                     <group name="main" colspan="4">
                         <field name="selected" />
                         <field name="sequence" />
@@ -187,7 +187,7 @@
             <field name="model">external.referential</field>
             <field name="type">tree</field>
             <field name="arch" type="xml">
-                <tree>
+                <tree string="External Referential">
                     <field name="name" select="1" />
                     <field name="location" select="1" />
                 </tree>
@@ -199,7 +199,7 @@
             <field name="model">external.referential.version</field>
             <field name="type">form</field>
             <field name="arch" type="xml">
-                <form>
+                <form string="External Referential Version">
                     <field name="name" />
                     <field name="code"/>
                     <field name="full_name" />
@@ -215,7 +215,7 @@
             <field name="model">external.mapping</field>
             <field name="type">tree</field>
             <field name="arch" type="xml">
-                <tree>
+                <tree string="Mapping">
                     <field name="model_id" select="1" />
                     <field name="referential_id" select="1" />
                     <field name="extra_name" select="1" />
@@ -261,7 +261,7 @@
                    <field name="referential_id"/>
                    <field name="extra_name"/>
                    <newline/>
-                   <group  expand='0' string='Group by...' groups="base.group_extended">
+                   <group  expand='0' string='Group by...'>
                        <filter string='Referential' icon="terp-stock_symbol-selection" domain="[]" context="{'group_by' : 'referential_id'}" />
                    </group>
                 </search>
@@ -275,7 +275,7 @@
             <field name="model">external.referential.type</field>
             <field name="type">form</field>
             <field name="arch" type="xml">
-                <form>
+                <form string="Referential Type">
                     <field name="name" />
                     <field name="code"/>
                     <field name="categ_id" />
@@ -307,7 +307,7 @@
                     <field name="categ_id" />
                     <field name="version_ids" colspan="4"/>
                    <newline/>
-                   <group  expand='0' string='Group by...' groups="base.group_extended">
+                   <group  expand='0' string='Group by...'>
                        <filter string='External Referential' icon="terp-stock_symbol-selection" domain="[]" context="{'group_by' : 'referential_id'}" />
                    </group>
                 </search>

@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+  <data>
+    <record id="external_referential_view_form" model="ir.ui.view">
+      <field name="name">external.referential.form</field>
+      <field name="model">external.referential</field>
+      <field name="arch" type="xml">
+        <form string="External Referentials" version="7.0">
+          <header>
+            <button name="import_referentials" string="Synchronize Metadata"/>
+          </header>
+          <sheet>
+            <group col="4">
+              <field name="name"/>
+              <field name="service_id"/>
+            </group>
+            <group col="4">
+              <field name="location" colspan="4"/>
+              <field name="apiusername"/>
+              <field name="apipass"/>
+            </group>
+            <group col="4" colspan="4">
+              <notebook colspan="4">
+                <page string="Synchronizations">
+                </page>
+                <page string="Mappings (deprecated)">
+                  <field name="mapping_ids" widget="one2many_list" nolabel="1">
+                    <tree string="Object Mappings">
+                      <field name="model_id" />
+                      <field name="extra_name" />
+                      </tree>
+                      <form string="Object Mappings">
+                        <field name="model_id" on_change="model_id_change(model_id)" />
+                        <field name="extra_name" />
+                        <field name="related_model_ids" invisible="1" />
+                        <group col="4" colspan="4">
+                          <field name="external_list_method" />
+                          <field name="external_search_method" />
+                          <field name="external_get_method" />
+                          <field name="external_update_method" />
+                          <field name="external_create_method" />
+                          <field name="external_delete_method" />
+                          <field name="external_done_method" />
+                          <field name="key_for_external_id" />
+                          <field name="external_resource_name" />
+                        </group>
+                        <field colspan="4" name="mapping_ids"
+                          widget="one2many_list"
+                          nolabel="1"
+                          context="{'model_id':model_id}" />
+                      </form>
+                    </field>
+                </page>
+              </notebook>
+            </group>
+          </sheet>
+        </form>
+      </field>
+    </record>
+
+    <record id="external_referential_view_tree" model="ir.ui.view">
+      <field name="name">external.referential.tree</field>
+      <field name="model">external.referential</field>
+      <field name="arch" type="xml">
+        <tree string="External Referentials">
+          <field name="name"/>
+          <field name="location"/>
+          <field name="service_name"/>
+        </tree>
+      </field>
+    </record>
+
+    <record id="external_referential_view_search" model="ir.ui.view">
+      <field name="name">external.referential.search</field>
+      <field name="model">external.referential</field>
+      <field name="arch" type="xml">
+        <search string="External Referentials">
+          <field name="name"/>
+        </search>
+      </field>
+    </record>
+
+    <record id="external_referential_act" model="ir.actions.act_window">
+      <field name="name">External Referentials</field>
+      <field name="res_model">external.referential</field>
+      <field name="view_type">form</field>
+      <field name="view_mode">tree,form</field>
+      <field name="context">{}</field>
+      <field name="view_id" ref="external_referential_view_tree"/>
+    </record>
+
+    <record id="external_referential_service_view_form" model="ir.ui.view">
+      <field name="name">external.referential.service.form</field>
+      <field name="model">external.referential.service</field>
+      <field name="arch" type="xml">
+        <form string="External Referential Services" version="7.0">
+          <sheet>
+            <group col="4">
+              <field name="type"/>
+              <field name="version"/>
+            </group>
+          </sheet>
+        </form>
+      </field>
+    </record>
+
+    <record id="external_referential_service_view_tree" model="ir.ui.view">
+      <field name="name">external.referential.service.tree</field>
+      <field name="model">external.referential.service</field>
+      <field name="arch" type="xml">
+        <tree string="External Referential Services">
+          <field name="type"/>
+          <field name="version"/>
+        </tree>
+      </field>
+    </record>
+
+    <record id="external_referential_service_view_search" model="ir.ui.view">
+      <field name="name">external.referential.service.search</field>
+      <field name="model">external.referential.service</field>
+      <field name="arch" type="xml">
+        <search string="External Referential Services">
+          <field name="type"/>
+          <field name="version"/>
+        </search>
+      </field>
+    </record>
+
+    <menuitem id="menu_external_referential"
+      name="External Referentials"
+      parent="ir_ui_menu_external_referentials"
+      action="external_referential_act"/>
+  </data>
+</openerp>

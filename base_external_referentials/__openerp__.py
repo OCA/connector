@@ -23,7 +23,7 @@
 
 {
     'name': 'Base External Referentials',
-    'version': '6.1.0',
+    'version': '7.0',
     'category': 'Generic Modules/Base',
     'description': """
 Definition : a referential is an external system that will interacts with OpenERP
@@ -46,21 +46,17 @@ The existing ir_model_data feature of OpenERP is mostly thought as an mono-exter
 the concept further to assume multiple external ids for OpenERP entities and add the possibility
 to customize their field mapping directly in OpenERP to accomodate the external systems.
     """,
-    'author': 'Raphaël Valyi (Akretion.com), Sharoon Thomas (Openlabs.co.in)',
-    'website': 'http://www.akretion.com, http://openlabs.co.in/',
-    'depends': ['base','base_pop_up', 'base_file_protocole', 'email_template'],
-    'init_xml': [],
-    'update_xml': [
-        'external_referentials_view.xml',
-        'report_view.xml',
-        'external_referentials_menu.xml',
+    'author': 'Magentoerpconnect Core Editors',
+    'website': 'http://www.magentoerpconnect.com',
+    'depends': [],
+    'data': [
+        'deprecated/external_referentials_view.xml',
+        'deprecated/report_view.xml',
+        'deprecated/external_referentials_menu.xml',
         'security/ir.model.access.csv',
-        'group_fields_view.xml',
-        'security/base_external_referentials_security.xml',
-        'report_mail_template.xml',
-    ],
-    'demo_xml': [],
+        'deprecated/group_fields_view.xml',
+        'deprecated/base_external_referentials_security.xml',
+        'deprecated/report_mail_template.xml',
+        ],
     'installable': False,
-    'certificate': '',
 }
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

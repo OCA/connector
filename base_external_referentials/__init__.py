@@ -1,6 +1,7 @@
-import external_referentials
-import external_osv
-import report
-import ir_model
+from .deprecated import *
 import decorator
+import external_osv
 import group_fields
+import ir_model
+import message_error
+import report

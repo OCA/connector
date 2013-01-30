@@ -2,7 +2,9 @@
 <openerp>
     <data>
 
-        <menuitem id="ir_ui_menu_external_referentials" name="External Referentials" parent="base.menu_administration" />
+        <menuitem id="menu_deprecated"
+          name="Deprecated"
+          parent="ir_ui_menu_external_referentials"/>
 
         <!-- External Referentials Types -->
 
@@ -15,7 +17,7 @@
             <field name="search_view_id" ref="external_referential_type_search_form_view"/>
         </record>
 
-        <menuitem id="ir_ui_menu_external_types" name="External Referentials Types" parent="ir_ui_menu_external_referentials" action="ir_actions_act_window_external_type" />
+        <menuitem id="ir_ui_menu_external_types" name="External Referentials Types" parent="menu_deprecated" action="ir_actions_act_window_external_type" />
 
         <!-- External Mappings -->
 
@@ -28,7 +30,7 @@
             <field name="search_view_id" ref="external_mapping_search_view"/>
         </record>
 
-        <menuitem id="ir_ui_menu_external_mappings" name="External Mappings" parent="ir_ui_menu_external_referentials" action="ir_actions_act_window_external_mapping" />
+        <menuitem id="ir_ui_menu_external_mappings" name="External Mappings" parent="menu_deprecated" action="ir_actions_act_window_external_mapping" />
 
         <!-- External Mapping Lines-->
 
@@ -41,7 +43,7 @@
             <field name="search_view_id" ref="external_mapping_line_search_view"/>
         </record>
 
-        <menuitem id="ir_ui_menu_external_mapping_lines" name="External Mapping Lines" parent="ir_ui_menu_external_referentials" action="ir_actions_act_window_external_mapping_line" />
+        <menuitem id="ir_ui_menu_external_mapping_lines" name="External Mapping Lines" parent="menu_deprecated" action="ir_actions_act_window_external_mapping_line" />
 
         <!-- External Report -->
 
@@ -54,7 +56,7 @@
             <field name="search_view_id" ref="external_report_search_form_view"/>
         </record>
 
-        <menuitem id="ir_ui_menu_external_report" name="External Report" parent="ir_ui_menu_external_referentials" action="ir_actions_act_window_external_report" />
+        <menuitem id="ir_ui_menu_external_report" name="External Report" parent="menu_deprecated" action="ir_actions_act_window_external_report" />
 
         <!-- External Report History -->
 
@@ -67,7 +69,7 @@
             <field name="search_view_id" ref="external_report_history_search_view"/>
         </record>
 
-        <menuitem id="ir_ui_menu_external_report_history" name="External Report History" parent="ir_ui_menu_external_referentials" action="ir_actions_act_window_external_report_history" />
+        <menuitem id="ir_ui_menu_external_report_history" name="External Report History" parent="menu_deprecated" action="ir_actions_act_window_external_report_history" />
 
         <!-- External Report Line -->
 
@@ -81,7 +83,7 @@
             <field name="search_view_id" ref="external_report_line_search_view"/>
         </record>
 
-        <menuitem id="ir_ui_menu_external_report_line" name="External Report Lines" parent="ir_ui_menu_external_referentials" action="ir_actions_act_window_external_report_line" />
+        <menuitem id="ir_ui_menu_external_report_line" name="External Report Lines" parent="menu_deprecated" action="ir_actions_act_window_external_report_line" />
 
     </data>
 </openerp>

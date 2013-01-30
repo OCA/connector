@@ -2,27 +2,12 @@
 <openerp>
     <data>
 
-        <record model="ir.ui.view" id="external_referential_search_view">
-            <field name="name">external.referential.search.view</field>
-            <field name="model">external.referential</field>
-            <field name="type">search</field>
-            <field name="arch" type="xml">
-                <search string="External Referential">
-                   <field name="name"/>
-                   <field name="type_id"/>
-                   <field name="categ_id"/>
-                   <newline/>
-                   <group  expand='0' string='Group by...'>
-                       <filter string='Category' icon="terp-stock_symbol-selection" domain="[]" context="{'group_by' : 'categ_id'}" />
-                   </group>
-                </search>
-            </field>
-        </record>
-
+        <!--
         <record model="ir.ui.view" id="external_referential_form_view">
             <field name="name">external_referential_form_view</field>
             <field name="model">external.referential</field>
             <field name="type">form</field>
+            <field name="priority">20</field>
             <field name="arch" type="xml">
                 <form string="External Referential">
                     <group col="6" colspan="4" name='name'>
@@ -61,8 +46,6 @@
                         <tree string="Object Mappings">
                             <field name="model_id" />
                             <field name="extra_name" />
-<!--                            <field name="related_model_ids" invisible="1" />-->
-<!--                            <field name="mapping_ids" />-->
                         </tree>
                         <form string="Object Mappings">
                             <field name="model_id" on_change="model_id_change(model_id)" />
@@ -87,6 +70,7 @@
                 </form>
             </field>
         </record>
+-->
 
 <!-- External mapping line search views -->
         <record model="ir.ui.view" id="external_mapping_line_search_view">
@@ -177,33 +161,6 @@
                             <field name="name" attrs="{'invisible':[('evaluation_type','=','function')]}"/>
                         </group>
                     </group>
-                </form>
-            </field>
-        </record>
-
-
-        <record id="external_referential_tree_view" model="ir.ui.view">
-            <field name="name">external_referential_tree_view</field>
-            <field name="model">external.referential</field>
-            <field name="type">tree</field>
-            <field name="arch" type="xml">
-                <tree string="External Referential">
-                    <field name="name" select="1" />
-                    <field name="location" select="1" />
-                </tree>
-            </field>
-        </record>
-
-        <record id="external_referential_version_form_view" model="ir.ui.view">
-            <field name="name">external_referential_version_form_view</field>
-            <field name="model">external.referential.version</field>
-            <field name="type">form</field>
-            <field name="arch" type="xml">
-                <form string="External Referential Version">
-                    <field name="name" />
-                    <field name="code"/>
-                    <field name="full_name" />
-                    <field name="type_id"/>
                 </form>
             </field>
         </record>

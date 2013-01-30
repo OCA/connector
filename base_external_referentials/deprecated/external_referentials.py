@@ -207,29 +207,27 @@ class external_referential(Model):
         for the configuration of the referential
         """
         # use lxml to compose the arch XML
-        result = super(external_referential, self).fields_view_get(cr, uid,
-                                                                    view_id=view_id,
-                                                                    view_type=view_type,
-                                                                    context=context,
-                                                                    toolbar=toolbar,
-                                                                    submenu=submenu,
-                                                                )
+        result = super(external_referential, self).fields_view_get(
+                cr, uid, view_id=view_id, view_type=view_type,
+                context=context, toolbar=toolbar, submenu=submenu)
+
         if view_type == 'form':
             eview = etree.fromstring(result['arch'])
             toupdate_fields = []
             for field_name in REF_FIELDS:
-                field = eview.xpath("//field[@name='%s']"%field_name)
+                field = eview.xpath("//field[@name='%s']" % field_name)
                 if field:
                     field = field[0]
-                    referentials = []
-                    for ref_type, visible_fields in REF_VISIBLE_FIELDS.items():
-                        if field_name in visible_fields:
-                            referentials.append(ref_type)
-                    field.set('attrs', """{
-                                    'invisible': [('type_name', 'not in', %s)],
-                                    'required': [('type_name', 'in', %s)]
-                                        }"""%(referentials, referentials))
-                    orm.setup_modifiers(field, field=result['fields'][field_name], context=context)
+                    referentials = [service for service, fields
+                                    in REF_VISIBLE_FIELDS.iteritems()
+                                    if field_name in fields]
+                    field.set('attrs',
+                              "{'invisible': [('type', 'not in', %s)], "
+                              " 'required': [('type', 'in', %s)]} " %
+                              (referentials, referentials))
+                    orm.setup_modifiers(field,
+                                        field=result['fields'][field_name],
+                                        context=context)
                     result['arch'] = etree.tostring(eview, pretty_print=True)
         return result
 

@@ -25,6 +25,7 @@ from openerp.osv.orm import Model
 class ir_model(Model):
     _inherit='ir.model'
 
+    # TODO: call a Binder.bind() to generate it.
     def create_external_link(self, cr, uid, model_id, context=None):
         model = self.pool.get('ir.model').browse(cr, uid, model_id, context=context)
         vals = {'domain': "[('res_id', '=', active_id), ('model', '=', '%s')]" %(model.model,),

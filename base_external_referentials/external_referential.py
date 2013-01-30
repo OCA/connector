@@ -89,6 +89,11 @@ class external_referential(orm.Model):
         ('name_uniq', 'unique (name)', 'Referential names must be unique !')
     ]
 
+    def import_referentials(self, cr, uid, ids, context=None):
+        for referential in self.browse(cr, uid, ids, context=context):
+            pass  # TODO call the task to import the referentials
+        return True
+
 
 class ir_model_data(orm.Model):
     _inherit = 'ir.model.data'

@@ -111,3 +111,5 @@ class ir_model_data(orm.Model):
          'id for a same referential'),
     ]
 
+
+from .deprecated.external_referentials import *

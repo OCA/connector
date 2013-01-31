@@ -24,9 +24,9 @@
             </group>
             <group col="4" colspan="4">
               <notebook colspan="4">
-                <page string="Configuration">
+                <page name="configuration" string="Configuration">
                 </page>
-                <page string="Mappings (deprecated)">
+                <page name="mappings" string="Mappings (deprecated)">
                   <field name="mapping_ids" widget="one2many_list" nolabel="1">
                     <tree string="Object Mappings">
                       <field name="model_id" />

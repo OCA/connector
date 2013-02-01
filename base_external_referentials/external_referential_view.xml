@@ -105,13 +105,16 @@
       <field name="view_id" ref="external_referential_view_tree"/>
     </record>
 
-    <menuitem id="ir_ui_menu_external_referentials"
-      name="External Referentials"
-      parent="base.menu_administration" />
+    <menuitem id="menu_connectors_root"
+      name="Connectors" />
 
-    <menuitem id="menu_external_referential"
-      name="External Referentials"
-      parent="ir_ui_menu_external_referentials"
+    <menuitem id="menu_connectors"
+      name="Connectors"
+      parent="menu_connectors_root" />
+
+    <menuitem id="menu_referentials"
+      name="Referentials"
+      parent="menu_connectors"
       action="external_referential_act"/>
 
   </data>

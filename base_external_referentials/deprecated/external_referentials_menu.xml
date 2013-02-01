@@ -2,9 +2,19 @@
 <openerp>
     <data>
 
+
         <menuitem id="menu_deprecated"
           name="Deprecated"
-          parent="ir_ui_menu_external_referentials"/>
+          parent="base.menu_administration"/>
+
+        <menuitem id="ir_ui_menu_external_referentials"
+          name="External Referentials"
+          parent="menu_deprecated" />
+
+        <menuitem id="menu_external_referential"
+          name="External Referentials"
+          parent="ir_ui_menu_external_referentials"
+          action="external_referential_act"/>
 
         <!-- External Referentials Types -->
 

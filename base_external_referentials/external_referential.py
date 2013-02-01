@@ -29,7 +29,9 @@ class external_referential_service(orm.Model):
     def _get_name(self, cr, uid, ids, name, arg, context=None):
         res = {}
         for service in self.browse(cr, uid, ids, context=context):
-            res[service.id] = '%s %s' % (service.type, service.version)
+            res[service.id] = ' '.join(part for part in
+                                       (service.type, service.version)
+                                       if part)
         return res
 
     _columns = {

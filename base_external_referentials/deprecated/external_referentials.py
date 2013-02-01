@@ -170,6 +170,7 @@ class external_mappinglines_template(Model):
         }
 
 
+# TODO move the specialized stuff the the backends
 class external_referential(Model):
     """External referential can have the option _lang_support. It can be equal to :
             - fields_with_main_lang : the fields to create will be organized all in the main lang and only the translatable fields in the others.example : {'main_lang': {trad_field : value, untrad_field: value, trad_field : value, untrad_field : value ...}, 'other_lang': {trad_field: value, trad_field: value}, ...}
@@ -222,8 +223,8 @@ class external_referential(Model):
                                     in REF_VISIBLE_FIELDS.iteritems()
                                     if field_name in fields]
                     field.set('attrs',
-                              "{'invisible': [('type', 'not in', %s)], "
-                              " 'required': [('type', 'in', %s)]} " %
+                              "{'invisible': [('type_name', 'not in', %s)], "
+                              " 'required': [('type_name', 'in', %s)]} " %
                               (referentials, referentials))
                     orm.setup_modifiers(field,
                                         field=result['fields'][field_name],
@@ -270,28 +271,33 @@ class external_referential(Model):
                         }
 
 
-    def import_resources(self, cr, uid, ids, resource_name, method="search_then_read", context=None):
-        """Abstract function to import resources from a shop / a referential...
+    # def import_resources(self, cr, uid, ids, resource_name, method="search_then_read", context=None):
+    #     """Abstract function to import resources from a shop / a referential...
 
-        :param list ids: list of id
-        :param str ressource_name: the resource name to import
-        :param str method: method used for importing the resource (search_then_read,
-            search_then_read_no_loop, search_read, search_read_no_loop )
-        :rtype: dict
-        :return: dictionary with the key "create_ids" and "write_ids" which containt the id created/written
-        """
-        result = {"create_ids" : [], "write_ids" : []}
-        for referential in self.browse(cr, uid, ids, context=context):
-            connector_cls = REGISTRY.get_connector(referential.type, referential.version) # XXX checkme
-            ext_session = ExternalSession(referential) # when implementing this on a shop, pass the shop as 2nd argument
-            connector = connector_cls(ext_session, referential) # XXX the session knows the referential, so do we need both?
-            res = connector.import_resource(cr, uid, resource_name)
-            for key in result:
-                result[key] += res.get(key, [])
-        return result # XXX xmlrpc error
+    #     :param list ids: list of id
+    #     :param str ressource_name: the resource name to import
+    #     :param str method: method used for importing the resource (search_then_read,
+    #         search_then_read_no_loop, search_read, search_read_no_loop )
+    #     :rtype: dict
+    #     :return: dictionary with the key "create_ids" and "write_ids" which containt the id created/written
+    #     """
+    #     result = {"create_ids" : [], "write_ids" : []}
+    #     for referential in self.browse(cr, uid, ids, context=context):
+    #         connector_cls = REGISTRY.get_connector(referential.type, referential.version) # XXX checkme
+    #         ext_session = ExternalSession(referential) # when implementing this on a shop, pass the shop as 2nd argument
+    #         connector = connector_cls(ext_session, referential) # XXX the session knows the referential, so do we need both?
+    #         res = connector.import_resource(cr, uid, resource_name)
+    #         for key in result:
+    #             result[key] += res.get(key, [])
+    #     return result # XXX xmlrpc error
 
-
-
+    def import_referentials(self, cr, uid, ids, context=None):
+        self.import_resources(cr, uid, ids, 'external.referential', context=context)
+        return True
+        # for referential in self.browse(cr, uid, ids, context=context):
+        #     connector = REGISTRY.get_connector(referential.type, referential.version)
+        #     connector.import_resource(cr, uid, 'external.referential', context=context)
+        # return True
 
     def refresh_mapping(self, cr, uid, ids, context=None):
         #This function will reinstate mapping & mapping_lines for registered objects
@@ -335,6 +341,9 @@ class external_referential(Model):
 
 
     _columns = {
+        'location': fields.char('Location'),
+        'apiusername': fields.char('Username'),
+        'apipass': fields.char('Password'),
         'type_id': fields.related('version_id', 'type_id', type='many2one', relation='external.referential.type', string='External Type'),
         'type_name': fields.related('type_id', 'name', type='char', string='External Type Name',
                                     store=True),

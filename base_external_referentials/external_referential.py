@@ -22,59 +22,38 @@
 from openerp.osv import orm, fields
 
 
-class external_referential_service(orm.Model):
-    _name = 'external.referential.service'
-    _description = 'External Services'
-
-    def _get_name(self, cr, uid, ids, name, arg, context=None):
-        res = {}
-        for service in self.browse(cr, uid, ids, context=context):
-            res[service.id] = ' '.join(part for part in
-                                       (service.type, service.version)
-                                       if part)
-        return res
-
-    _columns = {
-        'name': fields.function(
-            _get_name,
-            type='char',
-            string='Name'),
-        'type': fields.char('Service Type', readonly=True, required=True),
-        'version': fields.char('Version', readonly=True),
-        }
+# name of the models usable by external.referential
+available_backends = []
+def add_backend(name):
+    if not name in available_backends:
+        available_backends.append(name)
 
 
 class external_referential(orm.Model):
     _name = 'external.referential'
     _description = 'External Referential'
 
+    def _select_backends(self, cr, uid, context=None):
+        model_obj = self.pool.get('ir.model')
+        ids = model_obj.search(cr, uid,
+                               [('name', 'in', available_backends)],
+                               context=context)
+        res = model_obj.read(cr, uid, ids, ['model', 'name'], context=context)
+        return [(r['model'], r['name']) for r in res]
+
     _columns = {
         'name': fields.char('Name', required=True),
-        'service_id': fields.many2one(
-            'external.referential.service',
-            'External Service',
-            required=True),
-        'service_name': fields.related(
-            'service_id',
-            'name',
-            type='char',
-            string='Service',
-            readonly=True),
+        'backend_id': fields.reference(
+            'External Backend',
+            selection=_select_backends,
+            required=True,
+            size=128),
         'type': fields.related(
-            'service_id',
+            'backend_id',
             'type',
             type='char',
-            string='Service Type',
+            string='Type',
             readonly=True),
-        'version': fields.related(
-            'service_id',
-            'version',
-            type='char',
-            string='Version',
-            readonly=True),
-        'location': fields.char('Location'),
-        'apiusername': fields.char('Username'),
-        'apipass': fields.char('Password'),
     }
 
     def _test_dot_in_name(self, cr, uid, ids, context=None):
@@ -91,10 +70,19 @@ class external_referential(orm.Model):
         ('name_uniq', 'unique (name)', 'Referential names must be unique !')
     ]
 
-    def import_referentials(self, cr, uid, ids, context=None):
-        for referential in self.browse(cr, uid, ids, context=context):
-            pass  # TODO call the task to import the referentials
-        return True
+
+class external_backend(orm.AbstractModel):
+    """ An instance of an external backend to synchronize with.
+
+    The backends have to inherited this model in the connectors modules.
+    """
+    _name = 'external.backend'
+
+    _columns = {
+        'type': fields.char('Type', readonly=True)
+    }
+
+
 
 
 class ir_model_data(orm.Model):

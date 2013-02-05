@@ -11,13 +11,12 @@ ADMIN_USER_ID = common.ADMIN_USER_ID
 
 
 class test_connector_session(unittest2.TestCase):
-    """ Try cr.execute with wrong parameters """
+    """ Test ConnectorSession (without original cr and pool) """
 
     def test_empty_session(self):
         """
         Create an session without transaction
         """
-        context = {'lang': 'fr_FR'}
         session = ConnectorSession(DB, ADMIN_USER_ID)
         self.assertEqual(session.dbname, DB)
         self.assertEqual(session.uid, ADMIN_USER_ID)
@@ -87,6 +86,7 @@ class test_connector_session(unittest2.TestCase):
 
 
 class test_connector_session_transaction(common.TransactionCase):
+    """ Test ConnectorSession (with original cr and pool) """
 
     def test_model_with_transaction(self):
         """

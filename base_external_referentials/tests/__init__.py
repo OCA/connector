@@ -21,10 +21,12 @@
 
 
 import test_session
+import test_events
 
 fast_suite = [
 ]
 
 checks = [
-    test_session
+    test_session,
+    test_events,
 ]

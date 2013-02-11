@@ -1,6 +1,6 @@
 import external_referential
 import session
-import events
+import event
 
 from .deprecated import *
 import decorator

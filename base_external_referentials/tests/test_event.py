@@ -2,9 +2,9 @@
 
 import unittest2
 
-from openerp.addons.base_external_referentials.events import Event
+from openerp.addons.base_external_referentials.event import Event
 
-class test_events(unittest2.TestCase):
+class test_event(unittest2.TestCase):
     """ Test Event """
 
     def setUp(self):
@@ -26,7 +26,7 @@ class test_events(unittest2.TestCase):
         self.event.subscribe(self.consumer1, model_names=['res.users'])
         self.assertIn(self.consumer1, self.event._actions['res.users'])
 
-    def test_subscribe_decorator(self):
+    def test_subscribe_decorator_model(self):
         @self.event(model_names=['res.users'])
         def consumer():
             pass

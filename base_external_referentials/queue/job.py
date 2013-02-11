@@ -133,7 +133,7 @@ class OpenERPJobStorage(JobStorage):
         """ Store the Job """
         vals = dict(uuid=job.id,
                     state=job.state,
-                    name=job.name,
+                    name=job.description,
                     func_string=job.func_string)
 
         vals['func'] = dumps((job.func_name,

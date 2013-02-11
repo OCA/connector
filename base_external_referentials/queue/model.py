@@ -19,33 +19,37 @@
 #
 ##############################################################################
 
-from openerp.osv import orm, fields
+import os
+import logging
+from datetime import datetime, timedelta
 
+from openerp.osv import orm, fields
+from openerp.tools import DEFAULT_SERVER_DATETIME_FORMAT
+
+from .job import STATES
 from ..session import ConnectorSession
+
+_logger = logging.getLogger(__name__)
 
 
 class QueueJob(orm.Model):
     """ Job status and result """
     _name = 'queue.job'
-
     _log_access = False
 
     _columns = {
         'worker_id': fields.many2one('queue.worker', string='Worker',
-                                     readonly=True),
+                                     ondelete='set null', readonly=True),
         'uuid': fields.char('UUID', readonly=True, select=True),
-        'user_id': fields.integer('User ID'),
+        'user_id': fields.many2one('res.users', string='User ID'),
         'name': fields.char('Description', readonly=True),
         'func_string': fields.char('Task', readonly=True),
         'func': fields.text('Pickled Job Function', readonly=True),
-        'state': fields.selection([('pending', 'Pending'),
-                                   ('queued', 'Queued'),
-                                   ('started', 'Started'),
-                                   ('failed', 'Failed'),
-                                   ('done', 'Done')],
+        'state': fields.selection(STATES,
                                   string='State',
                                   readonly=True),
         'exc_info': fields.text('Exception Info', readonly=True),
+        'result': fields.text('Result', readonly=True),
         'date_created': fields.datetime('Created Date', readonly=True),
         'date_started': fields.datetime('Start Date', readonly=True),
         'date_enqueued': fields.datetime('Enqueue Time', readonly=True),
@@ -60,11 +64,154 @@ class QueueJob(orm.Model):
 
 class QueueWorker(orm.Model):
     """ Worker """
-
     _name = 'queue.worker'
-
     _log_access = False
+
+    worker_timeout = 5 * 60  # seconds
+    _worker = None
 
     _columns = {
         'uuid': fields.char('UUID', readonly=True, select=True),
+        'pid': fields.char('PID', readonly=True),
+        'date_start': fields.datetime('Start Date', readonly=True),
+        'date_alive': fields.datetime('Last Alive Check', readonly=True),
+        'job_ids': fields.one2many('jobs.storage', 'worker_id',
+                                   string='Jobs', readonly=True),
         }
+
+    def _notify_alive(self, cr, uid, worker, context=None):
+        worker_ids = self.search(cr, uid,
+                                 [('uuid', '=', worker.uuid)],
+                                 context=context)
+
+        now_fmt = datetime.now().strftime(DEFAULT_SERVER_DATETIME_FORMAT)
+        if not worker_ids:
+            self.create(cr, uid,
+                        {'uuid': worker.uuid,
+                         'pid': os.getpid(),
+                         'date_start': now_fmt,
+                         'date_alive': now_fmt},
+                        context=context)
+            self._worker = worker
+        else:
+            self.write(cr, uid, worker_ids,
+                       {'date_alive': now_fmt}, context=context)
+
+    def _purge_dead_workers(self, cr, uid, context=None):
+        deadline = datetime.now() - timedelta(seconds=self.worker_timeout)
+        deadline_fmt = deadline.strftime(DEFAULT_SERVER_DATETIME_FORMAT)
+        dead_ids = self.search(cr, uid,
+                               [('date_alive', '<', deadline_fmt)],
+                               context=context)
+        dead_workers = self.read(cr, uid, dead_ids, ['uuid'], context=context)
+        for worker in dead_workers:
+            _logger.debug('Worker %s is dead', worker['uuid'])
+            # exists in self._workers only for the same process and pool
+            if worker['uuid'] == self._worker:
+                _logger.error('Worker %s should be alive, '
+                              'but appears to be dead.',
+                              worker['uuid'])
+                self._worker = None
+        # it will set worker_id to null on jobs, freeing them for
+        # another worker
+        self.unlink(cr, uid, dead_ids, context=context)
+
+    def _worker_id(self, cr, uid, context=None):
+        assert self._worker
+        worker_ids = self.search(cr, uid, [('uuid', '=', self._worker.uuid)],
+                                 context=context)
+        assert len(worker_ids) == 1
+        return worker_ids[0]
+
+    def assign_then_enqueue(self, cr, uid, max_jobs=None, context=None):
+        """ Assign all the jobs not already assigned to a worker.
+        Then enqueue all the jobs having a worker but not enqueued.
+
+        Each operation is atomic.
+
+        .. warning:: commit transaction
+           ``cr.commit()`` is called, so please always call
+           this method in your own transaction, not in the main
+           OpenERP's transaction
+
+        :param max_jobs: maximal limit of jobs to assign on a worker
+        :type max_jobs: int
+        """
+        self.assign_jobs(cr, uid, max_jobs=max_jobs, context=context)
+        cr.commit()
+        self.enqueue_jobs(cr, uid, context=context)
+        cr.commit()
+        return True
+
+    def assign_jobs(self, cr, uid, max_jobs=None, context=None):
+        """ Assign ``n`` jobs to the worker of the current process
+
+        ``n`` is ``max_jobs`` or unlimited if ``max_jobs`` is None
+
+        :param max_jobs: maximal limit of jobs to assign on a worker
+        :type max_jobs: int
+        """
+        if self._worker:
+            self._assign_jobs(cr, uid, max_jobs=max_jobs, context=context)
+        else:
+            _logger.debug('No worker started for process %s', os.getpid())
+        return True
+
+    def enqueue_jobs(self, cr, uid, context=None):
+        """ Enqueue all the jobs assigned to the worker of the current
+        process
+        """
+        if self._worker:
+            self._enqueue_jobs(cr, uid, context=context)
+        else:
+            _logger.debug('No worker started for process %s', os.getpid())
+        return True
+
+    def _assign_jobs(self, cr, uid, max_jobs=None, context=None):
+        sql = ("SELECT id FROM queue_job "
+               "WHERE worker_id IS NULL "
+               "AND state not in ('failed', 'done') ")
+        if max_jobs is not None:
+            sql += ' LIMIT %d' % max_jobs
+        sql += ' FOR UPDATE NOWAIT'
+        # use a SAVEPOINT to be able to rollback this part of the
+        # transaction without failing the whole transaction if the LOCK
+        # cannot be acquired
+        cr.execute("SAVEPOINT queue_assign_jobs")
+        try:
+            cr.execute(sql, log_exceptions=False)
+        except Exception:
+            # Here it's likely that the FOR UPDATE NOWAIT failed to get the LOCK,
+            # so we ROLLBACK to the SAVEPOINT to restore the transaction to its earlier
+            # state. The assign will be done the next time.
+            cr.execute("ROLLBACK TO queue_assign_jobs")
+            _logger.warning("Failed attempt to assign jobs, likely due "
+                            "to another transaction already in progress. Next "
+                            "attempt is likely to work. Detailed error "
+                            "available at DEBUG level.")
+            _logger.debug("Trace of the failed assignment of jobs on worker "
+                          "%s attempt: ", self._worker.uuid, exc_info=True)
+        job_rows = cr.fetchall()
+        if not job_rows:
+            _logger.debug('No job to assign to worker %s', self._worker.uuid)
+            return
+        job_ids = [id for id, in job_rows]
+
+        worker_id = self._worker_id(cr, uid, context=context)
+        _logger.debug('Assign %d jobs to worker %s', len(job_ids),
+                      self._worker.uuid)
+        self.pool.get('jobs.storage').write(cr, uid, job_ids,
+                                            {'state': 'pending',
+                                             'worker_id': worker_id},
+                                            context=context)
+
+    def _enqueue_jobs(self, cr, uid, context=None):
+        """ Called by an ir.cron, add to the queue all the jobs not
+        already queued"""
+        db_worker_id = self._worker_id(cr, uid, context=context)
+        db_worker = self.browse(cr, uid, db_worker_id, context=context)
+        session = ConnectorSession.use_existing_cr(
+                cr, uid, self.pool, self._name, context=context)
+        for job in db_worker.job_ids:
+            if job.state == 'pending':
+                self._worker.enqueue_job_uuid(session, job.uuid)

@@ -359,3 +359,21 @@ class Job(object):
 
     def __repr__(self):
         return '<Job %s, priority:%d>' % (self.id, self.priority)
+
+
+def job(func):
+    """ Decorator for jobs.
+
+    Add a ``delay`` attribute on the decorated function.
+
+    When ``delay`` is called, the function is transformed to a job and
+    stored in the OpenERP queue.job model. The arguments and keyword
+    arguments given in ``delay`` will be the arguments used by the
+    decorated function when it is executed.
+    """
+    def delay(session, *args, **kwargs):
+        OpenERPJobStorage.enqueue_resolve_args(session, func, *args, **kwargs)
+    func.delay = delay
+    return func
+
+

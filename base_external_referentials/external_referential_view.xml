@@ -107,7 +107,7 @@
 
     <menuitem id="menu_connectors_root"
       name="Connectors"
-      group="group_connector_manager"/>
+      groups="group_connector_manager"/>
 
     <menuitem id="menu_connectors"
       name="Connectors"

@@ -20,15 +20,29 @@
 ##############################################################################
 
 
-import test_session
-import test_event
-import test_job
+class ConnectorException(RuntimeError):
+    """ Base Exception for the connectors """
 
-fast_suite = [
-]
 
-checks = [
-    test_session,
-    test_event,
-    test_job,
-]
+class InvalidDataError(ConnectorException):
+    """ Data Invalid """
+
+
+class JobError(ConnectorException):
+    """ A job had an error """
+
+
+class NoSuchJobError(JobError):
+    """ The job does not exist. """
+
+
+class NotReadableJobError(JobError):
+    """ The job cannot be read from the storage. """
+
+
+class FailedJobError(JobError):
+    """ A job had an error having to be resolved. """
+
+
+class RetryableJobError(JobError):
+    """ A job had an error but can be retried. """

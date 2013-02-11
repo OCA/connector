@@ -19,16 +19,7 @@
 #
 ##############################################################################
 
-
-import test_session
-import test_event
-import test_job
-
-fast_suite = [
-]
-
-checks = [
-    test_session,
-    test_event,
-    test_job,
-]
+from .queue import *
+from .job import *
+from .worker import *
+import model

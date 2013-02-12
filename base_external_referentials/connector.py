@@ -19,19 +19,11 @@
 #
 ##############################################################################
 
-import test_session
-import test_event
-import test_job
-import test_queue
-import test_worker
+from openerp.osv import orm
 
-fast_suite = [
-]
 
-checks = [
-    test_session,
-    test_event,
-    test_job,
-    test_queue,
-    test_worker,
-]
+class connectors_installed(orm.AbstractModel):
+    """Empty model used to know if the module is installed on the
+    database.
+    """
+    _name = 'connectors.installed'

@@ -310,7 +310,7 @@ class Job(object):
         :param session: session execute the job
         :type session: ConnectorSession
         """
-        with session.transaction().change_user(self.user_id):
+        with session.change_user(self.user_id):
             self.result = self.func(session, *self.args, **self.kwargs)
         return self.result
 

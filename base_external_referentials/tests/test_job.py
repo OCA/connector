@@ -4,7 +4,14 @@ import mock
 import unittest2
 from datetime import datetime, timedelta
 
-from openerp.addons.base_external_referentials.queue.job import Job
+import openerp
+import openerp.tests.common as common
+from openerp.addons.base_external_referentials.queue.job import (
+        Job, OpenERPJobStorage, job,
+        ENQUEUED, STARTED, DONE, FAILED)
+from openerp.addons.base_external_referentials.session import (
+        ConnectorSession)
+from .common import mock_now
 
 
 def task_b(session):
@@ -63,3 +70,72 @@ class test_job(unittest2.TestCase):
                   kwargs={'c': '!'})
         result = job.perform(self.session)
         self.assertEqual(result, 'ok!')
+
+class test_job_storage(common.TransactionCase):
+    """ Test storage of jobs """
+
+    def setUp(self):
+        super(test_job_storage, self).setUp()
+        self.pool = openerp.modules.registry.RegistryManager.get(common.DB)
+        self.session = ConnectorSession.use_existing_cr(
+                self.cr,
+                self.uid,
+                self.pool)
+        self.queue_job = self.registry('queue.job')
+
+    def test_store(self):
+        job = Job(func=task_a)
+        storage = OpenERPJobStorage(self.session)
+        storage.store(job)
+        stored = self.queue_job.search(
+                self.cr, self.uid,
+                [('uuid', '=', job.id)])
+        self.assertEqual(len(stored), 1)
+
+    def test_read(self):
+        only_after = datetime.now() + timedelta(hours=5)
+        job = Job(func=dummy_task_args,
+                  args=('o', 'k'),
+                  kwargs={'c': '!'},
+                  priority=15,
+                  only_after=only_after)
+        job.user_id = 1
+        storage = OpenERPJobStorage(self.session)
+        storage.store(job)
+        job_read = storage.load(job.id)
+        self.assertEqual(job.id, job_read.id)
+        self.assertEqual(job.func, job_read.func)
+        self.assertEqual(job.args, job_read.args)
+        self.assertEqual(job.kwargs, job_read.kwargs)
+        self.assertEqual(job.func_name, job_read.func_name)
+        self.assertEqual(job.func_string, job_read.func_string)
+        self.assertEqual(job.description, job_read.description)
+        self.assertEqual(job.state, job_read.state)
+        self.assertEqual(job.priority, job_read.priority)
+        self.assertEqual(job.exc_info, job_read.exc_info)
+        self.assertEqual(job.result, job_read.result)
+        self.assertEqual(job.user_id, job_read.user_id)
+        self.assertEqual(job.user_id, job_read.user_id)
+        delta = timedelta(seconds=1)  # DB does not keep milliseconds
+        self.assertAlmostEqual(job.date_created, job_read.date_created,
+                               delta=delta)
+        self.assertAlmostEqual(job.date_started, job_read.date_started,
+                               delta=delta)
+        self.assertAlmostEqual(job.date_enqueued, job_read.date_enqueued,
+                               delta=delta)
+        self.assertAlmostEqual(job.date_done, job_read.date_done,
+                               delta=delta)
+        self.assertAlmostEqual(job.only_after, job_read.only_after,
+                               delta=delta)
+
+    def test_job_delay(self):
+        deco_task = job(task_a)
+        task_a.delay(self.session)
+        stored = self.queue_job.search(self.cr, self.uid, [])
+        self.assertEqual(len(stored), 1)
+
+    def test_job_delay_args(self):
+        deco_task = job(dummy_task_args)
+        task_a.delay(self.session, 'o', 'k', c='!')
+        stored = self.queue_job.search(self.cr, self.uid, [])
+        self.assertEqual(len(stored), 1)

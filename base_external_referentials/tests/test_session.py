@@ -104,12 +104,13 @@ class test_connector_session_transaction(common.TransactionCase):
         """
         Use a session as a container for an existing cursor
         """
+        pool = openerp.modules.registry.RegistryManager.get(common.DB)
         session = ConnectorSession.use_existing_cr(self.cr,
                                                    self.uid,
-                                                   self.registry)
+                                                   pool)
         self.assertEqual(session.cr, self.cr)
         self.assertEqual(session.uid, self.uid)
-        self.assertEqual(session.pool, self.registry)
+        self.assertEqual(session.pool, pool)
         with self.assertRaises(AssertionError):
             with session.transaction():
                 pass

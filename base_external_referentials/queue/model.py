@@ -48,6 +48,7 @@ class QueueJob(orm.Model):
         'state': fields.selection(STATES,
                                   string='State',
                                   readonly=True),
+        'priority': fields.integer('Priority'),
         'exc_info': fields.text('Exception Info', readonly=True),
         'result': fields.text('Result', readonly=True),
         'date_created': fields.datetime('Created Date', readonly=True),

@@ -85,7 +85,7 @@ class JobStorage(object):
 class OpenERPJobStorage(JobStorage):
     """ Store a job on OpenERP """
 
-    _storage_model_name = 'jobs.storage'
+    _storage_model_name = 'queue.job'
 
     def __init__(self, session):
         super(OpenERPJobStorage, self).__init__()
@@ -134,7 +134,8 @@ class OpenERPJobStorage(JobStorage):
         vals = dict(uuid=job.id,
                     state=job.state,
                     name=job.description,
-                    func_string=job.func_string)
+                    func_string=job.func_string,
+                    priority=job.priority)
 
         vals['func'] = dumps((job.func_name,
                               job.args,
@@ -164,7 +165,7 @@ class OpenERPJobStorage(JobStorage):
 
         vals['user_id'] = job.user_id
 
-        if self.exists(job):
+        if self.exists(job.id):
             self.storage_model.write(
                     self.session.cr,
                     self.session.uid,
@@ -222,7 +223,7 @@ class OpenERPJobStorage(JobStorage):
         job.state = stored.state
         job.result = stored.result if stored.result else None
         job.exc_info = stored.exc_info if stored.exc_info else None
-        job.user_id = stored.user_id
+        job.user_id = stored.user_id.id if stored.user_id else None
         return job
 
 
@@ -293,6 +294,9 @@ class Job(object):
         self.user_id = None
 
     def __cmp__(self, other):
+        if not isinstance(other, Job):
+            raise TypeError("Job.__cmp__(self, other) requires other to be "
+                            "a 'Job', not a '%s'" % type(other))
         self_after = self.only_after or datetime(MINYEAR, 1, 1)
         other_after = other.only_after or datetime(MINYEAR, 1, 1)
         return cmp((self_after, self.priority),
@@ -372,8 +376,6 @@ def job(func):
     decorated function when it is executed.
     """
     def delay(session, *args, **kwargs):
-        OpenERPJobStorage.enqueue_resolve_args(session, func, *args, **kwargs)
+        OpenERPJobStorage(session).enqueue_resolve_args(func, *args, **kwargs)
     func.delay = delay
     return func
-
-

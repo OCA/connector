@@ -19,4 +19,26 @@
 #
 ##############################################################################
 
+import logging
+from Queue import PriorityQueue
 
+_logger = logging.getLogger(__name__)
+
+
+class JobsQueue(object):
+    """ Holds the jobs planned for execution in memory.
+
+    The Jobs are sorted, the higher the priority is,
+    the earlier the jobs are dequeued.
+    """
+
+    def __init__(self):
+        self._queue = PriorityQueue()
+
+    def enqueue(self, job):
+        self._queue.put_nowait(job)
+
+    def dequeue(self):
+        """ Take the first job according to its priority
+        and return it"""
+        return self._queue.get()

@@ -4,6 +4,7 @@ import unittest2
 
 from openerp.addons.base_external_referentials.event import Event
 
+
 class test_event(unittest2.TestCase):
     """ Test Event """
 

@@ -22,6 +22,7 @@
 import test_session
 import test_event
 import test_job
+import test_queue
 
 fast_suite = [
 ]
@@ -30,4 +31,5 @@ checks = [
     test_session,
     test_event,
     test_job,
+    test_queue,
 ]

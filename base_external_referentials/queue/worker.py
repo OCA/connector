@@ -137,7 +137,7 @@ class Worker(threading.Thread):
         It dequeues the jobs one per one and execute the jobs.
         """
         while 1:
-            # check if the the worker has to exit
+            # check if the worker has to exit
             if self.watcher.worker_lost(self):
                 break
             job = self.queue.dequeue()
@@ -171,9 +171,9 @@ class WorkerWatcher(threading.Thread):
             raise Exception('Database %s already has a worker (%s)' %
                             (db_name, self.workers[db_name].uuid))
         worker = Worker(db_name, self)
+        self.workers[db_name] = worker
         worker.daemon = True
         worker.start()
-        self.workers[db_name] = worker
 
     def delete(self, db_name):
         """ Delete worker for the database """
@@ -211,7 +211,7 @@ class WorkerWatcher(threading.Thread):
     def run(self):
         while 1:
             self._update_databases()
-            for db_name, worker in self.workers.iteritems():
+            for db_name, worker in self.workers.items():
                 self.check_alive(db_name, worker)
             time.sleep(WAIT_CHECK_WORKER_ALIVE)
 
@@ -219,8 +219,9 @@ class WorkerWatcher(threading.Thread):
         session = ConnectorSession(db_name,
                                    openerp.SUPERUSER_ID)
         with session.transaction():
-            self._notify_alive(session, worker)
-            session.commit()
+            if worker.is_alive():
+                self._notify_alive(session, worker)
+                session.commit()
             self._purge_dead_workers(session, worker)
             session.commit()
 

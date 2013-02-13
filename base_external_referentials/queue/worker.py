@@ -31,7 +31,7 @@ from StringIO import StringIO
 import openerp
 import openerp.modules.registry as registry_module
 from .queue import JobsQueue
-from ..session import ConnectorSession
+from ..session import ConnectorSessionHandler
 from .job import (OpenERPJobStorage,
                   ENQUEUED,
                   STARTED,
@@ -64,8 +64,8 @@ class Worker(threading.Thread):
 
     def run_job(self, job):
         """ Execute a job """
-        session = ConnectorSession(self.db_name,
-                                   openerp.SUPERUSER_ID)
+        session_hdl = ConnectorSessionHandler(self.db_name,
+                                          openerp.SUPERUSER_ID)
         try:
             job = self._load_job(job)
             if job is None:
@@ -84,23 +84,23 @@ class Worker(threading.Thread):
                 time.sleep(WAIT_WHEN_ONLY_AFTER_JOBS)
                 return
 
-            with session.transaction():
+            with session_hdl.session() as session:
                 job.set_state(STARTED)
                 self.job_storage_class(session).store(job)
 
             _logger.debug('%s started', job)
-            with session.transaction():
+            with session_hdl.session() as session:
                 job.perform(session)
             _logger.debug('%s done', job)
 
-            with session.transaction():
+            with session_hdl.session() as session:
                 job.set_state(DONE)
                 self.job_storage_class(session).store(job)
 
         except RetryableJobError:
             # delay the job later
             job.only_after = timedelta(seconds=RETRY_JOB_TIMEDELTA)
-            with session.transaction():
+            with session_hdl.session() as session:
                 self.job_storage_class(session).store(job)
 
         except (FailedJobError, Exception):  # XXX Exception?
@@ -110,16 +110,16 @@ class Worker(threading.Thread):
             traceback.print_exc(file=buff)
             _logger.error(buff.getvalue())
 
-            with session.transaction():
+            with session_hdl.session() as session:
                 job.set_state(FAILED, exc_info=buff.getvalue())
                 self.job_storage_class(session).store(job)
             raise
 
     def _load_job(self, job):
         """ Reload a job from the backend """
-        session = ConnectorSession(self.db_name,
-                                   openerp.SUPERUSER_ID)
-        with session.transaction():
+        session_hdl = ConnectorSessionHandler(self.db_name,
+                                              openerp.SUPERUSER_ID)
+        with session_hdl.session() as session:
             try:
                 job = self.job_storage_class(session).load(job.uuid)
             except NoSuchJobError:
@@ -148,13 +148,15 @@ class Worker(threading.Thread):
             except:
                 continue
 
-    def enqueue_job_uuid(self, session, job_uuid):
+    def enqueue_job_uuid(self, job_uuid):
         """ Enqueue a job:
 
         It will be executed by the worker as soon as possible (according
         to the job's priority
         """
-        with session.transaction():
+        session_hdl = ConnectorSessionHandler(self.db_name,
+                                              openerp.SUPERUSER_ID)
+        with session_hdl.session() as session:
             try:
                 job = self.job_storage_class(session).load(job_uuid)
             except NoSuchJobError:
@@ -165,8 +167,10 @@ class Worker(threading.Thread):
                 raise
             job.set_state(ENQUEUED)
             self.job_storage_class(session).store(job)
-            self.queue.enqueue(job)
-            _logger.debug('%s enqueued in %s', job.uuid, self.uuid)
+        # the change of state should be commited before
+        # the enqueue otherwise we may have concurrent updates
+        self.queue.enqueue(job)
+        _logger.debug('%s enqueued in %s', job.uuid, self.uuid)
 
 
 class WorkerWatcher(threading.Thread):
@@ -251,9 +255,9 @@ class WorkerWatcher(threading.Thread):
         Check if the other workers are still alive, if they are
         dead, remove them from the worker's pool.
         """
-        session = ConnectorSession(db_name,
-                                   openerp.SUPERUSER_ID)
-        with session.transaction():
+        session_hdl = ConnectorSessionHandler(db_name,
+                                          openerp.SUPERUSER_ID)
+        with session_hdl.session() as session:
             if worker.is_alive():
                 self._notify_alive(session, worker)
                 session.commit()
@@ -293,4 +297,3 @@ def start_service():
     watcher.start()
 
 start_service()
-

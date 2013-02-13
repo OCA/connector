@@ -304,7 +304,7 @@ class Job(object):
 
         The job is executed with the user which has initiated it.
 
-        :param session: session execute the job
+        :param session: session to execute the job
         :type session: ConnectorSession
         """
         with session.change_user(self.user_id):

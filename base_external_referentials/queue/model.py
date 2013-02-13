@@ -27,7 +27,7 @@ from openerp.osv import orm, fields
 from openerp.tools import DEFAULT_SERVER_DATETIME_FORMAT
 
 from .job import STATES
-from ..session import ConnectorSession
+from ..session import ConnectorSessionHandler
 
 _logger = logging.getLogger(__name__)
 
@@ -213,7 +213,6 @@ class QueueWorker(orm.Model):
         already queued"""
         db_worker_id = self._worker_id(cr, uid, context=context)
         db_worker = self.browse(cr, uid, db_worker_id, context=context)
-        session = ConnectorSession(cr.dbname, uid, context=context)
         for job in db_worker.job_ids:
             if job.state == 'pending':
-                self._worker.enqueue_job_uuid(session, job.uuid)
+                self._worker.enqueue_job_uuid(job.uuid)

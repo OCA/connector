@@ -136,7 +136,7 @@ class Worker(threading.Thread):
         Check if it still exists in the ``watcher``. When it does no
         longer exist, it break the loop so the thread stops properly.
 
-        It dequeues the jobs one per one and execute the jobs.
+        Wait for jobs and execute them sequentially.
         """
         while 1:
             # check if the worker has to exit
@@ -149,6 +149,11 @@ class Worker(threading.Thread):
                 continue
 
     def enqueue_job_uuid(self, session, job_uuid):
+        """ Enqueue a job:
+
+        It will be executed by the worker as soon as possible (according
+        to the job's priority
+        """
         with session.transaction():
             try:
                 job = self.job_storage_class(session).load(job_uuid)
@@ -199,6 +204,13 @@ class WorkerWatcher(threading.Thread):
 
     @staticmethod
     def available_registries():
+        """ Yield the registries which are available.
+
+        Available means that they can be used by a `Worker`.
+
+        :return: database name, registry
+        :rtype: tuple
+        """
         registries = registry_module.RegistryManager.registries
         for db_name, registry in registries.iteritems():
             if not 'connectors.installed' in registry.models:
@@ -207,7 +219,14 @@ class WorkerWatcher(threading.Thread):
                 continue
             yield db_name, registry
 
-    def _update_databases(self):
+    def _update_workers(self):
+        """ Refresh the list of workers according to the available
+        databases and registries.
+
+        A new database can be available, so we need to create a new
+        `Worker` or a database could have been dropped, so we have to
+        discard the Worker.
+        """
         for db_name, _registry in self.available_registries():
             if db_name not in self.workers:
                 self.new(db_name)
@@ -219,20 +238,26 @@ class WorkerWatcher(threading.Thread):
             self.delete(removed_db)
 
     def run(self):
+        """ `WorkerWatcher`'s main loop """
         while 1:
-            self._update_databases()
+            self._update_workers()
             for db_name, worker in self.workers.items():
                 self.check_alive(db_name, worker)
             time.sleep(WAIT_CHECK_WORKER_ALIVE)
 
     def check_alive(self, db_name, worker):
+        """ Check if the the worker is still alive and notify
+        its aliveness.
+        Check if the other workers are still alive, if they are
+        dead, remove them from the worker's pool.
+        """
         session = ConnectorSession(db_name,
                                    openerp.SUPERUSER_ID)
         with session.transaction():
             if worker.is_alive():
                 self._notify_alive(session, worker)
                 session.commit()
-            self._purge_dead_workers(session, worker)
+            self._purge_dead_workers(session)
             session.commit()
 
     def _notify_alive(self, session, worker):
@@ -244,7 +269,7 @@ class WorkerWatcher(threading.Thread):
                                    worker,
                                    context=session.context)
 
-    def _purge_dead_workers(self, session, worker):
+    def _purge_dead_workers(self, session):
         dbworker_obj = session.pool.get('queue.worker')
         dbworker_obj._purge_dead_workers(session.cr,
                                          session.uid,
@@ -263,6 +288,7 @@ registry_module.RegistryManager.delete = classmethod(delete)
 
 
 def start_service():
+    """ Start the watcher """
     watcher.daemon = True
     watcher.start()
 

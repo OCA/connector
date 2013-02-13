@@ -89,7 +89,7 @@ class test_job_storage(common.TransactionCase):
         storage.store(job)
         stored = self.queue_job.search(
                 self.cr, self.uid,
-                [('uuid', '=', job.id)])
+                [('uuid', '=', job.uuid)])
         self.assertEqual(len(stored), 1)
 
     def test_read(self):
@@ -102,8 +102,8 @@ class test_job_storage(common.TransactionCase):
         job.user_id = 1
         storage = OpenERPJobStorage(self.session)
         storage.store(job)
-        job_read = storage.load(job.id)
-        self.assertEqual(job.id, job_read.id)
+        job_read = storage.load(job.uuid)
+        self.assertEqual(job.uuid, job_read.uuid)
         self.assertEqual(job.func, job_read.func)
         self.assertEqual(job.args, job_read.args)
         self.assertEqual(job.kwargs, job_read.kwargs)
@@ -114,7 +114,6 @@ class test_job_storage(common.TransactionCase):
         self.assertEqual(job.priority, job_read.priority)
         self.assertEqual(job.exc_info, job_read.exc_info)
         self.assertEqual(job.result, job_read.result)
-        self.assertEqual(job.user_id, job_read.user_id)
         self.assertEqual(job.user_id, job_read.user_id)
         delta = timedelta(seconds=1)  # DB does not keep milliseconds
         self.assertAlmostEqual(job.date_created, job_read.date_created,

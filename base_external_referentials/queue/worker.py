@@ -33,6 +33,7 @@ import openerp.modules.registry as registry_module
 from .queue import JobsQueue
 from ..session import ConnectorSession
 from .job import (OpenERPJobStorage,
+                  ENQUEUED,
                   STARTED,
                   FAILED,
                   DONE)
@@ -86,10 +87,10 @@ class Worker(threading.Thread):
             with session.transaction():
                 job.set_state(session, STARTED)
 
-            _logger.debug('Starting: %s', job)
+            _logger.debug('Job %s started', job)
             with session.transaction():
                 job.perform(session)
-            _logger.debug('Done: %s', job)
+            _logger.debug('Job %s done', job)
 
             with session.transaction():
                 job.set_state(session, DONE)
@@ -118,7 +119,7 @@ class Worker(threading.Thread):
                                    openerp.SUPERUSER_ID)
         with session.transaction():
             try:
-                job = self.job_storage_class(session).load(job.id)
+                job = self.job_storage_class(session).load(job.uuid)
             except NoSuchJobError:
                 # just skip it
                 job = None
@@ -144,6 +145,13 @@ class Worker(threading.Thread):
                 self.run_job(job)
             except:
                 continue
+
+    def enqueue_job_uuid(self, session, job_uuid):
+        with session.transaction():
+            job = self.job_storage_class(session).load(job_uuid)
+            job.set_state(session, ENQUEUED)
+            self.queue.enqueue(job)
+            _logger.debug('Job %s enqueued in Worker %s', job.uuid, self.uuid)
 
 
 class WorkerWatcher(threading.Thread):

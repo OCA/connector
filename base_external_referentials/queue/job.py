@@ -73,11 +73,11 @@ class JobStorage(object):
         """ Store a job """
         raise NotImplementedError
 
-    def load(self, job_id):
+    def load(self, job_uuid):
         """ Read the job's data from the storage """
         raise NotImplementedError
 
-    def exists(self, job_id):
+    def exists(self, job_uuid):
         """Returns if a job still exists in the storage."""
         raise NotImplementedError
 
@@ -110,16 +110,16 @@ class OpenERPJobStorage(JobStorage):
                             priority=priority,
                             only_after=only_after)
 
-    def exists(self, job_id):
+    def exists(self, job_uuid):
         """Returns if a job still exists in the storage."""
-        return bool(self._openerp_id(job_id))
+        return bool(self._openerp_id(job_uuid))
 
-    def _openerp_id(self, job_id):
+    def _openerp_id(self, job_uuid):
         openerp_id = None
         job_ids = self.storage_model.search(
                 self.session.cr,
                 SUPERUSER_ID,
-                [('uuid', '=', job_id)],
+                [('uuid', '=', job_uuid)],
                 context=self.session.context,
                 limit=1)
         if job_ids:
@@ -127,11 +127,11 @@ class OpenERPJobStorage(JobStorage):
         return openerp_id
 
     def openerp_id(self, job):
-        return self._openerp_id(job.id)
+        return self._openerp_id(job.uuid)
 
     def store(self, job):
         """ Store the Job """
-        vals = dict(uuid=job.id,
+        vals = dict(uuid=job.uuid,
                     state=job.state,
                     name=job.description,
                     func_string=job.func_string,
@@ -165,7 +165,7 @@ class OpenERPJobStorage(JobStorage):
 
         vals['user_id'] = job.user_id
 
-        if self.exists(job.id):
+        if self.exists(job.uuid):
             self.storage_model.write(
                     self.session.cr,
                     self.session.uid,
@@ -179,14 +179,14 @@ class OpenERPJobStorage(JobStorage):
                     vals,
                     self.session.context)
 
-    def load(self, job_id):
+    def load(self, job_uuid):
         """ Read a job from the Database"""
-        if not self.exists(job_id):
+        if not self.exists(job_uuid):
             raise NoSuchJobError(
-                    '%s does no longer exist in the storage.' % job_id)
+                    '%s does no longer exist in the storage.' % job_uuid)
         stored = self.storage_model.browse(self.session.cr,
                                            self.session.uid,
-                                           self._openerp_id(job_id),
+                                           self._openerp_id(job_uuid),
                                            context=self.session.context)
 
         func = unpickle(str(stored.func))  # openerp stores them as unicode...
@@ -202,7 +202,7 @@ class OpenERPJobStorage(JobStorage):
 
         job = Job(func=func_name, args=args, kwargs=kwargs,
                   priority=stored.priority, only_after=only_after,
-                  job_id=stored.uuid)
+                  job_uuid=stored.uuid)
 
         if stored.date_created:
             job.date_created = datetime.strptime(
@@ -232,7 +232,7 @@ class Job(object):
 
     def __init__(self, func=None,
                  args=None, kwargs=None, priority=None,
-                 only_after=None, job_id=None):
+                 only_after=None, job_uuid=None):
         """ Create a Job
 
         :param func: function to execute
@@ -246,7 +246,7 @@ class Job(object):
         :param only_after: the job can be executed only after this datetime
                            (or now + timedelta)
         :type only_after: datetime or timedelta
-        :param job_id: UUID of the job
+        :param job_uuid: UUID of the job
         """
         if args is None:
             args = ()
@@ -259,7 +259,7 @@ class Job(object):
 
         self.state = PENDING
 
-        self._id = job_id
+        self._uuid = job_uuid
 
         self.func_name = None
         if func:
@@ -325,11 +325,11 @@ class Job(object):
         return self.func.__doc__ or 'Function %s' % self.func.__name__
 
     @property
-    def id(self):
+    def uuid(self):
         """Job ID, this is an UUID """
-        if self._id is None:
-            self._id = unicode(uuid.uuid4())
-        return self._id
+        if self._uuid is None:
+            self._uuid = unicode(uuid.uuid4())
+        return self._uuid
 
     @property
     def func(self):
@@ -376,7 +376,7 @@ class Job(object):
             self.exc_info = exc_info
 
     def __repr__(self):
-        return '<Job %s, priority:%d>' % (self.id, self.priority)
+        return '<Job %s, priority:%d>' % (self.uuid, self.priority)
 
 
 def job(func):

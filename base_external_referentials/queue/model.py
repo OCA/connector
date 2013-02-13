@@ -68,7 +68,9 @@ class QueueWorker(orm.Model):
     _name = 'queue.worker'
     _log_access = False
 
-    worker_timeout = 5 * 60  # seconds
+    # worker_timeout = 5 * 60  # seconds
+    # FIXME: remove test with shorten timeout
+    worker_timeout = 20  # seconds
     _worker = None
 
     _columns = {
@@ -76,7 +78,7 @@ class QueueWorker(orm.Model):
         'pid': fields.char('PID', readonly=True),
         'date_start': fields.datetime('Start Date', readonly=True),
         'date_alive': fields.datetime('Last Alive Check', readonly=True),
-        'job_ids': fields.one2many('jobs.storage', 'worker_id',
+        'job_ids': fields.one2many('queue.job', 'worker_id',
                                    string='Jobs', readonly=True),
         }
 
@@ -201,18 +203,17 @@ class QueueWorker(orm.Model):
         worker_id = self._worker_id(cr, uid, context=context)
         _logger.debug('Assign %d jobs to worker %s', len(job_ids),
                       self._worker.uuid)
-        self.pool.get('jobs.storage').write(cr, uid, job_ids,
-                                            {'state': 'pending',
-                                             'worker_id': worker_id},
-                                            context=context)
+        self.pool.get('queue.job').write(cr, uid, job_ids,
+                                         {'state': 'pending',
+                                          'worker_id': worker_id},
+                                         context=context)
 
     def _enqueue_jobs(self, cr, uid, context=None):
         """ Called by an ir.cron, add to the queue all the jobs not
         already queued"""
         db_worker_id = self._worker_id(cr, uid, context=context)
         db_worker = self.browse(cr, uid, db_worker_id, context=context)
-        session = ConnectorSession.use_existing_cr(
-                cr, uid, self.pool, self._name, context=context)
+        session = ConnectorSession(cr.dbname, uid, context=context)
         for job in db_worker.job_ids:
             if job.state == 'pending':
                 self._worker.enqueue_job_uuid(session, job.uuid)

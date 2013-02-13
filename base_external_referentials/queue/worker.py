@@ -85,15 +85,17 @@ class Worker(threading.Thread):
                 return
 
             with session.transaction():
-                job.set_state(session, STARTED)
+                job.set_state(STARTED)
+                self.job_storage_class(session).store(job)
 
-            _logger.debug('Job %s started', job)
+            _logger.debug('%s started', job)
             with session.transaction():
                 job.perform(session)
-            _logger.debug('Job %s done', job)
+            _logger.debug('%s done', job)
 
             with session.transaction():
-                job.set_state(session, DONE)
+                job.set_state(DONE)
+                self.job_storage_class(session).store(job)
 
         except RetryableJobError:
             # delay the job later
@@ -109,8 +111,8 @@ class Worker(threading.Thread):
             _logger.error(buff.getvalue())
 
             with session.transaction():
-                job.set_state(session, FAILED,
-                              exc_info=buff.getvalue())
+                job.set_state(FAILED, exc_info=buff.getvalue())
+                self.job_storage_class(session).store(job)
             raise
 
     def _load_job(self, job):
@@ -148,10 +150,18 @@ class Worker(threading.Thread):
 
     def enqueue_job_uuid(self, session, job_uuid):
         with session.transaction():
-            job = self.job_storage_class(session).load(job_uuid)
-            job.set_state(session, ENQUEUED)
+            try:
+                job = self.job_storage_class(session).load(job_uuid)
+            except NoSuchJobError:
+                # just skip it
+                return
+            except NotReadableJobError:
+                _logger.exception('Could not read job: %s', job_uuid)
+                raise
+            job.set_state(ENQUEUED)
+            self.job_storage_class(session).store(job)
             self.queue.enqueue(job)
-            _logger.debug('Job %s enqueued in Worker %s', job.uuid, self.uuid)
+            _logger.debug('%s enqueued in %s', job.uuid, self.uuid)
 
 
 class WorkerWatcher(threading.Thread):

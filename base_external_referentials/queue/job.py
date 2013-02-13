@@ -169,7 +169,7 @@ class OpenERPJobStorage(JobStorage):
             self.storage_model.write(
                     self.session.cr,
                     self.session.uid,
-                    self.openerp_id,
+                    self.openerp_id(job),
                     vals,
                     self.session.context)
         else:

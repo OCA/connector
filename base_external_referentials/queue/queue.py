@@ -19,10 +19,7 @@
 #
 ##############################################################################
 
-import logging
 from Queue import PriorityQueue
-
-_logger = logging.getLogger(__name__)
 
 
 class JobsQueue(object):

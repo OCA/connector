@@ -19,7 +19,6 @@
 #
 ##############################################################################
 
-import copy
 import openerp
 
 from contextlib import contextmanager

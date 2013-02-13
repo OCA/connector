@@ -20,17 +20,66 @@
 ##############################################################################
 
 import copy
-import openerp.pooler
+import openerp
 
 from contextlib import contextmanager
 
 
-class ConnectorSession(object):
-    """ Container for the OpenERP transactional stuff:
+class ConnectorSessionHandler(object):
+    """ Allow to create a new `ConnectorSession` for a database.
 
-    .. attribute:: dbname
+    .. attribute:: db_name
 
         The name of the database we're working on
+
+    .. attribute:: uid
+
+        The User ID as integer
+
+    .. attribute:: context
+
+        The current OpenERP's context
+
+    Usage::
+
+        session_hdl = ConnectorSessionHandler(db_name, 1)
+        with session_hdl.session() as session:
+            # work with session
+    """
+
+    def __init__(self, db_name, uid, model_name=None, context=None):
+        self.db_name = db_name
+        self.uid = uid
+        self.model_name = model_name
+        self.context = {} if context is None else context
+
+    @contextmanager
+    def session(self):
+        """ Start a new session and ensure that the session's cursor is:
+
+        * rollbacked on errors
+        * commited at the end of the ``with`` context when no error occured
+        * always closed at the end of the ``with`` context
+        """
+        db = openerp.sql_db.db_connect(self.db_name)
+        session = ConnectorSession(db.cursor(),
+                                   self.uid,
+                                   model_name=self.model_name,
+                                   context=self.context)
+
+        try:
+            yield session
+        except:
+            session.rollback()
+            raise
+        else:
+            session.commit()
+        finally:
+            session.close()
+
+
+class ConnectorSession(object):
+    """ Container for the OpenERP transactional stuff:
 
     .. attribute:: cr
 
@@ -59,63 +108,14 @@ class ConnectorSession(object):
     A session can hold a reference to a model. This is useful
     in the connectors' context because a session's life is usually
     focused on a model (export a product, import a sale order, ...)
-
-    There is 2 usages of a sessions:
-
-    * use the session as a container for the current cursor and the
-      other attributes
-    * open / close transactions using a session
-
-    When you already have a cursor and want to encapsulate it in a
-    `Session`::
-
-        session = ConnectorSession(cr, uid, pool, context=context)
-
-    In this case, you must not commit, rollback or close the cursor.
-
-    When you want to manage yourself the transaction, you can create a
-    session without attaching a cursor and start a transaction using::
-
-        session = ConnectorSession(cr.dbname, uid, context=context)
-        with session.transaction():
-            # work, work, work
-            # self.cr and self.pool are now defined
-
     """
 
-    @classmethod
-    def use_existing_cr(cls, cr, uid, pool, model_name=None, context=None):
-        """ The session will be initialized with the current ``Cursor``
-        and ``pool`` of models, thus, it can be used as a container for the
-        current transaction.
-        """
-        session = cls(cr.dbname, uid, model_name, context)
-        session._cr = cr
-        session.pool = pool
-        return session
-
-    def __init__(self, dbname, uid, model_name=None, context=None):
-        self.dbname = dbname
-        self._cr = None
-        self.pool = None
+    def __init__(self, cr, uid, model_name=None, context=None):
+        self.cr = cr
         self.uid = uid
+        self._pool = None
         self.model_name = model_name
-        if context is None:
-            context = {}
-        self.context = context
-
-    @property
-    def cr(self):
-        """ OpenERP Cursor """
-        assert self._cr is not None, "No cursor"
-        return self._cr
-
-    @property
-    def model(self):
-        """ OpenERP Model """
-        assert self.pool is not None, "No pool"
-        assert self.model_name, "No model name"
-        return self.pool.get(self.model_name)
+        self.context = {} if context is None else context
 
     @contextmanager
     def change_user(self, uid):
@@ -127,31 +127,15 @@ class ConnectorSession(object):
         yield self
         self.uid = current_uid
 
-    @contextmanager
-    def transaction(self):
-        """ Start a new transaction and ensure that it is:
+    @property
+    def pool(self):
+        if self._pool is None:
+            self._pool = openerp.pooler.get_pool(self.cr.dbname)
+        return self._pool
 
-        * rollbacked on errors
-        * commited at the end of the ``with`` context when no error occured
-        * always closed at the end of the ``with`` context
-
-        A transaction cannot be started if another one is already
-        running on the session.
-        """
-        assert self._cr is None, "Transaction already started."
-        db, self.pool = openerp.pooler.get_db_and_pool(self.dbname)
-        self._cr = db.cursor()
-        try:
-            yield self
-        except:
-            self.rollback()
-            raise
-        else:
-            self.commit()
-        finally:
-            self.close()
-            self._cr = None
-            self.pool = None
+    @property
+    def model(self):
+        return self.pool.get(self.model_name)
 
     def commit(self):
         """ Commit the cursor """
@@ -164,15 +148,3 @@ class ConnectorSession(object):
     def close(self):
         """ Close the cursor """
         self.cr.close()
-
-    def __copy__(self):
-        return ConnectorSession(self.dbname,
-                                self.uid,
-                                self.model_name,
-                                context=self.context)
-
-    def __deepcopy__(self):
-        return ConnectorSession(self.dbname,
-                                self.uid,
-                                self.model_name,
-                                context=copy.deepcopy(self.context))

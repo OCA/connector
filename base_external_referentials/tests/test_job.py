@@ -77,10 +77,7 @@ class test_job_storage(common.TransactionCase):
     def setUp(self):
         super(test_job_storage, self).setUp()
         self.pool = openerp.modules.registry.RegistryManager.get(common.DB)
-        self.session = ConnectorSession.use_existing_cr(
-                self.cr,
-                self.uid,
-                self.pool)
+        self.session = ConnectorSession(self.cr, self.uid)
         self.queue_job = self.registry('queue.job')
 
     def test_store(self):

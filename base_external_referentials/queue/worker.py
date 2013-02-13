@@ -25,7 +25,7 @@ import threading
 import time
 import traceback
 import uuid
-from datetime import datetime
+from datetime import datetime, timedelta
 from StringIO import StringIO
 
 import openerp
@@ -45,12 +45,14 @@ _logger = logging.getLogger(__name__)
 
 WAIT_CHECK_WORKER_ALIVE = 5  # seconds TODO change to 30 seconds
 WAIT_WHEN_ONLY_AFTER_JOBS = 10  # seconds
+RETRY_JOB_TIMEDELTA = 60 * 10  # seconds
 
 
 class Worker(threading.Thread):
     """ Post and retrieve jobs from the queue, execute them"""
 
     queue_class = JobsQueue
+    job_storage_class = OpenERPJobStorage
 
     def __init__(self, db_name, watcher):
         super(Worker, self).__init__()
@@ -93,9 +95,10 @@ class Worker(threading.Thread):
                 job.set_state(session, DONE)
 
         except RetryableJobError:
-            # TODO: implement the retryable errors:
-            # retryable should be requeued with a only_after date
-            raise NotImplementedError('RetryableJobError to implement')
+            # delay the job later
+            job.only_after = timedelta(seconds=RETRY_JOB_TIMEDELTA)
+            with session.transaction():
+                self.job_storage_class(session).store(job)
 
         except (FailedJobError, Exception):  # XXX Exception?
             # TODO allow to pass a pipeline of exception
@@ -115,7 +118,7 @@ class Worker(threading.Thread):
                                    openerp.SUPERUSER_ID)
         with session.transaction():
             try:
-                job = OpenERPJobStorage(session).load(job.id)
+                job = self.job_storage_class(session).load(job.id)
             except NoSuchJobError:
                 # just skip it
                 job = None
@@ -159,7 +162,10 @@ class WorkerWatcher(threading.Thread):
         if db_name in self.workers:
             raise Exception('Database %s already has a worker (%s)' %
                             (db_name, self.workers[db_name].uuid))
-        self.workers[db_name] = Worker(db_name, self)
+        worker = Worker(db_name, self)
+        worker.daemon = True
+        worker.start()
+        self.workers[db_name] = worker
 
     def delete(self, db_name):
         """ Delete worker for the database """
@@ -173,12 +179,6 @@ class WorkerWatcher(threading.Thread):
         """
         return worker not in self.workers.itervalues()
 
-    def start_worker(self, db_name):
-        """ Start the worker for the database """
-        worker = self.workers[db_name]
-        worker.daemon = True
-        worker.start()
-
     @staticmethod
     def available_registries():
         registries = registry_module.RegistryManager.registries
@@ -190,12 +190,13 @@ class WorkerWatcher(threading.Thread):
             yield db_name, registry
 
     def _update_databases(self):
-        all_db = registry_module.RegistryManager.registries.keys()
         for db_name, _registry in self.available_registries():
             if db_name not in self.workers:
                 self.new(db_name)
-                self.start_worker(db_name)
 
+        # XXX not necessary if we keep the monkey patch of
+        # RegistryManager.delete
+        all_db = registry_module.RegistryManager.registries.keys()
         for removed_db in set(self.workers) ^ set(all_db):
             self.delete(removed_db)
 
@@ -231,9 +232,20 @@ class WorkerWatcher(threading.Thread):
                                          context=session.context)
 
 
+watcher = WorkerWatcher()
+
+
+registry_delete_original = registry_module.RegistryManager.delete
+def delete(cls, db_name):
+    """Delete the registry linked to a given database.  """
+    watcher.delete(db_name)
+    return registry_delete_original(db_name)
+registry_module.RegistryManager.delete = classmethod(delete)
+
+
 def start_service():
-    watcher = WorkerWatcher()
     watcher.daemon = True
     watcher.start()
 
 start_service()
+

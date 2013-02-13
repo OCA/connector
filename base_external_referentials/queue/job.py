@@ -275,10 +275,6 @@ class Job(object):
         self.args = args
         self.kwargs = kwargs
 
-        if isinstance(only_after, timedelta):
-            self.only_after = datetime.now() + only_after
-        else:
-            self.only_after = only_after
         self.priority = priority
         if self.priority is None:
             self.priority = DEFAULT_PRIORITY
@@ -292,6 +288,7 @@ class Job(object):
         self.exc_info = None
 
         self.user_id = None
+        self.only_after = only_after
 
     def __cmp__(self, other):
         if not isinstance(other, Job):
@@ -343,6 +340,23 @@ class Job(object):
         module_name, func_name = func_name.rsplit('.', 1)
         module = importlib.import_module(module_name)
         return getattr(module, func_name)
+
+    @property
+    def only_after(self):
+        return self._only_after
+
+    @only_after.setter
+    def only_after(self, value):
+        if not value:
+            self._only_after = None
+        elif isinstance(value, timedelta):
+            self._only_after = datetime.now() + value
+        elif isinstance(value, datetime):
+            self._only_after = value
+        else:
+            raise ValueError("%s is not a valid type for only_after, "
+                             " it must be a 'timedelta' or a 'datetime'" %
+                             type(value))
 
     def set_state(self, state, result=None, exc_info=None):
         """Change the state of the job."""

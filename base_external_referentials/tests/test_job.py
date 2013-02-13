@@ -125,12 +125,14 @@ class test_job_storage(common.TransactionCase):
                                delta=delta)
 
     def test_job_delay(self):
+        self.cr.execute('delete from queue_job')
         deco_task = job(task_a)
         task_a.delay(self.session)
         stored = self.queue_job.search(self.cr, self.uid, [])
         self.assertEqual(len(stored), 1)
 
     def test_job_delay_args(self):
+        self.cr.execute('delete from queue_job')
         deco_task = job(dummy_task_args)
         task_a.delay(self.session, 'o', 'k', c='!')
         stored = self.queue_job.search(self.cr, self.uid, [])

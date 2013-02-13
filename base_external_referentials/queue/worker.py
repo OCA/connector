@@ -170,7 +170,7 @@ class Worker(threading.Thread):
         # the change of state should be commited before
         # the enqueue otherwise we may have concurrent updates
         self.queue.enqueue(job)
-        _logger.debug('%s enqueued in %s', job.uuid, self.uuid)
+        _logger.debug('%s enqueued in %s', job, self)
 
 
 class WorkerWatcher(threading.Thread):

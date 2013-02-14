@@ -19,6 +19,27 @@
 #
 ##############################################################################
 
+# directions
+TO_REFERENCE = 'to_reference'
+FROM_REFERENCE = 'from_reference'
+
 
 class Mapper(object):
     """ Transform a record to a defined output """
+
+    # name of the OpenERP model, to be defined in concrete classes
+    model_name = None
+    # direction of the conversion (TO_REFERENCE or FROM_REFERENCE)
+    direction = None
+
+    @classmethod
+    def match(cls, model, direction):
+        """ Find the appropriate class to transform the record """
+        if cls.model_name is None:
+            raise NotImplementedError
+        if hasattr(model, '_name'):  # model instance
+            model_name = model._name
+        else:
+            model_name = model  # str
+        return (cls.model_name == model_name and
+                cls.direction == direction)

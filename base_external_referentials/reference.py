@@ -114,34 +114,32 @@ class Reference(object):
             return '<Reference \'%s\', \'%s\'>' % (self.service, self.version)
         return '<Reference \'%s\'>' % self.service
 
-    def get_synchronizer(self, synchro_type, model):
+    def get_synchronizer(self, model, synchro_type):
         synchronizer = None
         for sync in self._synchronizers:
-            if sync.match(synchro_type, model):
+            if sync.match(model, synchro_type):
                 synchronizer = sync
                 break
         if synchronizer is None and self.parent:
-            synchronizer = self.parent.get_synchronizer(synchro_type, model)
+            synchronizer = self.parent.get_synchronizer(model, synchro_type)
         if synchronizer is None:
             raise ValueError('No matching synchronizer found for %s '
-                             'with synchronization_type: %s, model: %s' %
-                             (self, synchro_type, model))
+                             'with model: %s, synchronization_type: %s' %
+                             (self, model, synchro_type))
         return synchronizer
 
-    def get_mapper(self, model, direction, child_of=None):
+    def get_mapper(self, model, direction):
         mapper = None
         for proc in self._mappers:
-            if proc.match(model, direction, child_of=child_of):
+            if proc.match(model, direction):
                 mapper = proc
                 break
         if mapper is None and self.parent:
-            mapper = self.parent.get_mapper(model,
-                                                  direction,
-                                                  child_of=child_of)
+            mapper = self.parent.get_mapper(model, direction)
         if mapper is None:
             raise ValueError('No matching mapper found for %s '
-                             'with model,direction,child_of: %s,%s,%s' %
-                             (self, model, direction, child_of))
+                             'with model,direction: %s, %s' %
+                             (self, model, direction))
         return mapper
 
     def get_backend_adapter(self, model):

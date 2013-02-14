@@ -11,7 +11,9 @@ from openerp.addons.base_external_referentials.synchronizer import (
 from openerp.addons.base_external_referentials.binder import (
         Binder)
 from openerp.addons.base_external_referentials.mapper import (
-        Mapper)
+        Mapper,
+        TO_REFERENCE,
+        FROM_REFERENCE)
 from openerp.addons.base_external_referentials.backend_adapter import (
         BackendAdapter)
 
@@ -73,68 +75,72 @@ class test_reference_register(unittest2.TestCase):
 
     def test_register_synchronizer(self):
         class FrySynchronizer(Synchronizer):
-            pass
+            model_name = 'res.users'
+            synchronization_type = 'export'
 
         self.reference.register_synchronizer(FrySynchronizer)
-        ref = self.reference.get_synchronizer('export', 'res.users')
+        ref = self.reference.get_synchronizer('res.users', 'export')
         self.assertEqual(ref, FrySynchronizer)
         self.reference.unregister_synchronizer(FrySynchronizer)
         with self.assertRaises(ValueError):
-            self.reference.get_synchronizer('export', 'res.users')
+            self.reference.get_synchronizer('res.users', 'export')
 
     def test_register_mapper(self):
         class ZoidbergMapper(Mapper):
-            pass
+            model_name = 'res.users'
+            direction = TO_REFERENCE
 
         self.reference.register_mapper(ZoidbergMapper)
-        ref = self.reference.get_mapper('res.users', 'out')
+        ref = self.reference.get_mapper('res.users', TO_REFERENCE)
         self.assertEqual(ref, ZoidbergMapper)
         self.reference.unregister_mapper(ZoidbergMapper)
         with self.assertRaises(ValueError):
-            self.reference.get_mapper('export', 'res.users')
+            self.reference.get_mapper('res.users', TO_REFERENCE)
 
     def test_register_binder(self):
         class BenderBinder(Binder):
-            pass
+            model_name = 'res.users'
 
         self.reference.register_binder(BenderBinder)
         ref = self.reference.get_binder('res.users')
         self.assertEqual(ref, BenderBinder)
         self.reference.unregister_binder(BenderBinder)
         with self.assertRaises(ValueError):
-            self.reference.get_binder('export', 'res.users')
+            self.reference.get_binder('res.users')
 
     def test_register_backend_adapter(self):
         class HermesBackendAdapter(BackendAdapter):
-            pass
+            model_name = 'res.users'
 
         self.reference.register_backend_adapter(HermesBackendAdapter)
         ref = self.reference.get_backend_adapter('res.users')
         self.assertEqual(ref, HermesBackendAdapter)
         self.reference.unregister_backend_adapter(HermesBackendAdapter)
         with self.assertRaises(ValueError):
-            self.reference.get_backend_adapter('export', 'res.users')
+            self.reference.get_backend_adapter('res.users')
 
     def test_register_synchronizer_decorator(self):
         @self.reference
         class FrySynchronizer(Synchronizer):
-            pass
+            model_name = 'res.users'
+            synchronization_type = 'export'
 
-        ref = self.reference.get_synchronizer('export', 'res.users')
+        ref = self.reference.get_synchronizer('res.users', 'export')
         self.assertEqual(ref, FrySynchronizer)
 
     def test_register_mapper_decorator(self):
         @self.reference
         class ZoidbergMapper(Mapper):
-            pass
+            model_name = 'res.users'
+            direction = TO_REFERENCE
 
-        ref = self.reference.get_mapper('res.users', 'out')
+        ref = self.reference.get_mapper('res.users', TO_REFERENCE)
         self.assertEqual(ref, ZoidbergMapper)
 
     def test_register_binder_decorator(self):
         @self.reference
         class BenderBinder(Binder):
-            pass
+            model_name = 'res.users'
 
         ref = self.reference.get_binder('res.users')
         self.assertEqual(ref, BenderBinder)
@@ -142,7 +148,7 @@ class test_reference_register(unittest2.TestCase):
     def test_register_backend_adapter_decorator(self):
         @self.reference
         class HermesBackendAdapter(BackendAdapter):
-            pass
+            model_name = 'res.users'
 
         ref = self.reference.get_backend_adapter('res.users')
         self.assertEqual(ref, HermesBackendAdapter)
@@ -151,7 +157,7 @@ class test_reference_register(unittest2.TestCase):
         """ It should get the parent's binder when no binder is defined"""
         @self.parent
         class LeelaBinder(Binder):
-            pass
+            model_name = 'res.users'
 
         ref = self.reference.get_binder('res.users')
         self.assertEqual(ref, LeelaBinder)
@@ -161,18 +167,20 @@ class test_reference_register(unittest2.TestCase):
         is defined"""
         @self.parent
         class AmySynchronizer(Synchronizer):
-            pass
+            model_name = 'res.users'
+            synchronization_type = 'export'
 
-        ref = self.reference.get_synchronizer('export', 'res.users')
+        ref = self.reference.get_synchronizer('res.users', 'export')
         self.assertEqual(ref, AmySynchronizer)
 
     def test_register_mapper_parent(self):
         """ It should get the parent's mapper when no mapper is defined"""
         @self.parent
         class FarnsworthMapper(Mapper):
-            pass
+            model_name = 'res.users'
+            direction = TO_REFERENCE
 
-        ref = self.reference.get_mapper('res.users', 'out')
+        ref = self.reference.get_mapper('res.users', TO_REFERENCE)
         self.assertEqual(ref, FarnsworthMapper)
 
     def test_register_backend_adapter_parent(self):
@@ -180,7 +188,7 @@ class test_reference_register(unittest2.TestCase):
         backend_adapter is defined"""
         @self.parent
         class BranniganBackendAdapter(BackendAdapter):
-            pass
+            model_name = 'res.users'
 
         ref = self.reference.get_backend_adapter('res.users')
         self.assertEqual(ref, BranniganBackendAdapter)
@@ -188,12 +196,12 @@ class test_reference_register(unittest2.TestCase):
     def test_no_register_error_synchronizer(self):
         """ Error when asking for a synchronizer when any is found"""
         with self.assertRaises(ValueError):
-            ref = self.reference.get_synchronizer('export', 'res.users')
+            ref = self.reference.get_synchronizer('res.users', 'export')
 
     def test_no_register_error_mapper(self):
         """ Error when asking for a mapper when any is found"""
         with self.assertRaises(ValueError):
-            ref = self.reference.get_mapper('res.users', 'out')
+            ref = self.reference.get_mapper('res.users', TO_REFERENCE)
 
     def test_no_register_error_binder(self):
         """ Error when asking for a binder when any is found"""

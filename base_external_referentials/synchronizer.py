@@ -22,3 +22,19 @@
 
 class Synchronizer(object):
     """ Base class for synchronizers """
+
+    # implement in sub-classes
+    model_name = None
+    synchronization_type = None
+
+    @classmethod
+    def match(cls, model, synchronization_type):
+        """ Find the class to use """
+        if cls.model_name is None:
+            raise NotImplementedError
+        if hasattr(model, '_name'):  # model instance
+            model_name = model._name
+        else:
+            model_name = model  # str
+        return (cls.synchronization_type == synchronization_type and
+                cls.model_name == model_name)

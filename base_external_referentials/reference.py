@@ -31,9 +31,22 @@ class ReferenceRegistry(object):
         self.references = set()
 
     def register_reference(self, reference):
+        """ Register an instance of `Reference`
+
+        :param reference: reference to register
+        :type reference: Reference
+        """
         self.references.add(reference)
 
     def get_reference(self, service, version=None):
+        """ Return an instance of `Reference` for a ``service`` and a
+        ``version``
+
+        :param service: name of the service to return
+        :type service: str
+        :param version: version of the service to return
+        :type version: str
+        """
         for reference in self.references:
             if reference.match(service, version):
                 return reference
@@ -45,14 +58,19 @@ REFERENCES = ReferenceRegistry()
 
 
 def get_reference(service, version=None):
-    """ Return the correct instance of a `Reference` for a
-    ``service`` and a ``version``
+    """ Return the correct instance of `Reference` for a ``service`` and
+    a ``version``
+
+    :param service: name of the service to return
+    :type service: str
+    :param version: version of the service to return
+    :type version: str
     """
     return REFERENCES.get_reference(service, version)
 
 
 class Reference(object):
-    """ A reference represents a backend like Magento, Prestashop,
+    """ A reference represents a backend, like Magento, Prestashop,
     Redmine, ...
 
     .. attribute:: service
@@ -68,10 +86,10 @@ class Reference(object):
         A parent reference. When the reference has configuration, it
         will refer to its parent's one
 
-    The references contain all the classes they are able to use
-    (mappers, binders, synchronizers, backend adapters) and give the
-    appropriate class to use for a model. When a reference is linked to
-    a parent and no particular mapper, synchronizer or binder is
+    A reference knows all the classes it is able to use (mappers,
+    binders, synchronizers, backend adapters) and give the appropriate
+    class to use for a model. When a reference is linked to a parent and
+    no particular mapper, synchronizer, backend adapter or binder is
     defined at its level, it will use the parent's one.
 
     Example::
@@ -124,6 +142,9 @@ class Reference(object):
         return utility_class
 
     def get_synchronizer(self, model, synchro_type):
+        """ Return the synchronizer class to use for this reference, according
+        to the model and the type of synchronization
+        """
         synchronizer = self._get_class('_synchronizers', model, synchro_type)
         if synchronizer is None:
             raise ValueError('No matching synchronizer found for %s '
@@ -132,6 +153,9 @@ class Reference(object):
         return synchronizer
 
     def get_mapper(self, model, direction):
+        """ Return the mapper class to use for this reference, according
+        to the model and the direction of the mapper
+        """
         mapper = self._get_class('_mappers', model, direction)
         if mapper is None:
             raise ValueError('No matching mapper found for %s '
@@ -140,6 +164,9 @@ class Reference(object):
         return mapper
 
     def get_backend_adapter(self, model):
+        """ Return the backend adapter class to use for this reference,
+        according to the model
+        """
         adapter = self._get_class('_backend_adapters', model)
         if adapter is None:
             raise ValueError('No matching backend adapter found for %s '
@@ -147,6 +174,9 @@ class Reference(object):
         return adapter
 
     def get_binder(self, model):
+        """ Return the binder class to use for this reference, according to
+        the model
+        """
         binder = self._get_class('_binders', model)
         if binder is None:
             raise ValueError('No matching binder found for %s '
@@ -154,27 +184,35 @@ class Reference(object):
         return binder
 
     def register_binder(self, binder):
+        """ Register a binder class"""
         self._binders.add(binder)
 
     def register_synchronizer(self, synchronizer):
+        """ Register a synchronizer class"""
         self._synchronizers.add(synchronizer)
 
     def register_mapper(self, mapper):
+        """ Register a mapper class"""
         self._mappers.add(mapper)
 
     def register_backend_adapter(self, adapter):
+        """ Register a backend adapter class"""
         self._backend_adapters.add(adapter)
 
     def unregister_binder(self, binder):
+        """ Unregister a binder class"""
         self._binders.remove(binder)
 
     def unregister_synchronizer(self, synchronizer):
+        """ Unregister a synchronizer class"""
         self._synchronizers.remove(synchronizer)
 
     def unregister_mapper(self, mapper):
+        """ Unregister a mapper class"""
         self._mappers.remove(mapper)
 
     def unregister_backend_adapter(self, adapter):
+        """ Unregister a backend adapter class"""
         self._backend_adapters.remove(adapter)
 
     def __call__(self, cls):
@@ -185,11 +223,18 @@ class Reference(object):
             magento = Reference('magento')
 
         A binder, synchronizer, mapper or backend adapter can be
-        subscribed as follows::
+        registered as follows::
 
             @magento
             class MagentoBinder(Binder):
-                # do stuff
+                model_name = 'a.model'
+                # other stuff
+
+        Thus, by doing::
+
+            magento.get_binder('a.model')
+
+        We get the correct class ``MagentoBinder``.
 
         """
         def with_subscribe():

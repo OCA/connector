@@ -114,14 +114,17 @@ class Reference(object):
             return '<Reference \'%s\', \'%s\'>' % (self.service, self.version)
         return '<Reference \'%s\'>' % self.service
 
+    def _get_class(self, attr_name, *args):
+        utility_class = None
+        for cls in getattr(self, attr_name):
+            if cls.match(*args):
+                utility_class = cls
+        if utility_class is None and self.parent:
+            utility_class = self.parent._get_class(attr_name, *args)
+        return utility_class
+
     def get_synchronizer(self, model, synchro_type):
-        synchronizer = None
-        for sync in self._synchronizers:
-            if sync.match(model, synchro_type):
-                synchronizer = sync
-                break
-        if synchronizer is None and self.parent:
-            synchronizer = self.parent.get_synchronizer(model, synchro_type)
+        synchronizer = self._get_class('_synchronizers', model, synchro_type)
         if synchronizer is None:
             raise ValueError('No matching synchronizer found for %s '
                              'with model: %s, synchronization_type: %s' %
@@ -129,40 +132,22 @@ class Reference(object):
         return synchronizer
 
     def get_mapper(self, model, direction):
-        mapper = None
-        for proc in self._mappers:
-            if proc.match(model, direction):
-                mapper = proc
-                break
-        if mapper is None and self.parent:
-            mapper = self.parent.get_mapper(model, direction)
+        mapper = self._get_class('_mappers', model, direction)
         if mapper is None:
             raise ValueError('No matching mapper found for %s '
-                             'with model,direction: %s, %s' %
+                             'with model, direction: %s, %s' %
                              (self, model, direction))
         return mapper
 
     def get_backend_adapter(self, model):
-        adapter = None
-        for adap in self._backend_adapters:
-            if adap.match(model):
-                adapter = adap
-                break
-        if adapter is None and self.parent:
-            adapter = self.parent.get_backend_adapter(model)
+        adapter = self._get_class('_backend_adapters', model)
         if adapter is None:
             raise ValueError('No matching backend adapter found for %s '
                              'with model: %s' % (self, model))
         return adapter
 
     def get_binder(self, model):
-        binder = None
-        for bind in self._binders:
-            if bind.match(model):
-                binder = bind
-                break
-        if binder is None and self.parent:
-            binder = self.parent.get_binder(model)
+        binder = self._get_class('_binders', model)
         if binder is None:
             raise ValueError('No matching binder found for %s '
                              'with model: %s' % (self, model))

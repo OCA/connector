@@ -47,8 +47,8 @@ def get_reference(service, version):
 
 
 class Reference(object):
-    """ A reference represents an external system
-    like Magento, Prestashop, Redmine, ...
+    """ A reference represents a backend like Magento, Prestashop,
+    Redmine, ...
 
     .. attribute:: service
 
@@ -64,9 +64,9 @@ class Reference(object):
         will refer to its parent's one
 
     The references contain all the classes they are able to use
-    (processors, binders, synchronizers, external adapters) and give the
+    (mappers, binders, synchronizers, backend adapters) and give the
     appropriate class to use for a model. When a reference is linked to
-    a parent and no particular processor, synchronizer or binder is
+    a parent and no particular mapper, synchronizer or binder is
     defined at its level, it will use the parent's one.
 
     Example::
@@ -82,10 +82,10 @@ class Reference(object):
         self._service = service
         self.version = version
         self.parent = parent
-        self._processors = set()
+        self._mappers = set()
         self._binder = None
         self._synchronizers = set()
-        self._adapters = set()
+        self._backend_adapters = set()
         if registry is None:
             registry = REFERENCES
         registry.register_reference(self)
@@ -123,32 +123,32 @@ class Reference(object):
                                  (self, synchro_type, model))
         return synchronizer
 
-    def get_processor(self, model, direction, child_of=None):
-        processor = None
-        for proc in self._processors:
+    def get_mapper(self, model, direction, child_of=None):
+        mapper = None
+        for proc in self._mappers:
             if proc.match(model, direction, child_of=child_of):
-                processor = proc
+                mapper = proc
                 break
-        if processor is None and self.parent:
-            processor = self.parent.get_processor(model,
+        if mapper is None and self.parent:
+            mapper = self.parent.get_mapper(model,
                                                   direction,
                                                   child_of=child_of)
-            if processor is None:
-                raise ValueError('No matching processor found for %s '
+            if mapper is None:
+                raise ValueError('No matching mapper found for %s '
                                  'with model,direction,child_of: %s,%s,%s' %
                                  (self, model, direction, child_of))
-        return processor
+        return mapper
 
-    def get_adapter(self, model):
+    def get_backend_adapter(self, model):
         adapter = None
-        for proc in self._adapters:
+        for proc in self._backend_adapters:
             if proc.match(model):
                 adapter = proc
                 break
         if adapter is None and self.parent:
-            adapter = self.parent.get_adapter(model)
+            adapter = self.parent.get_backend_adapter(model)
             if adapter is None:
-                raise ValueError('No matching adapter found for %s '
+                raise ValueError('No matching backend adapter found for %s '
                                  'with model: %s' % (self, model))
         return adapter
 
@@ -169,17 +169,17 @@ class Reference(object):
     def register_synchronizer(self, synchronizer):
         self._synchronizers.add(synchronizer)
 
-    def register_processor(self, processor):
-        self._processors.add(processor)
+    def register_mapper(self, mapper):
+        self._mappers.add(mapper)
 
-    def register_adapter(self, adapter):
-        self._adapters.add(adapter)
+    def register_backend_adapter(self, adapter):
+        self._backend_adapters.add(adapter)
 
     def unregister_synchronizer(self, synchronizer):
         self._synchronizers.remove(synchronizer)
 
-    def unregister_processor(self, processor):
-        self._processors.remove(processor)
+    def unregister_mapper(self, mapper):
+        self._mappers.remove(mapper)
 
-    def unregister_adapter(self, adapter):
-        self._adapters.remove(adapter)
+    def unregister_backend_adapter(self, adapter):
+        self._backend_adapters.remove(adapter)

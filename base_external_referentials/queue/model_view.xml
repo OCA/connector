@@ -45,10 +45,6 @@
             <field name="view_id" ref="view_queue_worker_tree"/>
         </record>
 
-        <menuitem id="menu_queue_worker"
-            action="action_queue_worker"
-            parent="base.menu_ir_cron"/>
-
         <record id="view_queue_job_form" model="ir.ui.view">
             <field name="name">queue.job.form</field>
             <field name="model">queue.job</field>
@@ -140,8 +136,5 @@
             <field name="view_id" ref="view_queue_job_tree"/>
         </record>
 
-        <menuitem id="menu_queue_job"
-            action="action_queue_job"
-            parent="base.menu_ir_cron"/>
     </data>
 </openerp>

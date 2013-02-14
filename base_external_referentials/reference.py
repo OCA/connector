@@ -33,7 +33,7 @@ class ReferenceRegistry(object):
     def register_reference(self, reference):
         self.references.add(reference)
 
-    def get_reference(self, service, version):
+    def get_reference(self, service, version=None):
         for reference in self.references:
             if reference.match(service, version):
                 return reference
@@ -44,7 +44,7 @@ class ReferenceRegistry(object):
 REFERENCES = ReferenceRegistry()
 
 
-def get_reference(service, version):
+def get_reference(service, version=None):
     """ Return the correct instance of a `Reference` for a
     ``service`` and a ``version``
     """
@@ -88,7 +88,7 @@ class Reference(object):
         self.version = version
         self.parent = parent
         self._mappers = set()
-        self._binder = None
+        self._binders = set()
         self._synchronizers = set()
         self._backend_adapters = set()
         if registry is None:
@@ -122,10 +122,10 @@ class Reference(object):
                 break
         if synchronizer is None and self.parent:
             synchronizer = self.parent.get_synchronizer(synchro_type, model)
-            if synchronizer is None:
-                raise ValueError('No matching synchronizer found for %s '
-                                 'with synchronization_type: %s, model: %s' %
-                                 (self, synchro_type, model))
+        if synchronizer is None:
+            raise ValueError('No matching synchronizer found for %s '
+                             'with synchronization_type: %s, model: %s' %
+                             (self, synchro_type, model))
         return synchronizer
 
     def get_mapper(self, model, direction, child_of=None):
@@ -138,38 +138,40 @@ class Reference(object):
             mapper = self.parent.get_mapper(model,
                                                   direction,
                                                   child_of=child_of)
-            if mapper is None:
-                raise ValueError('No matching mapper found for %s '
-                                 'with model,direction,child_of: %s,%s,%s' %
-                                 (self, model, direction, child_of))
+        if mapper is None:
+            raise ValueError('No matching mapper found for %s '
+                             'with model,direction,child_of: %s,%s,%s' %
+                             (self, model, direction, child_of))
         return mapper
 
     def get_backend_adapter(self, model):
         adapter = None
-        for proc in self._backend_adapters:
-            if proc.match(model):
-                adapter = proc
+        for adap in self._backend_adapters:
+            if adap.match(model):
+                adapter = adap
                 break
         if adapter is None and self.parent:
             adapter = self.parent.get_backend_adapter(model)
-            if adapter is None:
-                raise ValueError('No matching backend adapter found for %s '
-                                 'with model: %s' % (self, model))
+        if adapter is None:
+            raise ValueError('No matching backend adapter found for %s '
+                             'with model: %s' % (self, model))
         return adapter
 
     def get_binder(self, model):
-        if self._binder:
-            binder = self._binder
-        else:
-            if self.parent:
-                binder = self.parent.get_binder(model)
-            if binder is None:
-                raise ValueError('No matching binder found for %s '
-                                 'with model: %s' % (self, model))
+        binder = None
+        for bind in self._binders:
+            if bind.match(model):
+                binder = bind
+                break
+        if binder is None and self.parent:
+            binder = self.parent.get_binder(model)
+        if binder is None:
+            raise ValueError('No matching binder found for %s '
+                             'with model: %s' % (self, model))
         return binder
 
     def register_binder(self, binder):
-        self._binder = binder
+        self._binders.add(binder)
 
     def register_synchronizer(self, synchronizer):
         self._synchronizers.add(synchronizer)
@@ -179,6 +181,9 @@ class Reference(object):
 
     def register_backend_adapter(self, adapter):
         self._backend_adapters.add(adapter)
+
+    def unregister_binder(self, binder):
+        self._binders.remove(binder)
 
     def unregister_synchronizer(self, synchronizer):
         self._synchronizers.remove(synchronizer)

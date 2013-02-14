@@ -11,7 +11,6 @@ from openerp.addons.base_external_referentials.queue.job import (
         ENQUEUED, STARTED, DONE, FAILED)
 from openerp.addons.base_external_referentials.session import (
         ConnectorSession)
-from .common import mock_now
 
 
 def task_b(session):

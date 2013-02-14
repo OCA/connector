@@ -18,3 +18,7 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
+
+
+class BackendAdapter(object):
+    """ Base Backend Adapter for the connectors """

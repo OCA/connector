@@ -18,3 +18,7 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
+
+
+class Mapper(object):
+    """ Transform a record to a defined output """

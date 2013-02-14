@@ -19,6 +19,11 @@
 #
 ##############################################################################
 
+from .mapper import Mapper
+from .binder import Binder
+from .backend_adapter import BackendAdapter
+from .synchronizer import Synchronizer
+
 
 class ReferenceRegistry(object):
     """ Hold a set of references """
@@ -183,3 +188,37 @@ class Reference(object):
 
     def unregister_backend_adapter(self, adapter):
         self._backend_adapters.remove(adapter)
+
+    def __call__(self, cls):
+        """ Reference decorator
+
+        For a reference ``magento`` declared like this::
+
+            magento = Reference('magento')
+
+        A binder, synchronizer, mapper or backend adapter can be
+        subscribed as follows::
+
+            @magento
+            class MagentoBinder(Binder):
+                # do stuff
+
+        """
+        def with_subscribe():
+            if issubclass(cls, Binder):
+                self.register_binder(cls)
+            elif issubclass(cls, Synchronizer):
+                self.register_synchronizer(cls)
+            elif issubclass(cls, Mapper):
+                self.register_mapper(cls)
+            elif issubclass(cls, BackendAdapter):
+                self.register_backend_adapter(cls)
+            else:
+                raise TypeError(
+                        '%s is not a valid type for %s.\n'
+                        'Allowed types are subclasses of Binder, '
+                        ' Synchronizer, Mapper, BackendAdapter' %
+                        (cls, self))
+            return cls
+
+        return with_subscribe()

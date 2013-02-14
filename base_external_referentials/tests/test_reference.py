@@ -194,21 +194,21 @@ class test_reference_register(unittest2.TestCase):
         self.assertEqual(ref, BranniganBackendAdapter)
 
     def test_no_register_error_synchronizer(self):
-        """ Error when asking for a synchronizer when any is found"""
+        """ Error when asking for a synchronizer and none is found"""
         with self.assertRaises(ValueError):
             ref = self.reference.get_synchronizer('res.users', 'export')
 
     def test_no_register_error_mapper(self):
-        """ Error when asking for a mapper when any is found"""
+        """ Error when asking for a mapper and none is found"""
         with self.assertRaises(ValueError):
             ref = self.reference.get_mapper('res.users', TO_REFERENCE)
 
     def test_no_register_error_binder(self):
-        """ Error when asking for a binder when any is found"""
+        """ Error when asking for a binder and none is found"""
         with self.assertRaises(ValueError):
             ref = self.reference.get_binder('res.users')
 
     def test_no_register_error_backend_adapter(self):
-        """ Error when asking for a backend_adapter when any is found"""
+        """ Error when asking for a backend_adapter and none is found"""
         with self.assertRaises(ValueError):
             ref = self.reference.get_backend_adapter('res.users')

@@ -40,14 +40,15 @@ class QueueJob(orm.Model):
     _columns = {
         'worker_id': fields.many2one('queue.worker', string='Worker',
                                      ondelete='set null', readonly=True),
-        'uuid': fields.char('UUID', readonly=True, select=True),
-        'user_id': fields.many2one('res.users', string='User ID'),
+        'uuid': fields.char('UUID', readonly=True, select=True, required=True),
+        'user_id': fields.many2one('res.users', string='User ID', required=True),
         'name': fields.char('Description', readonly=True),
         'func_string': fields.char('Task', readonly=True),
-        'func': fields.text('Pickled Job Function', readonly=True),
+        'func': fields.text('Pickled Function', readonly=True, required=True),
         'state': fields.selection(STATES,
                                   string='State',
-                                  readonly=True),
+                                  readonly=True,
+                                  required=True),
         'priority': fields.integer('Priority'),
         'exc_info': fields.text('Exception Info', readonly=True),
         'result': fields.text('Result', readonly=True),
@@ -75,7 +76,7 @@ class QueueWorker(orm.Model):
     _worker = None
 
     _columns = {
-        'uuid': fields.char('UUID', readonly=True, select=True),
+        'uuid': fields.char('UUID', readonly=True, select=True, required=True),
         'pid': fields.char('PID', readonly=True),
         'date_start': fields.datetime('Start Date', readonly=True),
         'date_alive': fields.datetime('Last Alive Check', readonly=True),

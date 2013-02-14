@@ -4,6 +4,7 @@ import external_referential
 import session
 import event
 import queue
+import reference
 
 from .deprecated import *
 import decorator

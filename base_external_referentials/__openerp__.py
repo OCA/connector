@@ -60,6 +60,7 @@ to customize their field mapping directly in OpenERP to accomodate the external 
         'deprecated/group_fields_view.xml',
         'security/base_external_referentials_security.xml',
         'deprecated/report_mail_template.xml',
+        'queue/model_view.xml',
         ],
     'installable': True,
 }

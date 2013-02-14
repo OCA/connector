@@ -256,7 +256,7 @@ class WorkerWatcher(threading.Thread):
         dead, remove them from the worker's pool.
         """
         session_hdl = ConnectorSessionHandler(db_name,
-                                          openerp.SUPERUSER_ID)
+                                              openerp.SUPERUSER_ID)
         with session_hdl.session() as session:
             if worker.is_alive():
                 self._notify_alive(session, worker)

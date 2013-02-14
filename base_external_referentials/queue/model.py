@@ -67,6 +67,7 @@ class QueueWorker(orm.Model):
     """ Worker """
     _name = 'queue.worker'
     _log_access = False
+    _rec_name = 'uuid'
 
     # worker_timeout = 5 * 60  # seconds
     # FIXME: remove test with shorten timeout

@@ -13,6 +13,27 @@ Contents:
 
    09_specifications
 
+Connector API
+'''''''''''''
+
+API:
+
+.. toctree::
+   :maxdepth: 2
+
+   api_session.rst
+   api_reference.rst
+   api_event.rst
+   api_binder.rst
+   api_mapper.rst
+   api_synchronizer.rst
+   api_backend_adapter.rst
+   api_queue.rst
+   api_exception.rst
+
+Concepts
+''''''''
+
 Glossary:
 
 .. glossary::

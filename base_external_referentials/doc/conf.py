@@ -17,6 +17,10 @@ import sys, os
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #sys.path.insert(0, os.path.abspath('.'))
+sys.path.append(os.path.abspath('../../../server'))
+sys.path.append(os.path.abspath('../../../addons'))
+sys.path.append(os.path.abspath('../..'))
+
 
 # -- General configuration -----------------------------------------------------
 
@@ -40,7 +44,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'Connectors'
+project = u'Connector'
 copyright = u'2013, Guewen Baconnier (Camptocamp SA)'
 
 # The version info for the project you're documenting, acts as replacement for
@@ -164,7 +168,7 @@ html_static_path = ['_static']
 #html_file_suffix = None
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'Connectorsdoc'
+htmlhelp_basename = 'connector-doc'
 
 
 # -- Options for LaTeX output --------------------------------------------------
@@ -183,8 +187,8 @@ latex_elements = {
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
-  ('index', 'Connectors.tex', u'Connectors Documentation',
-   u'Guewen Baconnier (Camptocamp SA)', 'manual'),
+  ('index', 'Connector.tex', u'Connector Documentation',
+   u'Camptocamp SA', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
@@ -213,8 +217,8 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    ('index', 'connectors', u'Connectors Documentation',
-     [u'Guewen Baconnier (Camptocamp SA)'], 1)
+    ('index', 'connector', u'Connector Documentation',
+     [u'Camptocamp SA'], 1)
 ]
 
 # If true, show URL addresses after external links.
@@ -227,8 +231,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-  ('index', 'Connectors', u'Connectors Documentation',
-   u'Guewen Baconnier (Camptocamp SA)', 'Connectors', 'One line description of project.',
+  ('index', 'Connector', u'Connector Documentation',
+   u'Camptocamp SA', 'Connector', 'Framework for OpenERP Connectors.',
    'Miscellaneous'),
 ]
 
@@ -243,4 +247,8 @@ texinfo_documents = [
 
 
 # Example configuration for intersphinx: refer to the Python standard library.
-intersphinx_mapping = {'http://docs.python.org/': None}
+intersphinx_mapping = {
+    'http://docs.python.org/': None,
+    'openerpweb': ('http://doc.openerp.com/trunk/developers/web', None),
+    'openerpdev': ('http://doc.openerp.com/trunk/developers', None),
+}

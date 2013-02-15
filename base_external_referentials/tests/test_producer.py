@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import unittest2
+import mock
 
 import openerp.tests.common as common
 from openerp.addons.base_external_referentials.event import (
@@ -70,7 +71,15 @@ class test_connector_session(common.TransactionCase):
         self.assertEqual(self.recipient.record_id, self.partner_id)
         on_record_write.unsubscribe(event)
 
-    def on_workflow_signal(self):
+    def test_on_record_create_no_consumer(self):
         """
-        Send a workflow signal and check if the event is called
+        If no consumer is registered on the event for the model,
+        the event should not be fired at all
         """
+        def fire(self, model_name, *args, **kwargs):
+            raise Exception('I should not be fired because I have no consumer')
+        with mock.patch.object(on_record_create, 'fire'):
+            on_record_create.fire.side_effect = fire
+            record_id = self.model.create(self.cr,
+                                          self.uid,
+                                          {'name': 'Kif Kroker'})

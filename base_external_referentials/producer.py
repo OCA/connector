@@ -34,16 +34,15 @@ from openerp.osv import orm
 from .session import ConnectorSession
 from .event import (on_record_create,
                     on_record_write,
-                    on_record_unlink,
-                    on_workflow_signal)
+                    on_record_unlink)
 
-# monkey patch appproach
 
 create_original = orm.Model.create
 def create(self, cr, uid, vals, context=None):
     record_id = create_original(self, cr, uid, vals, context=context)
-    session = ConnectorSession(cr, uid, context=context)
-    on_record_create.fire(self._name, session, record_id)
+    if on_record_create.has_consumer_for(self._name):
+        session = ConnectorSession(cr, uid, context=context)
+        on_record_create.fire(self._name, session, record_id)
     return record_id
 orm.Model.create = create
 
@@ -53,9 +52,10 @@ def write(self, cr, uid, ids, vals, context=None):
     result = write_original(self, cr, uid, ids, vals, context=context)
     if not hasattr(ids, '__iter__'):
         ids = [ids]
-    session = ConnectorSession(cr, uid, context=context)
-    for record_id in ids:
-        on_record_write.fire(self._name, session, record_id, vals.keys())
+    if on_record_write.has_consumer_for(self._name):
+        session = ConnectorSession(cr, uid, context=context)
+        for record_id in ids:
+            on_record_write.fire(self._name, session, record_id, vals.keys())
     return result
 orm.Model.write = write
 
@@ -65,8 +65,9 @@ def unlink(self, cr, uid, ids, context=None):
     result = unlink_original(self, cr, uid, ids, context=context)
     if not hasattr(ids, '__iter__'):
         ids = [ids]
-    session = ConnectorSession(cr, uid, context=context)
-    for record_id in ids:
-        on_record_unlink.fire(self._name, session, record_id)
+    if on_record_unlink.has_consumer_for(self._name):
+        session = ConnectorSession(cr, uid, context=context)
+        for record_id in ids:
+            on_record_unlink.fire(self._name, session, record_id)
     return result
 orm.Model.unlink = unlink

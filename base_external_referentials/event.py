@@ -111,6 +111,14 @@ class Event(object):
             if name in self._actions:
                 self._actions[name].discard(action)
 
+    def has_consumer_for(self, model_name):
+        """ Return True if at least one action is registered
+        for the model.
+        """
+        if self._actions[None]:
+            return True  # at least 1 global action exist
+        return bool(self._actions.get(model_name))
+
     def fire(self, model_name, *args, **kwargs):
         """ Call each action subscribed on the event with the given
         arguments and keyword arguments.

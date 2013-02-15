@@ -9,6 +9,7 @@ import mapper
 import binder
 import backend_adapter
 import synchronizer
+import producer
 
 from .deprecated import *
 import decorator

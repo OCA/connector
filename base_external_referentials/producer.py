@@ -2,7 +2,7 @@
 ##############################################################################
 #
 #    Author: Guewen Baconnier
-#    Copyright 2012 Camptocamp SA
+#    Copyright 2013 Camptocamp SA
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -19,23 +19,12 @@
 #
 ##############################################################################
 
-import test_session
-import test_event
-import test_job
-import test_queue
-import test_worker
-import test_reference
-import test_producer
+import openerp.pooler
+from openerp.osv import orm
+from openerp.osv.osv import object_proxy
+from .session import ConnectorSession
+from .event import (on_record_create,
+                    on_record_write,
+                    on_record_unlink,
+                    on_workflow_signal)
 
-fast_suite = [
-]
-
-checks = [
-    test_session,
-    test_event,
-    test_job,
-    test_queue,
-    test_worker,
-    test_reference,
-    test_producer,
-]

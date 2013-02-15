@@ -25,7 +25,6 @@ from tempfile import TemporaryFile
 from openerp.osv.orm import Model
 from openerp.osv import fields
 
-from base_file_protocole.base_file_protocole import FileCsvWriter
 from .connector import REGISTRY
 from .external_osv import ExternalSession
 from lxml import etree

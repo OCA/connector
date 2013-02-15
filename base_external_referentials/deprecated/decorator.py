@@ -20,8 +20,8 @@
 ###############################################################################
 
 from openerp.osv.osv import except_osv
-import pooler
-from tools.translate import _
+import openerp.pooler as pooler
+from openerp.tools.translate import _
 from message_error import MappingError
 import functools
 import xmlrpclib

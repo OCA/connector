@@ -26,15 +26,15 @@ from openerp.osv.osv import except_osv
 import base64
 import urllib
 import time
-import netsvc
+import openerp.netsvc
 from datetime import datetime
 import logging
 from lxml import objectify
 from openerp.tools.config import config
 
 from message_error import MappingError, ExtConnError
-from tools.translate import _
-from tools import DEFAULT_SERVER_DATETIME_FORMAT, DEFAULT_SERVER_DATE_FORMAT
+from openerp.tools.translate import _
+from openerp.tools import DEFAULT_SERVER_DATETIME_FORMAT, DEFAULT_SERVER_DATE_FORMAT
 #TODO fix me import do not work
 #from base_external_referentials.decorator import commit_now
 

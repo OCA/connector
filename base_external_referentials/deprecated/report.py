@@ -23,10 +23,10 @@ import sys
 import traceback
 from openerp.osv.orm import Model
 from openerp.osv import fields
-from tools import DEFAULT_SERVER_DATETIME_FORMAT
+from openerp.tools import DEFAULT_SERVER_DATETIME_FORMAT
 import simplejson
-from base_external_referentials.external_osv import ExternalSession
-from base_external_referentials.decorator import commit_now
+from .external_osv import ExternalSession
+from .decorator import commit_now
 
 MODEL_WITH_UNIQUE_REPORT_LINE = [
     'product.product',

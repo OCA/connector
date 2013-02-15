@@ -61,6 +61,7 @@ to customize their field mapping directly in OpenERP to accomodate the external 
         'security/base_external_referentials_security.xml',
         'deprecated/report_mail_template.xml',
         'queue/model_view.xml',
+        'queue/cron_data.xml',
         'connector_menu.xml',
         ],
     'installable': True,

@@ -53,7 +53,7 @@ class test_connector_session(common.TransactionCase):
                          {'name': 'Lrrr',
                           'city': 'Omicron Persei 8'})
         self.assertEqual(self.recipient.record_id, self.partner_id)
-        self.assertEqual(self.recipient.fields, ['name', 'country'])
+        self.assertItemsEqual(self.recipient.fields, ['name', 'city'])
         on_record_write.unsubscribe(event)
 
     def test_on_record_unlink(self):
@@ -67,7 +67,7 @@ class test_connector_session(common.TransactionCase):
         self.model.unlink(self.cr,
                           self.uid,
                           [self.partner_id])
-        self.assertEqual(self.recipient.record_id, [self.partner_id])
+        self.assertEqual(self.recipient.record_id, self.partner_id)
         on_record_write.unsubscribe(event)
 
     def on_workflow_signal(self):

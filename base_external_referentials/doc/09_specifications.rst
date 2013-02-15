@@ -34,21 +34,15 @@ We must be able to:
 Queue
 -----
 
-This section summarises the Queue which is in fact a grouping of 4
-notions, which are tasks, jobs, a worker, and the queue itself.
-
-  Tasks
-
-    A task is basically a piece of code, for instance a function, which
-    can be used by a job. A task could be a function with some
-    arguments. No special requirements at this level.
+This section summarises the Queue which is in fact a grouping of 3 notions,
+which are jobs, a worker, and the queue itself.
 
   Job
 
-    A job is a call of a `task` (with some arguments) waiting to be
-    executed. It is stored in the `queue` before it is executed.
+    A job is a delayed call waiting to be executed. It is stored in the
+    `queue` before it is executed.
 
-    It needs to store at least 2 things: the task to call and the
+    It needs to store at least 2 things: the function to call and the
     arguments to pass to it.
 
     A job may need to be run at a certain time, for instance to delay a
@@ -71,7 +65,7 @@ notions, which are tasks, jobs, a worker, and the queue itself.
   Worker
 
     The worker is started alongside OpenERP. Its role is to take the
-    jobs out of the queue and run them one per one. It can uses
+    jobs out of the queue and run them sequentially. It can uses
     thread(s) for instance.
 
     When OpenERP start, it has to take all the pending jobs from the

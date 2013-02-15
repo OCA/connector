@@ -30,15 +30,15 @@ __all__ = [
 
 
 class Event(object):
-    """ An event contains actions called when the event is fired.
+    """ An event contains consumers called when the event is fired.
 
-    The events are able to filter the actions to execute by model name.
+    The events are able to filter the consumers to execute by model name.
 
     The usage of an event is to instantiate an `Event` object::
 
         on_my_event = Event()
 
-    Then to subscribe one or more actions, an action is a function::
+    Then to subscribe one or more consumers, a consumer is a function::
 
         def do_something(a, b):
             print "Event was fired with arguments: %s, %s" % (a, b)
@@ -57,7 +57,7 @@ class Event(object):
     We can also replace an event::
 
         def do_something_product2(a, b):
-            print "Action 2"
+            print "Consumer 2"
             print ("Event was fired on a product "
                   "with arguments: %s, %s" % (a, b))
 
@@ -68,7 +68,7 @@ class Event(object):
 
         on_my_event.fire('value_a', 'value_b')
 
-    An action can be subscribed using a decorator::
+    A consumer can be subscribed using a decorator::
 
         @on_my_event
         def do_other_thing(a, b):
@@ -81,13 +81,13 @@ class Event(object):
     """
 
     def __init__(self):
-        self._actions = {None: set()}
+        self._consumers = {None: set()}
 
-    def subscribe(self, action, model_names=None, replacing=None):
-        """ Subscribe an action on the event
+    def subscribe(self, consumer, model_names=None, replacing=None):
+        """ Subscribe a consumer on the event
 
-        :param action: the function to register on the event
-        :param model_names: the action will be active only on these models,
+        :param consumer: the function to register on the event
+        :param model_names: the consumer will be active only on these models,
             active on all models if ``None``
         :param replacing: the function beeing replaced by this new one.
         """
@@ -96,43 +96,43 @@ class Event(object):
         if not hasattr(model_names, '__iter__'):
             model_names = [model_names]
         for name in model_names:
-            self._actions.setdefault(name, set()).add(action)
+            self._consumers.setdefault(name, set()).add(consumer)
 
-    def unsubscribe(self, action, model_names=None):
-        """ Remove an action from the event
+    def unsubscribe(self, consumer, model_names=None):
+        """ Remove a consumer from the event
 
-        :param action: the function to unsubscribe
-        :param model_names: remove only for these models or remove an
-            action which is active on all models if ``None``.
+        :param consumer: the function to unsubscribe
+        :param model_names: remove only for these models or remove a
+            consumer which is active on all models if ``None``.
         """
         if not hasattr(model_names, '__iter__'):
             model_names = [model_names]
         for name in model_names:
-            if name in self._actions:
-                self._actions[name].discard(action)
+            if name in self._consumers:
+                self._consumers[name].discard(consumer)
 
     def has_consumer_for(self, model_name):
-        """ Return True if at least one action is registered
+        """ Return True if at least one consumer is registered
         for the model.
         """
-        if self._actions[None]:
-            return True  # at least 1 global action exist
-        return bool(self._actions.get(model_name))
+        if self._consumers[None]:
+            return True  # at least 1 global consumer exist
+        return bool(self._consumers.get(model_name))
 
     def fire(self, model_name, *args, **kwargs):
-        """ Call each action subscribed on the event with the given
+        """ Call each consumer subscribed on the event with the given
         arguments and keyword arguments.
 
-        All the action which were subscribed globally (no model name) or
+        All the consumers which were subscribed globally (no model name) or
         which are subscribed on the same model
 
         :param model_name: the current model
-        :param args: arguments propagated to the action
-        :param kwargs: keyword arguments propagated to the action
+        :param args: arguments propagated to the consumer
+        :param kwargs: keyword arguments propagated to the consumer
         """
         for name in (None, model_name):
-            for action in self._actions.get(name, ()):
-                action(*args, **kwargs)
+            for consumer in self._consumers.get(name, ()):
+                consumer(*args, **kwargs)
 
     def __call__(self, *args, **kwargs):
         """ Event decorator

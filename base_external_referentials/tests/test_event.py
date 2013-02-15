@@ -15,33 +15,33 @@ class test_event(unittest2.TestCase):
 
     def test_subscribe(self):
         self.event.subscribe(self.consumer1)
-        self.assertIn(self.consumer1, self.event._actions[None])
+        self.assertIn(self.consumer1, self.event._consumers[None])
 
     def test_subscribe_decorator(self):
         @self.event
         def consumer():
             pass
-        self.assertIn(consumer, self.event._actions[None])
+        self.assertIn(consumer, self.event._consumers[None])
 
     def test_subscribe_model(self):
         self.event.subscribe(self.consumer1, model_names=['res.users'])
-        self.assertIn(self.consumer1, self.event._actions['res.users'])
+        self.assertIn(self.consumer1, self.event._consumers['res.users'])
 
     def test_subscribe_decorator_model(self):
         @self.event(model_names=['res.users'])
         def consumer():
             pass
-        self.assertIn(consumer, self.event._actions['res.users'])
+        self.assertIn(consumer, self.event._consumers['res.users'])
 
     def test_unsubscribe(self):
         self.event.subscribe(self.consumer1)
         self.event.unsubscribe(self.consumer1)
-        self.assertNotIn(self.consumer1, self.event._actions[None])
+        self.assertNotIn(self.consumer1, self.event._consumers[None])
 
     def test_unsubscribe_model(self):
         self.event.subscribe(self.consumer1, model_names=['res.users'])
         self.event.unsubscribe(self.consumer1, model_names=['res.users'])
-        self.assertNotIn(self.consumer1, self.event._actions['res.users'])
+        self.assertNotIn(self.consumer1, self.event._consumers['res.users'])
 
     def test_unsubscribe_not_existing(self):
         """ Discard without error """
@@ -54,8 +54,8 @@ class test_event(unittest2.TestCase):
     def test_replacing(self):
         self.event.subscribe(self.consumer1)
         self.event.subscribe(self.consumer2, replacing=self.consumer1)
-        self.assertNotIn(self.consumer1, self.event._actions[None])
-        self.assertIn(self.consumer2, self.event._actions[None])
+        self.assertNotIn(self.consumer1, self.event._consumers[None])
+        self.assertIn(self.consumer2, self.event._consumers[None])
 
     def test_replacing_decorator(self):
         @self.event
@@ -64,15 +64,15 @@ class test_event(unittest2.TestCase):
         @self.event(replacing=consumer1)
         def consumer2():
             pass
-        self.assertNotIn(consumer1, self.event._actions[None])
-        self.assertIn(consumer2, self.event._actions[None])
+        self.assertNotIn(consumer1, self.event._consumers[None])
+        self.assertIn(consumer2, self.event._consumers[None])
 
     def test_replacing_model(self):
         self.event.subscribe(self.consumer1, model_names=['res.users'])
         self.event.subscribe(self.consumer2, replacing=self.consumer1,
                              model_names=['res.users'])
-        self.assertNotIn(self.consumer1, self.event._actions['res.users'])
-        self.assertIn(self.consumer2, self.event._actions['res.users'])
+        self.assertNotIn(self.consumer1, self.event._consumers['res.users'])
+        self.assertIn(self.consumer2, self.event._consumers['res.users'])
 
     def test_fire(self):
         class Recipient(object):
@@ -88,3 +88,17 @@ class test_event(unittest2.TestCase):
         # an event is fired on a model name
         self.event.fire('res.users', recipient, 'success')
         self.assertEquals(recipient.message, 'success')
+
+    def test_has_consumer_for(self):
+        @self.event(model_names=['product.product'])
+        def consumer1():
+            pass
+        self.assertTrue(self.event.has_consumer_for('product.product'))
+        self.assertFalse(self.event.has_consumer_for('res.partner'))
+
+    def test_has_consumer_for_global(self):
+        @self.event
+        def consumer1():
+            pass
+        self.assertTrue(self.event.has_consumer_for('product.product'))
+        self.assertTrue(self.event.has_consumer_for('res.partner'))

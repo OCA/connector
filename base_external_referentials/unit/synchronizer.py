@@ -28,17 +28,6 @@ class Synchronizer(ConnectorUnit):
     # implement in sub-classes
     model_name = None
 
-    @classmethod
-    def match(cls, model):
-        """ Find the class to use """
-        if cls.model_name is None:
-            raise NotImplementedError
-        if hasattr(model, '_name'):  # model instance
-            model_name = model._name
-        else:
-            model_name = model  # str
-        return cls.model_name == model_name
-
 
 class ExportSynchronizer(Synchronizer):
     """ Synchronizer for exporting data from OpenERP to a backend """

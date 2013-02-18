@@ -26,15 +26,3 @@ class BackendAdapter(ConnectorUnit):
     """ Base Backend Adapter for the connectors """
 
     model_name = None  # define in sub-classes
-
-    @classmethod
-    def match(cls, model):
-        """ Identify the class to use
-        """
-        if cls.model_name is None:
-            raise NotImplementedError
-        if hasattr(model, '_name'):  # model instance
-            model_name = model._name
-        else:
-            model_name = model  # str
-        return cls.model_name == model_name

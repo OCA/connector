@@ -34,17 +34,6 @@ class Mapper(ConnectorUnit):
     # direction of the conversion (TO_REFERENCE or FROM_REFERENCE)
     direction = None
 
-    @classmethod
-    def match(cls, model):
-        """ Find the appropriate class to transform the record """
-        if cls.model_name is None:
-            raise NotImplementedError
-        if hasattr(model, '_name'):  # model instance
-            model_name = model._name
-        else:
-            model_name = model  # str
-        return cls.model_name == model_name
-
 
 class ImportMapper(Mapper):
     """ Transform a record from a backend to an OpenERP record """

@@ -105,10 +105,7 @@ class Reference(object):
         self._service = service
         self.version = version
         self.parent = parent
-        self._mappers = set()
-        self._binders = set()
-        self._synchronizers = set()
-        self._backend_adapters = set()
+        self._classes = set()
         if registry is None:
             registry = REFERENCES
         registry.register_reference(self)
@@ -132,88 +129,46 @@ class Reference(object):
             return '<Reference \'%s\', \'%s\'>' % (self.service, self.version)
         return '<Reference \'%s\'>' % self.service
 
-    def _get_class(self, attr_name, *args):
-        utility_class = None
-        for cls in getattr(self, attr_name):
-            if cls.match(*args):
-                utility_class = cls
-        if utility_class is None and self.parent:
-            utility_class = self.parent._get_class(attr_name, *args)
-        return utility_class
+    def _get_class(self, base_class, *args, **kwargs):
+        matching_class = None
+        for cls in self.registered_classes(base_class=base_class):
+            if not issubclass(cls, base_class):
+                continue
+            if cls.match(*args, **kwargs):
+                matching_class = cls
+        if matching_class is None and self.parent:
+            matching_class = self.parent._get_class(base_class,
+                                                    *args, **kwargs)
+        return matching_class
 
-    def get_synchronizer(self, model, synchro_type):
-        """ Return the synchronizer class to use for this reference, according
-        to the model and the type of synchronization
+    def get_class(self, base_class, *args, **kwargs):
+        """ Find a matching subclass of `base_class` in the registered
+        classes"""
+        matching_class = self._get_class(base_class, *args, **kwargs)
+        if matching_class is None:
+            raise ValueError('No matching class found for %s '
+                             'with args: %s and keyword args: %s' %
+                             (base_class, args, kwargs))
+        return matching_class
+
+    def registered_classes(self, base_class=None):
+        """ Yield all the classes registered on the reference
+
+        :param base_class: select only subclasses of ``base_class``
+        :type base_class: type
         """
-        synchronizer = self._get_class('_synchronizers', model, synchro_type)
-        if synchronizer is None:
-            raise ValueError('No matching synchronizer found for %s '
-                             'with model: %s, synchronization_type: %s' %
-                             (self, model, synchro_type))
-        return synchronizer
+        for cls in self._classes:
+            if base_class and not issubclass(cls, base_class):
+                continue
+            yield cls
 
-    def get_mapper(self, model, direction):
-        """ Return the mapper class to use for this reference, according
-        to the model and the direction of the mapper
-        """
-        mapper = self._get_class('_mappers', model, direction)
-        if mapper is None:
-            raise ValueError('No matching mapper found for %s '
-                             'with model, direction: %s, %s' %
-                             (self, model, direction))
-        return mapper
+    def register_class(self, cls):
+        """ Register a class"""
+        self._classes.add(cls)
 
-    def get_backend_adapter(self, model):
-        """ Return the backend adapter class to use for this reference,
-        according to the model
-        """
-        adapter = self._get_class('_backend_adapters', model)
-        if adapter is None:
-            raise ValueError('No matching backend adapter found for %s '
-                             'with model: %s' % (self, model))
-        return adapter
-
-    def get_binder(self, model):
-        """ Return the binder class to use for this reference, according to
-        the model
-        """
-        binder = self._get_class('_binders', model)
-        if binder is None:
-            raise ValueError('No matching binder found for %s '
-                             'with model: %s' % (self, model))
-        return binder
-
-    def register_binder(self, binder):
-        """ Register a binder class"""
-        self._binders.add(binder)
-
-    def register_synchronizer(self, synchronizer):
-        """ Register a synchronizer class"""
-        self._synchronizers.add(synchronizer)
-
-    def register_mapper(self, mapper):
-        """ Register a mapper class"""
-        self._mappers.add(mapper)
-
-    def register_backend_adapter(self, adapter):
-        """ Register a backend adapter class"""
-        self._backend_adapters.add(adapter)
-
-    def unregister_binder(self, binder):
-        """ Unregister a binder class"""
-        self._binders.remove(binder)
-
-    def unregister_synchronizer(self, synchronizer):
-        """ Unregister a synchronizer class"""
-        self._synchronizers.remove(synchronizer)
-
-    def unregister_mapper(self, mapper):
-        """ Unregister a mapper class"""
-        self._mappers.remove(mapper)
-
-    def unregister_backend_adapter(self, adapter):
-        """ Unregister a backend adapter class"""
-        self._backend_adapters.remove(adapter)
+    def unregister_class(self, cls):
+        """ Unregister a class"""
+        self._classes.remove(cls)
 
     def __call__(self, cls):
         """ Reference decorator
@@ -232,26 +187,13 @@ class Reference(object):
 
         Thus, by doing::
 
-            magento.get_binder('a.model')
+            magento.get_class(Binder, 'a.model')
 
         We get the correct class ``MagentoBinder``.
 
         """
         def with_subscribe():
-            if issubclass(cls, Binder):
-                self.register_binder(cls)
-            elif issubclass(cls, Synchronizer):
-                self.register_synchronizer(cls)
-            elif issubclass(cls, Mapper):
-                self.register_mapper(cls)
-            elif issubclass(cls, BackendAdapter):
-                self.register_backend_adapter(cls)
-            else:
-                raise TypeError(
-                        '%s is not a valid type for %s.\n'
-                        'Allowed types are subclasses of Binder, '
-                        ' Synchronizer, Mapper, BackendAdapter' %
-                        (cls, self))
+            self.register_class(cls)
             return cls
 
         return with_subscribe()

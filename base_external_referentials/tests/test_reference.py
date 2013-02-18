@@ -6,14 +6,11 @@ from openerp.addons.base_external_referentials.reference import (
         Reference,
         get_reference,
         REFERENCES)
-from openerp.addons.base_external_referentials.synchronizer import (
-        Synchronizer)
 from openerp.addons.base_external_referentials.binder import (
         Binder)
 from openerp.addons.base_external_referentials.mapper import (
         Mapper,
-        TO_REFERENCE,
-        FROM_REFERENCE)
+        TO_REFERENCE)
 from openerp.addons.base_external_referentials.backend_adapter import (
         BackendAdapter)
 
@@ -72,143 +69,75 @@ class test_reference_register(unittest2.TestCase):
 
     def tearDown(self):
         REFERENCES.references.clear()
+        self.reference._classes.clear()
 
-    def test_register_synchronizer(self):
-        class FrySynchronizer(Synchronizer):
-            model_name = 'res.users'
-            synchronization_type = 'export'
-
-        self.reference.register_synchronizer(FrySynchronizer)
-        ref = self.reference.get_synchronizer('res.users', 'export')
-        self.assertEqual(ref, FrySynchronizer)
-        self.reference.unregister_synchronizer(FrySynchronizer)
-        with self.assertRaises(ValueError):
-            self.reference.get_synchronizer('res.users', 'export')
-
-    def test_register_mapper(self):
-        class ZoidbergMapper(Mapper):
-            model_name = 'res.users'
-            direction = TO_REFERENCE
-
-        self.reference.register_mapper(ZoidbergMapper)
-        ref = self.reference.get_mapper('res.users', TO_REFERENCE)
-        self.assertEqual(ref, ZoidbergMapper)
-        self.reference.unregister_mapper(ZoidbergMapper)
-        with self.assertRaises(ValueError):
-            self.reference.get_mapper('res.users', TO_REFERENCE)
-
-    def test_register_binder(self):
+    def test_register_class(self):
         class BenderBinder(Binder):
             model_name = 'res.users'
 
-        self.reference.register_binder(BenderBinder)
-        ref = self.reference.get_binder('res.users')
+        self.reference.register_class(BenderBinder)
+        ref = self.reference.get_class(Binder, 'res.users')
         self.assertEqual(ref, BenderBinder)
-        self.reference.unregister_binder(BenderBinder)
-        with self.assertRaises(ValueError):
-            self.reference.get_binder('res.users')
 
-    def test_register_backend_adapter(self):
-        class HermesBackendAdapter(BackendAdapter):
-            model_name = 'res.users'
-
-        self.reference.register_backend_adapter(HermesBackendAdapter)
-        ref = self.reference.get_backend_adapter('res.users')
-        self.assertEqual(ref, HermesBackendAdapter)
-        self.reference.unregister_backend_adapter(HermesBackendAdapter)
-        with self.assertRaises(ValueError):
-            self.reference.get_backend_adapter('res.users')
-
-    def test_register_synchronizer_decorator(self):
-        @self.reference
-        class FrySynchronizer(Synchronizer):
-            model_name = 'res.users'
-            synchronization_type = 'export'
-
-        ref = self.reference.get_synchronizer('res.users', 'export')
-        self.assertEqual(ref, FrySynchronizer)
-
-    def test_register_mapper_decorator(self):
+    def test_register_class_decorator(self):
         @self.reference
         class ZoidbergMapper(Mapper):
             model_name = 'res.users'
             direction = TO_REFERENCE
 
-        ref = self.reference.get_mapper('res.users', TO_REFERENCE)
+        ref = self.reference.get_class(Mapper, 'res.users', TO_REFERENCE)
         self.assertEqual(ref, ZoidbergMapper)
 
-    def test_register_binder_decorator(self):
+    def test_register_class_parent(self):
+        """ It should get the parent's class when no class is defined"""
+        @self.parent
+        class FryBinder(Binder):
+            model_name = 'res.users'
+
+        ref = self.reference.get_class(Binder, 'res.users')
+        self.assertEqual(ref, FryBinder)
+
+    def test_no_register_error(self):
+        """ Error when asking for a class and none is found"""
+        with self.assertRaises(ValueError):
+            ref = self.reference.get_class(BackendAdapter, 'res.users')
+
+    def test_registered_classes_all(self):
         @self.reference
-        class BenderBinder(Binder):
+        class LeelaMapper(Mapper):
             model_name = 'res.users'
 
-        ref = self.reference.get_binder('res.users')
-        self.assertEqual(ref, BenderBinder)
-
-    def test_register_backend_adapter_decorator(self):
         @self.reference
-        class HermesBackendAdapter(BackendAdapter):
+        class FarnsworthBinder(Binder):
             model_name = 'res.users'
 
-        ref = self.reference.get_backend_adapter('res.users')
-        self.assertEqual(ref, HermesBackendAdapter)
-
-    def test_register_binder_parent(self):
-        """ It should get the parent's binder when no binder is defined"""
-        @self.parent
-        class LeelaBinder(Binder):
+        @self.reference
+        class NibblerBackendAdapter(BackendAdapter):
             model_name = 'res.users'
 
-        ref = self.reference.get_binder('res.users')
-        self.assertEqual(ref, LeelaBinder)
+        classes = list(self.reference.registered_classes())
+        self.assertItemsEqual(
+                classes,
+                [LeelaMapper, FarnsworthBinder, NibblerBackendAdapter])
 
-    def test_register_synchronizer_parent(self):
-        """ It should get the parent's synchronizer when no synchronizer
-        is defined"""
-        @self.parent
-        class AmySynchronizer(Synchronizer):
-            model_name = 'res.users'
-            synchronization_type = 'export'
-
-        ref = self.reference.get_synchronizer('res.users', 'export')
-        self.assertEqual(ref, AmySynchronizer)
-
-    def test_register_mapper_parent(self):
-        """ It should get the parent's mapper when no mapper is defined"""
-        @self.parent
-        class FarnsworthMapper(Mapper):
-            model_name = 'res.users'
-            direction = TO_REFERENCE
-
-        ref = self.reference.get_mapper('res.users', TO_REFERENCE)
-        self.assertEqual(ref, FarnsworthMapper)
-
-    def test_register_backend_adapter_parent(self):
-        """ It should get the parent's backend_adapter when no
-        backend_adapter is defined"""
-        @self.parent
-        class BranniganBackendAdapter(BackendAdapter):
+    def test_registered_classes_filter(self):
+        @self.reference
+        class LeelaMapper(Mapper):
             model_name = 'res.users'
 
-        ref = self.reference.get_backend_adapter('res.users')
-        self.assertEqual(ref, BranniganBackendAdapter)
+        @self.reference
+        class AmyWongMapper(Mapper):
+            model_name = 'res.users'
 
-    def test_no_register_error_synchronizer(self):
-        """ Error when asking for a synchronizer and none is found"""
-        with self.assertRaises(ValueError):
-            ref = self.reference.get_synchronizer('res.users', 'export')
+        @self.reference
+        class FarnsworthBinder(Binder):
+            model_name = 'res.users'
 
-    def test_no_register_error_mapper(self):
-        """ Error when asking for a mapper and none is found"""
-        with self.assertRaises(ValueError):
-            ref = self.reference.get_mapper('res.users', TO_REFERENCE)
+        @self.reference
+        class NibblerBackendAdapter(BackendAdapter):
+            model_name = 'res.users'
 
-    def test_no_register_error_binder(self):
-        """ Error when asking for a binder and none is found"""
-        with self.assertRaises(ValueError):
-            ref = self.reference.get_binder('res.users')
-
-    def test_no_register_error_backend_adapter(self):
-        """ Error when asking for a backend_adapter and none is found"""
-        with self.assertRaises(ValueError):
-            ref = self.reference.get_backend_adapter('res.users')
+        classes = list(self.reference.registered_classes(Mapper))
+        self.assertItemsEqual(
+                classes,
+                [LeelaMapper, AmyWongMapper])

@@ -35,7 +35,7 @@ class Mapper(ConnectorUnit):
     direction = None
 
     @classmethod
-    def match(cls, model, direction):
+    def match(cls, model):
         """ Find the appropriate class to transform the record """
         if cls.model_name is None:
             raise NotImplementedError
@@ -43,5 +43,15 @@ class Mapper(ConnectorUnit):
             model_name = model._name
         else:
             model_name = model  # str
-        return (cls.model_name == model_name and
-                cls.direction == direction)
+        return cls.model_name == model_name
+
+
+class ImportMapper(Mapper):
+    """ Transform a record from a backend to an OpenERP record """
+    direction = FROM_REFERENCE
+
+
+class ExportMapper(Mapper):
+    """ Transform a record from OpenERP to a backend record """
+    direction = TO_REFERENCE
+

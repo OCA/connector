@@ -71,7 +71,7 @@ class test_reference_register(unittest2.TestCase):
 
     def test_register_class(self):
         class BenderBinder(Binder):
-            model_name = 'res.users'
+            _model_name = 'res.users'
 
         self.reference.register_class(BenderBinder)
         ref = self.reference.get_class(Binder, 'res.users')
@@ -80,7 +80,7 @@ class test_reference_register(unittest2.TestCase):
     def test_register_class_decorator(self):
         @self.reference
         class ZoidbergMapper(ExportMapper):
-            model_name = 'res.users'
+            _model_name = 'res.users'
 
         ref = self.reference.get_class(ExportMapper, 'res.users')
         self.assertEqual(ref, ZoidbergMapper)
@@ -89,7 +89,7 @@ class test_reference_register(unittest2.TestCase):
         """ It should get the parent's class when no class is defined"""
         @self.parent
         class FryBinder(Binder):
-            model_name = 'res.users'
+            _model_name = 'res.users'
 
         ref = self.reference.get_class(Binder, 'res.users')
         self.assertEqual(ref, FryBinder)
@@ -102,15 +102,15 @@ class test_reference_register(unittest2.TestCase):
     def test_registered_classes_all(self):
         @self.reference
         class LeelaMapper(Mapper):
-            model_name = 'res.users'
+            _model_name = 'res.users'
 
         @self.reference
         class FarnsworthBinder(Binder):
-            model_name = 'res.users'
+            _model_name = 'res.users'
 
         @self.reference
         class NibblerBackendAdapter(BackendAdapter):
-            model_name = 'res.users'
+            _model_name = 'res.users'
 
         classes = list(self.reference.registered_classes())
         self.assertItemsEqual(
@@ -120,19 +120,19 @@ class test_reference_register(unittest2.TestCase):
     def test_registered_classes_filter(self):
         @self.reference
         class LeelaMapper(ExportMapper):
-            model_name = 'res.users'
+            _model_name = 'res.users'
 
         @self.reference
         class AmyWongMapper(ImportMapper):
-            model_name = 'res.users'
+            _model_name = 'res.users'
 
         @self.reference
         class FarnsworthBinder(Binder):
-            model_name = 'res.users'
+            _model_name = 'res.users'
 
         @self.reference
         class NibblerBackendAdapter(BackendAdapter):
-            model_name = 'res.users'
+            _model_name = 'res.users'
 
         classes = list(self.reference.registered_classes(Mapper))
         self.assertItemsEqual(

@@ -25,7 +25,7 @@ from ..connector import ConnectorUnit
 class BackendAdapter(ConnectorUnit):
     """ Base Backend Adapter for the connectors """
 
-    model_name = None  # define in sub-classes
+    _model_name = None  # define in sub-classes
 
 
 class CRUDAdapter(BackendAdapter):
@@ -36,7 +36,7 @@ class CRUDAdapter(BackendAdapter):
     the methods.
     """
 
-    model_name = None
+    _model_name = None
 
     def search(self, *args, **kwargs):
         """ Search records according to some criterias

@@ -26,7 +26,7 @@ class Synchronizer(ConnectorUnit):
     """ Base class for synchronizers """
 
     # implement in sub-classes
-    model_name = None
+    _model_name = None
 
 
 class ExportSynchronizer(Synchronizer):

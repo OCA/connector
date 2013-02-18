@@ -30,7 +30,7 @@ class Mapper(ConnectorUnit):
     """ Transform a record to a defined output """
 
     # name of the OpenERP model, to be defined in concrete classes
-    model_name = None
+    _model_name = None
     # direction of the conversion (TO_REFERENCE or FROM_REFERENCE)
     direction = None
 

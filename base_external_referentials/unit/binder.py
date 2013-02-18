@@ -27,4 +27,9 @@ class Binder(ConnectorUnit):
     internal id, or create the link between them
     """
 
-    model_name = None  # define in sub-classes
+    _model_name = None  # define in sub-classes
+
+    def __init__(self, reference, session):
+        super(Binder, self).__init__(reference)
+        self.session = session
+        self.model = self.session.pool.get(self.model_name)

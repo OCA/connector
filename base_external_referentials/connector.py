@@ -41,7 +41,7 @@ class ConnectorUnit(object):
     :py:class:`base_external_referentials.reference.Reference`.
     """
 
-    model_name = None
+    _model_name = None  # to be defined in sub-classes
 
     def __init__(self, reference):
         """
@@ -53,10 +53,31 @@ class ConnectorUnit(object):
     @classmethod
     def match(cls, model):
         """ Find the class to use """
-        if cls.model_name is None:
-            raise NotImplementedError
         if hasattr(model, '_name'):  # model instance
             model_name = model._name
         else:
             model_name = model  # str
         return cls.model_name == model_name
+
+    class __metaclass__(type):
+        @property
+        def model_name(cls):
+            if cls._model_name is None:
+                raise NotImplementedError
+            return cls._model_name
+
+
+class RecordIdentifier(object):
+    """ Most of the time, on an external system, a record is identified
+    by a unique ID. However occasionaly, it is identified by an ID and a
+    second key, or even no ID at all but some keys.
+
+    Instances of this class encapsulate the identifier(s) for a external
+    record.
+
+    The instance should support pickling because a
+    :py:class:`RecordMetadata` can be stored in a job.
+    """
+    def __init__(self, **kwargs):
+        for key, value in kwargs.iteritems():
+            setattr(self, key, value)

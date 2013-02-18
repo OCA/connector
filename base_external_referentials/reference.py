@@ -185,7 +185,7 @@ class Reference(object):
 
             @magento
             class MagentoBinder(Binder):
-                model_name = 'a.model'
+                _model_name = 'a.model'
                 # other stuff
 
         Thus, by doing::

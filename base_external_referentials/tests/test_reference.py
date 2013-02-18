@@ -6,12 +6,12 @@ from openerp.addons.base_external_referentials.reference import (
         Reference,
         get_reference,
         REFERENCES)
-from openerp.addons.base_external_referentials.binder import (
+from openerp.addons.base_external_referentials import (
         Binder)
-from openerp.addons.base_external_referentials.mapper import (
+from openerp.addons.base_external_referentials import (
         Mapper,
         TO_REFERENCE)
-from openerp.addons.base_external_referentials.backend_adapter import (
+from openerp.addons.base_external_referentials import (
         BackendAdapter)
 
 

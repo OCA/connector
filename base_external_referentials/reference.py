@@ -19,10 +19,10 @@
 #
 ##############################################################################
 
-from .mapper import Mapper
-from .binder import Binder
-from .backend_adapter import BackendAdapter
-from .synchronizer import Synchronizer
+from .unit.mapper import Mapper
+from .unit.binder import Binder
+from .unit.backend_adapter import BackendAdapter
+from .unit.synchronizer import Synchronizer
 
 
 class ReferenceRegistry(object):
@@ -31,7 +31,8 @@ class ReferenceRegistry(object):
         self.references = set()
 
     def register_reference(self, reference):
-        """ Register an instance of `Reference`
+        """ Register an instance of
+        :py:class:`base_external_referentials.reference.Reference`
 
         :param reference: reference to register
         :type reference: Reference
@@ -39,8 +40,9 @@ class ReferenceRegistry(object):
         self.references.add(reference)
 
     def get_reference(self, service, version=None):
-        """ Return an instance of `Reference` for a ``service`` and a
-        ``version``
+        """ Return an instance of
+        :py:class:`base_external_referentials.reference.Reference` for a
+        ``service`` and a ``version``
 
         :param service: name of the service to return
         :type service: str
@@ -58,8 +60,9 @@ REFERENCES = ReferenceRegistry()
 
 
 def get_reference(service, version=None):
-    """ Return the correct instance of `Reference` for a ``service`` and
-    a ``version``
+    """ Return the correct instance of
+    :py:class:`base_external_referentials.reference.Reference` for a
+    ``service`` and a ``version``
 
     :param service: name of the service to return
     :type service: str

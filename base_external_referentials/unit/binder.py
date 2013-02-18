@@ -19,18 +19,19 @@
 #
 ##############################################################################
 
-from .connector import ConnectorUnit
+from ..connector import ConnectorUnit
 
 
-class BackendAdapter(ConnectorUnit):
-    """ Base Backend Adapter for the connectors """
+class Binder(ConnectorUnit):
+    """ For one record of a model, capable to find an external or
+    internal id, or create the link between them
+    """
 
     model_name = None  # define in sub-classes
 
     @classmethod
     def match(cls, model):
-        """ Identify the class to use
-        """
+        """ Identify the class to use """
         if cls.model_name is None:
             raise NotImplementedError
         if hasattr(model, '_name'):  # model instance

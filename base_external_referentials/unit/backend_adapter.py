@@ -19,24 +19,22 @@
 #
 ##############################################################################
 
-from .connector import ConnectorUnit
+from ..connector import ConnectorUnit
 
 
-class Synchronizer(ConnectorUnit):
-    """ Base class for synchronizers """
+class BackendAdapter(ConnectorUnit):
+    """ Base Backend Adapter for the connectors """
 
-    # implement in sub-classes
-    model_name = None
-    synchronization_type = None
+    model_name = None  # define in sub-classes
 
     @classmethod
-    def match(cls, model, synchronization_type):
-        """ Find the class to use """
+    def match(cls, model):
+        """ Identify the class to use
+        """
         if cls.model_name is None:
             raise NotImplementedError
         if hasattr(model, '_name'):  # model instance
             model_name = model._name
         else:
             model_name = model  # str
-        return (cls.synchronization_type == synchronization_type and
-                cls.model_name == model_name)
+        return cls.model_name == model_name

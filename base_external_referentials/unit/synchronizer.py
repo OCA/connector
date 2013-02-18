@@ -19,29 +19,24 @@
 #
 ##############################################################################
 
-# directions
-TO_REFERENCE = 'to_reference'
-FROM_REFERENCE = 'from_reference'
-
-from .connector import ConnectorUnit
+from ..connector import ConnectorUnit
 
 
-class Mapper(ConnectorUnit):
-    """ Transform a record to a defined output """
+class Synchronizer(ConnectorUnit):
+    """ Base class for synchronizers """
 
-    # name of the OpenERP model, to be defined in concrete classes
+    # implement in sub-classes
     model_name = None
-    # direction of the conversion (TO_REFERENCE or FROM_REFERENCE)
-    direction = None
+    synchronization_type = None
 
     @classmethod
-    def match(cls, model, direction):
-        """ Find the appropriate class to transform the record """
+    def match(cls, model, synchronization_type):
+        """ Find the class to use """
         if cls.model_name is None:
             raise NotImplementedError
         if hasattr(model, '_name'):  # model instance
             model_name = model._name
         else:
             model_name = model  # str
-        return (cls.model_name == model_name and
-                cls.direction == direction)
+        return (cls.synchronization_type == synchronization_type and
+                cls.model_name == model_name)

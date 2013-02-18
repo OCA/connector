@@ -163,7 +163,7 @@ class OpenERPJobStorage(JobStorage):
         if job.result is not None:
             vals['result'] = unicode(job.result)
 
-        vals['user_id'] = job.user_id
+        vals['user_id'] = job.user_id or self.session.uid
 
         # by removing the worker on terminated jobs,
         # we can check the load of a worker

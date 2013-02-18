@@ -43,6 +43,13 @@ class ConnectorUnit(object):
 
     model_name = None
 
+    def __init__(self, reference):
+        """
+        :param reference: current reference we are working with
+        :type reference: :py:class:`base_external_referentials.reference.Reference`
+        """
+        self.reference = reference
+
     @classmethod
     def match(cls, model):
         """ Find the class to use """

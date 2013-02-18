@@ -6,13 +6,11 @@ from openerp.addons.base_external_referentials.reference import (
         Reference,
         get_reference,
         REFERENCES)
-from openerp.addons.base_external_referentials import (
-        Binder)
-from openerp.addons.base_external_referentials import (
-        Mapper,
-        TO_REFERENCE)
-from openerp.addons.base_external_referentials import (
-        BackendAdapter)
+from openerp.addons.base_external_referentials import Binder
+from openerp.addons.base_external_referentials import (Mapper,
+                                                       ImportMapper,
+                                                       ExportMapper)
+from openerp.addons.base_external_referentials import BackendAdapter
 
 
 class test_reference(unittest2.TestCase):
@@ -81,11 +79,10 @@ class test_reference_register(unittest2.TestCase):
 
     def test_register_class_decorator(self):
         @self.reference
-        class ZoidbergMapper(Mapper):
+        class ZoidbergMapper(ExportMapper):
             model_name = 'res.users'
-            direction = TO_REFERENCE
 
-        ref = self.reference.get_class(Mapper, 'res.users', TO_REFERENCE)
+        ref = self.reference.get_class(ExportMapper, 'res.users')
         self.assertEqual(ref, ZoidbergMapper)
 
     def test_register_class_parent(self):
@@ -122,11 +119,11 @@ class test_reference_register(unittest2.TestCase):
 
     def test_registered_classes_filter(self):
         @self.reference
-        class LeelaMapper(Mapper):
+        class LeelaMapper(ExportMapper):
             model_name = 'res.users'
 
         @self.reference
-        class AmyWongMapper(Mapper):
+        class AmyWongMapper(ImportMapper):
             model_name = 'res.users'
 
         @self.reference

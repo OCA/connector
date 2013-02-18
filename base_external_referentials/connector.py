@@ -27,3 +27,23 @@ class connectors_installed(orm.AbstractModel):
     database.
     """
     _name = 'connectors.installed'
+
+
+class ConnectorPiece(object):
+    """Abstract class for each piece of the connector:
+
+    * Binder
+    * Mapper
+    * Synchronizer
+    * Backend Adapter
+
+    Or basically any class intended to be registered in a
+    :py:class:`base_external_referentials.reference.Reference`.
+    """
+
+    model_name = None
+
+    @classmethod
+    def match(cls, model, *args, **kwargs):
+        """ Identify the class to use """
+        raise NotImplementedError

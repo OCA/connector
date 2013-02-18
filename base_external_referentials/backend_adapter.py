@@ -19,8 +19,10 @@
 #
 ##############################################################################
 
+from .connector import ConnectorPiece
 
-class BackendAdapter(object):
+
+class BackendAdapter(ConnectorPiece):
     """ Base Backend Adapter for the connectors """
 
     model_name = None  # define in sub-classes

@@ -21,6 +21,7 @@ API:
 .. toctree::
    :maxdepth: 2
 
+   api_connector.rst
    api_session.rst
    api_reference.rst
    api_event.rst

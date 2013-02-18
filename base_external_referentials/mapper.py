@@ -23,8 +23,10 @@
 TO_REFERENCE = 'to_reference'
 FROM_REFERENCE = 'from_reference'
 
+from .connector import ConnectorPiece
 
-class Mapper(object):
+
+class Mapper(ConnectorPiece):
     """ Transform a record to a defined output """
 
     # name of the OpenERP model, to be defined in concrete classes

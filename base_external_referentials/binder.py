@@ -19,8 +19,10 @@
 #
 ##############################################################################
 
+from .connector import ConnectorPiece
 
-class Binder(object):
+
+class Binder(ConnectorPiece):
     """ For one record of a model, capable to find an external or
     internal id, or create the link between them
     """

@@ -19,8 +19,10 @@
 #
 ##############################################################################
 
+from .connector import ConnectorPiece
 
-class Synchronizer(object):
+
+class Synchronizer(ConnectorPiece):
     """ Base class for synchronizers """
 
     # implement in sub-classes

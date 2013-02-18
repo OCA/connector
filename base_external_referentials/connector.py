@@ -29,7 +29,7 @@ class connectors_installed(orm.AbstractModel):
     _name = 'connectors.installed'
 
 
-class ConnectorPiece(object):
+class ConnectorUnit(object):
     """Abstract class for each piece of the connector:
 
     * Binder

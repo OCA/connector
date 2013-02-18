@@ -22,6 +22,9 @@
 from ..connector import ConnectorUnit
 
 
+# TODO abstract external.referential
+# TODO store and read metadata (attributes stored on the relation
+# between the backend and the openerp record)
 class Binder(ConnectorUnit):
     """ For one record of a model, capable to find an external or
     internal id, or create the link between them
@@ -33,3 +36,36 @@ class Binder(ConnectorUnit):
         super(Binder, self).__init__(reference)
         self.session = session
         self.model = self.session.pool.get(self.model_name)
+
+    def to_openerp(self, referential_id, backend_identifier):
+        """ Give the OpenERP ID for an external ID
+
+        :param referential_id: id of the external.referential
+        :param backend_identifier: backend identifiers for which we want
+                                   the OpenERP ID
+        :type backend_identifier: :py:class:`base_external_referentials.connector.ExternalIdentifier`
+        :return: OpenERP ID of the record
+        :rtype: int
+        """
+        raise NotImplementedError
+
+    def to_backend(self, referential_id, openerp_id):
+        """ Give the backend ID for an OpenERP ID
+
+        :param referential_id: id of the external.referential
+        :param openerp_id: OpenERP ID for which we want the backend id
+        :return: backend identifier of the record
+        :rtype: :py:class:`base_external_referentials.connector.ExternalIdentifier`
+        """
+        raise NotImplementedError
+
+    def bind(self, referential_id, backend_identifier, openerp_id):
+        """ Create the link between an external ID and an OpenERP ID
+
+        :param referential_id: id of the external.referential
+        :param external_identifier: Backend identifiers to bind
+        :type external_identifier: :py:class:`base_external_referentials.connector.ExternalIdentifier`
+        :param openerp_id: OpenERP ID to bind
+        :type openerp_id: int
+        """
+        raise NotImplementedError

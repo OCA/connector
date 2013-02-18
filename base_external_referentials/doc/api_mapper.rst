@@ -1,7 +1,7 @@
 Mapper
 =======
 
-.. automodule:: base_external_referentials.mapper
+.. automodule:: base_external_referentials.unit.mapper
    :members:
    :undoc-members:
 

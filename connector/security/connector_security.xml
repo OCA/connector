@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  connector for OpenERP
+  Copyright (C) 2011 Akretion Benoît Guillot <benoit.guillot@akretion.com>
+  The licence is in the file __openerp__.py
+-->
+
+<openerp>
+    <data>
+
+    <record model="ir.module.category" id="module_category_connector">
+        <field name="name">Connectors</field>
+        <field name="sequence">20</field>
+    </record>
+
+    <record id="group_connector_manager" model="res.groups">
+        <field name="name">Connectors Manager</field>
+        <field name="category_id" ref="module_category_connector"/>
+    </record>
+
+    <!-- to remove -->
+    <record id="group_export_mapping" model="res.groups">
+        <field name="name">Export Mapping Manager</field>
+    </record>
+
+    </data>
+</openerp>

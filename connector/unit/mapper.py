@@ -25,11 +25,9 @@
 # the name of the external / openerp model and the values are the
 # records. And the same for the output records.
 
-# directions
-TO_REFERENCE = 'to_reference'
-FROM_REFERENCE = 'from_reference'
-
-from ..connector import ConnectorUnit, MetaConnectorUnit
+from ..connector import ConnectorUnit, MetaConnectorUnit, RecordIdentifier
+from ..exception import MappingError
+from .binder import Binder
 
 
 def mapping(func):
@@ -55,6 +53,7 @@ def changed_by(*args):
         return func
     return register_mapping
 
+
 class MetaMapper(MetaConnectorUnit):
     """ Metaclass for Mapper """
 
@@ -76,30 +75,151 @@ class Mapper(ConnectorUnit):
 
     # name of the OpenERP model, to be defined in concrete classes
     _model_name = None
-    # direction of the conversion (TO_REFERENCE or FROM_REFERENCE)
-    direction = None
 
-    direct = []  # direct conversion of a field to another
-    method = []  # use a method to convert one or many fields
-    children = []  # conversion of sub-records
+    direct = []  # direct conversion of a field to another (from_attr, to_attr)
+    method = []  # use a method to convert one or many fields (method, [changed by fields])
+    children = []  # conversion of sub-records (from_attr, to_attr, model)
 
     _map_methods = None
 
-    def __init__(self, reference, session):
+    def __init__(self, reference, session, backend):
         super(Mapper, self).__init__(reference)
         self.session = session
         self.model = self.session.pool.get(self.model_name)
+        self.backend = backend
+
+    def _map_direct(self, record, from_attr, to_attr):
+        raise NotImplementedError
+
+    def _map_children(self, record, attr, model):
+        raise NotImplementedError
 
     @property
     def map_methods(self):
         return self._map_methods
 
+    def convert(self, record, fields=None, parent_values=None):
+        """ Transform an external record to an OpenERP record or the opposite
+
+        :param record: record to transform
+        :param parent_values: openerp record of the containing object
+            (e.g. sale_order for a sale_order_line)
+        """
+        if fields is None:
+            fields = {}
+
+        result = {}
+
+        for from_attr, to_attr in self.direct:
+            if (not fields or from_attr in fields):
+                # XXX not compatible with all
+                # record type (wrap
+                # records in a standard class representation?)
+                value = self._map_direct(record,
+                                         from_attr,
+                                         to_attr)
+                result[to_attr] = value
+
+        for meth in self.method:
+            changed_by = None
+            if len(meth) == 2:
+                meth, changed_by = meth
+
+            if (changed_by is not None and
+                    not isinstance(changed_by, (tuple, list))):
+                changed_by = [changed_by]
+
+            if (not fields or
+                    changed_by is None or
+                    set(fields).intersection(changed_by)):
+                values = meth(self, record)
+                if not values:
+                    continue
+                if isinstance(values, dict):
+                    result.update(values)
+                else:
+                    raise ValueError('%s: invalid return value for the '
+                                     'mapping method %s' % (values, meth))
+
+        for from_attr, to_attr, model in self.children:
+            if (not fields or from_attr in fields):
+                values = self._map_children(record, from_attr, model)
+                result[to_attr] = values
+
+        return result
+
+    def _sub_convert(self, records, processor, parent_values=None):
+        """ return values of a one2many to put in the main record
+        do not create the records!
+        """
+        raise NotImplementedError
+
 
 class ImportMapper(Mapper):
     """ Transform a record from a backend to an OpenERP record """
-    direction = FROM_REFERENCE
+
+    def _get_o2m_binder(self, model_name):
+        binder_cls = self.reference.get_class(Binder, model_name)
+        return self.binder_cls(self.reference, self.session)
+
+    def _get_o2m_external_identifier(self, record, attr, model):
+        # TODO we should have a unique way to obtain a RecordIdentifier
+        # from a record for a model
+        return RecordIdentifier(id=record[attr])
+
+    def _map_direct(self, record, from_attr, to_attr):
+        value = record[from_attr]
+        attr_type = self.model._columns[to_attr]._type
+        if attr_type == 'many2one':
+            model = self.model._columns[to_attr]._obj
+            ext_id = self._get_o2m_external_identifier(
+                    record, from_attr, model)
+            binder = self._get_o2m_binder(model)
+            value = binder.to_openerp(self.backend, ext_id)
+
+            if not value:
+                raise MappingError("Can not find an existing %s for external "
+                                   "record %s" % (model, ext_id))
+        return value
+
+    def _map_children(self, record, attr, model):
+        mapper_cls = self.reference.get_class(ImportMapper, self.model_name)
+        mapper = mapper_cls(self.reference, self.session)
+        child_records = record[attr]  # XXX not compatible with
+                                     # all record types
+        return self._sub_convert(child_records, mapper,
+                                 parent_values=record)
+
+    def _sub_convert(self, records, mapper, parent_values=None):
+        """ return values of a one2many to put in the main record
+        do not create the records!
+        """
+        result = []
+        for record in records:
+            vals = mapper.convert(record,
+                                  parent_values=parent_values)
+            result.append((0, 0, vals))
+        return result
 
 
 class ExportMapper(Mapper):
     """ Transform a record from OpenERP to a backend record """
-    direction = TO_REFERENCE
+
+    def _map_children(self, record, attr, model):
+        mapper_cls = self.reference.get_class(ExportMapper, self.model_name)
+        mapper = mapper_cls(self.reference, self.session)
+        child_records = record[attr]  # XXX not compatible with
+                                      # all record types
+        return self._sub_convert(child_records, mapper,
+                                 parent_values=record)
+
+    def _sub_convert(self, records, mapper, parent_values=None):
+        """ return values of a one2many to put in the main record
+        do not create the records!
+        """
+        result = []
+        for record in records:
+            vals = mapper.convert(record,
+                                  parent_values=parent_values)
+            result.append(vals)
+        return result

@@ -31,22 +31,15 @@ class Synchronizer(ConnectorUnit):
     # implement in sub-classes
     _model_name = None
 
-    def run(self):
-        """ Run the synchronization """
-        raise NotImplementedError
-
-
-class ImportExportSynchronizer(Synchronizer):
-    """ Common base class for import and exports """
-
-    def __init__(self, reference, session):
-        super(ImportExportSynchronizer, self).__init__(reference)
+    def __init__(self, reference, session, backend):
+        super(Synchronizer, self).__init__(reference)
         self.session = session
+        self.backend = backend
         self.model = self.session.pool.get(self.model_name)
 
         self._binder = None
-        self._external_adapter = None
-        self._processor = None
+        self._backend_adapter = None
+        self._mapper = None
 
     @property
     def binder(self):
@@ -64,8 +57,8 @@ class ImportExportSynchronizer(Synchronizer):
         if self._backend_adapter is None:
             adapter_cls = self.reference.get_class(BackendAdapter,
                                                    self.model_name)
-            self._backend_adapter = adapter_cls(self.reference, self.session)
-        return self._external_adapter
+            self._backend_adapter = adapter_cls(self.reference)
+        return self._backend_adapter
 
     @backend_adapter.setter
     def backend_adapter(self, backend_adapter):
@@ -82,11 +75,14 @@ class ImportExportSynchronizer(Synchronizer):
     def mapper(self, mapper):
         self._mapper = mapper
 
+    def run(self):
+        """ Run the synchronization """
+        raise NotImplementedError
 
 
-class ExportSynchronizer(ImportExportSynchronizer):
+class ExportSynchronizer(Synchronizer):
     """ Synchronizer for exporting data from OpenERP to a backend """
 
 
-class ImportSynchronizer(ImportExportSynchronizer):
+class ImportSynchronizer(Synchronizer):
     """ Synchronizer for importing data from a backend to OpenERP """

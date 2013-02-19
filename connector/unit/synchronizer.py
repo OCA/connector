@@ -21,7 +21,7 @@
 
 from ..connector import ConnectorUnit
 from .binder import Binder
-from .mapper import Mapper
+from .mapper import Mapper, ImportMapper, ExportMapper
 from .backend_adapter import BackendAdapter
 
 
@@ -85,6 +85,23 @@ class Synchronizer(ConnectorUnit):
 class ExportSynchronizer(Synchronizer):
     """ Synchronizer for exporting data from OpenERP to a backend """
 
+    @property
+    def mapper(self):
+        if self._mapper is None:
+            mapper_cls = self.reference.get_class(ExportMapper, self.model_name)
+            self._mapper = mapper_cls(self.reference,
+                                      self.session,
+                                      self.backend)
+        return self._mapper
 
 class ImportSynchronizer(Synchronizer):
     """ Synchronizer for importing data from a backend to OpenERP """
+
+    @property
+    def mapper(self):
+        if self._mapper is None:
+            mapper_cls = self.reference.get_class(ImportMapper, self.model_name)
+            self._mapper = mapper_cls(self.reference,
+                                      self.session,
+                                      self.backend)
+        return self._mapper

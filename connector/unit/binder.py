@@ -37,34 +37,34 @@ class Binder(ConnectorUnit):
         self.session = session
         self.model = self.session.pool.get(self.model_name)
 
-    def to_openerp(self, referential_id, backend_identifier):
+    def to_openerp(self, backend, backend_identifier):
         """ Give the OpenERP ID for an external ID
 
-        :param referential_id: id of the external.referential
+        :param backend: external backend
         :param backend_identifier: backend identifiers for which we want
                                    the OpenERP ID
-        :type backend_identifier: :py:class:`connector.connector.ExternalIdentifier`
+        :type backend_identifier: :py:class:`connector.connector.RecordIdentifier`
         :return: OpenERP ID of the record
         :rtype: int
         """
         raise NotImplementedError
 
-    def to_backend(self, referential_id, openerp_id):
+    def to_backend(self, backend, openerp_id):
         """ Give the backend ID for an OpenERP ID
 
-        :param referential_id: id of the external.referential
+        :param backend: browse of the external backend
         :param openerp_id: OpenERP ID for which we want the backend id
         :return: backend identifier of the record
-        :rtype: :py:class:`connector.connector.ExternalIdentifier`
+        :rtype: :py:class:`connector.connector.RecordIdentifier`
         """
         raise NotImplementedError
 
-    def bind(self, referential_id, backend_identifier, openerp_id):
+    def bind(self, backend, backend_identifier, openerp_id):
         """ Create the link between an external ID and an OpenERP ID
 
-        :param referential_id: id of the external.referential
-        :param external_identifier: Backend identifiers to bind
-        :type external_identifier: :py:class:`connector.connector.ExternalIdentifier`
+        :param backend: browse of the external backend
+        :param backend_identifier: Backend identifiers to bind
+        :type backend_identifier: :py:class:`connector.connector.RecordIdentifier`
         :param openerp_id: OpenERP ID to bind
         :type openerp_id: int
         """

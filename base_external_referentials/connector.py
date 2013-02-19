@@ -29,6 +29,16 @@ class connectors_installed(orm.AbstractModel):
     _name = 'connectors.installed'
 
 
+class MetaConnectorUnit(type):
+    """ Metaclass for ConnectorUnit """
+
+    @property
+    def model_name(cls):
+        if cls._model_name is None:
+            raise NotImplementedError
+        return cls._model_name
+
+
 class ConnectorUnit(object):
     """Abstract class for each piece of the connector:
 
@@ -40,6 +50,8 @@ class ConnectorUnit(object):
     Or basically any class intended to be registered in a
     :py:class:`base_external_referentials.reference.Reference`.
     """
+
+    __metaclass__ = MetaConnectorUnit
 
     _model_name = None  # to be defined in sub-classes
 
@@ -59,12 +71,11 @@ class ConnectorUnit(object):
             model_name = model  # str
         return cls.model_name == model_name
 
-    class __metaclass__(type):
-        @property
-        def model_name(cls):
-            if cls._model_name is None:
-                raise NotImplementedError
-            return cls._model_name
+    @property
+    def model_name(self):
+        if self._model_name is None:
+            raise NotImplementedError('No _model_name')
+        return self._model_name
 
 
 class RecordIdentifier(object):

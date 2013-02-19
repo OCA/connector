@@ -27,6 +27,7 @@ import test_worker
 import test_reference
 import test_producer
 import test_connector
+import test_mapper
 
 fast_suite = [
 ]
@@ -40,4 +41,5 @@ checks = [
     test_reference,
     test_producer,
     test_connector,
+    test_mapper,
 ]

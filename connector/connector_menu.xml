@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data noupdate="0">
+        <menuitem id="menu_connectors_root"
+            name="Connectors"
+            groups="group_connector_manager"/>
+
+        <menuitem id="menu_connectors"
+            name="Connectors"
+            parent="menu_connectors_root" />
+
+        <menuitem id="menu_referentials"
+            name="Backends"
+            parent="menu_connectors"
+            action="external_referential_act"/>
+
+        <menuitem id="menu_queue"
+            name="Queue"
+            parent="menu_connectors_root"/>
+
+        <menuitem id="menu_queue_worker"
+            action="action_queue_worker"
+            parent="menu_queue"/>
+
+        <menuitem id="menu_queue_job"
+            action="action_queue_job"
+            parent="menu_queue"/>
+
+    </data>
+</openerp>

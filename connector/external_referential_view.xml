@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+  <data>
+    <record id="external_referential_view_form" model="ir.ui.view">
+      <field name="name">external.referential.form</field>
+      <field name="model">external.referential</field>
+      <field name="arch" type="xml">
+        <form string="External Referentials" version="7.0">
+          <header>
+            <button name="import_referentials"
+              class="oe_highlight"
+              string="Synchronize Metadata"/>
+          </header>
+          <sheet>
+            <group col="4">
+              <field name="name" attrs="{'readonly':[('create_date','!=',False)]}"/>
+              <field name="backend_id"/>
+            </group>
+            <group col="4" colspan="4">
+              <notebook colspan="4">
+                <page name="configuration" string="Configuration">
+                </page>
+                <page name="old_config" string="Legacy configuration (deprecated)">
+                  <group>
+                    <field name="version_id" on_change="onchange_version_id(version_id)"/>
+                    <field name="debug"/>
+                    <field name="location"/>
+                    <field name="apiusername"/>
+                    <field name="apipass"/>
+                    <field name="create_date" invisible="True"/>
+                    <field name="categ_name" invisible="True"/>
+                    <field name="type_name" invisible="True" readonly="1"/>
+                  </group>
+                </page>
+                <page name="old_synchros" string="Legacy synchronizations (deprecated)">
+                  <separator string="Core Components" colspan="4" />
+                    <group name="compulsory" col="4" colspan="4">
+                      <separator string="Compulsory" colspan="4" />
+                      <button name="import_referentials" string="2 - Synchronize Referential Settings" colspan="2" type="object" attrs="{'readonly':[('mapping_ids','=',[])]}"/>
+                    </group>
+                </page>
+                <page name="mappings" string="Mappings (deprecated)">
+                  <button name="refresh_mapping" string="1 - Reload Referential Mapping Templates" colspan="2" type="object" />
+                  <field name="mapping_ids" widget="one2many_list" nolabel="1">
+                    <tree string="Object Mappings">
+                      <field name="model_id" />
+                      <field name="extra_name" />
+                      </tree>
+                      <form string="Object Mappings">
+                        <field name="model_id" on_change="model_id_change(model_id)" />
+                        <field name="extra_name" />
+                        <field name="related_model_ids" invisible="1" />
+                        <group col="4" colspan="4">
+                          <field name="external_list_method" />
+                          <field name="external_search_method" />
+                          <field name="external_get_method" />
+                          <field name="external_update_method" />
+                          <field name="external_create_method" />
+                          <field name="external_delete_method" />
+                          <field name="external_done_method" />
+                          <field name="key_for_external_id" />
+                          <field name="external_resource_name" />
+                        </group>
+                        <field colspan="4" name="mapping_ids"
+                          widget="one2many_list"
+                          nolabel="1"
+                          context="{'model_id':model_id}" />
+                      </form>
+                    </field>
+                </page>
+              </notebook>
+            </group>
+          </sheet>
+        </form>
+      </field>
+    </record>
+
+    <record id="external_referential_view_tree" model="ir.ui.view">
+      <field name="name">external.referential.tree</field>
+      <field name="model">external.referential</field>
+      <field name="arch" type="xml">
+        <tree string="External Referentials">
+          <field name="name"/>
+          <field name="type"/>
+        </tree>
+      </field>
+    </record>
+
+    <record id="external_referential_view_search" model="ir.ui.view">
+      <field name="name">external.referential.search</field>
+      <field name="model">external.referential</field>
+      <field name="arch" type="xml">
+        <search string="External Referentials">
+          <field name="name"/>
+        </search>
+      </field>
+    </record>
+
+    <record id="external_referential_act" model="ir.actions.act_window">
+      <field name="name">External Referentials</field>
+      <field name="res_model">external.referential</field>
+      <field name="view_type">form</field>
+      <field name="view_mode">tree,form</field>
+      <field name="context">{}</field>
+      <field name="view_id" ref="external_referential_view_tree"/>
+    </record>
+
+  </data>
+</openerp>

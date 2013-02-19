@@ -21,6 +21,11 @@
 
 from openerp.osv import orm
 
+__all__ = [
+    'ConnectorUnit',
+    'RecordIdentifier',
+]
+
 
 class connectors_installed(orm.AbstractModel):
     """Empty model used to know if the module is installed on the
@@ -35,7 +40,7 @@ class MetaConnectorUnit(type):
     @property
     def model_name(cls):
         if cls._model_name is None:
-            raise NotImplementedError
+            raise NotImplementedError("no _model_name for %s" % cls)
         return cls._model_name
 
 
@@ -74,7 +79,7 @@ class ConnectorUnit(object):
     @property
     def model_name(self):
         if self._model_name is None:
-            raise NotImplementedError('No _model_name')
+            raise NotImplementedError('No _model_name for %s' % self)
         return self._model_name
 
 

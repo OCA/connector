@@ -79,10 +79,9 @@ class external_backend(orm.AbstractModel):
     _name = 'external.backend'
 
     _columns = {
+        'name': fields.char('Name', required=True),
         'type': fields.char('Type', readonly=True)
     }
-
-
 
 
 class ir_model_data(orm.Model):

@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <!--
+        <record model="ir.ui.view" id="external_referential_form_view">
+            <field name="name">external_referential_form_view</field>
+            <field name="model">external.referential</field>
+            <field name="type">form</field>
+            <field name="priority">20</field>
+            <field name="arch" type="xml">
+                <form string="External Referential">
+                    <group col="6" colspan="4" name='name'>
+                        <separator string="Configuration" colspan="6"/>
+                        <field name="name" attrs="{'readonly':[('create_date','!=',False)]}"/>
+                        <field name="version_id" on_change="onchange_version_id(version_id)"/>
+                        <field name="debug"/>
+                        <field name="location"/>
+                        <field name="apiusername"/>
+                        <field name="apipass"/>
+                        <field name="create_date" invisible="True"/>
+                        <field name="categ_name" invisible="True"/>
+                        <field name="type_name" invisible="True" readonly="1"/>
+                    </group>
+                    <group col="4" colspan="4">
+                        <separator string="Core Components" colspan="4" />
+                        <notebook colspan="4">
+                            <page string="Referential Actions">
+                                <group name="compulsory" col="4" colspan="4">
+                                    <separator string="Compulsory" colspan="4" />
+                                    <button name="refresh_mapping" string="1 - Reload Referential Mapping Templates" colspan="2" type="object" />
+                                    <button name="import_referentials" string="2 - Synchronize Referential Settings" colspan="2" type="object" attrs="{'readonly':[('mapping_ids','=',[])]}"/>
+                                </group>
+                            </page>
+                            <page string="CSV file generation" groups="base_external_referentials.group_export_mapping" >
+                                <button name="build_external_ref_categ" string="1- Export category" colspan="1" type="object" />
+                                <button name="build_external_ref_type" string="2- Export type" colspan="1" type="object" />
+                                <button name="build_external_ref_version" string="3- Export version" colspan="1" type="object" />
+                                <button name="build_external_ref" string="4- Export referential" colspan="1" type="object" />
+                                <button name="build_external_mapping_template" string="5- Export mapping template" colspan="1" type="object" />
+                                <button name="build_external_mapping_lines" string="6- Export mapping lines" colspan="1" type="object" />
+                            </page>
+                        </notebook>
+                    </group>
+                    <field name="mapping_ids" widget="one2many_list" nolabel="1">
+                        <tree string="Object Mappings">
+                            <field name="model_id" />
+                            <field name="extra_name" />
+                        </tree>
+                        <form string="Object Mappings">
+                            <field name="model_id" on_change="model_id_change(model_id)" />
+                            <field name="extra_name" />
+                            <field name="related_model_ids" invisible="1" />
+                            <group col="4" colspan="4">
+                                <field name="external_list_method" />
+                                <field name="external_search_method" />
+                                <field name="external_get_method" />
+                                <field name="external_update_method" />
+                                <field name="external_create_method" />
+                                <field name="external_delete_method" />
+                                <field name="external_done_method" />
+                                <field name="key_for_external_id" />
+                                <field name="external_resource_name" />
+                            </group>
+                            <button name="add_all_fields" string="Add all object fields" colspan="2" type="object" />
+                            <button name="create_mapping_file" string="Export mapping file" colspan="2" type="object" groups="base_external_referentials.group_export_mapping"/>
+                            <field colspan="4" name="mapping_ids" widget="one2many_list" nolabel="1" context="{'model_id':model_id}" />
+                        </form>
+                    </field>
+                </form>
+            </field>
+        </record>
+-->
+
+<!-- External mapping line search views -->
+        <record model="ir.ui.view" id="external_mapping_line_search_view">
+            <field name="name">external.mapping_line.search.view</field>
+            <field name="model">external.mapping.line</field>
+            <field name="type">search</field>
+            <field name="arch" type="xml">
+                <search string="Mapping line">
+                   <field name="external_field"/>
+                   <field name="name"/>
+                   <field name="mapping_id" />
+                   <newline/>
+                   <group  expand='0' string='Group by...'>
+                       <filter string='External Mapping' icon="terp-stock_symbol-selection" domain="[]" context="{'group_by' : 'mapping_id'}" />
+                   </group>
+                </search>
+            </field>
+        </record>
+<!-- External mapping line tree views -->
+        <record id="external_mapping_line_tree_view" model="ir.ui.view">
+            <field name="name">external_mapping_line_tree_view</field>
+            <field name="model">external.mapping.line</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="Mapping line">
+                    <field name="selected" />
+                    <field name="sequence" />
+                    <field name="field_id" />
+                    <field name="internal_field" />
+                    <field name="external_field" />
+                    <field name="external_type" />
+                    <field name="type" />
+                    <field name="alternative_key" />
+                    <field name="name" />
+                    <field name="mapping_id" />
+                </tree>
+            </field>
+        </record>
+
+<!-- External mapping line form views -->
+        <record model="ir.ui.view" id="external_mapping_line_form_view">
+            <field name="name">external_mapping_line_form_view</field>
+            <field name="model">external.mapping.line</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Mapping line">
+                    <group name="main" colspan="4">
+                        <field name="selected" />
+                        <field name="sequence" />
+                        <field name="type" />
+                        <field name="evaluation_type" />
+                    </group>
+                    <group attrs="{'invisible':[('evaluation_type','=','function')]}" colspan="4">
+                        <group name="external_field" colspan="2" col="2">
+                            <separator string="External fields" colspan="2"/>
+                            <field name="external_field" select="1"/>
+                            <field name="external_type" attrs="{'required':[('evaluation_type','=','direct')]}"/>
+                            <field name="datetime_format" attrs="{'invisible':[('external_type','!=','datetime')]}"/>
+                        </group>
+                        <group name="internal_field" colspan="2" col="2">
+                            <separator string="Internal fields" colspan="2"/>
+                            <field name="field_id" domain="[('model_id','in',parent.related_model_ids[0][2])]"
+                                    attrs="{'required':[('evaluation_type','in',['direct', 'sub-mapping'])],
+                                            'invisible':[('evaluation_type', '=', 'function')]}"/>
+                            <field name="internal_type" readonly="True"/>
+                            <field name="child_mapping_id" colspan="2"
+                                    attrs="{'invisible':[('evaluation_type','!=','sub-mapping')],
+                                            'required':[('evaluation_type','=','sub-mapping')]}"/>
+                        </group>
+                    </group>
+                    <group attrs="{'invisible':[('evaluation_type','!=','function')]}" colspan="4">
+                        <group name="import_function_field" colspan="2" col="2">
+                            <separator string="Import in OpenERP Mapping Python Function" colspan="2"/>
+                            <field name="in_function" colspan="2" nolabel="1"/>
+                        </group>
+                        <group name="export_function_field" colspan="2" col="2">
+                        <separator string="Export from OpenERP Mapping Python Function" colspan="2"/>
+                        <field name="out_function" colspan="2" nolabel="1"/>
+                        </group>
+                    </group>
+                    <group name="other_information" colspan="4">
+                        <separator string="Other Information" colspan="4"/>
+                        <field name="alternative_key" />
+                        <group name='full_name'>
+                            <field name="function_name" string="Full Name"
+                                    attrs="{'invisible':[('evaluation_type','!=','function')],
+                                            'required':[('evaluation_type','=','function')]}"/>
+                            <field name="name" attrs="{'invisible':[('evaluation_type','=','function')]}"/>
+                        </group>
+                    </group>
+                </form>
+            </field>
+        </record>
+
+        <!-- External Mappings -->
+
+        <record id="external_mapping_tree_view" model="ir.ui.view">
+            <field name="name">external_mapping_tree_view</field>
+            <field name="model">external.mapping</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="Mapping">
+                    <field name="model_id" select="1" />
+                    <field name="referential_id" select="1" />
+                    <field name="extra_name" select="1" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="external_mapping_form_view" model="ir.ui.view">
+            <field name="name">external_mapping_form_view</field>
+            <field name="model">external.mapping</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Object Mappings">
+                    <field name="model_id" on_change="model_id_change(model_id)" />
+                    <field name="extra_name" />
+                    <field name="related_model_ids" invisible="1" />
+                    <group col="4" colspan="4">
+                        <field name="external_list_method" />
+                        <field name="external_search_method" />
+                        <field name="external_get_method" />
+                        <field name="external_update_method" />
+                        <field name="external_create_method" />
+                        <field name="external_delete_method" />
+                        <field name="external_done_method" />
+                        <field name="key_for_external_id" />
+                        <field name="external_resource_name" />
+                    </group>
+                    <button name="add_all_fields" string="Add all object fields" colspan="2" type="object" />
+                    <field colspan="4" name="mapping_ids" widget="one2many_list" nolabel="1" context="{'model_id':model_id}" />
+                </form>
+            </field>
+        </record>
+
+
+        <record model="ir.ui.view" id="external_mapping_search_view">
+            <field name="name">external_mapping_search_view</field>
+            <field name="model">external.mapping</field>
+            <field name="type">search</field>
+            <field name="arch" type="xml">
+                <search string="External Mapping">
+                   <field name="model_id"/>
+                   <field name="referential_id"/>
+                   <field name="extra_name"/>
+                   <newline/>
+                   <group  expand='0' string='Group by...'>
+                       <filter string='Referential' icon="terp-stock_symbol-selection" domain="[]" context="{'group_by' : 'referential_id'}" />
+                   </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- External Referentials Types -->
+
+        <record id="external_referential_type_form_view" model="ir.ui.view">
+            <field name="name">external_referential_type_form_view</field>
+            <field name="model">external.referential.type</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Referential Type">
+                    <field name="name" />
+                    <field name="code"/>
+                    <field name="categ_id" />
+                    <field name="version_ids" colspan="4"/>
+                </form>
+            </field>
+        </record>
+
+        <record id="external_referential_type_tree_view" model="ir.ui.view">
+            <field name="name">external_referential_type_tree_view</field>
+            <field name="model">external.referential.type</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="External Referential Types">
+                    <field name="name" />
+                    <field name="categ_id" />
+                    <field name="version_ids" colspan="4"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="external_referential_type_search_form_view" model="ir.ui.view">
+            <field name="name">external_referential_type_search_form_view</field>
+            <field name="model">external.referential.type</field>
+            <field name="type">search</field>
+            <field name="arch" type="xml">
+                <search string="External Referential Types">
+                    <field name="name" />
+                    <field name="categ_id" />
+                    <field name="version_ids" colspan="4"/>
+                   <newline/>
+                   <group  expand='0' string='Group by...'>
+                       <filter string='External Referential' icon="terp-stock_symbol-selection" domain="[]" context="{'group_by' : 'referential_id'}" />
+                   </group>
+                </search>
+            </field>
+        </record>
+
+    </data>
+</openerp>

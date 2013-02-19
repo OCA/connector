@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_external_referential_category,Configuration group has full access to external.referential.category,model_external_referential_category,base.group_system,1,1,1,1
+access_connector_external_referential_categ,connector_external_referential,model_external_referential_category,base.group_user,1,0,0,0
+access_connector_external_referential,connector_external_referential,connector.model_external_referential,base.group_user,1,0,0,0
+access_connector_external_referential_type,connector_external_referential_type,connector.model_external_referential_type,base.group_user,1,0,0,0
+access_connector_group_fields_manager,connector_group_fields,connector.model_group_fields,base.group_system,1,1,1,1
+access_connector_group_fields_user,connector_group_fields,connector.model_group_fields,base.group_user,1,0,0,0

@@ -125,7 +125,8 @@ class QueueWorker(orm.Model):
         assert self._worker
         worker_ids = self.search(cr, uid, [('uuid', '=', self._worker.uuid)],
                                  context=context)
-        assert len(worker_ids) == 1
+        assert len(worker_ids) == 1, ("%s worker found in database instead "
+                                      "of 1" % len(worker_ids))
         return worker_ids[0]
 
     def assign_then_enqueue(self, cr, uid, max_jobs=None, context=None):

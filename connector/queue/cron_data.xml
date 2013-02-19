@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data noupdate="1">
+
+        <!-- Using multi-processing, one should create as many
+             cron lines (same line with a different name) as cron worker
+             Because one cron line can't run on 2 workers at the same time.
+         -->
+        <record id="ir_cron_enqueue_jobs" model="ir.cron">
+            <field name="name">Enqueue Jobs</field>
+            <field eval="True" name="active" />
+            <field name="user_id" ref="base.user_root" />
+            <field name="interval_number">1</field>
+            <field name="interval_type">minutes</field>
+            <field name="numbercall">-1</field>
+            <field eval="False" name="doall" />
+            <field eval="'queue.worker'" name="model" />
+            <field eval="'assign_then_enqueue'" name="function" />
+            <field eval="'(50,)'" name="args" />
+            <field name="priority">1</field>
+        </record>
+
+    </data>
+</openerp>

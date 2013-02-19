@@ -28,6 +28,10 @@ class InvalidDataError(ConnectorException):
     """ Data Invalid """
 
 
+class MappingError(ConnectorException):
+    """ An error occurred during a mapping transformation. """
+
+
 class JobError(ConnectorException):
     """ A job had an error """
 

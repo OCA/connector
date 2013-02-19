@@ -67,8 +67,10 @@ class Synchronizer(ConnectorUnit):
     @property
     def mapper(self):
         if self._mapper is None:
-            self._mapper = self.reference.get_class(
-                    Mapper, self.model_name)(self.reference, self.session)
+            mapper_cls = self.reference.get_class(Mapper, self.model_name)
+            self._mapper = mapper_cls(self.reference,
+                                      self.session,
+                                      self.backend)
         return self._mapper
 
     @mapper.setter

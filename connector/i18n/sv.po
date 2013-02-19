@@ -1,0 +1,349 @@
+# Translation of OpenERP Server.
+# This file contains the translation of the following modules:
+#	* connector
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: OpenERP Server 5.0.14\n"
+"Report-Msgid-Bugs-To: support@openerp.com\n"
+"POT-Creation-Date: 2009-12-20 17:21+0000\n"
+"PO-Revision-Date: 2011-02-14 11:51+0000\n"
+"Last-Translator: Olivier Dony (OpenERP) <Unknown>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Launchpad-Export-Date: 2012-01-17 05:05+0000\n"
+"X-Generator: Launchpad (build 14676)\n"
+
+#. module: connector
+#: constraint:ir.model:0
+msgid ""
+"The Object name must start with x_ and not contain any special character !"
+msgstr ""
+
+#. module: connector
+#: field:external.referential,mapping_ids:0
+msgid "Mappings"
+msgstr ""
+
+#. module: connector
+#: view:external.referential:0
+msgid "Object Mappings"
+msgstr ""
+
+#. module: connector
+#: view:external.referential:0
+msgid "Synchronize Referential Settings"
+msgstr ""
+
+#. module: connector
+#: view:external.referential:0
+msgid "Authentication"
+msgstr ""
+
+#. module: connector
+#: field:external.referential,location:0
+msgid "Location"
+msgstr ""
+
+#. module: connector
+#: constraint:ir.actions.act_window:0
+msgid "Invalid model name in the action definition."
+msgstr ""
+
+#. module: connector
+#: selection:external.mapping.line,type:0
+#: selection:external.mappinglines.template,type:0
+msgid "External <- OpenERP"
+msgstr ""
+
+#. module: connector
+#: field:external.mapping.line,type:0
+#: field:external.mappinglines.template,type:0
+msgid "Type"
+msgstr ""
+
+#. module: connector
+#: view:external.referential:0
+msgid "Reload Referential Mapping Templates"
+msgstr ""
+
+#. module: connector
+#: model:ir.module.module,shortdesc:connector.module_meta_information
+msgid "Base External Referentials"
+msgstr "Base External Referentials"
+
+#. module: connector
+#: field:external.mapping,related_model_ids:0
+msgid "Related Inherited Models"
+msgstr ""
+
+#. module: connector
+#: field:external.mapping.line,external_type:0
+#: field:external.mappinglines.template,external_type:0
+msgid "External Type"
+msgstr ""
+
+#. module: connector
+#: selection:external.mapping.line,external_type:0
+#: selection:external.mappinglines.template,external_type:0
+msgid "String"
+msgstr ""
+
+#. module: connector
+#: field:external.mapping,external_list_method:0
+#: field:external.mapping.template,external_list_method:0
+msgid "List Method"
+msgstr ""
+
+#. module: connector
+#: model:ir.ui.menu,name:connector.ir_ui_menu_extref0
+msgid "External Referentials"
+msgstr ""
+
+#. module: connector
+#: model:ir.model,name:connector.model_external_referential_type
+msgid "External Referential Type (Ex.Magento,Spree)"
+msgstr ""
+
+#. module: connector
+#: field:external.mapping.line,related_model_id:0
+msgid "Related Model"
+msgstr ""
+
+#. module: connector
+#: field:ir.model.data,create_date:0
+msgid "Created date"
+msgstr ""
+
+#. module: connector
+#: field:external.referential,apiusername:0
+msgid "User Name"
+msgstr ""
+
+#. module: connector
+#: help:external.mapping,related_model_ids:0
+msgid ""
+"potentially inherited through '_inherits' model, used for mapping field "
+"selection"
+msgstr ""
+
+#. module: connector
+#: field:external.mapping,external_get_method:0
+#: field:external.mapping.template,external_get_method:0
+msgid "Get Method"
+msgstr ""
+
+#. module: connector
+#: field:external.mapping,model:0
+#: field:external.mapping.template,model:0
+#: field:external.mappinglines.template,model:0
+msgid "Model Name"
+msgstr ""
+
+#. module: connector
+#: selection:external.mapping.line,external_type:0
+#: selection:external.mappinglines.template,external_type:0
+msgid "Integer"
+msgstr ""
+
+#. module: connector
+#: view:external.referential:0
+#: model:ir.model,name:connector.model_external_mapping_line
+msgid "Field Mapping"
+msgstr ""
+
+#. module: connector
+#: model:ir.model,name:connector.model_external_mapping_template
+msgid "The source mapping records"
+msgstr ""
+
+#. module: connector
+#: model:ir.actions.act_window,name:connector.ir_actions_act_window_externalreferential0
+msgid "external_referential"
+msgstr ""
+
+#. module: connector
+#: constraint:ir.ui.view:0
+msgid "Invalid XML for View Architecture!"
+msgstr ""
+
+#. module: connector
+#: field:external.mapping.line,external_field:0
+#: field:external.mappinglines.template,external_field:0
+msgid "External Field"
+msgstr ""
+
+#. module: connector
+#: field:external.referential,name:0
+#: field:external.referential.type,name:0
+msgid "Name"
+msgstr ""
+
+#. module: connector
+#: field:external.mapping.line,in_function:0
+#: field:external.mappinglines.template,in_function:0
+msgid "Import in OpenERP Mapping Python Function"
+msgstr ""
+
+#. module: connector
+#: field:external.mapping,mapping_ids:0
+msgid "Mappings Lines"
+msgstr ""
+
+#. module: connector
+#: selection:external.mapping.line,type:0
+#: selection:external.mappinglines.template,type:0
+msgid "External -> OpenERP"
+msgstr ""
+
+#. module: connector
+#: model:ir.model,name:connector.model_external_mappinglines_template
+msgid "The source mapping line records"
+msgstr ""
+
+#. module: connector
+#: field:external.mapping,referential_id:0
+#: model:ir.model,name:connector.model_external_referential
+msgid "External Referential"
+msgstr ""
+
+#. module: connector
+#: field:external.referential,type_id:0
+msgid "Referential Type"
+msgstr ""
+
+#. module: connector
+#: view:external.referential:0
+msgid "General"
+msgstr ""
+
+#. module: connector
+#: field:external.mapping,external_update_method:0
+#: field:external.mapping.template,external_update_method:0
+msgid "Update Method"
+msgstr ""
+
+#. module: connector
+#: field:external.mapping.line,name_function:0
+msgid "Full Name"
+msgstr ""
+
+#. module: connector
+#: view:external.referential:0
+msgid "Field Mappings"
+msgstr ""
+
+#. module: connector
+#: field:external.mapping,model_id:0
+#: field:external.mapping.template,model_id:0
+#: field:external.mappinglines.template,model_id:0
+msgid "OpenERP Model"
+msgstr ""
+
+#. module: connector
+#: field:external.mapping.line,out_function:0
+#: field:external.mappinglines.template,out_function:0
+msgid "Export from OpenERP Mapping Python Function"
+msgstr ""
+
+#. module: connector
+#: field:external.referential,apipass:0
+msgid "Password"
+msgstr ""
+
+#. module: connector
+#: field:external.mapping.line,mapping_id:0
+#: model:ir.model,name:connector.model_external_mapping
+msgid "External Mapping"
+msgstr ""
+
+#. module: connector
+#: field:external.mapping.line,field_id:0
+msgid "OpenERP Field"
+msgstr ""
+
+#. module: connector
+#: field:external.mapping,external_create_method:0
+#: field:external.mapping.template,external_create_method:0
+msgid "Create Method"
+msgstr ""
+
+#. module: connector
+#: selection:external.mapping.line,external_type:0
+#: selection:external.mappinglines.template,external_type:0
+msgid "Float"
+msgstr ""
+
+#. module: connector
+#: field:external.mapping,external_key_name:0
+#: field:external.mapping.template,external_key_name:0
+msgid "External field used as key"
+msgstr ""
+
+#. module: connector
+#: field:external.mapping,external_delete_method:0
+#: field:external.mapping.template,external_delete_method:0
+msgid "Delete Method"
+msgstr ""
+
+#. module: connector
+#: selection:external.mapping.line,external_type:0
+#: selection:external.mappinglines.template,external_type:0
+msgid "Boolean"
+msgstr ""
+
+#. module: connector
+#: field:ir.model.data,external_referential_id:0
+msgid "Ext. Referential"
+msgstr ""
+
+#. module: connector
+#: field:ir.model.data,write_date:0
+msgid "Updated date"
+msgstr ""
+
+#. module: connector
+#: model:ir.module.module,description:connector.module_meta_information
+msgid ""
+"\n"
+"This module provide an abstract common minimal base to add any additional "
+"external id columns\n"
+"to some OpenObject table, pointing to some external referential.\n"
+"A referential is abstract and minimal at this stage, it's only identified\n"
+"by:\n"
+"* a name\n"
+"* a location (possibly webservice URL, database connection URL...); the "
+"connection method will tell it...\n"
+"* referential credentials (user name + password)\n"
+"\n"
+"OpenERP already has limited supported to external ids using the "
+"ir_model_data and the id\n"
+"fields in the loaded data such as XML or CSV.\n"
+"The issue is that teh current system, while very useful to deal with "
+"internal OpenERP data has some\n"
+"limitations:\n"
+"* it doesn't scale well to whole production data because everything ends up "
+"into the ir_model_data\n"
+"* all the system is built with a using reference id in mind. But in fact you "
+"might want SEVERAL external ids.\n"
+"Say you sale your products over several websites (using the new Magento "
+"multi-instance connector for\n"
+"instance), then you want that each product have SEVERAL external id columns. "
+"This is exactly what\n"
+"this module enables!\n"
+"    "
+msgstr ""
+
+#. module: connector
+#: field:external.mapping.template,type_id:0
+#: field:external.mappinglines.template,type_id:0
+msgid "External Referential Type"
+msgstr ""
+
+#. module: connector
+#: selection:external.mapping.line,type:0
+#: selection:external.mappinglines.template,type:0
+msgid "External <-> OpenERP"
+msgstr ""

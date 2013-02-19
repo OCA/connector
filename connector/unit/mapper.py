@@ -122,7 +122,7 @@ class Mapper(ConnectorUnit):
 
         for meth in self.method:
             changed_by = None
-            if len(meth) == 2:
+            if hasattr(meth, '__iter__') and len(meth) == 2:
                 meth, changed_by = meth
 
             if (changed_by is not None and

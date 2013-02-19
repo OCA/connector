@@ -24,6 +24,8 @@ from .unit.binder import Binder
 from .unit.backend_adapter import BackendAdapter
 from .unit.synchronizer import Synchronizer
 
+__all__ = ['get_reference', 'Reference']
+
 
 class ReferenceRegistry(object):
     """ Hold a set of references """

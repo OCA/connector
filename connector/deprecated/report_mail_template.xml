@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  crm_claim_categ_as_name for OpenERP
+  Copyright (C) 2012 Akretion Benoît GUILLOT <benoit.guillot@akretion.com>
+  The licence is in the file __openerp__.py
+-->
+<openerp>
+    <data noupdate="1">
+
+        <!--Email template -->
+        <record id="email_template_report" model="email.template">
+            <field name="name">Reporting error</field>
+            <field name="email_from">${object.company_id.email or ''}</field>
+            <field name="subject">${object.company_id.name} Error with ${object.report_id.name or '' })</field>
+            <field name="email_to">${object.company_id.email or ''}</field>
+            <field name="model_id" ref="connector.model_external_report_line"/>
+            <field name="auto_delete" eval="True"/>
+            <field name="lang">${object.company_id.partner_id.lang}</field>
+            <field name="body_html"><![CDATA[]]></field>
+            <field name="body_text"><![CDATA[
+An error occurred during the import of the ${object.report_id.action_on}
+
+The message is : ${object.error_message}]]></field>
+        </record>
+    </data>
+</openerp>

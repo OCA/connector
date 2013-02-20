@@ -33,44 +33,17 @@ class Synchronizer(ConnectorUnit):
 
     def __init__(self, environment):
         super(Synchronizer, self).__init__(environment)
-        self._binder = None
-        self._backend_adapter = None
-        self._mapper = None
+        model_name = environment.model_name
+        get_class = self.reference.get_class
+        self.binder = get_class(Binder, model_name)(environment)
+        self.backend_adapter = get_class(BackendAdapter, model_name)(environment)
+        self.mapper = None
+        self._init_mapper(environment)
 
-    @property
-    def binder(self):
-        if self._binder is None:
-            self._binder = self.reference.get_class(
-                    Binder, self.environment.model_name)(self.environment)
-        return self._binder
-
-    @binder.setter
-    def binder(self, binder):
-        self._binder = binder
-
-    @property
-    def backend_adapter(self):
-        if self._backend_adapter is None:
-            adapter_cls = self.reference.get_class(BackendAdapter,
-                                                   self.environment.model_name)
-            self._backend_adapter = adapter_cls(self.environment)
-        return self._backend_adapter
-
-    @backend_adapter.setter
-    def backend_adapter(self, backend_adapter):
-        self._backend_adapter = backend_adapter
-
-    @property
-    def mapper(self):
-        if self._mapper is None:
-            mapper_cls = self.reference.get_class(Mapper,
-                                                  self.environment.model_name)
-            self._mapper = mapper_cls(self.environment)
-        return self._mapper
-
-    @mapper.setter
-    def mapper(self, mapper):
-        self._mapper = mapper
+    def _init_mapper(self, environment):
+        model_name = environment.model_name
+        get_class = self.reference.get_class
+        self.mapper = get_class(Mapper, model_name)(environment)
 
     def run(self):
         """ Run the synchronization """
@@ -80,21 +53,16 @@ class Synchronizer(ConnectorUnit):
 class ExportSynchronizer(Synchronizer):
     """ Synchronizer for exporting data from OpenERP to a backend """
 
-    @property
-    def mapper(self):
-        if self._mapper is None:
-            mapper_cls = self.reference.get_class(ExportMapper,
-                                                  self.environment.model_name)
-            self._mapper = mapper_cls(self.environment)
-        return self._mapper
+    def _init_mapper(self, environment):
+        model_name = environment.model_name
+        get_class = self.reference.get_class
+        self.mapper = get_class(ExportMapper, model_name)(environment)
+
 
 class ImportSynchronizer(Synchronizer):
     """ Synchronizer for importing data from a backend to OpenERP """
 
-    @property
-    def mapper(self):
-        if self._mapper is None:
-            mapper_cls = self.reference.get_class(ImportMapper,
-                                                  self.environment.model_name)
-            self._mapper = mapper_cls(self.environment)
-        return self._mapper
+    def _init_mapper(self, environment):
+        model_name = environment.model_name
+        get_class = self.reference.get_class
+        self.mapper = get_class(ImportMapper, model_name)(environment)

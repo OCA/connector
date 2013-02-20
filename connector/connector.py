@@ -24,6 +24,7 @@ from openerp.osv import orm
 __all__ = [
     'ConnectorUnit',
     'RecordIdentifier',
+    'SynchronizationEnvironment',
 ]
 
 
@@ -60,12 +61,18 @@ class ConnectorUnit(object):
 
     _model_name = None  # to be defined in sub-classes
 
-    def __init__(self, reference):
+    def __init__(self, environment):
         """
-        :param reference: current reference we are working with
-        :type reference: :py:class:`connector.reference.Reference`
+
+        :param environment: current environment (reference, backend, ...)
+        :type environment: :py:class:`connector.connector.SynchronizationEnvironment`
         """
-        self.reference = reference
+        self.environment = environment
+        self.reference = environment.reference
+        self.session = environment.session
+        self.backend = environment.backend
+        self.current_model_name = environment.model_name
+        self.model = self.session.pool.get(environment.model_name)
 
     @classmethod
     def match(cls, model):
@@ -74,13 +81,35 @@ class ConnectorUnit(object):
             model_name = model._name
         else:
             model_name = model  # str
-        return cls.model_name == model_name
+        return model_name in cls.model_name
 
     @property
     def model_name(self):
         if self._model_name is None:
             raise NotImplementedError('No _model_name for %s' % self)
-        return self._model_name
+        model_name = self._model_name
+        if not hasattr(model_name, '__iter__'):
+            model_name = [model_name]
+        return model_name
+
+
+class SynchronizationEnvironment(object):
+
+    def __init__(self, reference, backend, session, model_name):
+        """
+        :param reference: current reference we are working with
+        :type reference: :py:class:`connector.reference.Reference`
+        :param backend: browse record of the backend
+        :param session: current session (cr, uid, context)
+        :type session: :py:class:`connector.session.ConnectorSession`
+        :param model_name: name of the model
+        :type model_name: str
+        """
+        self.reference = reference
+        self.backend = backend
+        self.session = session
+        self.model_name = model_name
+        self.model = self.session.pool.get(model_name)
 
 
 class RecordIdentifier(object):

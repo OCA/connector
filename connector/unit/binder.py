@@ -32,11 +32,6 @@ class Binder(ConnectorUnit):
 
     _model_name = None  # define in sub-classes
 
-    def __init__(self, reference, session):
-        super(Binder, self).__init__(reference)
-        self.session = session
-        self.model = self.session.pool.get(self.model_name)
-
     def to_openerp(self, backend, backend_identifier):
         """ Give the OpenERP ID for an external ID
 

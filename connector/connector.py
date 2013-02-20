@@ -42,7 +42,10 @@ class MetaConnectorUnit(type):
     def model_name(cls):
         if cls._model_name is None:
             raise NotImplementedError("no _model_name for %s" % cls)
-        return cls._model_name
+        model_name = cls._model_name
+        if not hasattr(model_name, '__iter__'):
+            model_name = [model_name]
+        return model_name
 
 
 class ConnectorUnit(object):

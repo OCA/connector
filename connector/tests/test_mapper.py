@@ -25,10 +25,10 @@ class test_mapper(unittest2.TestCase):
             def email(self):
                 pass
 
-        self.assertItemsEqual(
-                KifKroker.map_methods,
-                [(KifKroker.name, ('name', 'city')),
-                 (KifKroker.email, ('email',))])
+        self.assertEqual(
+                KifKrokerMapper._map_methods,
+                {'name': set(('name', 'city')),
+                 'email': set(('email',))})
 
     def test_mapping_decorator_cross_classes(self):
         """ Mappings should not propagate to other classes"""
@@ -50,15 +50,12 @@ class test_mapper(unittest2.TestCase):
             def email(self):
                 pass
 
-        ref = session = mock.Mock()
-        mom_mapper = MomMapper(ref, session)
-        zapp_mapper = ZappMapper(ref, session)
-        self.assertItemsEqual(
-                mom_mapper.map_methods,
-                [(MomMapper.name, ('name', 'city'))])
-        self.assertItemsEqual(
-                zapp_mapper.map_methods,
-                [(ZappMapper.email, ('email'))])
+        self.assertEqual(
+                MomMapper._map_methods,
+                {'name': set(('name', 'city'))})
+        self.assertEqual(
+                ZappMapper._map_methods,
+                {'email': set(('email',))})
 
     def test_mapping_decorator_cumul(self):
         """ Mappings should cumulate the ``super`` mappings
@@ -81,7 +78,32 @@ class test_mapper(unittest2.TestCase):
             def email(self):
                 pass
 
-        self.assertItemsEqual(
-                FarnsworthMapper.map_methods,
-                [(FarnsworthMapper.name, ('name', 'city')),
-                 (FarnsworthMapper.email, ('email',))])
+        self.assertEqual(
+                FarnsworthMapper._map_methods,
+                {'name': set(('name', 'city')),
+                 'email': set(('email',))})
+
+    def test_mapping_decorator_cumul_changed_by(self):
+        """ Mappings should cumulate the changed_by fields of the
+        ``super`` mappings and the local mappings """
+        class FryMapper(Mapper):
+
+            _model_name = 'res.users'
+
+            @changed_by('name', 'city')
+            @mapping
+            def name(self):
+                pass
+
+        class FarnsworthMapper(FryMapper):
+
+            _model_name = 'res.users'
+
+            @changed_by('email')
+            @mapping
+            def name(self):
+                pass
+
+        self.assertEqual(
+                FarnsworthMapper._map_methods,
+                {'name': set(('name', 'city', 'email'))})

@@ -58,15 +58,22 @@ def changed_by(*args):
 class MetaMapper(MetaConnectorUnit):
     """ Metaclass for Mapper """
 
-    def __init__(cls, name, bases, attrs):
-        for key, attr in attrs.iteritems():
+    def __new__(meta, name, bases, attrs):
+        if attrs.get('_map_methods') is None:
+            attrs['_map_methods'] = {}
+
+        cls = super(MetaMapper, meta).__new__(meta, name, bases, attrs)
+
+        for base in bases:
+            for attr_name, changed_by in getattr(base, '_map_methods', {}).iteritems():
+                cls._map_methods.setdefault(attr_name, set()).update(changed_by)
+
+        for attr_name, attr in attrs.iteritems():
             mapping = getattr(attr, 'is_mapping', None)
             if mapping:
-                changed_by = getattr(attr, 'changed_by', None)
-                if (not hasattr(cls, '_map_methods') or
-                        cls._map_methods is None):
-                    cls._map_methods = []
-                cls._map_methods.append((attr, changed_by))
+                changed_by = getattr(attr, 'changed_by', set())
+                cls._map_methods.setdefault(attr_name, set()).update(changed_by)
+        return cls
 
 
 class Mapper(ConnectorUnit):
@@ -78,7 +85,6 @@ class Mapper(ConnectorUnit):
     _model_name = None
 
     direct = []  # direct conversion of a field to another (from_attr, to_attr)
-    method = []  # use a method to convert one or many fields (method, [changed by fields])
     children = []  # conversion of sub-records (from_attr, to_attr, model)
 
     _map_methods = None
@@ -91,7 +97,8 @@ class Mapper(ConnectorUnit):
 
     @property
     def map_methods(self):
-        return self._map_methods
+        for meth, changed_by in self._map_methods.iteritems():
+            yield getattr(self, meth), changed_by
 
     def convert(self, record, fields=None, parent_values=None):
         """ Transform an external record to an OpenERP record or the opposite
@@ -115,19 +122,12 @@ class Mapper(ConnectorUnit):
                                          to_attr)
                 result[to_attr] = value
 
-        for meth in self.method:
-            changed_by = None
-            if hasattr(meth, '__iter__') and len(meth) == 2:
-                meth, changed_by = meth
-
-            if (changed_by is not None and
-                    not isinstance(changed_by, (tuple, list))):
-                changed_by = [changed_by]
+        for meth, changed_by in self.map_methods:
 
             if (not fields or
-                    changed_by is None or
+                    not changed_by or
                     set(fields).intersection(changed_by)):
-                values = meth(self, record)
+                values = meth(record)
                 if not values:
                     continue
                 if isinstance(values, dict):

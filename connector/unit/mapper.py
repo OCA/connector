@@ -35,6 +35,7 @@ def mapping(func):
     func.is_mapping = True
     return func
 
+
 def changed_by(*args):
     """ Decorator for the mappings. When fields are modified, we want to modify
     only the modified fields. Using this decorator, we can specify which fields
@@ -81,12 +82,6 @@ class Mapper(ConnectorUnit):
     children = []  # conversion of sub-records (from_attr, to_attr, model)
 
     _map_methods = None
-
-    def __init__(self, reference, session, backend):
-        super(Mapper, self).__init__(reference)
-        self.session = session
-        self.model = self.session.pool.get(self.model_name)
-        self.backend = backend
 
     def _map_direct(self, record, from_attr, to_attr):
         raise NotImplementedError

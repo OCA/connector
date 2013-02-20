@@ -31,12 +31,8 @@ class Synchronizer(ConnectorUnit):
     # implement in sub-classes
     _model_name = None
 
-    def __init__(self, reference, session, backend):
-        super(Synchronizer, self).__init__(reference)
-        self.session = session
-        self.backend = backend
-        self.model = self.session.pool.get(self.model_name)
-
+    def __init__(self, environment):
+        super(Synchronizer, self).__init__(environment)
         self._binder = None
         self._backend_adapter = None
         self._mapper = None
@@ -45,7 +41,7 @@ class Synchronizer(ConnectorUnit):
     def binder(self):
         if self._binder is None:
             self._binder = self.reference.get_class(
-                    Binder, self.model_name)(self.reference, self.session)
+                    Binder, self.environment.model_name)(self.environment)
         return self._binder
 
     @binder.setter
@@ -56,8 +52,8 @@ class Synchronizer(ConnectorUnit):
     def backend_adapter(self):
         if self._backend_adapter is None:
             adapter_cls = self.reference.get_class(BackendAdapter,
-                                                   self.model_name)
-            self._backend_adapter = adapter_cls(self.reference)
+                                                   self.environment.model_name)
+            self._backend_adapter = adapter_cls(self.environment)
         return self._backend_adapter
 
     @backend_adapter.setter
@@ -67,10 +63,9 @@ class Synchronizer(ConnectorUnit):
     @property
     def mapper(self):
         if self._mapper is None:
-            mapper_cls = self.reference.get_class(Mapper, self.model_name)
-            self._mapper = mapper_cls(self.reference,
-                                      self.session,
-                                      self.backend)
+            mapper_cls = self.reference.get_class(Mapper,
+                                                  self.environment.model_name)
+            self._mapper = mapper_cls(self.environment)
         return self._mapper
 
     @mapper.setter
@@ -88,10 +83,9 @@ class ExportSynchronizer(Synchronizer):
     @property
     def mapper(self):
         if self._mapper is None:
-            mapper_cls = self.reference.get_class(ExportMapper, self.model_name)
-            self._mapper = mapper_cls(self.reference,
-                                      self.session,
-                                      self.backend)
+            mapper_cls = self.reference.get_class(ExportMapper,
+                                                  self.environment.model_name)
+            self._mapper = mapper_cls(self.environment)
         return self._mapper
 
 class ImportSynchronizer(Synchronizer):
@@ -100,8 +94,7 @@ class ImportSynchronizer(Synchronizer):
     @property
     def mapper(self):
         if self._mapper is None:
-            mapper_cls = self.reference.get_class(ImportMapper, self.model_name)
-            self._mapper = mapper_cls(self.reference,
-                                      self.session,
-                                      self.backend)
+            mapper_cls = self.reference.get_class(ImportMapper,
+                                                  self.environment.model_name)
+            self._mapper = mapper_cls(self.environment)
         return self._mapper

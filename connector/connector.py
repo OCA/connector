@@ -129,6 +129,17 @@ class Environment(object):
         self.model_name = model_name
         self.model = self.session.pool.get(model_name)
 
+    def get_connector_unit(self, base_class, *args, **kwargs):
+        """ Search the class using
+        :py:class:`connector.backend.Backend.get_class`,
+        return an instance of the class with ``self`` as environment.
+
+        The ``model_name`` should not be passed in the arguments as
+        ``self.model_name`` is used.
+        """
+        return self.backend.get_class(base_class, self.model_name,
+                                      *args, **kwargs)(self)
+
 
 class RecordIdentifier(object):
     """ Most of the time, on an external system, a record is identified

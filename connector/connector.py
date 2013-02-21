@@ -57,7 +57,7 @@ class ConnectorUnit(object):
     * Backend Adapter
 
     Or basically any class intended to be registered in a
-    :py:class:`connector.reference.Reference`.
+    :py:class:`connector.backend.Backend`.
     """
 
     __metaclass__ = MetaConnectorUnit
@@ -67,15 +67,15 @@ class ConnectorUnit(object):
     def __init__(self, environment):
         """
 
-        :param environment: current environment (reference, backend, ...)
+        :param environment: current environment (backend, session, ...)
         :type environment: :py:class:`connector.connector.SynchronizationEnvironment`
         """
         self.environment = environment
-        self.reference = environment.reference
-        self.session = environment.session
-        self.backend = environment.backend
-        self.current_model_name = environment.model_name
-        self.model = self.session.pool.get(environment.model_name)
+        self.backend = self.environment.backend
+        self.backend_record = self.environment.backend_record
+        self.session = self.environment.session
+        session = self.environment.session
+        self.model = session.pool.get(environment.model_name)
 
     @classmethod
     def match(cls, model):
@@ -86,30 +86,22 @@ class ConnectorUnit(object):
             model_name = model  # str
         return model_name in cls.model_name
 
-    @property
-    def model_name(self):
-        if self._model_name is None:
-            raise NotImplementedError('No _model_name for %s' % self)
-        model_name = self._model_name
-        if not hasattr(model_name, '__iter__'):
-            model_name = [model_name]
-        return model_name
-
 
 class SynchronizationEnvironment(object):
 
-    def __init__(self, reference, backend, session, model_name):
+    def __init__(self, backend, backend_record, session, model_name):
         """
-        :param reference: current reference we are working with
-        :type reference: :py:class:`connector.reference.Reference`
-        :param backend: browse record of the backend
+        :param backend: current backend we are working with
+        :type backend: :py:class:`connector.backend.backend`
+        :param backend_record: browse record of the backend
+        :type backend_record: :py:class:`openerp.osv.orm.browse_record`
         :param session: current session (cr, uid, context)
         :type session: :py:class:`connector.session.ConnectorSession`
         :param model_name: name of the model
         :type model_name: str
         """
-        self.reference = reference
         self.backend = backend
+        self.backend_record = backend_record
         self.session = session
         self.model_name = model_name
         self.model = self.session.pool.get(model_name)

@@ -169,7 +169,7 @@ class OpenERPJobStorage(JobStorage):
 
         # by removing the worker on terminated jobs,
         # we can check the load of a worker
-        if job.state == DONE:
+        if job.state in (DONE, FAILED):
             vals['worker_id'] = False
 
         if self.exists(job.uuid):

@@ -24,7 +24,7 @@ from openerp.osv import orm
 __all__ = [
     'ConnectorUnit',
     'RecordIdentifier',
-    'SynchronizationEnvironment',
+    'Environment',
 ]
 
 
@@ -68,7 +68,7 @@ class ConnectorUnit(object):
         """
 
         :param environment: current environment (backend, session, ...)
-        :type environment: :py:class:`connector.connector.SynchronizationEnvironment`
+        :type environment: :py:class:`connector.connector.Environment`
         """
         self.environment = environment
         self.backend = self.environment.backend
@@ -87,7 +87,7 @@ class ConnectorUnit(object):
         return model_name in cls.model_name
 
 
-class SynchronizationEnvironment(object):
+class Environment(object):
     """ Environment used by the different units for the synchronization.
 
     .. attribute:: backend

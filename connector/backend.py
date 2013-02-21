@@ -24,26 +24,26 @@ from .unit.binder import Binder
 from .unit.backend_adapter import BackendAdapter
 from .unit.synchronizer import Synchronizer
 
-__all__ = ['get_reference', 'Reference']
+__all__ = ['get_backend', 'Backend']
 
 
-class ReferenceRegistry(object):
-    """ Hold a set of references """
+class BackendRegistry(object):
+    """ Hold a set of backends """
     def __init__(self):
-        self.references = set()
+        self.backends = set()
 
-    def register_reference(self, reference):
+    def register_backend(self, backend):
         """ Register an instance of
-        :py:class:`connector.reference.Reference`
+        :py:class:`connector.backend.Backend`
 
-        :param reference: reference to register
-        :type reference: Reference
+        :param backend: backend to register
+        :type backend: Backend
         """
-        self.references.add(reference)
+        self.backends.add(backend)
 
-    def get_reference(self, service, version=None):
+    def get_backend(self, service, version=None):
         """ Return an instance of
-        :py:class:`connector.reference.Reference` for a
+        :py:class:`connector.backend.Backend` for a
         ``service`` and a ``version``
 
         :param service: name of the service to return
@@ -51,19 +51,19 @@ class ReferenceRegistry(object):
         :param version: version of the service to return
         :type version: str
         """
-        for reference in self.references:
-            if reference.match(service, version):
-                return reference
-        raise ValueError('No reference found for %s %s' %
+        for backend in self.backends:
+            if backend.match(service, version):
+                return backend
+        raise ValueError('No backend found for %s %s' %
                          (service, version))
 
 
-REFERENCES = ReferenceRegistry()
+BACKENDS = BackendRegistry()
 
 
-def get_reference(service, version=None):
+def get_backend(service, version=None):
     """ Return the correct instance of
-    :py:class:`connector.reference.Reference` for a
+    :py:class:`connector.backend.Backend` for a
     ``service`` and a ``version``
 
     :param service: name of the service to return
@@ -71,12 +71,12 @@ def get_reference(service, version=None):
     :param version: version of the service to return
     :type version: str
     """
-    return REFERENCES.get_reference(service, version)
+    return BACKENDS.get_backend(service, version)
 
 
-class Reference(object):
-    """ A reference represents a backend, like Magento, Prestashop,
-    Redmine, ...
+class Backend(object):
+    """ A backend represents a system to interact with,
+    like Magento, Prestashop, Redmine, ...
 
     .. attribute:: service
 
@@ -88,19 +88,19 @@ class Reference(object):
 
     .. attribute:: parent
 
-        A parent reference. When the reference has configuration, it
+        A parent backend. When the backend has configuration, it
         will refer to its parent's one
 
-    A reference knows all the classes it is able to use (mappers,
+    A backend knows all the classes it is able to use (mappers,
     binders, synchronizers, backend adapters) and give the appropriate
-    class to use for a model. When a reference is linked to a parent and
+    class to use for a model. When a backend is linked to a parent and
     no particular mapper, synchronizer, backend adapter or binder is
     defined at its level, it will use the parent's one.
 
     Example::
 
-        magento = Reference('magento')
-        magento1700 = Reference(parent=magento, version='1.7')
+        magento = Backend('magento')
+        magento1700 = Backend(parent=magento, version='1.7')
 
     """
 
@@ -112,11 +112,11 @@ class Reference(object):
         self.parent = parent
         self._classes = set()
         if registry is None:
-            registry = REFERENCES
-        registry.register_reference(self)
+            registry = BACKENDS
+        registry.register_backend(self)
 
     def match(self, service, version):
-        """Used to find the reference for a service and a version"""
+        """Used to find the backend for a service and a version"""
         return (self.service == service and
                 self.version == version)
 
@@ -126,13 +126,13 @@ class Reference(object):
 
     def __str__(self):
         if self.version:
-            return 'Reference(\'%s\', \'%s\')' % (self.service, self.version)
-        return 'Reference(\'%s\')>' % self.service
+            return 'Backend(\'%s\', \'%s\')' % (self.service, self.version)
+        return 'Backend(\'%s\')>' % self.service
 
     def __repr__(self):
         if self.version:
-            return '<Reference \'%s\', \'%s\'>' % (self.service, self.version)
-        return '<Reference \'%s\'>' % self.service
+            return '<Backend \'%s\', \'%s\'>' % (self.service, self.version)
+        return '<Backend \'%s\'>' % self.service
 
     def _get_class(self, base_class, *args, **kwargs):
         matching_class = None
@@ -157,7 +157,7 @@ class Reference(object):
         return matching_class
 
     def registered_classes(self, base_class=None):
-        """ Yield all the classes registered on the reference
+        """ Yield all the classes registered on the backend
 
         :param base_class: select only subclasses of ``base_class``
         :type base_class: type
@@ -176,11 +176,11 @@ class Reference(object):
         self._classes.remove(cls)
 
     def __call__(self, cls):
-        """ Reference decorator
+        """ Backend decorator
 
-        For a reference ``magento`` declared like this::
+        For a backend ``magento`` declared like this::
 
-            magento = Reference('magento')
+            magento = Backend('magento')
 
         A binder, synchronizer, mapper or backend adapter can be
         registered as follows::

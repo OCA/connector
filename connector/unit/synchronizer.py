@@ -34,7 +34,7 @@ class Synchronizer(ConnectorUnit):
     def __init__(self, environment):
         super(Synchronizer, self).__init__(environment)
         model_name = environment.model_name
-        get_class = self.reference.get_class
+        get_class = self.backend.get_class
         self.binder = get_class(Binder, model_name)(environment)
         self.backend_adapter = get_class(BackendAdapter, model_name)(environment)
         self.mapper = None
@@ -42,7 +42,7 @@ class Synchronizer(ConnectorUnit):
 
     def _init_mapper(self, environment):
         model_name = environment.model_name
-        get_class = self.reference.get_class
+        get_class = self.backend.get_class
         self.mapper = get_class(Mapper, model_name)(environment)
 
     def run(self):
@@ -55,7 +55,7 @@ class ExportSynchronizer(Synchronizer):
 
     def _init_mapper(self, environment):
         model_name = environment.model_name
-        get_class = self.reference.get_class
+        get_class = self.backend.get_class
         self.mapper = get_class(ExportMapper, model_name)(environment)
 
 
@@ -64,5 +64,5 @@ class ImportSynchronizer(Synchronizer):
 
     def _init_mapper(self, environment):
         model_name = environment.model_name
-        get_class = self.reference.get_class
+        get_class = self.backend.get_class
         self.mapper = get_class(ImportMapper, model_name)(environment)

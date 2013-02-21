@@ -2,10 +2,10 @@
 
 import unittest2
 
-from openerp.addons.connector.reference import (
-        Reference,
-        get_reference,
-        REFERENCES)
+from openerp.addons.connector.backend import (
+        Backend,
+        get_backend,
+        BACKENDS)
 from openerp.addons.connector import Binder
 from openerp.addons.connector import (Mapper,
                                                        ImportMapper,
@@ -13,76 +13,76 @@ from openerp.addons.connector import (Mapper,
 from openerp.addons.connector import BackendAdapter
 
 
-class test_reference(unittest2.TestCase):
-    """ Test Reference """
+class test_backend(unittest2.TestCase):
+    """ Test Backend """
 
     def setUp(self):
         self.service = 'calamitorium'
 
     def tearDown(self):
-        REFERENCES.references.clear()
+        BACKENDS.backends.clear()
 
-    def test_new_reference(self):
-        """ Create a reference"""
+    def test_new_backend(self):
+        """ Create a backend"""
         version = '1.14'
-        reference = Reference(self.service, version=version)
-        self.assertEqual(reference.service, self.service)
-        self.assertEqual(reference.version, version)
+        backend = Backend(self.service, version=version)
+        self.assertEqual(backend.service, self.service)
+        self.assertEqual(backend.version, version)
 
     def test_parent(self):
-        """ Bind the reference to a parent reference"""
+        """ Bind the backend to a parent backend"""
         version = '1.14'
-        reference = Reference(self.service)
-        child_reference = Reference(parent=reference, version=version)
-        self.assertEqual(child_reference.service, reference.service)
+        backend = Backend(self.service)
+        child_backend = Backend(parent=backend, version=version)
+        self.assertEqual(child_backend.service, backend.service)
 
     def test_no_service(self):
         """ Should raise an error because no service or parent is defined"""
         with self.assertRaises(ValueError):
-            reference = Reference(version='1.14')
+            backend = Backend(version='1.14')
 
-    def test_get_reference(self):
-        """ Find a reference """
-        reference = Reference(self.service)
-        found_ref = get_reference(self.service)
-        self.assertEqual(reference, found_ref)
+    def test_get_backend(self):
+        """ Find a backend """
+        backend = Backend(self.service)
+        found_ref = get_backend(self.service)
+        self.assertEqual(backend, found_ref)
 
-    def test_reference_version(self):
-        """ Find a reference with a version """
-        parent = Reference(self.service)
-        reference = Reference(parent=parent, version='1.14')
-        found_ref = get_reference(self.service, version='1.14')
-        self.assertEqual(reference, found_ref)
+    def test_backend_version(self):
+        """ Find a backend with a version """
+        parent = Backend(self.service)
+        backend = Backend(parent=parent, version='1.14')
+        found_ref = get_backend(self.service, version='1.14')
+        self.assertEqual(backend, found_ref)
 
 
-class test_reference_register(unittest2.TestCase):
-    """ Test registration of classes on the Reference"""
+class test_backend_register(unittest2.TestCase):
+    """ Test registration of classes on the Backend"""
 
 
     def setUp(self):
         self.service = 'calamitorium'
         self.version = '1.14'
-        self.parent = Reference(self.service)
-        self.reference = Reference(parent=self.parent, version=self.version)
+        self.parent = Backend(self.service)
+        self.backend = Backend(parent=self.parent, version=self.version)
 
     def tearDown(self):
-        REFERENCES.references.clear()
-        self.reference._classes.clear()
+        BACKENDS.backends.clear()
+        self.backend._classes.clear()
 
     def test_register_class(self):
         class BenderBinder(Binder):
             _model_name = 'res.users'
 
-        self.reference.register_class(BenderBinder)
-        ref = self.reference.get_class(Binder, 'res.users')
+        self.backend.register_class(BenderBinder)
+        ref = self.backend.get_class(Binder, 'res.users')
         self.assertEqual(ref, BenderBinder)
 
     def test_register_class_decorator(self):
-        @self.reference
+        @self.backend
         class ZoidbergMapper(ExportMapper):
             _model_name = 'res.users'
 
-        ref = self.reference.get_class(ExportMapper, 'res.users')
+        ref = self.backend.get_class(ExportMapper, 'res.users')
         self.assertEqual(ref, ZoidbergMapper)
 
     def test_register_class_parent(self):
@@ -91,50 +91,50 @@ class test_reference_register(unittest2.TestCase):
         class FryBinder(Binder):
             _model_name = 'res.users'
 
-        ref = self.reference.get_class(Binder, 'res.users')
+        ref = self.backend.get_class(Binder, 'res.users')
         self.assertEqual(ref, FryBinder)
 
     def test_no_register_error(self):
         """ Error when asking for a class and none is found"""
         with self.assertRaises(ValueError):
-            ref = self.reference.get_class(BackendAdapter, 'res.users')
+            ref = self.backend.get_class(BackendAdapter, 'res.users')
 
     def test_registered_classes_all(self):
-        @self.reference
+        @self.backend
         class LeelaMapper(Mapper):
             _model_name = 'res.users'
 
-        @self.reference
+        @self.backend
         class FarnsworthBinder(Binder):
             _model_name = 'res.users'
 
-        @self.reference
+        @self.backend
         class NibblerBackendAdapter(BackendAdapter):
             _model_name = 'res.users'
 
-        classes = list(self.reference.registered_classes())
+        classes = list(self.backend.registered_classes())
         self.assertItemsEqual(
                 classes,
                 [LeelaMapper, FarnsworthBinder, NibblerBackendAdapter])
 
     def test_registered_classes_filter(self):
-        @self.reference
+        @self.backend
         class LeelaMapper(ExportMapper):
             _model_name = 'res.users'
 
-        @self.reference
+        @self.backend
         class AmyWongMapper(ImportMapper):
             _model_name = 'res.users'
 
-        @self.reference
+        @self.backend
         class FarnsworthBinder(Binder):
             _model_name = 'res.users'
 
-        @self.reference
+        @self.backend
         class NibblerBackendAdapter(BackendAdapter):
             _model_name = 'res.users'
 
-        classes = list(self.reference.registered_classes(Mapper))
+        classes = list(self.backend.registered_classes(Mapper))
         self.assertItemsEqual(
                 classes,
                 [LeelaMapper, AmyWongMapper])

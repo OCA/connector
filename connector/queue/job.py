@@ -31,6 +31,8 @@ from openerp.tools import DEFAULT_SERVER_DATETIME_FORMAT
 
 from ..exception import NotReadableJobError, NoSuchJobError
 
+__all__ = ['job']
+
 
 PENDING = 'pending'
 ENQUEUED = 'enqueued'

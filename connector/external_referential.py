@@ -20,6 +20,7 @@
 ##############################################################################
 
 from openerp.osv import orm, fields
+import backend
 
 
 # name of the models usable by external.referential
@@ -80,8 +81,17 @@ class external_backend(orm.AbstractModel):
 
     _columns = {
         'name': fields.char('Name', required=True),
-        'type': fields.char('Type', readonly=True)
+        'type': fields.char('Type', readonly=True, required=True),
+        # replace by a selection
+        'version': fields.selection((), 'Version', required=True),
     }
+
+    def get_backend(self, cr, uid, id, context=None):
+        if hasattr(id, '__iter__'):
+            assert len(id) == 1, "One ID expected, %d received" % len(id)
+            id = id[0]
+        backend_record = self.browse(cr, uid, id, context=context)
+        return backend.get_backend(backend_record.type, backend_record.version)
 
 
 class ir_model_data(orm.Model):

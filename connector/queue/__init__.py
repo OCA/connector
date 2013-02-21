@@ -19,7 +19,7 @@
 #
 ##############################################################################
 
-from .queue import *
+import queue
 from .job import *
-from .worker import *
+import worker
 import model

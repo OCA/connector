@@ -24,7 +24,7 @@ import test_event
 import test_job
 import test_queue
 import test_worker
-import test_reference
+import test_backend
 import test_producer
 import test_connector
 import test_mapper
@@ -38,7 +38,7 @@ checks = [
     test_job,
     test_queue,
     test_worker,
-    test_reference,
+    test_backend,
     test_producer,
     test_connector,
     test_mapper,

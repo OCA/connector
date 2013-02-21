@@ -88,11 +88,34 @@ class ConnectorUnit(object):
 
 
 class SynchronizationEnvironment(object):
+    """ Environment used by the different units for the synchronization.
 
-    def __init__(self, backend, backend_record, session, model_name):
+    .. attribute:: backend
+
+        Current backend we are working with.
+        Obtained with ``backend_record.get_backend()``.
+
+        Instance of: :py:class:`connector.backend.Backend`
+
+    .. attribute:: backend_record
+
+        Browsable record of the backend. The backend is inherited
+        from the model ``connector.backend`` and have at least a
+        ``type`` and a ``version``.
+
+    .. attribute:: session
+
+        Current session we are working in. It contains the OpenERP
+        cr, uid and context.
+
+    .. attribute:: model_name
+
+        Name of the OpenERP model to work with.
+    """
+
+    def __init__(self, backend_record, session, model_name):
         """
-        :param backend: current backend we are working with
-        :type backend: :py:class:`connector.backend.backend`
+
         :param backend_record: browse record of the backend
         :type backend_record: :py:class:`openerp.osv.orm.browse_record`
         :param session: current session (cr, uid, context)
@@ -100,8 +123,8 @@ class SynchronizationEnvironment(object):
         :param model_name: name of the model
         :type model_name: str
         """
-        self.backend = backend
         self.backend_record = backend_record
+        self.backend = backend_record.get_backend()
         self.session = session
         self.model_name = model_name
         self.model = self.session.pool.get(model_name)

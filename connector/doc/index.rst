@@ -23,7 +23,7 @@ API:
 
    api_connector.rst
    api_session.rst
-   api_reference.rst
+   api_backend.rst
    api_event.rst
    api_binder.rst
    api_mapper.rst

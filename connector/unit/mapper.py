@@ -154,8 +154,8 @@ class ImportMapper(Mapper):
     """ Transform a record from a backend to an OpenERP record """
 
     def _get_o2m_binder(self, model_name):
-        binder_cls = self.reference.get_class(Binder, model_name)
-        return self.binder_cls(self.reference, self.session)
+        binder_cls = self.backend.get_class(Binder, model_name)
+        return self.binder_cls(self.backend, self.session)
 
     def _get_o2m_external_identifier(self, record, attr, model):
         # TODO we should have a unique way to obtain a RecordIdentifier
@@ -178,8 +178,8 @@ class ImportMapper(Mapper):
         return value
 
     def _map_children(self, record, attr, model):
-        mapper_cls = self.reference.get_class(ImportMapper, self.model_name)
-        mapper = mapper_cls(self.reference, self.session)
+        mapper_cls = self.backend.get_class(ImportMapper, self.model_name)
+        mapper = mapper_cls(self.backend, self.session)
         child_records = record[attr]  # XXX not compatible with
                                      # all record types
         return self._sub_convert(child_records, mapper,
@@ -201,8 +201,8 @@ class ExportMapper(Mapper):
     """ Transform a record from OpenERP to a backend record """
 
     def _map_children(self, record, attr, model):
-        mapper_cls = self.reference.get_class(ExportMapper, self.model_name)
-        mapper = mapper_cls(self.reference, self.session)
+        mapper_cls = self.backend.get_class(ExportMapper, self.model_name)
+        mapper = mapper_cls(self.backend, self.session)
         child_records = record[attr]  # XXX not compatible with
                                       # all record types
         return self._sub_convert(child_records, mapper,

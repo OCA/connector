@@ -76,7 +76,7 @@ class external_backend(orm.AbstractModel):
 
     The backends have to inherited this model in the connectors modules.
     """
-    _name = 'external.backend'
+    _name = 'connector.backend'
 
     _columns = {
         'name': fields.char('Name', required=True),

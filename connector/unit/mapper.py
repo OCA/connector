@@ -25,7 +25,7 @@
 # the name of the external / openerp model and the values are the
 # records. And the same for the output records.
 
-from ..connector import ConnectorUnit, MetaConnectorUnit, RecordIdentifier
+from ..connector import ConnectorUnit, MetaConnectorUnit
 from ..exception import MappingError
 from .binder import Binder
 
@@ -158,9 +158,8 @@ class ImportMapper(Mapper):
         return self.binder_cls(self.backend, self.session)
 
     def _get_o2m_external_identifier(self, record, attr, model):
-        # TODO we should have a unique way to obtain a RecordIdentifier
         # from a record for a model
-        return RecordIdentifier(id=record[attr])
+        return record[attr]
 
     def _map_direct(self, record, from_attr, to_attr):
         value = record[from_attr]

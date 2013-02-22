@@ -75,6 +75,7 @@ to customize their field mapping directly in OpenERP to accomodate the external 
         'queue/model_view.xml',
         'queue/cron_data.xml',
         'connector_menu.xml',
+        'res_partner_view.xml',
         ],
     'installable': True,
 }

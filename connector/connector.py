@@ -74,8 +74,7 @@ class ConnectorUnit(object):
         self.backend = self.environment.backend
         self.backend_record = self.environment.backend_record
         self.session = self.environment.session
-        session = self.environment.session
-        self.model = session.pool.get(environment.model_name)
+        self.model = self.session.pool.get(environment.model_name)
 
     @classmethod
     def match(cls, model):

@@ -22,7 +22,6 @@
 from ..connector import ConnectorUnit
 
 
-# TODO abstract external.referential
 # TODO store and read metadata (attributes stored on the relation
 # between the backend and the openerp record)
 class Binder(ConnectorUnit):
@@ -32,10 +31,9 @@ class Binder(ConnectorUnit):
 
     _model_name = None  # define in sub-classes
 
-    def to_openerp(self, backend, backend_identifier):
+    def to_openerp(self, backend_identifier):
         """ Give the OpenERP ID for an external ID
 
-        :param backend: external backend
         :param backend_identifier: backend identifiers for which we want
                                    the OpenERP ID
         :type backend_identifier: :py:class:`connector.connector.RecordIdentifier`
@@ -44,23 +42,25 @@ class Binder(ConnectorUnit):
         """
         raise NotImplementedError
 
-    def to_backend(self, backend, openerp_id):
+    def to_backend(self, openerp_id):
         """ Give the backend ID for an OpenERP ID
 
-        :param backend: browse of the external backend
         :param openerp_id: OpenERP ID for which we want the backend id
         :return: backend identifier of the record
         :rtype: :py:class:`connector.connector.RecordIdentifier`
         """
         raise NotImplementedError
 
-    def bind(self, backend, backend_identifier, openerp_id):
+    def bind(self, backend_identifier, openerp_id):
         """ Create the link between an external ID and an OpenERP ID
 
-        :param backend: browse of the external backend
         :param backend_identifier: Backend identifiers to bind
         :type backend_identifier: :py:class:`connector.connector.RecordIdentifier`
         :param openerp_id: OpenERP ID to bind
         :type openerp_id: int
         """
+        raise NotImplementedError
+
+    def read_metadata(self, openerp_id, backend_identifier):
+        """ Read the metadata for a relation OpenERP - Magento """
         raise NotImplementedError

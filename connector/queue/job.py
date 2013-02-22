@@ -41,9 +41,9 @@ STARTED = 'started'
 FAILED = 'failed'
 
 STATES = [(PENDING, 'Pending'),
-          (ENQUEUED, 'Queued'),
-          (DONE, 'Done'),
+          (ENQUEUED, 'Enqueued'),
           (STARTED, 'Started'),
+          (DONE, 'Done'),
           (FAILED, 'Failed')]
 
 DEFAULT_PRIORITY = 10  # used by the PriorityQueue to sort the jobs

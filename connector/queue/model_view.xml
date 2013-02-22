@@ -59,7 +59,7 @@
                             groups="base.group_user"/>
                         <field name="state"
                             widget="statusbar"
-                            statusbar_visible="pending,queued,started,failed,done"
+                            statusbar_visible="pending,enqueued,started,done"
                             statusbar_colors='{"failed":"red","done":"green"}'/>
                     </header>
                     <sheet>

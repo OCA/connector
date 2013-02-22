@@ -22,9 +22,8 @@
 from openerp.osv import orm
 
 __all__ = [
-    'ConnectorUnit',
-    'RecordIdentifier',
     'Environment',
+    'ConnectorUnit',
 ]
 
 
@@ -139,20 +138,3 @@ class Environment(object):
         return self.backend.get_class(base_class, self.model_name,
                                       *args, **kwargs)(self)
 
-
-class RecordIdentifier(object):
-    """ Most of the time, on an external system, a record is identified
-    by a unique ID. However occasionaly, it is identified by an ID and a
-    second key, or even no ID at all but some keys.
-
-    Instances of this class encapsulate the identifier(s) for a external
-    record.
-
-    The instance should support pickling because a
-    :py:class:`RecordMetadata` can be stored in a job.
-    """
-    def __init__(self, **kwargs):
-        for key, value in kwargs.iteritems():
-            setattr(self, key, value)
-
-    # TODO display key / values in repr

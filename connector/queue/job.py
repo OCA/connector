@@ -374,6 +374,7 @@ class Job(object):
         if state == STARTED:
             self.date_started = datetime.now()
         if state == DONE:
+            self.exc_info = None
             self.date_done = datetime.now()
 
         if result is not None:

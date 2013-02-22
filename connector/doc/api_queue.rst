@@ -7,6 +7,7 @@ Job
 .. automodule:: connector.queue.job
    :members:
    :undoc-members:
+   :show-inheritance:
 
 Worker
 ------
@@ -14,6 +15,7 @@ Worker
 .. automodule:: connector.queue.worker
    :members:
    :undoc-members:
+   :show-inheritance:
 
 Queue
 -----
@@ -21,3 +23,4 @@ Queue
 .. automodule:: connector.queue.queue
    :members:
    :undoc-members:
+   :show-inheritance:

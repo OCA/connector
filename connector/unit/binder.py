@@ -22,8 +22,6 @@
 from ..connector import ConnectorUnit
 
 
-# TODO store and read metadata (attributes stored on the relation
-# between the backend and the openerp record)
 class Binder(ConnectorUnit):
     """ For one record of a model, capable to find an external or
     internal id, or create the link between them
@@ -31,12 +29,11 @@ class Binder(ConnectorUnit):
 
     _model_name = None  # define in sub-classes
 
-    def to_openerp(self, backend_identifier):
+    def to_openerp(self, backend_id):
         """ Give the OpenERP ID for an external ID
 
-        :param backend_identifier: backend identifiers for which we want
+        :param backend_identifier: backend ID for which we want
                                    the OpenERP ID
-        :type backend_identifier: :py:class:`connector.connector.RecordIdentifier`
         :return: OpenERP ID of the record
         :rtype: int
         """
@@ -46,16 +43,14 @@ class Binder(ConnectorUnit):
         """ Give the backend ID for an OpenERP ID
 
         :param openerp_id: OpenERP ID for which we want the backend id
-        :return: backend identifier of the record
-        :rtype: :py:class:`connector.connector.RecordIdentifier`
+        :return: backend ID of the record
         """
         raise NotImplementedError
 
-    def bind(self, backend_identifier, openerp_id, metadata=None):
+    def bind(self, backend_id, openerp_id, metadata=None):
         """ Create the link between an external ID and an OpenERP ID
 
-        :param backend_identifier: Backend identifiers to bind
-        :type backend_identifier: :py:class:`connector.connector.RecordIdentifier`
+        :param backend_id: Backend id to bind
         :param openerp_id: OpenERP ID to bind
         :type openerp_id: int
         :param metadata: optional values to store on the relation model
@@ -63,6 +58,6 @@ class Binder(ConnectorUnit):
         """
         raise NotImplementedError
 
-    def read_metadata(self, openerp_id, backend_identifier):
+    def read_metadata(self, openerp_id, backend_id):
         """ Read the metadata for a relation OpenERP - Magento """
         raise NotImplementedError

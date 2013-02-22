@@ -51,13 +51,15 @@ class Binder(ConnectorUnit):
         """
         raise NotImplementedError
 
-    def bind(self, backend_identifier, openerp_id):
+    def bind(self, backend_identifier, openerp_id, metadata=None):
         """ Create the link between an external ID and an OpenERP ID
 
         :param backend_identifier: Backend identifiers to bind
         :type backend_identifier: :py:class:`connector.connector.RecordIdentifier`
         :param openerp_id: OpenERP ID to bind
         :type openerp_id: int
+        :param metadata: optional values to store on the relation model
+        :type metadata: dict
         """
         raise NotImplementedError
 

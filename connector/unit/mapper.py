@@ -25,7 +25,7 @@
 # the name of the external / openerp model and the values are the
 # records. And the same for the output records.
 
-from ..connector import ConnectorUnit, MetaConnectorUnit
+from ..connector import ConnectorUnit, MetaConnectorUnit, Environment
 from ..exception import MappingError
 from .binder import Binder
 
@@ -153,32 +153,27 @@ class Mapper(ConnectorUnit):
 class ImportMapper(Mapper):
     """ Transform a record from a backend to an OpenERP record """
 
-    def _get_o2m_binder(self, model_name):
-        binder_cls = self.backend.get_class(Binder, model_name)
-        return self.binder_cls(self.backend, self.session)
-
-    def _get_o2m_external_identifier(self, record, attr, model):
-        # from a record for a model
-        return record[attr]
-
     def _map_direct(self, record, from_attr, to_attr):
         value = record[from_attr]
-        attr_type = self.model._all_columns[to_attr].column._type
-        if attr_type == 'many2one':
-            model = self.model._all_columns[to_attr].column._obj
-            ext_id = self._get_o2m_external_identifier(
-                    record, from_attr, model)
-            binder = self._get_o2m_binder(model)
-            value = binder.to_openerp(self.backend, ext_id)
+        column = self.model._all_columns[to_attr].column
+        if column._type == 'many2one':
+            model_name = column._obj
+            env = Environment(self.backend_record,
+                              self.session,
+                              model_name)
+            binder = env.get_connector_unit(Binder)
+            value = binder.to_openerp(record[from_attr])
 
             if not value:
                 raise MappingError("Can not find an existing %s for external "
                                    "record %s" % (model, ext_id))
         return value
 
-    def _map_children(self, record, attr, model):
-        mapper_cls = self.backend.get_class(ImportMapper, self.model_name)
-        mapper = mapper_cls(self.backend, self.session)
+    def _map_children(self, record, attr, model_name):
+        env = Environment(self.backend_record,
+                          self.session,
+                          model_name)
+        mapper = env.get_connector_unit(ImportMapper)
         child_records = record[attr]  # XXX not compatible with
                                      # all record types
         return self._sub_convert(child_records, mapper,
@@ -199,9 +194,11 @@ class ImportMapper(Mapper):
 class ExportMapper(Mapper):
     """ Transform a record from OpenERP to a backend record """
 
-    def _map_children(self, record, attr, model):
-        mapper_cls = self.backend.get_class(ExportMapper, self.model_name)
-        mapper = mapper_cls(self.backend, self.session)
+    def _map_children(self, record, attr, model_name):
+        env = Environment(self.backend_record,
+                          self.session,
+                          model_name)
+        mapper = env.get_connector_unit(ExportMapper)
         child_records = record[attr]  # XXX not compatible with
                                       # all record types
         return self._sub_convert(child_records, mapper,

@@ -143,27 +143,34 @@ class OpenERPJobStorage(JobStorage):
                               job.args,
                               job.kwargs))
 
-        if job.date_created:
-            vals['date_created'] = job.date_created.strftime(
-                    DEFAULT_SERVER_DATETIME_FORMAT)
+        vals['date_created'] = job.date_created.strftime(
+                DEFAULT_SERVER_DATETIME_FORMAT)
+
         if job.date_enqueued:
             vals['date_enqueued'] = job.date_enqueued.strftime(
                     DEFAULT_SERVER_DATETIME_FORMAT)
+        else:
+            vals['date_enqueued'] = False
+
         if job.date_started:
             vals['date_started'] = job.date_started.strftime(
                     DEFAULT_SERVER_DATETIME_FORMAT)
+        else:
+            vals['date_started'] = False
+
         if job.date_done:
             vals['date_done'] = job.date_done.strftime(
                     DEFAULT_SERVER_DATETIME_FORMAT)
+
         if job.only_after:
             vals['only_after'] = job.only_after.strftime(
                     DEFAULT_SERVER_DATETIME_FORMAT)
+        else:
+            vals['only_after'] = False
 
-        if job.exc_info is not None:
-            vals['exc_info'] = job.exc_info
+        vals['exc_info'] = job.exc_info
 
-        if job.result is not None:
-            vals['result'] = unicode(job.result)
+        vals['result'] = unicode(job.result)
 
         vals['user_id'] = job.user_id or self.session.uid
 
@@ -369,8 +376,13 @@ class Job(object):
         """Change the state of the job."""
         self.state = state
 
+        if state == PENDING:
+            self.date_enqueued = None
+            self.date_started = None
+
         if state == ENQUEUED:
             self.date_enqueued = datetime.now()
+            self.date_started = None
         if state == STARTED:
             self.date_started = datetime.now()
         if state == DONE:

@@ -37,6 +37,8 @@ class QueueJob(orm.Model):
     _name = 'queue.job'
     _log_access = False
 
+    _order = 'date_created DESC, date_done DESC'
+
     _columns = {
         'worker_id': fields.many2one('queue.worker', string='Worker',
                                      ondelete='set null', readonly=True),

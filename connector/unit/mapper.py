@@ -163,9 +163,9 @@ class ImportMapper(Mapper):
 
     def _map_direct(self, record, from_attr, to_attr):
         value = record[from_attr]
-        attr_type = self.model._columns[to_attr]._type
+        attr_type = self.model._all_columns[to_attr].column._type
         if attr_type == 'many2one':
-            model = self.model._columns[to_attr]._obj
+            model = self.model._all_columns[to_attr].column._obj
             ext_id = self._get_o2m_external_identifier(
                     record, from_attr, model)
             binder = self._get_o2m_binder(model)

@@ -221,3 +221,35 @@ class QueueWorker(orm.Model):
         for job in db_worker.job_ids:
             if job.state == 'pending':
                 self._worker.enqueue_job_uuid(job.uuid)
+
+
+class requeue_job(orm.TransientModel):
+    _name = 'queue.requeue.job'
+    _description = 'Wizard to requeue a selection of jobs'
+
+    def _get_job_ids(self, cr, uid, context=None):
+        if context is None:
+            context = {}
+        res = False
+        if (context.get('active_model') == 'queue.job' and
+                context.get('active_ids')):
+            res = context['active_ids']
+        return res
+
+    _columns = {
+        'job_ids': fields.many2many('queue.job', string='Jobs'),
+    }
+
+    _defaults = {
+        'job_ids': _get_job_ids,
+    }
+
+    def requeue(self, cr, uid, ids, context=None):
+        if isinstance(ids, (tuple, list)):
+            assert len(ids) == 1, "One ID expected"
+            ids = ids[0]
+
+        form = self.browse(cr, uid, ids, context=context)
+        job_ids = [job.id for job in form.job_ids]
+        self.pool.get('queue.job').requeue(cr, uid, job_ids, context=context)
+        return {'type': 'ir.actions.act_window_close'}

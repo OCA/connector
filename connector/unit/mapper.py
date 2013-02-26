@@ -155,18 +155,22 @@ class ImportMapper(Mapper):
 
     def _map_direct(self, record, from_attr, to_attr):
         value = record[from_attr]
+        if not value:
+            return False
+
         column = self.model._all_columns[to_attr].column
         if column._type == 'many2one':
+            rel_id = record[from_attr]
             model_name = column._obj
             env = Environment(self.backend_record,
                               self.session,
                               model_name)
             binder = env.get_connector_unit(Binder)
-            value = binder.to_openerp(record[from_attr])
+            value = binder.to_openerp(rel_id)
 
             if not value:
                 raise MappingError("Can not find an existing %s for external "
-                                   "record %s" % (model, ext_id))
+                                   "record %s" % (model, rel_id))
         return value
 
     def _map_children(self, record, attr, model_name):
@@ -193,6 +197,26 @@ class ImportMapper(Mapper):
 
 class ExportMapper(Mapper):
     """ Transform a record from OpenERP to a backend record """
+
+    def _map_direct(self, record, from_attr, to_attr):
+        value = record[from_attr]
+        if not value:
+            return False
+
+        column = self.model._all_columns[from_attr].column
+        if column._type == 'many2one':
+            rel_id = record[from_attr].id
+            model_name = column._obj
+            env = Environment(self.backend_record,
+                              self.session,
+                              model_name)
+            binder = env.get_connector_unit(Binder)
+            value = binder.to_backend(rel_id)
+
+            if not value:
+                raise MappingError("Can not find an existing %s for external "
+                                   "record %s" % (model, rel_id))
+        return value
 
     def _map_children(self, record, attr, model_name):
         env = Environment(self.backend_record,

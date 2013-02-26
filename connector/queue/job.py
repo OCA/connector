@@ -170,7 +170,7 @@ class OpenERPJobStorage(JobStorage):
 
         vals['exc_info'] = job.exc_info
 
-        vals['result'] = unicode(job.result)
+        vals['result'] = unicode(job.result) if job.result else False
 
         vals['user_id'] = job.user_id or self.session.uid
 

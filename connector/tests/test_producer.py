@@ -30,7 +30,7 @@ class test_connector_session(common.TransactionCase):
         Create a record and check if the event is called
         """
         @on_record_create
-        def event(session, record_id):
+        def event(session, model_name, record_id):
             self.recipient.record_id = record_id
 
         record_id = self.model.create(self.cr,
@@ -44,7 +44,7 @@ class test_connector_session(common.TransactionCase):
         Write on a record and check if the event is called
         """
         @on_record_write
-        def event(session, record_id, fields):
+        def event(session, model_name, record_id, fields=None):
             self.recipient.record_id = record_id
             self.recipient.fields = fields
 
@@ -62,7 +62,7 @@ class test_connector_session(common.TransactionCase):
         Unlink a record and check if the event is called
         """
         @on_record_unlink
-        def event(session, record_id):
+        def event(session, model_name, record_id):
             self.recipient.record_id = record_id
 
         self.model.unlink(self.cr,
@@ -71,15 +71,14 @@ class test_connector_session(common.TransactionCase):
         self.assertEqual(self.recipient.record_id, self.partner_id)
         on_record_write.unsubscribe(event)
 
-    def test_on_record_create_no_consumer(self):
+    def test_on_record_write_no_consumer(self):
         """
         If no consumer is registered on the event for the model,
         the event should not be fired at all
         """
-        def fire(self, model_name, *args, **kwargs):
-            raise Exception('I should not be fired because I have no consumer')
-        with mock.patch.object(on_record_create, 'fire'):
-            on_record_create.fire.side_effect = fire
-            record_id = self.model.create(self.cr,
-                                          self.uid,
-                                          {'name': 'Kif Kroker'})
+        with mock.patch.object(on_record_write, 'fire'):
+            record_id = self.model.write(self.cr,
+                                         self.uid,
+                                         self.partner_id,
+                                         {'name': 'Kif Kroker'})
+            self.assertEqual(on_record_write.fire.called, False)

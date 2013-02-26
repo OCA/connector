@@ -25,7 +25,6 @@ __all__ = [
     'on_record_write',
     'on_record_create',
     'on_record_unlink',
-    'on_workflow_signal',
 ]
 
 
@@ -173,6 +172,7 @@ on_record_write = Event()
 Listeners should take the following arguments:
 
  * session: `Session` object
+ * model_name: name of the model
  * record_id: id of the record
  * fields: name of the fields which have been written
 
@@ -185,6 +185,7 @@ on_record_create = Event()
 Listeners should take the following arguments:
 
  * session: `Session` object
+ * model_name: name of the model
  * record_id: id of the created record
 
 """
@@ -196,18 +197,7 @@ on_record_unlink = Event()
 Listeners should take the following arguments:
 
  * session: `Session` object
+ * model_name: name of the model
  * record_id: id of the record
-
-"""
-
-on_workflow_signal = Event()
-"""
-``on_workflow_signal`` is fired when a workflow signal is triggered.
-
-Listeners should take the following arguments:
-
- * session: `Session` object
- * record_id: id of the record
- * signal: name of the signal
 
 """

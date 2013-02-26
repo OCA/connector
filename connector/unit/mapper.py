@@ -170,7 +170,7 @@ class ImportMapper(Mapper):
 
             if not value:
                 raise MappingError("Can not find an existing %s for external "
-                                   "record %s" % (model, rel_id))
+                                   "record %s" % (model_name, rel_id))
         return value
 
     def _map_children(self, record, attr, model_name):
@@ -214,8 +214,8 @@ class ExportMapper(Mapper):
             value = binder.to_backend(rel_id)
 
             if not value:
-                raise MappingError("Can not find an existing %s for external "
-                                   "record %s" % (model, rel_id))
+                raise MappingError("Can not find an external id for record "
+                                   "%s in model %s" % (rel_id, model_name))
         return value
 
     def _map_children(self, record, attr, model_name):

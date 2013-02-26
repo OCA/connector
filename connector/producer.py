@@ -40,9 +40,8 @@ from .event import (on_record_create,
 create_original = orm.Model.create
 def create(self, cr, uid, vals, context=None):
     record_id = create_original(self, cr, uid, vals, context=context)
-    if on_record_create.has_consumer_for(self._name):
-        session = ConnectorSession(cr, uid, context=context)
-        on_record_create.fire(self._name, session, self._name, record_id)
+    session = ConnectorSession(cr, uid, context=context)
+    on_record_create.fire(self._name, session, self._name, record_id)
     return record_id
 orm.Model.create = create
 

@@ -115,3 +115,7 @@ class ImportSynchronizer(Synchronizer):
         if self._mapper is None:
             self._mapper = self.environment.get_connector_unit(ImportMapper)
         return self._mapper
+
+
+class DeleteSynchronizer(Synchronizer):
+    """ Synchronizer for deleting a record on the backend """

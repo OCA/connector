@@ -46,10 +46,9 @@ class ConnectorSessionHandler(object):
             # work with session
     """
 
-    def __init__(self, db_name, uid, model_name=None, context=None):
+    def __init__(self, db_name, uid, context=None):
         self.db_name = db_name
         self.uid = uid
-        self.model_name = model_name
         self.context = {} if context is None else context
 
     @contextmanager
@@ -63,7 +62,6 @@ class ConnectorSessionHandler(object):
         db = openerp.sql_db.db_connect(self.db_name)
         session = ConnectorSession(db.cursor(),
                                    self.uid,
-                                   model_name=self.model_name,
                                    context=self.context)
 
         try:
@@ -96,10 +94,6 @@ class ConnectorSession(object):
 
         The current OpenERP's context
 
-    .. attribute:: model_name
-
-        Name of the model we're working on
-
     .. attribute:: model
 
         Instance of the model we're working on
@@ -109,11 +103,10 @@ class ConnectorSession(object):
     focused on a model (export a product, import a sale order, ...)
     """
 
-    def __init__(self, cr, uid, model_name=None, context=None):
+    def __init__(self, cr, uid, context=None):
         self.cr = cr
         self.uid = uid
         self._pool = None
-        self.model_name = model_name
         self.context = {} if context is None else context
 
     @contextmanager
@@ -131,10 +124,6 @@ class ConnectorSession(object):
         if self._pool is None:
             self._pool = openerp.pooler.get_pool(self.cr.dbname)
         return self._pool
-
-    @property
-    def model(self):
-        return self.pool.get(self.model_name)
 
     def commit(self):
         """ Commit the cursor """

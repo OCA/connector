@@ -18,11 +18,9 @@ class test_connector_session_handler(common.TransactionCase):
 
     def setUp(self):
         super(test_connector_session_handler, self).setUp()
-        self.model_name = 'res.users'
         self.context = {'lang': 'fr_FR'}
         self.session_hdl = ConnectorSessionHandler(
                 DB, ADMIN_USER_ID,
-                model_name=self.model_name,
                 context=self.context)
 
     def test_empty_session(self):
@@ -31,7 +29,6 @@ class test_connector_session_handler(common.TransactionCase):
         """
         self.assertEqual(self.session_hdl.db_name, DB)
         self.assertEqual(self.session_hdl.uid, ADMIN_USER_ID)
-        self.assertEqual(self.session_hdl.model_name, self.model_name)
         self.assertEqual(self.session_hdl.context, self.context)
 
     def test_with_session(self):
@@ -42,7 +39,6 @@ class test_connector_session_handler(common.TransactionCase):
             pool = openerp.modules.registry.RegistryManager.get(DB)
             self.assertIsNotNone(session.cr)
             self.assertEqual(session.pool, pool)
-            self.assertEqual(session.model._name, self.session_hdl.model_name)
             self.assertEqual(session.context, self.session_hdl.context)
 
     def test_with_session_cr(self):
@@ -67,11 +63,9 @@ class test_connector_session(common.TransactionCase):
 
     def setUp(self):
         super(test_connector_session, self).setUp()
-        self.model_name = 'res.users'
         self.context = {'lang': 'fr_FR'}
         self.session = ConnectorSession(self.cr,
                                         self.uid,
-                                        model_name=self.model_name,
                                         context=self.context)
 
     def test_change_user(self):
@@ -91,5 +85,4 @@ class test_connector_session(common.TransactionCase):
         """
         res_users = self.registry('res.users')
 
-        self.assertEqual(self.session.model_name, 'res.users')
-        self.assertEqual(self.session.model, res_users)
+        self.assertEqual(self.session.pool.get('res.users'), res_users)

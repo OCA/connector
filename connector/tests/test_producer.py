@@ -7,8 +7,8 @@ import openerp.tests.common as common
 from openerp.addons.connector.event import (
         on_record_create,
         on_record_write,
-        on_record_unlink,
-        on_workflow_signal)
+        on_record_unlink
+        )
 from openerp.osv import orm
 
 

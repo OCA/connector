@@ -62,7 +62,6 @@ orm.Model.write = write
 
 unlink_original = orm.Model.unlink
 def unlink(self, cr, uid, ids, context=None):
-    result = unlink_original(self, cr, uid, ids, context=context)
     if not hasattr(ids, '__iter__'):
         ids = [ids]
     if on_record_unlink.has_consumer_for(self._name):
@@ -70,5 +69,5 @@ def unlink(self, cr, uid, ids, context=None):
         for record_id in ids:
             on_record_unlink.fire(self._name, session, self._name,
                                   record_id)
-    return result
+    return unlink_original(self, cr, uid, ids, context=context)
 orm.Model.unlink = unlink

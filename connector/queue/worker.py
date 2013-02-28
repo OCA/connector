@@ -40,7 +40,8 @@ from .job import (OpenERPJobStorage,
 from ..exception import (NoSuchJobError,
                          NotReadableJobError,
                          RetryableJobError,
-                         FailedJobError)
+                         FailedJobError,
+                         NothingToDoJob)
 
 _logger = logging.getLogger(__name__)
 
@@ -97,21 +98,24 @@ class Worker(threading.Thread):
                 job.set_state(DONE)
                 self.job_storage_class(session).store(job)
 
+        except NothingToDoJob:
+            job.cancel()
+            with session_hdl.session() as session:
+                self.job_storage_class(session).store(job)
+
         except RetryableJobError:
             # delay the job later
             job.only_after = timedelta(seconds=RETRY_JOB_TIMEDELTA)
             with session_hdl.session() as session:
                 self.job_storage_class(session).store(job)
 
-        except (FailedJobError, Exception):  # XXX Exception?
-            # TODO allow to pass a pipeline of exception
-            # handlers (log errors, send by email, ...)
+        except (FailedJobError, Exception):
             buff = StringIO()
             traceback.print_exc(file=buff)
             _logger.error(buff.getvalue())
 
+            job.set_state(FAILED, exc_info=buff.getvalue())
             with session_hdl.session() as session:
-                job.set_state(FAILED, exc_info=buff.getvalue())
                 self.job_storage_class(session).store(job)
             raise
 

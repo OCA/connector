@@ -59,7 +59,12 @@ class QueueJob(orm.Model):
         'date_enqueued': fields.datetime('Enqueue Time', readonly=True),
         'date_done': fields.datetime('Date Done', readonly=True),
         'only_after': fields.datetime('Execute only after'),
-        }
+        'active': fields.boolean('Active'),
+    }
+
+    _defaults = {
+        'active': True,
+    }
 
     def requeue(self, cr, uid, ids, context=None):
         self.write(cr, uid, ids, {'state': 'pending'}, context=context)
@@ -178,7 +183,8 @@ class QueueWorker(orm.Model):
     def _assign_jobs(self, cr, uid, max_jobs=None, context=None):
         sql = ("SELECT id FROM queue_job "
                "WHERE worker_id IS NULL "
-               "AND state not in ('failed', 'done') ")
+               "AND state not in ('failed', 'done') "
+               "AND active = true ")
         if max_jobs is not None:
             sql += ' LIMIT %d' % max_jobs
         sql += ' FOR UPDATE NOWAIT'

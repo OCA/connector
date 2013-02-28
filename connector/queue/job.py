@@ -28,6 +28,7 @@ from pickle import loads, dumps, UnpicklingError
 
 from openerp import SUPERUSER_ID
 from openerp.tools import DEFAULT_SERVER_DATETIME_FORMAT
+from openerp.tools.translate import _
 
 from ..exception import NotReadableJobError, NoSuchJobError
 
@@ -179,6 +180,9 @@ class OpenERPJobStorage(JobStorage):
         if job.state in (DONE, FAILED):
             vals['worker_id'] = False
 
+        if job.canceled:
+            vals['active'] = False
+
         if self.exists(job.uuid):
             self.storage_model.write(
                     self.session.cr,
@@ -238,6 +242,7 @@ class OpenERPJobStorage(JobStorage):
         job.result = stored.result if stored.result else None
         job.exc_info = stored.exc_info if stored.exc_info else None
         job.user_id = stored.user_id.id if stored.user_id else None
+        job.canceled = not stored.active
         return job
 
 
@@ -303,6 +308,7 @@ class Job(object):
 
         self.user_id = None
         self.only_after = only_after
+        self.canceled = False
 
     def __cmp__(self, other):
         if not isinstance(other, Job):
@@ -321,6 +327,7 @@ class Job(object):
         :param session: session to execute the job
         :type session: ConnectorSession
         """
+        assert not self.canceled, "Canceled job"
         with session.change_user(self.user_id):
             self.result = self.func(session, *self.args, **self.kwargs)
         return self.result
@@ -397,6 +404,10 @@ class Job(object):
 
     def __repr__(self):
         return '<Job %s, priority:%d>' % (self.uuid, self.priority)
+
+    def cancel(self):
+        self.canceled = True
+        self.set_state(DONE, result=_('Nothing to do'))
 
 
 def job(func):

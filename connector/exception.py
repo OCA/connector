@@ -50,3 +50,7 @@ class FailedJobError(JobError):
 
 class RetryableJobError(JobError):
     """ A job had an error but can be retried. """
+
+
+class NothingToDoJob(JobError):
+    """ The Job has nothing to do. """

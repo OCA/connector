@@ -60,6 +60,7 @@ class QueueJob(orm.Model):
         'date_done': fields.datetime('Date Done', readonly=True),
         'only_after': fields.datetime('Execute only after'),
         'active': fields.boolean('Active'),
+        'model_name': fields.char('Model'),
     }
 
     _defaults = {

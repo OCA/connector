@@ -41,7 +41,7 @@ create_original = orm.Model.create
 def create(self, cr, uid, vals, context=None):
     record_id = create_original(self, cr, uid, vals, context=context)
     session = ConnectorSession(cr, uid, context=context)
-    on_record_create.fire(self._name, session, self._name, record_id)
+    on_record_create.fire(session, self._name, record_id)
     return record_id
 orm.Model.create = create
 
@@ -54,8 +54,7 @@ def write(self, cr, uid, ids, vals, context=None):
     if on_record_write.has_consumer_for(self._name):
         session = ConnectorSession(cr, uid, context=context)
         for record_id in ids:
-            on_record_write.fire(self._name, session, self._name,
-                                 record_id, vals.keys())
+            on_record_write.fire(session, self._name, record_id, vals.keys())
     return result
 orm.Model.write = write
 
@@ -67,7 +66,6 @@ def unlink(self, cr, uid, ids, context=None):
     if on_record_unlink.has_consumer_for(self._name):
         session = ConnectorSession(cr, uid, context=context)
         for record_id in ids:
-            on_record_unlink.fire(self._name, session, self._name,
-                                  record_id)
+            on_record_unlink.fire(session, self._name, record_id)
     return unlink_original(self, cr, uid, ids, context=context)
 orm.Model.unlink = unlink

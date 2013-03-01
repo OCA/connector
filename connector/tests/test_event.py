@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import unittest2
+import mock
 
 from openerp.addons.connector.event import Event
 
@@ -9,8 +10,8 @@ class test_event(unittest2.TestCase):
     """ Test Event """
 
     def setUp(self):
-        self.consumer1 = lambda: True
-        self.consumer2 = lambda: True
+        self.consumer1 = lambda session, model_name: None
+        self.consumer2 = lambda session, model_name: None
         self.event = Event()
 
     def test_subscribe(self):
@@ -59,10 +60,10 @@ class test_event(unittest2.TestCase):
 
     def test_replacing_decorator(self):
         @self.event
-        def consumer1():
+        def consumer1(session, model_name):
             pass
         @self.event(replacing=consumer1)
-        def consumer2():
+        def consumer2(session, model_name):
             pass
         self.assertNotIn(consumer1, self.event._consumers[None])
         self.assertIn(consumer2, self.event._consumers[None])
@@ -82,23 +83,24 @@ class test_event(unittest2.TestCase):
                 self.message = message
 
         @self.event
-        def set_message(recipient, message):
+        def set_message(session, model_name, recipient, message):
             recipient.set_message(message)
         recipient = Recipient()
         # an event is fired on a model name
-        self.event.fire('res.users', recipient, 'success')
+        session = mock.Mock()
+        self.event.fire(session, 'res.users', recipient, 'success')
         self.assertEquals(recipient.message, 'success')
 
     def test_has_consumer_for(self):
         @self.event(model_names=['product.product'])
-        def consumer1():
+        def consumer1(session, model_name):
             pass
         self.assertTrue(self.event.has_consumer_for('product.product'))
         self.assertFalse(self.event.has_consumer_for('res.partner'))
 
     def test_has_consumer_for_global(self):
         @self.event
-        def consumer1():
+        def consumer1(session, model_name):
             pass
         self.assertTrue(self.event.has_consumer_for('product.product'))
         self.assertTrue(self.event.has_consumer_for('res.partner'))

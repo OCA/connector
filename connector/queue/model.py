@@ -62,6 +62,8 @@ class QueueJob(orm.Model):
         'only_after': fields.datetime('Execute only after'),
         'active': fields.boolean('Active'),
         'model_name': fields.char('Model'),
+        'retry': fields.integer('Current retry'),
+        'max_retries': fields.integer('Max. retries'),
     }
 
     _defaults = {

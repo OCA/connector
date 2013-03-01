@@ -25,9 +25,10 @@ from datetime import datetime, timedelta
 
 from openerp.osv import orm, fields
 from openerp.tools import DEFAULT_SERVER_DATETIME_FORMAT
+from openerp.tools.translate import _
 
-from .job import STATES
-from ..session import ConnectorSessionHandler
+from .job import STATES, DONE, PENDING, OpenERPJobStorage
+from ..session import ConnectorSession
 
 _logger = logging.getLogger(__name__)
 
@@ -67,8 +68,29 @@ class QueueJob(orm.Model):
         'active': True,
     }
 
+    def _change_job_state(self, cr, uid, ids, state, result=None, context=None):
+        """ Change the state of the `Job` object itself so it
+        will change the other fields (date, result, ...)
+        """
+        if not hasattr(ids, '__iter__'):
+            ids = [ids]
+
+        session = ConnectorSession(cr, uid, context=context)
+        storage = OpenERPJobStorage(session)
+        for job in self.browse(cr, uid, ids, context=context):
+            job = storage.load(job.uuid)
+            job.set_state(state, result=result)
+            storage.store(job)
+
+    def button_done(self, cr, uid, ids, context=None):
+        user = self.pool.get('res.users').browse(cr, uid, uid, context=context)
+        result = _('Manually set to done by %s') % user.name
+        self._change_job_state(cr, uid, ids, DONE,
+                               result=result, context=context)
+        return True
+
     def requeue(self, cr, uid, ids, context=None):
-        self.write(cr, uid, ids, {'state': 'pending'}, context=context)
+        self._change_job_state(cr, uid, ids, PENDING, context=context)
         return True
 
 

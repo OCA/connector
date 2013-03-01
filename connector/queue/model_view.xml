@@ -56,7 +56,13 @@
                             class="oe_highlight"
                             string="Requeue Job"
                             type="object"
-                            groups="base.group_user"/>
+                            groups="connector.group_connector_manager"/>
+                        <button name="button_done"
+                            states="pending,enqueued,failed"
+                            class="oe_highlight"
+                            string="Set to 'Done'"
+                            type="object"
+                            groups="connector.group_connector_manager"/>
                         <field name="state"
                             widget="statusbar"
                             statusbar_visible="pending,enqueued,started,done"
@@ -86,11 +92,11 @@
                             <field name="date_enqueued"/>
                             <field name="worker_id"/>
                         </group>
-                        <group>
-                            <field nolabel="1" name="exc_info"/>
-                        </group>
-                        <group>
+                        <group name="result" string="Result" attrs="{'invisible': [('result', '=', False)]}">
                             <field nolabel="1" name="result"/>
+                        </group>
+                        <group name="exc_info" string="Exception Information" attrs="{'invisible': [('exc_info', '=', False)]}">
+                            <field nolabel="1" name="exc_info"/>
                         </group>
                     </sheet>
                 </form>
@@ -117,6 +123,9 @@
             <field name="model">queue.job</field>
             <field name="arch" type="xml">
                 <search string="Jobs">
+                    <field name="uuid"/>
+                    <field name="name"/>
+                    <field name="func_string"/>
                     <filter name="pending" string="Pending"
                         domain="[('state', '=', 'pending')]"/>
                     <filter name="enqueued" string="Enqueued"

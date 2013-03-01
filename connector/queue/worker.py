@@ -72,6 +72,11 @@ class Worker(threading.Thread):
             if job is None:
                 return
 
+            # if the job has been manually set to DONE
+            # before its execution, stop
+            if job.state == DONE:
+                return
+
             if job.only_after and job.only_after > datetime.now():
                 # The queue is sorted by 'only_after' date first
                 # so if we dequeued a job expected to be run in

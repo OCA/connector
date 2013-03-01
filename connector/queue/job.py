@@ -97,9 +97,9 @@ class OpenERPJobStorage(JobStorage):
         assert self.storage_model is not None, (
                 "Model %s not found" % self._storage_model_name)
 
-    def enqueue(self, func, args=None, kwargs=None,
+    def enqueue(self, func, model_name=None, args=None, kwargs=None,
                 priority=None, only_after=None):
-        job = Job(func=func, args=args, kwargs=kwargs,
+        job = Job(func=func, model_name=model_name, args=args, kwargs=kwargs,
                   priority=priority, only_after=only_after)
         job.user_id = self.session.uid
         self.store(job)
@@ -108,8 +108,10 @@ class OpenERPJobStorage(JobStorage):
         """Create a Job and enqueue it in the queue"""
         priority = kwargs.pop('priority', None)
         only_after = kwargs.pop('only_after', None)
+        model_name = kwargs.pop('model_name', None)
 
-        return self.enqueue(func, args=args, kwargs=kwargs,
+        return self.enqueue(func, model_name=model_name,
+                            args=args, kwargs=kwargs,
                             priority=priority,
                             only_after=only_after)
 
@@ -174,6 +176,8 @@ class OpenERPJobStorage(JobStorage):
         vals['result'] = unicode(job.result) if job.result else False
 
         vals['user_id'] = job.user_id or self.session.uid
+
+        vals['model_name'] = job.model_name if job.model_name else False
 
         # by removing the worker on terminated jobs,
         # we can check the load of a worker
@@ -243,19 +247,22 @@ class OpenERPJobStorage(JobStorage):
         job.exc_info = stored.exc_info if stored.exc_info else None
         job.user_id = stored.user_id.id if stored.user_id else None
         job.canceled = not stored.active
+        job.model_name = stored.model_name if stored.model_name else None
         return job
 
 
 class Job(object):
     """ A Job is a task to execute """
 
-    def __init__(self, func=None,
+    def __init__(self, func=None, model_name=None,
                  args=None, kwargs=None, priority=None,
                  only_after=None, job_uuid=None):
         """ Create a Job
 
         :param func: function to execute
         :type func: function
+        :param model_name: name of the model targetted by the job
+        :type model_name: str
         :param args: arguments for func
         :type args: tuple
         :param kwargs: keyworkd arguments for func
@@ -283,7 +290,8 @@ class Job(object):
         self.func_name = None
         if func:
             if inspect.ismethod(func):
-                raise NotImplementedError('Jobs on instances methods are not supported')
+                raise NotImplementedError('Jobs on instances methods are '
+                                          'not supported')
             elif inspect.isfunction(func):
                 self.func_name = '%s.%s' % (func.__module__, func.__name__)
             elif isinstance(func, basestring):
@@ -291,6 +299,10 @@ class Job(object):
             else:
                 raise TypeError('%s is not a valid function for a job' % func)
 
+        self.model_name = model_name
+        # the model name is by convention the second argument of the job
+        if self.model_name:
+            args = tuple([self.model_name] + list(args))
         self.args = args
         self.kwargs = kwargs
 
@@ -420,7 +432,9 @@ def job(func):
     arguments given in ``delay`` will be the arguments used by the
     decorated function when it is executed.
     """
-    def delay(session, *args, **kwargs):
-        OpenERPJobStorage(session).enqueue_resolve_args(func, *args, **kwargs)
+    def delay(session, model_name, *args, **kwargs):
+        OpenERPJobStorage(session).enqueue_resolve_args(func,
+                                                        model_name=model_name,
+                                                        *args, **kwargs)
     func.delay = delay
     return func

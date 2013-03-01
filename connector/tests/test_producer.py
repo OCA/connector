@@ -63,7 +63,8 @@ class test_connector_session(common.TransactionCase):
         """
         @on_record_unlink
         def event(session, model_name, record_id):
-            self.recipient.record_id = record_id
+            if model_name == 'res.partner':
+                self.recipient.record_id = record_id
 
         self.model.unlink(self.cr,
                           self.uid,

@@ -37,17 +37,22 @@ class Event(object):
 
         on_my_event = Event()
 
+    An event always have at least the 2 following arguments:
+
+    * session
+    * model_name
+
     Then to subscribe one or more consumers, a consumer is a function::
 
-        def do_something(a, b):
+        def do_something(session, model_name, a, b):
             print "Event was fired with arguments: %s, %s" % (a, b)
 
         # active on all models
         on_my_event.subscribe(do_something)
 
-        def do_something_product(a, b):
+        def do_something_product(session, model_name, a, b):
             print ("Event was fired on a product "
-                  "with arguments: %s, %s" % (a, b))
+                   "with arguments: %s, %s" % (a, b))
 
         # active only on product.product
         on_my_event.subscribe(do_something_product,
@@ -55,7 +60,7 @@ class Event(object):
 
     We can also replace an event::
 
-        def do_something_product2(a, b):
+        def do_something_product2(session, model_name, a, b):
             print "Consumer 2"
             print ("Event was fired on a product "
                   "with arguments: %s, %s" % (a, b))
@@ -65,16 +70,16 @@ class Event(object):
 
     Finally, we fire the event::
 
-        on_my_event.fire('value_a', 'value_b')
+        on_my_event.fire(session, 'res.users', 'value_a', 'value_b')
 
     A consumer can be subscribed using a decorator::
 
         @on_my_event
-        def do_other_thing(a, b):
+        def do_other_thing(session, model_name, a, b):
             print 'foo'
 
         @on_my_event(replacing=do_other_thing)
-        def print_bar(a, b):
+        def print_bar(session, model_name, a, b):
             print 'bar'
 
     """
@@ -118,19 +123,27 @@ class Event(object):
             return True  # at least 1 global consumer exist
         return bool(self._consumers.get(model_name))
 
-    def fire(self, model_name, *args, **kwargs):
+    def fire(self, session, model_name, *args, **kwargs):
         """ Call each consumer subscribed on the event with the given
         arguments and keyword arguments.
 
         All the consumers which were subscribed globally (no model name) or
         which are subscribed on the same model
 
-        :param model_name: the current model
+        :param session: current session
+        :type session: :py:class:`connector.session.Session`
+        :param model_name: name of the model
+        :type model_name: str
         :param args: arguments propagated to the consumer
+                     The second argument of `args` is the model name.
+                     The first argument is the session.
         :param kwargs: keyword arguments propagated to the consumer
         """
+        assert isinstance(model_name, basestring), ("Second argument must be "
+                " the model name as string, instead received: %s" % model_name)
         for name in (None, model_name):
             for consumer in self._consumers.get(name, ()):
+                args = tuple([session, model_name] + list(args))
                 consumer(*args, **kwargs)
 
     def __call__(self, *args, **kwargs):

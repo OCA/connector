@@ -13,11 +13,11 @@ from openerp.addons.connector.session import (
         ConnectorSession)
 
 
-def task_b(session):
+def task_b(session, model_name):
     pass
 
 
-def task_a(session):
+def task_a(session, model_name):
     pass
 
 
@@ -25,7 +25,7 @@ def dummy_task(session):
     return 'ok'
 
 
-def dummy_task_args(session, a, b, c=None):
+def dummy_task_args(session, model_name, a, b, c=None):
     return a + b + c
 
 
@@ -65,6 +65,7 @@ class test_job(unittest2.TestCase):
 
     def test_perform_args(self):
         job = Job(func=dummy_task_args,
+                  model_name='res.users',
                   args=('o', 'k'),
                   kwargs={'c': '!'})
         result = job.perform(self.session)
@@ -91,6 +92,7 @@ class test_job_storage(common.TransactionCase):
     def test_read(self):
         only_after = datetime.now() + timedelta(hours=5)
         job = Job(func=dummy_task_args,
+                  model_name='res.users',
                   args=('o', 'k'),
                   kwargs={'c': '!'},
                   priority=15,
@@ -100,6 +102,7 @@ class test_job_storage(common.TransactionCase):
         storage.store(job)
         job_read = storage.load(job.uuid)
         self.assertEqual(job.uuid, job_read.uuid)
+        self.assertEqual(job.model_name, job_read.model_name)
         self.assertEqual(job.func, job_read.func)
         self.assertEqual(job.args, job_read.args)
         self.assertEqual(job.kwargs, job_read.kwargs)
@@ -126,13 +129,13 @@ class test_job_storage(common.TransactionCase):
     def test_job_delay(self):
         self.cr.execute('delete from queue_job')
         deco_task = job(task_a)
-        task_a.delay(self.session)
+        task_a.delay(self.session, 'res.users')
         stored = self.queue_job.search(self.cr, self.uid, [])
         self.assertEqual(len(stored), 1)
 
     def test_job_delay_args(self):
         self.cr.execute('delete from queue_job')
         deco_task = job(dummy_task_args)
-        task_a.delay(self.session, 'o', 'k', c='!')
+        task_a.delay(self.session, 'res.users', 'o', 'k', c='!')
         stored = self.queue_job.search(self.cr, self.uid, [])
         self.assertEqual(len(stored), 1)

@@ -11,6 +11,8 @@ from openerp.addons.connector.queue.job import (
         ENQUEUED, STARTED, DONE, FAILED)
 from openerp.addons.connector.session import (
         ConnectorSession)
+from openerp.addons.connector.exception import (
+        RetryableJobError, FailedJobError)
 
 
 def task_b(session, model_name):
@@ -27,6 +29,9 @@ def dummy_task(session):
 
 def dummy_task_args(session, model_name, a, b, c=None):
     return a + b + c
+
+def retryable_error_task(session):
+    raise RetryableJobError
 
 
 class test_job(unittest2.TestCase):
@@ -70,6 +75,17 @@ class test_job(unittest2.TestCase):
                   kwargs={'c': '!'})
         result = job.perform(self.session)
         self.assertEqual(result, 'ok!')
+
+    def test_retryable_error(self):
+        job = Job(func=retryable_error_task,
+                  max_retries=3)
+        with self.assertRaises(RetryableJobError):
+            job.perform(self.session)
+        with self.assertRaises(RetryableJobError):
+            job.perform(self.session)
+        with self.assertRaises(FailedJobError):
+            job.perform(self.session)
+
 
 class test_job_storage(common.TransactionCase):
     """ Test storage of jobs """

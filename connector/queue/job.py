@@ -19,6 +19,7 @@
 #
 ##############################################################################
 
+import sys
 import logging
 import inspect
 import uuid
@@ -30,7 +31,10 @@ from openerp import SUPERUSER_ID
 from openerp.tools import DEFAULT_SERVER_DATETIME_FORMAT
 from openerp.tools.translate import _
 
-from ..exception import NotReadableJobError, NoSuchJobError
+from ..exception import (NotReadableJobError,
+                         NoSuchJobError,
+                         FailedJobError,
+                         RetryableJobError)
 
 __all__ = ['job']
 
@@ -48,6 +52,8 @@ STATES = [(PENDING, 'Pending'),
           (FAILED, 'Failed')]
 
 DEFAULT_PRIORITY = 10  # used by the PriorityQueue to sort the jobs
+DEFAULT_MAX_RETRIES = 3
+RETRY_INTERVAL = 10 * 60  # seconds
 
 _logger = logging.getLogger(__name__)
 
@@ -98,9 +104,10 @@ class OpenERPJobStorage(JobStorage):
                 "Model %s not found" % self._storage_model_name)
 
     def enqueue(self, func, model_name=None, args=None, kwargs=None,
-                priority=None, only_after=None):
+                priority=None, only_after=None, max_retries=None):
         job = Job(func=func, model_name=model_name, args=args, kwargs=kwargs,
-                  priority=priority, only_after=only_after)
+                  priority=priority, only_after=only_after,
+                  max_retries=max_retries)
         job.user_id = self.session.uid
         self.store(job)
 
@@ -109,10 +116,12 @@ class OpenERPJobStorage(JobStorage):
         priority = kwargs.pop('priority', None)
         only_after = kwargs.pop('only_after', None)
         model_name = kwargs.pop('model_name', None)
+        max_retries = kwargs.pop('max_retries', None)
 
         return self.enqueue(func, model_name=model_name,
                             args=args, kwargs=kwargs,
                             priority=priority,
+                            max_retries=max_retries,
                             only_after=only_after)
 
     def exists(self, job_uuid):
@@ -187,6 +196,9 @@ class OpenERPJobStorage(JobStorage):
         if job.canceled:
             vals['active'] = False
 
+        vals['retry'] = job.retry
+        vals['max_retries'] = job.max_retries
+
         if self.exists(job.uuid):
             self.storage_model.write(
                     self.session.cr,
@@ -248,6 +260,8 @@ class OpenERPJobStorage(JobStorage):
         job.user_id = stored.user_id.id if stored.user_id else None
         job.canceled = not stored.active
         job.model_name = stored.model_name if stored.model_name else None
+        job.retry = stored.retry
+        job.max_retries = stored.max_retries
         return job
 
 
@@ -256,7 +270,7 @@ class Job(object):
 
     def __init__(self, func=None, model_name=None,
                  args=None, kwargs=None, priority=None,
-                 only_after=None, job_uuid=None):
+                 only_after=None, job_uuid=None, max_retries=None):
         """ Create a Job
 
         :param func: function to execute
@@ -273,6 +287,8 @@ class Job(object):
                            (or now + timedelta)
         :type only_after: datetime or timedelta
         :param job_uuid: UUID of the job
+        :param max_retries: maximum number of retries before giving up and set
+            the job state to 'failed'. A value of 0 means infinite retries.
         """
         if args is None:
             args = ()
@@ -284,6 +300,9 @@ class Job(object):
         assert not func is None, "func is required"
 
         self.state = PENDING
+
+        self.retry = 0
+        self.max_retries = max_retries or DEFAULT_MAX_RETRIES
 
         self._uuid = job_uuid
 
@@ -341,7 +360,21 @@ class Job(object):
         """
         assert not self.canceled, "Canceled job"
         with session.change_user(self.user_id):
-            self.result = self.func(session, *self.args, **self.kwargs)
+            try:
+                self.result = self.func(session, *self.args, **self.kwargs)
+            except RetryableJobError:
+                self.retry += 1
+                if not self.max_retries:  # infinite retries
+                    raise
+                elif self.retry >= self.max_retries:
+                    type, value, traceback = sys.exc_info()
+                    # change the exception type but keep the original
+                    # traceback and message:
+                    # http://blog.ianbicking.org/2007/09/12/re-raising-exceptions/
+                    new_exc = FailedJobError("Max. retries (%d) reached: %s" %
+                                             (self.max_retries, value or type))
+                    raise new_exc.__class__, new_exc, traceback
+                raise
         return self.result
 
     @property

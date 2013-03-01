@@ -33,6 +33,7 @@ import openerp.modules.registry as registry_module
 from .queue import JobsQueue
 from ..session import ConnectorSessionHandler
 from .job import (OpenERPJobStorage,
+                  RETRY_INTERVAL,
                   ENQUEUED,
                   STARTED,
                   FAILED,
@@ -47,7 +48,6 @@ _logger = logging.getLogger(__name__)
 
 WAIT_CHECK_WORKER_ALIVE = 5  # seconds TODO change to 30 seconds
 WAIT_WHEN_ONLY_AFTER_JOBS = 10  # seconds
-RETRY_JOB_TIMEDELTA = 60 * 10  # seconds
 
 
 class Worker(threading.Thread):
@@ -110,7 +110,7 @@ class Worker(threading.Thread):
 
         except RetryableJobError:
             # delay the job later
-            job.only_after = timedelta(seconds=RETRY_JOB_TIMEDELTA)
+            job.only_after = timedelta(seconds=RETRY_INTERVAL)
             with session_hdl.session() as session:
                 self.job_storage_class(session).store(job)
 

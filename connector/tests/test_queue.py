@@ -19,16 +19,16 @@ class test_queue(unittest2.TestCase):
 
     def test_sort(self):
         """ Sort: the lowest priority number has the highest priority.
-        A job with a `only_after` datetime is less priority in any case.
+        A job with a `eta` datetime is less priority in any case.
         """
         job1 = Job(dummy_task, priority=10)
         job2 = Job(dummy_task, priority=5)
         job3 = Job(dummy_task, priority=15,
-                   only_after=timedelta(hours=2))
+                   eta=timedelta(hours=2))
         job4 = Job(dummy_task, priority=15,
-                   only_after=timedelta(hours=1))
+                   eta=timedelta(hours=1))
         job5 = Job(dummy_task, priority=1,
-                   only_after=timedelta(hours=2))
+                   eta=timedelta(hours=2))
         self.queue.enqueue(job1)
         self.queue.enqueue(job2)
         self.queue.enqueue(job3)

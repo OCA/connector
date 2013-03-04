@@ -104,17 +104,16 @@ class OpenERPJobStorage(JobStorage):
                 "Model %s not found" % self._storage_model_name)
 
     def enqueue(self, func, model_name=None, args=None, kwargs=None,
-                priority=None, only_after=None, max_retries=None):
+                priority=None, eta=None, max_retries=None):
         job = Job(func=func, model_name=model_name, args=args, kwargs=kwargs,
-                  priority=priority, only_after=only_after,
-                  max_retries=max_retries)
+                  priority=priority, eta=eta, max_retries=max_retries)
         job.user_id = self.session.uid
         self.store(job)
 
     def enqueue_resolve_args(self, func, *args, **kwargs):
         """Create a Job and enqueue it in the queue"""
         priority = kwargs.pop('priority', None)
-        only_after = kwargs.pop('only_after', None)
+        eta = kwargs.pop('eta', None)
         model_name = kwargs.pop('model_name', None)
         max_retries = kwargs.pop('max_retries', None)
 
@@ -122,7 +121,7 @@ class OpenERPJobStorage(JobStorage):
                             args=args, kwargs=kwargs,
                             priority=priority,
                             max_retries=max_retries,
-                            only_after=only_after)
+                            eta=eta)
 
     def exists(self, job_uuid):
         """Returns if a job still exists in the storage."""
@@ -174,11 +173,10 @@ class OpenERPJobStorage(JobStorage):
             vals['date_done'] = job.date_done.strftime(
                     DEFAULT_SERVER_DATETIME_FORMAT)
 
-        if job.only_after:
-            vals['only_after'] = job.only_after.strftime(
-                    DEFAULT_SERVER_DATETIME_FORMAT)
+        if job.eta:
+            vals['eta'] = job.eta.strftime(DEFAULT_SERVER_DATETIME_FORMAT)
         else:
-            vals['only_after'] = False
+            vals['eta'] = False
 
         vals['exc_info'] = job.exc_info
 
@@ -229,14 +227,12 @@ class OpenERPJobStorage(JobStorage):
          args,
          kwargs) = func
 
-        only_after = None
-        if stored.only_after:
-            only_after = datetime.strptime(stored.only_after,
-                                           DEFAULT_SERVER_DATETIME_FORMAT)
+        eta = None
+        if stored.eta:
+            eta = datetime.strptime(stored.eta, DEFAULT_SERVER_DATETIME_FORMAT)
 
         job = Job(func=func_name, args=args, kwargs=kwargs,
-                  priority=stored.priority, only_after=only_after,
-                  job_uuid=stored.uuid)
+                  priority=stored.priority, eta=eta, job_uuid=stored.uuid)
 
         if stored.date_created:
             job.date_created = datetime.strptime(
@@ -270,7 +266,7 @@ class Job(object):
 
     def __init__(self, func=None, model_name=None,
                  args=None, kwargs=None, priority=None,
-                 only_after=None, job_uuid=None, max_retries=None):
+                 eta=None, job_uuid=None, max_retries=None):
         """ Create a Job
 
         :param func: function to execute
@@ -283,9 +279,9 @@ class Job(object):
         :type kwargs: dict
         :param priority: priority of the job, the smaller is the higher priority
         :type priority: int
-        :param only_after: the job can be executed only after this datetime
+        :param eta: the job can be executed only after this datetime
                            (or now + timedelta)
-        :type only_after: datetime or timedelta
+        :type eta: datetime or timedelta
         :param job_uuid: UUID of the job
         :param max_retries: maximum number of retries before giving up and set
             the job state to 'failed'. A value of 0 means infinite retries.
@@ -338,17 +334,17 @@ class Job(object):
         self.exc_info = None
 
         self.user_id = None
-        self.only_after = only_after
+        self.eta = eta
         self.canceled = False
 
     def __cmp__(self, other):
         if not isinstance(other, Job):
             raise TypeError("Job.__cmp__(self, other) requires other to be "
                             "a 'Job', not a '%s'" % type(other))
-        self_after = self.only_after or datetime(MINYEAR, 1, 1)
-        other_after = other.only_after or datetime(MINYEAR, 1, 1)
-        return cmp((self_after, self.priority),
-                   (other_after, other.priority))
+        self_eta = self.eta or datetime(MINYEAR, 1, 1)
+        other_eta = other.eta or datetime(MINYEAR, 1, 1)
+        return cmp((self_eta, self.priority),
+                   (other_eta, other.priority))
 
     def perform(self, session):
         """ Execute a job.
@@ -408,21 +404,23 @@ class Job(object):
         return getattr(module, func_name)
 
     @property
-    def only_after(self):
-        return self._only_after
+    def eta(self):
+        return self._eta
 
-    @only_after.setter
-    def only_after(self, value):
+    @eta.setter
+    def eta(self, value):
         if not value:
-            self._only_after = None
+            self._eta = None
         elif isinstance(value, timedelta):
-            self._only_after = datetime.now() + value
+            self._eta = datetime.now() + value
         elif isinstance(value, datetime):
-            self._only_after = value
+            self._eta = value
+        elif instance(value, int):
+            self._eta = datetime.now() + timedelta(seconds=value)
         else:
-            raise ValueError("%s is not a valid type for only_after, "
-                             " it must be a 'timedelta' or a 'datetime'" %
-                             type(value))
+            raise ValueError("%s is not a valid type for eta, "
+                             " it must be an 'int',  a 'timedelta' "
+                             "or a 'datetime'" % type(value))
 
     def set_state(self, state, result=None, exc_info=None):
         """Change the state of the job."""

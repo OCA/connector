@@ -78,7 +78,7 @@
                         </group>
                         <group>
                             <field name="priority"/>
-                            <field name="only_after"/>
+                            <field name="eta"/>
                         </group>
                         <group>
                             <field name="user_id"/>
@@ -111,7 +111,7 @@
                     <field name="uuid"/>
                     <field name="name"/>
                     <field name="state"/>
-                    <field name="only_after"/>
+                    <field name="eta"/>
                     <field name="date_created"/>
                     <field name="date_done"/>
                 </tree>

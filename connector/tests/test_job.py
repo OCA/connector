@@ -54,12 +54,12 @@ class test_job(unittest2.TestCase):
         job_b = Job(func=task_b, priority=5)
         self.assertGreater(job_a, job_b)
 
-    def test_only_after(self):
-        """ When an `only_after` datetime is defined, it should
+    def test_eta(self):
+        """ When an `eta` datetime is defined, it should
         be executed after a job without one.
         """
         date = datetime.now() + timedelta(hours=3)
-        job_a = Job(func=task_a, priority=10, only_after=date)
+        job_a = Job(func=task_a, priority=10, eta=date)
         job_b = Job(func=task_b, priority=10)
         self.assertGreater(job_a, job_b)
 
@@ -106,13 +106,13 @@ class test_job_storage(common.TransactionCase):
         self.assertEqual(len(stored), 1)
 
     def test_read(self):
-        only_after = datetime.now() + timedelta(hours=5)
+        eta = datetime.now() + timedelta(hours=5)
         job = Job(func=dummy_task_args,
                   model_name='res.users',
                   args=('o', 'k'),
                   kwargs={'c': '!'},
                   priority=15,
-                  only_after=only_after)
+                  eta=eta)
         job.user_id = 1
         storage = OpenERPJobStorage(self.session)
         storage.store(job)
@@ -139,7 +139,7 @@ class test_job_storage(common.TransactionCase):
                                delta=delta)
         self.assertAlmostEqual(job.date_done, job_read.date_done,
                                delta=delta)
-        self.assertAlmostEqual(job.only_after, job_read.only_after,
+        self.assertAlmostEqual(job.eta, job_read.eta,
                                delta=delta)
 
     def test_job_delay(self):

@@ -59,7 +59,7 @@ class QueueJob(orm.Model):
         'date_started': fields.datetime('Start Date', readonly=True),
         'date_enqueued': fields.datetime('Enqueue Time', readonly=True),
         'date_done': fields.datetime('Date Done', readonly=True),
-        'only_after': fields.datetime('Execute only after'),
+        'eta': fields.datetime('Execute only after'),
         'active': fields.boolean('Active'),
         'model_name': fields.char('Model'),
         'retry': fields.integer('Current retry'),

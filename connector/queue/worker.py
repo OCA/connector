@@ -77,8 +77,8 @@ class Worker(threading.Thread):
             if job.state == DONE:
                 return
 
-            if job.only_after and job.only_after > datetime.now():
-                # The queue is sorted by 'only_after' date first
+            if job.eta and job.eta > datetime.now():
+                # The queue is sorted by 'eta' date first
                 # so if we dequeued a job expected to be run in
                 # the future, we have no jobs to do right now!
                 self.queue.enqueue(job)
@@ -110,7 +110,7 @@ class Worker(threading.Thread):
 
         except RetryableJobError:
             # delay the job later
-            job.only_after = timedelta(seconds=RETRY_INTERVAL)
+            job.eta = timedelta(seconds=RETRY_INTERVAL)
             with session_hdl.session() as session:
                 self.job_storage_class(session).store(job)
 

@@ -65,7 +65,6 @@ to customize their field mapping directly in OpenERP to accomodate the external 
         ],
     'data': [
         'deprecated/external_referentials_view.xml',
-        'external_referential_view.xml',
         'deprecated/report_view.xml',
         'deprecated/external_referentials_menu.xml',
         'security/ir.model.access.csv',

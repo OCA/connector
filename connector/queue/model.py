@@ -36,6 +36,7 @@ _logger = logging.getLogger(__name__)
 class QueueJob(orm.Model):
     """ Job status and result """
     _name = 'queue.job'
+    _inherit = ['mail.thread', 'ir.needaction_mixin']
     _log_access = False
 
     _order = 'date_created DESC, date_done DESC'
@@ -94,6 +95,52 @@ class QueueJob(orm.Model):
     def requeue(self, cr, uid, ids, context=None):
         self._change_job_state(cr, uid, ids, PENDING, context=context)
         return True
+
+    def write(self, cr, uid, ids, vals, context=None):
+        super(QueueJob, self).write(cr, uid, ids, vals, context=context)
+        if vals.get('state') == 'failed':
+            if not hasattr(ids, '__iter__'):
+                ids = [ids]
+            # subscribe the users now to avoid to subscribe them
+            # at every job creation
+            self._subscribe_users(cr, uid, ids, context=context)
+            for id in ids:
+                msg = self._message_failed_job(cr, uid, id, context=context)
+                if msg:
+                    self.message_post(cr, uid, id, body=msg,
+                                      subtype='connector.mt_job_failed',
+                                      context=context)
+
+    def _subscribe_users(self, cr, uid, ids, context=None):
+        """ Subscribe all users having the 'Connector Manager' group """
+        group_ref = self.pool.get('ir.model.data').get_object_reference(
+                cr, uid, 'connector', 'group_connector_manager')
+        if not group_ref:
+            return
+        group_id = group_ref[1]
+        user_ids = self.pool.get('res.users').search(
+                cr, uid, [('groups_id', '=', group_id)], context=context)
+        if user_ids:
+            self.message_subscribe_users(cr, uid, ids,
+                                         user_ids=user_ids,
+                                         context=context)
+
+    def _message_failed_job(self, cr, uid, id, context=None):
+        """ Return a message which will be posted on the job when it is failed.
+
+        It can be inherited to allow more precise messages based on the
+        exception informations.
+
+        If nothing is returned, no message will be posted.
+        """
+        return _("Something bad happened during the execution of the job. "
+                 "More details in the 'Exception Information' section.")
+
+    def _needaction_domain_get(self, cr, uid, context=None):
+        """ Returns the domain to filter records that require an action
+            :return: domain or False is no action
+        """
+        return [('state', '=', 'failed')]
 
 
 class QueueWorker(orm.Model):

@@ -2,6 +2,13 @@
 <openerp>
     <data noupdate="1">
 
+        <!-- Connector-related subtypes for messaging / Chatter -->
+        <record id="mt_job_failed" model="mail.message.subtype">
+            <field name="name">Job failed</field>
+            <field name="res_model">queue.job</field>
+            <field name="default" eval="True"/>
+        </record>
+
         <!-- Using multi-processing, one should create as many
              cron lines (same line with a different name) as cron worker
              Because one cron line can't run on 2 workers at the same time.

@@ -73,7 +73,7 @@ to customize their field mapping directly in OpenERP to accomodate the external 
         'security/connector_security.xml',
         'deprecated/report_mail_template.xml',
         'queue/model_view.xml',
-        'queue/cron_data.xml',
+        'queue/queue_data.xml',
         'connector_menu.xml',
         'setting_view.xml',
         'res_partner_view.xml',

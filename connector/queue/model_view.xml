@@ -98,6 +98,10 @@
                         <group name="exc_info" string="Exception Information" attrs="{'invisible': [('exc_info', '=', False)]}">
                             <field nolabel="1" name="exc_info"/>
                         </group>
+                        <div class="oe_chatter">
+                            <field name="message_follower_ids" widget="mail_followers"/>
+                            <field name="message_ids" widget="mail_thread"/>
+                        </div>
                     </sheet>
                 </form>
             </field>
@@ -107,7 +111,7 @@
             <field name="name">queue.job.tree</field>
             <field name="model">queue.job</field>
             <field name="arch" type="xml">
-                <tree string="Jobs">
+                <tree string="Jobs" colors="red:state == 'failed';gray:state == 'done'">
                     <field name="uuid"/>
                     <field name="name"/>
                     <field name="state"/>

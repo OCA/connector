@@ -176,7 +176,6 @@ class external_referential(Model):
             - fields_with_no_lang : all the fields untranslatable are grouped and the translatable fields are grouped in each lang. example : {'no_lang' : {untrad_field: value, untrad_field: value, untrad_field: value}, 'lang_one' : {trad_field: value, trad_field: value}, 'lang_two' : {trad_field: value, trad_field: value} ...}
             - all_fields : all the fields are in all languagues. example = {'lang_one' : {all_fields}, 'lang_two': {all_fields}...}"""
     _name = 'external.referential'
-    _inherit = 'external.referential'
     _description = 'External Referential'
 
     _lang_support = 'fields_with_main_lang'
@@ -340,6 +339,7 @@ class external_referential(Model):
 
 
     _columns = {
+        'name': fields.char('Name', required=True),
         'location': fields.char('Location'),
         'apiusername': fields.char('Username'),
         'apipass': fields.char('Password'),
@@ -363,6 +363,19 @@ class external_referential(Model):
             referential_id = referential.name.replace('.','_').replace(' ','_')
         return referential_id
 
+    def _test_dot_in_name(self, cr, uid, ids, context=None):
+        for referential in self.browse(cr, uid, ids):
+            if '.' in referential.name:
+                return False
+        return True
+
+    _constraints = [
+        (_test_dot_in_name, 'The name cannot contain a dot.', ['name']),
+    ]
+
+    _sql_constraints = [
+        ('name_uniq', 'unique (name)', 'Referential names must be unique !')
+    ]
 
 class external_mapping_line(Model):
     _name = 'external.mapping.line'

@@ -46,7 +46,7 @@ from ..exception import (NoSuchJobError,
 
 _logger = logging.getLogger(__name__)
 
-WAIT_CHECK_WORKER_ALIVE = 5  # seconds TODO change to 30 seconds
+WAIT_CHECK_WORKER_ALIVE = 30  # seconds
 WAIT_WHEN_ONLY_AFTER_JOBS = 10  # seconds
 
 

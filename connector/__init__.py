@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import setting
 from exception import *
 from .connector import *
 import external_referential

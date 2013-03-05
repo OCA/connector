@@ -5,3 +5,5 @@ access_connector_external_referential,connector_external_referential,connector.m
 access_connector_external_referential_type,connector_external_referential_type,connector.model_external_referential_type,base.group_user,1,0,0,0
 access_connector_group_fields_manager,connector_group_fields,connector.model_group_fields,base.group_system,1,1,1,1
 access_connector_group_fields_user,connector_group_fields,connector.model_group_fields,base.group_user,1,0,0,0
+access_connector_queue_worker_manager,connector worker manager,connector.model_queue_worker,connector.group_connector_manager,1,1,1,1
+access_connector_queue_job_manager,connector job manager,connector.model_queue_job,connector.group_connector_manager,1,1,1,1

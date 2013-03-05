@@ -2,7 +2,7 @@
 import setting
 from exception import *
 from .connector import *
-import external_referential
+import backend_model
 from .session import *
 import event
 from queue import *

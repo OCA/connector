@@ -40,8 +40,9 @@ from .event import (on_record_create,
 create_original = orm.Model.create
 def create(self, cr, uid, vals, context=None):
     record_id = create_original(self, cr, uid, vals, context=context)
-    session = ConnectorSession(cr, uid, context=context)
-    on_record_create.fire(session, self._name, record_id)
+    if self.pool.get('connector.installed') is not None:
+        session = ConnectorSession(cr, uid, context=context)
+        on_record_create.fire(session, self._name, record_id)
     return record_id
 orm.Model.create = create
 
@@ -49,23 +50,26 @@ orm.Model.create = create
 write_original = orm.Model.write
 def write(self, cr, uid, ids, vals, context=None):
     result = write_original(self, cr, uid, ids, vals, context=context)
-    if not hasattr(ids, '__iter__'):
-        ids = [ids]
-    if on_record_write.has_consumer_for(self._name):
-        session = ConnectorSession(cr, uid, context=context)
-        for record_id in ids:
-            on_record_write.fire(session, self._name, record_id, vals.keys())
+    if self.pool.get('connector.installed') is not None:
+        if not hasattr(ids, '__iter__'):
+            ids = [ids]
+        if on_record_write.has_consumer_for(self._name):
+            session = ConnectorSession(cr, uid, context=context)
+            for record_id in ids:
+                on_record_write.fire(session, self._name,
+                                     record_id, vals.keys())
     return result
 orm.Model.write = write
 
 
 unlink_original = orm.Model.unlink
 def unlink(self, cr, uid, ids, context=None):
-    if not hasattr(ids, '__iter__'):
-        ids = [ids]
-    if on_record_unlink.has_consumer_for(self._name):
-        session = ConnectorSession(cr, uid, context=context)
-        for record_id in ids:
-            on_record_unlink.fire(session, self._name, record_id)
+    if self.pool.get('connector.installed') is not None:
+        if not hasattr(ids, '__iter__'):
+            ids = [ids]
+        if on_record_unlink.has_consumer_for(self._name):
+            session = ConnectorSession(cr, uid, context=context)
+            for record_id in ids:
+                on_record_unlink.fire(session, self._name, record_id)
     return unlink_original(self, cr, uid, ids, context=context)
 orm.Model.unlink = unlink

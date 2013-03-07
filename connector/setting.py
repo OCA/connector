@@ -28,6 +28,6 @@ class note_base_config_settings(orm.TransientModel):
 
     _columns = {
         'module_magentoerpconnect': fields.boolean(
-            "Synchronize with Magentoerpconnect",
+            "Synchronize with Magento",
             help="""This installs the module magentoerpconnect."""),
     }

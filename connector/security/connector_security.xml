@@ -16,6 +16,7 @@
     <record id="group_connector_manager" model="res.groups">
         <field name="name">Connector Manager</field>
         <field name="category_id" ref="module_category_connector"/>
+        <field name="users" eval="[(4, ref('base.user_root'))]"/>
     </record>
 
     <!-- to remove -->

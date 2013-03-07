@@ -117,7 +117,8 @@ class external_binding(orm.AbstractModel):
 
     _columns = {
         # TODO write the date on import / export
-        # and skip import / export (avoid mega loop)
+        # and skip import / export (avoid unnecessary import
+        # right after the export)
         'sync_date': fields.date('Last synchronization date'),
         # add other fields in concrete models
     }

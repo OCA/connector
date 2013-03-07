@@ -31,7 +31,7 @@ class connectors_installed(orm.AbstractModel):
     """Empty model used to know if the module is installed on the
     database.
     """
-    _name = 'connectors.installed'
+    _name = 'connector.installed'
 
 
 class MetaConnectorUnit(type):

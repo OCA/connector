@@ -285,6 +285,7 @@ class QueueWorker(orm.Model):
         worker_id = self._worker_id(cr, uid, context=context)
         _logger.debug('Assign %d jobs to worker %s', len(job_ids),
                       self._worker.uuid)
+        # ready to be enqueued in the worker
         self.pool.get('queue.job').write(cr, uid, job_ids,
                                          {'state': 'pending',
                                           'worker_id': worker_id},

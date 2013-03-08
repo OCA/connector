@@ -28,6 +28,7 @@ from openerp.tools import DEFAULT_SERVER_DATETIME_FORMAT
 from openerp.tools.translate import _
 
 from .job import STATES, DONE, PENDING, OpenERPJobStorage
+from .worker import WORKER_TIMEOUT
 from ..session import ConnectorSession
 
 _logger = logging.getLogger(__name__)
@@ -149,9 +150,7 @@ class QueueWorker(orm.Model):
     _log_access = False
     _rec_name = 'uuid'
 
-    # worker_timeout = 5 * 60  # seconds
-    # FIXME: remove test with shorten timeout
-    worker_timeout = 20  # seconds
+    worker_timeout = WORKER_TIMEOUT
     _worker = None
 
     _columns = {

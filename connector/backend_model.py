@@ -29,6 +29,7 @@ class external_backend(orm.AbstractModel):
     The backends have to inherited this model in the connectors modules.
     """
     _name = 'connector.backend'
+    _backend_type = None
 
     _columns = {
         'name': fields.char('Name', required=True),
@@ -40,8 +41,10 @@ class external_backend(orm.AbstractModel):
         if hasattr(id, '__iter__'):
             assert len(id) == 1, "One ID expected, %d received" % len(id)
             id = id[0]
+        if self._backend_type is None:
+            raise ValueError('The backend %s has no _backend_type' % self)
         backend_record = self.browse(cr, uid, id, context=context)
-        return backend.get_backend(backend_record.type, backend_record.version)
+        return backend.get_backend(self._backend_type, backend_record.version)
 
 
 class external_binding(orm.AbstractModel):

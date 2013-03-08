@@ -21,7 +21,8 @@
 
 from openerp.osv import orm, fields
 
-class note_base_config_settings(orm.TransientModel):
+
+class connector_config_settings(orm.TransientModel):
 
     _name = 'connector.config.settings'
     _inherit = 'base.config.settings'

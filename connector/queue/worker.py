@@ -227,7 +227,7 @@ class WorkerWatcher(threading.Thread):
         """
         registries = registry_module.RegistryManager.registries
         for db_name, registry in registries.iteritems():
-            if not 'connectors.installed' in registry.models:
+            if not 'connector.installed' in registry.models:
                 continue
             if not registry.ready:
                 continue

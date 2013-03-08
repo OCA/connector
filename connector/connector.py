@@ -27,7 +27,7 @@ __all__ = [
 ]
 
 
-class connectors_installed(orm.AbstractModel):
+class connector_installed(orm.AbstractModel):
     """Empty model used to know if the module is installed on the
     database.
 

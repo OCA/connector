@@ -23,7 +23,6 @@ import sys
 import logging
 import inspect
 import uuid
-import importlib
 from datetime import datetime, timedelta, MINYEAR
 from pickle import loads, dumps, UnpicklingError
 
@@ -400,7 +399,8 @@ class Job(object):
             return None
 
         module_name, func_name = func_name.rsplit('.', 1)
-        module = importlib.import_module(module_name)
+        __import__(module_name)
+        module = sys.modules[module_name]
         return getattr(module, func_name)
 
     @property

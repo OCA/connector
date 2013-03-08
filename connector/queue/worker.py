@@ -48,6 +48,7 @@ _logger = logging.getLogger(__name__)
 
 WAIT_CHECK_WORKER_ALIVE = 30  # seconds
 WAIT_WHEN_ONLY_AFTER_JOBS = 10  # seconds
+WORKER_TIMEOUT = 5 * 60  # seconds
 
 
 class Worker(threading.Thread):

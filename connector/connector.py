@@ -21,6 +21,8 @@
 
 from openerp.osv import orm
 
+from .unit.binder import Binder
+
 __all__ = [
     'Environment',
     'ConnectorUnit',
@@ -85,6 +87,16 @@ class ConnectorUnit(object):
         else:
             model_name = model  # str
         return model_name in cls.model_name
+
+    def get_binder_for_model(self, model=None):
+        if model is None:
+            env = self.environment
+        else:
+            env = Environment(self.backend_record,
+                              self.session,
+                              model)
+        binder = env.get_connector_unit(Binder)
+        return binder
 
 
 class Environment(object):

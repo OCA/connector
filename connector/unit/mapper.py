@@ -27,7 +27,6 @@
 
 from ..connector import ConnectorUnit, MetaConnectorUnit, Environment
 from ..exception import MappingError
-from .binder import Binder
 
 
 def mapping(func):
@@ -161,10 +160,7 @@ class ImportMapper(Mapper):
         if column._type == 'many2one':
             rel_id = record[from_attr]
             model_name = column._obj
-            env = Environment(self.backend_record,
-                              self.session,
-                              model_name)
-            binder = env.get_connector_unit(Binder)
+            binder = self.get_binder_for_model(model_name)
             value = binder.to_openerp(rel_id)
 
             if not value:
@@ -206,10 +202,7 @@ class ExportMapper(Mapper):
         if column._type == 'many2one':
             rel_id = record[from_attr].id
             model_name = column._obj
-            env = Environment(self.backend_record,
-                              self.session,
-                              model_name)
-            binder = env.get_connector_unit(Binder)
+            binder = self.get_binder_for_model(model_name)
             value = binder.to_backend(rel_id)
 
             if not value:

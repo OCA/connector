@@ -29,10 +29,10 @@ class Binder(ConnectorUnit):
 
     _model_name = None  # define in sub-classes
 
-    def to_openerp(self, backend_id):
+    def to_openerp(self, external_id):
         """ Give the OpenERP ID for an external ID
 
-        :param backend_identifier: backend ID for which we want
+        :param external_id: external ID for which we want
                                    the OpenERP ID
         :return: OpenERP ID of the record
         :rtype: int
@@ -40,17 +40,17 @@ class Binder(ConnectorUnit):
         raise NotImplementedError
 
     def to_backend(self, openerp_id):
-        """ Give the backend ID for an OpenERP ID
+        """ Give the external ID for an OpenERP ID
 
         :param openerp_id: OpenERP ID for which we want the backend id
-        :return: backend ID of the record
+        :return: external ID of the record
         """
         raise NotImplementedError
 
-    def bind(self, backend_id, openerp_id, metadata=None):
+    def bind(self, external_id, openerp_id, metadata=None):
         """ Create the link between an external ID and an OpenERP ID
 
-        :param backend_id: Backend id to bind
+        :param external_id: external id to bind
         :param openerp_id: OpenERP ID to bind
         :type openerp_id: int
         :param metadata: optional values to store on the relation model
@@ -58,6 +58,6 @@ class Binder(ConnectorUnit):
         """
         raise NotImplementedError
 
-    def read_metadata(self, openerp_id, backend_id):
-        """ Read the metadata for a relation OpenERP - Magento """
+    def read_metadata(self, openerp_id, external_id):
+        """ Read the metadata for a relation OpenERP - Backend """
         raise NotImplementedError

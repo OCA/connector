@@ -140,6 +140,7 @@ class Environment(object):
         self.session = session
         self.model_name = model_name
         self.model = self.session.pool.get(model_name)
+        self.pool = self.session.pool
 
     def get_connector_unit(self, base_class, *args, **kwargs):
         """ Search the class using

@@ -36,7 +36,7 @@ Write a good presentation of the framework.
 
 
 previous description
-.-------------------
+--------------------
 
 Definition : a referential is an external system that will interacts with OpenERP
 Goal : store external system connection details and objects fields mapping

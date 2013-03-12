@@ -80,7 +80,7 @@ class ConnectorUnit(object):
     @classmethod
     def match(cls, model):
         """ Find the class to use """
-        if hasattr(model, '_name'):  # model instance
+        if hasattr(model, '_name'):  # Model instance
             model_name = model._name
         else:
             model_name = model  # str

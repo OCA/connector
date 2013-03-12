@@ -20,7 +20,6 @@
 ##############################################################################
 
 from ..connector import ConnectorUnit
-from .binder import Binder
 from .mapper import Mapper, ImportMapper, ExportMapper
 from .backend_adapter import BackendAdapter
 
@@ -64,7 +63,7 @@ class Synchronizer(ConnectorUnit):
         :rtype: :py:class:`connector.unit.binder.Binder`
         """
         if self._binder is None:
-            self._binder = self.environment.get_connector_unit(Binder)
+            self._binder = self.get_binder_for_model()
         return self._binder
 
     @property

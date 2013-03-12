@@ -123,7 +123,9 @@ class Mapper(ConnectorUnit):
                 result[to_attr] = value
 
         for meth, changed_by in self.map_methods:
-            if changed_by.intersection(fields):
+
+            if (not fields or not changed_by or
+                    changed_by.intersection(fields)):
                 values = meth(record)
                 if not values:
                     continue

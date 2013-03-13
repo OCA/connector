@@ -3,7 +3,7 @@
 import unittest2
 import mock
 
-from openerp.addons.connector import (
+from openerp.addons.connector.unit.mapper import (
         Mapper, changed_by, mapping)
 
 

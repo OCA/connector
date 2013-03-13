@@ -24,11 +24,12 @@
 # conversely. A processor must accept in input a dict where the keys are
 # the name of the external / openerp model and the values are the
 # records. And the same for the output records.
+import logging
 
 from ..connector import ConnectorUnit, MetaConnectorUnit, Environment
 from ..exception import MappingError
 
-
+_logger = logging.getLogger(__name__)
 def mapping(func):
     """ Decorator declarating a mapping for a field """
     func.is_mapping = True
@@ -110,7 +111,7 @@ class Mapper(ConnectorUnit):
             fields = {}
 
         result = {}
-
+        _logger.debug('converting record %s to model %s', record, self._model_name)
         for from_attr, to_attr in self.direct:
             if (not fields or from_attr in fields):
                 # XXX not compatible with all

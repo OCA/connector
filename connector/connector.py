@@ -21,8 +21,6 @@
 
 from openerp.osv import orm
 
-from .unit.binder import Binder
-
 __all__ = [
     'Environment',
     'ConnectorUnit',
@@ -153,3 +151,43 @@ class Environment(object):
         return self.backend.get_class(base_class, self.model_name,
                                       *args, **kwargs)(self)
 
+
+class Binder(ConnectorUnit):
+    """ For one record of a model, capable to find an external or
+    internal id, or create the link between them
+    """
+
+    _model_name = None  # define in sub-classes
+
+    def to_openerp(self, external_id):
+        """ Give the OpenERP ID for an external ID
+
+        :param external_id: external ID for which we want
+                                   the OpenERP ID
+        :return: OpenERP ID of the record
+        :rtype: int
+        """
+        raise NotImplementedError
+
+    def to_backend(self, openerp_id):
+        """ Give the external ID for an OpenERP ID
+
+        :param openerp_id: OpenERP ID for which we want the backend id
+        :return: external ID of the record
+        """
+        raise NotImplementedError
+
+    def bind(self, external_id, openerp_id, metadata=None):
+        """ Create the link between an external ID and an OpenERP ID
+
+        :param external_id: external id to bind
+        :param openerp_id: OpenERP ID to bind
+        :type openerp_id: int
+        :param metadata: optional values to store on the relation model
+        :type metadata: dict
+        """
+        raise NotImplementedError
+
+    def read_metadata(self, openerp_id, external_id):
+        """ Read the metadata for a relation OpenERP - Backend """
+        raise NotImplementedError

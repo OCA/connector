@@ -6,11 +6,12 @@ from openerp.addons.connector.backend import (
         Backend,
         get_backend,
         BACKENDS)
-from openerp.addons.connector import Binder
-from openerp.addons.connector import (Mapper,
-                                                       ImportMapper,
-                                                       ExportMapper)
-from openerp.addons.connector import BackendAdapter
+from openerp.addons.connector.connector import Binder
+from openerp.addons.connector.unit.mapper import (
+                                       Mapper,
+                                       ImportMapper,
+                                       ExportMapper)
+from openerp.addons.connector.unit.backend_adapter import BackendAdapter
 
 
 class test_backend(unittest2.TestCase):

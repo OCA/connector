@@ -152,7 +152,7 @@ class ImportMapper(Mapper):
     """ Transform a record from a backend to an OpenERP record """
 
     def _map_direct(self, record, from_attr, to_attr):
-        value = record[from_attr]
+        value = record.get('from_attr')
         if not value:
             return False
 

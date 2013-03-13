@@ -54,3 +54,8 @@ class RetryableJobError(JobError):
 
 class NothingToDoJob(JobError):
     """ The Job has nothing to do. """
+
+class NoExternalId(RetryableJobError):
+    """ No External ID found, the job would have an error but can be retried. """
+    
+

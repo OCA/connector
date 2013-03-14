@@ -86,15 +86,18 @@ class ConnectorUnit(object):
             model_name = model  # str
         return model_name in cls.model_name
 
-    def get_binder_for_model(self, model=None):
+    def get_connector_unit_for_model(self, connector_unit_class, model=None):
         if model is None:
             env = self.environment
         else:
             env = Environment(self.backend_record,
                               self.session,
                               model)
-        binder = env.get_connector_unit(Binder)
+        binder = env.get_connector_unit(connector_unit_class)
         return binder
+
+    def get_binder_for_model(self, model=None):
+        return self.get_connector_unit_for_model(Binder, model)
 
 
 class Environment(object):

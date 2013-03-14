@@ -27,8 +27,8 @@
             <field name="priority">1</field>
         </record>
 
-        <record id="ir_cron_delete_done_jobs" model="ir.cron">
-            <field name="name">Delete Done Jobs</field>
+        <record id="ir_cron_autovacuum_queue_jobs" model="ir.cron">
+            <field name="name">AutoVacuum Queue Jobs</field>
             <field eval="True" name="active"/>
             <field name="user_id" ref="base.user_root"/>
             <field name="interval_number">1</field>
@@ -36,7 +36,7 @@
             <field name="numbercall">-1</field>
             <field eval="False" name="doall"/>
             <field eval="'queue.job'" name="model"/>
-            <field eval="'delete_done_jobs'" name="function"/>
+            <field eval="'autovacuum'" name="function"/>
             <field eval="'()'" name="args"/>
         </record>
 

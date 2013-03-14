@@ -37,10 +37,13 @@ _logger = logging.getLogger(__name__)
 class QueueJob(orm.Model):
     """ Job status and result """
     _name = 'queue.job'
+    _description = 'Queue Job'
     _inherit = ['mail.thread', 'ir.needaction_mixin']
     _log_access = False
 
     _order = 'date_created DESC, date_done DESC'
+
+    _removal_interval = 30
 
     _columns = {
         'worker_id': fields.many2one('queue.worker', string='Worker',
@@ -142,6 +145,22 @@ class QueueJob(orm.Model):
             :return: domain or False is no action
         """
         return [('state', '=', 'failed')]
+
+    def delete_done_jobs(self, cr, uid, context=None):
+        """ Delete all jobs (active, or not) set to done 30 days ago or more.
+
+        The days interval is set in the parameter : _removal_interval.
+        """
+        if context is None:
+            context = {}
+        context['active_test'] = False
+        deadline = datetime.now() - timedelta(days=self._removal_interval)
+        deadline_fmt = deadline.strftime(DEFAULT_SERVER_DATETIME_FORMAT)
+        job_ids = self.search(cr, uid,
+                              [('date_done', '<=', deadline_fmt)],
+                              context=context)
+        self.unlink(cr, uid, job_ids, context=context)
+        return True
 
 
 class QueueWorker(orm.Model):

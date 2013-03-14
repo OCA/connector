@@ -192,29 +192,31 @@ class WorkerWatcher(threading.Thread):
 
     def __init__(self):
         super(WorkerWatcher, self).__init__()
-        self.workers = {}
+        self._workers_lock = threading.Lock()
+        self._workers = {}
 
-    def new(self, db_name):
+    def _new(self, db_name):
         """ Create a new worker for the database """
-        if db_name in self.workers:
+        if db_name in self._workers:
             raise Exception('Database %s already has a worker (%s)' %
-                            (db_name, self.workers[db_name].uuid))
+                            (db_name, self._workers[db_name].uuid))
         worker = Worker(db_name, self)
-        self.workers[db_name] = worker
+        self._workers[db_name] = worker
         worker.daemon = True
         worker.start()
 
     def delete(self, db_name):
         """ Delete worker for the database """
-        if db_name in self.workers:
-            del self.workers[db_name]
+        if db_name in self._workers:
+            with self._workers_lock:
+                del self._workers[db_name]
 
     def worker_lost(self, worker):
         """ Indicate if a worker is no longer referenced by the watcher.
 
         Used by the worker threads to know they have to exit.
         """
-        return worker not in self.workers.itervalues()
+        return worker not in self._workers.itervalues()
 
     @staticmethod
     def available_registries():
@@ -242,21 +244,16 @@ class WorkerWatcher(threading.Thread):
         discard the Worker.
         """
         for db_name, _registry in self.available_registries():
-            if db_name not in self.workers:
-                self.new(db_name)
-
-        # XXX not necessary if we keep the monkey patch of
-        # RegistryManager.delete
-        all_db = registry_module.RegistryManager.registries.keys()
-        for removed_db in set(self.workers) ^ set(all_db):
-            self.delete(removed_db)
+            if db_name not in self._workers:
+                self._new(db_name)
 
     def run(self):
         """ `WorkerWatcher`'s main loop """
         while 1:
-            self._update_workers()
-            for db_name, worker in self.workers.items():
-                self.check_alive(db_name, worker)
+            with self._workers_lock:
+                self._update_workers()
+                for db_name, worker in self._workers.items():
+                    self.check_alive(db_name, worker)
             time.sleep(WAIT_CHECK_WORKER_ALIVE)
 
     def check_alive(self, db_name, worker):

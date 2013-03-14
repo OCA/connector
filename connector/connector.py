@@ -93,8 +93,8 @@ class ConnectorUnit(object):
             env = Environment(self.backend_record,
                               self.session,
                               model)
-        binder = env.get_connector_unit(connector_unit_class)
-        return binder
+        return env.get_connector_unit(connector_unit_class)
+
 
     def get_binder_for_model(self, model=None):
         return self.get_connector_unit_for_model(Binder, model)

@@ -89,6 +89,9 @@ class Mapper(ConnectorUnit):
 
     _map_methods = None
 
+    def _after_mapping(self, result):
+        return result
+
     def _map_direct(self, record, from_attr, to_attr):
         raise NotImplementedError
 
@@ -139,6 +142,8 @@ class Mapper(ConnectorUnit):
             if (not fields or from_attr in fields):
                 values = self._map_children(record, from_attr, model)
                 result[to_attr] = values
+
+        result = self._after_mapping(result)
 
         return result
 

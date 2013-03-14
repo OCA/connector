@@ -162,12 +162,15 @@ class Binder(ConnectorUnit):
 
     _model_name = None  # define in sub-classes
 
-    def to_openerp(self, external_id):
+    def to_openerp(self, external_id, unwrap=False):
         """ Give the OpenERP ID for an external ID
 
         :param external_id: external ID for which we want
                                    the OpenERP ID
-        :return: OpenERP ID of the record
+        :param unwrap: if True, returns the openerp_id of the magento_xxxx record,
+                       else return the id of that record
+        :return: a record ID, depending on the value of unwrap,
+                 or None if the external_id is not mapped
         :rtype: int
         """
         raise NotImplementedError

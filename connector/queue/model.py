@@ -43,7 +43,7 @@ class QueueJob(orm.Model):
 
     _order = 'date_created DESC, date_done DESC'
 
-    _removal_interval = 30
+    _removal_interval = 30  # days
 
     _columns = {
         'worker_id': fields.many2one('queue.worker', string='Worker',
@@ -146,14 +146,15 @@ class QueueJob(orm.Model):
         """
         return [('state', '=', 'failed')]
 
-    def delete_done_jobs(self, cr, uid, context=None):
-        """ Delete all jobs (active, or not) set to done 30 days ago or more.
+    def autovacuum(self, cr, uid, context=None):
+        """ Delete all jobs (active or not) done since more than
+        ``_removal_interval`` days.
 
-        The days interval is set in the parameter : _removal_interval.
+        Called from a cron.
         """
         if context is None:
             context = {}
-        context['active_test'] = False
+        context = dict(context, active_test=False)
         deadline = datetime.now() - timedelta(days=self._removal_interval)
         deadline_fmt = deadline.strftime(DEFAULT_SERVER_DATETIME_FORMAT)
         job_ids = self.search(cr, uid,

@@ -129,27 +129,30 @@ class Backend(object):
             return '<Backend \'%s\', \'%s\'>' % (self.service, self.version)
         return '<Backend \'%s\'>' % self.service
 
-    def _get_class(self, base_class, *args, **kwargs):
-        matching_class = None
+    def _get_classes(self, base_class, *args, **kwargs):
+        matching_classes = []
         for cls in self.registered_classes(base_class=base_class):
             if not issubclass(cls, base_class):
                 continue
             if cls.match(*args, **kwargs):
-                matching_class = cls
-        if matching_class is None and self.parent:
-            matching_class = self.parent._get_class(base_class,
-                                                    *args, **kwargs)
-        return matching_class
+                matching_classes.append(cls)
+        if not matching_classes and self.parent:
+            matching_classes = self.parent._get_classes(base_class,
+                                                        *args, **kwargs)
+        return matching_classes
 
     def get_class(self, base_class, *args, **kwargs):
         """ Find a matching subclass of `base_class` in the registered
         classes"""
-        matching_class = self._get_class(base_class, *args, **kwargs)
-        if matching_class is None:
-            raise ValueError('No matching class found for %s '
-                             'with args: %s and keyword args: %s' %
-                             (base_class, args, kwargs))
-        return matching_class
+        matching_classes = self._get_classes(base_class, *args, **kwargs)
+        assert len(matching_classes) == 1, (
+                'Several classes found for %s '
+                'with args: %s and keyword args: %s. Found: %s' %
+                (base_class, args, kwargs, matching_classes))
+        assert matching_classes, ('No matching class found for %s '
+                                  'with args: %s and keyword args: %s' %
+                                  (base_class, args, kwargs))
+        return matching_classes[0]
 
     def registered_classes(self, base_class=None):
         """ Yield all the classes registered on the backend

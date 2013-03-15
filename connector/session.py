@@ -148,3 +148,6 @@ class ConnectorSession(object):
 
     def create(self, model, values):
         return self.pool[model].create(self.cr, self.uid, values, context=self.context)
+
+    def write(self, model, ids, values):
+        return self.pool[model].write(self.cr, self.uid, ids, values, context=self.context)

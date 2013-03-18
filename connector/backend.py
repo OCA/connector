@@ -145,13 +145,13 @@ class Backend(object):
         """ Find a matching subclass of `base_class` in the registered
         classes"""
         matching_classes = self._get_classes(base_class, *args, **kwargs)
+        assert matching_classes, ('No matching class found for %s '
+                                  'with args: %s and keyword args: %s' %
+                                  (base_class, args, kwargs))
         assert len(matching_classes) == 1, (
                 'Several classes found for %s '
                 'with args: %s and keyword args: %s. Found: %s' %
                 (base_class, args, kwargs, matching_classes))
-        assert matching_classes, ('No matching class found for %s '
-                                  'with args: %s and keyword args: %s' %
-                                  (base_class, args, kwargs))
         return matching_classes[0]
 
     def registered_classes(self, base_class=None):

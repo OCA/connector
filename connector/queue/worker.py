@@ -104,8 +104,12 @@ class Worker(threading.Thread):
                 job.set_state(DONE)
                 self.job_storage_class(session).store(job)
 
-        except NothingToDoJob:
-            job.cancel()
+        except NothingToDoJob as err:
+            if err.message:
+                msg = err.message
+            else:
+                msg = None
+            job.cancel(msg)
             with session_hdl.session() as session:
                 self.job_storage_class(session).store(job)
 

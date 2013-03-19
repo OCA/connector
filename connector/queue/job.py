@@ -448,9 +448,10 @@ class Job(object):
     def __repr__(self):
         return '<Job %s, priority:%d>' % (self.uuid, self.priority)
 
-    def cancel(self):
+    def cancel(self, msg=None):
         self.canceled = True
-        self.set_state(DONE, result=_('Nothing to do'))
+        result = msg if msg is not None else _('Nothing to do')
+        self.set_state(DONE, result=result)
 
 
 def job(func):

@@ -1,1 +1,0 @@
-from .deprecated.decorator import *

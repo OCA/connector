@@ -6,7 +6,8 @@
             <field name="name">queue.worker.form</field>
             <field name="model">queue.worker</field>
             <field name="arch" type="xml">
-                <form string="Worker" version="7.0">
+                <form string="Worker" create="false"
+                        delete="false" edit="false" version="7.0">
                     <group>
                         <field name="uuid"/>
                         <field name="pid"/>
@@ -27,7 +28,8 @@
             <field name="model">queue.worker</field>
             <field name="type">tree</field>
             <field name="arch" type="xml">
-                <tree string="Worker" version="7.0">
+                <tree string="Worker" create="false"
+                        delete="false" edit="false" version="7.0">
                     <field name="uuid"/>
                     <field name="pid"/>
                     <field name="date_start"/>
@@ -49,7 +51,8 @@
             <field name="name">queue.job.form</field>
             <field name="model">queue.job</field>
             <field name="arch" type="xml">
-                <form string="Jobs" version="7.0">
+                <form string="Jobs" create="false"
+                        delete="false" version="7.0">
                     <header>
                         <button name="requeue"
                             states="failed"
@@ -111,7 +114,9 @@
             <field name="name">queue.job.tree</field>
             <field name="model">queue.job</field>
             <field name="arch" type="xml">
-                <tree string="Jobs" colors="red:state == 'failed';gray:state == 'done'">
+                <tree string="Jobs" create="false"
+                        delete="false"
+                        colors="red:state == 'failed';gray:state == 'done'">
                     <field name="uuid"/>
                     <field name="name"/>
                     <field name="state"/>

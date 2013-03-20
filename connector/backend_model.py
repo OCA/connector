@@ -125,6 +125,3 @@ class external_binding(orm.AbstractModel):
         'sync_date': fields.date('Last synchronization date'),
         # add other fields in concrete models
     }
-
-
-from .deprecated.external_referentials import *

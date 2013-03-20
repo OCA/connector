@@ -21,11 +21,13 @@
 ##############################################################################
 
 
-{
-    'name': 'Connector',
-    'version': '2.0.0',
-    'category': 'Generic Modules',
-    'description': """
+{'name': 'Connector',
+ 'version': '2.0.0',
+ 'author': 'Magentoerpconnect Core Editors',
+ 'website': 'http://www.magentoerpconnect.com',
+ 'license': 'AGPL-3',
+ 'category': 'Generic Modules',
+ 'description': """
 Connector
 =========
 
@@ -58,25 +60,16 @@ The existing ir_model_data feature of OpenERP is mostly thought as an mono-exter
 the concept further to assume multiple external ids for OpenERP entities and add the possibility
 to customize their field mapping directly in OpenERP to accomodate the external systems.
     """,
-    'author': 'Magentoerpconnect Core Editors',
-    'website': 'http://www.magentoerpconnect.com',
-    'depends': [
-        'email_template'
-        ],
-    'data': [
-        'deprecated/external_referentials_view.xml',
-        'deprecated/report_view.xml',
-        'deprecated/external_referentials_menu.xml',
-        'security/connector_security.xml',
-        'security/ir.model.access.csv',
-        'deprecated/group_fields_view.xml',
-        'deprecated/report_mail_template.xml',
-        'queue/model_view.xml',
-        'queue/queue_data.xml',
-        'connector_menu.xml',
-        'setting_view.xml',
-        'res_partner_view.xml',
-        ],
-    'installable': True,
-    'application': True,
+ 'depends': ['mail'
+             ],
+ 'data': ['security/connector_security.xml',
+          'security/ir.model.access.csv',
+          'queue/model_view.xml',
+          'queue/queue_data.xml',
+          'connector_menu.xml',
+          'setting_view.xml',
+          'res_partner_view.xml',
+          ],
+ 'installable': True,
+ 'application': True,
 }

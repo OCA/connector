@@ -342,8 +342,8 @@ class Job(object):
                             "a 'Job', not a '%s'" % type(other))
         self_eta = self.eta or datetime(MINYEAR, 1, 1)
         other_eta = other.eta or datetime(MINYEAR, 1, 1)
-        return cmp((self_eta, self.priority),
-                   (other_eta, other.priority))
+        return cmp((self_eta, self.priority, self.date_created),
+                   (other_eta, other.priority, other.date_created))
 
     def perform(self, session):
         """ Execute a job.

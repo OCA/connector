@@ -97,7 +97,7 @@ class test_backend_register(unittest2.TestCase):
 
     def test_no_register_error(self):
         """ Error when asking for a class and none is found"""
-        with self.assertRaises(ValueError):
+        with self.assertRaises(AssertionError):
             ref = self.backend.get_class(BackendAdapter, 'res.users')
 
     def test_registered_classes_all(self):

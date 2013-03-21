@@ -107,7 +107,7 @@ class ConnectorSession(object):
         self.cr = cr
         self.uid = uid
         self._pool = None
-        self.context = {} if context is None else context
+        self._context = context
 
     @contextmanager
     def change_user(self, uid):
@@ -118,6 +118,13 @@ class ConnectorSession(object):
         self.uid = uid
         yield self
         self.uid = current_uid
+
+    @property
+    def context(self):
+        if self._context is None:
+            user_obj = self.pool['res.users']
+            self._context = user_obj.context_get(self.cr, self.uid)
+        return self._context
 
     @property
     def pool(self):

@@ -113,10 +113,11 @@ class Worker(threading.Thread):
             with session_hdl.session() as session:
                 self.job_storage_class(session).store(job)
 
-        except RetryableJobError:
+        except RetryableJobError as err:
             # delay the job later
             with session_hdl.session() as session:
-                self.job_storage_class(session).postpone(job)
+                storage = self.job_storage_class(session)
+                storage.postpone(job, result=err.message)
             _logger.debug('%s postponed', job)
 
         except (FailedJobError, Exception):

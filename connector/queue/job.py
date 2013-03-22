@@ -143,58 +143,35 @@ class OpenERPJobStorage(JobStorage):
 
     def store(self, job):
         """ Store the Job """
-        vals = dict(uuid=job.uuid,
-                    state=job.state,
-                    name=job.description,
-                    func_string=job.func_string,
-                    priority=job.priority)
-
-        vals['func'] = dumps((job.func_name,
-                              job.args,
-                              job.kwargs))
-
-        vals['date_created'] = job.date_created.strftime(
-                DEFAULT_SERVER_DATETIME_FORMAT)
+        vals = {'state': job.state,
+                'priority': job.priority,
+                'retry': job.retry,
+                'max_retries': job.max_retries,
+                'exc_info': job.exc_info,
+                'user_id': job.user_id or self.session.uid,
+                'result': unicode(job.result) if job.result else False,
+                'date_enqueued': False,
+                'date_started': False,
+                'date_done': False,
+                'eta': False,
+                }
 
         if job.date_enqueued:
             vals['date_enqueued'] = job.date_enqueued.strftime(
                     DEFAULT_SERVER_DATETIME_FORMAT)
-        else:
-            vals['date_enqueued'] = False
-
         if job.date_started:
             vals['date_started'] = job.date_started.strftime(
                     DEFAULT_SERVER_DATETIME_FORMAT)
-        else:
-            vals['date_started'] = False
-
         if job.date_done:
             vals['date_done'] = job.date_done.strftime(
                     DEFAULT_SERVER_DATETIME_FORMAT)
-
         if job.eta:
             vals['eta'] = job.eta.strftime(DEFAULT_SERVER_DATETIME_FORMAT)
-        else:
-            vals['eta'] = False
 
-        vals['exc_info'] = job.exc_info
-
-        vals['result'] = unicode(job.result) if job.result else False
-
-        vals['user_id'] = job.user_id or self.session.uid
-
-        vals['model_name'] = job.model_name if job.model_name else False
-
-        # by removing the worker on terminated jobs,
-        # we can check the load of a worker
-        if job.state in (DONE, FAILED):
+        if job.state in (PENDING, DONE, FAILED):
             vals['worker_id'] = False
-
         if job.canceled:
             vals['active'] = False
-
-        vals['retry'] = job.retry
-        vals['max_retries'] = job.max_retries
 
         if self.exists(job.uuid):
             self.storage_model.write(
@@ -204,11 +181,30 @@ class OpenERPJobStorage(JobStorage):
                     vals,
                     self.session.context)
         else:
+            date_created = job.date_created.strftime(DEFAULT_SERVER_DATETIME_FORMAT)
+            vals.update({'uuid': job.uuid,
+                         'name': job.description,
+                         'func_string': job.func_string,
+                         'date_created': date_created,
+                         'model_name': (job.model_name if job.model_name
+                                        else False),
+                         })
+
+            vals['func'] = dumps((job.func_name,
+                                  job.args,
+                                  job.kwargs))
+
             self.storage_model.create(
                     self.session.cr,
                     self.session.uid,
                     vals,
                     self.session.context)
+
+    def postpone(self, job):
+        job.eta = timedelta(seconds=RETRY_INTERVAL)
+        job.exc_info = None
+        job.set_state(PENDING)
+        self.store(job)
 
     def load(self, job_uuid):
         """ Read a job from the Database"""
@@ -222,9 +218,7 @@ class OpenERPJobStorage(JobStorage):
 
         func = unpickle(str(stored.func))  # openerp stores them as unicode...
 
-        (func_name,
-         args,
-         kwargs) = func
+        (func_name, args, kwargs) = func
 
         eta = None
         if stored.eta:

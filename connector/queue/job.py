@@ -349,10 +349,10 @@ class Job(object):
         """
         assert not self.canceled, "Canceled job"
         with session.change_user(self.user_id):
+            self.retry += 1
             try:
                 self.result = self.func(session, *self.args, **self.kwargs)
             except RetryableJobError:
-                self.retry += 1
                 if not self.max_retries:  # infinite retries
                     raise
                 elif self.retry >= self.max_retries:

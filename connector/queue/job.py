@@ -291,7 +291,10 @@ class Job(object):
         self.state = PENDING
 
         self.retry = 0
-        self.max_retries = max_retries or DEFAULT_MAX_RETRIES
+        if max_retries is None:
+            self.max_retries = DEFAULT_MAX_RETRIES
+        else:
+            self.max_retries = max_retries
 
         self._uuid = job_uuid
 

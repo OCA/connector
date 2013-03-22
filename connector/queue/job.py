@@ -200,10 +200,10 @@ class OpenERPJobStorage(JobStorage):
                     vals,
                     self.session.context)
 
-    def postpone(self, job):
+    def postpone(self, job, result=None):
         job.eta = timedelta(seconds=RETRY_INTERVAL)
         job.exc_info = None
-        job.set_state(PENDING)
+        job.set_state(PENDING, result=result)
         self.store(job)
 
     def load(self, job_uuid):

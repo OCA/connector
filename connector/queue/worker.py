@@ -33,7 +33,6 @@ import openerp.modules.registry as registry_module
 from .queue import JobsQueue
 from ..session import ConnectorSessionHandler
 from .job import (OpenERPJobStorage,
-                  RETRY_INTERVAL,
                   ENQUEUED,
                   STARTED,
                   FAILED,
@@ -115,9 +114,9 @@ class Worker(threading.Thread):
 
         except RetryableJobError:
             # delay the job later
-            job.eta = timedelta(seconds=RETRY_INTERVAL)
             with session_hdl.session() as session:
-                self.job_storage_class(session).store(job)
+                self.job_storage_class(session).postpone(job)
+            _logger.debug('%s postponed', job)
 
         except (FailedJobError, Exception):
             buff = StringIO()

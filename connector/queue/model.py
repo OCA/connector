@@ -66,9 +66,12 @@ class QueueJob(orm.Model):
         'date_done': fields.datetime('Date Done', readonly=True),
         'eta': fields.datetime('Execute only after'),
         'active': fields.boolean('Active'),
-        'model_name': fields.char('Model'),
-        'retry': fields.integer('Current retry'),
-        'max_retries': fields.integer('Max. retries'),
+        'model_name': fields.char('Model', readonly=True),
+        'retry': fields.integer('Current try'),
+        'max_retries': fields.integer(
+            'Max. retries',
+            help="The job will fail if the number of tries reach the max. retries.\n"
+                 "Retries are infinite when empty."),
     }
 
     _defaults = {
@@ -101,7 +104,7 @@ class QueueJob(orm.Model):
         return True
 
     def write(self, cr, uid, ids, vals, context=None):
-        super(QueueJob, self).write(cr, uid, ids, vals, context=context)
+        res = super(QueueJob, self).write(cr, uid, ids, vals, context=context)
         if vals.get('state') == 'failed':
             if not hasattr(ids, '__iter__'):
                 ids = [ids]
@@ -114,6 +117,7 @@ class QueueJob(orm.Model):
                     self.message_post(cr, uid, id, body=msg,
                                       subtype='connector.mt_job_failed',
                                       context=context)
+        return res
 
     def _subscribe_users(self, cr, uid, ids, context=None):
         """ Subscribe all users having the 'Connector Manager' group """

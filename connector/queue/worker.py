@@ -68,9 +68,10 @@ class Worker(threading.Thread):
         session_hdl = ConnectorSessionHandler(self.db_name,
                                           openerp.SUPERUSER_ID)
         try:
-            job = self._load_job(job)
-            if job is None:
-                return
+            with session_hdl.session() as session:
+                job = self._load_job(session, job.uuid)
+                if job is None:
+                    return
 
             # if the job has been manually set to DONE
             # before its execution, stop
@@ -128,19 +129,16 @@ class Worker(threading.Thread):
                 self.job_storage_class(session).store(job)
             raise
 
-    def _load_job(self, job):
+    def _load_job(self, session, job_uuid):
         """ Reload a job from the backend """
-        session_hdl = ConnectorSessionHandler(self.db_name,
-                                              openerp.SUPERUSER_ID)
-        with session_hdl.session() as session:
-            try:
-                job = self.job_storage_class(session).load(job.uuid)
-            except NoSuchJobError:
-                # just skip it
-                job = None
-            except NotReadableJobError:
-                _logger.exception('Could not read job: %s', job)
-                raise
+        try:
+            job = self.job_storage_class(session).load(job_uuid)
+        except NoSuchJobError:
+            # just skip it
+            job = None
+        except NotReadableJobError:
+            _logger.exception('Could not read job: %s', job_uuid)
+            raise
         return job
 
     def run(self):
@@ -170,18 +168,15 @@ class Worker(threading.Thread):
         session_hdl = ConnectorSessionHandler(self.db_name,
                                               openerp.SUPERUSER_ID)
         with session_hdl.session() as session:
-            try:
-                job = self.job_storage_class(session).load(job_uuid)
-            except NoSuchJobError:
-                # just skip it
+            job = self._load_job(session, job_uuid)
+            if job is None:
+                # skip a deleted job
                 return
-            except NotReadableJobError:
-                _logger.exception('Could not read job: %s', job_uuid)
-                raise
             job.set_state(ENQUEUED)
             self.job_storage_class(session).store(job)
         # the change of state should be commited before
         # the enqueue otherwise we may have concurrent updates
+        # if the job is started directly
         self.queue.enqueue(job)
         _logger.debug('%s enqueued in %s', job, self)
 

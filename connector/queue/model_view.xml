@@ -78,22 +78,21 @@
                         <group>
                             <field name="uuid"/>
                             <field name="func_string"/>
-                        </group>
-                        <group>
                             <field name="priority"/>
                             <field name="eta"/>
-                        </group>
-                        <group>
                             <field name="user_id"/>
-                        </group>
-                        <group>
                             <field name="date_created"/>
+                            <field name="date_enqueued"/>
                             <field name="date_started"/>
                             <field name="date_done"/>
-                        </group>
-                        <group>
-                            <field name="date_enqueued"/>
                             <field name="worker_id"/>
+                        </group>
+                        <group colspan="4">
+                            <div>
+                                <label for="retry" string="Current try / max. retries"/>
+                                <field name="retry" class="oe_inline"/> /
+                                <field name="max_retries" class="oe_inline"/>
+                            </div>
                         </group>
                         <group name="result" string="Result" attrs="{'invisible': [('result', '=', False)]}">
                             <field nolabel="1" name="result"/>

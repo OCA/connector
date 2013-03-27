@@ -25,7 +25,7 @@ import threading
 import time
 import traceback
 import uuid
-from datetime import datetime, timedelta
+from datetime import datetime
 from StringIO import StringIO
 
 import openerp
@@ -66,12 +66,16 @@ class Worker(threading.Thread):
     def run_job(self, job):
         """ Execute a job """
         session_hdl = ConnectorSessionHandler(self.db_name,
-                                          openerp.SUPERUSER_ID)
+                                              openerp.SUPERUSER_ID)
         try:
             with session_hdl.session() as session:
                 job = self._load_job(session, job.uuid)
                 if job is None:
                     return
+
+            # FIXME: the worker should double-check if the job
+            # is still assigned to itself (it means, the jobs
+            # should know the uuid of their worker
 
             # if the job has been manually set to DONE
             # before its execution, stop

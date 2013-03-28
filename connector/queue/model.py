@@ -89,7 +89,12 @@ class QueueJob(orm.Model):
         storage = OpenERPJobStorage(session)
         for job in self.browse(cr, uid, ids, context=context):
             job = storage.load(job.uuid)
-            job.set_state(state, result=result)
+            if state == DONE:
+                job.set_done(result=result)
+            elif state == PENDING:
+                job.set_pending(result=result)
+            else:
+                raise ValueError('State not supported: %s' % state)
             storage.store(job)
 
     def button_done(self, cr, uid, ids, context=None):

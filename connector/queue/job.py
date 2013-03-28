@@ -35,9 +35,6 @@ from ..exception import (NotReadableJobError,
                          FailedJobError,
                          RetryableJobError)
 
-__all__ = ['job']
-
-
 PENDING = 'pending'
 ENQUEUED = 'enqueued'
 DONE = 'done'
@@ -253,7 +250,7 @@ class OpenERPJobStorage(JobStorage):
 
 
 class Job(object):
-    """ A Job is a task to execute
+    """ A Job is a task to execute.
 
     .. attribute:: uuid
 
@@ -433,7 +430,7 @@ class Job(object):
                    (other_eta, other.priority, other.date_created))
 
     def perform(self, session):
-        """ Execute a job.
+        """ Execute the job.
 
         The job is executed with the user which has initiated it.
 

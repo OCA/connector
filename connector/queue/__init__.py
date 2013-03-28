@@ -19,7 +19,5 @@
 #
 ##############################################################################
 
-import queue
-from .job import *
 import worker
 import model

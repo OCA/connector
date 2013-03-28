@@ -100,7 +100,7 @@ class OpenERPJobStorage(JobStorage):
         self.session = session
         self.storage_model = self.session.pool.get(self._storage_model_name)
         assert self.storage_model is not None, (
-                "Model %s not found" % self._storage_model_name)
+            "Model %s not found" % self._storage_model_name)
 
     def enqueue(self, func, model_name=None, args=None, kwargs=None,
                 priority=None, eta=None, max_retries=None):
@@ -129,11 +129,11 @@ class OpenERPJobStorage(JobStorage):
     def _openerp_id(self, job_uuid):
         openerp_id = None
         job_ids = self.storage_model.search(
-                self.session.cr,
-                SUPERUSER_ID,
-                [('uuid', '=', job_uuid)],
-                context=self.session.context,
-                limit=1)
+            self.session.cr,
+            SUPERUSER_ID,
+            [('uuid', '=', job_uuid)],
+            context=self.session.context,
+            limit=1)
         if job_ids:
             openerp_id = job_ids[0]
         return openerp_id
@@ -158,13 +158,13 @@ class OpenERPJobStorage(JobStorage):
 
         if job.date_enqueued:
             vals['date_enqueued'] = job.date_enqueued.strftime(
-                    DEFAULT_SERVER_DATETIME_FORMAT)
+                DEFAULT_SERVER_DATETIME_FORMAT)
         if job.date_started:
             vals['date_started'] = job.date_started.strftime(
-                    DEFAULT_SERVER_DATETIME_FORMAT)
+                DEFAULT_SERVER_DATETIME_FORMAT)
         if job.date_done:
             vals['date_done'] = job.date_done.strftime(
-                    DEFAULT_SERVER_DATETIME_FORMAT)
+                DEFAULT_SERVER_DATETIME_FORMAT)
         if job.eta:
             vals['eta'] = job.eta.strftime(DEFAULT_SERVER_DATETIME_FORMAT)
 
@@ -174,12 +174,11 @@ class OpenERPJobStorage(JobStorage):
             vals['active'] = False
 
         if self.exists(job.uuid):
-            self.storage_model.write(
-                    self.session.cr,
-                    self.session.uid,
-                    self.openerp_id(job),
-                    vals,
-                    self.session.context)
+            self.storage_model.write(self.session.cr,
+                                     self.session.uid,
+                                     self.openerp_id(job),
+                                     vals,
+                                     self.session.context)
         else:
             date_created = job.date_created.strftime(DEFAULT_SERVER_DATETIME_FORMAT)
             vals.update({'uuid': job.uuid,
@@ -194,11 +193,10 @@ class OpenERPJobStorage(JobStorage):
                                   job.args,
                                   job.kwargs))
 
-            self.storage_model.create(
-                    self.session.cr,
-                    self.session.uid,
-                    vals,
-                    self.session.context)
+            self.storage_model.create(self.session.cr,
+                                      self.session.uid,
+                                      vals,
+                                      self.session.context)
 
     def postpone(self, job, result=None):
         job.eta = timedelta(seconds=RETRY_INTERVAL)
@@ -210,7 +208,7 @@ class OpenERPJobStorage(JobStorage):
         """ Read a job from the Database"""
         if not self.exists(job_uuid):
             raise NoSuchJobError(
-                    '%s does no longer exist in the storage.' % job_uuid)
+                '%s does no longer exist in the storage.' % job_uuid)
         stored = self.storage_model.browse(self.session.cr,
                                            self.session.uid,
                                            self._openerp_id(job_uuid),
@@ -229,19 +227,19 @@ class OpenERPJobStorage(JobStorage):
 
         if stored.date_created:
             job.date_created = datetime.strptime(
-                    stored.date_created, DEFAULT_SERVER_DATETIME_FORMAT)
+                stored.date_created, DEFAULT_SERVER_DATETIME_FORMAT)
 
         if stored.date_enqueued:
             job.date_enqueued = datetime.strptime(
-                    stored.date_enqueued, DEFAULT_SERVER_DATETIME_FORMAT)
+                stored.date_enqueued, DEFAULT_SERVER_DATETIME_FORMAT)
 
         if stored.date_started:
             job.date_started = datetime.strptime(
-                    stored.date_started, DEFAULT_SERVER_DATETIME_FORMAT)
+                stored.date_started, DEFAULT_SERVER_DATETIME_FORMAT)
 
         if stored.date_done:
             job.date_done = datetime.strptime(
-                    stored.date_done, DEFAULT_SERVER_DATETIME_FORMAT)
+                stored.date_done, DEFAULT_SERVER_DATETIME_FORMAT)
 
         job.state = stored.state
         job.result = stored.result if stored.result else None
@@ -255,7 +253,98 @@ class OpenERPJobStorage(JobStorage):
 
 
 class Job(object):
-    """ A Job is a task to execute """
+    """ A Job is a task to execute
+
+    .. attribute:: uuid
+
+        Id (UUID) of the job.
+
+    .. attribute:: state
+
+        State of the job, can pending, enqueued, started, done or failed.
+        The start state is pending and the final state is done.
+
+    .. attribute:: retry
+
+        The current try, starts at 0 and each time the job is executed,
+        it increases by 1.
+
+    .. attribute:: max_retries
+
+        The maximum number of retries allowed before the job is
+        considered as failed.
+
+    .. attribute:: func_name
+
+        Name of the function (in the form module.function_name).
+
+    .. attribute:: args
+
+        Arguments passed to the function when executed.
+
+    .. attribute:: kwargs
+
+        Keyword arguments passed to the function when executed.
+
+    .. attribute:: func_string
+
+        Full string representing the function to be executed,
+        ie. module.function(args, kwargs)
+
+    .. attribute:: description
+
+        Human description of the job.
+
+    .. attribute:: func
+
+        The python function itself.
+
+    .. attribute:: model_name
+
+        OpenERP model on which the job will run.
+
+    .. attribute:: priority
+
+        Priority of the job, 0 being the higher priority.
+
+    .. attribute:: date_created
+
+        Date and time when the job was created.
+
+    .. attribute:: date_enqueued
+
+        Date and time when the job was enqueued.
+
+    .. attribute:: date_started
+
+        Date and time when the job was started.
+
+    .. attribute:: date_done
+
+        Date and time when the job was done.
+
+    .. attribute:: result
+
+        A description of the result (for humans).
+
+    .. attribute:: exc_info
+
+        Exception information (traceback) when the job failed.
+
+    .. attribute:: user_id
+
+        OpenERP user id which created the job
+
+    .. attribute:: eta
+
+        Estimated Time of Arrival of the job. It will not be executed
+        before this date/time.
+
+    .. attribute:: canceled
+
+        True if the job has been canceled.
+
+    """
 
     def __init__(self, func=None, model_name=None,
                  args=None, kwargs=None, priority=None,
@@ -330,6 +419,7 @@ class Job(object):
         self.exc_info = None
 
         self.user_id = None
+        self._eta = None
         self.eta = eta
         self.canceled = False
 
@@ -412,7 +502,7 @@ class Job(object):
             self._eta = datetime.now() + value
         elif isinstance(value, datetime):
             self._eta = value
-        elif instance(value, int):
+        elif isinstance(value, int):
             self._eta = datetime.now() + timedelta(seconds=value)
         else:
             raise ValueError("%s is not a valid type for eta, "
@@ -422,23 +512,19 @@ class Job(object):
     def set_state(self, state, result=None, exc_info=None):
         """Change the state of the job."""
         self.state = state
-
         if state == PENDING:
             self.date_enqueued = None
             self.date_started = None
-
-        if state == ENQUEUED:
+        elif state == ENQUEUED:
             self.date_enqueued = datetime.now()
             self.date_started = None
-        if state == STARTED:
+        elif state == STARTED:
             self.date_started = datetime.now()
-        if state == DONE:
+        elif state == DONE:
             self.exc_info = None
             self.date_done = datetime.now()
-
         if result is not None:
             self.result = result
-
         if exc_info is not None:
             self.exc_info = exc_info
 

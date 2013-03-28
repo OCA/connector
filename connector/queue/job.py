@@ -210,12 +210,6 @@ class OpenERPJobStorage(JobStorage):
                                   vals,
                                   self.session.context)
 
-    def postpone(self, job, result=None):
-        job.eta = timedelta(seconds=RETRY_INTERVAL)
-        job.exc_info = None
-        job.set_pending(result=result)
-        self.store(job)
-
     def load(self, job_uuid):
         """ Read a job from the Database"""
         if not self.exists(job_uuid):
@@ -567,6 +561,12 @@ class Job(object):
         self.canceled = True
         result = msg if msg is not None else _('Canceled. Nothing to do.')
         self.set_done(result=result)
+
+    def postpone(self, result=None):
+        self.eta = timedelta(seconds=RETRY_INTERVAL)
+        self.exc_info = None
+        if result is not None:
+            self.result = result
 
 
 def job(func):

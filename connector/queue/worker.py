@@ -33,9 +33,7 @@ import openerp.modules.registry as registry_module
 from .queue import JobsQueue
 from ..session import ConnectorSessionHandler
 from .job import (OpenERPJobStorage,
-                  ENQUEUED,
-                  STARTED,
-                  FAILED,
+                  PENDING,
                   DONE)
 from ..exception import (NoSuchJobError,
                          NotReadableJobError,
@@ -73,13 +71,21 @@ class Worker(threading.Thread):
                 if job is None:
                     return
 
-            # FIXME: the worker should double-check if the job
-            # is still assigned to itself (it means, the jobs
-            # should know the uuid of their worker
-
-            # if the job has been manually set to DONE
+            # if the job has been manually set to DONE or PENDING
             # before its execution, stop
-            if job.state == DONE:
+            if job.state in (DONE, PENDING):
+                return
+
+            # the job has been enqueued in this worker but has likely be
+            # modified in the database since its enqueue
+            if job.worker_uuid != self.uuid:
+                # put the job in pending so it can be requeued
+                _logger.error('Job %s was enqueued in worker %s but '
+                              'was linked to worker %s. Reset to pending.',
+                              job.uuid, self.uuid, job.worker_uuid)
+                with session_hdl.session() as session:
+                    job.set_pending()
+                    self.job_storage_class(session).store(job)
                 return
 
             if job.eta and job.eta > datetime.now():
@@ -96,7 +102,7 @@ class Worker(threading.Thread):
                 return
 
             with session_hdl.session() as session:
-                job.set_state(STARTED)
+                job.set_started()
                 self.job_storage_class(session).store(job)
 
             _logger.debug('%s started', job)
@@ -105,7 +111,7 @@ class Worker(threading.Thread):
             _logger.debug('%s done', job)
 
             with session_hdl.session() as session:
-                job.set_state(DONE)
+                job.set_done()
                 self.job_storage_class(session).store(job)
 
         except NothingToDoJob as err:
@@ -129,7 +135,7 @@ class Worker(threading.Thread):
             traceback.print_exc(file=buff)
             _logger.error(buff.getvalue())
 
-            job.set_state(FAILED, exc_info=buff.getvalue())
+            job.set_failed(exc_info=buff.getvalue())
             with session_hdl.session() as session:
                 self.job_storage_class(session).store(job)
             raise
@@ -155,12 +161,13 @@ class Worker(threading.Thread):
         Wait for jobs and execute them sequentially.
         """
         while 1:
-            # check if the worker has to exit
+            # check if the worker has to exit (registry destroyed)
             if self.watcher.worker_lost(self):
                 break
             job = self.queue.dequeue()
             try:
                 self.run_job(job)
+                time.sleep(10)
             except:
                 continue
 
@@ -177,7 +184,7 @@ class Worker(threading.Thread):
             if job is None:
                 # skip a deleted job
                 return
-            job.set_state(ENQUEUED)
+            job.set_enqueued(self)
             self.job_storage_class(session).store(job)
         # the change of state should be commited before
         # the enqueue otherwise we may have concurrent updates

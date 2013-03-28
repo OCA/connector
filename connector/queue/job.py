@@ -90,14 +90,16 @@ class JobStorage(object):
 class OpenERPJobStorage(JobStorage):
     """ Store a job on OpenERP """
 
-    _storage_model_name = 'queue.job'
+    _job_model_name = 'queue.job'
+    _worker_model_name = 'queue.worker'
 
     def __init__(self, session):
         super(OpenERPJobStorage, self).__init__()
         self.session = session
-        self.storage_model = self.session.pool.get(self._storage_model_name)
-        assert self.storage_model is not None, (
-            "Model %s not found" % self._storage_model_name)
+        self.job_model = self.session.pool.get(self._job_model_name)
+        self.worker_model = self.session.pool.get(self._worker_model_name)
+        assert self.job_model is not None, (
+            "Model %s not found" % self._job_model_name)
 
     def enqueue(self, func, model_name=None, args=None, kwargs=None,
                 priority=None, eta=None, max_retries=None):
@@ -125,18 +127,28 @@ class OpenERPJobStorage(JobStorage):
 
     def _openerp_id(self, job_uuid):
         openerp_id = None
-        job_ids = self.storage_model.search(
-            self.session.cr,
-            SUPERUSER_ID,
-            [('uuid', '=', job_uuid)],
-            context=self.session.context,
-            limit=1)
+        job_ids = self.job_model.search(self.session.cr,
+                                        SUPERUSER_ID,
+                                        [('uuid', '=', job_uuid)],
+                                        context=self.session.context,
+                                        limit=1)
         if job_ids:
             openerp_id = job_ids[0]
         return openerp_id
 
     def openerp_id(self, job):
         return self._openerp_id(job.uuid)
+
+    def _worker_id(self, worker_uuid):
+        openerp_id = None
+        worker_ids = self.worker_model.search(self.session.cr,
+                                              SUPERUSER_ID,
+                                              [('uuid', '=', worker_uuid)],
+                                              context=self.session.context,
+                                              limit=1)
+        if worker_ids:
+            openerp_id = worker_ids[0]
+        return openerp_id
 
     def store(self, job):
         """ Store the Job """
@@ -165,17 +177,20 @@ class OpenERPJobStorage(JobStorage):
         if job.eta:
             vals['eta'] = job.eta.strftime(DEFAULT_SERVER_DATETIME_FORMAT)
 
-        if job.state in (PENDING, DONE, FAILED):
-            vals['worker_id'] = False
         if job.canceled:
             vals['active'] = False
 
+        if job.worker_uuid:
+            vals['worker_id'] = self._worker_id(job.worker_uuid)
+        else:
+            vals['worker_id'] = False
+
         if self.exists(job.uuid):
-            self.storage_model.write(self.session.cr,
-                                     self.session.uid,
-                                     self.openerp_id(job),
-                                     vals,
-                                     self.session.context)
+            self.job_model.write(self.session.cr,
+                                 self.session.uid,
+                                 self.openerp_id(job),
+                                 vals,
+                                 self.session.context)
         else:
             date_created = job.date_created.strftime(DEFAULT_SERVER_DATETIME_FORMAT)
             vals.update({'uuid': job.uuid,
@@ -190,15 +205,15 @@ class OpenERPJobStorage(JobStorage):
                                   job.args,
                                   job.kwargs))
 
-            self.storage_model.create(self.session.cr,
-                                      self.session.uid,
-                                      vals,
-                                      self.session.context)
+            self.job_model.create(self.session.cr,
+                                  self.session.uid,
+                                  vals,
+                                  self.session.context)
 
     def postpone(self, job, result=None):
         job.eta = timedelta(seconds=RETRY_INTERVAL)
         job.exc_info = None
-        job.set_state(PENDING, result=result)
+        job.set_pending(result=result)
         self.store(job)
 
     def load(self, job_uuid):
@@ -206,10 +221,10 @@ class OpenERPJobStorage(JobStorage):
         if not self.exists(job_uuid):
             raise NoSuchJobError(
                 '%s does no longer exist in the storage.' % job_uuid)
-        stored = self.storage_model.browse(self.session.cr,
-                                           self.session.uid,
-                                           self._openerp_id(job_uuid),
-                                           context=self.session.context)
+        stored = self.job_model.browse(self.session.cr,
+                                       self.session.uid,
+                                       self._openerp_id(job_uuid),
+                                       context=self.session.context)
 
         func = unpickle(str(stored.func))  # openerp stores them as unicode...
 
@@ -246,6 +261,8 @@ class OpenERPJobStorage(JobStorage):
         job.model_name = stored.model_name if stored.model_name else None
         job.retry = stored.retry
         job.max_retries = stored.max_retries
+        if stored.worker_id:
+            job.worker_uuid = stored.worker_id.uuid
         return job
 
 
@@ -255,6 +272,10 @@ class Job(object):
     .. attribute:: uuid
 
         Id (UUID) of the job.
+
+    .. attribute:: worker_uuid
+
+        When the job is enqueued, UUID of the worker.
 
     .. attribute:: state
 
@@ -419,6 +440,7 @@ class Job(object):
         self._eta = None
         self.eta = eta
         self.canceled = False
+        self.worker_uuid = None
 
     def __cmp__(self, other):
         if not isinstance(other, Job):
@@ -503,25 +525,38 @@ class Job(object):
             self._eta = datetime.now() + timedelta(seconds=value)
         else:
             raise ValueError("%s is not a valid type for eta, "
-                             " it must be an 'int',  a 'timedelta' "
+                             " it must be an 'int', a 'timedelta' "
                              "or a 'datetime'" % type(value))
 
-    def set_state(self, state, result=None, exc_info=None):
-        """Change the state of the job."""
-        self.state = state
-        if state == PENDING:
-            self.date_enqueued = None
-            self.date_started = None
-        elif state == ENQUEUED:
-            self.date_enqueued = datetime.now()
-            self.date_started = None
-        elif state == STARTED:
-            self.date_started = datetime.now()
-        elif state == DONE:
-            self.exc_info = None
-            self.date_done = datetime.now()
+    def set_pending(self, result=None):
+        self.state = PENDING
+        self.date_enqueued = None
+        self.date_started = None
+        self.worker_uuid = None
         if result is not None:
             self.result = result
+
+    def set_enqueued(self, worker):
+        self.state = ENQUEUED
+        self.date_enqueued = datetime.now()
+        self.date_started = None
+        self.worker_uuid = worker.uuid
+
+    def set_started(self):
+        self.state = STARTED
+        self.date_started = datetime.now()
+
+    def set_done(self, result=None):
+        self.state = DONE
+        self.exc_info = None
+        self.date_done = datetime.now()
+        self.worker_uuid = None
+        if result is not None:
+            self.result = result
+
+    def set_failed(self, exc_info=None):
+        self.state = FAILED
+        self.worker_uuid = None
         if exc_info is not None:
             self.exc_info = exc_info
 
@@ -530,8 +565,8 @@ class Job(object):
 
     def cancel(self, msg=None):
         self.canceled = True
-        result = msg if msg is not None else _('Nothing to do')
-        self.set_state(DONE, result=result)
+        result = msg if msg is not None else _('Canceled. Nothing to do.')
+        self.set_done(result=result)
 
 
 def job(func):

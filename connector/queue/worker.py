@@ -169,7 +169,6 @@ class Worker(threading.Thread):
             job = self.queue.dequeue()
             try:
                 self.run_job(job)
-                time.sleep(10)
             except:
                 continue
 
@@ -226,7 +225,7 @@ class WorkerWatcher(threading.Thread):
     def worker_lost(self, worker):
         """ Indicate if a worker is no longer referenced by the watcher.
 
-        Used by the worker threads to know they have to exit.
+        Used by the worker threads to know if they have to exit.
         """
         return worker not in self._workers.itervalues()
 

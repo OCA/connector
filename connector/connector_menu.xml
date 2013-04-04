@@ -24,7 +24,8 @@
         <menuitem id="menu_checkpoint"
             parent="menu_connector"
             name="Checkpoint"
-            sequence="10"/>
+            action="action_connector_checkpoint"
+            sequence="20"/>
 
     </data>
 </openerp>

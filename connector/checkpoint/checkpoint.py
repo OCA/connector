@@ -34,13 +34,17 @@ from openerp.osv import orm, fields
 
 class connector_checkpoint(orm.Model):
     _name = 'connector.checkpoint'
+    _description = 'Connector Checkpoint'
+
+    _rec_name = 'res_id'
 
     def _get_models(self, cr, uid, context=None):
         """ All models are allowed as reference, anyway the
         fields.reference are readonly. """
         model_obj = self.pool.get('ir.model')
         model_ids = model_obj.search(cr, uid, [], context=context)
-        models = model_obj.read(cr, uid, ids, ['model', 'name'], context=context)
+        models = model_obj.read(cr, uid, model_ids,
+                                ['model', 'name'], context=context)
         return [(m['model'], m['name']) for m in models]
 
     _columns = {
@@ -66,4 +70,8 @@ class connector_checkpoint(orm.Model):
             'Status',
             required=True,
             readonly=True),
+    }
+
+    _defaults = {
+        'state': 'pending',
     }

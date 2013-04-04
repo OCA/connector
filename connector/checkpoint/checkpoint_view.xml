@@ -8,17 +8,10 @@
             <field name="arch" type="xml">
                 <form string="Connector Checkpoint" version="7.0">
                     <header>
-                        <button name="check"
+                        <button name="verified"
                             type="object"
                             class="oe_highlight"
                             string="Verified"/>
-                        <button name="check"
-                            type="object"
-                            class="oe_highlight"
-                            string="Verified and Next"/>
-                        <button name="check"
-                            type="object"
-                            string="Next"/>
                         <field name="state"
                             widget="statusbar"
                             statusbar_visible="pending,verified"

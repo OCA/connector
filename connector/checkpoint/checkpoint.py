@@ -79,7 +79,7 @@ class connector_checkpoint(orm.Model):
             select=1),
         'state': fields.selection(
             [('pending', 'Pending'),
-             ('done', 'Done')],
+             ('verified', 'Verified')],
             'Status',
             required=True,
             readonly=True),

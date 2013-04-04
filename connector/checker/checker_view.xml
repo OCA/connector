@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data noupdate="0">
+
+      <record id="view_connector_checker_form" model="ir.ui.view">
+          <field name="name">connector.checker.form</field>
+          <field name="model">connector.checker</field>
+          <field name="arch" type="xml">
+              <form string="Connector Checker" version="7.0">
+                  <field name="backend_id"/>
+                  <field name="res_id"/>
+                  <field name="state"/>
+              </form>
+          </field>
+      </record>
+
+      <record id="view_connector_checker_tree" model="ir.ui.view">
+          <field name="name">connector.checker.tree</field>
+          <field name="model">connector.checker</field>
+          <field name="arch" type="xml">
+              <tree string="Connector Checker" version="7.0">
+                  <field name="backend_id"/>
+                  <field name="res_id"/>
+                  <field name="state"/>
+              </tree>
+          </field>
+      </record>
+
+    </data>
+</openerp>

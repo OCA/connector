@@ -21,8 +21,8 @@
                             string="Next"/>
                         <field name="state"
                             widget="statusbar"
-                            statusbar_visible="pending,done"
-                            statusbar_colors='{"done":"grey"}'/>
+                            statusbar_visible="pending,verified"
+                            statusbar_colors='{"verified":"grey"}'/>
                     </header>
                     <sheet>
                         <group>
@@ -56,8 +56,8 @@
                     <field name="model_id"/>
                     <filter name="pending" string="Pending"
                         domain="[('state', '=', 'pending')]"/>
-                    <filter name="done" string="Done"
-                        domain="[('state', '=', 'done')]"/>
+                    <filter name="verified" string="Verified"
+                        domain="[('state', '=', 'verified')]"/>
                    <group string="Group By...">
                        <filter string="Model" context="{'group_by' : 'model_id'}" />
                    </group>

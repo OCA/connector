@@ -21,9 +21,9 @@
             action="action_queue_job"
             parent="menu_queue"/>
 
-        <menuitem id="menu_checker"
+        <menuitem id="menu_checkpoint"
             parent="menu_connector"
-            name="Checker"
+            name="Checkpoint"
             sequence="10"/>
 
     </data>

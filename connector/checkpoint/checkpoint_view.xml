@@ -7,11 +7,30 @@
             <field name="model">connector.checkpoint</field>
             <field name="arch" type="xml">
                 <form string="Connector Checkpoint" version="7.0">
-                    <group>
-                        <field name="backend_id"/>
-                        <field name="res_id"/>
-                        <field name="state"/>
-                    </group>
+                    <header>
+                        <button name="check"
+                            type="object"
+                            class="oe_highlight"
+                            string="Verified"/>
+                        <button name="check"
+                            type="object"
+                            class="oe_highlight"
+                            string="Verified and Next"/>
+                        <button name="check"
+                            type="object"
+                            string="Next"/>
+                        <field name="state"
+                            widget="statusbar"
+                            statusbar_visible="pending,done"
+                            statusbar_colors='{"done":"grey"}'/>
+                    </header>
+                    <sheet>
+                        <group>
+                            <field name="model_id" options='{"no_open": 1}'/>
+                            <field name="record"/>
+                            <field name="backend_id"/>
+                        </group>
+                    </sheet>
                 </form>
             </field>
         </record>
@@ -21,10 +40,28 @@
             <field name="model">connector.checkpoint</field>
             <field name="arch" type="xml">
                 <tree string="Connector Checkpoint" version="7.0">
+                    <field name="model_id"/>
+                    <field name="record"/>
                     <field name="backend_id"/>
-                    <field name="res_id"/>
                     <field name="state"/>
                 </tree>
+            </field>
+        </record>
+
+        <record id="view_connector_checkpoint_search" model="ir.ui.view">
+            <field name="name">connector.checkpoint.search</field>
+            <field name="model">connector.checkpoint</field>
+            <field name="arch" type="xml">
+                <search string="Connector Checkpoint">
+                    <field name="model_id"/>
+                    <filter name="pending" string="Pending"
+                        domain="[('state', '=', 'pending')]"/>
+                    <filter name="done" string="Done"
+                        domain="[('state', '=', 'done')]"/>
+                   <group string="Group By...">
+                       <filter string="Model" context="{'group_by' : 'model_id'}" />
+                   </group>
+                </search>
             </field>
         </record>
 
@@ -34,6 +71,15 @@
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
             <field name="view_id" ref="view_connector_checkpoint_tree"/>
+            <field name="help" type="html">
+                <p>No record to check.</p>
+                <p>
+                  When a connector imports new records which have configuration
+                  or verifications to do manually, they will appears in this list.
+                  Once a record has been verified, click on the Verified button.
+              </p>
+            </field>
+            <field name="context">{'search_default_pending': 1}</field>
         </record>
 
     </data>

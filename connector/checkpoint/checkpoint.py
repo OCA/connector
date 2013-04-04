@@ -36,7 +36,7 @@ class connector_checkpoint(orm.Model):
     _name = 'connector.checkpoint'
     _description = 'Connector Checkpoint'
 
-    _rec_name = 'res_id'
+    _rec_name = 'record'
 
     def _get_models(self, cr, uid, context=None):
         """ All models are allowed as reference, anyway the
@@ -47,15 +47,28 @@ class connector_checkpoint(orm.Model):
                                 ['model', 'name'], context=context)
         return [(m['model'], m['name']) for m in models]
 
+    def _get_ref(self, cr, uid, ids, prop, unknow_none, context=None):
+        res = {}
+        for check in self.browse(cr, uid, ids, context=context):
+            res[check.id] = check.model_id.model + ',' + str(check.record_id)
+        return res
+
     _columns = {
-        'res_id': fields.reference(
-            'Record',
+        'record': fields.function(
+            _get_ref,
+            type='reference',
+            string='Record',
             selection=_get_models,
-            size=128,
             help="The record to check.",
-            required=True,
-            readonly=True,
-            select=1),
+            size=128,
+            readonly=True),
+        'record_id': fields.integer('Record ID',
+                                    required=True,
+                                    readonly=True),
+        'model_id': fields.many2one('ir.model',
+                                    string='Model',
+                                    required=True,
+                                    readonly=True),
         'backend_id': fields.reference(
             'Backend',
             selection=_get_models,

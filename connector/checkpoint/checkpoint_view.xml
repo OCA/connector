@@ -2,29 +2,39 @@
 <openerp>
     <data noupdate="0">
 
-      <record id="view_connector_checkpoint_form" model="ir.ui.view">
-          <field name="name">connector.checkpoint.form</field>
-          <field name="model">connector.checkpoint</field>
-          <field name="arch" type="xml">
-              <form string="Connector Checkpoint" version="7.0">
-                  <field name="backend_id"/>
-                  <field name="res_id"/>
-                  <field name="state"/>
-              </form>
-          </field>
-      </record>
+        <record id="view_connector_checkpoint_form" model="ir.ui.view">
+            <field name="name">connector.checkpoint.form</field>
+            <field name="model">connector.checkpoint</field>
+            <field name="arch" type="xml">
+                <form string="Connector Checkpoint" version="7.0">
+                    <group>
+                        <field name="backend_id"/>
+                        <field name="res_id"/>
+                        <field name="state"/>
+                    </group>
+                </form>
+            </field>
+        </record>
 
-      <record id="view_connector_checkpoint_tree" model="ir.ui.view">
-          <field name="name">connector.checkpoint.tree</field>
-          <field name="model">connector.checkpoint</field>
-          <field name="arch" type="xml">
-              <tree string="Connector Checkpoint" version="7.0">
-                  <field name="backend_id"/>
-                  <field name="res_id"/>
-                  <field name="state"/>
-              </tree>
-          </field>
-      </record>
+        <record id="view_connector_checkpoint_tree" model="ir.ui.view">
+            <field name="name">connector.checkpoint.tree</field>
+            <field name="model">connector.checkpoint</field>
+            <field name="arch" type="xml">
+                <tree string="Connector Checkpoint" version="7.0">
+                    <field name="backend_id"/>
+                    <field name="res_id"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_connector_checkpoint" model="ir.actions.act_window">
+            <field name="name">Connector Checkpoint</field>
+            <field name="res_model">connector.checkpoint</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_connector_checkpoint_tree"/>
+        </record>
 
     </data>
 </openerp>

@@ -20,7 +20,7 @@
 ##############################################################################
 
 """
-The checker is a model containing records to be verified by the end
+The checkpoint is a model containing records to be verified by the end
 users.  The connectors register records to verify so the user can check
 them and flag them as verified.
 
@@ -32,8 +32,8 @@ so they appears in this list.
 from openerp.osv import orm, fields
 
 
-class connector_checker(orm.Model):
-    _name = 'connector.checker'
+class connector_checkpoint(orm.Model):
+    _name = 'connector.checkpoint'
 
     def _get_models(self, cr, uid, context=None):
         """ All models are allowed as reference, anyway the

@@ -88,3 +88,8 @@ class connector_checkpoint(orm.Model):
     _defaults = {
         'state': 'pending',
     }
+
+    def verified(self, cr, uid, ids, context=None):
+        return self.write(cr, uid, ids,
+                          {'state': 'verified'},
+                          context=context)

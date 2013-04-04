@@ -2,11 +2,11 @@
 <openerp>
     <data noupdate="0">
 
-      <record id="view_connector_checker_form" model="ir.ui.view">
-          <field name="name">connector.checker.form</field>
-          <field name="model">connector.checker</field>
+      <record id="view_connector_checkpoint_form" model="ir.ui.view">
+          <field name="name">connector.checkpoint.form</field>
+          <field name="model">connector.checkpoint</field>
           <field name="arch" type="xml">
-              <form string="Connector Checker" version="7.0">
+              <form string="Connector Checkpoint" version="7.0">
                   <field name="backend_id"/>
                   <field name="res_id"/>
                   <field name="state"/>
@@ -14,11 +14,11 @@
           </field>
       </record>
 
-      <record id="view_connector_checker_tree" model="ir.ui.view">
-          <field name="name">connector.checker.tree</field>
-          <field name="model">connector.checker</field>
+      <record id="view_connector_checkpoint_tree" model="ir.ui.view">
+          <field name="name">connector.checkpoint.tree</field>
+          <field name="model">connector.checkpoint</field>
           <field name="arch" type="xml">
-              <tree string="Connector Checker" version="7.0">
+              <tree string="Connector Checkpoint" version="7.0">
                   <field name="backend_id"/>
                   <field name="res_id"/>
                   <field name="state"/>

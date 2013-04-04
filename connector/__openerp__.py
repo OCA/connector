@@ -64,7 +64,7 @@ to customize their field mapping directly in OpenERP to accomodate the external 
           'security/ir.model.access.csv',
           'queue/model_view.xml',
           'queue/queue_data.xml',
-          'checker/checker_view.xml',
+          'checkpoint/checkpoint_view.xml',
           'connector_menu.xml',
           'setting_view.xml',
           'res_partner_view.xml',

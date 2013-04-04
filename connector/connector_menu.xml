@@ -21,5 +21,10 @@
             action="action_queue_job"
             parent="menu_queue"/>
 
+        <menuitem id="menu_checker"
+            parent="menu_connector"
+            name="Checker"
+            sequence="10"/>
+
     </data>
 </openerp>

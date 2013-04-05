@@ -52,6 +52,10 @@ class RetryableJobError(JobError):
     """ A job had an error but can be retried. """
 
 
+class NetworkRetryableError(RetryableJobError):
+    """ A network error caused the failure of the job, but it can be retried later. """
+
+
 class NothingToDoJob(JobError):
     """ The Job has nothing to do. """
 

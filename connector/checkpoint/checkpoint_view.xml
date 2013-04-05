@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data noupdate="0">
+
+        <record id="view_connector_checkpoint_form" model="ir.ui.view">
+            <field name="name">connector.checkpoint.form</field>
+            <field name="model">connector.checkpoint</field>
+            <field name="arch" type="xml">
+                <form string="Connector Checkpoint" create="false"
+                        delete="false" edit="false" version="7.0">
+                    <header>
+                        <button name="verified"
+                            type="object"
+                            class="oe_highlight"
+                            states="need_verification"
+                            string="Verified"/>
+                        <field name="state"
+                            widget="statusbar"
+                            statusbar_visible="need_verification,verified"
+                            statusbar_colors='{"verified":"grey"}'/>
+                    </header>
+                    <sheet>
+                        <h1>
+                            Click on the <field name="model_id" class="oe_inline" options='{"no_open": 1}'/>
+                            to verify it:
+                            <field name="record"/>
+                        </h1>
+                        <group>
+                            <field name="backend_id"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_connector_checkpoint_tree" model="ir.ui.view">
+            <field name="name">connector.checkpoint.tree</field>
+            <field name="model">connector.checkpoint</field>
+            <field name="arch" type="xml">
+                <tree string="Connector Checkpoint" create="false"
+                        delete="false" edit="false" version="7.0">
+                    <field name="model_id"/>
+                    <field name="record"/>
+                    <field name="backend_id"/>
+                    <field name="state"/>
+                    <button name="verified"
+                        type="object"
+                        class="oe_highlight"
+                        icon="kanban-apply"
+                        states="need_verification"
+                        string="Verified"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_connector_checkpoint_search" model="ir.ui.view">
+            <field name="name">connector.checkpoint.search</field>
+            <field name="model">connector.checkpoint</field>
+            <field name="arch" type="xml">
+                <search string="Connector Checkpoint">
+                    <field name="model_id"/>
+                    <filter name="need_verification" string="Need Verification"
+                        domain="[('state', '=', 'need_verification')]"/>
+                    <filter name="verified" string="Verified"
+                        domain="[('state', '=', 'verified')]"/>
+                   <group string="Group By...">
+                       <filter string="Model" context="{'group_by' : 'model_id'}" />
+                   </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_connector_checkpoint" model="ir.actions.act_window">
+            <field name="name">Connector Checkpoint</field>
+            <field name="res_model">connector.checkpoint</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_connector_checkpoint_tree"/>
+            <field name="help" type="html">
+                <p>No record to check.</p>
+                <p> When a connector imports new records which have
+                    configuration or verifications to do manually, they
+                    will appear in this list.  Once a record has been
+                    checked, click on the 'Verified' button.  </p>
+                <p>The connectors list the new records to verify
+                    based on their type.  Only some need a manual
+                    verification.</p>
+            </field>
+            <field name="context">{'search_default_need_verification': 1}</field>
+        </record>
+
+    </data>
+</openerp>

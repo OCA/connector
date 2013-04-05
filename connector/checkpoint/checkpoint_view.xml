@@ -6,11 +6,13 @@
             <field name="name">connector.checkpoint.form</field>
             <field name="model">connector.checkpoint</field>
             <field name="arch" type="xml">
-                <form string="Connector Checkpoint" version="7.0">
+                <form string="Connector Checkpoint" create="false"
+                        delete="false" edit="false" version="7.0">
                     <header>
                         <button name="verified"
                             type="object"
                             class="oe_highlight"
+                            states="pending"
                             string="Verified"/>
                         <field name="state"
                             widget="statusbar"
@@ -18,9 +20,11 @@
                             statusbar_colors='{"verified":"grey"}'/>
                     </header>
                     <sheet>
+                        <h1>
+                            <field name="record"/>
+                        </h1>
                         <group>
                             <field name="model_id" options='{"no_open": 1}'/>
-                            <field name="record"/>
                             <field name="backend_id"/>
                         </group>
                     </sheet>
@@ -32,11 +36,18 @@
             <field name="name">connector.checkpoint.tree</field>
             <field name="model">connector.checkpoint</field>
             <field name="arch" type="xml">
-                <tree string="Connector Checkpoint" version="7.0">
+                <tree string="Connector Checkpoint" create="false"
+                        delete="false" edit="false" version="7.0">
                     <field name="model_id"/>
                     <field name="record"/>
                     <field name="backend_id"/>
                     <field name="state"/>
+                    <button name="verified"
+                        type="object"
+                        class="oe_highlight"
+                        icon="kanban-apply"
+                        states="pending"
+                        string="Verified"/>
                 </tree>
             </field>
         </record>
@@ -68,8 +79,8 @@
                 <p>No record to check.</p>
                 <p>
                   When a connector imports new records which have configuration
-                  or verifications to do manually, they will appears in this list.
-                  Once a record has been verified, click on the Verified button.
+                  or verifications to do manually, they will appear in this list.
+                  Once a record has been checked, click on the 'Verified' button.
               </p>
             </field>
             <field name="context">{'search_default_pending': 1}</field>

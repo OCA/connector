@@ -94,8 +94,8 @@ class connector_checkpoint(orm.Model):
                           {'state': 'verified'},
                           context=context)
 
-    def add_checkpoint(self, cr, uid, model_name, record_id,
-                       backend_model_name, backend_id, context=None):
+    def create_from_name(self, cr, uid, model_name, record_id,
+                         backend_model_name, backend_id, context=None):
         model_obj = self.pool.get('ir.model')
         model_ids = model_obj.search(cr, uid,
                                      [('model', '=', model_name)],
@@ -107,3 +107,12 @@ class connector_checkpoint(orm.Model):
                             'record_id': record_id,
                             'backend_id': backend},
                            context=context)
+
+
+def add_checkpoint(session, model_name, record_id,
+                   backend_model_name, backend_id):
+    cr, uid, context = session.cr, session.uid, session.context
+    checkpoint_obj = session.pool['connector.checkpoint']
+    return checkpoint_obj.create_from_name(cr, uid, model_name, record_id,
+                                           backend_model_name, backend_id,
+                                           context=context)

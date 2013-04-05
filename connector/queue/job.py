@@ -527,6 +527,7 @@ class Job(object):
         self.date_enqueued = None
         self.date_started = None
         self.worker_uuid = None
+        self.retry = 0
         if result is not None:
             self.result = result
 

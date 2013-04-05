@@ -78,7 +78,7 @@ class connector_checkpoint(orm.Model):
             help="The record has been imported from this backend",
             select=1),
         'state': fields.selection(
-            [('pending', 'Pending'),
+            [('need_verification', 'Need Verification'),
              ('verified', 'Verified')],
             'Status',
             required=True,
@@ -86,7 +86,7 @@ class connector_checkpoint(orm.Model):
     }
 
     _defaults = {
-        'state': 'pending',
+        'state': 'need_verification',
     }
 
     def verified(self, cr, uid, ids, context=None):

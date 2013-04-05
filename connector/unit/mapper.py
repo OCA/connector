@@ -25,9 +25,11 @@
 # the name of the external / openerp model and the values are the
 # records. And the same for the output records.
 import logging
+from collections import namedtuple
 
 from ..connector import ConnectorUnit, MetaConnectorUnit, Environment
 from ..exception import MappingError
+
 
 _logger = logging.getLogger(__name__)
 def mapping(func):
@@ -55,8 +57,33 @@ def changed_by(*args):
     return register_mapping
 
 
+def on_create(func):
+    """ A mapping decorated with ``on_create`` will be applied only if
+    the mapping is called for the creation of the record. """
+    func.on_create = True
+    return func
+
+
+def on_update(func):
+    """ A mapping decorated with ``on_update`` will be applied only if
+    the mapping is called for the update of the record. """
+    func.on_update = True
+    return func
+
+
+MappingDefinition = namedtuple('MappingDefinition',
+                               ['changed_by',
+                                'on_create',
+                                'on_update'])
+
+
 class MetaMapper(MetaConnectorUnit):
-    """ Metaclass for Mapper """
+    """ Metaclass for Mapper
+
+    Build a ``_map_methods`` dict of mappings methods.
+    The keys of the dict are the method names.
+    The values of the dict are a namedtuple containing:
+    """
 
     def __new__(meta, name, bases, attrs):
         if attrs.get('_map_methods') is None:
@@ -65,14 +92,32 @@ class MetaMapper(MetaConnectorUnit):
         cls = super(MetaMapper, meta).__new__(meta, name, bases, attrs)
 
         for base in bases:
-            for attr_name, changed_by in getattr(base, '_map_methods', {}).iteritems():
-                cls._map_methods.setdefault(attr_name, set()).update(changed_by)
+            base_map_methods = getattr(base, '_map_methods', {})
+            for attr_name, definition in base_map_methods.iteritems():
+                if cls._map_methods.get(attr_name) is None:
+                    cls._map_methods[attr_name] = definition
+                else:
+                    cls._map_methods[attr_name].changed_by.update(definition.changed_by)
 
         for attr_name, attr in attrs.iteritems():
             mapping = getattr(attr, 'is_mapping', None)
             if mapping:
-                changed_by = getattr(attr, 'changed_by', set())
-                cls._map_methods.setdefault(attr_name, set()).update(changed_by)
+                on_create = getattr(attr, 'on_create', False)
+                on_update = getattr(attr, 'on_update', False)
+                # when nothing is defined, the mapping always applies
+                if not (on_create or on_update):
+                    on_create = on_update = True
+
+                changed_by = set(getattr(attr, 'changed_by', ()))
+                if cls._map_methods.get(attr_name) is not None:
+                    definition = cls._map_methods[attr_name]
+                    changed_by.update(definition.changed_by)
+
+                # keep the last choice for on_create and on_update
+                definition = MappingDefinition(changed_by,
+                                               on_create,
+                                               on_update)
+                cls._map_methods[attr_name] = definition
         return cls
 
 
@@ -100,16 +145,23 @@ class Mapper(ConnectorUnit):
 
     @property
     def map_methods(self):
-        for meth, changed_by in self._map_methods.iteritems():
-            yield getattr(self, meth), changed_by
+        for meth, definition in self._map_methods.iteritems():
+            yield getattr(self, meth), definition
 
-    def convert(self, record, fields=None, parent_values=None):
+    def convert(self, record, mode, fields=None, parent_values=None):
         """ Transform an external record to an OpenERP record or the opposite
+
+        Sometimes we want to map values only when we create or update
+        the records. The mapping methods have to be decorated with ``on_create``
+        or ``on_update`` to filter them by the mode.
 
         :param record: record to transform
         :param parent_values: openerp record of the containing object
             (e.g. sale_order for a sale_order_line)
+        :param mode: 'create' or 'update'
         """
+        assert mode in ('create', 'update'), ("mode must be 'create' or "
+                                              'update, received: %s' % mode)
         if fields is None:
             fields = {}
 
@@ -125,8 +177,12 @@ class Mapper(ConnectorUnit):
                                          to_attr)
                 result[to_attr] = value
 
-        for meth, changed_by in self.map_methods:
-
+        for meth, definition in self.map_methods:
+            changed_by = definition.changed_by
+            if mode == 'create' and not definition.on_create:
+                continue
+            if mode == 'update' and not definition.on_update:
+                continue
             if (not fields or not changed_by or
                     changed_by.intersection(fields)):
                 values = meth(record)

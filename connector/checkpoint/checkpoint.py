@@ -70,7 +70,7 @@ class connector_checkpoint(orm.Model):
                                     required=True,
                                     readonly=True),
         'backend_id': fields.reference(
-            'Backend',
+            'Imported from',
             selection=_get_models,
             size=128,
             readonly=True,

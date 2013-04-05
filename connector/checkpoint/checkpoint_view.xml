@@ -21,10 +21,11 @@
                     </header>
                     <sheet>
                         <h1>
+                            Click on the <field name="model_id" class="oe_inline" options='{"no_open": 1}'/>
+                            to verify it:
                             <field name="record"/>
                         </h1>
                         <group>
-                            <field name="model_id" options='{"no_open": 1}'/>
                             <field name="backend_id"/>
                         </group>
                     </sheet>
@@ -77,11 +78,13 @@
             <field name="view_id" ref="view_connector_checkpoint_tree"/>
             <field name="help" type="html">
                 <p>No record to check.</p>
-                <p>
-                  When a connector imports new records which have configuration
-                  or verifications to do manually, they will appear in this list.
-                  Once a record has been checked, click on the 'Verified' button.
-              </p>
+                <p> When a connector imports new records which have
+                    configuration or verifications to do manually, they
+                    will appear in this list.  Once a record has been
+                    checked, click on the 'Verified' button.  </p>
+                <p>The connectors list the new records to verify
+                    based on their type.  Only some need a manual
+                    verification.</p>
             </field>
             <field name="context">{'search_default_pending': 1}</field>
         </record>

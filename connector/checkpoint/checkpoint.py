@@ -93,3 +93,17 @@ class connector_checkpoint(orm.Model):
         return self.write(cr, uid, ids,
                           {'state': 'verified'},
                           context=context)
+
+    def add_checkpoint(self, cr, uid, model_name, record_id,
+                       backend_model_name, backend_id, context=None):
+        model_obj = self.pool.get('ir.model')
+        model_ids = model_obj.search(cr, uid,
+                                     [('model', '=', model_name)],
+                                     context=context)
+        assert model_ids, "The model %s does not exist" % model_name
+        backend = backend_model_name + ',' + str(backend_id)
+        return self.create(cr, uid,
+                           {'model_id': model_ids[0],
+                            'record_id': record_id,
+                            'backend_id': backend},
+                           context=context)

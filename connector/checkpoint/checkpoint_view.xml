@@ -12,11 +12,11 @@
                         <button name="verified"
                             type="object"
                             class="oe_highlight"
-                            states="pending"
+                            states="need_verification"
                             string="Verified"/>
                         <field name="state"
                             widget="statusbar"
-                            statusbar_visible="pending,verified"
+                            statusbar_visible="need_verification,verified"
                             statusbar_colors='{"verified":"grey"}'/>
                     </header>
                     <sheet>
@@ -47,7 +47,7 @@
                         type="object"
                         class="oe_highlight"
                         icon="kanban-apply"
-                        states="pending"
+                        states="need_verification"
                         string="Verified"/>
                 </tree>
             </field>
@@ -59,8 +59,8 @@
             <field name="arch" type="xml">
                 <search string="Connector Checkpoint">
                     <field name="model_id"/>
-                    <filter name="pending" string="Pending"
-                        domain="[('state', '=', 'pending')]"/>
+                    <filter name="need_verification" string="Need Verification"
+                        domain="[('state', '=', 'need_verification')]"/>
                     <filter name="verified" string="Verified"
                         domain="[('state', '=', 'verified')]"/>
                    <group string="Group By...">
@@ -86,7 +86,7 @@
                     based on their type.  Only some need a manual
                     verification.</p>
             </field>
-            <field name="context">{'search_default_pending': 1}</field>
+            <field name="context">{'search_default_need_verification': 1}</field>
         </record>
 
     </data>

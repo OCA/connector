@@ -30,8 +30,9 @@ from collections import namedtuple
 from ..connector import ConnectorUnit, MetaConnectorUnit, Environment
 from ..exception import MappingError
 
-
 _logger = logging.getLogger(__name__)
+
+
 def mapping(func):
     """ Decorator declarating a mapping for a field """
     func.is_mapping = True
@@ -89,7 +90,8 @@ class MetaMapper(MetaConnectorUnit):
                 if cls._map_methods.get(attr_name) is None:
                     cls._map_methods[attr_name] = definition
                 else:
-                    cls._map_methods[attr_name].changed_by.update(definition.changed_by)
+                    changed_by = cls._map_methods[attr_name].changed_by
+                    changed_by.update(definition.changed_by)
 
         for attr_name, attr in attrs.iteritems():
             mapping = getattr(attr, 'is_mapping', None)
@@ -121,6 +123,16 @@ class Mapper(ConnectorUnit):
 
     _map_methods = None
 
+    def __init__(self, environment):
+        """
+
+        :param environment: current environment (backend, session, ...)
+        :type environment: :py:class:`connector.connector.Environment`
+        """
+        super(Mapper, self).__init__(environment)
+        self._data = None
+        self._data_for_create = None
+
     def _after_mapping(self, result):
         return result
 
@@ -135,24 +147,23 @@ class Mapper(ConnectorUnit):
         for meth, definition in self._map_methods.iteritems():
             yield getattr(self, meth), definition
 
-    def convert(self, record, mode, fields=None, parent_values=None):
+    def convert(self, record, fields=None, parent_values=None):
         """ Transform an external record to an OpenERP record or the opposite
 
-        Sometimes we want to map values only when we create or update
-        the records. The mapping methods have to be decorated with ``only_create``
-        to filter them by the mode.
+        Sometimes we want to map values only when we create the records.
+        The mapping methods have to be decorated with ``only_create`` to
+        map values only for creation of records.
 
         :param record: record to transform
         :param parent_values: openerp record of the containing object
             (e.g. sale_order for a sale_order_line)
-        :param mode: 'create' or 'update'
         """
-        assert mode in ('create', 'update'), ("mode must be 'create' or "
-                                              'update, received: %s' % mode)
         if fields is None:
             fields = {}
 
-        result = {}
+        self._data = {}
+        self._data_for_create = {}
+
         _logger.debug('converting record %s to model %s', record, self._model_name)
         for from_attr, to_attr in self.direct:
             if (not fields or from_attr in fields):
@@ -162,31 +173,45 @@ class Mapper(ConnectorUnit):
                 value = self._map_direct(record,
                                          from_attr,
                                          to_attr)
-                result[to_attr] = value
+                self._data[to_attr] = value
 
         for meth, definition in self.map_methods:
             changed_by = definition.changed_by
-            if mode != 'create' and definition.only_create:
-                continue
             if (not fields or not changed_by or
                     changed_by.intersection(fields)):
                 values = meth(record)
                 if not values:
                     continue
-                if isinstance(values, dict):
-                    result.update(values)
-                else:
+                if not isinstance(values, dict):
                     raise ValueError('%s: invalid return value for the '
                                      'mapping method %s' % (values, meth))
+                if definition.only_create:
+                    self._data_for_create.update(values)
+                else:
+                    self._data.update(values)
 
         for from_attr, to_attr, model in self.children:
             if (not fields or from_attr in fields):
                 values = self._map_children(record, from_attr, model)
-                result[to_attr] = values
+                self._data[to_attr] = values
 
-        result = self._after_mapping(result)
+    def data(self):
+        """ Returns a dict for a record processed by
+        :py:meth:`~convert` """
+        if self._data is None:
+            raise ValueError('Mapper.convert should be called before '
+                             'accessing the data')
+        return self._after_mapping(self._data)
 
-        return result
+    def data_for_create(self):
+        """ Returns a dict for a record processed by
+        :py:meth:`~convert` to use only for creation of the record. """
+        if self._data is None:
+            raise ValueError('Mapper.convert should be called before '
+                             'accessing the data')
+        result = self._data.copy()
+        result.update(self._data_for_create)
+        return self._after_mapping(result)
 
     def _sub_convert(self, records, processor, parent_values=None):
         """ return values of a one2many to put in the main record
@@ -220,8 +245,7 @@ class ImportMapper(Mapper):
                           self.session,
                           model_name)
         mapper = env.get_connector_unit(ImportMapper)
-        child_records = record[attr]  # XXX not compatible with
-                                     # all record types
+        child_records = record[attr]
         return self._sub_convert(child_records, mapper,
                                  parent_values=record)
 
@@ -262,8 +286,7 @@ class ExportMapper(Mapper):
                           self.session,
                           model_name)
         mapper = env.get_connector_unit(ExportMapper)
-        child_records = record[attr]  # XXX not compatible with
-                                      # all record types
+        child_records = record[attr]
         return self._sub_convert(child_records, mapper,
                                  parent_values=record)
 

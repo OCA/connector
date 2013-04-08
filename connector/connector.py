@@ -167,33 +167,31 @@ class Binder(ConnectorUnit):
 
         :param external_id: external ID for which we want
                                    the OpenERP ID
-        :param unwrap: if True, returns the openerp_id of the magento_xxxx record,
-                       else return the id of that record
+        :param unwrap: if True, returns the openerp_id of the
+                       magento_xxxx record, else return the id (binding id)
+                       of that record
         :return: a record ID, depending on the value of unwrap,
                  or None if the external_id is not mapped
         :rtype: int
         """
         raise NotImplementedError
 
-    def to_backend(self, openerp_id):
-        """ Give the external ID for an OpenERP ID
+    def to_backend(self, binding_id):
+        """ Give the external ID for an OpenERP ID (binding id, from a
+        magento.* model)
 
-        :param openerp_id: OpenERP ID for which we want the backend id
+        :param binding_id: OpenERP ID for which we want the backend id
         :return: external ID of the record
         """
         raise NotImplementedError
 
-    def bind(self, external_id, openerp_id, metadata=None):
+    def bind(self, external_id, binding_id, metadata=None):
         """ Create the link between an external ID and an OpenERP ID
 
         :param external_id: external id to bind
-        :param openerp_id: OpenERP ID to bind
-        :type openerp_id: int
+        :param binding_id: OpenERP ID to bind
+        :type binding_id: int
         :param metadata: optional values to store on the relation model
         :type metadata: dict
         """
-        raise NotImplementedError
-
-    def read_metadata(self, openerp_id, external_id):
-        """ Read the metadata for a relation OpenERP - Backend """
         raise NotImplementedError

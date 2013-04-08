@@ -193,7 +193,12 @@ class test_mapper(unittest2.TestCase):
 
             @mapping
             def price(self, record):
-                return {'price': price * 2}
+                return {'price': record['price'] * 2}
+
+            @only_create
+            @mapping
+            def discount(self, record):
+                return {'discount': .5}
 
         class SaleMapper(ImportMapper):
 
@@ -201,8 +206,10 @@ class test_mapper(unittest2.TestCase):
 
             children = [('lines', 'line_ids', 'sale.order.line')]
 
+            def _init_child_mapper(self, model_name):
+                return LineMapper(self.environment)
+
         env = mock.MagicMock()
-        env.get_connector_unit.return_value(LineMapper(env))
 
         record = {'name': 'SO1',
                   'lines': [{'name': 'Mango',
@@ -218,4 +225,12 @@ class test_mapper(unittest2.TestCase):
                                          'price': 40})]
                     }
         self.assertEqual(mapper.data, expected)
+        expected = {'name': 'SO1',
+                    'line_ids': [(0, 0, {'name': 'Mango',
+                                         'price': 20,
+                                         'discount': .5}),
+                                 (0, 0, {'name': 'Pumpkin',
+                                         'price': 40,
+                                         'discount': .5})]
+                    }
         self.assertEqual(mapper.data_for_create, expected)

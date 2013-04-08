@@ -132,6 +132,10 @@ class Mapper(ConnectorUnit):
         super(Mapper, self).__init__(environment)
         self._data = None
         self._data_for_create = None
+        self._data_children = None
+
+    def _init_child_mapper(self, model_name):
+        raise NotImplementedError
 
     def _after_mapping(self, result):
         return result
@@ -147,22 +151,13 @@ class Mapper(ConnectorUnit):
         for meth, definition in self._map_methods.iteritems():
             yield getattr(self, meth), definition
 
-    def convert(self, record, fields=None, parent_values=None):
-        """ Transform an external record to an OpenERP record or the opposite
-
-        Sometimes we want to map values only when we create the records.
-        The mapping methods have to be decorated with ``only_create`` to
-        map values only for creation of records.
-
-        :param record: record to transform
-        :param parent_values: openerp record of the containing object
-            (e.g. sale_order for a sale_order_line)
-        """
+    def _convert(self, record, fields=None, parent_values=None):
         if fields is None:
             fields = {}
 
         self._data = {}
         self._data_for_create = {}
+        self._data_children = {}
 
         _logger.debug('converting record %s to model %s', record, self._model_name)
         for from_attr, to_attr in self.direct:
@@ -190,36 +185,69 @@ class Mapper(ConnectorUnit):
                 else:
                     self._data.update(values)
 
-        for from_attr, to_attr, model in self.children:
+        for from_attr, to_attr, model_name in self.children:
             if (not fields or from_attr in fields):
-                values = self._map_children(record, from_attr, model)
-                self._data[to_attr] = values
+                self._map_child(record, from_attr, to_attr, model_name)
+
+    def convert_child(self, record, parent_values=None):
+        """ Transform child row contained in a main record, only
+        called from another Mapper.
+
+        :param parent_values: openerp record of the containing object
+            (e.g. sale_order for a sale_order_line)
+        """
+        self._convert(record, parent_values=parent_values)
+
+    def convert(self, record, fields=None):
+        """ Transform an external record to an OpenERP record or the opposite
+
+        Sometimes we want to map values only when we create the records.
+        The mapping methods have to be decorated with ``only_create`` to
+        map values only for creation of records.
+
+        :param record: record to transform
+        :param fields: list of fields to convert, if empty, all fields
+                       are converted
+        """
+        self._convert(record, fields=fields)
 
     @property
     def data(self):
         """ Returns a dict for a record processed by
-        :py:meth:`~convert` """
+        :py:meth:`~_convert` """
         if self._data is None:
             raise ValueError('Mapper.convert should be called before '
                              'accessing the data')
-        return self._after_mapping(self._data)
+        result = self._data.copy()
+        for attr, mappers in self._data_children.iteritems():
+            child_data = [mapper.data for mapper in mappers]
+            result[attr] = self._format_child_rows(child_data)
+        return self._after_mapping(result)
 
     @property
     def data_for_create(self):
         """ Returns a dict for a record processed by
-        :py:meth:`~convert` to use only for creation of the record. """
+        :py:meth:`~_convert` to use only for creation of the record. """
         if self._data is None:
             raise ValueError('Mapper.convert should be called before '
                              'accessing the data')
         result = self._data.copy()
         result.update(self._data_for_create)
+        for attr, mappers in self._data_children.iteritems():
+            child_data = [mapper.data_for_create for mapper in mappers]
+            result[attr] = self._format_child_rows(child_data)
         return self._after_mapping(result)
 
-    def _sub_convert(self, records, processor, parent_values=None):
-        """ return values of a one2many to put in the main record
-        do not create the records!
-        """
-        raise NotImplementedError
+    def _format_child_rows(self, child_records):
+        return child_records
+
+    def _map_child(self, record, from_attr, to_attr, model_name):
+        child_records = record[from_attr]
+        self._data_children[to_attr] = []
+        for child_record in child_records:
+            mapper = self._init_child_mapper(model_name)
+            mapper.convert_child(child_record, parent_values=record)
+            self._data_children[to_attr].append(mapper)
 
 
 class ImportMapper(Mapper):
@@ -242,25 +270,14 @@ class ImportMapper(Mapper):
                                    "record %s" % (model_name, rel_id))
         return value
 
-    def _map_children(self, record, attr, model_name):
+    def _init_child_mappers(self, model_name):
         env = Environment(self.backend_record,
                           self.session,
                           model_name)
-        mapper = env.get_connector_unit(ImportMapper)
-        child_records = record[attr]
-        return self._sub_convert(child_records, mapper,
-                                 parent_values=record)
+        return env.get_connector_unit(ImportMapper)
 
-    def _sub_convert(self, records, mapper, parent_values=None):
-        """ return values of a one2many to put in the main record
-        do not create the records!
-        """
-        result = []
-        for record in records:
-            vals = mapper.convert(record,
-                                  parent_values=parent_values)
-            result.append((0, 0, vals))
-        return result
+    def _format_child_rows(self, child_records):
+        return [(0, 0, data) for data in child_records]
 
 
 class ExportMapper(Mapper):
@@ -283,22 +300,8 @@ class ExportMapper(Mapper):
                                    "%s in model %s" % (rel_id, model_name))
         return value
 
-    def _map_children(self, record, attr, model_name):
+    def _init_child_mappers(self, model_name):
         env = Environment(self.backend_record,
                           self.session,
                           model_name)
-        mapper = env.get_connector_unit(ExportMapper)
-        child_records = record[attr]
-        return self._sub_convert(child_records, mapper,
-                                 parent_values=record)
-
-    def _sub_convert(self, records, mapper, parent_values=None):
-        """ return values of a one2many to put in the main record
-        do not create the records!
-        """
-        result = []
-        for record in records:
-            vals = mapper.convert(record,
-                                  parent_values=parent_values)
-            result.append(vals)
-        return result
+        return env.get_connector_unit(ExportMapper)

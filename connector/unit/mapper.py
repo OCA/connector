@@ -57,24 +57,16 @@ def changed_by(*args):
     return register_mapping
 
 
-def on_create(func):
-    """ A mapping decorated with ``on_create`` will be applied only if
-    the mapping is called for the creation of the record. """
-    func.on_create = True
-    return func
-
-
-def on_update(func):
-    """ A mapping decorated with ``on_update`` will be applied only if
-    the mapping is called for the update of the record. """
-    func.on_update = True
+def only_create(func):
+    """ A mapping decorated with ``only_create`` means that it has to be
+    used only for the creation of the records. """
+    func.only_create = True
     return func
 
 
 MappingDefinition = namedtuple('MappingDefinition',
                                ['changed_by',
-                                'on_create',
-                                'on_update'])
+                                'only_create'])
 
 
 class MetaMapper(MetaConnectorUnit):
@@ -102,21 +94,16 @@ class MetaMapper(MetaConnectorUnit):
         for attr_name, attr in attrs.iteritems():
             mapping = getattr(attr, 'is_mapping', None)
             if mapping:
-                on_create = getattr(attr, 'on_create', False)
-                on_update = getattr(attr, 'on_update', False)
-                # when nothing is defined, the mapping always applies
-                if not (on_create or on_update):
-                    on_create = on_update = True
+                only_create = getattr(attr, 'only_create', False)
 
                 changed_by = set(getattr(attr, 'changed_by', ()))
                 if cls._map_methods.get(attr_name) is not None:
                     definition = cls._map_methods[attr_name]
                     changed_by.update(definition.changed_by)
 
-                # keep the last choice for on_create and on_update
+                # keep the last choice for only_create
                 definition = MappingDefinition(changed_by,
-                                               on_create,
-                                               on_update)
+                                               only_create)
                 cls._map_methods[attr_name] = definition
         return cls
 
@@ -152,8 +139,8 @@ class Mapper(ConnectorUnit):
         """ Transform an external record to an OpenERP record or the opposite
 
         Sometimes we want to map values only when we create or update
-        the records. The mapping methods have to be decorated with ``on_create``
-        or ``on_update`` to filter them by the mode.
+        the records. The mapping methods have to be decorated with ``only_create``
+        to filter them by the mode.
 
         :param record: record to transform
         :param parent_values: openerp record of the containing object
@@ -179,9 +166,7 @@ class Mapper(ConnectorUnit):
 
         for meth, definition in self.map_methods:
             changed_by = definition.changed_by
-            if mode == 'create' and not definition.on_create:
-                continue
-            if mode == 'update' and not definition.on_update:
+            if mode != 'create' and definition.only_create:
                 continue
             if (not fields or not changed_by or
                     changed_by.intersection(fields)):

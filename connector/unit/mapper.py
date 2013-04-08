@@ -195,6 +195,7 @@ class Mapper(ConnectorUnit):
                 values = self._map_children(record, from_attr, model)
                 self._data[to_attr] = values
 
+    @property
     def data(self):
         """ Returns a dict for a record processed by
         :py:meth:`~convert` """
@@ -203,6 +204,7 @@ class Mapper(ConnectorUnit):
                              'accessing the data')
         return self._after_mapping(self._data)
 
+    @property
     def data_for_create(self):
         """ Returns a dict for a record processed by
         :py:meth:`~convert` to use only for creation of the record. """

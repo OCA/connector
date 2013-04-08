@@ -5,6 +5,7 @@ import mock
 
 from openerp.addons.connector.unit.mapper import (
     Mapper,
+    ImportMapper,
     MappingDefinition,
     changed_by,
     only_create,
@@ -136,50 +137,85 @@ class test_mapper(unittest2.TestCase):
         self.assertEqual(FarnsworthMapper._map_methods,
                          {'name': name_def})
 
-        def test_mapping_record(self):
-            """ Map a record and check the result """
-            class MyMapper(Mapper):
+    def test_mapping_record(self):
+        """ Map a record and check the result """
+        class MyMapper(ImportMapper):
 
-                direct = [('name', 'out_name')]
+            direct = [('name', 'out_name')]
 
-                @mapping
-                def street(self, record):
-                    return {'out_street': record['street'].upper()}
+            @mapping
+            def street(self, record):
+                return {'out_street': record['street'].upper()}
 
-            env = mock.Mock()
-            record = {'name': 'Guewen',
-                      'street': 'street'}
-            mapper = MyMapper(env)
-            mapper.convert(record)
-            expected = {'out_name': 'Guewen',
-                        'out_street': 'STREET'}
-            self.assertEqual(mapper.data, expected)
-            self.assertEqual(mapper.data_for_create, expected)
+        env = mock.MagicMock()
+        record = {'name': 'Guewen',
+                    'street': 'street'}
+        mapper = MyMapper(env)
+        mapper.convert(record)
+        expected = {'out_name': 'Guewen',
+                    'out_street': 'STREET'}
+        self.assertEqual(mapper.data, expected)
+        self.assertEqual(mapper.data_for_create, expected)
 
-        def test_mapping_record_on_create(self):
-            """ Map a record and check the result """
-            class MyMapper(Mapper):
+    def test_mapping_record_on_create(self):
+        """ Map a record and check the result for creation of record """
+        class MyMapper(ImportMapper):
 
-                direct = [('name', 'out_name')]
+            direct = [('name', 'out_name')]
 
-                @mapping
-                def street(self, record):
-                    return {'out_street': record['street'].upper()}
+            @mapping
+            def street(self, record):
+                return {'out_street': record['street'].upper()}
 
-                @on_create
-                @mapping
-                def city(self, record):
-                    return {'out_city': 'city'}
+            @only_create
+            @mapping
+            def city(self, record):
+                return {'out_city': 'city'}
 
-            env = mock.Mock()
-            record = {'name': 'Guewen',
-                      'street': 'street'}
-            mapper = MyMapper(env)
-            mapper.convert(record)
-            expected = {'out_name': 'Guewen',
-                        'out_street': 'STREET'}
-            self.assertEqual(mapper.data, expected)
-            expected = {'out_name': 'Guewen',
-                        'out_street': 'STREET',
-                        'out_city': 'city'}
-            self.assertEqual(mapper.data_for_create, expected)
+        env = mock.MagicMock()
+        record = {'name': 'Guewen',
+                  'street': 'street'}
+        mapper = MyMapper(env)
+        mapper.convert(record)
+        expected = {'out_name': 'Guewen',
+                    'out_street': 'STREET'}
+        self.assertEqual(mapper.data, expected)
+        expected = {'out_name': 'Guewen',
+                    'out_street': 'STREET',
+                    'out_city': 'city'}
+        self.assertEqual(mapper.data_for_create, expected)
+
+    def test_mapping_record_children(self):
+        """ Map a record with children and check the result """
+
+        class LineMapper(ImportMapper):
+            direct = [('name', 'name')]
+
+            @mapping
+            def price(self, record):
+                return {'price': price * 2}
+
+        class SaleMapper(ImportMapper):
+
+            direct = [('name', 'name')]
+
+            children = [('lines', 'line_ids', 'sale.order.line')]
+
+        env = mock.MagicMock()
+        env.get_connector_unit.return_value(LineMapper(env))
+
+        record = {'name': 'SO1',
+                  'lines': [{'name': 'Mango',
+                             'price': 10},
+                            {'name': 'Pumpkin',
+                             'price': 20}]}
+        mapper = SaleMapper(env)
+        mapper.convert(record)
+        expected = {'name': 'SO1',
+                    'line_ids': [(0, 0, {'name': 'Mango',
+                                         'price': 20}),
+                                 (0, 0, {'name': 'Pumpkin',
+                                         'price': 40})]
+                    }
+        self.assertEqual(mapper.data, expected)
+        self.assertEqual(mapper.data_for_create, expected)

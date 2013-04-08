@@ -135,3 +135,51 @@ class test_mapper(unittest2.TestCase):
 
         self.assertEqual(FarnsworthMapper._map_methods,
                          {'name': name_def})
+
+        def test_mapping_record(self):
+            """ Map a record and check the result """
+            class MyMapper(Mapper):
+
+                direct = [('name', 'out_name')]
+
+                @mapping
+                def street(self, record):
+                    return {'out_street': record['street'].upper()}
+
+            env = mock.Mock()
+            record = {'name': 'Guewen',
+                      'street': 'street'}
+            mapper = MyMapper(env)
+            mapper.convert(record)
+            expected = {'out_name': 'Guewen',
+                        'out_street': 'STREET'}
+            self.assertEqual(mapper.data, expected)
+            self.assertEqual(mapper.data_for_create, expected)
+
+        def test_mapping_record_on_create(self):
+            """ Map a record and check the result """
+            class MyMapper(Mapper):
+
+                direct = [('name', 'out_name')]
+
+                @mapping
+                def street(self, record):
+                    return {'out_street': record['street'].upper()}
+
+                @on_create
+                @mapping
+                def city(self, record):
+                    return {'out_city': 'city'}
+
+            env = mock.Mock()
+            record = {'name': 'Guewen',
+                      'street': 'street'}
+            mapper = MyMapper(env)
+            mapper.convert(record)
+            expected = {'out_name': 'Guewen',
+                        'out_street': 'STREET'}
+            self.assertEqual(mapper.data, expected)
+            expected = {'out_name': 'Guewen',
+                        'out_street': 'STREET',
+                        'out_city': 'city'}
+            self.assertEqual(mapper.data_for_create, expected)

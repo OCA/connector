@@ -270,7 +270,7 @@ class ImportMapper(Mapper):
                                    "record %s" % (model_name, rel_id))
         return value
 
-    def _init_child_mappers(self, model_name):
+    def _init_child_mapper(self, model_name):
         env = Environment(self.backend_record,
                           self.session,
                           model_name)
@@ -300,7 +300,7 @@ class ExportMapper(Mapper):
                                    "%s in model %s" % (rel_id, model_name))
         return value
 
-    def _init_child_mappers(self, model_name):
+    def _init_child_mapper(self, model_name):
         env = Environment(self.backend_record,
                           self.session,
                           model_name)

@@ -7,8 +7,7 @@ from openerp.addons.connector.unit.mapper import (
     Mapper,
     MappingDefinition,
     changed_by,
-    on_create,
-    on_update,
+    only_create,
     mapping)
 
 
@@ -22,13 +21,12 @@ class test_mapper(unittest2.TestCase):
 
             @changed_by('name', 'city')
             @mapping
-            @on_create
+            @only_create
             def name(self):
                 pass
 
             @changed_by('email')
             @mapping
-            @on_update
             def email(self):
                 pass
 
@@ -39,14 +37,11 @@ class test_mapper(unittest2.TestCase):
 
         self.maxDiff = None
         name_def = MappingDefinition(changed_by=set(('name', 'city')),
-                                     on_create=True,
-                                     on_update=False)
+                                     only_create=True)
         email_def = MappingDefinition(changed_by=set(('email',)),
-                                      on_create=False,
-                                      on_update=True)
+                                      only_create=False)
         street_def = MappingDefinition(changed_by=set(('street',)),
-                                       on_create=True,
-                                       on_update=True)
+                                       only_create=False)
 
         self.assertEqual(KifKrokerMapper._map_methods,
                          {'name': name_def,
@@ -61,7 +56,6 @@ class test_mapper(unittest2.TestCase):
             _model_name = 'res.users'
 
             @changed_by('name', 'city')
-            @on_update
             @mapping
             def name(self):
                 pass
@@ -71,16 +65,15 @@ class test_mapper(unittest2.TestCase):
             _model_name = 'res.users'
 
             @changed_by('email')
+            @only_create
             @mapping
             def email(self):
                 pass
 
         mom_def = MappingDefinition(changed_by=set(('name', 'city')),
-                                    on_create=False,
-                                    on_update=True)
+                                    only_create=False)
         zapp_def = MappingDefinition(changed_by=set(('email',)),
-                                     on_create=True,
-                                     on_update=True)
+                                     only_create=True)
 
         self.assertEqual(MomMapper._map_methods,
                          {'name': mom_def})
@@ -109,11 +102,9 @@ class test_mapper(unittest2.TestCase):
                 pass
 
         name_def = MappingDefinition(changed_by=set(('name', 'city')),
-                                     on_create=True,
-                                     on_update=True)
+                                     only_create=False)
         email_def = MappingDefinition(changed_by=set(('email',)),
-                                      on_create=True,
-                                      on_update=True)
+                                      only_create=False)
         self.assertEqual(FarnsworthMapper._map_methods,
                          {'name': name_def,
                           'email': email_def})
@@ -140,8 +131,7 @@ class test_mapper(unittest2.TestCase):
                 pass
 
         name_def = MappingDefinition(changed_by=set(('name', 'city', 'email')),
-                                     on_create=True,
-                                     on_update=True)
+                                     only_create=False)
 
         self.assertEqual(FarnsworthMapper._map_methods,
                          {'name': name_def})

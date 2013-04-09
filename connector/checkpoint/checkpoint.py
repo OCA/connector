@@ -20,9 +20,9 @@
 ##############################################################################
 
 """
-The checkpoint is a model containing records to be verified by the end
+The checkpoint is a model containing records to be reviewed by the end
 users.  The connectors register records to verify so the user can check
-them and flag them as verified.
+them and flag them as reviewed.
 
 A concrete use case is the import of new products from Magento. Once
 they are imported, the user have to configure things like the supplier,
@@ -78,20 +78,20 @@ class connector_checkpoint(orm.Model):
             help="The record has been imported from this backend",
             select=1),
         'state': fields.selection(
-            [('need_verification', 'Need Verification'),
-             ('verified', 'Verified')],
+            [('need_review', 'Need Review'),
+             ('reviewed', 'Reviewed')],
             'Status',
             required=True,
             readonly=True),
     }
 
     _defaults = {
-        'state': 'need_verification',
+        'state': 'need_review',
     }
 
-    def verified(self, cr, uid, ids, context=None):
+    def reviewed(self, cr, uid, ids, context=None):
         return self.write(cr, uid, ids,
-                          {'state': 'verified'},
+                          {'state': 'reviewed'},
                           context=context)
 
     def create_from_name(self, cr, uid, model_name, record_id,

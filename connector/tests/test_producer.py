@@ -22,8 +22,9 @@ class test_connector_session(common.TransactionCase):
         self.recipient = Recipient()
         self.model = self.registry('res.partner')
         data_obj = self.registry('ir.model.data')
-        self.partner_id = data_obj.get_object_reference(
-                self.cr, self.uid, 'base', 'res_partner_23')[1]
+        self.partner_id = self.model.create(self.cr,
+                                            self.uid,
+                                            {'name': 'new'})
 
     def test_on_record_create(self):
         """

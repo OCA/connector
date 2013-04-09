@@ -133,10 +133,9 @@ class QueueJob(orm.Model):
         group_id = group_ref[1]
         user_ids = self.pool.get('res.users').search(
                 cr, uid, [('groups_id', '=', group_id)], context=context)
-        if user_ids:
-            self.message_subscribe_users(cr, uid, ids,
-                                         user_ids=user_ids,
-                                         context=context)
+        self.message_subscribe_users(cr, uid, ids,
+                                     user_ids=user_ids,
+                                     context=context)
 
     def _message_failed_job(self, cr, uid, id, context=None):
         """ Return a message which will be posted on the job when it is failed.

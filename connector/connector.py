@@ -143,6 +143,10 @@ class Environment(object):
         self.model = self.session.pool.get(model_name)
         self.pool = self.session.pool
 
+    def set_lang(self, code):
+        """ Change the working language in the environment. """
+        self.session.context['lang'] = code
+
     def get_connector_unit(self, base_class, *args, **kwargs):
         """ Search the class using
         :py:class:`connector.backend.Backend.get_class`,

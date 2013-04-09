@@ -9,15 +9,15 @@
                 <form string="Connector Checkpoint" create="false"
                         delete="false" edit="false" version="7.0">
                     <header>
-                        <button name="verified"
+                        <button name="reviewed"
                             type="object"
                             class="oe_highlight"
-                            states="need_verification"
-                            string="Verified"/>
+                            states="need_review"
+                            string="Reviewed"/>
                         <field name="state"
                             widget="statusbar"
-                            statusbar_visible="need_verification,verified"
-                            statusbar_colors='{"verified":"grey"}'/>
+                            statusbar_visible="need_review,reviewed"
+                            statusbar_colors='{"reviewed":"grey"}'/>
                     </header>
                     <sheet>
                         <h1>
@@ -43,12 +43,12 @@
                     <field name="record"/>
                     <field name="backend_id"/>
                     <field name="state"/>
-                    <button name="verified"
+                    <button name="reviewed"
                         type="object"
                         class="oe_highlight"
                         icon="kanban-apply"
-                        states="need_verification"
-                        string="Verified"/>
+                        states="need_review"
+                        string="Reviewed"/>
                 </tree>
             </field>
         </record>
@@ -59,10 +59,10 @@
             <field name="arch" type="xml">
                 <search string="Connector Checkpoint">
                     <field name="model_id"/>
-                    <filter name="need_verification" string="Need Verification"
-                        domain="[('state', '=', 'need_verification')]"/>
-                    <filter name="verified" string="Verified"
-                        domain="[('state', '=', 'verified')]"/>
+                    <filter name="need_review" string="Need Review"
+                        domain="[('state', '=', 'need_review')]"/>
+                    <filter name="reviewed" string="Reviewed"
+                        domain="[('state', '=', 'reviewed')]"/>
                    <group string="Group By...">
                        <filter string="Model" context="{'group_by' : 'model_id'}" />
                    </group>
@@ -79,14 +79,14 @@
             <field name="help" type="html">
                 <p>No record to check.</p>
                 <p> When a connector imports new records which have
-                    configuration or verifications to do manually, they
+                    configuration or reviews to do manually, they
                     will appear in this list.  Once a record has been
-                    checked, click on the 'Verified' button.  </p>
+                    checked, click on the 'Reviewed' button.  </p>
                 <p>The connectors list the new records to verify
                     based on their type.  Only some need a manual
-                    verification.</p>
+                    review.</p>
             </field>
-            <field name="context">{'search_default_need_verification': 1}</field>
+            <field name="context">{'search_default_need_review': 1}</field>
         </record>
 
     </data>

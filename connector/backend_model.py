@@ -26,7 +26,8 @@ import backend
 class external_backend(orm.AbstractModel):
     """ An instance of an external backend to synchronize with.
 
-    The backends have to inherited this model in the connectors modules.
+    The backends have to ``_inherit`` this model in the connectors
+    modules.
     """
     _name = 'connector.backend'
     _backend_type = None

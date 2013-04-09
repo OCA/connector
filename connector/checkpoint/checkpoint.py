@@ -30,11 +30,14 @@ so they appears in this list.
 """
 
 from openerp.osv import orm, fields
+from openerp.tools.translate import _
 
 
 class connector_checkpoint(orm.Model):
     _name = 'connector.checkpoint'
     _description = 'Connector Checkpoint'
+
+    _inherit = ['mail.thread', 'ir.needaction_mixin']
 
     _rec_name = 'record'
 
@@ -94,6 +97,30 @@ class connector_checkpoint(orm.Model):
                           {'state': 'reviewed'},
                           context=context)
 
+    def _subscribe_users(self, cr, uid, ids, context=None):
+        """ Subscribe all users having the 'Connector Manager' group """
+        group_ref = self.pool.get('ir.model.data').get_object_reference(
+                cr, uid, 'connector', 'group_connector_manager')
+        if not group_ref:
+            return
+        group_id = group_ref[1]
+        user_ids = self.pool.get('res.users').search(
+                cr, uid, [('groups_id', '=', group_id)], context=context)
+        self.message_subscribe_users(cr, uid, ids,
+                                     user_ids=user_ids,
+                                     context=context)
+
+    def create(self, cr, uid, vals, context=None):
+        obj_id = super(connector_checkpoint, self).create(
+            cr, uid, vals, context=context)
+        self._subscribe_users(cr, uid, [obj_id], context=context)
+        cp = self.browse(cr, uid, obj_id, context=context)
+        msg = _('A %s needs a review.') % cp.model_id.name
+        self.message_post(cr, uid, obj_id, body=msg,
+                          subtype='mail.mt_comment',
+                          context=context)
+        return obj_id
+
     def create_from_name(self, cr, uid, model_name, record_id,
                          backend_model_name, backend_id, context=None):
         model_obj = self.pool.get('ir.model')
@@ -107,6 +134,12 @@ class connector_checkpoint(orm.Model):
                             'record_id': record_id,
                             'backend_id': backend},
                            context=context)
+
+    def _needaction_domain_get(self, cr, uid, context=None):
+        """ Returns the domain to filter records that require an action
+            :return: domain or False is no action
+        """
+        return [('state', '=', 'need_review')]
 
 
 def add_checkpoint(session, model_name, record_id,

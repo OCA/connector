@@ -21,7 +21,6 @@ class test_connector_session(common.TransactionCase):
             pass
         self.recipient = Recipient()
         self.model = self.registry('res.partner')
-        data_obj = self.registry('ir.model.data')
         self.partner_id = self.model.create(self.cr,
                                             self.uid,
                                             {'name': 'new'})

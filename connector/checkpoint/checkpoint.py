@@ -149,3 +149,40 @@ def add_checkpoint(session, model_name, record_id,
     return checkpoint_obj.create_from_name(cr, uid, model_name, record_id,
                                            backend_model_name, backend_id,
                                            context=context)
+
+
+class connector_checkpoint_review(orm.TransientModel):
+    _name = 'connector.checkpoint.review'
+    _description = 'Checkpoints Review'
+
+    def _get_checkpoint_ids(self, cr, uid, context=None):
+        if context is None:
+            context = {}
+        res = False
+        if (context.get('active_model') == 'connector.checkpoint' and
+                context.get('active_ids')):
+            res = context['active_ids']
+        return res
+
+    _columns = {
+        'checkpoint_ids': fields.many2many('connector.checkpoint',
+                                           'connector_checkpoint_review_rel',
+                                           'review_id', 'checkpoint_id',
+                                           string='Checkpoints',
+                                           domain="[('state', '=', 'need_review')]"),
+    }
+
+    _defaults = {
+        'checkpoint_ids': _get_checkpoint_ids,
+    }
+
+    def review(self, cr, uid, ids, context=None):
+        if isinstance(ids, (tuple, list)):
+            assert len(ids) == 1, "One ID expected"
+            ids = ids[0]
+
+        form = self.browse(cr, uid, ids, context=context)
+        checkpoint_ids = [checkpoint.id for checkpoint in form.checkpoint_ids]
+        checkpoint_obj = self.pool['connector.checkpoint']
+        checkpoint_obj.reviewed(cr, uid, checkpoint_ids, context=context)
+        return {'type': 'ir.actions.act_window_close'}

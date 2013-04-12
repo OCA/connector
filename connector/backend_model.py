@@ -104,7 +104,7 @@ class external_binding(orm.AbstractModel):
                     'Magento Backend',
                     required=True,
                     ondelete='restrict'),
-                'sync_date': fields.date('Last synchronization date'),
+                'sync_date': fields.datetime('Last synchronization date'),
                 'magento_id': fields.char('ID on Magento'),
                 'tax_class_id': fields.integer('Tax Class ID'),
             }
@@ -123,6 +123,6 @@ class external_binding(orm.AbstractModel):
         # TODO write the date on import / export
         # and skip import / export (avoid unnecessary import
         # right after the export)
-        'sync_date': fields.date('Last synchronization date'),
+        'sync_date': fields.datetime('Last synchronization date'),
         # add other fields in concrete models
     }

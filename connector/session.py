@@ -132,6 +132,20 @@ class ConnectorSession(object):
             self._pool = openerp.pooler.get_pool(self.cr.dbname)
         return self._pool
 
+    @contextmanager
+    def change_context(self, values):
+        """ Shallow copy the context, update it with values,
+        then restore the original context on closing.
+
+        :param values: values to apply on the context
+        :type values: dict
+        """
+        original_context = self._context
+        self._context = original_context.copy()
+        self._context.update(values)
+        yield
+        self._context = original_context
+
     def commit(self):
         """ Commit the cursor """
         self.cr.commit()

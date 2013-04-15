@@ -76,6 +76,8 @@ class ConnectorUnit(object):
         self.backend_record = self.environment.backend_record
         self.session = self.environment.session
         self.model = self.session.pool.get(environment.model_name)
+        # so we can use openerp.tools.translate._, used to find the lang
+        self.localcontext = self.session.context
 
     @classmethod
     def match(cls, model):

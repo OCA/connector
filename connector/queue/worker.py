@@ -28,8 +28,11 @@ import uuid
 from datetime import datetime
 from StringIO import StringIO
 
+from psycopg2 import OperationalError
+
 import openerp
 import openerp.modules.registry as registry_module
+from openerp.osv.osv import PG_CONCURRENCY_ERRORS_TO_RETRY
 from .queue import JobsQueue
 from ..session import ConnectorSessionHandler
 from .job import (OpenERPJobStorage,
@@ -63,6 +66,13 @@ class Worker(threading.Thread):
 
     def run_job(self, job):
         """ Execute a job """
+        def retry_postpone(job, message, seconds=None):
+            with session_hdl.session() as session:
+                job.postpone(result=message, seconds=5)
+                job.set_enqueued(self)
+                self.job_storage_class(session).store(job)
+            self.queue.enqueue(job)
+
         session_hdl = ConnectorSessionHandler(self.db_name,
                                               openerp.SUPERUSER_ID)
         try:
@@ -125,12 +135,15 @@ class Worker(threading.Thread):
 
         except RetryableJobError as err:
             # delay the job later, requeue
-            with session_hdl.session() as session:
-                job.postpone(result=err.message)
-                job.set_enqueued(self)
-                self.job_storage_class(session).store(job)
-            self.queue.enqueue(job)
+            retry_postpone(job, err.message)
             _logger.debug('%s postponed', job)
+
+        except OperationalError as err:
+            # Automatically retry the typical transaction serialization errors
+            if err.pgcode not in PG_CONCURRENCY_ERRORS_TO_RETRY:
+                raise
+            retry_postpone(job, err.message, seconds=5)
+            _logger.debug('%s OperionalError, postponed', job)
 
         except (FailedJobError, Exception):
             buff = StringIO()

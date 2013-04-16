@@ -49,6 +49,7 @@ _logger = logging.getLogger(__name__)
 WAIT_CHECK_WORKER_ALIVE = 30  # seconds
 WAIT_WHEN_ONLY_AFTER_JOBS = 10  # seconds
 WORKER_TIMEOUT = 5 * 60  # seconds
+PG_RETRY = 5  # seconds
 
 
 class Worker(threading.Thread):
@@ -68,7 +69,7 @@ class Worker(threading.Thread):
         """ Execute a job """
         def retry_postpone(job, message, seconds=None):
             with session_hdl.session() as session:
-                job.postpone(result=message, seconds=5)
+                job.postpone(result=message, seconds=seconds)
                 job.set_enqueued(self)
                 self.job_storage_class(session).store(job)
             self.queue.enqueue(job)
@@ -142,7 +143,7 @@ class Worker(threading.Thread):
             # Automatically retry the typical transaction serialization errors
             if err.pgcode not in PG_CONCURRENCY_ERRORS_TO_RETRY:
                 raise
-            retry_postpone(job, err.message, seconds=5)
+            retry_postpone(job, err.message, seconds=PG_RETRY)
             _logger.debug('%s OperionalError, postponed', job)
 
         except (FailedJobError, Exception):

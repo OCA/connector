@@ -48,7 +48,7 @@ STATES = [(PENDING, 'Pending'),
           (FAILED, 'Failed')]
 
 DEFAULT_PRIORITY = 10  # used by the PriorityQueue to sort the jobs
-DEFAULT_MAX_RETRIES = 3
+DEFAULT_MAX_RETRIES = 5
 RETRY_INTERVAL = 10 * 60  # seconds
 
 _logger = logging.getLogger(__name__)
@@ -563,8 +563,13 @@ class Job(object):
         result = msg if msg is not None else _('Canceled. Nothing to do.')
         self.set_done(result=result)
 
-    def postpone(self, result=None):
-        self.eta = timedelta(seconds=RETRY_INTERVAL)
+    def postpone(self, result=None, seconds=None):
+        """ Write an estimated time arrival to n seconds
+        later than now. Used when an retryable exception
+        want to retry a job later. """
+        if seconds is None:
+            seconds = RETRY_INTERVAL
+        self.eta = timedelta(seconds=seconds)
         self.exc_info = None
         if result is not None:
             self.result = result

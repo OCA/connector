@@ -21,43 +21,50 @@
 
 {'name': 'Connector',
  'version': '2.0.0',
- 'author': 'Magentoerpconnect Core Editors',
- 'website': 'http://www.magentoerpconnect.com',
+ 'author': 'Openerp Connector Core Editors',
+ 'website': 'https://launchpad.net/openerp-connector',
  'license': 'AGPL-3',
  'category': 'Generic Modules',
  'description': """
 Connector
 =========
 
-TODO
-----
+This is a framework designed to build connectors with external systems,
+usually called `Backends`.
 
-Write a good presentation of the framework.
+It features:
 
+* A jobs queue
 
-previous description
---------------------
+    In which the connectors can push functions (synchronization tasks)
+    to be executed later.
 
-Definition : a referential is an external system that will interacts with OpenERP
-Goal : store external system connection details and objects fields mapping
+* An event pattern
 
-This module provide an abstract common minimal base to add any additional external id columns
-to some OpenObject table, pointing to some external referential.
-A referential is abstract and minimal at this stage, it only has:
-* a name
-* a location (possibly webservice URL, database connection URL...); the connection method will tell it...
-* referential credentials (user name + password)
-* placeholders for custom in and out mapping for OpenERP object fields.
+    The connectors can subscribe consumer methods, executed when the events
+    are fired.
 
-OpenERP already has limited supported to external ids using the ir_model_data and the id
-fields in the loaded data such as XML or CSV. We think that's OK to store all referential ids
-into the same ir_model_data table: yes it makes it large, but synchronisation operations involve
-a network bottleneck anyway, so it's largely OK and negligible to have a large table here.
-The existing ir_model_data feature of OpenERP is mostly thought as an mono-external referential
-(even if the module key of ir_model_data plays some referential scoping role). Here we just push
-the concept further to assume multiple external ids for OpenERP entities and add the possibility
-to customize their field mapping directly in OpenERP to accomodate the external systems.
-    """,
+* Connector base classes
+
+    Called ``ConnectorUnit``.
+
+    Include base classes for the use in connectors, ready to be extended:
+
+    * ``Synchronizer``: flow of an import or export
+    * ``Mapper``: transform a record according to mapping rules
+    * ``Binder``: link external IDs with local IDS
+    * ``BackendAdapter``: adapter interface for the exchanges with the backend
+
+* A multi-backend support
+
+    Each ``ConnectorUnit`` can be registered amongst a backend type (eg.
+    Magento) or a backend version only.
+
+It is actually used to connect Magento_ and Prestashop_
+
+.. _Magento: https://launchpad.net/magentoerpconnect
+.. _Prestashop: https://launchpad.net/prestashoperpconnect
+""",
  'depends': ['mail'
              ],
  'data': ['security/connector_security.xml',

@@ -21,12 +21,6 @@
 
 from collections import Callable
 
-__all__ = [
-    'on_record_write',
-    'on_record_create',
-    'on_record_unlink',
-]
-
 
 class Event(object):
     """ An event contains consumers called when the event is fired.

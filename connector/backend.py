@@ -83,8 +83,8 @@ class Backend(object):
 
     .. attribute:: parent
 
-        A parent backend. When the backend has configuration, it
-        will refer to its parent's one
+        A parent backend. When no :py:class:`~connector.connector.ConnectorUnit`
+        is found for a backend, it will search it in the `parent`.
 
     A backend knows all the classes it is able to use (mappers,
     binders, synchronizers, backend adapters) and give the appropriate

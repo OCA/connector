@@ -21,11 +21,6 @@
 
 from openerp.osv import orm
 
-__all__ = [
-    'Environment',
-    'ConnectorUnit',
-]
-
 
 class connector_installed(orm.AbstractModel):
     """Empty model used to know if the module is installed on the
@@ -173,9 +168,8 @@ class Binder(ConnectorUnit):
 
         :param external_id: external ID for which we want
                                    the OpenERP ID
-        :param unwrap: if True, returns the openerp_id of the
-                       magento_xxxx record, else return the id (binding id)
-                       of that record
+        :param unwrap: if True, returns the openerp_id
+                       else return the binding id (magento.*.id)
         :return: a record ID, depending on the value of unwrap,
                  or None if the external_id is not mapped
         :rtype: int
@@ -183,21 +177,19 @@ class Binder(ConnectorUnit):
         raise NotImplementedError
 
     def to_backend(self, binding_id):
-        """ Give the external ID for an OpenERP ID (binding id, from a
-        magento.* model)
+        """ Give the external ID for an OpenERP binding ID
+        (ID in a model magento.*)
 
-        :param binding_id: OpenERP ID for which we want the backend id
+        :param binding_id: OpenERP binding ID for which we want the backend id
         :return: external ID of the record
         """
         raise NotImplementedError
 
-    def bind(self, external_id, binding_id, metadata=None):
+    def bind(self, external_id, binding_id):
         """ Create the link between an external ID and an OpenERP ID
 
         :param external_id: external id to bind
         :param binding_id: OpenERP ID to bind
         :type binding_id: int
-        :param metadata: optional values to store on the relation model
-        :type metadata: dict
         """
         raise NotImplementedError

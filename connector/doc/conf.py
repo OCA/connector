@@ -32,6 +32,8 @@ sys.path.append(os.path.abspath('../..'))
 # coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
 extensions = ['sphinx.ext.autodoc', 'sphinx.ext.intersphinx', 'sphinx.ext.todo', 'sphinx.ext.viewcode']
 
+todo_include_todos = True
+
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
 
@@ -46,7 +48,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'Connector'
-copyright = u'2013, Guewen Baconnier (Camptocamp SA)'
+copyright = u'2013, Camptocamp SA'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -251,5 +253,5 @@ texinfo_documents = [
 intersphinx_mapping = {
     'http://docs.python.org/': None,
     'openerpweb': ('http://doc.openerp.com/trunk/developers/web', None),
-    'openerpdev': ('http://doc.openerp.com/trunk/developers', None),
+    'openerpdev': ('http://doc.openerp.com/trunk/developers/server/', None),
 }

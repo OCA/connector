@@ -21,12 +21,6 @@
 
 from collections import Callable
 
-__all__ = [
-    'on_record_write',
-    'on_record_create',
-    'on_record_unlink',
-]
-
 
 class Event(object):
     """ An event contains consumers called when the event is fired.
@@ -184,10 +178,10 @@ on_record_write = Event()
 
 Listeners should take the following arguments:
 
- * session: `Session` object
+ * session: :py:class:`~connector.session.ConnectorSession` object
  * model_name: name of the model
  * record_id: id of the record
- * fields: name of the fields which have been written
+ * fields: list with names of the fields which have been written
 
 """
 
@@ -197,7 +191,7 @@ on_record_create = Event()
 
 Listeners should take the following arguments:
 
- * session: `Session` object
+ * session: :py:class:`~connector.session.ConnectorSession` object
  * model_name: name of the model
  * record_id: id of the created record
 
@@ -209,7 +203,7 @@ on_record_unlink = Event()
 
 Listeners should take the following arguments:
 
- * session: `Session` object
+ * session: :py:class:`~connector.session.ConnectorSession` object
  * model_name: name of the model
  * record_id: id of the record
 

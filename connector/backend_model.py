@@ -23,7 +23,7 @@ from openerp.osv import orm, fields
 import backend
 
 
-class external_backend(orm.AbstractModel):
+class connector_backend(orm.AbstractModel):
     """ An instance of an external backend to synchronize with.
 
     The backends have to ``_inherit`` this model in the connectors
@@ -87,7 +87,9 @@ class external_binding(orm.AbstractModel):
     concrete classes because the relations themselves do not exist in
     this addon.
 
-    Example for ``magento.res.partner.category`` in ``magentoerpconnect``:
+    For example, for a ``res.partner.category`` from Magento, I would have
+    (this is a consolidation of all the columns from the abstract models,
+    in ``magentoerpconnect`` you would not find that)::
 
         class magento_res_partner_category(orm.Model):
             _name = 'magento.res.partner.category'

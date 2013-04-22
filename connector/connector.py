@@ -186,13 +186,11 @@ class Binder(ConnectorUnit):
         """
         raise NotImplementedError
 
-    def bind(self, external_id, binding_id, metadata=None):
+    def bind(self, external_id, binding_id):
         """ Create the link between an external ID and an OpenERP ID
 
         :param external_id: external id to bind
         :param binding_id: OpenERP ID to bind
         :type binding_id: int
-        :param metadata: optional values to store on the relation model
-        :type metadata: dict
         """
         raise NotImplementedError

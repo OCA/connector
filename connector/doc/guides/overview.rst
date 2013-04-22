@@ -211,6 +211,8 @@ create the binding between them.
 Bindings
 ********
 
+Here a binding means the link of a record between OpenERP and a backend.
+
 The proposed implementation for the connectors widely use the
 `_inherits` capabilities.
 

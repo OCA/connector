@@ -21,11 +21,6 @@
 
 from openerp.osv import orm
 
-__all__ = [
-    'Environment',
-    'ConnectorUnit',
-]
-
 
 class connector_installed(orm.AbstractModel):
     """Empty model used to know if the module is installed on the

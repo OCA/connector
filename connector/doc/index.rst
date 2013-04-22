@@ -21,9 +21,6 @@ ability to extend it with extension modules or local customizations.
 .. _Akretion: http://www.akretion.com
 .. _`source is on launchpad`: https://code.launchpad.net/openerp-connector
 
-.. todo:: document connector.checkpoint, mainly the entry point ``add_checkpoint``
-.. todo:: rewrite the specificiations according to the last decisions and changes
-
 
 *****************
 Developer's guide

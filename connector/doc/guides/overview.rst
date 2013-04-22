@@ -207,6 +207,9 @@ Binders are classes which know how to find the external ID for an
 OpenERP ID, how to find the OpenERP ID for an external ID and how to
 create the binding between them.
 
+
+.. _binding:
+
 ********
 Bindings
 ********
@@ -227,6 +230,7 @@ OpenERP, the ID in Magento and the relation to the backend model.
 It also stores all the necessary metadata related to this customer
 coming from Magento.
 
+.. _checkpoint:
 
 **********
 Checkpoint

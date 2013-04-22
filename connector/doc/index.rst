@@ -30,6 +30,7 @@ Developer's guide
    :maxdepth: 2
 
    guides/overview.rst
+   guides/bootstrap_connector.rst
 
 API Reference
 =============

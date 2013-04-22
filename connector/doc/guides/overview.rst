@@ -1,8 +1,8 @@
 .. _connectors-specifications:
 
-
+##################
 Connector Overview
-==================
+##################
 
 The framework to develop connectors is decoupled in small pieces of
 codes interacting together. Each of them can be used or not in an
@@ -15,8 +15,9 @@ pointers to more concrete 'how-to' or small tutorials.
 
 .. _Magentoerpconnect: http://code.launchpad.net/magentoerpconnect
 
+******
 Events
-------
+******
 
 Events are hooks in OpenERP on which we can plug some actions. They are
 based on an Observer pattern.
@@ -35,8 +36,9 @@ From the connectors, we are able to:
 * filter the events by model, so a subscribed function will be triggered
   only if the event happens on a registered model
 
+******
 Queue
------
+******
 
 This section summarises the Queue which is in fact a grouping of 3 notions,
 which are jobs, a worker, and the queue itself.
@@ -86,8 +88,9 @@ Potential issues:
 * Sop of the server: a job executed jobs just before the stop of the
   server may be finished but not written as 'done' in the database.
 
+**********
 References
-----------
+**********
 
 A reference represents a service and a version, for instance `Magento
 1.7`. It holds lists of mappings, synchronizers, external adapters and
@@ -104,8 +107,9 @@ for each type of classes.
 
 We must be able to unregister or register each class.
 
+********
 Mappings
---------
+********
 
 A mapping translates an external record to an OpenERP record and
 conversely. This point is more complex than it can appear.
@@ -126,8 +130,9 @@ It should support:
 * merge of records: convert 2 external records in 1 OpenERP record or
   the reverse
 
+*************
 Synchronizers
--------------
+*************
 
 A synchronizer is an action with the external system. It can be a
 record's import or export, a deletion of something, or anything else.
@@ -135,22 +140,25 @@ It will use the mappings to convert the data between both systems, the
 external adapters to read or write data on the external system and the
 binders to create the link between them.
 
+*****************
 External Adapters
------------------
+*****************
 
 An external adapter has a common interface to speak with the external
 system. It translates the basic orders (search, read, write) to an
 underlying communication with the external system.
 
+*******
 Binders
--------
+*******
 
 Binders are classes which know how to find the external ID for an
 OpenERP ID, how to find the OpenERP ID for an external ID and how to
 create the binding between them.
 
+*****************
 Datamodel changes
------------------
+*****************
 
 The datamodel used in Magentoerpconnect_ (and other connectors) in
 version 6.1 is invasive. They add their own fields on each synchronized
@@ -179,8 +187,13 @@ also be able to store the additional data like the product attributes.
 
    Datamodel structure for connectors V7.0
 
+******
 Naming
-------
+******
 
 We need to agree on a clear naming for the concepts exposed here and some
 of the existing ones.
+
+**********
+Checkpoint
+**********

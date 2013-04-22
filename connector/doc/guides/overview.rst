@@ -37,7 +37,7 @@ common to e-commerce.
 
 A connectors developer is mostly interested by:
 
-.. todo:: add pointers
+.. todo:: add url references
 
 * register a new function on an event
 * unregister a function from an event
@@ -87,7 +87,7 @@ A connectors developer is mostly interested by:
 Session
 *******
 
-A :py:class:`~connector.session.Session` is a container for the usual
+A :py:class:`~connector.session.ConnectorSession` is a container for the usual
 `cr`, `uid`, `context` used in OpenERP.
 We use them accross the connectors.
 

@@ -1,16 +1,19 @@
 .. _connectors-specifications:
 
 
-Connectors Specifications
-=========================
+Connector Overview
+==================
 
-The framework to develop connectors (like Magentoerpconnect_) is
-decoupled in small pieces of codes interacting together.
+The framework to develop connectors is decoupled in small pieces of
+codes interacting together. Each of them can be used or not in an
+implementation.
 
-This document describes the high-level specifications for each piece.
+An example of implementation is Magentoerpconnect_.
+
+This document describes them from a high-level point of view and gives
+pointers to more concrete 'how-to' or small tutorials.
 
 .. _Magentoerpconnect: http://code.launchpad.net/magentoerpconnect
-
 
 Events
 ------
@@ -18,12 +21,13 @@ Events
 Events are hooks in OpenERP on which we can plug some actions. They are
 based on an Observer pattern.
 
-The basic idea is to declare an event, for instance `on_record_create`.
-Then each connector is able to subscribe one or many function on it. The
-creation of a record should fire `on_record_create`, and that will
+The basic idea is to declare an :py:class:`~connector.event.Event`, for instance
+`on_record_create`.
+Then each connector has the ability to subscribe one or many function on it.
+The creation of a record should fire `on_record_create`, which will
 trigger all the subscribed functions.
 
-We must be able to:
+From the connectors, we are able to:
 
 * register a new function on an event
 * unregister a function from an event

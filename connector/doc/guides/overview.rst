@@ -203,42 +203,25 @@ create the binding between them.
 Bindings
 ********
 
-The datamodel used in Magentoerpconnect_ (and other connectors) in
-version 6.1 is invasive. They add their own fields on each synchronized
-models (products, partners, ...). This not only is a mess on the views,
-but also becomes limitating for the extensibility of the connectors. For
-instance, actually the Magento `email` fields is stored on
-`res.partner`. The fact is that a partner could be shared between 2
-Magento's websites with different email. Product attributes may be
-different per shop.
+The proposed implementation for the connectors widely use the
+`_inherits` capabilities.
 
-Another issue is the storage of the bindings between records in
-`ir.model-data`. This model allows to store an external id, an openerp
-id, a model and a a referential. This is a limitation when we need more
-granularity in the bindings (`website_id` for a partner) or when there
-is no external id but a couple of keys (product links).
+Say we import a customer from *Magento*.
 
-The solution here is to properly stores the bindings on relation tables
-between the referentials and the records `Figure 1`_. These relation tables will
-also be able to store the additional data like the product attributes.
+We create a `magento.res.partner` model, which `_inherits`
+`res.partner`.
 
-.. _`Figure 1`:
-.. figure:: _static/09_datamodel.png
-   :width: 50%
-   :alt: New Datamodel for connectors V7.0
-   :align: center
+This model, called a *binding* model, knows the ID of the partner in
+OpenERP, the ID in Magento and the relation to the backend model.
 
-   Datamodel structure for connectors V7.0
+It also stores all the necessary metadata related to this customer
+coming from Magento.
 
-******
-Naming
-******
-
-We need to agree on a clear naming for the concepts exposed here and some
-of the existing ones.
 
 **********
 Checkpoint
 **********
+
+
 
 .. _connector_ecommerce: https://launchpad.net/openerp-connector

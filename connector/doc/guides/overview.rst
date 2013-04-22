@@ -37,6 +37,8 @@ common to e-commerce.
 
 A connectors developer is mostly interested by:
 
+.. todo:: add pointers
+
 * register a new function on an event
 * unregister a function from an event
 * so, it means also replace a function by another
@@ -65,12 +67,16 @@ A :py:class:`~connector.queue.worker.WorkerWatcher` create or destroy
 new workers when new :py:class:`~openerp.modules.registry.Registry` are
 created or destroyed, and signal the aliveness of the workers.
 
-Jobs are assigned to a worker in the database. The worker loads all the
-jobs assigned to itself in memory in the
+Jobs are assigned to a worker in the database by a cron.
+The worker loads all the jobs assigned to itself in memory in the
 :py:class:`~connector.queue.queue.JobsQueue`.
 When a worker is dead, it is removed from the database,
 so the jobs are freeed from the worker and can be assigned to another
 one.
+
+When multiple OpenERP processes are running,
+a worker per process is running, but only those which are *CronWorkers*
+enqueue and execute jobs, to avoid to clutter the HTTP processes.
 
 A connectors developer is mostly interested by:
 
@@ -126,57 +132,76 @@ A connectors developer is mostly interested by:
 ConnectorUnit
 *************
 
+:py:class:`~connector.connector.ConnectorUnit`
+are pluggable classes used for the synchronizations with the external
+systems.
+
+The connector defines some base classes, which you can find below.
+Note that you can define your own ConnectorUnits as well without
+reusing them.
+
 Mappings
 ========
 
+The base class is :py:class:`connector.unit.mapper.Mapper`.
+
 A mapping translates an external record to an OpenERP record and
-conversely. This point is more complex than it can appear.
+conversely.
 
-A mapping is applicable based on:
+It supports:
 
-* a model
-* a direction (OpenERP -> External, External -> OpenERP)
+* direct mappings
 
-It should support:
+    Fields *a* is written in field *b*.
 
-* direct mappings: field `a` is written in field `b`
-* method mappings: a method is used to convert one or many fields to one
-  or many fields
-* sub mappings: a sub record (lines of a sale order) is converted
-* fields selection: smart selection of records to convert (only few
-  fields have been modified on OpenERP, convert only them)
-* merge of records: convert 2 external records in 1 OpenERP record or
-  the reverse
+* method mappings
 
-*************
+    A method is used to convert one or many fields to one or many
+    fields, with transformation.
+    It can be filtered, for example only applied when the record is
+    created or when the source fields are modified.
+
+* submapping
+
+    a sub-record (lines of a sale order) is converted using another
+    Mapper
+
 Synchronizers
-*************
+=============
 
-A synchronizer is an action with the external system. It can be a
-record's import or export, a deletion of something, or anything else.
-It will use the mappings to convert the data between both systems, the
-external adapters to read or write data on the external system and the
-binders to create the link between them.
+The base class is :py:class:`connector.unit.synchronizer.Synchronizer`.
 
-*****************
-External Adapters
-*****************
+A synchronizer defines the flow of a synchronization with a backend.
+It can be a record's import or export, a deletion of something,
+or anything else.
+For instance, it will use the mappings
+to convert the data between both systems,
+the backend adapters to read or write data on the backend
+and the binders to create the link between them.
 
-An external adapter has a common interface to speak with the external
-system. It translates the basic orders (search, read, write) to an
-underlying communication with the external system.
+Backend Adapters
+================
 
-*******
+The base class is
+:py:class:`connector.unit.backend_adapter.BackendAdapter`.
+
+An external adapter has a common interface to speak with the backend.
+It translates the basic orders (search, read, write) to the protocol
+used by the backend.
+
 Binders
-*******
+=======
+
+The base class is
+:py:class:`connector.connector.Binder`.
 
 Binders are classes which know how to find the external ID for an
 OpenERP ID, how to find the OpenERP ID for an external ID and how to
 create the binding between them.
 
-*****************
-Datamodel changes
-*****************
+********
+Bindings
+********
 
 The datamodel used in Magentoerpconnect_ (and other connectors) in
 version 6.1 is invasive. They add their own fields on each synchronized

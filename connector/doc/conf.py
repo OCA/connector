@@ -253,5 +253,5 @@ texinfo_documents = [
 intersphinx_mapping = {
     'http://docs.python.org/': None,
     'openerpweb': ('http://doc.openerp.com/trunk/developers/web', None),
-    'openerpdev': ('http://doc.openerp.com/trunk/developers', None),
+    'openerpdev': ('http://doc.openerp.com/trunk/developers/server/', None),
 }

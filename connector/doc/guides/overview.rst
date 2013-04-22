@@ -22,13 +22,20 @@ Events
 Events are hooks in OpenERP on which we can plug some actions. They are
 based on an Observer pattern.
 
-The basic idea is to declare an :py:class:`~connector.event.Event`, for instance
-`on_record_create`.
+The basic idea is to declare an :py:class:`~connector.event.Event`, for
+instance :py:class:`~connector.event.on_record_create`.
 Then each connector has the ability to subscribe one or many function on it.
-The creation of a record should fire `on_record_create`, which will
-trigger all the subscribed functions.
+The creation of a record should fire
+:py:class:`~connector.event.on_record_create`,
+which will trigger all the subscribed functions.
 
-From the connectors, we are able to:
+The same event can be shared across several connectors, easing their
+implementation.
+For instance, the module connector_ecommerce_ which extends the
+framework with common e-commerce capabilities, adds its own events
+common to e-commerce.
+
+A connectors developer is mostly interested by:
 
 * register a new function on an event
 * unregister a function from an event
@@ -36,80 +43,91 @@ From the connectors, we are able to:
 * filter the events by model, so a subscribed function will be triggered
   only if the event happens on a registered model
 
-******
-Queue
-******
-
-This section summarises the Queue which is in fact a grouping of 3 notions,
-which are jobs, a worker, and the queue itself.
-
-  Job
-
-    A job is a delayed call waiting to be executed. It is stored in the
-    `queue` before it is executed.
-
-    It needs to store at least 2 things: the function to call and the
-    arguments to pass to it.
-
-    A job may need to be run at a certain time, for instance to delay a
-    failed task to a later time, or to defer some expensive tasks during
-    the night. So, a job could also have a 'later time'.
-
-    We want some jobs to be run before others, according to a priority.
-    Thus they have to store a priority.
-
-    Jobs should be stored somewhere (PostgreSQL or other database) and
-    not just kept into memory, because they have to survive to an
-    OpenERP restart.
-
-  Queue
-
-    The queue stores the jobs before their execution. The queue has 2
-    responsibilities: queue a job, dequeue a job. It should respect the
-    priorities and the 'later time' of the jobs.
-
-  Worker
-
-    The worker is started alongside OpenERP. Its role is to take the
-    jobs out of the queue and run them sequentially. It can uses
-    thread(s) for instance.
-
-    When OpenERP start, it has to take all the pending jobs from the
-    database and queue them.
-
-
-Potential issues:
-
-* Start of the server: the pending jobs must be enqueued only in one
-  queue when we have many processes using Gunicorn.
-* Restart of processes: Gunicorn kills the processes based on some
-  resources or time limits. We have to ensure that: the jobs are still
-  in a queue, the jobs are not in 2 queues
-* Sop of the server: a job executed jobs just before the stop of the
-  server may be finished but not written as 'done' in the database.
-
 **********
-References
+Jobs Queue
 **********
 
-A reference represents a service and a version, for instance `Magento
-1.7`. It holds lists of mappings, synchronizers, external adapters and
-binders available.
+This section summarises the Job's Queue,
+which articulates around several classes,
+in broad terms,
+:py:class:`~connector.queue.job.Job`
+are executed by a
+:py:class:`~connector.queue.worker.Worker`
+which stores them in a
+:py:class:`~connector.queue.queue.JobsQueue`.
+
+Jobs are stored in the
+:py:class:`~connector.queue.model.QueueJob` model.
+
+Workers are stored in the
+:py:class:`~connector.queue.model.QueueWorker` model.
+A :py:class:`~connector.queue.worker.WorkerWatcher` create or destroy
+new workers when new :py:class:`~openerp.modules.registry.Registry` are
+created or destroyed, and signal the aliveness of the workers.
+
+Jobs are assigned to a worker in the database. The worker loads all the
+jobs assigned to itself in memory in the
+:py:class:`~connector.queue.queue.JobsQueue`.
+When a worker is dead, it is removed from the database,
+so the jobs are freeed from the worker and can be assigned to another
+one.
+
+A connectors developer is mostly interested by:
+
+* Enqueue a job
+
+
+*******
+Backend
+*******
+
+A :py:class:`~connector.backend.Backend`
+is a reference to an external system or service.
+
+A backend is defined by a name and a version.
+For instance `Magento 1.7`.
 
 A reference can have a parent. The instance `Magento 1.7` is the child
 of `Magento`.
 
-We should be able to ask to a reference the mapping class to use. For
-instance, if I ask the mapping class for `res.partner` to `Magento 1.7`,
-it must return me the class to use. If `Magento 1.7` has no mapping
-registered, it returns the mapping registered on its parent. Same story
-for each type of classes.
+:py:class:`~connector.connector.ConnectorUnit` classes are registered on
+the backends. Then, we are able to ask a registered class to a backend.
+If no class is found, it will search in its parent backend.
 
-We must be able to unregister or register each class.
+It is always accompanied by a concrete subclass of the model
+:py:class:`~connector.backend_model.connector_backend`.
 
-********
+A connectors developer is mostly interested by:
+
+* Declare the backends
+* Register a ConnectorUnit on a backend
+* Unregister a ConnectorUnit on a backend
+* Get a connectorUnit from a backend
+
+
+***********
+Environment
+***********
+
+An :py:class:`~connector.connector.Environment`
+is the scope from which we will do synchronizations.
+
+It contains a :py:class:`~connector.backend.Backend`,
+a record of a concrete subclass of the model
+:py:class:`~connector.backend_model.connector_backend`,
+a :py:class:`~connector.session.Session`
+and the name of the model to work with.
+
+A connectors developer is mostly interested by:
+
+* Get a connectorUnit from an environment
+
+*************
+ConnectorUnit
+*************
+
 Mappings
-********
+========
 
 A mapping translates an external record to an OpenERP record and
 conversely. This point is more complex than it can appear.
@@ -197,3 +215,5 @@ of the existing ones.
 **********
 Checkpoint
 **********
+
+.. _connector_ecommerce: https://launchpad.net/openerp-connector

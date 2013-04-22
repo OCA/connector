@@ -23,7 +23,7 @@ from openerp.osv import orm, fields
 import backend
 
 
-class external_backend(orm.AbstractModel):
+class connector_backend(orm.AbstractModel):
     """ An instance of an external backend to synchronize with.
 
     The backends have to ``_inherit`` this model in the connectors

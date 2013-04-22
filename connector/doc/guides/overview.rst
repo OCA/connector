@@ -84,6 +84,14 @@ A connectors developer is mostly interested by:
 
 
 *******
+Session
+*******
+
+A :py:class:`~connector.session.Session` is a container for the usual
+`cr`, `uid`, `context` used in OpenERP.
+We use them accross the connectors.
+
+*******
 Backend
 *******
 
@@ -222,6 +230,9 @@ coming from Magento.
 Checkpoint
 **********
 
+A checkpoint is a record in the model `connector.checkpoint` linked to a
+model and a record, the connectors can create a new one when the user
+needs to review imported documents.
 
 
 .. _connector_ecommerce: https://launchpad.net/openerp-connector

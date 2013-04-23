@@ -129,29 +129,31 @@ class Backend(object):
             return '<Backend \'%s\', \'%s\'>' % (self.service, self.version)
         return '<Backend \'%s\'>' % self.service
 
-    def _get_classes(self, base_class, *args, **kwargs):
+    def _get_classes(self, base_class, session, model_name):
         matching_classes = []
         for cls in self.registered_classes(base_class=base_class):
             if not issubclass(cls, base_class):
                 continue
-            if cls.match(*args, **kwargs):
+            if cls.match(session, model_name):
                 matching_classes.append(cls)
         if not matching_classes and self.parent:
             matching_classes = self.parent._get_classes(base_class,
-                                                        *args, **kwargs)
+                                                        session, model_name)
         return matching_classes
 
-    def get_class(self, base_class, *args, **kwargs):
-        """ Find a matching subclass of `base_class` in the registered
+    def get_class(self, base_class, session, model_name):
+        """ Find a matching subclass of ``base_class`` in the registered
         classes"""
-        matching_classes = self._get_classes(base_class, *args, **kwargs)
+        matching_classes = self._get_classes(base_class, session,
+                                             model_name)
         assert matching_classes, ('No matching class found for %s '
-                                  'with args: %s and keyword args: %s' %
-                                  (base_class, args, kwargs))
+                                  'with session: %s, '
+                                  'model name: %s' %
+                                  (base_class, session, model_name))
         assert len(matching_classes) == 1, (
-                'Several classes found for %s '
-                'with args: %s and keyword args: %s. Found: %s' %
-                (base_class, args, kwargs, matching_classes))
+            'Several classes found for %s '
+            'with session %s, model name: %s. Found: %s' %
+            (base_class, session, model_name, matching_classes))
         return matching_classes[0]
 
     def registered_classes(self, base_class=None):

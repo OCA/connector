@@ -2,25 +2,28 @@
 
 import unittest2
 
-from openerp.addons.connector.backend import (
-        Backend,
-        get_backend,
-        BACKENDS)
-from openerp.addons.connector.connector import Binder
-from openerp.addons.connector.unit.mapper import (
-                                       Mapper,
-                                       ImportMapper,
-                                       ExportMapper)
+import openerp.tests.common as common
+from openerp.addons.connector.backend import (Backend,
+                                              get_backend,
+                                              BACKENDS)
+from openerp.addons.connector.connector import (Binder,
+                                                ConnectorUnit)
+from openerp.addons.connector.unit.mapper import (Mapper,
+                                                  ImportMapper,
+                                                  ExportMapper)
 from openerp.addons.connector.unit.backend_adapter import BackendAdapter
+from openerp.addons.connector.session import ConnectorSession
 
 
 class test_backend(unittest2.TestCase):
     """ Test Backend """
 
     def setUp(self):
+        super(test_backend, self).setUp()
         self.service = 'calamitorium'
 
     def tearDown(self):
+        super(test_backend, self).tearDown()
         BACKENDS.backends.clear()
 
     def test_new_backend(self):
@@ -56,17 +59,21 @@ class test_backend(unittest2.TestCase):
         self.assertEqual(backend, found_ref)
 
 
-class test_backend_register(unittest2.TestCase):
+class test_backend_register(common.TransactionCase):
     """ Test registration of classes on the Backend"""
 
 
     def setUp(self):
+        super(test_backend_register, self).setUp()
         self.service = 'calamitorium'
         self.version = '1.14'
         self.parent = Backend(self.service)
         self.backend = Backend(parent=self.parent, version=self.version)
+        self.session = ConnectorSession(self.cr,
+                                        self.uid)
 
     def tearDown(self):
+        super(test_backend_register, self).setUp()
         BACKENDS.backends.clear()
         self.backend._classes.clear()
 
@@ -75,7 +82,9 @@ class test_backend_register(unittest2.TestCase):
             _model_name = 'res.users'
 
         self.backend.register_class(BenderBinder)
-        ref = self.backend.get_class(Binder, 'res.users')
+        ref = self.backend.get_class(Binder,
+                                     self.session,
+                                     'res.users')
         self.assertEqual(ref, BenderBinder)
 
     def test_register_class_decorator(self):
@@ -83,7 +92,9 @@ class test_backend_register(unittest2.TestCase):
         class ZoidbergMapper(ExportMapper):
             _model_name = 'res.users'
 
-        ref = self.backend.get_class(ExportMapper, 'res.users')
+        ref = self.backend.get_class(ExportMapper,
+                                     self.session,
+                                     'res.users')
         self.assertEqual(ref, ZoidbergMapper)
 
     def test_register_class_parent(self):
@@ -92,13 +103,17 @@ class test_backend_register(unittest2.TestCase):
         class FryBinder(Binder):
             _model_name = 'res.users'
 
-        ref = self.backend.get_class(Binder, 'res.users')
+        ref = self.backend.get_class(Binder,
+                                     self.session,
+                                     'res.users')
         self.assertEqual(ref, FryBinder)
 
     def test_no_register_error(self):
         """ Error when asking for a class and none is found"""
         with self.assertRaises(AssertionError):
-            ref = self.backend.get_class(BackendAdapter, 'res.users')
+            ref = self.backend.get_class(BackendAdapter,
+                                         self.session,
+                                         'res.users')
 
     def test_registered_classes_all(self):
         @self.backend
@@ -115,8 +130,8 @@ class test_backend_register(unittest2.TestCase):
 
         classes = list(self.backend.registered_classes())
         self.assertItemsEqual(
-                classes,
-                [LeelaMapper, FarnsworthBinder, NibblerBackendAdapter])
+            classes,
+            [LeelaMapper, FarnsworthBinder, NibblerBackendAdapter])
 
     def test_registered_classes_filter(self):
         @self.backend
@@ -137,5 +152,24 @@ class test_backend_register(unittest2.TestCase):
 
         classes = list(self.backend.registered_classes(Mapper))
         self.assertItemsEqual(
-                classes,
-                [LeelaMapper, AmyWongMapper])
+            classes,
+            [LeelaMapper, AmyWongMapper])
+
+    def test_get_class_installed_module(self):
+        """ Only class from an installed module should be returned """
+        class LambdaUnit(ConnectorUnit):
+            _model_name = 'res.users'
+
+        @self.backend
+        class LambdaYesUnit(LambdaUnit):
+            _model_name = 'res.users'
+
+        @self.backend
+        class LambdaNoUnit(LambdaUnit):
+            _model_name = 'res.users'
+
+        LambdaNoUnit._module = 'not_installed_module'
+        self.assertEqual(self.backend.get_class(LambdaUnit,
+                                                self.session,
+                                                'res.users'),
+                         LambdaYesUnit)

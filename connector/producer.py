@@ -53,8 +53,8 @@ def write(self, cr, uid, ids, vals, context=None):
     if self.pool.get('connector.installed') is not None:
         if not hasattr(ids, '__iter__'):
             ids = [ids]
-        if on_record_write.has_consumer_for(self._name):
-            session = ConnectorSession(cr, uid, context=context)
+        session = ConnectorSession(cr, uid, context=context)
+        if on_record_write.has_consumer_for(session, self._name):
             for record_id in ids:
                 on_record_write.fire(session, self._name,
                                      record_id, vals.keys())
@@ -67,8 +67,8 @@ def unlink(self, cr, uid, ids, context=None):
     if self.pool.get('connector.installed') is not None:
         if not hasattr(ids, '__iter__'):
             ids = [ids]
-        if on_record_unlink.has_consumer_for(self._name):
-            session = ConnectorSession(cr, uid, context=context)
+        session = ConnectorSession(cr, uid, context=context)
+        if on_record_unlink.has_consumer_for(session, self._name):
             for record_id in ids:
                 on_record_unlink.fire(session, self._name, record_id)
     return unlink_original(self, cr, uid, ids, context=context)

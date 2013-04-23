@@ -20,6 +20,7 @@
 ##############################################################################
 
 from collections import Callable
+from .connector import get_openerp_module
 
 
 class Event(object):
@@ -109,13 +110,18 @@ class Event(object):
             if name in self._consumers:
                 self._consumers[name].discard(consumer)
 
-    def has_consumer_for(self, model_name):
+    def has_consumer_for(self, session, model_name):
         """ Return True if at least one consumer is registered
         for the model.
         """
-        if self._consumers[None]:
+        if any(self._consumers_for(session, None)):
             return True  # at least 1 global consumer exist
-        return bool(self._consumers.get(model_name))
+        return any(self._consumers_for(session, model_name))
+
+    def _consumers_for(self, session, model_name):
+        is_installed = session.is_module_installed
+        return (cons for cons in self._consumers.get(model_name, ())
+                if is_installed(get_openerp_module(cons)))
 
     def fire(self, session, model_name, *args, **kwargs):
         """ Call each consumer subscribed on the event with the given
@@ -133,10 +139,11 @@ class Event(object):
                      The first argument is the session.
         :param kwargs: keyword arguments propagated to the consumer
         """
-        assert isinstance(model_name, basestring), ("Second argument must be "
-                " the model name as string, instead received: %s" % model_name)
+        assert isinstance(model_name, basestring), (
+            "Second argument must be the model name as string, "
+            "instead received: %s" % model_name)
         for name in (None, model_name):
-            for consumer in self._consumers.get(name, ()):
+            for consumer in self._consumers_for(session, name):
                 args = tuple([session, model_name] + list(args))
                 consumer(*args, **kwargs)
 

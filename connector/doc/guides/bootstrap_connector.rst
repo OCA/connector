@@ -64,6 +64,44 @@ Nothing special but 2 things to note:
 Of course, we also need to create the ``__init__.py`` file where we will
 put the imports of our python modules.
 
+
+***********************************
+Declare the module to the connector
+***********************************
+
+Each module using the ``connector`` needs to create a special empty
+model, which will be used by the framework to know if the module is
+installed or not on each database.
+
+That's just a matter of following a convention and creating in
+``connector_coffee/connector.py``::
+
+    from openerp.osv import orm
+
+
+    class connector_coffee_installed(orm.AbstractModel):
+        """Empty model used to know if the module is installed on the
+        database.
+
+        If the model is in the registry, the module is installed.
+        """
+        _name = 'connector_coffee.installed'
+
+Note:
+
+* the ``_name`` is in the form: ``module_name.installed``, where
+  ``.installed`` is the part which does never change.
+
+
+.. note:: The reason for this is that OpenERP imports the Python modules
+          of uninstalled modules, so it automatically registers the
+          events and ConnectorUnit classes, even for uninstalled
+          modules.
+
+          To prevent this, we use a little trick: create an abstract
+          model and look in the registry if it is loaded.
+
+
 ********************
 Declare the backends
 ********************
@@ -132,65 +170,6 @@ Notes:
 * the versions should be the same than the ones declared in `Declare the backends`_.
 * We may want to add as many fields as we want to configure our
   connection or configuration regarding the backend in that model.
-
-
-*********************
-Consumers boilerplate
-*********************
-
-We'll want to register consumers on the
-:py:class:`~connector.event.Event`,
-OpenERP imports all the python modules even when the addons are not installed.
-This is a problem for the consumers as they should be registered only if
-the addon is installed.
-
-To prevent this, we use a little trick: create an abstract model and
-look in the registry if it is loaded.
-
-So let's create the abstract model in
-``connector_coffee/connector.py``::
-
-    from openerp.osv import orm, fields
-
-
-    class connector_coffee_installed(orm.AbstractModel):
-        """Empty model used to know if the module is installed on the
-        database.
-
-        If the model is in the registry, the module is installed.
-        """
-        _name = 'connector_coffee.installed'
-
-
-And create a decorator to filter the consumers::
-
-
-    from functools import wraps
-
-
-    def coffee_consumer(func):
-        """ Use this decorator on all the consumers of connector_coffee.
-
-        It will prevent the consumers from being fired when connector_coffee
-        addon is not installed.
-        """
-        @wraps(func)
-        def wrapped(*args, **kwargs):
-            session = args[0]
-            if session.pool.get('connector_coffee.installed'):
-                return func(*args, **kwargs)
-
-        return wrapped
-
-
-Now, when we'll want to subscribe our own consumer on an event, we'll
-write for instance::
-
-
-    @on_record_create(model_names=['res.partner'])
-    @coffee_consumer
-    def my_consumer(session, model_name, record_id, fields=None):
-        print 'partner created'
 
 
 ****************

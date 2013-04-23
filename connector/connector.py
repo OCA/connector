@@ -31,6 +31,27 @@ class connector_installed(orm.AbstractModel):
     _name = 'connector.installed'
 
 
+def get_openerp_module(cls_or_func):
+    """ For a top level function or class, returns the
+    name of the module where it lives.
+
+    So we will be able to filter them according to the modules
+    installation state.
+    """
+    # taken from OpenERP server: openerp.osv.orm
+    # The (OpenERP) module name can be in the `openerp.addons` namespace
+    # or not. For instance module `sale` can be imported as
+    # `openerp.addons.sale` (the good way) or `sale` (for backward
+    # compatibility).
+    module_parts = cls_or_func.__module__.split('.')
+    if (len(module_parts) > 2 and module_parts[0] == 'openerp' and
+            module_parts[1] == 'addons'):
+        module_name = cls_or_func.__module__.split('.')[2]
+    else:
+        module_name = cls_or_func.__module__.split('.')[0]
+    return module_name
+
+
 class MetaConnectorUnit(type):
     """ Metaclass for ConnectorUnit """
 
@@ -45,25 +66,7 @@ class MetaConnectorUnit(type):
 
     def __init__(cls, name, bases, attrs):
         super(MetaConnectorUnit, cls).__init__(name, bases, attrs)
-        cls._module = cls._get_module()
-
-    def _get_module(cls):
-        """ Get the OpenERP module where the ConnectorUnit is living so
-        we will be able to filter them according to the modules
-        installation state.
-        """
-        # taken from OpenERP server: openerp.osv.orm
-        # The (OpenERP) module name can be in the `openerp.addons` namespace
-        # or not. For instance module `sale` can be imported as
-        # `openerp.addons.sale` (the good way) or `sale` (for backward
-        # compatibility).
-        module_parts = cls.__module__.split('.')
-        if (len(module_parts) > 2 and module_parts[0] == 'openerp' and
-                module_parts[1] == 'addons'):
-            module_name = cls.__module__.split('.')[2]
-        else:
-            module_name = cls.__module__.split('.')[0]
-        return module_name
+        cls._module = get_openerp_module(cls)
 
 
 class ConnectorUnit(object):

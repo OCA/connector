@@ -31,6 +31,27 @@ class connector_installed(orm.AbstractModel):
     _name = 'connector.installed'
 
 
+def get_openerp_module(cls_or_func):
+    """ For a top level function or class, returns the
+    name of the module where it lives.
+
+    So we will be able to filter them according to the modules
+    installation state.
+    """
+    # taken from OpenERP server: openerp.osv.orm
+    # The (OpenERP) module name can be in the `openerp.addons` namespace
+    # or not. For instance module `sale` can be imported as
+    # `openerp.addons.sale` (the good way) or `sale` (for backward
+    # compatibility).
+    module_parts = cls_or_func.__module__.split('.')
+    if (len(module_parts) > 2 and module_parts[0] == 'openerp' and
+            module_parts[1] == 'addons'):
+        module_name = cls_or_func.__module__.split('.')[2]
+    else:
+        module_name = cls_or_func.__module__.split('.')[0]
+    return module_name
+
+
 class MetaConnectorUnit(type):
     """ Metaclass for ConnectorUnit """
 
@@ -42,6 +63,10 @@ class MetaConnectorUnit(type):
         if not hasattr(model_name, '__iter__'):
             model_name = [model_name]
         return model_name
+
+    def __init__(cls, name, bases, attrs):
+        super(MetaConnectorUnit, cls).__init__(name, bases, attrs)
+        cls._module = get_openerp_module(cls)
 
 
 class ConnectorUnit(object):
@@ -66,6 +91,7 @@ class ConnectorUnit(object):
         :param environment: current environment (backend, session, ...)
         :type environment: :py:class:`connector.connector.Environment`
         """
+        super(ConnectorUnit, self).__init__()
         self.environment = environment
         self.backend = self.environment.backend
         self.backend_record = self.environment.backend_record
@@ -75,8 +101,12 @@ class ConnectorUnit(object):
         self.localcontext = self.session.context
 
     @classmethod
-    def match(cls, model):
+    def match(cls, session, model):
         """ Find the class to use """
+        # filter out the ConnectorUnit from modules
+        # not installed in the current DB
+        if not session.is_module_installed(cls._module):
+            return False
         if hasattr(model, '_name'):  # Model instance
             model_name = model._name
         else:
@@ -91,7 +121,6 @@ class ConnectorUnit(object):
                               self.session,
                               model)
         return env.get_connector_unit(connector_unit_class)
-
 
     def get_binder_for_model(self, model=None):
         return self.get_connector_unit_for_model(Binder, model)
@@ -144,16 +173,14 @@ class Environment(object):
         """ Change the working language in the environment. """
         self.session.context['lang'] = code
 
-    def get_connector_unit(self, base_class, *args, **kwargs):
+    def get_connector_unit(self, base_class):
         """ Search the class using
-        :py:class:`connector.backend.Backend.get_class`,
-        return an instance of the class with ``self`` as environment.
+        :py:class:`connector.backend.Backend.get_class`
 
-        The ``model_name`` should not be passed in the arguments as
-        ``self.model_name`` is used.
+        return an instance of the class with ``self`` as environment.
         """
-        return self.backend.get_class(base_class, self.model_name,
-                                      *args, **kwargs)(self)
+        return self.backend.get_class(base_class, self.session,
+                                      self.model_name)(self)
 
 
 class Binder(ConnectorUnit):

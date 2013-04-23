@@ -12,13 +12,15 @@ from openerp.addons.connector.event import (
 from openerp.osv import orm
 
 
-class test_connector_session(common.TransactionCase):
-    """ Test ConnectorSession """
+class test_producers(common.TransactionCase):
+    """ Test producers """
 
     def setUp(self):
-        super(test_connector_session, self).setUp()
+        super(test_producers, self).setUp()
+
         class Recipient(object):
             pass
+
         self.recipient = Recipient()
         self.model = self.registry('res.partner')
         self.partner_id = self.model.create(self.cr,

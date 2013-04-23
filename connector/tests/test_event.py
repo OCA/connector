@@ -3,16 +3,21 @@
 import unittest2
 import mock
 
+import openerp.tests.common as common
 from openerp.addons.connector.event import Event
+from openerp.addons.connector.session import ConnectorSession
 
 
-class test_event(unittest2.TestCase):
+class test_event(common.TransactionCase):
     """ Test Event """
 
     def setUp(self):
+        super(test_event, self).setUp()
         self.consumer1 = lambda session, model_name: None
         self.consumer2 = lambda session, model_name: None
         self.event = Event()
+        self.session = ConnectorSession(self.cr,
+                                        self.uid)
 
     def test_subscribe(self):
         self.event.subscribe(self.consumer1)
@@ -95,12 +100,29 @@ class test_event(unittest2.TestCase):
         @self.event(model_names=['product.product'])
         def consumer1(session, model_name):
             pass
-        self.assertTrue(self.event.has_consumer_for('product.product'))
-        self.assertFalse(self.event.has_consumer_for('res.partner'))
+        self.assertTrue(self.event.has_consumer_for(self.session,
+                                                    'product.product'))
+        self.assertFalse(self.event.has_consumer_for(self.session,
+                                                     'res.partner'))
 
     def test_has_consumer_for_global(self):
         @self.event
         def consumer1(session, model_name):
             pass
-        self.assertTrue(self.event.has_consumer_for('product.product'))
-        self.assertTrue(self.event.has_consumer_for('res.partner'))
+        self.assertTrue(self.event.has_consumer_for(self.session,
+                                                    'product.product'))
+        self.assertTrue(self.event.has_consumer_for(self.session,
+                                                    'res.partner'))
+
+    def test_consumer_uninstalled_module(self):
+        """A consumer in a uninstalled module should not be fired"""
+        @self.event
+        def consumer1(session, model_name):
+            pass
+        # devious way to test it: the __module__ of a mock is 'mock'
+        # and we use __module__ to know the module of the event
+        # so, here func is considered to be in a uninstalled module
+        func = mock.Mock()
+        func.side_effect = Exception('Should not be called')
+        self.event(func)
+        self.event.fire(self.session, 'res.users')

@@ -62,3 +62,7 @@ class NothingToDoJob(JobError):
 
 class NoExternalId(RetryableJobError):
     """ No External ID found, the job would have an error but can be retried. """
+
+
+class IDMissingInBackend(JobError):
+    """ The ID of does not exist in the backend """

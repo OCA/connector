@@ -30,6 +30,7 @@ class connector_backend(orm.AbstractModel):
     modules.
     """
     _name = 'connector.backend'
+    _description = 'Connector Backend'
     _backend_type = None
 
     _columns = {

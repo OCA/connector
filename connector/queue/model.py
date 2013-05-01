@@ -175,6 +175,7 @@ class QueueJob(orm.Model):
 class QueueWorker(orm.Model):
     """ Worker """
     _name = 'queue.worker'
+    _description = 'Queue Worker'
     _log_access = False
     _rec_name = 'uuid'
 

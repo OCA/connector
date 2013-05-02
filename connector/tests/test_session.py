@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import with_statement
 import unittest2
 
 import openerp
@@ -54,9 +53,9 @@ class test_connector_session_handler(common.TransactionCase):
         """
         Check if 2 sessions can be opened on the same session
         """
-        with self.session_hdl.session() as session,\
-                self.session_hdl.session() as session2:
-            self.assertNotEqual(session, session2)
+        with self.session_hdl.session() as session:
+            with self.session_hdl.session() as session2:
+                self.assertNotEqual(session, session2)
 
 class test_connector_session(common.TransactionCase):
     """ Test ConnectorSession """

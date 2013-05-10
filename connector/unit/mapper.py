@@ -221,7 +221,8 @@ class Mapper(ConnectorUnit):
         result = self._data.copy()
         for attr, mappers in self._data_children.iteritems():
             child_data = [mapper.data for mapper in mappers]
-            result[attr] = self._format_child_rows(child_data)
+            if child_data:
+                result[attr] = self._format_child_rows(child_data)
         return self._after_mapping(result)
 
     @property
@@ -235,7 +236,8 @@ class Mapper(ConnectorUnit):
         result.update(self._data_for_create)
         for attr, mappers in self._data_children.iteritems():
             child_data = [mapper.data_for_create for mapper in mappers]
-            result[attr] = self._format_child_rows(child_data)
+            if child_data:
+                result[attr] = self._format_child_rows(child_data)
         return self._after_mapping(result)
 
     def _format_child_rows(self, child_records):

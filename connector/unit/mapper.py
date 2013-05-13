@@ -189,6 +189,15 @@ class Mapper(ConnectorUnit):
             if (not fields or from_attr in fields):
                 self._map_child(record, from_attr, to_attr, model_name)
 
+    def skip_convert_child(self, record, parent_values=None):
+        """ Hook to implement in sub-classes when some child
+        records should be skipped.
+
+        This method is only relevable for child mappers.
+
+        If it returns True, the current child record is skipped."""
+        return False
+
     def convert_child(self, record, parent_values=None):
         """ Transform child row contained in a main record, only
         called from another Mapper.
@@ -248,6 +257,8 @@ class Mapper(ConnectorUnit):
         self._data_children[to_attr] = []
         for child_record in child_records:
             mapper = self._init_child_mapper(model_name)
+            if mapper.skip_convert_child(child_record, parent_values=record):
+                continue
             mapper.convert_child(child_record, parent_values=record)
             self._data_children[to_attr].append(mapper)
 

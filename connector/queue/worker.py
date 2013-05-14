@@ -126,8 +126,8 @@ class Worker(threading.Thread):
                 self.job_storage_class(session).store(job)
 
         except NothingToDoJob as err:
-            if err.message:
-                msg = err.message
+            if unicode(err):
+                msg = unicode(err)
             else:
                 msg = None
             job.cancel(msg)
@@ -136,14 +136,14 @@ class Worker(threading.Thread):
 
         except RetryableJobError as err:
             # delay the job later, requeue
-            retry_postpone(job, err.message)
+            retry_postpone(job, unicode(err))
             _logger.debug('%s postponed', job)
 
         except OperationalError as err:
             # Automatically retry the typical transaction serialization errors
             if err.pgcode not in PG_CONCURRENCY_ERRORS_TO_RETRY:
                 raise
-            retry_postpone(job, err.message, seconds=PG_RETRY)
+            retry_postpone(job, unicode(err), seconds=PG_RETRY)
             _logger.debug('%s OperionalError, postponed', job)
 
         except (FailedJobError, Exception):

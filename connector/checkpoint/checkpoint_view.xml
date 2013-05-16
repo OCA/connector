@@ -62,6 +62,7 @@
             <field name="model">connector.checkpoint</field>
             <field name="arch" type="xml">
                 <search string="Connector Checkpoint">
+                    <field name="name"/>
                     <field name="model_id"/>
                     <filter name="need_review" string="Need Review"
                         domain="[('state', '=', 'need_review')]"/>

@@ -39,8 +39,6 @@ class connector_checkpoint(orm.Model):
 
     _inherit = ['mail.thread', 'ir.needaction_mixin']
 
-    _rec_name = 'record'
-
     def _get_models(self, cr, uid, context=None):
         """ All models are allowed as reference, anyway the
         fields.reference are readonly. """
@@ -56,14 +54,58 @@ class connector_checkpoint(orm.Model):
             res[check.id] = check.model_id.model + ',' + str(check.record_id)
         return res
 
+    def _get_record_name(self, cr, uid, ids, prop, unknow_none, context=None):
+        res = {}
+        for check in self.browse(cr, uid, ids, context=context):
+            model_obj = self.pool.get(check.model_id.model)
+            res[check.id] = model_obj.name_get(cr, uid, check.record_id,
+                                               context=context)[0][1]
+        return res
+
+    def _search_record(self, cr, uid, obj, name, args, context=None):
+        ids = set()
+        model_obj = self.pool.get('ir.model')
+        sql = "SELECT DISTINCT model_id FROM connector_checkpoint"
+        cr.execute(sql)
+        model_ids = [row[0] for row in cr.fetchall()]
+        models = model_obj.read(cr, uid, model_ids,
+                                ['model'], context=context)
+
+        for criteria in args:
+            __, operator, value = criteria
+            for model in models:
+                model_id = model['id']
+                model_name = model['model']
+                model_obj = self.pool.get(model_name)
+                results = model_obj.name_search(cr, uid,
+                                                name=value,
+                                                operator=operator,
+                                                context=context)
+                res_ids = [res[0] for res in results]
+                check_ids = self.search(cr, uid,
+                                        [('model_id', '=', model_id),
+                                         ('record_id', 'in', res_ids)],
+                                        context=context)
+                ids.update(check_ids)
+        if not ids:
+            return [('id', '=', '0')]
+        return [('id', 'in', tuple(ids))]
+
     _columns = {
         'record': fields.function(
             _get_ref,
             type='reference',
             string='Record',
             selection=_get_models,
-            help="The record to check.",
+            help="The record to review.",
             size=128,
+            readonly=True),
+        'name': fields.function(
+            _get_record_name,
+            fnct_search=_search_record,
+            type='char',
+            string='Record Name',
+            help="Name of the record to review",
             readonly=True),
         'record_id': fields.integer('Record ID',
                                     required=True,

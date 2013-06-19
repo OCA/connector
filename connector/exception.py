@@ -66,3 +66,7 @@ class NoExternalId(RetryableJobError):
 
 class IDMissingInBackend(JobError):
     """ The ID of does not exist in the backend """
+
+
+class ManyIDSInBackend(JobError):
+    """Unique key exists many times in backend"""

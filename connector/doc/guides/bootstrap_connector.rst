@@ -252,4 +252,4 @@ Magentoerpconnect_ and Prestashoperpconnect_ projects.
 
 
 .. _Magentoerpconnect: https://code.launchpad.net/~openerp-connector-core-editors/openerp-connector/7.0-magentoerpconnect
-.. _Prestashoperpconnect: 
+.. _Prestashoperpconnect:

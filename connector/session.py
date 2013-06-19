@@ -158,8 +158,10 @@ class ConnectorSession(object):
         """ Close the cursor """
         self.cr.close()
 
-    def search(self, model, domain):
-        return self.pool[model].search(self.cr, self.uid, domain, context=self.context)
+    def search(self, model, domain, limit=None, offset=0, order=None):
+        return self.pool[model].search(self.cr, self.uid, domain,
+                                       limit=limit, offest=offset,
+                                       order=order, context=self.context)
 
     def browse(self, model, ids):
         return self.pool[model].browse(self.cr, self.uid, ids, context=self.context)

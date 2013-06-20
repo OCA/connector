@@ -160,7 +160,7 @@ class ConnectorSession(object):
 
     def search(self, model, domain, limit=None, offset=0, order=None):
         return self.pool[model].search(self.cr, self.uid, domain,
-                                       limit=limit, offest=offset,
+                                       limit=limit, offset=offset,
                                        order=order, context=self.context)
 
     def browse(self, model, ids):

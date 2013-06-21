@@ -305,6 +305,7 @@ class QueueWorker(orm.Model):
                             "available at DEBUG level.")
             _logger.debug("Trace of the failed assignment of jobs on worker "
                           "%s attempt: ", self._worker.uuid, exc_info=True)
+            return
         job_rows = cr.fetchall()
         if not job_rows:
             _logger.debug('No job to assign to worker %s', self._worker.uuid)

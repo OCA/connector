@@ -224,9 +224,13 @@ class QueueWorker(orm.Model):
                               'but appears to be dead.',
                               worker['uuid'])
                 self._worker = None
-        # it will set worker_id to null on jobs, freeing them for
-        # another worker
-        self.unlink(cr, uid, dead_ids, context=context)
+        try:
+            self.unlink(cr, uid, dead_ids, context=context)
+        except Exception:
+            _logger.debug("Failed attempt to unlink a dead worker, likely due "
+                          "to another transaction in progress. "
+                          "Trace of the failed unlink "
+                          "%s attempt: ", self._worker.uuid, exc_info=True)
 
     def _worker_id(self, cr, uid, context=None):
         assert self._worker
@@ -299,11 +303,9 @@ class QueueWorker(orm.Model):
             # so we ROLLBACK to the SAVEPOINT to restore the transaction to its earlier
             # state. The assign will be done the next time.
             cr.execute("ROLLBACK TO queue_assign_jobs")
-            _logger.warning("Failed attempt to assign jobs, likely due "
-                            "to another transaction already in progress. Next "
-                            "attempt is likely to work. Detailed error "
-                            "available at DEBUG level.")
-            _logger.debug("Trace of the failed assignment of jobs on worker "
+            _logger.debug("Failed attempt to assign jobs, likely due to "
+                          "another transaction in progress. "
+                          "Trace of the failed assignment of jobs on worker "
                           "%s attempt: ", self._worker.uuid, exc_info=True)
             return
         job_rows = cr.fetchall()
@@ -316,10 +318,13 @@ class QueueWorker(orm.Model):
         _logger.debug('Assign %d jobs to worker %s', len(job_ids),
                       self._worker.uuid)
         # ready to be enqueued in the worker
-        self.pool.get('queue.job').write(cr, uid, job_ids,
-                                         {'state': 'pending',
-                                          'worker_id': worker_id},
-                                         context=context)
+        try:
+            self.pool.get('queue.job').write(cr, uid, job_ids,
+                                            {'state': 'pending',
+                                            'worker_id': worker_id},
+                                            context=context)
+        except Exception:
+            pass  # will be assigned to another worker
 
     def _enqueue_jobs(self, cr, uid, context=None):
         """ Called by an ir.cron, add to the queue all the jobs not

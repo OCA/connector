@@ -130,9 +130,6 @@ class Mapper(ConnectorUnit):
         :type environment: :py:class:`connector.connector.Environment`
         """
         super(Mapper, self).__init__(environment)
-        self._data = None
-        self._data_for_create = None
-        self._data_children = None
 
     def _init_child_mapper(self, model_name):
         raise NotImplementedError
@@ -151,13 +148,52 @@ class Mapper(ConnectorUnit):
         for meth, definition in self._map_methods.iteritems():
             yield getattr(self, meth), definition
 
+    def map_record(self, record, fields=None):
+        """
+
+        :param record: recort to map
+        :type record: :py:class:`~._MapperRecord`
+        """
+        if fields is None:
+            fields = {}
+        _logger.debug('mapping record %s to model %s',
+                      record, self._model_name)
+        data = {}
+        data_for_create = {}
+        children = {}
+        for from_attr, to_attr in self.direct:
+            if (not fields or from_attr in fields):
+                value = self._map_direct(record,
+                                         from_attr,
+                                         to_attr)
+                data[to_attr] = value
+
+        for meth, definition in self.map_methods:
+            changed_by = definition.changed_by
+            if (not fields or not changed_by or
+                    changed_by.intersection(fields)):
+                values = meth(record)
+                if not values:
+                    continue
+                if not isinstance(values, dict):
+                    raise ValueError('%s: invalid return value for the '
+                                     'mapping method %s' % (values, meth))
+                if definition.only_create:
+                    data_for_create.update(values)
+                else:
+                    data.update(values)
+
+        for from_attr, to_attr, model_name in self.children:
+            if (not fields or from_attr in fields):
+                children[to_attr] = self._map_child(record, from_attr,
+                                                    to_attr, model_name)
+
+        return data, data_for_create, children
+
+
     def _convert(self, record, fields=None, parent_values=None):
         if fields is None:
             fields = {}
-
-        self._data = {}
-        self._data_for_create = {}
-        self._data_children = {}
 
         _logger.debug('converting record %s to model %s', record, self._model_name)
         for from_attr, to_attr in self.direct:
@@ -198,14 +234,14 @@ class Mapper(ConnectorUnit):
         If it returns True, the current child record is skipped."""
         return False
 
-    def convert_child(self, record, parent_values=None):
-        """ Transform child row contained in a main record, only
-        called from another Mapper.
+    # def convert_for_child(self, record, parent_values=None):
+    #     """ Transform child row contained in a main record, only
+    #     called from another Mapper.
 
-        :param parent_values: openerp record of the containing object
-            (e.g. sale_order for a sale_order_line)
-        """
-        self._convert(record, parent_values=parent_values)
+    #     :param parent_values: openerp record of the containing object
+    #         (e.g. sale_order for a sale_order_line)
+    #     """
+    #     return _MapperRecord(self, record, parent=)
 
     def convert(self, record, fields=None):
         """ Transform an external record to an OpenERP record or the opposite
@@ -218,7 +254,8 @@ class Mapper(ConnectorUnit):
         :param fields: list of fields to convert, if empty, all fields
                        are converted
         """
-        self._convert(record, fields=fields)
+        # self._convert(record, fields=fields)
+        return _MapperRecord(self, record, fields=fields)
 
     @property
     def data(self):
@@ -252,15 +289,43 @@ class Mapper(ConnectorUnit):
     def _format_child_rows(self, child_records):
         return child_records
 
-    def _map_child(self, record, from_attr, to_attr, model_name):
-        child_records = record[from_attr]
-        self._data_children[to_attr] = []
+    def _map_child(self, record, from_attr, model_name):
+        child_records = record.source[from_attr]
+        mapper = self._init_child_mapper(model_name)
+        children = []
         for child_record in child_records:
-            mapper = self._init_child_mapper(model_name)
-            if mapper.skip_convert_child(child_record, parent_values=record):
-                continue
-            mapper.convert_child(child_record, parent_values=record)
-            self._data_children[to_attr].append(mapper)
+            # XXX move me
+            # if mapper.skip_convert_child(child_record, parent_values=record):
+            #     continue
+            children.append(_MapperRecord(self, record, parent=record))
+
+
+class _MapperRecord(object):
+
+    def __init__(self, mapper, source, fields=None, parent=None):
+        self._source = source
+        self._fields = fields
+        self._mapper = mapper
+        self._data = None
+        self._data_for_create = None
+        self._data_children = None
+
+    @property
+    def source(self):
+        return self._source
+
+    @property
+    def data(self):
+        if self._data is None:
+            pass
+        return self._data
+
+    @property
+    def data_for_create(self):
+        if self._data_for_create is None:
+            pass
+        return self._data_for_create
+
 
 
 class ImportMapper(Mapper):

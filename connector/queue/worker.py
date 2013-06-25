@@ -261,8 +261,11 @@ class WorkerWatcher(threading.Thread):
         if config['db_name']:
             db_names = config['db_name'].split(',')
         else:
-            service = openerp.netsvc.ExportService._services['db']
-            db_names = service.exp_list(True)
+            services = openerp.netsvc.ExportService._services
+            if services.get('db'):
+                db_names = services['db'].exp_list(True)
+            else:
+                db_names = []
         available_db_names = []
         for db_name in db_names:
             session_hdl = ConnectorSessionHandler(db_name,
@@ -340,4 +343,11 @@ def start_service():
     watcher.daemon = True
     watcher.start()
 
-start_service()
+# We have to launch the Jobs Workers only if:
+# 1. OpenERP is used in standalone mode (monoprocess)
+# 2. Or it is used in multiprocess (with option ``--workers``)
+#    but the current process is a Connector Worker
+#    (launched with the ``openerp-connector-worker`` script).
+if (not getattr(openerp, 'multi_process', False) or
+        getattr(openerp, 'worker_connector', False)):
+    start_service()

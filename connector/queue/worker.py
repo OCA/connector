@@ -237,15 +237,6 @@ class WorkerWatcher(threading.Thread):
             worker_uuid = self._workers[db_name].uuid
             # the worker will exit (it checks ``worker_lost()``)
             del self._workers[db_name]
-            session_hdl = ConnectorSessionHandler(db_name,
-                                                  openerp.SUPERUSER_ID)
-            with session_hdl.session() as session:
-                worker_ids = session.search('queue.worker',
-                                            [('uuid', '=', worker_uuid)])
-                try:
-                    session.unlink('queue.worker', worker_ids)
-                except Exception:
-                    pass  # if it fails, it will be removed after 5 minutes
 
     def worker_for_db(self, db_name):
         return self._workers.get(db_name)

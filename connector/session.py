@@ -19,9 +19,10 @@
 #
 ##############################################################################
 
-import openerp
-
 from contextlib import contextmanager
+
+import openerp
+from openerp.modules.registry import RegistryManager
 
 
 class ConnectorSessionHandler(object):
@@ -58,6 +59,7 @@ class ConnectorSessionHandler(object):
         * rollbacked on errors
         * commited at the end of the ``with`` context when no error occured
         * always closed at the end of the ``with`` context
+        * it handles the registry signaling
         """
         db = openerp.sql_db.db_connect(self.db_name)
         session = ConnectorSession(db.cursor(),
@@ -65,7 +67,9 @@ class ConnectorSessionHandler(object):
                                    context=self.context)
 
         try:
+            RegistryManager.check_registry_signaling(self.db_name)
             yield session
+            RegistryManager.signal_caches_change(self.db_name)
         except:
             session.rollback()
             raise
@@ -174,6 +178,9 @@ class ConnectorSession(object):
 
     def write(self, model, ids, values):
         return self.pool[model].write(self.cr, self.uid, ids, values, context=self.context)
+
+    def unlink(self, model, ids):
+        return self.pool[model].unlink(self.cr, self.uid, ids, context=self.context)
 
     def __repr__(self):
         return '<Session db_name: %s, uid: %d>' % (self.cr.dbname, self.uid)

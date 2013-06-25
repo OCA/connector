@@ -30,6 +30,7 @@ from openerp.tools.translate import _
 from .job import STATES, DONE, PENDING, OpenERPJobStorage
 from .worker import WORKER_TIMEOUT
 from ..session import ConnectorSession
+from .worker import watcher
 
 _logger = logging.getLogger(__name__)
 
@@ -180,7 +181,6 @@ class QueueWorker(orm.Model):
     _rec_name = 'uuid'
 
     worker_timeout = WORKER_TIMEOUT
-    _worker = None
 
     _columns = {
         'uuid': fields.char('UUID', readonly=True, select=True, required=True),
@@ -189,7 +189,7 @@ class QueueWorker(orm.Model):
         'date_alive': fields.datetime('Last Alive Check', readonly=True),
         'job_ids': fields.one2many('queue.job', 'worker_id',
                                    string='Jobs', readonly=True),
-        }
+    }
 
     def _notify_alive(self, cr, uid, worker, context=None):
         worker_ids = self.search(cr, uid,
@@ -204,12 +204,12 @@ class QueueWorker(orm.Model):
                          'date_start': now_fmt,
                          'date_alive': now_fmt},
                         context=context)
-            self._worker = worker
         else:
             self.write(cr, uid, worker_ids,
                        {'date_alive': now_fmt}, context=context)
 
     def _purge_dead_workers(self, cr, uid, context=None):
+        mem_worker = watcher.worker_for_db(cr.dbname)
         deadline = datetime.now() - timedelta(seconds=self.worker_timeout)
         deadline_fmt = deadline.strftime(DEFAULT_SERVER_DATETIME_FORMAT)
         dead_ids = self.search(cr, uid,
@@ -218,23 +218,23 @@ class QueueWorker(orm.Model):
         dead_workers = self.read(cr, uid, dead_ids, ['uuid'], context=context)
         for worker in dead_workers:
             _logger.debug('Worker %s is dead', worker['uuid'])
-            # exists in self._workers only for the same process and pool
-            if worker['uuid'] == self._worker:
-                _logger.error('Worker %s should be alive, '
-                              'but appears to be dead.',
+            # exists in the WorkerWatcher but is dead according to db
+            if worker['uuid'] == mem_worker.uuid:
+                _logger.error('Worker %s seems alive, '
+                              'but appears to be dead in database.',
                               worker['uuid'])
-                self._worker = None
         try:
             self.unlink(cr, uid, dead_ids, context=context)
         except Exception:
             _logger.debug("Failed attempt to unlink a dead worker, likely due "
                           "to another transaction in progress. "
                           "Trace of the failed unlink "
-                          "%s attempt: ", self._worker.uuid, exc_info=True)
+                          "%s attempt: ", mem_worker.uuid, exc_info=True)
 
     def _worker_id(self, cr, uid, context=None):
-        assert self._worker
-        worker_ids = self.search(cr, uid, [('uuid', '=', self._worker.uuid)],
+        worker = watcher.worker_for_db(cr.dbname)
+        assert worker
+        worker_ids = self.search(cr, uid, [('uuid', '=', worker.uuid)],
                                  context=context)
         assert len(worker_ids) == 1, ("%s worker found in database instead "
                                       "of 1" % len(worker_ids))
@@ -268,7 +268,8 @@ class QueueWorker(orm.Model):
         :param max_jobs: maximal limit of jobs to assign on a worker
         :type max_jobs: int
         """
-        if self._worker:
+        worker = watcher.worker_for_db(cr.dbname)
+        if worker:
             self._assign_jobs(cr, uid, max_jobs=max_jobs, context=context)
         else:
             _logger.debug('No worker started for process %s', os.getpid())
@@ -278,7 +279,8 @@ class QueueWorker(orm.Model):
         """ Enqueue all the jobs assigned to the worker of the current
         process
         """
-        if self._worker:
+        worker = watcher.worker_for_db(cr.dbname)
+        if worker:
             self._enqueue_jobs(cr, uid, context=context)
         else:
             _logger.debug('No worker started for process %s', os.getpid())
@@ -295,6 +297,7 @@ class QueueWorker(orm.Model):
         # use a SAVEPOINT to be able to rollback this part of the
         # transaction without failing the whole transaction if the LOCK
         # cannot be acquired
+        worker = watcher.worker_for_db(cr.dbname)
         cr.execute("SAVEPOINT queue_assign_jobs")
         try:
             cr.execute(sql, log_exceptions=False)
@@ -306,23 +309,23 @@ class QueueWorker(orm.Model):
             _logger.debug("Failed attempt to assign jobs, likely due to "
                           "another transaction in progress. "
                           "Trace of the failed assignment of jobs on worker "
-                          "%s attempt: ", self._worker.uuid, exc_info=True)
+                          "%s attempt: ", worker.uuid, exc_info=True)
             return
         job_rows = cr.fetchall()
         if not job_rows:
-            _logger.debug('No job to assign to worker %s', self._worker.uuid)
+            _logger.debug('No job to assign to worker %s', worker.uuid)
             return
         job_ids = [id for id, in job_rows]
 
         worker_id = self._worker_id(cr, uid, context=context)
         _logger.debug('Assign %d jobs to worker %s', len(job_ids),
-                      self._worker.uuid)
+                      worker.uuid)
         # ready to be enqueued in the worker
         try:
             self.pool.get('queue.job').write(cr, uid, job_ids,
-                                            {'state': 'pending',
-                                            'worker_id': worker_id},
-                                            context=context)
+                                             {'state': 'pending',
+                                             'worker_id': worker_id},
+                                             context=context)
         except Exception:
             pass  # will be assigned to another worker
 
@@ -331,9 +334,10 @@ class QueueWorker(orm.Model):
         already queued"""
         db_worker_id = self._worker_id(cr, uid, context=context)
         db_worker = self.browse(cr, uid, db_worker_id, context=context)
+        worker = watcher.worker_for_db(cr.dbname)
         for job in db_worker.job_ids:
             if job.state == 'pending':
-                self._worker.enqueue_job_uuid(job.uuid)
+                worker.enqueue_job_uuid(job.uuid)
 
 
 class requeue_job(orm.TransientModel):

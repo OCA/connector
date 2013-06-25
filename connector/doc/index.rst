@@ -31,6 +31,7 @@ Developer's guide
 
    guides/overview.rst
    guides/bootstrap_connector.rst
+   guides/multiprocessing.rst
 
 API Reference
 =============

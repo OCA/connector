@@ -22,7 +22,7 @@ server.
 Example::
 
     $ PYTHONPATH=/path/to/server connector/openerp-connector-worker --config /path/to/configfile \
-      --workers=2 --log-file=/path/to/logfile
+      --workers=2 --logfile=/path/to/logfile
 
 The 'Enqueue Jobs' scheduled action is useless when multiprocessing is
 used.

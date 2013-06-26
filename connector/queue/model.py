@@ -322,14 +322,18 @@ class QueueWorker(orm.Model):
             pass  # will be assigned to another worker
 
     def _enqueue_jobs(self, cr, uid, context=None):
-        """ Called by an ir.cron, add to the queue all the jobs not
-        already queued"""
+        """ Add to the queue of the worker all the jobs not
+        yet queued but already assigned."""
+        job_obj = self.pool.get('queue.job')
         db_worker_id = self._worker_id(cr, uid, context=context)
-        db_worker = self.browse(cr, uid, db_worker_id, context=context)
+        job_ids = job_obj.search(cr, uid,
+                                 [('worker_id', '=', db_worker_id),
+                                  ('state', '=', 'pending')],
+                                 context=context)
         worker = watcher.worker_for_db(cr.dbname)
-        for job in db_worker.job_ids:
-            if job.state == 'pending':
-                worker.enqueue_job_uuid(job.uuid)
+        jobs = job_obj.read(cr, uid, job_ids, ['uuid'], context=context)
+        for job in jobs:
+            worker.enqueue_job_uuid(job['uuid'])
 
 
 class requeue_job(orm.TransientModel):

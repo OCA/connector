@@ -209,7 +209,6 @@ class QueueWorker(orm.Model):
                        {'date_alive': now_fmt}, context=context)
 
     def _purge_dead_workers(self, cr, uid, context=None):
-        mem_worker = watcher.worker_for_db(cr.dbname)
         deadline = datetime.now() - timedelta(seconds=self.worker_timeout)
         deadline_fmt = deadline.strftime(DEFAULT_SERVER_DATETIME_FORMAT)
         dead_ids = self.search(cr, uid,
@@ -218,18 +217,11 @@ class QueueWorker(orm.Model):
         dead_workers = self.read(cr, uid, dead_ids, ['uuid'], context=context)
         for worker in dead_workers:
             _logger.debug('Worker %s is dead', worker['uuid'])
-            # exists in the WorkerWatcher but is dead according to db
-            if worker['uuid'] == mem_worker.uuid:
-                _logger.error('Worker %s seems alive, '
-                              'but appears to be dead in database.',
-                              worker['uuid'])
         try:
             self.unlink(cr, uid, dead_ids, context=context)
         except Exception:
             _logger.debug("Failed attempt to unlink a dead worker, likely due "
-                          "to another transaction in progress. "
-                          "Trace of the failed unlink "
-                          "%s attempt: ", mem_worker.uuid, exc_info=True)
+                          "to another transaction in progress.")
 
     def _worker_id(self, cr, uid, context=None):
         worker = watcher.worker_for_db(cr.dbname)

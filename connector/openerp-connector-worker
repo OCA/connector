@@ -13,7 +13,7 @@ import openerp.service.workers as workers
 from openerp.modules.registry import RegistryManager
 from openerp.tools import config
 
-_logger = logging.getLogger('connector.worker.multi')
+_logger = logging.getLogger('openerp-connector-worker')
 
 
 class Multicornnector(workers.Multicorn):

@@ -156,7 +156,8 @@ class test_backend_register(common.TransactionCase):
         self.assertEqual(matching_cls, LambdaYesUnit)
 
     def test_get_class_replaced_uninstalled_module(self):
-        """ Only class from an installed module should be returned """
+        """ Does not return the replacing ConnectorUnit of an
+        uninstalled module """
         class LambdaUnit(ConnectorUnit):
             _model_name = 'res.users'
 
@@ -171,6 +172,28 @@ class test_backend_register(common.TransactionCase):
         # that it comes from the OpenERP module 'not installed module'
         LambdaNoUnit._openerp_module_ = 'not installed module'
         self.backend(LambdaNoUnit, replacing=LambdaYesUnit)
+
+        matching_cls = self.backend.get_class(LambdaUnit,
+                                              self.session,
+                                              'res.users')
+        self.assertEqual(matching_cls, LambdaYesUnit)
+
+    def test_get_class_replaced_diamond(self):
+        """ Replace several classes in a diamond fashion """
+        class LambdaUnit(ConnectorUnit):
+            _model_name = 'res.users'
+
+        @self.backend
+        class LambdaNoUnit(LambdaUnit):
+            _model_name = 'res.users'
+
+        @self.backend
+        class LambdaNo2Unit(LambdaUnit):
+            _model_name = 'res.users'
+
+        @self.backend(replacing=(LambdaNoUnit, LambdaNo2Unit))
+        class LambdaYesUnit(LambdaUnit):
+            _model_name = 'res.users'
 
         matching_cls = self.backend.get_class(LambdaUnit,
                                               self.session,

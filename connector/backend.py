@@ -180,19 +180,26 @@ class Backend(object):
 
     def register_class(self, cls, replacing=None):
         """ Register a class"""
-        entry = _ConnectorUnitEntry(cls=cls,
-                                    openerp_module=cls._openerp_module_,
-                                    replaced_by=[])
-        if replacing is not None:
+        def register_replace(replacing_cls):
             found = False
             for replaced_entry in self._class_entries:
-                if replaced_entry.cls is replacing:
+                if replaced_entry.cls is replacing_cls:
                     replaced_entry.replaced_by.append(entry)
                     found = True
                     break
             if not found:
                 raise ValueError('%s replaces an unexisting class: %s' %
                                  (cls, replacing))
+
+        entry = _ConnectorUnitEntry(cls=cls,
+                                    openerp_module=cls._openerp_module_,
+                                    replaced_by=[])
+        if replacing is not None:
+            if hasattr(replacing, '__iter__'):
+                for replacing_cls in replacing:
+                    register_replace(replacing_cls)
+            else:
+                register_replace(replacing)
         self._class_entries.append(entry)
 
     def __call__(self, cls=None, replacing=None):

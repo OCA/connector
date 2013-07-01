@@ -81,6 +81,7 @@ class test_event(common.TransactionCase):
         self.assertIn(self.consumer2, self.event._consumers['res.users'])
 
     def test_fire(self):
+        """ Fire a consumer """
         class Recipient(object):
             def __init__(self):
                 self.message = None
@@ -95,6 +96,31 @@ class test_event(common.TransactionCase):
         session = mock.Mock()
         self.event.fire(session, 'res.users', recipient, 'success')
         self.assertEquals(recipient.message, 'success')
+
+    def test_fire_several_consumers(self):
+        """ Fire several consumers """
+        class Recipient(object):
+            def __init__(self):
+                self.message = None
+            def set_message(self, message):
+                self.message = message
+
+        recipient = Recipient()
+        recipient2 = Recipient()
+
+        @self.event
+        def set_message(session, model_name, message):
+            recipient.set_message(message)
+
+        @self.event
+        def set_message2(session, model_name, message):
+            recipient2.set_message(message)
+
+        # an event is fired on a model name
+        session = mock.Mock()
+        self.event.fire(session, 'res.users', 'success')
+        self.assertEquals(recipient.message, 'success')
+        self.assertEquals(recipient2.message, 'success')
 
     def test_has_consumer_for(self):
         @self.event(model_names=['product.product'])

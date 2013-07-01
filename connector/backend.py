@@ -18,6 +18,8 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
+from functools import partial
+from collections import namedtuple
 
 __all__ = ['get_backend', 'Backend']
 
@@ -69,6 +71,13 @@ def get_backend(service, version=None):
     return BACKENDS.get_backend(service, version)
 
 
+# Represents an entry for a class in a ``Backend`` registry.
+_ConnectorUnitEntry = namedtuple('_ConnectorUnitEntry',
+                                 ['cls',
+                                  'openerp_module',
+                                  'replaced_by'])
+
+
 class Backend(object):
     """ A backend represents a system to interact with,
     like Magento, Prestashop, Redmine, ...
@@ -105,7 +114,7 @@ class Backend(object):
         self._service = service
         self.version = version
         self.parent = parent
-        self._classes = set()
+        self._class_entries = []
         if registry is None:
             registry = BACKENDS
         registry.register_backend(self)
@@ -130,12 +139,25 @@ class Backend(object):
         return '<Backend \'%s\'>' % self.service
 
     def _get_classes(self, base_class, session, model_name):
-        matching_classes = []
-        for cls in self.registered_classes(base_class=base_class):
-            if not issubclass(cls, base_class):
-                continue
-            if cls.match(session, model_name):
-                matching_classes.append(cls)
+        def follow_replacing(entries):
+            candidates = set()
+            for entry in entries:
+                replacings = None
+                if entry.replaced_by:
+                    replacings = follow_replacing(entry.replaced_by)
+                    if replacings:
+                        candidates.update(replacings)
+                # If all the classes supposed to replace the current class
+                # have been discarded, the current class is a candidate.
+                # It happens when the entries in 'replaced_by' are
+                # in modules not installed.
+                if not replacings:
+                    if (session.is_module_installed(entry.openerp_module) and
+                            issubclass(entry.cls, base_class) and
+                            entry.cls.match(session, model_name)):
+                        candidates.add(entry.cls)
+            return candidates
+        matching_classes = follow_replacing(self._class_entries)
         if not matching_classes and self.parent:
             matching_classes = self.parent._get_classes(base_class,
                                                         session, model_name)
@@ -154,35 +176,33 @@ class Backend(object):
             'Several classes found for %s '
             'with session %s, model name: %s. Found: %s' %
             (base_class, session, model_name, matching_classes))
-        return matching_classes[0]
+        return matching_classes.pop()
 
-    def registered_classes(self, base_class=None):
-        """ Yield all the classes registered on the backend
-
-        :param base_class: select only subclasses of ``base_class``
-        :type base_class: type
-        """
-        for cls in self._classes:
-            if base_class and not issubclass(cls, base_class):
-                continue
-            yield cls
-
-    def register_class(self, cls):
+    def register_class(self, cls, replacing=None):
         """ Register a class"""
-        self._classes.add(cls)
+        entry = _ConnectorUnitEntry(cls=cls,
+                                    openerp_module=cls._openerp_module_,
+                                    replaced_by=[])
+        if replacing is not None:
+            found = False
+            for replaced_entry in self._class_entries:
+                if replaced_entry.cls is replacing:
+                    replaced_entry.replaced_by.append(entry)
+                    found = True
+                    break
+            if not found:
+                raise ValueError('%s replaces an unexisting class: %s' %
+                                 (cls, replacing))
+        self._class_entries.append(entry)
 
-    def unregister_class(self, cls):
-        """ Unregister a class"""
-        self._classes.remove(cls)
-
-    def __call__(self, cls):
+    def __call__(self, cls=None, replacing=None):
         """ Backend decorator
 
         For a backend ``magento`` declared like this::
 
             magento = Backend('magento')
 
-        A binder, synchronizer, mapper or backend adapter can be
+        A ``ConnectorUnit`` (binder, synchronizer, mapper, ...) can be
         registered as follows::
 
             @magento
@@ -196,9 +216,26 @@ class Backend(object):
 
         We get the correct class ``MagentoBinder``.
 
+        Any ConnectorUnit can be replaced by another doing::
+
+            @magento(replacing=MagentoBinder)
+            class MagentoBinder2(Binder):
+                _model_name = 'a.model'
+                # other stuff
+
+        This is useful when working on an OpenERP module which should
+        alter the original behavior of a connector.
+
+        :param cls: the ConnectorUnit class class to register
+        :type: :py:class:`connector.connector.MetaConnectorUnit`
+        :param replacing: optional, the ConnectorUnit class to replace
+        :type: :py:class:`connector.connector.MetaConnectorUnit`
         """
+        if cls is None:
+            return partial(self, replacing=replacing)
+
         def with_subscribe():
-            self.register_class(cls)
+            self.register_class(cls, replacing=replacing)
             return cls
 
         return with_subscribe()

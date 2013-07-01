@@ -188,7 +188,7 @@ class Backend(object):
                     found = True
                     break
             if not found:
-                raise ValueError('%s replaces an unexisting class: %s' %
+                raise ValueError('%s replaces an unregistered class: %s' %
                                  (cls, replacing))
 
         entry = _ConnectorUnitEntry(cls=cls,

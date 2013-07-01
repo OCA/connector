@@ -75,7 +75,7 @@ class test_backend_register(common.TransactionCase):
     def tearDown(self):
         super(test_backend_register, self).setUp()
         BACKENDS.backends.clear()
-        self.backend._classes.clear()
+        del self.backend._class_entries[:]
 
     def test_register_class(self):
         class BenderBinder(Binder):
@@ -115,46 +115,6 @@ class test_backend_register(common.TransactionCase):
                                          self.session,
                                          'res.users')
 
-    def test_registered_classes_all(self):
-        @self.backend
-        class LeelaMapper(Mapper):
-            _model_name = 'res.users'
-
-        @self.backend
-        class FarnsworthBinder(Binder):
-            _model_name = 'res.users'
-
-        @self.backend
-        class NibblerBackendAdapter(BackendAdapter):
-            _model_name = 'res.users'
-
-        classes = list(self.backend.registered_classes())
-        self.assertItemsEqual(
-            classes,
-            [LeelaMapper, FarnsworthBinder, NibblerBackendAdapter])
-
-    def test_registered_classes_filter(self):
-        @self.backend
-        class LeelaMapper(ExportMapper):
-            _model_name = 'res.users'
-
-        @self.backend
-        class AmyWongMapper(ImportMapper):
-            _model_name = 'res.users'
-
-        @self.backend
-        class FarnsworthBinder(Binder):
-            _model_name = 'res.users'
-
-        @self.backend
-        class NibblerBackendAdapter(BackendAdapter):
-            _model_name = 'res.users'
-
-        classes = list(self.backend.registered_classes(Mapper))
-        self.assertItemsEqual(
-            classes,
-            [LeelaMapper, AmyWongMapper])
-
     def test_get_class_installed_module(self):
         """ Only class from an installed module should be returned """
         class LambdaUnit(ConnectorUnit):
@@ -164,12 +124,55 @@ class test_backend_register(common.TransactionCase):
         class LambdaYesUnit(LambdaUnit):
             _model_name = 'res.users'
 
+        class LambdaNoUnit(LambdaUnit):
+            _model_name = 'res.users'
+
+        # trick the origin of the class, let it think
+        # that it comes from the OpenERP module 'not installed module'
+        LambdaNoUnit._openerp_module_ = 'not installed module'
+        self.backend(LambdaNoUnit)
+
+        matching_cls = self.backend.get_class(LambdaUnit,
+                                              self.session,
+                                              'res.users')
+        self.assertEqual(matching_cls, LambdaYesUnit)
+
+    def test_get_class_replaced_module(self):
+        """ Returns the replacing ConnectorUnit"""
+        class LambdaUnit(ConnectorUnit):
+            _model_name = 'res.users'
+
         @self.backend
         class LambdaNoUnit(LambdaUnit):
             _model_name = 'res.users'
 
-        LambdaNoUnit._module = 'not_installed_module'
-        self.assertEqual(self.backend.get_class(LambdaUnit,
-                                                self.session,
-                                                'res.users'),
-                         LambdaYesUnit)
+        @self.backend(replacing=LambdaNoUnit)
+        class LambdaYesUnit(LambdaUnit):
+            _model_name = 'res.users'
+
+        matching_cls = self.backend.get_class(LambdaUnit,
+                                              self.session,
+                                              'res.users')
+        self.assertEqual(matching_cls, LambdaYesUnit)
+
+    def test_get_class_replaced_uninstalled_module(self):
+        """ Only class from an installed module should be returned """
+        class LambdaUnit(ConnectorUnit):
+            _model_name = 'res.users'
+
+        @self.backend
+        class LambdaYesUnit(LambdaUnit):
+            _model_name = 'res.users'
+
+        class LambdaNoUnit(LambdaUnit):
+            _model_name = 'res.users'
+
+        # trick the origin of the class, let it think
+        # that it comes from the OpenERP module 'not installed module'
+        LambdaNoUnit._openerp_module_ = 'not installed module'
+        self.backend(LambdaNoUnit, replacing=LambdaYesUnit)
+
+        matching_cls = self.backend.get_class(LambdaUnit,
+                                              self.session,
+                                              'res.users')
+        self.assertEqual(matching_cls, LambdaYesUnit)

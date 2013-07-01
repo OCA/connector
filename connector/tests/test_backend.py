@@ -199,3 +199,13 @@ class test_backend_register(common.TransactionCase):
                                               self.session,
                                               'res.users')
         self.assertEqual(matching_cls, LambdaYesUnit)
+
+    def test_get_class_replacing_unregistered(self):
+        """ Replacing an unregistered class raise ValueError """
+        class LambdaUnit(ConnectorUnit):
+            _model_name = 'res.users'
+
+        with self.assertRaises(ValueError):
+            @self.backend(replacing=LambdaUnit)
+            class LambdaNoUnit(LambdaUnit):
+                _model_name = 'res.users'

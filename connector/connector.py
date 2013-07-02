@@ -19,37 +19,66 @@
 #
 ##############################################################################
 
+import inspect
 from openerp.osv import orm
 
 
-class connector_installed(orm.AbstractModel):
-    """Empty model used to know if the module is installed on the
-    database.
+def _get_openerp_module_name(module_path):
+    """ Extract the name of the OpenERP module from the path of the
+    Python module.
 
-    If the model is in the registry, the module is installed.
+    Taken from OpenERP server: ``openerp.osv.orm``
+
+    The (OpenERP) module name can be in the ``openerp.addons`` namespace
+    or not. For instance module ``sale`` can be imported as
+    ``openerp.addons.sale`` (the good way) or ``sale`` (for backward
+    compatibility).
     """
-    _name = 'connector.installed'
+    module_parts = module_path.split('.')
+    if (len(module_parts) > 2 and module_parts[0] == 'openerp' and
+            module_parts[1] == 'addons'):
+        module_name = module_parts[2]
+    else:
+        module_name = module_parts[0]
+    return module_name
+
+
+def install_connector_module():
+    """ Installs an OpenERP module in the ``Connector`` framework.
+
+    It has to be called once per OpenERP module to plug.
+
+    Under the cover, it creates a ``orm.AbstractModel`` whose name is
+    the name of the module with a ``.intalled`` suffix:
+    ``{name_of_the_openerp_module_to_install}.installed``.
+
+    The connector then uses this model to know when the OpenERP module
+    is installed or not and whether it should use the ConnectorUnit
+    classes of this module or not.
+    """
+    # Get the module of the caller
+    module = inspect.getmodule(inspect.currentframe().f_back)
+    openerp_module_name = _get_openerp_module_name(module.__name__)
+    # Build a new AbstractModel with the name of the module and the suffix
+    name = "%s.installed" % openerp_module_name
+    class_name = name.replace('.', '_')
+    model = orm.MetaModel(class_name, (orm.AbstractModel,), {'_name': name})
+    # Update the module of the model, it should be the caller's one
+    model.__module__ = module
+
+
+# install the connector itself
+install_connector_module()
 
 
 def get_openerp_module(cls_or_func):
     """ For a top level function or class, returns the
-    name of the module where it lives.
+    name of the OpenERP module where it lives.
 
     So we will be able to filter them according to the modules
     installation state.
     """
-    # taken from OpenERP server: openerp.osv.orm
-    # The (OpenERP) module name can be in the `openerp.addons` namespace
-    # or not. For instance module `sale` can be imported as
-    # `openerp.addons.sale` (the good way) or `sale` (for backward
-    # compatibility).
-    module_parts = cls_or_func.__module__.split('.')
-    if (len(module_parts) > 2 and module_parts[0] == 'openerp' and
-            module_parts[1] == 'addons'):
-        module_name = cls_or_func.__module__.split('.')[2]
-    else:
-        module_name = cls_or_func.__module__.split('.')[0]
-    return module_name
+    return _get_openerp_module_name(cls_or_func.__module__)
 
 
 class MetaConnectorUnit(type):

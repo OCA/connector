@@ -79,8 +79,8 @@ That's just a matter of following a convention and creating
 
     install_connector_module()
 
-.. warning:: If you miss this line of code, your custom ConnectorUnit
-             classes won't be used.
+.. warning:: If you miss this line of code, your ConnectorUnit classes won't
+             be found.
 
 .. note:: The reason for this is that OpenERP may import the Python modules
           of uninstalled modules, so it automatically registers the

@@ -21,7 +21,7 @@ class Multicornnector(workers.Multicorn):
     def __init__(self, app):
         super(Multicornnector, self).__init__(app)
         self.address = ('0.0.0.0', 0)
-        self.population = config['workers']
+        self.population = config['workers'] or 1
         self.workers_connector = {}
 
     def process_spawn(self):

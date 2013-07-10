@@ -126,7 +126,7 @@ html_theme_options = {
 
     # HTML navbar class (Default: "navbar") to attach to <div> element.
     # For black navbar, do "navbar navbar-inverse"
-    'navbar_class': "navbar navbar-inverse",
+    'navbar_class': "navbar",
 
     # Fix navigation bar to top of page?
     # Values: "true" (default) or "false"
@@ -134,7 +134,7 @@ html_theme_options = {
 
     # Location of link to source.
     # Options are "nav" (default), "footer" or anything else to exclude.
-    'source_link_position': "nav",
+    'source_link_position': "footer",
 
     # Bootswatch (http://bootswatch.com/) theme.
     #
@@ -292,6 +292,7 @@ texinfo_documents = [
 # Example configuration for intersphinx: refer to the Python standard library.
 intersphinx_mapping = {
     'http://docs.python.org/': None,
-    'openerpweb': ('http://doc.openerp.com/trunk/developers/web', None),
-    'openerpdev': ('http://doc.openerp.com/trunk/developers/server/', None),
+    'openerpweb': ('https://doc.openerp.com/trunk/web/', None),
+    'openerpdev': ('https://doc.openerp.com/trunk/server/', None),
+    'magentoerpconnect': ('http://localhost:8001', None),
 }

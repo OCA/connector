@@ -35,8 +35,7 @@ def _get_openerp_module_name(module_path):
     compatibility).
     """
     module_parts = module_path.split('.')
-    if (len(module_parts) > 2 and module_parts[0] == 'openerp' and
-            module_parts[1] == 'addons'):
+    if len(module_parts) > 2 and module_parts[:2] == ['openerp', 'addons']:
         module_name = module_parts[2]
     else:
         module_name = module_parts[0]

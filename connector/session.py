@@ -97,14 +97,6 @@ class ConnectorSession(object):
     .. attribute:: context
 
         The current OpenERP's context
-
-    .. attribute:: model
-
-        Instance of the model we're working on
-
-    A session can hold a reference to a model. This is useful
-    in the connectors' context because a session's life is usually
-    focused on a model (export a product, import a sale order, ...)
     """
 
     def __init__(self, cr, uid, context=None):
@@ -190,7 +182,7 @@ class ConnectorSession(object):
         on the current database.
 
         .. note:: Use a convention established for the connectors addons:
-                  To know if a module is installed, it looks if an abstract
+                  To know if a module is installed, it looks if an (abstract)
                   model with name ``module_name.installed`` is loaded in the
                   registry.
         """

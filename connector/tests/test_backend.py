@@ -209,3 +209,16 @@ class test_backend_register(common.TransactionCase):
             @self.backend(replacing=LambdaUnit)
             class LambdaNoUnit(LambdaUnit):
                 _model_name = 'res.users'
+
+    def test_get_class_replacing_self(self):
+        """ A class should not be able to replace itself """
+        class LambdaUnit(ConnectorUnit):
+            _model_name = 'res.users'
+
+        @self.backend
+        class LambdaRecurseUnit(LambdaUnit):
+            _model_name = 'res.users'
+
+        with self.assertRaises(ValueError):
+            self.backend.register_class(LambdaRecurseUnit,
+                                        replacing=LambdaRecurseUnit)

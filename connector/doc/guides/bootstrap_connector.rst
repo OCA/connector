@@ -72,12 +72,12 @@ Install the module in the connector
 Each new module needs to be plugged in the connector's framework.
 That's just a matter of following a convention and creating
 ``connector_coffee/connector.py`` in which you will call the
-``install_connector_module`` function::
+``install_in_connector`` function::
 
-    from openerp.addons.connector.connector import install_connector_module
+    from openerp.addons.connector.connector import install_in_connector
 
 
-    install_connector_module()
+    install_in_connector()
 
 .. warning:: If you miss this line of code, your ConnectorUnit classes won't
              be found.

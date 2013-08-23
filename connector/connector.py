@@ -42,7 +42,7 @@ def _get_openerp_module_name(module_path):
     return module_name
 
 
-def install_connector_module():
+def install_in_connector():
     """ Installs an OpenERP module in the ``Connector`` framework.
 
     It has to be called once per OpenERP module to plug.
@@ -67,7 +67,7 @@ def install_connector_module():
 
 
 # install the connector itself
-install_connector_module()
+install_in_connector()
 
 
 def get_openerp_module(cls_or_func):

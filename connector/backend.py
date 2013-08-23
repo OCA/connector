@@ -204,6 +204,23 @@ class Backend(object):
                 register_replace(replacing)
         self._class_entries.append(entry)
 
+    def unregister_class(self, cls):
+        """ Deprecated. Was used to remove a ``ConnectorUnit``
+        from the registry. Now, the ``replacing`` argument of
+        the decorator or ``register_clas()`` should be used.
+
+        It has been deprecated because it is not safe to unregister
+        a ConnectorUnit due to the way OpenERP works with addons.
+        A python module can be imported even if a addon is not installed.
+        """
+        raise DeprecationWarning('Backend.unregister_class() is deprecated. '
+                                 'You have to use the replacing argument '
+                                 'of the register_class() method')
+
+    def registered_classes(self, base_class=None):
+        """ Deprecated. """
+        raise DeprecationWarning('Backend.registered_classes() is deprecated.')
+
     def __call__(self, cls=None, replacing=None):
         """ Backend decorator
 

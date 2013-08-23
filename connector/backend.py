@@ -195,6 +195,8 @@ class Backend(object):
                                     openerp_module=cls._openerp_module_,
                                     replaced_by=[])
         if replacing is not None:
+            if replacing is cls:
+                raise ValueError('%r cannot replace itself' % replacing)
             if hasattr(replacing, '__iter__'):
                 for replacing_cls in replacing:
                     register_replace(replacing_cls)

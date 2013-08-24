@@ -115,8 +115,8 @@ A connectors developer is mostly interested by:
 
 * Declare the backends
 * Register a ConnectorUnit on a backend
-* Unregister a ConnectorUnit on a backend
-* Get a connectorUnit from a backend
+* Replace a ConnectorUnit on a backend
+* Use a different ConnectorUnit for a different version of a backend
 
 
 ***********

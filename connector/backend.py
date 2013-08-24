@@ -82,6 +82,8 @@ class Backend(object):
     """ A backend represents a system to interact with,
     like Magento, Prestashop, Redmine, ...
 
+    It owns 3 properties:
+
     .. attribute:: service
 
         Name of the service, for instance 'magento'
@@ -95,16 +97,98 @@ class Backend(object):
         A parent backend. When no :py:class:`~connector.connector.ConnectorUnit`
         is found for a backend, it will search it in the `parent`.
 
-    A backend knows all the classes it is able to use (mappers,
-    binders, synchronizers, backend adapters) and give the appropriate
-    class to use for a model. When a backend is linked to a parent and
-    no particular mapper, synchronizer, backend adapter or binder is
-    defined at its level, it will use the parent's one.
+    The Backends structure is a key part of the framework, but is rather simple.
 
-    Example::
+    * A ``Backend`` instance holds a registry of
+      :py:class:`~connector.connector.ConnectorUnit` classes
+    * It can return the appropriate :py:class:`~connector.connector.ConnectorUnit`
+      to use for a task
+    * If no :py:class:`~connector.connector.ConnectorUnit` is registered for a
+      task, it will ask it to its direct parent (and so on)
+
+
+    The Backends support 2 different extension mechanisms. One is more
+    vertical - across the versions - and the other would be more horizontal as
+    it allows to modify the behavior for 1 version of backend.
+
+    For the sake of the example, let's say we have theses backend versions::
+
+                 <Magento>
+                     |
+              -----------------
+              |               |
+        <Magento 1.7>   <Magento 2.0>
+              |
+        <Magento with specific>
+
+    And here is the way they are declared in Python::
 
         magento = Backend('magento')
         magento1700 = Backend(parent=magento, version='1.7')
+        magento2000 = Backend(parent=magento, version='2.0')
+
+        magento_specific = Backend(parent=magento1700, version='1.7-specific')
+
+    In the graph above, ``<Magento>`` will hold all the classes shared between
+    all the versions.  Each Magento version (``<Magento 1.7>``, ``<Magento
+    2.0>``) will use the classes defined on ``<Magento>``, excepted if they
+    registered their own ones instead. That's the same for ``<Magento with
+    specific>`` but this one contains customizations which are specific to an
+    instance (typically you want specific mappings for one instance).
+
+    Here is how you would register classes on ``<Magento>`` and another on
+    ``<Magento 1.7>``::
+
+        @magento
+        class Synchronizer(ConnectorUnit):
+            _model_name = 'res.partner'
+
+        @magento
+        class Mapper(ConnectorUnit):
+            _model_name = 'res.partner'
+
+        @magento1700
+        class Synchronizer1700(Synchronizer):
+            _model_name = 'res.partner'
+
+    Here, the :py:meth:`~get_class` called on ``magento1700`` would return::
+
+        magento1700.get_class(Synchronizer, session, 'res.partner')
+        # => Synchronizer1700
+        magento1700.get_class(Mapper, session, 'res.partner')
+        # => Mapper
+
+    This is the vertical extension mechanism, it says that each child version
+    is able to extend or replace the behavior of its parent.
+
+    .. note:: when using the framework, you won't need to call
+              :py:meth:`~get_class`, usually, you will call
+              :py:meth:`connector.connector.Environment.get_connector_unit`.
+
+    The vertical extension is the one you will probably use the most, because
+    most of them concern customizations for different versions of the backends.
+
+    However, some time, we need to change the behavior of a connector, by
+    installing an addon. For example, say that we already have an
+    ``ImportMapper`` for the products in the Magento Connector. We create a
+    - generic - addon to handle the catalog in a more advanced manner. We
+    redefine an ``AdvancedImportMapper``, which should be used when the addon is
+    installed, this for all the versions of Magento. This is the horizontal
+    extension mechanism.
+
+    Replace a :py:class:`~connector.connector.ConnectorUnit` by another one
+    in a backend::
+
+        @backend(replacing=ImportMapper)
+        class AdvancedImportMapper(ImportMapper):
+            _model_name = 'product.product'
+
+    .. caution:: The horizontal extension should be used sparingly and
+                 cautiously because as soon as 2 addons want to replace the same class,
+                 you'll have a conflict (which would need to create a third addon to glue
+                 them, ``replacing`` can take a tuple of classes to replace).
+
+    TODO: refs from the "concepts" page
 
     """
 

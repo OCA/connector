@@ -21,7 +21,7 @@
 from functools import partial
 from collections import namedtuple
 
-__all__ = ['get_backend', 'Backend']
+__all__ = ['Backend']
 
 
 class BackendRegistry(object):
@@ -166,15 +166,15 @@ class Backend(object):
               :py:meth:`connector.connector.Environment.get_connector_unit`.
 
     The vertical extension is the one you will probably use the most, because
-    most of them concern customizations for different versions of the backends.
+    most of the things you will change concern your custom adaptations or
+    different behaviors between the versions of the backend.
 
     However, some time, we need to change the behavior of a connector, by
     installing an addon. For example, say that we already have an
     ``ImportMapper`` for the products in the Magento Connector. We create a
     - generic - addon to handle the catalog in a more advanced manner. We
     redefine an ``AdvancedImportMapper``, which should be used when the addon is
-    installed, this for all the versions of Magento. This is the horizontal
-    extension mechanism.
+    installed. This is the horizontal extension mechanism.
 
     Replace a :py:class:`~connector.connector.ConnectorUnit` by another one
     in a backend::
@@ -183,13 +183,12 @@ class Backend(object):
         class AdvancedImportMapper(ImportMapper):
             _model_name = 'product.product'
 
-    .. caution:: The horizontal extension should be used sparingly and
-                 cautiously because as soon as 2 addons want to replace the same class,
+    .. warning:: The horizontal extension should be used sparingly and
+                 cautiously since as soon as 2 addons want to replace the same class,
                  you'll have a conflict (which would need to create a third addon to glue
-                 them, ``replacing`` can take a tuple of classes to replace).
-
-    TODO: refs from the "concepts" page
-
+                 them, ``replacing`` can take a tuple of classes to replace and this is
+                 exponential). This mechanism should be used only in some well placed
+                 circumstances for generic addons.
     """
 
     def __init__(self, service=None, version=None, parent=None, registry=None):
@@ -249,7 +248,13 @@ class Backend(object):
 
     def get_class(self, base_class, session, model_name):
         """ Find a matching subclass of ``base_class`` in the registered
-        classes"""
+        classes.
+
+        :param base_class: class (and its subclass) to search in the registry
+        :type base_class: :py:class:`connector.connector.MetaConnectorUnit`
+        :param session: current session
+        :type session: :py:class:`connector.session.ConnectorSession`
+        """
         matching_classes = self._get_classes(base_class, session,
                                              model_name)
         assert matching_classes, ('No matching class found for %s '
@@ -263,7 +268,13 @@ class Backend(object):
         return matching_classes.pop()
 
     def register_class(self, cls, replacing=None):
-        """ Register a class"""
+        """ Register a class in the backend.
+
+        :param cls: the ConnectorUnit class class to register
+        :type cls: :py:class:`connector.connector.MetaConnectorUnit`
+        :param replacing: optional, the ConnectorUnit class to replace
+        :type replacing: :py:class:`connector.connector.MetaConnectorUnit`
+        """
         def register_replace(replacing_cls):
             found = False
             for replaced_entry in self._class_entries:
@@ -312,7 +323,8 @@ class Backend(object):
 
             magento = Backend('magento')
 
-        A ``ConnectorUnit`` (binder, synchronizer, mapper, ...) can be
+        A :py:class:`connector.connector.ConnectorUnit`
+        (like a binder, a synchronizer, a mapper, ...) can be
         registered as follows::
 
             @magento
@@ -326,7 +338,7 @@ class Backend(object):
 
         We get the correct class ``MagentoBinder``.
 
-        Any ConnectorUnit can be replaced by another doing::
+        Any ``ConnectorUnit`` can be replaced by another doing::
 
             @magento(replacing=MagentoBinder)
             class MagentoBinder2(Binder):
@@ -334,12 +346,12 @@ class Backend(object):
                 # other stuff
 
         This is useful when working on an OpenERP module which should
-        alter the original behavior of a connector.
+        alter the original behavior of a connector for an existing backend.
 
         :param cls: the ConnectorUnit class class to register
-        :type: :py:class:`connector.connector.MetaConnectorUnit`
+        :type cls: :py:class:`connector.connector.MetaConnectorUnit`
         :param replacing: optional, the ConnectorUnit class to replace
-        :type: :py:class:`connector.connector.MetaConnectorUnit`
+        :type replacing: :py:class:`connector.connector.MetaConnectorUnit`
         """
         if cls is None:
             return partial(self, replacing=replacing)

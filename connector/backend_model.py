@@ -40,6 +40,9 @@ class connector_backend(orm.AbstractModel):
     }
 
     def get_backend(self, cr, uid, id, context=None):
+        """ For a record of backend, returns the appropriate instance
+        of :py:class:`~connector.backend.Backend`.
+        """
         if hasattr(id, '__iter__'):
             assert len(id) == 1, "One ID expected, %d received" % len(id)
             id = id[0]

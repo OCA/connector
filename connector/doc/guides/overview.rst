@@ -113,10 +113,10 @@ It is always accompanied by a concrete subclass of the model
 
 A connectors developer is mostly interested by:
 
-* Declare the backends
-* Register a ConnectorUnit on a backend
-* Replace a ConnectorUnit on a backend
-* Use a different ConnectorUnit for a different version of a backend
+* Declare the backends (see :py:class:`connector.backend.Backend`)
+* Register a ConnectorUnit on a backend (see :py:class:`connector.backend.Backend`)
+* Replace a ConnectorUnit on a backend (see :py:class:`connector.backend.Backend`)
+* Use a different ConnectorUnit for a different version of a backend (see :py:class:`connector.backend.Backend`)
 
 
 ***********

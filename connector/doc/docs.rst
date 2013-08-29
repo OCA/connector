@@ -28,18 +28,14 @@ API Reference
 Project
 =======
 
-.. todo:: how to contribute, releases notes, license
-
-* release notes
-
-* license
-
 .. toctree::
    :maxdepth: 1
 
    project/contribute
-   project/roadmap
    project/contributors
+   project/license
+   project/changes
+   project/roadmap
 
 Indices and tables
 ==================

@@ -53,7 +53,8 @@ def install_in_connector():
 
     The connector then uses this model to know when the OpenERP module
     is installed or not and whether it should use the ConnectorUnit
-    classes of this module or not.
+    classes of this module or not and whether it should fire the
+    consumers of events or not.
     """
     # Get the module of the caller
     module = inspect.getmodule(inspect.currentframe().f_back)
@@ -81,10 +82,20 @@ def get_openerp_module(cls_or_func):
 
 
 class MetaConnectorUnit(type):
-    """ Metaclass for ConnectorUnit """
+    """ Metaclass for ConnectorUnit.
+
+    Keeps a ``_module`` attribute on the classes, the same way OpenERP does
+    it for the Model classes. It is then used to filter them according to
+    the state of the module (installed or not).
+    """
 
     @property
     def model_name(cls):
+        """
+        The ``model_name`` is used to find the class and is mandatory for
+        :py:class:`~connector.connector.ConnectorUnit` which are registered
+        on a :py:class:`~connector.backend.Backend`.
+        """
         if cls._model_name is None:
             raise NotImplementedError("no _model_name for %s" % cls)
         model_name = cls._model_name
@@ -100,13 +111,14 @@ class MetaConnectorUnit(type):
 class ConnectorUnit(object):
     """Abstract class for each piece of the connector:
 
-    * Binder
-    * Mapper
-    * Synchronizer
-    * Backend Adapter
+    Examples:
+        * :py:class:`connector.connector.Binder`
+        * :py:class:`connector.unit.mapper.Mapper`
+        * :py:class:`connector.unit.synchronizer.Synchronizer`
+        * :py:class:`connector.unit.backend_adapter.BackendAdapter`
 
     Or basically any class intended to be registered in a
-    :py:class:`connector.backend.Backend`.
+    :py:class:`~connector.backend.Backend`.
     """
 
     __metaclass__ = MetaConnectorUnit
@@ -126,11 +138,20 @@ class ConnectorUnit(object):
         self.session = self.environment.session
         self.model = self.session.pool.get(environment.model_name)
         # so we can use openerp.tools.translate._, used to find the lang
+        # that's because _() search for a localcontext attribute
+        # but self.localcontext should not be used for other purposes
         self.localcontext = self.session.context
 
     @classmethod
     def match(cls, session, model):
-        """ Find the class to use """
+        """ Returns True if the current class correspond to the
+        searched model.
+
+        :param session: current session
+        :type session: :py:class:`connector.session.ConnectorSession`
+        :param model: model to match
+        :type model: str or :py:class:`openerp.osv.orm.Model`
+        """
         # filter out the ConnectorUnit from modules
         # not installed in the current DB
         if hasattr(model, '_name'):  # Model instance
@@ -140,6 +161,22 @@ class ConnectorUnit(object):
         return model_name in cls.model_name
 
     def get_connector_unit_for_model(self, connector_unit_class, model=None):
+        """ According to the current
+        :py:class:`~connector.connector.Environment`,
+        search and returns an instance of the
+        :py:class:`~connector.connector.ConnectorUnit` for the current
+        model and being a class or subclass of ``connector_unit_class``.
+
+        If a ``model`` is given, a new
+        :py:class:`~connector.connector.Environment`
+        is built for this model.
+
+        :param connector_unit_class: ``ConnectorUnit`` to search (class or subclass)
+        :type connector_unit_class: :py:class:`connector.connector.ConnectorUnit`
+        :param model: to give if the ``ConnectorUnit`` is for another
+                      model than the current one
+        :type model: str
+        """
         if model is None:
             env = self.environment
         else:
@@ -149,6 +186,8 @@ class ConnectorUnit(object):
         return env.get_connector_unit(connector_unit_class)
 
     def get_binder_for_model(self, model=None):
+        """ Returns an new instance of the correct ``Binder`` for
+        a model """
         return self.get_connector_unit_for_model(Binder, model)
 
 
@@ -196,14 +235,21 @@ class Environment(object):
         self.pool = self.session.pool
 
     def set_lang(self, code):
-        """ Change the working language in the environment. """
+        """ Change the working language in the environment.
+
+        It changes the ``lang`` key in the session's context.
+        """
         self.session.context['lang'] = code
 
     def get_connector_unit(self, base_class):
-        """ Search the class using
-        :py:class:`connector.backend.Backend.get_class`
+        """ Searches and returns an instance of the
+        :py:class:`~connector.connector.ConnectorUnit` for the current
+        model and being a class or subclass of ``base_class``.
+ 
+        The returned instance is built with ``self`` for its environment.
 
-        return an instance of the class with ``self`` as environment.
+        :param base_class: ``ConnectorUnit`` to search (class or subclass)
+        :type base_class: :py:class:`connector.connector.ConnectorUnit`
         """
         return self.backend.get_class(base_class, self.session,
                                       self.model_name)(self)
@@ -211,7 +257,9 @@ class Environment(object):
 
 class Binder(ConnectorUnit):
     """ For one record of a model, capable to find an external or
-    internal id, or create the link between them
+    internal id, or create the binding (link) between them
+
+    The Binder should be implemented in the connectors.
     """
 
     _model_name = None  # define in sub-classes
@@ -220,9 +268,9 @@ class Binder(ConnectorUnit):
         """ Give the OpenERP ID for an external ID
 
         :param external_id: external ID for which we want
-                                   the OpenERP ID
+                            the OpenERP ID
         :param unwrap: if True, returns the openerp_id
-                       else return the binding id (magento.*.id)
+                       else return the id of the binding
         :return: a record ID, depending on the value of unwrap,
                  or None if the external_id is not mapped
         :rtype: int

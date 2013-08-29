@@ -20,7 +20,7 @@
 ##############################################################################
 
 {'name': 'Connector',
- 'version': '2.0.0',
+ 'version': '2.0.0.dev0',
  'author': 'Openerp Connector Core Editors',
  'website': 'https://launchpad.net/openerp-connector',
  'license': 'AGPL-3',

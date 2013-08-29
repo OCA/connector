@@ -6,19 +6,18 @@ Projects
 
   **Magento Connector**
 
-  .. image:: _static/img/magentoerpconnect.png
-    :height: 150px
+  .. image:: _static/img/magentoerpconnect150.png
 
   The historical connector "Magentoerpconnect" has been entirely rewritten
   using the Connector Framework.
 
-  `Documentation <http://localhost:8001>`_
+  `Documentation <http://www.openerp-magento-connector.com>`_
 
-  `Source <https://launchpad.net/magentoerpconnect>`_
+  `Source <https://launchpad.net/openerp-connector>`_
 
-  `Bug Tracker <https://bugs.launchpad.net/magentoerpconnect>`_
+  `Bug Tracker <https://bugs.launchpad.net/openerp-connector>`_
 
-  `Mailing list <https://launchpad.net/~magentoerpconnect-community>`_
+  `Mailing list <https://launchpad.net/~openerp-connector-community>`_
 
 ====================
 
@@ -26,8 +25,7 @@ Projects
 
   **Prestashop Connector**
 
-  .. image:: _static/img/prestashoperpconnect.png
-    :height: 150px
+  .. image:: _static/img/prestashoperpconnect150.png
 
   The historical connector "Prestashoperpconnect" has been entirely rewritten
   using the Connector Framework.
@@ -36,4 +34,4 @@ Projects
 
   `Bug Tracker <https://bugs.launchpad.net/prestashoperpconnect>`_
 
-  `Mailing list <https://launchpad.net/~prestashoperpconnect-community>`_
+  `Mailing list <https://launchpad.net/~openerp-connector-community>`_

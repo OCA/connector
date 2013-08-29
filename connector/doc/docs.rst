@@ -30,8 +30,6 @@ Project
 
 .. todo:: how to contribute, releases notes, license
 
-* how to contribute
-
 * release notes
 
 * license
@@ -39,30 +37,9 @@ Project
 .. toctree::
    :maxdepth: 1
 
+   project/contribute
    project/roadmap
    project/contributors
-
-Concepts
-========
-
-Glossary:
-
-.. glossary::
-
-    Job
-
-        A unit of work consisting of a single complete and atomic task.
-        Example: import of a product.
-
-    Backend
-
-        An external service on which we connect OpenERP. In the context
-        of the Magento connector, Magento is a backend.
-
-    Mapping
-
-        A mapping defines how the data is converted from Magento to
-        OpenERP and reversely.
 
 Indices and tables
 ==================

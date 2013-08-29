@@ -25,7 +25,8 @@ from contextlib import contextmanager
 
 
 class ConnectorSessionHandler(object):
-    """ Allow to create a new `ConnectorSession` for a database.
+    """ Allow to create a new instance of
+    :py:class:`~connector.session.ConnectorSession` for a database.
 
     .. attribute:: db_name
 
@@ -53,7 +54,8 @@ class ConnectorSessionHandler(object):
 
     @contextmanager
     def session(self):
-        """ Start a new session and ensure that the session's cursor is:
+        """ Context Manager: start a new session and ensure that the
+        session's cursor is:
 
         * rollbacked on errors
         * commited at the end of the ``with`` context when no error occured
@@ -103,8 +105,8 @@ class ConnectorSession(object):
 
     @contextmanager
     def change_user(self, uid):
-        """ Temporarily change the user's session and restablish the
-        normal user at closing,
+        """ Context Manager: temporarily change the user's session and
+        restablish the normal user at closing,
         """
         current_uid = self.uid
         self.uid = uid
@@ -126,8 +128,8 @@ class ConnectorSession(object):
 
     @contextmanager
     def change_context(self, values):
-        """ Shallow copy the context, update it with values,
-        then restore the original context on closing.
+        """ Context Manager: shallow copy the context, update it with
+        ``values``, then restore the original context on closing.
 
         :param values: values to apply on the context
         :type values: dict
@@ -151,20 +153,25 @@ class ConnectorSession(object):
         self.cr.close()
 
     def search(self, model, domain, limit=None, offset=0, order=None):
+        """ Shortcut to :py:class:`openerp.osv.orm.BaseModel.search` """
         return self.pool[model].search(self.cr, self.uid, domain,
                                        limit=limit, offset=offset,
                                        order=order, context=self.context)
 
     def browse(self, model, ids):
+        """ Shortcut to :py:class:`openerp.osv.orm.BaseModel.browse` """
         return self.pool[model].browse(self.cr, self.uid, ids, context=self.context)
 
     def read(self, model, ids, fields):
+        """ Shortcut to :py:class:`openerp.osv.orm.BaseModel.read` """
         return self.pool[model].read(self.cr, self.uid, ids, fields, context=self.context)
 
     def create(self, model, values):
+        """ Shortcut to :py:class:`openerp.osv.orm.BaseModel.create` """
         return self.pool[model].create(self.cr, self.uid, values, context=self.context)
 
     def write(self, model, ids, values):
+        """ Shortcut to :py:class:`openerp.osv.orm.BaseModel.write` """
         return self.pool[model].write(self.cr, self.uid, ids, values, context=self.context)
 
     def __repr__(self):
@@ -174,9 +181,9 @@ class ConnectorSession(object):
         """ Indicates whether a module is installed or not
         on the current database.
 
-        .. note:: Use a convention established for the connectors addons:
-                  To know if a module is installed, it looks if an (abstract)
-                  model with name ``module_name.installed`` is loaded in the
-                  registry.
+        Use a convention established for the connectors addons:
+        To know if a module is installed, it looks if an (abstract)
+        model with name ``module_name.installed`` is loaded in the
+        registry.
         """
         return bool(self.pool.get('%s.installed' % module_name))

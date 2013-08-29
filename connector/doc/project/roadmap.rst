@@ -4,9 +4,7 @@
 Roadmap
 #######
 
-This document lists the feature that we want to develop for the
-connector. They are not sorted by priority. Any contribution on theses
-points will be welcome.
+Here is a list of things we may agree to merge.
 
 * Queue: use PostgreSQL `notify` for direct enqueue of jobs
 

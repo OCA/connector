@@ -54,7 +54,7 @@ RETRY_INTERVAL = 10 * 60  # seconds
 _logger = logging.getLogger(__name__)
 
 
-def unpickle(pickled):
+def _unpickle(pickled):
     """ Unpickles a string and catch all types of errors it can throw,
     to raise only NotReadableJobError in case of error.
 
@@ -220,7 +220,7 @@ class OpenERPJobStorage(JobStorage):
                                        self._openerp_id(job_uuid),
                                        context=self.session.context)
 
-        func = unpickle(str(stored.func))  # openerp stores them as unicode...
+        func = _unpickle(str(stored.func))  # openerp stores them as unicode...
 
         (func_name, args, kwargs) = func
 

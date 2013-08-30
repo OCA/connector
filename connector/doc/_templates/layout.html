@@ -3,7 +3,8 @@
 {% set css_files = css_files + ['_static/connector_style.css']%}
 
 {% block sidebartoc %}
-  <li><a href="{{ pathto(master_doc) }}">About</a></li>
+  <li><a href="{{ pathto(master_doc) }}">Home</a></li>
+  <li><a href="{{ pathto('overview') }}">Overview</a></li>
   <li><a href="{{ pathto('projects') }}">Projects</a></li>
   <li><a href="{{ pathto('docs') }}">Documentation</a></li>
 {% endblock %}

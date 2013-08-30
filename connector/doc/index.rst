@@ -3,9 +3,9 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-#####
-About
-#####
+####
+Home
+####
 
 This is a framework to build connectors between OpenERP and external
 systems or services.
@@ -30,6 +30,7 @@ The framework is:
  * An assortment of building blocks, it does not force to a certain
    implementation but leaves the final choice to the
    developer how to use the proposed pieces.
+ * See an :ref:`general-overview` with examples of code
 
 .. _Camptocamp: http://www.camptocamp.com
 .. _Akretion: http://www.akretion.com

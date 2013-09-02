@@ -62,9 +62,15 @@ def install_in_connector():
     # Build a new AbstractModel with the name of the module and the suffix
     name = "%s.installed" % openerp_module_name
     class_name = name.replace('.', '_')
-    model = orm.MetaModel(class_name, (orm.AbstractModel,), {'_name': name})
+    # we need to call __new__ and __init__ in 2 phases because
+    # __init__ needs to have the right __module__ and _module attributes
+    model = orm.MetaModel.__new__(orm.MetaModel, class_name,
+                                  (orm.AbstractModel,), {'_name': name})
     # Update the module of the model, it should be the caller's one
-    model.__module__ = module
+    model._module = openerp_module_name
+    model.__module__ = module.__name__
+    orm.MetaModel.__init__(model, class_name,
+                           (orm.AbstractModel,), {'_name': name})
 
 
 # install the connector itself

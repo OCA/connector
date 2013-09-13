@@ -111,7 +111,7 @@ class MetaConnectorUnit(type):
 
     def __init__(cls, name, bases, attrs):
         super(MetaConnectorUnit, cls).__init__(name, bases, attrs)
-        cls._module = get_openerp_module(cls)
+        cls._openerp_module_ = get_openerp_module(cls)
 
 
 class ConnectorUnit(object):
@@ -160,8 +160,6 @@ class ConnectorUnit(object):
         """
         # filter out the ConnectorUnit from modules
         # not installed in the current DB
-        if not session.is_module_installed(cls._module):
-            return False
         if hasattr(model, '_name'):  # Model instance
             model_name = model._name
         else:

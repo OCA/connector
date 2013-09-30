@@ -37,17 +37,17 @@ from .event import (on_record_create,
                     on_record_unlink)
 
 
-create_original = orm.Model.create
+create_original = orm.AbstractModel.create
 def create(self, cr, uid, vals, context=None):
     record_id = create_original(self, cr, uid, vals, context=context)
     if self.pool.get('connector.installed') is not None:
         session = ConnectorSession(cr, uid, context=context)
         on_record_create.fire(session, self._name, record_id)
     return record_id
-orm.Model.create = create
+orm.AbstractModel.create = create
 
 
-write_original = orm.Model.write
+write_original = orm.AbstractModel.write
 def write(self, cr, uid, ids, vals, context=None):
     result = write_original(self, cr, uid, ids, vals, context=context)
     if self.pool.get('connector.installed') is not None:
@@ -59,10 +59,10 @@ def write(self, cr, uid, ids, vals, context=None):
                 on_record_write.fire(session, self._name,
                                      record_id, vals.keys())
     return result
-orm.Model.write = write
+orm.AbstractModel.write = write
 
 
-unlink_original = orm.Model.unlink
+unlink_original = orm.AbstractModel.unlink
 def unlink(self, cr, uid, ids, context=None):
     if self.pool.get('connector.installed') is not None:
         if not hasattr(ids, '__iter__'):
@@ -72,4 +72,4 @@ def unlink(self, cr, uid, ids, context=None):
             for record_id in ids:
                 on_record_unlink.fire(session, self._name, record_id)
     return unlink_original(self, cr, uid, ids, context=context)
-orm.Model.unlink = unlink
+orm.AbstractModel.unlink = unlink

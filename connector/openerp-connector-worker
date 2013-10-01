@@ -6,6 +6,7 @@ import signal
 import time
 import threading
 from contextlib import closing
+from psycopg2 import ProgrammingError
 
 import openerp
 from openerp.cli import server as servercli
@@ -14,6 +15,8 @@ from openerp.modules.registry import RegistryManager
 from openerp.tools import config
 
 _logger = logging.getLogger('openerp-connector-worker')
+
+MAX_JOBS = 50
 
 
 class Multicornnector(workers.Multicorn):
@@ -46,6 +49,30 @@ class WorkerConnector(workers.Worker):
         super(WorkerConnector, self).__init__(multi)
         self.db_index = 0
 
+    def _work_database(self, cr):
+        db_name = cr.dbname
+        try:
+            cr.execute("SELECT 1 FROM ir_module_module "
+                       "WHERE name = %s "
+                       "AND state = %s", ('connector', 'installed'),
+                       log_exceptions=False)
+        except ProgrammingError as err:
+            if unicode(err).startswith('relation "ir_module_module" does not exist'):
+                _logger.debug('Database %s is not an OpenERP database,'
+                              ' connector worker not started', db_name)
+            else:
+                raise
+        else:
+            if cr.fetchone():
+                RegistryManager.check_registry_signaling(db_name)
+                registry = openerp.pooler.get_pool(db_name)
+                if registry:
+                    queue_worker = registry['queue.worker']
+                    queue_worker.assign_then_enqueue(cr,
+                                                     openerp.SUPERUSER_ID,
+                                                     max_jobs=MAX_JOBS)
+                RegistryManager.signal_caches_change(db_name)
+
     def process_work(self):
         if config['db_name']:
             db_names = config['db_name'].split(',')
@@ -62,18 +89,7 @@ class WorkerConnector(workers.Worker):
             db = openerp.sql_db.db_connect(db_name)
             threading.current_thread().dbname = db_name
             with closing(db.cursor()) as cr:
-                cr.execute("SELECT 1 FROM ir_module_module "
-                           "WHERE name = %s "
-                           "AND state = %s", ('connector', 'installed'))
-                if cr.fetchone():
-                    RegistryManager.check_registry_signaling(db_name)
-                    registry = openerp.pooler.get_pool(db_name)
-                    if registry:
-                        queue_worker = registry['queue.worker']
-                        queue_worker.assign_then_enqueue(cr,
-                                                         openerp.SUPERUSER_ID,
-                                                         max_jobs=50)
-                    RegistryManager.signal_caches_change(db_name)
+                self._work_database(cr)
         else:
             self.db_index = 0
 

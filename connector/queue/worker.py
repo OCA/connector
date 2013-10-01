@@ -28,7 +28,7 @@ import uuid
 from datetime import datetime
 from StringIO import StringIO
 
-from psycopg2 import OperationalError
+from psycopg2 import OperationalError, ProgrammingError
 
 import openerp
 from openerp.osv.osv import PG_CONCURRENCY_ERRORS_TO_RETRY
@@ -272,11 +272,20 @@ class WorkerWatcher(threading.Thread):
                                                   openerp.SUPERUSER_ID)
             with session_hdl.session() as session:
                 cr = session.cr
-                cr.execute("SELECT 1 FROM ir_module_module "
-                           "WHERE name = %s "
-                           "AND state = %s", ('connector', 'installed'))
-                if cr.fetchone():
-                    available_db_names.append(db_name)
+                try:
+                    cr.execute("SELECT 1 FROM ir_module_module "
+                               "WHERE name = %s "
+                               "AND state = %s", ('connector', 'installed'),
+                               log_exceptions=False)
+                except ProgrammingError as err:
+                    if unicode(err).startswith('relation "ir_module_module" does not exist'):
+                        _logger.debug('Database %s is not an OpenERP database,'
+                                      ' connector worker not started', db_name)
+                    else:
+                        raise
+                else:
+                    if cr.fetchone():
+                        available_db_names.append(db_name)
         return available_db_names
 
     def _update_workers(self):

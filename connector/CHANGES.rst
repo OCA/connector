@@ -4,8 +4,8 @@ Changelog
 2.0.1.dev0
 ~~~~~~~~~~
 
-* Pass a new parameter to listeners of  'on_recrod_write' ( vals:  field values of the new record, e.g {'field_name': field_value, ...})
-* Replace the list of updated fields passed to listeners of 'on_record_write' by a dictionary of updated field values e.g {'field_name': field_value, ...}  
+* Pass a new parameter to listeners of 'on_recrod_create' ( vals:  field values of the new record, e.g {'field_name': field_value, ...})
+* Replace the list of updated fields passed to listeners of 'on_record_write' by a dictionary of updated field values e.g {'field_name': field_value, ...}
 
 2.0.1 (2013-09-12)
 ~~~~~~~~~~~~~~~~~~

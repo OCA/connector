@@ -51,7 +51,7 @@ class test_producers(common.TransactionCase):
             self.recipient.vals = vals
 
         vals =  {'name': 'Lrrr',
-                    'city': 'Omicron Persei 8'}
+                 'city': 'Omicron Persei 8'}
         self.model.write(self.cr,
                          self.uid,
                          self.partner_id,

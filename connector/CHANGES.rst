@@ -13,6 +13,7 @@ Changelog
 * Developers of addons do no longer need to create an AbstractModel with a _name 'name_of_the_module.installed',
   instead, they just have to call connector.connector.install_in_connector() lp:1196859
 * Added a script `openerp-connector-worker` to start processes for Jobs Workers when running OpenERP is multiprocessing
+* Fix: inheritance broken when an orm.Model inherit from an or.AbstractModel. One effect was that the mail.thread features were no longer working (lp:1233355)
 
 
 2.0.0

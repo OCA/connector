@@ -11,6 +11,7 @@ Changelog
   instead, they just have to call connector.connector.install_in_connector() lp:1196859
 * Added a script `openerp-connector-worker` to start processes for Jobs Workers when running OpenERP is multiprocessing
 * Fix: inheritance broken when an orm.Model inherit from an or.AbstractModel. One effect was that the mail.thread features were no longer working (lp:1233355)
+* Fix: do no fail to start when OpenERP has access to a not-OpenERP database (lp:1233388)
 
 
 2.0.0

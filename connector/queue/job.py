@@ -578,12 +578,55 @@ class Job(object):
 def job(func):
     """ Decorator for jobs.
 
-    Add a ``delay`` attribute on the decorated function.
+   Add a ``delay`` attribute on the decorated function.
 
-    When ``delay`` is called, the function is transformed to a job and
-    stored in the OpenERP queue.job model. The arguments and keyword
-    arguments given in ``delay`` will be the arguments used by the
-    decorated function when it is executed.
+   When ``delay`` is called, the function is transformed to a job and
+   stored in the OpenERP queue.job model. The arguments and keyword
+   arguments given in ``delay`` will be the arguments used by the
+   decorated function when it is executed.
+
+   The ``delay()`` function of a job takes the following arguments:
+
+   session
+     Current :py:class:`~openerp.addons.connector.session.ConnectorSession`
+
+   model_name
+     name of the model on which the job has something to do
+
+   *args and **kargs
+     Arguments and keyword arguments which will be given to the called
+     function once the job is executed. They should be ``pickle-able``.
+
+     There is 3 special and reserved keyword arguments that you can use:
+
+     * priority: priority of the job, the smaller is the higher priority.
+                 Default is 10.
+     * max_retries: maximum number of retries before giving up and set
+                    the job state to 'failed'. A value of 0 means
+                    infinite retries. Default is 5.
+     * eta: the job can be executed only after this datetime
+            (or now + timedelta if a timedelta or integer is given)
+
+    Example:
+
+    .. code-block:: python
+
+        @job
+        def export_one_thing(session, model_name, one_thing):
+            # work
+            # export one_thing
+
+        export_one_thing(session, 'a.model', the_thing_to_export)
+        # => normal and synchronous function call
+
+        export_one_thing.delay(session, 'a.model', the_thing_to_export)
+        # => the job will be executed as soon as possible
+
+        export_one_thing.delay(session, 'a.model', the_thing_to_export,
+                               priority=30, eta=60*60*5)
+        # => the job will be executed with a low priority and not before a
+        # delay of 5 hours from now
+
     """
     def delay(session, model_name, *args, **kwargs):
         OpenERPJobStorage(session).enqueue_resolve_args(func,

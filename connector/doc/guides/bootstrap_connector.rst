@@ -240,5 +240,5 @@ Their implementation can vary a lot. Have a look on the
 Magentoerpconnect_ and Prestashoperpconnect_ projects.
 
 
-.. _Magentoerpconnect: https://code.launchpad.net/~openerp-connector-core-editors/openerp-connector/7.0-magentoerpconnect
-.. _Prestashoperpconnect:
+.. _Magentoerpconnect: https://code.launchpad.net/magentoerpconnect
+.. _Prestashoperpconnect: https://code.launchpad.net/prestashoperpconnect

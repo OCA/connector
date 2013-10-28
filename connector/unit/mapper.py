@@ -19,11 +19,6 @@
 #
 ##############################################################################
 
-# TODO multi-records:
-# 2 external records may be converted in 1 openerp record and
-# conversely. A processor must accept in input a dict where the keys are
-# the name of the external / openerp model and the values are the
-# records. And the same for the output records.
 import logging
 from collections import namedtuple
 

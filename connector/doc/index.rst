@@ -9,7 +9,7 @@ OpenERP Connector
 
 OpenERP Connector is a powerful and generic framework to develop any kind of
 bi-directional connector between OpenERP (Open Source ERP) and any other
-software or service.
+software or service. It is installed as a normal addons in OpenERP.
 
 It is designed to have a modular and generic core, with the ability to be
 extended with additional modules for new features or customizations.

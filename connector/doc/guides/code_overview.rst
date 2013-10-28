@@ -1,8 +1,8 @@
-.. _general-overview:
+.. _code-overview:
 
-########
-Overview
-########
+#############
+Code Overview
+#############
 
 Here is an overview of some of the concepts in the framework.
 
@@ -55,7 +55,7 @@ solution::
 Session
 *******
 
-The framework uses :py:class:`~connector.session.ConnectorSession` to
+The framework uses :py:class:`~connector.session.ConnectorSession` objects to
 store the ``cr``, ``uid`` and ``context`` as well as the current
 ``pool``. A ``session`` object also features shortcuts to the most used
 ``ORM`` methods like::

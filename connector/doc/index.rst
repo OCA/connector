@@ -7,20 +7,24 @@
 OpenERP Connector
 #################
 
-OpenERP Connector is a powerful and generic framework to develop any kind of
-bi-directional connector between OpenERP (Open Source ERP) and any other
-software or service. It is installed as a normal addons in OpenERP.
+OpenERP Connector is a powerful framework to develop any kind of
+bi-directional connector between `OpenERP`_ (Open Source ERP) and any other
+software or service.
 
-It is designed to have a modular and generic core, with the ability to be
-extended with additional modules for new features or customizations.
+This OpenERP add-on has a modular and generic core, with the
+ability to be extended with additional modules for new features or
+customizations.
 
 The development of OpenERP Connector has been started by `Camptocamp`_ and is now
 maintained by `Camptocamp`_, `Akretion`_ and several :ref:`contributors`.
 
-Subscribe now to the `project's mailing list`_!
+*Subscribe to the* `project's mailing list`_
 
+*Learn how to* :ref:`contribute`
+
+*************
 Core Features
-=============
+*************
 
 * **100% Open Source** (`AGPL version 3`_): the full `source code is available
   on Launchpad`_
@@ -32,14 +36,16 @@ Core Features
   developer on how to use the proposed pieces.
 * See a :ref:`code-overview` with examples of code
 
+.. _OpenERP: http://www.openerp.com
 .. _Camptocamp: http://www.camptocamp.com
 .. _Akretion: http://www.akretion.com
 .. _`source code is available on Launchpad`: https://code.launchpad.net/openerp-connector
 .. _`AGPL version 3`: http://www.gnu.org/licenses/agpl-3.0.html
 .. _`project's mailing list`: https://launchpad.net/~openerp-connector-community
 
+*********************************
 Connectors based on the framework
-=================================
+*********************************
 
 * `Magento Connector <http://www.openerp-magento-connector.com>`_
 * `Prestashop Connector <https://launchpad.net/prestashoperpconnect>`_
@@ -52,8 +58,19 @@ Connectors based on the framework
   * Project Management: OpenERP Redmine connector…
   * Ticketing: OpenERP Request Tracker connector, OpenERP GLPI connector…
 
+********
+Overview
+********
+
+.. raw:: html
+
+    <div style="margin-top:10px;">
+         <iframe src="http://www.slideshare.net/slideshow/embed_code/24048994?rel=0" width="427" height="356" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="border:1px solid #CCC;border-width:1px 1px 0;margin-bottom:5px" allowfullscreen> </iframe> <div style="margin-bottom:5px"> <strong> <a href="https://fr.slideshare.net/openobject/ecommerce-the-new-magento-open-erp-connector-a-generic-connector-to-any-apps-luc-maurer-guewen-baconnier-camptocamp" title="E-commerce: the new Magento - OpenERP Connector: a generic connector to any apps. Luc Maurer &amp; Guewen Baconnier, Camptocamp" target="_blank">E-commerce: the new Magento - OpenERP Connector: a generic connector to any apps. Luc Maurer &amp; Guewen Baconnier, Camptocamp (OpenERP Days 2013)</a> </strong> from <strong><a href="http://www.slideshare.net/openobject" target="_blank">OpenERP.tv</a></strong> </div>
+    </div>
+
+**************************
 Top financial contributors
-==========================
+**************************
 
 .. image:: _static/img/LogicSupply_Orange_260x80_transparent.png
    :alt: Logic Supply
@@ -66,17 +83,18 @@ Top financial contributors
 |
 *See all the project's* :ref:`financial-contributors`.
 
-Companies offering services
-===========================
+*******
+Project
+*******
 
-.. image:: _static/img/c2c_square_baseline_192.jpg
-   :alt: Camptocamp
-   :target: Camptocamp_
+.. toctree::
+   :maxdepth: 1
 
-.. image:: _static/img/akretion_logo.png
-   :alt: Akretion
-   :target: Akretion_
-
+   project/contribute
+   project/contributors
+   project/license
+   project/changes
+   project/roadmap
 
 *****************
 Developer's guide
@@ -107,20 +125,9 @@ API Reference
    api/api_queue.rst
    api/api_exception.rst
 
-Project
-=======
-
-.. toctree::
-   :maxdepth: 1
-
-   project/contribute
-   project/contributors
-   project/license
-   project/changes
-   project/roadmap
-
+******************
 Indices and tables
-==================
+******************
 
 * :ref:`genindex`
 * :ref:`modindex`

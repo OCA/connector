@@ -73,7 +73,7 @@ class test_backend_register(common.TransactionCase):
                                         self.uid)
 
     def tearDown(self):
-        super(test_backend_register, self).setUp()
+        super(test_backend_register, self).tearDown()
         BACKENDS.backends.clear()
         del self.backend._class_entries[:]
 

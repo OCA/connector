@@ -283,11 +283,15 @@ class Binder(ConnectorUnit):
         """
         raise NotImplementedError
 
-    def to_backend(self, binding_id):
+    def to_backend(self, binding_id, wrap=False):
         """ Give the external ID for an OpenERP binding ID
         (ID in a model magento.*)
 
         :param binding_id: OpenERP binding ID for which we want the backend id
+        :param wrap: if False, binding_id is the ID of the binding,
+                     if True, binding_id is the ID of the normal record, the
+                     method will search the corresponding binding and returns
+                     the backend id of the binding
         :return: external ID of the record
         """
         raise NotImplementedError

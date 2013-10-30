@@ -2,6 +2,7 @@
 
 import unittest2
 import mock
+import openerp.tests.common as common
 
 from openerp.addons.connector.unit.mapper import (
     Mapper,
@@ -9,7 +10,19 @@ from openerp.addons.connector.unit.mapper import (
     MappingDefinition,
     changed_by,
     only_create,
+    convert,
+    m2o_to_backend,
+    backend_to_m2o,
     mapping)
+
+from openerp.addons.connector.backend import (Backend,
+                                              get_backend,
+                                              BACKENDS)
+from openerp.addons.connector.connector import (Environment,
+                                                ConnectorUnit,
+                                                Binder,
+                                                )
+from openerp.addons.connector.session import ConnectorSession
 
 
 class test_mapper(unittest2.TestCase):
@@ -234,3 +247,84 @@ class test_mapper(unittest2.TestCase):
                                          'discount': .5})]
                     }
         self.assertEqual(mapper.data_for_create, expected)
+
+    def test_mapping_closure(self):
+        """ Map a direct record with a closure function """
+
+        def do_nothing(field):
+            def transform(self, record, to_attr):
+                return record[field]
+            return transform
+
+        class MyMapper(ImportMapper):
+            direct = [(do_nothing('name'), 'out_name')]
+
+        env = mock.MagicMock()
+        record = {'name': 'Guewen'}
+        mapper = MyMapper(env)
+        mapper.convert(record)
+        expected = {'out_name': 'Guewen'}
+        self.assertEqual(mapper.data, expected)
+        self.assertEqual(mapper.data_for_create, expected)
+
+    def test_mapping_convert(self):
+        """ Map a direct record with the convert closure function """
+        class MyMapper(ImportMapper):
+            direct = [(convert('name', int), 'out_name')]
+
+        env = mock.MagicMock()
+        record = {'name': '300'}
+        mapper = MyMapper(env)
+        mapper.convert(record)
+        expected = {'out_name': 300}
+        self.assertEqual(mapper.data, expected)
+        self.assertEqual(mapper.data_for_create, expected)
+
+
+class test_mapper_binding(common.TransactionCase):
+    """ Test Mapper with Bindings"""
+
+    def setUp(self):
+        super(test_mapper_binding, self).setUp()
+        self.session = ConnectorSession(self.cr, self.uid)
+        self.Partner = self.registry('res.partner')
+        self.backend = mock.Mock(wraps=Backend('x', version='y'),
+                                 name='backend')
+        backend_record = mock.Mock()
+        backend_record.get_backend.return_value = self.backend
+        self.env = Environment(backend_record, self.session, 'res.partner')
+        self.country_binder = mock.Mock(name='country_binder')
+        self.country_binder.return_value = self.country_binder
+        self.backend.get_class.return_value = self.country_binder
+
+    def test_mapping_m2o_to_backend(self):
+        """ Map a direct record with the m2o_to_backend closure function """
+        class MyMapper(ImportMapper):
+            _model_name = 'res.partner'
+            direct = [(m2o_to_backend('country_id', binding=False), 'country')]
+
+        partner_id = self.ref('base.main_partner')
+        self.Partner.write(self.cr, self.uid, partner_id,
+                           {'country_id': self.ref('base.ch')})
+        partner = self.Partner.browse(self.cr, self.uid, partner_id)
+        self.country_binder.to_backend.return_value = 10
+
+        mapper = MyMapper(self.env)
+        mapper.convert(partner)
+        self.country_binder.to_backend.assert_called_once_with(
+            partner.country_id.id, wrap=True)
+        self.assertEqual(mapper.data, {'country': 10})
+
+    def test_mapping_backend_to_m2o(self):
+        """ Map a direct record with the backend_to_m2o closure function """
+        class MyMapper(ImportMapper):
+            _model_name = 'res.partner'
+            direct = [(backend_to_m2o('country', binding=False), 'country_id')]
+
+        record = {'country': 10}
+        self.country_binder.to_openerp.return_value = 44
+        mapper = MyMapper(self.env)
+        mapper.convert(record)
+        self.country_binder.to_openerp.assert_called_once_with(
+            10, unwrap=True)
+        self.assertEqual(mapper.data, {'country_id': 44})

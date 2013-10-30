@@ -15,13 +15,8 @@ from openerp.addons.connector.unit.mapper import (
     backend_to_m2o,
     mapping)
 
-from openerp.addons.connector.backend import (Backend,
-                                              get_backend,
-                                              BACKENDS)
-from openerp.addons.connector.connector import (Environment,
-                                                ConnectorUnit,
-                                                Binder,
-                                                )
+from openerp.addons.connector.backend import Backend
+from openerp.addons.connector.connector import Environment
 from openerp.addons.connector.session import ConnectorSession
 
 

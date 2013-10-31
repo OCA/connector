@@ -77,7 +77,7 @@ def convert(field, conv_type):
         if not value:
             return False
         return conv_type(value)
-    return transform
+    return modifier
 
 
 def m2o_to_backend(field, binding=False):
@@ -115,7 +115,7 @@ def m2o_to_backend(field, binding=False):
                                (rel_id, model_name,
                                 'with' if wrap else 'without'))
         return value
-    return transform
+    return modifier
 
 
 def backend_to_m2o(field, binding=False):
@@ -154,7 +154,7 @@ def backend_to_m2o(field, binding=False):
                                (model_name, rel_id,
                                 'with' if unwrap else 'without'))
         return value
-    return transform
+    return modifier
 
 
 MappingDefinition = namedtuple('MappingDefinition',
@@ -227,7 +227,7 @@ class Mapper(ConnectorUnit):
                         record is the current record to map,
                         to_attr is the target field'''
                     return record[field]
-                return transform
+                return modifier
 
         And used like that::
 
@@ -245,7 +245,7 @@ class Mapper(ConnectorUnit):
                     if not value:
                         return None
                     return conv_type(value)
-            return transform
+            return modifier
 
         And used like that::
 

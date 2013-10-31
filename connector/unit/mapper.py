@@ -60,6 +60,31 @@ def only_create(func):
     return func
 
 
+def none(field):
+    """ A modifier intended to be used on the ``direct`` mappings.
+
+    Replace the False-ish values by None.
+    It can be used in a pipeline of modifiers when .
+
+    Example::
+
+        direct = [(none('source'), 'target'),
+                  (none(m2o_to_backend('rel_id'), 'rel_id')]
+
+    :param field: name of the source field in the record
+    :param binding: True if the relation is a binding record
+    """
+    def modifier(self, record, to_attr):
+        if callable(field):
+            result = field(self, record, to_attr)
+        else:
+            result = record[field]
+        if not result:
+            return None
+        return result
+    return modifier
+
+
 def convert(field, conv_type):
     """ A modifier intended to be used on the ``direct`` mappings.
 

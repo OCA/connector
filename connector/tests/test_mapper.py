@@ -13,6 +13,7 @@ from openerp.addons.connector.unit.mapper import (
     convert,
     m2o_to_backend,
     backend_to_m2o,
+    none,
     mapping)
 
 from openerp.addons.connector.backend import Backend
@@ -243,8 +244,8 @@ class test_mapper(unittest2.TestCase):
                     }
         self.assertEqual(mapper.data_for_create, expected)
 
-    def test_mapping_closure(self):
-        """ Map a direct record with a closure function """
+    def test_mapping_modifier(self):
+        """ Map a direct record with a modifier function """
 
         def do_nothing(field):
             def transform(self, record, to_attr):
@@ -263,7 +264,7 @@ class test_mapper(unittest2.TestCase):
         self.assertEqual(mapper.data_for_create, expected)
 
     def test_mapping_convert(self):
-        """ Map a direct record with the convert closure function """
+        """ Map a direct record with the convert modifier function """
         class MyMapper(ImportMapper):
             direct = [(convert('name', int), 'out_name')]
 
@@ -272,6 +273,34 @@ class test_mapper(unittest2.TestCase):
         mapper = MyMapper(env)
         mapper.convert(record)
         expected = {'out_name': 300}
+        self.assertEqual(mapper.data, expected)
+        self.assertEqual(mapper.data_for_create, expected)
+
+    def test_mapping_modifier_none(self):
+        """ Pipeline of modifiers """
+        class MyMapper(ImportMapper):
+            direct = [(none('in_f'), 'out_f'),
+                      (none('in_t'), 'out_t')]
+
+        env = mock.MagicMock()
+        record = {'in_f': False, 'in_t': True}
+        mapper = MyMapper(env)
+        mapper.convert(record)
+        expected = {'out_f': None, 'out_t': True}
+        self.assertEqual(mapper.data, expected)
+        self.assertEqual(mapper.data_for_create, expected)
+
+    def test_mapping_modifier_pipeline(self):
+        """ Pipeline of modifiers """
+        class MyMapper(ImportMapper):
+            direct = [(none(convert('in_f', bool)), 'out_f'),
+                      (none(convert('in_t', bool)), 'out_t')]
+
+        env = mock.MagicMock()
+        record = {'in_f': 0, 'in_t': 1}
+        mapper = MyMapper(env)
+        mapper.convert(record)
+        expected = {'out_f': None, 'out_t': True}
         self.assertEqual(mapper.data, expected)
         self.assertEqual(mapper.data_for_create, expected)
 
@@ -293,7 +322,7 @@ class test_mapper_binding(common.TransactionCase):
         self.backend.get_class.return_value = self.country_binder
 
     def test_mapping_m2o_to_backend(self):
-        """ Map a direct record with the m2o_to_backend closure function """
+        """ Map a direct record with the m2o_to_backend modifier function """
         class MyMapper(ImportMapper):
             _model_name = 'res.partner'
             direct = [(m2o_to_backend('country_id', binding=False), 'country')]
@@ -311,7 +340,7 @@ class test_mapper_binding(common.TransactionCase):
         self.assertEqual(mapper.data, {'country': 10})
 
     def test_mapping_backend_to_m2o(self):
-        """ Map a direct record with the backend_to_m2o closure function """
+        """ Map a direct record with the backend_to_m2o modifier function """
         class MyMapper(ImportMapper):
             _model_name = 'res.partner'
             direct = [(backend_to_m2o('country', binding=False), 'country_id')]

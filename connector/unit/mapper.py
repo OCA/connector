@@ -72,7 +72,7 @@ def convert(field, conv_type):
     :param field: name of the source field in the record
     :param binding: True if the relation is a binding record
     """
-    def transform(self, record, to_attr):
+    def modifier(self, record, to_attr):
         value = record[field]
         if not value:
             return False
@@ -95,7 +95,7 @@ def m2o_to_backend(field, binding=False):
     :param field: name of the source field in the record
     :param binding: True if the source field's relation is a binding record
     """
-    def transform(self, record, to_attr):
+    def modifier(self, record, to_attr):
         if not record[field]:
             return False
         column = self.model._all_columns[field].column
@@ -134,7 +134,7 @@ def backend_to_m2o(field, binding=False):
     :param field: name of the source field in the record
     :param binding: True if the target field's relation is a binding record
     """
-    def transform(self, record, to_attr):
+    def modifier(self, record, to_attr):
         if not record[field]:
             return False
         column = self.model._all_columns[to_attr].column
@@ -222,7 +222,7 @@ class Mapper(ConnectorUnit):
 
             def a_function(field):
                 ''' ``field`` is the name of the source field '''
-                def transform(self, record, to_attr):
+                def modifier(self, record, to_attr):
                     ''' self is the current Mapper,
                         record is the current record to map,
                         to_attr is the target field'''
@@ -240,7 +240,7 @@ class Mapper(ConnectorUnit):
             def convert(field, conv_type):
                 ''' Convert the source field to a defined ``conv_type``
                 (ex. str) before returning it'''
-                def transform(self, record, to_attr):
+                def modifier(self, record, to_attr):
                     value = record[field]
                     if not value:
                         return None

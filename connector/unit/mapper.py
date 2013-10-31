@@ -61,7 +61,7 @@ def only_create(func):
 
 
 def convert(field, conv_type):
-    """ Closure intended to be used for the ``direct`` mappings.
+    """ A modifier intended to be used on the ``direct`` mappings.
 
     Convert a field's value to a given type.
 
@@ -73,12 +73,15 @@ def convert(field, conv_type):
     :param binding: True if the relation is a binding record
     """
     def transform(self, record, to_attr):
-        return conv_type(record[field])
+        value = record[field]
+        if not value:
+            return False
+        return conv_type(value)
     return transform
 
 
 def m2o_to_backend(field, binding=False):
-    """ Closure intended to be used for the ``direct`` mappings.
+    """ A modifier intended to be used on the ``direct`` mappings.
 
     For a many2one, get the ID on the backend and returns it.
 
@@ -93,6 +96,8 @@ def m2o_to_backend(field, binding=False):
     :param binding: True if the source field's relation is a binding record
     """
     def transform(self, record, to_attr):
+        if not record[field]:
+            return False
         column = self.model._all_columns[field].column
         if column._type != 'many2one':
             raise ValueError('The column %s should be a many2one, got %s' %
@@ -114,7 +119,7 @@ def m2o_to_backend(field, binding=False):
 
 
 def backend_to_m2o(field, binding=False):
-    """ Closure intended to be used for the ``direct`` mappings.
+    """ A modifier intended to be used on the ``direct`` mappings.
 
     For a field from a backend which is an ID, search the corresponding
     binding in OpenERP and returns its ID.
@@ -130,6 +135,8 @@ def backend_to_m2o(field, binding=False):
     :param binding: True if the target field's relation is a binding record
     """
     def transform(self, record, to_attr):
+        if not record[field]:
+            return False
         column = self.model._all_columns[to_attr].column
         if column._type != 'many2one':
             raise ValueError('The column %s should be a many2one, got %s' %
@@ -208,8 +215,10 @@ class Mapper(ConnectorUnit):
 
         Here, the ``source`` field will be copied in the ``target`` field.
 
-        A callable can be used in the source item. It should be a closure
-        function respecting this idiom::
+        A modifier can be used in the source item.
+        The modifier will be applied to the source field before being
+        copied in the target field.
+        It should be a closure function respecting this idiom::
 
             def a_function(field):
                 ''' ``field`` is the name of the source field '''
@@ -226,13 +235,16 @@ class Mapper(ConnectorUnit):
                     (a_function('source'), 'target'),
             ]
 
-        A more concrete example::
+        A more concrete example of modifier::
 
             def convert(field, conv_type):
-                ''' Convert the source field to a defined ``conv_type`` 
+                ''' Convert the source field to a defined ``conv_type``
                 (ex. str) before returning it'''
                 def transform(self, record, to_attr):
-                    return conv_type(record[field])
+                    value = record[field]
+                    if not value:
+                        return None
+                    return conv_type(value)
             return transform
 
         And used like that::
@@ -241,14 +253,11 @@ class Mapper(ConnectorUnit):
                     (convert('myfield', float), 'target_field'),
             ]
 
-        Or, look at one of theses functions:
+        More examples of modifiers:
 
         * :py:func:`convert`
         * :py:func:`m2o_to_backend`
         * :py:func:`backend_to_m2o`
-
-        Meaning that the function will be applied to the source fields before
-        being copied in the target fields.
 
     Method Mappings
         A mapping method allows to execute arbitrary code and return one
@@ -260,8 +269,9 @@ class Mapper(ConnectorUnit):
                 state = 'pending'
                 return {'state': state}
 
-        We can also specify that a mapping methods should be applied only when an
-        object is created, and never applied on further updates::
+        We can also specify that a mapping methods should be applied
+        only when an object is created, and never applied on further
+        updates::
 
             @only_create
             @mapping

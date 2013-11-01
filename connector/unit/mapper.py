@@ -138,7 +138,7 @@ def m2o_to_backend(field, binding=None):
         binder = self.get_binder_for_model(binding_model)
         # if a relation is not a binding, we wrap the record in the
         # binding, we'll return the id of the binding
-        wrap = not binding
+        wrap = bool(binding)
         value = binder.to_backend(rel_id, wrap=wrap)
         if not value:
             raise MappingError("Can not find an external id for record "
@@ -183,7 +183,7 @@ def backend_to_m2o(field, binding=None):
         binder = self.get_binder_for_model(binding_model)
         # if we want the ID of a normal record, not a binding,
         # we ask the unwrapped id to the binder
-        unwrap = not binding
+        unwrap = bool(binding)
         value = binder.to_openerp(rel_id, unwrap=unwrap)
         if not value:
             raise MappingError("Can not find an existing %s for external "

@@ -336,7 +336,7 @@ class test_mapper_binding(common.TransactionCase):
         mapper = MyMapper(self.env)
         mapper.convert(partner)
         self.country_binder.to_backend.assert_called_once_with(
-            partner.country_id.id, wrap=True)
+            partner.country_id.id, wrap=False)
         self.assertEqual(mapper.data, {'country': 10})
 
     def test_mapping_backend_to_m2o(self):
@@ -350,5 +350,5 @@ class test_mapper_binding(common.TransactionCase):
         mapper = MyMapper(self.env)
         mapper.convert(record)
         self.country_binder.to_openerp.assert_called_once_with(
-            10, unwrap=True)
+            10, unwrap=False)
         self.assertEqual(mapper.data, {'country_id': 44})

@@ -105,20 +105,23 @@ def convert(field, conv_type):
     return modifier
 
 
-def m2o_to_backend(field, binding=False):
+def m2o_to_backend(field, binding=None):
     """ A modifier intended to be used on the ``direct`` mappings.
 
     For a many2one, get the ID on the backend and returns it.
 
     When the field's relation is not a binding (i.e. it does not point to
-    something like ``magento.*``), the ``binding`` argument should be False.
+    something like ``magento.*``), the binding model needs to be provided
+    in the ``binding`` keyword argument.
 
     Example::
 
-        direct = [(m2o_to_backend('country_id', binding=False), 'country')]
+        direct = [(m2o_to_backend('country_id', binding='magento.res.country'),
+                   'country'),
+                  (m2o_to_backend('magento_country_id'), 'country')]
 
     :param field: name of the source field in the record
-    :param binding: True if the source field's relation is a binding record
+    :param binding: name of the binding model is the relation is not a binding
     """
     def modifier(self, record, to_attr):
         if not record[field]:
@@ -128,8 +131,11 @@ def m2o_to_backend(field, binding=False):
             raise ValueError('The column %s should be a many2one, got %s' %
                              field, column._type)
         rel_id = record[field].id
-        model_name = column._obj
-        binder = self.get_binder_for_model(model_name)
+        if binding is None:
+            binding_model = column._obj
+        else:
+            binding_model = binding
+        binder = self.get_binder_for_model(binding_model)
         # if a relation is not a binding, we wrap the record in the
         # binding, we'll return the id of the binding
         wrap = not binding
@@ -137,27 +143,30 @@ def m2o_to_backend(field, binding=False):
         if not value:
             raise MappingError("Can not find an external id for record "
                                "%s in model %s %s wrapping" %
-                               (rel_id, model_name,
+                               (rel_id, binding_model,
                                 'with' if wrap else 'without'))
         return value
     return modifier
 
 
-def backend_to_m2o(field, binding=False):
+def backend_to_m2o(field, binding=None):
     """ A modifier intended to be used on the ``direct`` mappings.
 
     For a field from a backend which is an ID, search the corresponding
     binding in OpenERP and returns its ID.
 
     When the field's relation is not a binding (i.e. it does not point to
-    something like ``magento.*``), the ``binding`` argument should be False.
+    something like ``magento.*``), the binding model needs to be provided
+    in the ``binding`` keyword argument.
 
     Example::
 
-        direct = [(backend_to_m2o('country', binding=False), 'country_id')]
+        direct = [(backend_to_m2o('country', binding='magento.res.country'),
+                   'country_id'),
+                  (backend_to_m2o('country'), 'magento_country_id')]
 
     :param field: name of the source field in the record
-    :param binding: True if the target field's relation is a binding record
+    :param binding: name of the binding model is the relation is not a binding
     """
     def modifier(self, record, to_attr):
         if not record[field]:
@@ -167,8 +176,11 @@ def backend_to_m2o(field, binding=False):
             raise ValueError('The column %s should be a many2one, got %s' %
                              to_attr, column._type)
         rel_id = record[field]
-        model_name = column._obj
-        binder = self.get_binder_for_model(model_name)
+        if binding is None:
+            binding_model = column._obj
+        else:
+            binding_model = binding
+        binder = self.get_binder_for_model(binding_model)
         # if we want the ID of a normal record, not a binding,
         # we ask the unwrapped id to the binder
         unwrap = not binding
@@ -176,7 +188,7 @@ def backend_to_m2o(field, binding=False):
         if not value:
             raise MappingError("Can not find an existing %s for external "
                                "record %s %s unwrapping" %
-                               (model_name, rel_id,
+                               (binding_model, rel_id,
                                 'with' if unwrap else 'without'))
         return value
     return modifier

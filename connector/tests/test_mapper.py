@@ -325,7 +325,7 @@ class test_mapper_binding(common.TransactionCase):
         """ Map a direct record with the m2o_to_backend modifier function """
         class MyMapper(ImportMapper):
             _model_name = 'res.partner'
-            direct = [(m2o_to_backend('country_id', binding=False), 'country')]
+            direct = [(m2o_to_backend('country_id'), 'country')]
 
         partner_id = self.ref('base.main_partner')
         self.Partner.write(self.cr, self.uid, partner_id,
@@ -343,7 +343,7 @@ class test_mapper_binding(common.TransactionCase):
         """ Map a direct record with the backend_to_m2o modifier function """
         class MyMapper(ImportMapper):
             _model_name = 'res.partner'
-            direct = [(backend_to_m2o('country', binding=False), 'country_id')]
+            direct = [(backend_to_m2o('country'), 'country_id')]
 
         record = {'country': 10}
         self.country_binder.to_openerp.return_value = 44

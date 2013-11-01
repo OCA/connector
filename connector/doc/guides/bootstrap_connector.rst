@@ -10,11 +10,11 @@ We'll see the steps to bootstrap a new connector.
 Besides that, you may want to use the existing connectors to have some
 real implementation examples:
 
-* Magentoerpconnect_
-* Prestashoperpconnect_
+* `OpenERP Magento Connector`_
+* `OpenERP Prestashop Connector`_
 
 Some boilerplate is necessary, so this document will guide you through
-some steps.
+some steps. Please also take a look on the :ref:`naming-convention`.
 
 For the sake of the example, we'll imagine we have to synchronize
 OpenERP with a coffee machine.
@@ -237,8 +237,8 @@ We'll probably need to create synchronizers, mappers, backend adapters,
 binders and maybe our own types of ConnectorUnit classes.
 
 Their implementation can vary a lot. Have a look on the
-Magentoerpconnect_ and Prestashoperpconnect_ projects.
+`OpenERP Magento Connector`_ and `OpenERP Prestashop Connector`_ projects.
 
 
-.. _Magentoerpconnect: https://code.launchpad.net/magentoerpconnect
-.. _Prestashoperpconnect: https://code.launchpad.net/prestashoperpconnect
+.. _`OpenERP Magento Connector`: https://code.launchpad.net/openerp-connector-magento
+.. _`OpenERP Prestashop Connector`: https://code.launchpad.net/prestashoperpconnect

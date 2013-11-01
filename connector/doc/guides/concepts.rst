@@ -8,12 +8,12 @@ The framework to develop connectors is decoupled in small pieces of
 codes interacting together. Each of them can be used or not in an
 implementation.
 
-An example of implementation is Magentoerpconnect_.
+An example of implementation is the `OpenERP Magento Connector`_.
 
 This document describes them from a high-level point of view and gives
 pointers to more concrete 'how-to' or small tutorials.
 
-.. _Magentoerpconnect: http://code.launchpad.net/magentoerpconnect
+.. _`OpenERP Magento Connector`: http://www.openerp-magento-connector.com
 
 ******
 Events

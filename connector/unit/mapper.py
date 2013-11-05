@@ -149,7 +149,7 @@ def m2o_to_backend(field, binding=None):
     return modifier
 
 
-def backend_to_m2o(field, binding=None):
+def backend_to_m2o(field, binding=None, with_inactive=False):
     """ A modifier intended to be used on the ``direct`` mappings.
 
     For a field from a backend which is an ID, search the corresponding
@@ -167,6 +167,7 @@ def backend_to_m2o(field, binding=None):
 
     :param field: name of the source field in the record
     :param binding: name of the binding model is the relation is not a binding
+    :param with_inactive: include the inactive records in OpenERP in the search
     """
     def modifier(self, record, to_attr):
         if not record[field]:
@@ -184,7 +185,8 @@ def backend_to_m2o(field, binding=None):
         # if we want the ID of a normal record, not a binding,
         # we ask the unwrapped id to the binder
         unwrap = bool(binding)
-        value = binder.to_openerp(rel_id, unwrap=unwrap)
+        with self.session.change_context({'active_test': False}):
+            value = binder.to_openerp(rel_id, unwrap=unwrap)
         if not value:
             raise MappingError("Can not find an existing %s for external "
                                "record %s %s unwrapping" %

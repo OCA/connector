@@ -30,3 +30,6 @@ used.
 .. note:: The ``openerp-connector-worker`` should not be launched
           alongside OpenERP when the latter does not run in multiprocess
           mode, because the interprocess signaling would not be done.
+
+.. hint:: The Magento Connector's buildout contains builtin commands to launch the workers:
+          :ref:`connectormagento:installation-with-buildout`

@@ -22,30 +22,32 @@ Here is the list of the funders, ordered by the amount of the contribution:
 
 * **Logic Supply**
 * **Debonix**
-* Apertoso NV
-* openBIG.org
+* Apertoso
+* OpenBIG
 * Smile
 * IT Service Partners
-* WillowIT Pty Ltd
+* WillowIT
 * Eezee-It
-* AUGURIA
-* Enova SARL
+* Auguria
+* Enova
 * Mr. Goran Sunjka
-* TAKTIK SA
+* Taktik
 * Maison del Gusto
-* BEE COMPANY Sàrl
-* initOS GmbH & Co. KG
-* Rhônalia SARL
+* Open2bizz Software
+* Bee Company
+* initOS
+* Rhônalia
 * Julius Network Solutions
-* Shanghai Elico Limited
+* Elico Corp
 * Linko Solutions
-* HSP Hanse Shopping GmbH
+* HSP Hanse Shopping
 * Burn Out Italy
 * Mr. Peter Dijkstra
-* Savoir-faire Linux (Mr. Maxime Chambreuil)
+* Mr. Luc Maurer
+* Mr. Maxime Chambreuil
 * Mr. Eric Vernichon
 * Avanzosc
-* Zupy! (Mr. Fabio Martinelli)
+* Mr. Fabio Martinelli
 * Mr. Marcelo Bello
 * Rove.design
 * Mr. Mark Felling

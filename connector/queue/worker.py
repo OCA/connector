@@ -28,11 +28,11 @@ import uuid
 from datetime import datetime
 from StringIO import StringIO
 
-from psycopg2 import OperationalError
+from psycopg2 import OperationalError, ProgrammingError
 
 import openerp
-import openerp.modules.registry as registry_module
 from openerp.osv.osv import PG_CONCURRENCY_ERRORS_TO_RETRY
+from openerp.tools import config
 from .queue import JobsQueue
 from ..session import ConnectorSessionHandler
 from .job import (OpenERPJobStorage,
@@ -62,6 +62,7 @@ class Worker(threading.Thread):
         super(Worker, self).__init__()
         self.queue = self.queue_class()
         self.db_name = db_name
+        threading.current_thread().dbname = db_name
         self.uuid = unicode(uuid.uuid4())
         self.watcher = watcher
 
@@ -177,7 +178,8 @@ class Worker(threading.Thread):
         Wait for jobs and execute them sequentially.
         """
         while 1:
-            # check if the worker has to exit (registry destroyed)
+            # check if the worker has to exit (db destroyed, connector
+            # uninstalled)
             if self.watcher.worker_lost(self):
                 break
             job = self.queue.dequeue()
@@ -217,7 +219,6 @@ class WorkerWatcher(threading.Thread):
 
     def __init__(self):
         super(WorkerWatcher, self).__init__()
-        self._workers_lock = threading.Lock()
         self._workers = {}
 
     def _new(self, db_name):
@@ -230,11 +231,15 @@ class WorkerWatcher(threading.Thread):
         worker.daemon = True
         worker.start()
 
-    def delete(self, db_name):
-        """ Delete worker for the database """
+    def _delete(self, db_name):
+        """ Delete a worker associated with a database """
         if db_name in self._workers:
-            with self._workers_lock:
-                del self._workers[db_name]
+            worker_uuid = self._workers[db_name].uuid
+            # the worker will exit (it checks ``worker_lost()``)
+            del self._workers[db_name]
+
+    def worker_for_db(self, db_name):
+        return self._workers.get(db_name)
 
     def worker_lost(self, worker):
         """ Indicate if a worker is no longer referenced by the watcher.
@@ -244,21 +249,44 @@ class WorkerWatcher(threading.Thread):
         return worker not in self._workers.itervalues()
 
     @staticmethod
-    def available_registries():
-        """ Yield the registries which are available.
+    def available_db_names():
+        """ Returns the databases for the server having
+        the connector module installed.
 
         Available means that they can be used by a `Worker`.
 
-        :return: database name, registry
-        :rtype: tuple
+        :return: database names
+        :rtype: list
         """
-        registries = registry_module.RegistryManager.registries
-        for db_name, registry in registries.iteritems():
-            if not 'connector.installed' in registry.models:
-                continue
-            if not registry.ready:
-                continue
-            yield db_name, registry
+        if config['db_name']:
+            db_names = config['db_name'].split(',')
+        else:
+            services = openerp.netsvc.ExportService._services
+            if services.get('db'):
+                db_names = services['db'].exp_list(True)
+            else:
+                db_names = []
+        available_db_names = []
+        for db_name in db_names:
+            session_hdl = ConnectorSessionHandler(db_name,
+                                                  openerp.SUPERUSER_ID)
+            with session_hdl.session() as session:
+                cr = session.cr
+                try:
+                    cr.execute("SELECT 1 FROM ir_module_module "
+                               "WHERE name = %s "
+                               "AND state = %s", ('connector', 'installed'),
+                               log_exceptions=False)
+                except ProgrammingError as err:
+                    if unicode(err).startswith('relation "ir_module_module" does not exist'):
+                        _logger.debug('Database %s is not an OpenERP database,'
+                                      ' connector worker not started', db_name)
+                    else:
+                        raise
+                else:
+                    if cr.fetchone():
+                        available_db_names.append(db_name)
+        return available_db_names
 
     def _update_workers(self):
         """ Refresh the list of workers according to the available
@@ -268,17 +296,21 @@ class WorkerWatcher(threading.Thread):
         `Worker` or a database could have been dropped, so we have to
         discard the Worker.
         """
-        for db_name, _registry in self.available_registries():
+        db_names = self.available_db_names()
+        # deleted db or connector uninstalled: remove the workers
+        for db_name in set(self._workers) - set(db_names):
+            self._delete(db_name)
+
+        for db_name in db_names:
             if db_name not in self._workers:
                 self._new(db_name)
 
     def run(self):
         """ `WorkerWatcher`'s main loop """
         while 1:
-            with self._workers_lock:
-                self._update_workers()
-                for db_name, worker in self._workers.items():
-                    self.check_alive(db_name, worker)
+            self._update_workers()
+            for db_name, worker in self._workers.items():
+                self.check_alive(db_name, worker)
             time.sleep(WAIT_CHECK_WORKER_ALIVE)
 
     def check_alive(self, db_name, worker):
@@ -300,6 +332,11 @@ class WorkerWatcher(threading.Thread):
         _logger.debug('Worker %s is alive on process %s',
                       worker.uuid, os.getpid())
         dbworker_obj = session.pool.get('queue.worker')
+        # at startup (especially when running tests),
+        # registry is not yet initialized, so we just skip
+        # the notify in such case
+        if not dbworker_obj:
+            return
         dbworker_obj._notify_alive(session.cr,
                                    session.uid,
                                    worker,
@@ -307,6 +344,11 @@ class WorkerWatcher(threading.Thread):
 
     def _purge_dead_workers(self, session):
         dbworker_obj = session.pool.get('queue.worker')
+        # at startup (especially when running tests),
+        # registry is not yet initialized, so we just skip
+        # the notify in such case
+        if not dbworker_obj:
+            return
         dbworker_obj._purge_dead_workers(session.cr,
                                          session.uid,
                                          context=session.context)
@@ -315,17 +357,16 @@ class WorkerWatcher(threading.Thread):
 watcher = WorkerWatcher()
 
 
-registry_delete_original = registry_module.RegistryManager.delete
-def delete(cls, db_name):
-    """Delete the registry linked to a given database.  """
-    watcher.delete(db_name)
-    return registry_delete_original(db_name)
-registry_module.RegistryManager.delete = classmethod(delete)
-
-
 def start_service():
     """ Start the watcher """
     watcher.daemon = True
     watcher.start()
 
-start_service()
+# We have to launch the Jobs Workers only if:
+# 1. OpenERP is used in standalone mode (monoprocess)
+# 2. Or it is used in multiprocess (with option ``--workers``)
+#    but the current process is a Connector Worker
+#    (launched with the ``openerp-connector-worker`` script).
+if (not getattr(openerp, 'multi_process', False) or
+        getattr(openerp, 'worker_connector', False)):
+    start_service()

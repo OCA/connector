@@ -19,13 +19,15 @@
 #
 ##############################################################################
 
-import openerp
-
 from contextlib import contextmanager
+
+import openerp
+from openerp.modules.registry import RegistryManager
 
 
 class ConnectorSessionHandler(object):
-    """ Allow to create a new `ConnectorSession` for a database.
+    """ Allow to create a new instance of
+    :py:class:`~connector.session.ConnectorSession` for a database.
 
     .. attribute:: db_name
 
@@ -53,11 +55,13 @@ class ConnectorSessionHandler(object):
 
     @contextmanager
     def session(self):
-        """ Start a new session and ensure that the session's cursor is:
+        """ Context Manager: start a new session and ensure that the
+        session's cursor is:
 
         * rollbacked on errors
         * commited at the end of the ``with`` context when no error occured
         * always closed at the end of the ``with`` context
+        * it handles the registry signaling
         """
         db = openerp.sql_db.db_connect(self.db_name)
         session = ConnectorSession(db.cursor(),
@@ -65,7 +69,9 @@ class ConnectorSessionHandler(object):
                                    context=self.context)
 
         try:
+            RegistryManager.check_registry_signaling(self.db_name)
             yield session
+            RegistryManager.signal_caches_change(self.db_name)
         except:
             session.rollback()
             raise
@@ -93,14 +99,6 @@ class ConnectorSession(object):
     .. attribute:: context
 
         The current OpenERP's context
-
-    .. attribute:: model
-
-        Instance of the model we're working on
-
-    A session can hold a reference to a model. This is useful
-    in the connectors' context because a session's life is usually
-    focused on a model (export a product, import a sale order, ...)
     """
 
     def __init__(self, cr, uid, context=None):
@@ -111,8 +109,8 @@ class ConnectorSession(object):
 
     @contextmanager
     def change_user(self, uid):
-        """ Temporarily change the user's session and restablish the
-        normal user at closing,
+        """ Context Manager: temporarily change the user's session and
+        restablish the normal user at closing,
         """
         current_uid = self.uid
         self.uid = uid
@@ -134,8 +132,8 @@ class ConnectorSession(object):
 
     @contextmanager
     def change_context(self, values):
-        """ Shallow copy the context, update it with values,
-        then restore the original context on closing.
+        """ Context Manager: shallow copy the context, update it with
+        ``values``, then restore the original context on closing.
 
         :param values: values to apply on the context
         :type values: dict
@@ -158,20 +156,30 @@ class ConnectorSession(object):
         """ Close the cursor """
         self.cr.close()
 
-    def search(self, model, domain):
-        return self.pool[model].search(self.cr, self.uid, domain, context=self.context)
+    def search(self, model, domain, limit=None, offset=0, order=None):
+        """ Shortcut to :py:class:`openerp.osv.orm.BaseModel.search` """
+        return self.pool[model].search(self.cr, self.uid, domain,
+                                       limit=limit, offset=offset,
+                                       order=order, context=self.context)
 
     def browse(self, model, ids):
+        """ Shortcut to :py:class:`openerp.osv.orm.BaseModel.browse` """
         return self.pool[model].browse(self.cr, self.uid, ids, context=self.context)
 
     def read(self, model, ids, fields):
+        """ Shortcut to :py:class:`openerp.osv.orm.BaseModel.read` """
         return self.pool[model].read(self.cr, self.uid, ids, fields, context=self.context)
 
     def create(self, model, values):
+        """ Shortcut to :py:class:`openerp.osv.orm.BaseModel.create` """
         return self.pool[model].create(self.cr, self.uid, values, context=self.context)
 
     def write(self, model, ids, values):
+        """ Shortcut to :py:class:`openerp.osv.orm.BaseModel.write` """
         return self.pool[model].write(self.cr, self.uid, ids, values, context=self.context)
+
+    def unlink(self, model, ids):
+        return self.pool[model].unlink(self.cr, self.uid, ids, context=self.context)
 
     def __repr__(self):
         return '<Session db_name: %s, uid: %d>' % (self.cr.dbname, self.uid)
@@ -180,9 +188,9 @@ class ConnectorSession(object):
         """ Indicates whether a module is installed or not
         on the current database.
 
-        .. note:: Use a convention established for the connectors addons:
-                  To know if a module is installed, it looks if an abstract
-                  model with name ``module_name.installed`` is loaded in the
-                  registry.
+        Use a convention established for the connectors addons:
+        To know if a module is installed, it looks if an (abstract)
+        model with name ``module_name.installed`` is loaded in the
+        registry.
         """
         return bool(self.pool.get('%s.installed' % module_name))

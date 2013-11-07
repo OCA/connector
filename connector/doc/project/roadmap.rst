@@ -4,20 +4,16 @@
 Roadmap
 #######
 
-This document lists the feature that we want to develop for the
-connector. They are not sorted by priority. Any contribution on theses
-points will be welcome.
+Here is a list of things we may agree to merge.
 
 * Queue: use PostgreSQL `notify` for direct enqueue of jobs
 
-    It seems to work but stays one problem:
-
-    we should identify the HTTP workers and Cron workers to activate the
-    listener only on the latters. I didn't find a way to do that and I
-    don't think we can monkey patch the workers as they are started
-    before the loading of the addons.
-
-    https://code.launchpad.net/~magentoerpconnect-core-editors/magentoerpconnect/7.0-prototype-multi-worker-notify/+merge/147387
+  Experimental branch: lp:~openerp-connector-core-editors/openerp-connector/7.0-connector-pg-notify-listen-experimental
 
 * Add facilities to parse the errors from the jobs so we can replace it
   by more contextual and helpful errors.
+
+* A logger which keeps in a buffer all the logs and flushes them when an error
+  occurs in a synchronization, clears them if it succeeded
+
+Please also have a look on the registered blueprints on https://blueprints.launchpad.net/openerp-connector

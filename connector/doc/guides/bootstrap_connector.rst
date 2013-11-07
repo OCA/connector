@@ -10,11 +10,11 @@ We'll see the steps to bootstrap a new connector.
 Besides that, you may want to use the existing connectors to have some
 real implementation examples:
 
-* Magentoerpconnect_
-* Prestashoperpconnect_
+* `OpenERP Magento Connector`_
+* `OpenERP Prestashop Connector`_
 
 Some boilerplate is necessary, so this document will guide you through
-some steps.
+some steps. Please also take a look on the :ref:`naming-convention`.
 
 For the sake of the example, we'll imagine we have to synchronize
 OpenERP with a coffee machine.
@@ -66,34 +66,23 @@ put the imports of our python modules.
 
 
 ***********************************
-Declare the module to the connector
+Install the module in the connector
 ***********************************
 
-Each module using the ``connector`` needs to create a special empty
-model, which will be used by the framework to know if the module is
-installed or not on each database.
+Each new module needs to be plugged in the connector's framework.
+That's just a matter of following a convention and creating
+``connector_coffee/connector.py`` in which you will call the
+``install_in_connector`` function::
 
-That's just a matter of following a convention and creating in
-``connector_coffee/connector.py``::
-
-    from openerp.osv import orm
+    from openerp.addons.connector.connector import install_in_connector
 
 
-    class connector_coffee_installed(orm.AbstractModel):
-        """Empty model used to know if the module is installed on the
-        database.
+    install_in_connector()
 
-        If the model is in the registry, the module is installed.
-        """
-        _name = 'connector_coffee.installed'
+.. warning:: If you miss this line of code, your ConnectorUnit classes won't
+             be found.
 
-Note:
-
-* the ``_name`` is in the form: ``module_name.installed``, where
-  ``.installed`` is the part which does never change.
-
-
-.. note:: The reason for this is that OpenERP imports the Python modules
+.. note:: The reason for this is that OpenERP may import the Python modules
           of uninstalled modules, so it automatically registers the
           events and ConnectorUnit classes, even for uninstalled
           modules.
@@ -248,8 +237,8 @@ We'll probably need to create synchronizers, mappers, backend adapters,
 binders and maybe our own types of ConnectorUnit classes.
 
 Their implementation can vary a lot. Have a look on the
-Magentoerpconnect_ and Prestashoperpconnect_ projects.
+`OpenERP Magento Connector`_ and `OpenERP Prestashop Connector`_ projects.
 
 
-.. _Magentoerpconnect: https://code.launchpad.net/~openerp-connector-core-editors/openerp-connector/7.0-magentoerpconnect
-.. _Prestashoperpconnect: 
+.. _`OpenERP Magento Connector`: https://code.launchpad.net/openerp-connector-magento
+.. _`OpenERP Prestashop Connector`: https://code.launchpad.net/prestashoperpconnect

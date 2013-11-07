@@ -1,19 +1,19 @@
-.. _connectors-specifications:
+.. _concepts:
 
 ##################
-Connector Overview
+Connector Concepts
 ##################
 
 The framework to develop connectors is decoupled in small pieces of
 codes interacting together. Each of them can be used or not in an
 implementation.
 
-An example of implementation is Magentoerpconnect_.
+An example of implementation is the `OpenERP Magento Connector`_.
 
 This document describes them from a high-level point of view and gives
 pointers to more concrete 'how-to' or small tutorials.
 
-.. _Magentoerpconnect: http://code.launchpad.net/magentoerpconnect
+.. _`OpenERP Magento Connector`: http://www.openerp-magento-connector.com
 
 ******
 Events
@@ -37,13 +37,13 @@ common to e-commerce.
 
 A connectors developer is mostly interested by:
 
-.. todo:: add url references
-
-* register a new function on an event
-* unregister a function from an event
-* so, it means also replace a function by another
+* register a new function on an event (see :py:class:`connector.event.Event`)
+* unregister a function from an event (see :py:meth:`connector.event.Event.unsubscribe`)
+* replace a consumer function by another one (see :py:class:`connector.event.Event`)
 * filter the events by model, so a subscribed function will be triggered
   only if the event happens on a registered model
+
+.. _jobs-queue:
 
 **********
 Jobs Queue
@@ -80,7 +80,7 @@ enqueue and execute jobs, to avoid to clutter the HTTP processes.
 
 A connectors developer is mostly interested by:
 
-* Enqueue a job
+* Delay a job (see the decorator :py:func:`~connector.queue.job.job`)
 
 
 *******
@@ -113,10 +113,10 @@ It is always accompanied by a concrete subclass of the model
 
 A connectors developer is mostly interested by:
 
-* Declare the backends
-* Register a ConnectorUnit on a backend
-* Unregister a ConnectorUnit on a backend
-* Get a connectorUnit from a backend
+* Declare the backends (see :py:class:`connector.backend.Backend`)
+* Register a ConnectorUnit on a backend (see :py:class:`connector.backend.Backend`)
+* Replace a ConnectorUnit on a backend (see :py:class:`connector.backend.Backend`)
+* Use a different ConnectorUnit for a different version of a backend (see :py:class:`connector.backend.Backend`)
 
 
 ***********
@@ -134,7 +134,8 @@ and the name of the model to work with.
 
 A connectors developer is mostly interested by:
 
-* Get a connectorUnit from an environment
+* Get a connectorUnit from an environment (:py:meth:`connector.connector.ConnectorUnit.get_connector_unit_for_model`,
+  :py:meth:`connector.connector.ConnectorUnit.get_binder_for_model`)
 
 *************
 ConnectorUnit

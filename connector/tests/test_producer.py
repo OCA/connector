@@ -31,7 +31,7 @@ class test_producers(common.TransactionCase):
         """
         Create a record and check if the event is called
         """
-        @on_record_create
+        @on_record_create(model_names='res.partner')
         def event(session, model_name, record_id):
             self.recipient.record_id = record_id
 
@@ -45,7 +45,7 @@ class test_producers(common.TransactionCase):
         """
         Write on a record and check if the event is called
         """
-        @on_record_write
+        @on_record_write(model_names='res.partner')
         def event(session, model_name, record_id, fields=None):
             self.recipient.record_id = record_id
             self.recipient.fields = fields
@@ -63,7 +63,7 @@ class test_producers(common.TransactionCase):
         """
         Unlink a record and check if the event is called
         """
-        @on_record_unlink
+        @on_record_unlink(model_names='res.partner')
         def event(session, model_name, record_id):
             if model_name == 'res.partner':
                 self.recipient.record_id = record_id
@@ -79,6 +79,8 @@ class test_producers(common.TransactionCase):
         If no consumer is registered on the event for the model,
         the event should not be fired at all
         """
+        # clear all the registered events
+        on_record_write._consumers = {None: set()}
         with mock.patch.object(on_record_write, 'fire'):
             record_id = self.model.write(self.cr,
                                          self.uid,

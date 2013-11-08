@@ -244,6 +244,91 @@ class test_mapper(unittest2.TestCase):
                     }
         self.assertEqual(map_record.values(only_create=True), expected)
 
+    def test_mapping_update(self):
+        """ Force values on a map record """
+        class MyMapper(ImportMapper):
+
+            direct = [('name', 'out_name')]
+
+            @mapping
+            def street(self, record):
+                return {'out_street': record['street'].upper()}
+
+            @only_create
+            @mapping
+            def city(self, record):
+                return {'out_city': 'city'}
+
+        env = mock.MagicMock()
+        record = {'name': 'Guewen',
+                  'street': 'street'}
+        mapper = MyMapper(env)
+        map_record = mapper.map_record(record)
+        map_record.update(out_city='forced')
+        map_record.update({'test': 1})
+        expected = {'out_name': 'Guewen',
+                    'out_street': 'STREET',
+                    'out_city': 'forced',
+                    'test': 1}
+        self.assertEqual(map_record.values(), expected)
+        expected = {'out_name': 'Guewen',
+                    'out_street': 'STREET',
+                    'out_city': 'forced',
+                    'test': 1}
+        self.assertEqual(map_record.values(only_create=True), expected)
+
+    def test_finalize(self):
+        """ Inherit _finalize to modify values """
+        class MyMapper(ImportMapper):
+
+            direct = [('name', 'out_name')]
+
+            def _finalize(self, record, values):
+                result = super(MyMapper, self)._finalize(record, values)
+                result['test'] = 'abc'
+                return result
+
+        env = mock.MagicMock()
+        record = {'name': 'Guewen',
+                  'street': 'street'}
+        mapper = MyMapper(env)
+        map_record = mapper.map_record(record)
+        expected = {'out_name': 'Guewen',
+                    'test': 'abc'}
+        self.assertEqual(map_record.values(), expected)
+        expected = {'out_name': 'Guewen',
+                    'test': 'abc'}
+        self.assertEqual(map_record.values(only_create=True), expected)
+
+    def test_some_fields(self):
+        """ Map only a selection of fields """
+        class MyMapper(ImportMapper):
+
+            direct = [('name', 'out_name'),
+                      ('street', 'out_street'),
+                      ]
+
+            @changed_by('country')
+            @mapping
+            def country(self, record):
+                return {'country': 'country'}
+
+        env = mock.MagicMock()
+        record = {'name': 'Guewen',
+                  'street': 'street',
+                  'country': 'country'}
+        mapper = MyMapper(env)
+        map_record = mapper.map_record(record)
+        expected = {'out_name': 'Guewen',
+                    'country': 'country'}
+        self.assertEqual(map_record.values(fields=['name', 'country']),
+                         expected)
+        expected = {'out_name': 'Guewen',
+                    'country': 'country'}
+        self.assertEqual(map_record.values(only_create=True,
+                                           fields=['name', 'country']),
+                         expected)
+
     def test_mapping_modifier(self):
         """ Map a direct record with a modifier function """
 

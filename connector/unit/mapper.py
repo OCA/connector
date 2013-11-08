@@ -24,7 +24,7 @@ from collections import namedtuple
 from contextlib import contextmanager
 
 from ..connector import ConnectorUnit, MetaConnectorUnit, Environment
-from ..exception import MappingError
+from ..exception import MappingError, NoConnectorUnitError
 
 _logger = logging.getLogger(__name__)
 
@@ -242,7 +242,94 @@ class MetaMapper(MetaConnectorUnit):
         return cls
 
 
-class ChildMapper(ConnectorUnit):
+class MapChild(ConnectorUnit):
+    """
+
+    """
+    _model_name = None
+
+    def _child_mapper(self):
+        raise NotImplementedError
+
+    def _skip_convert_child(self, map_record):
+        """ Hook to implement in sub-classes when some child
+        records should be skipped.
+
+        The parent record is accessible in ``map_record``.
+        If it returns True, the current child record is skipped.
+
+        :param map_record: record that we are converting
+        :type map_record: :py:class:`MapRecord`
+        """
+        return False
+
+    def get_items(self, items, parent, to_attr, options):
+        mapper = self._child_mapper()
+        mapped = []
+        for item in items:
+            map_record = mapper.map_record(item, parent=parent)
+            if self._skip_convert_child(map_record):
+                continue
+            mapped.append(self._get_item_values(map_record, to_attr, options))
+        return self._format_items(mapped)
+
+    def _get_item_values(self, map_record, to_attr, options):
+        """ Get the values from the child Mappers for the items.
+
+        It can be overridden for instance to:
+
+        * Change options
+        * Use a Binder to know if an item already exists to modify an
+          existing item, rather than to add it
+
+        :param map_record: record that we are converting
+        :type map_record: :py:class:`MapRecord`
+        :param to_attr: destination field (can be used for introspecting
+                        the relation)
+        :type to_attr: str
+        :param options: dict of options, herited from the main mapper
+        """
+        return map_record.values(options=options)
+
+    def _format_items(self, items_values):
+        """ Format the values of the items mapped from the child Mappers.
+
+        It can be overridden for instance to add the OpenERP
+        relationships commands ``(6, 0, [IDs])``, ...
+
+        As instance, it can be modified to handle update of existing
+        items: check if 'id' existings in values, use the ``(1, ID,
+        {values}``) command
+
+        :param items_values: list of values for the items to create
+        """
+        return items_values
+
+
+class ImportMapChild(MapChild):
+
+    def _child_mapper(self):
+        return self.get_connector_unit_for_model(ImportMapper, self.model._name)
+
+    def _format_items(self, items_values):
+        """ Format the values of the items mapped from the child Mappers.
+
+        It can be overridden for instance to add the OpenERP
+        relationships commands ``(6, 0, [IDs])``, ...
+
+        As instance, it can be modified to handle update of existing
+        items: check if 'id' existings in values, use the ``(1, ID,
+        {values}``) command
+
+        :param items_values: list of values for the items to create
+        """
+        return [(0, 0, values) for values in items_values]
+
+
+class ExportMapChild(MapChild):
+
+    def _child_mapper(self):
+        return self.get_connector_unit_for_model(ExportMapper, self.model._name)
 
 
 class Mapper(ConnectorUnit):
@@ -349,6 +436,8 @@ class Mapper(ConnectorUnit):
 
     _map_methods = None
 
+    _map_child_class = None
+
     def __init__(self, environment):
         """
 
@@ -357,9 +446,6 @@ class Mapper(ConnectorUnit):
         """
         super(Mapper, self).__init__(environment)
         self._options = None
-
-    def _init_child_mapper(self, model_name):
-        raise NotImplementedError
 
     def _after_mapping(self, result):
         """ Mapper.convert_child() has been deprecated """
@@ -436,22 +522,22 @@ class Mapper(ConnectorUnit):
                                  'use Mapper.map_record() then '
                                  'map_record.values() ')
 
-    def _format_child_rows(self, child_records):
-        return child_records
-
-    def _map_child(self, source, from_attr, model_name):
-        child_records = source[from_attr]
-        mapper = self._init_child_mapper(model_name)
-        children = []
-        for child_record in child_records:
-            if mapper.skip_convert_child(child_record, parent_values=source):
-                continue
-            map_child = mapper.map_record(child_record, parent=source)
-            only_create = self.options.get('only_create')
-            fields = self.options.get('fields')
-            children.append(map_child.values(only_create=only_create,
-                                             fields=fields))
-        return self._format_child_rows(children)
+    def _map_child(self, map_record, from_attr, to_attr, model_name):
+        assert self._map_child_class is not None, "_map_child_class required"
+        child_records = map_record.source[from_attr]
+        try:
+            mapper_child = self.get_connector_unit_for_model(
+                self._map_child_class, model_name)
+        except NoConnectorUnitError:
+            # does not force developers to use a MapChild ->
+            # will use the default one if not explicitely defined
+            env = Environment(self.backend_record,
+                              self.session,
+                              model_name)
+            mapper_child = self._map_child_class(env)
+        items = mapper_child.get_items(child_records, map_record,
+                                       to_attr, options=self.options)
+        return items
 
     @contextmanager
     def _mapping_options(self, options):
@@ -520,8 +606,8 @@ class Mapper(ConnectorUnit):
 
         for from_attr, to_attr, model_name in self.children:
             if (not fields or from_attr in fields):
-                result[to_attr] = self._map_child(map_record.source, from_attr,
-                                                  model_name)
+                result[to_attr] = self._map_child(map_record, from_attr,
+                                                  to_attr, model_name)
 
         return self._finalize(map_record, result)
 
@@ -538,44 +624,10 @@ class Mapper(ConnectorUnit):
         return values
 
 
-class MapRecord(object):
-
-    def __init__(self, mapper, source, parent=None):
-        self._source = source
-        self._mapper = mapper
-        self._forced_values = {}
-
-    @property
-    def source(self):
-        return self._source
-
-    def values(self, only_create=False, fields=None, options=None):
-        """
-
-        Sometimes we want to map values only for creation the records.
-        The mapping methods have to be decorated with ``only_create`` to
-        map values only for creation of records. Then, we must give the
-        ``only_create=True`` argument to ``values()``.
-
-        """
-        if options is None:
-            options = {}
-        options = dict(options, only_create=only_create, fields=fields)
-        values = self._mapper._apply(self, options=options)
-        values.update(self._forced_values)
-        return values
-
-    def update(self, *args, **kwargs):
-        if args:
-            assert len(args) == 1, 'dict expected, got: %s' % args
-            assert isinstance(args[0], dict), 'dict expected, got %s' % args
-            self._forced_values.update(args[0])
-        if kwargs:
-            self._forced_values.update(kwargs)
-
-
 class ImportMapper(Mapper):
     """ Transform a record from a backend to an OpenERP record """
+
+    _map_child_class = ImportMapChild
 
     def _map_direct(self, record, from_attr, to_attr):
         """ Apply the ``direct`` mappings.
@@ -600,18 +652,11 @@ class ImportMapper(Mapper):
             value = mapping(self, record, to_attr)
         return value
 
-    def _init_child_mapper(self, model_name):
-        env = Environment(self.backend_record,
-                          self.session,
-                          model_name)
-        return env.get_connector_unit(ImportMapper)
-
-    def _format_child_rows(self, child_records):
-        return [(0, 0, data) for data in child_records]
-
 
 class ExportMapper(Mapper):
     """ Transform a record from OpenERP to a backend record """
+
+    _map_child_class = ExportMapChild
 
     def _map_direct(self, record, from_attr, to_attr):
         """ Apply the ``direct`` mappings.
@@ -636,8 +681,46 @@ class ExportMapper(Mapper):
             value = mapping(self, record, to_attr)
         return value
 
-    def _init_child_mapper(self, model_name):
-        env = Environment(self.backend_record,
-                          self.session,
-                          model_name)
-        return env.get_connector_unit(ExportMapper)
+
+class MapRecord(object):
+
+    def __init__(self, mapper, source, parent=None):
+        self._source = source
+        self._mapper = mapper
+        self._parent = parent
+        self._forced_values = {}
+
+    @property
+    def source(self):
+        return self._source
+
+    @property
+    def parent(self):
+        return self._parent
+
+    def values(self, only_create=None, fields=None, options=None):
+        """
+
+        Sometimes we want to map values only for creation the records.
+        The mapping methods have to be decorated with ``only_create`` to
+        map values only for creation of records. Then, we must give the
+        ``only_create=True`` argument to ``values()``.
+
+        """
+        if options is None:
+            options = {}
+        if only_create is not None:
+            options['only_create'] = only_create
+        if fields is not None:
+            options['fields'] = fields
+        values = self._mapper._apply(self, options=options)
+        values.update(self._forced_values)
+        return values
+
+    def update(self, *args, **kwargs):
+        if args:
+            assert len(args) == 1, 'dict expected, got: %s' % args
+            assert isinstance(args[0], dict), 'dict expected, got %s' % args
+            self._forced_values.update(args[0])
+        if kwargs:
+            self._forced_values.update(kwargs)

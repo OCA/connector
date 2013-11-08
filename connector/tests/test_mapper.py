@@ -160,11 +160,11 @@ class test_mapper(unittest2.TestCase):
         record = {'name': 'Guewen',
                     'street': 'street'}
         mapper = MyMapper(env)
-        mapper.convert(record)
+        map_record = mapper.map_record(record)
         expected = {'out_name': 'Guewen',
                     'out_street': 'STREET'}
-        self.assertEqual(mapper.data, expected)
-        self.assertEqual(mapper.data_for_create, expected)
+        self.assertEqual(map_record.values(), expected)
+        self.assertEqual(map_record.values(only_create=True), expected)
 
     def test_mapping_record_on_create(self):
         """ Map a record and check the result for creation of record """
@@ -185,14 +185,14 @@ class test_mapper(unittest2.TestCase):
         record = {'name': 'Guewen',
                   'street': 'street'}
         mapper = MyMapper(env)
-        mapper.convert(record)
+        map_record = mapper.map_record(record)
         expected = {'out_name': 'Guewen',
                     'out_street': 'STREET'}
-        self.assertEqual(mapper.data, expected)
+        self.assertEqual(map_record.values(), expected)
         expected = {'out_name': 'Guewen',
                     'out_street': 'STREET',
                     'out_city': 'city'}
-        self.assertEqual(mapper.data_for_create, expected)
+        self.assertEqual(map_record.values(only_create=True), expected)
 
     def test_mapping_record_children(self):
         """ Map a record with children and check the result """
@@ -226,14 +226,14 @@ class test_mapper(unittest2.TestCase):
                             {'name': 'Pumpkin',
                              'price': 20}]}
         mapper = SaleMapper(env)
-        mapper.convert(record)
+        map_record = mapper.map_record(record)
         expected = {'name': 'SO1',
                     'line_ids': [(0, 0, {'name': 'Mango',
                                          'price': 20}),
                                  (0, 0, {'name': 'Pumpkin',
                                          'price': 40})]
                     }
-        self.assertEqual(mapper.data, expected)
+        self.assertEqual(map_record.values(), expected)
         expected = {'name': 'SO1',
                     'line_ids': [(0, 0, {'name': 'Mango',
                                          'price': 20,
@@ -242,7 +242,7 @@ class test_mapper(unittest2.TestCase):
                                          'price': 40,
                                          'discount': .5})]
                     }
-        self.assertEqual(mapper.data_for_create, expected)
+        self.assertEqual(map_record.values(only_create=True), expected)
 
     def test_mapping_modifier(self):
         """ Map a direct record with a modifier function """
@@ -258,10 +258,10 @@ class test_mapper(unittest2.TestCase):
         env = mock.MagicMock()
         record = {'name': 'Guewen'}
         mapper = MyMapper(env)
-        mapper.convert(record)
+        map_record = mapper.map_record(record)
         expected = {'out_name': 'Guewen'}
-        self.assertEqual(mapper.data, expected)
-        self.assertEqual(mapper.data_for_create, expected)
+        self.assertEqual(map_record.values(), expected)
+        self.assertEqual(map_record.values(only_create=True), expected)
 
     def test_mapping_convert(self):
         """ Map a direct record with the convert modifier function """
@@ -271,10 +271,10 @@ class test_mapper(unittest2.TestCase):
         env = mock.MagicMock()
         record = {'name': '300'}
         mapper = MyMapper(env)
-        mapper.convert(record)
+        map_record = mapper.map_record(record)
         expected = {'out_name': 300}
-        self.assertEqual(mapper.data, expected)
-        self.assertEqual(mapper.data_for_create, expected)
+        self.assertEqual(map_record.values(), expected)
+        self.assertEqual(map_record.values(only_create=True), expected)
 
     def test_mapping_modifier_none(self):
         """ Pipeline of modifiers """
@@ -285,10 +285,10 @@ class test_mapper(unittest2.TestCase):
         env = mock.MagicMock()
         record = {'in_f': False, 'in_t': True}
         mapper = MyMapper(env)
-        mapper.convert(record)
+        map_record = mapper.map_record(record)
         expected = {'out_f': None, 'out_t': True}
-        self.assertEqual(mapper.data, expected)
-        self.assertEqual(mapper.data_for_create, expected)
+        self.assertEqual(map_record.values(), expected)
+        self.assertEqual(map_record.values(only_create=True), expected)
 
     def test_mapping_modifier_pipeline(self):
         """ Pipeline of modifiers """
@@ -299,10 +299,10 @@ class test_mapper(unittest2.TestCase):
         env = mock.MagicMock()
         record = {'in_f': 0, 'in_t': 1}
         mapper = MyMapper(env)
-        mapper.convert(record)
+        map_record = mapper.map_record(record)
         expected = {'out_f': None, 'out_t': True}
-        self.assertEqual(mapper.data, expected)
-        self.assertEqual(mapper.data_for_create, expected)
+        self.assertEqual(map_record.values(), expected)
+        self.assertEqual(map_record.values(only_create=True), expected)
 
 
 class test_mapper_binding(common.TransactionCase):
@@ -334,10 +334,10 @@ class test_mapper_binding(common.TransactionCase):
         self.country_binder.to_backend.return_value = 10
 
         mapper = MyMapper(self.env)
-        mapper.convert(partner)
+        map_record = mapper.map_record(partner)
+        self.assertEqual(map_record.values(), {'country': 10})
         self.country_binder.to_backend.assert_called_once_with(
             partner.country_id.id, wrap=False)
-        self.assertEqual(mapper.data, {'country': 10})
 
     def test_mapping_backend_to_m2o(self):
         """ Map a direct record with the backend_to_m2o modifier function """
@@ -348,7 +348,7 @@ class test_mapper_binding(common.TransactionCase):
         record = {'country': 10}
         self.country_binder.to_openerp.return_value = 44
         mapper = MyMapper(self.env)
-        mapper.convert(record)
+        map_record = mapper.map_record(record)
+        self.assertEqual(map_record.values(), {'country_id': 44})
         self.country_binder.to_openerp.assert_called_once_with(
             10, unwrap=False)
-        self.assertEqual(mapper.data, {'country_id': 44})

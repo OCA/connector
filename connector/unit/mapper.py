@@ -682,8 +682,10 @@ class Mapper(ConnectorUnit):
         return self.finalize(map_record, result)
 
     def finalize(self, map_record, values):
-        """ Called at the end of the mapping. Can be used to
-        modify the values before returning them.
+        """ Called at the end of the mapping.
+
+        Can be used to modify the values before returning them, as the
+        ``on_change``.
 
         :param map_record: source map_record
         :type map_record: :py:class:`MapRecord`
@@ -696,7 +698,7 @@ class Mapper(ConnectorUnit):
     def _after_mapping(self, result):
         """ .. deprecated:: 2.1 """
         raise DeprecationWarning('Mapper._after_mapping() has been deprecated, '
-                                 'use Mapper._finalize()')
+                                 'use Mapper.finalize()')
 
     def convert_child(self, record, parent_values=None):
         """ .. deprecated:: 2.1 """

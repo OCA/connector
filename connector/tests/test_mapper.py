@@ -216,8 +216,7 @@ class test_mapper(unittest2.TestCase):
                   'street': 'street'}
         mapper = MyMapper(env)
         map_record = mapper.map_record(record)
-        map_record.update(out_city='forced')
-        map_record.update({'test': 1})
+        map_record.update({'test': 1}, out_city='forced')
         expected = {'out_name': 'Guewen',
                     'out_street': 'STREET',
                     'out_city': 'forced',

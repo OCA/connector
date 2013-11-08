@@ -905,9 +905,4 @@ class MapRecord(object):
         they have a greater priority than the mapping values.
 
         """
-        if args:
-            assert len(args) == 1, 'dict expected, got: %s' % args
-            assert isinstance(args[0], dict), 'dict expected, got %s' % args
-            self._forced_values.update(args[0])
-        if kwargs:
-            self._forced_values.update(kwargs)
+        self._forced_values.update(*args, **kwargs)

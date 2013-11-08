@@ -146,8 +146,7 @@ are pluggable classes used for the synchronizations with the external
 systems.
 
 The connector defines some base classes, which you can find below.
-Note that you can define your own ConnectorUnits as well without
-reusing them.
+Note that you can define your own ConnectorUnits as well.
 
 Mappings
 ========
@@ -159,19 +158,16 @@ conversely.
 
 It supports:
 
-* direct mappings
-
+direct mappings
     Fields *a* is written in field *b*.
 
-* method mappings
-
+method mappings
     A method is used to convert one or many fields to one or many
     fields, with transformation.
     It can be filtered, for example only applied when the record is
     created or when the source fields are modified.
 
-* submapping
-
+submapping
     a sub-record (lines of a sale order) is converted using another
     Mapper
 

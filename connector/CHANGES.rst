@@ -4,6 +4,9 @@ Changelog
 2.0.1.dev0
 ~~~~~~~~~~
 
+* Add the possibility to use 'Modifiers' functions in the 'direct
+  mappings' (details in the documentation of the Mapper class)
+
 2.0.1 (2013-09-12)
 ~~~~~~~~~~~~~~~~~~
 

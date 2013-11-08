@@ -548,7 +548,7 @@ class _MapRecord(object):
     def __init__(self, mapper, source, parent=None):
         self._source = source
         self._mapper = mapper
-        self._extra = {}
+        self._forced_values = {}
 
     @property
     def source(self):
@@ -556,7 +556,6 @@ class _MapRecord(object):
 
     def values(self, only_create=False, fields=None, options=None):
         """
-
 
         Sometimes we want to map values only for creation the records.
         The mapping methods have to be decorated with ``only_create`` to
@@ -569,16 +568,16 @@ class _MapRecord(object):
         options = dict(options, only_create=only_create, fields=fields)
         with self._mapper._mapping_options(options):
             values = self._mapper._apply(self.source)
-            values.update(self._extra)
+            values.update(self._forced_values)
         return values
 
     def update(self, *args, **kwargs):
         if args:
             assert len(args) == 1, 'dict expected, got: %s' % args
-            assert isinstance(args, dict), 'dict expected, got %s' % args
-            self._extra.update(args[0])
+            assert isinstance(args[0], dict), 'dict expected, got %s' % args
+            self._forced_values.update(args[0])
         if kwargs:
-            self._extra.update(kwargs)
+            self._forced_values.update(kwargs)
 
 
 class ImportMapper(Mapper):

@@ -424,7 +424,7 @@ class Mapper(ConnectorUnit):
 
     @property
     def data(self):
-        """ Returns a dict for a record processed by
+        """  Deprecated. Returns a dict for a record processed by
         :py:meth:`~_convert` """
         if self._data is None:
             raise ValueError('Mapper.convert should be called before '
@@ -454,15 +454,19 @@ class Mapper(ConnectorUnit):
     def _format_child_rows(self, child_records):
         return child_records
 
-    def _map_child(self, record, from_attr, model_name):
-        child_records = record.source[from_attr]
+    def _map_child(self, source, from_attr, model_name):
+        child_records = source[from_attr]
         mapper = self._init_child_mapper(model_name)
         children = []
         for child_record in child_records:
-            # XXX move me
-            # if mapper.skip_convert_child(child_record, parent_values=record):
-            #     continue
-            children.append(_MapperRecord(self, record, parent=record))
+            if mapper.skip_convert_child(child_record, parent_values=source):
+                continue
+            map_child = mapper.map_record(child_record, parent=source)
+            only_create = self.options.get('only_create')
+            fields = self.options.get('fields')
+            children.append(map_child.values(only_create=only_create,
+                                             fields=fields))
+        return self._format_child_rows(children)
 
     # -------- new api --------
     @contextmanager
@@ -483,13 +487,13 @@ class Mapper(ConnectorUnit):
         """ Should not be modified manually, only with _mapping_options """
         return self._options
 
-    def map_record(self, record):
+    def map_record(self, record, parent=None):
         """ Get a MapRecord with record, ready to be converted using the
         current Mapper.
 
         :param record: record to transform
         """
-        return _MapRecord(self, record)
+        return _MapRecord(self, record, parent=parent)
 
     def _apply(self, source):
         assert self.options is not None,(
@@ -523,7 +527,7 @@ class Mapper(ConnectorUnit):
 
         for from_attr, to_attr, model_name in self.children:
             if (not fields or from_attr in fields):
-                self._map_child(source, from_attr, to_attr, model_name)
+                result[to_attr] = self._map_child(source, from_attr, model_name)
 
         return self._finalize(source, result)
 

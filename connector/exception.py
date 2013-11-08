@@ -24,6 +24,10 @@ class ConnectorException(RuntimeError):
     """ Base Exception for the connectors """
 
 
+class NoConnectorUnitError(ConnectorException):
+    """ No ConnectorUnit has been found """
+
+
 class InvalidDataError(ConnectorException):
     """ Data Invalid """
 

@@ -7,6 +7,7 @@ import openerp.tests.common as common
 from openerp.addons.connector.unit.mapper import (
     Mapper,
     ImportMapper,
+    ImportMapChild,
     MappingDefinition,
     changed_by,
     only_create,
@@ -16,6 +17,7 @@ from openerp.addons.connector.unit.mapper import (
     none,
     mapping)
 
+from openerp.addons.connector.exception import NoConnectorUnitError
 from openerp.addons.connector.backend import Backend
 from openerp.addons.connector.connector import Environment
 from openerp.addons.connector.session import ConnectorSession
@@ -194,56 +196,6 @@ class test_mapper(unittest2.TestCase):
                     'out_city': 'city'}
         self.assertEqual(map_record.values(only_create=True), expected)
 
-    def test_mapping_record_children(self):
-        """ Map a record with children and check the result """
-
-        class LineMapper(ImportMapper):
-            direct = [('name', 'name')]
-
-            @mapping
-            def price(self, record):
-                return {'price': record['price'] * 2}
-
-            @only_create
-            @mapping
-            def discount(self, record):
-                return {'discount': .5}
-
-        class SaleMapper(ImportMapper):
-
-            direct = [('name', 'name')]
-
-            children = [('lines', 'line_ids', 'sale.order.line')]
-
-            def _init_child_mapper(self, model_name):
-                return LineMapper(self.environment)
-
-        env = mock.MagicMock()
-
-        record = {'name': 'SO1',
-                  'lines': [{'name': 'Mango',
-                             'price': 10},
-                            {'name': 'Pumpkin',
-                             'price': 20}]}
-        mapper = SaleMapper(env)
-        map_record = mapper.map_record(record)
-        expected = {'name': 'SO1',
-                    'line_ids': [(0, 0, {'name': 'Mango',
-                                         'price': 20}),
-                                 (0, 0, {'name': 'Pumpkin',
-                                         'price': 40})]
-                    }
-        self.assertEqual(map_record.values(), expected)
-        expected = {'name': 'SO1',
-                    'line_ids': [(0, 0, {'name': 'Mango',
-                                         'price': 20,
-                                         'discount': .5}),
-                                 (0, 0, {'name': 'Pumpkin',
-                                         'price': 40,
-                                         'discount': .5})]
-                    }
-        self.assertEqual(map_record.values(only_create=True), expected)
-
     def test_mapping_update(self):
         """ Force values on a map record """
         class MyMapper(ImportMapper):
@@ -389,6 +341,25 @@ class test_mapper(unittest2.TestCase):
         self.assertEqual(map_record.values(), expected)
         self.assertEqual(map_record.values(only_create=True), expected)
 
+    def test_mapping_custom_option(self):
+        """ Usage of custom options in mappings """
+        class MyMapper(ImportMapper):
+            @mapping
+            def any(self, record):
+                if self.options.get('custom'):
+                    res = True
+                else:
+                    res = False
+                return {'res': res}
+
+        env = mock.MagicMock()
+        record = {}
+        mapper = MyMapper(env)
+        map_record = mapper.map_record(record)
+        expected = {'res': True}
+        self.assertEqual(map_record.values(options=dict(custom=True)),
+                         expected)
+
 
 class test_mapper_binding(common.TransactionCase):
     """ Test Mapper with Bindings"""
@@ -437,3 +408,122 @@ class test_mapper_binding(common.TransactionCase):
         self.assertEqual(map_record.values(), {'country_id': 44})
         self.country_binder.to_openerp.assert_called_once_with(
             10, unwrap=False)
+
+    def test_mapping_record_children_no_map_child(self):
+        """ Map a record with children, using default MapChild """
+
+        backend = Backend('backend', '42')
+
+        @backend
+        class LineMapper(ImportMapper):
+            _model_name = 'res.currency.rate'
+            direct = [('name', 'name')]
+
+            @mapping
+            def price(self, record):
+                return {'rate': record['rate'] * 2}
+
+            @only_create
+            @mapping
+            def discount(self, record):
+                return {'test': .5}
+
+        @backend
+        class ObjectMapper(ImportMapper):
+            _model_name = 'res.currency'
+
+            direct = [('name', 'name')]
+
+            children = [('lines', 'line_ids', 'res.currency.rate')]
+
+
+        backend_record = mock.Mock()
+        backend_record.get_backend.side_effect = lambda *a: backend
+        env = Environment(backend_record, self.session, 'res.currency')
+
+        record = {'name': 'SO1',
+                  'lines': [{'name': '2013-11-07',
+                             'rate': 10},
+                            {'name': '2013-11-08',
+                             'rate': 20}]}
+        mapper = ObjectMapper(env)
+        map_record = mapper.map_record(record)
+        expected = {'name': 'SO1',
+                    'line_ids': [(0, 0, {'name': '2013-11-07',
+                                         'rate': 20}),
+                                 (0, 0, {'name': '2013-11-08',
+                                         'rate': 40})]
+                    }
+        self.assertEqual(map_record.values(), expected)
+        expected = {'name': 'SO1',
+                    'line_ids': [(0, 0, {'name': '2013-11-07',
+                                         'rate': 20,
+                                         'test': .5}),
+                                 (0, 0, {'name': '2013-11-08',
+                                         'rate': 40,
+                                         'test': .5})]
+                    }
+        self.assertEqual(map_record.values(only_create=True), expected)
+
+    def test_mapping_record_children(self):
+        """ Map a record with children, using defined MapChild """
+
+        backend = Backend('backend', '42')
+
+        @backend
+        class LineMapper(ImportMapper):
+            _model_name = 'res.currency.rate'
+            direct = [('name', 'name')]
+
+            @mapping
+            def price(self, record):
+                return {'rate': record['rate'] * 2}
+
+            @only_create
+            @mapping
+            def discount(self, record):
+                return {'test': .5}
+
+        @backend
+        class SaleLineImportMapChild(ImportMapChild):
+            _model_name = 'res.currency.rate'
+            def _format_items(self, items_values):
+                return [('ABC', values) for values in items_values]
+
+
+        @backend
+        class ObjectMapper(ImportMapper):
+            _model_name = 'res.currency'
+
+            direct = [('name', 'name')]
+
+            children = [('lines', 'line_ids', 'res.currency.rate')]
+
+
+        backend_record = mock.Mock()
+        backend_record.get_backend.side_effect = lambda *a: backend
+        env = Environment(backend_record, self.session, 'res.currency')
+
+        record = {'name': 'SO1',
+                  'lines': [{'name': '2013-11-07',
+                             'rate': 10},
+                            {'name': '2013-11-08',
+                             'rate': 20}]}
+        mapper = ObjectMapper(env)
+        map_record = mapper.map_record(record)
+        expected = {'name': 'SO1',
+                    'line_ids': [('ABC', {'name': '2013-11-07',
+                                          'rate': 20}),
+                                 ('ABC', {'name': '2013-11-08',
+                                          'rate': 40})]
+                    }
+        self.assertEqual(map_record.values(), expected)
+        expected = {'name': 'SO1',
+                    'line_ids': [('ABC', {'name': '2013-11-07',
+                                          'rate': 20,
+                                          'test': .5}),
+                                 ('ABC', {'name': '2013-11-08',
+                                          'rate': 40,
+                                          'test': .5})]
+                    }
+        self.assertEqual(map_record.values(only_create=True), expected)

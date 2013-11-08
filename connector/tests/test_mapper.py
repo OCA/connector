@@ -166,7 +166,7 @@ class test_mapper(unittest2.TestCase):
         expected = {'out_name': 'Guewen',
                     'out_street': 'STREET'}
         self.assertEqual(map_record.values(), expected)
-        self.assertEqual(map_record.values(only_create=True), expected)
+        self.assertEqual(map_record.values(for_create=True), expected)
 
     def test_mapping_record_on_create(self):
         """ Map a record and check the result for creation of record """
@@ -194,7 +194,7 @@ class test_mapper(unittest2.TestCase):
         expected = {'out_name': 'Guewen',
                     'out_street': 'STREET',
                     'out_city': 'city'}
-        self.assertEqual(map_record.values(only_create=True), expected)
+        self.assertEqual(map_record.values(for_create=True), expected)
 
     def test_mapping_update(self):
         """ Force values on a map record """
@@ -227,7 +227,7 @@ class test_mapper(unittest2.TestCase):
                     'out_street': 'STREET',
                     'out_city': 'forced',
                     'test': 1}
-        self.assertEqual(map_record.values(only_create=True), expected)
+        self.assertEqual(map_record.values(for_create=True), expected)
 
     def test_finalize(self):
         """ Inherit _finalize to modify values """
@@ -250,7 +250,7 @@ class test_mapper(unittest2.TestCase):
         self.assertEqual(map_record.values(), expected)
         expected = {'out_name': 'Guewen',
                     'test': 'abc'}
-        self.assertEqual(map_record.values(only_create=True), expected)
+        self.assertEqual(map_record.values(for_create=True), expected)
 
     def test_some_fields(self):
         """ Map only a selection of fields """
@@ -277,7 +277,7 @@ class test_mapper(unittest2.TestCase):
                          expected)
         expected = {'out_name': 'Guewen',
                     'country': 'country'}
-        self.assertEqual(map_record.values(only_create=True,
+        self.assertEqual(map_record.values(for_create=True,
                                            fields=['name', 'country']),
                          expected)
 
@@ -298,7 +298,7 @@ class test_mapper(unittest2.TestCase):
         map_record = mapper.map_record(record)
         expected = {'out_name': 'Guewen'}
         self.assertEqual(map_record.values(), expected)
-        self.assertEqual(map_record.values(only_create=True), expected)
+        self.assertEqual(map_record.values(for_create=True), expected)
 
     def test_mapping_convert(self):
         """ Map a direct record with the convert modifier function """
@@ -311,7 +311,7 @@ class test_mapper(unittest2.TestCase):
         map_record = mapper.map_record(record)
         expected = {'out_name': 300}
         self.assertEqual(map_record.values(), expected)
-        self.assertEqual(map_record.values(only_create=True), expected)
+        self.assertEqual(map_record.values(for_create=True), expected)
 
     def test_mapping_modifier_none(self):
         """ Pipeline of modifiers """
@@ -325,7 +325,7 @@ class test_mapper(unittest2.TestCase):
         map_record = mapper.map_record(record)
         expected = {'out_f': None, 'out_t': True}
         self.assertEqual(map_record.values(), expected)
-        self.assertEqual(map_record.values(only_create=True), expected)
+        self.assertEqual(map_record.values(for_create=True), expected)
 
     def test_mapping_modifier_pipeline(self):
         """ Pipeline of modifiers """
@@ -339,7 +339,7 @@ class test_mapper(unittest2.TestCase):
         map_record = mapper.map_record(record)
         expected = {'out_f': None, 'out_t': True}
         self.assertEqual(map_record.values(), expected)
-        self.assertEqual(map_record.values(only_create=True), expected)
+        self.assertEqual(map_record.values(for_create=True), expected)
 
     def test_mapping_custom_option(self):
         """ Usage of custom options in mappings """
@@ -463,7 +463,7 @@ class test_mapper_binding(common.TransactionCase):
                                          'rate': 40,
                                          'test': .5})]
                     }
-        self.assertEqual(map_record.values(only_create=True), expected)
+        self.assertEqual(map_record.values(for_create=True), expected)
 
     def test_mapping_record_children(self):
         """ Map a record with children, using defined MapChild """
@@ -526,4 +526,4 @@ class test_mapper_binding(common.TransactionCase):
                                           'rate': 40,
                                           'test': .5})]
                     }
-        self.assertEqual(map_record.values(only_create=True), expected)
+        self.assertEqual(map_record.values(for_create=True), expected)

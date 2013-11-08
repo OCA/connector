@@ -582,7 +582,7 @@ class Mapper(ConnectorUnit):
                       map_record.source, self.model._name)
 
         fields = self.options.get('fields')
-        only_create = self.options.get('only_create')
+        for_create = self.options.get('for_create')
         result = {}
         for from_attr, to_attr in self.direct:
             if (not fields or from_attr in fields):
@@ -601,7 +601,7 @@ class Mapper(ConnectorUnit):
                 if not isinstance(values, dict):
                     raise ValueError('%s: invalid return value for the '
                                      'mapping method %s' % (values, meth))
-                if not definition.only_create or only_create:
+                if not definition.only_create or for_create:
                     result.update(values)
 
         for from_attr, to_attr, model_name in self.children:
@@ -698,19 +698,19 @@ class MapRecord(object):
     def parent(self):
         return self._parent
 
-    def values(self, only_create=None, fields=None, options=None):
+    def values(self, for_create=None, fields=None, options=None):
         """
 
         Sometimes we want to map values only for creation the records.
-        The mapping methods have to be decorated with ``only_create`` to
+        The mapping methods have to be decorated with ``for_create`` to
         map values only for creation of records. Then, we must give the
-        ``only_create=True`` argument to ``values()``.
+        ``for_create=True`` argument to ``values()``.
 
         """
         if options is None:
             options = {}
-        if only_create is not None:
-            options['only_create'] = only_create
+        if for_create is not None:
+            options['for_create'] = for_create
         if fields is not None:
             options['fields'] = fields
         values = self._mapper._apply(self, options=options)

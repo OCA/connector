@@ -6,6 +6,7 @@ import openerp.tests.common as common
 from openerp.addons.connector.backend import (Backend,
                                               get_backend,
                                               BACKENDS)
+from openerp.addons.connector.exception import NoConnectorUnitError
 from openerp.addons.connector.connector import (Binder,
                                                 ConnectorUnit)
 from openerp.addons.connector.unit.mapper import (Mapper,
@@ -110,7 +111,7 @@ class test_backend_register(common.TransactionCase):
 
     def test_no_register_error(self):
         """ Error when asking for a class and none is found"""
-        with self.assertRaises(AssertionError):
+        with self.assertRaises(NoConnectorUnitError):
             ref = self.backend.get_class(BackendAdapter,
                                          self.session,
                                          'res.users')

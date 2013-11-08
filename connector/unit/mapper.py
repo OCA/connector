@@ -40,23 +40,44 @@ _logger = logging.getLogger(__name__)
 
 
 def mapping(func):
-    """ Decorator declarating a mapping for a field """
+    """ Declare that a method is a mapping method.
+
+    It is then used by the :py:class:`Mapper` to convert the records.
+
+    Usage::
+
+        @mapping
+        def any(self, record):
+            return {'output_field': record['input_field']}
+
+    """
     func.is_mapping = True
     return func
 
 
 def changed_by(*args):
-    """ Decorator for the mappings. When fields are modified, we want to modify
-    only the modified fields. Using this decorator, we can specify which fields
-    updates should trigger which mapping.
+    """ Decorator for the mapping methods (:py:func:`mapping`)
+
+    When fields are modified in OpenERP, we want to export only the
+    modified fields. Using this decorator, we can specify which fields
+    updates should trigger which mapping method.
 
     If ``changed_by`` is empty, the mapping is always active.
-    As far as possible, it should be used, thus, when we do an update on
-    only a small number of fields on a record, the size of the output
-    record will be limited to only the fields really having to be
-    modified.
+
+    As far as possible, this decorator should be used for the exports,
+    thus, when we do an update on only a small number of fields on a
+    record, the size of the output record will be limited to only the
+    fields really having to be exported.
+
+    Usage::
+
+        @changed_by('input_field')
+        @mapping
+        def any(self, record):
+            return {'output_field': record['input_field']}
 
     :param *args: field names which trigger the mapping when modified
+
     """
     def register_mapping(func):
         func.changed_by = args
@@ -65,8 +86,19 @@ def changed_by(*args):
 
 
 def only_create(func):
-    """ A mapping decorated with ``only_create`` means that it has to be
-    used only for the creation of the records. """
+    """ Decorator for the mapping methods (:py:func:`mapping`)
+
+    A mapping decorated with ``only_create`` means that it has to be
+    used only for the creation of the records.
+
+    Usage::
+
+        @only_create
+        @mapping
+        def any(self, record):
+            return {'output_field': record['input_field']}
+
+    """
     func.only_create = True
     return func
 
@@ -253,8 +285,45 @@ class MetaMapper(MetaConnectorUnit):
 
 
 class MapChild(ConnectorUnit):
-    """ MapChild 
+    """ MapChild is responsible to convert items.
 
+    Items are sub-records of a main record.
+    In this example, the items are the records in ``lines``::
+
+        sales = {'name': 'SO10',
+                 'lines': [{'product_id': 1, 'quantity': 2},
+                           {'product_id': 2, 'quantity': 2}]}
+
+    A MapChild is always called from another :py:class:`Mapper` which
+    provides a ``children`` configuration.
+
+    Considering the example above, the "main" :py:class:`Mapper` would
+    returns something as follows::
+
+        {'name': 'SO10',
+                 'lines': [(0, 0, {'product_id': 11, 'quantity': 2}),
+                           (0, 0, {'product_id': 12, 'quantity': 2})]}
+
+    A MapChild is responsible to:
+
+    * Find the :py:class:`Mapper` to convert the items
+    * Eventually filter out some lines (can be done by inheriting
+      :py:meth:`skip_item`)
+    * Convert the items' records using the found :py:class:`Mapper`
+    * Format the output values to the format expected by OpenERP or the
+      backend (as seen above with ``(0, 0, {values})``
+
+    A MapChild can be extended like any other
+    :py:class:`~connector.connector.ConnectorUnit`. However, it is not mandatory
+    to explicitly create a MapChild for each children mapping, the default
+    one will be used (:py:class:`ImportMapChild` or :py:class:`ExportMapChild`).
+
+    The implementation by default does not take care of the updates: if
+    I import a sales order 2 times, the lines will be duplicated. This
+    is not a problem as long as an importation should only support the
+    creation (typical for sales orders). It can be implemented on a
+    case-by-case basis by inheriting :py:meth:`get_item_values` and
+    :py:meth:`format_items`.
 
     """
     _model_name = None
@@ -275,6 +344,18 @@ class MapChild(ConnectorUnit):
         return False
 
     def get_items(self, items, parent, to_attr, options):
+        """ Returns the formatted output values of items from a main record
+
+        :param items: list of item records
+        :type items: list
+        :param parent: parent record
+        :param to_attr: destination field (can be used for introspecting
+                        the relation)
+        :type to_attr: str
+        :param options: dict of options, herited from the main mapper
+        :return: formatted output values for the item
+
+        """
         mapper = self._child_mapper()
         mapped = []
         for item in items:
@@ -285,13 +366,14 @@ class MapChild(ConnectorUnit):
         return self.format_items(mapped)
 
     def get_item_values(self, map_record, to_attr, options):
-        """ Get the values from the child Mappers for the items.
+        """ Get the raw values from the child Mappers for the items.
 
         It can be overridden for instance to:
 
         * Change options
-        * Use a Binder to know if an item already exists to modify an
-          existing item, rather than to add it
+        * Use a :py:class:`~connector.connector.Binder` to know if an
+          item already exists to modify an existing item, rather than to
+          add it
 
         :param map_record: record that we are converting
         :type map_record: :py:class:`MapRecord`
@@ -299,6 +381,7 @@ class MapChild(ConnectorUnit):
                         the relation)
         :type to_attr: str
         :param options: dict of options, herited from the main mapper
+
         """
         return map_record.values(options=options)
 
@@ -309,15 +392,19 @@ class MapChild(ConnectorUnit):
         relationships commands ``(6, 0, [IDs])``, ...
 
         As instance, it can be modified to handle update of existing
-        items: check if 'id' existings in values, use the ``(1, ID,
-        {values}``) command
+        items: check if an 'id' has been defined by
+        :py:meth:`get_item_values` then use the ``(1, ID, {values}``)
+        command
 
-        :param items_values: list of values for the items to create
+        :param items_values: mapped values for the items
+        :type items_values: list
+
         """
         return items_values
 
 
 class ImportMapChild(MapChild):
+    """ :py:class:`MapChild` for the Imports """
 
     def _child_mapper(self):
         return self.get_connector_unit_for_model(ImportMapper, self.model._name)
@@ -329,15 +416,20 @@ class ImportMapChild(MapChild):
         relationships commands ``(6, 0, [IDs])``, ...
 
         As instance, it can be modified to handle update of existing
-        items: check if 'id' existings in values, use the ``(1, ID,
-        {values}``) command
+        items: check if an 'id' has been defined by
+        :py:meth:`get_item_values` then use the ``(1, ID, {values}``)
+        command
 
         :param items_values: list of values for the items to create
+        :type items_values: list
+
         """
         return [(0, 0, values) for values in items_values]
 
 
 class ExportMapChild(MapChild):
+    """ :py:class:`MapChild` for the Exports """
+
 
     def _child_mapper(self):
         return self.get_connector_unit_for_model(ExportMapper, self.model._name)
@@ -425,7 +517,14 @@ class Mapper(ConnectorUnit):
         When a record contains sub-items, like the lines of a sales order,
         we can convert the children using another Mapper::
 
-            children = [('items', 'line_ids', LineMapper)]
+            children = [('items', 'line_ids', 'model.name')]
+
+        It allows to create the sales order and all its lines with the
+        same call to :py:meth:`openerp.osv.orm.BaseModel.create()`.
+
+        When using ``children`` for items of a record, we need to create
+        a :py:class:`Mapper` for the model of the items, and optionally a
+        :py:class:`MapChild`.
 
     Usage of a Mapper::
 
@@ -474,10 +573,12 @@ class Mapper(ConnectorUnit):
 
     @property
     def map_methods(self):
+        """ Yield all the methods decorated with ``@mapping`` """
         for meth, definition in self._map_methods.iteritems():
             yield getattr(self, meth), definition
 
     def _map_child(self, map_record, from_attr, to_attr, model_name):
+        """ Convert items of the record as defined by children """
         assert self._map_child_class is not None, "_map_child_class required"
         child_records = map_record.source[from_attr]
         try:
@@ -509,28 +610,42 @@ class Mapper(ConnectorUnit):
 
     @property
     def options(self):
-        """ Should not be modified manually, only with _mapping_options.
-
-        Options can be accessed in the mapping methods.
-
-        """
+        """ Options can be accessed in the mapping methods with
+        ``self.options``. """
         return self._options
 
     def map_record(self, record, parent=None):
-        """ Get a MapRecord with record, ready to be converted using the
-        current Mapper.
+        """ Get a :py:class:`MapRecord` with record, ready to be
+        converted using the current Mapper.
 
         :param record: record to transform
+        :param parent: optional parent record, for items
+
         """
         return MapRecord(self, record, parent=parent)
 
     def _apply(self, map_record, options=None):
+        """ Apply the mappings on a :py:class:`MapRecord`
+
+        :param map_record: source record to convert
+        :type map_record: :py:class:`MapRecord`
+
+        """
         if options is None:
             options = {}
         with self._mapping_options(options):
             return self._apply_with_options(map_record)
 
     def _apply_with_options(self, map_record):
+        """ Apply the mappings on a :py:class:`MapRecord` with
+        contextual options (the ``options`` given in
+        :py:meth:`MapRecord.values()` are accessible in
+        ``self.options``)
+
+        :param map_record: source record to convert
+        :type map_record: :py:class:`MapRecord`
+
+        """
         assert self.options is not None, (
             "options should be defined with '_mapping_options'")
         _logger.debug('converting record %s to model %s',
@@ -579,21 +694,19 @@ class Mapper(ConnectorUnit):
         return values
 
     def _after_mapping(self, result):
-        """ Mapper.convert_child() has been deprecated """
+        """ .. deprecated:: 2.1 """
         raise DeprecationWarning('Mapper._after_mapping() has been deprecated, '
                                  'use Mapper._finalize()')
 
     def convert_child(self, record, parent_values=None):
-        """ Mapper.convert_child() has been deprecated """
+        """ .. deprecated:: 2.1 """
         raise DeprecationWarning('Mapper.convert_child() has been deprecated, '
                                  'use Mapper.map_record() then '
                                  'map_record.values() ')
 
     def convert(self, record, fields=None):
-        """ Mapper.convert() has been deprecated
-
-        See :py:meth:`Mapper.map_record`, :py:meth:`MapRecord.values`
-
+        """ .. deprecated:: 2.1
+               See :py:meth:`Mapper.map_record`, :py:meth:`MapRecord.values`
         """
         raise DeprecationWarning('Mapper.convert() has been deprecated, '
                                  'use Mapper.map_record() then '
@@ -601,10 +714,8 @@ class Mapper(ConnectorUnit):
 
     @property
     def data(self):
-        """ Mapper.data has been deprecated
-
-        See :py:meth:`Mapper.map_record`, :py:meth:`MapRecord.values`
-
+        """ .. deprecated:: 2.1
+               See :py:meth:`Mapper.map_record`, :py:meth:`MapRecord.values`
         """
         raise DeprecationWarning('Mapper.data has been deprecated, '
                                  'use Mapper.map_record() then '
@@ -612,28 +723,27 @@ class Mapper(ConnectorUnit):
 
     @property
     def data_for_create(self):
-        """ Mapper.data has been deprecated
-
-        See :py:meth:`Mapper.map_record`, :py:meth:`MapRecord.values`
-
+        """ .. deprecated:: 2.1
+               See :py:meth:`Mapper.map_record`, :py:meth:`MapRecord.values`
         """
         raise DeprecationWarning('Mapper.data_for_create has been deprecated, '
                                  'use Mapper.map_record() then '
                                  'map_record.values() ')
 
     def skip_convert_child(self, record, parent_values=None):
-        """ Hook to implement in sub-classes when some child
-        records should be skipped.
-
-        This method is only relevable for child mappers.
-
-        If it returns True, the current child record is skipped."""
+        """ .. deprecated:: 2.1
+               Use :py:meth:`MapChild.skip_item` instead.
+        """
         raise DeprecationWarning('Mapper.skip_convert_child has been deprecated, '
                                  'use MapChild.skip_item().')
 
 
 class ImportMapper(Mapper):
-    """ Transform a record from a backend to an OpenERP record """
+    """ :py:class:`Mapper` for imports.
+
+    Transform a record from a backend to an OpenERP record
+
+    """
 
     _map_child_class = ImportMapChild
 
@@ -662,7 +772,11 @@ class ImportMapper(Mapper):
 
 
 class ExportMapper(Mapper):
-    """ Transform a record from OpenERP to a backend record """
+    """ :py:class:`Mapper` for exports.
+
+    Transform a record from OpenERP to a backend record
+
+    """
 
     _map_child_class = ExportMapChild
 
@@ -691,6 +805,19 @@ class ExportMapper(Mapper):
 
 
 class MapRecord(object):
+    """ A record prepared to be converted using a :py:class:`Mapper`.
+
+    MapRecord instances are prepared by :py:meth:`Mapper.map_record`.
+
+    Usage::
+
+        mapper = SomeMapper(env)
+        map_record = mapper.map_record()
+        output_values = map_record.values()
+
+    See :py:meth:`values` for more information on the available arguments.
+
+    """
 
     def __init__(self, mapper, source, parent=None):
         self._source = source
@@ -700,19 +827,57 @@ class MapRecord(object):
 
     @property
     def source(self):
+        """ Source record to be converted """
         return self._source
 
     @property
     def parent(self):
+        """ Parent record if the current record is an item """
         return self._parent
 
     def values(self, for_create=None, fields=None, options=None):
-        """
+        """ Build and returns the mapped values according to the options.
 
-        Sometimes we want to map values only for creation the records.
-        The mapping methods have to be decorated with ``for_create`` to
-        map values only for creation of records. Then, we must give the
-        ``for_create=True`` argument to ``values()``.
+        Usage::
+
+            mapper = SomeMapper(env)
+            map_record = mapper.map_record()
+            output_values = map_record.values()
+
+        Creation of records
+            When using the option ``for_create``, only the mappings decorated
+            with ``@only_create`` will be mapped.
+
+            ::
+
+                output_values = map_record.values(for_create=True)
+
+        Filter on fields
+            When using the ``fields`` argument, the mappings will be
+            filtered using either the source key in ``direct`` arguments,
+            either the ``changed_by`` arguments for the mapping methods.
+
+            ::
+
+                output_values = map_record.values(fields=['name', 'street'])
+
+        Custom options
+            Arbitrary key and values can be defined in the ``options``
+            argument.  They can later be used in the mapping methods
+            using ``self.options``.
+
+            ::
+
+                output_values = map_record.values(options=dict(tax_include=True))
+
+        :param for_create: specify if only the mappings for creation
+                           (``@only_create``) should be mapped.
+        :type for_create: boolean
+        :param fields: filter on fields
+        :type fields: list
+        :param options: custom options, they can later be used in the
+                        mapping methods
+        :type options: dict
 
         """
         if options is None:
@@ -726,6 +891,20 @@ class MapRecord(object):
         return values
 
     def update(self, *args, **kwargs):
+        """ Force values to be applied after a mapping.
+
+        Usage::
+
+            mapper = SomeMapper(env)
+            map_record = mapper.map_record()
+            map_record.update(a=1)
+            output_values = map_record.values()
+            # output_values will at least contain {'a': 1}
+
+        The values assigned with ``update()`` are in any case applied,
+        they have a greater priority than the mapping values.
+
+        """
         if args:
             assert len(args) == 1, 'dict expected, got: %s' % args
             assert isinstance(args[0], dict), 'dict expected, got %s' % args

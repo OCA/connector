@@ -456,7 +456,11 @@ class Mapper(ConnectorUnit):
 
     @property
     def options(self):
-        """ Should not be modified manually, only with _mapping_options """
+        """ Should not be modified manually, only with _mapping_options.
+
+        Options can be accessed in the mapping methods.
+
+        """
         return self._options
 
     def map_record(self, record, parent=None):
@@ -467,10 +471,15 @@ class Mapper(ConnectorUnit):
         """
         return MapRecord(self, record, parent=parent)
 
-    def _apply(self, map_record):
-        assert self.options is not None,(
-            "options should be defined with 'mapping_options'")
+    def _apply(self, map_record, options=None):
+        if options is None:
+            options = {}
+        with self._mapping_options(options):
+            return self._apply_with_options(map_record)
 
+    def _apply_with_options(self, map_record):
+        assert self.options is not None, (
+            "options should be defined with '_mapping_options'")
         _logger.debug('converting record %s to model %s',
                       map_record.source, self.model._name)
 
@@ -540,9 +549,8 @@ class MapRecord(object):
         if options is None:
             options = {}
         options = dict(options, only_create=only_create, fields=fields)
-        with self._mapper._mapping_options(options):
-            values = self._mapper._apply(self)
-            values.update(self._forced_values)
+        values = self._mapper._apply(self, options=options)
+        values.update(self._forced_values)
         return values
 
     def update(self, *args, **kwargs):

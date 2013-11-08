@@ -242,6 +242,9 @@ class MetaMapper(MetaConnectorUnit):
         return cls
 
 
+class ChildMapper(ConnectorUnit):
+
+
 class Mapper(ConnectorUnit):
     """ A Mapper translates an external record to an OpenERP record and
     conversely. The output of a Mapper is a ``dict``.
@@ -326,6 +329,14 @@ class Mapper(ConnectorUnit):
 
             children = [('items', 'line_ids', LineMapper)]
 
+    Usage of a Mapper::
+
+        mapper = Mapper(env)
+        map_record = mapper.map_record()
+        values = map_record.values()
+        values = map_record.values(only_create=True)
+        values = map_record.values(fields=['name', 'street'])
+
     """
 
     __metaclass__ = MetaMapper
@@ -351,7 +362,9 @@ class Mapper(ConnectorUnit):
         raise NotImplementedError
 
     def _after_mapping(self, result):
-        return result
+        """ Mapper.convert_child() has been deprecated """
+        raise DeprecationWarning('Mapper._after_mapping() has been deprecated, '
+                                 'use Mapper._finalize()')
 
     def _map_direct(self, record, from_attr, to_attr):
         """ Apply the ``direct`` mappings.
@@ -367,6 +380,15 @@ class Mapper(ConnectorUnit):
     def _map_children(self, record, attr, model):
         raise NotImplementedError
 
+    def skip_convert_child(self, record, parent_values=None):
+        """ Hook to implement in sub-classes when some child
+        records should be skipped.
+
+        This method is only relevable for child mappers.
+
+        If it returns True, the current child record is skipped."""
+        return False
+
     @property
     def map_methods(self):
         for meth, definition in self._map_methods.iteritems():
@@ -374,7 +396,7 @@ class Mapper(ConnectorUnit):
 
     def convert_child(self, record, parent_values=None):
         """ Mapper.convert_child() has been deprecated """
-        raise DeprecationWarning('Mapper.convert_chidl() has been deprecated, '
+        raise DeprecationWarning('Mapper.convert_child() has been deprecated, '
                                  'use Mapper.map_record() then '
                                  'map_record.values() ')
 
@@ -392,15 +414,6 @@ class Mapper(ConnectorUnit):
         raise DeprecationWarning('Mapper.convert() has been deprecated, '
                                  'use Mapper.map_record() then '
                                  'map_record.values() ')
-
-    def skip_convert_child(self, record, parent_values=None):
-        """ Hook to implement in sub-classes when some child
-        records should be skipped.
-
-        This method is only relevable for child mappers.
-
-        If it returns True, the current child record is skipped."""
-        return False
 
     @property
     def data(self):
@@ -440,7 +453,6 @@ class Mapper(ConnectorUnit):
                                              fields=fields))
         return self._format_child_rows(children)
 
-    # -------- new api --------
     @contextmanager
     def _mapping_options(self, options):
         """ Change the mapping options for the Mapper.

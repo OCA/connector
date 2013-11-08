@@ -21,6 +21,7 @@
 
 import logging
 from collections import namedtuple
+from contextlib import contextmanager
 
 from ..connector import ConnectorUnit, MetaConnectorUnit, Environment
 from ..exception import MappingError
@@ -344,6 +345,7 @@ class Mapper(ConnectorUnit):
         :type environment: :py:class:`connector.connector.Environment`
         """
         super(Mapper, self).__init__(environment)
+        self._options = None
 
     def _init_child_mapper(self, model_name):
         raise NotImplementedError
@@ -370,50 +372,8 @@ class Mapper(ConnectorUnit):
         for meth, definition in self._map_methods.iteritems():
             yield getattr(self, meth), definition
 
-    def map_record(self, record, fields=None):
-        """
-
-        :param record: recort to map
-        :type record: :py:class:`~._MapperRecord`
-        """
-        if fields is None:
-            fields = {}
-        _logger.debug('mapping record %s to model %s',
-                      record, self._model_name)
-        data = {}
-        data_for_create = {}
-        children = {}
-        for from_attr, to_attr in self.direct:
-            if (not fields or from_attr in fields):
-                value = self._map_direct(record,
-                                         from_attr,
-                                         to_attr)
-                data[to_attr] = value
-
-        for meth, definition in self.map_methods:
-            changed_by = definition.changed_by
-            if (not fields or not changed_by or
-                    changed_by.intersection(fields)):
-                values = meth(record)
-                if not values:
-                    continue
-                if not isinstance(values, dict):
-                    raise ValueError('%s: invalid return value for the '
-                                     'mapping method %s' % (values, meth))
-                if definition.only_create:
-                    data_for_create.update(values)
-                else:
-                    data.update(values)
-
-        for from_attr, to_attr, model_name in self.children:
-            if (not fields or from_attr in fields):
-                children[to_attr] = self._map_child(record, from_attr,
-                                                    to_attr, model_name)
-
-        return data, data_for_create, children
-
-
     def _convert(self, record, fields=None, parent_values=None):
+        # deprecated
         if fields is None:
             fields = {}
 
@@ -462,20 +422,6 @@ class Mapper(ConnectorUnit):
     #     """
     #     return _MapperRecord(self, record, parent=)
 
-    def convert(self, record, fields=None):
-        """ Transform an external record to an OpenERP record or the opposite
-
-        Sometimes we want to map values only when we create the records.
-        The mapping methods have to be decorated with ``only_create`` to
-        map values only for creation of records.
-
-        :param record: record to transform
-        :param fields: list of fields to convert, if empty, all fields
-                       are converted
-        """
-        # self._convert(record, fields=fields)
-        return _MapperRecord(self, record, fields=fields)
-
     @property
     def data(self):
         """ Returns a dict for a record processed by
@@ -492,7 +438,7 @@ class Mapper(ConnectorUnit):
 
     @property
     def data_for_create(self):
-        """ Returns a dict for a record processed by
+        """ Deprecated. Returns a dict for a record processed by
         :py:meth:`~_convert` to use only for creation of the record. """
         if self._data is None:
             raise ValueError('Mapper.convert should be called before '
@@ -518,33 +464,117 @@ class Mapper(ConnectorUnit):
             #     continue
             children.append(_MapperRecord(self, record, parent=record))
 
+    # -------- new api --------
+    @contextmanager
+    def _mapping_options(self, options):
+        """ Change the mapping options for the Mapper.
 
-class _MapperRecord(object):
+        Context Manager to use in order to alter the behavior
+        of the mapping, when using ``_apply`` or ``finalize``.
 
-    def __init__(self, mapper, source, fields=None, parent=None):
+        """
+        current = self._options
+        self._options = options
+        yield
+        self._options = current
+
+    @property
+    def options(self):
+        """ Should not be modified manually, only with _mapping_options """
+        return self._options
+
+    def map_record(self, record):
+        """ Get a MapRecord with record, ready to be converted using the
+        current Mapper.
+
+        :param record: record to transform
+        """
+        return _MapRecord(self, record)
+
+    def _apply(self, source):
+        assert self.options is not None,(
+            "options should be defined with 'mapping_options'")
+
+        _logger.debug('converting record %s to model %s',
+                      source, self.model._name)
+
+        fields = self.options.get('fields')
+        only_create = self.options.get('only_create')
+        result = {}
+        for from_attr, to_attr in self.direct:
+            if (not fields or from_attr in fields):
+                value = self._map_direct(source,
+                                         from_attr,
+                                         to_attr)
+                result[to_attr] = value
+
+        for meth, definition in self.map_methods:
+            changed_by = definition.changed_by
+            if (not fields or not changed_by or
+                    changed_by.intersection(fields)):
+                values = meth(source)
+                if not values:
+                    continue
+                if not isinstance(values, dict):
+                    raise ValueError('%s: invalid return value for the '
+                                     'mapping method %s' % (values, meth))
+                if not definition.only_create or only_create:
+                    result.update(values)
+
+        for from_attr, to_attr, model_name in self.children:
+            if (not fields or from_attr in fields):
+                self._map_child(source, from_attr, to_attr, model_name)
+
+        return self._finalize(source, result)
+
+    def _finalize(self, source, values):
+        """ Called at the end of the mapping. Can be used to
+        modify the values before returning them.
+
+        :param source: source record
+        :param values: mapped values
+        :returns: mapped values
+        :rtype: dict
+        """
+        return values
+
+
+class _MapRecord(object):
+
+    def __init__(self, mapper, source, parent=None):
         self._source = source
-        self._fields = fields
         self._mapper = mapper
-        self._data = None
-        self._data_for_create = None
-        self._data_children = None
+        self._extra = {}
 
     @property
     def source(self):
         return self._source
 
-    @property
-    def data(self):
-        if self._data is None:
-            pass
-        return self._data
+    def values(self, only_create=False, fields=None, options=None):
+        """
 
-    @property
-    def data_for_create(self):
-        if self._data_for_create is None:
-            pass
-        return self._data_for_create
 
+        Sometimes we want to map values only for creation the records.
+        The mapping methods have to be decorated with ``only_create`` to
+        map values only for creation of records. Then, we must give the
+        ``only_create=True`` argument to ``values()``.
+
+        """
+        if options is None:
+            options = {}
+        options = dict(options, only_create=only_create, fields=fields)
+        with self._mapper._mapping_options(options):
+            values = self._mapper._apply(self.source)
+            values.update(self._extra)
+        return values
+
+    def update(self, *args, **kwargs):
+        if args:
+            assert len(args) == 1, 'dict expected, got: %s' % args
+            assert isinstance(args, dict), 'dict expected, got %s' % args
+            self._extra.update(args[0])
+        if kwargs:
+            self._extra.update(kwargs)
 
 
 class ImportMapper(Mapper):

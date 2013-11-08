@@ -230,13 +230,13 @@ class test_mapper(unittest2.TestCase):
         self.assertEqual(map_record.values(for_create=True), expected)
 
     def test_finalize(self):
-        """ Inherit _finalize to modify values """
+        """ Inherit finalize to modify values """
         class MyMapper(ImportMapper):
 
             direct = [('name', 'out_name')]
 
-            def _finalize(self, record, values):
-                result = super(MyMapper, self)._finalize(record, values)
+            def finalize(self, record, values):
+                result = super(MyMapper, self).finalize(record, values)
                 result['test'] = 'abc'
                 return result
 
@@ -487,7 +487,8 @@ class test_mapper_binding(common.TransactionCase):
         @backend
         class SaleLineImportMapChild(ImportMapChild):
             _model_name = 'res.currency.rate'
-            def _format_items(self, items_values):
+
+            def format_items(self, items_values):
                 return [('ABC', values) for values in items_values]
 
 

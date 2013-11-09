@@ -765,10 +765,13 @@ class ImportMapper(Mapper):
         if not value:
             return False
 
-        # may be replaced by the explicit backend_to_m2o
+        # Backward compatibility: when a field is a relation, and a modifier is
+        # not used, we assume that the relation model is a binding.
+        # Use an explicit modifier backend_to_m2o in the 'direct' mappings to
+        # change that.
         column = self.model._all_columns[to_attr].column
         if column._type == 'many2one':
-            mapping = backend_to_m2o(from_attr, binding=True)
+            mapping = backend_to_m2o(from_attr)
             value = mapping(self, record, to_attr)
         return value
 
@@ -798,10 +801,13 @@ class ExportMapper(Mapper):
         if not value:
             return False
 
-        # may be replaced by the explicit m2o_to_backend
+        # Backward compatibility: when a field is a relation, and a modifier is
+        # not used, we assume that the relation model is a binding.
+        # Use an explicit modifier m2o_to_backend  in the 'direct' mappings to
+        # change that.
         column = self.model._all_columns[from_attr].column
         if column._type == 'many2one':
-            mapping = m2o_to_backend(from_attr, binding=True)
+            mapping = m2o_to_backend(from_attr)
             value = mapping(self, record, to_attr)
         return value
 

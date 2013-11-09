@@ -383,7 +383,7 @@ class MapChild(ConnectorUnit):
         :param options: dict of options, herited from the main mapper
 
         """
-        return map_record.values(options=options)
+        return map_record.values(**options)
 
     def format_items(self, items_values):
         """ Format the values of the items mapped from the child Mappers.
@@ -651,8 +651,8 @@ class Mapper(ConnectorUnit):
         _logger.debug('converting record %s to model %s',
                       map_record.source, self.model._name)
 
-        fields = self.options.get('fields')
-        for_create = self.options.get('for_create')
+        fields = self.options.fields
+        for_create = self.options.for_create
         result = {}
         for from_attr, to_attr in self.direct:
             if (not fields or from_attr in fields):
@@ -837,7 +837,7 @@ class MapRecord(object):
         """ Parent record if the current record is an item """
         return self._parent
 
-    def values(self, for_create=None, fields=None, options=None):
+    def values(self, for_create=None, fields=None, **kwargs):
         """ Build and returns the mapped values according to the options.
 
         Usage::
@@ -864,30 +864,24 @@ class MapRecord(object):
                 output_values = map_record.values(fields=['name', 'street'])
 
         Custom options
-            Arbitrary key and values can be defined in the ``options``
-            argument.  They can later be used in the mapping methods
+            Arbitrary key and values can be defined in the ``kwargs``
+            arguments.  They can later be used in the mapping methods
             using ``self.options``.
 
             ::
 
-                output_values = map_record.values(options=dict(tax_include=True))
+                output_values = map_record.values(tax_include=True)
 
         :param for_create: specify if only the mappings for creation
                            (``@only_create``) should be mapped.
         :type for_create: boolean
         :param fields: filter on fields
         :type fields: list
-        :param options: custom options, they can later be used in the
-                        mapping methods
-        :type options: dict
+        :param **kwargs: custom options, they can later be used in the
+                         mapping methods
 
         """
-        if options is None:
-            options = {}
-        if for_create is not None:
-            options['for_create'] = for_create
-        if fields is not None:
-            options['fields'] = fields
+        options = MapOptions(for_create=for_create, fields=fields, **kwargs)
         values = self._mapper._apply(self, options=options)
         values.update(self._forced_values)
         return values
@@ -908,3 +902,21 @@ class MapRecord(object):
 
         """
         self._forced_values.update(*args, **kwargs)
+
+
+class MapOptions(dict):
+    """ Container for the options of mappings.
+
+    Offer the convenience to access options with attributes
+
+    """
+
+    def __getattr__(self, key):
+        try:
+            return self[key]
+        except KeyError:
+            raise AttributeError('The option %s has not been defined '
+                                 'in MapRecord.values()' % key)
+
+    def __setattr__(self, key, value):
+        self[key] = value

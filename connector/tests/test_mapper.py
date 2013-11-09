@@ -345,7 +345,7 @@ class test_mapper(unittest2.TestCase):
         class MyMapper(ImportMapper):
             @mapping
             def any(self, record):
-                if self.options.get('custom'):
+                if self.options.custom:
                     res = True
                 else:
                     res = False
@@ -356,8 +356,25 @@ class test_mapper(unittest2.TestCase):
         mapper = MyMapper(env)
         map_record = mapper.map_record(record)
         expected = {'res': True}
-        self.assertEqual(map_record.values(options=dict(custom=True)),
-                         expected)
+        self.assertEqual(map_record.values(custom=True), expected)
+
+    def test_mapping_custom_option_not_defined(self):
+        """ Usage of custom options not defined raise AttributeError """
+        class MyMapper(ImportMapper):
+            @mapping
+            def any(self, record):
+                if self.options.custom:
+                    res = True
+                else:
+                    res = False
+                return {'res': res}
+
+        env = mock.MagicMock()
+        record = {}
+        mapper = MyMapper(env)
+        map_record = mapper.map_record(record)
+        with self.assertRaises(AttributeError):
+            map_record.values()
 
 
 class test_mapper_binding(common.TransactionCase):

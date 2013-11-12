@@ -15,6 +15,7 @@ from openerp.addons.connector.unit.mapper import (
     m2o_to_backend,
     backend_to_m2o,
     none,
+    MapOptions,
     mapping)
 
 from openerp.addons.connector.exception import NoConnectorUnitError
@@ -363,7 +364,7 @@ class test_mapper(unittest2.TestCase):
         class MyMapper(ImportMapper):
             @mapping
             def any(self, record):
-                if self.options.custom:
+                if self.options.custom is None:
                     res = True
                 else:
                     res = False
@@ -373,8 +374,21 @@ class test_mapper(unittest2.TestCase):
         record = {}
         mapper = MyMapper(env)
         map_record = mapper.map_record(record)
-        with self.assertRaises(AttributeError):
-            map_record.values()
+        expected = {'res': True}
+        self.assertEqual(map_record.values(), expected)
+
+    def test_map_options(self):
+        """ Test MapOptions """
+        options = MapOptions({'xyz': 'abc'}, k=1)
+        options.l = 2
+        self.assertEqual(options['xyz'], 'abc')
+        self.assertEqual(options['k'], 1)
+        self.assertEqual(options['l'], 2)
+        self.assertEqual(options.xyz, 'abc')
+        self.assertEqual(options.k, 1)
+        self.assertEqual(options.l, 2)
+        self.assertEqual(options['undefined'], None)
+        self.assertEqual(options.undefined, None)
 
 
 class test_mapper_binding(common.TransactionCase):

@@ -917,12 +917,14 @@ class MapOptions(dict):
 
     """
 
-    def __getattr__(self, key):
+    def __getitem__(self, key):
         try:
-            return self[key]
+            return super(MapOptions, self).__getitem__(key)
         except KeyError:
-            raise AttributeError('The option %s has not been defined '
-                                 'in MapRecord.values()' % key)
+            return None
+
+    def __getattr__(self, key):
+        return self[key]
 
     def __setattr__(self, key, value):
         self[key] = value

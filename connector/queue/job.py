@@ -602,7 +602,7 @@ def job(func):
      Arguments and keyword arguments which will be given to the called
      function once the job is executed. They should be ``pickle-able``.
 
-     There is 3 special and reserved keyword arguments that you can use:
+     There is 4 special and reserved keyword arguments that you can use:
 
      * priority: priority of the job, the smaller is the higher priority.
                  Default is 10.
@@ -611,6 +611,9 @@ def job(func):
                     infinite retries. Default is 5.
      * eta: the job can be executed only after this datetime
             (or now + timedelta if a timedelta or integer is given)
+     
+     * description : a human description of the job
+            (Default is the func.__doc__ or 'Function %s' % func.__name__)
 
     Example:
 

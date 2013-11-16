@@ -20,6 +20,8 @@ def task_b(session, model_name):
 
 
 def task_a(session, model_name):
+    """ Task description
+    """
     pass
 
 
@@ -76,6 +78,22 @@ class test_job(unittest2.TestCase):
         result = job.perform(self.session)
         self.assertEqual(result, 'ok!')
 
+    def test_description(self):
+        """ If no description is given to the job, it
+        should be computed from the function
+        """
+        # if a doctstring is defined for the function
+        # it's used as description
+        job_a = Job(func=task_a)
+        self.assertEqual(job_a.description, task_a.__doc__)
+        # if no docstring, the description is computed
+        job_b = Job(func=task_b)
+        self.assertEqual(job_b.description, "Function task_b")
+        # case when we explicitly specify the description
+        description = "My description"
+        job_a = Job(func=task_a, description=description)
+        self.assertEqual(job_a.description, description)
+
     def test_retryable_error(self):
         job = Job(func=retryable_error_task,
                   max_retries=3)
@@ -112,7 +130,8 @@ class test_job_storage(common.TransactionCase):
                   args=('o', 'k'),
                   kwargs={'c': '!'},
                   priority=15,
-                  eta=eta)
+                  eta=eta,
+                  description="My description")
         job.user_id = 1
         storage = OpenERPJobStorage(self.session)
         storage.store(job)

@@ -102,9 +102,9 @@ class OpenERPJobStorage(JobStorage):
             "Model %s not found" % self._job_model_name)
 
     def enqueue(self, func, model_name=None, args=None, kwargs=None,
-                priority=None, eta=None, max_retries=None):
+                priority=None, eta=None, max_retries=None, description=None):
         job = Job(func=func, model_name=model_name, args=args, kwargs=kwargs,
-                  priority=priority, eta=eta, max_retries=max_retries)
+                  priority=priority, eta=eta, max_retries=max_retries, description=description)
         job.user_id = self.session.uid
         self.store(job)
 
@@ -114,12 +114,14 @@ class OpenERPJobStorage(JobStorage):
         eta = kwargs.pop('eta', None)
         model_name = kwargs.pop('model_name', None)
         max_retries = kwargs.pop('max_retries', None)
+        description = kwargs.pop('description', None)
 
         return self.enqueue(func, model_name=model_name,
                             args=args, kwargs=kwargs,
                             priority=priority,
                             max_retries=max_retries,
-                            eta=eta)
+                            eta=eta,
+                            description=description)
 
     def exists(self, job_uuid):
         """Returns if a job still exists in the storage."""
@@ -229,7 +231,7 @@ class OpenERPJobStorage(JobStorage):
             eta = datetime.strptime(stored.eta, DEFAULT_SERVER_DATETIME_FORMAT)
 
         job = Job(func=func_name, args=args, kwargs=kwargs,
-                  priority=stored.priority, eta=eta, job_uuid=stored.uuid)
+                  priority=stored.priority, eta=eta, job_uuid=stored.uuid, description=stored.name)
 
         if stored.date_created:
             job.date_created = datetime.strptime(
@@ -360,7 +362,7 @@ class Job(object):
 
     def __init__(self, func=None, model_name=None,
                  args=None, kwargs=None, priority=None,
-                 eta=None, job_uuid=None, max_retries=None):
+                 eta=None, job_uuid=None, max_retries=None, description=None):
         """ Create a Job
 
         :param func: function to execute
@@ -379,6 +381,8 @@ class Job(object):
         :param job_uuid: UUID of the job
         :param max_retries: maximum number of retries before giving up and set
             the job state to 'failed'. A value of 0 means infinite retries.
+        :param description: human description of the job. If None, description
+            is computed from the function doc or name
         """
         if args is None:
             args = ()
@@ -423,6 +427,7 @@ class Job(object):
             self.priority = DEFAULT_PRIORITY
 
         self.date_created = datetime.now()
+        self._description = description
         self.date_enqueued = None
         self.date_started = None
         self.date_done = None
@@ -483,7 +488,7 @@ class Job(object):
 
     @property
     def description(self):
-        return self.func.__doc__ or 'Function %s' % self.func.__name__
+        return self._description or self.func.__doc__ or 'Function %s' % self.func.__name__
 
     @property
     def uuid(self):

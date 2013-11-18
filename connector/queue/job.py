@@ -612,8 +612,9 @@ def job(func):
      * eta: the job can be executed only after this datetime
             (or now + timedelta if a timedelta or integer is given)
      
-     * description : a human description of the job
-            (Default is the func.__doc__ or 'Function %s' % func.__name__)
+     * description : a human description of the job,
+                     intended to discriminate job instances
+                     (Default is the func.__doc__ or 'Function %s' % func.__name__)
 
     Example:
 

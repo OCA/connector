@@ -282,7 +282,8 @@ class QueueWorker(orm.Model):
         sql = ("SELECT id FROM queue_job "
                "WHERE worker_id IS NULL "
                "AND state not in ('failed', 'done') "
-               "AND active = true ")
+               "AND active = true "
+               "ORDER BY eta NULLS LAST, priority, date_created ")
         if max_jobs is not None:
             sql += ' LIMIT %d' % max_jobs
         sql += ' FOR UPDATE NOWAIT'

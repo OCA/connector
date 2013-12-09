@@ -9,6 +9,7 @@ Changelog
   in OpenERP and displayed in the list of jobs.
 * Add the possibility to use 'Modifiers' functions in the 'direct
   mappings' (details in the documentation of the Mapper class)
+* Fix: assignment of jobs to workers respect the priority of the jobs (lp:1252681)
 
 2.0.1 (2013-09-12)
 ~~~~~~~~~~~~~~~~~~

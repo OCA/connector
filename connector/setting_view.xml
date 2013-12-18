@@ -26,10 +26,6 @@
                     <group>
                         <label for="id" string="Backends"/>
                         <div>
-                            <div>
-                                <field name="module_magentoerpconnect" class="oe_inline"/>
-                                <label for="module_magentoerpconnect"/>
-                            </div>
                         </div>
                     </group>
                 </form>

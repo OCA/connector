@@ -29,7 +29,4 @@ class connector_config_settings(orm.TransientModel):
     _inherit = 'base.config.settings'
 
     _columns = {
-        'module_magentoerpconnect': fields.boolean(
-            "Synchronize with Magento",
-            help="""This installs the module magentoerpconnect."""),
     }

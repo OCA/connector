@@ -577,10 +577,7 @@ class Mapper(ConnectorUnit):
         for meth, definition in self._map_methods.iteritems():
             yield getattr(self, meth), definition
 
-    def _map_child(self, map_record, from_attr, to_attr, model_name):
-        """ Convert items of the record as defined by children """
-        assert self._map_child_class is not None, "_map_child_class required"
-        child_records = map_record.source[from_attr]
+    def _get_map_child_unit(self, model_name):
         try:
             mapper_child = self.get_connector_unit_for_model(
                 self._map_child_class, model_name)
@@ -591,6 +588,13 @@ class Mapper(ConnectorUnit):
                               self.session,
                               model_name)
             mapper_child = self._map_child_class(env)
+        return mapper_child
+
+    def _map_child(self, map_record, from_attr, to_attr, model_name):
+        """ Convert items of the record as defined by children """
+        assert self._map_child_class is not None, "_map_child_class required"
+        child_records = map_record.source[from_attr]
+        mapper_child = self._get_map_child_unit(model_name)
         items = mapper_child.get_items(child_records, map_record,
                                        to_attr, options=self.options)
         return items

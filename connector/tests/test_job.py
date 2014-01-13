@@ -164,9 +164,14 @@ class test_job_storage(common.TransactionCase):
     def test_job_delay(self):
         self.cr.execute('delete from queue_job')
         deco_task = job(task_a)
-        task_a.delay(self.session, 'res.users')
+        job_uuid = task_a.delay(self.session, 'res.users')
         stored = self.queue_job.search(self.cr, self.uid, [])
         self.assertEqual(len(stored), 1)
+        stored_brw = self.queue_job.browse(self.cr, self.uid, stored)
+        self.assertEqual(
+            stored_brw[0].uuid,
+            job_uuid,
+            'Incorrect returned Job UUID')
 
     def test_job_delay_args(self):
         self.cr.execute('delete from queue_job')

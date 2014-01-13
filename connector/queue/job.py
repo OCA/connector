@@ -103,13 +103,20 @@ class OpenERPJobStorage(JobStorage):
 
     def enqueue(self, func, model_name=None, args=None, kwargs=None,
                 priority=None, eta=None, max_retries=None, description=None):
+        """Create a Job and enqueue it in the queue. Return the job uuid.
+
+        This expects the arguments specific to the job to be already extracted
+        from the ones to pass to the job function.
+
+        """
         job = Job(func=func, model_name=model_name, args=args, kwargs=kwargs,
                   priority=priority, eta=eta, max_retries=max_retries, description=description)
         job.user_id = self.session.uid
         self.store(job)
+        return job.uuid
 
     def enqueue_resolve_args(self, func, *args, **kwargs):
-        """Create a Job and enqueue it in the queue"""
+        """Create a Job and enqueue it in the queue. Return the job uuid."""
         priority = kwargs.pop('priority', None)
         eta = kwargs.pop('eta', None)
         model_name = kwargs.pop('model_name', None)
@@ -638,8 +645,11 @@ def job(func):
 
     """
     def delay(session, model_name, *args, **kwargs):
-        OpenERPJobStorage(session).enqueue_resolve_args(func,
-                                                        model_name=model_name,
-                                                        *args, **kwargs)
+        """Enqueue the function. Return the uuid of the created job."""
+        return OpenERPJobStorage(session).enqueue_resolve_args(
+            func,
+            model_name=model_name,
+            *args,
+            **kwargs)
     func.delay = delay
     return func

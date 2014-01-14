@@ -332,11 +332,6 @@ class WorkerWatcher(threading.Thread):
         _logger.debug('Worker %s is alive on process %s',
                       worker.uuid, os.getpid())
         dbworker_obj = session.pool.get('queue.worker')
-        # at startup (especially when running tests),
-        # registry is not yet initialized, so we just skip
-        # the notify in such case
-        if not dbworker_obj:
-            return
         dbworker_obj._notify_alive(session.cr,
                                    session.uid,
                                    worker,
@@ -344,11 +339,6 @@ class WorkerWatcher(threading.Thread):
 
     def _purge_dead_workers(self, session):
         dbworker_obj = session.pool.get('queue.worker')
-        # at startup (especially when running tests),
-        # registry is not yet initialized, so we just skip
-        # the notify in such case
-        if not dbworker_obj:
-            return
         dbworker_obj._purge_dead_workers(session.cr,
                                          session.uid,
                                          context=session.context)

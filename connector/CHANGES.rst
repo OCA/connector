@@ -14,6 +14,7 @@ Changelog
   by a dictionary of updated field values e.g {'field_name': field_value, ...}
 * Add the possibility to use 'Modifiers' functions in the 'direct
   mappings' (details in the documentation of the Mapper class)
+* When a job a delayed, the job's UUID is returned by the delay() function
 * Refactoring of mappers. Much details here:
   https://code.launchpad.net/~openerp-connector-core-editors/openerp-connector/7.0-connector-mapper-refactor/+merge/194485
 

@@ -186,7 +186,8 @@ It can be as follows (in ``connector_coffee/connector.py``)::
                 required=True,
                 ondelete='restrict'),
             # fields.char because 0 is a valid coffee ID
-            'coffee_id': fields.char('ID in the Coffee Machine'),
+            'coffee_id': fields.char('ID in the Coffee Machine',
+                                     select=True),
         }
 
 

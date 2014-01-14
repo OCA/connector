@@ -60,6 +60,142 @@ def only_create(func):
     return func
 
 
+def none(field):
+    """ A modifier intended to be used on the ``direct`` mappings.
+
+    Replace the False-ish values by None.
+    It can be used in a pipeline of modifiers when .
+
+    Example::
+
+        direct = [(none('source'), 'target'),
+                  (none(m2o_to_backend('rel_id'), 'rel_id')]
+
+    :param field: name of the source field in the record
+    :param binding: True if the relation is a binding record
+    """
+    def modifier(self, record, to_attr):
+        if callable(field):
+            result = field(self, record, to_attr)
+        else:
+            result = record[field]
+        if not result:
+            return None
+        return result
+    return modifier
+
+
+def convert(field, conv_type):
+    """ A modifier intended to be used on the ``direct`` mappings.
+
+    Convert a field's value to a given type.
+
+    Example::
+
+        direct = [(convert('source', str), 'target')]
+
+    :param field: name of the source field in the record
+    :param binding: True if the relation is a binding record
+    """
+    def modifier(self, record, to_attr):
+        value = record[field]
+        if not value:
+            return False
+        return conv_type(value)
+    return modifier
+
+
+def m2o_to_backend(field, binding=None):
+    """ A modifier intended to be used on the ``direct`` mappings.
+
+    For a many2one, get the ID on the backend and returns it.
+
+    When the field's relation is not a binding (i.e. it does not point to
+    something like ``magento.*``), the binding model needs to be provided
+    in the ``binding`` keyword argument.
+
+    Example::
+
+        direct = [(m2o_to_backend('country_id', binding='magento.res.country'),
+                   'country'),
+                  (m2o_to_backend('magento_country_id'), 'country')]
+
+    :param field: name of the source field in the record
+    :param binding: name of the binding model is the relation is not a binding
+    """
+    def modifier(self, record, to_attr):
+        if not record[field]:
+            return False
+        column = self.model._all_columns[field].column
+        if column._type != 'many2one':
+            raise ValueError('The column %s should be a many2one, got %s' %
+                             field, column._type)
+        rel_id = record[field].id
+        if binding is None:
+            binding_model = column._obj
+        else:
+            binding_model = binding
+        binder = self.get_binder_for_model(binding_model)
+        # if a relation is not a binding, we wrap the record in the
+        # binding, we'll return the id of the binding
+        wrap = bool(binding)
+        value = binder.to_backend(rel_id, wrap=wrap)
+        if not value:
+            raise MappingError("Can not find an external id for record "
+                               "%s in model %s %s wrapping" %
+                               (rel_id, binding_model,
+                                'with' if wrap else 'without'))
+        return value
+    return modifier
+
+
+def backend_to_m2o(field, binding=None, with_inactive=False):
+    """ A modifier intended to be used on the ``direct`` mappings.
+
+    For a field from a backend which is an ID, search the corresponding
+    binding in OpenERP and returns its ID.
+
+    When the field's relation is not a binding (i.e. it does not point to
+    something like ``magento.*``), the binding model needs to be provided
+    in the ``binding`` keyword argument.
+
+    Example::
+
+        direct = [(backend_to_m2o('country', binding='magento.res.country'),
+                   'country_id'),
+                  (backend_to_m2o('country'), 'magento_country_id')]
+
+    :param field: name of the source field in the record
+    :param binding: name of the binding model is the relation is not a binding
+    :param with_inactive: include the inactive records in OpenERP in the search
+    """
+    def modifier(self, record, to_attr):
+        if not record[field]:
+            return False
+        column = self.model._all_columns[to_attr].column
+        if column._type != 'many2one':
+            raise ValueError('The column %s should be a many2one, got %s' %
+                             to_attr, column._type)
+        rel_id = record[field]
+        if binding is None:
+            binding_model = column._obj
+        else:
+            binding_model = binding
+        binder = self.get_binder_for_model(binding_model)
+        # if we want the ID of a normal record, not a binding,
+        # we ask the unwrapped id to the binder
+        unwrap = bool(binding)
+        with self.session.change_context({'active_test': False}):
+            value = binder.to_openerp(rel_id, unwrap=unwrap)
+        if not value:
+            raise MappingError("Can not find an existing %s for external "
+                               "record %s %s unwrapping" %
+                               (binding_model, rel_id,
+                                'with' if unwrap else 'without'))
+        return value
+    return modifier
+
+
 MappingDefinition = namedtuple('MappingDefinition',
                                ['changed_by',
                                 'only_create'])
@@ -106,7 +242,90 @@ class MetaMapper(MetaConnectorUnit):
 
 
 class Mapper(ConnectorUnit):
-    """ Transform a record to a defined output """
+    """ A Mapper translates an external record to an OpenERP record and
+    conversely. The output of a Mapper is a ``dict``.
+
+    3 types of mappings are supported:
+
+    Direct Mappings
+        Example::
+
+            direct = [('source', 'target')]
+
+        Here, the ``source`` field will be copied in the ``target`` field.
+
+        A modifier can be used in the source item.
+        The modifier will be applied to the source field before being
+        copied in the target field.
+        It should be a closure function respecting this idiom::
+
+            def a_function(field):
+                ''' ``field`` is the name of the source field '''
+                def modifier(self, record, to_attr):
+                    ''' self is the current Mapper,
+                        record is the current record to map,
+                        to_attr is the target field'''
+                    return record[field]
+                return modifier
+
+        And used like that::
+
+            direct = [
+                    (a_function('source'), 'target'),
+            ]
+
+        A more concrete example of modifier::
+
+            def convert(field, conv_type):
+                ''' Convert the source field to a defined ``conv_type``
+                (ex. str) before returning it'''
+                def modifier(self, record, to_attr):
+                    value = record[field]
+                    if not value:
+                        return None
+                    return conv_type(value)
+            return modifier
+
+        And used like that::
+
+            direct = [
+                    (convert('myfield', float), 'target_field'),
+            ]
+
+        More examples of modifiers:
+
+        * :py:func:`convert`
+        * :py:func:`m2o_to_backend`
+        * :py:func:`backend_to_m2o`
+
+    Method Mappings
+        A mapping method allows to execute arbitrary code and return one
+        or many fields::
+
+            @mapping
+            def compute_state(self, record):
+                # compute some state, using the ``record`` or not
+                state = 'pending'
+                return {'state': state}
+
+        We can also specify that a mapping methods should be applied
+        only when an object is created, and never applied on further
+        updates::
+
+            @only_create
+            @mapping
+            def default_warehouse(self, record):
+                # get default warehouse
+                warehouse_id = ...
+                return {'warehouse_id': warehouse_id}
+
+    Submappings
+        When a record contains sub-items, like the lines of a sales order,
+        we can convert the children using another Mapper::
+
+            children = [('items', 'line_ids', LineMapper)]
+
+    """
 
     __metaclass__ = MetaMapper
 
@@ -136,6 +355,14 @@ class Mapper(ConnectorUnit):
         return result
 
     def _map_direct(self, record, from_attr, to_attr):
+        """ Apply the ``direct`` mappings.
+
+        :param record: record to convert from a source to a target
+        :param from_attr: name of the source attribute or a callable
+        :type from_attr: callable | str
+        :param to_attr: name of the target attribute
+        :type to_attr: str
+        """
         raise NotImplementedError
 
     def _map_children(self, record, attr, model):
@@ -157,9 +384,6 @@ class Mapper(ConnectorUnit):
         _logger.debug('converting record %s to model %s', record, self._model_name)
         for from_attr, to_attr in self.direct:
             if (not fields or from_attr in fields):
-                # XXX not compatible with all
-                # record type (wrap
-                # records in a standard class representation?)
                 value = self._map_direct(record,
                                          from_attr,
                                          to_attr)
@@ -262,20 +486,29 @@ class ImportMapper(Mapper):
     """ Transform a record from a backend to an OpenERP record """
 
     def _map_direct(self, record, from_attr, to_attr):
+        """ Apply the ``direct`` mappings.
+
+        :param record: record to convert from a source to a target
+        :param from_attr: name of the source attribute or a callable
+        :type from_attr: callable | str
+        :param to_attr: name of the target attribute
+        :type to_attr: str
+        """
+        if callable(from_attr):
+            return from_attr(self, record, to_attr)
+
         value = record.get(from_attr)
         if not value:
             return False
 
+        # Backward compatibility: when a field is a relation, and a modifier is
+        # not used, we assume that the relation model is a binding.
+        # Use an explicit modifier backend_to_m2o in the 'direct' mappings to
+        # change that.
         column = self.model._all_columns[to_attr].column
         if column._type == 'many2one':
-            rel_id = record[from_attr]
-            model_name = column._obj
-            binder = self.get_binder_for_model(model_name)
-            value = binder.to_openerp(rel_id)
-
-            if not value:
-                raise MappingError("Can not find an existing %s for external "
-                                   "record %s" % (model_name, rel_id))
+            mapping = backend_to_m2o(from_attr)
+            value = mapping(self, record, to_attr)
         return value
 
     def _init_child_mapper(self, model_name):
@@ -292,20 +525,29 @@ class ExportMapper(Mapper):
     """ Transform a record from OpenERP to a backend record """
 
     def _map_direct(self, record, from_attr, to_attr):
+        """ Apply the ``direct`` mappings.
+
+        :param record: record to convert from a source to a target
+        :param from_attr: name of the source attribute or a callable
+        :type from_attr: callable | str
+        :param to_attr: name of the target attribute
+        :type to_attr: str
+        """
+        if callable(from_attr):
+            return from_attr(self, record, to_attr)
+
         value = record[from_attr]
         if not value:
             return False
 
+        # Backward compatibility: when a field is a relation, and a modifier is
+        # not used, we assume that the relation model is a binding.
+        # Use an explicit modifier m2o_to_backend  in the 'direct' mappings to
+        # change that.
         column = self.model._all_columns[from_attr].column
         if column._type == 'many2one':
-            rel_id = record[from_attr].id
-            model_name = column._obj
-            binder = self.get_binder_for_model(model_name)
-            value = binder.to_backend(rel_id)
-
-            if not value:
-                raise MappingError("Can not find an external id for record "
-                                   "%s in model %s" % (rel_id, model_name))
+            mapping = m2o_to_backend(from_attr)
+            value = mapping(self, record, to_attr)
         return value
 
     def _init_child_mapper(self, model_name):

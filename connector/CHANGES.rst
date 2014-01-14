@@ -1,17 +1,21 @@
 Changelog
 ---------
 
-2.1.0.dev0
-~~~~~~~~~~
+2.1.0 (2014-01-15 - warning: breaks compatibility)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 * Add a new optional keyword argument 'description' to the delay() function of a
   job.  If given, the description is used as name of the queue.job record stored
   in OpenERP and displayed in the list of jobs.
 * Fix: assignment of jobs to workers respect the priority of the jobs (lp:1252681)
-* Pass a new parameter to listeners of 'on_record_create' ( vals:  field values of the new record, e.g {'field_name': field_value, ...})
-* Replace the list of updated fields passed to listeners of 'on_record_write' by a dictionary of updated field values e.g {'field_name': field_value, ...}
+* Pass a new parameter to listeners of 'on_record_create' ( vals:  field values
+  of the new record, e.g {'field_name': field_value, ...})
+* Replace the list of updated fields passed to listeners of 'on_record_write'
+  by a dictionary of updated field values e.g {'field_name': field_value, ...}
 * Add the possibility to use 'Modifiers' functions in the 'direct
   mappings' (details in the documentation of the Mapper class)
+* Refactoring of mappers. Much details here:
+  https://code.launchpad.net/~openerp-connector-core-editors/openerp-connector/7.0-connector-mapper-refactor/+merge/194485
 
 2.0.1 (2013-09-12)
 ~~~~~~~~~~~~~~~~~~

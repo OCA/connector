@@ -30,6 +30,9 @@ Then, my personal advice is to look at the existing connectors (`OpenERP
 Magento Connector`_, `OpenERP Prestashop Connector`_). You will also probably
 need to dive a bit in the framework's code.
 
+If the connector belongs to the e-commerce domain, you may want to reuse the pieces
+of the `E-Commerce Connector`_ module.
+
 .. _naming-convention:
 
 Naming conventions
@@ -54,3 +57,4 @@ New projects should ideally respect it.
 
 .. _`OpenERP Magento Connector`: https://code.launchpad.net/openerp-connector-magento
 .. _`OpenERP Prestashop Connector`: https://code.launchpad.net/prestashoperpconnect
+.. _`E-Commerce Connector`: https://code.launchpad.net/openerp-connector-ecommerce

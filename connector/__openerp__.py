@@ -20,9 +20,9 @@
 ##############################################################################
 
 {'name': 'Connector',
- 'version': '2.0.1',
+ 'version': '2.1.0',
  'author': 'Openerp Connector Core Editors',
- 'website': 'https://launchpad.net/openerp-connector',
+ 'website': 'http://openerp-connector.com',
  'license': 'AGPL-3',
  'category': 'Generic Modules',
  'description': """
@@ -31,6 +31,8 @@ Connector
 
 This is a framework designed to build connectors with external systems,
 usually called `Backends`.
+
+Documentation: http://openerp-connector.com
 
 It features:
 
@@ -62,7 +64,7 @@ It features:
 
 It is actually used to connect Magento_ and Prestashop_
 
-.. _Magento: https://launchpad.net/magentoerpconnect
+.. _Magento: http://openerp-magento-connector.com
 .. _Prestashop: https://launchpad.net/prestashoperpconnect
 """,
  'depends': ['mail'

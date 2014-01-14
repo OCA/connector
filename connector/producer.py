@@ -42,7 +42,7 @@ def create(self, cr, uid, vals, context=None):
     record_id = create_original(self, cr, uid, vals, context=context)
     if self.pool.get('connector.installed') is not None:
         session = ConnectorSession(cr, uid, context=context)
-        on_record_create.fire(session, self._name, record_id)
+        on_record_create.fire(session, self._name, record_id, vals)
     return record_id
 orm.BaseModel.create = create
 
@@ -57,7 +57,7 @@ def write(self, cr, uid, ids, vals, context=None):
         if on_record_write.has_consumer_for(session, self._name):
             for record_id in ids:
                 on_record_write.fire(session, self._name,
-                                     record_id, vals.keys())
+                                     record_id, vals)
     return result
 orm.BaseModel.write = write
 

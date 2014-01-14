@@ -1,13 +1,15 @@
 Changelog
 ---------
 
-2.0.1.dev0
+2.1.0.dev0
 ~~~~~~~~~~
 
 * Add a new optional keyword argument 'description' to the delay() function of a
   job.  If given, the description is used as name of the queue.job record stored
   in OpenERP and displayed in the list of jobs.
 * Fix: assignment of jobs to workers respect the priority of the jobs (lp:1252681)
+* Pass a new parameter to listeners of 'on_record_create' ( vals:  field values of the new record, e.g {'field_name': field_value, ...})
+* Replace the list of updated fields passed to listeners of 'on_record_write' by a dictionary of updated field values e.g {'field_name': field_value, ...}
 
 2.0.1 (2013-09-12)
 ~~~~~~~~~~~~~~~~~~

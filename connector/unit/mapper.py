@@ -529,7 +529,7 @@ class Mapper(ConnectorUnit):
     Usage of a Mapper::
 
         mapper = Mapper(env)
-        map_record = mapper.map_record()
+        map_record = mapper.map_record(record)
         values = map_record.values()
         values = map_record.values(only_create=True)
         values = map_record.values(fields=['name', 'street'])
@@ -824,7 +824,7 @@ class MapRecord(object):
     Usage::
 
         mapper = SomeMapper(env)
-        map_record = mapper.map_record()
+        map_record = mapper.map_record(record)
         output_values = map_record.values()
 
     See :py:meth:`values` for more information on the available arguments.
@@ -853,7 +853,7 @@ class MapRecord(object):
         Usage::
 
             mapper = SomeMapper(env)
-            map_record = mapper.map_record()
+            map_record = mapper.map_record(record)
             output_values = map_record.values()
 
         Creation of records
@@ -902,7 +902,7 @@ class MapRecord(object):
         Usage::
 
             mapper = SomeMapper(env)
-            map_record = mapper.map_record()
+            map_record = mapper.map_record(record)
             map_record.update(a=1)
             output_values = map_record.values()
             # output_values will at least contain {'a': 1}

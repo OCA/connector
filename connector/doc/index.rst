@@ -50,6 +50,7 @@ Connectors based on the framework
 * `Magento Connector <http://www.openerp-magento-connector.com>`_
 * `Prestashop Connector <https://launchpad.net/prestashoperpconnect>`_
 * `solerp (Solr Connector) <https://github.com/akretion/solerp>`_
+* `OpenERP Multi Company <http://www.openerp.net.cn/new-intercompany-process-module/>`_
 * Develop easily and rapidly your own connector based on this powerful
   framework and list your project on this page! Examples:
 

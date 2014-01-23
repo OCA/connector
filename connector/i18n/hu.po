@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: openerp-connector\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2013-05-01 13:36+0000\n"
-"PO-Revision-Date: 2014-01-21 10:28+0000\n"
+"PO-Revision-Date: 2014-01-22 09:48+0000\n"
 "Last-Translator: krnkris <Unknown>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2014-01-22 06:14+0000\n"
+"X-Launchpad-Export-Date: 2014-01-23 05:58+0000\n"
 "X-Generator: Launchpad (build 16901)\n"
 
 #. module: connector
@@ -132,24 +132,24 @@ msgstr "Max. újrapróbálkozások száma"
 #: help:connector.checkpoint,message_unread:0
 #: help:queue.job,message_unread:0
 msgid "If checked new messages require your attention."
-msgstr ""
+msgstr "Ha be van jelölve, akkor figyelje az új üzeneteket."
 
 #. module: connector
 #: field:queue.job,uuid:0
 #: field:queue.worker,uuid:0
 msgid "UUID"
-msgstr ""
+msgstr "UUID"
 
 #. module: connector
 #: view:connector.config.settings:0
 #: model:ir.actions.act_window,name:connector.action_connector_config_settings
 msgid "Configure Connector"
-msgstr ""
+msgstr "Csatlakozó beállítása"
 
 #. module: connector
 #: field:external.binding,sync_date:0
 msgid "Last synchronization date"
-msgstr ""
+msgstr "Utolsó szinkronizáció dátuma"
 
 #. module: connector
 #: model:ir.actions.act_window,help:connector.action_connector_checkpoint
@@ -164,6 +164,16 @@ msgid ""
 "                    review.</p>\n"
 "            "
 msgstr ""
+"<p>Nincs rekord az ellenőrzéshez.</p>\n"
+"                <p> Ha egy csatoló kézi beállításokkal vagy \n"
+"                    nézetekkel rendelkező új rekordokat importál,\n"
+"                    akkor azok megjelennek ebben a listában. \n"
+"                    Miután le lett ellenőrizve a rekord, kattintson\n"
+"                    a 'Leellenőrizve' gombra.  </p>\n"
+"                <p>A csatoló az új rekordokat a típus alapú  \n"
+"                    ellenőrzéshez listázza. Csak egy párat kell\n"
+"                    kézzel ellenőrizni.</p>\n"
+"            "
 
 #. module: connector
 #: help:connector.checkpoint,message_summary:0
@@ -172,26 +182,28 @@ msgid ""
 "Holds the Chatter summary (number of messages, ...). This summary is "
 "directly in html format in order to be inserted in kanban views."
 msgstr ""
+"A chettelés összegzést megállítja (üzenetek száma,...). Ez az összegzés "
+"direkt HTML formátumú ahhoz hogy beilleszthető legyen a kanban nézetekbe."
 
 #. module: connector
 #: model:ir.model,name:connector.model_connector_config_settings
 msgid "connector.config.settings"
-msgstr ""
+msgstr "connector.config.settings"
 
 #. module: connector
 #: model:ir.model,name:connector.model_queue_worker
 msgid "queue.worker"
-msgstr ""
+msgstr "queue.worker"
 
 #. module: connector
 #: help:connector.config.settings,module_magentoerpconnect:0
 msgid "This installs the module magentoerpconnect."
-msgstr ""
+msgstr "Ez a magentoerpconnect modult telepíti."
 
 #. module: connector
 #: field:connector.checkpoint,backend_id:0
 msgid "Imported from"
-msgstr ""
+msgstr "Innen importált"
 
 #. module: connector
 #: model:ir.model,name:connector.model_queue_requeue_job

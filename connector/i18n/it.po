@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: openerp-connector\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2013-05-01 13:36+0000\n"
-"PO-Revision-Date: 2014-01-23 09:09+0000\n"
+"PO-Revision-Date: 2014-01-24 09:52+0000\n"
 "Last-Translator: Davide Corio @ LS <enlightx@gmail.com>\n"
 "Language-Team: Italian <it@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2014-01-24 06:26+0000\n"
+"X-Launchpad-Export-Date: 2014-01-25 06:41+0000\n"
 "X-Generator: Launchpad (build 16914)\n"
 
 #. module: connector
@@ -171,26 +171,28 @@ msgid ""
 "Holds the Chatter summary (number of messages, ...). This summary is "
 "directly in html format in order to be inserted in kanban views."
 msgstr ""
+"Gestisce il sommario (numero di messaggi, ...) del Chatter. Questo sommario "
+"è direttamente in html così da poter essere inserito nelle viste kanban."
 
 #. module: connector
 #: model:ir.model,name:connector.model_connector_config_settings
 msgid "connector.config.settings"
-msgstr ""
+msgstr "connector.config.settings"
 
 #. module: connector
 #: model:ir.model,name:connector.model_queue_worker
 msgid "queue.worker"
-msgstr ""
+msgstr "queue.worker"
 
 #. module: connector
 #: help:connector.config.settings,module_magentoerpconnect:0
 msgid "This installs the module magentoerpconnect."
-msgstr ""
+msgstr "Installa il modulo magentoerpconnect."
 
 #. module: connector
 #: field:connector.checkpoint,backend_id:0
 msgid "Imported from"
-msgstr ""
+msgstr "Importato da"
 
 #. module: connector
 #: model:ir.model,name:connector.model_queue_requeue_job
@@ -227,18 +229,18 @@ msgstr "Followers"
 #. module: connector
 #: model:ir.model,name:connector.model_queue_job
 msgid "Queue Job"
-msgstr ""
+msgstr "Coda Job"
 
 #. module: connector
 #: field:connector.config.settings,module_base_import:0
 msgid "Allow users to import data from CSV files"
-msgstr ""
+msgstr "Permette agli utenti di importare dati da file CSV"
 
 #. module: connector
 #: field:queue.job,worker_id:0
 #: view:queue.worker:0
 msgid "Worker"
-msgstr ""
+msgstr "Worker"
 
 #. module: connector
 #: view:connector.checkpoint:0
@@ -262,7 +264,7 @@ msgstr ""
 #. module: connector
 #: model:ir.model,name:connector.model_connector_checkpoint_review
 msgid "Checkpoints Review"
-msgstr ""
+msgstr "Revisione Checkpoints"
 
 #. module: connector
 #: model:ir.ui.menu,name:connector.menu_queue
@@ -272,17 +274,17 @@ msgstr "Coda"
 #. module: connector
 #: view:connector.checkpoint.review:0
 msgid "Set as reviewed"
-msgstr ""
+msgstr "Imposta come revisionato"
 
 #. module: connector
 #: field:queue.job,retry:0
 msgid "Current try"
-msgstr ""
+msgstr "Tentativo attuale"
 
 #. module: connector
 #: field:connector.config.settings,module_portal:0
 msgid "Activate the customer portal"
-msgstr ""
+msgstr "Attiva il portale clienti"
 
 #. module: connector
 #: field:queue.job,date_created:0
@@ -302,33 +304,33 @@ msgstr ""
 #. module: connector
 #: view:queue.job:0
 msgid "Set to 'Done'"
-msgstr ""
+msgstr "Imposta come 'Completato'"
 
 #. module: connector
 #: model:ir.ui.menu,name:connector.menu_connector
 #: model:ir.ui.menu,name:connector.menu_connector_root
 #: view:res.partner:0
 msgid "Connectors"
-msgstr ""
+msgstr "Connettori"
 
 #. module: connector
 #: view:queue.job:0
 #: field:queue.job,result:0
 msgid "Result"
-msgstr ""
+msgstr "Risultato"
 
 #. module: connector
 #: field:queue.job,date_started:0
 #: field:queue.worker,date_start:0
 msgid "Start Date"
-msgstr ""
+msgstr "Data Inizio"
 
 #. module: connector
 #: view:connector.checkpoint.review:0
 #: view:connector.config.settings:0
 #: view:queue.requeue.job:0
 msgid "or"
-msgstr ""
+msgstr "o"
 
 #. module: connector
 #: field:connector.config.settings,module_auth_oauth:0

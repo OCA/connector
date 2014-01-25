@@ -1,4 +1,4 @@
-# Hungarian translation for openerp-connector
+# Croatian translation for openerp-connector
 # Copyright (c) 2014 Rosetta Contributors and Canonical Ltd 2014
 # This file is distributed under the same license as the openerp-connector package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2014.
@@ -8,9 +8,9 @@ msgstr ""
 "Project-Id-Version: openerp-connector\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2013-05-01 13:36+0000\n"
-"PO-Revision-Date: 2014-01-24 09:46+0000\n"
-"Last-Translator: krnkris <Unknown>\n"
-"Language-Team: Hungarian <hu@li.org>\n"
+"PO-Revision-Date: 2014-01-24 11:28+0000\n"
+"Last-Translator: Goran Kliska <gkliska@gmail.com>\n"
+"Language-Team: Croatian <hr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -20,29 +20,29 @@ msgstr ""
 #. module: connector
 #: view:connector.config.settings:0
 msgid "Apply"
-msgstr "Alkalmaz"
+msgstr "Primjeni"
 
 #. module: connector
 #: model:ir.actions.act_window,name:connector.action_queue_worker
 #: model:ir.ui.menu,name:connector.menu_queue_worker
 msgid "Workers"
-msgstr "Munkások"
+msgstr ""
 
 #. module: connector
 #: model:ir.module.category,name:connector.module_category_connector
 #: model:ir.ui.menu,name:connector.menu_connector_config_settings
 msgid "Connector"
-msgstr "Csatoló"
+msgstr ""
 
 #. module: connector
 #: view:connector.checkpoint:0
 msgid "Group By..."
-msgstr "Csoportosítás ezzel..."
+msgstr "Grupiraj po..."
 
 #. module: connector
 #: field:queue.job,date_done:0
 msgid "Date Done"
-msgstr "Befejezés dátuma"
+msgstr "Datum izvršenja"
 
 #. module: connector
 #: model:ir.actions.act_window,name:connector.action_queue_job
@@ -51,18 +51,18 @@ msgstr "Befejezés dátuma"
 #: field:queue.requeue.job,job_ids:0
 #: field:queue.worker,job_ids:0
 msgid "Jobs"
-msgstr "Feladatok"
+msgstr "Zadaci"
 
 #. module: connector
 #: field:connector.config.settings,module_multi_company:0
 msgid "Manage multiple companies"
-msgstr "Többes válallkozás kezelése"
+msgstr "Više organizacija (tvrtki)"
 
 #. module: connector
 #: field:connector.checkpoint,message_unread:0
 #: field:queue.job,message_unread:0
 msgid "Unread Messages"
-msgstr "Olvasatlan üzenetek"
+msgstr "Nepročitane poruke"
 
 #. module: connector
 #: field:queue.worker,pid:0
@@ -72,67 +72,65 @@ msgstr "PID"
 #. module: connector
 #: field:queue.job,user_id:0
 msgid "User ID"
-msgstr "Felhasználó azonosító (ID)"
+msgstr "ID korisnika"
 
 #. module: connector
 #: field:connector.checkpoint.review,checkpoint_ids:0
 msgid "Checkpoints"
-msgstr "Ellenörző pontok"
+msgstr ""
 
 #. module: connector
 #: view:queue.requeue.job:0
 msgid "The selected jobs will be requeued."
-msgstr "A kiválasztott feladat ismételten sorba lesz állítva."
+msgstr ""
 
 #. module: connector
 #: field:queue.job,func_string:0
 msgid "Task"
-msgstr "Feladat"
+msgstr "Zadatak"
 
 #. module: connector
 #: help:connector.checkpoint,record:0
 msgid "The record to check."
-msgstr "Az ellenőrizni kívánt rekord."
+msgstr ""
 
 #. module: connector
 #: help:connector.checkpoint,backend_id:0
 msgid "The record has been imported from this backend"
-msgstr "Erről a végpontról importált rekord"
+msgstr ""
 
 #. module: connector
 #: model:ir.actions.client,name:connector.action_client_connector_menu
 msgid "Open Connector Menu"
-msgstr "Csatoló menü megnyitása"
+msgstr ""
 
 #. module: connector
 #: field:connector.checkpoint,message_ids:0
 #: field:queue.job,message_ids:0
 msgid "Messages"
-msgstr "Üzenetek"
+msgstr "Poruke"
 
 #. module: connector
 #: view:queue.job:0
 #: selection:queue.job,state:0
 msgid "Enqueued"
-msgstr "Sorbahelyezett"
+msgstr ""
 
 #. module: connector
 #: help:connector.config.settings,module_portal_anonymous:0
 msgid "Enable the public part of openerp, openerp becomes a public website."
 msgstr ""
-"Az OpenERP közösségi részének bekapcsolása, OpenERP elérhetővé válik egy "
-"közösségi weboldalként."
 
 #. module: connector
 #: field:queue.job,max_retries:0
 msgid "Max. retries"
-msgstr "Max. újrapróbálkozások száma"
+msgstr ""
 
 #. module: connector
 #: help:connector.checkpoint,message_unread:0
 #: help:queue.job,message_unread:0
 msgid "If checked new messages require your attention."
-msgstr "Ha be van jelölve, akkor figyelje az új üzeneteket."
+msgstr "Ako je odabrano, nove poruke zahtijevaju Vašu pažnju."
 
 #. module: connector
 #: field:queue.job,uuid:0
@@ -144,12 +142,12 @@ msgstr "UUID"
 #: view:connector.config.settings:0
 #: model:ir.actions.act_window,name:connector.action_connector_config_settings
 msgid "Configure Connector"
-msgstr "Csatlakozó beállítása"
+msgstr ""
 
 #. module: connector
 #: field:external.binding,sync_date:0
 msgid "Last synchronization date"
-msgstr "Utolsó szinkronizáció dátuma"
+msgstr ""
 
 #. module: connector
 #: model:ir.actions.act_window,help:connector.action_connector_checkpoint
@@ -164,16 +162,6 @@ msgid ""
 "                    review.</p>\n"
 "            "
 msgstr ""
-"<p>Nincs rekord az ellenőrzéshez.</p>\n"
-"                <p> Ha egy csatoló kézi beállításokkal vagy \n"
-"                    nézetekkel rendelkező új rekordokat importál,\n"
-"                    akkor azok megjelennek ebben a listában. \n"
-"                    Miután le lett ellenőrizve a rekord, kattintson\n"
-"                    a 'Leellenőrizve' gombra.  </p>\n"
-"                <p>A csatoló az új rekordokat a típus alapú  \n"
-"                    ellenőrzéshez listázza. Csak egy párat kell\n"
-"                    kézzel ellenőrizni.</p>\n"
-"            "
 
 #. module: connector
 #: help:connector.checkpoint,message_summary:0
@@ -182,90 +170,88 @@ msgid ""
 "Holds the Chatter summary (number of messages, ...). This summary is "
 "directly in html format in order to be inserted in kanban views."
 msgstr ""
-"A chettelés összegzést megállítja (üzenetek száma,...). Ez az összegzés "
-"direkt HTML formátumú ahhoz hogy beilleszthető legyen a kanban nézetekbe."
 
 #. module: connector
 #: model:ir.model,name:connector.model_connector_config_settings
 msgid "connector.config.settings"
-msgstr "connector.config.settings"
+msgstr ""
 
 #. module: connector
 #: model:ir.model,name:connector.model_queue_worker
 msgid "queue.worker"
-msgstr "queue.worker"
+msgstr ""
 
 #. module: connector
 #: help:connector.config.settings,module_magentoerpconnect:0
 msgid "This installs the module magentoerpconnect."
-msgstr "Ez a magentoerpconnect modult telepíti."
+msgstr ""
 
 #. module: connector
 #: field:connector.checkpoint,backend_id:0
 msgid "Imported from"
-msgstr "Innen importált"
+msgstr ""
 
 #. module: connector
 #: model:ir.model,name:connector.model_queue_requeue_job
 msgid "Wizard to requeue a selection of jobs"
-msgstr "Varázsló a kiválasztott feladatok ismételt sorbaállításához"
+msgstr ""
 
 #. module: connector
 #: field:queue.job,priority:0
 msgid "Priority"
-msgstr "Prioritás"
+msgstr ""
 
 #. module: connector
 #: view:queue.job:0
 #: selection:queue.job,state:0
 msgid "Failed"
-msgstr "Sikertelen"
+msgstr ""
 
 #. module: connector
 #: field:queue.job,state:0
 msgid "State"
-msgstr "Állapot"
+msgstr ""
 
 #. module: connector
 #: view:connector.config.settings:0
 msgid "Backends"
-msgstr "Háttérprogramok"
+msgstr ""
 
 #. module: connector
 #: field:connector.checkpoint,message_follower_ids:0
 #: field:queue.job,message_follower_ids:0
 msgid "Followers"
-msgstr "Követők"
+msgstr ""
 
 #. module: connector
 #: model:ir.model,name:connector.model_queue_job
 msgid "Queue Job"
-msgstr "Sorbanálló feladatok"
+msgstr ""
 
 #. module: connector
 #: field:connector.config.settings,module_base_import:0
 msgid "Allow users to import data from CSV files"
-msgstr "Lehetővé teszi a felhasználók adatainak betöltését CSV fájlokból"
+msgstr ""
 
 #. module: connector
 #: field:queue.job,worker_id:0
 #: view:queue.worker:0
 msgid "Worker"
-msgstr "Munkavállaló"
+msgstr ""
 
 #. module: connector
 #: view:connector.checkpoint:0
 #: model:ir.actions.act_window,name:connector.action_connector_checkpoint
 #: model:ir.model,name:connector.model_connector_checkpoint
 msgid "Connector Checkpoint"
-msgstr "Csatoló ellenörzőpont"
+msgstr ""
 
 #. module: connector
 #: view:connector.checkpoint.review:0
 #: view:connector.config.settings:0
 #: view:queue.requeue.job:0
 msgid "Cancel"
-msgstr "Mégsem"
+msgstr ""
 
 #. module: connector
 #: field:queue.job,func:0
@@ -275,130 +261,128 @@ msgstr ""
 #. module: connector
 #: model:ir.model,name:connector.model_connector_checkpoint_review
 msgid "Checkpoints Review"
-msgstr "Ellenörzőpontok felülvizsgálata"
+msgstr ""
 
 #. module: connector
 #: model:ir.ui.menu,name:connector.menu_queue
 msgid "Queue"
-msgstr "Feladatsor"
+msgstr ""
 
 #. module: connector
 #: view:connector.checkpoint.review:0
 msgid "Set as reviewed"
-msgstr "Leellenörzöttnek jelölt"
+msgstr ""
 
 #. module: connector
 #: field:queue.job,retry:0
 msgid "Current try"
-msgstr "Jelenlegi próbálkozás"
+msgstr ""
 
 #. module: connector
 #: field:connector.config.settings,module_portal:0
 msgid "Activate the customer portal"
-msgstr "A közösségi portál aktiválása"
+msgstr ""
 
 #. module: connector
 #: field:queue.job,date_created:0
 msgid "Created Date"
-msgstr "Létrehozás dátuma"
+msgstr ""
 
 #. module: connector
 #: field:connector.checkpoint,record:0
 msgid "Record"
-msgstr "Rekord(Adat)"
+msgstr ""
 
 #. module: connector
 #: field:queue.worker,date_alive:0
 msgid "Last Alive Check"
-msgstr "Utolsó futó ellenőrzés"
+msgstr ""
 
 #. module: connector
 #: view:queue.job:0
 msgid "Set to 'Done'"
-msgstr "'Elvégzett'-nek jelölve"
+msgstr ""
 
 #. module: connector
 #: model:ir.ui.menu,name:connector.menu_connector
 #: model:ir.ui.menu,name:connector.menu_connector_root
 #: view:res.partner:0
 msgid "Connectors"
-msgstr "Csatolók"
+msgstr ""
 
 #. module: connector
 #: view:queue.job:0
 #: field:queue.job,result:0
 msgid "Result"
-msgstr "Eredmény"
+msgstr ""
 
 #. module: connector
 #: field:queue.job,date_started:0
 #: field:queue.worker,date_start:0
 msgid "Start Date"
-msgstr "Kezdő dátum"
+msgstr ""
 
 #. module: connector
 #: view:connector.checkpoint.review:0
 #: view:connector.config.settings:0
 #: view:queue.requeue.job:0
 msgid "or"
-msgstr "vagy"
+msgstr ""
 
 #. module: connector
 #: field:connector.config.settings,module_auth_oauth:0
 msgid ""
 "Use external authentication providers, sign in with google, facebook, ..."
 msgstr ""
-"Használjon külső azonosító tartalomkezelőt, lépjen be mint google, facebook, "
-"... felhasználó"
 
 #. module: connector
 #: model:ir.model,name:connector.model_connector_backend
 msgid "connector.backend"
-msgstr "connector.backend"
+msgstr ""
 
 #. module: connector
 #: view:connector.checkpoint.review:0
 #: model:ir.actions.act_window,name:connector.action_connector_checkpoint_review
 msgid "Review Checkpoints"
-msgstr "Ellenörzőpontok felülvizsgálata"
+msgstr ""
 
 #. module: connector
 #: view:queue.job:0
 #: selection:queue.job,state:0
 msgid "Pending"
-msgstr "Függőben lévő"
+msgstr ""
 
 #. module: connector
 #: field:connector.checkpoint,state:0
 msgid "Status"
-msgstr "Állapot"
+msgstr ""
 
 #. module: connector
 #: view:queue.job:0
 #: selection:queue.job,state:0
 msgid "Started"
-msgstr "Elkezdve"
+msgstr ""
 
 #. module: connector
 #: model:ir.model,name:connector.model_connector_installed
 msgid "connector.installed"
-msgstr "connector.installed"
+msgstr ""
 
 #. module: connector
 #: field:connector.checkpoint,message_is_follower:0
 #: field:queue.job,message_is_follower:0
 msgid "Is a Follower"
-msgstr "Ez egy követő"
+msgstr ""
 
 #. module: connector
 #: help:connector.config.settings,module_share:0
 msgid "Share or embbed any screen of openerp."
-msgstr "Bármely képernyő megosztása vagy eltüntetése."
+msgstr ""
 
 #. module: connector
 #: field:queue.job,active:0
 msgid "Active"
-msgstr "Aktív"
+msgstr ""
 
 #. module: connector
 #: help:queue.job,max_retries:0
@@ -406,99 +390,95 @@ msgid ""
 "The job will fail if the number of tries reach the max. retries.\n"
 "Retries are infinite when empty."
 msgstr ""
-"A feladat nem lesz végrehajtva, ha a próbálkozások száma eléri a max. "
-"értéket.\n"
-"Üresen hagyva végtelen újrapróbálkozás lesz."
 
 #. module: connector
 #: view:connector.checkpoint:0
 msgid "Click on the"
-msgstr "Kattintson erre"
+msgstr ""
 
 #. module: connector
 #: field:connector.checkpoint,message_summary:0
 #: field:queue.job,message_summary:0
 msgid "Summary"
-msgstr "Összegzés"
+msgstr ""
 
 #. module: connector
 #: view:queue.job:0
 msgid "Exception Information"
-msgstr "Rendkívüli körülmény információja"
+msgstr ""
 
 #. module: connector
 #: view:queue.requeue.job:0
 msgid "Requeue"
-msgstr "Újrarendezés"
+msgstr ""
 
 #. module: connector
 #: model:ir.ui.menu,name:connector.menu_checkpoint
 msgid "Checkpoint"
-msgstr "Ellenőrzőpont"
+msgstr ""
 
 #. module: connector
 #: view:connector.checkpoint:0
 #: selection:connector.checkpoint,state:0
 msgid "Reviewed"
-msgstr "Leellenörzött"
+msgstr ""
 
 #. module: connector
 #: field:connector.backend,version:0
 msgid "Version"
-msgstr "Verzió"
+msgstr ""
 
 #. module: connector
 #: view:queue.job:0
 #: selection:queue.job,state:0
 msgid "Done"
-msgstr "Kész"
+msgstr ""
 
 #. module: connector
 #: view:connector.checkpoint.review:0
 msgid "The selected checkpoints will be set as reviewed."
-msgstr "A kiválasztott ellenörzőpont leellenörzőttként nyilvántartva."
+msgstr ""
 
 #. module: connector
 #: model:ir.actions.act_window,name:connector.action_requeue_job
 #: view:queue.requeue.job:0
 msgid "Requeue Jobs"
-msgstr "Feladatok újrarendezése"
+msgstr ""
 
 #. module: connector
 #: field:queue.job,exc_info:0
 msgid "Exception Info"
-msgstr "Kivételes körülmény információja"
+msgstr ""
 
 #. module: connector
 #: view:queue.job:0
 msgid "Requeue Job"
-msgstr "Feladat újrarendezése"
+msgstr ""
 
 #. module: connector
 #: model:ir.model,name:connector.model_external_binding
 msgid "External Binding (abstract)"
-msgstr "Külső csatolás (absztract)"
+msgstr ""
 
 #. module: connector
 #: field:queue.job,name:0
 msgid "Description"
-msgstr "Leírás"
+msgstr ""
 
 #. module: connector
 #: view:queue.job:0
 msgid "If the max. retries is 0, the number of retries is infinite."
 msgstr ""
-"Ha a max. újraporóbálkozás 0, akkor az újrapróbálkozások száma végtelen."
 
 #. module: connector
 #: field:queue.job,date_enqueued:0
 msgid "Enqueue Time"
-msgstr "Sorbarendezési idő"
+msgstr ""
 
 #. module: connector
 #: field:connector.checkpoint,record_id:0
 msgid "Record ID"
-msgstr "Rekordazonosító ID"
+msgstr ""
 
 #. module: connector
 #: help:connector.config.settings,module_multi_company:0
@@ -507,14 +487,11 @@ msgid ""
 "companies.\n"
 "                This installs the module multi_company."
 msgstr ""
-"Többes vállalkozású környezetben dolgozni, a helyesen meghatározott "
-"vállalatok közötti hozzáférési jogosultságokkal.\n"
-"                Ez a multi_company modult telepíti."
 
 #. module: connector
 #: field:connector.backend,name:0
 msgid "Name"
-msgstr "Név"
+msgstr ""
 
 #. module: connector
 #: help:connector.config.settings,alias_domain:0
@@ -522,74 +499,72 @@ msgid ""
 "If you have setup a catch-all email domain redirected to the OpenERP server, "
 "enter the domain name here."
 msgstr ""
-"Ha be állítja az összes e-mail domain fogadásának átirányítás az openERP "
-"szerverre, akkor írja ide a domain nevet."
 
 #. module: connector
 #: field:connector.config.settings,alias_domain:0
 msgid "Alias Domain"
-msgstr "Domain álnév (alias)"
+msgstr ""
 
 #. module: connector
 #: view:queue.job:0
 msgid "Current try / max. retries"
-msgstr "Jelenlegi próbálkozás / max. próbálkozások"
+msgstr ""
 
 #. module: connector
 #: field:connector.config.settings,module_magentoerpconnect:0
 msgid "Synchronize with Magento"
-msgstr "Szinkronizálás Magentoval"
+msgstr ""
 
 #. module: connector
 #: view:connector.checkpoint:0
 msgid "to verify it:"
-msgstr "ezt ellenőrizni:"
+msgstr ""
 
 #. module: connector
 #: view:connector.checkpoint:0
 #: field:connector.checkpoint,model_id:0
 #: field:queue.job,model_name:0
 msgid "Model"
-msgstr "Modell, minta"
+msgstr ""
 
 #. module: connector
 #: help:connector.checkpoint,message_ids:0
 #: help:queue.job,message_ids:0
 msgid "Messages and communication history"
-msgstr "Üzenetek és kommunikációs történet"
+msgstr ""
 
 #. module: connector
 #: field:connector.config.settings,module_share:0
 msgid "Allow documents sharing"
-msgstr "Dokumentumok megoszásának engedélyezése"
+msgstr ""
 
 #. module: connector
 #: field:connector.config.settings,module_portal_anonymous:0
 msgid "Activate the public portal"
-msgstr "Közösségi portál aktiválása"
+msgstr ""
 
 #. module: connector
 #: model:res.groups,name:connector.group_connector_manager
 msgid "Connector Manager"
-msgstr "Csatoló beállítás"
+msgstr ""
 
 #. module: connector
 #: model:mail.message.subtype,name:connector.mt_job_failed
 msgid "Job failed"
-msgstr "Feladat meghiusult"
+msgstr ""
 
 #. module: connector
 #: help:connector.config.settings,module_portal:0
 msgid "Give your customers access to their documents."
-msgstr "Adjon hozzáférést a vevőknek a dokumentumaikhoz."
+msgstr ""
 
 #. module: connector
 #: field:queue.job,eta:0
 msgid "Execute only after"
-msgstr "Csak ezután végezze el"
+msgstr ""
 
 #. module: connector
 #: view:connector.checkpoint:0
 #: selection:connector.checkpoint,state:0
 msgid "Need Review"
-msgstr "Felülvizsgálat szükséges"
+msgstr ""

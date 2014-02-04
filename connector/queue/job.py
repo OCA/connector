@@ -215,7 +215,7 @@ class OpenERPJobStorage(JobStorage):
                                   job.kwargs))
 
             self.job_model.create(self.session.cr,
-                                  self.session.uid,
+                                  SUPERUSER_ID,
                                   vals,
                                   self.session.context)
 

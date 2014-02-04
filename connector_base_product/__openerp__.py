@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    Author: Guewen Baconnier Copyright 2013 Camptocamp SA
+#    Author: David BEAL, Copyright Akretion, 2014
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -23,19 +23,19 @@
  'author': 'Openerp Connector Core Editors',
  'website': 'http://openerp-connector.com',
  'license': 'AGPL-3',
- 'category': 'Generic Modules',
+ 'category': 'Connector',
  'description': """
 Connector Base Product
-========================
+======================
 
 Add 'Connector' tab to product view
 """,
  'depends': [
      'connector',
+     'product',
  ],
  'data': [
      'product_view.xml'
  ],
  'installable': True,
- 'application': True,
 }

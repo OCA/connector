@@ -117,12 +117,13 @@
                 <tree string="Jobs" create="false"
                         delete="false"
                         colors="red:state == 'failed';gray:state == 'done'">
-                    <field name="uuid"/>
                     <field name="name"/>
+                    <field name="model_name"/>
                     <field name="state"/>
                     <field name="eta"/>
                     <field name="date_created"/>
                     <field name="date_done"/>
+                    <field name="uuid"/>
                 </tree>
             </field>
         </record>

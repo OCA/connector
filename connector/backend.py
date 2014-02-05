@@ -20,6 +20,7 @@
 ##############################################################################
 from functools import partial
 from collections import namedtuple
+from .exception import NoConnectorUnitError
 
 __all__ = ['Backend']
 
@@ -257,10 +258,12 @@ class Backend(object):
         """
         matching_classes = self._get_classes(base_class, session,
                                              model_name)
-        assert matching_classes, ('No matching class found for %s '
-                                  'with session: %s, '
-                                  'model name: %s' %
-                                  (base_class, session, model_name))
+        if not matching_classes:
+            raise NoConnectorUnitError('No matching class found for %s '
+                                       'with session: %s, '
+                                       'model name: %s' %
+                                       (base_class, session, model_name))
+
         assert len(matching_classes) == 1, (
             'Several classes found for %s '
             'with session %s, model name: %s. Found: %s' %

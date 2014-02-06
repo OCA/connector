@@ -1,0 +1,599 @@
+# Dutch translation for openerp-connector
+# Copyright (c) 2014 Rosetta Contributors and Canonical Ltd 2014
+# This file is distributed under the same license as the openerp-connector package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2014.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: openerp-connector\n"
+"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
+"POT-Creation-Date: 2013-05-01 13:36+0000\n"
+"PO-Revision-Date: 2014-02-13 14:05+0000\n"
+"Last-Translator: Erwin van der Ploeg (BAS Solutions) <Unknown>\n"
+"Language-Team: Dutch <nl@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Launchpad-Export-Date: 2014-02-14 07:50+0000\n"
+"X-Generator: Launchpad (build 16916)\n"
+
+#. module: connector
+#: view:connector.config.settings:0
+msgid "Apply"
+msgstr "Toepassen"
+
+#. module: connector
+#: model:ir.actions.act_window,name:connector.action_queue_worker
+#: model:ir.ui.menu,name:connector.menu_queue_worker
+msgid "Workers"
+msgstr "Werkers"
+
+#. module: connector
+#: model:ir.module.category,name:connector.module_category_connector
+#: model:ir.ui.menu,name:connector.menu_connector_config_settings
+msgid "Connector"
+msgstr "Connector"
+
+#. module: connector
+#: view:connector.checkpoint:0
+msgid "Group By..."
+msgstr "Groepeer op..."
+
+#. module: connector
+#: field:queue.job,date_done:0
+msgid "Date Done"
+msgstr "Verwerkingsdatum"
+
+#. module: connector
+#: model:ir.actions.act_window,name:connector.action_queue_job
+#: model:ir.ui.menu,name:connector.menu_queue_job
+#: view:queue.job:0
+#: field:queue.requeue.job,job_ids:0
+#: field:queue.worker,job_ids:0
+msgid "Jobs"
+msgstr "Taken"
+
+#. module: connector
+#: field:connector.config.settings,module_multi_company:0
+msgid "Manage multiple companies"
+msgstr "Beheer meerdere bedrijven"
+
+#. module: connector
+#: field:connector.checkpoint,message_unread:0
+#: field:queue.job,message_unread:0
+msgid "Unread Messages"
+msgstr "Ongelezen berichten"
+
+#. module: connector
+#: field:queue.worker,pid:0
+msgid "PID"
+msgstr "PID"
+
+#. module: connector
+#: field:queue.job,user_id:0
+msgid "User ID"
+msgstr "Gebruikers-ID"
+
+#. module: connector
+#: field:connector.checkpoint.review,checkpoint_ids:0
+msgid "Checkpoints"
+msgstr "Controlepunten"
+
+#. module: connector
+#: view:queue.requeue.job:0
+msgid "The selected jobs will be requeued."
+msgstr "De geselecteerde taken worden opnieuw ingepland."
+
+#. module: connector
+#: field:queue.job,func_string:0
+msgid "Task"
+msgstr "Taak"
+
+#. module: connector
+#: help:connector.checkpoint,record:0
+msgid "The record to check."
+msgstr "De te controleren regel"
+
+#. module: connector
+#: help:connector.checkpoint,backend_id:0
+msgid "The record has been imported from this backend"
+msgstr "De regel is geïmporteerd vanuit deze backend"
+
+#. module: connector
+#: model:ir.actions.client,name:connector.action_client_connector_menu
+msgid "Open Connector Menu"
+msgstr "Open connector menu"
+
+#. module: connector
+#: field:connector.checkpoint,message_ids:0
+#: field:queue.job,message_ids:0
+msgid "Messages"
+msgstr "Berichten"
+
+#. module: connector
+#: view:queue.job:0
+#: selection:queue.job,state:0
+msgid "Enqueued"
+msgstr "Opnieuw ingepland"
+
+#. module: connector
+#: help:connector.config.settings,module_portal_anonymous:0
+msgid "Enable the public part of openerp, openerp becomes a public website."
+msgstr ""
+"Schakel het publieke deel van OpenERP in, OpenERP wordt hiermee een openbare "
+"website."
+
+#. module: connector
+#: field:queue.job,max_retries:0
+msgid "Max. retries"
+msgstr "Max. herhaalpogingen"
+
+#. module: connector
+#: help:connector.checkpoint,message_unread:0
+#: help:queue.job,message_unread:0
+msgid "If checked new messages require your attention."
+msgstr "Indien aangevinkt zullen nieuwe berichten uw aandacht vragen."
+
+#. module: connector
+#: field:queue.job,uuid:0
+#: field:queue.worker,uuid:0
+msgid "UUID"
+msgstr "UUID"
+
+#. module: connector
+#: view:connector.config.settings:0
+#: model:ir.actions.act_window,name:connector.action_connector_config_settings
+msgid "Configure Connector"
+msgstr "Connector instellen"
+
+#. module: connector
+#: field:external.binding,sync_date:0
+msgid "Last synchronization date"
+msgstr "Laatste synchronisatie datum"
+
+#. module: connector
+#: model:ir.actions.act_window,help:connector.action_connector_checkpoint
+msgid ""
+"<p>No record to check.</p>\n"
+"                <p> When a connector imports new records which have\n"
+"                    configuration or reviews to do manually, they\n"
+"                    will appear in this list.  Once a record has been\n"
+"                    checked, click on the 'Reviewed' button.  </p>\n"
+"                <p>The connectors list the new records to verify\n"
+"                    based on their type.  Only some need a manual\n"
+"                    review.</p>\n"
+"            "
+msgstr ""
+"<p>Geen record om te controleren.</p>\n"
+"                <p> Wanneer een connector nieuwe records importeert, en "
+"zijn\n"
+"                    instellingen te maken of te controleren, dan worden "
+"deze\n"
+"                    in deze lijst weergegeven.  Wanneer een record is\n"
+"                    gecontroleerd, klikt u op de 'Gecontroleerd' knop.  "
+"</p>\n"
+"                <p>De connectors geven een lijst weer van nieuwe records\n"
+"                    welke gecontroleerd moeten worden, gebaseerd op type.  "
+"Sommige\n"
+"                    moeten handmatig worden gecontroleerd.</p>\n"
+"            "
+
+#. module: connector
+#: help:connector.checkpoint,message_summary:0
+#: help:queue.job,message_summary:0
+msgid ""
+"Holds the Chatter summary (number of messages, ...). This summary is "
+"directly in html format in order to be inserted in kanban views."
+msgstr ""
+"Bevat de samenvatting van de chatter (aantal berichten,...). Deze "
+"samenvatting is direct in html formaat om zo in de kanban weergave te worden "
+"ingevoegd."
+
+#. module: connector
+#: model:ir.model,name:connector.model_connector_config_settings
+msgid "connector.config.settings"
+msgstr "connector.config.settings"
+
+#. module: connector
+#: model:ir.model,name:connector.model_queue_worker
+msgid "queue.worker"
+msgstr "queue.worker"
+
+#. module: connector
+#: help:connector.config.settings,module_magentoerpconnect:0
+msgid "This installs the module magentoerpconnect."
+msgstr "Dit installeerd de module magentoerpconnect."
+
+#. module: connector
+#: field:connector.checkpoint,backend_id:0
+msgid "Imported from"
+msgstr "Geïmporteerd van"
+
+#. module: connector
+#: model:ir.model,name:connector.model_queue_requeue_job
+msgid "Wizard to requeue a selection of jobs"
+msgstr "Wizard om een selectie van taken opnieuw in te plannen"
+
+#. module: connector
+#: field:queue.job,priority:0
+msgid "Priority"
+msgstr "Prioriteit"
+
+#. module: connector
+#: view:queue.job:0
+#: selection:queue.job,state:0
+msgid "Failed"
+msgstr "Mislukt"
+
+#. module: connector
+#: field:queue.job,state:0
+msgid "State"
+msgstr "Status"
+
+#. module: connector
+#: view:connector.config.settings:0
+msgid "Backends"
+msgstr "Backends"
+
+#. module: connector
+#: field:connector.checkpoint,message_follower_ids:0
+#: field:queue.job,message_follower_ids:0
+msgid "Followers"
+msgstr "Volgers"
+
+#. module: connector
+#: model:ir.model,name:connector.model_queue_job
+msgid "Queue Job"
+msgstr "Geplande taken"
+
+#. module: connector
+#: field:connector.config.settings,module_base_import:0
+msgid "Allow users to import data from CSV files"
+msgstr "Sta toe dat gebruikers gegevens importeren van CSV bestanden."
+
+#. module: connector
+#: field:queue.job,worker_id:0
+#: view:queue.worker:0
+msgid "Worker"
+msgstr "Werker"
+
+#. module: connector
+#: view:connector.checkpoint:0
+#: model:ir.actions.act_window,name:connector.action_connector_checkpoint
+#: model:ir.model,name:connector.model_connector_checkpoint
+msgid "Connector Checkpoint"
+msgstr "Connector controlepunt"
+
+#. module: connector
+#: view:connector.checkpoint.review:0
+#: view:connector.config.settings:0
+#: view:queue.requeue.job:0
+msgid "Cancel"
+msgstr "Annuleer"
+
+#. module: connector
+#: field:queue.job,func:0
+msgid "Pickled Function"
+msgstr "Pickled Function"
+
+#. module: connector
+#: model:ir.model,name:connector.model_connector_checkpoint_review
+msgid "Checkpoints Review"
+msgstr "Controlepunten controle"
+
+#. module: connector
+#: model:ir.ui.menu,name:connector.menu_queue
+msgid "Queue"
+msgstr "Wachtrij"
+
+#. module: connector
+#: view:connector.checkpoint.review:0
+msgid "Set as reviewed"
+msgstr "Stel in als gecontroleerd"
+
+#. module: connector
+#: field:queue.job,retry:0
+msgid "Current try"
+msgstr "Huidige poging"
+
+#. module: connector
+#: field:connector.config.settings,module_portal:0
+msgid "Activate the customer portal"
+msgstr "Activeer het klantenportaal"
+
+#. module: connector
+#: field:queue.job,date_created:0
+msgid "Created Date"
+msgstr "Aanmaakdatum"
+
+#. module: connector
+#: field:connector.checkpoint,record:0
+msgid "Record"
+msgstr "Regel"
+
+#. module: connector
+#: field:queue.worker,date_alive:0
+msgid "Last Alive Check"
+msgstr "Laatste alive controle"
+
+#. module: connector
+#: view:queue.job:0
+msgid "Set to 'Done'"
+msgstr "Instellen op 'Gereed'"
+
+#. module: connector
+#: model:ir.ui.menu,name:connector.menu_connector
+#: model:ir.ui.menu,name:connector.menu_connector_root
+#: view:res.partner:0
+msgid "Connectors"
+msgstr "Connectors"
+
+#. module: connector
+#: view:queue.job:0
+#: field:queue.job,result:0
+msgid "Result"
+msgstr "Resultaat"
+
+#. module: connector
+#: field:queue.job,date_started:0
+#: field:queue.worker,date_start:0
+msgid "Start Date"
+msgstr "Startdatum"
+
+#. module: connector
+#: view:connector.checkpoint.review:0
+#: view:connector.config.settings:0
+#: view:queue.requeue.job:0
+msgid "or"
+msgstr "of"
+
+#. module: connector
+#: field:connector.config.settings,module_auth_oauth:0
+msgid ""
+"Use external authentication providers, sign in with google, facebook, ..."
+msgstr ""
+"Gebruik externe authenticatie providers. Log in met Google, Facebook, ..."
+
+#. module: connector
+#: model:ir.model,name:connector.model_connector_backend
+msgid "connector.backend"
+msgstr "connector.backend"
+
+#. module: connector
+#: view:connector.checkpoint.review:0
+#: model:ir.actions.act_window,name:connector.action_connector_checkpoint_review
+msgid "Review Checkpoints"
+msgstr "Controleer controlepunten"
+
+#. module: connector
+#: view:queue.job:0
+#: selection:queue.job,state:0
+msgid "Pending"
+msgstr "Wachtend"
+
+#. module: connector
+#: field:connector.checkpoint,state:0
+msgid "Status"
+msgstr "Status"
+
+#. module: connector
+#: view:queue.job:0
+#: selection:queue.job,state:0
+msgid "Started"
+msgstr "Gestart"
+
+#. module: connector
+#: model:ir.model,name:connector.model_connector_installed
+msgid "connector.installed"
+msgstr "connector.installed"
+
+#. module: connector
+#: field:connector.checkpoint,message_is_follower:0
+#: field:queue.job,message_is_follower:0
+msgid "Is a Follower"
+msgstr "Is een volger"
+
+#. module: connector
+#: help:connector.config.settings,module_share:0
+msgid "Share or embbed any screen of openerp."
+msgstr "Deel of embbed iedere scherm van OpenERP"
+
+#. module: connector
+#: field:queue.job,active:0
+msgid "Active"
+msgstr "Actief"
+
+#. module: connector
+#: help:queue.job,max_retries:0
+msgid ""
+"The job will fail if the number of tries reach the max. retries.\n"
+"Retries are infinite when empty."
+msgstr ""
+"de taak is mislukt als het aantal herhalingen het maximale aantal "
+"herhalingen bereikt.\n"
+"Herhalingen zijn oneindig indien leeg."
+
+#. module: connector
+#: view:connector.checkpoint:0
+msgid "Click on the"
+msgstr "Klik op de"
+
+#. module: connector
+#: field:connector.checkpoint,message_summary:0
+#: field:queue.job,message_summary:0
+msgid "Summary"
+msgstr "Samenvatting"
+
+#. module: connector
+#: view:queue.job:0
+msgid "Exception Information"
+msgstr "Fout informatie"
+
+#. module: connector
+#: view:queue.requeue.job:0
+msgid "Requeue"
+msgstr "Opnieuw inplannen"
+
+#. module: connector
+#: model:ir.ui.menu,name:connector.menu_checkpoint
+msgid "Checkpoint"
+msgstr "Controlepunt"
+
+#. module: connector
+#: view:connector.checkpoint:0
+#: selection:connector.checkpoint,state:0
+msgid "Reviewed"
+msgstr "Gecontroleerd"
+
+#. module: connector
+#: field:connector.backend,version:0
+msgid "Version"
+msgstr "Versie"
+
+#. module: connector
+#: view:queue.job:0
+#: selection:queue.job,state:0
+msgid "Done"
+msgstr "Gereed"
+
+#. module: connector
+#: view:connector.checkpoint.review:0
+msgid "The selected checkpoints will be set as reviewed."
+msgstr "De geselecteerde controlepunten worden ingesteld als gecontroleerd"
+
+#. module: connector
+#: model:ir.actions.act_window,name:connector.action_requeue_job
+#: view:queue.requeue.job:0
+msgid "Requeue Jobs"
+msgstr "Taken opnieuw inplannen"
+
+#. module: connector
+#: field:queue.job,exc_info:0
+msgid "Exception Info"
+msgstr "Fout informatie"
+
+#. module: connector
+#: view:queue.job:0
+msgid "Requeue Job"
+msgstr "Taken opnieuw inplannen"
+
+#. module: connector
+#: model:ir.model,name:connector.model_external_binding
+msgid "External Binding (abstract)"
+msgstr "External Binding (abstract)"
+
+#. module: connector
+#: field:queue.job,name:0
+msgid "Description"
+msgstr "Beschrijving"
+
+#. module: connector
+#: view:queue.job:0
+msgid "If the max. retries is 0, the number of retries is infinite."
+msgstr ""
+"Indien het maximale aantal herhalingen nul is, is het aantal herhalingen "
+"oneindig."
+
+#. module: connector
+#: field:queue.job,date_enqueued:0
+msgid "Enqueue Time"
+msgstr "Nieuwe geplande tijd"
+
+#. module: connector
+#: field:connector.checkpoint,record_id:0
+msgid "Record ID"
+msgstr "Record-id"
+
+#. module: connector
+#: help:connector.config.settings,module_multi_company:0
+msgid ""
+"Work in multi-company environments, with appropriate security access between "
+"companies.\n"
+"                This installs the module multi_company."
+msgstr ""
+"Werken in multi-company omgevingen, met de nodige beveiliging toegang tussen "
+"de bedrijven.\n"
+"                Dit installeert de module multi_company."
+
+#. module: connector
+#: field:connector.backend,name:0
+msgid "Name"
+msgstr "Naam"
+
+#. module: connector
+#: help:connector.config.settings,alias_domain:0
+msgid ""
+"If you have setup a catch-all email domain redirected to the OpenERP server, "
+"enter the domain name here."
+msgstr ""
+"Als u hebt ingesteld om alle e-mail af te vangen van een domein naar de "
+"OpenERP server, voer dan hier de domeinnaam in."
+
+#. module: connector
+#: field:connector.config.settings,alias_domain:0
+msgid "Alias Domain"
+msgstr "Alias domein"
+
+#. module: connector
+#: view:queue.job:0
+msgid "Current try / max. retries"
+msgstr "Huidige poging / Max. herhalingen"
+
+#. module: connector
+#: field:connector.config.settings,module_magentoerpconnect:0
+msgid "Synchronize with Magento"
+msgstr "Synchroniseer met Magento"
+
+#. module: connector
+#: view:connector.checkpoint:0
+msgid "to verify it:"
+msgstr "om te controleren:"
+
+#. module: connector
+#: view:connector.checkpoint:0
+#: field:connector.checkpoint,model_id:0
+#: field:queue.job,model_name:0
+msgid "Model"
+msgstr "Model"
+
+#. module: connector
+#: help:connector.checkpoint,message_ids:0
+#: help:queue.job,message_ids:0
+msgid "Messages and communication history"
+msgstr "Berichten en communicatie historie"
+
+#. module: connector
+#: field:connector.config.settings,module_share:0
+msgid "Allow documents sharing"
+msgstr "Delen van documenten toestaan"
+
+#. module: connector
+#: field:connector.config.settings,module_portal_anonymous:0
+msgid "Activate the public portal"
+msgstr "Activeer het publieke portaal"
+
+#. module: connector
+#: model:res.groups,name:connector.group_connector_manager
+msgid "Connector Manager"
+msgstr "Connector manager"
+
+#. module: connector
+#: model:mail.message.subtype,name:connector.mt_job_failed
+msgid "Job failed"
+msgstr "Taak mislukt"
+
+#. module: connector
+#: help:connector.config.settings,module_portal:0
+msgid "Give your customers access to their documents."
+msgstr "Geef uw klanten toegang tot hun documenten."
+
+#. module: connector
+#: field:queue.job,eta:0
+msgid "Execute only after"
+msgstr "Uitvoeren alleen na"
+
+#. module: connector
+#: view:connector.checkpoint:0
+#: selection:connector.checkpoint,state:0
+msgid "Need Review"
+msgstr "Controle  nodig"

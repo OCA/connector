@@ -266,15 +266,7 @@ class WorkerWatcher(threading.Thread):
         if config['db_name']:
             db_names = config['db_name'].split(',')
         else:
-            try:
-                services =  openerp.netsvc.ExportService._services
-            except AttributeError:
-                # maybe a SAAS-2 version
-                services = openerp.modules.registry.RegistryManager
-            if services.get('db'):
-                db_names = services['db'].exp_list(True)
-            else:
-                db_names = []
+            db_names = openerp.service.db.exp_list(True)
         available_db_names = []
         for db_name in db_names:
             session_hdl = ConnectorSessionHandler(db_name,

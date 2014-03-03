@@ -10,7 +10,7 @@ from psycopg2 import ProgrammingError
 
 import openerp
 from openerp.cli import server as servercli
-import openerp.service.workers as workers
+import openerp.service.server as workers
 from openerp.modules.registry import RegistryManager
 from openerp.tools import config
 
@@ -19,7 +19,7 @@ _logger = logging.getLogger('openerp-connector-worker')
 MAX_JOBS = 50
 
 
-class Multicornnector(workers.Multicorn):
+class Multicornnector(workers.PreforkServer):
 
     def __init__(self, app):
         super(Multicornnector, self).__init__(app)
@@ -77,11 +77,7 @@ class WorkerConnector(workers.Worker):
         if config['db_name']:
             db_names = config['db_name'].split(',')
         else:
-            services = openerp.netsvc.ExportService._services
-            if services.get('db'):
-                db_names = services['db'].exp_list(True)
-            else:
-                db_names = []
+            db_names = openerp.service.db.exp_list(True)
         if len(db_names):
             self.db_index = (self.db_index + 1) % len(db_names)
             db_name = db_names[self.db_index]
@@ -101,7 +97,6 @@ class WorkerConnector(workers.Worker):
 
     def start(self):
         workers.Worker.start(self)
-        openerp.service.start_internal()
 
 
 if __name__ == "__main__":

@@ -20,7 +20,7 @@
 ##############################################################################
 
 {'name': 'Connector',
- 'version': '2.1.1',
+ 'version': '2.2.0',
  'author': 'Openerp Connector Core Editors',
  'website': 'http://openerp-connector.com',
  'license': 'AGPL-3',

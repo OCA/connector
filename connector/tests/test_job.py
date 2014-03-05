@@ -161,6 +161,21 @@ class test_job_storage(common.TransactionCase):
         self.assertAlmostEqual(job.eta, job_read.eta,
                                delta=delta)
 
+    def test_unicode(self):
+        job = Job(func=dummy_task_args,
+                  model_name='res.users',
+                  args=(u'öô¿‽', u'ñě'),
+                  kwargs={'c': u'ßø'},
+                  priority=15,
+                  description=u"My dé^Wdescription")
+        job.user_id = 1
+        storage = OpenERPJobStorage(self.session)
+        storage.store(job)
+        job_read = storage.load(job.uuid)
+        self.assertEqual(job.args, job_read.args)
+        self.assertEqual(job.kwargs, job_read.kwargs)
+        self.assertEqual(job.description, job_read.description)
+
     def test_job_delay(self):
         self.cr.execute('delete from queue_job')
         deco_task = job(task_a)

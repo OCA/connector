@@ -65,7 +65,7 @@ def _unpickle(pickled):
     raised as `NotReadableJobError`).
     """
     try:
-        unpickled = loads(pickled.encode('utf-8'))
+        unpickled = loads(pickled)
     except (StandardError, UnpicklingError):
         raise NotReadableJobError('Could not unpickle.', pickled)
     return unpickled

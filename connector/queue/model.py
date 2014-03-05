@@ -53,7 +53,7 @@ class QueueJob(orm.Model):
         'user_id': fields.many2one('res.users', string='User ID', required=True),
         'name': fields.char('Description', readonly=True),
         'func_string': fields.char('Task', readonly=True),
-        'func': fields.text('Pickled Function', readonly=True, required=True),
+        'func': fields.binary('Pickled Function', readonly=True, required=True),
         'state': fields.selection(STATES,
                                   string='State',
                                   readonly=True,

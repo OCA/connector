@@ -194,8 +194,8 @@ class test_job_storage(common.TransactionCase):
         self.assertEqual(job_read.args, ('res.users', 'öô¿‽', 'ñě'))
         self.assertEqual(job.kwargs, job_read.kwargs)
         self.assertEqual(job_read.kwargs, {'c': 'ßø'})
-        # the job has been created as bytestring but is decoded to utf8 by the
-        # ORM so make them comparable
+        # the job's description has been created as bytestring but is
+        # decoded to utf8 by the ORM so make them comparable
         self.assertEqual(job.description, job_read.description.encode('utf8'))
         self.assertEqual(job_read.description, "My dé^Wdescription".decode('utf8'))
 

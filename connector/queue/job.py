@@ -229,7 +229,7 @@ class OpenERPJobStorage(JobStorage):
                                        self._openerp_id(job_uuid),
                                        context=self.session.context)
 
-        func = _unpickle(str(stored.func))  # openerp stores them as unicode...
+        func = _unpickle(stored.func)
 
         (func_name, args, kwargs) = func
 

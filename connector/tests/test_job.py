@@ -173,11 +173,11 @@ class test_job_storage(common.TransactionCase):
         storage.store(job)
         job_read = storage.load(job.uuid)
         self.assertEqual(job.args, job_read.args)
-        self.assertEqual(job.args, ('res.users', u'öô¿‽', u'ñě'))
+        self.assertEqual(job_read.args, ('res.users', u'öô¿‽', u'ñě'))
         self.assertEqual(job.kwargs, job_read.kwargs)
-        self.assertEqual(job.kwargs, {'c': u'ßø'})
+        self.assertEqual(job_read.kwargs, {'c': u'ßø'})
         self.assertEqual(job.description, job_read.description)
-        self.assertEqual(job.description, u"My dé^Wdescription")
+        self.assertEqual(job_read.description, u"My dé^Wdescription")
 
     def test_accented_bytestring(self):
         job = Job(func=dummy_task_args,
@@ -191,10 +191,13 @@ class test_job_storage(common.TransactionCase):
         storage.store(job)
         job_read = storage.load(job.uuid)
         self.assertEqual(job.args, job_read.args)
-        self.assertEqual(job.args, ('res.users', 'öô¿‽', 'ñě'))
+        self.assertEqual(job_read.args, ('res.users', 'öô¿‽', 'ñě'))
         self.assertEqual(job.kwargs, job_read.kwargs)
-        self.assertEqual(job.kwargs, {'c': 'ßø'})
-        self.assertEqual(job.description, "My dé^Wdescription")
+        self.assertEqual(job_read.kwargs, {'c': 'ßø'})
+        # the job has been created as bytestring but is decoded to utf8 by the
+        # ORM so make them comparable
+        self.assertEqual(job.description, job_read.description.encode('utf8'))
+        self.assertEqual(job_read.description, "My dé^Wdescription".decode('utf8'))
 
     def test_job_delay(self):
         self.cr.execute('delete from queue_job')

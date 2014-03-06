@@ -173,8 +173,11 @@ class test_job_storage(common.TransactionCase):
         storage.store(job)
         job_read = storage.load(job.uuid)
         self.assertEqual(job.args, job_read.args)
+        self.assertEqual(job.args, ('res.users', u'öô¿‽', u'ñě'))
         self.assertEqual(job.kwargs, job_read.kwargs)
+        self.assertEqual(job.kwargs, {'c': u'ßø'})
         self.assertEqual(job.description, job_read.description)
+        self.assertEqual(job.description, u"My dé^Wdescription")
 
     def test_job_delay(self):
         self.cr.execute('delete from queue_job')

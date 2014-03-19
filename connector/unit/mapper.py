@@ -478,7 +478,7 @@ class Mapper(ConnectorUnit):
                     if not value:
                         return None
                     return conv_type(value)
-            return modifier
+                return modifier
 
         And used like that::
 

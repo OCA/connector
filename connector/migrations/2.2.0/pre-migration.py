@@ -6,4 +6,4 @@ def migrate(cr, version):
     if not version:
         return
     cr.execute("ALTER TABLE queue_job ALTER func "
-               "TYPE bytea USING func::bytea ")
+               "TYPE bytea USING convert_to(func, 'LATIN1') ")

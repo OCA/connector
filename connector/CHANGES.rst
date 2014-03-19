@@ -1,6 +1,11 @@
 Changelog
 ---------
 
+2.1.1.dev0 (unreleased)
+~~~~~~~~~~~~~~~~~~~~~~~
+
+* Job arguments can now contain unicode strings (thanks Stéphane Bidoul) lp:1288187
+
 2.1.1 (2014-02-06)
 ~~~~~~~~~~~~~~~~~~
 

@@ -65,7 +65,7 @@ def _unpickle(pickled):
     raised as `NotReadableJobError`).
     """
     try:
-        unpickled = loads(pickled.encode('utf-8'))
+        unpickled = loads(pickled)
     except (StandardError, UnpicklingError):
         raise NotReadableJobError('Could not unpickle.', pickled)
     return unpickled
@@ -229,7 +229,7 @@ class OpenERPJobStorage(JobStorage):
                                        self._openerp_id(job_uuid),
                                        context=self.session.context)
 
-        func = _unpickle(str(stored.func))  # openerp stores them as unicode...
+        func = _unpickle(stored.func)
 
         (func_name, args, kwargs) = func
 

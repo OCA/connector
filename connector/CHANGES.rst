@@ -5,6 +5,7 @@ Changelog
 ~~~~~~~~~~~~~~~~~~~~~~~
 
 * Job arguments can now contain unicode strings (thanks Stéphane Bidoul) lp:1288187
+* List view of the jobs improved
 
 2.1.1 (2014-02-06)
 ~~~~~~~~~~~~~~~~~~

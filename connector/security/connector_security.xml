@@ -14,4 +14,16 @@
     </record>
 
     </data>
+    
+    <data noupdate="1">
+
+    <record id="queue_job_comp_rule" model="ir.rule">
+      <field name="name" >Queue job multi-company</field>
+      <field name="model_id" ref="model_queue_job"/>
+      <field name="global" eval="True"/>
+      <field name="domain_force">['|',('company_id','=',False),('company_id','child_of',[user.company_id.id])]</field>
+    </record>
+
+  </data>
+ 
 </openerp>

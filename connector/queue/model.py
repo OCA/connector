@@ -51,6 +51,7 @@ class QueueJob(orm.Model):
                                      ondelete='set null', readonly=True),
         'uuid': fields.char('UUID', readonly=True, select=True, required=True),
         'user_id': fields.many2one('res.users', string='User ID', required=True),
+        'company_id' : fields.many2one('res.company', 'Company'),
         'name': fields.char('Description', readonly=True),
         'func_string': fields.char('Task', readonly=True),
         'func': fields.binary('Pickled Function', readonly=True, required=True),
@@ -132,8 +133,12 @@ class QueueJob(orm.Model):
         if not group_ref:
             return
         group_id = group_ref[1]
+        company_ids = [val['company_id'][0] for val in  self.read(cr, uid, ids, ['company_id'], context=context) if val['company_id']]
+        domain = [('groups_id', '=', group_id)]
+        if company_ids:
+            domain.append(('company_ids', 'child_of', company_ids))
         user_ids = self.pool.get('res.users').search(
-                cr, uid, [('groups_id', '=', group_id)], context=context)
+                cr, uid, domain, context=context)
         self.message_subscribe_users(cr, uid, ids,
                                      user_ids=user_ids,
                                      context=context)

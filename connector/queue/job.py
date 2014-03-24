@@ -112,6 +112,14 @@ class OpenERPJobStorage(JobStorage):
         job = Job(func=func, model_name=model_name, args=args, kwargs=kwargs,
                   priority=priority, eta=eta, max_retries=max_retries, description=description)
         job.user_id = self.session.uid
+        if 'company_id' in self.session.context:
+            company_id = self.session.context['company_id']
+        else:
+            company_id = self.session.pool.get('res.company')._company_default_get(self.session.cr, job.user_id,
+                                    object='queue.job',
+                                    field='company_id',
+                                    context=self.session.context)
+        job.company_id = company_id
         self.store(job)
         return job.uuid
 
@@ -167,6 +175,7 @@ class OpenERPJobStorage(JobStorage):
                 'max_retries': job.max_retries,
                 'exc_info': job.exc_info,
                 'user_id': job.user_id or self.session.uid,
+                'company_id': job.company_id,
                 'result': unicode(job.result) if job.result else False,
                 'date_enqueued': False,
                 'date_started': False,
@@ -443,6 +452,7 @@ class Job(object):
         self.exc_info = None
 
         self.user_id = None
+        self.company_id = None
         self._eta = None
         self.eta = eta
         self.canceled = False

@@ -5,6 +5,7 @@ import unittest2
 from datetime import datetime, timedelta
 
 import openerp
+from openerp import SUPERUSER_ID
 import openerp.tests.common as common
 from openerp.addons.connector.queue.job import (
         Job, OpenERPJobStorage, job,
@@ -155,7 +156,7 @@ class test_job_storage(common.TransactionCase):
         self.assertAlmostEqual(job.date_started, job_read.date_started,
                                delta=delta)
         self.assertAlmostEqual(job.date_enqueued, job_read.date_enqueued,
-                               delta=delta)
+                               delta=delta) 
         self.assertAlmostEqual(job.date_done, job_read.date_done,
                                delta=delta)
         self.assertAlmostEqual(job.eta, job_read.eta,
@@ -217,3 +218,122 @@ class test_job_storage(common.TransactionCase):
         task_a.delay(self.session, 'res.users', 'o', 'k', c='!')
         stored = self.queue_job.search(self.cr, self.uid, [])
         self.assertEqual(len(stored), 1)
+
+
+class test_job_storage_multi_company(common.TransactionCase):
+    """ Test storage of jobs """
+
+    def setUp(self):
+        super(test_job_storage_multi_company, self).setUp()
+        self.pool = openerp.modules.registry.RegistryManager.get(common.DB)
+        self.session = ConnectorSession(self.cr, self.uid)
+        self.queue_job = self.registry('queue.job')
+        self.other_partner_id_a = self.registry('res.partner').create(self.cr, self.uid, {
+                            "name": "My Company a",
+                            "is_company": True,
+                            "email": "test@tes.ttest",
+                            })
+        self.other_company_id_a = self.registry('res.company').create(self.cr, self.uid, {
+                            "name": "My Company a",
+                            "partner_id": self.other_partner_id_a,
+                            "rml_header1": "My Company Tagline",
+                            "currency_id": self.ref("base.EUR")
+                            })
+        self.other_user_id_a = self.registry('res.users').create(self.cr, self.uid, {
+                            "partner_id": self.other_partner_id_a,
+                            "company_id": self.other_company_id_a,
+                            "company_ids": [(4, self.other_company_id_a)],
+                            "login": "my_login a",
+                            "name": "my user",
+                            "groups_id": [
+                                                  (4, self.ref("connector.group_connector_manager"))]
+                            })
+        self.other_partner_id_b = self.registry('res.partner').create(self.cr, self.uid, {
+                            "name": "My Company b",
+                            "is_company": True,
+                            "email": "test@tes.ttest",
+                            })
+        self.other_company_id_b = self.registry('res.company').create(self.cr, self.uid, {
+                            "name": "My Company b",
+                            "partner_id": self.other_partner_id_b,
+                            "rml_header1": "My Company Tagline",
+                            "currency_id": self.ref("base.EUR")
+                            })
+        self.other_user_id_b = self.registry('res.users').create(self.cr, self.uid, {
+                            "partner_id": self.other_partner_id_b,
+                            "company_id": self.other_company_id_b,
+                            "company_ids": [(4, self.other_company_id_b)],
+                            "login": "my_login_b",
+                            "name": "my user 1",
+                            "groups_id": [
+                                                  (4, self.ref("connector.group_connector_manager"))]
+                            })
+
+    def _create_job(self, **kwargs):
+        self.cr.execute('delete from queue_job')
+        if 'company_id' in kwargs:
+            self.session.context['company_id'] = kwargs.get('company_id')
+        job(task_a)
+        if 'uid' in kwargs:
+            with self.session.change_user(kwargs.get('uid')):
+                task_a.delay(self.session, 'res.users')
+        else:
+            task_a.delay(self.session, 'res.users')
+        stored = self.queue_job.search(self.cr, self.uid, [])
+        self.assertEqual(len(stored), 1)
+        return self.queue_job.browse(self.cr, self.uid, stored[0])
+
+    def test_job_default_company_id(self):
+        """the default company is the one from the current user_id"""
+        stored_brw = self._create_job()
+        self.assertEqual(
+                         stored_brw.company_id.id,
+                         self.ref("base.main_company"),
+                         'Incorrect default company_id')
+        stored_brw = self._create_job(uid=self.other_user_id_b)
+        self.assertEqual(
+                         stored_brw.company_id.id,
+                         self.other_company_id_b,
+                         'Incorrect default company_id')
+
+    def test_job_no_company_id(self):
+        """ if we put an empty company_id in the context
+         jobs are created without company_id"""
+        stored_brw = self._create_job(company_id=False)
+        self.assertFalse(
+                         stored_brw.company_id,
+                         ' Company_id should be empty')
+
+    def test_job_specific_company_id(self):
+        """If a company_id specified in the context
+        it's use by default for the job creation"""
+        stored_brw = self._create_job(company_id=self.other_company_id_a)
+        self.assertEqual(
+                         stored_brw.company_id.id,
+                         self.other_company_id_a,
+                         'Incorrect company_id')
+
+    def test_job_subscription(self):
+        # if the job is created without company_id, all members of
+        # connector.group_connector_manager must be followers
+        stored_brw = self._create_job(company_id=False)
+        self.queue_job. _subscribe_users(self.cr, self.uid, [stored_brw.id])
+        stored_brw.refresh()
+        user_ids = self.registry('res.users').search(
+                self.cr, self.uid, [('groups_id', '=', self.ref('connector.group_connector_manager'))])
+        self.assertEqual(len(stored_brw.message_follower_ids), len(user_ids))
+        expected_partners = [u.partner_id for u in self.registry("res.users").browse(self.cr, self.uid, user_ids)]
+        self.assertSetEqual(set(stored_brw.message_follower_ids), set(expected_partners))
+        followers_id = [f.id for f in stored_brw.message_follower_ids]
+        self.assertIn(self.other_partner_id_a, followers_id)
+        self.assertIn(self.other_partner_id_b, followers_id)
+        # jobs created for a specific company_id are followed only by company's members
+        stored_brw = self._create_job(company_id=self.other_company_id_a)
+        self.queue_job. _subscribe_users(self.cr, self.other_user_id_a, [stored_brw.id])
+        stored_brw.refresh()
+        self.assertEqual(len(stored_brw.message_follower_ids), 2)  # 2 because admin + self.other_partner_id_a
+        expected_partners = [u.partner_id for u in self.registry("res.users").browse(self.cr, self.uid, [SUPERUSER_ID, self.other_user_id_a])]
+        self.assertSetEqual(set(stored_brw.message_follower_ids), set(expected_partners))
+        followers_id = [f.id for f in stored_brw.message_follower_ids]
+        self.assertIn(self.other_partner_id_a, followers_id)
+        self.assertNotIn(self.other_partner_id_b, followers_id)

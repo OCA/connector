@@ -275,6 +275,8 @@ class OpenERPJobStorage(JobStorage):
         job.max_retries = stored.max_retries
         if stored.worker_id:
             job.worker_uuid = stored.worker_id.uuid
+        if stored.company_id:
+            job.company_id = stored.company_id.id
         return job
 
 

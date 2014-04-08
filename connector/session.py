@@ -138,7 +138,7 @@ class ConnectorSession(object):
         :param values: values to apply on the context
         :type values: dict
         """
-        original_context = self._context
+        original_context = self.context
         self._context = original_context.copy()
         self._context.update(values)
         yield

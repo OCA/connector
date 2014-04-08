@@ -119,6 +119,7 @@
                         delete="false"
                         colors="red:state == 'failed';gray:state == 'done'">
                     <field name="uuid"/>
+                    <field name="name"/>
                     <field name="state"/>
                     <field name="eta"/>
                     <field name="date_created"/>

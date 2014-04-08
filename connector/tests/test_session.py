@@ -85,3 +85,19 @@ class test_connector_session(common.TransactionCase):
         res_users = self.registry('res.users')
 
         self.assertEqual(self.session.pool.get('res.users'), res_users)
+
+    def test_change_context(self):
+        """
+        Change the context and check if it is reverted correctly at the end
+        """
+        test_key = 'test_key'
+        self.assertNotIn(test_key, self.session.context)
+        with self.session.change_context({test_key: 'value'}):
+            self.assertIn(test_key, self.session.context)
+        self.assertNotIn(test_key, self.session.context)
+
+        #change the context on a session not initialized with a context
+        session = ConnectorSession(self.cr, self.uid)
+        with session.change_context({test_key: 'value'}):
+            self.assertIn(test_key, session.context)
+        self.assertNotIn(test_key, session.context)

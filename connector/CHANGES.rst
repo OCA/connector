@@ -4,8 +4,9 @@ Changelog
 2.1.1.dev0 (unreleased)
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-* Job arguments can now contain unicode strings (thanks Stéphane Bidoul) lp:1288187
+* Job arguments can now contain unicode strings (thanks to Stéphane Bidoul) lp:1288187
 * List view of the jobs improved
+* Jobs now support multicompany (thanks to Laurent Mignon) https://lists.launchpad.net/openerp-connector-community/msg00253.html)
 
 2.1.1 (2014-02-06)
 ~~~~~~~~~~~~~~~~~~

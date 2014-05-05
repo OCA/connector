@@ -51,6 +51,7 @@ Connectors based on the framework
 * `Prestashop Connector <https://launchpad.net/prestashoperpconnect>`_
 * `solerp (Solr Connector) <https://github.com/akretion/solerp>`_
 * `OpenERP Multi Company <http://www.openerp.net.cn/new-intercompany-process-module/>`_
+* `CMIS <http://launchpad.net/knowledge-addons>`_
 * Develop easily and rapidly your own connector based on this powerful
   framework and list your project on this page! Examples:
 

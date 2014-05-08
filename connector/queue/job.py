@@ -588,6 +588,8 @@ class Job(object):
             self.result = result
 
     def related_action(self, session):
+        if not hasattr(self.func, 'related_action'):
+            return None
         return self.func.related_action(session, self)
 
 
@@ -656,9 +658,6 @@ def job(func):
             *args,
             **kwargs)
     func.delay = delay
-    # set a default related action
-    if not hasattr(func, 'related_action'):
-        func = related_action()(func)
     return func
 
 

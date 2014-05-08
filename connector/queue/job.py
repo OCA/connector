@@ -19,10 +19,11 @@
 #
 ##############################################################################
 
-import sys
-import logging
 import inspect
+import functools
+import logging
 import uuid
+import sys
 from datetime import datetime, timedelta, MINYEAR
 from pickle import loads, dumps, UnpicklingError
 
@@ -598,6 +599,9 @@ class Job(object):
         if result is not None:
             self.result = result
 
+    def related_action(self, session):
+        return self.func.related_action(session, self)
+
 
 def job(func):
     """ Decorator for jobs.
@@ -664,4 +668,65 @@ def job(func):
             *args,
             **kwargs)
     func.delay = delay
+    # set a default related action
+    if not hasattr(func, 'related_action'):
+        func = related_action()(func)
     return func
+
+
+def related_action(action=lambda session, job: None, **kwargs):
+    """ Attach a *Related Action* to a job.
+
+    A *Related Action* will appear as a button on the OpenERP view.
+    The button will execute the action, usually it will open the
+    form view of the record related to the job.
+
+    The ``action`` must be a callable that responds to arguments::
+
+        session, job, **kwargs
+
+    Example usage:
+
+    .. code-block:: python
+
+        def related_action_partner(session, job):
+            model = job.args[0]
+            partner_id = job.args[1]
+            # eventually get the real ID if partner_id is a binding ID
+            action = {
+                'name': _("Partner"),
+                'type': 'ir.actions.act_window',
+                'res_model': model,
+                'view_type': 'form',
+                'view_mode': 'form',
+                'res_id': partner_id,
+            }
+            return action
+
+        @job
+        @related_action(action=related_action_partner)
+        def export_partner(session, model_name, partner_id):
+            # ...
+
+    The kwargs are transmitted to the action:
+
+    .. code-block:: python
+
+        def related_action_product(session, job, extra_arg=1):
+            assert extra_arg == 2
+            model = job.args[0]
+            product_id = job.args[1]
+
+        @job
+        @related_action(action=related_action_product, extra_arg=2)
+        def export_product(session, model_name, product_id):
+            # ...
+
+    """
+    def decorate(func):
+        if kwargs:
+            func.related_action = functools.partial(action, **kwargs)
+        else:
+            func.related_action = action
+        return func
+    return decorate

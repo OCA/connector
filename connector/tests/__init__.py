@@ -28,6 +28,7 @@ import test_backend
 import test_producer
 import test_connector
 import test_mapper
+import test_related_action
 
 fast_suite = [
 ]
@@ -42,4 +43,5 @@ checks = [
     test_producer,
     test_connector,
     test_mapper,
+    test_related_action,
 ]

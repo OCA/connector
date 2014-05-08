@@ -80,6 +80,22 @@ class QueueJob(orm.Model):
         'active': True,
     }
 
+    def open_related_action(self, cr, uid, ids, context=None):
+        """ Open the related action associated to the job """
+        if hasattr(ids, '__iter__'):
+            assert len(ids) == 1, "1 ID expected, got %s" % ids
+            ids = ids[0]
+        session = ConnectorSession(cr, uid, context=context)
+        storage = OpenERPJobStorage(session)
+        job = self.browse(cr, uid, ids, context=context)
+        job = storage.load(job.uuid)
+        action = job.related_action(session)
+        if action is None:
+            raise orm.except_orm(
+                _('Error'),
+                _('No action available for this job'))
+        return action
+
     def _change_job_state(self, cr, uid, ids, state, result=None, context=None):
         """ Change the state of the `Job` object itself so it
         will change the other fields (date, result, ...)

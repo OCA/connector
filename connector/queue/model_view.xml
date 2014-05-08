@@ -66,6 +66,10 @@
                             string="Set to 'Done'"
                             type="object"
                             groups="connector.group_connector_manager"/>
+                        <button name="open_related_action"
+                            string="Related Action"
+                            type="object"
+                            />
                         <field name="state"
                             widget="statusbar"
                             statusbar_visible="pending,enqueued,started,done"

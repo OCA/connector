@@ -304,3 +304,22 @@ class Binder(ConnectorUnit):
         :type binding_id: int
         """
         raise NotImplementedError
+
+    def unwrap_record(self, binding_id, browse=False):
+        """ For a binding record, gives the normal record.
+
+        Example: when called with a ``magento.product.product`` id,
+        it will return the corresponding ``product.product`` id.
+
+        :param browse: when True, returns a browse_record instance
+                       rather than an ID
+        """
+        raise NotImplementedError
+
+    def unwrap_model(self):
+        """ For a binding model, gives the normal model.
+
+        Example: when called on a binder for ``magento.product.product``,
+        it will return ``product.product``.
+        """
+        raise NotImplementedError

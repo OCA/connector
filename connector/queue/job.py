@@ -636,7 +636,7 @@ def job(func):
                     infinite retries. Default is 5.
      * eta: the job can be executed only after this datetime
             (or now + timedelta if a timedelta or integer is given)
-     
+
      * description : a human description of the job,
                      intended to discriminate job instances
                      (Default is the func.__doc__ or 'Function %s' % func.__name__)
@@ -660,6 +660,9 @@ def job(func):
                                priority=30, eta=60*60*5)
         # => the job will be executed with a low priority and not before a
         # delay of 5 hours from now
+
+    See also: :py:func:`related_action` a related action can be attached
+    to a job
 
     """
     def delay(session, model_name, *args, **kwargs):

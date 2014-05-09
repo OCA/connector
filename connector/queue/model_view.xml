@@ -84,6 +84,7 @@
                             <field name="func_string"/>
                             <field name="priority"/>
                             <field name="eta"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
                             <field name="user_id"/>
                             <field name="date_created"/>
                             <field name="date_enqueued"/>
@@ -128,6 +129,7 @@
                     <field name="date_created"/>
                     <field name="date_done"/>
                     <field name="uuid"/>
+                    <field name="company_id" groups="base.group_multi_company"/>
                 </tree>
             </field>
         </record>
@@ -140,6 +142,7 @@
                     <field name="uuid"/>
                     <field name="name"/>
                     <field name="func_string"/>
+                    <field name="company_id" groups="base.group_multi_company" widget="selection"/>
                     <filter name="pending" string="Pending"
                         domain="[('state', '=', 'pending')]"/>
                     <filter name="enqueued" string="Enqueued"

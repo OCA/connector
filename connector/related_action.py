@@ -59,7 +59,7 @@ def unwrap_binding(session, job, id_pos=2, binder_class=Binder):
     binder = env.get_connector_unit(binder_class)
     try:
         model = binder.unwrap_model()
-        record_id = binder.unwrap_record(binding_id)
+        record_id = binder.unwrap_binding(binding_id)
     except ValueError:
         # the binding record will be displayed
         action.update({

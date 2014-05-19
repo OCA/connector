@@ -305,7 +305,7 @@ class Binder(ConnectorUnit):
         """
         raise NotImplementedError
 
-    def unwrap_record(self, binding_id, browse=False):
+    def unwrap_binding(self, binding_id, browse=False):
         """ For a binding record, gives the normal record.
 
         Example: when called with a ``magento.product.product`` id,

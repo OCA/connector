@@ -89,7 +89,7 @@ class test_related_action(unittest2.TestCase):
         class TestBinder(Binder):
             _model_name = 'binding.res.users'
 
-            def unwrap_record(self, binding_id, browse=False):
+            def unwrap_binding(self, binding_id, browse=False):
                 return 42
 
             def unwrap_model(self):

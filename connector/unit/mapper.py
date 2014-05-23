@@ -659,7 +659,14 @@ class Mapper(ConnectorUnit):
         for_create = self.options.for_create
         result = {}
         for from_attr, to_attr in self.direct:
-            if (not fields or from_attr in fields):
+            if callable(from_attr):  # in a modifier
+                # the name of the attribute is the first arg of the
+                # closure
+                attr_name = from_attr.__closure__[0].cell_contents
+            else:
+                attr_name = from_attr
+
+            if (not fields or attr_name in fields):
                 value = self._map_direct(map_record.source,
                                          from_attr,
                                          to_attr)

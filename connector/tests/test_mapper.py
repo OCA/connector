@@ -558,3 +558,19 @@ class test_mapper_binding(common.TransactionCase):
                                           'test': .5})]
                     }
         self.assertEqual(map_record.values(for_create=True), expected)
+
+    def test_modifier_filter_field(self):
+        """ A direct mapping with a modifier must still be considered from the list of fields """
+        class MyMapper(ImportMapper):
+            direct = [('field', 'field2'),
+                      ('no_field', 'no_field2'),
+                      (convert('name', int), 'out_name')]
+
+        env = mock.MagicMock()
+        record = {'name': '300', 'field': 'value', 'no_field': 'no_value'}
+        mapper = MyMapper(env)
+        map_record = mapper.map_record(record)
+        expected = {'out_name': 300, 'field2': 'value'}
+        self.assertEqual(map_record.values(fields=['field', 'name']), expected)
+        self.assertEqual(map_record.values(for_create=True,
+                                           fields=['field', 'name']), expected)

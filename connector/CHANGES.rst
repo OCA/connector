@@ -1,8 +1,8 @@
 Changelog
 ---------
 
-2.1.1.dev0 (unreleased)
-~~~~~~~~~~~~~~~~~~~~~~~
+2.2.0 (2014-05-26)
+~~~~~~~~~~~~~~~~~~
 
 * Job arguments can now contain unicode strings (thanks to Stéphane Bidoul) lp:1288187
 * List view of the jobs improved

@@ -7,6 +7,7 @@ Changelog
 * Job arguments can now contain unicode strings (thanks to Stéphane Bidoul) lp:1288187
 * List view of the jobs improved
 * Jobs now support multicompany (thanks to Laurent Mignon) https://lists.launchpad.net/openerp-connector-community/msg00253.html)
+* An action can be assigned to a job.  The action is called with a button on the job and could be something like open a form view or an url.
 
 2.1.1 (2014-02-06)
 ~~~~~~~~~~~~~~~~~~

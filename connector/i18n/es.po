@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: openerp-connector\n"
 "Report-Msgid-Bugs-To: Alberto Garcia <alberto.garcia@factorlibre.com>\n"
 "POT-Creation-Date: 2013-05-01 13:36+0000\n"
-"PO-Revision-Date: 2014-06-06 00:02+0000\n"
+"PO-Revision-Date: 2014-06-24 09:01+0000\n"
 "Last-Translator: Alberto Garcia (Factor Libre) "
 "<alberto.garcia@factorlibre.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2014-06-06 06:35+0000\n"
-"X-Generator: Launchpad (build 17031)\n"
+"X-Launchpad-Export-Date: 2014-06-25 06:12+0000\n"
+"X-Generator: Launchpad (build 17065)\n"
 
 #. module: connector
 #: view:connector.config.settings:0
@@ -93,7 +93,7 @@ msgstr "Tarea"
 #. module: connector
 #: help:connector.checkpoint,record:0
 msgid "The record to check."
-msgstr ""
+msgstr "El registro a comprobar"
 
 #. module: connector
 #: help:connector.checkpoint,backend_id:0
@@ -198,7 +198,7 @@ msgstr ""
 #. module: connector
 #: help:connector.config.settings,module_magentoerpconnect:0
 msgid "This installs the module magentoerpconnect."
-msgstr ""
+msgstr "Esto instala el módulo magentoerpconnect"
 
 #. module: connector
 #: field:connector.checkpoint,backend_id:0
@@ -533,7 +533,7 @@ msgstr "Intento actual / max. reintentos"
 #. module: connector
 #: field:connector.config.settings,module_magentoerpconnect:0
 msgid "Synchronize with Magento"
-msgstr ""
+msgstr "Sincronizado con Magento"
 
 #. module: connector
 #: view:connector.checkpoint:0
@@ -588,52 +588,3 @@ msgstr "Ejecutar solo después"
 #: selection:connector.checkpoint,state:0
 msgid "Need Review"
 msgstr "Necesita Revisión"
-
-#~ msgid "A %s needs a review."
-#~ msgstr "Un/a %s necesita ser revisado/a"
-
-#~ msgid "Canceled. Nothing to do."
-#~ msgstr "Cancelado. Nada que hacer."
-
-#~ msgid "Company"
-#~ msgstr "Compañía"
-
-#~ msgid "Connector Backend"
-#~ msgstr "Administración del Conector"
-
-#~ msgid "Connector Configuration"
-#~ msgstr "Configuración del Conector"
-
-#~ msgid "Error"
-#~ msgstr "Error"
-
-#~ msgid "Manually set to done by %s"
-#~ msgstr "Establecer a hecho manualmente mediante %s"
-
-#~ msgid "Name of the record to review"
-#~ msgstr "Nombre del registro a revisar"
-
-#~ msgid "No action available for this job"
-#~ msgstr "Acción no disponible para este trabajo"
-
-#~ msgid "Queue Worker"
-#~ msgstr "Trabajador de Cola"
-
-#~ msgid "Record Name"
-#~ msgstr "Nombre Registro"
-
-#~ msgid "Related"
-#~ msgstr "Relacionado"
-
-#~ msgid "Related Record"
-#~ msgstr "Registro Relacionado"
-
-#~ msgid ""
-#~ "Something bad happened during the execution of the job. More details in the "
-#~ "'Exception Information' section."
-#~ msgstr ""
-#~ "Algo mal ocurrió durante la ejecución del trabajo. Más detalles en la "
-#~ "sección 'Información de Excepción'."
-
-#~ msgid "The record to review."
-#~ msgstr "Registro a revisar"

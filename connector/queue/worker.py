@@ -31,7 +31,8 @@ from StringIO import StringIO
 from psycopg2 import OperationalError, ProgrammingError
 
 import openerp
-from openerp.osv.osv import PG_CONCURRENCY_ERRORS_TO_RETRY
+from openerp.service.model import PG_CONCURRENCY_ERRORS_TO_RETRY
+from openerp.service import db
 from openerp.tools import config
 from .queue import JobsQueue
 from ..session import ConnectorSessionHandler
@@ -261,11 +262,7 @@ class WorkerWatcher(threading.Thread):
         if config['db_name']:
             db_names = config['db_name'].split(',')
         else:
-            services = openerp.netsvc.ExportService._services
-            if services.get('db'):
-                db_names = services['db'].exp_list(True)
-            else:
-                db_names = []
+            db_names = db.exp_list(True)
         available_db_names = []
         for db_name in db_names:
             session_hdl = ConnectorSessionHandler(db_name,

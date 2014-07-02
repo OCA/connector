@@ -78,6 +78,6 @@ It is actually used to connect Magento_ and Prestashop_
           'setting_view.xml',
           'res_partner_view.xml',
           ],
- 'installable': False,
+ 'installable': True,
  'application': True,
 }

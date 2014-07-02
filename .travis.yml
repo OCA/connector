@@ -35,8 +35,8 @@ before_script:
 # Preload modules before testing to only run tests of repo's modules
 # Include current directory and dependent repos in addons-path as well as official addons
 script:
-    - flake8 . --max-line-length=120 --filename=__init__.py --ignore=F401
-    - flake8 . --max-line-length=120 --exclude=__init__.py
+    - flake8 . --max-line-length=120 --exclude=__unported__ --filename=__init__.py --ignore=F401
+    - flake8 . --max-line-length=120 --exclude=__unported__,__init__.py
     - odoo.py -d test --stop-after-init --init=$(python -c 'import os; print(",".join(x for x in os.listdir(".") if os.path.isdir(x) and not x.startswith(".") and x != "__unported__"))') --addons-path=$(pwd),`python -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())"`/addons
     - coverage run $(which odoo.py) -d test --test-enable --log-level=test --stop-after-init --init=$(python -c 'import os; print(",".join(x for x in os.listdir(".") if os.path.isdir(x) and not x.startswith(".") and x != "__unported__"))') --addons-path=$(pwd),`python -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())"`/addons
 

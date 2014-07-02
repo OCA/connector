@@ -6,7 +6,7 @@ from psycopg2 import OperationalError
 
 import openerp
 from openerp.addons.web import http
-from openerp.osv.osv import PG_CONCURRENCY_ERRORS_TO_RETRY
+from openerp.service.model import PG_CONCURRENCY_ERRORS_TO_RETRY
 
 from ..session import ConnectorSessionHandler
 from ..queue.job import (OpenERPJobStorage,

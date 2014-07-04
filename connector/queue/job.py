@@ -111,15 +111,18 @@ class OpenERPJobStorage(JobStorage):
 
         """
         job = Job(func=func, model_name=model_name, args=args, kwargs=kwargs,
-                  priority=priority, eta=eta, max_retries=max_retries, description=description)
+                  priority=priority, eta=eta, max_retries=max_retries,
+                  description=description)
         job.user_id = self.session.uid
         if 'company_id' in self.session.context:
             company_id = self.session.context['company_id']
         else:
-            company_id = self.session.pool.get('res.company')._company_default_get(self.session.cr, job.user_id,
-                                    object='queue.job',
-                                    field='company_id',
-                                    context=self.session.context)
+            company_obj = self.session.pool['res.company']
+            company_id = company_obj._company_default_get(
+                self.session.cr, job.user_id,
+                object='queue.job',
+                field='company_id',
+                context=self.session.context)
         job.company_id = company_id
         self.store(job)
         return job.uuid
@@ -211,7 +214,8 @@ class OpenERPJobStorage(JobStorage):
                                  vals,
                                  self.session.context)
         else:
-            date_created = job.date_created.strftime(DEFAULT_SERVER_DATETIME_FORMAT)
+            fmt = DEFAULT_SERVER_DATETIME_FORMAT
+            date_created = job.date_created.strftime(fmt)
             vals.update({'uuid': job.uuid,
                          'name': job.description,
                          'func_string': job.func_string,
@@ -392,7 +396,8 @@ class Job(object):
         :type args: tuple
         :param kwargs: keyworkd arguments for func
         :type kwargs: dict
-        :param priority: priority of the job, the smaller is the higher priority
+        :param priority: priority of the job,
+                         the smaller is the higher priority
         :type priority: int
         :param eta: the job can be executed only after this datetime
                            (or now + timedelta)
@@ -410,7 +415,7 @@ class Job(object):
             kwargs = {}
 
         assert isinstance(kwargs, dict), "%s: kwargs are not a dict" % kwargs
-        assert not func is None, "func is required"
+        assert func is not None, "func is required"
 
         self.state = PENDING
 
@@ -639,7 +644,8 @@ def job(func):
 
      * description : a human description of the job,
                      intended to discriminate job instances
-                     (Default is the func.__doc__ or 'Function %s' % func.__name__)
+                     (Default is the func.__doc__ or
+                      'Function %s' % func.__name__)
 
     Example:
 

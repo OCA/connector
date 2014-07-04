@@ -430,9 +430,9 @@ class ImportMapChild(MapChild):
 class ExportMapChild(MapChild):
     """ :py:class:`MapChild` for the Exports """
 
-
     def _child_mapper(self):
-        return self.get_connector_unit_for_model(ExportMapper, self.model._name)
+        return self.get_connector_unit_for_model(ExportMapper,
+                                                 self.model._name)
 
 
 class Mapper(ConnectorUnit):

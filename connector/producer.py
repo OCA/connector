@@ -37,7 +37,9 @@ from .event import (on_record_create,
                     on_record_unlink)
 
 
-create_original = orm.AbstractModel.create
+create_original = orm.BaseModel.create
+
+
 def create(self, cr, uid, vals, context=None):
     record_id = create_original(self, cr, uid, vals, context=context)
     if self.pool.get('connector.installed') is not None:
@@ -47,7 +49,9 @@ def create(self, cr, uid, vals, context=None):
 orm.AbstractModel.create = create
 
 
-write_original = orm.AbstractModel.write
+write_original = orm.BaseModel.write
+
+
 def write(self, cr, uid, ids, vals, context=None):
     result = write_original(self, cr, uid, ids, vals, context=context)
     if self.pool.get('connector.installed') is not None:
@@ -62,7 +66,9 @@ def write(self, cr, uid, ids, vals, context=None):
 orm.AbstractModel.write = write
 
 
-unlink_original = orm.AbstractModel.unlink
+unlink_original = orm.BaseModel.unlink
+
+
 def unlink(self, cr, uid, ids, context=None):
     if self.pool.get('connector.installed') is not None:
         if not hasattr(ids, '__iter__'):

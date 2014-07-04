@@ -5,7 +5,6 @@ import unittest2
 
 import openerp
 import openerp.tests.common as common
-from ..backend import Backend, BACKENDS
 from ..connector import Binder
 from ..queue.job import (Job,
                          OpenERPJobStorage,
@@ -115,7 +114,6 @@ class test_related_action(unittest2.TestCase):
             'res_model': 'res.users',
         }
         self.assertEquals(action, expected)
-
 
 
 class test_related_action_storage(common.TransactionCase):

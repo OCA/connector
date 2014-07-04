@@ -51,7 +51,7 @@ class QueueJob(orm.Model):
                                      ondelete='set null', readonly=True),
         'uuid': fields.char('UUID', readonly=True, select=True, required=True),
         'user_id': fields.many2one('res.users', string='User ID', required=True),
-        'company_id' : fields.many2one('res.company', 'Company'),
+        'company_id': fields.many2one('res.company', 'Company'),
         'name': fields.char('Description', readonly=True),
         'func_string': fields.char('Task', readonly=True),
         'func': fields.binary('Pickled Function', readonly=True, required=True),
@@ -72,7 +72,8 @@ class QueueJob(orm.Model):
         'retry': fields.integer('Current try'),
         'max_retries': fields.integer(
             'Max. retries',
-            help="The job will fail if the number of tries reach the max. retries.\n"
+            help="The job will fail if the number of tries reach the "
+                 "max. retries.\n"
                  "Retries are infinite when empty."),
     }
 
@@ -134,10 +135,11 @@ class QueueJob(orm.Model):
             # subscribe the users now to avoid to subscribe them
             # at every job creation
             self._subscribe_users(cr, uid, ids, context=context)
-            for id in ids:
-                msg = self._message_failed_job(cr, uid, id, context=context)
+            for job_id in ids:
+                msg = self._message_failed_job(cr, uid, job_id,
+                                               context=context)
                 if msg:
-                    self.message_post(cr, uid, id, body=msg,
+                    self.message_post(cr, uid, job_id, body=msg,
                                       subtype='connector.mt_job_failed',
                                       context=context)
         return res
@@ -145,16 +147,18 @@ class QueueJob(orm.Model):
     def _subscribe_users(self, cr, uid, ids, context=None):
         """ Subscribe all users having the 'Connector Manager' group """
         group_ref = self.pool.get('ir.model.data').get_object_reference(
-                cr, uid, 'connector', 'group_connector_manager')
+            cr, uid, 'connector', 'group_connector_manager')
         if not group_ref:
             return
         group_id = group_ref[1]
-        company_ids = [val['company_id'][0] for val in  self.read(cr, uid, ids, ['company_id'], context=context) if val['company_id']]
+        jobs = self.read(cr, uid, ids, ['company_id'], context=context)
+        company_ids = [val['company_id'][0] for val in jobs
+                       if val['company_id']]
         domain = [('groups_id', '=', group_id)]
         if company_ids:
             domain.append(('company_ids', 'child_of', company_ids))
         user_ids = self.pool.get('res.users').search(
-                cr, uid, domain, context=context)
+            cr, uid, domain, context=context)
         self.message_subscribe_users(cr, uid, ids,
                                      user_ids=user_ids,
                                      context=context)
@@ -338,7 +342,7 @@ class QueueWorker(orm.Model):
         try:
             self.pool.get('queue.job').write(cr, uid, job_ids,
                                              {'state': 'pending',
-                                             'worker_id': worker_id},
+                                              'worker_id': worker_id},
                                              context=context)
         except Exception:
             pass  # will be assigned to another worker

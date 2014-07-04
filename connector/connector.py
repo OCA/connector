@@ -251,7 +251,7 @@ class Environment(object):
         """ Searches and returns an instance of the
         :py:class:`~connector.connector.ConnectorUnit` for the current
         model and being a class or subclass of ``base_class``.
- 
+
         The returned instance is built with ``self`` for its environment.
 
         :param base_class: ``ConnectorUnit`` to search (class or subclass)

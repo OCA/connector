@@ -1,12 +1,10 @@
 # -*- coding: utf-8 -*-
 
-import unittest2
-
 import openerp
 import openerp.tests.common as common
 from openerp.addons.connector.session import (
-        ConnectorSession,
-        ConnectorSessionHandler)
+    ConnectorSession,
+    ConnectorSessionHandler)
 
 DB = common.DB
 ADMIN_USER_ID = common.ADMIN_USER_ID
@@ -19,8 +17,8 @@ class test_connector_session_handler(common.TransactionCase):
         super(test_connector_session_handler, self).setUp()
         self.context = {'lang': 'fr_FR'}
         self.session_hdl = ConnectorSessionHandler(
-                DB, ADMIN_USER_ID,
-                context=self.context)
+            DB, ADMIN_USER_ID,
+            context=self.context)
 
     def test_empty_session(self):
         """
@@ -56,6 +54,7 @@ class test_connector_session_handler(common.TransactionCase):
         with self.session_hdl.session() as session:
             with self.session_hdl.session() as session2:
                 self.assertNotEqual(session, session2)
+
 
 class test_connector_session(common.TransactionCase):
     """ Test ConnectorSession """
@@ -96,7 +95,7 @@ class test_connector_session(common.TransactionCase):
             self.assertIn(test_key, self.session.context)
         self.assertNotIn(test_key, self.session.context)
 
-        #change the context on a session not initialized with a context
+        # change the context on a session not initialized with a context
         session = ConnectorSession(self.cr, self.uid)
         with session.change_context({test_key: 'value'}):
             self.assertIn(test_key, session.context)

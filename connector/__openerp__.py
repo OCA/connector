@@ -80,4 +80,4 @@ It is actually used to connect Magento_ and Prestashop_
           ],
  'installable': True,
  'application': True,
-}
+ }

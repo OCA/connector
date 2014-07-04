@@ -235,7 +235,6 @@ class WorkerWatcher(threading.Thread):
     def _delete(self, db_name):
         """ Delete a worker associated with a database """
         if db_name in self._workers:
-            worker_uuid = self._workers[db_name].uuid
             # the worker will exit (it checks ``worker_lost()``)
             del self._workers[db_name]
 

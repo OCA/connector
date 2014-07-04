@@ -38,4 +38,4 @@ Add 'Connector' tab to product view
      'product_view.xml'
  ],
  'installable': True,
-}
+ }

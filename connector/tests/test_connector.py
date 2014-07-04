@@ -10,6 +10,7 @@ class test_connector_unit(unittest2.TestCase):
 
     def test_connector_unit_model_name(self):
         model = 'res.users'
+
         class ModelUnit(ConnectorUnit):
             _model_name = model
 

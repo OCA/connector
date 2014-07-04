@@ -2,6 +2,7 @@
 
 __name__ = "Convert jobs pickled func to bytea"
 
+
 def migrate(cr, version):
     if not version:
         return

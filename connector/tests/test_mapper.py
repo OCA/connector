@@ -18,7 +18,6 @@ from openerp.addons.connector.unit.mapper import (
     MapOptions,
     mapping)
 
-from openerp.addons.connector.exception import NoConnectorUnitError
 from openerp.addons.connector.backend import Backend
 from openerp.addons.connector.connector import Environment
 from openerp.addons.connector.session import ConnectorSession
@@ -161,7 +160,7 @@ class test_mapper(unittest2.TestCase):
 
         env = mock.MagicMock()
         record = {'name': 'Guewen',
-                    'street': 'street'}
+                  'street': 'street'}
         mapper = MyMapper(env)
         map_record = mapper.map_record(record)
         expected = {'out_name': 'Guewen',
@@ -466,7 +465,6 @@ class test_mapper_binding(common.TransactionCase):
 
             children = [('lines', 'line_ids', 'res.currency.rate')]
 
-
         backend_record = mock.Mock()
         backend_record.get_backend.side_effect = lambda *a: backend
         env = Environment(backend_record, self.session, 'res.currency')
@@ -521,7 +519,6 @@ class test_mapper_binding(common.TransactionCase):
             def format_items(self, items_values):
                 return [('ABC', values) for values in items_values]
 
-
         @backend
         class ObjectMapper(ImportMapper):
             _model_name = 'res.currency'
@@ -529,7 +526,6 @@ class test_mapper_binding(common.TransactionCase):
             direct = [('name', 'name')]
 
             children = [('lines', 'line_ids', 'res.currency.rate')]
-
 
         backend_record = mock.Mock()
         backend_record.get_backend.side_effect = lambda *a: backend

@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-import unittest2
 import mock
 
 import openerp.tests.common as common
@@ -67,6 +66,7 @@ class test_event(common.TransactionCase):
         @self.event
         def consumer1(session, model_name):
             pass
+
         @self.event(replacing=consumer1)
         def consumer2(session, model_name):
             pass
@@ -85,6 +85,7 @@ class test_event(common.TransactionCase):
         class Recipient(object):
             def __init__(self):
                 self.message = None
+
             def set_message(self, message):
                 self.message = message
 
@@ -102,6 +103,7 @@ class test_event(common.TransactionCase):
         class Recipient(object):
             def __init__(self):
                 self.message = None
+
             def set_message(self, message):
                 self.message = message
 

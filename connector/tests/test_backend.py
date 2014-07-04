@@ -9,9 +9,7 @@ from openerp.addons.connector.backend import (Backend,
 from openerp.addons.connector.exception import NoConnectorUnitError
 from openerp.addons.connector.connector import (Binder,
                                                 ConnectorUnit)
-from openerp.addons.connector.unit.mapper import (Mapper,
-                                                  ImportMapper,
-                                                  ExportMapper)
+from openerp.addons.connector.unit.mapper import ExportMapper
 from openerp.addons.connector.unit.backend_adapter import BackendAdapter
 from openerp.addons.connector.session import ConnectorSession
 
@@ -44,7 +42,7 @@ class test_backend(unittest2.TestCase):
     def test_no_service(self):
         """ Should raise an error because no service or parent is defined"""
         with self.assertRaises(ValueError):
-            backend = Backend(version='1.14')
+            Backend(version='1.14')
 
     def test_get_backend(self):
         """ Find a backend """
@@ -62,7 +60,6 @@ class test_backend(unittest2.TestCase):
 
 class test_backend_register(common.TransactionCase):
     """ Test registration of classes on the Backend"""
-
 
     def setUp(self):
         super(test_backend_register, self).setUp()
@@ -112,9 +109,9 @@ class test_backend_register(common.TransactionCase):
     def test_no_register_error(self):
         """ Error when asking for a class and none is found"""
         with self.assertRaises(NoConnectorUnitError):
-            ref = self.backend.get_class(BackendAdapter,
-                                         self.session,
-                                         'res.users')
+            self.backend.get_class(BackendAdapter,
+                                   self.session,
+                                   'res.users')
 
     def test_get_class_installed_module(self):
         """ Only class from an installed module should be returned """

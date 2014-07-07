@@ -238,4 +238,4 @@ model and a record, the connectors can create a new one when the user
 needs to review imported documents.
 
 
-.. _connector_ecommerce: https://launchpad.net/openerp-connector
+.. _connector_ecommerce: https://github.com/OCA/connector-ecommerce

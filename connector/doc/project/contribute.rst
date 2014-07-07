@@ -16,7 +16,7 @@ Have a look on the :ref:`Magento Connector Developer's Guide
 <connectormagento:contribute>` which is more complete, most of the
 information is the same.
 
-The Launchpad project is: http://launchpad.net/openerp-connector
+The GitHub project is: https://github.com/OCA/connector
 
 *****************************
 Want to start a new connector
@@ -40,14 +40,15 @@ Naming conventions
 
 The naming conventions for the new projects are the following:
 
-Name of the project
-    openerp-connector-xxx
+Name of the project if it is in the OCA:
+
+    connector-xxx
 
 Name of the OpenERP module:
     connector_xxx
 
 Example:
-    http://launchpad.net/openerp-connector-magento
+    https://github.com/OCA/connector-magento
 
     ``connector_magento``
 
@@ -55,6 +56,6 @@ Actually, the Magento and Prestashop connectors do not respect this convention
 for historical reasons (magentoerpconnect, prestashoperpconnect).
 New projects should ideally respect it.
 
-.. _`OpenERP Magento Connector`: https://code.launchpad.net/openerp-connector-magento
+.. _`OpenERP Magento Connector`: https://github.com/OCA/connector-magento
 .. _`OpenERP Prestashop Connector`: https://code.launchpad.net/prestashoperpconnect
-.. _`E-Commerce Connector`: https://code.launchpad.net/openerp-connector-ecommerce
+.. _`E-Commerce Connector`: https://github.com/OCA/connector-ecommerce

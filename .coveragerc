@@ -1,6 +1,6 @@
 [report]
 include =
-    */OCA/connector-ecommerce/*
+    */OCA/connector/*
 
 omit =
     */tests/*

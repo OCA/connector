@@ -16,4 +16,5 @@ Here is a list of things we may agree to merge.
 * A logger which keeps in a buffer all the logs and flushes them when an error
   occurs in a synchronization, clears them if it succeeded
 
-Please also have a look on the registered blueprints on https://blueprints.launchpad.net/openerp-connector
+* Job Channels: each job is owned by a channel and workers can be
+  dedicated to one channel only

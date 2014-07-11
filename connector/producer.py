@@ -38,6 +38,8 @@ from .event import (on_record_create,
 
 
 create_original = orm.BaseModel.create
+
+
 def create(self, cr, uid, vals, context=None):
     record_id = create_original(self, cr, uid, vals, context=context)
     if self.pool.get('connector.installed') is not None:
@@ -48,6 +50,8 @@ orm.BaseModel.create = create
 
 
 write_original = orm.BaseModel.write
+
+
 def write(self, cr, uid, ids, vals, context=None):
     result = write_original(self, cr, uid, ids, vals, context=context)
     if self.pool.get('connector.installed') is not None:
@@ -63,6 +67,8 @@ orm.BaseModel.write = write
 
 
 unlink_original = orm.BaseModel.unlink
+
+
 def unlink(self, cr, uid, ids, context=None):
     if self.pool.get('connector.installed') is not None:
         if not hasattr(ids, '__iter__'):

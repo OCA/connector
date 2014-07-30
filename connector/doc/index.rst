@@ -27,7 +27,7 @@ Core Features
 *************
 
 * **100% Open Source** (`AGPL version 3`_): the full `source code is available
-  on Launchpad`_
+  on GitHub`_
 * Not only designed to connect OpenERP with e-commerce backends,
   rather it is **adaptable** to connect OpenERP with any type of service.
 * **Robust for high volumetries** and **easy to monitor** thanks to a :ref:`jobs-queue`.
@@ -39,7 +39,7 @@ Core Features
 .. _OpenERP: http://www.openerp.com
 .. _Camptocamp: http://www.camptocamp.com
 .. _Akretion: http://www.akretion.com
-.. _`source code is available on Launchpad`: https://code.launchpad.net/openerp-connector
+.. _`source code is available on GitHub`: https://github.com/OCA/connector
 .. _`AGPL version 3`: http://www.gnu.org/licenses/agpl-3.0.html
 .. _`project's mailing list`: https://launchpad.net/~openerp-connector-community
 
@@ -51,7 +51,7 @@ Connectors based on the framework
 * `Prestashop Connector <https://launchpad.net/prestashoperpconnect>`_
 * `solerp (Solr Connector) <https://github.com/akretion/solerp>`_
 * `OpenERP Multi Company <http://www.openerp.net.cn/new-intercompany-process-module/>`_
-* `CMIS <http://launchpad.net/knowledge-addons>`_
+* `CMIS <https://github.com/OCA/connector-cmis>`_
 * Develop easily and rapidly your own connector based on this powerful
   framework and list your project on this page! Examples:
 

@@ -1,15 +1,13 @@
 # -*- coding: utf-8 -*-
 
-import unittest2
 import mock
 
 import openerp.tests.common as common
 from openerp.addons.connector.event import (
-        on_record_create,
-        on_record_write,
-        on_record_unlink
-        )
-from openerp.osv import orm
+    on_record_create,
+    on_record_write,
+    on_record_unlink
+)
 
 
 class test_producers(common.TransactionCase):
@@ -50,8 +48,8 @@ class test_producers(common.TransactionCase):
             self.recipient.record_id = record_id
             self.recipient.vals = vals
 
-        vals =  {'name': 'Lrrr',
-                 'city': 'Omicron Persei 8'}
+        vals = {'name': 'Lrrr',
+                'city': 'Omicron Persei 8'}
         self.model.write(self.cr,
                          self.uid,
                          self.partner_id,
@@ -83,8 +81,7 @@ class test_producers(common.TransactionCase):
         # clear all the registered events
         on_record_write._consumers = {None: set()}
         with mock.patch.object(on_record_write, 'fire'):
-            record_id = self.model.write(self.cr,
-                                         self.uid,
-                                         self.partner_id,
-                                         {'name': 'Kif Kroker'})
+            self.model.write(self.cr, self.uid,
+                             self.partner_id,
+                             {'name': 'Kif Kroker'})
             self.assertEqual(on_record_write.fire.called, False)

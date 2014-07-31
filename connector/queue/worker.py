@@ -303,11 +303,12 @@ class WorkerWatcher(threading.Thread):
 
     def run(self):
         """ `WorkerWatcher`'s main loop """
-        while 1:
-            self._update_workers()
-            for db_name, worker in self._workers.items():
-                self.check_alive(db_name, worker)
-            time.sleep(WAIT_CHECK_WORKER_ALIVE)
+        with openerp.api.Environment.manage():
+            while 1:
+                self._update_workers()
+                for db_name, worker in self._workers.items():
+                    self.check_alive(db_name, worker)
+                time.sleep(WAIT_CHECK_WORKER_ALIVE)
 
     def check_alive(self, db_name, worker):
         """ Check if the the worker is still alive and notify

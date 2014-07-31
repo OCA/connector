@@ -30,7 +30,7 @@ Fire the common events:
 
 """
 
-from openerp import api
+import openerp
 from openerp.osv import orm
 from .session import ConnectorSession
 from .event import (on_record_create,
@@ -41,8 +41,8 @@ from .event import (on_record_create,
 create_original = orm.BaseModel.create
 
 
-@api.model
-@api.returns('self', lambda value: value.id)
+@openerp.api.model
+@openerp.api.returns('self', lambda value: value.id)
 def create(self, vals):
     record_id = create_original(self, vals)
     if self.pool.get('connector.installed') is not None:
@@ -55,7 +55,7 @@ orm.BaseModel.create = create
 write_original = orm.BaseModel.write
 
 
-@api.multi
+@openerp.api.multi
 def write(self, vals):
     result = write_original(self, vals)
     if self.pool.get('connector.installed') is not None:

@@ -102,8 +102,8 @@ class Backend(object):
 
     * A ``Backend`` instance holds a registry of
       :py:class:`~connector.connector.ConnectorUnit` classes
-    * It can return the appropriate :py:class:`~connector.connector.ConnectorUnit`
-      to use for a task
+    * It can return the appropriate :py:class:
+      `~connector.connector.ConnectorUnit` to use for a task
     * If no :py:class:`~connector.connector.ConnectorUnit` is registered for a
       task, it will ask it to its direct parent (and so on)
 
@@ -185,11 +185,12 @@ class Backend(object):
             _model_name = 'product.product'
 
     .. warning:: The horizontal extension should be used sparingly and
-                 cautiously since as soon as 2 addons want to replace the same class,
-                 you'll have a conflict (which would need to create a third addon to glue
-                 them, ``replacing`` can take a tuple of classes to replace and this is
-                 exponential). This mechanism should be used only in some well placed
-                 circumstances for generic addons.
+                 cautiously since as soon as 2 addons want to replace the same
+                 class, you'll have a conflict (which would need to create a
+                 third addon to glue them, ``replacing`` can take a tuple of
+                 classes to replace and this is exponential). This mechanism
+                 should be used only in some well placed circumstances for
+                 generic addons.
     """
 
     def __init__(self, service=None, version=None, parent=None, registry=None):

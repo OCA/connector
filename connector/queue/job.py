@@ -252,7 +252,8 @@ class OpenERPJobStorage(JobStorage):
             eta = datetime.strptime(stored.eta, DEFAULT_SERVER_DATETIME_FORMAT)
 
         job = Job(func=func_name, args=args, kwargs=kwargs,
-                  priority=stored.priority, eta=eta, job_uuid=stored.uuid, description=stored.name)
+                  priority=stored.priority, eta=eta, job_uuid=stored.uuid,
+                  description=stored.name)
 
         if stored.date_created:
             job.date_created = datetime.strptime(
@@ -495,7 +496,8 @@ class Job(object):
                     type, value, traceback = sys.exc_info()
                     # change the exception type but keep the original
                     # traceback and message:
-                    # http://blog.ianbicking.org/2007/09/12/re-raising-exceptions/
+                    # http://blog.ianbicking.org/2007/09/12/
+                    # re-raising-exceptions/
                     new_exc = FailedJobError("Max. retries (%d) reached: %s" %
                                              (self.max_retries, value or type))
                     raise new_exc.__class__, new_exc, traceback
@@ -513,7 +515,8 @@ class Job(object):
 
     @property
     def description(self):
-        return self._description or self.func.__doc__ or 'Function %s' % self.func.__name__
+        return self._description or self.func.__doc__ or 'Function %s' \
+                                                         % self.func.__name__
 
     @property
     def uuid(self):

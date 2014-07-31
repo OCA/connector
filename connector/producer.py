@@ -30,6 +30,7 @@ Fire the common events:
 
 """
 
+from openerp import api
 from openerp.osv import orm
 from .session import ConnectorSession
 from .event import (on_record_create,
@@ -40,11 +41,13 @@ from .event import (on_record_create,
 create_original = orm.BaseModel.create
 
 
-def create(self, cr, uid, vals, context=None):
-    record_id = create_original(self, cr, uid, vals, context=context)
+@api.model
+@api.returns('self', lambda value: value.id)
+def create(self, vals):
+    record_id = create_original(self, vals)
     if self.pool.get('connector.installed') is not None:
-        session = ConnectorSession(cr, uid, context=context)
-        on_record_create.fire(session, self._name, record_id, vals)
+        session = ConnectorSession(self.env.cr, self.env.uid, context=self.env.context)
+        on_record_create.fire(session, self._name, record_id.id, vals)
     return record_id
 orm.BaseModel.create = create
 
@@ -52,14 +55,13 @@ orm.BaseModel.create = create
 write_original = orm.BaseModel.write
 
 
-def write(self, cr, uid, ids, vals, context=None):
-    result = write_original(self, cr, uid, ids, vals, context=context)
+@api.multi
+def write(self, vals):
+    result = write_original(self, vals)
     if self.pool.get('connector.installed') is not None:
-        if not hasattr(ids, '__iter__'):
-            ids = [ids]
-        session = ConnectorSession(cr, uid, context=context)
+        session = ConnectorSession(self.env.cr, self.env.uid, context=self.env.context)
         if on_record_write.has_consumer_for(session, self._name):
-            for record_id in ids:
+            for record_id in self._ids:
                 on_record_write.fire(session, self._name,
                                      record_id, vals)
     return result

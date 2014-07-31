@@ -660,9 +660,14 @@ class Mapper(ConnectorUnit):
         result = {}
         for from_attr, to_attr in self.direct:
             if callable(from_attr):  # in a modifier
-                # the name of the attribute is the first arg of the
-                # closure
-                attr_name = from_attr.__closure__[0].cell_contents
+                # the name of the attribute is the first arg the original
+                # function. BUT the argument order seems to be not enforced
+                # by python in the closure so we use the first non callable
+                # cell_contents in the closure as attr_name
+                for cell in from_attr.func_closure:
+                    contents = cell.cell_contents
+                    if not callable(contents):
+                        attr_name = contents
             else:
                 attr_name = from_attr
 

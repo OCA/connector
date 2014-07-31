@@ -57,7 +57,8 @@ class RetryableJobError(JobError):
 
 
 class NetworkRetryableError(RetryableJobError):
-    """ A network error caused the failure of the job, but it can be retried later. """
+    """ A network error caused the failure of the job, but it can be retried
+    later. """
 
 
 class NothingToDoJob(JobError):
@@ -65,7 +66,8 @@ class NothingToDoJob(JobError):
 
 
 class NoExternalId(RetryableJobError):
-    """ No External ID found, the job would have an error but can be retried. """
+    """ No External ID found, the job would have an error but can be retried.
+    """
 
 
 class IDMissingInBackend(JobError):

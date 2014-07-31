@@ -752,8 +752,8 @@ class Mapper(ConnectorUnit):
         """ .. deprecated:: 2.1
                Use :py:meth:`MapChild.skip_item` instead.
         """
-        raise DeprecationWarning('Mapper.skip_convert_child has been deprecated, '
-                                 'use MapChild.skip_item().')
+        raise DeprecationWarning('Mapper.skip_convert_child has been '
+                                 'deprecated, use MapChild.skip_item().')
 
 
 class ImportMapper(Mapper):

@@ -46,7 +46,8 @@ create_original = orm.BaseModel.create
 def create(self, vals):
     record_id = create_original(self, vals)
     if self.pool.get('connector.installed') is not None:
-        session = ConnectorSession(self.env.cr, self.env.uid, context=self.env.context)
+        session = ConnectorSession(self.env.cr, self.env.uid,
+                                   context=self.env.context)
         on_record_create.fire(session, self._name, record_id.id, vals)
     return record_id
 orm.BaseModel.create = create
@@ -59,7 +60,8 @@ write_original = orm.BaseModel.write
 def write(self, vals):
     result = write_original(self, vals)
     if self.pool.get('connector.installed') is not None:
-        session = ConnectorSession(self.env.cr, self.env.uid, context=self.env.context)
+        session = ConnectorSession(self.env.cr, self.env.uid,
+                                   context=self.env.context)
         if on_record_write.has_consumer_for(session, self._name):
             for record_id in self._ids:
                 on_record_write.fire(session, self._name,

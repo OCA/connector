@@ -164,22 +164,27 @@ class ConnectorSession(object):
 
     def browse(self, model, ids):
         """ Shortcut to :py:class:`openerp.osv.orm.BaseModel.browse` """
-        return self.pool[model].browse(self.cr, self.uid, ids, context=self.context)
+        return self.pool[model].browse(self.cr, self.uid, ids,
+                                       context=self.context)
 
     def read(self, model, ids, fields):
         """ Shortcut to :py:class:`openerp.osv.orm.BaseModel.read` """
-        return self.pool[model].read(self.cr, self.uid, ids, fields, context=self.context)
+        return self.pool[model].read(self.cr, self.uid, ids, fields,
+                                     context=self.context)
 
     def create(self, model, values):
         """ Shortcut to :py:class:`openerp.osv.orm.BaseModel.create` """
-        return self.pool[model].create(self.cr, self.uid, values, context=self.context)
+        return self.pool[model].create(self.cr, self.uid, values,
+                                       context=self.context)
 
     def write(self, model, ids, values):
         """ Shortcut to :py:class:`openerp.osv.orm.BaseModel.write` """
-        return self.pool[model].write(self.cr, self.uid, ids, values, context=self.context)
+        return self.pool[model].write(self.cr, self.uid, ids, values,
+                                      context=self.context)
 
     def unlink(self, model, ids):
-        return self.pool[model].unlink(self.cr, self.uid, ids, context=self.context)
+        return self.pool[model].unlink(self.cr, self.uid, ids,
+                                       context=self.context)
 
     def __repr__(self):
         return '<Session db_name: %s, uid: %d>' % (self.cr.dbname, self.uid)

@@ -211,7 +211,8 @@ class connector_checkpoint_review(orm.TransientModel):
                                            'connector_checkpoint_review_rel',
                                            'review_id', 'checkpoint_id',
                                            string='Checkpoints',
-                                           domain="[('state', '=', 'need_review')]"),
+                                           domain="[('state', '=', "
+                                           "'need_review')]"),
     }
 
     _defaults = {

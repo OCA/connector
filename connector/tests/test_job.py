@@ -206,7 +206,8 @@ class test_job_storage(common.TransactionCase):
         # the job's description has been created as bytestring but is
         # decoded to utf8 by the ORM so make them comparable
         self.assertEqual(job.description, job_read.description.encode('utf8'))
-        self.assertEqual(job_read.description, "My dé^Wdescription".decode('utf8'))
+        self.assertEqual(job_read.description,
+                         "My dé^Wdescription".decode('utf8'))
 
     def test_job_delay(self):
         self.cr.execute('delete from queue_job')

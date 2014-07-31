@@ -556,7 +556,8 @@ class test_mapper_binding(common.TransactionCase):
         self.assertEqual(map_record.values(for_create=True), expected)
 
     def test_modifier_filter_field(self):
-        """ A direct mapping with a modifier must still be considered from the list of fields """
+        """ A direct mapping with a modifier must still be considered from the
+        list of fields """
         class MyMapper(ImportMapper):
             direct = [('field', 'field2'),
                       ('no_field', 'no_field2'),

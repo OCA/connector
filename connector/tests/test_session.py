@@ -81,9 +81,14 @@ class test_connector_session(common.TransactionCase):
         Create a session with a model name, we should be able to access
         the model from a transaction
         """
-        res_users = self.registry('res.users')
-
-        self.assertEqual(self.session.pool.get('res.users'), res_users)
+        res_users = self.registry('res.users').search_count(self.cr,
+                                                            self.uid,
+                                                            [])
+        sess_res_users_obj = self.session.pool.get('res.users')
+        sess_res_users = sess_res_users_obj.search_count(self.cr,
+                                                         self.uid,
+                                                         [])
+        self.assertEqual(sess_res_users, res_users)
 
     def test_change_context(self):
         """

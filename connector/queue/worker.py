@@ -178,16 +178,17 @@ class Worker(threading.Thread):
 
         Wait for jobs and execute them sequentially.
         """
-        while 1:
-            # check if the worker has to exit (db destroyed, connector
-            # uninstalled)
-            if self.watcher.worker_lost(self):
-                break
-            job = self.queue.dequeue()
-            try:
-                self.run_job(job)
-            except:
-                continue
+        with openerp.api.Environment.manage():
+            while 1:
+                # check if the worker has to exit (db destroyed, connector
+                # uninstalled)
+                if self.watcher.worker_lost(self):
+                    break
+                job = self.queue.dequeue()
+                try:
+                    self.run_job(job)
+                except:
+                    continue
 
     def enqueue_job_uuid(self, job_uuid):
         """ Enqueue a job:

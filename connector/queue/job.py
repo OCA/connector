@@ -103,16 +103,21 @@ class OpenERPJobStorage(JobStorage):
             "Model %s not found" % self._job_model_name)
 
     def enqueue(self, func, model_name=None, args=None, kwargs=None,
-                priority=None, eta=None, max_retries=None, description=None):
+                priority=None, eta=None, max_retries=None, description=None,
+                _job_to_key=None, _merge_job=None):
         """Create a Job and enqueue it in the queue. Return the job uuid.
 
         This expects the arguments specific to the job to be already extracted
         from the ones to pass to the job function.
 
         """
+        if not hasattr(self.session.cr, 'job_cache'):
+            self.session.cr.job_cache = {}
+
         job = Job(func=func, model_name=model_name, args=args, kwargs=kwargs,
                   priority=priority, eta=eta, max_retries=max_retries,
                   description=description)
+    
         job.user_id = self.session.uid
         if 'company_id' in self.session.context:
             company_id = self.session.context['company_id']
@@ -124,6 +129,14 @@ class OpenERPJobStorage(JobStorage):
                 field='company_id',
                 context=self.session.context)
         job.company_id = company_id
+        
+        if _job_to_key and _merge_job:
+            job_key = _job_to_key(job)
+            if self.session.cr.job_cache.get(job_key):
+                existing_job = self.session.cr.job_cache[job_key]
+                job = _merge_job(existing_job, job)
+            else:
+                self.session.cr.job_cache[job_key] = job
         self.store(job)
         return job.uuid
 
@@ -134,13 +147,18 @@ class OpenERPJobStorage(JobStorage):
         model_name = kwargs.pop('model_name', None)
         max_retries = kwargs.pop('max_retries', None)
         description = kwargs.pop('description', None)
+        _job_to_key = kwargs.pop('_job_to_key', None)
+        _merge_job = kwargs.pop('_merge_job', None)
 
-        return self.enqueue(func, model_name=model_name,
-                            args=args, kwargs=kwargs,
-                            priority=priority,
-                            max_retries=max_retries,
-                            eta=eta,
-                            description=description)
+        return self.enqueue(
+            func, model_name=model_name,
+            args=args, kwargs=kwargs,
+            priority=priority,
+            max_retries=max_retries,
+            eta=eta,
+            description=description,
+            _job_to_key=_job_to_key,
+            _merge_job=_merge_job)
 
     def exists(self, job_uuid):
         """Returns if a job still exists in the storage."""
@@ -206,6 +224,20 @@ class OpenERPJobStorage(JobStorage):
             vals['worker_id'] = self._worker_id(job.worker_uuid)
         else:
             vals['worker_id'] = False
+        
+        fmt = DEFAULT_SERVER_DATETIME_FORMAT
+        date_created = job.date_created.strftime(fmt)
+        vals.update({'uuid': job.uuid,
+                     'name': job.description,
+                     'func_string': job.func_string,
+                     'date_created': date_created,
+                     'model_name': (job.model_name if job.model_name
+                                    else False),
+                     })
+
+        vals['func'] = dumps((job.func_name,
+                              job.args,
+                              job.kwargs))
 
         if self.exists(job.uuid):
             self.job_model.write(self.session.cr,
@@ -214,20 +246,6 @@ class OpenERPJobStorage(JobStorage):
                                  vals,
                                  self.session.context)
         else:
-            fmt = DEFAULT_SERVER_DATETIME_FORMAT
-            date_created = job.date_created.strftime(fmt)
-            vals.update({'uuid': job.uuid,
-                         'name': job.description,
-                         'func_string': job.func_string,
-                         'date_created': date_created,
-                         'model_name': (job.model_name if job.model_name
-                                        else False),
-                         })
-
-            vals['func'] = dumps((job.func_name,
-                                  job.args,
-                                  job.kwargs))
-
             self.job_model.create(self.session.cr,
                                   SUPERUSER_ID,
                                   vals,

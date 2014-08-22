@@ -79,8 +79,8 @@ class test_related_action(unittest2.TestCase):
         """ Job with related action check if action propagates kwargs """
         def action(session, job, a=1, b=2):
             return a, b
-        action = related_action(action=action, b=4)
-        job_func = action(task_related_return_kwargs)
+        task = task_related_return_kwargs
+        job_func = related_action(action=action, b=4)(task)
         job = Job(func=job_func)
         self.assertEqual(job.related_action(self.session), (1, 4))
 

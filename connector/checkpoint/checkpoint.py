@@ -207,12 +207,12 @@ class connector_checkpoint_review(orm.TransientModel):
         return res
 
     _columns = {
-        'checkpoint_ids': fields.many2many('connector.checkpoint',
-                                           'connector_checkpoint_review_rel',
-                                           'review_id', 'checkpoint_id',
-                                           string='Checkpoints',
-                                           domain="[('state', '=', "
-                                           "'need_review')]"),
+        'checkpoint_ids': fields.many2many(
+            'connector.checkpoint',
+            'connector_checkpoint_review_rel',
+            'review_id', 'checkpoint_id',
+            string='Checkpoints',
+            domain="[('state', '=', 'need_review')]"),
     }
 
     _defaults = {

@@ -275,8 +275,8 @@ class WorkerWatcher(threading.Thread):
                                "AND state = %s", ('connector', 'installed'),
                                log_exceptions=False)
                 except ProgrammingError as err:
-                    if unicode(err).startswith('relation "ir_module_module"'
-                                               ' does not exist'):
+                    no_db_error = 'relation "ir_module_module" does not exist'
+                    if unicode(err).startswith(no_db_error):
                         _logger.debug('Database %s is not an OpenERP database,'
                                       ' connector worker not started', db_name)
                     else:

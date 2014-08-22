@@ -314,9 +314,10 @@ class MapChild(ConnectorUnit):
       backend (as seen above with ``(0, 0, {values})``
 
     A MapChild can be extended like any other
-    :py:class:`~connector.connector.ConnectorUnit`. However, it is not mandatory
-    to explicitly create a MapChild for each children mapping, the default
-    one will be used (:py:class:`ImportMapChild` or :py:class:`ExportMapChild`).
+    :py:class:`~connector.connector.ConnectorUnit`.
+    However, it is not mandatory to explicitly create a MapChild for
+    each children mapping, the default one will be used
+    (:py:class:`ImportMapChild` or :py:class:`ExportMapChild`).
 
     The implementation by default does not take care of the updates: if
     I import a sales order 2 times, the lines will be duplicated. This
@@ -407,7 +408,8 @@ class ImportMapChild(MapChild):
     """ :py:class:`MapChild` for the Imports """
 
     def _child_mapper(self):
-        return self.get_connector_unit_for_model(ImportMapper, self.model._name)
+        get_connector_unit = self.get_connector_unit_for_model
+        return get_connector_unit(ImportMapper, self.model._name)
 
     def format_items(self, items_values):
         """ Format the values of the items mapped from the child Mappers.
@@ -713,8 +715,8 @@ class Mapper(ConnectorUnit):
 
     def _after_mapping(self, result):
         """ .. deprecated:: 2.1 """
-        raise DeprecationWarning('Mapper._after_mapping() has been deprecated, '
-                                 'use Mapper.finalize()')
+        raise DeprecationWarning('Mapper._after_mapping() has been deprecated,'
+                                 ' use Mapper.finalize()')
 
     def convert_child(self, record, parent_values=None):
         """ .. deprecated:: 2.1 """

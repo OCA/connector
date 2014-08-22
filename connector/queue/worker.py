@@ -146,7 +146,7 @@ class Worker(threading.Thread):
             if err.pgcode not in PG_CONCURRENCY_ERRORS_TO_RETRY:
                 raise
             retry_postpone(job, unicode(err), seconds=PG_RETRY)
-            _logger.debug('%s OperionalError, postponed', job)
+            _logger.debug('%s OperationalError, postponed', job)
 
         except (FailedJobError, Exception):
             buff = StringIO()

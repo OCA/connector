@@ -1,5 +1,6 @@
-[![Build Status](https://travis-ci.org/OCA/connector.svg?branch=master)](https://travis-ci.org/OCA/connector)
-[![Coverage Status](https://img.shields.io/coveralls/OCA/connector.svg)](https://coveralls.io/r/OCA/connector?branch=master)
+[![Build Status](https://travis-ci.org/OCA/connector.svg?branch=8.0)](https://travis-ci.org/OCA/connector)
+[![Coverage Status](https://coveralls.io/repos/OCA/connector/badge.png?branch=8.0)](https://coveralls.io/r/OCA/connector?branch=8.0)
+
 
 Odoo Connector Modules
 ======================

@@ -515,8 +515,10 @@ class Job(object):
 
     @property
     def description(self):
-        template = self._description or self.func.__doc__ or 'Function %s'
-        return template % self.func.__name__
+        descr = (self._description or
+                 self.func.__doc__ or
+                 'Function %s' % self.func.__name__)
+        return descr
 
     @property
     def uuid(self):

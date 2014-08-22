@@ -252,8 +252,8 @@ class OpenERPJobStorage(JobStorage):
             eta = datetime.strptime(stored.eta, DEFAULT_SERVER_DATETIME_FORMAT)
 
         job = Job(func=func_name, args=args, kwargs=kwargs,
-                  priority=stored.priority, eta=eta, job_uuid=stored.uuid,
-                  description=stored.name)
+                  priority=stored.priority, eta=eta,
+                  job_uuid=stored.uuid, description=stored.name)
 
         if stored.date_created:
             job.date_created = datetime.strptime(
@@ -515,8 +515,8 @@ class Job(object):
 
     @property
     def description(self):
-        return self._description or self.func.__doc__ or 'Function %s' \
-                                                         % self.func.__name__
+        template = self._description or self.func.__doc__ or 'Function %s'
+        return template % self.func.__name__
 
     @property
     def uuid(self):

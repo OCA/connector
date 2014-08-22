@@ -50,11 +50,13 @@ class QueueJob(orm.Model):
         'worker_id': fields.many2one('queue.worker', string='Worker',
                                      ondelete='set null', readonly=True),
         'uuid': fields.char('UUID', readonly=True, select=True, required=True),
-        'user_id': fields.many2one('res.users', string='User ID', required=True),
+        'user_id': fields.many2one('res.users', string='User ID',
+                                   required=True),
         'company_id': fields.many2one('res.company', 'Company'),
         'name': fields.char('Description', readonly=True),
         'func_string': fields.char('Task', readonly=True),
-        'func': fields.binary('Pickled Function', readonly=True, required=True),
+        'func': fields.binary('Pickled Function', readonly=True,
+                              required=True),
         'state': fields.selection(STATES,
                                   string='State',
                                   readonly=True,
@@ -97,7 +99,8 @@ class QueueJob(orm.Model):
                 _('No action available for this job'))
         return action
 
-    def _change_job_state(self, cr, uid, ids, state, result=None, context=None):
+    def _change_job_state(self, cr, uid, ids, state, result=None,
+                          context=None):
         """ Change the state of the `Job` object itself so it
         will change the other fields (date, result, ...)
         """
@@ -320,9 +323,10 @@ class QueueWorker(orm.Model):
         try:
             cr.execute(sql, log_exceptions=False)
         except Exception:
-            # Here it's likely that the FOR UPDATE NOWAIT failed to get the LOCK,
-            # so we ROLLBACK to the SAVEPOINT to restore the transaction to its earlier
-            # state. The assign will be done the next time.
+            # Here it's likely that the FOR UPDATE NOWAIT failed to get
+            # the LOCK, so we ROLLBACK to the SAVEPOINT to restore the
+            # transaction to its earlier state. The assign will be done
+            # the next time.
             cr.execute("ROLLBACK TO queue_assign_jobs")
             _logger.debug("Failed attempt to assign jobs, likely due to "
                           "another transaction in progress. "

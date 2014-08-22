@@ -164,8 +164,8 @@ class ConnectorSession(object):
 
     def browse(self, model, ids):
         """ Shortcut to :py:class:`openerp.osv.orm.BaseModel.browse` """
-        return self.pool[model].browse(self.cr, self.uid, ids,
-                                       context=self.context)
+        model_obj = self.pool[model]
+        return model_obj.browse(self.cr, self.uid, ids, context=self.context)
 
     def read(self, model, ids, fields):
         """ Shortcut to :py:class:`openerp.osv.orm.BaseModel.read` """
@@ -183,8 +183,8 @@ class ConnectorSession(object):
                                       context=self.context)
 
     def unlink(self, model, ids):
-        return self.pool[model].unlink(self.cr, self.uid, ids,
-                                       context=self.context)
+        model_obj = self.pool[model]
+        return model_obj.unlink(self.cr, self.uid, ids, context=self.context)
 
     def __repr__(self):
         return '<Session db_name: %s, uid: %d>' % (self.cr.dbname, self.uid)

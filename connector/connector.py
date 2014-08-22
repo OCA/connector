@@ -179,8 +179,8 @@ class ConnectorUnit(object):
 
         :param connector_unit_class: ``ConnectorUnit`` to search
                                      (class or subclass)
-        :type connector_unit_class: :py:class:`connector.connector.
-                      ConnectorUnit`
+        :type connector_unit_class: :py:class:`connector.\
+                                               connector.ConnectorUnit`
         :param model: to give if the ``ConnectorUnit`` is for another
                       model than the current one
         :type model: str

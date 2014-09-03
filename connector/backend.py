@@ -95,15 +95,17 @@ class Backend(object):
 
     .. attribute:: parent
 
-        A parent backend. When no :py:class:`~connector.connector.ConnectorUnit`
+        A parent backend.
+        When no :py:class:`~connector.connector.ConnectorUnit`
         is found for a backend, it will search it in the `parent`.
 
-    The Backends structure is a key part of the framework, but is rather simple.
+    The Backends structure is a key part of the framework,
+    but is rather simple.
 
     * A ``Backend`` instance holds a registry of
       :py:class:`~connector.connector.ConnectorUnit` classes
-    * It can return the appropriate :py:class:
-      `~connector.connector.ConnectorUnit` to use for a task
+    * It can return the appropriate
+      :py:class:`~connector.connector.ConnectorUnit` to use for a task
     * If no :py:class:`~connector.connector.ConnectorUnit` is registered for a
       task, it will ask it to its direct parent (and so on)
 
@@ -174,8 +176,8 @@ class Backend(object):
     installing an addon. For example, say that we already have an
     ``ImportMapper`` for the products in the Magento Connector. We create a
     - generic - addon to handle the catalog in a more advanced manner. We
-    redefine an ``AdvancedImportMapper``, which should be used when the addon is
-    installed. This is the horizontal extension mechanism.
+    redefine an ``AdvancedImportMapper``, which should be used when the
+    addon is installed. This is the horizontal extension mechanism.
 
     Replace a :py:class:`~connector.connector.ConnectorUnit` by another one
     in a backend::
@@ -185,12 +187,13 @@ class Backend(object):
             _model_name = 'product.product'
 
     .. warning:: The horizontal extension should be used sparingly and
-                 cautiously since as soon as 2 addons want to replace the same
-                 class, you'll have a conflict (which would need to create a
-                 third addon to glue them, ``replacing`` can take a tuple of
-                 classes to replace and this is exponential). This mechanism
-                 should be used only in some well placed circumstances for
-                 generic addons.
+                 cautiously since as soon as 2 addons want to replace
+                 the same class, you'll have a conflict
+                 (which would need to create a third addon to glue
+                 them, ``replacing`` can take a tuple of classes to replace
+                 and this is exponential).
+                 This mechanism should be used only in some well placed
+                 circumstances for generic addons.
     """
 
     def __init__(self, service=None, version=None, parent=None, registry=None):

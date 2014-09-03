@@ -26,7 +26,6 @@
         <record id="view_queue_worker_tree" model="ir.ui.view">
             <field name="name">queue.worker.tree</field>
             <field name="model">queue.worker</field>
-            <field name="type">tree</field>
             <field name="arch" type="xml">
                 <tree string="Worker" create="false"
                         delete="false" edit="false" version="7.0">

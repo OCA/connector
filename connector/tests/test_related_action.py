@@ -101,7 +101,7 @@ class test_related_action(unittest2.TestCase):
         backend = mock.Mock(name='backend')
         browse_record = mock.Mock(name='browse_record')
         backend.get_class.return_value = TestBinder
-        backend_record.get_backend.return_value = backend
+        backend_record.get_backend.return_value = [backend]
         browse_record.exists.return_value = True
         browse_record.backend_id = backend_record
         session.browse.return_value = browse_record

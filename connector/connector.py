@@ -236,7 +236,8 @@ class Environment(object):
         :type model_name: str
         """
         self.backend_record = backend_record
-        self.backend = backend_record.get_backend()
+        backend = backend_record.get_backend()
+        self.backend = backend[0]
         self.session = session
         self.model_name = model_name
         self.model = self.session.pool.get(model_name)

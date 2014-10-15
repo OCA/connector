@@ -127,7 +127,7 @@ class ConnectorSession(object):
     @property
     def pool(self):
         if self._pool is None:
-            self._pool = openerp.pooler.get_pool(self.cr.dbname)
+            self._pool = openerp.registry(self.cr.dbname)
         return self._pool
 
     @contextmanager

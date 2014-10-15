@@ -65,7 +65,7 @@ class WorkerConnector(workers.Worker):
         else:
             if cr.fetchone():
                 RegistryManager.check_registry_signaling(db_name)
-                registry = openerp.pooler.get_pool(db_name)
+                registry = openerp.registry(db_name)
                 if registry:
                     queue_worker = registry['queue.worker']
                     queue_worker.assign_then_enqueue(cr,

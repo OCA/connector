@@ -339,7 +339,11 @@ class QueueWorker(orm.Model):
             return
         job_ids = [id for id, in job_rows]
 
-        worker_id = self._worker_id(cr, uid, context=context)
+        try:
+            worker_id = self._worker_id(cr, uid, context=context)
+        except Exception, e:
+            _logger.exception(e)
+            return
         _logger.debug('Assign %d jobs to worker %s', len(job_ids),
                       worker.uuid)
         # ready to be enqueued in the worker
@@ -355,7 +359,11 @@ class QueueWorker(orm.Model):
         """ Add to the queue of the worker all the jobs not
         yet queued but already assigned."""
         job_obj = self.pool.get('queue.job')
-        db_worker_id = self._worker_id(cr, uid, context=context)
+        try:
+            db_worker_id = self._worker_id(cr, uid, context=context)
+        except Exception, e:
+            _logger.exception(e)
+            return
         job_ids = job_obj.search(cr, uid,
                                  [('worker_id', '=', db_worker_id),
                                   ('state', '=', 'pending')],

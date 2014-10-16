@@ -341,7 +341,7 @@ class QueueWorker(orm.Model):
 
         try:
             worker_id = self._worker_id(cr, uid, context=context)
-        except Exception, e:
+        except AssertionError as e:
             _logger.exception(e)
             return
         _logger.debug('Assign %d jobs to worker %s', len(job_ids),
@@ -361,7 +361,7 @@ class QueueWorker(orm.Model):
         job_obj = self.pool.get('queue.job')
         try:
             db_worker_id = self._worker_id(cr, uid, context=context)
-        except Exception, e:
+        except AssertionError as e:
             _logger.exception(e)
             return
         job_ids = job_obj.search(cr, uid,

@@ -683,14 +683,15 @@ class Mapper(ConnectorUnit):
             changed_by = definition.changed_by
             if (not fields or not changed_by or
                     changed_by.intersection(fields)):
+                if definition.only_create and not for_create:
+                    continue
                 values = meth(map_record.source)
                 if not values:
                     continue
                 if not isinstance(values, dict):
                     raise ValueError('%s: invalid return value for the '
                                      'mapping method %s' % (values, meth))
-                if not definition.only_create or for_create:
-                    result.update(values)
+                result.update(values)
 
         for from_attr, to_attr, model_name in self.children:
             if (not fields or from_attr in fields):

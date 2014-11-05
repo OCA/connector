@@ -58,7 +58,7 @@ class connector_checkpoint(orm.Model):
         res = {}
         for check in self.browse(cr, uid, ids, context=context):
             model_obj = self.pool.get(check.model_id.model)
-            res[check.id] = model_obj.name_get(cr, uid, check.record_id,
+            res[check.id] = model_obj.name_get(cr, uid, [check.record_id],
                                                context=context)[0][1]
         return res
 

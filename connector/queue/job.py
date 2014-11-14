@@ -73,6 +73,7 @@ def _unpickle(pickled):
 
 
 class JobStorage(object):
+
     """ Interface for the storage of jobs """
 
     def store(self, job):
@@ -89,6 +90,7 @@ class JobStorage(object):
 
 
 class OpenERPJobStorage(JobStorage):
+
     """ Store a job on OpenERP """
 
     _job_model_name = 'queue.job'
@@ -287,6 +289,7 @@ class OpenERPJobStorage(JobStorage):
 
 
 class Job(object):
+
     """ A Job is a task to execute.
 
     .. attribute:: uuid

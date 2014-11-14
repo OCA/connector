@@ -8,6 +8,7 @@ from openerp.addons.connector.session import ConnectorSession
 
 
 class test_event(common.TransactionCase):
+
     """ Test Event """
 
     def setUp(self):
@@ -83,6 +84,7 @@ class test_event(common.TransactionCase):
     def test_fire(self):
         """ Fire a consumer """
         class Recipient(object):
+
             def __init__(self):
                 self.message = None
 
@@ -101,6 +103,7 @@ class test_event(common.TransactionCase):
     def test_fire_several_consumers(self):
         """ Fire several consumers """
         class Recipient(object):
+
             def __init__(self):
                 self.message = None
 

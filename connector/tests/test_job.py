@@ -28,7 +28,6 @@ def task_b(session, model_name):
 def task_a(session, model_name):
     """ Task description
     """
-    pass
 
 
 def dummy_task(session):
@@ -44,6 +43,7 @@ def retryable_error_task(session):
 
 
 class test_job(unittest2.TestCase):
+
     """ Test Job """
 
     def setUp(self):
@@ -113,6 +113,7 @@ class test_job(unittest2.TestCase):
 
 
 class test_job_storage(common.TransactionCase):
+
     """ Test storage of jobs """
 
     def setUp(self):
@@ -230,6 +231,7 @@ class test_job_storage(common.TransactionCase):
 
 
 class test_job_storage_multi_company(common.TransactionCase):
+
     """ Test storage of jobs """
 
     def setUp(self):

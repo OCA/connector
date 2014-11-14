@@ -21,57 +21,71 @@
 
 
 class ConnectorException(RuntimeError):
+
     """ Base Exception for the connectors """
 
 
 class NoConnectorUnitError(ConnectorException):
+
     """ No ConnectorUnit has been found """
 
 
 class InvalidDataError(ConnectorException):
+
     """ Data Invalid """
 
 
 class MappingError(ConnectorException):
+
     """ An error occurred during a mapping transformation. """
 
 
 class JobError(ConnectorException):
+
     """ A job had an error """
 
 
 class NoSuchJobError(JobError):
+
     """ The job does not exist. """
 
 
 class NotReadableJobError(JobError):
+
     """ The job cannot be read from the storage. """
 
 
 class FailedJobError(JobError):
+
     """ A job had an error having to be resolved. """
 
 
 class RetryableJobError(JobError):
+
     """ A job had an error but can be retried. """
 
 
 class NetworkRetryableError(RetryableJobError):
+
     """ A network error caused the failure of the job, it can be retried later.
     """
 
 
 class NothingToDoJob(JobError):
+
     """ The Job has nothing to do. """
 
 
 class NoExternalId(RetryableJobError):
+
     """ No External ID found, it can be retried later. """
 
 
 class IDMissingInBackend(JobError):
+
     """ The ID of does not exist in the backend """
 
 
 class ManyIDSInBackend(JobError):
+
     """Unique key exists many times in backend"""

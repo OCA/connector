@@ -23,6 +23,7 @@ from Queue import PriorityQueue
 
 
 class JobsQueue(object):
+
     """ Holds the jobs planned for execution in memory.
 
     The Jobs are sorted, the higher the priority is,

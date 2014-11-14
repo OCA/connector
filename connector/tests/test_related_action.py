@@ -49,6 +49,7 @@ def test_unwrap_binding(session, model_name, binding_id):
 
 
 class test_related_action(unittest2.TestCase):
+
     """ Test Related Actions """
 
     def setUp(self):
@@ -118,6 +119,7 @@ class test_related_action(unittest2.TestCase):
 
 
 class test_related_action_storage(common.TransactionCase):
+
     """ Test related actions on stored jobs """
 
     def setUp(self):

@@ -23,12 +23,14 @@ from ..connector import ConnectorUnit
 
 
 class BackendAdapter(ConnectorUnit):
+
     """ Base Backend Adapter for the connectors """
 
     _model_name = None  # define in sub-classes
 
 
 class CRUDAdapter(BackendAdapter):
+
     """ Base External Adapter specialized in the handling
     of records on external systems.
 

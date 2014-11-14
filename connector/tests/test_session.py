@@ -11,6 +11,7 @@ ADMIN_USER_ID = common.ADMIN_USER_ID
 
 
 class test_connector_session_handler(common.TransactionCase):
+
     """ Test ConnectorSessionHandler (without original cr and pool) """
 
     def setUp(self):
@@ -57,6 +58,7 @@ class test_connector_session_handler(common.TransactionCase):
 
 
 class test_connector_session(common.TransactionCase):
+
     """ Test ConnectorSession """
 
     def setUp(self):

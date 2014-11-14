@@ -36,6 +36,7 @@ _logger = logging.getLogger(__name__)
 
 
 class QueueJob(orm.Model):
+
     """ Job status and result """
     _name = 'queue.job'
     _description = 'Queue Job'
@@ -202,6 +203,7 @@ class QueueJob(orm.Model):
 
 
 class QueueWorker(orm.Model):
+
     """ Worker """
     _name = 'queue.worker'
     _description = 'Queue Worker'

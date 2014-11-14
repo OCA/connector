@@ -20,10 +20,11 @@
 ##############################################################################
 
 from openerp.osv import orm, fields
-import backend
+from . import backend
 
 
 class connector_backend(orm.AbstractModel):
+
     """ An instance of an external backend to synchronize with.
 
     The backends have to ``_inherit`` this model in the connectors
@@ -53,6 +54,7 @@ class connector_backend(orm.AbstractModel):
 
 
 class external_binding(orm.AbstractModel):
+
     """ An abstract model for bindings to external records.
 
     An external binding is a binding between a backend and OpenERP.  For

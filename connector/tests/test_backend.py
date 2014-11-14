@@ -15,6 +15,7 @@ from openerp.addons.connector.session import ConnectorSession
 
 
 class test_backend(unittest2.TestCase):
+
     """ Test Backend """
 
     def setUp(self):
@@ -59,6 +60,7 @@ class test_backend(unittest2.TestCase):
 
 
 class test_backend_register(common.TransactionCase):
+
     """ Test registration of classes on the Backend"""
 
     def setUp(self):

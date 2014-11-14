@@ -53,6 +53,7 @@ PG_RETRY = 5  # seconds
 
 
 class Worker(threading.Thread):
+
     """ Post and retrieve jobs from the queue, execute them"""
 
     queue_class = JobsQueue
@@ -211,6 +212,7 @@ class Worker(threading.Thread):
 
 
 class WorkerWatcher(threading.Thread):
+
     """ Keep a sight on the workers and signal their aliveness.
 
     A `WorkerWatcher` is shared between databases, so only 1 instance is

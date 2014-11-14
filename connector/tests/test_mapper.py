@@ -24,6 +24,7 @@ from openerp.addons.connector.session import ConnectorSession
 
 
 class test_mapper(unittest2.TestCase):
+
     """ Test Mapper """
 
     def test_mapping_decorator(self):
@@ -343,6 +344,7 @@ class test_mapper(unittest2.TestCase):
     def test_mapping_custom_option(self):
         """ Usage of custom options in mappings """
         class MyMapper(ImportMapper):
+
             @mapping
             def any(self, record):
                 if self.options.custom:
@@ -361,6 +363,7 @@ class test_mapper(unittest2.TestCase):
     def test_mapping_custom_option_not_defined(self):
         """ Usage of custom options not defined raise AttributeError """
         class MyMapper(ImportMapper):
+
             @mapping
             def any(self, record):
                 if self.options.custom is None:
@@ -391,6 +394,7 @@ class test_mapper(unittest2.TestCase):
 
 
 class test_mapper_binding(common.TransactionCase):
+
     """ Test Mapper with Bindings"""
 
     def setUp(self):

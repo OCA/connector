@@ -26,7 +26,9 @@ __all__ = ['Backend']
 
 
 class BackendRegistry(object):
+
     """ Hold a set of backends """
+
     def __init__(self):
         self.backends = set()
 
@@ -80,6 +82,7 @@ _ConnectorUnitEntry = namedtuple('_ConnectorUnitEntry',
 
 
 class Backend(object):
+
     """ A backend represents a system to interact with,
     like Magento, Prestashop, Redmine, ...
 

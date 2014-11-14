@@ -11,6 +11,7 @@ from openerp.addons.connector.event import (
 
 
 class test_producers(common.TransactionCase):
+
     """ Test producers """
 
     def setUp(self):

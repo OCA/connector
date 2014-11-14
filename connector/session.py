@@ -26,6 +26,7 @@ from openerp.modules.registry import RegistryManager
 
 
 class ConnectorSessionHandler(object):
+
     """ Allow to create a new instance of
     :py:class:`~connector.session.ConnectorSession` for a database.
 
@@ -82,6 +83,7 @@ class ConnectorSessionHandler(object):
 
 
 class ConnectorSession(object):
+
     """ Container for the OpenERP transactional stuff:
 
     .. attribute:: cr

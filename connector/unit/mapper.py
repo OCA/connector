@@ -117,6 +117,7 @@ def none(field):
     :param field: name of the source field in the record
     :param binding: True if the relation is a binding record
     """
+
     def modifier(self, record, to_attr):
         if callable(field):
             result = field(self, record, to_attr)
@@ -140,6 +141,7 @@ def convert(field, conv_type):
     :param field: name of the source field in the record
     :param binding: True if the relation is a binding record
     """
+
     def modifier(self, record, to_attr):
         value = record[field]
         if not value:
@@ -166,6 +168,7 @@ def m2o_to_backend(field, binding=None):
     :param field: name of the source field in the record
     :param binding: name of the binding model is the relation is not a binding
     """
+
     def modifier(self, record, to_attr):
         if not record[field]:
             return False
@@ -212,6 +215,7 @@ def backend_to_m2o(field, binding=None, with_inactive=False):
     :param binding: name of the binding model is the relation is not a binding
     :param with_inactive: include the inactive records in OpenERP in the search
     """
+
     def modifier(self, record, to_attr):
         if not record[field]:
             return False
@@ -245,6 +249,7 @@ MappingDefinition = namedtuple('MappingDefinition',
 
 
 class MetaMapper(MetaConnectorUnit):
+
     """ Metaclass for Mapper
 
     Build a ``_map_methods`` dict of mappings methods.
@@ -285,6 +290,7 @@ class MetaMapper(MetaConnectorUnit):
 
 
 class MapChild(ConnectorUnit):
+
     """ MapChild is responsible to convert items.
 
     Items are sub-records of a main record.
@@ -405,6 +411,7 @@ class MapChild(ConnectorUnit):
 
 
 class ImportMapChild(MapChild):
+
     """ :py:class:`MapChild` for the Imports """
 
     def _child_mapper(self):
@@ -430,6 +437,7 @@ class ImportMapChild(MapChild):
 
 
 class ExportMapChild(MapChild):
+
     """ :py:class:`MapChild` for the Exports """
 
     def _child_mapper(self):
@@ -438,6 +446,7 @@ class ExportMapChild(MapChild):
 
 
 class Mapper(ConnectorUnit):
+
     """ A Mapper translates an external record to an OpenERP record and
     conversely. The output of a Mapper is a ``dict``.
 
@@ -754,6 +763,7 @@ class Mapper(ConnectorUnit):
 
 
 class ImportMapper(Mapper):
+
     """ :py:class:`Mapper` for imports.
 
     Transform a record from a backend to an OpenERP record
@@ -790,6 +800,7 @@ class ImportMapper(Mapper):
 
 
 class ExportMapper(Mapper):
+
     """ :py:class:`Mapper` for exports.
 
     Transform a record from OpenERP to a backend record
@@ -826,6 +837,7 @@ class ExportMapper(Mapper):
 
 
 class MapRecord(object):
+
     """ A record prepared to be converted using a :py:class:`Mapper`.
 
     MapRecord instances are prepared by :py:meth:`Mapper.map_record`.
@@ -924,6 +936,7 @@ class MapRecord(object):
 
 
 class MapOptions(dict):
+
     """ Container for the options of mappings.
 
     Options can be accessed using attributes of the instance.  When an

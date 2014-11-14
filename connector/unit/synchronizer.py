@@ -25,6 +25,7 @@ from .backend_adapter import BackendAdapter
 
 
 class Synchronizer(ConnectorUnit):
+
     """ Base class for synchronizers """
 
     # implement in sub-classes
@@ -83,6 +84,7 @@ class Synchronizer(ConnectorUnit):
 
 
 class ExportSynchronizer(Synchronizer):
+
     """ Synchronizer for exporting data from OpenERP to a backend """
 
     @property
@@ -100,6 +102,7 @@ class ExportSynchronizer(Synchronizer):
 
 
 class ImportSynchronizer(Synchronizer):
+
     """ Synchronizer for importing data from a backend to OpenERP """
 
     @property
@@ -117,4 +120,5 @@ class ImportSynchronizer(Synchronizer):
 
 
 class DeleteSynchronizer(Synchronizer):
+
     """ Synchronizer for deleting a record on the backend """

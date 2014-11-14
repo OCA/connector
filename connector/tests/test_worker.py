@@ -6,6 +6,7 @@ from openerp.addons.connector.queue.queue import JobsQueue
 
 
 class test_worker(unittest2.TestCase):
+
     """ Test Worker """
 
     def setUp(self):

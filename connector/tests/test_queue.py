@@ -12,6 +12,7 @@ def dummy_task(session):
 
 
 class test_queue(unittest2.TestCase):
+
     """ Test Queue """
 
     def setUp(self):

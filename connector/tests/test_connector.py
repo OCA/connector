@@ -6,6 +6,7 @@ from openerp.addons.connector.connector import ConnectorUnit
 
 
 class test_connector_unit(unittest2.TestCase):
+
     """ Test Connector Unit """
 
     def test_connector_unit_model_name(self):

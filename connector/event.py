@@ -24,6 +24,7 @@ from .connector import get_openerp_module
 
 
 class Event(object):
+
     """ An event contains consumers called when the event is fired.
 
     The events are able to filter the consumers to execute by model name.

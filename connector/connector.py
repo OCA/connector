@@ -88,6 +88,7 @@ def get_openerp_module(cls_or_func):
 
 
 class MetaConnectorUnit(type):
+
     """ Metaclass for ConnectorUnit.
 
     Keeps a ``_module`` attribute on the classes, the same way OpenERP does
@@ -115,6 +116,7 @@ class MetaConnectorUnit(type):
 
 
 class ConnectorUnit(object):
+
     """Abstract class for each piece of the connector:
 
     Examples:
@@ -200,6 +202,7 @@ class ConnectorUnit(object):
 
 
 class Environment(object):
+
     """ Environment used by the different units for the synchronization.
 
     .. attribute:: backend
@@ -264,6 +267,7 @@ class Environment(object):
 
 
 class Binder(ConnectorUnit):
+
     """ For one record of a model, capable to find an external or
     internal id, or create the binding (link) between them
 

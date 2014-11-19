@@ -401,7 +401,7 @@ class test_mapper_binding(common.TransactionCase):
                                  name='backend')
         backend_record = mock.Mock()
         backend_record.get_backend.return_value = [self.backend]
-        self.env = Environment(backend_record, self.session, 'res.partner')
+        self.connector_env = Environment(backend_record, self.session, 'res.partner')
         self.country_binder = mock.Mock(name='country_binder')
         self.country_binder.return_value = self.country_binder
         self.backend.get_class.return_value = self.country_binder
@@ -418,7 +418,7 @@ class test_mapper_binding(common.TransactionCase):
         partner = self.Partner.browse(self.cr, self.uid, partner_id)
         self.country_binder.to_backend.return_value = 10
 
-        mapper = MyMapper(self.env)
+        mapper = MyMapper(self.connector_env)
         map_record = mapper.map_record(partner)
         self.assertEqual(map_record.values(), {'country': 10})
         self.country_binder.to_backend.assert_called_once_with(
@@ -432,7 +432,7 @@ class test_mapper_binding(common.TransactionCase):
 
         record = {'country': 10}
         self.country_binder.to_openerp.return_value = 44
-        mapper = MyMapper(self.env)
+        mapper = MyMapper(self.connector_env)
         map_record = mapper.map_record(record)
         self.assertEqual(map_record.values(), {'country_id': 44})
         self.country_binder.to_openerp.assert_called_once_with(

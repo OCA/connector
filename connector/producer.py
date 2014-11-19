@@ -73,13 +73,13 @@ orm.BaseModel.write = write
 unlink_original = orm.BaseModel.unlink
 
 
-def unlink(self, cr, uid, ids, context=None):
+@openerp.api.multi
+def unlink(self):
     if self.pool.get('connector.installed') is not None:
-        if not hasattr(ids, '__iter__'):
-            ids = [ids]
-        session = ConnectorSession(cr, uid, context=context)
+        session = ConnectorSession(self.env.cr, self.env.uid,
+                                   context=self.env.context)
         if on_record_unlink.has_consumer_for(session, self._name):
-            for record_id in ids:
+            for record_id in self._ids:
                 on_record_unlink.fire(session, self._name, record_id)
-    return unlink_original(self, cr, uid, ids, context=context)
+    return unlink_original(self)
 orm.BaseModel.unlink = unlink

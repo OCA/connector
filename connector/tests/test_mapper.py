@@ -401,7 +401,8 @@ class test_mapper_binding(common.TransactionCase):
                                  name='backend')
         backend_record = mock.Mock()
         backend_record.get_backend.return_value = [self.backend]
-        self.connector_env = Environment(backend_record, self.session, 'res.partner')
+        self.connector_env = Environment(
+            backend_record, self.session, 'res.partner')
         self.country_binder = mock.Mock(name='country_binder')
         self.country_binder.return_value = self.country_binder
         self.backend.get_class.return_value = self.country_binder

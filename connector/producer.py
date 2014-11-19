@@ -63,7 +63,7 @@ def write(self, vals):
         session = ConnectorSession(self.env.cr, self.env.uid,
                                    context=self.env.context)
         if on_record_write.has_consumer_for(session, self._name):
-            for record_id in self._ids:
+            for record_id in self.ids:
                 on_record_write.fire(session, self._name,
                                      record_id, vals)
     return result
@@ -79,7 +79,7 @@ def unlink(self):
         session = ConnectorSession(self.env.cr, self.env.uid,
                                    context=self.env.context)
         if on_record_unlink.has_consumer_for(session, self._name):
-            for record_id in self._ids:
+            for record_id in self.ids:
                 on_record_unlink.fire(session, self._name, record_id)
     return unlink_original(self)
 orm.BaseModel.unlink = unlink

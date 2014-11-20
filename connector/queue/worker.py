@@ -59,13 +59,13 @@ class Worker(threading.Thread):
     queue_class = JobsQueue
     job_storage_class = OpenERPJobStorage
 
-    def __init__(self, db_name, watcher):
+    def __init__(self, db_name, watcher_):
         super(Worker, self).__init__()
         self.queue = self.queue_class()
         self.db_name = db_name
         threading.current_thread().dbname = db_name
         self.uuid = unicode(uuid.uuid4())
-        self.watcher = watcher
+        self.watcher = watcher_
 
     def run_job(self, job):
         """ Execute a job """

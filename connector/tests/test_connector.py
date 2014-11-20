@@ -18,4 +18,4 @@ class test_connector_unit(unittest2.TestCase):
 
     def test_connector_unit_no_model_name(self):
         with self.assertRaises(NotImplementedError):
-            ConnectorUnit.model_name
+            ConnectorUnit.model_name  # pylint: disable=W0104

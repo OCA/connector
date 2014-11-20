@@ -1,3 +1,3 @@
 # -*- coding: utf-8 -*-
 
-import checkpoint
+from . import checkpoint

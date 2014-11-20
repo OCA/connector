@@ -264,22 +264,22 @@ class MetaMapper(MetaConnectorUnit):
                 if cls._map_methods.get(attr_name) is None:
                     cls._map_methods[attr_name] = definition
                 else:
-                    changed_by = cls._map_methods[attr_name].changed_by
-                    changed_by.update(definition.changed_by)
+                    mapping_changed_by = cls._map_methods[attr_name].changed_by
+                    mapping_changed_by.update(definition.changed_by)
 
         for attr_name, attr in attrs.iteritems():
-            mapping = getattr(attr, 'is_mapping', None)
-            if mapping:
-                only_create = getattr(attr, 'only_create', False)
+            is_mapping = getattr(attr, 'is_mapping', None)
+            if is_mapping:
+                has_only_create = getattr(attr, 'only_create', False)
 
-                changed_by = set(getattr(attr, 'changed_by', ()))
+                mapping_changed_by = set(getattr(attr, 'changed_by', ()))
                 if cls._map_methods.get(attr_name) is not None:
                     definition = cls._map_methods[attr_name]
-                    changed_by.update(definition.changed_by)
+                    mapping_changed_by.update(definition.changed_by)
 
                 # keep the last choice for only_create
-                definition = MappingDefinition(changed_by,
-                                               only_create)
+                definition = MappingDefinition(mapping_changed_by,
+                                               has_only_create)
                 cls._map_methods[attr_name] = definition
         return cls
 
@@ -675,9 +675,9 @@ class Mapper(ConnectorUnit):
                 result[to_attr] = value
 
         for meth, definition in self.map_methods:
-            changed_by = definition.changed_by
-            if (not fields or not changed_by or
-                    changed_by.intersection(fields)):
+            mapping_changed_by = definition.changed_by
+            if (not fields or not mapping_changed_by or
+                    mapping_changed_by.intersection(fields)):
                 values = meth(map_record.source)
                 if not values:
                     continue
@@ -784,8 +784,8 @@ class ImportMapper(Mapper):
         # change that.
         column = self.model._all_columns[to_attr].column
         if column._type == 'many2one':
-            mapping = backend_to_m2o(from_attr)
-            value = mapping(self, record, to_attr)
+            mapping_func = backend_to_m2o(from_attr)
+            value = mapping_func(self, record, to_attr)
         return value
 
 
@@ -820,8 +820,8 @@ class ExportMapper(Mapper):
         # change that.
         column = self.model._all_columns[from_attr].column
         if column._type == 'many2one':
-            mapping = m2o_to_backend(from_attr)
-            value = mapping(self, record, to_attr)
+            mapping_func = m2o_to_backend(from_attr)
+            value = mapping_func(self, record, to_attr)
         return value
 
 

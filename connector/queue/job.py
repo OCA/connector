@@ -494,13 +494,14 @@ class Job(object):
                 if not self.max_retries:  # infinite retries
                     raise
                 elif self.retry >= self.max_retries:
-                    type, value, traceback = sys.exc_info()
+                    type_, value, traceback = sys.exc_info()
                     # change the exception type but keep the original
                     # traceback and message:
                     # http://blog.ianbicking.org/2007/09/12/
                     # re-raising-exceptions/
                     new_exc = FailedJobError("Max. retries (%d) reached: %s" %
-                                             (self.max_retries, value or type))
+                                             (self.max_retries, value or type_)
+                                             )
                     raise new_exc.__class__, new_exc, traceback
                 raise
         return self.result

@@ -19,5 +19,5 @@
 #
 ##############################################################################
 
-import model
-import worker
+from . import model
+from . import worker

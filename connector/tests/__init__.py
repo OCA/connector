@@ -19,16 +19,16 @@
 #
 ##############################################################################
 
-import test_session
-import test_event
-import test_job
-import test_queue
-import test_worker
-import test_backend
-import test_producer
-import test_connector
-import test_mapper
-import test_related_action
+from . import test_session
+from . import test_event
+from . import test_job
+from . import test_queue
+from . import test_worker
+from . import test_backend
+from . import test_producer
+from . import test_connector
+from . import test_mapper
+from . import test_related_action
 
 fast_suite = [
 ]

@@ -28,7 +28,6 @@ def task_b(session, model_name):
 def task_a(session, model_name):
     """ Task description
     """
-    pass
 
 
 def dummy_task(session):

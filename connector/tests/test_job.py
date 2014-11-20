@@ -42,7 +42,7 @@ def retryable_error_task(session):
     raise RetryableJobError
 
 
-class test_job(unittest2.TestCase):
+class TestJobs(unittest2.TestCase):
     """ Test Job """
 
     def setUp(self):
@@ -52,8 +52,8 @@ class test_job(unittest2.TestCase):
         """
         Create a job
         """
-        job = Job(func=task_a)
-        self.assertEqual(job.func, task_a)
+        test_job = Job(func=task_a)
+        self.assertEqual(test_job.func, task_a)
 
     def test_priority(self):
         """ The lower the priority number, the higher
@@ -72,16 +72,16 @@ class test_job(unittest2.TestCase):
         self.assertGreater(job_a, job_b)
 
     def test_perform(self):
-        job = Job(func=dummy_task)
-        result = job.perform(self.session)
+        test_job = Job(func=dummy_task)
+        result = test_job.perform(self.session)
         self.assertEqual(result, 'ok')
 
     def test_perform_args(self):
-        job = Job(func=dummy_task_args,
-                  model_name='res.users',
-                  args=('o', 'k'),
-                  kwargs={'c': '!'})
-        result = job.perform(self.session)
+        test_job = Job(func=dummy_task_args,
+                       model_name='res.users',
+                       args=('o', 'k'),
+                       kwargs={'c': '!'})
+        result = test_job.perform(self.session)
         self.assertEqual(result, 'ok!')
 
     def test_description(self):
@@ -101,110 +101,111 @@ class test_job(unittest2.TestCase):
         self.assertEqual(job_a.description, description)
 
     def test_retryable_error(self):
-        job = Job(func=retryable_error_task,
-                  max_retries=3)
+        test_job = Job(func=retryable_error_task,
+                       max_retries=3)
         with self.assertRaises(RetryableJobError):
-            job.perform(self.session)
+            test_job.perform(self.session)
         with self.assertRaises(RetryableJobError):
-            job.perform(self.session)
+            test_job.perform(self.session)
         with self.assertRaises(FailedJobError):
-            job.perform(self.session)
+            test_job.perform(self.session)
 
 
-class test_job_storage(common.TransactionCase):
+class TestJobStorage(common.TransactionCase):
     """ Test storage of jobs """
 
     def setUp(self):
-        super(test_job_storage, self).setUp()
+        super(TestJobStorage, self).setUp()
         self.pool = openerp.modules.registry.RegistryManager.get(common.DB)
         self.session = ConnectorSession(self.cr, self.uid)
         self.queue_job = self.registry('queue.job')
 
     def test_store(self):
-        job = Job(func=task_a)
+        test_job = Job(func=task_a)
         storage = OpenERPJobStorage(self.session)
-        storage.store(job)
+        storage.store(test_job)
         stored = self.queue_job.search(
             self.cr, self.uid,
-            [('uuid', '=', job.uuid)])
+            [('uuid', '=', test_job.uuid)])
         self.assertEqual(len(stored), 1)
 
     def test_read(self):
         eta = datetime.now() + timedelta(hours=5)
-        job = Job(func=dummy_task_args,
-                  model_name='res.users',
-                  args=('o', 'k'),
-                  kwargs={'c': '!'},
-                  priority=15,
-                  eta=eta,
-                  description="My description")
-        job.user_id = 1
-        job.company_id = self.ref("base.main_company")
+        test_job = Job(func=dummy_task_args,
+                       model_name='res.users',
+                       args=('o', 'k'),
+                       kwargs={'c': '!'},
+                       priority=15,
+                       eta=eta,
+                       description="My description")
+        test_job.user_id = 1
+        test_job.company_id = self.ref("base.main_company")
         storage = OpenERPJobStorage(self.session)
-        storage.store(job)
-        job_read = storage.load(job.uuid)
-        self.assertEqual(job.uuid, job_read.uuid)
-        self.assertEqual(job.model_name, job_read.model_name)
-        self.assertEqual(job.func, job_read.func)
-        self.assertEqual(job.args, job_read.args)
-        self.assertEqual(job.kwargs, job_read.kwargs)
-        self.assertEqual(job.func_name, job_read.func_name)
-        self.assertEqual(job.func_string, job_read.func_string)
-        self.assertEqual(job.description, job_read.description)
-        self.assertEqual(job.state, job_read.state)
-        self.assertEqual(job.priority, job_read.priority)
-        self.assertEqual(job.exc_info, job_read.exc_info)
-        self.assertEqual(job.result, job_read.result)
-        self.assertEqual(job.user_id, job_read.user_id)
-        self.assertEqual(job.company_id, job_read.company_id)
+        storage.store(test_job)
+        job_read = storage.load(test_job.uuid)
+        self.assertEqual(test_job.uuid, job_read.uuid)
+        self.assertEqual(test_job.model_name, job_read.model_name)
+        self.assertEqual(test_job.func, job_read.func)
+        self.assertEqual(test_job.args, job_read.args)
+        self.assertEqual(test_job.kwargs, job_read.kwargs)
+        self.assertEqual(test_job.func_name, job_read.func_name)
+        self.assertEqual(test_job.func_string, job_read.func_string)
+        self.assertEqual(test_job.description, job_read.description)
+        self.assertEqual(test_job.state, job_read.state)
+        self.assertEqual(test_job.priority, job_read.priority)
+        self.assertEqual(test_job.exc_info, job_read.exc_info)
+        self.assertEqual(test_job.result, job_read.result)
+        self.assertEqual(test_job.user_id, job_read.user_id)
+        self.assertEqual(test_job.company_id, job_read.company_id)
         delta = timedelta(seconds=1)  # DB does not keep milliseconds
-        self.assertAlmostEqual(job.date_created, job_read.date_created,
+        self.assertAlmostEqual(test_job.date_created, job_read.date_created,
                                delta=delta)
-        self.assertAlmostEqual(job.date_started, job_read.date_started,
+        self.assertAlmostEqual(test_job.date_started, job_read.date_started,
                                delta=delta)
-        self.assertAlmostEqual(job.date_enqueued, job_read.date_enqueued,
+        self.assertAlmostEqual(test_job.date_enqueued, job_read.date_enqueued,
                                delta=delta)
-        self.assertAlmostEqual(job.date_done, job_read.date_done,
+        self.assertAlmostEqual(test_job.date_done, job_read.date_done,
                                delta=delta)
-        self.assertAlmostEqual(job.eta, job_read.eta,
+        self.assertAlmostEqual(test_job.eta, job_read.eta,
                                delta=delta)
 
     def test_unicode(self):
-        job = Job(func=dummy_task_args,
-                  model_name='res.users',
-                  args=(u'öô¿‽', u'ñě'),
-                  kwargs={'c': u'ßø'},
-                  priority=15,
-                  description=u"My dé^Wdescription")
-        job.user_id = 1
+        test_job = Job(func=dummy_task_args,
+                       model_name='res.users',
+                       args=(u'öô¿‽', u'ñě'),
+                       kwargs={'c': u'ßø'},
+                       priority=15,
+                       description=u"My dé^Wdescription")
+        test_job.user_id = 1
         storage = OpenERPJobStorage(self.session)
-        storage.store(job)
-        job_read = storage.load(job.uuid)
-        self.assertEqual(job.args, job_read.args)
+        storage.store(test_job)
+        job_read = storage.load(test_job.uuid)
+        self.assertEqual(test_job.args, job_read.args)
         self.assertEqual(job_read.args, ('res.users', u'öô¿‽', u'ñě'))
-        self.assertEqual(job.kwargs, job_read.kwargs)
+        self.assertEqual(test_job.kwargs, job_read.kwargs)
         self.assertEqual(job_read.kwargs, {'c': u'ßø'})
-        self.assertEqual(job.description, job_read.description)
+        self.assertEqual(test_job.description, job_read.description)
         self.assertEqual(job_read.description, u"My dé^Wdescription")
 
     def test_accented_bytestring(self):
-        job = Job(func=dummy_task_args,
-                  model_name='res.users',
-                  args=('öô¿‽', 'ñě'),
-                  kwargs={'c': 'ßø'},
-                  priority=15,
-                  description="My dé^Wdescription")
-        job.user_id = 1
+        test_job = Job(func=dummy_task_args,
+                       model_name='res.users',
+                       args=('öô¿‽', 'ñě'),
+                       kwargs={'c': 'ßø'},
+                       priority=15,
+                       description="My dé^Wdescription")
+        test_job.user_id = 1
         storage = OpenERPJobStorage(self.session)
-        storage.store(job)
-        job_read = storage.load(job.uuid)
-        self.assertEqual(job.args, job_read.args)
+        storage.store(test_job)
+        job_read = storage.load(test_job.uuid)
+        self.assertEqual(test_job.args, job_read.args)
         self.assertEqual(job_read.args, ('res.users', 'öô¿‽', 'ñě'))
-        self.assertEqual(job.kwargs, job_read.kwargs)
+        self.assertEqual(test_job.kwargs, job_read.kwargs)
         self.assertEqual(job_read.kwargs, {'c': 'ßø'})
         # the job's description has been created as bytestring but is
         # decoded to utf8 by the ORM so make them comparable
-        self.assertEqual(job.description, job_read.description.encode('utf8'))
+        self.assertEqual(test_job.description,
+                         job_read.description.encode('utf8'))
         self.assertEqual(job_read.description,
                          "My dé^Wdescription".decode('utf8'))
 
@@ -228,11 +229,11 @@ class test_job_storage(common.TransactionCase):
         self.assertEqual(len(stored), 1)
 
 
-class test_job_storage_multi_company(common.TransactionCase):
+class TestJobStorageMultiCompany(common.TransactionCase):
     """ Test storage of jobs """
 
     def setUp(self):
-        super(test_job_storage_multi_company, self).setUp()
+        super(TestJobStorageMultiCompany, self).setUp()
         self.pool = openerp.modules.registry.RegistryManager.get(common.DB)
         self.session = ConnectorSession(self.cr, self.uid, context={})
         self.queue_job = self.registry('queue.job')

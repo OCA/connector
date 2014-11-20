@@ -20,7 +20,7 @@
 ##############################################################################
 
 from openerp.osv import orm, fields
-import backend
+from . import backend
 
 
 class connector_backend(orm.AbstractModel):

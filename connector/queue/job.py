@@ -75,7 +75,7 @@ def _unpickle(pickled):
 class JobStorage(object):
     """ Interface for the storage of jobs """
 
-    def store(self, job):
+    def store(self, job_):
         """ Store a job """
         raise NotImplementedError
 
@@ -110,22 +110,23 @@ class OpenERPJobStorage(JobStorage):
         from the ones to pass to the job function.
 
         """
-        job = Job(func=func, model_name=model_name, args=args, kwargs=kwargs,
-                  priority=priority, eta=eta, max_retries=max_retries,
-                  description=description)
-        job.user_id = self.session.uid
+        new_job = Job(func=func, model_name=model_name, args=args,
+                      kwargs=kwargs, priority=priority, eta=eta,
+                      max_retries=max_retries, description=description)
+        new_job.user_id = self.session.uid
         if 'company_id' in self.session.context:
             company_id = self.session.context['company_id']
         else:
             company_obj = self.session.pool['res.company']
             company_id = company_obj._company_default_get(
-                self.session.cr, job.user_id,
+                self.session.cr,
+                new_job.user_id,
                 object='queue.job',
                 field='company_id',
                 context=self.session.context)
-        job.company_id = company_id
-        self.store(job)
-        return job.uuid
+        new_job.company_id = company_id
+        self.store(new_job)
+        return new_job.uuid
 
     def enqueue_resolve_args(self, func, *args, **kwargs):
         """Create a Job and enqueue it in the queue. Return the job uuid."""
@@ -157,8 +158,8 @@ class OpenERPJobStorage(JobStorage):
             openerp_id = job_ids[0]
         return openerp_id
 
-    def openerp_id(self, job):
-        return self._openerp_id(job.uuid)
+    def openerp_id(self, job_):
+        return self._openerp_id(job_.uuid)
 
     def _worker_id(self, worker_uuid):
         openerp_id = None
@@ -171,62 +172,62 @@ class OpenERPJobStorage(JobStorage):
             openerp_id = worker_ids[0]
         return openerp_id
 
-    def store(self, job):
+    def store(self, job_):
         """ Store the Job """
-        vals = {'state': job.state,
-                'priority': job.priority,
-                'retry': job.retry,
-                'max_retries': job.max_retries,
-                'exc_info': job.exc_info,
-                'user_id': job.user_id or self.session.uid,
-                'company_id': job.company_id,
-                'result': unicode(job.result) if job.result else False,
+        vals = {'state': job_.state,
+                'priority': job_.priority,
+                'retry': job_.retry,
+                'max_retries': job_.max_retries,
+                'exc_info': job_.exc_info,
+                'user_id': job_.user_id or self.session.uid,
+                'company_id': job_.company_id,
+                'result': unicode(job_.result) if job_.result else False,
                 'date_enqueued': False,
                 'date_started': False,
                 'date_done': False,
                 'eta': False,
                 }
 
-        if job.date_enqueued:
-            vals['date_enqueued'] = job.date_enqueued.strftime(
+        if job_.date_enqueued:
+            vals['date_enqueued'] = job_.date_enqueued.strftime(
                 DEFAULT_SERVER_DATETIME_FORMAT)
-        if job.date_started:
-            vals['date_started'] = job.date_started.strftime(
+        if job_.date_started:
+            vals['date_started'] = job_.date_started.strftime(
                 DEFAULT_SERVER_DATETIME_FORMAT)
-        if job.date_done:
-            vals['date_done'] = job.date_done.strftime(
+        if job_.date_done:
+            vals['date_done'] = job_.date_done.strftime(
                 DEFAULT_SERVER_DATETIME_FORMAT)
-        if job.eta:
-            vals['eta'] = job.eta.strftime(DEFAULT_SERVER_DATETIME_FORMAT)
+        if job_.eta:
+            vals['eta'] = job_.eta.strftime(DEFAULT_SERVER_DATETIME_FORMAT)
 
-        if job.canceled:
+        if job_.canceled:
             vals['active'] = False
 
-        if job.worker_uuid:
-            vals['worker_id'] = self._worker_id(job.worker_uuid)
+        if job_.worker_uuid:
+            vals['worker_id'] = self._worker_id(job_.worker_uuid)
         else:
             vals['worker_id'] = False
 
-        if self.exists(job.uuid):
+        if self.exists(job_.uuid):
             self.job_model.write(self.session.cr,
                                  self.session.uid,
-                                 self.openerp_id(job),
+                                 self.openerp_id(job_),
                                  vals,
                                  self.session.context)
         else:
             fmt = DEFAULT_SERVER_DATETIME_FORMAT
-            date_created = job.date_created.strftime(fmt)
-            vals.update({'uuid': job.uuid,
-                         'name': job.description,
-                         'func_string': job.func_string,
+            date_created = job_.date_created.strftime(fmt)
+            vals.update({'uuid': job_.uuid,
+                         'name': job_.description,
+                         'func_string': job_.func_string,
                          'date_created': date_created,
-                         'model_name': (job.model_name if job.model_name
+                         'model_name': (job_.model_name if job_.model_name
                                         else False),
                          })
 
-            vals['func'] = dumps((job.func_name,
-                                  job.args,
-                                  job.kwargs))
+            vals['func'] = dumps((job_.func_name,
+                                  job_.args,
+                                  job_.kwargs))
 
             self.job_model.create(self.session.cr,
                                   SUPERUSER_ID,
@@ -251,39 +252,39 @@ class OpenERPJobStorage(JobStorage):
         if stored.eta:
             eta = datetime.strptime(stored.eta, DEFAULT_SERVER_DATETIME_FORMAT)
 
-        job = Job(func=func_name, args=args, kwargs=kwargs,
-                  priority=stored.priority, eta=eta,
-                  job_uuid=stored.uuid, description=stored.name)
+        job_ = Job(func=func_name, args=args, kwargs=kwargs,
+                   priority=stored.priority, eta=eta,
+                   job_uuid=stored.uuid, description=stored.name)
 
         if stored.date_created:
-            job.date_created = datetime.strptime(
+            job_.date_created = datetime.strptime(
                 stored.date_created, DEFAULT_SERVER_DATETIME_FORMAT)
 
         if stored.date_enqueued:
-            job.date_enqueued = datetime.strptime(
+            job_.date_enqueued = datetime.strptime(
                 stored.date_enqueued, DEFAULT_SERVER_DATETIME_FORMAT)
 
         if stored.date_started:
-            job.date_started = datetime.strptime(
+            job_.date_started = datetime.strptime(
                 stored.date_started, DEFAULT_SERVER_DATETIME_FORMAT)
 
         if stored.date_done:
-            job.date_done = datetime.strptime(
+            job_.date_done = datetime.strptime(
                 stored.date_done, DEFAULT_SERVER_DATETIME_FORMAT)
 
-        job.state = stored.state
-        job.result = stored.result if stored.result else None
-        job.exc_info = stored.exc_info if stored.exc_info else None
-        job.user_id = stored.user_id.id if stored.user_id else None
-        job.canceled = not stored.active
-        job.model_name = stored.model_name if stored.model_name else None
-        job.retry = stored.retry
-        job.max_retries = stored.max_retries
+        job_.state = stored.state
+        job_.result = stored.result if stored.result else None
+        job_.exc_info = stored.exc_info if stored.exc_info else None
+        job_.user_id = stored.user_id.id if stored.user_id else None
+        job_.canceled = not stored.active
+        job_.model_name = stored.model_name if stored.model_name else None
+        job_.retry = stored.retry
+        job_.max_retries = stored.max_retries
         if stored.worker_id:
-            job.worker_uuid = stored.worker_id.uuid
+            job_.worker_uuid = stored.worker_id.uuid
         if stored.company_id:
-            job.company_id = stored.company_id.id
-        return job
+            job_.company_id = stored.company_id.id
+        return job_
 
 
 class Job(object):

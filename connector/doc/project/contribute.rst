@@ -57,5 +57,5 @@ for historical reasons (magentoerpconnect, prestashoperpconnect).
 New projects should ideally respect it.
 
 .. _`OpenERP Magento Connector`: https://github.com/OCA/connector-magento
-.. _`OpenERP Prestashop Connector`: https://code.launchpad.net/prestashoperpconnect
+.. _`OpenERP Prestashop Connector`: https://github.com/OCA/connector-prestashop
 .. _`E-Commerce Connector`: https://github.com/OCA/connector-ecommerce

@@ -21,7 +21,7 @@
 {'name': 'Connector Base Product',
  'version': '1.0',
  'author': 'Openerp Connector Core Editors',
- 'website': 'http://openerp-connector.com',
+ 'website': 'http://odoo-connector.com',
  'license': 'AGPL-3',
  'category': 'Connector',
  'description': """

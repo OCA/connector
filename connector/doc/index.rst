@@ -47,8 +47,8 @@ Core Features
 Connectors based on the framework
 *********************************
 
-* `Magento Connector <http://www.openerp-magento-connector.com>`_
-* `Prestashop Connector <https://launchpad.net/prestashoperpconnect>`_
+* `Magento Connector <http://www.odoo-magento-connector.com>`_
+* `Prestashop Connector <https://github.com/OCA/connector-prestashop>`_
 * `solerp (Solr Connector) <https://github.com/akretion/solerp>`_
 * `OpenERP Multi Company <http://www.openerp.net.cn/new-intercompany-process-module/>`_
 * `CMIS <https://github.com/OCA/connector-cmis>`_

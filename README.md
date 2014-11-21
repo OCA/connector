@@ -12,4 +12,4 @@ The team for the community is here: https://launchpad.net/~openerp-connector-com
 Please join and subscribe to the mailing list.
 
 Documentation:
-http://www.openerp-connector.com
+http://www.odoo-connector.com

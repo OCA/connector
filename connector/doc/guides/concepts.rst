@@ -13,7 +13,7 @@ An example of implementation is the `OpenERP Magento Connector`_.
 This document describes them from a high-level point of view and gives
 pointers to more concrete 'how-to' or small tutorials.
 
-.. _`OpenERP Magento Connector`: http://www.openerp-magento-connector.com
+.. _`OpenERP Magento Connector`: http://www.odoo-magento-connector.com
 
 ******
 Events

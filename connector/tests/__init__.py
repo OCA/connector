@@ -29,19 +29,3 @@ from . import test_producer
 from . import test_connector
 from . import test_mapper
 from . import test_related_action
-
-fast_suite = [
-]
-
-checks = [
-    test_session,
-    test_event,
-    test_job,
-    test_queue,
-    test_worker,
-    test_backend,
-    test_producer,
-    test_connector,
-    test_mapper,
-    test_related_action,
-]

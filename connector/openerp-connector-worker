@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+import re
 import sys
 import logging
 import os
@@ -82,6 +83,9 @@ class WorkerConnector(workers.Worker):
                 db_names = services['db'].exp_list(True)
             else:
                 db_names = []
+        dbfilter = config['dbfilter']
+        if dbfilter and db_names:
+            db_names = [d for d in db_names if re.match(dbfilter, d)]
         if len(db_names):
             self.db_index = (self.db_index + 1) % len(db_names)
             db_name = db_names[self.db_index]

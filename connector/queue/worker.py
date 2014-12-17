@@ -19,6 +19,7 @@
 #
 ##############################################################################
 
+import re
 import logging
 import os
 import threading
@@ -265,6 +266,9 @@ class WorkerWatcher(threading.Thread):
                 db_names = services['db'].exp_list(True)
             else:
                 db_names = []
+        dbfilter = config['dbfilter']
+        if dbfilter and db_names:
+            db_names = [d for d in db_names if re.match(dbfilter, d)]
         available_db_names = []
         for db_name in db_names:
             session_hdl = ConnectorSessionHandler(db_name,

@@ -242,4 +242,4 @@ Their implementation can vary a lot. Have a look on the
 
 
 .. _`OpenERP Magento Connector`: https://github.com/OCA/connector-magento
-.. _`OpenERP Prestashop Connector`: https://code.launchpad.net/prestashoperpconnect
+.. _`OpenERP Prestashop Connector`: https://github.com/OCA/connector-prestashop

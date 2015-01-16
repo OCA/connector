@@ -298,5 +298,5 @@ intersphinx_mapping = {
     'http://docs.python.org/': None,
     'openerpweb': ('https://doc.openerp.com/trunk/web/', None),
     'openerpdev': ('https://doc.openerp.com/trunk/server/', None),
-    'connectormagento': ('http://www.openerp-magento-connector.com', None),
+    'connectormagento': ('http://www.odoo-magento-connector.com', None),
 }

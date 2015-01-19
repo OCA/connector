@@ -5,6 +5,8 @@
 Odoo Connector Modules
 ======================
 
+[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/OCA/connector?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 *OpenERP Connector is a powerful framework to develop any kind of bi-directional connector between OpenERP (Open Source ERP) and any other software or service.*
 
 This OpenERP add-on has a modular and generic core, with the ability to be extended with additional modules for new features or customizations.

@@ -20,6 +20,7 @@
 ##############################################################################
 
 import inspect
+from contextlib import contextmanager
 from openerp.osv import orm
 
 
@@ -248,12 +249,14 @@ class Environment(object):
         self.model = self.session.pool.get(model_name)
         self.pool = self.session.pool
 
+    @contextmanager
     def set_lang(self, code):
         """ Change the working language in the environment.
 
         It changes the ``lang`` key in the session's context.
         """
-        self.session.context['lang'] = code
+        with self.session.change_context(lang=code):
+            yield
 
     def get_connector_unit(self, base_class):
         """ Searches and returns an instance of the

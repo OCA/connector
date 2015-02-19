@@ -137,20 +137,54 @@ class ConnectorSession(object):
 
     @contextmanager
     def change_user(self, uid):
-        """ Context Manager: temporarily change the user's session and
-        restablish the normal user at closing,
+        """ Context Manager: create a new Env with the specified user
+
+        It generates a new :class:`openerp.api.Environment` used within
+        the context manager, where the user is replaced by the specified
+        one.  The original environment is restored at the closing of the
+        context manager.
+
+        .. warning:: only recordsets read within the context manager
+                     will be attached to this environment. In many cases,
+                     you will prefer to use
+                     :meth:`openerp.models.BaseModel.with_context`
         """
-        raise Exception('Deprecated: use sudo() on a recordset.')
+        env = self.env
+        self.env = env(user=uid)
+        yield
+        self.env = env
 
     @contextmanager
-    def change_context(self, values):
-        """ Context Manager: shallow copy the context, update it with
-        ``values``, then restore the original context on closing.
+    def change_context(self, *args, **kwargs):
+        """ Context Manager: create a new Env with an updated context
 
-        :param values: values to apply on the context
-        :type values: dict
+        It generates a new :class:`openerp.api.Environment` used within
+        the context manager, where the context is extended with the
+        arguments. The original environment is restored at the closing
+        of the context manager.
+
+        The extended context is either the provided ``context`` in which
+        ``overrides`` are merged or the *current* context in which
+        ``overrides`` are merged e.g.
+
+        .. code-block:: python
+
+            # current context is {'key1': True}
+            r2 = records.with_context({}, key2=True)
+            # -> r2._context is {'key2': True}
+            r2 = records.with_context(key2=True)
+            # -> r2._context is {'key1': True, 'key2': True}
+
+        .. warning:: only recordsets read within the context manager
+                     will be attached to this environment. In many cases,
+                     you will prefer to use
+                     :meth:`openerp.models.BaseModel.with_context`
         """
-        raise Exception('Deprecated: use with_context() on a recordset.')
+        context = dict(args[0] if args else self.context, **kwargs)
+        env = self.env
+        self.env = env(context=context)
+        yield
+        self.env = env
 
     def commit(self):
         """ Commit the cursor """

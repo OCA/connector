@@ -39,7 +39,7 @@ class connector_backend(orm.AbstractModel):
         'version': fields.selection((), 'Version', required=True),
     }
 
-    def get_backend(self, cr, uid, id, context=None):
+    def get_backend(self, cr, uid, ids, context=None):
         """ For a record of backend, returns the appropriate instance
         of :py:class:`~connector.backend.Backend`.
         """

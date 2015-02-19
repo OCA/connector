@@ -305,14 +305,14 @@ class Binder(ConnectorUnit):
 
     _model_name = None  # define in sub-classes
 
-    def to_openerp(self, external_id, unwrap=False, record=False):
+    def to_openerp(self, external_id, unwrap=False, browse=False):
         """ Give the OpenERP ID for an external ID
 
         :param external_id: external ID for which we want
                             the OpenERP ID
         :param unwrap: if True, returns the openerp_id
                        else return the id of the binding
-        :param record: if True, returns a recordset
+        :param browse: if True, returns a recordset
         :return: a record ID, depending on the value of unwrap,
                  or None if the external_id is not mapped
         :rtype: int

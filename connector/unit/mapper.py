@@ -178,7 +178,7 @@ def m2o_to_backend(field, binding=None):
             binding_model = column._obj
         else:
             binding_model = binding
-        binder = self.get_binder_for_model(binding_model)
+        binder = self.binder_for(binding_model)
         # if a relation is not a binding, we wrap the record in the
         # binding, we'll return the id of the binding
         wrap = bool(binding)
@@ -224,7 +224,7 @@ def backend_to_m2o(field, binding=None, with_inactive=False):
             binding_model = column._obj
         else:
             binding_model = binding
-        binder = self.get_binder_for_model(binding_model)
+        binder = self.binder_for(binding_model)
         # if we want the ID of a normal record, not a binding,
         # we ask the unwrapped id to the binder
         unwrap = bool(binding)

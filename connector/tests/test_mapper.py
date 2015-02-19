@@ -400,7 +400,7 @@ class test_mapper_binding(common.TransactionCase):
         self.backend = mock.Mock(wraps=Backend('x', version='y'),
                                  name='backend')
         backend_record = mock.Mock()
-        backend_record.get_backend.return_value = [self.backend]
+        backend_record.get_backend.return_value = self.backend
         self.connector_env = Environment(
             backend_record, self.session, 'res.partner')
         self.country_binder = mock.Mock(name='country_binder')
@@ -467,7 +467,7 @@ class test_mapper_binding(common.TransactionCase):
             children = [('lines', 'line_ids', 'res.currency.rate')]
 
         backend_record = mock.Mock()
-        backend_record.get_backend.side_effect = lambda *a: [backend]
+        backend_record.get_backend.side_effect = lambda *a: backend
         env = Environment(backend_record, self.session, 'res.currency')
 
         record = {'name': 'SO1',
@@ -529,7 +529,7 @@ class test_mapper_binding(common.TransactionCase):
             children = [('lines', 'line_ids', 'res.currency.rate')]
 
         backend_record = mock.Mock()
-        backend_record.get_backend.side_effect = lambda *a: [backend]
+        backend_record.get_backend.side_effect = lambda *a: backend
         env = Environment(backend_record, self.session, 'res.currency')
 
         record = {'name': 'SO1',

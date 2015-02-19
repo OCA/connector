@@ -237,7 +237,7 @@ class Environment(object):
         """
         self.backend_record = backend_record
         backend = backend_record.get_backend()
-        self.backend = backend[0]
+        self.backend = backend
         self.session = session
         self.model_name = model_name
         self.model = self.session.pool.get(model_name)

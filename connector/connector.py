@@ -20,8 +20,11 @@
 ##############################################################################
 
 import inspect
+import logging
 from contextlib import contextmanager
 from openerp.osv import orm
+
+_logger = logging.getLogger(__name__)
 
 
 def _get_openerp_module_name(module_path):
@@ -143,7 +146,7 @@ class ConnectorUnit(object):
         self.backend = self.environment.backend
         self.backend_record = self.environment.backend_record
         self.session = self.environment.session
-        self.model = self.session.pool.get(environment.model_name)
+
         # so we can use openerp.tools.translate._, used to find the lang
         # that's because _() search for a localcontext attribute
         # but self.localcontext should not be used for other purposes
@@ -171,6 +174,17 @@ class ConnectorUnit(object):
     def env(self):
         """ Returns the openerp.api.environment """
         return self.session.env
+
+    @property
+    def model(self):
+        _logger.warning('Deprecated: ConnectorUnit.model is no longer a '
+                        'property. Now, you should use '
+                        'ConnectorUnit.recordset() that returns a '
+                        'new-api model/recordset.')
+        return self.session.pool.get(self.environment.model_name)
+
+    def recordset(self, model=None):
+        return self.env[model or self.environment.model_name]
 
     def get_connector_unit_for_model(self, connector_unit_class, model=None):
         """ According to the current

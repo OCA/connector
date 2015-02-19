@@ -30,6 +30,9 @@ class Synchronizer(ConnectorUnit):
     # implement in sub-classes
     _model_name = None
 
+    _base_mapper = Mapper
+    _base_backend_adapter = BackendAdapter
+
     def __init__(self, environment):
         super(Synchronizer, self).__init__(environment)
         self._backend_adapter = None
@@ -50,7 +53,8 @@ class Synchronizer(ConnectorUnit):
         :rtype: :py:class:`connector.unit.mapper.Mapper`
         """
         if self._mapper is None:
-            self._mapper = self.environment.get_connector_unit(Mapper)
+            get_unit = self.environment.get_connector_unit
+            self._mapper = get_unit(self._base_mapper)
         return self._mapper
 
     @property
@@ -63,7 +67,7 @@ class Synchronizer(ConnectorUnit):
         :rtype: :py:class:`connector.unit.binder.Binder`
         """
         if self._binder is None:
-            self._binder = self.get_binder_for_model()
+            self._binder = self.binder_for()
         return self._binder
 
     @property
@@ -78,42 +82,20 @@ class Synchronizer(ConnectorUnit):
         """
         if self._backend_adapter is None:
             get_unit = self.environment.get_connector_unit
-            self._backend_adapter = get_unit(BackendAdapter)
+            self._backend_adapter = get_unit(self._base_backend_adapter)
         return self._backend_adapter
 
 
 class ExportSynchronizer(Synchronizer):
     """ Synchronizer for exporting data from OpenERP to a backend """
 
-    @property
-    def mapper(self):
-        """ Return an instance of ``Mapper`` for the synchronization.
-
-        The instanciation is delayed because some synchronisations do
-        not need such an unit and the unit may not exist.
-
-        :rtype: :py:class:`connector.unit.mapper.ExportMapper`
-        """
-        if self._mapper is None:
-            self._mapper = self.environment.get_connector_unit(ExportMapper)
-        return self._mapper
+    _base_mapper = ExportMapper
 
 
 class ImportSynchronizer(Synchronizer):
     """ Synchronizer for importing data from a backend to OpenERP """
 
-    @property
-    def mapper(self):
-        """ Return an instance of ``Mapper`` for the synchronization.
-
-        The instanciation is delayed because some synchronisations do
-        not need such an unit and the unit may not exist.
-
-        :rtype: :py:class:`connector.unit.mapper.ImportMapper`
-        """
-        if self._mapper is None:
-            self._mapper = self.environment.get_connector_unit(ImportMapper)
-        return self._mapper
+    _base_mapper = ImportMapper
 
 
 class DeleteSynchronizer(Synchronizer):

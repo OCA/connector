@@ -142,7 +142,6 @@ class ConnectorUnit(object):
         self.backend = self.environment.backend
         self.backend_record = self.environment.backend_record
         self.session = self.environment.session
-        self.env = self.session.env  # odoo environment
         self.model = self.session.pool.get(environment.model_name)
         # so we can use openerp.tools.translate._, used to find the lang
         # that's because _() search for a localcontext attribute
@@ -166,6 +165,11 @@ class ConnectorUnit(object):
         else:
             model_name = model  # str
         return model_name in cls.model_name
+
+    @property
+    def env(self):
+        """ Returns the openerp.api.environment """
+        return self.session.env
 
     def get_connector_unit_for_model(self, connector_unit_class, model=None):
         """ According to the current

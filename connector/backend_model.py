@@ -43,12 +43,12 @@ class connector_backend(orm.AbstractModel):
         """ For a record of backend, returns the appropriate instance
         of :py:class:`~connector.backend.Backend`.
         """
-        if hasattr(id, '__iter__'):
-            assert len(id) == 1, "One ID expected, %d received" % len(id)
-            id = id[0]
+        if hasattr(ids, '__iter__'):
+            assert len(ids) == 1, "One ID expected, %d received" % len(ids)
+            ids = ids[0]
         if self._backend_type is None:
             raise ValueError('The backend %s has no _backend_type' % self)
-        backend_record = self.browse(cr, uid, id, context=context)
+        backend_record = self.browse(cr, uid, ids, context=context)
         return backend.get_backend(self._backend_type, backend_record.version)
 
 

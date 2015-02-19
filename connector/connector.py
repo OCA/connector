@@ -213,10 +213,20 @@ class ConnectorUnit(object):
                               model)
         return env.get_connector_unit(connector_unit_class)
 
-    def get_binder_for_model(self, model=None):
+    def binder_for(self, model=None):
         """ Returns an new instance of the correct ``Binder`` for
         a model """
         return self.get_connector_unit_for_model(Binder, model)
+
+    def get_binder_for_model(self, model=None):
+        """ Returns an new instance of the correct ``Binder`` for
+        a model
+
+        Deprecated, use ``binder_for`` now.
+        """
+        _logger.warning("Deprecated: 'get_binder_for_model()' has been "
+                        "deprecated in favor of 'binder_for()'")
+        return self.binder_for(model=model)
 
 
 class Environment(object):

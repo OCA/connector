@@ -134,7 +134,7 @@ and the name of the model to work with.
 
 A connectors developer is mostly interested by:
 
-* Get a connectorUnit from an environment (:py:meth:`connector.connector.ConnectorUnit.get_connector_unit_for_model`,
+* Get a connectorUnit from an environment (:py:meth:`connector.connector.ConnectorUnit.unit_for`,
   :py:meth:`connector.connector.ConnectorUnit.binder_for`)
 
 *************

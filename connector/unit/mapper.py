@@ -408,7 +408,7 @@ class ImportMapChild(MapChild):
     """ :py:class:`MapChild` for the Imports """
 
     def _child_mapper(self):
-        return self.get_unit_for(ImportMapper)
+        return self.unit_for(ImportMapper)
 
     def format_items(self, items_values):
         """ Format the values of the items mapped from the child Mappers.
@@ -432,7 +432,7 @@ class ExportMapChild(MapChild):
     """ :py:class:`MapChild` for the Exports """
 
     def _child_mapper(self):
-        return self.get_unit_for(ExportMapper)
+        return self.unit_for(ExportMapper)
 
 
 class Mapper(ConnectorUnit):
@@ -579,8 +579,8 @@ class Mapper(ConnectorUnit):
 
     def _get_map_child_unit(self, model_name):
         try:
-            mapper_child = self.get_unit_for(self._map_child_class,
-                                             model=model_name)
+            mapper_child = self.unit_for(self._map_child_class,
+                                         model=model_name)
         except NoConnectorUnitError:
             # does not force developers to use a MapChild ->
             # will use the default one if not explicitely defined

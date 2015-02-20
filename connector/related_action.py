@@ -51,7 +51,7 @@ def unwrap_binding(session, job, id_pos=2, binder_class=Binder):
         'view_mode': 'form',
     }
     # try to get an unwrapped record
-    binding = session.browse(binding_model, binding_id)
+    binding = session.env[binding_model].browse(binding_id)
     if not binding.exists():
         # it has been deleted
         return None

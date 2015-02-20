@@ -299,9 +299,12 @@ class Environment(object):
         """ Change the working language in the environment.
 
         It changes the ``lang`` key in the session's context.
+
+
         """
-        with self.session.change_context(lang=code):
-            yield
+        raise DeprecationWarning('Environment.set_lang has been deprecated. '
+                                 'session.change_context should be used '
+                                 'instead.')
 
     def get_connector_unit(self, base_class):
         """ Searches and returns an instance of the

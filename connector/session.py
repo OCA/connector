@@ -195,7 +195,10 @@ class ConnectorSession(object):
 
     def search(self, model, domain, limit=None, offset=0, order=None):
         """ Shortcut to :py:class:`openerp.models.BaseModel.search` """
-        _logger.warning("Deprecated: use 'self.env['model'].search()'")
+        _logger.warning("'Session.search()' has been deprecated, prefer "
+                        "'self.env['model'].search()' or "
+                        "self.recordset().search() if you are in a "
+                        "ConnectorUnit.")
         return self.pool[model].search(self.cr, self.uid, domain,
                                        limit=limit, offset=offset,
                                        order=order, context=self.context)
@@ -203,30 +206,45 @@ class ConnectorSession(object):
     def browse(self, model, ids):
         """ Shortcut to :py:class:`openerp.models.BaseModel.browse` """
         model_obj = self.pool[model]
-        _logger.warning("Deprecated: use 'self.env['model'].browse()'")
+        _logger.warning("'Session.browse()' has been deprecated, prefer "
+                        "'self.env['model'].browse()' or "
+                        "self.recordset().browse() if you are in a "
+                        "ConnectorUnit.")
         return model_obj.browse(self.cr, self.uid, ids, context=self.context)
 
     def read(self, model, ids, fields):
         """ Shortcut to :py:class:`openerp.models.BaseModel.read` """
-        _logger.warning("Deprecated: use 'self.env['model'].read()'")
+        _logger.warning("'Session.read()' has been deprecated, prefer "
+                        "'self.env['model'].read()' or "
+                        "self.recordset().read() if you are in a "
+                        "ConnectorUnit.")
         return self.pool[model].read(self.cr, self.uid, ids, fields,
                                      context=self.context)
 
     def create(self, model, values):
         """ Shortcut to :py:class:`openerp.models.BaseModel.create` """
-        _logger.warning("Deprecated: use 'self.env['model'].create()'")
+        _logger.warning("'Session.create()' has been deprecated, prefer "
+                        "'self.env['model'].create()' or "
+                        "self.recordset().create() if you are in a "
+                        "ConnectorUnit.")
         return self.pool[model].create(self.cr, self.uid, values,
                                        context=self.context)
 
     def write(self, model, ids, values):
         """ Shortcut to :py:class:`openerp.models.BaseModel.write` """
-        _logger.warning("Deprecated: use 'self.env['model'].write()'")
+        _logger.warning("'Session.write()' has been deprecated, prefer "
+                        "'self.env['model'].write()' or "
+                        "self.recordset().write() if you are in a "
+                        "ConnectorUnit.")
         return self.pool[model].write(self.cr, self.uid, ids, values,
                                       context=self.context)
 
     def unlink(self, model, ids):
         model_obj = self.pool[model]
-        _logger.warning("Deprecated: use 'self.env['model'].unlink()'")
+        _logger.warning("'Session.unlink()' has been deprecated, prefer "
+                        "'self.env['model'].unlink()' or "
+                        "self.recordset().unlink() if you are in a "
+                        "ConnectorUnit.")
         return model_obj.unlink(self.cr, self.uid, ids, context=self.context)
 
     def __repr__(self):

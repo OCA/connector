@@ -147,11 +147,6 @@ class ConnectorUnit(object):
         self.backend_record = self.environment.backend_record
         self.session = self.environment.session
 
-        # so we can use openerp.tools.translate._, used to find the lang
-        # that's because _() search for a localcontext attribute
-        # but self.localcontext should not be used for other purposes
-        self.localcontext = self.session.context
-
     @classmethod
     def match(cls, session, model):
         """ Returns True if the current class correspond to the
@@ -177,11 +172,21 @@ class ConnectorUnit(object):
 
     @property
     def model(self):
-        _logger.warning('Deprecated: ConnectorUnit.model is no longer a '
-                        'property. Now, you should use '
+        _logger.warning('ConnectorUnit.model is deprecated in favor of '
                         'ConnectorUnit.records() that returns a '
                         'new-api model/empty recordset.')
         return self.session.pool.get(self.environment.model_name)
+
+    @property
+    def localcontext(self):
+        """ It is there for compatibility.
+
+        :func:`openerp.tools.translate._` searches for this attribute
+        in the classes do be able to translate the strings.
+
+        There is no reason to use this attribute for other purposes.
+        """
+        return self.session.context
 
     def records(self, model=None):
         """ Returns an OpenERP ``recordset``
@@ -292,8 +297,19 @@ class Environment(object):
         self.backend = backend
         self.session = session
         self.model_name = model_name
-        self.model = self.session.pool.get(model_name)
-        self.pool = self.session.pool
+
+    @property
+    def model(self):
+        _logger.warning('Environment.model is deprecated.')
+        return self.session.pool.get(self.environment.model_name)
+
+    @property
+    def pool(self):
+        return self.session.pool
+
+    @property
+    def env(self):
+        return self.session.env
 
     @contextmanager
     def set_lang(self, code):

@@ -201,7 +201,7 @@ class ConnectorUnit(object):
         """
         return self.env[model or self.environment.model_name]
 
-    def get_connector_unit_for_model(self, connector_unit_class, model=None):
+    def get_unit_for(self, connector_unit_class, model=None):
         """ According to the current
         :py:class:`~connector.connector.Environment`,
         search and returns an instance of the
@@ -227,6 +227,12 @@ class ConnectorUnit(object):
                               self.session,
                               model)
         return env.get_connector_unit(connector_unit_class)
+
+    def get_connector_unit_for_model(self, connector_unit_class, model=None):
+        """ Deprecated in favor of :meth:`~get_unit_for` """
+        _logger.warning("Deprecated: 'get_connector_unit_for_model()' "
+                        "has been deprecated in favor of 'get_unit_for()'")
+        return self.get_unit_for(connector_unit_class, model=model)
 
     def binder_for(self, model=None):
         """ Returns an new instance of the correct ``Binder`` for

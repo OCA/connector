@@ -19,14 +19,11 @@
 #
 ##############################################################################
 
-from openerp.osv import orm
+from openerp import models
 
 
-class connector_config_settings(orm.TransientModel):
+class ConnectorConfigSettings(models.TransientModel):
 
     _name = 'connector.config.settings'
     _description = 'Connector Configuration'
     _inherit = 'base.config.settings'
-
-    _columns = {
-    }

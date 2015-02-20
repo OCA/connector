@@ -33,8 +33,6 @@ import logging
 from collections import namedtuple
 from contextlib import contextmanager
 
-import openerp
-
 from ..connector import ConnectorUnit, MetaConnectorUnit, Environment
 from ..exception import MappingError, NoConnectorUnitError
 
@@ -410,8 +408,7 @@ class ImportMapChild(MapChild):
     """ :py:class:`MapChild` for the Imports """
 
     def _child_mapper(self):
-        get_connector_unit = self.get_connector_unit_for_model
-        return get_connector_unit(ImportMapper, self.model._name)
+        return self.get_unit_for(ImportMapper, model=self.model._name)
 
     def format_items(self, items_values):
         """ Format the values of the items mapped from the child Mappers.
@@ -435,8 +432,7 @@ class ExportMapChild(MapChild):
     """ :py:class:`MapChild` for the Exports """
 
     def _child_mapper(self):
-        return self.get_connector_unit_for_model(ExportMapper,
-                                                 self.model._name)
+        return self.get_unit_for(ExportMapper, model=self.model._name)
 
 
 class Mapper(ConnectorUnit):
@@ -583,8 +579,8 @@ class Mapper(ConnectorUnit):
 
     def _get_map_child_unit(self, model_name):
         try:
-            mapper_child = self.get_connector_unit_for_model(
-                self._map_child_class, model_name)
+            mapper_child = self.get_unit_for(self._map_child_class,
+                                             model=model_name)
         except NoConnectorUnitError:
             # does not force developers to use a MapChild ->
             # will use the default one if not explicitely defined

@@ -710,50 +710,6 @@ class Mapper(ConnectorUnit):
         """
         return values
 
-    def _after_mapping(self, result):
-        """ .. deprecated:: 2.1 """
-        raise DeprecationWarning('Mapper._after_mapping() has been deprecated,'
-                                 ' use Mapper.finalize()')
-
-    def convert_child(self, record, parent_values=None):
-        """ .. deprecated:: 2.1 """
-        raise DeprecationWarning('Mapper.convert_child() has been deprecated, '
-                                 'use Mapper.map_record() then '
-                                 'map_record.values() ')
-
-    def convert(self, record, fields=None):
-        """ .. deprecated:: 2.1
-               See :py:meth:`Mapper.map_record`, :py:meth:`MapRecord.values`
-        """
-        raise DeprecationWarning('Mapper.convert() has been deprecated, '
-                                 'use Mapper.map_record() then '
-                                 'map_record.values() ')
-
-    @property
-    def data(self):
-        """ .. deprecated:: 2.1
-               See :py:meth:`Mapper.map_record`, :py:meth:`MapRecord.values`
-        """
-        raise DeprecationWarning('Mapper.data has been deprecated, '
-                                 'use Mapper.map_record() then '
-                                 'map_record.values() ')
-
-    @property
-    def data_for_create(self):
-        """ .. deprecated:: 2.1
-               See :py:meth:`Mapper.map_record`, :py:meth:`MapRecord.values`
-        """
-        raise DeprecationWarning('Mapper.data_for_create has been deprecated, '
-                                 'use Mapper.map_record() then '
-                                 'map_record.values() ')
-
-    def skip_convert_child(self, record, parent_values=None):
-        """ .. deprecated:: 2.1
-               Use :py:meth:`MapChild.skip_item` instead.
-        """
-        raise DeprecationWarning('Mapper.skip_convert_child has been '
-                                 'deprecated, use MapChild.skip_item().')
-
 
 class ImportMapper(Mapper):
     """ :py:class:`Mapper` for imports.

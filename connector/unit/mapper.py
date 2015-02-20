@@ -169,7 +169,7 @@ def m2o_to_backend(field, binding=None):
     def modifier(self, record, to_attr):
         if not record[field]:
             return False
-        column = self.model._fields[field]
+        column = self.records()._fields[field]
         if column.type != 'many2one':
             raise ValueError('The column %s should be a Many2one, got %s' %
                              (field, type(column)))
@@ -215,7 +215,7 @@ def backend_to_m2o(field, binding=None, with_inactive=False):
     def modifier(self, record, to_attr):
         if not record[field]:
             return False
-        column = self.model._fields[to_attr]
+        column = self.records()._fields[to_attr]
         if column.type != 'many2one':
             raise ValueError('The column %s should be a Many2one, got %s' %
                              (to_attr, type(column)))
@@ -408,7 +408,7 @@ class ImportMapChild(MapChild):
     """ :py:class:`MapChild` for the Imports """
 
     def _child_mapper(self):
-        return self.get_unit_for(ImportMapper, model=self.model._name)
+        return self.get_unit_for(ImportMapper)
 
     def format_items(self, items_values):
         """ Format the values of the items mapped from the child Mappers.
@@ -432,7 +432,7 @@ class ExportMapChild(MapChild):
     """ :py:class:`MapChild` for the Exports """
 
     def _child_mapper(self):
-        return self.get_unit_for(ExportMapper, model=self.model._name)
+        return self.get_unit_for(ExportMapper)
 
 
 class Mapper(ConnectorUnit):
@@ -653,7 +653,7 @@ class Mapper(ConnectorUnit):
         assert self.options is not None, (
             "options should be defined with '_mapping_options'")
         _logger.debug('converting record %s to model %s',
-                      map_record.source, self.model._name)
+                      map_record.source, self.records())
 
         fields = self.options.fields
         for_create = self.options.for_create
@@ -784,7 +784,7 @@ class ImportMapper(Mapper):
         # not used, we assume that the relation model is a binding.
         # Use an explicit modifier backend_to_m2o in the 'direct' mappings to
         # change that.
-        field = self.model._fields[to_attr]
+        field = self.records()._fields[to_attr]
         if field.type == 'many2one':
             mapping_func = backend_to_m2o(from_attr)
             value = mapping_func(self, record, to_attr)
@@ -820,7 +820,7 @@ class ExportMapper(Mapper):
         # not used, we assume that the relation model is a binding.
         # Use an explicit modifier m2o_to_backend  in the 'direct' mappings to
         # change that.
-        field = self.model._fields[from_attr]
+        field = self.records()._fields[from_attr]
         if field.type == 'many2one':
             mapping_func = m2o_to_backend(from_attr)
             value = mapping_func(self, record, to_attr)

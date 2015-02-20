@@ -338,17 +338,10 @@ class WorkerWatcher(threading.Thread):
     def _notify_alive(self, session, worker):
         _logger.debug('Worker %s is alive on process %s',
                       worker.uuid, os.getpid())
-        dbworker_obj = session.pool.get('queue.worker')
-        dbworker_obj._notify_alive(session.cr,
-                                   session.uid,
-                                   worker,
-                                   context=session.context)
+        session.env['queue.worker']._notify_alive(worker)
 
     def _purge_dead_workers(self, session):
-        dbworker_obj = session.pool.get('queue.worker')
-        dbworker_obj._purge_dead_workers(session.cr,
-                                         session.uid,
-                                         context=session.context)
+        session.env['queue.worker']._purge_dead_workers()
 
 
 watcher = WorkerWatcher()

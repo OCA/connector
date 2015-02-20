@@ -220,10 +220,3 @@ class test_backend_register(common.TransactionCase):
         with self.assertRaises(ValueError):
             self.backend.register_class(LambdaRecurseUnit,
                                         replacing=LambdaRecurseUnit)
-
-    def test_get_class_unregister_deprecated(self):
-        """ Unregister is deprecated """
-        class LambdaUnit(ConnectorUnit):
-            _model_name = 'res.users'
-        with self.assertRaises(DeprecationWarning):
-            self.backend.unregister_class(LambdaUnit)

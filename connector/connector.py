@@ -230,8 +230,9 @@ class ConnectorUnit(object):
 
     def get_connector_unit_for_model(self, connector_unit_class, model=None):
         """ Deprecated in favor of :meth:`~unit_for` """
-        _logger.warning("Deprecated: 'get_connector_unit_for_model()' "
-                        "has been deprecated in favor of 'unit_for()'")
+        _logger.warning("'ConnectorUnit.get_connector_unit_for_model()' "
+                        "has been deprecated in favor of "
+                        "'ConnectorUnit.unit_for()'")
         return self.unit_for(connector_unit_class, model=model)
 
     def binder_for(self, model=None):
@@ -245,8 +246,8 @@ class ConnectorUnit(object):
 
         Deprecated, use ``binder_for`` now.
         """
-        _logger.warning("Deprecated: 'get_binder_for_model()' has been "
-                        "deprecated in favor of 'binder_for()'")
+        _logger.warning("'ConnectorUnit.get_binder_for_model()' has been "
+                        "deprecated in favor of 'ConnectorUnit.binder_for()'")
         return self.binder_for(model=model)
 
 

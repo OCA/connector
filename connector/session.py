@@ -127,13 +127,8 @@ class ConnectorSession(object):
         return self.env.context
 
     @property
-    def registry(self):
-        return self.env.registry
-
-    @property
     def pool(self):
-        _logger.warning("Deprecated: use 'registry'")
-        return self.registry
+        return self.env.registry
 
     @contextmanager
     def change_user(self, uid):
@@ -201,36 +196,36 @@ class ConnectorSession(object):
     def search(self, model, domain, limit=None, offset=0, order=None):
         """ Shortcut to :py:class:`openerp.models.BaseModel.search` """
         _logger.warning("Deprecated: use 'self.env['model'].search()'")
-        return self.registry[model].search(self.cr, self.uid, domain,
-                                           limit=limit, offset=offset,
-                                           order=order, context=self.context)
+        return self.pool[model].search(self.cr, self.uid, domain,
+                                       limit=limit, offset=offset,
+                                       order=order, context=self.context)
 
     def browse(self, model, ids):
         """ Shortcut to :py:class:`openerp.models.BaseModel.browse` """
-        model_obj = self.registry[model]
+        model_obj = self.pool[model]
         _logger.warning("Deprecated: use 'self.env['model'].browse()'")
         return model_obj.browse(self.cr, self.uid, ids, context=self.context)
 
     def read(self, model, ids, fields):
         """ Shortcut to :py:class:`openerp.models.BaseModel.read` """
         _logger.warning("Deprecated: use 'self.env['model'].read()'")
-        return self.registry[model].read(self.cr, self.uid, ids, fields,
-                                         context=self.context)
+        return self.pool[model].read(self.cr, self.uid, ids, fields,
+                                     context=self.context)
 
     def create(self, model, values):
         """ Shortcut to :py:class:`openerp.models.BaseModel.create` """
         _logger.warning("Deprecated: use 'self.env['model'].create()'")
-        return self.registry[model].create(self.cr, self.uid, values,
-                                           context=self.context)
+        return self.pool[model].create(self.cr, self.uid, values,
+                                       context=self.context)
 
     def write(self, model, ids, values):
         """ Shortcut to :py:class:`openerp.models.BaseModel.write` """
         _logger.warning("Deprecated: use 'self.env['model'].write()'")
-        return self.registry[model].write(self.cr, self.uid, ids, values,
-                                          context=self.context)
+        return self.pool[model].write(self.cr, self.uid, ids, values,
+                                      context=self.context)
 
     def unlink(self, model, ids):
-        model_obj = self.registry[model]
+        model_obj = self.pool[model]
         _logger.warning("Deprecated: use 'self.env['model'].unlink()'")
         return model_obj.unlink(self.cr, self.uid, ids, context=self.context)
 
@@ -248,4 +243,4 @@ class ConnectorSession(object):
         model with name ``module_name.installed`` is loaded in the
         registry.
         """
-        return bool(self.registry.get('%s.installed' % module_name))
+        return bool(self.pool.get('%s.installed' % module_name))

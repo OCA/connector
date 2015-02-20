@@ -208,8 +208,8 @@ I propose to create a helper method which build it for us (in
         env = Environment(backend_record, session, model_name)
         lang = backend_record.default_lang_id
         lang_code = lang.code if lang else 'en_US'
-        env.set_lang(code=lang_code)
-        return env
+        with env.session.change_context(lang=lang_code):
+            return env
 
 Note that the part regarding the language definition is totally
 optional but I left it as an example.

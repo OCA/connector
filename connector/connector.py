@@ -179,11 +179,26 @@ class ConnectorUnit(object):
     def model(self):
         _logger.warning('Deprecated: ConnectorUnit.model is no longer a '
                         'property. Now, you should use '
-                        'ConnectorUnit.recordset() that returns a '
-                        'new-api model/recordset.')
+                        'ConnectorUnit.records() that returns a '
+                        'new-api model/empty recordset.')
         return self.session.pool.get(self.environment.model_name)
 
-    def recordset(self, model=None):
+    def records(self, model=None):
+        """ Returns an OpenERP ``recordset``
+
+        The model of the recordset is the current one if ``model`` is not
+        specified.
+
+        The ``recordset`` can then be used for all the OpenERP orm methods::
+
+            # when the model of the ConnectorUnit is 'res.users'
+            users = self.records().search([])
+            # when the model is another one
+            users = self.records('res.users').search([])
+            things = self.records().browse(ids)
+            things.unlink()
+
+        """
         return self.env[model or self.environment.model_name]
 
     def get_connector_unit_for_model(self, connector_unit_class, model=None):

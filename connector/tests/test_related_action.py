@@ -96,7 +96,7 @@ class test_related_action(unittest2.TestCase):
                 return 'res.users'
 
         job = Job(func=test_unwrap_binding, args=('res.users', 555))
-        session = mock.Mock(name='session')
+        session = mock.MagicMock(name='session')
         backend_record = mock.Mock(name='backend_record')
         backend = mock.Mock(name='backend')
         browse_record = mock.Mock(name='browse_record')
@@ -104,7 +104,9 @@ class test_related_action(unittest2.TestCase):
         backend_record.get_backend.return_value = backend
         browse_record.exists.return_value = True
         browse_record.backend_id = backend_record
-        session.browse.return_value = browse_record
+        recordset = mock.Mock(name='recordset')
+        session.env.__getitem__.return_value = recordset
+        recordset.browse.return_value = browse_record
         action = unwrap_binding(session, job)
         expected = {
             'name': mock.ANY,

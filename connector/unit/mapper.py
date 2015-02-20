@@ -33,6 +33,8 @@ import logging
 from collections import namedtuple
 from contextlib import contextmanager
 
+import openerp
+
 from ..connector import ConnectorUnit, MetaConnectorUnit, Environment
 from ..exception import MappingError, NoConnectorUnitError
 
@@ -169,13 +171,13 @@ def m2o_to_backend(field, binding=None):
     def modifier(self, record, to_attr):
         if not record[field]:
             return False
-        column = self.model._all_columns[field].column
-        if column._type != 'many2one':
-            raise ValueError('The column %s should be a many2one, got %s' %
-                             field, column._type)
+        column = self.model._fields[field]
+        if column.type != 'many2one':
+            raise ValueError('The column %s should be a Many2one, got %s' %
+                             (field, type(column)))
         rel_id = record[field].id
         if binding is None:
-            binding_model = column._obj
+            binding_model = column.comodel_name
         else:
             binding_model = binding
         binder = self.binder_for(binding_model)
@@ -215,20 +217,20 @@ def backend_to_m2o(field, binding=None, with_inactive=False):
     def modifier(self, record, to_attr):
         if not record[field]:
             return False
-        column = self.model._all_columns[to_attr].column
-        if column._type != 'many2one':
-            raise ValueError('The column %s should be a many2one, got %s' %
-                             to_attr, column._type)
+        column = self.model._fields[to_attr]
+        if column.type != 'many2one':
+            raise ValueError('The column %s should be a Many2one, got %s' %
+                             (to_attr, type(column)))
         rel_id = record[field]
         if binding is None:
-            binding_model = column._obj
+            binding_model = column.comodel_name
         else:
             binding_model = binding
         binder = self.binder_for(binding_model)
         # if we want the ID of a normal record, not a binding,
         # we ask the unwrapped id to the binder
         unwrap = bool(binding)
-        with self.session.change_context({'active_test': False}):
+        with self.session.change_context(active_test=False):
             value = binder.to_openerp(rel_id, unwrap=unwrap)
         if not value:
             raise MappingError("Can not find an existing %s for external "
@@ -786,8 +788,8 @@ class ImportMapper(Mapper):
         # not used, we assume that the relation model is a binding.
         # Use an explicit modifier backend_to_m2o in the 'direct' mappings to
         # change that.
-        column = self.model._all_columns[to_attr].column
-        if column._type == 'many2one':
+        field = self.model._fields[to_attr]
+        if field.type == 'many2one':
             mapping_func = backend_to_m2o(from_attr)
             value = mapping_func(self, record, to_attr)
         return value
@@ -822,8 +824,8 @@ class ExportMapper(Mapper):
         # not used, we assume that the relation model is a binding.
         # Use an explicit modifier m2o_to_backend  in the 'direct' mappings to
         # change that.
-        column = self.model._all_columns[from_attr].column
-        if column._type == 'many2one':
+        field = self.model._fields[from_attr]
+        if field.type == 'many2one':
             mapping_func = m2o_to_backend(from_attr)
             value = mapping_func(self, record, to_attr)
         return value

@@ -19,11 +19,11 @@
 #
 ##############################################################################
 
-from openerp.osv import orm, fields
+from openerp import models, fields, api
 from . import backend
 
 
-class connector_backend(orm.AbstractModel):
+class ConnectorBackend(models.AbstractModel):
     """ An instance of an external backend to synchronize with.
 
     The backends have to ``_inherit`` this model in the connectors
@@ -33,26 +33,22 @@ class connector_backend(orm.AbstractModel):
     _description = 'Connector Backend'
     _backend_type = None
 
-    _columns = {
-        'name': fields.char('Name', required=True),
-        # replace by a selection in concrete models
-        'version': fields.selection((), 'Version', required=True),
-    }
+    name = fields.Char(required=True)
+    # replace by a selection in concrete models
+    version = fields.Selection(selection=[], required=True)
 
-    def get_backend(self, cr, uid, ids, context=None):
+    @api.multi
+    def get_backend(self):
         """ For a record of backend, returns the appropriate instance
         of :py:class:`~connector.backend.Backend`.
         """
-        if hasattr(ids, '__iter__'):
-            assert len(ids) == 1, "One ID expected, %d received" % len(ids)
-            ids = ids[0]
+        self.ensure_one()
         if self._backend_type is None:
             raise ValueError('The backend %s has no _backend_type' % self)
-        backend_record = self.browse(cr, uid, ids, context=context)
-        return backend.get_backend(self._backend_type, backend_record.version)
+        return backend.get_backend(self._backend_type, self.version)
 
 
-class external_binding(orm.AbstractModel):
+class ExternalBinding(models.AbstractModel):
     """ An abstract model for bindings to external records.
 
     An external binding is a binding between a backend and OpenERP.  For
@@ -95,25 +91,22 @@ class external_binding(orm.AbstractModel):
     (this is a consolidation of all the columns from the abstract models,
     in ``magentoerpconnect`` you would not find that)::
 
-        class magento_res_partner_category(orm.Model):
+        class MagentoResPartnerCategory(models.Model):
             _name = 'magento.res.partner.category'
 
             _inherits = {'res.partner.category': 'openerp_id'}
 
-            _columns = {
-                'openerp_id': fields.many2one('res.partner.category',
-                                              string='Partner Category',
-                                              required=True,
-                                              ondelete='cascade'),
-                'backend_id': fields.many2one(
-                    'magento.backend',
-                    'Magento Backend',
-                    required=True,
-                    ondelete='restrict'),
-                'sync_date': fields.datetime('Last synchronization date'),
-                'magento_id': fields.char('ID on Magento'),
-                'tax_class_id': fields.integer('Tax Class ID'),
-            }
+            openerp_id = fields.Many2one(comodel_name='res.partner.category',
+                                          string='Partner Category',
+                                          required=True,
+                                          ondelete='cascade')
+            backend_id = fields.Many2one(
+                comodel_name='magento.backend',
+                string='Magento Backend',
+                required=True,
+                ondelete='restrict')
+            magento_id = fields.Char(string='ID on Magento')
+            tax_class_id = fields.Integer(string='Tax Class ID')
 
             _sql_constraints = [
                 ('magento_uniq', 'unique(backend_id, magento_id)',
@@ -125,10 +118,5 @@ class external_binding(orm.AbstractModel):
     _name = 'external.binding'
     _description = 'External Binding (abstract)'
 
-    _columns = {
-        # TODO write the date on import / export
-        # and skip import / export (avoid unnecessary import
-        # right after the export)
-        'sync_date': fields.datetime('Last synchronization date'),
-        # add other fields in concrete models
-    }
+    sync_date = fields.Datetime(string='Last synchronization date')
+    # add other fields in concrete models

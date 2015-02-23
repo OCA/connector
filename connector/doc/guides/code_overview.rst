@@ -180,8 +180,7 @@ For the export of the invoice, we just need an ``adapter`` and a
 
       def run(self, binding_id):
           """ Run the job to export the validated/paid invoice """
-          sess = self.session
-          invoice = sess.browse(self.model._name, binding_id)
+          invoice = self.model.browse(binding_id)
           magento_order = invoice.magento_order_id
           magento_id = self._export_invoice(magento_order.magento_id, lines_info, True)
           # use the ``binder`` to write the external ID

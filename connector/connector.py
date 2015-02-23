@@ -172,10 +172,7 @@ class ConnectorUnit(object):
 
     @property
     def model(self):
-        _logger.warning('ConnectorUnit.model is deprecated in favor of '
-                        'ConnectorUnit.records() that returns a '
-                        'new-api model/empty recordset.')
-        return self.session.pool.get(self.environment.model_name)
+        return self.env[self.environment.model_name]
 
     @property
     def localcontext(self):
@@ -187,24 +184,6 @@ class ConnectorUnit(object):
         There is no reason to use this attribute for other purposes.
         """
         return self.session.context
-
-    def records(self, model=None):
-        """ Returns an OpenERP ``recordset``
-
-        The model of the recordset is the current one if ``model`` is not
-        specified.
-
-        The ``recordset`` can then be used for all the OpenERP orm methods::
-
-            # when the model of the ConnectorUnit is 'res.users'
-            users = self.records().search([])
-            # when the model is another one
-            users = self.records('res.users').search([])
-            things = self.records().browse(ids)
-            things.unlink()
-
-        """
-        return self.env[model or self.environment.model_name]
 
     def unit_for(self, connector_unit_class, model=None):
         """ According to the current

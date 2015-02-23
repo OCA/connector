@@ -169,7 +169,7 @@ def m2o_to_backend(field, binding=None):
     def modifier(self, record, to_attr):
         if not record[field]:
             return False
-        column = self.records()._fields[field]
+        column = self.model._fields[field]
         if column.type != 'many2one':
             raise ValueError('The column %s should be a Many2one, got %s' %
                              (field, type(column)))
@@ -215,7 +215,7 @@ def backend_to_m2o(field, binding=None, with_inactive=False):
     def modifier(self, record, to_attr):
         if not record[field]:
             return False
-        column = self.records()._fields[to_attr]
+        column = self.model._fields[to_attr]
         if column.type != 'many2one':
             raise ValueError('The column %s should be a Many2one, got %s' %
                              (to_attr, type(column)))
@@ -653,7 +653,7 @@ class Mapper(ConnectorUnit):
         assert self.options is not None, (
             "options should be defined with '_mapping_options'")
         _logger.debug('converting record %s to model %s',
-                      map_record.source, self.records())
+                      map_record.source, self.model)
 
         fields = self.options.fields
         for_create = self.options.for_create
@@ -740,7 +740,7 @@ class ImportMapper(Mapper):
         # not used, we assume that the relation model is a binding.
         # Use an explicit modifier backend_to_m2o in the 'direct' mappings to
         # change that.
-        field = self.records()._fields[to_attr]
+        field = self.model._fields[to_attr]
         if field.type == 'many2one':
             mapping_func = backend_to_m2o(from_attr)
             value = mapping_func(self, record, to_attr)
@@ -776,7 +776,7 @@ class ExportMapper(Mapper):
         # not used, we assume that the relation model is a binding.
         # Use an explicit modifier m2o_to_backend  in the 'direct' mappings to
         # change that.
-        field = self.records()._fields[from_attr]
+        field = self.model._fields[from_attr]
         if field.type == 'many2one':
             mapping_func = m2o_to_backend(from_attr)
             value = mapping_func(self, record, to_attr)

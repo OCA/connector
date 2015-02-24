@@ -29,3 +29,28 @@ def log_deprecate(message):
     module = inspect.getmodule(frame)
     logger = logging.getLogger(module.__name__)
     logger.warning('Deprecated: %s at line %r: %s', funcname, lineno, message)
+
+
+class DeprecatedClass(object):
+
+    def __init__(self, oldname, replacement):
+        self.oldname = oldname
+        self.replacement = replacement
+
+    def _warning(self):
+        frame, __, lineno, funcname, __, __ = inspect.stack()[2]
+        module = inspect.getmodule(frame)
+        logger = logging.getLogger(module.__name__)
+        lineno = lineno
+        logger.warning('Deprecated: class %s must be replaced by %s '
+                       'at line %r',
+                       self.oldname,
+                       self.replacement.__name__,
+                       lineno)
+
+    def __call__(self, *args, **kwargs):
+        self._warning()
+        return self.replacement(*args, **kwargs)
+
+    def __getattr__(self, *args, **kwargs):
+        return getattr(self.replacement, *args, **kwargs)

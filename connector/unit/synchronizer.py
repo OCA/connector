@@ -33,8 +33,8 @@ class Synchronizer(ConnectorUnit):
     _base_mapper = Mapper
     _base_backend_adapter = BackendAdapter
 
-    def __init__(self, environment):
-        super(Synchronizer, self).__init__(environment)
+    def __init__(self, connector_env):
+        super(Synchronizer, self).__init__(connector_env)
         self._backend_adapter = None
         self._binder = None
         self._mapper = None
@@ -53,7 +53,7 @@ class Synchronizer(ConnectorUnit):
         :rtype: :py:class:`connector.unit.mapper.Mapper`
         """
         if self._mapper is None:
-            get_unit = self.environment.get_connector_unit
+            get_unit = self.connector_env.get_connector_unit
             self._mapper = get_unit(self._base_mapper)
         return self._mapper
 
@@ -81,7 +81,7 @@ class Synchronizer(ConnectorUnit):
         :rtype: :py:class:`connector.unit.backend_adapter.BackendAdapter`
         """
         if self._backend_adapter is None:
-            get_unit = self.environment.get_connector_unit
+            get_unit = self.connector_env.get_connector_unit
             self._backend_adapter = get_unit(self._base_backend_adapter)
         return self._backend_adapter
 

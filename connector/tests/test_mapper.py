@@ -19,7 +19,7 @@ from openerp.addons.connector.unit.mapper import (
     mapping)
 
 from openerp.addons.connector.backend import Backend
-from openerp.addons.connector.connector import Environment
+from openerp.addons.connector.connector import ConnectorEnvironment
 from openerp.addons.connector.session import ConnectorSession
 
 
@@ -401,7 +401,7 @@ class test_mapper_binding(common.TransactionCase):
                                  name='backend')
         backend_record = mock.Mock()
         backend_record.get_backend.return_value = self.backend
-        self.connector_env = Environment(
+        self.connector_env = ConnectorEnvironment(
             backend_record, self.session, 'res.partner')
         self.country_binder = mock.Mock(name='country_binder')
         self.country_binder.return_value = self.country_binder
@@ -468,7 +468,8 @@ class test_mapper_binding(common.TransactionCase):
 
         backend_record = mock.Mock()
         backend_record.get_backend.side_effect = lambda *a: backend
-        env = Environment(backend_record, self.session, 'res.currency')
+        env = ConnectorEnvironment(backend_record, self.session,
+                                   'res.currency')
 
         record = {'name': 'SO1',
                   'lines': [{'name': '2013-11-07',
@@ -530,7 +531,8 @@ class test_mapper_binding(common.TransactionCase):
 
         backend_record = mock.Mock()
         backend_record.get_backend.side_effect = lambda *a: backend
-        env = Environment(backend_record, self.session, 'res.currency')
+        env = ConnectorEnvironment(backend_record, self.session,
+                                   'res.currency')
 
         record = {'name': 'SO1',
                   'lines': [{'name': '2013-11-07',

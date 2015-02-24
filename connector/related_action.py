@@ -28,7 +28,7 @@ When called on a job, they will return an action to the client.
 """
 
 from openerp.tools.translate import _
-from .connector import Environment, Binder
+from .connector import ConnectorEnvironment, Binder
 
 
 def unwrap_binding(session, job, id_pos=2, binder_class=Binder):
@@ -55,7 +55,7 @@ def unwrap_binding(session, job, id_pos=2, binder_class=Binder):
     if not binding.exists():
         # it has been deleted
         return None
-    env = Environment(binding.backend_id, session, binding_model)
+    env = ConnectorEnvironment(binding.backend_id, session, binding_model)
     binder = env.get_connector_unit(binder_class)
     try:
         model = binder.unwrap_model()

@@ -53,8 +53,7 @@ class Synchronizer(ConnectorUnit):
         :rtype: :py:class:`connector.unit.mapper.Mapper`
         """
         if self._mapper is None:
-            get_unit = self.connector_env.get_connector_unit
-            self._mapper = get_unit(self._base_mapper)
+            self._mapper = self.unit_for(self._base_mapper)
         return self._mapper
 
     @property
@@ -81,8 +80,7 @@ class Synchronizer(ConnectorUnit):
         :rtype: :py:class:`connector.unit.backend_adapter.BackendAdapter`
         """
         if self._backend_adapter is None:
-            get_unit = self.connector_env.get_connector_unit
-            self._backend_adapter = get_unit(self._base_backend_adapter)
+            self._backend_adapter = self.unit_for(self._base_backend_adapter)
         return self._backend_adapter
 
 

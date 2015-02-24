@@ -24,7 +24,7 @@ import logging
 from contextlib import contextmanager
 from openerp.osv import orm
 
-from .common import log_deprecate
+from .deprecate import log_deprecate, DeprecatedClass
 
 _logger = logging.getLogger(__name__)
 
@@ -137,17 +137,22 @@ class ConnectorUnit(object):
 
     _model_name = None  # to be defined in sub-classes
 
-    def __init__(self, environment):
+    def __init__(self, connector_env):
         """
 
-        :param environment: current environment (backend, session, ...)
-        :type environment: :py:class:`connector.connector.Environment`
+        :param connector_env: current environment (backend, session, ...)
+        :type connector_env: :class:`connector.connector.ConnectorEnvironment`
         """
         super(ConnectorUnit, self).__init__()
-        self.environment = environment
-        self.backend = self.environment.backend
-        self.backend_record = self.environment.backend_record
-        self.session = self.environment.session
+        self.connector_env = connector_env
+        self.backend = self.connector_env.backend
+        self.backend_record = self.connector_env.backend_record
+        self.session = self.connector_env.session
+
+    @property
+    def environment(self):
+        log_deprecate('renamed to connector_env')
+        return self.connector_env
 
     @classmethod
     def match(cls, session, model):
@@ -174,7 +179,7 @@ class ConnectorUnit(object):
 
     @property
     def model(self):
-        return self.environment.model
+        return self.connector_env.model
 
     @property
     def localcontext(self):
@@ -189,13 +194,13 @@ class ConnectorUnit(object):
 
     def unit_for(self, connector_unit_class, model=None):
         """ According to the current
-        :py:class:`~connector.connector.Environment`,
+        :py:class:`~connector.connector.ConnectorEnvironment`,
         search and returns an instance of the
         :py:class:`~connector.connector.ConnectorUnit` for the current
         model and being a class or subclass of ``connector_unit_class``.
 
         If a ``model`` is given, a new
-        :py:class:`~connector.connector.Environment`
+        :py:class:`~connector.connector.ConnectorEnvironment`
         is built for this model.
 
         :param connector_unit_class: ``ConnectorUnit`` to search
@@ -207,11 +212,11 @@ class ConnectorUnit(object):
         :type model: str
         """
         if model is None:
-            env = self.environment
+            env = self.connector_env
         else:
-            env = Environment(self.backend_record,
-                              self.session,
-                              model)
+            env = ConnectorEnvironment(self.backend_record,
+                                       self.session,
+                                       model)
         return env.get_connector_unit(connector_unit_class)
 
     def get_connector_unit_for_model(self, connector_unit_class, model=None):
@@ -234,7 +239,7 @@ class ConnectorUnit(object):
         return self.binder_for(model=model)
 
 
-class Environment(object):
+class ConnectorEnvironment(object):
     """ Environment used by the different units for the synchronization.
 
     .. attribute:: backend
@@ -278,7 +283,7 @@ class Environment(object):
 
     @property
     def model(self):
-        return self.env[self.environment.model_name]
+        return self.env[self.model_name]
 
     @property
     def pool(self):
@@ -296,9 +301,9 @@ class Environment(object):
 
 
         """
-        raise DeprecationWarning('Environment.set_lang has been deprecated. '
-                                 'session.change_context should be used '
-                                 'instead.')
+        raise DeprecationWarning('ConnectorEnvironment.set_lang has been '
+                                 'deprecated. session.change_context should '
+                                 'be used instead.')
 
     def get_connector_unit(self, base_class):
         """ Searches and returns an instance of the
@@ -312,6 +317,10 @@ class Environment(object):
         """
         return self.backend.get_class(base_class, self.session,
                                       self.model_name)(self)
+
+
+Environment = DeprecatedClass('Environment',
+                              ConnectorEnvironment)
 
 
 class Binder(ConnectorUnit):

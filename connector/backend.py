@@ -165,8 +165,8 @@ class Backend(object):
     is able to extend or replace the behavior of its parent.
 
     .. note:: when using the framework, you won't need to call
-              :py:meth:`~get_class`, usually, you will call
-              :py:meth:`connector.connector.Environment.get_connector_unit`.
+    :py:meth:`~get_class`, usually, you will call
+    :py:meth:`connector.connector.ConnectorEnvironment.get_connector_unit`.
 
     The vertical extension is the one you will probably use the most, because
     most of the things you will change concern your custom adaptations or

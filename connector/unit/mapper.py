@@ -33,7 +33,7 @@ import logging
 from collections import namedtuple
 from contextlib import contextmanager
 
-from ..connector import ConnectorUnit, MetaConnectorUnit, Environment
+from ..connector import ConnectorUnit, MetaConnectorUnit, ConnectorEnvironment
 from ..exception import MappingError, NoConnectorUnitError
 
 _logger = logging.getLogger(__name__)
@@ -548,13 +548,13 @@ class Mapper(ConnectorUnit):
 
     _map_child_class = None
 
-    def __init__(self, environment):
+    def __init__(self, connector_env):
         """
 
-        :param environment: current environment (backend, session, ...)
-        :type environment: :py:class:`connector.connector.Environment`
+        :param connector_env: current environment (backend, session, ...)
+        :type connector_env: :py:class:`connector.connector.Environment`
         """
-        super(Mapper, self).__init__(environment)
+        super(Mapper, self).__init__(connector_env)
         self._options = None
 
     def _map_direct(self, record, from_attr, to_attr):
@@ -584,9 +584,9 @@ class Mapper(ConnectorUnit):
         except NoConnectorUnitError:
             # does not force developers to use a MapChild ->
             # will use the default one if not explicitely defined
-            env = Environment(self.backend_record,
-                              self.session,
-                              model_name)
+            env = ConnectorEnvironment(self.backend_record,
+                                       self.session,
+                                       model_name)
             mapper_child = self._map_child_class(env)
         return mapper_child
 

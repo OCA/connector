@@ -25,7 +25,7 @@ from contextlib import contextmanager
 import openerp
 from openerp.modules.registry import RegistryManager
 
-from .common import log_deprecate
+from .deprecate import log_deprecate
 
 _logger = logging.getLogger(__name__)
 

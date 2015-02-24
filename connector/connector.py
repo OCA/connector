@@ -24,6 +24,8 @@ import logging
 from contextlib import contextmanager
 from openerp.osv import orm
 
+from .common import log_deprecate
+
 _logger = logging.getLogger(__name__)
 
 
@@ -172,7 +174,7 @@ class ConnectorUnit(object):
 
     @property
     def model(self):
-        return self.env[self.environment.model_name]
+        return self.environment.model
 
     @property
     def localcontext(self):
@@ -214,9 +216,7 @@ class ConnectorUnit(object):
 
     def get_connector_unit_for_model(self, connector_unit_class, model=None):
         """ Deprecated in favor of :meth:`~unit_for` """
-        _logger.warning("'ConnectorUnit.get_connector_unit_for_model()' "
-                        "has been deprecated in favor of "
-                        "'ConnectorUnit.unit_for()'")
+        log_deprecate('renamed to unit_for()')
         return self.unit_for(connector_unit_class, model=model)
 
     def binder_for(self, model=None):
@@ -230,8 +230,7 @@ class ConnectorUnit(object):
 
         Deprecated, use ``binder_for`` now.
         """
-        _logger.warning("'ConnectorUnit.get_binder_for_model()' has been "
-                        "deprecated in favor of 'ConnectorUnit.binder_for()'")
+        log_deprecate('renamed to binder_for()')
         return self.binder_for(model=model)
 
 
@@ -279,8 +278,7 @@ class Environment(object):
 
     @property
     def model(self):
-        _logger.warning('Environment.model is deprecated.')
-        return self.session.pool.get(self.environment.model_name)
+        return self.env[self.environment.model_name]
 
     @property
     def pool(self):

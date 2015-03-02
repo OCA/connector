@@ -20,7 +20,7 @@
 
 {'name': 'Connector Base Product',
  'version': '1.0',
- 'author': 'Openerp Connector Core Editors',
+ 'author': "Openerp Connector Core Editors,Odoo Community Association (OCA)",
  'website': 'http://odoo-connector.com',
  'license': 'AGPL-3',
  'category': 'Connector',

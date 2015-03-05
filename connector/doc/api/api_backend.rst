@@ -23,14 +23,15 @@ Example with the Magento Connector::
 
     # in magentoerpconnect/magento_model.py
 
-    class magento_backend(orm.Model):
+    class MagentoBackend(models.Model):
         _name = 'magento.backend'
         _description = 'Magento Backend'
         _inherit = 'connector.backend'
 
         _backend_type = 'magento'
 
-        def _select_versions(self, cr, uid, context=None):
+        @api.model
+        def _select_versions(self):
             """ Available versions
 
             Can be inherited to add custom versions.
@@ -39,16 +40,16 @@ Example with the Magento Connector::
 
         # <snip>
 
-        _columns = {
-            'version': fields.selection(
-                _select_versions,
-                string='Version',
-                required=True),
-            'location': fields.char('Location', required=True),
-            'username': fields.char('Username'),
-            'password': fields.char('Password'),
+        version = fields.Selection(
+            selection='_select_versions',
+            string='Version',
+            required=True,
+        )
+        location = fields.Char(string='Location', required=True)
+        username = fields.Char(string='Username')
+        password = fields.Char(string='Password')
+
         # <snip>
-        }
 
 In the code above, '1.7' is the matching key between the
 :py:class:`~connector.backend.Backend` instance (``magento1700``) and the

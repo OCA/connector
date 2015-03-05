@@ -84,17 +84,26 @@ class Synchronizer(ConnectorUnit):
         return self._backend_adapter
 
 
-class ExportSynchronizer(Synchronizer):
+class Exporter(Synchronizer):
     """ Synchronizer for exporting data from OpenERP to a backend """
 
     _base_mapper = ExportMapper
 
 
-class ImportSynchronizer(Synchronizer):
+ExportSynchronizer = Exporter  # deprecated
+
+
+class Importer(Synchronizer):
     """ Synchronizer for importing data from a backend to OpenERP """
 
     _base_mapper = ImportMapper
 
 
-class DeleteSynchronizer(Synchronizer):
+ImportSynchronizer = Importer  # deprecated
+
+
+class Deleter(Synchronizer):
     """ Synchronizer for deleting a record on the backend """
+
+
+DeleteSynchronizer = Deleter  # deprecated

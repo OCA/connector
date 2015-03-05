@@ -520,7 +520,7 @@ class Mapper(ConnectorUnit):
             children = [('items', 'line_ids', 'model.name')]
 
         It allows to create the sales order and all its lines with the
-        same call to :py:meth:`openerp.osv.orm.BaseModel.create()`.
+        same call to :py:meth:`openerp.models.BaseModel.create()`.
 
         When using ``children`` for items of a record, we need to create
         a :py:class:`Mapper` for the model of the items, and optionally a

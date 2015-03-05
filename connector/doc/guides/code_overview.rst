@@ -38,29 +38,26 @@ model (``account.invoice``), in a new link model or in a new link model
 which ``_inherits`` ``account.invoice``. Here we choose the latter
 solution::
 
-  class magento_account_invoice(orm.Model):
+  class MagentoAccountInvoice(models.Model):
       _name = 'magento.account.invoice'
       _inherits = {'account.invoice': 'openerp_id'}
       _description = 'Magento Invoice'
-      _columns = {
-          'backend_id': fields.many2one('magento.backend', 'Magento Backend', required=True, ondelete='restrict'),
-          'openerp_id': fields.many2one('account.invoice', string='Invoice', required=True, ondelete='cascade'),
-          'magento_id': fields.char('ID on Magento'), # fields.char because 0 is a valid Magento ID
-          'sync_date': fields.datetime('Last synchronization date'),
-          'magento_order_id': fields.many2one('magento.sale.order', string='Magento Sale Order', ondelete='set null'),
-          # we can also store additional data related to the Magento Invoice
-      }
+
+      backend_id = fields.Many2one(comodel_name='magento.backend', string='Magento Backend', required=True, ondelete='restrict')
+      openerp_id = fields.Many2one(comodel_name='account.invoice', string='Invoice', required=True, ondelete='cascade')
+      magento_id = fields.Char(string='ID on Magento')  # fields.char because 0 is a valid Magento ID
+      sync_date = fields.Datetime(string='Last synchronization date')
+      magento_order_id = fields.Many2one(comodel_name='magento.sale.order', string='Magento Sale Order', ondelete='set null')
+      # we can also store additional data related to the Magento Invoice
 
 *******
 Session
 *******
 
-The framework uses :py:class:`~connector.session.ConnectorSession` objects to
-store the ``cr``, ``uid`` and ``context`` as well as the current
-``pool``. A ``session`` object also features shortcuts to the most used
-``ORM`` methods like::
-
-    invoice = session.browse('magento.account.invoice', record_id)
+The framework uses :py:class:`~connector.session.ConnectorSession`
+objects to store the ``cr``, ``uid`` and ``context`` in a
+:class:`openerp.api.Environment`.  So from a session, we can access to
+the usual ``self.env`` (new API) or ``self.pool`` (old API).
 
 ******
 Events
@@ -101,7 +98,7 @@ and will be run as soon as possible::
   @job
   def export_invoice(session, model_name, record_id):
       """ Export a validated or paid invoice. """
-      invoice = session.browse(model_name, record_id)
+      invoice = session.env[model_name].browse(record_id)
       backend_id = invoice.backend_id.id
       env = get_environment(session, model_name, backend_id)
       invoice_exporter = env.get_connector_unit(MagentoInvoiceSynchronizer)

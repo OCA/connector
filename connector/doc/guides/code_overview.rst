@@ -162,7 +162,7 @@ For the export of the invoice, we just need an ``adapter`` and a
                             [order_increment_id, items, comment,
                             email, include_comment])
   @magento
-  class MagentoInvoiceSynchronizer(ExportSynchronizer):
+  class MagentoInvoiceSynchronizer(Exporter):
       """ Export invoices to Magento """
       _model_name = ['magento.account.invoice']
 

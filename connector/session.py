@@ -20,6 +20,7 @@
 ##############################################################################
 
 import logging
+import threading
 from contextlib import contextmanager
 
 import openerp
@@ -185,7 +186,9 @@ class ConnectorSession(object):
 
     def commit(self):
         """ Commit the cursor """
-        self.cr.commit()
+        # do never commit during tests
+        if not getattr(threading.currentThread(), 'testing', False):
+            self.cr.commit()
 
     def rollback(self):
         """ Rollback the cursor """

@@ -103,10 +103,17 @@ class MetaConnectorUnit(type):
 
     @property
     def model_name(cls):
-        """
-        The ``model_name`` is used to find the class and is mandatory for
-        :py:class:`~connector.connector.ConnectorUnit` which are registered
-        on a :py:class:`~connector.backend.Backend`.
+        log_deprecate('renamed to for_model_names')
+        return cls.for_model_names
+
+    @property
+    def for_model_names(cls):
+        """ Returns the list of models on which a
+        :class:`~connector.connector.ConnectorUnit` is usable
+
+        It is used in :meth:`~connector.connector.ConnectorUnit.match` when
+        we search the correct ``ConnectorUnit`` for a model.
+
         """
         if cls._model_name is None:
             raise NotImplementedError("no _model_name for %s" % cls)
@@ -170,7 +177,7 @@ class ConnectorUnit(object):
             model_name = model._name
         else:
             model_name = model  # str
-        return model_name in cls.model_name
+        return model_name in cls.for_model_names
 
     @property
     def env(self):

@@ -22,7 +22,7 @@
 import inspect
 import logging
 from contextlib import contextmanager
-from openerp.osv import orm
+from openerp import models
 
 from .deprecate import log_deprecate, DeprecatedClass
 
@@ -33,7 +33,7 @@ def _get_openerp_module_name(module_path):
     """ Extract the name of the OpenERP module from the path of the
     Python module.
 
-    Taken from OpenERP server: ``openerp.osv.orm``
+    Taken from OpenERP server: ``openerp.models.MetaModel``
 
     The (OpenERP) module name can be in the ``openerp.addons`` namespace
     or not. For instance module ``sale`` can be imported as
@@ -53,8 +53,8 @@ def install_in_connector():
 
     It has to be called once per OpenERP module to plug.
 
-    Under the cover, it creates a ``orm.AbstractModel`` whose name is
-    the name of the module with a ``.intalled`` suffix:
+    Under the cover, it creates a ``openerp.models.AbstractModel`` whose
+    name is the name of the module with a ``.intalled`` suffix:
     ``{name_of_the_openerp_module_to_install}.installed``.
 
     The connector then uses this model to know when the OpenERP module
@@ -70,13 +70,13 @@ def install_in_connector():
     class_name = name.replace('.', '_')
     # we need to call __new__ and __init__ in 2 phases because
     # __init__ needs to have the right __module__ and _module attributes
-    model = orm.MetaModel.__new__(orm.MetaModel, class_name,
-                                  (orm.AbstractModel,), {'_name': name})
+    model = models.MetaModel.__new__(models.MetaModel, class_name,
+                                     (models.AbstractModel,), {'_name': name})
     # Update the module of the model, it should be the caller's one
     model._module = openerp_module_name
     model.__module__ = module.__name__
-    orm.MetaModel.__init__(model, class_name,
-                           (orm.AbstractModel,), {'_name': name})
+    models.MetaModel.__init__(model, class_name,
+                              (models.AbstractModel,), {'_name': name})
 
 
 # install the connector itself
@@ -169,7 +169,7 @@ class ConnectorUnit(object):
         :param session: current session
         :type session: :py:class:`connector.session.ConnectorSession`
         :param model: model to match
-        :type model: str or :py:class:`openerp.osv.orm.Model`
+        :type model: str or :py:class:`openerp.models.Model`
         """
         # filter out the ConnectorUnit from modules
         # not installed in the current DB
@@ -276,7 +276,7 @@ class ConnectorEnvironment(object):
         """
 
         :param backend_record: browse record of the backend
-        :type backend_record: :py:class:`openerp.osv.orm.browse_record`
+        :type backend_record: :py:class:`openerp.models.Model`
         :param session: current session (cr, uid, context)
         :type session: :py:class:`connector.session.ConnectorSession`
         :param model_name: name of the model

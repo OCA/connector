@@ -423,6 +423,73 @@ class TestJobStorage(common.TransactionCase):
         self.assertEqual(len(stored), 1)
 
 
+class TestJobModel(common.TransactionCase):
+
+    def setUp(self):
+        super(TestJobModel, self).setUp()
+        self.session = ConnectorSession(self.cr, self.uid)
+        self.queue_job = self.env['queue.job']
+
+    def _create_job(self):
+        test_job = Job(func=task_a)
+        storage = OpenERPJobStorage(self.session)
+        storage.store(test_job)
+        stored = self.queue_job.search([('uuid', '=', test_job.uuid)])
+        self.assertEqual(len(stored), 1)
+        return stored
+
+    def test_job_change_state(self):
+        stored = self._create_job()
+        stored._change_job_state(DONE, result='test')
+        self.assertEqual(stored.state, DONE)
+        self.assertEqual(stored.result, 'test')
+        stored._change_job_state(PENDING, result='test2')
+        self.assertEqual(stored.state, PENDING)
+        self.assertEqual(stored.result, 'test2')
+        with self.assertRaises(ValueError):
+            # only PENDING and DONE supported
+            stored._change_job_state(STARTED)
+
+    def test_button_done(self):
+        stored = self._create_job()
+        stored.button_done()
+        self.assertEqual(stored.state, DONE)
+        self.assertEqual(stored.result,
+                         'Manually set to done by %s' % self.env.user.name)
+
+    def test_requeue(self):
+        stored = self._create_job()
+        stored.write({'state': 'failed'})
+        stored.requeue()
+        self.assertEqual(stored.state, PENDING)
+        self.assertFalse(stored.worker_id)
+
+    def test_message_when_write_fail(self):
+        stored = self._create_job()
+        stored.write({'state': 'failed'})
+        self.assertEqual(stored.state, FAILED)
+        messages = stored.message_ids
+        self.assertEqual(len(messages), 2)
+
+    def test_autovacuum(self):
+        stored = self._create_job()
+        stored2 = self._create_job()
+        stored.write({'date_done': '2000-01-01 00:00:00'})
+        stored2.write({'date_done': '2000-01-01 00:00:00', 'active': False})
+        self.env['queue.job'].autovacuum()
+        self.assertEqual(len(self.env['queue.job'].search([])), 0)
+
+    def test_wizard_requeue(self):
+        stored = self._create_job()
+        stored.write({'state': 'failed'})
+        model = self.env['queue.requeue.job']
+        model = model.with_context(active_model='queue.job',
+                                   active_ids=stored.ids)
+        model.create({}).requeue()
+        self.assertEqual(stored.state, PENDING)
+        self.assertFalse(stored.worker_id)
+
+
 class TestJobStorageMultiCompany(common.TransactionCase):
     """ Test storage of jobs """
 

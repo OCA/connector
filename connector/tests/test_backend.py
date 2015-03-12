@@ -72,7 +72,6 @@ class test_backend(unittest2.TestCase):
         self.assertEqual(repr(backend), "<Backend 'calamitorium', '1.14'>")
 
 
-
 class test_backend_register(common.TransactionCase):
     """ Test registration of classes on the Backend"""
 

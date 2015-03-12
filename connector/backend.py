@@ -219,7 +219,7 @@ class Backend(object):
     def __str__(self):
         if self.version:
             return 'Backend(\'%s\', \'%s\')' % (self.service, self.version)
-        return 'Backend(\'%s\')>' % self.service
+        return 'Backend(\'%s\')' % self.service
 
     def __repr__(self):
         if self.version:

@@ -50,12 +50,27 @@ class test_backend(unittest2.TestCase):
         found_ref = get_backend(self.service)
         self.assertEqual(backend, found_ref)
 
+    def test_no_backend_found(self):
+        """ Can't find a backend """
+        with self.assertRaises(ValueError):
+            get_backend('torium')
+
     def test_backend_version(self):
         """ Find a backend with a version """
         parent = Backend(self.service)
         backend = Backend(parent=parent, version='1.14')
         found_ref = get_backend(self.service, version='1.14')
         self.assertEqual(backend, found_ref)
+
+    def test_repr(self):
+        parent = Backend(self.service)
+        self.assertEqual(str(parent), "Backend('calamitorium')")
+        self.assertEqual(repr(parent), "<Backend 'calamitorium'>")
+
+        backend = Backend(parent=parent, version='1.14')
+        self.assertEqual(str(backend), "Backend('calamitorium', '1.14')")
+        self.assertEqual(repr(backend), "<Backend 'calamitorium', '1.14'>")
+
 
 
 class test_backend_register(common.TransactionCase):

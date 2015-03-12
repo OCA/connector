@@ -258,21 +258,31 @@ class MetaMapper(MetaConnectorUnit):
 
         cls = super(MetaMapper, meta).__new__(meta, name, bases, attrs)
 
+        # When a class has several bases: ``class Mapper(Base1, Base2):``
         for base in bases:
+            # Merge the _map_methods of the bases
             base_map_methods = getattr(base, '_map_methods', {})
             for attr_name, definition in base_map_methods.iteritems():
                 if cls._map_methods.get(attr_name) is None:
                     cls._map_methods[attr_name] = definition
                 else:
+                    # Update the existing @changed_by with the content
+                    # of each base (it is mutated in place).
+                    # @only_create keeps the value defined in the first
+                    # base.
                     mapping_changed_by = cls._map_methods[attr_name].changed_by
                     mapping_changed_by.update(definition.changed_by)
 
+        # Update the _map_methods from the @mapping methods in attrs,
+        # respecting the class tree.
         for attr_name, attr in attrs.iteritems():
             is_mapping = getattr(attr, 'is_mapping', None)
             if is_mapping:
                 has_only_create = getattr(attr, 'only_create', False)
 
                 mapping_changed_by = set(getattr(attr, 'changed_by', ()))
+                # If already existing, it has been defined in a super
+                # class, extend the @changed_by set
                 if cls._map_methods.get(attr_name) is not None:
                     definition = cls._map_methods[attr_name]
                     mapping_changed_by.update(definition.changed_by)

@@ -26,48 +26,6 @@
  'website': 'http://odoo-connector.com',
  'license': 'AGPL-3',
  'category': 'Generic Modules',
- 'description': """
-Connector
-=========
-
-This is a framework designed to build connectors with external systems,
-usually called `Backends`.
-
-Documentation: http://odoo-connector.com
-
-It features:
-
-* A jobs queue
-
-    In which the connectors can push functions (synchronization tasks)
-    to be executed later.
-
-* An event pattern
-
-    The connectors can subscribe consumer methods, executed when the events
-    are fired.
-
-* Connector base classes
-
-    Called ``ConnectorUnit``.
-
-    Include base classes for the use in connectors, ready to be extended:
-
-    * ``Synchronizer``: flow of an import or export
-    * ``Mapper``: transform a record according to mapping rules
-    * ``Binder``: link external IDs with local IDS
-    * ``BackendAdapter``: adapter interface for the exchanges with the backend
-
-* A multi-backend support
-
-    Each ``ConnectorUnit`` can be registered amongst a backend type (eg.
-    Magento) or a backend version only.
-
-It is actually used to connect Magento_ and Prestashop_
-
-.. _Magento: http://odoo-magento-connector.com
-.. _Prestashop: https://launchpad.net/prestashoperpconnect
-""",
  'depends': ['mail'
              ],
  'data': ['security/connector_security.xml',

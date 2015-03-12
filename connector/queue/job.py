@@ -28,7 +28,6 @@ from datetime import datetime, timedelta, MINYEAR
 from pickle import loads, dumps, UnpicklingError
 
 import openerp
-from openerp import SUPERUSER_ID
 from openerp.tools.translate import _
 
 from ..exception import (NotReadableJobError,
@@ -97,8 +96,8 @@ class OpenERPJobStorage(JobStorage):
     def __init__(self, session):
         super(OpenERPJobStorage, self).__init__()
         self.session = session
-        self.job_model = self.session.pool.get(self._job_model_name)
-        self.worker_model = self.session.pool.get(self._worker_model_name)
+        self.job_model = self.session.env[self._job_model_name]
+        self.worker_model = self.session.env[self._worker_model_name]
         assert self.job_model is not None, (
             "Model %s not found" % self._job_model_name)
 
@@ -117,13 +116,11 @@ class OpenERPJobStorage(JobStorage):
         if 'company_id' in self.session.context:
             company_id = self.session.context['company_id']
         else:
-            company_obj = self.session.pool['res.company']
-            company_id = company_obj._company_default_get(
-                self.session.cr,
-                new_job.user_id,
+            company_model = self.session.env['res.company']
+            company_model = company_model.sudo(new_job.user_id)
+            company_id = company_model._company_default_get(
                 object='queue.job',
-                field='company_id',
-                context=self.session.context)
+                field='company_id')
         new_job.company_id = company_id
         self.store(new_job)
         return new_job.uuid
@@ -145,32 +142,23 @@ class OpenERPJobStorage(JobStorage):
 
     def exists(self, job_uuid):
         """Returns if a job still exists in the storage."""
-        return bool(self._openerp_id(job_uuid))
+        return bool(self.db_record_from_uuid(job_uuid))
 
-    def _openerp_id(self, job_uuid):
-        openerp_id = None
-        job_ids = self.job_model.search(self.session.cr,
-                                        SUPERUSER_ID,
-                                        [('uuid', '=', job_uuid)],
-                                        context=self.session.context,
-                                        limit=1)
-        if job_ids:
-            openerp_id = job_ids[0]
-        return openerp_id
+    def db_record_from_uuid(self, job_uuid):
+        record = self.job_model.sudo().search([('uuid', '=', job_uuid)],
+                                              limit=1)
+        if record:
+            return record
 
-    def openerp_id(self, job_):
-        return self._openerp_id(job_.uuid)
+    def db_record(self, job_):
+        return self.db_record_from_uuid(job_.uuid)
 
     def _worker_id(self, worker_uuid):
-        openerp_id = None
-        worker_ids = self.worker_model.search(self.session.cr,
-                                              SUPERUSER_ID,
-                                              [('uuid', '=', worker_uuid)],
-                                              context=self.session.context,
-                                              limit=1)
-        if worker_ids:
-            openerp_id = worker_ids[0]
-        return openerp_id
+        worker = self.worker_model.sudo().search(
+            [('uuid', '=', worker_uuid)],
+            limit=1)
+        if worker:
+            return worker.id
 
     def store(self, job_):
         """ Store the Job """
@@ -206,12 +194,9 @@ class OpenERPJobStorage(JobStorage):
         else:
             vals['worker_id'] = False
 
-        if self.exists(job_.uuid):
-            self.job_model.write(self.session.cr,
-                                 self.session.uid,
-                                 self.openerp_id(job_),
-                                 vals,
-                                 self.session.context)
+        db_record = self.db_record(job_)
+        if db_record:
+            db_record.write(vals)
         else:
             date_created = dt_to_string(job_.date_created)
             vals.update({'uuid': job_.uuid,
@@ -226,20 +211,14 @@ class OpenERPJobStorage(JobStorage):
                                   job_.args,
                                   job_.kwargs))
 
-            self.job_model.create(self.session.cr,
-                                  SUPERUSER_ID,
-                                  vals,
-                                  self.session.context)
+            self.job_model.sudo().create(vals)
 
     def load(self, job_uuid):
         """ Read a job from the Database"""
-        if not self.exists(job_uuid):
+        stored = self.db_record_from_uuid(job_uuid)
+        if not stored:
             raise NoSuchJobError(
-                '%s does no longer exist in the storage.' % job_uuid)
-        stored = self.job_model.browse(self.session.cr,
-                                       self.session.uid,
-                                       self._openerp_id(job_uuid),
-                                       context=self.session.context)
+                'Job %s does no longer exist in the storage.' % job_uuid)
 
         func = _unpickle(stored.func)
 

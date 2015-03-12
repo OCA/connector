@@ -249,17 +249,14 @@ class TestJobStorage(common.TransactionCase):
 
     def setUp(self):
         super(TestJobStorage, self).setUp()
-        self.pool = openerp.modules.registry.RegistryManager.get(common.DB)
         self.session = ConnectorSession(self.cr, self.uid)
-        self.queue_job = self.registry('queue.job')
+        self.queue_job = self.env['queue.job']
 
     def test_store(self):
         test_job = Job(func=task_a)
         storage = OpenERPJobStorage(self.session)
         storage.store(test_job)
-        stored = self.queue_job.search(
-            self.cr, self.uid,
-            [('uuid', '=', test_job.uuid)])
+        stored = self.queue_job.search([('uuid', '=', test_job.uuid)])
         self.assertEqual(len(stored), 1)
 
     def test_read(self):
@@ -272,7 +269,7 @@ class TestJobStorage(common.TransactionCase):
                        eta=eta,
                        description="My description")
         test_job.user_id = 1
-        test_job.company_id = self.ref("base.main_company")
+        test_job.company_id = self.env.ref("base.main_company").id
         storage = OpenERPJobStorage(self.session)
         storage.store(test_job)
         job_read = storage.load(test_job.uuid)
@@ -346,11 +343,10 @@ class TestJobStorage(common.TransactionCase):
         self.cr.execute('delete from queue_job')
         job(task_a)
         job_uuid = task_a.delay(self.session, 'res.users')
-        stored = self.queue_job.search(self.cr, self.uid, [])
+        stored = self.queue_job.search([])
         self.assertEqual(len(stored), 1)
-        stored_brw = self.queue_job.browse(self.cr, self.uid, stored)
         self.assertEqual(
-            stored_brw[0].uuid,
+            stored.uuid,
             job_uuid,
             'Incorrect returned Job UUID')
 
@@ -358,7 +354,7 @@ class TestJobStorage(common.TransactionCase):
         self.cr.execute('delete from queue_job')
         job(dummy_task_args)
         task_a.delay(self.session, 'res.users', 'o', 'k', c='!')
-        stored = self.queue_job.search(self.cr, self.uid, [])
+        stored = self.queue_job.search([])
         self.assertEqual(len(stored), 1)
 
 
@@ -367,53 +363,46 @@ class TestJobStorageMultiCompany(common.TransactionCase):
 
     def setUp(self):
         super(TestJobStorageMultiCompany, self).setUp()
-        self.pool = openerp.modules.registry.RegistryManager.get(common.DB)
         self.session = ConnectorSession(self.cr, self.uid, context={})
-        self.queue_job = self.registry('queue.job')
+        self.queue_job = self.env['queue.job']
         grp_connector_manager = self.ref("connector.group_connector_manager")
-        User = self.registry('res.users')
-        Company = self.registry('res.company')
-        Partner = self.registry('res.partner')
-        self.other_partner_id_a = Partner.create(
-            self.cr, self.uid,
+        User = self.env['res.users']
+        Company = self.env['res.company']
+        Partner = self.env['res.partner']
+        self.other_partner_a = Partner.create(
             {"name": "My Company a",
              "is_company": True,
              "email": "test@tes.ttest",
              })
-        self.other_company_id_a = Company.create(
-            self.cr, self.uid,
+        self.other_company_a = Company.create(
             {"name": "My Company a",
-             "partner_id": self.other_partner_id_a,
+             "partner_id": self.other_partner_a.id,
              "rml_header1": "My Company Tagline",
              "currency_id": self.ref("base.EUR")
              })
-        self.other_user_id_a = User.create(
-            self.cr, self.uid,
-            {"partner_id": self.other_partner_id_a,
-             "company_id": self.other_company_id_a,
-             "company_ids": [(4, self.other_company_id_a)],
+        self.other_user_a = User.create(
+            {"partner_id": self.other_partner_a.id,
+             "company_id": self.other_company_a.id,
+             "company_ids": [(4, self.other_company_a.id)],
              "login": "my_login a",
              "name": "my user",
              "groups_id": [(4, grp_connector_manager)]
              })
-        self.other_partner_id_b = Partner.create(
-            self.cr, self.uid,
+        self.other_partner_b = Partner.create(
             {"name": "My Company b",
              "is_company": True,
              "email": "test@tes.ttest",
              })
-        self.other_company_id_b = Company.create(
-            self.cr, self.uid,
+        self.other_company_b = Company.create(
             {"name": "My Company b",
-             "partner_id": self.other_partner_id_b,
+             "partner_id": self.other_partner_b.id,
              "rml_header1": "My Company Tagline",
              "currency_id": self.ref("base.EUR")
              })
-        self.other_user_id_b = User.create(
-            self.cr, self.uid,
-            {"partner_id": self.other_partner_id_b,
-             "company_id": self.other_company_id_b,
-             "company_ids": [(4, self.other_company_id_b)],
+        self.other_user_b = User.create(
+            {"partner_id": self.other_partner_b.id,
+             "company_id": self.other_company_b.id,
+             "company_ids": [(4, self.other_company_b.id)],
              "login": "my_login_b",
              "name": "my user 1",
              "groups_id": [(4, grp_connector_manager)]
@@ -423,75 +412,69 @@ class TestJobStorageMultiCompany(common.TransactionCase):
         self.cr.execute('delete from queue_job')
         job(task_a)
         task_a.delay(self.session, 'res.users')
-        stored = self.queue_job.search(self.cr, self.uid, [])
+        stored = self.queue_job.search([])
         self.assertEqual(len(stored), 1)
-        return self.queue_job.browse(self.cr, self.uid, stored[0])
+        return stored
 
     def test_job_default_company_id(self):
         """the default company is the one from the current user_id"""
-        stored_brw = self._create_job()
-        self.assertEqual(stored_brw.company_id.id,
+        stored = self._create_job()
+        self.assertEqual(stored.company_id.id,
                          self.ref("base.main_company"),
                          'Incorrect default company_id')
-        with self.session.change_user(self.other_user_id_b):
-            stored_brw = self._create_job()
-            self.assertEqual(stored_brw.company_id.id,
-                             self.other_company_id_b,
+        with self.session.change_user(self.other_user_b.id):
+            stored = self._create_job()
+            self.assertEqual(stored.company_id.id,
+                             self.other_company_b.id,
                              'Incorrect default company_id')
 
     def test_job_no_company_id(self):
         """ if we put an empty company_id in the context
          jobs are created without company_id"""
         with self.session.change_context({'company_id': None}):
-            stored_brw = self._create_job()
-            self.assertFalse(stored_brw.company_id,
+            stored = self._create_job()
+            self.assertFalse(stored.company_id,
                              ' Company_id should be empty')
 
     def test_job_specific_company_id(self):
         """If a company_id specified in the context
         it's used by default for the job creation"""
         s = self.session
-        with s.change_context({'company_id': self.other_company_id_a}):
-            stored_brw = self._create_job()
-            self.assertEqual(stored_brw.company_id.id,
-                             self.other_company_id_a,
+        with s.change_context({'company_id': self.other_company_a.id}):
+            stored = self._create_job()
+            self.assertEqual(stored.company_id.id,
+                             self.other_company_a.id,
                              'Incorrect company_id')
 
     def test_job_subscription(self):
         # if the job is created without company_id, all members of
         # connector.group_connector_manager must be followers
-        User = self.registry("res.users")
-        with self.session.change_context({'company_id': None}):
-            stored_brw = self._create_job()
-        self.queue_job. _subscribe_users(self.cr, self.uid, [stored_brw.id])
-        stored_brw.refresh()
-        user_ids = User.search(
-            self.cr, self.uid,
+        User = self.env['res.users']
+        with self.session.change_context(company_id=None):
+            stored = self._create_job()
+        stored._subscribe_users()
+        users = User.search(
             [('groups_id', '=', self.ref('connector.group_connector_manager'))]
         )
-        self.assertEqual(len(stored_brw.message_follower_ids), len(user_ids))
-        users = self.registry("res.users").browse(self.cr, self.uid, user_ids)
+        self.assertEqual(len(stored.message_follower_ids), len(users))
         expected_partners = [u.partner_id for u in users]
-        self.assertSetEqual(set(stored_brw.message_follower_ids),
+        self.assertSetEqual(set(stored.message_follower_ids),
                             set(expected_partners))
-        followers_id = [f.id for f in stored_brw.message_follower_ids]
-        self.assertIn(self.other_partner_id_a, followers_id)
-        self.assertIn(self.other_partner_id_b, followers_id)
+        followers_id = [f.id for f in stored.message_follower_ids]
+        self.assertIn(self.other_partner_a.id, followers_id)
+        self.assertIn(self.other_partner_b.id, followers_id)
         # jobs created for a specific company_id are followed only by
         # company's members
         s = self.session
-        with s.change_context({'company_id': self.other_company_id_a}):
-            stored_brw = self._create_job()
-        self.queue_job. _subscribe_users(self.cr, self.other_user_id_a,
-                                         [stored_brw.id])
-        stored_brw.refresh()
-        # 2 because admin + self.other_partner_id_a
-        self.assertEqual(len(stored_brw.message_follower_ids), 2)
-        users = User.browse(self.cr, self.uid,
-                            [SUPERUSER_ID, self.other_user_id_a])
+        with s.change_context(company_id=self.other_company_a.id):
+            stored = self._create_job()
+        stored.sudo(self.other_user_a.id)._subscribe_users()
+        # 2 because admin + self.other_partner_a
+        self.assertEqual(len(stored.message_follower_ids), 2)
+        users = User.browse([SUPERUSER_ID, self.other_user_a.id])
         expected_partners = [u.partner_id for u in users]
-        self.assertSetEqual(set(stored_brw.message_follower_ids),
+        self.assertSetEqual(set(stored.message_follower_ids),
                             set(expected_partners))
-        followers_id = [f.id for f in stored_brw.message_follower_ids]
-        self.assertIn(self.other_partner_id_a, followers_id)
-        self.assertNotIn(self.other_partner_id_b, followers_id)
+        followers_id = [f.id for f in stored.message_follower_ids]
+        self.assertIn(self.other_partner_a.id, followers_id)
+        self.assertNotIn(self.other_partner_b.id, followers_id)

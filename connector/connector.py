@@ -206,7 +206,7 @@ class ConnectorUnit(object):
         :py:class:`~connector.connector.ConnectorUnit` for the current
         model and being a class or subclass of ``connector_unit_class``.
 
-        If a ``model`` is given, a new
+        If a different ``model`` is given, a new
         :py:class:`~connector.connector.ConnectorEnvironment`
         is built for this model.
 
@@ -218,7 +218,7 @@ class ConnectorUnit(object):
                       model than the current one
         :type model: str
         """
-        if model is None:
+        if model is None or model == self.model._name:
             env = self.connector_env
         else:
             env = ConnectorEnvironment(self.backend_record,

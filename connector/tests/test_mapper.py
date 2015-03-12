@@ -396,7 +396,6 @@ class test_mapper_binding(common.TransactionCase):
     def setUp(self):
         super(test_mapper_binding, self).setUp()
         self.session = ConnectorSession(self.cr, self.uid)
-        self.Partner = self.registry('res.partner')
         self.backend = mock.Mock(wraps=Backend('x', version='y'),
                                  name='backend')
         backend_record = mock.Mock()
@@ -413,10 +412,8 @@ class test_mapper_binding(common.TransactionCase):
             _model_name = 'res.partner'
             direct = [(m2o_to_backend('country_id'), 'country')]
 
-        partner_id = self.ref('base.main_partner')
-        self.Partner.write(self.cr, self.uid, partner_id,
-                           {'country_id': self.ref('base.ch')})
-        partner = self.Partner.browse(self.cr, self.uid, partner_id)
+        partner = self.env.ref('base.main_partner')
+        partner.write({'country_id': self.env.ref('base.ch').id})
         self.country_binder.to_backend.return_value = 10
 
         mapper = MyMapper(self.connector_env)

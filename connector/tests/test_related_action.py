@@ -124,21 +124,18 @@ class test_related_action_storage(common.TransactionCase):
 
     def setUp(self):
         super(test_related_action_storage, self).setUp()
-        self.pool = openerp.modules.registry.RegistryManager.get(common.DB)
         self.session = ConnectorSession(self.cr, self.uid)
-        self.queue_job = self.registry('queue.job')
+        self.queue_job = self.env['queue.job']
 
     def test_store_related_action(self):
         """ Call the related action on the model """
         job = Job(func=task_wikipedia, args=('Discworld',))
         storage = OpenERPJobStorage(self.session)
         storage.store(job)
-        stored_ids = self.queue_job.search(self.cr, self.uid,
-                                           [('uuid', '=', job.uuid)])
-        self.assertEqual(len(stored_ids), 1)
-        stored = self.queue_job.browse(self.cr, self.uid, stored_ids[0])
+        stored_job = self.queue_job.search([('uuid', '=', job.uuid)])
+        self.assertEqual(len(stored_job), 1)
         expected = {'type': 'ir.actions.act_url',
                     'target': 'new',
                     'url': 'https://en.wikipedia.org/wiki/Discworld',
                     }
-        self.assertEquals(stored.open_related_action(), expected)
+        self.assertEquals(stored_job.open_related_action(), expected)

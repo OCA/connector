@@ -11,6 +11,11 @@ from openerp.addons.connector.queue.job import (
     Job,
     OpenERPJobStorage,
     job,
+    PENDING,
+    ENQUEUED,
+    DONE,
+    STARTED,
+    FAILED,
 )
 from openerp.addons.connector.session import (
     ConnectorSession,
@@ -62,7 +67,7 @@ class TestJobs(unittest2.TestCase):
         job_b = Job(func=task_b, priority=5)
         self.assertGreater(job_a, job_b)
 
-    def test_eta(self):
+    def test_compare_eta(self):
         """ When an `eta` datetime is defined, it should
         be executed after a job without one.
         """
@@ -70,6 +75,29 @@ class TestJobs(unittest2.TestCase):
         job_a = Job(func=task_a, priority=10, eta=date)
         job_b = Job(func=task_b, priority=10)
         self.assertGreater(job_a, job_b)
+
+    def test_eta(self):
+        """ When an `eta` is datetime, it uses it """
+        now = datetime.now()
+        job_a = Job(func=task_a, eta=now)
+        self.assertEqual(job_a.eta, now)
+
+    def test_eta_integer(self):
+        """ When an `eta` is an integer, it adds n seconds up to now """
+        datetime_path = 'openerp.addons.connector.queue.job.datetime'
+        with mock.patch(datetime_path, autospec=True) as mock_datetime:
+            mock_datetime.now.return_value = datetime(2015, 3, 15, 16, 41, 0)
+            job_a = Job(func=task_a, eta=60)
+            self.assertEqual(job_a.eta, datetime(2015, 3, 15, 16, 42, 0))
+
+    def test_eta_timedelta(self):
+        """ When an `eta` is a timedelta, it adds it up to now """
+        datetime_path = 'openerp.addons.connector.queue.job.datetime'
+        with mock.patch(datetime_path, autospec=True) as mock_datetime:
+            mock_datetime.now.return_value = datetime(2015, 3, 15, 16, 41, 0)
+            delta = timedelta(hours=3)
+            job_a = Job(func=task_a, eta=delta)
+            self.assertEqual(job_a.eta, datetime(2015, 3, 15, 19, 41, 0))
 
     def test_perform(self):
         test_job = Job(func=dummy_task)
@@ -103,12 +131,117 @@ class TestJobs(unittest2.TestCase):
     def test_retryable_error(self):
         test_job = Job(func=retryable_error_task,
                        max_retries=3)
+        self.assertEqual(test_job.retry, 0)
         with self.assertRaises(RetryableJobError):
             test_job.perform(self.session)
+        self.assertEqual(test_job.retry, 1)
         with self.assertRaises(RetryableJobError):
             test_job.perform(self.session)
+        self.assertEqual(test_job.retry, 2)
         with self.assertRaises(FailedJobError):
             test_job.perform(self.session)
+        self.assertEqual(test_job.retry, 3)
+
+    def test_infinite_retryable_error(self):
+        test_job = Job(func=retryable_error_task,
+                       max_retries=0)
+        self.assertEqual(test_job.retry, 0)
+        with self.assertRaises(RetryableJobError):
+            test_job.perform(self.session)
+        self.assertEqual(test_job.retry, 1)
+
+    def test_on_method(self):
+
+        class A(object):
+            def method(self):
+                pass
+
+        with self.assertRaises(NotImplementedError):
+            Job(A.method)
+
+    def test_invalid_function(self):
+        with self.assertRaises(TypeError):
+            Job(1)
+
+    def test_compare_apple_and_orange(self):
+        with self.assertRaises(TypeError):
+            Job(func=task_a) != 1
+
+    def test_set_pending(self):
+        job_a = Job(func=task_a)
+        job_a.set_pending(result='test')
+        self.assertEquals(job_a.state, PENDING)
+        self.assertFalse(job_a.date_enqueued)
+        self.assertFalse(job_a.date_started)
+        self.assertFalse(job_a.worker_uuid)
+        self.assertEquals(job_a.retry, 0)
+        self.assertEquals(job_a.result, 'test')
+
+    def test_set_enqueued(self):
+        job_a = Job(func=task_a)
+        worker = mock.Mock(name='Worker')
+        uuid = 'ae7d1161-dc34-40b1-af06-8057c049133e'
+        worker.uuid = 'ae7d1161-dc34-40b1-af06-8057c049133e'
+        datetime_path = 'openerp.addons.connector.queue.job.datetime'
+        with mock.patch(datetime_path, autospec=True) as mock_datetime:
+            mock_datetime.now.return_value = datetime(2015, 3, 15, 16, 41, 0)
+            job_a.set_enqueued(worker)
+
+        self.assertEquals(job_a.state, ENQUEUED)
+        self.assertEquals(job_a.date_enqueued,
+                          datetime(2015, 3, 15, 16, 41, 0))
+        self.assertEquals(job_a.worker_uuid, uuid)
+        self.assertFalse(job_a.date_started)
+
+    def test_set_started(self):
+        job_a = Job(func=task_a)
+        datetime_path = 'openerp.addons.connector.queue.job.datetime'
+        with mock.patch(datetime_path, autospec=True) as mock_datetime:
+            mock_datetime.now.return_value = datetime(2015, 3, 15, 16, 41, 0)
+            job_a.set_started()
+
+        self.assertEquals(job_a.state, STARTED)
+        self.assertEquals(job_a.date_started,
+                          datetime(2015, 3, 15, 16, 41, 0))
+
+    def test_set_done(self):
+        job_a = Job(func=task_a)
+        datetime_path = 'openerp.addons.connector.queue.job.datetime'
+        with mock.patch(datetime_path, autospec=True) as mock_datetime:
+            mock_datetime.now.return_value = datetime(2015, 3, 15, 16, 41, 0)
+            job_a.set_done(result='test')
+
+        self.assertEquals(job_a.state, DONE)
+        self.assertEquals(job_a.result, 'test')
+        self.assertEquals(job_a.date_done,
+                          datetime(2015, 3, 15, 16, 41, 0))
+        self.assertFalse(job_a.worker_uuid)
+        self.assertFalse(job_a.exc_info)
+
+    def test_set_failed(self):
+        job_a = Job(func=task_a)
+        job_a.set_failed(exc_info='failed test')
+        self.assertEquals(job_a.state, FAILED)
+        self.assertEquals(job_a.exc_info, 'failed test')
+        self.assertFalse(job_a.worker_uuid)
+
+    def test_cancel(self):
+        job_a = Job(func=task_a)
+        job_a.cancel(msg='test')
+        self.assertTrue(job_a.canceled)
+        self.assertEquals(job_a.state, DONE)
+        self.assertEquals(job_a.result, 'test')
+
+    def test_postpone(self):
+        job_a = Job(func=task_a)
+        datetime_path = 'openerp.addons.connector.queue.job.datetime'
+        with mock.patch(datetime_path, autospec=True) as mock_datetime:
+            mock_datetime.now.return_value = datetime(2015, 3, 15, 16, 41, 0)
+            job_a.postpone(result='test', seconds=60)
+
+        self.assertEquals(job_a.eta, datetime(2015, 3, 15, 16, 42, 0))
+        self.assertEquals(job_a.result, 'test')
+        self.assertFalse(job_a.exc_info)
 
 
 class TestJobStorage(common.TransactionCase):

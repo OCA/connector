@@ -4,11 +4,11 @@ import mock
 import unittest2
 from datetime import datetime, timedelta
 
-import openerp
 from openerp import SUPERUSER_ID
 import openerp.tests.common as common
 from openerp.addons.connector.queue.job import (
     Job,
+    JobStorage,
     OpenERPJobStorage,
     job,
     PENDING,
@@ -16,13 +16,16 @@ from openerp.addons.connector.queue.job import (
     DONE,
     STARTED,
     FAILED,
+    _unpickle,
 )
 from openerp.addons.connector.session import (
     ConnectorSession,
 )
 from openerp.addons.connector.exception import (
+    FailedJobError,
+    NoSuchJobError,
+    NotReadableJobError,
     RetryableJobError,
-    FailedJobError
 )
 
 
@@ -243,6 +246,25 @@ class TestJobs(unittest2.TestCase):
         self.assertEquals(job_a.result, 'test')
         self.assertFalse(job_a.exc_info)
 
+    def test_unpickle(self):
+        pickle = ("S'a small cucumber preserved in vinegar, "
+                  "brine, or a similar solution.'\np0\n.")
+        self.assertEqual(_unpickle(pickle),
+                         'a small cucumber preserved in vinegar, '
+                         'brine, or a similar solution.')
+
+    def test_unpickle_not_readable(self):
+        with self.assertRaises(NotReadableJobError):
+            self.assertEqual(_unpickle('cucumber'))
+
+    def test_not_implemented_job_storage(self):
+        storage = JobStorage()
+        job_a = mock.Mock()
+        with self.assertRaises(NotImplementedError):
+            storage.store(job_a)
+            storage.load(job_a)
+            storage.exists(job_a)
+
 
 class TestJobStorage(common.TransactionCase):
     """ Test storage of jobs """
@@ -298,6 +320,49 @@ class TestJobStorage(common.TransactionCase):
                                delta=delta)
         self.assertAlmostEqual(test_job.eta, job_read.eta,
                                delta=delta)
+
+        test_date = datetime(2015, 3, 15, 21, 7, 0)
+        job_read.date_enqueued = test_date
+        job_read.date_started = test_date
+        job_read.date_done = test_date
+        job_read.canceled = True
+        storage.store(job_read)
+
+        job_read = storage.load(test_job.uuid)
+        self.assertAlmostEqual(job_read.date_started, test_date,
+                               delta=delta)
+        self.assertAlmostEqual(job_read.date_enqueued, test_date,
+                               delta=delta)
+        self.assertAlmostEqual(job_read.date_done, test_date,
+                               delta=delta)
+        self.assertEqual(job_read.canceled, True)
+
+    def test_job_worker(self):
+        worker = self.env['queue.worker'].create(
+            {'uuid': '57569b99-c2c1-47b6-aad1-72f953c92c87'}
+        )
+        test_job = Job(func=dummy_task_args,
+                       model_name='res.users',
+                       args=('o', 'k'),
+                       kwargs={'c': '!'})
+        test_job.worker_uuid = worker.uuid
+        storage = OpenERPJobStorage(self.session)
+        self.assertEqual(storage._worker_id(worker.uuid), worker.id)
+        storage.store(test_job)
+        job_read = storage.load(test_job.uuid)
+        self.assertEqual(job_read.worker_uuid, worker.uuid)
+
+    def test_job_unlinked(self):
+        test_job = Job(func=dummy_task_args,
+                       model_name='res.users',
+                       args=('o', 'k'),
+                       kwargs={'c': '!'})
+        storage = OpenERPJobStorage(self.session)
+        storage.store(test_job)
+        stored = self.queue_job.search([('uuid', '=', test_job.uuid)])
+        stored.unlink()
+        with self.assertRaises(NoSuchJobError):
+            storage.load(test_job.uuid)
 
     def test_unicode(self):
         test_job = Job(func=dummy_task_args,

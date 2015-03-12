@@ -550,14 +550,10 @@ class Job(object):
             self._eta = None
         elif isinstance(value, timedelta):
             self._eta = datetime.now() + value
-        elif isinstance(value, datetime):
-            self._eta = value
         elif isinstance(value, int):
             self._eta = datetime.now() + timedelta(seconds=value)
         else:
-            raise ValueError("%s is not a valid type for eta, "
-                             " it must be an 'int', a 'timedelta' "
-                             "or a 'datetime'" % type(value))
+            self._eta = value
 
     def set_pending(self, result=None):
         self.state = PENDING

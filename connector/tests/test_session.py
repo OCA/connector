@@ -66,21 +66,30 @@ class test_connector_session(common.TransactionCase):
                                         self.uid,
                                         context=self.context)
 
+    def test_env(self):
+        """ Check the session properties """
+        session = self.session
+        self.assertEqual(session.cr, session.env.cr)
+        self.assertEqual(session.uid, session.env.uid)
+        self.assertEqual(session.context, session.env.context)
+        self.assertEqual(session.pool, session.env.registry)
+
     def test_change_user(self):
         """
         Change the user and check if it is reverted correctly at the end
         """
         original_uid = self.session.uid
-        new_uid = 2
+        original_env = self.session.env
+        new_uid = self.env.ref('base.user_demo').id
         with self.session.change_user(new_uid):
+            # a new openerp.api.Environment is generated with the user
+            self.assertNotEqual(self.session.env, original_env)
             self.assertEqual(self.session.uid, new_uid)
+        self.assertEqual(self.session.env, original_env)
         self.assertEqual(self.session.uid, original_uid)
 
     def test_model_with_transaction(self):
-        """
-        Create a session with a model name, we should be able to access
-        the model from a transaction
-        """
+        """ Use a method on a model from the pool """
         res_users = self.registry('res.users').search_count(self.cr,
                                                             self.uid,
                                                             [])
@@ -90,18 +99,41 @@ class test_connector_session(common.TransactionCase):
                                                          [])
         self.assertEqual(sess_res_users, res_users)
 
+    def test_new_model_with_transaction(self):
+        """ Use a method on a model from the new api """
+        res_users = self.env['res.users'].search_count([])
+        sess_res_users_model = self.session.env['res.users']
+        sess_res_users = sess_res_users_model.search_count([])
+        self.assertEqual(sess_res_users, res_users)
+
     def test_change_context(self):
-        """
-        Change the context and check if it is reverted correctly at the end
-        """
+        """ Change the context, it is reverted at the end """
         test_key = 'test_key'
         self.assertNotIn(test_key, self.session.context)
         with self.session.change_context({test_key: 'value'}):
-            self.assertIn(test_key, self.session.context)
+            self.assertEqual(self.session.context.get('test_key'), 'value')
         self.assertNotIn(test_key, self.session.context)
 
-        # change the context on a session not initialized with a context
+    def test_change_context_keyword(self):
+        """ Change the context by keyword, it is reverted at the end """
+        test_key = 'test_key'
+        self.assertNotIn(test_key, self.session.context)
+        with self.session.change_context(test_key='value'):
+            self.assertEqual(self.session.context.get('test_key'), 'value')
+        self.assertNotIn(test_key, self.session.context)
+
+    def test_change_context_uninitialized(self):
+        """ Change the context on a session not initialized with a context """
         session = ConnectorSession(self.cr, self.uid)
+        test_key = 'test_key'
         with session.change_context({test_key: 'value'}):
-            self.assertIn(test_key, session.context)
+            self.assertEqual(session.context.get('test_key'), 'value')
         self.assertNotIn(test_key, session.context)
+
+    def test_is_module_installed(self):
+        """ Test on an installed module """
+        self.assertTrue(self.session.is_module_installed('connector'))
+
+    def test_is_module_uninstalled(self):
+        """ Test on an installed module """
+        self.assertFalse(self.session.is_module_installed('lambda'))

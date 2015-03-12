@@ -20,10 +20,8 @@ class test_producers(common.TransactionCase):
             pass
 
         self.recipient = Recipient()
-        self.model = self.registry('res.partner')
-        self.partner_id = self.model.create(self.cr,
-                                            self.uid,
-                                            {'name': 'new'})
+        self.model = self.env['res.partner']
+        self.partner = self.model.create({'name': 'new'})
 
     def test_on_record_create(self):
         """
@@ -33,10 +31,8 @@ class test_producers(common.TransactionCase):
         def event(session, model_name, record_id, vals):
             self.recipient.record_id = record_id
 
-        record_id = self.model.create(self.cr,
-                                      self.uid,
-                                      {'name': 'Kif Kroker'})
-        self.assertEqual(self.recipient.record_id, record_id)
+        record = self.model.create({'name': 'Kif Kroker'})
+        self.assertEqual(self.recipient.record_id, record.id)
         on_record_create.unsubscribe(event)
 
     def test_on_record_write(self):
@@ -50,11 +46,8 @@ class test_producers(common.TransactionCase):
 
         vals = {'name': 'Lrrr',
                 'city': 'Omicron Persei 8'}
-        self.model.write(self.cr,
-                         self.uid,
-                         self.partner_id,
-                         vals)
-        self.assertEqual(self.recipient.record_id, self.partner_id)
+        self.partner.write(vals)
+        self.assertEqual(self.recipient.record_id, self.partner.id)
         self.assertDictEqual(self.recipient.vals, vals)
         on_record_write.unsubscribe(event)
 
@@ -67,10 +60,8 @@ class test_producers(common.TransactionCase):
             if model_name == 'res.partner':
                 self.recipient.record_id = record_id
 
-        self.model.unlink(self.cr,
-                          self.uid,
-                          [self.partner_id])
-        self.assertEqual(self.recipient.record_id, self.partner_id)
+        self.partner.unlink()
+        self.assertEqual(self.recipient.record_id, self.partner.id)
         on_record_write.unsubscribe(event)
 
     def test_on_record_write_no_consumer(self):
@@ -81,7 +72,5 @@ class test_producers(common.TransactionCase):
         # clear all the registered events
         on_record_write._consumers = {None: set()}
         with mock.patch.object(on_record_write, 'fire'):
-            self.model.write(self.cr, self.uid,
-                             self.partner_id,
-                             {'name': 'Kif Kroker'})
+            self.partner.write({'name': 'Kif Kroker'})
             self.assertEqual(on_record_write.fire.called, False)

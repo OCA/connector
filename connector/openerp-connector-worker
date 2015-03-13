@@ -79,7 +79,7 @@ class WorkerConnector(workers.Worker):
             if config['db_name']:
                 db_names = config['db_name'].split(',')
             else:
-               db_names = openerp.service.db.exp_list(True)
+                db_names = openerp.service.db.exp_list(True)
             dbfilter = config['dbfilter']
             if dbfilter and db_names:
                 db_names = [d for d in db_names if re.match(dbfilter, d)]

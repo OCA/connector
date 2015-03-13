@@ -32,6 +32,19 @@ class Multicornnector(workers.PreforkServer):
         while len(self.workers_connector) < self.population:
             self.worker_spawn(WorkerConnector, self.workers_connector)
 
+    def worker_spawn(self, klass, workers_registry):
+        self.generation += 1
+        worker = klass(self, self.generation)
+        pid = os.fork()
+        if pid != 0:
+            worker.pid = pid
+            self.workers[pid] = worker
+            workers_registry[pid] = worker
+            return worker
+        else:
+            worker.run()
+            sys.exit(0)
+
     def worker_pop(self, pid):
         if pid in self.workers:
             _logger.debug("Worker (%s) unregistered", pid)
@@ -46,9 +59,11 @@ class Multicornnector(workers.PreforkServer):
 class WorkerConnector(workers.Worker):
     """ HTTP Request workers """
 
-    def __init__(self, multi):
+    def __init__(self, multi, index):
         super(WorkerConnector, self).__init__(multi)
         self.db_index = 0
+        self.index = index
+        self.delay = index % self.multi.population
 
     def _work_database(self, cr):
         db_name = cr.dbname
@@ -97,7 +112,9 @@ class WorkerConnector(workers.Worker):
     def sleep(self):
         # Really sleep once all the databases have been processed.
         if self.db_index == 0:
-            interval = 15 + self.pid % self.multi.population  # chorus effect
+            # add a variance to make the workers work first turn by turn
+            interval = 15 + self.delay
+            self.delay = (self.delay + 1) % self.multi.population
             time.sleep(interval)
 
     def start(self):

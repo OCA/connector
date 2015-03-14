@@ -1,0 +1,230 @@
+#!/usr/bin/env python
+"""
+odoo-connector-runner
+
+What's this?
+============
+This is an alternative to connector workers, with the goal
+of resolving issues due to the polling nature of workers:
+* jobs do not start immediately even if there is a free worker
+* workers may starve while other workers have too many jobs enqueued
+
+It is fully compatible with the connector mechanism and only
+replaces workers.
+
+How?
+====
+* This process receives postgres NOTIFY messages each time jobs change state.
+* It does not run jobs itself, but asks Odoo to run them through an
+  anonymous HTTP request [1].
+
+How to use
+==========
+* adapt the _TMP_* variables below to suit your needs
+* start Odoo with --workers > _TMP_MAX_RUNNING_JOBS
+  and --load=web,connector
+* disable "Enqueue Jobs" cron
+* do NOT start openerp-connector-worker
+* run python odoo-connector-runner (only dependency is psycopg2)
+* create jobs (eg using base_import_async) and observe they
+  start immediately and in parallel
+
+TODO
+====
+* See in the code below.
+
+Notes
+=====
+[1] From a security standpoint, it is safe to have an anonymous HTTP
+    request because this request only accepts to run jobs that are
+    enqueued.
+"""
+
+from contextlib import closing
+import logging
+import select
+import threading
+import time
+import urllib2
+
+import psycopg2
+from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
+
+# TODO: This is currently working nicely but for only
+#       one database. Also, the approach is relatively
+#       brute force, as the queue_job is queried each
+#       time a notification is received. So the next step
+#       is to maintain a in-memory list of jobs to run
+#       and use the information in the notifications to
+#       decide what to run and when. Querying the database
+#       will be done only at initialization and to re-sync
+#       the state in case of bug or missed notifications.
+#       This opens the path to a simple implementation of
+#       job channels (https://github.com/OCA/connector/issues/43).
+
+# TODO: since STATE_ENQUEUED is now very short lived state
+#       we can automatically requeue (set pending) all
+#       jobs that are enqueued since more than a few seconds
+#       this is important as jobs will be stuck in that
+#       state if this odoo-connector-runner runs while odoo does not
+
+# TODO: make all this configurable
+_TMP_DATABASE = "jobrunner-1-v80"
+_TMP_ODOO_URL = "http://localhost:8069"
+_TMP_MAX_RUNNING_JOBS = 4
+_TMP_SELECT_TIMEOUT = 60
+
+
+STATE_ENQUEUED = "enqueued"
+STATE_STARTED = "started"
+STATE_PENDING = "pending"
+STATES_RUNNING = (STATE_ENQUEUED, STATE_STARTED)
+STATES_PENDING = (STATE_PENDING,)
+
+
+# TODO: configurable
+logging.basicConfig(format='%(asctime)s %(name)s %(levelname)s:%(message)s',
+                    level=logging.DEBUG)
+_logger = logging.getLogger("odoo-connector-runner")
+
+
+def _async_http_get(url):
+    # TODO: better way to HTTP GET asynchronously (grequest, ...)?
+    #       if this was python3 I would be doing this with
+    #       asyncio, aiohttp and aiopg
+    def urlopen():
+        try:
+            _logger.debug("GET %s", url)
+            # we are not interested in the result, so we set a short timeout
+            urllib2.urlopen(url, timeout=1)
+        except:
+            pass
+    thread = threading.Thread(target=urlopen)
+    thread.daemon = True
+    thread.start()
+
+
+class OdooConnectorRunner:
+
+    def __init__(self):
+        self.conn = psycopg2.connect(database=_TMP_DATABASE)
+        self.conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
+        with closing(self.conn.cursor()) as cr:
+            # this is the trigger that sends notifications
+            # when job states change
+            # TODO: perhaps we don't need to trigger ON DELETE?
+            cr.execute("""
+                DROP TRIGGER IF EXISTS queue_job_notify ON queue_job;
+
+                CREATE OR REPLACE
+                    FUNCTION queue_job_notify() RETURNS trigger AS $$
+                DECLARE
+                    old_state TEXT;
+                    new_state TEXT;
+                    uuid      TEXT;
+                BEGIN
+                    IF TG_OP != 'INSERT' THEN
+                        old_state = OLD.state;
+                        uuid = OLD.uuid;
+                    ELSE
+                        old_state = '';
+                    END IF;
+                    IF TG_OP != 'DELETE' THEN
+                        new_state = NEW.state;
+                        uuid = NEW.uuid;
+                    ELSE
+                        new_state = '';
+                    END IF;
+                    IF new_state != old_state THEN
+                        PERFORM pg_notify('connector',
+                                          uuid || ',' ||
+                                          old_state || '->' || new_state);
+                    END IF;
+                    RETURN NULL;
+                END;
+                $$ LANGUAGE plpgsql;
+
+                CREATE TRIGGER queue_job_notify
+                    AFTER INSERT OR UPDATE OR DELETE
+                    ON queue_job
+                    FOR EACH ROW EXECUTE PROCEDURE queue_job_notify();
+            """)
+            cr.execute("LISTEN connector")
+
+    def job_uuids_to_run(self):
+        # TODO: job channels https://github.com/OCA/connector/issues/43
+        with closing(self.conn.cursor()) as cr:
+            cr.execute("SELECT COUNT(id) FROM queue_job WHERE state IN %s",
+                       (STATES_RUNNING,))
+            running = cr.fetchone()[0]
+            _logger.debug("there are %s running jobs", running)
+            limit = _TMP_MAX_RUNNING_JOBS - running
+            if limit > 0:
+                cr.execute("SELECT uuid FROM queue_job "
+                           "WHERE state IN %s AND active "
+                           "  AND (eta IS NULL OR eta <= NOW()) "
+                           "ORDER BY eta NULLS LAST, priority, id "
+                           "LIMIT %s",
+                           (STATES_PENDING, limit))
+                return [r[0] for r in cr.fetchall()]
+            else:
+                _logger.debug("nothing to run")
+                return []
+
+    def run_jobs(self):
+        with closing(self.conn.cursor()) as cr:
+            for job_uuid in self.job_uuids_to_run():
+                _logger.debug("running job %s", job_uuid)
+                cr.execute("UPDATE queue_job "
+                           "   SET state=%s, "
+                           "       date_enqueued=NOW() "
+                           "WHERE uuid=%s",
+                           (STATE_ENQUEUED, job_uuid))
+                _async_http_get(_TMP_ODOO_URL +
+                                "/runjob?db=%s&job_uuid=%s" %
+                                (_TMP_DATABASE, job_uuid,))
+
+    def process_notifications(self):
+        # TODO: in this version, we don't care
+        #       about the nofifications content
+        #       and we simply query the database to see
+        #       what jobs to run; when going
+        #       multi-db, the transitions in
+        #       the notification will suffice to
+        #       decide what to run, and querying the
+        #       database will be used to re-sync
+        #       at startup.
+        while self.conn.notifies:
+            notification = self.conn.notifies.pop()
+            _logger.debug("got notification %s",
+                          notification.payload)
+        self.run_jobs()
+
+    def wait_notification(self):
+        if self.conn.notifies:
+            return
+        # wait for something to happen in the queue_job table
+        conns, _, _ = select.select([self.conn], [], [],
+                                    _TMP_SELECT_TIMEOUT)
+        if conns:
+            for conn in conns:
+                conn.poll()
+        else:
+            _logger.debug("select timeout")
+
+    def run_forever(self):
+        _logger.info("starting")
+        while True:
+            try:
+                self.process_notifications()
+                self.wait_notification()
+            except KeyboardInterrupt:
+                _logger.info("stopping")
+                break
+            except:
+                _logger.exception("exception, sleeping a bit and continuing")
+                time.sleep(1)
+
+
+if __name__ == "__main__":
+    OdooConnectorRunner().run_forever()

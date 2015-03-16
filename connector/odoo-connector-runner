@@ -25,7 +25,7 @@ How to use
   and --load=web,connector
 * disable "Enqueue Jobs" cron
 * do NOT start openerp-connector-worker
-* run python odoo-connector-runner (only dependency is psycopg2)
+* run python odoo-connector-runner (only dependency are psycopg2 and requests)
 * create jobs (eg using base_import_async) and observe they
   start immediately and in parallel
 
@@ -45,8 +45,8 @@ import logging
 import select
 import threading
 import time
-import urllib2
 
+import requests
 import psycopg2
 from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
 
@@ -67,6 +67,8 @@ from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
 #       jobs that are enqueued since more than a few seconds
 #       this is important as jobs will be stuck in that
 #       state if this odoo-connector-runner runs while odoo does not
+
+# TODO: should we try to recover from lost postgres connections?
 
 # TODO: make all this configurable
 _TMP_DATABASE = "jobrunner-1-v80"
@@ -96,9 +98,12 @@ def _async_http_get(url):
         try:
             _logger.debug("GET %s", url)
             # we are not interested in the result, so we set a short timeout
-            urllib2.urlopen(url, timeout=1)
-        except:
+            # but not too short so we log errors when Odoo is not running at all
+            requests.get(url, timeout=1)
+        except requests.Timeout:
             pass
+        except:
+            _logger.exception("exception in GET %s", url)
     thread = threading.Thread(target=urlopen)
     thread.daemon = True
     thread.start()

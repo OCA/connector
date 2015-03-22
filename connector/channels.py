@@ -272,6 +272,44 @@ class ChannelQueue:
 
 
 class Channel:
+    """A channel for jobs, with a maximum number of workers.
+
+    Job channels are joined in a hierarchy down to the root channel.
+    When a job channel has free workers, jobs are dequeued, marked
+    as running in the channel and are inserted into the queue of the
+    parent channel where they wait for free workers and so on.
+
+    Job channels can be visualized as water channels with a given flow
+    limit (= workers). Channels are joined together in a downstream channel
+    and the flow limit of the downstream channel limit upstream channels.
+
+    ---------------------\
+                         \
+                         \-----------------------
+     Ch. A W:4,Q:12,R:4
+
+    ---------------------\  Ch. root W:5,Q:0,R:4
+                         |
+    ---------------------/
+     Ch. B W:1,Q:0,R:0    -----------------------
+    ---------------------/
+
+    The above diagram illustrates two channels joining in the root channel.
+    The root channel has 5 workers, and 4 running jobs coming from Channel A.
+    Channel A has maximum 4 workers, all in use (passed down to the root
+    channel), and 12 jobs enqueued. Channel B has maximum 1 worker,
+    none in use. This means that whenever a new job comes in channel B,
+    there will be available room for it to run in the root channel.
+
+    Should a downstream channel have less capacity than its upstream channels,
+    jobs going downstream will be enqueued in the downstream channel,
+    and compete normally according to their properties (priority, etc).
+
+    Using this technique, it is possible to enforce sequence in a channel
+    with 1 worker. It is also possible to dedicate a channel with a
+    limited number of workers for application-autocreated subchannels
+    without risking to overflow the system.
+    """
 
     def __init__(self, name, parent, workers=1, sequential=False):
         self.name = name
@@ -288,10 +326,11 @@ class Channel:
         self._failed = SafeSet()
 
     def __str__(self):
-        return "%s(Q:%d,R:%d,F:%d)" % (self.name,
-                                       len(self._queue),
-                                       len(self._running),
-                                       len(self._failed))
+        return "%s(W:%d,Q:%d,R:%d,F:%d)" % (self.name,
+                                            self.workers,
+                                            len(self._queue),
+                                            len(self._running),
+                                            len(self._failed))
 
     def remove(self, job):
         self._queue.remove(job)

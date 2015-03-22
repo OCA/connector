@@ -301,6 +301,10 @@ class Channel:
     none in use. This means that whenever a new job comes in channel B,
     there will be available room for it to run in the root channel.
 
+    Note that from the point of view of a channel, 'running' means enqueued
+    in the downstream channel. Only jobs marked running in the root channel
+    are actually sent to Odoo for execution.
+
     Should a downstream channel have less capacity than its upstream channels,
     jobs going downstream will be enqueued in the downstream channel,
     and compete normally according to their properties (priority, etc).

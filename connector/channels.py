@@ -283,16 +283,16 @@ class Channel:
     limit (= workers). Channels are joined together in a downstream channel
     and the flow limit of the downstream channel limit upstream channels.
 
-    ---------------------\
-                         \
-                         \-----------------------
-     Ch. A W:4,Q:12,R:4
-
-    ---------------------\  Ch. root W:5,Q:0,R:4
+    ---------------------+
                          |
-    ---------------------/
-     Ch. B W:1,Q:0,R:0    -----------------------
-    ---------------------/
+                         |
+     Ch. A W:4,Q:12,R:4  +-----------------------
+
+    ---------------------+  Ch. root W:5,Q:0,R:4
+                         |
+    ---------------------+
+     Ch. B W:1,Q:0,R:0
+    ---------------------+-----------------------
 
     The above diagram illustrates two channels joining in the root channel.
     The root channel has 5 workers, and 4 running jobs coming from Channel A.
@@ -380,6 +380,10 @@ class Channel:
             for job in child.get_jobs_to_run():
                 self._queue.add(job)
         # sequential channels block when there are failed jobs
+        # TODO: this is probably not sufficient to ensure
+        #       senquentiality because of the behaviour in presence
+        #       of jobs with eta; plus: check if there are no
+        #       race conditions.
         if self.sequential and len(self._failed):
             return
         # yield jobs that are ready to run

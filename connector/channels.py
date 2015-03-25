@@ -321,13 +321,31 @@ class Channel:
         if self.parent:
             self.parent.children.append(self)
         self.children = []
-        self.workers = workers
-        if sequential and workers != 1:
-            raise ValueError("A sequential channel can have only one worker")
-        self.sequential = sequential
+        self.workers = None
+        self.sequential = False
         self._queue = ChannelQueue()
         self._running = SafeSet()
         self._failed = SafeSet()
+
+    def configure(self, config):
+        assert config['name'] == self.fullname
+        self.workers = config.get('workers', 1)
+        self.sequential = bool(config.get('sequential', False))
+        if self.sequential and self.workers != 1:
+            raise ValueError("A sequential channel can have only one worker")
+
+    @property
+    def fullname(self):
+        if self.parent:
+            return self.parent.fullname + '.' + self.name
+        else:
+            return self.name
+
+    def get_subchannel_by_name(self, subchannel_name):
+        for child in self.children:
+            if child.name == subchannel_name:
+                return child
+        return None
 
     def __str__(self):
         return "%s(W:%d,Q:%d,R:%d,F:%d)" % (self.name,
@@ -345,7 +363,8 @@ class Channel:
 
     def set_done(self, job):
         self.remove(job)
-        _logger.debug("job %s marked done", job.uuid)
+        _logger.debug("job %s marked done in channel %s",
+                      job.uuid, self.name)
 
     def set_pending(self, job):
         if job not in self._queue:
@@ -354,7 +373,8 @@ class Channel:
             self._failed.remove(job)
             if self.parent:
                 self.parent.remove(job)
-            _logger.debug("job %s marked pending", job.uuid)
+            _logger.debug("job %s marked pending in channel %s",
+                          job.uuid, self.name)
 
     def set_running(self, job):
         if job not in self._running:
@@ -363,7 +383,8 @@ class Channel:
             self._failed.remove(job)
             if self.parent:
                 self.parent.set_running(job)
-            _logger.debug("job %s marked running", job.uuid)
+            _logger.debug("job %s marked running in channel %s",
+                          job.uuid, self.name)
 
     def set_failed(self, job):
         if job not in self._failed:
@@ -372,7 +393,8 @@ class Channel:
             self._failed.add(job)
             if self.parent:
                 self.parent.remove(job)
-            _logger.debug("job %s marked failed", job.uuid)
+            _logger.debug("job %s marked failed in channel %s",
+                          job.uuid, self.name)
 
     def get_jobs_to_run(self):
         # enqueue jobs of children channels
@@ -387,30 +409,135 @@ class Channel:
         if self.sequential and len(self._failed):
             return
         # yield jobs that are ready to run
-        while len(self._running) < self.workers:
+        while not self.workers or len(self._running) < self.workers:
             job = self._queue.pop(now=datetime.now())
             if not job:
                 return
             self._running.add(job)
-            _logger.debug("job %s marked running", job.uuid)
+            _logger.debug("job %s marked running in channel %s",
+                          job.uuid, self.name)
+            _logger.debug("channel %s", self)
             yield job
 
 
 class ChannelManager:
 
-    def __init__(self, workers):
-        # TODO: config
+    def __init__(self):
         self._jobs_by_uuid = WeakValueDictionary()
-        self._root_channel = Channel(name='root', parent=None, workers=workers)
+        self._root_channel = Channel(name='root', parent=None)
+        self._channels_by_name = WeakValueDictionary(root=self._root_channel)
 
-    def get_channel_by_name(self, channel_name):
-        # TODO: channels by name
-        # TODO: autocreate/autodestroy channels
-        return self._root_channel
+    @classmethod
+    def parse_simple_config(cls, config_string):
+        """Parse a simple channels configuration string.
 
-    def notify(self, channel_name, uuid,
+        The general form is as follow:
+        channel.subchannel.subsubchannel(:workers(:key=value)*)?,...
+
+        Returns a list of channel configuration dictionaries.
+
+        >>> from pprint import pprint as pp
+        >>> pp(ChannelManager.parse_simple_config('root:4'))
+        [{'name': 'root', 'workers': 4}]
+        >>> pp(ChannelManager.parse_simple_config('root:4,root.sub:2'))
+        [{'name': 'root', 'workers': 4}, {'name': 'root.sub', 'workers': 2}]
+        >>> pp(ChannelManager.parse_simple_config('root:4,root.sub:2:'
+        ...                                       'sequential:k=v'))
+        [{'name': 'root', 'workers': 4},
+         {'k': 'v', 'name': 'root.sub', 'sequential': True, 'workers': 2}]
+        >>> pp(ChannelManager.parse_simple_config('root'))
+        [{'name': 'root', 'workers': 1}]
+        """
+        res = []
+        for channel_config_string in config_string.split(','):
+            config = {}
+            config_items = channel_config_string.split(':')
+            name = config_items[0]
+            if not name:
+                raise ValueError('Invalid channel config %s: '
+                                 'missing channel name' % config_string)
+            config['name'] = name
+            if len(config_items) > 1:
+                workers = config_items[1]
+                try:
+                    config['workers'] = int(workers)
+                except:
+                    raise ValueError('Invalid channel config %s: '
+                                     'invalid workers %s' %
+                                     (config_string, workers))
+                for config_item in config_items[2:]:
+                    kv = config_item.split('=')
+                    if len(kv) == 1:
+                        k, v = kv[0], True
+                    elif len(kv) == 2:
+                        k, v = kv
+                    else:
+                        raise ValueError('Invalid channel config %s: ',
+                                         'incorrect config item %s'
+                                         (config_string, config_item))
+                    if k in config:
+                        raise ValueError('Invalid channel config %s: '
+                                         'duplicate key %s'
+                                         (config_string, k))
+                    config[k] = v
+            else:
+                config['workers'] = 1
+            res.append(config)
+        return res
+
+    def simple_configure(self, config_string):
+        for config in ChannelManager.parse_simple_config(config_string):
+            self.get_channel_from_config(config)
+
+    def get_channel_from_config(self, config):
+        channel = self.get_channel_by_name(config['name'], autocreate=True)
+        channel.configure(config)
+        return channel
+
+    def get_channel_by_name(self, channel_name, autocreate):
+        """
+        >>> cm = ChannelManager()
+        >>> c = cm.get_channel_by_name('root', autocreate=False)
+        >>> c.name
+        'root'
+        >>> c.fullname
+        'root'
+        >>> c = cm.get_channel_by_name('root.sub', autocreate=True)
+        >>> c.name
+        'sub'
+        >>> c.fullname
+        'root.sub'
+        >>> c = cm.get_channel_by_name('sub', autocreate=True)
+        >>> c.name
+        'sub'
+        >>> c.fullname
+        'root.sub'
+        """
+        if channel_name in self._channels_by_name:
+            return self._channels_by_name[channel_name]
+        if not autocreate:
+            raise RuntimeError('Channel %s not found' % channel_name)
+        parent = self._root_channel
+        for subchannel_name in channel_name.split('.'):
+            if subchannel_name == 'root':
+                continue
+            subchannel = parent.get_subchannel_by_name(subchannel_name)
+            if not subchannel:
+                subchannel = Channel(subchannel_name, parent)
+                self._channels_by_name[subchannel.fullname] = subchannel
+            parent = subchannel
+        return parent
+
+    def notify(self, channel_config_string, uuid,
                seq, date_created, priority, eta, state):
-        channel = self.get_channel_by_name(channel_name)
+        if not channel_config_string:
+            channel = self._root_channel
+        else:
+            configs = ChannelManager.parse_simple_config(channel_config_string)
+            if len(configs) != 1:
+                raise ValueError('%s is not a configuration for '
+                                 'a single channel' % channel_config_string)
+            channel = self.get_channel_from_config(configs[0])
         job = self._jobs_by_uuid.get(uuid)
         if not job:
             job = ChannelJob(channel, uuid, seq, date_created, priority, eta)
@@ -436,11 +563,10 @@ class ChannelManager:
             channel.set_failed(job)
         else:
             _logger.error("unexpected state %s for job %s", state, job)
-        _logger.debug("channel %s", self._root_channel)
+        # _logger.debug("channel %s", self._root_channel)
 
     def get_jobs_to_run(self):
-        for job in self._root_channel.get_jobs_to_run():
-            yield job
+        return self._root_channel.get_jobs_to_run()
 
 
 if __name__ == '__main__':

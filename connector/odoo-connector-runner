@@ -99,7 +99,7 @@ from channels import ChannelManager, STATE_ENQUEUED, STATES_NOT_DONE
 # TODO: make all this configurable
 _TMP_DATABASE = "jobrunner-1-v80"
 _TMP_ODOO_URL = "http://localhost:8069"
-_TMP_MAX_RUNNING_JOBS = 4
+_TMP_CONFIG = "root:4,root.sub:3"
 _TMP_SELECT_TIMEOUT = 60
 
 
@@ -131,8 +131,8 @@ def _async_http_get(url):
 class OdooConnectorRunner:
 
     def __init__(self):
-        # TODO: config
-        self.channel_manager = ChannelManager(_TMP_MAX_RUNNING_JOBS)
+        self.channel_manager = ChannelManager()
+        self.channel_manager.simple_configure(_TMP_CONFIG)
         self.conn = psycopg2.connect(database=_TMP_DATABASE)
         self.conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
         with closing(self.conn.cursor()) as cr:

@@ -89,9 +89,6 @@ from openerp.tools import config
 
 from .channels import ChannelManager, STATE_ENQUEUED, STATES_NOT_DONE
 
-# TODO: This is currently working nicely but for only
-#       one database.
-
 # TODO: since STATE_ENQUEUED is now very short lived state
 #       we can automatically requeue (set pending) all
 #       jobs that are enqueued since more than a few seconds
@@ -99,9 +96,6 @@ from .channels import ChannelManager, STATE_ENQUEUED, STATES_NOT_DONE
 #       state if this odoo-connector-runner runs while odoo does not
 
 # TODO: should we try to recover from lost postgres connections?
-
-# TODO: make all this configurable
-_TMP_DATABASE = "jobrunner-1-v80"
 
 SELECT_TIMEOUT = 60
 
@@ -128,14 +122,42 @@ def _async_http_get(url):
     thread.start()
 
 
-class OdooConnectorRunner:
+class Database:
 
-    def __init__(self, port=8069, channel_config_string='root:4'):
-        self.port = port
-        self.channel_manager = ChannelManager()
-        self.channel_manager.simple_configure(channel_config_string)
-        self.conn = psycopg2.connect(sql_db.dsn(_TMP_DATABASE)[1])
+    def __init__(self, db_name):
+        self.db_name = db_name
+        self.conn = psycopg2.connect(sql_db.dsn(db_name)[1])
         self.conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
+        self.has_connector = self._has_connector()
+        if self.has_connector:
+            self.has_channel = self._has_queue_job_column('channel')
+            self.has_seq = self._has_queue_job_column('seq')
+            self._initialize()
+
+    def _has_connector(self):
+        with closing(self.conn.cursor()) as cr:
+            try:
+                cr.execute("SELECT 1 FROM ir_module_module "
+                           "WHERE name=%s AND state=%s",
+                           ('connector', 'installed'))
+            except psycopg2.ProgrammingError as err:
+                if unicode(err).startswith('relation "ir_module_module" '
+                                           'does not exist'):
+                    return False
+                else:
+                    raise
+            return cr.fetchone()
+
+    def _has_queue_job_column(self, column):
+        if not self.has_connector:
+            return False
+        with closing(self.conn.cursor()) as cr:
+            cr.execute("SELECT 1 FROM information_schema.columns "
+                       "WHERE table_name=%s AND column_name=%s",
+                       ('queue_job', column))
+            return cr.fetchone()
+
+    def _initialize(self):
         with closing(self.conn.cursor()) as cr:
             # this is the trigger that sends notifications when jobs change
             # TODO: perhaps we don't need to trigger ON DELETE?
@@ -164,7 +186,41 @@ class OdooConnectorRunner:
                     FOR EACH ROW EXECUTE PROCEDURE queue_job_notify();
             """)
             cr.execute("LISTEN connector")
-        self.notify_jobs(_TMP_DATABASE)
+
+    def select_jobs(self, where, args):
+        query = "SELECT %s, uuid, %s, date_created, priority, eta, state " \
+                "FROM queue_job WHERE %s" % \
+                ('channel' if self.has_channel else 'NULL',
+                 'seq' if self.has_seq else 0,
+                 where)
+        with closing(self.conn.cursor()) as cr:
+            cr.execute(query, args)
+            return list(cr.fetchall())
+
+    def set_job_enqueued(self, uuid):
+        with closing(self.conn.cursor()) as cr:
+            cr.execute("UPDATE queue_job SET state=%s, date_enqueued=NOW() "
+                       "WHERE uuid=%s",
+                       (STATE_ENQUEUED, uuid))
+
+
+class OdooConnectorRunner:
+
+    def __init__(self, port=8069, channel_config_string='root:4'):
+        self.port = port
+        self.channel_manager = ChannelManager()
+        self.channel_manager.simple_configure(channel_config_string)
+        self.db_by_name = {}
+        for db_name in self.get_db_names():
+            db = Database(db_name)
+            if not db.has_connector:
+                _logger.info('connector is not installed for db %s', db_name)
+            else:
+                self.db_by_name[db_name] = db
+                for job_data in db.select_jobs('state in %s',
+                                               (STATES_NOT_DONE,)):
+                    self.channel_manager.notify(db_name, *job_data)
+                _logger.info('connector runner ready for db %s', db_name)
 
     def get_db_names(self):
         if config['db_name']:
@@ -172,65 +228,37 @@ class OdooConnectorRunner:
         else:
             db_names = db.exp_list()
         dbfilter = config['dbfilter']
-        if dbfilter and db_names:
+        if dbfilter:
             db_names = [d for d in db_names if re.match(dbfilter, d)]
         return db_names
-
-    def notify_jobs(self, db_name):
-        # TODO: remove all jobs for database, in case we are reconnecting
-        _logger.debug("loading all jobs")
-        with closing(self.conn.cursor()) as cr:
-            # TODO: channel_name
-            # TODO: sequence
-            cr.execute("SELECT NULL, uuid, 0, date_created, priority, eta, state " \
-                       "  FROM queue_job WHERE state in %s", (STATES_NOT_DONE,))
-            for channel_name, uuid, seq, date_created, priority, eta, state in cr.fetchall():
-                self.channel_manager.notify(db_name, channel_name, uuid,
-                                            seq, date_created, priority, eta, state)
-        _logger.debug("loaded all jobs")
-
-    def notify_job(self, db_name, uuid):
-        with closing(self.conn.cursor()) as cr:
-            # TODO: channel_name
-            # TODO: sequence
-            cr.execute("SELECT NULL, uuid, 0, date_created, priority, eta, state " \
-                       "  FROM queue_job WHERE uuid = %s", (uuid,))
-            res = cr.fetchall()
-            if res:
-                for channel_name, uuid, seq, date_created, priority, eta, state in res:
-                    self.channel_manager.notify(db_name, channel_name, uuid,
-                                                seq, date_created, priority, eta, state)
-            else:
-                # job not found: remove it
-                _logger.warning("job %s not found in database", uuid)
-                self.channel_manager.notify(db_name, None, uuid,
-                                            None, None, None, None, None)
 
     def run_jobs(self):
         for job in self.channel_manager.get_jobs_to_run():
             _logger.info("asking Odoo to run job %s on db %s",
                          job.uuid, job.db_name)
-            with closing(self.conn.cursor()) as cr:
-                cr.execute("UPDATE queue_job "
-                           "   SET state=%s, "
-                           "       date_enqueued=NOW() "
-                           "WHERE uuid=%s",
-                           (STATE_ENQUEUED, job.uuid))
+            self.db_by_name[job.db_name].set_job_enqueued(job.uuid)
             _async_http_get('http://localhost:%d'
                             '/runjob?db=%s&job_uuid=%s' %
                             (self.port, job.db_name, job.uuid,))
 
     def process_notifications(self):
-        while self.conn.notifies:
-            notification = self.conn.notifies.pop()
-            db_name, uuid = notification.payload.split(',')
-            self.notify_job(db_name, uuid)
+        for db in self.db_by_name.values():
+            while db.conn.notifies:
+                notification = db.conn.notifies.pop()
+                db_name, uuid = notification.payload.split(',')
+                job_datas = db.select_jobs('uuid = %s', (uuid,))
+                if job_datas:
+                    self.channel_manager.notify(db_name, *job_datas[0])
+                else:
+                    self.remove_job(db_name, uuid)
 
     def wait_notification(self):
-        if self.conn.notifies:
-            return
-        # wait for something to happen in the queue_job table
-        conns, _, _ = select.select([self.conn], [], [], SELECT_TIMEOUT)
+        for db in self.db_by_name.values():
+            if db.conn.notifies:
+                return
+        # wait for something to happen in the queue_job tables
+        conns = [db.conn for db in self.db_by_name.values()]
+        conns, _, _ = select.select(conns, [], [], SELECT_TIMEOUT)
         if conns:
             for conn in conns:
                 conn.poll()

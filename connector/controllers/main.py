@@ -60,10 +60,13 @@ class RunJobController(http.Controller):
                 return ""
 
         try:
-            # if the job has been manually set to DONE or PENDING
+            # if the job has been manually set to DONE or PENDING,
+            # or if something tries to run a job that is not enqueued
             # before its execution, stop
-            # TODO: is this still possible?
             if job.state != ENQUEUED:
+                _logger.warning('job %s is in state %s '
+                                'instead of enqueued in /runjob',
+                                job.state, job_uuid)
                 return
 
             with session_hdl.session() as session:

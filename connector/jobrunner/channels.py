@@ -570,6 +570,16 @@ class ChannelManager:
             _logger.error("unexpected state %s for job %s", state, job)
         # _logger.debug("channel %s", self._root_channel)
 
+    def remove_job(self, uuid):
+        job = self._jobs_by_uuid.get(uuid)
+        if job:
+            job.channel.remove(job)
+
+    def remove_db(self, db_name):
+        for job in self._jobs_by_uuid.values():
+            if job.db_name == db_name:
+                job.channel.remove(job)
+
     def get_jobs_to_run(self):
         return self._root_channel.get_jobs_to_run()
 

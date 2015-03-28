@@ -349,10 +349,12 @@ def start_service():
     watcher.start()
 
 # We have to launch the Jobs Workers only if:
+# 0. The alternative connector runner is not enabled
 # 1. OpenERP is used in standalone mode (monoprocess)
 # 2. Or it is used in multiprocess (with option ``--workers``)
 #    but the current process is a Connector Worker
 #    (launched with the ``openerp-connector-worker`` script).
-if (not getattr(openerp, 'multi_process', False) or
-        getattr(openerp, 'worker_connector', False)):
-    start_service()
+if not os.environ.get('ODOO_CONNECTOR_RUNNER_ENABLE'):
+    if (not getattr(openerp, 'multi_process', False) or
+            getattr(openerp, 'worker_connector', False)):
+        start_service()

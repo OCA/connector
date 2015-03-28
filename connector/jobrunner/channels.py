@@ -197,9 +197,11 @@ class ChannelJob:
     True
     """
 
-    def __init__(self, channel, uuid, seq, date_created, priority, eta):
-        self.uuid = uuid
+    def __init__(self, db_name, channel, uuid,
+                 seq, date_created, priority, eta):
+        self.db_name = db_name
         self.channel = channel
+        self.uuid = uuid
         self.seq = seq
         self.date_created = date_created
         self.priority = priority
@@ -528,7 +530,7 @@ class ChannelManager:
             parent = subchannel
         return parent
 
-    def notify(self, channel_config_string, uuid,
+    def notify(self, db_name, channel_config_string, uuid,
                seq, date_created, priority, eta, state):
         if not channel_config_string:
             channel = self._root_channel
@@ -540,10 +542,13 @@ class ChannelManager:
             channel = self.get_channel_from_config(configs[0])
         job = self._jobs_by_uuid.get(uuid)
         if not job:
-            job = ChannelJob(channel, uuid, seq, date_created, priority, eta)
+            job = ChannelJob(db_name, channel, uuid,
+                             seq, date_created, priority, eta)
             self._jobs_by_uuid[uuid] = job
         # TODO: handle sequence change
         assert job.seq == seq
+        # db_name is invariant
+        assert job.db_name == db_name
         # date_created is invariant
         assert job.date_created == date_created
         # TODO: handle priority change

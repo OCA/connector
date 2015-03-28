@@ -24,10 +24,11 @@
 #
 ##############################################################################
 """
-odoo-connector-runner
+Odoo Connector jobs runner
+==========================
 
 What's this?
-============
+------------
 This is an alternative to connector workers, with the goal
 of resolving issues due to the polling nature of workers:
 * jobs do not start immediately even if there is a free worker
@@ -37,28 +38,27 @@ It is fully compatible with the connector mechanism and only
 replaces workers.
 
 How?
-====
-* This process receives postgres NOTIFY messages each time jobs change state.
+----
+* It starts as a thread in the Odoo main process
+* It receives postgres NOTIFY messages each time jobs are
+  added or updated in the queue_job table.
 * It does not run jobs itself, but asks Odoo to run them through an
-  anonymous HTTP request [1].
+  anonymous /runjob HTTP request [1].
 
 How to use
-==========
-* adapt the _TMP_* variables below to suit your needs
-* start Odoo with --workers > _TMP_MAX_RUNNING_JOBS
-  and --load=web,connector
+----------
+* start Odoo with --load=web,connector
 * disable "Enqueue Jobs" cron
 * do NOT start openerp-connector-worker
-* run python odoo-connector-runner (only dependency are psycopg2 and requests)
 * create jobs (eg using base_import_async) and observe they
   start immediately and in parallel
 
 TODO
-====
+----
 * See in the code below.
 
 Notes
-=====
+-----
 [1] From a security standpoint, it is safe to have an anonymous HTTP
     request because this request only accepts to run jobs that are
     enqueued.
@@ -70,23 +70,16 @@ import select
 import threading
 import time
 
-import requests
 import psycopg2
 from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
+import requests
 
-from channels import ChannelManager, STATE_ENQUEUED, STATES_NOT_DONE
+from openerp import sql_db
+
+from .channels import ChannelManager, STATE_ENQUEUED, STATES_NOT_DONE
 
 # TODO: This is currently working nicely but for only
-#       one database. Also, the approach is relatively
-#       brute force, as the queue_job is queried each
-#       time a notification is received. So the next step
-#       is to maintain a in-memory list of jobs to run
-#       and use the information in the notifications to
-#       decide what to run and when. Querying the database
-#       will be done only at initialization and to re-sync
-#       the state in case of bug or missed notifications.
-#       This opens the path to a simple implementation of
-#       job channels (https://github.com/OCA/connector/issues/43).
+#       one database.
 
 # TODO: since STATE_ENQUEUED is now very short lived state
 #       we can automatically requeue (set pending) all
@@ -98,15 +91,10 @@ from channels import ChannelManager, STATE_ENQUEUED, STATES_NOT_DONE
 
 # TODO: make all this configurable
 _TMP_DATABASE = "jobrunner-1-v80"
-_TMP_ODOO_URL = "http://localhost:8069"
-_TMP_CONFIG = "root:4,root.sub:3"
-_TMP_SELECT_TIMEOUT = 60
 
+SELECT_TIMEOUT = 60
 
-# TODO: configurable
-logging.basicConfig(format='%(asctime)s %(name)s %(levelname)s:%(message)s',
-                    level=logging.DEBUG)
-_logger = logging.getLogger("odoo-connector-runner")
+_logger = logging.getLogger(__name__)
 
 
 def _async_http_get(url):
@@ -117,7 +105,8 @@ def _async_http_get(url):
         try:
             _logger.debug("GET %s", url)
             # we are not interested in the result, so we set a short timeout
-            # but not too short so we log errors when Odoo is not running at all
+            # but not too short so we log errors when Odoo
+            # is not running at all
             requests.get(url, timeout=1)
         except requests.Timeout:
             pass
@@ -130,10 +119,11 @@ def _async_http_get(url):
 
 class OdooConnectorRunner:
 
-    def __init__(self):
+    def __init__(self, port=8069, channel_config_string='root:4'):
+        self.port = port
         self.channel_manager = ChannelManager()
-        self.channel_manager.simple_configure(_TMP_CONFIG)
-        self.conn = psycopg2.connect(database=_TMP_DATABASE)
+        self.channel_manager.simple_configure(channel_config_string)
+        self.conn = psycopg2.connect(sql_db.dsn(_TMP_DATABASE)[1])
         self.conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
         with closing(self.conn.cursor()) as cr:
             # this is the trigger that sends notifications when jobs change
@@ -151,7 +141,8 @@ class OdooConnectorRunner:
                     ELSE
                         uuid = NEW.uuid;
                     END IF;
-                    PERFORM pg_notify('connector', current_database() || ',' || uuid);
+                    PERFORM pg_notify('connector',
+                                      current_database() || ',' || uuid);
                     RETURN NULL;
                 END;
                 $$ LANGUAGE plpgsql;
@@ -162,9 +153,9 @@ class OdooConnectorRunner:
                     FOR EACH ROW EXECUTE PROCEDURE queue_job_notify();
             """)
             cr.execute("LISTEN connector")
-        self.notify_jobs()
+        self.notify_jobs(_TMP_DATABASE)
 
-    def notify_jobs(self):
+    def notify_jobs(self, db_name):
         # TODO: remove all jobs for database, in case we are reconnecting
         _logger.debug("loading all jobs")
         with closing(self.conn.cursor()) as cr:
@@ -173,11 +164,11 @@ class OdooConnectorRunner:
             cr.execute("SELECT NULL, uuid, 0, date_created, priority, eta, state " \
                        "  FROM queue_job WHERE state in %s", (STATES_NOT_DONE,))
             for channel_name, uuid, seq, date_created, priority, eta, state in cr.fetchall():
-                self.channel_manager.notify(channel_name, uuid,
+                self.channel_manager.notify(db_name, channel_name, uuid,
                                             seq, date_created, priority, eta, state)
         _logger.debug("loaded all jobs")
 
-    def notify_job(self, uuid):
+    def notify_job(self, db_name, uuid):
         with closing(self.conn.cursor()) as cr:
             # TODO: channel_name
             # TODO: sequence
@@ -186,39 +177,39 @@ class OdooConnectorRunner:
             res = cr.fetchall()
             if res:
                 for channel_name, uuid, seq, date_created, priority, eta, state in res:
-                    self.channel_manager.notify(channel_name, uuid,
+                    self.channel_manager.notify(db_name, channel_name, uuid,
                                                 seq, date_created, priority, eta, state)
             else:
                 # job not found: remove it
                 _logger.warning("job %s not found in database", uuid)
-                self.channel_manager.notify(None, uuid,
+                self.channel_manager.notify(db_name, None, uuid,
                                             None, None, None, None, None)
 
     def run_jobs(self):
-        with closing(self.conn.cursor()) as cr:
-            for job in self.channel_manager.get_jobs_to_run():
-                _logger.debug("asking Odoo to run job %s", job.uuid)
+        for job in self.channel_manager.get_jobs_to_run():
+            _logger.info("asking Odoo to run job %s on db %s",
+                         job.uuid, job.db_name)
+            with closing(self.conn.cursor()) as cr:
                 cr.execute("UPDATE queue_job "
                            "   SET state=%s, "
                            "       date_enqueued=NOW() "
                            "WHERE uuid=%s",
                            (STATE_ENQUEUED, job.uuid))
-                _async_http_get(_TMP_ODOO_URL +
-                                "/runjob?db=%s&job_uuid=%s" %
-                                (_TMP_DATABASE, job.uuid,))
+            _async_http_get('http://localhost:%d'
+                            '/runjob?db=%s&job_uuid=%s' %
+                            (self.port, job.db_name, job.uuid,))
 
     def process_notifications(self):
         while self.conn.notifies:
             notification = self.conn.notifies.pop()
-            db, uuid = notification.payload.split(',')
-            self.notify_job(uuid)
+            db_name, uuid = notification.payload.split(',')
+            self.notify_job(db_name, uuid)
 
     def wait_notification(self):
         if self.conn.notifies:
             return
         # wait for something to happen in the queue_job table
-        conns, _, _ = select.select([self.conn], [], [],
-                                    _TMP_SELECT_TIMEOUT)
+        conns, _, _ = select.select([self.conn], [], [], SELECT_TIMEOUT)
         if conns:
             for conn in conns:
                 conn.poll()
@@ -238,7 +229,3 @@ class OdooConnectorRunner:
             except:
                 _logger.exception("exception, sleeping a bit and continuing")
                 time.sleep(1)
-
-
-if __name__ == "__main__":
-    OdooConnectorRunner().run_forever()

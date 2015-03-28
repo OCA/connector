@@ -31,8 +31,10 @@ What's this?
 ------------
 This is an alternative to connector workers, with the goal
 of resolving issues due to the polling nature of workers:
-* jobs do not start immediately even if there is a free worker
-* workers may starve while other workers have too many jobs enqueued
+* jobs do not start immediately even if there is a free connector worker
+* connector workers may starve while other workers have too many jobs enqueued
+* connector workers require another startup script,
+  making deployment more difficult
 
 It is fully compatible with the connector mechanism and only
 replaces workers.
@@ -47,7 +49,11 @@ How?
 
 How to use
 ----------
-* start Odoo with --load=web,connector
+* set the following environment variables:
+  - ODOO_CONNECTOR_RUNNER_ENABLE=1
+  - ODOO_CONNECTOR_CHANNELS=root:4 (or any other channels configuration)
+  - optional if xmlrpc_port is not set: ODOO_CONNECTOR_PORT=8069
+* start Odoo with --load=web,connector and --workers > 1 [2]
 * disable "Enqueue Jobs" cron
 * do NOT start openerp-connector-worker
 * create jobs (eg using base_import_async) and observe they
@@ -62,10 +68,13 @@ Notes
 [1] From a security standpoint, it is safe to have an anonymous HTTP
     request because this request only accepts to run jobs that are
     enqueued.
+[2] It works with the threaded Odoo server too, although this is
+    obviously not for production purposes.
 """
 
 from contextlib import closing
 import logging
+import re
 import select
 import threading
 import time
@@ -75,6 +84,8 @@ from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
 import requests
 
 from openerp import sql_db
+from openerp.service import db
+from openerp.tools import config
 
 from .channels import ChannelManager, STATE_ENQUEUED, STATES_NOT_DONE
 
@@ -154,6 +165,16 @@ class OdooConnectorRunner:
             """)
             cr.execute("LISTEN connector")
         self.notify_jobs(_TMP_DATABASE)
+
+    def get_db_names(self):
+        if config['db_name']:
+            db_names = config['db_name'].split(',')
+        else:
+            db_names = db.exp_list()
+        dbfilter = config['dbfilter']
+        if dbfilter and db_names:
+            db_names = [d for d in db_names if re.match(dbfilter, d)]
+        return db_names
 
     def notify_jobs(self, db_name):
         # TODO: remove all jobs for database, in case we are reconnecting

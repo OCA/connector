@@ -44,6 +44,8 @@ How?
 * It starts as a thread in the Odoo main process
 * It receives postgres NOTIFY messages each time jobs are
   added or updated in the queue_job table.
+* It maintains an in-memory priority queue of jobs that
+  is populated from the queue_job tables in all databases.
 * It does not run jobs itself, but asks Odoo to run them through an
   anonymous /runjob HTTP request [1].
 
@@ -93,9 +95,8 @@ from .channels import ChannelManager, STATE_ENQUEUED, STATES_NOT_DONE
 #       this is important as jobs will be stuck in that
 #       state if this odoo-connector-runner runs while odoo does not
 
-# TODO: should we try to recover from lost postgres connections?
-
 SELECT_TIMEOUT = 60
+ERROR_RECOVERY_DELAY = 5
 
 _logger = logging.getLogger(__name__)
 
@@ -130,6 +131,13 @@ class Database:
             self.has_channel = self._has_queue_job_column('channel')
             self.has_seq = self._has_queue_job_column('seq')
             self._initialize()
+
+    def close(self):
+        try:
+            self.conn.close()
+        except:
+            pass
+        self.conn = None
 
     def _has_connector(self):
         with closing(self.conn.cursor()) as cr:
@@ -208,16 +216,6 @@ class OdooConnectorRunner:
         self.channel_manager = ChannelManager()
         self.channel_manager.simple_configure(channel_config_string)
         self.db_by_name = {}
-        for db_name in self.get_db_names():
-            db = Database(db_name)
-            if not db.has_connector:
-                _logger.debug('connector is not installed for db %s', db_name)
-            else:
-                self.db_by_name[db_name] = db
-                for job_data in db.select_jobs('state in %s',
-                                               (STATES_NOT_DONE,)):
-                    self.channel_manager.notify(db_name, *job_data)
-                _logger.info('connector runner ready for db %s', db_name)
 
     def get_db_names(self):
         if openerp.tools.config['db_name']:
@@ -228,6 +226,26 @@ class OdooConnectorRunner:
         if dbfilter:
             db_names = [d for d in db_names if re.match(dbfilter, d)]
         return db_names
+
+    def initialize_databases(self):
+        for db_name, db in self.db_by_name.items():
+            try:
+                self.channel_manager.remove_db(db_name)
+                db.close()
+            except:
+                _logger.warning('error closing database %s',
+                                db_name, exc_info=True)
+        self.db_by_name = {}
+        for db_name in self.get_db_names():
+            db = Database(db_name)
+            if not db.has_connector:
+                _logger.debug('connector is not installed for db %s', db_name)
+            else:
+                self.db_by_name[db_name] = db
+                for job_data in db.select_jobs('state in %s',
+                                               (STATES_NOT_DONE,)):
+                    self.channel_manager.notify(db_name, *job_data)
+                _logger.info('connector runner ready for db %s', db_name)
 
     def run_jobs(self):
         for job in self.channel_manager.get_jobs_to_run():
@@ -265,13 +283,20 @@ class OdooConnectorRunner:
     def run_forever(self):
         _logger.info("starting")
         while True:
+            # outer loop does exception recovery
             try:
-                self.process_notifications()
-                self.run_jobs()
-                self.wait_notification()
+                _logger.info("initializing database connections")
+                self.initialize_databases()
+                _logger.info("database connections ready")
+                # inner loop does the normal processing
+                while True:
+                    self.process_notifications()
+                    self.run_jobs()
+                    self.wait_notification()
             except KeyboardInterrupt:
                 _logger.info("stopping")
                 break
             except:
-                _logger.exception("exception, sleeping a bit and continuing")
-                time.sleep(1)
+                _logger.exception("exception: sleeping %ds and retrying",
+                                  ERROR_RECOVERY_DELAY)
+                time.sleep(ERROR_RECOVERY_DELAY)

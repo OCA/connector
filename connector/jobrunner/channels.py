@@ -224,7 +224,8 @@ class ChannelJob:
         else:
             return (cmp(self.eta, other.eta) or
                     cmp(self.priority, other.priority) or
-                    cmp(self.date_created, other.date_created))
+                    cmp(self.date_created, other.date_created) or
+                    cmp(self.seq, other.seq))
 
 
 class ChannelQueue:

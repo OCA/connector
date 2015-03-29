@@ -83,9 +83,7 @@ import psycopg2
 from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
 import requests
 
-from openerp import sql_db
-from openerp.service import db
-from openerp.tools import config
+import openerp
 
 from .channels import ChannelManager, STATE_ENQUEUED, STATES_NOT_DONE
 
@@ -125,7 +123,7 @@ class Database:
 
     def __init__(self, db_name):
         self.db_name = db_name
-        self.conn = psycopg2.connect(sql_db.dsn(db_name)[1])
+        self.conn = psycopg2.connect(openerp.sql_db.dsn(db_name)[1])
         self.conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
         self.has_connector = self._has_connector()
         if self.has_connector:
@@ -222,11 +220,11 @@ class OdooConnectorRunner:
                 _logger.info('connector runner ready for db %s', db_name)
 
     def get_db_names(self):
-        if config['db_name']:
-            db_names = config['db_name'].split(',')
+        if openerp.tools.config['db_name']:
+            db_names = openerp.tools.config['db_name'].split(',')
         else:
-            db_names = db.exp_list()
-        dbfilter = config['dbfilter']
+            db_names = openerp.service.db.exp_list()
+        dbfilter = openerp.tools.config['dbfilter']
         if dbfilter:
             db_names = [d for d in db_names if re.match(dbfilter, d)]
         return db_names

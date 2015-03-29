@@ -228,7 +228,7 @@ class ChannelJob:
 
 
 class ChannelQueue:
-    """A channel queue is a priority queue for jobs, that returns
+    """A channel queue is a priority queue for jobs that returns
     jobs with a past ETA first.
 
     >>> q = ChannelQueue()
@@ -405,7 +405,7 @@ class Channel:
                 self._queue.add(job)
         # sequential channels block when there are failed jobs
         # TODO: this is probably not sufficient to ensure
-        #       senquentiality because of the behaviour in presence
+        #       sequentiality because of the behaviour in presence
         #       of jobs with eta; plus: check if there are no
         #       race conditions.
         if self.sequential and len(self._failed):
@@ -434,7 +434,12 @@ class ChannelManager:
         """Parse a simple channels configuration string.
 
         The general form is as follow:
-        channel.subchannel.subsubchannel(:workers(:key=value)*)?,...
+        channel(.subchannel)*(:workers(:key(=value)?)*)?,...
+
+        If workers is absent, it defaults to 1.
+        If a key is present without value, it gets True as value.
+        When declaring subchannels, the root channel may be omitted
+        (ie sub:4 is the same as root.sub:4).
 
         Returns a list of channel configuration dictionaries.
 
@@ -492,12 +497,23 @@ class ChannelManager:
             self.get_channel_from_config(config)
 
     def get_channel_from_config(self, config):
+        """Return a Channel object from a parsed configuration.
+
+        If the channel does not exist it is created.
+        The configuration is applied on the channel before returning it.
+        """
         channel = self.get_channel_by_name(config['name'], autocreate=True)
         channel.configure(config)
         return channel
 
     def get_channel_by_name(self, channel_name, autocreate):
-        """
+        """Return a Channel object by its name.
+
+        If it does not exist and autocreate is True, it is created
+        with a default configuration and inserted in the Channels structure.
+        If autocreate is False and the channel does not exist, an exception
+        is raised.
+
         >>> cm = ChannelManager()
         >>> c = cm.get_channel_by_name('root', autocreate=False)
         >>> c.name
@@ -574,11 +590,13 @@ class ChannelManager:
         job = self._jobs_by_uuid.get(uuid)
         if job:
             job.channel.remove(job)
+            del self._jobs_by_uuid[job.uuid]
 
     def remove_db(self, db_name):
         for job in self._jobs_by_uuid.values():
             if job.db_name == db_name:
                 job.channel.remove(job)
+                del self._jobs_by_uuid[job.uuid]
 
     def get_jobs_to_run(self):
         return self._root_channel.get_jobs_to_run()

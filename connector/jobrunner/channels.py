@@ -28,16 +28,10 @@ from heapq import heappush, heappop
 import logging
 from weakref import WeakValueDictionary
 
+from ..queue.job import PENDING, ENQUEUED, STARTED, FAILED, DONE
+NOT_DONE = (PENDING, ENQUEUED, STARTED, FAILED)
+
 _logger = logging.getLogger(__name__)
-
-
-STATE_PENDING = 'pending'
-STATE_ENQUEUED = 'enqueued'
-STATE_STARTED = 'started'
-STATE_FAILED = 'failed'
-STATE_DONE = 'done'
-
-STATES_NOT_DONE = (STATE_PENDING, STATE_ENQUEUED, STATE_STARTED, STATE_FAILED)
 
 
 class PriorityQueue:
@@ -575,13 +569,13 @@ class ChannelManager:
         # TODO: handle channel change
         assert job.channel == channel
         # state transitions
-        if not state or state == STATE_DONE:
+        if not state or state == DONE:
             channel.set_done(job)
-        elif state == STATE_PENDING:
+        elif state == PENDING:
             channel.set_pending(job)
-        elif state in (STATE_ENQUEUED, STATE_STARTED):
+        elif state in (ENQUEUED, STARTED):
             channel.set_running(job)
-        elif state == STATE_FAILED:
+        elif state == FAILED:
             channel.set_failed(job)
         else:
             _logger.error("unexpected state %s for job %s", state, job)

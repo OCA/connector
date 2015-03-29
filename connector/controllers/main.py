@@ -79,11 +79,9 @@ class RunJobController(http.Controller):
             _logger.debug('%s started', job)
             with session_hdl.session() as session:
                 job.perform(session)
-            _logger.debug('%s done', job)
-
-            with session_hdl.session() as session:
                 job.set_done()
                 self.job_storage_class(session).store(job)
+            _logger.debug('%s done', job)
 
         except NothingToDoJob as err:
             if unicode(err):

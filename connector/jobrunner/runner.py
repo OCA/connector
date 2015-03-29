@@ -108,7 +108,6 @@ def _async_http_get(url):
     #       asyncio, aiohttp and aiopg
     def urlopen():
         try:
-            _logger.debug("GET %s", url)
             # we are not interested in the result, so we set a short timeout
             # but not too short so we log errors when Odoo
             # is not running at all
@@ -214,7 +213,7 @@ class OdooConnectorRunner:
         for db_name in self.get_db_names():
             db = Database(db_name)
             if not db.has_connector:
-                _logger.info('connector is not installed for db %s', db_name)
+                _logger.debug('connector is not installed for db %s', db_name)
             else:
                 self.db_by_name[db_name] = db
                 for job_data in db.select_jobs('state in %s',
@@ -237,7 +236,7 @@ class OdooConnectorRunner:
             _logger.info("asking Odoo to run job %s on db %s",
                          job.uuid, job.db_name)
             self.db_by_name[job.db_name].set_job_enqueued(job.uuid)
-            _async_http_get('http://localhost:%d'
+            _async_http_get('http://localhost:%s'
                             '/runjob?db=%s&job_uuid=%s' %
                             (self.port, job.db_name, job.uuid,))
 
@@ -250,7 +249,7 @@ class OdooConnectorRunner:
                 if job_datas:
                     self.channel_manager.notify(db_name, *job_datas[0])
                 else:
-                    self.remove_job(db_name, uuid)
+                    self.channel_manager.remove_job(db_name, uuid)
 
     def wait_notification(self):
         for db in self.db_by_name.values():

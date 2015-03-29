@@ -87,7 +87,7 @@ import requests
 
 import openerp
 
-from .channels import ChannelManager, STATE_ENQUEUED, STATES_NOT_DONE
+from .channels import ChannelManager, ENQUEUED, NOT_DONE
 
 # TODO: since STATE_ENQUEUED is now very short lived state
 #       we can automatically requeue (set pending) all
@@ -206,7 +206,7 @@ class Database:
         with closing(self.conn.cursor()) as cr:
             cr.execute("UPDATE queue_job SET state=%s, date_enqueued=NOW() "
                        "WHERE uuid=%s",
-                       (STATE_ENQUEUED, uuid))
+                       (ENQUEUED, uuid))
 
 
 class OdooConnectorRunner:
@@ -243,7 +243,7 @@ class OdooConnectorRunner:
             else:
                 self.db_by_name[db_name] = db
                 for job_data in db.select_jobs('state in %s',
-                                               (STATES_NOT_DONE,)):
+                                               (NOT_DONE,)):
                     self.channel_manager.notify(db_name, *job_data)
                 _logger.info('connector runner ready for db %s', db_name)
 

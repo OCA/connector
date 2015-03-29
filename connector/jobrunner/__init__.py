@@ -35,7 +35,7 @@ from .runner import OdooConnectorRunner
 
 _logger = logging.getLogger(__name__)
 
-START_DELAY = 10
+START_DELAY = 5
 
 
 # Here we monkey patch the Odoo server to start the job runner thread

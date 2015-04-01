@@ -33,7 +33,7 @@ import logging
 from collections import namedtuple
 from contextlib import contextmanager
 
-from ..connector import ConnectorUnit, MetaConnectorUnit, Environment
+from ..connector import ConnectorUnit, MetaConnectorUnit, ConnectorEnvironment
 from ..exception import MappingError, NoConnectorUnitError
 
 _logger = logging.getLogger(__name__)
@@ -169,16 +169,16 @@ def m2o_to_backend(field, binding=None):
     def modifier(self, record, to_attr):
         if not record[field]:
             return False
-        column = self.model._all_columns[field].column
-        if column._type != 'many2one':
-            raise ValueError('The column %s should be a many2one, got %s' %
-                             field, column._type)
+        column = self.model._fields[field]
+        if column.type != 'many2one':
+            raise ValueError('The column %s should be a Many2one, got %s' %
+                             (field, type(column)))
         rel_id = record[field].id
         if binding is None:
-            binding_model = column._obj
+            binding_model = column.comodel_name
         else:
             binding_model = binding
-        binder = self.get_binder_for_model(binding_model)
+        binder = self.binder_for(binding_model)
         # if a relation is not a binding, we wrap the record in the
         # binding, we'll return the id of the binding
         wrap = bool(binding)
@@ -215,20 +215,20 @@ def backend_to_m2o(field, binding=None, with_inactive=False):
     def modifier(self, record, to_attr):
         if not record[field]:
             return False
-        column = self.model._all_columns[to_attr].column
-        if column._type != 'many2one':
-            raise ValueError('The column %s should be a many2one, got %s' %
-                             to_attr, column._type)
+        column = self.model._fields[to_attr]
+        if column.type != 'many2one':
+            raise ValueError('The column %s should be a Many2one, got %s' %
+                             (to_attr, type(column)))
         rel_id = record[field]
         if binding is None:
-            binding_model = column._obj
+            binding_model = column.comodel_name
         else:
             binding_model = binding
-        binder = self.get_binder_for_model(binding_model)
+        binder = self.binder_for(binding_model)
         # if we want the ID of a normal record, not a binding,
         # we ask the unwrapped id to the binder
         unwrap = bool(binding)
-        with self.session.change_context({'active_test': False}):
+        with self.session.change_context(active_test=False):
             value = binder.to_openerp(rel_id, unwrap=unwrap)
         if not value:
             raise MappingError("Can not find an existing %s for external "
@@ -258,21 +258,31 @@ class MetaMapper(MetaConnectorUnit):
 
         cls = super(MetaMapper, meta).__new__(meta, name, bases, attrs)
 
+        # When a class has several bases: ``class Mapper(Base1, Base2):``
         for base in bases:
+            # Merge the _map_methods of the bases
             base_map_methods = getattr(base, '_map_methods', {})
             for attr_name, definition in base_map_methods.iteritems():
                 if cls._map_methods.get(attr_name) is None:
                     cls._map_methods[attr_name] = definition
                 else:
+                    # Update the existing @changed_by with the content
+                    # of each base (it is mutated in place).
+                    # @only_create keeps the value defined in the first
+                    # base.
                     mapping_changed_by = cls._map_methods[attr_name].changed_by
                     mapping_changed_by.update(definition.changed_by)
 
+        # Update the _map_methods from the @mapping methods in attrs,
+        # respecting the class tree.
         for attr_name, attr in attrs.iteritems():
             is_mapping = getattr(attr, 'is_mapping', None)
             if is_mapping:
                 has_only_create = getattr(attr, 'only_create', False)
 
                 mapping_changed_by = set(getattr(attr, 'changed_by', ()))
+                # If already existing, it has been defined in a super
+                # class, extend the @changed_by set
                 if cls._map_methods.get(attr_name) is not None:
                     definition = cls._map_methods[attr_name]
                     mapping_changed_by.update(definition.changed_by)
@@ -408,8 +418,7 @@ class ImportMapChild(MapChild):
     """ :py:class:`MapChild` for the Imports """
 
     def _child_mapper(self):
-        get_connector_unit = self.get_connector_unit_for_model
-        return get_connector_unit(ImportMapper, self.model._name)
+        return self.unit_for(ImportMapper)
 
     def format_items(self, items_values):
         """ Format the values of the items mapped from the child Mappers.
@@ -433,8 +442,7 @@ class ExportMapChild(MapChild):
     """ :py:class:`MapChild` for the Exports """
 
     def _child_mapper(self):
-        return self.get_connector_unit_for_model(ExportMapper,
-                                                 self.model._name)
+        return self.unit_for(ExportMapper)
 
 
 class Mapper(ConnectorUnit):
@@ -522,7 +530,7 @@ class Mapper(ConnectorUnit):
             children = [('items', 'line_ids', 'model.name')]
 
         It allows to create the sales order and all its lines with the
-        same call to :py:meth:`openerp.osv.orm.BaseModel.create()`.
+        same call to :py:meth:`openerp.models.BaseModel.create()`.
 
         When using ``children`` for items of a record, we need to create
         a :py:class:`Mapper` for the model of the items, and optionally a
@@ -550,13 +558,13 @@ class Mapper(ConnectorUnit):
 
     _map_child_class = None
 
-    def __init__(self, environment):
+    def __init__(self, connector_env):
         """
 
-        :param environment: current environment (backend, session, ...)
-        :type environment: :py:class:`connector.connector.Environment`
+        :param connector_env: current environment (backend, session, ...)
+        :type connector_env: :py:class:`connector.connector.Environment`
         """
-        super(Mapper, self).__init__(environment)
+        super(Mapper, self).__init__(connector_env)
         self._options = None
 
     def _map_direct(self, record, from_attr, to_attr):
@@ -581,14 +589,14 @@ class Mapper(ConnectorUnit):
 
     def _get_map_child_unit(self, model_name):
         try:
-            mapper_child = self.get_connector_unit_for_model(
-                self._map_child_class, model_name)
+            mapper_child = self.unit_for(self._map_child_class,
+                                         model=model_name)
         except NoConnectorUnitError:
             # does not force developers to use a MapChild ->
             # will use the default one if not explicitely defined
-            env = Environment(self.backend_record,
-                              self.session,
-                              model_name)
+            env = ConnectorEnvironment(self.backend_record,
+                                       self.session,
+                                       model_name)
             mapper_child = self._map_child_class(env)
         return mapper_child
 
@@ -655,7 +663,7 @@ class Mapper(ConnectorUnit):
         assert self.options is not None, (
             "options should be defined with '_mapping_options'")
         _logger.debug('converting record %s to model %s',
-                      map_record.source, self.model._name)
+                      map_record.source, self.model)
 
         fields = self.options.fields
         for_create = self.options.for_create
@@ -714,50 +722,6 @@ class Mapper(ConnectorUnit):
         """
         return values
 
-    def _after_mapping(self, result):
-        """ .. deprecated:: 2.1 """
-        raise DeprecationWarning('Mapper._after_mapping() has been deprecated,'
-                                 ' use Mapper.finalize()')
-
-    def convert_child(self, record, parent_values=None):
-        """ .. deprecated:: 2.1 """
-        raise DeprecationWarning('Mapper.convert_child() has been deprecated, '
-                                 'use Mapper.map_record() then '
-                                 'map_record.values() ')
-
-    def convert(self, record, fields=None):
-        """ .. deprecated:: 2.1
-               See :py:meth:`Mapper.map_record`, :py:meth:`MapRecord.values`
-        """
-        raise DeprecationWarning('Mapper.convert() has been deprecated, '
-                                 'use Mapper.map_record() then '
-                                 'map_record.values() ')
-
-    @property
-    def data(self):
-        """ .. deprecated:: 2.1
-               See :py:meth:`Mapper.map_record`, :py:meth:`MapRecord.values`
-        """
-        raise DeprecationWarning('Mapper.data has been deprecated, '
-                                 'use Mapper.map_record() then '
-                                 'map_record.values() ')
-
-    @property
-    def data_for_create(self):
-        """ .. deprecated:: 2.1
-               See :py:meth:`Mapper.map_record`, :py:meth:`MapRecord.values`
-        """
-        raise DeprecationWarning('Mapper.data_for_create has been deprecated, '
-                                 'use Mapper.map_record() then '
-                                 'map_record.values() ')
-
-    def skip_convert_child(self, record, parent_values=None):
-        """ .. deprecated:: 2.1
-               Use :py:meth:`MapChild.skip_item` instead.
-        """
-        raise DeprecationWarning('Mapper.skip_convert_child has been '
-                                 'deprecated, use MapChild.skip_item().')
-
 
 class ImportMapper(Mapper):
     """ :py:class:`Mapper` for imports.
@@ -788,8 +752,8 @@ class ImportMapper(Mapper):
         # not used, we assume that the relation model is a binding.
         # Use an explicit modifier backend_to_m2o in the 'direct' mappings to
         # change that.
-        column = self.model._all_columns[to_attr].column
-        if column._type == 'many2one':
+        field = self.model._fields[to_attr]
+        if field.type == 'many2one':
             mapping_func = backend_to_m2o(from_attr)
             value = mapping_func(self, record, to_attr)
         return value
@@ -824,8 +788,8 @@ class ExportMapper(Mapper):
         # not used, we assume that the relation model is a binding.
         # Use an explicit modifier m2o_to_backend  in the 'direct' mappings to
         # change that.
-        column = self.model._all_columns[from_attr].column
-        if column._type == 'many2one':
+        field = self.model._fields[from_attr]
+        if field.type == 'many2one':
             mapping_func = m2o_to_backend(from_attr)
             value = mapping_func(self, record, to_attr)
         return value

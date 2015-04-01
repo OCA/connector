@@ -7,6 +7,7 @@ import openerp.tests.common as common
 from openerp.addons.connector.unit.mapper import (
     Mapper,
     ImportMapper,
+    ExportMapper,
     ImportMapChild,
     MappingDefinition,
     changed_by,
@@ -19,7 +20,7 @@ from openerp.addons.connector.unit.mapper import (
     mapping)
 
 from openerp.addons.connector.backend import Backend
-from openerp.addons.connector.connector import Environment
+from openerp.addons.connector.connector import ConnectorEnvironment
 from openerp.addons.connector.session import ConnectorSession
 
 
@@ -45,6 +46,9 @@ class test_mapper(unittest2.TestCase):
             @changed_by('street')
             @mapping
             def street(self):
+                pass
+
+            def no_decorator(self):
                 pass
 
         self.maxDiff = None
@@ -142,11 +146,94 @@ class test_mapper(unittest2.TestCase):
             def name(self):
                 pass
 
+        class ThirdMapper(FarnsworthMapper):
+
+            _model_name = 'res.users'
+
+            @changed_by('email', 'street')
+            @mapping
+            def name(self):
+                pass
+
         name_def = MappingDefinition(changed_by=set(('name', 'city', 'email')),
                                      only_create=False)
 
         self.assertEqual(FarnsworthMapper._map_methods,
                          {'name': name_def})
+
+        name_def = MappingDefinition(changed_by=set(('name', 'city',
+                                                     'email', 'street')),
+                                     only_create=False)
+        self.assertEqual(ThirdMapper._map_methods,
+                         {'name': name_def})
+
+    def test_several_bases_cumul(self):
+        class FryMapper(Mapper):
+
+            _model_name = 'res.users'
+
+            @changed_by('name', 'city')
+            @mapping
+            def name(self):
+                pass
+
+            @only_create
+            @mapping
+            def street(self):
+                pass
+
+            @only_create
+            @mapping
+            def zip(self):
+                pass
+
+        class FarnsworthMapper(Mapper):
+
+            _model_name = 'res.users'
+
+            @changed_by('email')
+            @mapping
+            def name(self):
+                pass
+
+            @changed_by('street')
+            @mapping
+            def city(self):
+                pass
+
+            @mapping
+            def zip(self):
+                pass
+
+        class ThirdMapper(FryMapper, FarnsworthMapper):
+
+            _model_name = 'res.users'
+
+            @changed_by('email', 'street')
+            @mapping
+            def name(self):
+                pass
+
+            @mapping
+            def email(self):
+                pass
+
+        name_def = MappingDefinition(changed_by=set(('name', 'city',
+                                                     'email', 'street')),
+                                     only_create=False)
+        street_def = MappingDefinition(changed_by=set([]),
+                                       only_create=True)
+        city_def = MappingDefinition(changed_by=set(('street',)),
+                                     only_create=False)
+        email_def = MappingDefinition(changed_by=set([]),
+                                      only_create=False)
+        zip_def = MappingDefinition(changed_by=set([]),
+                                    only_create=True)
+        self.assertEqual(ThirdMapper._map_methods['name'], name_def)
+        self.assertEqual(ThirdMapper._map_methods['street'], street_def)
+        self.assertEqual(ThirdMapper._map_methods['city'], city_def)
+        self.assertEqual(ThirdMapper._map_methods['email'], email_def)
+        self.assertEqual(ThirdMapper._map_methods['zip'], zip_def)
 
     def test_mapping_record(self):
         """ Map a record and check the result """
@@ -396,12 +483,11 @@ class test_mapper_binding(common.TransactionCase):
     def setUp(self):
         super(test_mapper_binding, self).setUp()
         self.session = ConnectorSession(self.cr, self.uid)
-        self.Partner = self.registry('res.partner')
         self.backend = mock.Mock(wraps=Backend('x', version='y'),
                                  name='backend')
         backend_record = mock.Mock()
         backend_record.get_backend.return_value = self.backend
-        self.connector_env = Environment(
+        self.connector_env = ConnectorEnvironment(
             backend_record, self.session, 'res.partner')
         self.country_binder = mock.Mock(name='country_binder')
         self.country_binder.return_value = self.country_binder
@@ -413,10 +499,8 @@ class test_mapper_binding(common.TransactionCase):
             _model_name = 'res.partner'
             direct = [(m2o_to_backend('country_id'), 'country')]
 
-        partner_id = self.ref('base.main_partner')
-        self.Partner.write(self.cr, self.uid, partner_id,
-                           {'country_id': self.ref('base.ch')})
-        partner = self.Partner.browse(self.cr, self.uid, partner_id)
+        partner = self.env.ref('base.main_partner')
+        partner.write({'country_id': self.env.ref('base.ch').id})
         self.country_binder.to_backend.return_value = 10
 
         mapper = MyMapper(self.connector_env)
@@ -468,7 +552,8 @@ class test_mapper_binding(common.TransactionCase):
 
         backend_record = mock.Mock()
         backend_record.get_backend.side_effect = lambda *a: backend
-        env = Environment(backend_record, self.session, 'res.currency')
+        env = ConnectorEnvironment(backend_record, self.session,
+                                   'res.currency')
 
         record = {'name': 'SO1',
                   'lines': [{'name': '2013-11-07',
@@ -530,7 +615,8 @@ class test_mapper_binding(common.TransactionCase):
 
         backend_record = mock.Mock()
         backend_record.get_backend.side_effect = lambda *a: backend
-        env = Environment(backend_record, self.session, 'res.currency')
+        env = ConnectorEnvironment(backend_record, self.session,
+                                   'res.currency')
 
         record = {'name': 'SO1',
                   'lines': [{'name': '2013-11-07',
@@ -556,11 +642,27 @@ class test_mapper_binding(common.TransactionCase):
                     }
         self.assertEqual(map_record.values(for_create=True), expected)
 
-    def test_modifier_filter_field(self):
+    def test_modifier_import_filter_field(self):
         """ A direct mapping with a modifier must still be considered
         from the list of fields
         """
         class MyMapper(ImportMapper):
+            direct = [('field', 'field2'),
+                      ('no_field', 'no_field2'),
+                      (convert('name', int), 'out_name')]
+
+        env = mock.MagicMock()
+        record = {'name': '300', 'field': 'value', 'no_field': 'no_value'}
+        mapper = MyMapper(env)
+        map_record = mapper.map_record(record)
+        expected = {'out_name': 300, 'field2': 'value'}
+        self.assertEqual(map_record.values(fields=['field', 'name']), expected)
+        self.assertEqual(map_record.values(for_create=True,
+                                           fields=['field', 'name']), expected)
+
+    def test_modifier_export_filter_field(self):
+        """ A direct mapping with a modifier on an export mapping """
+        class MyMapper(ExportMapper):
             direct = [('field', 'field2'),
                       ('no_field', 'no_field2'),
                       (convert('name', int), 'out_name')]

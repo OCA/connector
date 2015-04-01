@@ -19,10 +19,16 @@
 #
 ##############################################################################
 
+import logging
+import threading
 from contextlib import contextmanager
 
 import openerp
 from openerp.modules.registry import RegistryManager
+
+from .deprecate import log_deprecate
+
+_logger = logging.getLogger(__name__)
 
 
 class ConnectorSessionHandler(object):
@@ -63,26 +69,31 @@ class ConnectorSessionHandler(object):
         * always closed at the end of the ``with`` context
         * it handles the registry signaling
         """
-        db = openerp.sql_db.db_connect(self.db_name)
-        session = ConnectorSession(db.cursor(),
-                                   self.uid,
-                                   context=self.context)
+        with openerp.api.Environment.manage():
+            db = openerp.sql_db.db_connect(self.db_name)
+            session = ConnectorSession(db.cursor(),
+                                       self.uid,
+                                       context=self.context)
 
-        try:
-            RegistryManager.check_registry_signaling(self.db_name)
-            yield session
-            RegistryManager.signal_caches_change(self.db_name)
-        except:
-            session.rollback()
-            raise
-        else:
-            session.commit()
-        finally:
-            session.close()
+            try:
+                RegistryManager.check_registry_signaling(self.db_name)
+                yield session
+                RegistryManager.signal_caches_change(self.db_name)
+            except:
+                session.rollback()
+                raise
+            else:
+                session.commit()
+            finally:
+                session.close()
 
 
 class ConnectorSession(object):
     """ Container for the OpenERP transactional stuff:
+
+    .. attribute:: env
+
+        The Environment
 
     .. attribute:: cr
 
@@ -102,51 +113,82 @@ class ConnectorSession(object):
     """
 
     def __init__(self, cr, uid, context=None):
-        self.cr = cr
-        self.uid = uid
-        self._pool = None
-        self._context = context
+        if context is None:
+            context = {}
+        self.env = openerp.api.Environment(cr, uid, context)
 
-    @contextmanager
-    def change_user(self, uid):
-        """ Context Manager: temporarily change the user's session and
-        restablish the normal user at closing,
-        """
-        current_uid = self.uid
-        self.uid = uid
-        yield self
-        self.uid = current_uid
+    @property
+    def cr(self):
+        return self.env.cr
+
+    @property
+    def uid(self):
+        return self.env.uid
 
     @property
     def context(self):
-        if self._context is None:
-            user_obj = self.pool['res.users']
-            self._context = user_obj.context_get(self.cr, self.uid)
-        return self._context
+        return self.env.context
 
     @property
     def pool(self):
-        if self._pool is None:
-            self._pool = openerp.registry(self.cr.dbname)
-        return self._pool
+        return self.env.registry
 
     @contextmanager
-    def change_context(self, values):
-        """ Context Manager: shallow copy the context, update it with
-        ``values``, then restore the original context on closing.
+    def change_user(self, uid):
+        """ Context Manager: create a new Env with the specified user
 
-        :param values: values to apply on the context
-        :type values: dict
+        It generates a new :class:`openerp.api.Environment` used within
+        the context manager, where the user is replaced by the specified
+        one.  The original environment is restored at the closing of the
+        context manager.
+
+        .. warning:: only recordsets read within the context manager
+                     will be attached to this environment. In many cases,
+                     you will prefer to use
+                     :meth:`openerp.models.BaseModel.with_context`
         """
-        original_context = self.context
-        self._context = original_context.copy()
-        self._context.update(values)
+        env = self.env
+        self.env = env(user=uid)
         yield
-        self._context = original_context
+        self.env = env
+
+    @contextmanager
+    def change_context(self, *args, **kwargs):
+        """ Context Manager: create a new Env with an updated context
+
+        It generates a new :class:`openerp.api.Environment` used within
+        the context manager, where the context is extended with the
+        arguments. The original environment is restored at the closing
+        of the context manager.
+
+        The extended context is either the provided ``context`` in which
+        ``overrides`` are merged or the *current* context in which
+        ``overrides`` are merged e.g.
+
+        .. code-block:: python
+
+            # current context is {'key1': True}
+            r2 = records.with_context({}, key2=True)
+            # -> r2._context is {'key2': True}
+            r2 = records.with_context(key2=True)
+            # -> r2._context is {'key1': True, 'key2': True}
+
+        .. warning:: only recordsets read within the context manager
+                     will be attached to this environment. In many cases,
+                     you will prefer to use
+                     :meth:`openerp.models.BaseModel.with_context`
+        """
+        context = dict(args[0] if args else self.context, **kwargs)
+        env = self.env
+        self.env = env(context=context)
+        yield
+        self.env = env
 
     def commit(self):
         """ Commit the cursor """
-        self.cr.commit()
+        # do never commit during tests
+        if not getattr(threading.currentThread(), 'testing', False):
+            self.cr.commit()
 
     def rollback(self):
         """ Rollback the cursor """
@@ -157,37 +199,53 @@ class ConnectorSession(object):
         self.cr.close()
 
     def search(self, model, domain, limit=None, offset=0, order=None):
-        """ Shortcut to :py:class:`openerp.osv.orm.BaseModel.search` """
+        """ Shortcut to :py:class:`openerp.models.BaseModel.search` """
+        log_deprecate("'Session(...).search(...)' has been deprecated in "
+                      "favor of 'Session(...).env['model'].search(...)'")
         return self.pool[model].search(self.cr, self.uid, domain,
                                        limit=limit, offset=offset,
                                        order=order, context=self.context)
 
     def browse(self, model, ids):
-        """ Shortcut to :py:class:`openerp.osv.orm.BaseModel.browse` """
+        """ Shortcut to :py:class:`openerp.models.BaseModel.browse` """
         model_obj = self.pool[model]
+        log_deprecate("'Session(...).browse(...)' has been deprecated in "
+                      "favor of 'Session(...).env['model'].browse(...)'")
         return model_obj.browse(self.cr, self.uid, ids, context=self.context)
 
     def read(self, model, ids, fields):
-        """ Shortcut to :py:class:`openerp.osv.orm.BaseModel.read` """
+        """ Shortcut to :py:class:`openerp.models.BaseModel.read` """
+        log_deprecate("'Session(...).read(...)' has been deprecated in "
+                      "favor of 'Session(...).env['model'].read(...)'")
         return self.pool[model].read(self.cr, self.uid, ids, fields,
                                      context=self.context)
 
     def create(self, model, values):
-        """ Shortcut to :py:class:`openerp.osv.orm.BaseModel.create` """
+        """ Shortcut to :py:class:`openerp.models.BaseModel.create` """
+        log_deprecate("'Session(...).create(...)' has been deprecated in "
+                      "favor of 'Session(...).env['model'].create(...)'")
         return self.pool[model].create(self.cr, self.uid, values,
                                        context=self.context)
 
     def write(self, model, ids, values):
-        """ Shortcut to :py:class:`openerp.osv.orm.BaseModel.write` """
+        """ Shortcut to :py:class:`openerp.models.BaseModel.write` """
+        log_deprecate("'Session(...).write(...)' has been deprecated in "
+                      "favor of 'Session(...).env['model'].write(...)'")
         return self.pool[model].write(self.cr, self.uid, ids, values,
                                       context=self.context)
 
     def unlink(self, model, ids):
         model_obj = self.pool[model]
+        _logger.warning("'Session.unlink()' has been deprecated, prefer "
+                        "'self.env['model'].unlink()' or "
+                        "self.recordset().unlink() if you are in a "
+                        "ConnectorUnit.")
         return model_obj.unlink(self.cr, self.uid, ids, context=self.context)
 
     def __repr__(self):
-        return '<Session db_name: %s, uid: %d>' % (self.cr.dbname, self.uid)
+        return '<Session db_name: %s, uid: %d, context: %s>' % (self.cr.dbname,
+                                                                self.uid,
+                                                                self.context)
 
     def is_module_installed(self, module_name):
         """ Indicates whether a module is installed or not

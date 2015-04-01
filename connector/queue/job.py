@@ -27,8 +27,7 @@ import sys
 from datetime import datetime, timedelta, MINYEAR
 from pickle import loads, dumps, UnpicklingError
 
-from openerp import SUPERUSER_ID
-from openerp.tools import DEFAULT_SERVER_DATETIME_FORMAT
+import openerp
 from openerp.tools.translate import _
 
 from ..exception import (NotReadableJobError,
@@ -97,8 +96,8 @@ class OpenERPJobStorage(JobStorage):
     def __init__(self, session):
         super(OpenERPJobStorage, self).__init__()
         self.session = session
-        self.job_model = self.session.pool.get(self._job_model_name)
-        self.worker_model = self.session.pool.get(self._worker_model_name)
+        self.job_model = self.session.env[self._job_model_name]
+        self.worker_model = self.session.env[self._worker_model_name]
         assert self.job_model is not None, (
             "Model %s not found" % self._job_model_name)
 
@@ -117,13 +116,11 @@ class OpenERPJobStorage(JobStorage):
         if 'company_id' in self.session.context:
             company_id = self.session.context['company_id']
         else:
-            company_obj = self.session.pool['res.company']
-            company_id = company_obj._company_default_get(
-                self.session.cr,
-                new_job.user_id,
+            company_model = self.session.env['res.company']
+            company_model = company_model.sudo(new_job.user_id)
+            company_id = company_model._company_default_get(
                 object='queue.job',
-                field='company_id',
-                context=self.session.context)
+                field='company_id')
         new_job.company_id = company_id
         self.store(new_job)
         return new_job.uuid
@@ -145,32 +142,23 @@ class OpenERPJobStorage(JobStorage):
 
     def exists(self, job_uuid):
         """Returns if a job still exists in the storage."""
-        return bool(self._openerp_id(job_uuid))
+        return bool(self.db_record_from_uuid(job_uuid))
 
-    def _openerp_id(self, job_uuid):
-        openerp_id = None
-        job_ids = self.job_model.search(self.session.cr,
-                                        SUPERUSER_ID,
-                                        [('uuid', '=', job_uuid)],
-                                        context=self.session.context,
-                                        limit=1)
-        if job_ids:
-            openerp_id = job_ids[0]
-        return openerp_id
+    def db_record_from_uuid(self, job_uuid):
+        model = self.job_model.sudo().with_context(active_test=False)
+        record = model.search([('uuid', '=', job_uuid)], limit=1)
+        if record:
+            return record
 
-    def openerp_id(self, job_):
-        return self._openerp_id(job_.uuid)
+    def db_record(self, job_):
+        return self.db_record_from_uuid(job_.uuid)
 
     def _worker_id(self, worker_uuid):
-        openerp_id = None
-        worker_ids = self.worker_model.search(self.session.cr,
-                                              SUPERUSER_ID,
-                                              [('uuid', '=', worker_uuid)],
-                                              context=self.session.context,
-                                              limit=1)
-        if worker_ids:
-            openerp_id = worker_ids[0]
-        return openerp_id
+        worker = self.worker_model.sudo().search(
+            [('uuid', '=', worker_uuid)],
+            limit=1)
+        if worker:
+            return worker.id
 
     def store(self, job_):
         """ Store the Job """
@@ -188,17 +176,15 @@ class OpenERPJobStorage(JobStorage):
                 'eta': False,
                 }
 
+        dt_to_string = openerp.fields.Datetime.to_string
         if job_.date_enqueued:
-            vals['date_enqueued'] = job_.date_enqueued.strftime(
-                DEFAULT_SERVER_DATETIME_FORMAT)
+            vals['date_enqueued'] = dt_to_string(job_.date_enqueued)
         if job_.date_started:
-            vals['date_started'] = job_.date_started.strftime(
-                DEFAULT_SERVER_DATETIME_FORMAT)
+            vals['date_started'] = dt_to_string(job_.date_started)
         if job_.date_done:
-            vals['date_done'] = job_.date_done.strftime(
-                DEFAULT_SERVER_DATETIME_FORMAT)
+            vals['date_done'] = dt_to_string(job_.date_done)
         if job_.eta:
-            vals['eta'] = job_.eta.strftime(DEFAULT_SERVER_DATETIME_FORMAT)
+            vals['eta'] = dt_to_string(job_.eta)
 
         if job_.canceled:
             vals['active'] = False
@@ -208,15 +194,11 @@ class OpenERPJobStorage(JobStorage):
         else:
             vals['worker_id'] = False
 
-        if self.exists(job_.uuid):
-            self.job_model.write(self.session.cr,
-                                 self.session.uid,
-                                 self.openerp_id(job_),
-                                 vals,
-                                 self.session.context)
+        db_record = self.db_record(job_)
+        if db_record:
+            db_record.write(vals)
         else:
-            fmt = DEFAULT_SERVER_DATETIME_FORMAT
-            date_created = job_.date_created.strftime(fmt)
+            date_created = dt_to_string(job_.date_created)
             vals.update({'uuid': job_.uuid,
                          'name': job_.description,
                          'func_string': job_.func_string,
@@ -229,48 +211,39 @@ class OpenERPJobStorage(JobStorage):
                                   job_.args,
                                   job_.kwargs))
 
-            self.job_model.create(self.session.cr,
-                                  SUPERUSER_ID,
-                                  vals,
-                                  self.session.context)
+            self.job_model.sudo().create(vals)
 
     def load(self, job_uuid):
         """ Read a job from the Database"""
-        if not self.exists(job_uuid):
+        stored = self.db_record_from_uuid(job_uuid)
+        if not stored:
             raise NoSuchJobError(
-                '%s does no longer exist in the storage.' % job_uuid)
-        stored = self.job_model.browse(self.session.cr,
-                                       self.session.uid,
-                                       self._openerp_id(job_uuid),
-                                       context=self.session.context)
+                'Job %s does no longer exist in the storage.' % job_uuid)
 
         func = _unpickle(stored.func)
 
         (func_name, args, kwargs) = func
 
+        dt_from_string = openerp.fields.Datetime.from_string
         eta = None
         if stored.eta:
-            eta = datetime.strptime(stored.eta, DEFAULT_SERVER_DATETIME_FORMAT)
+            eta = dt_from_string(stored.eta)
 
         job_ = Job(func=func_name, args=args, kwargs=kwargs,
                    priority=stored.priority, eta=eta,
                    job_uuid=stored.uuid, description=stored.name)
 
         if stored.date_created:
-            job_.date_created = datetime.strptime(
-                stored.date_created, DEFAULT_SERVER_DATETIME_FORMAT)
+            job_.date_created = dt_from_string(stored.date_created)
 
         if stored.date_enqueued:
-            job_.date_enqueued = datetime.strptime(
-                stored.date_enqueued, DEFAULT_SERVER_DATETIME_FORMAT)
+            job_.date_enqueued = dt_from_string(stored.date_enqueued)
 
         if stored.date_started:
-            job_.date_started = datetime.strptime(
-                stored.date_started, DEFAULT_SERVER_DATETIME_FORMAT)
+            job_.date_started = dt_from_string(stored.date_started)
 
         if stored.date_done:
-            job_.date_done = datetime.strptime(
-                stored.date_done, DEFAULT_SERVER_DATETIME_FORMAT)
+            job_.date_done = dt_from_string(stored.date_done)
 
         job_.state = stored.state
         job_.result = stored.result if stored.result else None
@@ -549,14 +522,10 @@ class Job(object):
             self._eta = None
         elif isinstance(value, timedelta):
             self._eta = datetime.now() + value
-        elif isinstance(value, datetime):
-            self._eta = value
         elif isinstance(value, int):
             self._eta = datetime.now() + timedelta(seconds=value)
         else:
-            raise ValueError("%s is not a valid type for eta, "
-                             " it must be an 'int', a 'timedelta' "
-                             "or a 'datetime'" % type(value))
+            self._eta = value
 
     def set_pending(self, result=None):
         self.state = PENDING

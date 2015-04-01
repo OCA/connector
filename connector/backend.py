@@ -165,8 +165,8 @@ class Backend(object):
     is able to extend or replace the behavior of its parent.
 
     .. note:: when using the framework, you won't need to call
-              :py:meth:`~get_class`, usually, you will call
-              :py:meth:`connector.connector.Environment.get_connector_unit`.
+    :py:meth:`~get_class`, usually, you will call
+    :py:meth:`connector.connector.ConnectorEnvironment.get_connector_unit`.
 
     The vertical extension is the one you will probably use the most, because
     most of the things you will change concern your custom adaptations or
@@ -219,7 +219,7 @@ class Backend(object):
     def __str__(self):
         if self.version:
             return 'Backend(\'%s\', \'%s\')' % (self.service, self.version)
-        return 'Backend(\'%s\')>' % self.service
+        return 'Backend(\'%s\')' % self.service
 
     def __repr__(self):
         if self.version:
@@ -305,23 +305,6 @@ class Backend(object):
             else:
                 register_replace(replacing)
         self._class_entries.append(entry)
-
-    def unregister_class(self, cls):
-        """ Deprecated. Was used to remove a ``ConnectorUnit``
-        from the registry. Now, the ``replacing`` argument of
-        the decorator or ``register_clas()`` should be used.
-
-        It has been deprecated because it is not safe to unregister
-        a ConnectorUnit due to the way OpenERP works with addons.
-        A python module can be imported even if a addon is not installed.
-        """
-        raise DeprecationWarning('Backend.unregister_class() is deprecated. '
-                                 'You have to use the replacing argument '
-                                 'of the register_class() method')
-
-    def registered_classes(self, base_class=None):
-        """ Deprecated. """
-        raise DeprecationWarning('Backend.registered_classes() is deprecated.')
 
     def __call__(self, cls=None, replacing=None):
         """ Backend decorator

@@ -88,7 +88,8 @@ Session
 *******
 
 A :py:class:`~connector.session.ConnectorSession` is a container for the usual
-`cr`, `uid`, `context` used in OpenERP.
+``cr``, ``uid``, ``context`` used in OpenERP. Now, it contains the Odoo
+``Environment`` as ``self.env``.
 We use them accross the connectors.
 
 *******
@@ -99,10 +100,10 @@ A :py:class:`~connector.backend.Backend`
 is a reference to an external system or service.
 
 A backend is defined by a name and a version.
-For instance `Magento 1.7`.
+For instance ``Magento 1.7``.
 
-A reference can have a parent. The instance `Magento 1.7` is the child
-of `Magento`.
+A reference can have a parent. The instance ``Magento 1.7`` is the child
+of ``Magento``.
 
 :py:class:`~connector.connector.ConnectorUnit` classes are registered on
 the backends. Then, we are able to ask a registered class to a backend.
@@ -134,8 +135,8 @@ and the name of the model to work with.
 
 A connectors developer is mostly interested by:
 
-* Get a connectorUnit from an environment (:py:meth:`connector.connector.ConnectorUnit.get_connector_unit_for_model`,
-  :py:meth:`connector.connector.ConnectorUnit.get_binder_for_model`)
+* Get a connectorUnit from an environment (:py:meth:`connector.connector.ConnectorUnit.unit_for`,
+  :py:meth:`connector.connector.ConnectorUnit.binder_for`)
 
 *************
 ConnectorUnit

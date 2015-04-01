@@ -20,14 +20,20 @@
 ##############################################################################
 
 import inspect
-from openerp.osv import orm
+import logging
+from contextlib import contextmanager
+from openerp import models
+
+from .deprecate import log_deprecate, DeprecatedClass
+
+_logger = logging.getLogger(__name__)
 
 
 def _get_openerp_module_name(module_path):
     """ Extract the name of the OpenERP module from the path of the
     Python module.
 
-    Taken from OpenERP server: ``openerp.osv.orm``
+    Taken from OpenERP server: ``openerp.models.MetaModel``
 
     The (OpenERP) module name can be in the ``openerp.addons`` namespace
     or not. For instance module ``sale`` can be imported as
@@ -47,8 +53,8 @@ def install_in_connector():
 
     It has to be called once per OpenERP module to plug.
 
-    Under the cover, it creates a ``orm.AbstractModel`` whose name is
-    the name of the module with a ``.intalled`` suffix:
+    Under the cover, it creates a ``openerp.models.AbstractModel`` whose
+    name is the name of the module with a ``.intalled`` suffix:
     ``{name_of_the_openerp_module_to_install}.installed``.
 
     The connector then uses this model to know when the OpenERP module
@@ -64,13 +70,13 @@ def install_in_connector():
     class_name = name.replace('.', '_')
     # we need to call __new__ and __init__ in 2 phases because
     # __init__ needs to have the right __module__ and _module attributes
-    model = orm.MetaModel.__new__(orm.MetaModel, class_name,
-                                  (orm.AbstractModel,), {'_name': name})
+    model = models.MetaModel.__new__(models.MetaModel, class_name,
+                                     (models.AbstractModel,), {'_name': name})
     # Update the module of the model, it should be the caller's one
     model._module = openerp_module_name
     model.__module__ = module.__name__
-    orm.MetaModel.__init__(model, class_name,
-                           (orm.AbstractModel,), {'_name': name})
+    models.MetaModel.__init__(model, class_name,
+                              (models.AbstractModel,), {'_name': name})
 
 
 # install the connector itself
@@ -97,10 +103,17 @@ class MetaConnectorUnit(type):
 
     @property
     def model_name(cls):
-        """
-        The ``model_name`` is used to find the class and is mandatory for
-        :py:class:`~connector.connector.ConnectorUnit` which are registered
-        on a :py:class:`~connector.backend.Backend`.
+        log_deprecate('renamed to for_model_names')
+        return cls.for_model_names
+
+    @property
+    def for_model_names(cls):
+        """ Returns the list of models on which a
+        :class:`~connector.connector.ConnectorUnit` is usable
+
+        It is used in :meth:`~connector.connector.ConnectorUnit.match` when
+        we search the correct ``ConnectorUnit`` for a model.
+
         """
         if cls._model_name is None:
             raise NotImplementedError("no _model_name for %s" % cls)
@@ -131,22 +144,22 @@ class ConnectorUnit(object):
 
     _model_name = None  # to be defined in sub-classes
 
-    def __init__(self, environment):
+    def __init__(self, connector_env):
         """
 
-        :param environment: current environment (backend, session, ...)
-        :type environment: :py:class:`connector.connector.Environment`
+        :param connector_env: current environment (backend, session, ...)
+        :type connector_env: :class:`connector.connector.ConnectorEnvironment`
         """
         super(ConnectorUnit, self).__init__()
-        self.environment = environment
-        self.backend = self.environment.backend
-        self.backend_record = self.environment.backend_record
-        self.session = self.environment.session
-        self.model = self.session.pool.get(environment.model_name)
-        # so we can use openerp.tools.translate._, used to find the lang
-        # that's because _() search for a localcontext attribute
-        # but self.localcontext should not be used for other purposes
-        self.localcontext = self.session.context
+        self.connector_env = connector_env
+        self.backend = self.connector_env.backend
+        self.backend_record = self.connector_env.backend_record
+        self.session = self.connector_env.session
+
+    @property
+    def environment(self):
+        log_deprecate('renamed to connector_env')
+        return self.connector_env
 
     @classmethod
     def match(cls, session, model):
@@ -156,7 +169,7 @@ class ConnectorUnit(object):
         :param session: current session
         :type session: :py:class:`connector.session.ConnectorSession`
         :param model: model to match
-        :type model: str or :py:class:`openerp.osv.orm.Model`
+        :type model: str or :py:class:`openerp.models.Model`
         """
         # filter out the ConnectorUnit from modules
         # not installed in the current DB
@@ -164,17 +177,37 @@ class ConnectorUnit(object):
             model_name = model._name
         else:
             model_name = model  # str
-        return model_name in cls.model_name
+        return model_name in cls.for_model_names
 
-    def get_connector_unit_for_model(self, connector_unit_class, model=None):
+    @property
+    def env(self):
+        """ Returns the openerp.api.environment """
+        return self.session.env
+
+    @property
+    def model(self):
+        return self.connector_env.model
+
+    @property
+    def localcontext(self):
+        """ It is there for compatibility.
+
+        :func:`openerp.tools.translate._` searches for this attribute
+        in the classes do be able to translate the strings.
+
+        There is no reason to use this attribute for other purposes.
+        """
+        return self.session.context
+
+    def unit_for(self, connector_unit_class, model=None):
         """ According to the current
-        :py:class:`~connector.connector.Environment`,
+        :py:class:`~connector.connector.ConnectorEnvironment`,
         search and returns an instance of the
         :py:class:`~connector.connector.ConnectorUnit` for the current
         model and being a class or subclass of ``connector_unit_class``.
 
-        If a ``model`` is given, a new
-        :py:class:`~connector.connector.Environment`
+        If a different ``model`` is given, a new
+        :py:class:`~connector.connector.ConnectorEnvironment`
         is built for this model.
 
         :param connector_unit_class: ``ConnectorUnit`` to search
@@ -185,21 +218,35 @@ class ConnectorUnit(object):
                       model than the current one
         :type model: str
         """
-        if model is None:
-            env = self.environment
+        if model is None or model == self.model._name:
+            env = self.connector_env
         else:
-            env = Environment(self.backend_record,
-                              self.session,
-                              model)
+            env = ConnectorEnvironment(self.backend_record,
+                                       self.session,
+                                       model)
         return env.get_connector_unit(connector_unit_class)
+
+    def get_connector_unit_for_model(self, connector_unit_class, model=None):
+        """ Deprecated in favor of :meth:`~unit_for` """
+        log_deprecate('renamed to unit_for()')
+        return self.unit_for(connector_unit_class, model=model)
+
+    def binder_for(self, model=None):
+        """ Returns an new instance of the correct ``Binder`` for
+        a model """
+        return self.unit_for(Binder, model)
 
     def get_binder_for_model(self, model=None):
         """ Returns an new instance of the correct ``Binder`` for
-        a model """
-        return self.get_connector_unit_for_model(Binder, model)
+        a model
+
+        Deprecated, use ``binder_for`` now.
+        """
+        log_deprecate('renamed to binder_for()')
+        return self.binder_for(model=model)
 
 
-class Environment(object):
+class ConnectorEnvironment(object):
     """ Environment used by the different units for the synchronization.
 
     .. attribute:: backend
@@ -229,7 +276,7 @@ class Environment(object):
         """
 
         :param backend_record: browse record of the backend
-        :type backend_record: :py:class:`openerp.osv.orm.browse_record`
+        :type backend_record: :py:class:`openerp.models.Model`
         :param session: current session (cr, uid, context)
         :type session: :py:class:`connector.session.ConnectorSession`
         :param model_name: name of the model
@@ -240,15 +287,30 @@ class Environment(object):
         self.backend = backend
         self.session = session
         self.model_name = model_name
-        self.model = self.session.pool.get(model_name)
-        self.pool = self.session.pool
 
+    @property
+    def model(self):
+        return self.env[self.model_name]
+
+    @property
+    def pool(self):
+        return self.session.pool
+
+    @property
+    def env(self):
+        return self.session.env
+
+    @contextmanager
     def set_lang(self, code):
         """ Change the working language in the environment.
 
         It changes the ``lang`` key in the session's context.
+
+
         """
-        self.session.context['lang'] = code
+        raise DeprecationWarning('ConnectorEnvironment.set_lang has been '
+                                 'deprecated. session.change_context should '
+                                 'be used instead.')
 
     def get_connector_unit(self, base_class):
         """ Searches and returns an instance of the
@@ -264,6 +326,10 @@ class Environment(object):
                                       self.model_name)(self)
 
 
+Environment = DeprecatedClass('Environment',
+                              ConnectorEnvironment)
+
+
 class Binder(ConnectorUnit):
     """ For one record of a model, capable to find an external or
     internal id, or create the binding (link) between them
@@ -273,13 +339,14 @@ class Binder(ConnectorUnit):
 
     _model_name = None  # define in sub-classes
 
-    def to_openerp(self, external_id, unwrap=False):
+    def to_openerp(self, external_id, unwrap=False, browse=False):
         """ Give the OpenERP ID for an external ID
 
         :param external_id: external ID for which we want
                             the OpenERP ID
         :param unwrap: if True, returns the openerp_id
                        else return the id of the binding
+        :param browse: if True, returns a recordset
         :return: a record ID, depending on the value of unwrap,
                  or None if the external_id is not mapped
         :rtype: int

@@ -179,17 +179,16 @@ class Worker(threading.Thread):
 
         Wait for jobs and execute them sequentially.
         """
-        with openerp.api.Environment.manage():
-            while 1:
-                # check if the worker has to exit (db destroyed, connector
-                # uninstalled)
-                if self.watcher.worker_lost(self):
-                    break
-                job = self.queue.dequeue()
-                try:
-                    self.run_job(job)
-                except:
-                    continue
+        while 1:
+            # check if the worker has to exit (db destroyed, connector
+            # uninstalled)
+            if self.watcher.worker_lost(self):
+                break
+            job = self.queue.dequeue()
+            try:
+                self.run_job(job)
+            except:
+                continue
 
     def enqueue_job_uuid(self, job_uuid):
         """ Enqueue a job:
@@ -309,12 +308,11 @@ class WorkerWatcher(threading.Thread):
 
     def run(self):
         """ `WorkerWatcher`'s main loop """
-        with openerp.api.Environment.manage():
-            while 1:
-                self._update_workers()
-                for db_name, worker in self._workers.items():
-                    self.check_alive(db_name, worker)
-                time.sleep(WAIT_CHECK_WORKER_ALIVE)
+        while 1:
+            self._update_workers()
+            for db_name, worker in self._workers.items():
+                self.check_alive(db_name, worker)
+            time.sleep(WAIT_CHECK_WORKER_ALIVE)
 
     def check_alive(self, db_name, worker):
         """ Check if the the worker is still alive and notify
@@ -334,17 +332,10 @@ class WorkerWatcher(threading.Thread):
     def _notify_alive(self, session, worker):
         _logger.debug('Worker %s is alive on process %s',
                       worker.uuid, os.getpid())
-        dbworker_obj = session.pool.get('queue.worker')
-        dbworker_obj._notify_alive(session.cr,
-                                   session.uid,
-                                   worker,
-                                   context=session.context)
+        session.env['queue.worker']._notify_alive(worker)
 
     def _purge_dead_workers(self, session):
-        dbworker_obj = session.pool.get('queue.worker')
-        dbworker_obj._purge_dead_workers(session.cr,
-                                         session.uid,
-                                         context=session.context)
+        session.env['queue.worker']._purge_dead_workers()
 
 
 watcher = WorkerWatcher()

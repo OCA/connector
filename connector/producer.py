@@ -31,14 +31,14 @@ Fire the common events:
 """
 
 import openerp
-from openerp.osv import orm
+from openerp import models
 from .session import ConnectorSession
 from .event import (on_record_create,
                     on_record_write,
                     on_record_unlink)
 
 
-create_original = orm.BaseModel.create
+create_original = models.BaseModel.create
 
 
 @openerp.api.model
@@ -50,10 +50,10 @@ def create(self, vals):
                                    context=self.env.context)
         on_record_create.fire(session, self._name, record_id.id, vals)
     return record_id
-orm.BaseModel.create = create
+models.BaseModel.create = create
 
 
-write_original = orm.BaseModel.write
+write_original = models.BaseModel.write
 
 
 @openerp.api.multi
@@ -67,10 +67,10 @@ def write(self, vals):
                 on_record_write.fire(session, self._name,
                                      record_id, vals)
     return result
-orm.BaseModel.write = write
+models.BaseModel.write = write
 
 
-unlink_original = orm.BaseModel.unlink
+unlink_original = models.BaseModel.unlink
 
 
 @openerp.api.multi
@@ -82,4 +82,4 @@ def unlink(self):
             for record_id in self.ids:
                 on_record_unlink.fire(session, self._name, record_id)
     return unlink_original(self)
-orm.BaseModel.unlink = unlink
+models.BaseModel.unlink = unlink

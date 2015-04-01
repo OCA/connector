@@ -4,20 +4,28 @@ import mock
 import unittest2
 from datetime import datetime, timedelta
 
-import openerp
 from openerp import SUPERUSER_ID
 import openerp.tests.common as common
 from openerp.addons.connector.queue.job import (
     Job,
+    JobStorage,
     OpenERPJobStorage,
     job,
+    PENDING,
+    ENQUEUED,
+    DONE,
+    STARTED,
+    FAILED,
+    _unpickle,
 )
 from openerp.addons.connector.session import (
     ConnectorSession,
 )
 from openerp.addons.connector.exception import (
+    FailedJobError,
+    NoSuchJobError,
+    NotReadableJobError,
     RetryableJobError,
-    FailedJobError
 )
 
 
@@ -62,7 +70,7 @@ class TestJobs(unittest2.TestCase):
         job_b = Job(func=task_b, priority=5)
         self.assertGreater(job_a, job_b)
 
-    def test_eta(self):
+    def test_compare_eta(self):
         """ When an `eta` datetime is defined, it should
         be executed after a job without one.
         """
@@ -70,6 +78,29 @@ class TestJobs(unittest2.TestCase):
         job_a = Job(func=task_a, priority=10, eta=date)
         job_b = Job(func=task_b, priority=10)
         self.assertGreater(job_a, job_b)
+
+    def test_eta(self):
+        """ When an `eta` is datetime, it uses it """
+        now = datetime.now()
+        job_a = Job(func=task_a, eta=now)
+        self.assertEqual(job_a.eta, now)
+
+    def test_eta_integer(self):
+        """ When an `eta` is an integer, it adds n seconds up to now """
+        datetime_path = 'openerp.addons.connector.queue.job.datetime'
+        with mock.patch(datetime_path, autospec=True) as mock_datetime:
+            mock_datetime.now.return_value = datetime(2015, 3, 15, 16, 41, 0)
+            job_a = Job(func=task_a, eta=60)
+            self.assertEqual(job_a.eta, datetime(2015, 3, 15, 16, 42, 0))
+
+    def test_eta_timedelta(self):
+        """ When an `eta` is a timedelta, it adds it up to now """
+        datetime_path = 'openerp.addons.connector.queue.job.datetime'
+        with mock.patch(datetime_path, autospec=True) as mock_datetime:
+            mock_datetime.now.return_value = datetime(2015, 3, 15, 16, 41, 0)
+            delta = timedelta(hours=3)
+            job_a = Job(func=task_a, eta=delta)
+            self.assertEqual(job_a.eta, datetime(2015, 3, 15, 19, 41, 0))
 
     def test_perform(self):
         test_job = Job(func=dummy_task)
@@ -103,12 +134,136 @@ class TestJobs(unittest2.TestCase):
     def test_retryable_error(self):
         test_job = Job(func=retryable_error_task,
                        max_retries=3)
+        self.assertEqual(test_job.retry, 0)
         with self.assertRaises(RetryableJobError):
             test_job.perform(self.session)
+        self.assertEqual(test_job.retry, 1)
         with self.assertRaises(RetryableJobError):
             test_job.perform(self.session)
+        self.assertEqual(test_job.retry, 2)
         with self.assertRaises(FailedJobError):
             test_job.perform(self.session)
+        self.assertEqual(test_job.retry, 3)
+
+    def test_infinite_retryable_error(self):
+        test_job = Job(func=retryable_error_task,
+                       max_retries=0)
+        self.assertEqual(test_job.retry, 0)
+        with self.assertRaises(RetryableJobError):
+            test_job.perform(self.session)
+        self.assertEqual(test_job.retry, 1)
+
+    def test_on_method(self):
+
+        class A(object):
+            def method(self):
+                pass
+
+        with self.assertRaises(NotImplementedError):
+            Job(A.method)
+
+    def test_invalid_function(self):
+        with self.assertRaises(TypeError):
+            Job(1)
+
+    def test_compare_apple_and_orange(self):
+        with self.assertRaises(TypeError):
+            Job(func=task_a) != 1
+
+    def test_set_pending(self):
+        job_a = Job(func=task_a)
+        job_a.set_pending(result='test')
+        self.assertEquals(job_a.state, PENDING)
+        self.assertFalse(job_a.date_enqueued)
+        self.assertFalse(job_a.date_started)
+        self.assertFalse(job_a.worker_uuid)
+        self.assertEquals(job_a.retry, 0)
+        self.assertEquals(job_a.result, 'test')
+
+    def test_set_enqueued(self):
+        job_a = Job(func=task_a)
+        worker = mock.Mock(name='Worker')
+        uuid = 'ae7d1161-dc34-40b1-af06-8057c049133e'
+        worker.uuid = 'ae7d1161-dc34-40b1-af06-8057c049133e'
+        datetime_path = 'openerp.addons.connector.queue.job.datetime'
+        with mock.patch(datetime_path, autospec=True) as mock_datetime:
+            mock_datetime.now.return_value = datetime(2015, 3, 15, 16, 41, 0)
+            job_a.set_enqueued(worker)
+
+        self.assertEquals(job_a.state, ENQUEUED)
+        self.assertEquals(job_a.date_enqueued,
+                          datetime(2015, 3, 15, 16, 41, 0))
+        self.assertEquals(job_a.worker_uuid, uuid)
+        self.assertFalse(job_a.date_started)
+
+    def test_set_started(self):
+        job_a = Job(func=task_a)
+        datetime_path = 'openerp.addons.connector.queue.job.datetime'
+        with mock.patch(datetime_path, autospec=True) as mock_datetime:
+            mock_datetime.now.return_value = datetime(2015, 3, 15, 16, 41, 0)
+            job_a.set_started()
+
+        self.assertEquals(job_a.state, STARTED)
+        self.assertEquals(job_a.date_started,
+                          datetime(2015, 3, 15, 16, 41, 0))
+
+    def test_set_done(self):
+        job_a = Job(func=task_a)
+        datetime_path = 'openerp.addons.connector.queue.job.datetime'
+        with mock.patch(datetime_path, autospec=True) as mock_datetime:
+            mock_datetime.now.return_value = datetime(2015, 3, 15, 16, 41, 0)
+            job_a.set_done(result='test')
+
+        self.assertEquals(job_a.state, DONE)
+        self.assertEquals(job_a.result, 'test')
+        self.assertEquals(job_a.date_done,
+                          datetime(2015, 3, 15, 16, 41, 0))
+        self.assertFalse(job_a.worker_uuid)
+        self.assertFalse(job_a.exc_info)
+
+    def test_set_failed(self):
+        job_a = Job(func=task_a)
+        job_a.set_failed(exc_info='failed test')
+        self.assertEquals(job_a.state, FAILED)
+        self.assertEquals(job_a.exc_info, 'failed test')
+        self.assertFalse(job_a.worker_uuid)
+
+    def test_cancel(self):
+        job_a = Job(func=task_a)
+        job_a.cancel(msg='test')
+        self.assertTrue(job_a.canceled)
+        self.assertEquals(job_a.state, DONE)
+        self.assertEquals(job_a.result, 'test')
+
+    def test_postpone(self):
+        job_a = Job(func=task_a)
+        datetime_path = 'openerp.addons.connector.queue.job.datetime'
+        with mock.patch(datetime_path, autospec=True) as mock_datetime:
+            mock_datetime.now.return_value = datetime(2015, 3, 15, 16, 41, 0)
+            job_a.postpone(result='test', seconds=60)
+
+        self.assertEquals(job_a.eta, datetime(2015, 3, 15, 16, 42, 0))
+        self.assertEquals(job_a.result, 'test')
+        self.assertFalse(job_a.exc_info)
+
+    def test_unpickle(self):
+        pickle = ("S'a small cucumber preserved in vinegar, "
+                  "brine, or a similar solution.'\np0\n.")
+        self.assertEqual(_unpickle(pickle),
+                         'a small cucumber preserved in vinegar, '
+                         'brine, or a similar solution.')
+
+    def test_unpickle_not_readable(self):
+        with self.assertRaises(NotReadableJobError):
+            self.assertEqual(_unpickle('cucumber'))
+
+    def test_not_implemented_job_storage(self):
+        storage = JobStorage()
+        job_a = mock.Mock()
+        with self.assertRaises(NotImplementedError):
+            storage.store(job_a)
+            storage.load(job_a)
+            storage.exists(job_a)
 
 
 class TestJobStorage(common.TransactionCase):
@@ -116,17 +271,14 @@ class TestJobStorage(common.TransactionCase):
 
     def setUp(self):
         super(TestJobStorage, self).setUp()
-        self.pool = openerp.modules.registry.RegistryManager.get(common.DB)
         self.session = ConnectorSession(self.cr, self.uid)
-        self.queue_job = self.registry('queue.job')
+        self.queue_job = self.env['queue.job']
 
     def test_store(self):
         test_job = Job(func=task_a)
         storage = OpenERPJobStorage(self.session)
         storage.store(test_job)
-        stored = self.queue_job.search(
-            self.cr, self.uid,
-            [('uuid', '=', test_job.uuid)])
+        stored = self.queue_job.search([('uuid', '=', test_job.uuid)])
         self.assertEqual(len(stored), 1)
 
     def test_read(self):
@@ -139,7 +291,7 @@ class TestJobStorage(common.TransactionCase):
                        eta=eta,
                        description="My description")
         test_job.user_id = 1
-        test_job.company_id = self.ref("base.main_company")
+        test_job.company_id = self.env.ref("base.main_company").id
         storage = OpenERPJobStorage(self.session)
         storage.store(test_job)
         job_read = storage.load(test_job.uuid)
@@ -168,6 +320,49 @@ class TestJobStorage(common.TransactionCase):
                                delta=delta)
         self.assertAlmostEqual(test_job.eta, job_read.eta,
                                delta=delta)
+
+        test_date = datetime(2015, 3, 15, 21, 7, 0)
+        job_read.date_enqueued = test_date
+        job_read.date_started = test_date
+        job_read.date_done = test_date
+        job_read.canceled = True
+        storage.store(job_read)
+
+        job_read = storage.load(test_job.uuid)
+        self.assertAlmostEqual(job_read.date_started, test_date,
+                               delta=delta)
+        self.assertAlmostEqual(job_read.date_enqueued, test_date,
+                               delta=delta)
+        self.assertAlmostEqual(job_read.date_done, test_date,
+                               delta=delta)
+        self.assertEqual(job_read.canceled, True)
+
+    def test_job_worker(self):
+        worker = self.env['queue.worker'].create(
+            {'uuid': '57569b99-c2c1-47b6-aad1-72f953c92c87'}
+        )
+        test_job = Job(func=dummy_task_args,
+                       model_name='res.users',
+                       args=('o', 'k'),
+                       kwargs={'c': '!'})
+        test_job.worker_uuid = worker.uuid
+        storage = OpenERPJobStorage(self.session)
+        self.assertEqual(storage._worker_id(worker.uuid), worker.id)
+        storage.store(test_job)
+        job_read = storage.load(test_job.uuid)
+        self.assertEqual(job_read.worker_uuid, worker.uuid)
+
+    def test_job_unlinked(self):
+        test_job = Job(func=dummy_task_args,
+                       model_name='res.users',
+                       args=('o', 'k'),
+                       kwargs={'c': '!'})
+        storage = OpenERPJobStorage(self.session)
+        storage.store(test_job)
+        stored = self.queue_job.search([('uuid', '=', test_job.uuid)])
+        stored.unlink()
+        with self.assertRaises(NoSuchJobError):
+            storage.load(test_job.uuid)
 
     def test_unicode(self):
         test_job = Job(func=dummy_task_args,
@@ -213,11 +408,10 @@ class TestJobStorage(common.TransactionCase):
         self.cr.execute('delete from queue_job')
         job(task_a)
         job_uuid = task_a.delay(self.session, 'res.users')
-        stored = self.queue_job.search(self.cr, self.uid, [])
+        stored = self.queue_job.search([])
         self.assertEqual(len(stored), 1)
-        stored_brw = self.queue_job.browse(self.cr, self.uid, stored)
         self.assertEqual(
-            stored_brw[0].uuid,
+            stored.uuid,
             job_uuid,
             'Incorrect returned Job UUID')
 
@@ -225,8 +419,75 @@ class TestJobStorage(common.TransactionCase):
         self.cr.execute('delete from queue_job')
         job(dummy_task_args)
         task_a.delay(self.session, 'res.users', 'o', 'k', c='!')
-        stored = self.queue_job.search(self.cr, self.uid, [])
+        stored = self.queue_job.search([])
         self.assertEqual(len(stored), 1)
+
+
+class TestJobModel(common.TransactionCase):
+
+    def setUp(self):
+        super(TestJobModel, self).setUp()
+        self.session = ConnectorSession(self.cr, self.uid)
+        self.queue_job = self.env['queue.job']
+
+    def _create_job(self):
+        test_job = Job(func=task_a)
+        storage = OpenERPJobStorage(self.session)
+        storage.store(test_job)
+        stored = self.queue_job.search([('uuid', '=', test_job.uuid)])
+        self.assertEqual(len(stored), 1)
+        return stored
+
+    def test_job_change_state(self):
+        stored = self._create_job()
+        stored._change_job_state(DONE, result='test')
+        self.assertEqual(stored.state, DONE)
+        self.assertEqual(stored.result, 'test')
+        stored._change_job_state(PENDING, result='test2')
+        self.assertEqual(stored.state, PENDING)
+        self.assertEqual(stored.result, 'test2')
+        with self.assertRaises(ValueError):
+            # only PENDING and DONE supported
+            stored._change_job_state(STARTED)
+
+    def test_button_done(self):
+        stored = self._create_job()
+        stored.button_done()
+        self.assertEqual(stored.state, DONE)
+        self.assertEqual(stored.result,
+                         'Manually set to done by %s' % self.env.user.name)
+
+    def test_requeue(self):
+        stored = self._create_job()
+        stored.write({'state': 'failed'})
+        stored.requeue()
+        self.assertEqual(stored.state, PENDING)
+        self.assertFalse(stored.worker_id)
+
+    def test_message_when_write_fail(self):
+        stored = self._create_job()
+        stored.write({'state': 'failed'})
+        self.assertEqual(stored.state, FAILED)
+        messages = stored.message_ids
+        self.assertEqual(len(messages), 2)
+
+    def test_autovacuum(self):
+        stored = self._create_job()
+        stored2 = self._create_job()
+        stored.write({'date_done': '2000-01-01 00:00:00'})
+        stored2.write({'date_done': '2000-01-01 00:00:00', 'active': False})
+        self.env['queue.job'].autovacuum()
+        self.assertEqual(len(self.env['queue.job'].search([])), 0)
+
+    def test_wizard_requeue(self):
+        stored = self._create_job()
+        stored.write({'state': 'failed'})
+        model = self.env['queue.requeue.job']
+        model = model.with_context(active_model='queue.job',
+                                   active_ids=stored.ids)
+        model.create({}).requeue()
+        self.assertEqual(stored.state, PENDING)
+        self.assertFalse(stored.worker_id)
 
 
 class TestJobStorageMultiCompany(common.TransactionCase):
@@ -234,53 +495,46 @@ class TestJobStorageMultiCompany(common.TransactionCase):
 
     def setUp(self):
         super(TestJobStorageMultiCompany, self).setUp()
-        self.pool = openerp.modules.registry.RegistryManager.get(common.DB)
         self.session = ConnectorSession(self.cr, self.uid, context={})
-        self.queue_job = self.registry('queue.job')
+        self.queue_job = self.env['queue.job']
         grp_connector_manager = self.ref("connector.group_connector_manager")
-        User = self.registry('res.users')
-        Company = self.registry('res.company')
-        Partner = self.registry('res.partner')
-        self.other_partner_id_a = Partner.create(
-            self.cr, self.uid,
+        User = self.env['res.users']
+        Company = self.env['res.company']
+        Partner = self.env['res.partner']
+        self.other_partner_a = Partner.create(
             {"name": "My Company a",
              "is_company": True,
              "email": "test@tes.ttest",
              })
-        self.other_company_id_a = Company.create(
-            self.cr, self.uid,
+        self.other_company_a = Company.create(
             {"name": "My Company a",
-             "partner_id": self.other_partner_id_a,
+             "partner_id": self.other_partner_a.id,
              "rml_header1": "My Company Tagline",
              "currency_id": self.ref("base.EUR")
              })
-        self.other_user_id_a = User.create(
-            self.cr, self.uid,
-            {"partner_id": self.other_partner_id_a,
-             "company_id": self.other_company_id_a,
-             "company_ids": [(4, self.other_company_id_a)],
+        self.other_user_a = User.create(
+            {"partner_id": self.other_partner_a.id,
+             "company_id": self.other_company_a.id,
+             "company_ids": [(4, self.other_company_a.id)],
              "login": "my_login a",
              "name": "my user",
              "groups_id": [(4, grp_connector_manager)]
              })
-        self.other_partner_id_b = Partner.create(
-            self.cr, self.uid,
+        self.other_partner_b = Partner.create(
             {"name": "My Company b",
              "is_company": True,
              "email": "test@tes.ttest",
              })
-        self.other_company_id_b = Company.create(
-            self.cr, self.uid,
+        self.other_company_b = Company.create(
             {"name": "My Company b",
-             "partner_id": self.other_partner_id_b,
+             "partner_id": self.other_partner_b.id,
              "rml_header1": "My Company Tagline",
              "currency_id": self.ref("base.EUR")
              })
-        self.other_user_id_b = User.create(
-            self.cr, self.uid,
-            {"partner_id": self.other_partner_id_b,
-             "company_id": self.other_company_id_b,
-             "company_ids": [(4, self.other_company_id_b)],
+        self.other_user_b = User.create(
+            {"partner_id": self.other_partner_b.id,
+             "company_id": self.other_company_b.id,
+             "company_ids": [(4, self.other_company_b.id)],
              "login": "my_login_b",
              "name": "my user 1",
              "groups_id": [(4, grp_connector_manager)]
@@ -290,75 +544,69 @@ class TestJobStorageMultiCompany(common.TransactionCase):
         self.cr.execute('delete from queue_job')
         job(task_a)
         task_a.delay(self.session, 'res.users')
-        stored = self.queue_job.search(self.cr, self.uid, [])
+        stored = self.queue_job.search([])
         self.assertEqual(len(stored), 1)
-        return self.queue_job.browse(self.cr, self.uid, stored[0])
+        return stored
 
     def test_job_default_company_id(self):
         """the default company is the one from the current user_id"""
-        stored_brw = self._create_job()
-        self.assertEqual(stored_brw.company_id.id,
+        stored = self._create_job()
+        self.assertEqual(stored.company_id.id,
                          self.ref("base.main_company"),
                          'Incorrect default company_id')
-        with self.session.change_user(self.other_user_id_b):
-            stored_brw = self._create_job()
-            self.assertEqual(stored_brw.company_id.id,
-                             self.other_company_id_b,
+        with self.session.change_user(self.other_user_b.id):
+            stored = self._create_job()
+            self.assertEqual(stored.company_id.id,
+                             self.other_company_b.id,
                              'Incorrect default company_id')
 
     def test_job_no_company_id(self):
         """ if we put an empty company_id in the context
          jobs are created without company_id"""
         with self.session.change_context({'company_id': None}):
-            stored_brw = self._create_job()
-            self.assertFalse(stored_brw.company_id,
+            stored = self._create_job()
+            self.assertFalse(stored.company_id,
                              ' Company_id should be empty')
 
     def test_job_specific_company_id(self):
         """If a company_id specified in the context
         it's used by default for the job creation"""
         s = self.session
-        with s.change_context({'company_id': self.other_company_id_a}):
-            stored_brw = self._create_job()
-            self.assertEqual(stored_brw.company_id.id,
-                             self.other_company_id_a,
+        with s.change_context({'company_id': self.other_company_a.id}):
+            stored = self._create_job()
+            self.assertEqual(stored.company_id.id,
+                             self.other_company_a.id,
                              'Incorrect company_id')
 
     def test_job_subscription(self):
         # if the job is created without company_id, all members of
         # connector.group_connector_manager must be followers
-        User = self.registry("res.users")
-        with self.session.change_context({'company_id': None}):
-            stored_brw = self._create_job()
-        self.queue_job. _subscribe_users(self.cr, self.uid, [stored_brw.id])
-        stored_brw.refresh()
-        user_ids = User.search(
-            self.cr, self.uid,
+        User = self.env['res.users']
+        with self.session.change_context(company_id=None):
+            stored = self._create_job()
+        stored._subscribe_users()
+        users = User.search(
             [('groups_id', '=', self.ref('connector.group_connector_manager'))]
         )
-        self.assertEqual(len(stored_brw.message_follower_ids), len(user_ids))
-        users = self.registry("res.users").browse(self.cr, self.uid, user_ids)
+        self.assertEqual(len(stored.message_follower_ids), len(users))
         expected_partners = [u.partner_id for u in users]
-        self.assertSetEqual(set(stored_brw.message_follower_ids),
+        self.assertSetEqual(set(stored.message_follower_ids),
                             set(expected_partners))
-        followers_id = [f.id for f in stored_brw.message_follower_ids]
-        self.assertIn(self.other_partner_id_a, followers_id)
-        self.assertIn(self.other_partner_id_b, followers_id)
+        followers_id = [f.id for f in stored.message_follower_ids]
+        self.assertIn(self.other_partner_a.id, followers_id)
+        self.assertIn(self.other_partner_b.id, followers_id)
         # jobs created for a specific company_id are followed only by
         # company's members
         s = self.session
-        with s.change_context({'company_id': self.other_company_id_a}):
-            stored_brw = self._create_job()
-        self.queue_job. _subscribe_users(self.cr, self.other_user_id_a,
-                                         [stored_brw.id])
-        stored_brw.refresh()
-        # 2 because admin + self.other_partner_id_a
-        self.assertEqual(len(stored_brw.message_follower_ids), 2)
-        users = User.browse(self.cr, self.uid,
-                            [SUPERUSER_ID, self.other_user_id_a])
+        with s.change_context(company_id=self.other_company_a.id):
+            stored = self._create_job()
+        stored.sudo(self.other_user_a.id)._subscribe_users()
+        # 2 because admin + self.other_partner_a
+        self.assertEqual(len(stored.message_follower_ids), 2)
+        users = User.browse([SUPERUSER_ID, self.other_user_a.id])
         expected_partners = [u.partner_id for u in users]
-        self.assertSetEqual(set(stored_brw.message_follower_ids),
+        self.assertSetEqual(set(stored.message_follower_ids),
                             set(expected_partners))
-        followers_id = [f.id for f in stored_brw.message_follower_ids]
-        self.assertIn(self.other_partner_id_a, followers_id)
-        self.assertNotIn(self.other_partner_id_b, followers_id)
+        followers_id = [f.id for f in stored.message_follower_ids]
+        self.assertIn(self.other_partner_a.id, followers_id)
+        self.assertNotIn(self.other_partner_b.id, followers_id)

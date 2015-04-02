@@ -1,8 +1,8 @@
 Changelog
 ---------
 
-3.0.0 (not released)
-~~~~~~~~~~~~~~~~~~~~
+3.0.0 (2015-04-01)
+~~~~~~~~~~~~~~~~~~
 
 /!\ Backwards incompatible changes inside.
 

@@ -47,7 +47,7 @@ How?
 * It maintains an in-memory priority queue of jobs that
   is populated from the queue_job tables in all databases.
 * It does not run jobs itself, but asks Odoo to run them through an
-  anonymous /runjob HTTP request [1].
+  anonymous /connector/runjob HTTP request [1].
 
 How to use
 ----------
@@ -253,7 +253,7 @@ class ConnectorRunner:
                          job.uuid, job.db_name)
             self.db_by_name[job.db_name].set_job_enqueued(job.uuid)
             _async_http_get('http://localhost:%s'
-                            '/runjob?db=%s&job_uuid=%s' %
+                            '/connector/runjob?db=%s&job_uuid=%s' %
                             (self.port, job.db_name, job.uuid,))
 
     def process_notifications(self):

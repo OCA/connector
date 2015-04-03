@@ -43,9 +43,8 @@ class RunJobController(http.Controller):
             raise
         return job
 
-    @http.httprequest
-    def runjob(self, request, db, job_uuid, **kw):
-
+    @http.route('/connector/runjob', type='http', auth='none')
+    def runjob(self, db, job_uuid, **kw):
         session_hdl = ConnectorSessionHandler(db,
                                               openerp.SUPERUSER_ID)
 

@@ -204,7 +204,8 @@ class Database:
 
     def set_job_enqueued(self, uuid):
         with closing(self.conn.cursor()) as cr:
-            cr.execute("UPDATE queue_job SET state=%s, date_enqueued=NOW() "
+            cr.execute("UPDATE queue_job SET state=%s, "
+                       "date_enqueued=date_trunc('seconds', now()::timestamp) "
                        "WHERE uuid=%s",
                        (ENQUEUED, uuid))
 

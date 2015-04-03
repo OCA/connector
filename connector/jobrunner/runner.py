@@ -209,7 +209,7 @@ class Database:
                        (ENQUEUED, uuid))
 
 
-class OdooConnectorRunner:
+class ConnectorRunner:
 
     def __init__(self, port=8069, channel_config_string='root:4'):
         self.port = port

@@ -31,7 +31,7 @@ import time
 from openerp.service import server
 from openerp.tools import config
 
-from .runner import OdooConnectorRunner
+from .runner import ConnectorRunner
 
 _logger = logging.getLogger(__name__)
 
@@ -55,7 +55,7 @@ def run():
     time.sleep(START_DELAY)
     port = os.environ.get('ODOO_CONNECTOR_PORT') or config['xmlrpc_port']
     channels = os.environ.get('ODOO_CONNECTOR_CHANNELS')
-    runner = OdooConnectorRunner(port or 8069, channels or 'root:1')
+    runner = ConnectorRunner(port or 8069, channels or 'root:1')
     runner.run_forever()
 
 

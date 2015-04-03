@@ -28,7 +28,6 @@ import os
 from threading import Thread
 import time
 
-from openerp.service import server
 from openerp.tools import config
 
 from .runner import OdooConnectorRunner
@@ -38,18 +37,6 @@ _logger = logging.getLogger(__name__)
 START_DELAY = 5
 
 
-# Here we monkey patch the Odoo server to start the job runner thread
-# in the main server process (and not in forked workers). This is
-# very easy to deploy as we don't need another startup script.
-# The drawback is that it is not possible to extend the Odoo
-# server command line arguments, so we resort to environment variables
-# to configure the runner (channels mostly).
-
-
-# TODO: this is a temporary flag to enable the connector runner
-enable = os.environ.get('ODOO_CONNECTOR_RUNNER_ENABLE')
-
-
 def run():
     # sleep a bit to let the workers start at ease
     time.sleep(START_DELAY)
@@ -57,42 +44,3 @@ def run():
     channels = os.environ.get('ODOO_CONNECTOR_CHANNELS')
     runner = OdooConnectorRunner(port or 8069, channels or 'root:1')
     runner.run_forever()
-
-
-orig_prefork_start = server.PreforkServer.start
-orig_threaded_start = server.ThreadedServer.start
-orig_gevent_start = server.GeventServer.start
-
-
-def prefork_start(server, *args, **kwargs):
-    res = orig_prefork_start(server, *args, **kwargs)
-    if enable and not config['stop_after_init']:
-        _logger.info("starting jobrunner thread (in prefork server)")
-        thread = Thread(target=run)
-        thread.daemon = True
-        thread.start()
-    return res
-
-
-def threaded_start(server, *args, **kwargs):
-    res = orig_threaded_start(server, *args, **kwargs)
-    if enable and not config['stop_after_init']:
-        _logger.info("starting jobrunner thread (in threaded server)")
-        thread = Thread(target=run)
-        thread.daemon = True
-        thread.start()
-    return res
-
-
-def gevent_start(server, *args, **kwargs):
-    res = orig_gevent_start(server, *args, **kwargs)
-    if enable and not config['stop_after_init']:
-        _logger.info("starting jobrunner thread (in gevent server)")
-        # TODO: gevent spawn?
-        raise RuntimeError("not implemented")
-    return res
-
-
-server.PreforkServer.start = prefork_start
-server.ThreadedServer.start = threaded_start
-server.GeventServer.start = gevent_start

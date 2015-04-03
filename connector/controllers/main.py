@@ -5,8 +5,8 @@ from cStringIO import StringIO
 from psycopg2 import OperationalError
 
 import openerp
-from openerp import http
-from openerp.service.model import PG_CONCURRENCY_ERRORS_TO_RETRY
+from openerp.addons.web import http
+from openerp.osv.osv import PG_CONCURRENCY_ERRORS_TO_RETRY
 
 from ..session import ConnectorSessionHandler
 from ..queue.job import (OpenERPJobStorage,
@@ -28,6 +28,7 @@ PG_RETRY = 5  # seconds
 
 class RunJobController(http.Controller):
 
+    _cp_path = "/connector"
     job_storage_class = OpenERPJobStorage
 
     def _load_job(self, session, job_uuid):
@@ -42,8 +43,8 @@ class RunJobController(http.Controller):
             raise
         return job
 
-    @http.route('/runjob', type='http', auth='none')
-    def handler(self, db, job_uuid, **kw):
+    @http.httprequest
+    def runjob(self, request, db, job_uuid, **kw):
 
         session_hdl = ConnectorSessionHandler(db,
                                               openerp.SUPERUSER_ID)

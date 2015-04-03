@@ -124,7 +124,7 @@ class Database:
 
     def __init__(self, db_name):
         self.db_name = db_name
-        self.conn = psycopg2.connect(openerp.sql_db.dsn(db_name)[1])
+        self.conn = psycopg2.connect(openerp.sql_db.dsn(db_name))
         self.conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
         self.has_connector = self._has_connector()
         if self.has_connector:
@@ -204,7 +204,8 @@ class Database:
 
     def set_job_enqueued(self, uuid):
         with closing(self.conn.cursor()) as cr:
-            cr.execute("UPDATE queue_job SET state=%s, date_enqueued=NOW() "
+            cr.execute("UPDATE queue_job SET state=%s, "
+                       "date_enqueued=date_trunc('seconds', now()::timestamp) "
                        "WHERE uuid=%s",
                        (STATE_ENQUEUED, uuid))
 
@@ -221,7 +222,11 @@ class OdooConnectorRunner:
         if openerp.tools.config['db_name']:
             db_names = openerp.tools.config['db_name'].split(',')
         else:
-            db_names = openerp.service.db.exp_list()
+            services = openerp.netsvc.ExportService._services
+            if services.get('db'):
+                db_names = services['db'].exp_list(True)
+            else:
+                db_names = []
         dbfilter = openerp.tools.config['dbfilter']
         if dbfilter:
             db_names = [d for d in db_names if re.match(dbfilter, d)]
@@ -253,7 +258,7 @@ class OdooConnectorRunner:
                          job.uuid, job.db_name)
             self.db_by_name[job.db_name].set_job_enqueued(job.uuid)
             _async_http_get('http://localhost:%s'
-                            '/runjob?db=%s&job_uuid=%s' %
+                            '/connector/runjob?db=%s&job_uuid=%s' %
                             (self.port, job.db_name, job.uuid,))
 
     def process_notifications(self):

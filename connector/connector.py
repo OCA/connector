@@ -83,6 +83,10 @@ def install_in_connector():
 install_in_connector()
 
 
+def is_module_installed(pool, module_name):
+    return bool(pool.get('%s.installed' % module_name))
+
+
 def get_openerp_module(cls_or_func):
     """ For a top level function or class, returns the
     name of the OpenERP module where it lives.

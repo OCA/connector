@@ -186,6 +186,7 @@ class OpenERPJobStorage(JobStorage):
                 'date_started': False,
                 'date_done': False,
                 'eta': False,
+                'func_name': job_.func_name,
                 }
 
         if job_.date_enqueued:
@@ -616,6 +617,9 @@ class Job(object):
         return self.func.related_action(session, self)
 
 
+JOB_REGISTRY = set()
+
+
 def job(func):
     """ Decorator for jobs.
 
@@ -684,6 +688,7 @@ def job(func):
             model_name=model_name,
             *args,
             **kwargs)
+    JOB_REGISTRY.add(func)
     func.delay = delay
     return func
 

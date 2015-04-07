@@ -24,6 +24,14 @@ from contextlib import contextmanager
 import openerp
 from openerp.modules.registry import RegistryManager
 
+<<<<<<< HEAD
+=======
+from .connector import is_module_installed
+from .deprecate import log_deprecate
+
+_logger = logging.getLogger(__name__)
+
+>>>>>>> b9134e8... Allow to configure the channels on the job functions
 
 class ConnectorSessionHandler(object):
     """ Allow to create a new instance of
@@ -201,4 +209,4 @@ class ConnectorSession(object):
         model with name ``module_name.installed`` is loaded in the
         registry.
         """
-        return bool(self.pool.get('%s.installed' % module_name))
+        return is_module_installed(self.pool, module_name)

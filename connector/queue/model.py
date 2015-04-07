@@ -27,10 +27,11 @@ from openerp.osv import orm, fields
 from openerp.tools import DEFAULT_SERVER_DATETIME_FORMAT
 from openerp.tools.translate import _
 
-from .job import STATES, DONE, PENDING, OpenERPJobStorage
+from .job import STATES, DONE, PENDING, OpenERPJobStorage, JOB_REGISTRY
 from .worker import WORKER_TIMEOUT
 from ..session import ConnectorSession
 from .worker import watcher
+from ..connector import get_openerp_module, is_module_installed
 
 _logger = logging.getLogger(__name__)
 
@@ -46,6 +47,7 @@ class QueueJob(orm.Model):
 
     _removal_interval = 30  # days
 
+<<<<<<< HEAD
     _columns = {
         'worker_id': fields.many2one('queue.worker', string='Worker',
                                      ondelete='set null', readonly=True),
@@ -84,6 +86,66 @@ class QueueJob(orm.Model):
     }
 
     def open_related_action(self, cr, uid, ids, context=None):
+=======
+    worker_id = fields.Many2one(comodel_name='queue.worker',
+                                string='Worker',
+                                ondelete='set null',
+                                readonly=True)
+    uuid = fields.Char(string='UUID',
+                       readonly=True,
+                       select=True,
+                       required=True)
+    user_id = fields.Many2one(comodel_name='res.users',
+                              string='User ID',
+                              required=True)
+    company_id = fields.Many2one(comodel_name='res.company',
+                                 string='Company', select=True)
+    name = fields.Char(string='Description', readonly=True)
+    func_string = fields.Char(string='Task', readonly=True)
+    func = fields.Binary(string='Pickled Function',
+                         readonly=True,
+                         required=True)
+    state = fields.Selection(STATES,
+                             string='State',
+                             readonly=True,
+                             required=True,
+                             select=True)
+    priority = fields.Integer()
+    exc_info = fields.Text(string='Exception Info', readonly=True)
+    result = fields.Text(string='Result', readonly=True)
+    date_created = fields.Datetime(string='Created Date', readonly=True)
+    date_started = fields.Datetime(string='Start Date', readonly=True)
+    date_enqueued = fields.Datetime(string='Enqueue Time', readonly=True)
+    date_done = fields.Datetime(string='Date Done', readonly=True)
+    eta = fields.Datetime(string='Execute only after')
+    active = fields.Boolean(default=True)
+    model_name = fields.Char(string='Model', readonly=True)
+    retry = fields.Integer(string='Current try')
+    max_retries = fields.Integer(
+        string='Max. retries',
+        help="The job will fail if the number of tries reach the "
+             "max. retries.\n"
+             "Retries are infinite when empty.",
+    )
+    func_name = fields.Char(readonly=True)
+    job_function_id = fields.Many2one(comodel_name='queue.job.function',
+                                      compute='_compute_channel',
+                                      readonly=True,
+                                      store=True)
+    # for searching without JOIN on channels
+    channel = fields.Char(compute='_compute_channel', store=True, select=True)
+
+    @api.one
+    @api.depends('func_name', 'job_function_id.channel_id')
+    def _compute_channel(self):
+        func_model = self.env['queue.job.function']
+        function = func_model.search([('name', '=', self.func_name)])
+        self.job_function_id = function
+        self.channel = self.job_function_id.channel
+
+    @api.multi
+    def open_related_action(self):
+>>>>>>> b9134e8... Allow to configure the channels on the job functions
         """ Open the related action associated to the job """
         if hasattr(ids, '__iter__'):
             assert len(ids) == 1, "1 ID expected, got %s" % ids
@@ -404,3 +466,96 @@ class requeue_job(orm.TransientModel):
         job_ids = [job.id for job in form.job_ids]
         self.pool.get('queue.job').requeue(cr, uid, job_ids, context=context)
         return {'type': 'ir.actions.act_window_close'}
+
+
+class JobChannel(models.Model):
+    _name = 'queue.job.channel'
+    _description = 'Job Channels'
+
+    name = fields.Char()
+    complete_name = fields.Char(compute='_compute_complete_name',
+                                string='Complete Name',
+                                store=True,
+                                readonly=True)
+    parent_id = fields.Many2one(comodel_name='queue.job.channel',
+                                string='Parent Channel',
+                                ondelete='restrict')
+    job_function_ids = fields.One2many(comodel_name='queue.job.function',
+                                       inverse_name='channel_id',
+                                       string='Job Functions')
+
+    _sql_constraints = [
+        ('name_uniq',
+         'unique(complete_name)',
+         'Channel complete name must be unique'),
+    ]
+
+    @api.one
+    @api.depends('name', 'parent_id', 'parent_id.name')
+    def _compute_complete_name(self):
+        if not self.name:
+            return  # new record
+        channel = self
+        parts = [channel.name]
+        while channel.parent_id:
+            channel = channel.parent_id
+            parts.append(channel.name)
+        self.complete_name = '.'.join(reversed(parts))
+
+    @api.one
+    @api.constrains('parent_id')
+    def parent_required(self):
+        if self.name != 'root' and not self.parent_id:
+            raise exceptions.ValidationError(_('Parent channel required.'))
+
+    @api.multi
+    def write(self, values):
+        for channel in self:
+            if (not self.env.context.get('install_mode') and
+                    channel.name == 'root' and
+                    ('name' in values or 'parent_id' in values)):
+                raise exceptions.Warning(_('Cannot change the root channel'))
+        return super(JobChannel, self).write(values)
+
+    @api.multi
+    def unlink(self):
+        for channel in self:
+            if channel.name == 'root':
+                raise exceptions.Warning(_('Cannot remove the root channel'))
+        return super(JobChannel, self).unlink()
+
+    @api.multi
+    def name_get(self):
+        result = []
+        for record in self:
+            result.append((record.id, record.complete_name))
+        return result
+
+
+class JobFunction(models.Model):
+    _name = 'queue.job.function'
+    _description = 'Job Functions'
+    _log_access = False
+
+    @api.model
+    def _default_channel(self):
+        return self.env.ref('connector.channel_root')
+
+    name = fields.Char(select=True)
+    channel_id = fields.Many2one(comodel_name='queue.job.channel',
+                                 string='Channel',
+                                 required=True,
+                                 default=_default_channel)
+    channel = fields.Char(related='channel_id.complete_name',
+                          store=True,
+                          readonly=True)
+
+    @api.model
+    def _setup_complete(self):
+        super(JobFunction, self)._setup_complete()
+        for func in JOB_REGISTRY:
+            if not is_module_installed(self.pool, get_openerp_module(func)):
+                continue
+            func_name = '%s.%s' % (func.__module__, func.__name__)
+            if not self.search_count([('name', '=', func_name)]):
+                self.create({'name': func_name})

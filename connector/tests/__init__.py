@@ -29,3 +29,5 @@ from . import test_producer
 from . import test_connector
 from . import test_mapper
 from . import test_related_action
+from . import test_runner_channels
+from . import test_runner_runner

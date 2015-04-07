@@ -41,4 +41,12 @@
         </record>
 
     </data>
+
+    <data noupdate="0">
+
+        <record model="queue.job.channel" id="channel_root">
+            <field name="name">root</field>
+        </record>
+
+    </data>
 </openerp>

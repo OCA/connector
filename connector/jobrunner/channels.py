@@ -362,7 +362,11 @@ class Channel(object):
         return self.children.get(subchannel_name)
 
     def __str__(self):
+<<<<<<< HEAD
         return "%s(C:%d,Q:%d,R:%d,F:%d)" % (self.fullname,
+=======
+        return "%s(W:%d,Q:%d,R:%d,F:%d)" % (self.fullname,
+>>>>>>> cba40d6... Show the channels full names in the logs
                                             self.capacity,
                                             len(self._queue),
                                             len(self._running),
@@ -383,7 +387,11 @@ class Channel(object):
         """
         self.remove(job)
         _logger.debug("job %s marked done in channel %s",
+<<<<<<< HEAD
                       job.uuid, self)
+=======
+                      job.uuid, self.fullname)
+>>>>>>> cba40d6... Show the channels full names in the logs
 
     def set_pending(self, job):
         """ Mark a job as pending.
@@ -398,7 +406,11 @@ class Channel(object):
             if self.parent:
                 self.parent.remove(job)
             _logger.debug("job %s marked pending in channel %s",
+<<<<<<< HEAD
                           job.uuid, self)
+=======
+                          job.uuid, self.fullname)
+>>>>>>> cba40d6... Show the channels full names in the logs
 
     def set_running(self, job):
         """ Mark a job as running.
@@ -412,7 +424,11 @@ class Channel(object):
             if self.parent:
                 self.parent.set_running(job)
             _logger.debug("job %s marked running in channel %s",
+<<<<<<< HEAD
                           job.uuid, self)
+=======
+                          job.uuid, self.fullname)
+>>>>>>> cba40d6... Show the channels full names in the logs
 
     def set_failed(self, job):
         """ Mark the job as failed. """
@@ -423,6 +439,7 @@ class Channel(object):
             if self.parent:
                 self.parent.remove(job)
             _logger.debug("job %s marked failed in channel %s",
+<<<<<<< HEAD
                           job.uuid, self)
 
     def get_jobs_to_run(self, now):
@@ -431,6 +448,9 @@ class Channel(object):
         This works by enqueuing jobs that are ready to run in children
         channels, then yielding jobs from the channel queue until
         ``capacity`` jobs are marked running in the channel.
+=======
+                          job.uuid, self.fullname)
+>>>>>>> cba40d6... Show the channels full names in the logs
 
         :param now: the current datetime using a type that is comparable to
                     jobs eta attribute
@@ -455,7 +475,12 @@ class Channel(object):
                 return
             self._running.add(job)
             _logger.debug("job %s marked running in channel %s",
+<<<<<<< HEAD
                           job.uuid, self)
+=======
+                          job.uuid, self.fullname)
+            _logger.debug("channel %s", self)
+>>>>>>> cba40d6... Show the channels full names in the logs
             yield job
 
 

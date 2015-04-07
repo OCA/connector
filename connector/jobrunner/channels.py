@@ -353,7 +353,7 @@ class Channel(object):
         return self.children.get(subchannel_name)
 
     def __str__(self):
-        return "%s(W:%d,Q:%d,R:%d,F:%d)" % (self.name,
+        return "%s(W:%d,Q:%d,R:%d,F:%d)" % (self.fullname,
                                             self.capacity,
                                             len(self._queue),
                                             len(self._running),
@@ -369,7 +369,7 @@ class Channel(object):
     def set_done(self, job):
         self.remove(job)
         _logger.debug("job %s marked done in channel %s",
-                      job.uuid, self.name)
+                      job.uuid, self.fullname)
 
     def set_pending(self, job):
         if job not in self._queue:
@@ -379,7 +379,7 @@ class Channel(object):
             if self.parent:
                 self.parent.remove(job)
             _logger.debug("job %s marked pending in channel %s",
-                          job.uuid, self.name)
+                          job.uuid, self.fullname)
 
     def set_running(self, job):
         if job not in self._running:
@@ -389,7 +389,7 @@ class Channel(object):
             if self.parent:
                 self.parent.set_running(job)
             _logger.debug("job %s marked running in channel %s",
-                          job.uuid, self.name)
+                          job.uuid, self.fullname)
 
     def set_failed(self, job):
         if job not in self._failed:
@@ -399,7 +399,7 @@ class Channel(object):
             if self.parent:
                 self.parent.remove(job)
             _logger.debug("job %s marked failed in channel %s",
-                          job.uuid, self.name)
+                          job.uuid, self.fullname)
 
     def get_jobs_to_run(self):
         # enqueue jobs of children channels
@@ -420,7 +420,7 @@ class Channel(object):
                 return
             self._running.add(job)
             _logger.debug("job %s marked running in channel %s",
-                          job.uuid, self.name)
+                          job.uuid, self.fullname)
             _logger.debug("channel %s", self)
             yield job
 

@@ -28,6 +28,7 @@ from heapq import heappush, heappop
 import logging
 from weakref import WeakValueDictionary
 
+from ..exception import ChannelNotFound
 from ..queue.job import PENDING, ENQUEUED, STARTED, FAILED, DONE
 NOT_DONE = (PENDING, ENQUEUED, STARTED, FAILED)
 
@@ -279,16 +280,16 @@ class ChannelQueue(object):
 
 
 class Channel(object):
-    """A channel for jobs, with a maximum number of workers.
+    """A channel for jobs, with a maximum capacity.
 
     Job channels are joined in a hierarchy down to the root channel.
-    When a job channel has free workers, jobs are dequeued, marked
+    When a job channel has available capacity, jobs are dequeued, marked
     as running in the channel and are inserted into the queue of the
-    parent channel where they wait for free workers and so on.
+    parent channel where they wait for available capacity and so on.
 
     Job channels can be visualized as water channels with a given flow
-    limit (= workers). Channels are joined together in a downstream channel
-    and the flow limit of the downstream channel limit upstream channels.
+    limit (= capacity). Channels are joined together in a downstream channel
+    and the flow limit of the downstream channel limits upstream channels.
 
     ---------------------+
                          |
@@ -302,9 +303,9 @@ class Channel(object):
     ---------------------+-----------------------
 
     The above diagram illustrates two channels joining in the root channel.
-    The root channel has 5 workers, and 4 running jobs coming from Channel A.
-    Channel A has maximum 4 workers, all in use (passed down to the root
-    channel), and 12 jobs enqueued. Channel B has maximum 1 worker,
+    The root channel has a capacity of 5, and 4 running jobs coming from
+    Channel A. Channel A has a capacity of 4, all in use (passed down to the
+    root channel), and 12 jobs enqueued. Channel B has a capacity of 1,
     none in use. This means that whenever a new job comes in channel B,
     there will be available room for it to run in the root channel.
 
@@ -317,29 +318,29 @@ class Channel(object):
     and compete normally according to their properties (priority, etc).
 
     Using this technique, it is possible to enforce sequence in a channel
-    with 1 worker. It is also possible to dedicate a channel with a
-    limited number of workers for application-autocreated subchannels
+    with a capacity of 1. It is also possible to dedicate a channel with a
+    limited capacity for application-autocreated subchannels
     without risking to overflow the system.
     """
 
-    def __init__(self, name, parent, workers=1, sequential=False):
+    def __init__(self, name, parent, capacity=None, sequential=False):
         self.name = name
         self.parent = parent
         if self.parent:
             self.parent.children.append(self)
         self.children = []
-        self.workers = None
-        self.sequential = False
+        self.capacity = capacity
+        self.sequential = sequential
         self._queue = ChannelQueue()
         self._running = SafeSet()
         self._failed = SafeSet()
 
     def configure(self, config):
         assert config['name'] == self.fullname
-        self.workers = config.get('workers', 1)
+        self.capacity = config.get('capacity', None)
         self.sequential = bool(config.get('sequential', False))
-        if self.sequential and self.workers != 1:
-            raise ValueError("A sequential channel can have only one worker")
+        if self.sequential and self.capacity != 1:
+            raise ValueError("A sequential channel must have a capacity of 1")
 
     @property
     def fullname(self):
@@ -356,7 +357,7 @@ class Channel(object):
 
     def __str__(self):
         return "%s(W:%d,Q:%d,R:%d,F:%d)" % (self.name,
-                                            self.workers,
+                                            self.capacity,
                                             len(self._queue),
                                             len(self._running),
                                             len(self._failed))
@@ -416,7 +417,7 @@ class Channel(object):
         if self.sequential and len(self._failed):
             return
         # yield jobs that are ready to run
-        while not self.workers or len(self._running) < self.workers:
+        while not self.capacity or len(self._running) < self.capacity:
             job = self._queue.pop(now=datetime.now())
             if not job:
                 return
@@ -431,7 +432,7 @@ class ChannelManager(object):
 
     def __init__(self):
         self._jobs_by_uuid = WeakValueDictionary()
-        self._root_channel = Channel(name='root', parent=None)
+        self._root_channel = Channel(name='root', parent=None, capacity=1)
         self._channels_by_name = WeakValueDictionary(root=self._root_channel)
 
     @classmethod
@@ -439,9 +440,9 @@ class ChannelManager(object):
         """Parse a simple channels configuration string.
 
         The general form is as follow:
-        channel(.subchannel)*(:workers(:key(=value)?)*)?,...
+        channel(.subchannel)*(:capacity(:key(=value)?)*)?,...
 
-        If workers is absent, it defaults to 1.
+        If capacity is absent, it defaults to 1.
         If a key is present without value, it gets True as value.
         When declaring subchannels, the root channel may be omitted
         (ie sub:4 is the same as root.sub:4).
@@ -450,15 +451,17 @@ class ChannelManager(object):
 
         >>> from pprint import pprint as pp
         >>> pp(ChannelManager.parse_simple_config('root:4'))
-        [{'name': 'root', 'workers': 4}]
+        [{'capacity': 4, 'name': 'root'}]
         >>> pp(ChannelManager.parse_simple_config('root:4,root.sub:2'))
-        [{'name': 'root', 'workers': 4}, {'name': 'root.sub', 'workers': 2}]
+        [{'capacity': 4, 'name': 'root'}, {'capacity': 2, 'name': 'root.sub'}]
         >>> pp(ChannelManager.parse_simple_config('root:4,root.sub:2:'
         ...                                       'sequential:k=v'))
-        [{'name': 'root', 'workers': 4},
-         {'k': 'v', 'name': 'root.sub', 'sequential': True, 'workers': 2}]
+        [{'capacity': 4, 'name': 'root'},
+         {'capacity': 2, 'k': 'v', 'name': 'root.sub', 'sequential': True}]
         >>> pp(ChannelManager.parse_simple_config('root'))
-        [{'name': 'root', 'workers': 1}]
+        [{'capacity': 1, 'name': 'root'}]
+        >>> pp(ChannelManager.parse_simple_config('sub:2'))
+        [{'capacity': 2, 'name': 'root.sub'}]
         """
         res = []
         for channel_config_string in config_string.split(','):
@@ -468,15 +471,17 @@ class ChannelManager(object):
             if not name:
                 raise ValueError('Invalid channel config %s: '
                                  'missing channel name' % config_string)
+            if not name.startswith('root.') and name != 'root':
+                name = 'root.' + name
             config['name'] = name
             if len(config_items) > 1:
-                workers = config_items[1]
+                capacity = config_items[1]
                 try:
-                    config['workers'] = int(workers)
+                    config['capacity'] = int(capacity)
                 except:
                     raise ValueError('Invalid channel config %s: '
-                                     'invalid workers %s' %
-                                     (config_string, workers))
+                                     'invalid capacity %s' %
+                                     (config_string, capacity))
                 for config_item in config_items[2:]:
                     kv = config_item.split('=')
                     if len(kv) == 1:
@@ -493,11 +498,24 @@ class ChannelManager(object):
                                          (config_string, k))
                     config[k] = v
             else:
-                config['workers'] = 1
+                config['capacity'] = 1
             res.append(config)
         return res
 
     def simple_configure(self, config_string):
+        """Configure the channel manager from a simple configuration string
+
+        >>> cm = ChannelManager()
+        >>> c = cm.get_channel_by_name('root')
+        >>> c.capacity
+        1
+        >>> cm.simple_configure('root:4,autosub.sub:2')
+        >>> cm.get_channel_by_name('root').capacity
+        4
+        >>> cm.get_channel_by_name('root.autosub').capacity
+        >>> cm.get_channel_by_name('root.autosub.sub').capacity
+        2
+        """
         for config in ChannelManager.parse_simple_config(config_string):
             self.get_channel_from_config(config)
 
@@ -506,12 +524,16 @@ class ChannelManager(object):
 
         If the channel does not exist it is created.
         The configuration is applied on the channel before returning it.
+        If some of the parent channels are missing when creating a subchannel,
+        the parent channels are auto created with an infinite capacity
+        (except for the root channel, which defaults to a capacity of 1
+        when not configured explicity).
         """
         channel = self.get_channel_by_name(config['name'], autocreate=True)
         channel.configure(config)
         return channel
 
-    def get_channel_by_name(self, channel_name, autocreate):
+    def get_channel_by_name(self, channel_name, autocreate=False):
         """Return a Channel object by its name.
 
         If it does not exist and autocreate is True, it is created
@@ -535,18 +557,23 @@ class ChannelManager(object):
         'sub'
         >>> c.fullname
         'root.sub'
+        >>> c = cm.get_channel_by_name('autosub.sub', autocreate=True)
+        >>> c.name
+        'sub'
+        >>> c.fullname
+        'root.autosub.sub'
         """
         if channel_name in self._channels_by_name:
             return self._channels_by_name[channel_name]
         if not autocreate:
-            raise RuntimeError('Channel %s not found' % channel_name)
+            raise ChannelNotFound('Channel %s not found' % channel_name)
         parent = self._root_channel
         for subchannel_name in channel_name.split('.'):
             if subchannel_name == 'root':
                 continue
             subchannel = parent.get_subchannel_by_name(subchannel_name)
             if not subchannel:
-                subchannel = Channel(subchannel_name, parent)
+                subchannel = Channel(subchannel_name, parent, capacity=None)
                 self._channels_by_name[subchannel.fullname] = subchannel
             parent = subchannel
         return parent

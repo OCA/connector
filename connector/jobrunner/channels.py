@@ -575,50 +575,43 @@ class ChannelManager(object):
             parent = subchannel
         return parent
 
-    def notify(self, db_name, channel_config_string, uuid,
+    def notify(self, db_name, channel_name, uuid,
                seq, date_created, priority, eta, state):
-        if not channel_config_string:
-            channel = self._root_channel
-        else:
-            configs = ChannelManager.parse_simple_config(channel_config_string)
-            if len(configs) != 1:
-                raise ValueError('%s is not a configuration for '
-                                 'a single channel' % channel_config_string)
-            config = configs[0]
-            if config['name'] == 'root':
-                # don't let applications reconfigure the root channel
-                channel = self.get_channel_by_name(config['name'])
-            else:
-                channel = self.get_channel_from_config(config)
         job = self._jobs_by_uuid.get(uuid)
         if not job:
+            if not channel_name:
+                channel = self._root_channel
+            else:
+                try:
+                    channel = self.get_channel_by_name(channel_name)
+                except ChannelNotFound:
+                    _logger.warning('unknown channel %s, '
+                                    'using root channel for job %s',
+                                    channel_name, uuid)
+                    channel = self._root_channel
             job = ChannelJob(db_name, channel, uuid,
                              seq, date_created, priority, eta)
             self._jobs_by_uuid[uuid] = job
-        # TODO: handle sequence change
-        assert job.seq == seq
-        # db_name is invariant
-        assert job.db_name == db_name
-        # date_created is invariant
-        assert job.date_created == date_created
-        # TODO: handle priority change
-        assert job.priority == priority
-        # TODO: handle eta change
-        assert job.eta == eta
-        # TODO: handle channel change
-        assert job.channel == channel
+        else:
+            # db_name is invariant
+            assert job.db_name == db_name
+            # date_created is invariant
+            assert job.date_created == date_created
+            # TODO: handle sequence change
+            # TODO: handle priority change
+            # TODO: handle eta change
+            # TODO: handle channel change
         # state transitions
         if not state or state == DONE:
-            channel.set_done(job)
+            job.channel.set_done(job)
         elif state == PENDING:
-            channel.set_pending(job)
+            job.channel.set_pending(job)
         elif state in (ENQUEUED, STARTED):
-            channel.set_running(job)
+            job.channel.set_running(job)
         elif state == FAILED:
-            channel.set_failed(job)
+            job.channel.set_failed(job)
         else:
             _logger.error("unexpected state %s for job %s", state, job)
-        # _logger.debug("channel %s", self._root_channel)
 
     def remove_job(self, uuid):
         job = self._jobs_by_uuid.get(uuid)

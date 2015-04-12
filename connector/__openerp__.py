@@ -28,6 +28,9 @@
  'category': 'Generic Modules',
  'depends': ['mail'
              ],
+ 'external_dependencies': {'python': ['requests'
+                                      ],
+                           },
  'data': ['security/connector_security.xml',
           'security/ir.model.access.csv',
           'queue/model_view.xml',

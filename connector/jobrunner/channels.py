@@ -34,7 +34,7 @@ NOT_DONE = (PENDING, ENQUEUED, STARTED, FAILED)
 _logger = logging.getLogger(__name__)
 
 
-class PriorityQueue:
+class PriorityQueue(object):
     """A priority queue that supports removing arbitrary objects.
 
     Adding an object already in the queue is a no op.
@@ -140,7 +140,7 @@ class SafeSet(set):
             pass
 
 
-class ChannelJob:
+class ChannelJob(object):
     """A channel job is attached to a channel and holds the properties of a
     job that are necessary to prioritise them.
 
@@ -229,7 +229,7 @@ class ChannelJob:
                     cmp(self.seq, other.seq))
 
 
-class ChannelQueue:
+class ChannelQueue(object):
     """A channel queue is a priority queue for jobs that returns
     jobs with a past ETA first.
 
@@ -278,7 +278,7 @@ class ChannelQueue:
             return self._queue.pop()
 
 
-class Channel:
+class Channel(object):
     """A channel for jobs, with a maximum number of workers.
 
     Job channels are joined in a hierarchy down to the root channel.
@@ -427,7 +427,7 @@ class Channel:
             yield job
 
 
-class ChannelManager:
+class ChannelManager(object):
 
     def __init__(self):
         self._jobs_by_uuid = WeakValueDictionary()

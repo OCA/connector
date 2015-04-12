@@ -75,3 +75,7 @@ class IDMissingInBackend(JobError):
 
 class ManyIDSInBackend(JobError):
     """Unique key exists many times in backend"""
+
+
+class ChannelNotFound(ConnectorException):
+    """ A channel could not be found """

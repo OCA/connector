@@ -287,6 +287,8 @@ class ConnectorRunner:
             # outer loop does exception recovery
             try:
                 _logger.info("initializing database connections")
+                # TODO: how to detect new databases or databases
+                #       on which connector is installed after server start?
                 self.initialize_databases()
                 _logger.info("database connections ready")
                 # inner loop does the normal processing

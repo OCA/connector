@@ -154,27 +154,33 @@ class ChannelJob:
     Here are some examples.
 
     j1 comes before j2 before it has a smaller date_created
-    >>> j1 = ChannelJob(None, 1, seq=0, date_created=1, priority=9, eta=None)
+    >>> j1 = ChannelJob(None, None, 1,
+    ...                 seq=0, date_created=1, priority=9, eta=None)
     >>> j1
     <ChannelJob 1>
-    >>> j2 = ChannelJob(None, 2, seq=0, date_created=2, priority=9, eta=None)
+    >>> j2 = ChannelJob(None, None, 2,
+    ...                 seq=0, date_created=2, priority=9, eta=None)
     >>> j1 < j2
     True
 
     j3 comes first because it has lower priority,
     despite having a creation date after j1 and j2
-    >>> j3 = ChannelJob(None, 3, seq=0, date_created=3, priority=2, eta=None)
+    >>> j3 = ChannelJob(None, None, 3,
+    ...                 seq=0, date_created=3, priority=2, eta=None)
     >>> j3 < j1
     True
 
     j4 and j5 comes even before j3, because they have an eta
-    >>> j4 = ChannelJob(None, 4, seq=0, date_created=4, priority=9, eta=9)
-    >>> j5 = ChannelJob(None, 5, seq=0, date_created=5, priority=9, eta=9)
+    >>> j4 = ChannelJob(None, None, 4,
+    ...                 seq=0, date_created=4, priority=9, eta=9)
+    >>> j5 = ChannelJob(None, None, 5,
+    ...                 seq=0, date_created=5, priority=9, eta=9)
     >>> j4 < j5 < j3
     True
 
     j6 has same date_created and priority as j5 but a smaller eta
-    >>> j6 = ChannelJob(None, 6, seq=0, date_created=5, priority=9, eta=2)
+    >>> j6 = ChannelJob(None, None, 6,
+    ...                 seq=0, date_created=5, priority=9, eta=2)
     >>> j6 < j4 < j5
     True
 
@@ -184,7 +190,8 @@ class ChannelJob:
 
     j0 has the same properties as j1 but they are not considered
     equal as they are different instances
-    >>> j0 = ChannelJob(None, 1, seq=0, date_created=1, priority=9, eta=None)
+    >>> j0 = ChannelJob(None, None, 1,
+    ...                 seq=0, date_created=1, priority=9, eta=None)
     >>> j0 == j1
     False
     >>> j0 == j0
@@ -227,9 +234,12 @@ class ChannelQueue:
     jobs with a past ETA first.
 
     >>> q = ChannelQueue()
-    >>> j1 = ChannelJob(None, 1, seq=0, date_created=1, priority=1, eta=10)
-    >>> j2 = ChannelJob(None, 2, seq=0, date_created=2, priority=1, eta=None)
-    >>> j3 = ChannelJob(None, 3, seq=0, date_created=3, priority=1, eta=None)
+    >>> j1 = ChannelJob(None, None, 1,
+    ...                 seq=0, date_created=1, priority=1, eta=10)
+    >>> j2 = ChannelJob(None, None, 2,
+    ...                 seq=0, date_created=2, priority=1, eta=None)
+    >>> j3 = ChannelJob(None, None, 3,
+    ...                 seq=0, date_created=3, priority=1, eta=None)
     >>> q.add(j1)
     >>> q.add(j2)
     >>> q.add(j3)
@@ -595,8 +605,3 @@ class ChannelManager:
 
     def get_jobs_to_run(self):
         return self._root_channel.get_jobs_to_run()
-
-
-if __name__ == '__main__':
-    import doctest
-    doctest.testmod()

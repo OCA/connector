@@ -242,8 +242,7 @@ class ConnectorRunner:
                 _logger.debug('connector is not installed for db %s', db_name)
             else:
                 self.db_by_name[db_name] = db
-                for job_data in db.select_jobs('state in %s',
-                                               (NOT_DONE,)):
+                for job_data in db.select_jobs('state in %s', (NOT_DONE,)):
                     self.channel_manager.notify(db_name, *job_data)
                 _logger.info('connector runner ready for db %s', db_name)
 
@@ -254,7 +253,7 @@ class ConnectorRunner:
             self.db_by_name[job.db_name].set_job_enqueued(job.uuid)
             _async_http_get('http://localhost:%s'
                             '/connector/runjob?db=%s&job_uuid=%s' %
-                            (self.port, job.db_name, job.uuid,))
+                            (self.port, job.db_name, job.uuid))
 
     def process_notifications(self):
         for db in self.db_by_name.values():

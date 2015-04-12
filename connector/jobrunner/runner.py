@@ -120,7 +120,7 @@ def _async_http_get(url):
     thread.start()
 
 
-class Database:
+class Database(object):
 
     def __init__(self, db_name):
         self.db_name = db_name
@@ -209,9 +209,9 @@ class Database:
                        (ENQUEUED, uuid))
 
 
-class ConnectorRunner:
+class ConnectorRunner(object):
 
-    def __init__(self, port=8069, channel_config_string='root:4'):
+    def __init__(self, port=8069, channel_config_string='root:1'):
         self.port = port
         self.channel_manager = ChannelManager()
         self.channel_manager.simple_configure(channel_config_string)

@@ -327,8 +327,8 @@ class Channel(object):
         self.name = name
         self.parent = parent
         if self.parent:
-            self.parent.children.append(self)
-        self.children = []
+            self.parent.children[name] = self
+        self.children = {}
         self.capacity = capacity
         self.sequential = sequential
         self._queue = ChannelQueue()
@@ -350,10 +350,7 @@ class Channel(object):
             return self.name
 
     def get_subchannel_by_name(self, subchannel_name):
-        for child in self.children:
-            if child.name == subchannel_name:
-                return child
-        return None
+        return self.children.get(subchannel_name)
 
     def __str__(self):
         return "%s(W:%d,Q:%d,R:%d,F:%d)" % (self.name,
@@ -406,7 +403,7 @@ class Channel(object):
 
     def get_jobs_to_run(self):
         # enqueue jobs of children channels
-        for child in self.children:
+        for child in self.children.values():
             for job in child.get_jobs_to_run():
                 self._queue.add(job)
         # sequential channels block when there are failed jobs

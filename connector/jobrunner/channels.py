@@ -584,7 +584,12 @@ class ChannelManager(object):
             if len(configs) != 1:
                 raise ValueError('%s is not a configuration for '
                                  'a single channel' % channel_config_string)
-            channel = self.get_channel_from_config(configs[0])
+            config = configs[0]
+            if config['name'] == 'root':
+                # don't let applications reconfigure the root channel
+                channel = self.get_channel_by_name(config['name'])
+            else:
+                channel = self.get_channel_from_config(config)
         job = self._jobs_by_uuid.get(uuid)
         if not job:
             job = ChannelJob(db_name, channel, uuid,

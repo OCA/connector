@@ -11,6 +11,7 @@ from openerp.addons.connector.queue.job import (
     Job,
     OpenERPJobStorage,
     job,
+    POSTPONE_INTERVAL,
 )
 from openerp.addons.connector.session import (
     ConnectorSession,
@@ -226,8 +227,40 @@ class TestJobStorage(common.TransactionCase):
         job(dummy_task_args)
         task_a.delay(self.session, 'res.users', 'o', 'k', c='!')
         stored = self.queue_job.search(self.cr, self.uid, [])
-        self.assertEqual(len(stored), 1)
+        self.assertequal(len(stored), 1)
 
+    def test_store_postpone(self):
+        delta = timedelta(seconds=1)  # DB does not keep milliseconds
+        eta = datetime.now() + timedelta(hours=5)
+        test_job = Job(func=dummy_task_args,
+                       model_name='res.users',
+                       args=('o', 'k'),
+                       kwargs={'c': '!'},
+                       priority=15,
+                       eta=eta,
+                       description="My description")
+
+        storage = OpenERPJobStorage(self.session)
+        storage.store(test_job)
+
+        eta = datetime.now() + timedelta(hours=6)
+        test_job2 = Job(func=dummy_task_args,
+                       model_name='res.users',
+                       args=('o', 'k'),
+                       kwargs={'c': '!'},
+                       priority=15,
+                       eta=eta,
+                       description="My description")
+
+        storage = OpenERPJobStorage(self.session)
+        storage.store(test_job2)
+
+        test_job_b = Job(func=task_a)
+        storage = OpenERPJobStorage(self.session)
+        storage.store(test_job_b)
+        test_job_b.postpone('test_result', self.session, seconds=None)
+        eta2 = test_job2.eta+timedelta(seconds=POSTPONE_INTERVAL)
+        self.assertAlmostEqual(test_job_b.eta, eta2, delta=delta)
 
 class TestJobStorageMultiCompany(common.TransactionCase):
     """ Test storage of jobs """

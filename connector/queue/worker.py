@@ -71,7 +71,7 @@ class Worker(threading.Thread):
         """ Execute a job """
         def retry_postpone(job, message, seconds=None):
             with session_hdl.session() as session:
-                job.postpone(result=message, seconds=seconds)
+                job.postpone(result=message, session=session, seconds=seconds)
                 job.set_enqueued(self)
                 self.job_storage_class(session).store(job)
             self.queue.enqueue(job)

@@ -165,21 +165,19 @@ class Database(object):
     def _initialize(self):
         with closing(self.conn.cursor()) as cr:
             # this is the trigger that sends notifications when jobs change
-            # TODO: perhaps we don't need to trigger ON DELETE?
             cr.execute("""
                 DROP TRIGGER IF EXISTS queue_job_notify ON queue_job;
 
                 CREATE OR REPLACE
                     FUNCTION queue_job_notify() RETURNS trigger AS $$
-                DECLARE
-                    uuid TEXT;
                 BEGIN
                     IF TG_OP = 'DELETE' THEN
-                        uuid = OLD.uuid;
+                        IF OLD.state != 'done' THEN
+                            PERFORM pg_notify('connector', OLD.uuid);
+                        END IF;
                     ELSE
-                        uuid = NEW.uuid;
+                        PERFORM pg_notify('connector', NEW.uuid);
                     END IF;
-                    PERFORM pg_notify('connector', uuid);
                     RETURN NULL;
                 END;
                 $$ LANGUAGE plpgsql;
@@ -264,7 +262,7 @@ class ConnectorRunner(object):
                 if job_datas:
                     self.channel_manager.notify(db.db_name, *job_datas[0])
                 else:
-                    self.channel_manager.remove_job(db.db_name, uuid)
+                    self.channel_manager.remove_job(uuid)
 
     def wait_notification(self):
         for db in self.db_by_name.values():

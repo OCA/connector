@@ -317,7 +317,7 @@ class MapChild(ConnectorUnit):
     A MapChild is responsible to:
 
     * Find the :py:class:`Mapper` to convert the items
-    * Eventually filter out some lines (can be done by inheriting
+    * Possibly filter out some lines (can be done by inheriting
       :py:meth:`skip_item`)
     * Convert the items' records using the found :py:class:`Mapper`
     * Format the output values to the format expected by OpenERP or the

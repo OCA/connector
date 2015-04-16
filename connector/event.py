@@ -37,7 +37,7 @@ class Event(object):
     * session
     * model_name
 
-    Then to subscribe one or more consumers, a consumer is a function::
+    Then to subscribe one or more consumers, an event has a function::
 
         def do_something(session, model_name, a, b):
             print "Event was fired with arguments: %s, %s" % (a, b)
@@ -53,7 +53,7 @@ class Event(object):
         on_my_event.subscribe(do_something_product,
                               model_names='product.product')
 
-    We can also replace an event::
+    We can also replace an consumer::
 
         def do_something_product2(session, model_name, a, b):
             print "Consumer 2"

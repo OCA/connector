@@ -43,7 +43,7 @@ def task_wikipedia(session, subject):
 
 
 @related_action(action=unwrap_binding)
-def test_unwrap_binding(session, model_name, binding_id):
+def try_unwrap_binding(session, model_name, binding_id):
     pass
 
 
@@ -94,7 +94,7 @@ class test_related_action(unittest2.TestCase):
             def unwrap_model(self):
                 return 'res.users'
 
-        job = Job(func=test_unwrap_binding, args=('res.users', 555))
+        job = Job(func=try_unwrap_binding, args=('res.users', 555))
         session = mock.MagicMock(name='session')
         backend_record = mock.Mock(name='backend_record')
         backend = mock.Mock(name='backend')
@@ -128,7 +128,7 @@ class test_related_action(unittest2.TestCase):
             def unwrap_model(self):
                 raise ValueError('Not an inherits')
 
-        job = Job(func=test_unwrap_binding, args=('res.users', 555))
+        job = Job(func=try_unwrap_binding, args=('res.users', 555))
         session = mock.MagicMock(name='session')
         backend_record = mock.Mock(name='backend_record')
         backend = mock.Mock(name='backend')
@@ -175,7 +175,7 @@ class test_related_action_storage(common.TransactionCase):
 
     def test_unwrap_binding_not_exists(self):
         """ Call the related action on the model on non-existing record """
-        job = Job(func=test_unwrap_binding, args=('res.users', 555))
+        job = Job(func=try_unwrap_binding, args=('res.users', 555))
         storage = OpenERPJobStorage(self.session)
         storage.store(job)
         stored_job = self.queue_job.search([('uuid', '=', job.uuid)])

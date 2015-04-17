@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: Connector\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-04-15 22:28+0300\n"
-"PO-Revision-Date: 2015-04-16 22:39+0200\n"
+"PO-Revision-Date: 2015-04-17 14:04+0200\n"
 "Last-Translator: Christophe Combelles <ccomb@free.fr>\n"
 "Language-Team: fr <LL@li.org>\n"
 "Language: fr\n"
@@ -658,6 +658,90 @@ msgstr ""
 #: ../../../AUTHORS:11
 msgid "Christophe Combelles at Anybox (french translation)"
 msgstr "Christophe Combelles chez Anybox (trad française)"
+
+#: ../../project/contribute.rst:65
+msgid "Creating or maintaining a translation of this doc"
+msgstr "Créer ou maintenir une traduction de cette doc"
+
+#: ../../project/contribute.rst:67
+msgid ""
+"Install Odoo, its dependencies, sphinx, sphinx_bootstrap_theme and sphinx-"
+"intl"
+msgstr ""
+"Installez Odoo, ses dépendances, sphinx, sphinx_bootstrap_theme et sphinx-"
+"intl"
+
+#: ../../project/contribute.rst:72
+msgid "create an empty database with the connector module installed"
+msgstr "créez une nouvelle base de donnée avec le module connector installé"
+
+#: ../../project/contribute.rst:73
+msgid "``cd connector/doc``"
+msgstr "``cd connector/doc``"
+
+#: ../../project/contribute.rst:74
+msgid "rebuild the gettext .pot source catalogs: ``make gettext``"
+msgstr "reconstruisez les catalogues gettext sources .pot: ``make gettext``"
+
+#: ../../project/contribute.rst:75
+msgid ""
+"update the .po translation files from the latest .pot files (here for "
+"language 'fr'): ``sphinx-intl update -l fr -p _build/locale``"
+msgstr ""
+"mettez à jour les fichiers de traduction .po depuis les derniers fichiers ."
+"pot (ici pour la langue 'fr'): ``sphinx-intl update -l fr -p _build/locale``"
+
+#: ../../project/contribute.rst:77
+msgid ""
+"create or edit the translation in the .po files: ``poedit locale/fr/"
+"LC_MESSAGES/*.po``"
+msgstr ""
+"créez ou modifiez la traduction dans les fichiers .po : ``poedit locale/fr/"
+"LC_MESSAGES/*.po``"
+
+#: ../../project/contribute.rst:79
+msgid "compile the .po files into .mo files: ``sphinx-intl build``"
+msgstr "compilez les fichiers .po en fichiers .mo : ``sphinx-intl build``"
+
+#: ../../project/contribute.rst:80
+msgid ""
+"build the translated documentation to html: ``make SPHINXOPTS=\"-Dlanguage=fr"
+"\" html``"
+msgstr ""
+"construisez en html la documentation traduite : ``make SPHINXOPTS=\"-"
+"Dlanguage=fr\" html``"
+
+#: ../../project/contribute.rst:83
+msgid ""
+"The same using a `buildout <https://bitbucket.org/anybox/"
+"public_buildbot_buildouts/src/tip/odoo-connector.cfg>`_::"
+msgstr ""
+"La même chose en utilisant un `buildout <https://bitbucket.org/anybox/"
+"public_buildbot_buildouts/src/tip/odoo-connector.cfg>`_::"
+
+#: ../../project/contribute.rst:69
+msgid ""
+"Add `this patch <https://bitbucket.org/shimizukawa/sphinx-intl/pull-"
+"request/9/>`_ to sphinx-intl (until merged) to support *fuzzy* translations"
+msgstr ""
+"Ajoutez `ce patch <https://bitbucket.org/shimizukawa/sphinx-intl/pull-"
+"request/9/>`_ à sphinx-intl (jusqu'à ce que ce soit mergé) pour gérer les "
+"traductions *fuzzy*"
+
+#: ../../project/contribute.rst:99
+msgid "Then you can see the result in _build/html/ and submit a Pull Request"
+msgstr ""
+"Vous pouvez ensuite voir le résultat dans _build/html/ et soumettre un Pull "
+"Request"
+
+#~ msgid ""
+#~ "Add `this patch <https://bitbucket.org/shimizukawa/sphinx-intl/pull-"
+#~ "request/9/issue-9-support-fuzzy-translations>`_ to sphinx-intl (until "
+#~ "merged)"
+#~ msgstr ""
+#~ "Ajoutez `ce patch <https://bitbucket.org/shimizukawa/sphinx-intl/pull-"
+#~ "request/9/issue-9-support-fuzzy-translations>`_ to sphinx-intl (jusqu'à "
+#~ "ce qu'il soit mergé)"
 
 #~ msgid ""
 #~ "Fix: inheritance broken when an orm.Model inherit from an or."

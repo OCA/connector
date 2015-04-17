@@ -53,7 +53,7 @@ class Event(object):
         on_my_event.subscribe(do_something_product,
                               model_names='product.product')
 
-    We can also replace an consumer::
+    We can also replace a consumer::
 
         def do_something_product2(session, model_name, a, b):
             print "Consumer 2"

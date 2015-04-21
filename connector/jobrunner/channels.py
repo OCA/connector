@@ -28,6 +28,8 @@ from heapq import heappush, heappop
 import logging
 from weakref import WeakValueDictionary
 
+from openerp.tools.misc import DEFAULT_SERVER_DATETIME_FORMAT
+
 from ..exception import ChannelNotFound
 from ..queue.job import PENDING, ENQUEUED, STARTED, FAILED, DONE
 NOT_DONE = (PENDING, ENQUEUED, STARTED, FAILED)
@@ -414,8 +416,9 @@ class Channel(object):
         if self.sequential and len(self._failed):
             return
         # yield jobs that are ready to run
+        now = datetime.now().strftime(DEFAULT_SERVER_DATETIME_FORMAT)
         while not self.capacity or len(self._running) < self.capacity:
-            job = self._queue.pop(now=datetime.now())
+            job = self._queue.pop(now)
             if not job:
                 return
             self._running.add(job)

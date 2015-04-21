@@ -371,7 +371,7 @@ class Channel(object):
     def set_done(self, job):
         self.remove(job)
         _logger.debug("job %s marked done in channel %s",
-                      job.uuid, self.fullname)
+                      job.uuid, self)
 
     def set_pending(self, job):
         if job not in self._queue:
@@ -381,7 +381,7 @@ class Channel(object):
             if self.parent:
                 self.parent.remove(job)
             _logger.debug("job %s marked pending in channel %s",
-                          job.uuid, self.fullname)
+                          job.uuid, self)
 
     def set_running(self, job):
         if job not in self._running:
@@ -391,7 +391,7 @@ class Channel(object):
             if self.parent:
                 self.parent.set_running(job)
             _logger.debug("job %s marked running in channel %s",
-                          job.uuid, self.fullname)
+                          job.uuid, self)
 
     def set_failed(self, job):
         if job not in self._failed:
@@ -401,7 +401,7 @@ class Channel(object):
             if self.parent:
                 self.parent.remove(job)
             _logger.debug("job %s marked failed in channel %s",
-                          job.uuid, self.fullname)
+                          job.uuid, self)
 
     def get_jobs_to_run(self):
         # enqueue jobs of children channels
@@ -423,8 +423,7 @@ class Channel(object):
                 return
             self._running.add(job)
             _logger.debug("job %s marked running in channel %s",
-                          job.uuid, self.fullname)
-            _logger.debug("channel %s", self)
+                          job.uuid, self)
             yield job
 
 

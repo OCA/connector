@@ -112,7 +112,7 @@ html_theme = 'bootstrap'
 # documentation.
 html_theme_options = {
     # Navigation bar title. (Default: ``project`` value)
-    'navbar_title': "OpenERP Connector",
+    'navbar_title': "Odoo Connector",
 
     # Tab name for entire site. (Default: "Site")
     'navbar_site_name': "Site",
@@ -281,7 +281,7 @@ man_pages = [
 #  dir menu entry, description, category)
 texinfo_documents = [
     ('index', 'Connector', u'Connector Documentation',
-     u'Camptocamp SA', 'Connector', 'Framework for OpenERP Connectors.',
+     u'Camptocamp SA', 'Connector', 'Framework for Odoo Connectors.',
      'Miscellaneous'),
 ]
 
@@ -298,7 +298,7 @@ texinfo_documents = [
 # Example configuration for intersphinx: refer to the Python standard library.
 intersphinx_mapping = {
     'http://docs.python.org/': None,
-    'openerpweb': ('https://doc.openerp.com/trunk/web/', None),
-    'openerpdev': ('https://doc.openerp.com/trunk/server/', None),
+    'openerpweb': ('https://www.odoo.com/documentation/8.0/', None),
+    'openerpdev': ('https://www.odoo.com/documentation/8.0/', None),
     'connectormagento': ('http://www.odoo-magento-connector.com', None),
 }

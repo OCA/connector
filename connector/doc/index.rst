@@ -52,6 +52,9 @@ Connectors based on the framework
 * `solerp (Solr Connector) <https://github.com/akretion/solerp>`_
 * `Odoo Multi Company <http://www.openerp.net.cn/new-intercompany-process-module/>`_
 * `CMIS <https://github.com/OCA/connector-cmis>`_
+* `Odoo Asynchronous import module <https://github.com/OCA/connector-interfaces/tree/8.0/base_import_async>`_
+* `Salesforce Connector <https://github.com/OCA/connector-salesforce>`_
+* `Google Spreadsheet Connector <https://github.com/akretion/connector-google-spreadsheet>`_
 * Develop easily and rapidly your own connector based on this powerful
   framework and list your project on this page! Examples:
 

@@ -3,19 +3,19 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-#################
-OpenERP Connector
-#################
+##############
+Odoo Connector
+##############
 
-OpenERP Connector is a powerful framework to develop any kind of
-bi-directional connector between `OpenERP`_ (Open Source ERP) and any other
+Odoo Connector is a powerful framework to develop any kind of
+bi-directional connector between `Odoo`_ (Open Source ERP) and any other
 software or service.
 
-This OpenERP add-on has a modular and generic core, with the
+This Odoo add-on has a modular and generic core, with the
 ability to be extended with additional modules for new features or
 customizations.
 
-The development of OpenERP Connector has been started by `Camptocamp`_ and is now
+The development of Odoo Connector has been started by `Camptocamp`_ and is now
 maintained by `Camptocamp`_, `Akretion`_ and several :ref:`contributors`.
 
 *Subscribe to the* `project's mailing list`_
@@ -28,15 +28,15 @@ Core Features
 
 * **100% Open Source** (`AGPL version 3`_): the full `source code is available
   on GitHub`_
-* Not only designed to connect OpenERP with e-commerce backends,
-  rather it is **adaptable** to connect OpenERP with any type of service.
+* Not only designed to connect Odoo with e-commerce backends,
+  rather it is **adaptable** to connect Odoo with any type of service.
 * **Robust for high volumetries** and **easy to monitor** thanks to a :ref:`jobs-queue`.
 * A flexible set of building blocks, it does not force to a certain
   implementation but leaves the final choice to the
   developer on how to use the proposed pieces.
 * See a :ref:`code-overview` with examples of code
 
-.. _OpenERP: http://www.openerp.com
+.. _Odoo: http://www.odoo.com
 .. _Camptocamp: http://www.camptocamp.com
 .. _Akretion: http://www.akretion.com
 .. _`source code is available on GitHub`: https://github.com/OCA/connector
@@ -50,16 +50,16 @@ Connectors based on the framework
 * `Magento Connector <http://www.odoo-magento-connector.com>`_
 * `Prestashop Connector <https://github.com/OCA/connector-prestashop>`_
 * `solerp (Solr Connector) <https://github.com/akretion/solerp>`_
-* `OpenERP Multi Company <http://www.openerp.net.cn/new-intercompany-process-module/>`_
+* `Odoo Multi Company <http://www.openerp.net.cn/new-intercompany-process-module/>`_
 * `CMIS <https://github.com/OCA/connector-cmis>`_
 * Develop easily and rapidly your own connector based on this powerful
   framework and list your project on this page! Examples:
 
-  * E-Commerce: OpenERP OsCommerce connector, OpenERP Drupal Commerce connector, OpenERP Spree connector, OpenERP Ebay connector, OpenERP Amazon connector…
-  * CMS: OpenERP Wordpress connector…
-  * CRM: OpenERP SugarCRM connector, OpenERP Zabbix connector…
-  * Project Management: OpenERP Redmine connector…
-  * Ticketing: OpenERP Request Tracker connector, OpenERP GLPI connector…
+  * E-Commerce: Odoo OsCommerce connector, Odoo Drupal Commerce connector, Odoo Spree connector, Odoo Ebay connector, Odoo Amazon connector…
+  * CMS: Odoo Wordpress connector…
+  * CRM: Odoo SugarCRM connector, Odoo Zabbix connector…
+  * Project Management: Odoo Redmine connector…
+  * Ticketing: Odoo Request Tracker connector, Odoo GLPI connector…
 
 ********
 Overview
@@ -68,7 +68,7 @@ Overview
 .. raw:: html
 
     <div style="margin-top:10px;">
-         <iframe src="http://www.slideshare.net/slideshow/embed_code/24048994?rel=0" width="427" height="356" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="border:1px solid #CCC;border-width:1px 1px 0;margin-bottom:5px" allowfullscreen> </iframe> <div style="margin-bottom:5px"> <strong> <a href="https://fr.slideshare.net/openobject/ecommerce-the-new-magento-open-erp-connector-a-generic-connector-to-any-apps-luc-maurer-guewen-baconnier-camptocamp" title="E-commerce: the new Magento - OpenERP Connector: a generic connector to any apps. Luc Maurer &amp; Guewen Baconnier, Camptocamp" target="_blank">E-commerce: the new Magento - OpenERP Connector: a generic connector to any apps. Luc Maurer &amp; Guewen Baconnier, Camptocamp (OpenERP Days 2013)</a> </strong> from <strong><a href="http://www.slideshare.net/openobject" target="_blank">OpenERP.tv</a></strong> </div>
+         <iframe src="http://www.slideshare.net/slideshow/embed_code/24048994?rel=0" width="427" height="356" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="border:1px solid #CCC;border-width:1px 1px 0;margin-bottom:5px" allowfullscreen> </iframe> <div style="margin-bottom:5px"> <strong> <a href="https://fr.slideshare.net/openobject/ecommerce-the-new-magento-open-erp-connector-a-generic-connector-to-any-apps-luc-maurer-guewen-baconnier-camptocamp" title="E-commerce: the new Magento - Odoo Connector: a generic connector to any apps. Luc Maurer &amp; Guewen Baconnier, Camptocamp" target="_blank">E-commerce: the new Magento - Odoo Connector: a generic connector to any apps. Luc Maurer &amp; Guewen Baconnier, Camptocamp (OpenERP Days 2013)</a> </strong> from <strong><a href="http://www.slideshare.net/openobject" target="_blank">OpenERP.tv</a></strong> </div>
     </div>
 
 **************************

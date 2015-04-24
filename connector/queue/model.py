@@ -609,6 +609,30 @@ class JobFunction(orm.Model):
                           readonly=True)
 
     @api.model
+    def _find_or_create_channel(self, channel_path):
+        channel_model = self.env['queue.job.channel']
+        parts = channel_path.split('.')
+        parts.reverse()
+        channel_name = parts.pop()
+        assert channel_name == 'root', "A channel path starts with 'root'"
+        # get the root channel
+        channel = channel_model.search([('name', '=', channel_name)])
+        while parts:
+            channel_name = parts.pop()
+            parent_channel = channel
+            channel = channel_model.search([
+                ('name', '=', channel_name),
+                ('parent_id', '=', parent_channel.id)],
+                limit=1,
+            )
+            if not channel:
+                channel = channel_model.create({
+                    'name': channel_name,
+                    'parent_id': parent_channel.id,
+                })
+        return channel
+
+    @api.model
     def _register_jobs(self):
 >>>>>>> f4bc16f... Add tests on jobs and channels models
         for func in JOB_REGISTRY:
@@ -623,7 +647,8 @@ class JobFunction(orm.Model):
         return vals
 =======
             if not self.search_count([('name', '=', func_name)]):
-                self.create({'name': func_name})
+                channel = self._find_or_create_channel(func.default_channel)
+                self.create({'name': func_name, 'channel_id': channel.id})
 
     @api.model
     def _setup_complete(self):

@@ -8,18 +8,18 @@ The framework to develop connectors is decoupled in small pieces of
 codes interacting together. Each of them can be used or not in an
 implementation.
 
-An example of implementation is the `OpenERP Magento Connector`_.
+An example of implementation is the `Odoo Magento Connector`_.
 
 This document describes them from a high-level point of view and gives
 pointers to more concrete 'how-to' or small tutorials.
 
-.. _`OpenERP Magento Connector`: http://www.odoo-magento-connector.com
+.. _`Odoo Magento Connector`: http://www.odoo-magento-connector.com
 
 ******
 Events
 ******
 
-Events are hooks in OpenERP on which we can plug some actions. They are
+Events are hooks in Odoo on which we can plug some actions. They are
 based on an Observer pattern.
 
 The basic idea is to declare an :py:class:`~connector.event.Event`, for
@@ -74,7 +74,7 @@ When a worker is dead, it is removed from the database,
 so the jobs are freeed from the worker and can be assigned to another
 one.
 
-When multiple OpenERP processes are running,
+When multiple Odoo processes are running,
 a worker per process is running, but only those which are *CronWorkers*
 enqueue and execute jobs, to avoid to clutter the HTTP processes.
 
@@ -88,7 +88,7 @@ Session
 *******
 
 A :py:class:`~connector.session.ConnectorSession` is a container for the usual
-``cr``, ``uid``, ``context`` used in OpenERP. Now, it contains the Odoo
+``cr``, ``uid``, ``context`` used in Odoo. Now, it contains the Odoo
 ``Environment`` as ``self.env``.
 We use them accross the connectors.
 
@@ -154,7 +154,7 @@ Mappings
 
 The base class is :py:class:`connector.unit.mapper.Mapper`.
 
-A mapping translates an external record to an OpenERP record and
+A mapping translates an external record to an Odoo record and
 conversely.
 
 It supports:
@@ -202,7 +202,7 @@ The base class is
 :py:class:`connector.connector.Binder`.
 
 Binders are classes which know how to find the external ID for an
-OpenERP ID, how to find the OpenERP ID for an external ID and how to
+Odoo ID, how to find the Odoo ID for an external ID and how to
 create the binding between them.
 
 
@@ -212,7 +212,7 @@ create the binding between them.
 Bindings
 ********
 
-Here a binding means the link of a record between OpenERP and a backend.
+Here a binding means the link of a record between Odoo and a backend.
 
 The proposed implementation for the connectors widely use the
 `_inherits` capabilities.
@@ -223,7 +223,7 @@ We create a `magento.res.partner` model, which `_inherits`
 `res.partner`.
 
 This model, called a *binding* model, knows the ID of the partner in
-OpenERP, the ID in Magento and the relation to the backend model.
+Odoo, the ID in Magento and the relation to the backend model.
 
 It also stores all the necessary metadata related to this customer
 coming from Magento.

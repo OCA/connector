@@ -26,8 +26,8 @@ If you want to start a new connector based on the framework,
 a sane approach is to read this documentation, especially
 :ref:`concepts` and :ref:`bootstrap-connector`.
 
-Then, my personal advice is to look at the existing connectors (`OpenERP
-Magento Connector`_, `OpenERP Prestashop Connector`_). You will also probably
+Then, my personal advice is to look at the existing connectors (`Odoo
+Magento Connector`_, `Odoo Prestashop Connector`_). You will also probably
 need to dive a bit in the framework's code.
 
 If the connector belongs to the e-commerce domain, you may want to reuse the pieces
@@ -44,7 +44,7 @@ Name of the project if it is in the OCA:
 
     connector-xxx
 
-Name of the OpenERP module:
+Name of the Odoo module:
     connector_xxx
 
 Example:
@@ -56,8 +56,8 @@ Actually, the Magento and Prestashop connectors do not respect this convention
 for historical reasons (magentoerpconnect, prestashoperpconnect).
 New projects should ideally respect it.
 
-.. _`OpenERP Magento Connector`: https://github.com/OCA/connector-magento
-.. _`OpenERP Prestashop Connector`: https://github.com/OCA/connector-prestashop
+.. _`Odoo Magento Connector`: https://github.com/OCA/connector-magento
+.. _`Odoo Prestashop Connector`: https://github.com/OCA/connector-prestashop
 .. _`E-Commerce Connector`: https://github.com/OCA/connector-ecommerce
 
 *************************************************

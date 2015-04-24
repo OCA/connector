@@ -31,7 +31,7 @@ hierarchy of backends.
 Bindings
 ********
 
-The ``binding`` is the link between an OpenERP record and an external
+The ``binding`` is the link between an Odoo record and an external
 record. There is no forced implementation for the ``bindings``. The most
 straightforward techniques are: storing the external ID in the same
 model (``account.invoice``), in a new link model or in a new link model
@@ -127,12 +127,12 @@ The main types of :py:class:`~connector.connector.ConnectorUnit` are
 
 :py:class:`~connector.connector.Binder`
 
-  The ``binders`` give the external ID or OpenERP ID from respectively an
-  OpenERP ID or an external ID.
+  The ``binders`` give the external ID or Odoo ID from respectively an
+  Odoo ID or an external ID.
 
 :py:class:`~connector.unit.mapper.Mapper`
 
-  The ``mappers`` transform a external record into an OpenERP record or
+  The ``mappers`` transform a external record into an Odoo record or
   conversely.
 
 :py:class:`~connector.unit.backend_adapter.BackendAdapter`

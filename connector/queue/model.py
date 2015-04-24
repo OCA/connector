@@ -503,6 +503,7 @@ class JobChannel(orm.Model):
          _('Channel complete name must be unique')),
     ]
 
+<<<<<<< HEAD
     def parent_required(self, cr, uid, ids, context=None):
         for channel in self.browse(cr, uid, ids, context=context):
             if channel.name != 'root' and not channel.parent_id:
@@ -521,6 +522,30 @@ class JobChannel(orm.Model):
         context = context or {}
         for channel in self.browse(cr, uid, ids, context=context):
             if (not context.get('install_mode') and
+=======
+    @api.one
+    @api.depends('name', 'parent_id', 'parent_id.name')
+    def _compute_complete_name(self):
+        if not self.name:
+            return  # new record
+        channel = self
+        parts = [channel.name]
+        while channel.parent_id:
+            channel = channel.parent_id
+            parts.append(channel.name)
+        self.complete_name = '.'.join(reversed(parts))
+
+    @api.one
+    @api.constrains('parent_id', 'name')
+    def parent_required(self):
+        if self.name != 'root' and not self.parent_id:
+            raise exceptions.ValidationError(_('Parent channel required.'))
+
+    @api.multi
+    def write(self, values):
+        for channel in self:
+            if (not self.env.context.get('install_mode') and
+>>>>>>> f4bc16f... Add tests on jobs and channels models
                     channel.name == 'root' and
                     ('name' in values or 'parent_id' in values)):
                 raise exceptions.Warning(_('Cannot change the root channel'))
@@ -548,6 +573,7 @@ class JobFunction(orm.Model):
     _description = 'Job Functions'
     _log_access = False
 
+<<<<<<< HEAD
     def _default_channel(self, cr, uid, context=None):
         return self.pool.get('ir.model.data').get_object_reference(
             cr, uid, 'connector', 'channel_root')[1]
@@ -568,12 +594,39 @@ class JobFunction(orm.Model):
 
     def _register_hook(self, cr):
         vals = super(JobFunction, self)._register_hook(cr)
+=======
+    @api.model
+    def _default_channel(self):
+        return self.env.ref('connector.channel_root')
+
+    name = fields.Char(select=True)
+    channel_id = fields.Many2one(comodel_name='queue.job.channel',
+                                 string='Channel',
+                                 required=True,
+                                 default=_default_channel)
+    channel = fields.Char(related='channel_id.complete_name',
+                          store=True,
+                          readonly=True)
+
+    @api.model
+    def _register_jobs(self):
+>>>>>>> f4bc16f... Add tests on jobs and channels models
         for func in JOB_REGISTRY:
             if not is_module_installed(self.pool, get_openerp_module(func)):
                 continue
             func_name = '%s.%s' % (func.__module__, func.__name__)
+<<<<<<< HEAD
             if not self.search_count(
                     cr, openerp.SUPERUSER_ID, [('name', '=', func_name)]):
                 self.create(cr, openerp.SUPERUSER_ID, {'name': func_name})
         cr.commit()
         return vals
+=======
+            if not self.search_count([('name', '=', func_name)]):
+                self.create({'name': func_name})
+
+    @api.model
+    def _setup_complete(self):
+        super(JobFunction, self)._setup_complete()
+        self._register_jobs()
+>>>>>>> f4bc16f... Add tests on jobs and channels models

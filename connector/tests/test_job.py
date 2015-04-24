@@ -674,3 +674,19 @@ class TestJobChannels(common.TransactionCase):
         storage.store(test_job)
         stored = self.job_model.search([('uuid', '=', test_job.uuid)])
         self.assertEquals(stored.channel, 'root.sub')
+
+    def test_default_channel(self):
+        self.function_model.search([]).unlink()
+        job(task_a, default_channel='root.sub.subsub')
+        self.assertEquals(task_a.default_channel, 'root.sub.subsub')
+
+        self.function_model._register_jobs()
+
+        path_a = 'openerp.addons.connector.tests.test_job.task_a'
+        job_func = self.function_model.search([('name', '=', path_a)])
+
+        self.assertEquals(job_func.channel, 'root.sub.subsub')
+        channel = job_func.channel_id
+        self.assertEquals(channel.name, 'subsub')
+        self.assertEquals(channel.parent_id.name, 'sub')
+        self.assertEquals(channel.parent_id.parent_id.name, 'root')

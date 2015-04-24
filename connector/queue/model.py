@@ -441,7 +441,7 @@ class JobChannel(models.Model):
         self.complete_name = '.'.join(reversed(parts))
 
     @api.one
-    @api.constrains('parent_id')
+    @api.constrains('parent_id', 'name')
     def parent_required(self):
         if self.name != 'root' and not self.parent_id:
             raise exceptions.ValidationError(_('Parent channel required.'))
@@ -489,11 +489,15 @@ class JobFunction(models.Model):
                           readonly=True)
 
     @api.model
-    def _setup_complete(self):
-        super(JobFunction, self)._setup_complete()
+    def _register_jobs(self):
         for func in JOB_REGISTRY:
             if not is_module_installed(self.pool, get_openerp_module(func)):
                 continue
             func_name = '%s.%s' % (func.__module__, func.__name__)
             if not self.search_count([('name', '=', func_name)]):
                 self.create({'name': func_name})
+
+    @api.model
+    def _setup_complete(self):
+        super(JobFunction, self)._setup_complete()
+        self._register_jobs()

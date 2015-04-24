@@ -590,8 +590,14 @@ class Job(object):
 JOB_REGISTRY = set()
 
 
-def job(func):
+def job(func=None, default_channel='root'):
     """ Decorator for jobs.
+
+    Optional argument:
+
+    :param default_channel: the channel wherein the job will be assigned. This
+                            channel is set at the installation of the module
+                            and can be manually changed later using the views.
 
    Add a ``delay`` attribute on the decorated function.
 
@@ -647,10 +653,18 @@ def job(func):
         # => the job will be executed with a low priority and not before a
         # delay of 5 hours from now
 
+        @job(default_channel='root.subchannel')
+        def export_one_thing(session, model_name, one_thing):
+            # work
+            # export one_thing
+
     See also: :py:func:`related_action` a related action can be attached
     to a job
 
     """
+    if func is None:
+        return functools.partial(job, default_channel=default_channel)
+
     def delay(session, model_name, *args, **kwargs):
         """Enqueue the function. Return the uuid of the created job."""
         return OpenERPJobStorage(session).enqueue_resolve_args(
@@ -658,8 +672,12 @@ def job(func):
             model_name=model_name,
             *args,
             **kwargs)
-    JOB_REGISTRY.add(func)
+
+    assert default_channel == 'root' or default_channel.startswith('root.'), (
+        "The channel path must start by 'root'")
+    func.default_channel = default_channel
     func.delay = delay
+    JOB_REGISTRY.add(func)
     return func
 
 

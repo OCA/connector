@@ -5,18 +5,18 @@
 Use the connector with multiprocessing
 ######################################
 
-When OpenERP is launched with 1 process, the jobs worker will run
+When Odoo is launched with 1 process, the jobs worker will run
 threaded in the same process.
 
-When OpenERP is launched with multiple processes using the option
+When Odoo is launched with multiple processes using the option
 ``--workers``, the jobs workers are not independant processes, however,
 you have to launch them separately with the script
 ``openerp-connector-worker`` located in the connector module.
 
-It takes the same arguments and configuration file than the OpenERP
+It takes the same arguments and configuration file than the Odoo
 server.
 
-.. important:: The Python path must contain the path to the OpenERP
+.. important:: The Python path must contain the path to the Odoo
                server when ``openerp-connector-worker`` is launched.
 
 Example::
@@ -28,7 +28,7 @@ The 'Enqueue Jobs' scheduled action is useless when multiprocessing is
 used.
 
 .. note:: The ``openerp-connector-worker`` should not be launched
-          alongside OpenERP when the latter does not run in multiprocess
+          alongside Odoo when the latter does not run in multiprocess
           mode, because the interprocess signaling would not be done.
 
 .. hint:: The Magento Connector's buildout contains builtin commands to launch the workers:

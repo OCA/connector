@@ -129,7 +129,6 @@ class Database(object):
         self.has_connector = self._has_connector()
         if self.has_connector:
             self.has_channel = self._has_queue_job_column('channel')
-            self.has_seq = self._has_queue_job_column('seq')
             self._initialize()
 
     def close(self):
@@ -190,10 +189,9 @@ class Database(object):
             cr.execute("LISTEN connector")
 
     def select_jobs(self, where, args):
-        query = "SELECT %s, uuid, %s, date_created, priority, eta, state " \
+        query = "SELECT %s, uuid, id as seq, date_created, priority, eta, state " \
                 "FROM queue_job WHERE %s" % \
                 ('channel' if self.has_channel else 'NULL',
-                 'seq' if self.has_seq else 0,
                  where)
         with closing(self.conn.cursor()) as cr:
             cr.execute(query, args)

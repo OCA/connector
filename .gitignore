@@ -49,7 +49,7 @@ coverage.xml
 .ropeproject
 
 # Sphinx documentation
-docs/_build/
+connector/doc/_build/
 
 # Backup files
 *~

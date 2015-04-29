@@ -2,23 +2,32 @@ sudo: required
 language: python
 
 python:
-  - "2.7"
+  - '2.7'
 
 virtualenv:
   system_site_packages: true
 
 env:
+  matrix:
   - VERSION="8.0" LINT_CHECK="1"
   - VERSION="8.0" ODOO_REPO="odoo/odoo" LINT_CHECK="0"
   - VERSION="8.0" ODOO_REPO="OCA/OCB" LINT_CHECK="0"
+  - VERSION="8.0" DOCS="1" LINT_CHECK="0"
+  global:
+    secure: imkzmLXFYCB/2leIMiujghWwkw2TNTnXRYayDI9qlyR6pYXHx5lvEljfpTpvEDYywjfSLrkDya51APrUs8aLbAANDgkL/l17uFfD5ObmwLWYg+pwRmD+JhryCR0B6bP684RzXgFsyJ2zlLgTrCUvPMT6MIgUEwVnXXSgwB6lOC0=
 
 install:
   - git clone https://github.com/OCA/maintainer-quality-tools.git ${HOME}/maintainer-quality-tools
   - export PATH=${HOME}/maintainer-quality-tools/travis:${PATH}
   - travis_install_nightly
 
+services:
+  - postgresql
+
 script:
-  - travis_run_tests
+  - if [ -z "$DOCS" ] ; then travis_run_tests; fi
+  - if [ -n "$DOCS" ] ; then ./.travis_build_doc; fi
 
 after_success:
-  coveralls
+  - if [ -z "$DOCS" ] ; then coveralls; fi
+  - if [ -n "$DOCS" ] ; then ./.travis_push_doc; fi

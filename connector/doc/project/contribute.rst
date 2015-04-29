@@ -84,9 +84,10 @@ The same using a `buildout
 <https://bitbucket.org/anybox/public_buildbot_buildouts/src/tip/odoo-connector.cfg>`_::
 
     $ mkdir buildout && cd buildout
-    $ wget https://bitbucket.org/anybox/public_buildbot_buildouts/raw/tip/odoo-connector.cfg
+    $ wget https://bitbucket.org/anybox/public_buildbot_buildouts/raw/tip/odoo-connector.cfg -O buildout.cfg
     $ wget https://bitbucket.org/anybox/public_buildbot_buildouts/raw/tip/bootstrap.py
-    $ python bootstrap.py && bin/buildout -c odoo-connector.cfg
+    $ python bootstrap.py
+    $ bin/buildout
     $ createdb connectordb
     $ bin/start_openerp -d connectordb --stop-after-init
     $ cd connector/connector/doc/
@@ -96,4 +97,4 @@ The same using a `buildout
     $ ../../../bin/sphinx-intl -d connectordb -- build
     $ ../../../bin/sphinx-build -d connectordb -- -D language=fr -b html ./ _build/html/
 
-Then you can see the result in _build/html/ and submit a Pull Request
+Then you can see the result in _build/html/ and submit a Pull Request. Repeat the 5 last steps to update the translation if modified upstream.

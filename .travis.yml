@@ -19,7 +19,7 @@ env:
 
 
 install:
-  - git clone https://github.com/OCA/maintainer-quality-tools.git ${HOME}/maintainer-quality-tools
+  - git clone https://github.com/guewen/maintainer-quality-tools.git -b coveralls-script ${HOME}/maintainer-quality-tools
   - export PATH=${HOME}/maintainer-quality-tools/travis:${PATH}
   - travis_install_nightly
 
@@ -31,5 +31,5 @@ script:
   - if [ -n "$DOCS" ] ; then ./.travis_build_doc; fi
 
 after_success:
-  - if [ -z "$DOCS" ] ; then coveralls; fi
+  - if [ -z "$DOCS" ] ; then travis_after_tests_success; fi
   - if [ -n "$DOCS" ] ; then ./.travis_push_doc; fi

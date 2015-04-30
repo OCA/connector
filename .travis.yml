@@ -9,12 +9,14 @@ virtualenv:
 
 env:
   matrix:
-  - VERSION="8.0" LINT_CHECK="1"
-  - VERSION="8.0" ODOO_REPO="odoo/odoo" LINT_CHECK="0"
-  - VERSION="8.0" ODOO_REPO="OCA/OCB" LINT_CHECK="0"
-  - VERSION="8.0" DOCS="1" LINT_CHECK="0"
+  - LINT_CHECK="1"
+  - ODOO_REPO="odoo/odoo" LINT_CHECK="0"
+  - ODOO_REPO="OCA/OCB" LINT_CHECK="0"
+  - DOCS="1" LINT_CHECK="0"
   global:
-    secure: imkzmLXFYCB/2leIMiujghWwkw2TNTnXRYayDI9qlyR6pYXHx5lvEljfpTpvEDYywjfSLrkDya51APrUs8aLbAANDgkL/l17uFfD5ObmwLWYg+pwRmD+JhryCR0B6bP684RzXgFsyJ2zlLgTrCUvPMT6MIgUEwVnXXSgwB6lOC0=
+  - secure: imkzmLXFYCB/2leIMiujghWwkw2TNTnXRYayDI9qlyR6pYXHx5lvEljfpTpvEDYywjfSLrkDya51APrUs8aLbAANDgkL/l17uFfD5ObmwLWYg+pwRmD+JhryCR0B6bP684RzXgFsyJ2zlLgTrCUvPMT6MIgUEwVnXXSgwB6lOC0=
+  - VERSION="8.0"
+
 
 install:
   - git clone https://github.com/OCA/maintainer-quality-tools.git ${HOME}/maintainer-quality-tools

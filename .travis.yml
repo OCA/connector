@@ -10,12 +10,12 @@ virtualenv:
 env:
   matrix:
   - LINT_CHECK="1"
-  - TESTS="1" ODOO_REPO="odoo/odoo" LINT_CHECK="0"
-  - TESTS="1" ODOO_REPO="OCA/OCB" LINT_CHECK="0"
-  - DOCS="1" TESTS="0" LINT_CHECK="0"
+  - TESTS="1" ODOO_REPO="odoo/odoo"
+  - TESTS="1" ODOO_REPO="OCA/OCB"
+  - DOCS="1"
   global:
   - secure: imkzmLXFYCB/2leIMiujghWwkw2TNTnXRYayDI9qlyR6pYXHx5lvEljfpTpvEDYywjfSLrkDya51APrUs8aLbAANDgkL/l17uFfD5ObmwLWYg+pwRmD+JhryCR0B6bP684RzXgFsyJ2zlLgTrCUvPMT6MIgUEwVnXXSgwB6lOC0=
-  - VERSION="8.0"
+  - VERSION="8.0" TESTS="0" LINT_CHECK="0"
 
 install:
   - git clone https://github.com/guewen/maintainer-quality-tools.git -b coveralls-script ${HOME}/maintainer-quality-tools

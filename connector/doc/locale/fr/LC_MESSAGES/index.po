@@ -1,0 +1,198 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Connector\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-04-15 22:28+0300\n"
+"PO-Revision-Date: 2015-04-16 21:41+0200\n"
+"Last-Translator: Christophe Combelles <ccomb@free.fr>\n"
+"Language-Team: fr <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: fr\n"
+"X-Generator: Poedit 1.6.10\n"
+
+#: ../../index.rst:8
+msgid "OpenERP Connector"
+msgstr "OpenERP Connector"
+
+#: ../../index.rst:10
+msgid ""
+"OpenERP Connector is a powerful framework to develop any kind of bi-"
+"directional connector between `OpenERP`_ (Open Source ERP) and any other "
+"software or service."
+msgstr ""
+"`OpenERP Connector` est un puissant framework de développement de connecteur "
+"bi-directionnel entre `OpenERP`_ (ERP Open Source) et tout autre logiciel ou "
+"service."
+
+#: ../../index.rst:14
+msgid ""
+"This OpenERP add-on has a modular and generic core, with the ability to be "
+"extended with additional modules for new features or customizations."
+msgstr ""
+"Ce module OpenERP a un cœur modulaire et générique, capable d'être lui-même "
+"étendu grâce à des modules additionnels, pour ajouter des nouvelles "
+"fonctions ou des personnalisations."
+
+#: ../../index.rst:18
+msgid ""
+"The development of OpenERP Connector has been started by `Camptocamp`_ and "
+"is now maintained by `Camptocamp`_, `Akretion`_ and several :ref:"
+"`contributors`."
+msgstr ""
+"Le développement du Connecteur OpenERP a été démarré par `Camptocamp`_ et "
+"est maintenu par `Camptocamp`_, `Akretion`_ et d'autres :ref:`contributors`."
+
+#: ../../index.rst:21
+msgid "*Subscribe to the* `project's mailing list`_"
+msgstr "*Inscrivez-vous à la* `project's mailing list`_ *(en anglais)*"
+
+#: ../../index.rst:23
+msgid "*Learn how to* :ref:`contribute`"
+msgstr "*Découvrez comment* :ref:`contribute`"
+
+#: ../../index.rst:27
+msgid "Core Features"
+msgstr "Fonctionnalités de base"
+
+#: ../../index.rst:29
+msgid ""
+"**100% Open Source** (`AGPL version 3`_): the full `source code is available "
+"on GitHub`_"
+msgstr ""
+"**100% Open Source** (`AGPL version 3`_): la totalité du `code source est "
+"disponible sur GitHub`_"
+
+#: ../../index.rst:31
+msgid ""
+"Not only designed to connect OpenERP with e-commerce backends, rather it is "
+"**adaptable** to connect OpenERP with any type of service."
+msgstr ""
+"Pas uniquement conçu pour connecter OpenERP à des backend e-commerce, mais "
+"**adaptable** pour connecter OpenERP à tout type de service."
+
+#: ../../index.rst:33
+msgid ""
+"**Robust for high volumetries** and **easy to monitor** thanks to a :ref:"
+"`jobs-queue`."
+msgstr ""
+"**Robuste pour des volumétries importantes** et **faciler à surveiller** "
+"grâce à la :ref:`jobs-queue`."
+
+#: ../../index.rst:34
+msgid ""
+"A flexible set of building blocks, it does not force to a certain "
+"implementation but leaves the final choice to the developer on how to use "
+"the proposed pieces."
+msgstr ""
+"Un ensemble flexible de blocs de construction : il n'oblige pas à respecter "
+"une implémentation particulière mais laisse le choix final au développeur "
+"sur la manière d'utiliser les composants."
+
+#: ../../index.rst:37
+msgid "See a :ref:`code-overview` with examples of code"
+msgstr "Voir le :ref:`code-overview` et les exemples de code"
+
+#: ../../index.rst:48
+msgid "Connectors based on the framework"
+msgstr "Connecteurs basés sur le framework"
+
+#: ../../index.rst:50
+msgid "`Magento Connector <http://www.odoo-magento-connector.com>`_"
+msgstr "`Connecteur Magento <http://www.odoo-magento-connector.com>`_"
+
+#: ../../index.rst:51
+msgid "`Prestashop Connector <https://github.com/OCA/connector-prestashop>`_"
+msgstr "`Connecteur Prestashop <https://github.com/OCA/connector-prestashop>`_"
+
+#: ../../index.rst:52
+msgid "`solerp (Solr Connector) <https://github.com/akretion/solerp>`_"
+msgstr "`solerp (Connecteur Solr) <https://github.com/akretion/solerp>`_"
+
+#: ../../index.rst:53
+msgid ""
+"`OpenERP Multi Company <http://www.openerp.net.cn/new-intercompany-process-"
+"module/>`_"
+msgstr ""
+"`OpenERP Multi-sociétés <http://www.openerp.net.cn/new-intercompany-process-"
+"module/>`_"
+
+#: ../../index.rst:54
+msgid "`CMIS <https://github.com/OCA/connector-cmis>`_"
+msgstr "`Connecteur CMIS <https://github.com/OCA/connector-cmis>`_"
+
+#: ../../index.rst:55
+msgid ""
+"Develop easily and rapidly your own connector based on this powerful "
+"framework and list your project on this page! Examples:"
+msgstr ""
+"Développez facilement et rapidement votre propre connecteur basé sur ce "
+"puissant framework et ajoutez votre projet sur cette page ! Exemples :"
+
+#: ../../index.rst:58
+msgid ""
+"E-Commerce: OpenERP OsCommerce connector, OpenERP Drupal Commerce connector, "
+"OpenERP Spree connector, OpenERP Ebay connector, OpenERP Amazon connector…"
+msgstr ""
+"E-Commerce : connecteur OpenERP OsCommerce, connecteur OpenERP Drupal "
+"Commerce, connecteur OpenERP Spree, connecteur OpenERP Ebay, connecteur "
+"OpenERP Amazon…"
+
+#: ../../index.rst:59
+msgid "CMS: OpenERP Wordpress connector…"
+msgstr "CMS : connecteur OpenERP Wordpress…"
+
+#: ../../index.rst:60
+msgid "CRM: OpenERP SugarCRM connector, OpenERP Zabbix connector…"
+msgstr "CRM : connecteur OpenERP SugarCRM, connecteur OpenERP Zabbix…"
+
+#: ../../index.rst:61
+msgid "Project Management: OpenERP Redmine connector…"
+msgstr "Gestion de projets : connecteur OpenERP Redmine…"
+
+#: ../../index.rst:62
+msgid "Ticketing: OpenERP Request Tracker connector, OpenERP GLPI connector…"
+msgstr ""
+"Ticketing : connecteur OpenERP Request Tracker, connecteur OpenERP GLPI…"
+
+#: ../../index.rst:66
+msgid "Overview"
+msgstr "Présentation"
+
+#: ../../index.rst:76
+msgid "Top financial contributors"
+msgstr "Principaux contributeurs financiers"
+
+#: ../../index.rst:87
+msgid "*See all the project's* :ref:`financial-contributors`."
+msgstr "*Voir tous les* :ref:`financial-contributors` *du projet*."
+
+#: ../../index.rst:91
+msgid "Project"
+msgstr "Projet"
+
+#: ../../index.rst:104
+msgid "Developer's guide"
+msgstr "Guide du développeur"
+
+#: ../../index.rst:115
+msgid "API Reference"
+msgstr "Référence de l'API"
+
+#: ../../index.rst:133
+msgid "Indices and tables"
+msgstr "Index et tables"
+
+#: ../../index.rst:135
+msgid ":ref:`genindex`"
+msgstr ":ref:`genindex`"
+
+#: ../../index.rst:136
+msgid ":ref:`modindex`"
+msgstr ":ref:`modindex`"
+
+#: ../../index.rst:137
+msgid ":ref:`search`"
+msgstr ":ref:`search`"

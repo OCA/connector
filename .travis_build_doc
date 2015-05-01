@@ -1,5 +1,9 @@
 #!/bin/bash
 
+if [ "${DOCS}" != "1" ] ; then
+  exit 0
+fi
+
 cd ${HOME}
 mkdir buildout && cd buildout
 ln -s ${TRAVIS_BUILD_DIR} connector

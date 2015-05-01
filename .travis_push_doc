@@ -1,5 +1,9 @@
 #!/bin/bash
 
+if [ "${DOCS}" != "1" ] ; then
+  exit 0
+fi
+
 set -o errexit -o nounset
 
 if [ $TRAVIS_BRANCH = "8.0" ] && [ $TRAVIS_PULL_REQUEST = false ]; then

@@ -1,0 +1,1532 @@
+
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Index &mdash; Connector  documentation</title>
+    
+    <link rel="stylesheet" href="_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/bootswatch-3.2.0/united/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="_static/bootstrap-3.2.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="_static/bootstrap-sphinx.js"></script>
+    <link rel="top" title="Connector  documentation" href="index.html" />
+
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-7628916-3', 'odoo-connector.com');
+  ga('send', 'pageview');
+</script>
+
+  </head>
+  <body role="document">
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="index.html">
+          Odoo Connector</a>
+        <span class="navbar-text navbar-version pull-left"><b></b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="project/contribute.html">Contribute</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="project/contribute.html#want-to-start-a-new-connector">Want to start a new connector</a></li>
+<li class="toctree-l2"><a class="reference internal" href="project/contribute.html#creating-or-maintaining-a-translation-of-this-doc">Creating or maintaining a translation of this doc</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="project/contributors.html">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="project/contributors.html#financial-contributors">Financial Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="project/license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="project/changes.html">Changes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="project/changes.html#id2">3.0.0 (2015-04-01)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="project/changes.html#id3">2.2.0 (2014-05-26)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="project/changes.html#id4">2.1.1 (2014-02-06)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="project/changes.html#warning-breaks-compatibility">2.1.0 (2014-01-15 - warning: breaks compatibility)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="project/changes.html#id5">2.0.1 (2013-09-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="project/changes.html#id6">2.0.0</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="project/roadmap.html">Roadmap</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="guides/code_overview.html">Code Overview</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="guides/code_overview.html#backends">Backends</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/code_overview.html#bindings">Bindings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/code_overview.html#session">Session</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/code_overview.html#events">Events</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/code_overview.html#jobs">Jobs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/code_overview.html#connectorunit">ConnectorUnit</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="guides/concepts.html">Connector Concepts</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="guides/concepts.html#events">Events</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/concepts.html#jobs-queue">Jobs Queue</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/concepts.html#session">Session</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/concepts.html#backend">Backend</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/concepts.html#environment">Environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/concepts.html#connectorunit">ConnectorUnit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/concepts.html#bindings">Bindings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/concepts.html#checkpoint">Checkpoint</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="guides/bootstrap_connector.html">Boostrapping a connector</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="guides/bootstrap_connector.html#odoo-manifest">Odoo Manifest</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/bootstrap_connector.html#install-the-module-in-the-connector">Install the module in the connector</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/bootstrap_connector.html#declare-the-backends">Declare the backends</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/bootstrap_connector.html#backend-model">Backend Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/bootstrap_connector.html#abstract-binding">Abstract Binding</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/bootstrap_connector.html#environment">Environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/bootstrap_connector.html#checkpoints">Checkpoints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/bootstrap_connector.html#connectorunit-classes">ConnectorUnit classes</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="guides/multiprocessing.html">Use the connector with multiprocessing</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api/api_connector.html">Connector</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/api_session.html">Session</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/api_backend.html">Backend</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/api_backend.html#module-connector.backend_model">Backend Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/api_event.html">Event</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/api_binder.html">Binder</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/api_mapper.html">Mapper</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/api_mapper.html#mappers">Mappers</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api/api_synchronizer.html">Synchronizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/api_backend_adapter.html">Backend Adapter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/api_queue.html">Queue</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/api_queue.html#module-connector.queue.job">Job</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/api_queue.html#module-connector.queue.worker">Worker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/api_queue.html#id5">Queue</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/api_queue.html#module-connector.queue.model">Models</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api/api_exception.html">Exceptions</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"></ul>
+</li>
+              
+            
+            
+              
+                
+              
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      
+
+<h1 id="index">Index</h1>
+
+<div class="genindex-jumpbox">
+ <a href="#A"><strong>A</strong></a>
+ | <a href="#B"><strong>B</strong></a>
+ | <a href="#C"><strong>C</strong></a>
+ | <a href="#D"><strong>D</strong></a>
+ | <a href="#E"><strong>E</strong></a>
+ | <a href="#F"><strong>F</strong></a>
+ | <a href="#G"><strong>G</strong></a>
+ | <a href="#H"><strong>H</strong></a>
+ | <a href="#I"><strong>I</strong></a>
+ | <a href="#J"><strong>J</strong></a>
+ | <a href="#K"><strong>K</strong></a>
+ | <a href="#L"><strong>L</strong></a>
+ | <a href="#M"><strong>M</strong></a>
+ | <a href="#N"><strong>N</strong></a>
+ | <a href="#O"><strong>O</strong></a>
+ | <a href="#P"><strong>P</strong></a>
+ | <a href="#Q"><strong>Q</strong></a>
+ | <a href="#R"><strong>R</strong></a>
+ | <a href="#S"><strong>S</strong></a>
+ | <a href="#T"><strong>T</strong></a>
+ | <a href="#U"><strong>U</strong></a>
+ | <a href="#V"><strong>V</strong></a>
+ | <a href="#W"><strong>W</strong></a>
+ 
+</div>
+<h2 id="A">A</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="api/api_queue.html#connector.queue.model.QueueJob.active">active (connector.queue.model.QueueJob attribute)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_queue.html#connector.queue.job.Job.args">args (connector.queue.job.Job attribute)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_queue.html#connector.queue.model.QueueWorker.assign_jobs">assign_jobs() (connector.queue.model.QueueWorker method)</a>
+  </dt>
+
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="api/api_queue.html#connector.queue.model.QueueWorker.assign_then_enqueue">assign_then_enqueue() (connector.queue.model.QueueWorker method)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_queue.html#connector.queue.model.QueueJob.autovacuum">autovacuum() (connector.queue.model.QueueJob method)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_queue.html#connector.queue.worker.WorkerWatcher.available_db_names">available_db_names() (connector.queue.worker.WorkerWatcher static method)</a>
+  </dt>
+
+  </dl></td>
+</tr></table>
+
+<h2 id="B">B</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="api/api_backend.html#connector.backend.Backend">Backend (class in connector.backend)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_connector.html#connector.connector.ConnectorEnvironment.backend">backend (connector.connector.ConnectorEnvironment attribute)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_synchronizer.html#connector.unit.synchronizer.Synchronizer.backend_adapter">backend_adapter (connector.unit.synchronizer.Synchronizer attribute)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_connector.html#connector.connector.ConnectorEnvironment.backend_record">backend_record (connector.connector.ConnectorEnvironment attribute)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_mapper.html#connector.unit.mapper.backend_to_m2o">backend_to_m2o() (in module connector.unit.mapper)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_backend_adapter.html#connector.unit.backend_adapter.BackendAdapter">BackendAdapter (class in connector.unit.backend_adapter)</a>
+  </dt>
+
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="api/api_connector.html#connector.connector.Binder.bind">bind() (connector.connector.Binder method)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_connector.html#connector.connector.Binder">Binder (class in connector.connector)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_synchronizer.html#connector.unit.synchronizer.Synchronizer.binder">binder (connector.unit.synchronizer.Synchronizer attribute)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_connector.html#connector.connector.ConnectorUnit.binder_for">binder_for() (connector.connector.ConnectorUnit method)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_session.html#connector.session.ConnectorSession.browse">browse() (connector.session.ConnectorSession method)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_queue.html#connector.queue.model.QueueJob.button_done">button_done() (connector.queue.model.QueueJob method)</a>
+  </dt>
+
+  </dl></td>
+</tr></table>
+
+<h2 id="C">C</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="api/api_queue.html#connector.queue.job.Job.cancel">cancel() (connector.queue.job.Job method)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_queue.html#connector.queue.job.Job.canceled">canceled (connector.queue.job.Job attribute)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_session.html#connector.session.ConnectorSession.change_context">change_context() (connector.session.ConnectorSession method)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_session.html#connector.session.ConnectorSession.change_user">change_user() (connector.session.ConnectorSession method)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_mapper.html#connector.unit.mapper.MappingDefinition.changed_by">changed_by (connector.unit.mapper.MappingDefinition attribute)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_mapper.html#connector.unit.mapper.changed_by">changed_by() (in module connector.unit.mapper)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_queue.html#connector.queue.worker.WorkerWatcher.check_alive">check_alive() (connector.queue.worker.WorkerWatcher method)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_mapper.html#connector.unit.mapper.Mapper.children">children (connector.unit.mapper.Mapper attribute)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_session.html#connector.session.ConnectorSession.close">close() (connector.session.ConnectorSession method)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_session.html#connector.session.ConnectorSession.commit">commit() (connector.session.ConnectorSession method)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_queue.html#connector.queue.model.QueueJob.company_id">company_id (connector.queue.model.QueueJob attribute)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_backend.html#module-connector.backend">connector.backend (module)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_backend.html#module-connector.backend_model">connector.backend_model (module)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_connector.html#module-connector.connector">connector.connector (module)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_event.html#module-connector.event">connector.event (module)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_exception.html#module-connector.exception">connector.exception (module)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_queue.html#module-connector.queue.job">connector.queue.job (module)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_queue.html#module-connector.queue.model">connector.queue.model (module)</a>
+  </dt>
+
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="api/api_queue.html#module-connector.queue.queue">connector.queue.queue (module)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_queue.html#module-connector.queue.worker">connector.queue.worker (module)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_session.html#module-connector.session">connector.session (module)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_backend_adapter.html#module-connector.unit.backend_adapter">connector.unit.backend_adapter (module)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_binder.html#module-connector.unit.binder">connector.unit.binder (module)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_mapper.html#module-connector.unit.mapper">connector.unit.mapper (module)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_synchronizer.html#module-connector.unit.synchronizer">connector.unit.synchronizer (module)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_backend.html#connector.backend_model.ConnectorBackend">ConnectorBackend (class in connector.backend_model)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_connector.html#connector.connector.ConnectorEnvironment">ConnectorEnvironment (class in connector.connector)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_exception.html#connector.exception.ConnectorException">ConnectorException</a>
+  </dt>
+
+      
+  <dt><a href="api/api_session.html#connector.session.ConnectorSession">ConnectorSession (class in connector.session)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_session.html#connector.session.ConnectorSessionHandler">ConnectorSessionHandler (class in connector.session)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_connector.html#connector.connector.ConnectorUnit">ConnectorUnit (class in connector.connector)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_session.html#connector.session.ConnectorSession.context">context (connector.session.ConnectorSession attribute)</a>, <a href="api/api_session.html#connector.session.ConnectorSession.context">[1]</a>
+  </dt>
+
+      <dd><dl>
+        
+  <dt><a href="api/api_session.html#connector.session.ConnectorSessionHandler.context">(connector.session.ConnectorSessionHandler attribute)</a>
+  </dt>
+
+      </dl></dd>
+      
+  <dt><a href="api/api_mapper.html#connector.unit.mapper.convert">convert() (in module connector.unit.mapper)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_session.html#connector.session.ConnectorSession.cr">cr (connector.session.ConnectorSession attribute)</a>, <a href="api/api_session.html#connector.session.ConnectorSession.cr">[1]</a>
+  </dt>
+
+      
+  <dt><a href="api/api_session.html#connector.session.ConnectorSession.create">create() (connector.session.ConnectorSession method)</a>
+  </dt>
+
+      <dd><dl>
+        
+  <dt><a href="api/api_backend_adapter.html#connector.unit.backend_adapter.CRUDAdapter.create">(connector.unit.backend_adapter.CRUDAdapter method)</a>
+  </dt>
+
+      </dl></dd>
+      
+  <dt><a href="api/api_backend_adapter.html#connector.unit.backend_adapter.CRUDAdapter">CRUDAdapter (class in connector.unit.backend_adapter)</a>
+  </dt>
+
+  </dl></td>
+</tr></table>
+
+<h2 id="D">D</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="api/api_queue.html#connector.queue.model.QueueWorker.date_alive">date_alive (connector.queue.model.QueueWorker attribute)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_queue.html#connector.queue.job.Job.date_created">date_created (connector.queue.job.Job attribute)</a>
+  </dt>
+
+      <dd><dl>
+        
+  <dt><a href="api/api_queue.html#connector.queue.model.QueueJob.date_created">(connector.queue.model.QueueJob attribute)</a>
+  </dt>
+
+      </dl></dd>
+      
+  <dt><a href="api/api_queue.html#connector.queue.job.Job.date_done">date_done (connector.queue.job.Job attribute)</a>
+  </dt>
+
+      <dd><dl>
+        
+  <dt><a href="api/api_queue.html#connector.queue.model.QueueJob.date_done">(connector.queue.model.QueueJob attribute)</a>
+  </dt>
+
+      </dl></dd>
+      
+  <dt><a href="api/api_queue.html#connector.queue.job.Job.date_enqueued">date_enqueued (connector.queue.job.Job attribute)</a>
+  </dt>
+
+      <dd><dl>
+        
+  <dt><a href="api/api_queue.html#connector.queue.model.QueueJob.date_enqueued">(connector.queue.model.QueueJob attribute)</a>
+  </dt>
+
+      </dl></dd>
+      
+  <dt><a href="api/api_queue.html#connector.queue.model.QueueWorker.date_start">date_start (connector.queue.model.QueueWorker attribute)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_queue.html#connector.queue.job.Job.date_started">date_started (connector.queue.job.Job attribute)</a>
+  </dt>
+
+      <dd><dl>
+        
+  <dt><a href="api/api_queue.html#connector.queue.model.QueueJob.date_started">(connector.queue.model.QueueJob attribute)</a>
+  </dt>
+
+      </dl></dd>
+      
+  <dt><a href="api/api_session.html#connector.session.ConnectorSessionHandler.db_name">db_name (connector.session.ConnectorSessionHandler attribute)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_queue.html#connector.queue.job.OpenERPJobStorage.db_record">db_record() (connector.queue.job.OpenERPJobStorage method)</a>
+  </dt>
+
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="api/api_queue.html#connector.queue.job.OpenERPJobStorage.db_record_from_uuid">db_record_from_uuid() (connector.queue.job.OpenERPJobStorage method)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_backend_adapter.html#connector.unit.backend_adapter.CRUDAdapter.delete">delete() (connector.unit.backend_adapter.CRUDAdapter method)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_synchronizer.html#connector.unit.synchronizer.Deleter">Deleter (class in connector.unit.synchronizer)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_synchronizer.html#connector.unit.synchronizer.DeleteSynchronizer">DeleteSynchronizer (in module connector.unit.synchronizer)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_queue.html#connector.queue.queue.JobsQueue.dequeue">dequeue() (connector.queue.queue.JobsQueue method)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_queue.html#connector.queue.job.Job.description">description (connector.queue.job.Job attribute)</a>, <a href="api/api_queue.html#connector.queue.job.Job.description">[1]</a>
+  </dt>
+
+      
+  <dt><a href="api/api_mapper.html#connector.unit.mapper.Mapper.direct">direct (connector.unit.mapper.Mapper attribute)</a>
+  </dt>
+
+  </dl></td>
+</tr></table>
+
+<h2 id="E">E</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="api/api_queue.html#connector.queue.job.OpenERPJobStorage.enqueue">enqueue() (connector.queue.job.OpenERPJobStorage method)</a>
+  </dt>
+
+      <dd><dl>
+        
+  <dt><a href="api/api_queue.html#connector.queue.queue.JobsQueue.enqueue">(connector.queue.queue.JobsQueue method)</a>
+  </dt>
+
+      </dl></dd>
+      
+  <dt><a href="api/api_queue.html#connector.queue.worker.Worker.enqueue_job_uuid">enqueue_job_uuid() (connector.queue.worker.Worker method)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_queue.html#connector.queue.model.QueueWorker.enqueue_jobs">enqueue_jobs() (connector.queue.model.QueueWorker method)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_queue.html#connector.queue.job.OpenERPJobStorage.enqueue_resolve_args">enqueue_resolve_args() (connector.queue.job.OpenERPJobStorage method)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_connector.html#connector.connector.ConnectorEnvironment.env">env (connector.connector.ConnectorEnvironment attribute)</a>
+  </dt>
+
+      <dd><dl>
+        
+  <dt><a href="api/api_connector.html#connector.connector.ConnectorUnit.env">(connector.connector.ConnectorUnit attribute)</a>
+  </dt>
+
+        
+  <dt><a href="api/api_session.html#connector.session.ConnectorSession.env">(connector.session.ConnectorSession attribute)</a>
+  </dt>
+
+      </dl></dd>
+      
+  <dt><a href="api/api_connector.html#connector.connector.ConnectorUnit.environment">environment (connector.connector.ConnectorUnit attribute)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_queue.html#connector.queue.job.Job.eta">eta (connector.queue.job.Job attribute)</a>, <a href="api/api_queue.html#connector.queue.job.Job.eta">[1]</a>
+  </dt>
+
+      <dd><dl>
+        
+  <dt><a href="api/api_queue.html#connector.queue.model.QueueJob.eta">(connector.queue.model.QueueJob attribute)</a>
+  </dt>
+
+      </dl></dd>
+      
+  <dt><a href="api/api_event.html#connector.event.Event">Event (class in connector.event)</a>
+  </dt>
+
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="api/api_queue.html#connector.queue.job.Job.exc_info">exc_info (connector.queue.job.Job attribute)</a>
+  </dt>
+
+      <dd><dl>
+        
+  <dt><a href="api/api_queue.html#connector.queue.model.QueueJob.exc_info">(connector.queue.model.QueueJob attribute)</a>
+  </dt>
+
+      </dl></dd>
+      
+  <dt><a href="api/api_queue.html#connector.queue.job.JobStorage.exists">exists() (connector.queue.job.JobStorage method)</a>
+  </dt>
+
+      <dd><dl>
+        
+  <dt><a href="api/api_queue.html#connector.queue.job.OpenERPJobStorage.exists">(connector.queue.job.OpenERPJobStorage method)</a>
+  </dt>
+
+      </dl></dd>
+      
+  <dt><a href="api/api_synchronizer.html#connector.unit.synchronizer.Exporter">Exporter (class in connector.unit.synchronizer)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_mapper.html#connector.unit.mapper.ExportMapChild">ExportMapChild (class in connector.unit.mapper)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_mapper.html#connector.unit.mapper.ExportMapper">ExportMapper (class in connector.unit.mapper)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_synchronizer.html#connector.unit.synchronizer.ExportSynchronizer">ExportSynchronizer (in module connector.unit.synchronizer)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_backend.html#connector.backend_model.ExternalBinding">ExternalBinding (class in connector.backend_model)</a>
+  </dt>
+
+  </dl></td>
+</tr></table>
+
+<h2 id="F">F</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="api/api_exception.html#connector.exception.FailedJobError">FailedJobError</a>
+  </dt>
+
+      
+  <dt><a href="api/api_mapper.html#connector.unit.mapper.Mapper.finalize">finalize() (connector.unit.mapper.Mapper method)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_event.html#connector.event.Event.fire">fire() (connector.event.Event method)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_connector.html#connector.connector.MetaConnectorUnit.for_model_names">for_model_names (connector.connector.MetaConnectorUnit attribute)</a>
+  </dt>
+
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="api/api_mapper.html#connector.unit.mapper.ImportMapChild.format_items">format_items() (connector.unit.mapper.ImportMapChild method)</a>
+  </dt>
+
+      <dd><dl>
+        
+  <dt><a href="api/api_mapper.html#connector.unit.mapper.MapChild.format_items">(connector.unit.mapper.MapChild method)</a>
+  </dt>
+
+      </dl></dd>
+      
+  <dt><a href="api/api_queue.html#connector.queue.job.Job.func">func (connector.queue.job.Job attribute)</a>, <a href="api/api_queue.html#connector.queue.job.Job.func">[1]</a>
+  </dt>
+
+      <dd><dl>
+        
+  <dt><a href="api/api_queue.html#connector.queue.model.QueueJob.func">(connector.queue.model.QueueJob attribute)</a>
+  </dt>
+
+      </dl></dd>
+      
+  <dt><a href="api/api_queue.html#connector.queue.job.Job.func_name">func_name (connector.queue.job.Job attribute)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_queue.html#connector.queue.job.Job.func_string">func_string (connector.queue.job.Job attribute)</a>, <a href="api/api_queue.html#connector.queue.job.Job.func_string">[1]</a>
+  </dt>
+
+      <dd><dl>
+        
+  <dt><a href="api/api_queue.html#connector.queue.model.QueueJob.func_string">(connector.queue.model.QueueJob attribute)</a>
+  </dt>
+
+      </dl></dd>
+  </dl></td>
+</tr></table>
+
+<h2 id="G">G</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="api/api_backend.html#connector.backend_model.ConnectorBackend.get_backend">get_backend() (connector.backend_model.ConnectorBackend method)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_connector.html#connector.connector.ConnectorUnit.get_binder_for_model">get_binder_for_model() (connector.connector.ConnectorUnit method)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_backend.html#connector.backend.Backend.get_class">get_class() (connector.backend.Backend method)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_connector.html#connector.connector.ConnectorEnvironment.get_connector_unit">get_connector_unit() (connector.connector.ConnectorEnvironment method)</a>
+  </dt>
+
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="api/api_connector.html#connector.connector.ConnectorUnit.get_connector_unit_for_model">get_connector_unit_for_model() (connector.connector.ConnectorUnit method)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_mapper.html#connector.unit.mapper.MapChild.get_item_values">get_item_values() (connector.unit.mapper.MapChild method)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_mapper.html#connector.unit.mapper.MapChild.get_items">get_items() (connector.unit.mapper.MapChild method)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_connector.html#connector.connector.get_openerp_module">get_openerp_module() (in module connector.connector)</a>
+  </dt>
+
+  </dl></td>
+</tr></table>
+
+<h2 id="H">H</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="api/api_event.html#connector.event.Event.has_consumer_for">has_consumer_for() (connector.event.Event method)</a>
+  </dt>
+
+  </dl></td>
+</tr></table>
+
+<h2 id="I">I</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="api/api_exception.html#connector.exception.IDMissingInBackend">IDMissingInBackend</a>
+  </dt>
+
+      
+  <dt><a href="api/api_synchronizer.html#connector.unit.synchronizer.Importer">Importer (class in connector.unit.synchronizer)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_mapper.html#connector.unit.mapper.ImportMapChild">ImportMapChild (class in connector.unit.mapper)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_mapper.html#connector.unit.mapper.ImportMapper">ImportMapper (class in connector.unit.mapper)</a>
+  </dt>
+
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="api/api_synchronizer.html#connector.unit.synchronizer.ImportSynchronizer">ImportSynchronizer (in module connector.unit.synchronizer)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_connector.html#connector.connector.install_in_connector">install_in_connector() (in module connector.connector)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_exception.html#connector.exception.InvalidDataError">InvalidDataError</a>
+  </dt>
+
+      
+  <dt><a href="api/api_session.html#connector.session.ConnectorSession.is_module_installed">is_module_installed() (connector.session.ConnectorSession method)</a>
+  </dt>
+
+  </dl></td>
+</tr></table>
+
+<h2 id="J">J</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="api/api_queue.html#connector.queue.job.Job">Job (class in connector.queue.job)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_queue.html#connector.queue.job.job">job() (in module connector.queue.job)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_queue.html#connector.queue.model.QueueWorker.job_ids">job_ids (connector.queue.model.QueueWorker attribute)</a>
+  </dt>
+
+      <dd><dl>
+        
+  <dt><a href="api/api_queue.html#connector.queue.model.RequeueJob.job_ids">(connector.queue.model.RequeueJob attribute)</a>
+  </dt>
+
+      </dl></dd>
+      
+  <dt><a href="api/api_queue.html#connector.queue.worker.Worker.job_storage_class">job_storage_class (connector.queue.worker.Worker attribute)</a>
+  </dt>
+
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="api/api_exception.html#connector.exception.JobError">JobError</a>
+  </dt>
+
+      
+  <dt><a href="api/api_queue.html#connector.queue.queue.JobsQueue">JobsQueue (class in connector.queue.queue)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_queue.html#connector.queue.job.JobStorage">JobStorage (class in connector.queue.job)</a>
+  </dt>
+
+  </dl></td>
+</tr></table>
+
+<h2 id="K">K</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="api/api_queue.html#connector.queue.job.Job.kwargs">kwargs (connector.queue.job.Job attribute)</a>
+  </dt>
+
+  </dl></td>
+</tr></table>
+
+<h2 id="L">L</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="api/api_queue.html#connector.queue.job.JobStorage.load">load() (connector.queue.job.JobStorage method)</a>
+  </dt>
+
+      <dd><dl>
+        
+  <dt><a href="api/api_queue.html#connector.queue.job.OpenERPJobStorage.load">(connector.queue.job.OpenERPJobStorage method)</a>
+  </dt>
+
+      </dl></dd>
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="api/api_connector.html#connector.connector.ConnectorUnit.localcontext">localcontext (connector.connector.ConnectorUnit attribute)</a>
+  </dt>
+
+  </dl></td>
+</tr></table>
+
+<h2 id="M">M</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="api/api_mapper.html#connector.unit.mapper.m2o_to_backend">m2o_to_backend() (in module connector.unit.mapper)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_exception.html#connector.exception.ManyIDSInBackend">ManyIDSInBackend</a>
+  </dt>
+
+      
+  <dt><a href="api/api_mapper.html#connector.unit.mapper.Mapper.map_methods">map_methods (connector.unit.mapper.Mapper attribute)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_mapper.html#connector.unit.mapper.Mapper.map_record">map_record() (connector.unit.mapper.Mapper method)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_mapper.html#connector.unit.mapper.MapChild">MapChild (class in connector.unit.mapper)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_mapper.html#connector.unit.mapper.MapOptions">MapOptions (class in connector.unit.mapper)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_mapper.html#connector.unit.mapper.Mapper">Mapper (class in connector.unit.mapper)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_synchronizer.html#connector.unit.synchronizer.Synchronizer.mapper">mapper (connector.unit.synchronizer.Synchronizer attribute)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_mapper.html#connector.unit.mapper.mapping">mapping() (in module connector.unit.mapper)</a>
+  </dt>
+
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="api/api_mapper.html#connector.unit.mapper.MappingDefinition">MappingDefinition (class in connector.unit.mapper)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_exception.html#connector.exception.MappingError">MappingError</a>
+  </dt>
+
+      
+  <dt><a href="api/api_mapper.html#connector.unit.mapper.MapRecord">MapRecord (class in connector.unit.mapper)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_backend.html#connector.backend.Backend.match">match() (connector.backend.Backend method)</a>
+  </dt>
+
+      <dd><dl>
+        
+  <dt><a href="api/api_connector.html#connector.connector.ConnectorUnit.match">(connector.connector.ConnectorUnit class method)</a>
+  </dt>
+
+      </dl></dd>
+      
+  <dt><a href="api/api_queue.html#connector.queue.job.Job.max_retries">max_retries (connector.queue.job.Job attribute)</a>
+  </dt>
+
+      <dd><dl>
+        
+  <dt><a href="api/api_queue.html#connector.queue.model.QueueJob.max_retries">(connector.queue.model.QueueJob attribute)</a>
+  </dt>
+
+      </dl></dd>
+      
+  <dt><a href="api/api_connector.html#connector.connector.MetaConnectorUnit">MetaConnectorUnit (class in connector.connector)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_mapper.html#connector.unit.mapper.MetaMapper">MetaMapper (class in connector.unit.mapper)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_connector.html#connector.connector.ConnectorEnvironment.model">model (connector.connector.ConnectorEnvironment attribute)</a>
+  </dt>
+
+      <dd><dl>
+        
+  <dt><a href="api/api_connector.html#connector.connector.ConnectorUnit.model">(connector.connector.ConnectorUnit attribute)</a>
+  </dt>
+
+      </dl></dd>
+      
+  <dt><a href="api/api_connector.html#connector.connector.ConnectorEnvironment.model_name">model_name (connector.connector.ConnectorEnvironment attribute)</a>
+  </dt>
+
+      <dd><dl>
+        
+  <dt><a href="api/api_connector.html#connector.connector.MetaConnectorUnit.model_name">(connector.connector.MetaConnectorUnit attribute)</a>
+  </dt>
+
+        
+  <dt><a href="api/api_queue.html#connector.queue.job.Job.model_name">(connector.queue.job.Job attribute)</a>
+  </dt>
+
+        
+  <dt><a href="api/api_queue.html#connector.queue.model.QueueJob.model_name">(connector.queue.model.QueueJob attribute)</a>
+  </dt>
+
+      </dl></dd>
+  </dl></td>
+</tr></table>
+
+<h2 id="N">N</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="api/api_backend.html#connector.backend_model.ConnectorBackend.name">name (connector.backend_model.ConnectorBackend attribute)</a>
+  </dt>
+
+      <dd><dl>
+        
+  <dt><a href="api/api_queue.html#connector.queue.model.QueueJob.name">(connector.queue.model.QueueJob attribute)</a>
+  </dt>
+
+      </dl></dd>
+      
+  <dt><a href="api/api_exception.html#connector.exception.NetworkRetryableError">NetworkRetryableError</a>
+  </dt>
+
+      
+  <dt><a href="api/api_exception.html#connector.exception.NoConnectorUnitError">NoConnectorUnitError</a>
+  </dt>
+
+      
+  <dt><a href="api/api_exception.html#connector.exception.NoExternalId">NoExternalId</a>
+  </dt>
+
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="api/api_mapper.html#connector.unit.mapper.none">none() (in module connector.unit.mapper)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_exception.html#connector.exception.NoSuchJobError">NoSuchJobError</a>
+  </dt>
+
+      
+  <dt><a href="api/api_exception.html#connector.exception.NothingToDoJob">NothingToDoJob</a>
+  </dt>
+
+      
+  <dt><a href="api/api_exception.html#connector.exception.NotReadableJobError">NotReadableJobError</a>
+  </dt>
+
+  </dl></td>
+</tr></table>
+
+<h2 id="O">O</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="api/api_event.html#connector.event.on_record_create">on_record_create (in module connector.event)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_event.html#connector.event.on_record_unlink">on_record_unlink (in module connector.event)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_event.html#connector.event.on_record_write">on_record_write (in module connector.event)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_mapper.html#connector.unit.mapper.MappingDefinition.only_create">only_create (connector.unit.mapper.MappingDefinition attribute)</a>
+  </dt>
+
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="api/api_mapper.html#connector.unit.mapper.only_create">only_create() (in module connector.unit.mapper)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_queue.html#connector.queue.model.QueueJob.open_related_action">open_related_action() (connector.queue.model.QueueJob method)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_queue.html#connector.queue.job.OpenERPJobStorage">OpenERPJobStorage (class in connector.queue.job)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_mapper.html#connector.unit.mapper.Mapper.options">options (connector.unit.mapper.Mapper attribute)</a>
+  </dt>
+
+  </dl></td>
+</tr></table>
+
+<h2 id="P">P</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="api/api_backend.html#connector.backend.Backend.parent">parent (connector.backend.Backend attribute)</a>
+  </dt>
+
+      <dd><dl>
+        
+  <dt><a href="api/api_mapper.html#connector.unit.mapper.MapRecord.parent">(connector.unit.mapper.MapRecord attribute)</a>
+  </dt>
+
+      </dl></dd>
+      
+  <dt><a href="api/api_queue.html#connector.queue.job.Job.perform">perform() (connector.queue.job.Job method)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_queue.html#connector.queue.model.QueueWorker.pid">pid (connector.queue.model.QueueWorker attribute)</a>
+  </dt>
+
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="api/api_connector.html#connector.connector.ConnectorEnvironment.pool">pool (connector.connector.ConnectorEnvironment attribute)</a>
+  </dt>
+
+      <dd><dl>
+        
+  <dt><a href="api/api_session.html#connector.session.ConnectorSession.pool">(connector.session.ConnectorSession attribute)</a>, <a href="api/api_session.html#connector.session.ConnectorSession.pool">[1]</a>
+  </dt>
+
+      </dl></dd>
+      
+  <dt><a href="api/api_queue.html#connector.queue.job.Job.postpone">postpone() (connector.queue.job.Job method)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_queue.html#connector.queue.job.Job.priority">priority (connector.queue.job.Job attribute)</a>
+  </dt>
+
+      <dd><dl>
+        
+  <dt><a href="api/api_queue.html#connector.queue.model.QueueJob.priority">(connector.queue.model.QueueJob attribute)</a>
+  </dt>
+
+      </dl></dd>
+  </dl></td>
+</tr></table>
+
+<h2 id="Q">Q</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="api/api_queue.html#connector.queue.worker.Worker.queue_class">queue_class (connector.queue.worker.Worker attribute)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_queue.html#connector.queue.model.QueueJob">QueueJob (class in connector.queue.model)</a>
+  </dt>
+
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="api/api_queue.html#connector.queue.model.QueueWorker">QueueWorker (class in connector.queue.model)</a>
+  </dt>
+
+  </dl></td>
+</tr></table>
+
+<h2 id="R">R</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="api/api_session.html#connector.session.ConnectorSession.read">read() (connector.session.ConnectorSession method)</a>
+  </dt>
+
+      <dd><dl>
+        
+  <dt><a href="api/api_backend_adapter.html#connector.unit.backend_adapter.CRUDAdapter.read">(connector.unit.backend_adapter.CRUDAdapter method)</a>
+  </dt>
+
+      </dl></dd>
+      
+  <dt><a href="api/api_backend.html#connector.backend.Backend.register_class">register_class() (connector.backend.Backend method)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_queue.html#connector.queue.job.Job.related_action">related_action() (connector.queue.job.Job method)</a>
+  </dt>
+
+      <dd><dl>
+        
+  <dt><a href="api/api_queue.html#connector.queue.job.related_action">(in module connector.queue.job)</a>
+  </dt>
+
+      </dl></dd>
+      
+  <dt><a href="api/api_queue.html#connector.queue.model.QueueJob.requeue">requeue() (connector.queue.model.QueueJob method)</a>
+  </dt>
+
+      <dd><dl>
+        
+  <dt><a href="api/api_queue.html#connector.queue.model.RequeueJob.requeue">(connector.queue.model.RequeueJob method)</a>
+  </dt>
+
+      </dl></dd>
+      
+  <dt><a href="api/api_queue.html#connector.queue.model.RequeueJob">RequeueJob (class in connector.queue.model)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_queue.html#connector.queue.job.Job.result">result (connector.queue.job.Job attribute)</a>
+  </dt>
+
+      <dd><dl>
+        
+  <dt><a href="api/api_queue.html#connector.queue.model.QueueJob.result">(connector.queue.model.QueueJob attribute)</a>
+  </dt>
+
+      </dl></dd>
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="api/api_queue.html#connector.queue.job.Job.retry">retry (connector.queue.job.Job attribute)</a>
+  </dt>
+
+      <dd><dl>
+        
+  <dt><a href="api/api_queue.html#connector.queue.model.QueueJob.retry">(connector.queue.model.QueueJob attribute)</a>
+  </dt>
+
+      </dl></dd>
+      
+  <dt><a href="api/api_exception.html#connector.exception.RetryableJobError">RetryableJobError</a>
+  </dt>
+
+      
+  <dt><a href="api/api_session.html#connector.session.ConnectorSession.rollback">rollback() (connector.session.ConnectorSession method)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_queue.html#connector.queue.worker.Worker.run">run() (connector.queue.worker.Worker method)</a>
+  </dt>
+
+      <dd><dl>
+        
+  <dt><a href="api/api_queue.html#connector.queue.worker.WorkerWatcher.run">(connector.queue.worker.WorkerWatcher method)</a>
+  </dt>
+
+        
+  <dt><a href="api/api_synchronizer.html#connector.unit.synchronizer.Synchronizer.run">(connector.unit.synchronizer.Synchronizer method)</a>
+  </dt>
+
+      </dl></dd>
+      
+  <dt><a href="api/api_queue.html#connector.queue.worker.Worker.run_job">run_job() (connector.queue.worker.Worker method)</a>
+  </dt>
+
+  </dl></td>
+</tr></table>
+
+<h2 id="S">S</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="api/api_session.html#connector.session.ConnectorSession.search">search() (connector.session.ConnectorSession method)</a>
+  </dt>
+
+      <dd><dl>
+        
+  <dt><a href="api/api_backend_adapter.html#connector.unit.backend_adapter.CRUDAdapter.search">(connector.unit.backend_adapter.CRUDAdapter method)</a>
+  </dt>
+
+      </dl></dd>
+      
+  <dt><a href="api/api_backend_adapter.html#connector.unit.backend_adapter.CRUDAdapter.search_read">search_read() (connector.unit.backend_adapter.CRUDAdapter method)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_backend.html#connector.backend.Backend.service">service (connector.backend.Backend attribute)</a>, <a href="api/api_backend.html#connector.backend.Backend.service">[1]</a>
+  </dt>
+
+      
+  <dt><a href="api/api_connector.html#connector.connector.ConnectorEnvironment.session">session (connector.connector.ConnectorEnvironment attribute)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_session.html#connector.session.ConnectorSessionHandler.session">session() (connector.session.ConnectorSessionHandler method)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_queue.html#connector.queue.job.Job.set_done">set_done() (connector.queue.job.Job method)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_queue.html#connector.queue.job.Job.set_enqueued">set_enqueued() (connector.queue.job.Job method)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_queue.html#connector.queue.job.Job.set_failed">set_failed() (connector.queue.job.Job method)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_connector.html#connector.connector.ConnectorEnvironment.set_lang">set_lang() (connector.connector.ConnectorEnvironment method)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_queue.html#connector.queue.job.Job.set_pending">set_pending() (connector.queue.job.Job method)</a>
+  </dt>
+
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="api/api_queue.html#connector.queue.job.Job.set_started">set_started() (connector.queue.job.Job method)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_mapper.html#connector.unit.mapper.MapChild.skip_item">skip_item() (connector.unit.mapper.MapChild method)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_mapper.html#connector.unit.mapper.MapRecord.source">source (connector.unit.mapper.MapRecord attribute)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_queue.html#connector.queue.worker.start_service">start_service() (in module connector.queue.worker)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_queue.html#connector.queue.job.Job.state">state (connector.queue.job.Job attribute)</a>
+  </dt>
+
+      <dd><dl>
+        
+  <dt><a href="api/api_queue.html#connector.queue.model.QueueJob.state">(connector.queue.model.QueueJob attribute)</a>
+  </dt>
+
+      </dl></dd>
+      
+  <dt><a href="api/api_queue.html#connector.queue.job.JobStorage.store">store() (connector.queue.job.JobStorage method)</a>
+  </dt>
+
+      <dd><dl>
+        
+  <dt><a href="api/api_queue.html#connector.queue.job.OpenERPJobStorage.store">(connector.queue.job.OpenERPJobStorage method)</a>
+  </dt>
+
+      </dl></dd>
+      
+  <dt><a href="api/api_event.html#connector.event.Event.subscribe">subscribe() (connector.event.Event method)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_backend.html#connector.backend_model.ExternalBinding.sync_date">sync_date (connector.backend_model.ExternalBinding attribute)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_synchronizer.html#connector.unit.synchronizer.Synchronizer">Synchronizer (class in connector.unit.synchronizer)</a>
+  </dt>
+
+  </dl></td>
+</tr></table>
+
+<h2 id="T">T</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="api/api_connector.html#connector.connector.Binder.to_backend">to_backend() (connector.connector.Binder method)</a>
+  </dt>
+
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="api/api_connector.html#connector.connector.Binder.to_openerp">to_openerp() (connector.connector.Binder method)</a>
+  </dt>
+
+  </dl></td>
+</tr></table>
+
+<h2 id="U">U</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="api/api_session.html#connector.session.ConnectorSession.uid">uid (connector.session.ConnectorSession attribute)</a>, <a href="api/api_session.html#connector.session.ConnectorSession.uid">[1]</a>
+  </dt>
+
+      <dd><dl>
+        
+  <dt><a href="api/api_session.html#connector.session.ConnectorSessionHandler.uid">(connector.session.ConnectorSessionHandler attribute)</a>
+  </dt>
+
+      </dl></dd>
+      
+  <dt><a href="api/api_connector.html#connector.connector.ConnectorUnit.unit_for">unit_for() (connector.connector.ConnectorUnit method)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_session.html#connector.session.ConnectorSession.unlink">unlink() (connector.session.ConnectorSession method)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_event.html#connector.event.Event.unsubscribe">unsubscribe() (connector.event.Event method)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_connector.html#connector.connector.Binder.unwrap_binding">unwrap_binding() (connector.connector.Binder method)</a>
+  </dt>
+
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="api/api_connector.html#connector.connector.Binder.unwrap_model">unwrap_model() (connector.connector.Binder method)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_mapper.html#connector.unit.mapper.MapRecord.update">update() (connector.unit.mapper.MapRecord method)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_queue.html#connector.queue.job.Job.user_id">user_id (connector.queue.job.Job attribute)</a>
+  </dt>
+
+      <dd><dl>
+        
+  <dt><a href="api/api_queue.html#connector.queue.model.QueueJob.user_id">(connector.queue.model.QueueJob attribute)</a>
+  </dt>
+
+      </dl></dd>
+      
+  <dt><a href="api/api_queue.html#connector.queue.job.Job.uuid">uuid (connector.queue.job.Job attribute)</a>, <a href="api/api_queue.html#connector.queue.job.Job.uuid">[1]</a>
+  </dt>
+
+      <dd><dl>
+        
+  <dt><a href="api/api_queue.html#connector.queue.model.QueueJob.uuid">(connector.queue.model.QueueJob attribute)</a>
+  </dt>
+
+        
+  <dt><a href="api/api_queue.html#connector.queue.model.QueueWorker.uuid">(connector.queue.model.QueueWorker attribute)</a>
+  </dt>
+
+      </dl></dd>
+  </dl></td>
+</tr></table>
+
+<h2 id="V">V</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="api/api_mapper.html#connector.unit.mapper.MapRecord.values">values() (connector.unit.mapper.MapRecord method)</a>
+  </dt>
+
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="api/api_backend.html#connector.backend.Backend.version">version (connector.backend.Backend attribute)</a>
+  </dt>
+
+      <dd><dl>
+        
+  <dt><a href="api/api_backend.html#connector.backend_model.ConnectorBackend.version">(connector.backend_model.ConnectorBackend attribute)</a>
+  </dt>
+
+      </dl></dd>
+  </dl></td>
+</tr></table>
+
+<h2 id="W">W</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="api/api_queue.html#connector.queue.worker.Worker">Worker (class in connector.queue.worker)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_queue.html#connector.queue.worker.WorkerWatcher.worker_for_db">worker_for_db() (connector.queue.worker.WorkerWatcher method)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_queue.html#connector.queue.model.QueueJob.worker_id">worker_id (connector.queue.model.QueueJob attribute)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_queue.html#connector.queue.worker.WorkerWatcher.worker_lost">worker_lost() (connector.queue.worker.WorkerWatcher method)</a>
+  </dt>
+
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="api/api_queue.html#connector.queue.model.QueueWorker.worker_timeout">worker_timeout (connector.queue.model.QueueWorker attribute)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_queue.html#connector.queue.job.Job.worker_uuid">worker_uuid (connector.queue.job.Job attribute)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_queue.html#connector.queue.worker.WorkerWatcher">WorkerWatcher (class in connector.queue.worker)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_queue.html#connector.queue.model.QueueJob.write">write() (connector.queue.model.QueueJob method)</a>
+  </dt>
+
+      <dd><dl>
+        
+  <dt><a href="api/api_session.html#connector.session.ConnectorSession.write">(connector.session.ConnectorSession method)</a>
+  </dt>
+
+        
+  <dt><a href="api/api_backend_adapter.html#connector.unit.backend_adapter.CRUDAdapter.write">(connector.unit.backend_adapter.CRUDAdapter method)</a>
+  </dt>
+
+      </dl></dd>
+  </dl></td>
+</tr></table>
+
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+        <br/>
+        
+      
+    </p>
+    <p>
+        &copy; Copyright 2013, Camptocamp SA.<br/>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

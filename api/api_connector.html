@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Connector &mdash; Connector  documentation</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootswatch-3.2.0/united/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-3.2.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <link rel="top" title="Connector  documentation" href="../index.html" />
+    <link rel="next" title="Session" href="api_session.html" />
+    <link rel="prev" title="Use the connector with multiprocessing" href="../guides/multiprocessing.html" />
+
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-7628916-3', 'odoo-connector.com');
+  ga('send', 'pageview');
+</script>
+
+  </head>
+  <body role="document">
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../index.html">
+          Odoo Connector</a>
+        <span class="navbar-text navbar-version pull-left"><b></b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../project/contribute.html">Contribute</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../project/contribute.html#want-to-start-a-new-connector">Want to start a new connector</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../project/contribute.html#creating-or-maintaining-a-translation-of-this-doc">Creating or maintaining a translation of this doc</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../project/contributors.html">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../project/contributors.html#financial-contributors">Financial Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../project/license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../project/changes.html">Changes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../project/changes.html#id2">3.0.0 (2015-04-01)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../project/changes.html#id3">2.2.0 (2014-05-26)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../project/changes.html#id4">2.1.1 (2014-02-06)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../project/changes.html#warning-breaks-compatibility">2.1.0 (2014-01-15 - warning: breaks compatibility)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../project/changes.html#id5">2.0.1 (2013-09-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../project/changes.html#id6">2.0.0</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../project/roadmap.html">Roadmap</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../guides/code_overview.html">Code Overview</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../guides/code_overview.html#backends">Backends</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/code_overview.html#bindings">Bindings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/code_overview.html#session">Session</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/code_overview.html#events">Events</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/code_overview.html#jobs">Jobs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/code_overview.html#connectorunit">ConnectorUnit</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/concepts.html">Connector Concepts</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../guides/concepts.html#events">Events</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/concepts.html#jobs-queue">Jobs Queue</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/concepts.html#session">Session</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/concepts.html#backend">Backend</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/concepts.html#environment">Environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/concepts.html#connectorunit">ConnectorUnit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/concepts.html#bindings">Bindings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/concepts.html#checkpoint">Checkpoint</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/bootstrap_connector.html">Boostrapping a connector</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../guides/bootstrap_connector.html#odoo-manifest">Odoo Manifest</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/bootstrap_connector.html#install-the-module-in-the-connector">Install the module in the connector</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/bootstrap_connector.html#declare-the-backends">Declare the backends</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/bootstrap_connector.html#backend-model">Backend Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/bootstrap_connector.html#abstract-binding">Abstract Binding</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/bootstrap_connector.html#environment">Environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/bootstrap_connector.html#checkpoints">Checkpoints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/bootstrap_connector.html#connectorunit-classes">ConnectorUnit classes</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/multiprocessing.html">Use the connector with multiprocessing</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="">Connector</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_session.html">Session</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_backend.html">Backend</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_backend.html#module-connector.backend_model">Backend Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_event.html">Event</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_binder.html">Binder</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_mapper.html">Mapper</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api_mapper.html#mappers">Mappers</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api_synchronizer.html">Synchronizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_backend_adapter.html">Backend Adapter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_queue.html">Queue</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api_queue.html#module-connector.queue.job">Job</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_queue.html#module-connector.queue.worker">Worker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_queue.html#id5">Queue</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_queue.html#module-connector.queue.model">Models</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api_exception.html">Exceptions</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">Connector</a></li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+              
+                
+  <li>
+    <a href="../guides/multiprocessing.html" title="Previous Chapter: Use the connector with multiprocessing"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Use the connecto...</span>
+    </a>
+  </li>
+  <li>
+    <a href="api_session.html" title="Next Chapter: Session"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Session &raquo;</span>
+    </a>
+  </li>
+              
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      
+  <div class="section" id="module-connector.connector">
+<span id="connector"></span><h1>Connector<a class="headerlink" href="#module-connector.connector" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="connector.connector.Binder">
+<em class="property">class </em><code class="descclassname">connector.connector.</code><code class="descname">Binder</code><span class="sig-paren">(</span><em>connector_env</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/connector.html#Binder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.connector.Binder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#connector.connector.ConnectorUnit" title="connector.connector.ConnectorUnit"><code class="xref py py-class docutils literal"><span class="pre">connector.connector.ConnectorUnit</span></code></a></p>
+<p>For one record of a model, capable to find an external or
+internal id, or create the binding (link) between them</p>
+<p>The Binder should be implemented in the connectors.</p>
+<dl class="method">
+<dt id="connector.connector.Binder.bind">
+<code class="descname">bind</code><span class="sig-paren">(</span><em>external_id</em>, <em>binding_id</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/connector.html#Binder.bind"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.connector.Binder.bind" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create the link between an external ID and an OpenERP ID</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>external_id</strong> &#8211; external id to bind</li>
+<li><strong>binding_id</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; OpenERP ID to bind</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="connector.connector.Binder.to_backend">
+<code class="descname">to_backend</code><span class="sig-paren">(</span><em>binding_id</em>, <em>wrap=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/connector.html#Binder.to_backend"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.connector.Binder.to_backend" title="Permalink to this definition">¶</a></dt>
+<dd><p>Give the external ID for an OpenERP binding ID
+(ID in a model magento.*)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>binding_id</strong> &#8211; OpenERP binding ID for which we want the backend id</li>
+<li><strong>wrap</strong> &#8211; if False, binding_id is the ID of the binding,
+if True, binding_id is the ID of the normal record, the
+method will search the corresponding binding and returns
+the backend id of the binding</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">external ID of the record</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="connector.connector.Binder.to_openerp">
+<code class="descname">to_openerp</code><span class="sig-paren">(</span><em>external_id</em>, <em>unwrap=False</em>, <em>browse=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/connector.html#Binder.to_openerp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.connector.Binder.to_openerp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Give the OpenERP ID for an external ID</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>external_id</strong> &#8211; external ID for which we want
+the OpenERP ID</li>
+<li><strong>unwrap</strong> &#8211; if True, returns the openerp_id
+else return the id of the binding</li>
+<li><strong>browse</strong> &#8211; if True, returns a recordset</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">a record ID, depending on the value of unwrap,
+or None if the external_id is not mapped</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="http://docs.python.org/library/functions.html#int" title="(in Python v2.7)">int</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="connector.connector.Binder.unwrap_binding">
+<code class="descname">unwrap_binding</code><span class="sig-paren">(</span><em>binding_id</em>, <em>browse=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/connector.html#Binder.unwrap_binding"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.connector.Binder.unwrap_binding" title="Permalink to this definition">¶</a></dt>
+<dd><p>For a binding record, gives the normal record.</p>
+<p>Example: when called with a <code class="docutils literal"><span class="pre">magento.product.product</span></code> id,
+it will return the corresponding <code class="docutils literal"><span class="pre">product.product</span></code> id.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>browse</strong> &#8211; when True, returns a browse_record instance
+rather than an ID</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="connector.connector.Binder.unwrap_model">
+<code class="descname">unwrap_model</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/connector.html#Binder.unwrap_model"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.connector.Binder.unwrap_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>For a binding model, gives the normal model.</p>
+<p>Example: when called on a binder for <code class="docutils literal"><span class="pre">magento.product.product</span></code>,
+it will return <code class="docutils literal"><span class="pre">product.product</span></code>.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="connector.connector.ConnectorEnvironment">
+<em class="property">class </em><code class="descclassname">connector.connector.</code><code class="descname">ConnectorEnvironment</code><span class="sig-paren">(</span><em>backend_record</em>, <em>session</em>, <em>model_name</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/connector.html#ConnectorEnvironment"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.connector.ConnectorEnvironment" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="http://docs.python.org/library/functions.html#object" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<p>Environment used by the different units for the synchronization.</p>
+<dl class="attribute">
+<dt id="connector.connector.ConnectorEnvironment.backend">
+<code class="descname">backend</code><a class="headerlink" href="#connector.connector.ConnectorEnvironment.backend" title="Permalink to this definition">¶</a></dt>
+<dd><p>Current backend we are working with.
+Obtained with <code class="docutils literal"><span class="pre">backend_record.get_backend()</span></code>.</p>
+<p>Instance of: <a class="reference internal" href="api_backend.html#connector.backend.Backend" title="connector.backend.Backend"><code class="xref py py-class docutils literal"><span class="pre">connector.backend.Backend</span></code></a></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="connector.connector.ConnectorEnvironment.backend_record">
+<code class="descname">backend_record</code><a class="headerlink" href="#connector.connector.ConnectorEnvironment.backend_record" title="Permalink to this definition">¶</a></dt>
+<dd><p>Browsable record of the backend. The backend is inherited
+from the model <code class="docutils literal"><span class="pre">connector.backend</span></code> and have at least a
+<code class="docutils literal"><span class="pre">type</span></code> and a <code class="docutils literal"><span class="pre">version</span></code>.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="connector.connector.ConnectorEnvironment.session">
+<code class="descname">session</code><a class="headerlink" href="#connector.connector.ConnectorEnvironment.session" title="Permalink to this definition">¶</a></dt>
+<dd><p>Current session we are working in. It contains the OpenERP
+cr, uid and context.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="connector.connector.ConnectorEnvironment.model_name">
+<code class="descname">model_name</code><a class="headerlink" href="#connector.connector.ConnectorEnvironment.model_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Name of the OpenERP model to work with.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="connector.connector.ConnectorEnvironment.env">
+<code class="descname">env</code><a class="headerlink" href="#connector.connector.ConnectorEnvironment.env" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="connector.connector.ConnectorEnvironment.get_connector_unit">
+<code class="descname">get_connector_unit</code><span class="sig-paren">(</span><em>base_class</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/connector.html#ConnectorEnvironment.get_connector_unit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.connector.ConnectorEnvironment.get_connector_unit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Searches and returns an instance of the
+<a class="reference internal" href="#connector.connector.ConnectorUnit" title="connector.connector.ConnectorUnit"><code class="xref py py-class docutils literal"><span class="pre">ConnectorUnit</span></code></a> for the current
+model and being a class or subclass of <code class="docutils literal"><span class="pre">base_class</span></code>.</p>
+<p>The returned instance is built with <code class="docutils literal"><span class="pre">self</span></code> for its environment.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>base_class</strong> (<a class="reference internal" href="#connector.connector.ConnectorUnit" title="connector.connector.ConnectorUnit"><code class="xref py py-class docutils literal"><span class="pre">connector.connector.ConnectorUnit</span></code></a>) &#8211; <code class="docutils literal"><span class="pre">ConnectorUnit</span></code> to search (class or subclass)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="connector.connector.ConnectorEnvironment.model">
+<code class="descname">model</code><a class="headerlink" href="#connector.connector.ConnectorEnvironment.model" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="connector.connector.ConnectorEnvironment.pool">
+<code class="descname">pool</code><a class="headerlink" href="#connector.connector.ConnectorEnvironment.pool" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="connector.connector.ConnectorEnvironment.set_lang">
+<code class="descname">set_lang</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwds</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/connector.html#ConnectorEnvironment.set_lang"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.connector.ConnectorEnvironment.set_lang" title="Permalink to this definition">¶</a></dt>
+<dd><p>Change the working language in the environment.</p>
+<p>It changes the <code class="docutils literal"><span class="pre">lang</span></code> key in the session&#8217;s context.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="connector.connector.ConnectorUnit">
+<em class="property">class </em><code class="descclassname">connector.connector.</code><code class="descname">ConnectorUnit</code><span class="sig-paren">(</span><em>connector_env</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/connector.html#ConnectorUnit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.connector.ConnectorUnit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="http://docs.python.org/library/functions.html#object" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<p>Abstract class for each piece of the connector:</p>
+<dl class="docutils">
+<dt>Examples:</dt>
+<dd><ul class="first last simple">
+<li><a class="reference internal" href="#connector.connector.Binder" title="connector.connector.Binder"><code class="xref py py-class docutils literal"><span class="pre">connector.connector.Binder</span></code></a></li>
+<li><a class="reference internal" href="api_mapper.html#connector.unit.mapper.Mapper" title="connector.unit.mapper.Mapper"><code class="xref py py-class docutils literal"><span class="pre">connector.unit.mapper.Mapper</span></code></a></li>
+<li><a class="reference internal" href="api_synchronizer.html#connector.unit.synchronizer.Synchronizer" title="connector.unit.synchronizer.Synchronizer"><code class="xref py py-class docutils literal"><span class="pre">connector.unit.synchronizer.Synchronizer</span></code></a></li>
+<li><a class="reference internal" href="api_backend_adapter.html#connector.unit.backend_adapter.BackendAdapter" title="connector.unit.backend_adapter.BackendAdapter"><code class="xref py py-class docutils literal"><span class="pre">connector.unit.backend_adapter.BackendAdapter</span></code></a></li>
+</ul>
+</dd>
+</dl>
+<p>Or basically any class intended to be registered in a
+<a class="reference internal" href="api_backend.html#connector.backend.Backend" title="connector.backend.Backend"><code class="xref py py-class docutils literal"><span class="pre">Backend</span></code></a>.</p>
+<dl class="method">
+<dt id="connector.connector.ConnectorUnit.binder_for">
+<code class="descname">binder_for</code><span class="sig-paren">(</span><em>model=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/connector.html#ConnectorUnit.binder_for"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.connector.ConnectorUnit.binder_for" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns an new instance of the correct <code class="docutils literal"><span class="pre">Binder</span></code> for
+a model</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="connector.connector.ConnectorUnit.env">
+<code class="descname">env</code><a class="headerlink" href="#connector.connector.ConnectorUnit.env" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the openerp.api.environment</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="connector.connector.ConnectorUnit.environment">
+<code class="descname">environment</code><a class="headerlink" href="#connector.connector.ConnectorUnit.environment" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="connector.connector.ConnectorUnit.get_binder_for_model">
+<code class="descname">get_binder_for_model</code><span class="sig-paren">(</span><em>model=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/connector.html#ConnectorUnit.get_binder_for_model"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.connector.ConnectorUnit.get_binder_for_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns an new instance of the correct <code class="docutils literal"><span class="pre">Binder</span></code> for
+a model</p>
+<p>Deprecated, use <code class="docutils literal"><span class="pre">binder_for</span></code> now.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="connector.connector.ConnectorUnit.get_connector_unit_for_model">
+<code class="descname">get_connector_unit_for_model</code><span class="sig-paren">(</span><em>connector_unit_class</em>, <em>model=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/connector.html#ConnectorUnit.get_connector_unit_for_model"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.connector.ConnectorUnit.get_connector_unit_for_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deprecated in favor of <a class="reference internal" href="#connector.connector.ConnectorUnit.unit_for" title="connector.connector.ConnectorUnit.unit_for"><code class="xref py py-meth docutils literal"><span class="pre">unit_for()</span></code></a></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="connector.connector.ConnectorUnit.localcontext">
+<code class="descname">localcontext</code><a class="headerlink" href="#connector.connector.ConnectorUnit.localcontext" title="Permalink to this definition">¶</a></dt>
+<dd><p>It is there for compatibility.</p>
+<p><code class="xref py py-func docutils literal"><span class="pre">openerp.tools.translate._()</span></code> searches for this attribute
+in the classes do be able to translate the strings.</p>
+<p>There is no reason to use this attribute for other purposes.</p>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="connector.connector.ConnectorUnit.match">
+<em class="property">classmethod </em><code class="descname">match</code><span class="sig-paren">(</span><em>session</em>, <em>model</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/connector.html#ConnectorUnit.match"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.connector.ConnectorUnit.match" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns True if the current class correspond to the
+searched model.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>session</strong> (<a class="reference internal" href="api_session.html#connector.session.ConnectorSession" title="connector.session.ConnectorSession"><code class="xref py py-class docutils literal"><span class="pre">connector.session.ConnectorSession</span></code></a>) &#8211; current session</li>
+<li><strong>model</strong> (str or <a class="reference external" href="https://www.odoo.com/documentation/8.0/reference/orm.html#openerp.models.Model" title="(in odoo v8.0)"><code class="xref py py-class docutils literal"><span class="pre">openerp.models.Model</span></code></a>) &#8211; model to match</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="connector.connector.ConnectorUnit.model">
+<code class="descname">model</code><a class="headerlink" href="#connector.connector.ConnectorUnit.model" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="connector.connector.ConnectorUnit.unit_for">
+<code class="descname">unit_for</code><span class="sig-paren">(</span><em>connector_unit_class</em>, <em>model=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/connector.html#ConnectorUnit.unit_for"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.connector.ConnectorUnit.unit_for" title="Permalink to this definition">¶</a></dt>
+<dd><p>According to the current
+<a class="reference internal" href="#connector.connector.ConnectorEnvironment" title="connector.connector.ConnectorEnvironment"><code class="xref py py-class docutils literal"><span class="pre">ConnectorEnvironment</span></code></a>,
+search and returns an instance of the
+<a class="reference internal" href="#connector.connector.ConnectorUnit" title="connector.connector.ConnectorUnit"><code class="xref py py-class docutils literal"><span class="pre">ConnectorUnit</span></code></a> for the current
+model and being a class or subclass of <code class="docutils literal"><span class="pre">connector_unit_class</span></code>.</p>
+<p>If a different <code class="docutils literal"><span class="pre">model</span></code> is given, a new
+<a class="reference internal" href="#connector.connector.ConnectorEnvironment" title="connector.connector.ConnectorEnvironment"><code class="xref py py-class docutils literal"><span class="pre">ConnectorEnvironment</span></code></a>
+is built for this model.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>connector_unit_class</strong> (<code class="xref py py-class docutils literal"><span class="pre">connector.</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="pre">connector.ConnectorUnit</span></code>) &#8211; <code class="docutils literal"><span class="pre">ConnectorUnit</span></code> to search
+(class or subclass)</li>
+<li><strong>model</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; to give if the <code class="docutils literal"><span class="pre">ConnectorUnit</span></code> is for another
+model than the current one</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="connector.connector.MetaConnectorUnit">
+<em class="property">class </em><code class="descclassname">connector.connector.</code><code class="descname">MetaConnectorUnit</code><span class="sig-paren">(</span><em>name</em>, <em>bases</em>, <em>attrs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/connector.html#MetaConnectorUnit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.connector.MetaConnectorUnit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="http://docs.python.org/library/functions.html#type" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">type</span></code></a></p>
+<p>Metaclass for ConnectorUnit.</p>
+<p>Keeps a <code class="docutils literal"><span class="pre">_module</span></code> attribute on the classes, the same way OpenERP does
+it for the Model classes. It is then used to filter them according to
+the state of the module (installed or not).</p>
+<dl class="attribute">
+<dt id="connector.connector.MetaConnectorUnit.for_model_names">
+<code class="descname">for_model_names</code><a class="headerlink" href="#connector.connector.MetaConnectorUnit.for_model_names" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the list of models on which a
+<a class="reference internal" href="#connector.connector.ConnectorUnit" title="connector.connector.ConnectorUnit"><code class="xref py py-class docutils literal"><span class="pre">ConnectorUnit</span></code></a> is usable</p>
+<p>It is used in <a class="reference internal" href="#connector.connector.ConnectorUnit.match" title="connector.connector.ConnectorUnit.match"><code class="xref py py-meth docutils literal"><span class="pre">match()</span></code></a> when
+we search the correct <code class="docutils literal"><span class="pre">ConnectorUnit</span></code> for a model.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="connector.connector.MetaConnectorUnit.model_name">
+<code class="descname">model_name</code><a class="headerlink" href="#connector.connector.MetaConnectorUnit.model_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="connector.connector.get_openerp_module">
+<code class="descclassname">connector.connector.</code><code class="descname">get_openerp_module</code><span class="sig-paren">(</span><em>cls_or_func</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/connector.html#get_openerp_module"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.connector.get_openerp_module" title="Permalink to this definition">¶</a></dt>
+<dd><p>For a top level function or class, returns the
+name of the OpenERP module where it lives.</p>
+<p>So we will be able to filter them according to the modules
+installation state.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="connector.connector.install_in_connector">
+<code class="descclassname">connector.connector.</code><code class="descname">install_in_connector</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/connector.html#install_in_connector"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.connector.install_in_connector" title="Permalink to this definition">¶</a></dt>
+<dd><p>Installs an OpenERP module in the <code class="docutils literal"><span class="pre">Connector</span></code> framework.</p>
+<p>It has to be called once per OpenERP module to plug.</p>
+<p>Under the cover, it creates a <code class="docutils literal"><span class="pre">openerp.models.AbstractModel</span></code> whose
+name is the name of the module with a <code class="docutils literal"><span class="pre">.intalled</span></code> suffix:
+<code class="docutils literal"><span class="pre">{name_of_the_openerp_module_to_install}.installed</span></code>.</p>
+<p>The connector then uses this model to know when the OpenERP module
+is installed or not and whether it should use the ConnectorUnit
+classes of this module or not and whether it should fire the
+consumers of events or not.</p>
+</dd></dl>
+
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+        <br/>
+        
+<div id="sourcelink">
+  <a href="../_sources/api/api_connector.txt"
+     rel="nofollow">Source</a>
+</div>
+      
+    </p>
+    <p>
+        &copy; Copyright 2013, Camptocamp SA.<br/>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

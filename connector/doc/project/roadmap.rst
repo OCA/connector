@@ -8,7 +8,7 @@ Here is a list of things we may agree to merge.
 
 * Queue: use PostgreSQL `notify` for direct enqueue of jobs
 
-  Experimental branch: lp:~openerp-connector-core-editors/openerp-connector/7.0-connector-pg-notify-listen-experimental
+  See: https://github.com/OCA/connector/pull/52
 
 * Add facilities to parse the errors from the jobs so we can replace it
   by more contextual and helpful errors.
@@ -18,3 +18,5 @@ Here is a list of things we may agree to merge.
 
 * Job Channels: each job is owned by a channel and workers can be
   dedicated to one channel only
+
+  See: https://github.com/OCA/connector/pull/52

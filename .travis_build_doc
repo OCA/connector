@@ -10,6 +10,11 @@ parts = openerp
 versions = versions
 find-links = http://download.gna.org/pychart/
 
+# just for issue 9 of sphinx-intl
+extensions = gp.vcsdevelop
+vcs-extend-develop = hg+http://bitbucket.org/ccomb/sphinx-intl#egg=sphinx-intl
+vcs-update = True
+
 [openerp]
 recipe = anybox.recipe.odoo:server
 version = local odoo
@@ -31,3 +36,5 @@ createdb connectordb
 bin/start_openerp -d connectordb --stop-after-init
 cd connector/connector/doc/
 ${HOME}/buildout/bin/sphinx-build -d connectordb -- -b html ./ ${HOME}/doc
+${HOME}/buildout/bin/sphinx-intl -d connectordb -- build
+${HOME}/buildout/bin/sphinx-build -d connectordb -- -D language=fr -b html ./ ${HOME}/doc/fr

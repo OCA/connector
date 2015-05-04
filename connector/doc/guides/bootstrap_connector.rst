@@ -10,23 +10,23 @@ We'll see the steps to bootstrap a new connector.
 Besides that, you may want to use the existing connectors to have some
 real implementation examples:
 
-* `OpenERP Magento Connector`_
-* `OpenERP Prestashop Connector`_
+* `Odoo Magento Connector`_
+* `Odoo Prestashop Connector`_
 
 Some boilerplate is necessary, so this document will guide you through
 some steps. Please also take a look on the :ref:`naming-convention`.
 
 For the sake of the example, we'll imagine we have to synchronize
-OpenERP with a coffee machine.
+Odoo with a coffee machine.
 
-****************
-OpenERP Manifest
-****************
+*************
+Odoo Manifest
+*************
 
-As we want to synchronize OpenERP with a coffee machine, we'll name
+As we want to synchronize Odoo with a coffee machine, we'll name
 our connector connector_coffee.
 
-First, we need to create the OpenERP addons itself, editing the
+First, we need to create the Odoo addons itself, editing the
 ``connector_coffee/__openerp__.py`` manifest.
 
 
@@ -45,11 +45,11 @@ First, we need to create the OpenERP addons itself, editing the
     Coffee Connector
     ================
 
-    Connect OpenERP to my coffee machine.
+    Connect Odoo to my coffee machine.
 
     Features:
 
-    * Poor a coffee when OpenERP is busy for too long
+    * Poor a coffee when Odoo is busy for too long
     """,
      'data': [],
      'installable': True,
@@ -82,7 +82,7 @@ That's just a matter of following a convention and creating
 .. warning:: If you miss this line of code, your ConnectorUnit classes won't
              be found.
 
-.. note:: The reason for this is that OpenERP may import the Python modules
+.. note:: The reason for this is that Odoo may import the Python modules
           of uninstalled modules, so it automatically registers the
           events and ConnectorUnit classes, even for uninstalled
           modules.
@@ -242,8 +242,8 @@ We'll probably need to create synchronizers, mappers, backend adapters,
 binders and maybe our own types of ConnectorUnit classes.
 
 Their implementation can vary a lot. Have a look on the
-`OpenERP Magento Connector`_ and `OpenERP Prestashop Connector`_ projects.
+`Odoo Magento Connector`_ and `Odoo Prestashop Connector`_ projects.
 
 
-.. _`OpenERP Magento Connector`: https://github.com/OCA/connector-magento
-.. _`OpenERP Prestashop Connector`: https://github.com/OCA/connector-prestashop
+.. _`Odoo Magento Connector`: https://github.com/OCA/connector-magento
+.. _`Odoo Prestashop Connector`: https://github.com/OCA/connector-prestashop

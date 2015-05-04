@@ -14,7 +14,7 @@ env:
   - VERSION="8.0" ODOO_REPO="OCA/OCB" LINT_CHECK="0"
   - VERSION="8.0" DOCS="1" LINT_CHECK="0"
   global:
-    secure: imkzmLXFYCB/2leIMiujghWwkw2TNTnXRYayDI9qlyR6pYXHx5lvEljfpTpvEDYywjfSLrkDya51APrUs8aLbAANDgkL/l17uFfD5ObmwLWYg+pwRmD+JhryCR0B6bP684RzXgFsyJ2zlLgTrCUvPMT6MIgUEwVnXXSgwB6lOC0=
+    secure: "lazdZGpkqFTQiu44grYAqKcaGh0cVTBlrHcBxxs43K/OH4Uc2AjMBty83zKc0ZgzizrNOsfK3Z3UHLmTNI92Vi3PtgGzA9dUmiReGO6QcE9P31Geg4pN/1Fwosv6aSpG3hejJJ8ZYpMbEPJkZyjTVpdM2r1VEcqEvFQ2xR5bEUg="
 
 install:
   - git clone https://github.com/OCA/maintainer-quality-tools.git ${HOME}/maintainer-quality-tools

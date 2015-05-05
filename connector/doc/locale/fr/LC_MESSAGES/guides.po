@@ -4,14 +4,14 @@ msgstr ""
 "Project-Id-Version: Connector\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-04-15 22:28+0300\n"
-"PO-Revision-Date: 2015-04-16 22:44+0200\n"
-"Last-Translator: Christophe Combelles <ccomb@free.fr>\n"
+"PO-Revision-Date: 2015-05-05 11:55+0100\n"
+"Last-Translator: Guewen Baconnier <guewen.baconnier@camptocamp.com>\n"
 "Language-Team: fr <LL@li.org>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.6.10\n"
+"X-Generator: Poedit 1.5.4\n"
 
 #: ../../guides/bootstrap_connector.rst:6
 msgid "Boostrapping a connector"
@@ -30,14 +30,6 @@ msgstr ""
 "À côté de ça, vous devriez utiliser les connecteurs existants pour avoir des "
 "exemples réels d'implémentation:"
 
-#: ../../guides/bootstrap_connector.rst:13
-msgid "`OpenERP Magento Connector`_"
-msgstr "`Connecteur OpenERP Magento`_"
-
-#: ../../guides/bootstrap_connector.rst:14
-msgid "`OpenERP Prestashop Connector`_"
-msgstr "`Connecteur OpenERP Prestashop`_"
-
 #: ../../guides/bootstrap_connector.rst:16
 msgid ""
 "Some boilerplate is necessary, so this document will guide you through some "
@@ -45,34 +37,6 @@ msgid ""
 msgstr ""
 "Du code boilerplate est nécessaire, donc ce document va vous guider à "
 "travers différentes étapes. Consultez également les :ref:`naming-convention`."
-
-#: ../../guides/bootstrap_connector.rst:19
-msgid ""
-"For the sake of the example, we'll imagine we have to synchronize OpenERP "
-"with a coffee machine."
-msgstr ""
-"Pour cet exemple nous allons imaginer que nous devons synchroniser OpenERP "
-"avec une machine à café."
-
-#: ../../guides/bootstrap_connector.rst:24
-msgid "OpenERP Manifest"
-msgstr "Manifest OpenERP"
-
-#: ../../guides/bootstrap_connector.rst:26
-msgid ""
-"As we want to synchronize OpenERP with a coffee machine, we'll name our "
-"connector connector_coffee."
-msgstr ""
-"Comme nous voulons synchroniser OpenERP avec une machine à café, nous allons "
-"nommer notre connecteur connector_coffee"
-
-#: ../../guides/bootstrap_connector.rst:29
-msgid ""
-"First, we need to create the OpenERP addons itself, editing the "
-"``connector_coffee/__openerp__.py`` manifest."
-msgstr ""
-"Tout d'abord, nous devons créer le module OpenERP lui-même, en modifiant le "
-"fichier ``connector_coffee/__openerp__.py``."
 
 #: ../../guides/bootstrap_connector.rst:59
 msgid "Nothing special but 2 things to note:"
@@ -115,16 +79,6 @@ msgid ""
 msgstr ""
 "Si vous oubliez cette ligne de code, vos classes ConnectorUnit seront "
 "introuvables."
-
-#: ../../guides/bootstrap_connector.rst:85
-msgid ""
-"The reason for this is that OpenERP may import the Python modules of "
-"uninstalled modules, so it automatically registers the events and "
-"ConnectorUnit classes, even for uninstalled modules."
-msgstr ""
-"La raison de ce fonctionnement est qu'OpenERP importe les modules Python des "
-"addons non installés, donc il inscrit automatiquement les événements et les "
-"classes ConnectorUnit, même pour les modules non installés."
 
 #: ../../guides/bootstrap_connector.rst:90
 msgid ""
@@ -273,14 +227,6 @@ msgstr ""
 "des adaptateurs de backend, des bindings, et peut-être nos propres types de "
 "classes ConnectorUnit"
 
-#: ../../guides/bootstrap_connector.rst:244
-msgid ""
-"Their implementation can vary a lot. Have a look on the `OpenERP Magento "
-"Connector`_ and `OpenERP Prestashop Connector`_ projects."
-msgstr ""
-"Leur implémentation peut varier énormément. Jetez un œil aux projets "
-"`Connecteur OpenERP Magento`_ et `Connecteur OpenERP Prestashop`_."
-
 #: ../../guides/code_overview.rst:5
 msgid "Code Overview"
 msgstr "Survol du code"
@@ -321,21 +267,6 @@ msgstr ""
 #: ../../guides/code_overview.rst:32 ../../guides/concepts.rst:213
 msgid "Bindings"
 msgstr "Bindings (Liaisons)"
-
-#: ../../guides/code_overview.rst:34
-msgid ""
-"The ``binding`` is the link between an OpenERP record and an external "
-"record. There is no forced implementation for the ``bindings``. The most "
-"straightforward techniques are: storing the external ID in the same model "
-"(``account.invoice``), in a new link model or in a new link model which "
-"``_inherits`` ``account.invoice``. Here we choose the latter solution::"
-msgstr ""
-"Un ``binding`` est ce qui permet de lier un enregistrement OpenERP et un "
-"enregistrement externe. Il n'y a pas d'obligation pour l'implémentation des "
-"``liaisons``. Les techniques les plus évidentes sont: stocker les ID "
-"externes dans le même modèle (``account.invoice``), dans un modèle de "
-"liaison ou dans un modèle de laison qui ``_inherits`` ``account.invoice``. "
-"Ici nous choisissons la dernière solution ::"
 
 #: ../../guides/code_overview.rst:55 ../../guides/concepts.rst:88
 msgid "Session"
@@ -460,25 +391,9 @@ msgstr ""
 msgid ":py:class:`~connector.connector.Binder`"
 msgstr ":py:class:`~connector.connector.Binder`"
 
-#: ../../guides/code_overview.rst:130
-msgid ""
-"The ``binders`` give the external ID or OpenERP ID from respectively an "
-"OpenERP ID or an external ID."
-msgstr ""
-"Les ``binders`` (liants) donnent l'ID externe ou l'ID OpenERP en fonction, "
-"respectivement, d'un ID OpenERP ou d'un ID externe."
-
 #: ../../guides/code_overview.rst:133
 msgid ":py:class:`~connector.unit.mapper.Mapper`"
 msgstr ":py:class:`~connector.unit.mapper.Mapper`"
-
-#: ../../guides/code_overview.rst:135
-msgid ""
-"The ``mappers`` transform a external record into an OpenERP record or "
-"conversely."
-msgstr ""
-"Les ``mappeurs`` transforment un enregistrement externe en enregistrement "
-"OpenERP ou l'inverse."
 
 #: ../../guides/code_overview.rst:138
 msgid ":py:class:`~connector.unit.backend_adapter.BackendAdapter`"
@@ -526,10 +441,6 @@ msgstr ""
 "Le framework pour développer des connecteur est découplé en composants "
 "interagissant ensemble. Chacun d'eux peut être utilisé ou non dans une "
 "implémentation."
-
-#: ../../guides/concepts.rst:11
-msgid "An example of implementation is the `OpenERP Magento Connector`_."
-msgstr "Un exemple d'implémentation est le `Connecteur OpenERP Magento`_."
 
 #: ../../guides/concepts.rst:13
 msgid ""
@@ -651,31 +562,10 @@ msgstr ""
 "worker s'arrête, il est supprimé de la base de données, de façon que les "
 "jobs soient libérés et affectés à un autre worker."
 
-#: ../../guides/concepts.rst:77
-msgid ""
-"When multiple OpenERP processes are running, a worker per process is "
-"running, but only those which are *CronWorkers* enqueue and execute jobs, to "
-"avoid to clutter the HTTP processes."
-msgstr ""
-"Si plusieurs processus OpenERP sont en marche, il y a un worker par "
-"processus, mais seuls ceux qui sont des *CronWorkers* traitent les jobs dans "
-"la queue, pour éviter d'encombrer les processus HTTP."
-
 #: ../../guides/concepts.rst:83
 msgid "Delay a job (see the decorator :py:func:`~connector.queue.job.job`)"
 msgstr ""
 "Déporter un job (voir le décorateur :py:func:`~connector.queue.job.job`)"
-
-#: ../../guides/concepts.rst:90
-msgid ""
-"A :py:class:`~connector.session.ConnectorSession` is a container for the "
-"usual ``cr``, ``uid``, ``context`` used in OpenERP. Now, it contains the "
-"Odoo ``Environment`` as ``self.env``. We use them accross the connectors."
-msgstr ""
-"Une :py:class:`~connector.session.ConnectorSession` est un conteneur pour "
-"les classiques ``cr``, ``uid``, ``context`` utilisés dans OpenERP. "
-"Maintenant il contient l'``Environment`` Odoo dans ``self.env``. Nous les "
-"utilisons au sein des connecteurs."
 
 #: ../../guides/concepts.rst:97
 msgid "Backend"
@@ -804,13 +694,6 @@ msgstr "Mappings"
 msgid "The base class is :py:class:`connector.unit.mapper.Mapper`."
 msgstr "La classe de base est :py:class:`connector.unit.mapper.Mapper`."
 
-#: ../../guides/concepts.rst:157
-msgid ""
-"A mapping translates an external record to an OpenERP record and conversely."
-msgstr ""
-"Un mapping convertit un enregistrement externe en un enregistrement OpenERP "
-"et inversement."
-
 #: ../../guides/concepts.rst:160
 msgid "It supports:"
 msgstr "Il prend en charge :"
@@ -901,23 +784,6 @@ msgstr "Binders (Liants)"
 msgid "The base class is :py:class:`connector.connector.Binder`."
 msgstr "La classe de base est :py:class:`connector.connector.Binder`."
 
-#: ../../guides/concepts.rst:204
-msgid ""
-"Binders are classes which know how to find the external ID for an OpenERP "
-"ID, how to find the OpenERP ID for an external ID and how to create the "
-"binding between them."
-msgstr ""
-"Les Binders sont des classes qui savent comment trouver l'ID externe depuis "
-"un ID OpenERP, comment trouver l'ID OpenERP depuis un ID externe et comment "
-"créer le lien entre elles."
-
-#: ../../guides/concepts.rst:215
-msgid ""
-"Here a binding means the link of a record between OpenERP and a backend."
-msgstr ""
-"Ici, un « binding » signifie le lien d'un enregistrement entre OpenERP et un "
-"backend."
-
 #: ../../guides/concepts.rst:217
 msgid ""
 "The proposed implementation for the connectors widely use the `_inherits` "
@@ -935,14 +801,6 @@ msgid ""
 "We create a `magento.res.partner` model, which `_inherits` `res.partner`."
 msgstr ""
 "Nous créons un modèle `magento.res.partner`, qui `_inherits` `res.partner`."
-
-#: ../../guides/concepts.rst:225
-msgid ""
-"This model, called a *binding* model, knows the ID of the partner in "
-"OpenERP, the ID in Magento and the relation to the backend model."
-msgstr ""
-"Ce modèle, appelé modèle de *binding* (liaison), connaît les ID du `partner` "
-"dans OpenERP, l'ID dans Magento et la relation avec le modèle backend."
 
 #: ../../guides/concepts.rst:228
 msgid ""
@@ -970,41 +828,6 @@ msgstr ""
 msgid "Use the connector with multiprocessing"
 msgstr "Connecteur et multiprocessing"
 
-#: ../../guides/multiprocessing.rst:8
-msgid ""
-"When OpenERP is launched with 1 process, the jobs worker will run threaded "
-"in the same process."
-msgstr ""
-"Quand OpenERP est lancé avec un seul processus, le worker de jobs fonctionne "
-"dans un thread."
-
-#: ../../guides/multiprocessing.rst:11
-msgid ""
-"When OpenERP is launched with multiple processes using the option ``--"
-"workers``, the jobs workers are not independant processes, however, you have "
-"to launch them separately with the script ``openerp-connector-worker`` "
-"located in the connector module."
-msgstr ""
-"Quand OpenERP est lancé en multi-processus grâce à l'option ``--workers``, "
-"les workers de jobs ne sont pas des processus indépendants, mais vous devez "
-"les lancer séparément avec le script ``openerp-connector-worker`` situé dans "
-"le module `connector`."
-
-#: ../../guides/multiprocessing.rst:16
-msgid ""
-"It takes the same arguments and configuration file than the OpenERP server."
-msgstr ""
-"Il prend les mêmes arguments et fichier de configuration que le serveur "
-"OpenERP."
-
-#: ../../guides/multiprocessing.rst:19
-msgid ""
-"The Python path must contain the path to the OpenERP server when ``openerp-"
-"connector-worker`` is launched."
-msgstr ""
-"Le `path` de Python doit contenir le chemin vers le serveur OpenERP quand "
-"``openerp-connector-worker`` est lancé."
-
 #: ../../guides/multiprocessing.rst:22
 msgid "Example::"
 msgstr "Exemple ::"
@@ -1014,16 +837,6 @@ msgid ""
 "The 'Enqueue Jobs' scheduled action is useless when multiprocessing is used."
 msgstr "L'action planifiée 'Enqueue Jobs' est inutile en mode multi-processus."
 
-#: ../../guides/multiprocessing.rst:30
-msgid ""
-"The ``openerp-connector-worker`` should not be launched alongside OpenERP "
-"when the latter does not run in multiprocess mode, because the interprocess "
-"signaling would not be done."
-msgstr ""
-"Le script ``openerp-connector-worker`` ne doit pas être lancé avec OpenERP "
-"quand ce dernier ne fonctionne pas en multi-processus, parce que les signaux "
-"inter-processus ne seraient pas transmis."
-
 #: ../../guides/multiprocessing.rst:34
 msgid ""
 "The Magento Connector's buildout contains builtin commands to launch the "
@@ -1032,11 +845,371 @@ msgstr ""
 "Le `buildout` du connecteur Magento contient des commandes intégrées pour "
 "lancer les workers : :ref:`connectormagento:installation-with-buildout`"
 
+#: ../../guides/bootstrap_connector.rst:13
+msgid "`Odoo Magento Connector`_"
+msgstr "`Connecteur Odoo Magento`_"
+
+#: ../../guides/bootstrap_connector.rst:14
+msgid "`Odoo Prestashop Connector`_"
+msgstr "`Connecteur Odoo Prestashop`_"
+
+#: ../../guides/bootstrap_connector.rst:19
+msgid ""
+"For the sake of the example, we'll imagine we have to synchronize Odoo with "
+"a coffee machine."
+msgstr ""
+"Pour cet exemple nous allons imaginer que nous devons synchroniser Odoo avec "
+"une machine à café."
+
+#: ../../guides/bootstrap_connector.rst:24
+msgid "Odoo Manifest"
+msgstr ""
+
+#: ../../guides/bootstrap_connector.rst:26
+msgid ""
+"As we want to synchronize Odoo with a coffee machine, we'll name our "
+"connector connector_coffee."
+msgstr ""
+"Comme nous voulons synchroniser Odoo avec une machine à café, nous allons "
+"nommer notre connecteur connector_coffee"
+
+#: ../../guides/bootstrap_connector.rst:29
+msgid ""
+"First, we need to create the Odoo addons itself, editing the "
+"``connector_coffee/__openerp__.py`` manifest."
+msgstr ""
+"Tout d'abord, nous devons créer le module Odoo lui-même, en modifiant le "
+"fichier ``connector_coffee/__openerp__.py``."
+
+#: ../../guides/bootstrap_connector.rst:85
+msgid ""
+"The reason for this is that Odoo may import the Python modules of "
+"uninstalled modules, so it automatically registers the events and "
+"ConnectorUnit classes, even for uninstalled modules."
+msgstr ""
+"La raison de ce fonctionnement est qu'Odoo importe les modules Python des "
+"addons non installés, donc il inscrit automatiquement les événements et les "
+"classes ConnectorUnit, même pour les modules non installés."
+
+#: ../../guides/bootstrap_connector.rst:244
+msgid ""
+"Their implementation can vary a lot. Have a look on the `Odoo Magento "
+"Connector`_ and `Odoo Prestashop Connector`_ projects."
+msgstr ""
+"Leur implémentation peut varier énormément. Jetez un œil aux projets "
+"`Connecteur Odoo Magento`_ et `Connecteur Odoo Prestashop`_."
+
+#: ../../guides/code_overview.rst:34
+msgid ""
+"The ``binding`` is the link between an Odoo record and an external record. "
+"There is no forced implementation for the ``bindings``. The most "
+"straightforward techniques are: storing the external ID in the same model "
+"(``account.invoice``), in a new link model or in a new link model which "
+"``_inherits`` ``account.invoice``. Here we choose the latter solution::"
+msgstr ""
+"Un ``binding`` est ce qui permet de lier un enregistrement Odoo et un "
+"enregistrement externe. Il n'y a pas d'obligation pour l'implémentation des "
+"``liaisons``. Les techniques les plus évidentes sont: stocker les ID "
+"externes dans le même modèle (``account.invoice``), dans un modèle de "
+"liaison ou dans un modèle de laison qui ``_inherits`` ``account.invoice``. "
+"Ici nous choisissons la dernière solution ::"
+
+#: ../../guides/code_overview.rst:130
+msgid ""
+"The ``binders`` give the external ID or Odoo ID from respectively an Odoo ID "
+"or an external ID."
+msgstr ""
+"Les ``binders`` (liants) donnent l'ID externe ou l'ID Odoo en fonction, "
+"respectivement, d'un ID Odoo ou d'un ID externe."
+
+#: ../../guides/code_overview.rst:135
+msgid ""
+"The ``mappers`` transform a external record into an Odoo record or "
+"conversely."
+msgstr ""
+"Les ``mappeurs`` transforment un enregistrement externe en enregistrement "
+"Odoo ou l'inverse."
+
+#: ../../guides/concepts.rst:11
+msgid "An example of implementation is the `Odoo Magento Connector`_."
+msgstr "Un exemple d'implémentation est le `Connecteur Odoo Magento`_."
+
 #: ../../guides/concepts.rst:22
 msgid ""
-"Events are hooks in OpenERP on which we can plug some actions. They are "
-"based on an Observer pattern."
+"Events are hooks in Odoo on which we can plug some actions. They are based "
+"on an Observer pattern."
 msgstr ""
-"Les événements sont des points d'accroche dans OpenERP sur lesquels on peut "
+"Les événements sont des points d'accroche dans Odoo sur lesquels on peut "
 "brancher des actions. Ils sont basés sur le motif de conception « "
 "Observateur »."
+
+#: ../../guides/concepts.rst:77
+msgid ""
+"When multiple Odoo processes are running, a worker per process is running, "
+"but only those which are *CronWorkers* enqueue and execute jobs, to avoid to "
+"clutter the HTTP processes."
+msgstr ""
+"Si plusieurs processus Odoo sont en marche, il y a un worker par processus, "
+"mais seuls ceux qui sont des *CronWorkers* traitent les jobs dans la queue, "
+"pour éviter d'encombrer les processus HTTP."
+
+#: ../../guides/concepts.rst:90
+msgid ""
+"A :py:class:`~connector.session.ConnectorSession` is a container for the "
+"usual ``cr``, ``uid``, ``context`` used in Odoo. Now, it contains the Odoo "
+"``Environment`` as ``self.env``. We use them accross the connectors."
+msgstr ""
+"Une :py:class:`~connector.session.ConnectorSession` est un conteneur pour "
+"les classiques ``cr``, ``uid``, ``context`` utilisés dans Odoo. Maintenant "
+"il contient l'``Environment`` Odoo dans ``self.env``. Nous les utilisons au "
+"sein des connecteurs."
+
+#: ../../guides/concepts.rst:157
+msgid ""
+"A mapping translates an external record to an Odoo record and conversely."
+msgstr ""
+"Un mapping convertit un enregistrement externe en un enregistrement Odoo et "
+"inversement."
+
+#: ../../guides/concepts.rst:204
+msgid ""
+"Binders are classes which know how to find the external ID for an Odoo ID, "
+"how to find the Odoo ID for an external ID and how to create the binding "
+"between them."
+msgstr ""
+"Les Binders sont des classes qui savent comment trouver l'ID externe depuis "
+"un ID Odoo, comment trouver l'ID Odoo depuis un ID externe et comment créer "
+"le lien entre elles."
+
+#: ../../guides/concepts.rst:215
+msgid "Here a binding means the link of a record between Odoo and a backend."
+msgstr ""
+"Ici, un « binding » signifie le lien d'un enregistrement entre Odoo et un "
+"backend."
+
+#: ../../guides/concepts.rst:225
+msgid ""
+"This model, called a *binding* model, knows the ID of the partner in Odoo, "
+"the ID in Magento and the relation to the backend model."
+msgstr ""
+"Ce modèle, appelé modèle de *binding* (liaison), connaît les ID du `partner` "
+"dans Odoo, l'ID dans Magento et la relation avec le modèle backend."
+
+#: ../../guides/multiprocessing.rst:8
+msgid ""
+"When Odoo is launched with 1 process, the jobs worker will run threaded in "
+"the same process."
+msgstr ""
+"Quand Odoo est lancé avec un seul processus, le worker de jobs fonctionne "
+"dans un thread."
+
+#: ../../guides/multiprocessing.rst:11
+msgid ""
+"When Odoo is launched with multiple processes using the option ``--"
+"workers``, the jobs workers are not independant processes, however, you have "
+"to launch them separately with the script ``openerp-connector-worker`` "
+"located in the connector module."
+msgstr ""
+"Quand Odoo est lancé en multi-processus grâce à l'option ``--workers``, les "
+"workers de jobs ne sont pas des processus indépendants, mais vous devez les "
+"lancer séparément avec le script ``openerp-connector-worker`` situé dans le "
+"module `connector`."
+
+#: ../../guides/multiprocessing.rst:16
+msgid ""
+"It takes the same arguments and configuration file than the Odoo server."
+msgstr ""
+"Il prend les mêmes arguments et fichier de configuration que le serveur Odoo."
+
+#: ../../guides/multiprocessing.rst:19
+msgid ""
+"The Python path must contain the path to the Odoo server when ``openerp-"
+"connector-worker`` is launched."
+msgstr ""
+"Le `path` de Python doit contenir le chemin vers le serveur Odoo quand "
+"``openerp-connector-worker`` est lancé."
+
+#: ../../guides/multiprocessing.rst:30
+msgid ""
+"The ``openerp-connector-worker`` should not be launched alongside Odoo when "
+"the latter does not run in multiprocess mode, because the interprocess "
+"signaling would not be done."
+msgstr ""
+"Le script ``openerp-connector-worker`` ne doit pas être lancé avec Odoo "
+"quand ce dernier ne fonctionne pas en multi-processus, parce que les signaux "
+"inter-processus ne seraient pas transmis."
+
+#~ msgid "`OpenERP Magento Connector`_"
+#~ msgstr "`Connecteur OpenERP Magento`_"
+
+#~ msgid "`OpenERP Prestashop Connector`_"
+#~ msgstr "`Connecteur OpenERP Prestashop`_"
+
+#~ msgid ""
+#~ "For the sake of the example, we'll imagine we have to synchronize OpenERP "
+#~ "with a coffee machine."
+#~ msgstr ""
+#~ "Pour cet exemple nous allons imaginer que nous devons synchroniser "
+#~ "OpenERP avec une machine à café."
+
+#~ msgid "OpenERP Manifest"
+#~ msgstr "Manifest OpenERP"
+
+#~ msgid ""
+#~ "As we want to synchronize OpenERP with a coffee machine, we'll name our "
+#~ "connector connector_coffee."
+#~ msgstr ""
+#~ "Comme nous voulons synchroniser OpenERP avec une machine à café, nous "
+#~ "allons nommer notre connecteur connector_coffee"
+
+#~ msgid ""
+#~ "First, we need to create the OpenERP addons itself, editing the "
+#~ "``connector_coffee/__openerp__.py`` manifest."
+#~ msgstr ""
+#~ "Tout d'abord, nous devons créer le module OpenERP lui-même, en modifiant "
+#~ "le fichier ``connector_coffee/__openerp__.py``."
+
+#~ msgid ""
+#~ "The reason for this is that OpenERP may import the Python modules of "
+#~ "uninstalled modules, so it automatically registers the events and "
+#~ "ConnectorUnit classes, even for uninstalled modules."
+#~ msgstr ""
+#~ "La raison de ce fonctionnement est qu'OpenERP importe les modules Python "
+#~ "des addons non installés, donc il inscrit automatiquement les événements "
+#~ "et les classes ConnectorUnit, même pour les modules non installés."
+
+#~ msgid ""
+#~ "Their implementation can vary a lot. Have a look on the `OpenERP Magento "
+#~ "Connector`_ and `OpenERP Prestashop Connector`_ projects."
+#~ msgstr ""
+#~ "Leur implémentation peut varier énormément. Jetez un œil aux projets "
+#~ "`Connecteur OpenERP Magento`_ et `Connecteur OpenERP Prestashop`_."
+
+#~ msgid ""
+#~ "The ``binding`` is the link between an OpenERP record and an external "
+#~ "record. There is no forced implementation for the ``bindings``. The most "
+#~ "straightforward techniques are: storing the external ID in the same model "
+#~ "(``account.invoice``), in a new link model or in a new link model which "
+#~ "``_inherits`` ``account.invoice``. Here we choose the latter solution::"
+#~ msgstr ""
+#~ "Un ``binding`` est ce qui permet de lier un enregistrement OpenERP et un "
+#~ "enregistrement externe. Il n'y a pas d'obligation pour l'implémentation "
+#~ "des ``liaisons``. Les techniques les plus évidentes sont: stocker les ID "
+#~ "externes dans le même modèle (``account.invoice``), dans un modèle de "
+#~ "liaison ou dans un modèle de laison qui ``_inherits`` ``account."
+#~ "invoice``. Ici nous choisissons la dernière solution ::"
+
+#~ msgid ""
+#~ "The ``binders`` give the external ID or OpenERP ID from respectively an "
+#~ "OpenERP ID or an external ID."
+#~ msgstr ""
+#~ "Les ``binders`` (liants) donnent l'ID externe ou l'ID OpenERP en "
+#~ "fonction, respectivement, d'un ID OpenERP ou d'un ID externe."
+
+#~ msgid ""
+#~ "The ``mappers`` transform a external record into an OpenERP record or "
+#~ "conversely."
+#~ msgstr ""
+#~ "Les ``mappeurs`` transforment un enregistrement externe en enregistrement "
+#~ "OpenERP ou l'inverse."
+
+#~ msgid "An example of implementation is the `OpenERP Magento Connector`_."
+#~ msgstr "Un exemple d'implémentation est le `Connecteur OpenERP Magento`_."
+
+#~ msgid ""
+#~ "When multiple OpenERP processes are running, a worker per process is "
+#~ "running, but only those which are *CronWorkers* enqueue and execute jobs, "
+#~ "to avoid to clutter the HTTP processes."
+#~ msgstr ""
+#~ "Si plusieurs processus OpenERP sont en marche, il y a un worker par "
+#~ "processus, mais seuls ceux qui sont des *CronWorkers* traitent les jobs "
+#~ "dans la queue, pour éviter d'encombrer les processus HTTP."
+
+#~ msgid ""
+#~ "A :py:class:`~connector.session.ConnectorSession` is a container for the "
+#~ "usual ``cr``, ``uid``, ``context`` used in OpenERP. Now, it contains the "
+#~ "Odoo ``Environment`` as ``self.env``. We use them accross the connectors."
+#~ msgstr ""
+#~ "Une :py:class:`~connector.session.ConnectorSession` est un conteneur pour "
+#~ "les classiques ``cr``, ``uid``, ``context`` utilisés dans OpenERP. "
+#~ "Maintenant il contient l'``Environment`` Odoo dans ``self.env``. Nous les "
+#~ "utilisons au sein des connecteurs."
+
+#~ msgid ""
+#~ "A mapping translates an external record to an OpenERP record and "
+#~ "conversely."
+#~ msgstr ""
+#~ "Un mapping convertit un enregistrement externe en un enregistrement "
+#~ "OpenERP et inversement."
+
+#~ msgid ""
+#~ "Binders are classes which know how to find the external ID for an OpenERP "
+#~ "ID, how to find the OpenERP ID for an external ID and how to create the "
+#~ "binding between them."
+#~ msgstr ""
+#~ "Les Binders sont des classes qui savent comment trouver l'ID externe "
+#~ "depuis un ID OpenERP, comment trouver l'ID OpenERP depuis un ID externe "
+#~ "et comment créer le lien entre elles."
+
+#~ msgid ""
+#~ "Here a binding means the link of a record between OpenERP and a backend."
+#~ msgstr ""
+#~ "Ici, un « binding » signifie le lien d'un enregistrement entre OpenERP et "
+#~ "un backend."
+
+#~ msgid ""
+#~ "This model, called a *binding* model, knows the ID of the partner in "
+#~ "OpenERP, the ID in Magento and the relation to the backend model."
+#~ msgstr ""
+#~ "Ce modèle, appelé modèle de *binding* (liaison), connaît les ID du "
+#~ "`partner` dans OpenERP, l'ID dans Magento et la relation avec le modèle "
+#~ "backend."
+
+#~ msgid ""
+#~ "When OpenERP is launched with 1 process, the jobs worker will run "
+#~ "threaded in the same process."
+#~ msgstr ""
+#~ "Quand OpenERP est lancé avec un seul processus, le worker de jobs "
+#~ "fonctionne dans un thread."
+
+#~ msgid ""
+#~ "When OpenERP is launched with multiple processes using the option ``--"
+#~ "workers``, the jobs workers are not independant processes, however, you "
+#~ "have to launch them separately with the script ``openerp-connector-"
+#~ "worker`` located in the connector module."
+#~ msgstr ""
+#~ "Quand OpenERP est lancé en multi-processus grâce à l'option ``--"
+#~ "workers``, les workers de jobs ne sont pas des processus indépendants, "
+#~ "mais vous devez les lancer séparément avec le script ``openerp-connector-"
+#~ "worker`` situé dans le module `connector`."
+
+#~ msgid ""
+#~ "It takes the same arguments and configuration file than the OpenERP "
+#~ "server."
+#~ msgstr ""
+#~ "Il prend les mêmes arguments et fichier de configuration que le serveur "
+#~ "OpenERP."
+
+#~ msgid ""
+#~ "The Python path must contain the path to the OpenERP server when "
+#~ "``openerp-connector-worker`` is launched."
+#~ msgstr ""
+#~ "Le `path` de Python doit contenir le chemin vers le serveur OpenERP quand "
+#~ "``openerp-connector-worker`` est lancé."
+
+#~ msgid ""
+#~ "The ``openerp-connector-worker`` should not be launched alongside OpenERP "
+#~ "when the latter does not run in multiprocess mode, because the "
+#~ "interprocess signaling would not be done."
+#~ msgstr ""
+#~ "Le script ``openerp-connector-worker`` ne doit pas être lancé avec "
+#~ "OpenERP quand ce dernier ne fonctionne pas en multi-processus, parce que "
+#~ "les signaux inter-processus ne seraient pas transmis."
+
+#~ msgid ""
+#~ "Events are hooks in OpenERP on which we can plug some actions. They are "
+#~ "based on an Observer pattern."
+#~ msgstr ""
+#~ "Les événements sont des points d'accroche dans OpenERP sur lesquels on "
+#~ "peut brancher des actions. Ils sont basés sur le motif de conception « "
+#~ "Observateur »."

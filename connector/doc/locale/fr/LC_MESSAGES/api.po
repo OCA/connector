@@ -1616,7 +1616,8 @@ msgid "filter on fields"
 msgstr "filtre sur les champs"
 
 #: ../../../unit/mapper.pydocstring of
-#: connector.unit.mapper.MapRecord.values:40
+#: connector.unit.mapper.MapRecord.values:40 ../../../unit/mapper.pydocstring
+#: of connector.unit.mapper.MapRecord.values:40
 msgid "custom options, they can later be used in the mapping methods"
 msgstr ""
 "options spécifiques, elles peuvent être utilisées plus tard dans les "
@@ -1896,6 +1897,7 @@ msgstr ""
 "champs d'un enregistrement, la taille de l'enregistrement en sortie sera "
 "limitée aux seuls champs devant être exportés."
 
+#: ../../../unit/mapper.pydocstring of connector.unit.mapper.changed_by:21
 #: ../../../unit/mapper.pydocstring of connector.unit.mapper.changed_by:21
 msgid "field names which trigger the mapping when modified"
 msgstr "noms de champs qui déclenchent le mapping à la modification"

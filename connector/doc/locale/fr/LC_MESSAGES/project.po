@@ -4,14 +4,14 @@ msgstr ""
 "Project-Id-Version: Connector\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-04-15 22:28+0300\n"
-"PO-Revision-Date: 2015-04-17 14:04+0200\n"
-"Last-Translator: Christophe Combelles <ccomb@free.fr>\n"
+"PO-Revision-Date: 2015-05-05 11:48+0100\n"
+"Last-Translator: Guewen Baconnier <guewen.baconnier@camptocamp.com>\n"
 "Language-Team: fr <LL@li.org>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.6.10\n"
+"X-Generator: Poedit 1.5.4\n"
 
 #: ../../project/changes.rst:5
 msgid "Changes"
@@ -332,16 +332,6 @@ msgstr ""
 "l'approche conseillée est de lire cette documentation, en particulier les :"
 "ref:`concepts` et :ref:`bootstrap-connector`."
 
-#: ../../project/contribute.rst:29
-msgid ""
-"Then, my personal advice is to look at the existing connectors (`OpenERP "
-"Magento Connector`_, `OpenERP Prestashop Connector`_). You will also "
-"probably need to dive a bit in the framework's code."
-msgstr ""
-"Ensuite, il est conseillé de parcourir les connecteurs existants "
-"(`Connecteur OpenERP Magento`_, `Connecteur OpenERP Prestashop`_). Vous "
-"devrez aussi plonger peut-être un peu dans le code du framework."
-
 #: ../../project/contribute.rst:33
 msgid ""
 "If the connector belongs to the e-commerce domain, you may want to reuse the "
@@ -366,10 +356,6 @@ msgstr "Nom du projet s'il est dans l'OCA :"
 #: ../../project/contribute.rst:45
 msgid "connector-xxx"
 msgstr "connector-xxx"
-
-#: ../../project/contribute.rst:48
-msgid "Name of the OpenERP module:"
-msgstr "Nom du module OpenERP :"
 
 #: ../../project/contribute.rst:48
 msgid "connector_xxx"
@@ -613,14 +599,6 @@ msgstr ""
 "Queue : utiliser `notify` de PostgreSQL pour une mise en queue directe des "
 "jobs"
 
-#: ../../project/roadmap.rst:11
-msgid ""
-"Experimental branch: lp:~openerp-connector-core-editors/openerp-"
-"connector/7.0-connector-pg-notify-listen-experimental"
-msgstr ""
-"Branche expérimentale : lp:~openerp-connector-core-editors/openerp-"
-"connector/7.0-connector-pg-notify-listen-experimental"
-
 #: ../../project/roadmap.rst:13
 msgid ""
 "Add facilities to parse the errors from the jobs so we can replace it by "
@@ -728,11 +706,57 @@ msgstr ""
 "request/9/>`_ à sphinx-intl (jusqu'à ce que ce soit mergé) pour gérer les "
 "traductions *fuzzy*"
 
-#: ../../project/contribute.rst:99
-msgid "Then you can see the result in _build/html/ and submit a Pull Request"
+#: ../../project/contribute.rst:29
+msgid ""
+"Then, my personal advice is to look at the existing connectors (`Odoo "
+"Magento Connector`_, `Odoo Prestashop Connector`_). You will also probably "
+"need to dive a bit in the framework's code."
 msgstr ""
-"Vous pouvez ensuite voir le résultat dans _build/html/ et soumettre un Pull "
-"Request"
+"Ensuite, il est conseillé de parcourir les connecteurs existants "
+"(`Connecteur Odoo Magento`_, `Connecteur Odoo Prestashop`_). Vous devrez "
+"aussi plonger peut-être un peu dans le code du framework."
+
+#: ../../project/contribute.rst:48
+msgid "Name of the Odoo module:"
+msgstr "Nom du module Odoo :"
+
+#: ../../project/contribute.rst:100
+msgid ""
+"Then you can see the result in _build/html/ and submit a Pull Request. "
+"Repeat the 5 last steps to update the translation if modified upstream."
+msgstr ""
+"Vous pouvez ensuite voir le résultat dans _build/html/ et soumettre un "
+"\"Pull Request\". Répétez les 5 dernières étapes pour remettre à jour les "
+"traductions en cas de modification dans le tronc principal."
+
+#: ../../project/roadmap.rst:11 ../../project/roadmap.rst:22
+msgid "See: https://github.com/OCA/connector/pull/52"
+msgstr "See: https://github.com/OCA/connector/pull/52"
+
+#~ msgid ""
+#~ "Then, my personal advice is to look at the existing connectors (`OpenERP "
+#~ "Magento Connector`_, `OpenERP Prestashop Connector`_). You will also "
+#~ "probably need to dive a bit in the framework's code."
+#~ msgstr ""
+#~ "Ensuite, il est conseillé de parcourir les connecteurs existants "
+#~ "(`Connecteur OpenERP Magento`_, `Connecteur OpenERP Prestashop`_). Vous "
+#~ "devrez aussi plonger peut-être un peu dans le code du framework."
+
+#~ msgid "Name of the OpenERP module:"
+#~ msgstr "Nom du module OpenERP :"
+
+#~ msgid ""
+#~ "Experimental branch: lp:~openerp-connector-core-editors/openerp-"
+#~ "connector/7.0-connector-pg-notify-listen-experimental"
+#~ msgstr ""
+#~ "Branche expérimentale : lp:~openerp-connector-core-editors/openerp-"
+#~ "connector/7.0-connector-pg-notify-listen-experimental"
+
+#~ msgid ""
+#~ "Then you can see the result in _build/html/ and submit a Pull Request"
+#~ msgstr ""
+#~ "Vous pouvez ensuite voir le résultat dans _build/html/ et soumettre un "
+#~ "Pull Request"
 
 #~ msgid ""
 #~ "Add `this patch <https://bitbucket.org/shimizukawa/sphinx-intl/pull-"

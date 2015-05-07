@@ -56,7 +56,7 @@ class QueueJob(models.Model):
                               string='User ID',
                               required=True)
     company_id = fields.Many2one(comodel_name='res.company',
-                                 string='Company')
+                                 string='Company', select=True)
     name = fields.Char(string='Description', readonly=True)
     func_string = fields.Char(string='Task', readonly=True)
     func = fields.Binary(string='Pickled Function',
@@ -65,7 +65,8 @@ class QueueJob(models.Model):
     state = fields.Selection(STATES,
                              string='State',
                              readonly=True,
-                             required=True)
+                             required=True,
+                             select=True)
     priority = fields.Integer()
     exc_info = fields.Text(string='Exception Info', readonly=True)
     result = fields.Text(string='Result', readonly=True)

@@ -200,7 +200,8 @@ class Database(object):
     def set_job_enqueued(self, uuid):
         with closing(self.conn.cursor()) as cr:
             cr.execute("UPDATE queue_job SET state=%s, "
-                       "date_enqueued=date_trunc('seconds', now()::timestamp) "
+                       "date_enqueued=date_trunc('seconds', "
+                       "                         now() at time zone 'utc') "
                        "WHERE uuid=%s",
                        (ENQUEUED, uuid))
 

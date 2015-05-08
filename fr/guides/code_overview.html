@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Survol du code &mdash; documentation Connector </title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootswatch-3.2.0/united/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/translations.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-3.2.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <link rel="top" title="documentation Connector " href="../index.html" />
+    <link rel="next" title="Concepts du connecteur" href="concepts.html" />
+    <link rel="prev" title="Roadmap" href="../project/roadmap.html" />
+
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-7628916-3', 'odoo-connector.com');
+  ga('send', 'pageview');
+</script>
+
+  </head>
+  <body role="document">
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../index.html">
+          Odoo Connector</a>
+        <span class="navbar-text navbar-version pull-left"><b></b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+  <li class="dropdown">
+    <a role="button"
+       id="dLabelTranslations"
+       data-toggle="dropdown"
+       data-target="#"
+       href="#">Translations<b class="caret"></b></a>
+    <ul class="dropdown-menu"
+        role="menu"
+        aria-labelledby="dLabelTranslations">
+      <li><a class="reference" href="http://odoo-connector.com">English</a><li>
+      <li><a class="reference" href="http://odoo-connector.com/fr">French</a><li>
+    </ul>
+  </li>
+  
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../project/contribute.html">Contribuer</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../project/contribute.html#want-to-start-a-new-connector">Démarrer un nouveau connecteur</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../project/contribute.html#creating-or-maintaining-a-translation-of-this-doc">Créer ou maintenir une traduction de cette doc</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../project/contributors.html">Contributeurs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../project/contributors.html#financial-contributors">Contributeurs financiers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../project/license.html">Licence</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../project/changes.html">Changements</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../project/changes.html#id2">3.0.0 (2015-04-01)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../project/changes.html#id3">2.2.0 (2014-05-26)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../project/changes.html#id4">2.1.1 (2014-02-06)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../project/changes.html#warning-breaks-compatibility">2.1.0 (2014-01-15 - attention : rupture de compatibilité)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../project/changes.html#id5">2.0.1 (2013-09-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../project/changes.html#id6">2.0.0</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../project/roadmap.html">Roadmap</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="">Survol du code</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#backends">Backends</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#bindings">Bindings (Liaisons)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#session">Session</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#events">Événements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#jobs">Jobs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#connectorunit">ConnectorUnit</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="concepts.html">Concepts du connecteur</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="concepts.html#events">Événements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="concepts.html#jobs-queue">Queue de jobs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="concepts.html#session">Session</a></li>
+<li class="toctree-l2"><a class="reference internal" href="concepts.html#backend">Backend</a></li>
+<li class="toctree-l2"><a class="reference internal" href="concepts.html#environment">Environnement</a></li>
+<li class="toctree-l2"><a class="reference internal" href="concepts.html#connectorunit">ConnectorUnit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="concepts.html#bindings">Bindings (Liaisons)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="concepts.html#checkpoint">Point de contrôle</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="bootstrap_connector.html">Amorcer la création un nouveau connecteur</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="bootstrap_connector.html#odoo-manifest">Odoo Manifest</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bootstrap_connector.html#install-the-module-in-the-connector">Installation du module dans le connecteur</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bootstrap_connector.html#declare-the-backends">Déclaration des backends</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bootstrap_connector.html#backend-model">Modèle du backend</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bootstrap_connector.html#abstract-binding">Binding abstrait</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bootstrap_connector.html#environment">Environnement</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bootstrap_connector.html#checkpoints">Points de contrôle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bootstrap_connector.html#connectorunit-classes">Classes ConnectorUnit</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="multiprocessing.html">Connecteur et multiprocessing</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/api_connector.html">Connecteur</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/api_session.html">Session</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/api_backend.html">Backend</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/api_backend.html#module-connector.backend_model">Modèles du backend</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/api_event.html">Événement</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/api_binder.html">Binder (Liant)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/api_mapper.html">Mappeur</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../api/api_mapper.html#mappers">Mappeurs</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../api/api_synchronizer.html">Synchroniseur</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/api_backend_adapter.html">Adaptateur de backend</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/api_queue.html">Queue</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../api/api_queue.html#module-connector.queue.job">Job</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/api_queue.html#module-connector.queue.worker">Worker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/api_queue.html#id5">Queue</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/api_queue.html#module-connector.queue.model">Modèles</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../api/api_exception.html">Exceptions</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">Survol du code</a><ul>
+<li><a class="reference internal" href="#backends">Backends</a></li>
+<li><a class="reference internal" href="#bindings">Bindings (Liaisons)</a></li>
+<li><a class="reference internal" href="#session">Session</a></li>
+<li><a class="reference internal" href="#events">Événements</a></li>
+<li><a class="reference internal" href="#jobs">Jobs</a></li>
+<li><a class="reference internal" href="#connectorunit">ConnectorUnit</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+            
+
+            
+              
+                
+  <li>
+    <a href="../project/roadmap.html" title="Previous Chapter: Roadmap"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Roadmap</span>
+    </a>
+  </li>
+  <li>
+    <a href="concepts.html" title="Next Chapter: Concepts du connecteur"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Concepts du conn... &raquo;</span>
+    </a>
+  </li>
+              
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      
+  <div class="section" id="code-overview">
+<span id="id1"></span><h1>Survol du code<a class="headerlink" href="#code-overview" title="Lien permanent vers ce titre">¶</a></h1>
+<p>Voici un survol de certains concepts du framework.</p>
+<p>Comme exemple, nous allons voir les étapes pour exporter une facture vers Magento. Ce n&#8217;est pas un exemple complet mais un aperçu d&#8217;un cas réel pour exposer les idée principales.</p>
+<div class="section" id="backends">
+<h2>Backends<a class="headerlink" href="#backends" title="Lien permanent vers ce titre">¶</a></h2>
+<p>Tout commence par une déclaration du <a class="reference internal" href="../api/api_backend.html#connector.backend.Backend" title="connector.backend.Backend"><code class="xref py py-class docutils literal"><span class="pre">Backend</span></code></a>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">openerp.addons.connector.backend</span> <span class="kn">as</span> <span class="nn">backend</span>
+
+<span class="n">magento</span> <span class="o">=</span> <span class="n">backend</span><span class="o">.</span><span class="n">Backend</span><span class="p">(</span><span class="s">&#39;magento&#39;</span><span class="p">)</span>
+<span class="sd">&quot;&quot;&quot; Generic Magento Backend &quot;&quot;&quot;</span>
+
+<span class="n">magento1700</span> <span class="o">=</span> <span class="n">backend</span><span class="o">.</span><span class="n">Backend</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="n">magento</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s">&#39;1.7&#39;</span><span class="p">)</span>
+<span class="sd">&quot;&quot;&quot; Magento Backend for version 1.7 &quot;&quot;&quot;</span>
+</pre></div>
+</div>
+<p>Comme vous pouvez voir, Magento est parent de Magento 1.7. Nous pouvons donc définir une hiérarchie de backends.</p>
+</div>
+<div class="section" id="bindings">
+<h2>Bindings (Liaisons)<a class="headerlink" href="#bindings" title="Lien permanent vers ce titre">¶</a></h2>
+<p>Un <code class="docutils literal"><span class="pre">binding</span></code> est ce qui permet de lier un enregistrement Odoo et un enregistrement externe. Il n&#8217;y a pas d&#8217;obligation pour l&#8217;implémentation des <code class="docutils literal"><span class="pre">liaisons</span></code>. Les techniques les plus évidentes sont: stocker les ID externes dans le même modèle (<code class="docutils literal"><span class="pre">account.invoice</span></code>), dans un modèle de liaison ou dans un modèle de laison qui <code class="docutils literal"><span class="pre">_inherits</span></code> <code class="docutils literal"><span class="pre">account.invoice</span></code>. Ici nous choisissons la dernière solution</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">MagentoAccountInvoice</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">_name</span> <span class="o">=</span> <span class="s">&#39;magento.account.invoice&#39;</span>
+    <span class="n">_inherits</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;account.invoice&#39;</span><span class="p">:</span> <span class="s">&#39;openerp_id&#39;</span><span class="p">}</span>
+    <span class="n">_description</span> <span class="o">=</span> <span class="s">&#39;Magento Invoice&#39;</span>
+
+    <span class="n">backend_id</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Many2one</span><span class="p">(</span><span class="n">comodel_name</span><span class="o">=</span><span class="s">&#39;magento.backend&#39;</span><span class="p">,</span> <span class="n">string</span><span class="o">=</span><span class="s">&#39;Magento Backend&#39;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">ondelete</span><span class="o">=</span><span class="s">&#39;restrict&#39;</span><span class="p">)</span>
+    <span class="n">openerp_id</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Many2one</span><span class="p">(</span><span class="n">comodel_name</span><span class="o">=</span><span class="s">&#39;account.invoice&#39;</span><span class="p">,</span> <span class="n">string</span><span class="o">=</span><span class="s">&#39;Invoice&#39;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">ondelete</span><span class="o">=</span><span class="s">&#39;cascade&#39;</span><span class="p">)</span>
+    <span class="n">magento_id</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Char</span><span class="p">(</span><span class="n">string</span><span class="o">=</span><span class="s">&#39;ID on Magento&#39;</span><span class="p">)</span>  <span class="c"># fields.char because 0 is a valid Magento ID</span>
+    <span class="n">sync_date</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Datetime</span><span class="p">(</span><span class="n">string</span><span class="o">=</span><span class="s">&#39;Last synchronization date&#39;</span><span class="p">)</span>
+    <span class="n">magento_order_id</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Many2one</span><span class="p">(</span><span class="n">comodel_name</span><span class="o">=</span><span class="s">&#39;magento.sale.order&#39;</span><span class="p">,</span> <span class="n">string</span><span class="o">=</span><span class="s">&#39;Magento Sale Order&#39;</span><span class="p">,</span> <span class="n">ondelete</span><span class="o">=</span><span class="s">&#39;set null&#39;</span><span class="p">)</span>
+    <span class="c"># we can also store additional data related to the Magento Invoice</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="session">
+<h2>Session<a class="headerlink" href="#session" title="Lien permanent vers ce titre">¶</a></h2>
+<p>Le framework utilise des objets  <a class="reference internal" href="../api/api_session.html#connector.session.ConnectorSession" title="connector.session.ConnectorSession"><code class="xref py py-class docutils literal"><span class="pre">ConnectorSession</span></code></a> pour stocker les <code class="docutils literal"><span class="pre">cr</span></code>, <code class="docutils literal"><span class="pre">uid</span></code> et <code class="docutils literal"><span class="pre">context</span></code> dans un <code class="xref py py-class docutils literal"><span class="pre">openerp.api.Environment</span></code>.  Donc depuis une session, nous pouvons accéder aux habituels <code class="docutils literal"><span class="pre">self.env</span></code> (nouvelle API) ou <code class="docutils literal"><span class="pre">self.pool</span></code> (ancienne API).</p>
+</div>
+<div class="section" id="events">
+<h2>Événements<a class="headerlink" href="#events" title="Lien permanent vers ce titre">¶</a></h2>
+<p>Nous pouvons créer un <a class="reference internal" href="../api/api_event.html#connector.event.Event" title="connector.event.Event"><code class="xref py py-class docutils literal"><span class="pre">Event</span></code></a> sur lequel nous pouvons abonner des consommateurs. Le connecteur fournit d&#8217;origine les plus génériques: <a class="reference internal" href="../api/api_event.html#connector.event.on_record_create" title="connector.event.on_record_create"><code class="xref py py-meth docutils literal"><span class="pre">on_record_create()</span></code></a>, <a class="reference internal" href="../api/api_event.html#connector.event.on_record_write" title="connector.event.on_record_write"><code class="xref py py-meth docutils literal"><span class="pre">on_record_write()</span></code></a>, <a class="reference internal" href="../api/api_event.html#connector.event.on_record_unlink" title="connector.event.on_record_unlink"><code class="xref py py-meth docutils literal"><span class="pre">on_record_unlink()</span></code></a></p>
+<p>À la création d&#8217;un enregistrement <code class="docutils literal"><span class="pre">magento.account.invoice</span></code>, nous voulons lancer un job déporté pour l&#8217;exporter vers Magento, donc nous abonnons un nouveau consommateur à l&#8217;événement <a class="reference internal" href="../api/api_event.html#connector.event.on_record_create" title="connector.event.on_record_create"><code class="xref py py-meth docutils literal"><span class="pre">on_record_create()</span></code></a>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="nd">@on_record_create</span><span class="p">(</span><span class="n">model_names</span><span class="o">=</span><span class="s">&#39;magento.account.invoice&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">delay_export_account_invoice</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">record_id</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Delay the job to export the magento invoice.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">export_invoice</span><span class="o">.</span><span class="n">delay</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">record_id</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Sur la dernière ligne, vous pouvez notez un <code class="docutils literal"><span class="pre">export_invoice.delay</span></code>. Nous parlerons de ceci dans <a class="reference internal" href="#jobs">Jobs</a></p>
+</div>
+<div class="section" id="jobs">
+<h2>Jobs<a class="headerlink" href="#jobs" title="Lien permanent vers ce titre">¶</a></h2>
+<p>Un <a class="reference internal" href="../api/api_queue.html#connector.queue.job.Job" title="connector.queue.job.Job"><code class="xref py py-class docutils literal"><span class="pre">Job</span></code></a> est une tâche à exécuter plus tard. Dans le cas présent: créer une facture dans Magento.</p>
+<p>N&#8217;importe quelle fonction décorée avec <a class="reference internal" href="../api/api_queue.html#connector.queue.job.job" title="connector.queue.job.job"><code class="xref py py-meth docutils literal"><span class="pre">job()</span></code></a> peut être envoyée dans la queue de jobs en utilisant la fonction <code class="docutils literal"><span class="pre">delay()</span></code> et sera lancée aussi tôt que possible</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="nd">@job</span>
+<span class="k">def</span> <span class="nf">export_invoice</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">record_id</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Export a validated or paid invoice. &quot;&quot;&quot;</span>
+    <span class="n">invoice</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">env</span><span class="p">[</span><span class="n">model_name</span><span class="p">]</span><span class="o">.</span><span class="n">browse</span><span class="p">(</span><span class="n">record_id</span><span class="p">)</span>
+    <span class="n">backend_id</span> <span class="o">=</span> <span class="n">invoice</span><span class="o">.</span><span class="n">backend_id</span><span class="o">.</span><span class="n">id</span>
+    <span class="n">env</span> <span class="o">=</span> <span class="n">get_environment</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">backend_id</span><span class="p">)</span>
+    <span class="n">invoice_exporter</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">get_connector_unit</span><span class="p">(</span><span class="n">MagentoInvoiceSynchronizer</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">invoice_exporter</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">record_id</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Voici les choses qui se passent à ce moment :</p>
+<ul class="simple">
+<li><p class="first">Nous trouvons le backend vers lequel exporter la facture.</p>
+</li>
+<li><p class="first">Nous construisons un <code class="xref py py-class docutils literal"><span class="pre">Environment</span></code> avec la <a class="reference internal" href="../api/api_session.html#connector.session.ConnectorSession" title="connector.session.ConnectorSession"><code class="xref py py-class docutils literal"><span class="pre">ConnectorSession</span></code></a> actuelle, le modèle avec lequel on travaille et le backend cible.</p>
+</li>
+<li><p class="first">Nous récupérons la <a class="reference internal" href="../api/api_connector.html#connector.connector.ConnectorUnit" title="connector.connector.ConnectorUnit"><code class="xref py py-class docutils literal"><span class="pre">ConnectorUnit</span></code></a> responsable du travail grâce à <code class="xref py py-meth docutils literal"><span class="pre">get_connector_unit()</span></code> (en fonction de la version du backend et du modèle) et nous appelons sa méthode <code class="docutils literal"><span class="pre">run()</span></code>.</p>
+</li>
+</ul>
+</div>
+<div class="section" id="connectorunit">
+<h2>ConnectorUnit<a class="headerlink" href="#connectorunit" title="Lien permanent vers ce titre">¶</a></h2>
+<p>Voici toutes les classes qui sont responsables d&#8217;un travail particulier. Les principaux types de <a class="reference internal" href="../api/api_connector.html#connector.connector.ConnectorUnit" title="connector.connector.ConnectorUnit"><code class="xref py py-class docutils literal"><span class="pre">ConnectorUnit</span></code></a> sont (l&#8217;implémentation de ces classes fait partie des connecteurs):</p>
+<p><a class="reference internal" href="../api/api_connector.html#connector.connector.Binder" title="connector.connector.Binder"><code class="xref py py-class docutils literal"><span class="pre">Binder</span></code></a></p>
+<blockquote>
+<div><p>Les <code class="docutils literal"><span class="pre">binders</span></code> (liants) donnent l&#8217;ID externe ou l&#8217;ID Odoo en fonction, respectivement, d&#8217;un ID Odoo ou d&#8217;un ID externe.</p>
+</div></blockquote>
+<p><a class="reference internal" href="../api/api_mapper.html#connector.unit.mapper.Mapper" title="connector.unit.mapper.Mapper"><code class="xref py py-class docutils literal"><span class="pre">Mapper</span></code></a></p>
+<blockquote>
+<div><p>Les <code class="docutils literal"><span class="pre">mappeurs</span></code> transforment un enregistrement externe en enregistrement Odoo ou l&#8217;inverse.</p>
+</div></blockquote>
+<p><a class="reference internal" href="../api/api_backend_adapter.html#connector.unit.backend_adapter.BackendAdapter" title="connector.unit.backend_adapter.BackendAdapter"><code class="xref py py-class docutils literal"><span class="pre">BackendAdapter</span></code></a></p>
+<blockquote>
+<div><p>Les <code class="docutils literal"><span class="pre">adaptateurs</span></code> implémentent le dialogue avec les API du <code class="docutils literal"><span class="pre">backend</span></code>. Elles adaptent habituellement leurs APIs à une interface commune (CRUD).</p>
+</div></blockquote>
+<p><a class="reference internal" href="../api/api_synchronizer.html#connector.unit.synchronizer.Synchronizer" title="connector.unit.synchronizer.Synchronizer"><code class="xref py py-class docutils literal"><span class="pre">Synchronizer</span></code></a></p>
+<blockquote>
+<div><p>Les <code class="docutils literal"><span class="pre">synchroniseurs</span></code> sont la partie principale d&#8217;une synchronisation. Ils définissent le flux de synchronisation et utilisent les <a class="reference internal" href="../api/api_connector.html#connector.connector.ConnectorUnit" title="connector.connector.ConnectorUnit"><code class="xref py py-class docutils literal"><span class="pre">ConnectorUnit</span></code></a> (ceux ci-dessus ou des spécifiques).</p>
+</div></blockquote>
+<p>Pour l&#8217;export de la facture, nous avons juste besoin d&#8217;un <code class="docutils literal"><span class="pre">adaptateur</span></code> et d&#8217;un <code class="docutils literal"><span class="pre">synchroniseur</span></code> (l&#8217;implémentation réelle est plus complexe):</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="nd">@magento</span>
+<span class="k">class</span> <span class="nc">AccountInvoiceAdapter</span><span class="p">(</span><span class="n">GenericAdapter</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Backend Adapter for the Magento Invoice &quot;&quot;&quot;</span>
+    <span class="n">_model_name</span> <span class="o">=</span> <span class="s">&#39;magento.account.invoice&#39;</span>
+    <span class="n">_magento_model</span> <span class="o">=</span> <span class="s">&#39;sales_order_invoice&#39;</span>
+
+    <span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">order_increment_id</span><span class="p">,</span> <span class="n">items</span><span class="p">,</span> <span class="n">comment</span><span class="p">,</span> <span class="n">email</span><span class="p">,</span> <span class="n">include_comment</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Create a record on the external system &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_call</span><span class="p">(</span><span class="s">&#39;</span><span class="si">%s</span><span class="s">.create&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">_magento_model</span><span class="p">,</span>
+                          <span class="p">[</span><span class="n">order_increment_id</span><span class="p">,</span> <span class="n">items</span><span class="p">,</span> <span class="n">comment</span><span class="p">,</span>
+                          <span class="n">email</span><span class="p">,</span> <span class="n">include_comment</span><span class="p">])</span>
+<span class="nd">@magento</span>
+<span class="k">class</span> <span class="nc">MagentoInvoiceSynchronizer</span><span class="p">(</span><span class="n">Exporter</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Export invoices to Magento &quot;&quot;&quot;</span>
+    <span class="n">_model_name</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;magento.account.invoice&#39;</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">_export_invoice</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">magento_id</span><span class="p">,</span> <span class="n">lines_info</span><span class="p">,</span> <span class="n">mail_notification</span><span class="p">):</span>
+        <span class="c"># use the ``backend adapter`` to create the invoice</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">backend_adapter</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">magento_id</span><span class="p">,</span> <span class="n">lines_info</span><span class="p">,</span>
+                                          <span class="n">_</span><span class="p">(</span><span class="s">&quot;Invoice Created&quot;</span><span class="p">),</span>
+                                          <span class="n">mail_notification</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_lines_info</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">invoice</span><span class="p">):</span>
+        <span class="p">[</span><span class="o">...</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">binding_id</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Run the job to export the validated/paid invoice &quot;&quot;&quot;</span>
+        <span class="n">invoice</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">browse</span><span class="p">(</span><span class="n">binding_id</span><span class="p">)</span>
+        <span class="n">magento_order</span> <span class="o">=</span> <span class="n">invoice</span><span class="o">.</span><span class="n">magento_order_id</span>
+        <span class="n">magento_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_export_invoice</span><span class="p">(</span><span class="n">magento_order</span><span class="o">.</span><span class="n">magento_id</span><span class="p">,</span> <span class="n">lines_info</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span>
+        <span class="c"># use the ``binder`` to write the external ID</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">binder</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="n">magento_id</span><span class="p">,</span> <span class="n">binding_id</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+        <br/>
+        
+<div id="sourcelink">
+  <a href="../_sources/guides/code_overview.txt"
+     rel="nofollow">Source</a>
+</div>
+      
+    </p>
+    <p>
+        &copy; Copyright 2013, Camptocamp SA.<br/>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

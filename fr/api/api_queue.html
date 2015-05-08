@@ -1,0 +1,1259 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Queue &mdash; documentation Connector </title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootswatch-3.2.0/united/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/translations.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-3.2.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <link rel="top" title="documentation Connector " href="../index.html" />
+    <link rel="next" title="Exceptions" href="api_exception.html" />
+    <link rel="prev" title="Adaptateur de backend" href="api_backend_adapter.html" />
+
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-7628916-3', 'odoo-connector.com');
+  ga('send', 'pageview');
+</script>
+
+  </head>
+  <body role="document">
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../index.html">
+          Odoo Connector</a>
+        <span class="navbar-text navbar-version pull-left"><b></b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+  <li class="dropdown">
+    <a role="button"
+       id="dLabelTranslations"
+       data-toggle="dropdown"
+       data-target="#"
+       href="#">Translations<b class="caret"></b></a>
+    <ul class="dropdown-menu"
+        role="menu"
+        aria-labelledby="dLabelTranslations">
+      <li><a class="reference" href="http://odoo-connector.com">English</a><li>
+      <li><a class="reference" href="http://odoo-connector.com/fr">French</a><li>
+    </ul>
+  </li>
+  
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../project/contribute.html">Contribuer</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../project/contribute.html#want-to-start-a-new-connector">Démarrer un nouveau connecteur</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../project/contribute.html#creating-or-maintaining-a-translation-of-this-doc">Créer ou maintenir une traduction de cette doc</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../project/contributors.html">Contributeurs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../project/contributors.html#financial-contributors">Contributeurs financiers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../project/license.html">Licence</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../project/changes.html">Changements</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../project/changes.html#id2">3.0.0 (2015-04-01)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../project/changes.html#id3">2.2.0 (2014-05-26)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../project/changes.html#id4">2.1.1 (2014-02-06)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../project/changes.html#warning-breaks-compatibility">2.1.0 (2014-01-15 - attention : rupture de compatibilité)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../project/changes.html#id5">2.0.1 (2013-09-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../project/changes.html#id6">2.0.0</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../project/roadmap.html">Roadmap</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../guides/code_overview.html">Survol du code</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../guides/code_overview.html#backends">Backends</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/code_overview.html#bindings">Bindings (Liaisons)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/code_overview.html#session">Session</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/code_overview.html#events">Événements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/code_overview.html#jobs">Jobs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/code_overview.html#connectorunit">ConnectorUnit</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/concepts.html">Concepts du connecteur</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../guides/concepts.html#events">Événements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/concepts.html#jobs-queue">Queue de jobs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/concepts.html#session">Session</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/concepts.html#backend">Backend</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/concepts.html#environment">Environnement</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/concepts.html#connectorunit">ConnectorUnit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/concepts.html#bindings">Bindings (Liaisons)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/concepts.html#checkpoint">Point de contrôle</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/bootstrap_connector.html">Amorcer la création un nouveau connecteur</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../guides/bootstrap_connector.html#odoo-manifest">Odoo Manifest</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/bootstrap_connector.html#install-the-module-in-the-connector">Installation du module dans le connecteur</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/bootstrap_connector.html#declare-the-backends">Déclaration des backends</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/bootstrap_connector.html#backend-model">Modèle du backend</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/bootstrap_connector.html#abstract-binding">Binding abstrait</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/bootstrap_connector.html#environment">Environnement</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/bootstrap_connector.html#checkpoints">Points de contrôle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/bootstrap_connector.html#connectorunit-classes">Classes ConnectorUnit</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/multiprocessing.html">Connecteur et multiprocessing</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="api_connector.html">Connecteur</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_session.html">Session</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_backend.html">Backend</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_backend.html#module-connector.backend_model">Modèles du backend</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_event.html">Événement</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_binder.html">Binder (Liant)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_mapper.html">Mappeur</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api_mapper.html#mappers">Mappeurs</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api_synchronizer.html">Synchroniseur</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_backend_adapter.html">Adaptateur de backend</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Queue</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#module-connector.queue.job">Job</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-connector.queue.worker">Worker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id5">Queue</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-connector.queue.model">Modèles</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api_exception.html">Exceptions</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">Queue</a><ul>
+<li><a class="reference internal" href="#module-connector.queue.job">Job</a></li>
+<li><a class="reference internal" href="#module-connector.queue.worker">Worker</a></li>
+<li><a class="reference internal" href="#id5">Queue</a></li>
+<li><a class="reference internal" href="#module-connector.queue.model">Modèles</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+            
+
+            
+              
+                
+  <li>
+    <a href="api_backend_adapter.html" title="Previous Chapter: Adaptateur de backend"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Adaptateur de ba...</span>
+    </a>
+  </li>
+  <li>
+    <a href="api_exception.html" title="Next Chapter: Exceptions"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Exceptions &raquo;</span>
+    </a>
+  </li>
+              
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      
+  <div class="section" id="queue">
+<h1>Queue<a class="headerlink" href="#queue" title="Lien permanent vers ce titre">¶</a></h1>
+<div class="section" id="module-connector.queue.job">
+<span id="job"></span><h2>Job<a class="headerlink" href="#module-connector.queue.job" title="Lien permanent vers ce titre">¶</a></h2>
+<dl class="class">
+<dt id="connector.queue.job.Job">
+<em class="property">class </em><code class="descclassname">connector.queue.job.</code><code class="descname">Job</code><span class="sig-paren">(</span><em>func=None</em>, <em>model_name=None</em>, <em>args=None</em>, <em>kwargs=None</em>, <em>priority=None</em>, <em>eta=None</em>, <em>job_uuid=None</em>, <em>max_retries=None</em>, <em>description=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/queue/job.html#Job"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.job.Job" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Bases : <a class="reference external" href="http://docs.python.org/library/functions.html#object" title="(disponible dans Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<blockquote>
+<div><p>Un job est une tâche à exécuter.</p>
+<dl class="attribute">
+<dt id="connector.queue.job.uuid">
+<code class="descclassname">connector.queue.job.</code><code class="descname">uuid</code><a class="headerlink" href="#connector.queue.job.uuid" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Id (UUID) du job.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="connector.queue.job.worker_uuid">
+<code class="descclassname">connector.queue.job.</code><code class="descname">worker_uuid</code><a class="headerlink" href="#connector.queue.job.worker_uuid" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Quand le job est placé dans la queue, UUID du worker.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="connector.queue.job.state">
+<code class="descclassname">connector.queue.job.</code><code class="descname">state</code><a class="headerlink" href="#connector.queue.job.state" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>État du job, peut être en attente, en queue, démarré, terminé, échoué. L&#8217;état initial est <cite>en attente</cite> et l&#8217;état final est <cite>terminé</cite>.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="connector.queue.job.retry">
+<code class="descclassname">connector.queue.job.</code><code class="descname">retry</code><a class="headerlink" href="#connector.queue.job.retry" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>L&#8217;essai actuel, démarre à 0 et s&#8217;incrémente de 1 chaque fois que le job est exécuté.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="connector.queue.job.max_retries">
+<code class="descclassname">connector.queue.job.</code><code class="descname">max_retries</code><a class="headerlink" href="#connector.queue.job.max_retries" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Le nombre maximum d&#8217;essais permis avant que le job soit considéré comme échoué.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="connector.queue.job.func_name">
+<code class="descclassname">connector.queue.job.</code><code class="descname">func_name</code><a class="headerlink" href="#connector.queue.job.func_name" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Nom de la fonction (sous la forme module.nom_fonction).</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="connector.queue.job.args">
+<code class="descclassname">connector.queue.job.</code><code class="descname">args</code><a class="headerlink" href="#connector.queue.job.args" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Arguments transmis à la fonction pendant l&#8217;exécution.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="connector.queue.job.kwargs">
+<code class="descclassname">connector.queue.job.</code><code class="descname">kwargs</code><a class="headerlink" href="#connector.queue.job.kwargs" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Arguments nommés transmis à la fonction pendant l&#8217;exécution.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="connector.queue.job.func_string">
+<code class="descclassname">connector.queue.job.</code><code class="descname">func_string</code><a class="headerlink" href="#connector.queue.job.func_string" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Chaîne complète représentant la fonction à exécuter, càd module.fonction(args, kwargs)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="connector.queue.job.description">
+<code class="descclassname">connector.queue.job.</code><code class="descname">description</code><a class="headerlink" href="#connector.queue.job.description" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Description du job à destination des utilisateurs.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="connector.queue.job.func">
+<code class="descclassname">connector.queue.job.</code><code class="descname">func</code><a class="headerlink" href="#connector.queue.job.func" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>La fonction Python elle-même.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="connector.queue.job.model_name">
+<code class="descclassname">connector.queue.job.</code><code class="descname">model_name</code><a class="headerlink" href="#connector.queue.job.model_name" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Modèle OpenERP pour lequel le job va fonctionner.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="connector.queue.job.priority">
+<code class="descclassname">connector.queue.job.</code><code class="descname">priority</code><a class="headerlink" href="#connector.queue.job.priority" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Priorité du job, 0 étant la plus haute priorité.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="connector.queue.job.date_created">
+<code class="descclassname">connector.queue.job.</code><code class="descname">date_created</code><a class="headerlink" href="#connector.queue.job.date_created" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Date et heure de création du job.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="connector.queue.job.date_enqueued">
+<code class="descclassname">connector.queue.job.</code><code class="descname">date_enqueued</code><a class="headerlink" href="#connector.queue.job.date_enqueued" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Date et heure de mise en queue du job.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="connector.queue.job.date_started">
+<code class="descclassname">connector.queue.job.</code><code class="descname">date_started</code><a class="headerlink" href="#connector.queue.job.date_started" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Date et heure de démarrage du job.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="connector.queue.job.date_done">
+<code class="descclassname">connector.queue.job.</code><code class="descname">date_done</code><a class="headerlink" href="#connector.queue.job.date_done" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Date et heure d&#8217;arrêt du job.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="connector.queue.job.result">
+<code class="descclassname">connector.queue.job.</code><code class="descname">result</code><a class="headerlink" href="#connector.queue.job.result" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Une description du résultat (à destination des utilisateurs).</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="connector.queue.job.exc_info">
+<code class="descclassname">connector.queue.job.</code><code class="descname">exc_info</code><a class="headerlink" href="#connector.queue.job.exc_info" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Informations sur l&#8217;<cite>Exception</cite> (<a href="#id1"><span class="problematic" id="id2">`</span></a>traceback&#8217;) ayant causé l&#8217;échec du job</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="connector.queue.job.user_id">
+<code class="descclassname">connector.queue.job.</code><code class="descname">user_id</code><a class="headerlink" href="#connector.queue.job.user_id" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Id de l&#8217;utilisateur OpenERP qui a créé le job</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="connector.queue.job.eta">
+<code class="descclassname">connector.queue.job.</code><code class="descname">eta</code><a class="headerlink" href="#connector.queue.job.eta" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Heure estimée de lancement (ETA) du job. Il ne sera pas exécuté avant cette date/heure.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="connector.queue.job.canceled">
+<code class="descclassname">connector.queue.job.</code><code class="descname">canceled</code><a class="headerlink" href="#connector.queue.job.canceled" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>True si le job a été annulé.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="connector.queue.job.Job.cancel">
+<code class="descclassname">Job.</code><code class="descname">cancel</code><span class="sig-paren">(</span><em>msg=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/queue/job.html#Job.cancel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.job.Job.cancel" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="connector.queue.job.Job.description">
+<code class="descclassname">Job.</code><code class="descname">description</code><a class="headerlink" href="#connector.queue.job.Job.description" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="connector.queue.job.Job.eta">
+<code class="descclassname">Job.</code><code class="descname">eta</code><a class="headerlink" href="#connector.queue.job.Job.eta" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="connector.queue.job.Job.func">
+<code class="descclassname">Job.</code><code class="descname">func</code><a class="headerlink" href="#connector.queue.job.Job.func" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="connector.queue.job.Job.func_string">
+<code class="descclassname">Job.</code><code class="descname">func_string</code><a class="headerlink" href="#connector.queue.job.Job.func_string" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="connector.queue.job.Job.perform">
+<code class="descclassname">Job.</code><code class="descname">perform</code><span class="sig-paren">(</span><em>session</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/queue/job.html#Job.perform"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.job.Job.perform" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Exécute le job.</p>
+<p>Le job est exécuté avec l&#8217;utilisateur qui l&#8217;a initié.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><strong>session</strong> (<a class="reference internal" href="api_session.html#connector.session.ConnectorSession" title="connector.session.ConnectorSession"><em>ConnectorSession</em></a>) &#8211; session d&#8217;exécution du job</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="connector.queue.job.Job.postpone">
+<code class="descclassname">Job.</code><code class="descname">postpone</code><span class="sig-paren">(</span><em>result=None</em>, <em>seconds=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/queue/job.html#Job.postpone"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.job.Job.postpone" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Écrit un heure estimée de lancement dans <cite>n</cite> secondes. Utilisé quand une <cite>Exception</cite> non fatale souhaite relancer un job.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="connector.queue.job.Job.related_action">
+<code class="descclassname">Job.</code><code class="descname">related_action</code><span class="sig-paren">(</span><em>session</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/queue/job.html#Job.related_action"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.job.Job.related_action" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="connector.queue.job.Job.set_done">
+<code class="descclassname">Job.</code><code class="descname">set_done</code><span class="sig-paren">(</span><em>result=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/queue/job.html#Job.set_done"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.job.Job.set_done" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="connector.queue.job.Job.set_enqueued">
+<code class="descclassname">Job.</code><code class="descname">set_enqueued</code><span class="sig-paren">(</span><em>worker</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/queue/job.html#Job.set_enqueued"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.job.Job.set_enqueued" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="connector.queue.job.Job.set_failed">
+<code class="descclassname">Job.</code><code class="descname">set_failed</code><span class="sig-paren">(</span><em>exc_info=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/queue/job.html#Job.set_failed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.job.Job.set_failed" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="connector.queue.job.Job.set_pending">
+<code class="descclassname">Job.</code><code class="descname">set_pending</code><span class="sig-paren">(</span><em>result=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/queue/job.html#Job.set_pending"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.job.Job.set_pending" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="connector.queue.job.Job.set_started">
+<code class="descclassname">Job.</code><code class="descname">set_started</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/queue/job.html#Job.set_started"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.job.Job.set_started" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="connector.queue.job.Job.uuid">
+<code class="descclassname">Job.</code><code class="descname">uuid</code><a class="headerlink" href="#connector.queue.job.Job.uuid" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Id du job, c&#8217;est un UUID</p>
+</dd></dl>
+
+</div></blockquote>
+<dl class="class">
+<dt id="connector.queue.job.JobStorage">
+<em class="property">class </em><code class="descclassname">connector.queue.job.</code><code class="descname">JobStorage</code><a class="reference internal" href="../_modules/connector/queue/job.html#JobStorage"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.job.JobStorage" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Bases : <a class="reference external" href="http://docs.python.org/library/functions.html#object" title="(disponible dans Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<blockquote>
+<div><p>Interface pour le stockage des jobs</p>
+<dl class="method">
+<dt id="connector.queue.job.JobStorage.exists">
+<code class="descclassname">JobStorage.</code><code class="descname">exists</code><span class="sig-paren">(</span><em>job_uuid</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/queue/job.html#JobStorage.exists"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.job.JobStorage.exists" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Indique si un job existe encore dans l&#8217;espace de stockage.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="connector.queue.job.JobStorage.load">
+<code class="descclassname">JobStorage.</code><code class="descname">load</code><span class="sig-paren">(</span><em>job_uuid</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/queue/job.html#JobStorage.load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.job.JobStorage.load" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Lit les donnés du job dans l&#8217;espace de stockage</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="connector.queue.job.JobStorage.store">
+<code class="descclassname">JobStorage.</code><code class="descname">store</code><span class="sig-paren">(</span><em>job_</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/queue/job.html#JobStorage.store"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.job.JobStorage.store" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Stocke un job</p>
+</dd></dl>
+
+</div></blockquote>
+<dl class="class">
+<dt id="connector.queue.job.OpenERPJobStorage">
+<em class="property">class </em><code class="descclassname">connector.queue.job.</code><code class="descname">OpenERPJobStorage</code><span class="sig-paren">(</span><em>session</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/queue/job.html#OpenERPJobStorage"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.job.OpenERPJobStorage" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Bases : <a class="reference internal" href="#connector.queue.job.JobStorage" title="connector.queue.job.JobStorage"><code class="xref py py-class docutils literal"><span class="pre">connector.queue.job.JobStorage</span></code></a></p>
+<blockquote>
+<div><p>Stocke un job dans OpenERP</p>
+<dl class="method">
+<dt id="connector.queue.job.OpenERPJobStorage.db_record">
+<code class="descclassname">OpenERPJobStorage.</code><code class="descname">db_record</code><span class="sig-paren">(</span><em>job_</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/queue/job.html#OpenERPJobStorage.db_record"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.job.OpenERPJobStorage.db_record" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="connector.queue.job.OpenERPJobStorage.db_record_from_uuid">
+<code class="descclassname">OpenERPJobStorage.</code><code class="descname">db_record_from_uuid</code><span class="sig-paren">(</span><em>job_uuid</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/queue/job.html#OpenERPJobStorage.db_record_from_uuid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.job.OpenERPJobStorage.db_record_from_uuid" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="connector.queue.job.OpenERPJobStorage.enqueue">
+<code class="descclassname">OpenERPJobStorage.</code><code class="descname">enqueue</code><span class="sig-paren">(</span><em>func</em>, <em>model_name=None</em>, <em>args=None</em>, <em>kwargs=None</em>, <em>priority=None</em>, <em>eta=None</em>, <em>max_retries=None</em>, <em>description=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/queue/job.html#OpenERPJobStorage.enqueue"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.job.OpenERPJobStorage.enqueue" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Crée un job et le met en queue. Renvoie le UUID du job.</p>
+<p>S&#8217;attend à ce que les arguments spécifiques au job soient déjà extraites de ceux à passer à la fonction du job.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="connector.queue.job.OpenERPJobStorage.enqueue_resolve_args">
+<code class="descclassname">OpenERPJobStorage.</code><code class="descname">enqueue_resolve_args</code><span class="sig-paren">(</span><em>func</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/queue/job.html#OpenERPJobStorage.enqueue_resolve_args"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.job.OpenERPJobStorage.enqueue_resolve_args" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Crée un job et le met en queue. Renvoie le UUID du job.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="connector.queue.job.OpenERPJobStorage.exists">
+<code class="descclassname">OpenERPJobStorage.</code><code class="descname">exists</code><span class="sig-paren">(</span><em>job_uuid</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/queue/job.html#OpenERPJobStorage.exists"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.job.OpenERPJobStorage.exists" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Indique si un job existe encore dans l&#8217;espace de stockage.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="connector.queue.job.OpenERPJobStorage.load">
+<code class="descclassname">OpenERPJobStorage.</code><code class="descname">load</code><span class="sig-paren">(</span><em>job_uuid</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/queue/job.html#OpenERPJobStorage.load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.job.OpenERPJobStorage.load" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Lit un job depuis la base de données</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="connector.queue.job.OpenERPJobStorage.store">
+<code class="descclassname">OpenERPJobStorage.</code><code class="descname">store</code><span class="sig-paren">(</span><em>job_</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/queue/job.html#OpenERPJobStorage.store"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.job.OpenERPJobStorage.store" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Stocke le job</p>
+</dd></dl>
+
+</div></blockquote>
+<dl class="function">
+<dt id="connector.queue.job.job">
+<code class="descclassname">connector.queue.job.</code><code class="descname">job</code><span class="sig-paren">(</span><em>func</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/queue/job.html#job"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.job.job" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Décorateur pour les jobs.</p>
+<p>Ajoute un attribut <code class="docutils literal"><span class="pre">delay</span></code> sur la fonction décorée.</p>
+<p>Quand <code class="docutils literal"><span class="pre">delay</span></code> est appelée, la fonction est transformée en job et stockée dans le modèle OpenERP queue.job. Les arguments positionnels et nommés transmis à <code class="docutils literal"><span class="pre">delay</span></code> seront les arguments utilisés par la fonction décorée lorsqu&#8217;elle sera exécutée.</p>
+<p>La fonction <code class="docutils literal"><span class="pre">delay()</span></code> d&#8217;un job reçoit les arguments suivants :</p>
+<dl class="docutils">
+<dt>session</dt>
+<dd><p class="first last"><code class="xref py py-class docutils literal"><span class="pre">ConnectorSession</span></code> en cours</p>
+</dd>
+<dt>model_name</dt>
+<dd><p class="first last">nom du modèle sur lequel le job a quelque chose à faire</p>
+</dd>
+<dt><a href="#id1"><span class="problematic" id="id2">*</span></a>args et <a href="#id3"><span class="problematic" id="id4">**</span></a>kargs</dt>
+<dd><blockquote class="first">
+<div><p>Arguments positionnels et nommés qui seront transmis à la fonction une fois que le job est exécuté. Ils doivent être « pickle-able ».</p>
+<p>Il existe 4 arguments nommés spéciaux et réservés que vous pouvez utiliser :</p>
+<ul>
+<li><dl class="first docutils">
+<dt>priority : priorité du job, une valeur plus petite étant prioritaire.</dt>
+<dd><p class="first last">10 par défaut.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>max_retries : nombre maximal d&#8217;essais avant d&#8217;abandonner et définir</dt>
+<dd><p class="first last">l&#8217;état du job à <cite>échoué</cite>. Une valeur de 0 signifie un nombre infini d&#8217;essais. Par défaut la valeur est 5.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>eta : le job ne peut être exécuté qu&#8217;après cette <cite>datetime</cite></dt>
+<dd><p class="first last">(ou maintenant + <cite>timedelta</cite> si un <cite>timedelta</cite> ou un entier est fourni)</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>description : une description à destination des utilisateurs, <span class="classifier-delimiter">:</span> <span class="classifier">a human description of the job,</span></dt>
+<dd><p class="first">destinée à différencier les instances de job (Par défaut func.__doc__ ou</p>
+<blockquote class="last">
+<div><p>&#8216;Function %s&#8217; % func.__name__)</p>
+</div></blockquote>
+</dd>
+</dl>
+</li>
+</ul>
+</div></blockquote>
+<p>Exemple :</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="nd">@job</span>
+<span class="k">def</span> <span class="nf">export_one_thing</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">one_thing</span><span class="p">):</span>
+    <span class="c"># work</span>
+    <span class="c"># export one_thing</span>
+
+<span class="n">export_one_thing</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="s">&#39;a.model&#39;</span><span class="p">,</span> <span class="n">the_thing_to_export</span><span class="p">)</span>
+<span class="c"># =&gt; normal and synchronous function call</span>
+
+<span class="n">export_one_thing</span><span class="o">.</span><span class="n">delay</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="s">&#39;a.model&#39;</span><span class="p">,</span> <span class="n">the_thing_to_export</span><span class="p">)</span>
+<span class="c"># =&gt; the job will be executed as soon as possible</span>
+
+<span class="n">export_one_thing</span><span class="o">.</span><span class="n">delay</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="s">&#39;a.model&#39;</span><span class="p">,</span> <span class="n">the_thing_to_export</span><span class="p">,</span>
+                       <span class="n">priority</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">eta</span><span class="o">=</span><span class="mi">60</span><span class="o">*</span><span class="mi">60</span><span class="o">*</span><span class="mi">5</span><span class="p">)</span>
+<span class="c"># =&gt; the job will be executed with a low priority and not before a</span>
+<span class="c"># delay of 5 hours from now</span>
+</pre></div>
+</div>
+<p class="last">Voir aussi : <a class="reference internal" href="#connector.queue.job.related_action" title="connector.queue.job.related_action"><code class="xref py py-func docutils literal"><span class="pre">related_action()</span></code></a> une action connexe peut être attachée à un job</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="connector.queue.job.related_action">
+<code class="descclassname">connector.queue.job.</code><code class="descname">related_action</code><span class="sig-paren">(</span><em>action=&lt;function &lt;lambda&gt; at 0x5fce8c0&gt;</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/queue/job.html#related_action"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.job.related_action" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Attache une <em>action connexe</em> à un job</p>
+<p>Un <em>action connexe</em> apparaîtra comme un bouton dans la vue OpenERP. Le bouton exécutera l&#8217;action, habituellement une ouverture de formulaire de l&#8217;enregistrement lié au job.</p>
+<p>L&#8217;<code class="docutils literal"><span class="pre">action</span></code> doit être un objet <cite>callable</cite> qui prends les arguments</p>
+<div class="highlight-python"><div class="highlight"><pre>session, job, **kwargs
+</pre></div>
+</div>
+<p>Exemple d&#8217;utilisation :</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">related_action_partner</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">job</span><span class="p">):</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">job</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">partner_id</span> <span class="o">=</span> <span class="n">job</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="c"># eventually get the real ID if partner_id is a binding ID</span>
+    <span class="n">action</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="n">_</span><span class="p">(</span><span class="s">&quot;Partner&quot;</span><span class="p">),</span>
+        <span class="s">&#39;type&#39;</span><span class="p">:</span> <span class="s">&#39;ir.actions.act_window&#39;</span><span class="p">,</span>
+        <span class="s">&#39;res_model&#39;</span><span class="p">:</span> <span class="n">model</span><span class="p">,</span>
+        <span class="s">&#39;view_type&#39;</span><span class="p">:</span> <span class="s">&#39;form&#39;</span><span class="p">,</span>
+        <span class="s">&#39;view_mode&#39;</span><span class="p">:</span> <span class="s">&#39;form&#39;</span><span class="p">,</span>
+        <span class="s">&#39;res_id&#39;</span><span class="p">:</span> <span class="n">partner_id</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">action</span>
+
+<span class="nd">@job</span>
+<span class="nd">@related_action</span><span class="p">(</span><span class="n">action</span><span class="o">=</span><span class="n">related_action_partner</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">export_partner</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">partner_id</span><span class="p">):</span>
+    <span class="c"># ...</span>
+</pre></div>
+</div>
+<p>Les <code class="docutils literal"><span class="pre">kwargs</span></code> sont transmis à l&#8217;action :</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">related_action_product</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">job</span><span class="p">,</span> <span class="n">extra_arg</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+    <span class="k">assert</span> <span class="n">extra_arg</span> <span class="o">==</span> <span class="mi">2</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">job</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">product_id</span> <span class="o">=</span> <span class="n">job</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+<span class="nd">@job</span>
+<span class="nd">@related_action</span><span class="p">(</span><span class="n">action</span><span class="o">=</span><span class="n">related_action_product</span><span class="p">,</span> <span class="n">extra_arg</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">export_product</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">product_id</span><span class="p">):</span>
+    <span class="c"># ...</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="module-connector.queue.worker">
+<span id="worker"></span><h2>Worker<a class="headerlink" href="#module-connector.queue.worker" title="Lien permanent vers ce titre">¶</a></h2>
+<dl class="class">
+<dt id="connector.queue.worker.Worker">
+<em class="property">class </em><code class="descclassname">connector.queue.worker.</code><code class="descname">Worker</code><span class="sig-paren">(</span><em>db_name</em>, <em>watcher_</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/queue/worker.html#Worker"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.worker.Worker" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Bases : <a class="reference external" href="http://docs.python.org/library/threading.html#threading.Thread" title="(disponible dans Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">threading.Thread</span></code></a></p>
+<blockquote>
+<div><p>Poste et récupère des jobs de la queue, les exécute</p>
+<dl class="method">
+<dt id="connector.queue.worker.Worker.enqueue_job_uuid">
+<code class="descclassname">Worker.</code><code class="descname">enqueue_job_uuid</code><span class="sig-paren">(</span><em>job_uuid</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/queue/worker.html#Worker.enqueue_job_uuid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.worker.Worker.enqueue_job_uuid" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Met un job en queue :</p>
+<p>Il sera exécuté par le worker aussi tôt que possible (en fonction de la priorité du job)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="connector.queue.worker.Worker.job_storage_class">
+<code class="descclassname">Worker.</code><code class="descname">job_storage_class</code><a class="headerlink" href="#connector.queue.worker.Worker.job_storage_class" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>alias de <code class="xref py py-class docutils literal"><span class="pre">OpenERPJobStorage</span></code></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="connector.queue.worker.Worker.queue_class">
+<code class="descclassname">Worker.</code><code class="descname">queue_class</code><a class="headerlink" href="#connector.queue.worker.Worker.queue_class" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>alias de <code class="xref py py-class docutils literal"><span class="pre">JobsQueue</span></code></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="connector.queue.worker.Worker.run">
+<code class="descclassname">Worker.</code><code class="descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/queue/worker.html#Worker.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.worker.Worker.run" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Boucle principale du worker</p>
+<p>Vérifie s&#8217;il existe encore dans le <code class="docutils literal"><span class="pre">watcher</span></code>. Quand il n&#8217;existe plus, il sort de la boucle de façon que le <cite>thread</cite> s&#8217;arrête proprement.</p>
+<p>Attend les jobs et les exécute séquentiellement.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="connector.queue.worker.Worker.run_job">
+<code class="descclassname">Worker.</code><code class="descname">run_job</code><span class="sig-paren">(</span><em>job</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/queue/worker.html#Worker.run_job"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.worker.Worker.run_job" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Exécute un job</p>
+</dd></dl>
+
+</div></blockquote>
+<dl class="class">
+<dt id="connector.queue.worker.WorkerWatcher">
+<em class="property">class </em><code class="descclassname">connector.queue.worker.</code><code class="descname">WorkerWatcher</code><a class="reference internal" href="../_modules/connector/queue/worker.html#WorkerWatcher"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.worker.WorkerWatcher" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Bases : <a class="reference external" href="http://docs.python.org/library/threading.html#threading.Thread" title="(disponible dans Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">threading.Thread</span></code></a></p>
+<blockquote>
+<div><p>Garde un œil sur les workers et signale leur changement d&#8217;état.</p>
+<p>Un <cite>WorkerWatcher</cite> est partagé entre plusieurs bases de données, donc seule une instance est nécessaire pour vérifier l&#8217;état des workers pour chaque base de données.</p>
+<dl class="staticmethod">
+<dt id="connector.queue.worker.WorkerWatcher.available_db_names">
+<em class="property">static </em><code class="descclassname">WorkerWatcher.</code><code class="descname">available_db_names</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/queue/worker.html#WorkerWatcher.available_db_names"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.worker.WorkerWatcher.available_db_names" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Renvoie les bases de données du serveur où le module <cite>connector</cite> est installé</p>
+<p>Disponible signifie qu&#8217;elles peuvent être utilisées par un <cite>Worker</cite>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Retourne:</th><td class="field-body">Noms des bases de données</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Type retourné:</th><td class="field-body"><a class="reference external" href="http://docs.python.org/library/functions.html#list" title="(disponible dans Python v2.7)">list</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="connector.queue.worker.WorkerWatcher.check_alive">
+<code class="descclassname">WorkerWatcher.</code><code class="descname">check_alive</code><span class="sig-paren">(</span><em>db_name</em>, <em>worker</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/queue/worker.html#WorkerWatcher.check_alive"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.worker.WorkerWatcher.check_alive" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Vérifie si le worker est toujours vivant et signale son état. Vérifie si les autres workers sont toujours vivants, et si ce n&#8217;est pas le cas, les retire du pool de workers.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="connector.queue.worker.WorkerWatcher.run">
+<code class="descclassname">WorkerWatcher.</code><code class="descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/queue/worker.html#WorkerWatcher.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.worker.WorkerWatcher.run" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>boucle principale du <cite>WorkerWatcher</cite></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="connector.queue.worker.WorkerWatcher.worker_for_db">
+<code class="descclassname">WorkerWatcher.</code><code class="descname">worker_for_db</code><span class="sig-paren">(</span><em>db_name</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/queue/worker.html#WorkerWatcher.worker_for_db"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.worker.WorkerWatcher.worker_for_db" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="connector.queue.worker.WorkerWatcher.worker_lost">
+<code class="descclassname">WorkerWatcher.</code><code class="descname">worker_lost</code><span class="sig-paren">(</span><em>worker</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/queue/worker.html#WorkerWatcher.worker_lost"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.worker.WorkerWatcher.worker_lost" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Indique si un worker n&#8217;est plus référencé par l&#8217;observateur.</p>
+<p>Utilisé par les <cite>threads</cite> de worker pour savoir s&#8217;ils doivent s&#8217;arrêter.</p>
+</dd></dl>
+
+</div></blockquote>
+<dl class="function">
+<dt id="connector.queue.worker.start_service">
+<code class="descclassname">connector.queue.worker.</code><code class="descname">start_service</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/queue/worker.html#start_service"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.worker.start_service" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Démarre l&#8217;observateur</p>
+</dd></dl>
+
+</div>
+<div class="section" id="id5">
+<h2>Queue<a class="headerlink" href="#id5" title="Lien permanent vers ce titre">¶</a></h2>
+<span class="target" id="module-connector.queue.queue"></span><dl class="class">
+<dt id="connector.queue.queue.JobsQueue">
+<em class="property">class </em><code class="descclassname">connector.queue.queue.</code><code class="descname">JobsQueue</code><a class="reference internal" href="../_modules/connector/queue/queue.html#JobsQueue"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.queue.JobsQueue" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Bases : <a class="reference external" href="http://docs.python.org/library/functions.html#object" title="(disponible dans Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<blockquote>
+<div><p>Contient en mémoire les jobs dont l&#8217;exécution est planifiée.</p>
+<p>Les jobs sont triés, plus la priorité est importante, plus tôt les jobs sont dépilés de la queue.</p>
+<dl class="method">
+<dt id="connector.queue.queue.JobsQueue.dequeue">
+<code class="descclassname">JobsQueue.</code><code class="descname">dequeue</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/queue/queue.html#JobsQueue.dequeue"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.queue.JobsQueue.dequeue" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Dépile et renvoie le premier job en fonction de sa priorité</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="connector.queue.queue.JobsQueue.enqueue">
+<code class="descclassname">JobsQueue.</code><code class="descname">enqueue</code><span class="sig-paren">(</span><em>job</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/queue/queue.html#JobsQueue.enqueue"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.queue.JobsQueue.enqueue" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+</div></blockquote>
+</div>
+<div class="section" id="module-connector.queue.model">
+<span id="models"></span><h2>Modèles<a class="headerlink" href="#module-connector.queue.model" title="Lien permanent vers ce titre">¶</a></h2>
+<dl class="class">
+<dt id="connector.queue.model.QueueJob">
+<em class="property">class </em><code class="descclassname">connector.queue.model.</code><code class="descname">QueueJob</code><span class="sig-paren">(</span><em>pool</em>, <em>cr</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/queue/model.html#QueueJob"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.model.QueueJob" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Bases : <a class="reference external" href="https://www.odoo.com/documentation/8.0/reference/orm.html#openerp.models.Model" title="(disponible dans odoo v8.0)"><code class="xref py py-class docutils literal"><span class="pre">openerp.models.Model</span></code></a></p>
+<blockquote>
+<div><p>État du job et résultat</p>
+<dl class="attribute">
+<dt id="connector.queue.model.QueueJob.active">
+<code class="descclassname">QueueJob.</code><code class="descname">active</code><a class="headerlink" href="#connector.queue.model.QueueJob.active" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="connector.queue.model.QueueJob.autovacuum">
+<code class="descclassname">QueueJob.</code><code class="descname">autovacuum</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/queue/model.html#QueueJob.autovacuum"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.model.QueueJob.autovacuum" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Efface tous les jobs (actifs ou non) qui sont terminés depuis plus de <code class="docutils literal"><span class="pre">_removal_interval</span></code> jours.</p>
+<p>Appelé depuis une tâche planifiée (<cite>cron</cite>).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="connector.queue.model.QueueJob.button_done">
+<code class="descclassname">QueueJob.</code><code class="descname">button_done</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/queue/model.html#QueueJob.button_done"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.model.QueueJob.button_done" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="connector.queue.model.QueueJob.company_id">
+<code class="descclassname">QueueJob.</code><code class="descname">company_id</code><a class="headerlink" href="#connector.queue.model.QueueJob.company_id" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>La valeur d&#8217;un tel champ est un <cite>recordset</cite> de taille 0 (pas d&#8217;enregistrement) ou 1 (enregistrement unique).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><ul class="first last simple">
+<li><strong>comodel_name</strong> &#8211; nom du modèle cible (chaîne de caractères)</li>
+<li><strong>domain</strong> &#8211; un <cite>domain</cite> optionnel à définir sur les valeurs candidates côté client (<cite>domain</cite> ou <cite>string</cite>)</li>
+<li><strong>context</strong> &#8211; un <cite>context</cite> optionnel à utiliser côté client à la prise en charge de ce champ (dictionnaire)</li>
+<li><strong>ondelete</strong> &#8211; quoi faire quand l&#8217;enregistrement en rapport est effacé ; les valeurs possibles sont : <code class="docutils literal"><span class="pre">'set</span> <span class="pre">null'</span></code>, <code class="docutils literal"><span class="pre">'restrict'</span></code>, <code class="docutils literal"><span class="pre">'cascade'</span></code></li>
+<li><strong>auto_join</strong> &#8211; si les JOINs sont générés lors de la recherche sur ce champ (booleen, par défaut <code class="docutils literal"><span class="pre">False</span></code>)</li>
+<li><strong>delegate</strong> &#8211; définir à <code class="docutils literal"><span class="pre">True</span></code> pour rendre les champs du modèle cible accessibles depuis le modèle en cours (correspond à <code class="docutils literal"><span class="pre">_inherits</span></code>)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>L&#8217;attribut <cite>comodel_name</cite> est obligatoire sauf dans le cas des champs <cite>related</cite> ou des extensions de champs.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="connector.queue.model.QueueJob.date_created">
+<code class="descclassname">QueueJob.</code><code class="descname">date_created</code><a class="headerlink" href="#connector.queue.model.QueueJob.date_created" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="connector.queue.model.QueueJob.date_done">
+<code class="descclassname">QueueJob.</code><code class="descname">date_done</code><a class="headerlink" href="#connector.queue.model.QueueJob.date_done" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="connector.queue.model.QueueJob.date_enqueued">
+<code class="descclassname">QueueJob.</code><code class="descname">date_enqueued</code><a class="headerlink" href="#connector.queue.model.QueueJob.date_enqueued" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="connector.queue.model.QueueJob.date_started">
+<code class="descclassname">QueueJob.</code><code class="descname">date_started</code><a class="headerlink" href="#connector.queue.model.QueueJob.date_started" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="connector.queue.model.QueueJob.eta">
+<code class="descclassname">QueueJob.</code><code class="descname">eta</code><a class="headerlink" href="#connector.queue.model.QueueJob.eta" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="connector.queue.model.QueueJob.exc_info">
+<code class="descclassname">QueueJob.</code><code class="descname">exc_info</code><a class="headerlink" href="#connector.queue.model.QueueJob.exc_info" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Très similaire à <code class="xref py py-class docutils literal"><span class="pre">Char</span></code> mais utilisé pour des contenus plus longs, sans taille spécifiée et généralement affiché dans une boite de texte multi-lignes.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><strong>translate</strong> &#8211; si la valeur de ce champ peut être traduite ou non</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="connector.queue.model.QueueJob.func">
+<code class="descclassname">QueueJob.</code><code class="descname">func</code><a class="headerlink" href="#connector.queue.model.QueueJob.func" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="connector.queue.model.QueueJob.func_string">
+<code class="descclassname">QueueJob.</code><code class="descname">func_string</code><a class="headerlink" href="#connector.queue.model.QueueJob.func_string" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Champ chaîne de caractère basique, peut être limité en longeur, habituellement affiché comme ligne unique dans les clients</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><ul class="first last simple">
+<li><strong>size</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#int" title="(disponible dans Python v2.7)"><em>int</em></a>) &#8211; la taille maximum des valeurs stockées dans ce champ</li>
+<li><strong>translate</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#bool" title="(disponible dans Python v2.7)"><em>bool</em></a>) &#8211; si les valeurs de ce champ peuvent être traduites</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="connector.queue.model.QueueJob.max_retries">
+<code class="descclassname">QueueJob.</code><code class="descname">max_retries</code><a class="headerlink" href="#connector.queue.model.QueueJob.max_retries" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="connector.queue.model.QueueJob.model_name">
+<code class="descclassname">QueueJob.</code><code class="descname">model_name</code><a class="headerlink" href="#connector.queue.model.QueueJob.model_name" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Champ chaîne de caractère basique, peut être limité en longeur, habituellement affiché comme ligne unique dans les clients</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><ul class="first last simple">
+<li><strong>size</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#int" title="(disponible dans Python v2.7)"><em>int</em></a>) &#8211; la taille maximum des valeurs stockées dans ce champ</li>
+<li><strong>translate</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#bool" title="(disponible dans Python v2.7)"><em>bool</em></a>) &#8211; si les valeurs de ce champ peuvent être traduites</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="connector.queue.model.QueueJob.name">
+<code class="descclassname">QueueJob.</code><code class="descname">name</code><a class="headerlink" href="#connector.queue.model.QueueJob.name" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Champ chaîne de caractère basique, peut être limité en longeur, habituellement affiché comme ligne unique dans les clients</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><ul class="first last simple">
+<li><strong>size</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#int" title="(disponible dans Python v2.7)"><em>int</em></a>) &#8211; la taille maximum des valeurs stockées dans ce champ</li>
+<li><strong>translate</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#bool" title="(disponible dans Python v2.7)"><em>bool</em></a>) &#8211; si les valeurs de ce champ peuvent être traduites</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="connector.queue.model.QueueJob.open_related_action">
+<code class="descclassname">QueueJob.</code><code class="descname">open_related_action</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/queue/model.html#QueueJob.open_related_action"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.model.QueueJob.open_related_action" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Ouvre l&#8217;action associée au job</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="connector.queue.model.QueueJob.priority">
+<code class="descclassname">QueueJob.</code><code class="descname">priority</code><a class="headerlink" href="#connector.queue.model.QueueJob.priority" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="connector.queue.model.QueueJob.requeue">
+<code class="descclassname">QueueJob.</code><code class="descname">requeue</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/queue/model.html#QueueJob.requeue"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.model.QueueJob.requeue" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="connector.queue.model.QueueJob.result">
+<code class="descclassname">QueueJob.</code><code class="descname">result</code><a class="headerlink" href="#connector.queue.model.QueueJob.result" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Très similaire à <code class="xref py py-class docutils literal"><span class="pre">Char</span></code> mais utilisé pour des contenus plus longs, sans taille spécifiée et généralement affiché dans une boite de texte multi-lignes.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><strong>translate</strong> &#8211; si la valeur de ce champ peut être traduite ou non</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="connector.queue.model.QueueJob.retry">
+<code class="descclassname">QueueJob.</code><code class="descname">retry</code><a class="headerlink" href="#connector.queue.model.QueueJob.retry" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="connector.queue.model.QueueJob.state">
+<code class="descclassname">QueueJob.</code><code class="descname">state</code><a class="headerlink" href="#connector.queue.model.QueueJob.state" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><ul class="first last simple">
+<li><strong>selection</strong> &#8211; précise les valeurs possible de ce champs. C&#8217;est donné soit comme liste de paires (<cite>valeur</cite>, <cite>chaîne</cite>), soit comme méthode de modèle, soit comme nom de méthode.</li>
+<li><strong>selection_add</strong> &#8211; fournit une extension de la sélection dans le cas d&#8217;un champ surchargé. C&#8217;est une liste de paires (<cite>value</cite>, <cite>string</cite>).</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>L&#8217;attribut <cite>selection</cite> est obligatoire sauf dans le cas de <a class="reference external" href="https://www.odoo.com/documentation/8.0/reference/orm.html#field-related" title="(disponible dans odoo v8.0)"><span class="xref std std-ref">related fields</span></a> ou <a class="reference external" href="https://www.odoo.com/documentation/8.0/reference/orm.html#field-incremental-definition" title="(disponible dans odoo v8.0)"><span class="xref std std-ref">field extensions</span></a>.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="connector.queue.model.QueueJob.user_id">
+<code class="descclassname">QueueJob.</code><code class="descname">user_id</code><a class="headerlink" href="#connector.queue.model.QueueJob.user_id" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>La valeur d&#8217;un tel champ est un <cite>recordset</cite> de taille 0 (pas d&#8217;enregistrement) ou 1 (enregistrement unique).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><ul class="first last simple">
+<li><strong>comodel_name</strong> &#8211; nom du modèle cible (chaîne de caractères)</li>
+<li><strong>domain</strong> &#8211; un <cite>domain</cite> optionnel à définir sur les valeurs candidates côté client (<cite>domain</cite> ou <cite>string</cite>)</li>
+<li><strong>context</strong> &#8211; un <cite>context</cite> optionnel à utiliser côté client à la prise en charge de ce champ (dictionnaire)</li>
+<li><strong>ondelete</strong> &#8211; quoi faire quand l&#8217;enregistrement en rapport est effacé ; les valeurs possibles sont : <code class="docutils literal"><span class="pre">'set</span> <span class="pre">null'</span></code>, <code class="docutils literal"><span class="pre">'restrict'</span></code>, <code class="docutils literal"><span class="pre">'cascade'</span></code></li>
+<li><strong>auto_join</strong> &#8211; si les JOINs sont générés lors de la recherche sur ce champ (booleen, par défaut <code class="docutils literal"><span class="pre">False</span></code>)</li>
+<li><strong>delegate</strong> &#8211; définir à <code class="docutils literal"><span class="pre">True</span></code> pour rendre les champs du modèle cible accessibles depuis le modèle en cours (correspond à <code class="docutils literal"><span class="pre">_inherits</span></code>)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>L&#8217;attribut <cite>comodel_name</cite> est obligatoire sauf dans le cas des champs <cite>related</cite> ou des extensions de champs.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="connector.queue.model.QueueJob.uuid">
+<code class="descclassname">QueueJob.</code><code class="descname">uuid</code><a class="headerlink" href="#connector.queue.model.QueueJob.uuid" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Champ chaîne de caractère basique, peut être limité en longeur, habituellement affiché comme ligne unique dans les clients</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><ul class="first last simple">
+<li><strong>size</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#int" title="(disponible dans Python v2.7)"><em>int</em></a>) &#8211; la taille maximum des valeurs stockées dans ce champ</li>
+<li><strong>translate</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#bool" title="(disponible dans Python v2.7)"><em>bool</em></a>) &#8211; si les valeurs de ce champ peuvent être traduites</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="connector.queue.model.QueueJob.worker_id">
+<code class="descclassname">QueueJob.</code><code class="descname">worker_id</code><a class="headerlink" href="#connector.queue.model.QueueJob.worker_id" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>La valeur d&#8217;un tel champ est un <cite>recordset</cite> de taille 0 (pas d&#8217;enregistrement) ou 1 (enregistrement unique).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><ul class="first last simple">
+<li><strong>comodel_name</strong> &#8211; nom du modèle cible (chaîne de caractères)</li>
+<li><strong>domain</strong> &#8211; un <cite>domain</cite> optionnel à définir sur les valeurs candidates côté client (<cite>domain</cite> ou <cite>string</cite>)</li>
+<li><strong>context</strong> &#8211; un <cite>context</cite> optionnel à utiliser côté client à la prise en charge de ce champ (dictionnaire)</li>
+<li><strong>ondelete</strong> &#8211; quoi faire quand l&#8217;enregistrement en rapport est effacé ; les valeurs possibles sont : <code class="docutils literal"><span class="pre">'set</span> <span class="pre">null'</span></code>, <code class="docutils literal"><span class="pre">'restrict'</span></code>, <code class="docutils literal"><span class="pre">'cascade'</span></code></li>
+<li><strong>auto_join</strong> &#8211; si les JOINs sont générés lors de la recherche sur ce champ (booleen, par défaut <code class="docutils literal"><span class="pre">False</span></code>)</li>
+<li><strong>delegate</strong> &#8211; définir à <code class="docutils literal"><span class="pre">True</span></code> pour rendre les champs du modèle cible accessibles depuis le modèle en cours (correspond à <code class="docutils literal"><span class="pre">_inherits</span></code>)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>L&#8217;attribut <cite>comodel_name</cite> est obligatoire sauf dans le cas des champs <cite>related</cite> ou des extensions de champs.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="connector.queue.model.QueueJob.write">
+<code class="descclassname">QueueJob.</code><code class="descname">write</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/queue/model.html#QueueJob.write"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.model.QueueJob.write" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+</div></blockquote>
+<dl class="class">
+<dt id="connector.queue.model.QueueWorker">
+<em class="property">class </em><code class="descclassname">connector.queue.model.</code><code class="descname">QueueWorker</code><span class="sig-paren">(</span><em>pool</em>, <em>cr</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/queue/model.html#QueueWorker"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.model.QueueWorker" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Bases : <a class="reference external" href="https://www.odoo.com/documentation/8.0/reference/orm.html#openerp.models.Model" title="(disponible dans odoo v8.0)"><code class="xref py py-class docutils literal"><span class="pre">openerp.models.Model</span></code></a></p>
+<blockquote>
+<div><p>Worker</p>
+<dl class="method">
+<dt id="connector.queue.model.QueueWorker.assign_jobs">
+<code class="descclassname">QueueWorker.</code><code class="descname">assign_jobs</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/queue/model.html#QueueWorker.assign_jobs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.model.QueueWorker.assign_jobs" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Affecte <code class="docutils literal"><span class="pre">n</span></code> jobs au worker du processus en cours</p>
+<p><code class="docutils literal"><span class="pre">n</span></code> est <code class="docutils literal"><span class="pre">max_jobs</span></code> ou illimité si <code class="docutils literal"><span class="pre">max_jobs</span></code> est None</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><strong>max_jobs</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#int" title="(disponible dans Python v2.7)"><em>int</em></a>) &#8211; nombre maximal de jobs à affecter à un worker</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="connector.queue.model.QueueWorker.assign_then_enqueue">
+<code class="descclassname">QueueWorker.</code><code class="descname">assign_then_enqueue</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/queue/model.html#QueueWorker.assign_then_enqueue"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.model.QueueWorker.assign_then_enqueue" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Affecte tous les jobs non encore affectés à un worker. Puis met en queue tous les jobs qui ont un worker mais qui ne sont pas dans la queue.</p>
+<p>Chaque opération est atomique.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Avertissement</p>
+<p class="last">valide la transaction. <code class="docutils literal"><span class="pre">cr.commit()</span></code> est appelé, donc veuillez appeler cette méthode dans vos propres transactions, pas dans la transaction principale d&#8217;OpenERP</p>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><strong>max_jobs</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#int" title="(disponible dans Python v2.7)"><em>int</em></a>) &#8211; nombre maximal de jobs à affecter à un worker</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="connector.queue.model.QueueWorker.date_alive">
+<code class="descclassname">QueueWorker.</code><code class="descname">date_alive</code><a class="headerlink" href="#connector.queue.model.QueueWorker.date_alive" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="connector.queue.model.QueueWorker.date_start">
+<code class="descclassname">QueueWorker.</code><code class="descname">date_start</code><a class="headerlink" href="#connector.queue.model.QueueWorker.date_start" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="connector.queue.model.QueueWorker.enqueue_jobs">
+<code class="descclassname">QueueWorker.</code><code class="descname">enqueue_jobs</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/queue/model.html#QueueWorker.enqueue_jobs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.model.QueueWorker.enqueue_jobs" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Met en queue tous les jobs affectés au worker du processus en cours</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="connector.queue.model.QueueWorker.job_ids">
+<code class="descclassname">QueueWorker.</code><code class="descname">job_ids</code><a class="headerlink" href="#connector.queue.model.QueueWorker.job_ids" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Champ one2many ; la valeur d&#8217;un tel champ est le <cite>recordset</cite> de tous les enregistrements dans <cite>comodel_name</cite> de sorte que le champ <cite>inverse_name</cite> soit égal à l&#8217;enregistrement actuel.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><ul class="first last simple">
+<li><strong>comodel_name</strong> &#8211; nom du modèle cible (chaîne de caractères)</li>
+<li><strong>inverse_name</strong> &#8211; nom du champ <cite>many2one</cite> réciproque côté <cite>comodel_name</cite> (string)</li>
+<li><strong>domain</strong> &#8211; un <cite>domain</cite> optionnel à définir sur les valeurs candidates côté client (<cite>domain</cite> ou <cite>string</cite>)</li>
+<li><strong>context</strong> &#8211; un <cite>context</cite> optionnel à utiliser côté client à la prise en charge de ce champ (dictionnaire)</li>
+<li><strong>auto_join</strong> &#8211; si les JOINs sont générés lors de la recherche sur ce champ (booleen, par défaut <code class="docutils literal"><span class="pre">False</span></code>)</li>
+<li><strong>limit</strong> &#8211; limite optionnelle à utiliser à la lecture (entier)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Les attributs <cite>comodel_name</cite> et <cite>inverse_name</cite> sont obligatoires sauf dans les cas des champs <cite>related</cite> ou des extensions de champs.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="connector.queue.model.QueueWorker.pid">
+<code class="descclassname">QueueWorker.</code><code class="descname">pid</code><a class="headerlink" href="#connector.queue.model.QueueWorker.pid" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Champ chaîne de caractère basique, peut être limité en longeur, habituellement affiché comme ligne unique dans les clients</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><ul class="first last simple">
+<li><strong>size</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#int" title="(disponible dans Python v2.7)"><em>int</em></a>) &#8211; la taille maximum des valeurs stockées dans ce champ</li>
+<li><strong>translate</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#bool" title="(disponible dans Python v2.7)"><em>bool</em></a>) &#8211; si les valeurs de ce champ peuvent être traduites</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="connector.queue.model.QueueWorker.uuid">
+<code class="descclassname">QueueWorker.</code><code class="descname">uuid</code><a class="headerlink" href="#connector.queue.model.QueueWorker.uuid" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Champ chaîne de caractère basique, peut être limité en longeur, habituellement affiché comme ligne unique dans les clients</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><ul class="first last simple">
+<li><strong>size</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#int" title="(disponible dans Python v2.7)"><em>int</em></a>) &#8211; la taille maximum des valeurs stockées dans ce champ</li>
+<li><strong>translate</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#bool" title="(disponible dans Python v2.7)"><em>bool</em></a>) &#8211; si les valeurs de ce champ peuvent être traduites</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="connector.queue.model.QueueWorker.worker_timeout">
+<code class="descclassname">QueueWorker.</code><code class="descname">worker_timeout</code><em class="property"> = 300</em><a class="headerlink" href="#connector.queue.model.QueueWorker.worker_timeout" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+</div></blockquote>
+<dl class="class">
+<dt id="connector.queue.model.RequeueJob">
+<em class="property">class </em><code class="descclassname">connector.queue.model.</code><code class="descname">RequeueJob</code><span class="sig-paren">(</span><em>pool</em>, <em>cr</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/queue/model.html#RequeueJob"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.model.RequeueJob" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Bases : <code class="xref py py-class docutils literal"><span class="pre">openerp.models.TransientModel</span></code></p>
+<blockquote>
+<div><dl class="attribute">
+<dt id="connector.queue.model.RequeueJob.job_ids">
+<code class="descclassname">RequeueJob.</code><code class="descname">job_ids</code><a class="headerlink" href="#connector.queue.model.RequeueJob.job_ids" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Champ many2many ; la valeur d&#8217;un tel champ est un <cite>recordset</cite>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><strong>comodel_name</strong> &#8211; nom du modèle cible (chaîne de caractères)</td>
+</tr>
+</tbody>
+</table>
+<p>L&#8217;attribut <cite>comodel_name</cite> est obligatoire sauf dans le cas des champs <cite>related</cite> ou des extensions de champs.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><ul class="first last simple">
+<li><strong>relation</strong> &#8211; nom optionnel de la table qui stocke la relation dans la base de données (string)</li>
+<li><strong>column1</strong> &#8211; nom optionnel de la colonne qui se réfère à &#8220;ces&#8221; enregistrements dans la table <cite>relation</cite> (string)</li>
+<li><strong>column2</strong> &#8211; nom optionnel de la colonne qui se réfère à &#8220;ces&#8221; enregistrements dans la table <cite>relation</cite> (string)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Les attributs <cite>relation</cite>, <cite>column1</cite> et <cite>column2</cite> sont optionnels. S&#8217;ils ne sont pas fournis, des noms sont générés automatiquement depuis les noms de modèles, à condition que <cite>model_name</cite> et <cite>comodel_name</cite> soient differents !</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><ul class="first last simple">
+<li><strong>domain</strong> &#8211; un <cite>domain</cite> optionnel à définir sur les valeurs candidates côté client (<cite>domain</cite> ou <cite>string</cite>)</li>
+<li><strong>context</strong> &#8211; un <cite>context</cite> optionnel à utiliser côté client à la prise en charge de ce champ (dictionnaire)</li>
+<li><strong>limit</strong> &#8211; limite optionnelle à utiliser à la lecture (entier)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="connector.queue.model.RequeueJob.requeue">
+<code class="descclassname">RequeueJob.</code><code class="descname">requeue</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/queue/model.html#RequeueJob.requeue"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.model.RequeueJob.requeue" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+</div></blockquote>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+        <br/>
+        
+<div id="sourcelink">
+  <a href="../_sources/api/api_queue.txt"
+     rel="nofollow">Source</a>
+</div>
+      
+    </p>
+    <p>
+        &copy; Copyright 2013, Camptocamp SA.<br/>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

@@ -1,9 +1,16 @@
 .. _multiprocessing:
 
 
-######################################
-Use the connector with multiprocessing
-######################################
+##############################################
+Use the connector with multiprocessing workers
+##############################################
+
+.. note:: In a future version, workers will be deprecated
+          in favor of the newer job runner which is more efficient and
+          supports job channels. You should try the job runner first
+          and fall back to using workers in case the runner does not
+          work (sic) for you, in which case we will very much appreciate
+          a github issue describing the problems you encoutered.
 
 When Odoo is launched with 1 process, the jobs worker will run
 threaded in the same process.

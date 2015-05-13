@@ -37,6 +37,9 @@ _logger = logging.getLogger(__name__)
 START_DELAY = 5
 
 
+enable = os.environ.get('ODOO_CONNECTOR_CHANNELS')
+
+
 def run():
     # sleep a bit to let the workers start at ease
     time.sleep(START_DELAY)

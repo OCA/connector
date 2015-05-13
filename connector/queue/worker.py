@@ -354,7 +354,7 @@ def start_service():
 # 2. Or it is used in multiprocess (with option ``--workers``)
 #    but the current process is a Connector Worker
 #    (launched with the ``openerp-connector-worker`` script).
-if not os.environ.get('ODOO_CONNECTOR_RUNNER_ENABLE'):
+if not os.environ.get('ODOO_CONNECTOR_CHANNELS'):
     if (not getattr(openerp, 'multi_process', False) or
             getattr(openerp, 'worker_connector', False)):
         start_service()

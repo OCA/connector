@@ -46,8 +46,7 @@ START_DELAY = 5
 # to configure the runner (channels mostly).
 
 
-# TODO: this is a temporary flag to enable the connector runner
-enable = os.environ.get('ODOO_CONNECTOR_RUNNER_ENABLE')
+enable = os.environ.get('ODOO_CONNECTOR_CHANNELS')
 
 
 def run():

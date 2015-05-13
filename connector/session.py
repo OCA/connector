@@ -117,6 +117,11 @@ class ConnectorSession(object):
             context = {}
         self.env = openerp.api.Environment(cr, uid, context)
 
+    @classmethod
+    def from_env(cls, env):
+        """ Return a ConnectorSession from :class:`openerp.api.Environment` """
+        return cls(env.cr, env.uid, context=env.context)
+
     @property
     def cr(self):
         return self.env.cr

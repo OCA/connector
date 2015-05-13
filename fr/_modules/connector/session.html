@@ -330,6 +330,11 @@
             <span class="n">context</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">env</span> <span class="o">=</span> <span class="n">openerp</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">Environment</span><span class="p">(</span><span class="n">cr</span><span class="p">,</span> <span class="n">uid</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span>
 
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="ConnectorSession.from_env"><a class="viewcode-back" href="../../api/api_session.html#connector.session.ConnectorSession.from_env">[docs]</a>    <span class="k">def</span> <span class="nf">from_env</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">env</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Return a ConnectorSession from :class:`openerp.api.Environment` &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">cls</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">cr</span><span class="p">,</span> <span class="n">env</span><span class="o">.</span><span class="n">uid</span><span class="p">,</span> <span class="n">context</span><span class="o">=</span><span class="n">env</span><span class="o">.</span><span class="n">context</span><span class="p">)</span>
+</div>
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">cr</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">cr</span>

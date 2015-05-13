@@ -579,30 +579,36 @@ class ChannelManager(object):
 
     def notify(self, db_name, channel_name, uuid,
                seq, date_created, priority, eta, state):
+        if not channel_name:
+            channel_name = self._root_channel.name
         job = self._jobs_by_uuid.get(uuid)
-        if not job:
-            if not channel_name:
-                channel = self._root_channel
-            else:
-                try:
-                    channel = self.get_channel_by_name(channel_name)
-                except ChannelNotFound:
-                    _logger.warning('unknown channel %s, '
-                                    'using root channel for job %s',
-                                    channel_name, uuid)
-                    channel = self._root_channel
-            job = ChannelJob(db_name, channel, uuid,
-                             seq, date_created, priority, eta)
-            self._jobs_by_uuid[uuid] = job
-        else:
+        if job:
             # db_name is invariant
             assert job.db_name == db_name
             # date_created is invariant
             assert job.date_created == date_created
-            # TODO: handle sequence change
-            # TODO: handle priority change
-            # TODO: handle eta change
-            # TODO: handle channel change
+            # if one of the job properties that influence
+            # scheduling order has changed, we remove the job
+            # from the queues and create a new job object
+            if (seq != job.seq or
+                    priority != job.priority or
+                    eta != job.eta or
+                    channel_name != job.channel.fullname):
+                _logger.debug("job %s properties changed, rescheduling it",
+                              uuid)
+                self.remove_job(uuid)
+                job = None
+        if not job:
+            try:
+                channel = self.get_channel_by_name(channel_name)
+            except ChannelNotFound:
+                _logger.warning('unknown channel %s, '
+                                'using root channel for job %s',
+                                channel_name, uuid)
+                channel = self._root_channel
+            job = ChannelJob(db_name, channel, uuid,
+                             seq, date_created, priority, eta)
+            self._jobs_by_uuid[uuid] = job
         # state transitions
         if not state or state == DONE:
             job.channel.set_done(job)

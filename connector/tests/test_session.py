@@ -74,6 +74,14 @@ class test_connector_session(common.TransactionCase):
         self.assertEqual(session.context, session.env.context)
         self.assertEqual(session.pool, session.env.registry)
 
+    def test_from_env(self):
+        """ ConnectorSession.from_env(env) """
+        session = ConnectorSession.from_env(self.env)
+        self.assertEqual(session.cr, self.env.cr)
+        self.assertEqual(session.uid, self.env.uid)
+        self.assertEqual(session.context, self.env.context)
+        self.assertEqual(session.pool, self.env.registry)
+
     def test_change_user(self):
         """
         Change the user and check if it is reverted correctly at the end

@@ -88,12 +88,6 @@ import openerp
 
 from .channels import ChannelManager, ENQUEUED, NOT_DONE
 
-# TODO: since STATE_ENQUEUED is now very short lived state
-#       we can automatically requeue (set pending) all
-#       jobs that are enqueued since more than a few seconds
-#       this is important as jobs will be stuck in that
-#       state if this odoo-connector-runner runs while odoo does not
-
 SELECT_TIMEOUT = 60
 ERROR_RECOVERY_DELAY = 5
 
@@ -107,8 +101,7 @@ def _async_http_get(url):
     def urlopen():
         try:
             # we are not interested in the result, so we set a short timeout
-            # but not too short so we log errors when Odoo
-            # is not running at all
+            # but not too short so we trap and log hard configuration errors
             requests.get(url, timeout=1)
         except requests.Timeout:
             pass

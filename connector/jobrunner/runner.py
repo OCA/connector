@@ -52,7 +52,6 @@ How?
 How to use
 ----------
 * set the following environment variables:
-  - ODOO_CONNECTOR_RUNNER_ENABLE=1
   - ODOO_CONNECTOR_CHANNELS=root:4 (or any other channels configuration)
   - optional if xmlrpc_port is not set: ODOO_CONNECTOR_PORT=8069
 * start Odoo with --load=web,connector and --workers > 1 [2]

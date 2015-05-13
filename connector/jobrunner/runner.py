@@ -24,23 +24,22 @@
 #
 ##############################################################################
 """
-Odoo Connector jobs runner
-==========================
-
-What's this?
-------------
+What's is the job runner?
+-------------------------
 This is an alternative to connector workers, with the goal
 of resolving issues due to the polling nature of workers:
-* jobs do not start immediately even if there is a free connector worker
-* connector workers may starve while other workers have too many jobs enqueued
+
+* jobs do not start immediately even if there is a free connector worker,
+* connector workers may starve while other workers have too many jobs enqueued,
 * connector workers require another startup script,
   making deployment more difficult
 
 It is fully compatible with the connector mechanism and only
 replaces workers.
 
-How?
-----
+How does it work?
+-----------------
+
 * It starts as a thread in the Odoo main process
 * It receives postgres NOTIFY messages each time jobs are
   added or updated in the queue_job table.
@@ -49,20 +48,25 @@ How?
 * It does not run jobs itself, but asks Odoo to run them through an
   anonymous /connector/runjob HTTP request [1].
 
-How to use
-----------
-* set the following environment variables:
+How to use it?
+--------------
+
+* Set the following environment variables:
+
   - ODOO_CONNECTOR_CHANNELS=root:4 (or any other channels configuration)
   - optional if xmlrpc_port is not set: ODOO_CONNECTOR_PORT=8069
-* start Odoo with --load=web,connector and --workers > 1 [2]
-* disable "Enqueue Jobs" cron
-* do NOT start openerp-connector-worker
-* create jobs (eg using base_import_async) and observe they
-  start immediately and in parallel
 
-TODO
-----
-* See in the code below.
+* Start Odoo with --load=web,connector and --workers > 1. [2]
+* Disable then "Enqueue Jobs" cron.
+* Do NOT start openerp-connector-worker.
+* Create jobs (eg using base_import_async) and observe they
+  start immediately and in parallel.
+
+Caveat
+------
+
+* After creating a new database or installing connector on an
+  existing database, Odoo must be restarted for the runner to detect it.
 
 Notes
 -----

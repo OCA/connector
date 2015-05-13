@@ -284,6 +284,9 @@ class ChannelQueue(object):
 class Channel(object):
     """A channel for jobs, with a maximum capacity.
 
+    When jobs are created by connector modules, they may be associated
+    to a job channel. Jobs with no channel are inserted into the root channel.
+
     Job channels are joined in a hierarchy down to the root channel.
     When a job channel has available capacity, jobs are dequeued, marked
     as running in the channel and are inserted into the queue of the
@@ -291,18 +294,18 @@ class Channel(object):
 
     Job channels can be visualized as water channels with a given flow
     limit (= capacity). Channels are joined together in a downstream channel
-    and the flow limit of the downstream channel limits upstream channels.
+    and the flow limit of the downstream channel limits upstream channels.::
 
-    ---------------------+
-                         |
-                         |
-     Ch. A W:4,Q:12,R:4  +-----------------------
+        ---------------------+
+                             |
+                             |
+         Ch. A W:4,Q:12,R:4  +-----------------------
 
-    ---------------------+  Ch. root W:5,Q:0,R:4
-                         |
-    ---------------------+
-     Ch. B W:1,Q:0,R:0
-    ---------------------+-----------------------
+        ---------------------+  Ch. root W:5,Q:0,R:4
+                             |
+        ---------------------+
+         Ch. B W:1,Q:0,R:0
+        ---------------------+-----------------------
 
     The above diagram illustrates two channels joining in the root channel.
     The root channel has a capacity of 5, and 4 running jobs coming from
@@ -338,6 +341,12 @@ class Channel(object):
         self._failed = SafeSet()
 
     def configure(self, config):
+        """ Configure a channel from a dictionary.
+
+        Avaiable keys are:
+        * capacity
+        * sequential
+        """
         assert config['name'] == self.fullname
         self.capacity = config.get('capacity', None)
         self.sequential = bool(config.get('sequential', False))
@@ -346,6 +355,7 @@ class Channel(object):
 
     @property
     def fullname(self):
+        """ The full name of the channel, in dot separated notation. """
         if self.parent:
             return self.parent.fullname + '.' + self.name
         else:
@@ -362,6 +372,7 @@ class Channel(object):
                                             len(self._failed))
 
     def remove(self, job):
+        """ Remove a job from the channel. """
         self._queue.remove(job)
         self._running.remove(job)
         self._failed.remove(job)
@@ -369,11 +380,20 @@ class Channel(object):
             self.parent.remove(job)
 
     def set_done(self, job):
+        """ Mark a job as done.
+
+        This removes it from the channel queue.
+        """
         self.remove(job)
         _logger.debug("job %s marked done in channel %s",
                       job.uuid, self)
 
     def set_pending(self, job):
+        """ Mark a job as pending.
+
+        This puts the job in the channel queue and remove it
+        from parent channels queues.
+        """
         if job not in self._queue:
             self._queue.add(job)
             self._running.remove(job)
@@ -384,6 +404,10 @@ class Channel(object):
                           job.uuid, self)
 
     def set_running(self, job):
+        """ Mark a job as running.
+
+        This also marks the job as running in parent channels.
+        """
         if job not in self._running:
             self._queue.remove(job)
             self._running.add(job)
@@ -394,6 +418,7 @@ class Channel(object):
                           job.uuid, self)
 
     def set_failed(self, job):
+        """ Mark the job as failed. """
         if job not in self._failed:
             self._queue.remove(job)
             self._running.remove(job)
@@ -404,6 +429,14 @@ class Channel(object):
                           job.uuid, self)
 
     def get_jobs_to_run(self):
+        """ Get jobs that are ready to run in channel.
+
+        This works by enqueuing jobs that are ready to run in children
+        channels, then yielding jobs from the channel queue until
+        ``capacity`` jobs are marked running in the channel.
+
+        :return: iterator of :py:class:`connector.jobrunner.ChannelJob`
+        """
         # enqueue jobs of children channels
         for child in self.children.values():
             for job in child.get_jobs_to_run():

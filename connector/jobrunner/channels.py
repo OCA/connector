@@ -351,7 +351,7 @@ class Channel(object):
         * capacity
         * sequential
         """
-        assert config['name'] == self.fullname
+        assert self.fullname.endswith(config['name'])
         self.capacity = config.get('capacity', None)
         self.sequential = bool(config.get('sequential', False))
         if self.sequential and self.capacity != 1:
@@ -556,7 +556,7 @@ class ChannelManager(object):
         >>> pp(ChannelManager.parse_simple_config('root'))
         [{'capacity': 1, 'name': 'root'}]
         >>> pp(ChannelManager.parse_simple_config('sub:2'))
-        [{'capacity': 2, 'name': 'root.sub'}]
+        [{'capacity': 2, 'name': 'sub'}]
         """
         res = []
         for channel_config_string in config_string.split(','):
@@ -566,8 +566,6 @@ class ChannelManager(object):
             if not name:
                 raise ValueError('Invalid channel config %s: '
                                  'missing channel name' % config_string)
-            if not name.startswith('root.') and name != 'root':
-                name = 'root.' + name
             config['name'] = name
             if len(config_items) > 1:
                 capacity = config_items[1]
@@ -609,6 +607,8 @@ class ChannelManager(object):
         4
         >>> cm.get_channel_by_name('root.autosub').capacity
         >>> cm.get_channel_by_name('root.autosub.sub').capacity
+        2
+        >>> cm.get_channel_by_name('autosub.sub').capacity
         2
         """
         for config in ChannelManager.parse_simple_config(config_string):
@@ -676,9 +676,7 @@ class ChannelManager(object):
         if not autocreate:
             raise ChannelNotFound('Channel %s not found' % channel_name)
         parent = self._root_channel
-        for subchannel_name in channel_name.split('.'):
-            if subchannel_name == 'root':
-                continue
+        for subchannel_name in channel_name.split('.')[1:]:
             subchannel = parent.get_subchannel_by_name(subchannel_name)
             if not subchannel:
                 subchannel = Channel(subchannel_name, parent, capacity=None)

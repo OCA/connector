@@ -23,12 +23,9 @@
 #
 ##############################################################################
 
-from datetime import datetime
 from heapq import heappush, heappop
 import logging
 from weakref import WeakValueDictionary
-
-from openerp.tools.misc import DEFAULT_SERVER_DATETIME_FORMAT
 
 from ..exception import ChannelNotFound
 from ..queue.job import PENDING, ENQUEUED, STARTED, FAILED, DONE
@@ -152,7 +149,7 @@ class ChannelJob(object):
         * then jobs with a smaller eta come first
         * then jobs with smaller priority come first
         * then jobs with a smaller creation time come first
-        * then jobs with a samller sequence come first
+        * then jobs with a smaller sequence come first
 
     Here are some examples.
 
@@ -428,18 +425,21 @@ class Channel(object):
             _logger.debug("job %s marked failed in channel %s",
                           job.uuid, self)
 
-    def get_jobs_to_run(self):
+    def get_jobs_to_run(self, now):
         """ Get jobs that are ready to run in channel.
 
         This works by enqueuing jobs that are ready to run in children
         channels, then yielding jobs from the channel queue until
         ``capacity`` jobs are marked running in the channel.
 
+        :param now: the current datetime using a type that is comparable to
+                    jobs eta attribute
+
         :return: iterator of :py:class:`connector.jobrunner.ChannelJob`
         """
         # enqueue jobs of children channels
         for child in self.children.values():
-            for job in child.get_jobs_to_run():
+            for job in child.get_jobs_to_run(now):
                 self._queue.add(job)
         # sequential channels block when there are failed jobs
         # TODO: this is probably not sufficient to ensure
@@ -449,7 +449,6 @@ class Channel(object):
         if self.sequential and len(self._failed):
             return
         # yield jobs that are ready to run
-        now = datetime.now().strftime(DEFAULT_SERVER_DATETIME_FORMAT)
         while not self.capacity or len(self._running) < self.capacity:
             job = self._queue.pop(now)
             if not job:
@@ -666,5 +665,5 @@ class ChannelManager(object):
                 job.channel.remove(job)
                 del self._jobs_by_uuid[job.uuid]
 
-    def get_jobs_to_run(self):
-        return self._root_channel.get_jobs_to_run()
+    def get_jobs_to_run(self, now):
+        return self._root_channel.get_jobs_to_run(now)

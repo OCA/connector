@@ -600,7 +600,20 @@ class ChannelManager(object):
         'sub'
         >>> c.fullname
         'root.autosub.sub'
+        >>> c = cm.get_channel_by_name(None)
+        >>> c.fullname
+        'root'
+        >>> c = cm.get_channel_by_name('root.sub')
+        >>> c.fullname
+        'root.sub'
+        >>> c = cm.get_channel_by_name('sub')
+        >>> c.fullname
+        'root.sub'
         """
+        if not channel_name or channel_name == self._root_channel.name:
+            return self._root_channel
+        if not channel_name.startswith(self._root_channel.name + '.'):
+            channel_name = self._root_channel.name + '.' + channel_name
         if channel_name in self._channels_by_name:
             return self._channels_by_name[channel_name]
         if not autocreate:
@@ -618,8 +631,13 @@ class ChannelManager(object):
 
     def notify(self, db_name, channel_name, uuid,
                seq, date_created, priority, eta, state):
-        if not channel_name:
-            channel_name = self._root_channel.name
+        try:
+            channel = self.get_channel_by_name(channel_name)
+        except ChannelNotFound:
+            _logger.warning('unknown channel %s, '
+                            'using root channel for job %s',
+                            channel_name, uuid)
+            channel = self._root_channel
         job = self._jobs_by_uuid.get(uuid)
         if job:
             # db_name is invariant
@@ -632,19 +650,12 @@ class ChannelManager(object):
             if (seq != job.seq or
                     priority != job.priority or
                     eta != job.eta or
-                    channel_name != job.channel.fullname):
+                    channel != job.channel):
                 _logger.debug("job %s properties changed, rescheduling it",
                               uuid)
                 self.remove_job(uuid)
                 job = None
         if not job:
-            try:
-                channel = self.get_channel_by_name(channel_name)
-            except ChannelNotFound:
-                _logger.warning('unknown channel %s, '
-                                'using root channel for job %s',
-                                channel_name, uuid)
-                channel = self._root_channel
             job = ChannelJob(db_name, channel, uuid,
                              seq, date_created, priority, eta)
             self._jobs_by_uuid[uuid] = job

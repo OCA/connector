@@ -240,7 +240,8 @@ class ConnectorRunner(object):
                 _logger.info('connector runner ready for db %s', db_name)
 
     def run_jobs(self):
-        for job in self.channel_manager.get_jobs_to_run():
+        now = openerp.fields.Datetime.now()
+        for job in self.channel_manager.get_jobs_to_run(now):
             _logger.info("asking Odoo to run job %s on db %s",
                          job.uuid, job.db_name)
             self.db_by_name[job.db_name].set_job_enqueued(job.uuid)

@@ -467,6 +467,63 @@ class Channel(object):
 
 
 class ChannelManager(object):
+    """ High level interface for channels
+
+    This class handles:
+
+    * configuration of channels
+    * high level api to create and remove jobs (notify, remove_job, remove_db)
+    * get jobs to run
+
+    Here is how the runner will use it.
+
+    Let's create a channel manager and configure it.
+
+    >>> from pprint import pprint as pp
+    >>> cm = ChannelManager()
+    >>> cm.simple_configure('root:4,A:4,B:1')
+    >>> db = 'db'
+
+    Add a few jobs in channel A with priority 10
+
+    >>> cm.notify(db, 'A', 'A1', 1, 0, 10, None, 'pending')
+    >>> cm.notify(db, 'A', 'A2', 2, 0, 10, None, 'pending')
+    >>> cm.notify(db, 'A', 'A3', 3, 0, 10, None, 'pending')
+    >>> cm.notify(db, 'A', 'A4', 4, 0, 10, None, 'pending')
+    >>> cm.notify(db, 'A', 'A5', 5, 0, 10, None, 'pending')
+    >>> cm.notify(db, 'A', 'A6', 6, 0, 10, None, 'pending')
+
+    Add a few jobs in channel B with priority 5
+
+    >>> cm.notify(db, 'B', 'B1', 1, 0, 5, None, 'pending')
+    >>> cm.notify(db, 'B', 'B2', 2, 0, 5, None, 'pending')
+
+    We must now run one job from queue B which has a capacity of 1
+    and 3 jobs from queue A so the root channel capacity of 4 is filled.
+
+    >>> pp(list(cm.get_jobs_to_run(now=100)))
+    [<ChannelJob B1>, <ChannelJob A1>, <ChannelJob A2>, <ChannelJob A3>]
+
+    Job A2 is done. Next job to run is A5, even if we have
+    higher priority job in channel B, because channel B as a capacity of 1.
+
+    >>> cm.notify(db, 'A', 'A2', 2, 0, 10, None, 'done')
+    >>> pp(list(cm.get_jobs_to_run(now=100)))
+    [<ChannelJob A4>]
+
+    Job B1 is done. Next job to run is B2 because it has higher priority.
+
+    >>> cm.notify(db, 'B', 'B1', 1, 0, 5, None, 'done')
+    >>> pp(list(cm.get_jobs_to_run(now=100)))
+    [<ChannelJob B2>]
+
+    Let's say A1 is done and A6 gets a higher priority. A6 will run next.
+
+    >>> cm.notify(db, 'A', 'A1', 1, 0, 10, None, 'done')
+    >>> cm.notify(db, 'A', 'A6', 6, 0, 5, None, 'pending')
+    >>> pp(list(cm.get_jobs_to_run(now=100)))
+    [<ChannelJob A6>]
+    """
 
     def __init__(self):
         self._jobs_by_uuid = WeakValueDictionary()

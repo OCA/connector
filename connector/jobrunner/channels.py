@@ -154,6 +154,7 @@ class ChannelJob(object):
     Here are some examples.
 
     j1 comes before j2 before it has a smaller date_created
+
     >>> j1 = ChannelJob(None, None, 1,
     ...                 seq=0, date_created=1, priority=9, eta=None)
     >>> j1
@@ -165,12 +166,14 @@ class ChannelJob(object):
 
     j3 comes first because it has lower priority,
     despite having a creation date after j1 and j2
+
     >>> j3 = ChannelJob(None, None, 3,
     ...                 seq=0, date_created=3, priority=2, eta=None)
     >>> j3 < j1
     True
 
     j4 and j5 comes even before j3, because they have an eta
+
     >>> j4 = ChannelJob(None, None, 4,
     ...                 seq=0, date_created=4, priority=9, eta=9)
     >>> j5 = ChannelJob(None, None, 5,
@@ -179,17 +182,20 @@ class ChannelJob(object):
     True
 
     j6 has same date_created and priority as j5 but a smaller eta
+
     >>> j6 = ChannelJob(None, None, 6,
     ...                 seq=0, date_created=5, priority=9, eta=2)
     >>> j6 < j4 < j5
     True
 
     Here is the complete suite:
+
     >>> j6 < j4 < j5 < j3 < j1 < j2
     True
 
     j0 has the same properties as j1 but they are not considered
     equal as they are different instances
+
     >>> j0 = ChannelJob(None, None, 1,
     ...                 seq=0, date_created=1, priority=9, eta=None)
     >>> j0 == j1
@@ -340,7 +346,8 @@ class Channel(object):
     def configure(self, config):
         """ Configure a channel from a dictionary.
 
-        Avaiable keys are:
+        Supported keys are:
+
         * capacity
         * sequential
         """

@@ -16,7 +16,7 @@ ability to be extended with additional modules for new features or
 customizations.
 
 The development of Odoo Connector has been started by `Camptocamp`_ and is now
-maintained by `Camptocamp`_, `Akretion`_ and several :ref:`contributors`.
+maintained by `Camptocamp`_, `Akretion`_, `Acsone`_ and several :ref:`contributors`.
 
 *Subscribe to the* `project's mailing list`_
 
@@ -39,6 +39,7 @@ Core Features
 .. _Odoo: http://www.odoo.com
 .. _Camptocamp: http://www.camptocamp.com
 .. _Akretion: http://www.akretion.com
+.. _Acsone: http://www.acsone.eu
 .. _`source code is available on GitHub`: https://github.com/OCA/connector
 .. _`AGPL version 3`: http://www.gnu.org/licenses/agpl-3.0.html
 .. _`project's mailing list`: https://launchpad.net/~openerp-connector-community
@@ -112,6 +113,7 @@ Developer's guide
    guides/code_overview.rst
    guides/concepts.rst
    guides/bootstrap_connector.rst
+   guides/jobrunner.rst
    guides/multiprocessing.rst
 
 API Reference
@@ -130,6 +132,8 @@ API Reference
    api/api_backend_adapter.rst
    api/api_queue.rst
    api/api_exception.rst
+   api/api_channels.rst
+   api/api_runner.rst
 
 ******************
 Indices and tables

@@ -142,7 +142,17 @@
 <li class="toctree-l2"><a class="reference internal" href="guides/bootstrap_connector.html#connectorunit-classes">Classes ConnectorUnit</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="guides/multiprocessing.html">Connecteur et multiprocessing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guides/jobrunner.html">Configuring channels and the job runner</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="guides/jobrunner.html#what-s-is-the-job-runner">What&#8217;s is the job runner?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/jobrunner.html#how-does-it-work">How does it work?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/jobrunner.html#how-to-use-it">How to use it?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/jobrunner.html#caveat">Caveat</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/jobrunner.html#notes">Notes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/jobrunner.html#what-is-a-channel">What is a channel?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/jobrunner.html#how-to-configure-channels">How to configure Channels?</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="guides/multiprocessing.html">Use the connector with multiprocessing workers</a></li>
 </ul>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="api/api_connector.html">Connecteur</a></li>
@@ -165,6 +175,15 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="api/api_exception.html">Exceptions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/api_channels.html">Channels</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/api_runner.html">Job Runner</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/api_runner.html#what-s-is-the-job-runner">What&#8217;s is the job runner?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/api_runner.html#how-does-it-work">How does it work?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/api_runner.html#how-to-use-it">How to use it?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/api_runner.html#caveat">Caveat</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/api_runner.html#notes">Notes</a></li>
+</ul>
+</li>
 </ul>
 </ul>
 </li>
@@ -233,7 +252,8 @@
 <h1>Odoo Connector<a class="headerlink" href="#odoo-connector" title="Lien permanent vers ce titre">¶</a></h1>
 <p><cite>Odoo Connector</cite> est un puissant framework de développement de connecteur bi-directionnel entre <a class="reference external" href="http://www.odoo.com">Odoo</a> (ERP Open Source) et tout autre logiciel ou service.</p>
 <p>Ce module Odoo a un cœur modulaire et générique, capable d&#8217;être lui-même étendu grâce à des modules additionnels, pour ajouter des nouvelles fonctions ou des personnalisations.</p>
-<p>Le développement du Connecteur Odoo a été démarré par <a class="reference external" href="http://www.camptocamp.com">Camptocamp</a> et est maintenu par <a class="reference external" href="http://www.camptocamp.com">Camptocamp</a>, <a class="reference external" href="http://www.akretion.com">Akretion</a> et d&#8217;autres <a class="reference internal" href="project/contributors.html#contributors"><span>Contributeurs</span></a>.</p>
+<p>The development of Odoo Connector has been started by <a class="reference external" href="http://www.camptocamp.com">Camptocamp</a> and is now
+maintained by <a class="reference external" href="http://www.camptocamp.com">Camptocamp</a>, <a class="reference external" href="http://www.akretion.com">Akretion</a>, <a class="reference external" href="http://www.acsone.eu">Acsone</a> and several <a class="reference internal" href="project/contributors.html#contributors"><span>Contributeurs</span></a>.</p>
 <p><em>Inscrivez-vous à la</em> <a class="reference external" href="https://launchpad.net/~openerp-connector-community">project&#8217;s mailing list</a> <em>(en anglais)</em></p>
 <p><em>Découvrez comment</em> <a class="reference internal" href="project/contribute.html#contribute"><span>Contribuer</span></a></p>
 <div class="section" id="core-features">
@@ -348,7 +368,17 @@
 <li class="toctree-l2"><a class="reference internal" href="guides/bootstrap_connector.html#connectorunit-classes">Classes ConnectorUnit</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="guides/multiprocessing.html">Connecteur et multiprocessing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guides/jobrunner.html">Configuring channels and the job runner</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="guides/jobrunner.html#what-s-is-the-job-runner">What&#8217;s is the job runner?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/jobrunner.html#how-does-it-work">How does it work?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/jobrunner.html#how-to-use-it">How to use it?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/jobrunner.html#caveat">Caveat</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/jobrunner.html#notes">Notes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/jobrunner.html#what-is-a-channel">What is a channel?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/jobrunner.html#how-to-configure-channels">How to configure Channels?</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="guides/multiprocessing.html">Use the connector with multiprocessing workers</a></li>
 </ul>
 </div>
 <div class="section" id="api-reference">
@@ -366,6 +396,8 @@
 <li class="toctree-l1"><a class="reference internal" href="api/api_backend_adapter.html">Adaptateur de backend</a></li>
 <li class="toctree-l1"><a class="reference internal" href="api/api_queue.html">Queue</a></li>
 <li class="toctree-l1"><a class="reference internal" href="api/api_exception.html">Exceptions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/api_channels.html">Channels</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/api_runner.html">Job Runner</a></li>
 </ul>
 </div>
 </div>

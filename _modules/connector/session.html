@@ -141,7 +141,17 @@
 <li class="toctree-l2"><a class="reference internal" href="../../guides/bootstrap_connector.html#connectorunit-classes">ConnectorUnit classes</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../guides/multiprocessing.html">Use the connector with multiprocessing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../guides/jobrunner.html">Configuring channels and the job runner</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/jobrunner.html#what-s-is-the-job-runner">What&#8217;s is the job runner?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/jobrunner.html#how-does-it-work">How does it work?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/jobrunner.html#how-to-use-it">How to use it?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/jobrunner.html#caveat">Caveat</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/jobrunner.html#notes">Notes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/jobrunner.html#what-is-a-channel">What is a channel?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/jobrunner.html#how-to-configure-channels">How to configure Channels?</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../guides/multiprocessing.html">Use the connector with multiprocessing workers</a></li>
 </ul>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../api/api_connector.html">Connector</a></li>
@@ -164,6 +174,15 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../api/api_exception.html">Exceptions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/api_channels.html">Channels</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/api_runner.html">Job Runner</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../api/api_runner.html#what-s-is-the-job-runner">What&#8217;s is the job runner?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/api_runner.html#how-does-it-work">How does it work?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/api_runner.html#how-to-use-it">How to use it?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/api_runner.html#caveat">Caveat</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/api_runner.html#notes">Notes</a></li>
+</ul>
+</li>
 </ul>
 </ul>
 </li>
@@ -238,6 +257,7 @@
 <span class="kn">import</span> <span class="nn">openerp</span>
 <span class="kn">from</span> <span class="nn">openerp.modules.registry</span> <span class="kn">import</span> <span class="n">RegistryManager</span>
 
+<span class="kn">from</span> <span class="nn">.connector</span> <span class="kn">import</span> <span class="n">is_module_installed</span>
 <span class="kn">from</span> <span class="nn">.deprecate</span> <span class="kn">import</span> <span class="n">log_deprecate</span>
 
 <span class="n">_logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">__name__</span><span class="p">)</span>
@@ -473,7 +493,7 @@
 <span class="sd">        model with name ``module_name.installed`` is loaded in the</span>
 <span class="sd">        registry.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pool</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;</span><span class="si">%s</span><span class="s">.installed&#39;</span> <span class="o">%</span> <span class="n">module_name</span><span class="p">))</span></div></div>
+        <span class="k">return</span> <span class="n">is_module_installed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pool</span><span class="p">,</span> <span class="n">module_name</span><span class="p">)</span></div></div>
 </pre></div>
 
     </div>

@@ -141,7 +141,17 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../guides/bootstrap_connector.html#connectorunit-classes">ConnectorUnit classes</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../../guides/multiprocessing.html">Use the connector with multiprocessing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../guides/jobrunner.html">Configuring channels and the job runner</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/jobrunner.html#what-s-is-the-job-runner">What&#8217;s is the job runner?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/jobrunner.html#how-does-it-work">How does it work?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/jobrunner.html#how-to-use-it">How to use it?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/jobrunner.html#caveat">Caveat</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/jobrunner.html#notes">Notes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/jobrunner.html#what-is-a-channel">What is a channel?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/jobrunner.html#how-to-configure-channels">How to configure Channels?</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../guides/multiprocessing.html">Use the connector with multiprocessing workers</a></li>
 </ul>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../api/api_connector.html">Connector</a></li>
@@ -164,6 +174,15 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../api/api_exception.html">Exceptions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/api_channels.html">Channels</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/api_runner.html">Job Runner</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/api_runner.html#what-s-is-the-job-runner">What&#8217;s is the job runner?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/api_runner.html#how-does-it-work">How does it work?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/api_runner.html#how-to-use-it">How to use it?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/api_runner.html#caveat">Caveat</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/api_runner.html#notes">Notes</a></li>
+</ul>
+</li>
 </ul>
 </ul>
 </li>
@@ -386,6 +405,7 @@
                 <span class="s">&#39;date_started&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
                 <span class="s">&#39;date_done&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
                 <span class="s">&#39;eta&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+                <span class="s">&#39;func_name&#39;</span><span class="p">:</span> <span class="n">job_</span><span class="o">.</span><span class="n">func_name</span><span class="p">,</span>
                 <span class="p">}</span>
 
         <span class="n">dt_to_string</span> <span class="o">=</span> <span class="n">openerp</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">Datetime</span><span class="o">.</span><span class="n">to_string</span>
@@ -797,6 +817,9 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">func</span><span class="o">.</span><span class="n">related_action</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
 
 </div></div>
+<span class="n">JOB_REGISTRY</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+
+
 <div class="viewcode-block" id="job"><a class="viewcode-back" href="../../../api/api_queue.html#connector.queue.job.job">[docs]</a><span class="k">def</span> <span class="nf">job</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Decorator for jobs.</span>
 
@@ -865,6 +888,7 @@
             <span class="n">model_name</span><span class="o">=</span><span class="n">model_name</span><span class="p">,</span>
             <span class="o">*</span><span class="n">args</span><span class="p">,</span>
             <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="n">JOB_REGISTRY</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
     <span class="n">func</span><span class="o">.</span><span class="n">delay</span> <span class="o">=</span> <span class="n">delay</span>
     <span class="k">return</span> <span class="n">func</span>
 

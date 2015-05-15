@@ -5,7 +5,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Use the connector with multiprocessing &mdash; Connector  documentation</title>
+    <title>Use the connector with multiprocessing workers &mdash; Connector  documentation</title>
     
     <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -30,7 +30,7 @@
     <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
     <link rel="top" title="Connector  documentation" href="../index.html" />
     <link rel="next" title="Connector" href="../api/api_connector.html" />
-    <link rel="prev" title="Boostrapping a connector" href="bootstrap_connector.html" />
+    <link rel="prev" title="Configuring channels and the job runner" href="jobrunner.html" />
 
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
@@ -142,7 +142,17 @@
 <li class="toctree-l2"><a class="reference internal" href="bootstrap_connector.html#connectorunit-classes">ConnectorUnit classes</a></li>
 </ul>
 </li>
-<li class="toctree-l1 current"><a class="current reference internal" href="">Use the connector with multiprocessing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="jobrunner.html">Configuring channels and the job runner</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="jobrunner.html#what-s-is-the-job-runner">What&#8217;s is the job runner?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jobrunner.html#how-does-it-work">How does it work?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jobrunner.html#how-to-use-it">How to use it?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jobrunner.html#caveat">Caveat</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jobrunner.html#notes">Notes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jobrunner.html#what-is-a-channel">What is a channel?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jobrunner.html#how-to-configure-channels">How to configure Channels?</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Use the connector with multiprocessing workers</a></li>
 </ul>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../api/api_connector.html">Connector</a></li>
@@ -165,6 +175,15 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../api/api_exception.html">Exceptions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/api_channels.html">Channels</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/api_runner.html">Job Runner</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../api/api_runner.html#what-s-is-the-job-runner">What&#8217;s is the job runner?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/api_runner.html#how-does-it-work">How does it work?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/api_runner.html#how-to-use-it">How to use it?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/api_runner.html#caveat">Caveat</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/api_runner.html#notes">Notes</a></li>
+</ul>
+</li>
 </ul>
 </ul>
 </li>
@@ -178,7 +197,7 @@
   <ul class="dropdown-menu localtoc"
       role="menu"
       aria-labelledby="dLabelLocalToc"><ul>
-<li><a class="reference internal" href="#">Use the connector with multiprocessing</a></li>
+<li><a class="reference internal" href="#">Use the connector with multiprocessing workers</a></li>
 </ul>
 </ul>
 </li>
@@ -189,7 +208,7 @@
               
                 
   <li>
-    <a href="bootstrap_connector.html" title="Previous Chapter: Boostrapping a connector"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Boostrapping a c...</span>
+    <a href="jobrunner.html" title="Previous Chapter: Configuring channels and the job runner"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Configuring chan...</span>
     </a>
   </li>
   <li>
@@ -221,8 +240,17 @@
   <div class="row">
     <div class="col-md-12">
       
-  <div class="section" id="use-the-connector-with-multiprocessing">
-<span id="multiprocessing"></span><h1>Use the connector with multiprocessing<a class="headerlink" href="#use-the-connector-with-multiprocessing" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="use-the-connector-with-multiprocessing-workers">
+<span id="multiprocessing"></span><h1>Use the connector with multiprocessing workers<a class="headerlink" href="#use-the-connector-with-multiprocessing-workers" title="Permalink to this headline">¶</a></h1>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">In a future version, workers will be deprecated
+in favor of the newer job runner which is more efficient and
+supports job channels. You should try the job runner first
+and fall back to using workers in case the runner does not
+work (sic) for you, in which case we will very much appreciate
+a github issue describing the problems you encountered.</p>
+</div>
 <p>When Odoo is launched with 1 process, the jobs worker will run
 threaded in the same process.</p>
 <p>When Odoo is launched with multiple processes using the option

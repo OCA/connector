@@ -141,7 +141,17 @@
 <li class="toctree-l2"><a class="reference internal" href="guides/bootstrap_connector.html#connectorunit-classes">ConnectorUnit classes</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="guides/multiprocessing.html">Use the connector with multiprocessing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guides/jobrunner.html">Configuring channels and the job runner</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="guides/jobrunner.html#what-s-is-the-job-runner">What&#8217;s is the job runner?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/jobrunner.html#how-does-it-work">How does it work?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/jobrunner.html#how-to-use-it">How to use it?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/jobrunner.html#caveat">Caveat</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/jobrunner.html#notes">Notes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/jobrunner.html#what-is-a-channel">What is a channel?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/jobrunner.html#how-to-configure-channels">How to configure Channels?</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="guides/multiprocessing.html">Use the connector with multiprocessing workers</a></li>
 </ul>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="api/api_connector.html">Connector</a></li>
@@ -164,6 +174,15 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="api/api_exception.html">Exceptions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/api_channels.html">Channels</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/api_runner.html">Job Runner</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/api_runner.html#what-s-is-the-job-runner">What&#8217;s is the job runner?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/api_runner.html#how-does-it-work">How does it work?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/api_runner.html#how-to-use-it">How to use it?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/api_runner.html#caveat">Caveat</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/api_runner.html#notes">Notes</a></li>
+</ul>
+</li>
 </ul>
 </ul>
 </li>
@@ -245,6 +264,16 @@
   <dt><a href="api/api_queue.html#connector.queue.model.QueueJob.active">active (connector.queue.model.QueueJob attribute)</a>
   </dt>
 
+      
+  <dt><a href="api/api_channels.html#connector.jobrunner.channels.ChannelQueue.add">add() (connector.jobrunner.channels.ChannelQueue method)</a>
+  </dt>
+
+      <dd><dl>
+        
+  <dt><a href="api/api_channels.html#connector.jobrunner.channels.PriorityQueue.add">(connector.jobrunner.channels.PriorityQueue method)</a>
+  </dt>
+
+      </dl></dd>
       
   <dt><a href="api/api_queue.html#connector.queue.job.Job.args">args (connector.queue.job.Job attribute)</a>
   </dt>
@@ -354,6 +383,40 @@
   </dt>
 
       
+  <dt><a href="api/api_channels.html#connector.jobrunner.channels.Channel">Channel (class in connector.jobrunner.channels)</a>, <a href="guides/jobrunner.html#connector.jobrunner.channels.Channel">[1]</a>
+  </dt>
+
+      
+  <dt><a href="api/api_queue.html#connector.queue.model.JobFunction.channel">channel (connector.queue.model.JobFunction attribute)</a>
+  </dt>
+
+      <dd><dl>
+        
+  <dt><a href="api/api_queue.html#connector.queue.model.QueueJob.channel">(connector.queue.model.QueueJob attribute)</a>
+  </dt>
+
+      </dl></dd>
+      
+  <dt><a href="api/api_queue.html#connector.queue.model.JobFunction.channel_id">channel_id (connector.queue.model.JobFunction attribute)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_channels.html#connector.jobrunner.channels.ChannelJob">ChannelJob (class in connector.jobrunner.channels)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_channels.html#connector.jobrunner.channels.ChannelManager">ChannelManager (class in connector.jobrunner.channels)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_exception.html#connector.exception.ChannelNotFound">ChannelNotFound</a>
+  </dt>
+
+      
+  <dt><a href="api/api_channels.html#connector.jobrunner.channels.ChannelQueue">ChannelQueue (class in connector.jobrunner.channels)</a>
+  </dt>
+
+      
   <dt><a href="api/api_queue.html#connector.queue.worker.WorkerWatcher.check_alive">check_alive() (connector.queue.worker.WorkerWatcher method)</a>
   </dt>
 
@@ -362,15 +425,29 @@
   </dt>
 
       
-  <dt><a href="api/api_session.html#connector.session.ConnectorSession.close">close() (connector.session.ConnectorSession method)</a>
+  <dt><a href="api/api_runner.html#connector.jobrunner.runner.Database.close">close() (connector.jobrunner.runner.Database method)</a>
   </dt>
 
+      <dd><dl>
+        
+  <dt><a href="api/api_session.html#connector.session.ConnectorSession.close">(connector.session.ConnectorSession method)</a>
+  </dt>
+
+      </dl></dd>
       
   <dt><a href="api/api_session.html#connector.session.ConnectorSession.commit">commit() (connector.session.ConnectorSession method)</a>
   </dt>
 
       
   <dt><a href="api/api_queue.html#connector.queue.model.QueueJob.company_id">company_id (connector.queue.model.QueueJob attribute)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_queue.html#connector.queue.model.JobChannel.complete_name">complete_name (connector.queue.model.JobChannel attribute)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_channels.html#connector.jobrunner.channels.Channel.configure">configure() (connector.jobrunner.channels.Channel method)</a>
   </dt>
 
       
@@ -389,8 +466,18 @@
   <dt><a href="api/api_event.html#module-connector.event">connector.event (module)</a>
   </dt>
 
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="api/api_exception.html#module-connector.exception">connector.exception (module)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_channels.html#module-connector.jobrunner.channels">connector.jobrunner.channels (module)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_runner.html#module-connector.jobrunner.runner">connector.jobrunner.runner (module)</a>, <a href="guides/jobrunner.html#module-connector.jobrunner.runner">[1]</a>
   </dt>
 
       
@@ -401,8 +488,6 @@
   <dt><a href="api/api_queue.html#module-connector.queue.model">connector.queue.model (module)</a>
   </dt>
 
-  </dl></td>
-  <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="api/api_queue.html#module-connector.queue.queue">connector.queue.queue (module)</a>
   </dt>
@@ -441,6 +526,10 @@
 
       
   <dt><a href="api/api_exception.html#connector.exception.ConnectorException">ConnectorException</a>
+  </dt>
+
+      
+  <dt><a href="api/api_runner.html#connector.jobrunner.runner.ConnectorRunner">ConnectorRunner (class in connector.jobrunner.runner)</a>
   </dt>
 
       
@@ -494,6 +583,10 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%" valign="top"><dl>
       
+  <dt><a href="api/api_runner.html#connector.jobrunner.runner.Database">Database (class in connector.jobrunner.runner)</a>
+  </dt>
+
+      
   <dt><a href="api/api_queue.html#connector.queue.model.QueueWorker.date_alive">date_alive (connector.queue.model.QueueWorker attribute)</a>
   </dt>
 
@@ -545,12 +638,12 @@
   <dt><a href="api/api_session.html#connector.session.ConnectorSessionHandler.db_name">db_name (connector.session.ConnectorSessionHandler attribute)</a>
   </dt>
 
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="api/api_queue.html#connector.queue.job.OpenERPJobStorage.db_record">db_record() (connector.queue.job.OpenERPJobStorage method)</a>
   </dt>
 
-  </dl></td>
-  <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="api/api_queue.html#connector.queue.job.OpenERPJobStorage.db_record_from_uuid">db_record_from_uuid() (connector.queue.job.OpenERPJobStorage method)</a>
   </dt>
@@ -720,6 +813,10 @@
   </dt>
 
       
+  <dt><a href="api/api_channels.html#connector.jobrunner.channels.Channel.fullname">fullname (connector.jobrunner.channels.Channel attribute)</a>
+  </dt>
+
+      
   <dt><a href="api/api_queue.html#connector.queue.job.Job.func">func (connector.queue.job.Job attribute)</a>, <a href="api/api_queue.html#connector.queue.job.Job.func">[1]</a>
   </dt>
 
@@ -733,6 +830,12 @@
   <dt><a href="api/api_queue.html#connector.queue.job.Job.func_name">func_name (connector.queue.job.Job attribute)</a>
   </dt>
 
+      <dd><dl>
+        
+  <dt><a href="api/api_queue.html#connector.queue.model.QueueJob.func_name">(connector.queue.model.QueueJob attribute)</a>
+  </dt>
+
+      </dl></dd>
       
   <dt><a href="api/api_queue.html#connector.queue.job.Job.func_string">func_string (connector.queue.job.Job attribute)</a>, <a href="api/api_queue.html#connector.queue.job.Job.func_string">[1]</a>
   </dt>
@@ -758,6 +861,14 @@
   </dt>
 
       
+  <dt><a href="api/api_channels.html#connector.jobrunner.channels.ChannelManager.get_channel_by_name">get_channel_by_name() (connector.jobrunner.channels.ChannelManager method)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_channels.html#connector.jobrunner.channels.ChannelManager.get_channel_from_config">get_channel_from_config() (connector.jobrunner.channels.ChannelManager method)</a>
+  </dt>
+
+      
   <dt><a href="api/api_backend.html#connector.backend.Backend.get_class">get_class() (connector.backend.Backend method)</a>
   </dt>
 
@@ -765,10 +876,14 @@
   <dt><a href="api/api_connector.html#connector.connector.ConnectorEnvironment.get_connector_unit">get_connector_unit() (connector.connector.ConnectorEnvironment method)</a>
   </dt>
 
+      
+  <dt><a href="api/api_connector.html#connector.connector.ConnectorUnit.get_connector_unit_for_model">get_connector_unit_for_model() (connector.connector.ConnectorUnit method)</a>
+  </dt>
+
   </dl></td>
   <td style="width: 33%" valign="top"><dl>
       
-  <dt><a href="api/api_connector.html#connector.connector.ConnectorUnit.get_connector_unit_for_model">get_connector_unit_for_model() (connector.connector.ConnectorUnit method)</a>
+  <dt><a href="api/api_runner.html#connector.jobrunner.runner.ConnectorRunner.get_db_names">get_db_names() (connector.jobrunner.runner.ConnectorRunner method)</a>
   </dt>
 
       
@@ -780,7 +895,21 @@
   </dt>
 
       
+  <dt><a href="api/api_channels.html#connector.jobrunner.channels.Channel.get_jobs_to_run">get_jobs_to_run() (connector.jobrunner.channels.Channel method)</a>
+  </dt>
+
+      <dd><dl>
+        
+  <dt><a href="api/api_channels.html#connector.jobrunner.channels.ChannelManager.get_jobs_to_run">(connector.jobrunner.channels.ChannelManager method)</a>
+  </dt>
+
+      </dl></dd>
+      
   <dt><a href="api/api_connector.html#connector.connector.get_openerp_module">get_openerp_module() (in module connector.connector)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_channels.html#connector.jobrunner.channels.Channel.get_subchannel_by_name">get_subchannel_by_name() (connector.jobrunner.channels.Channel method)</a>
   </dt>
 
   </dl></td>
@@ -815,10 +944,14 @@
   <dt><a href="api/api_mapper.html#connector.unit.mapper.ImportMapper">ImportMapper (class in connector.unit.mapper)</a>
   </dt>
 
+      
+  <dt><a href="api/api_synchronizer.html#connector.unit.synchronizer.ImportSynchronizer">ImportSynchronizer (in module connector.unit.synchronizer)</a>
+  </dt>
+
   </dl></td>
   <td style="width: 33%" valign="top"><dl>
       
-  <dt><a href="api/api_synchronizer.html#connector.unit.synchronizer.ImportSynchronizer">ImportSynchronizer (in module connector.unit.synchronizer)</a>
+  <dt><a href="api/api_runner.html#connector.jobrunner.runner.ConnectorRunner.initialize_databases">initialize_databases() (connector.jobrunner.runner.ConnectorRunner method)</a>
   </dt>
 
       
@@ -833,6 +966,12 @@
   <dt><a href="api/api_session.html#connector.session.ConnectorSession.is_module_installed">is_module_installed() (connector.session.ConnectorSession method)</a>
   </dt>
 
+      <dd><dl>
+        
+  <dt><a href="api/api_connector.html#connector.connector.is_module_installed">(in module connector.connector)</a>
+  </dt>
+
+      </dl></dd>
   </dl></td>
 </tr></table>
 
@@ -845,6 +984,14 @@
 
       
   <dt><a href="api/api_queue.html#connector.queue.job.job">job() (in module connector.queue.job)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_queue.html#connector.queue.model.QueueJob.job_function_id">job_function_id (connector.queue.model.QueueJob attribute)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_queue.html#connector.queue.model.JobChannel.job_function_ids">job_function_ids (connector.queue.model.JobChannel attribute)</a>
   </dt>
 
       
@@ -864,7 +1011,15 @@
   </dl></td>
   <td style="width: 33%" valign="top"><dl>
       
+  <dt><a href="api/api_queue.html#connector.queue.model.JobChannel">JobChannel (class in connector.queue.model)</a>
+  </dt>
+
+      
   <dt><a href="api/api_exception.html#connector.exception.JobError">JobError</a>
+  </dt>
+
+      
+  <dt><a href="api/api_queue.html#connector.queue.model.JobFunction">JobFunction (class in connector.queue.model)</a>
   </dt>
 
       
@@ -1031,10 +1186,22 @@
 
       <dd><dl>
         
+  <dt><a href="api/api_queue.html#connector.queue.model.JobChannel.name">(connector.queue.model.JobChannel attribute)</a>
+  </dt>
+
+        
+  <dt><a href="api/api_queue.html#connector.queue.model.JobFunction.name">(connector.queue.model.JobFunction attribute)</a>
+  </dt>
+
+        
   <dt><a href="api/api_queue.html#connector.queue.model.QueueJob.name">(connector.queue.model.QueueJob attribute)</a>
   </dt>
 
       </dl></dd>
+      
+  <dt><a href="api/api_queue.html#connector.queue.model.JobChannel.name_get">name_get() (connector.queue.model.JobChannel method)</a>
+  </dt>
+
       
   <dt><a href="api/api_exception.html#connector.exception.NetworkRetryableError">NetworkRetryableError</a>
   </dt>
@@ -1059,6 +1226,10 @@
 
       
   <dt><a href="api/api_exception.html#connector.exception.NothingToDoJob">NothingToDoJob</a>
+  </dt>
+
+      
+  <dt><a href="api/api_channels.html#connector.jobrunner.channels.ChannelManager.notify">notify() (connector.jobrunner.channels.ChannelManager method)</a>
   </dt>
 
       
@@ -1122,6 +1293,18 @@
 
       </dl></dd>
       
+  <dt><a href="api/api_queue.html#connector.queue.model.JobChannel.parent_id">parent_id (connector.queue.model.JobChannel attribute)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_queue.html#connector.queue.model.JobChannel.parent_required">parent_required() (connector.queue.model.JobChannel method)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_channels.html#connector.jobrunner.channels.ChannelManager.parse_simple_config">parse_simple_config() (connector.jobrunner.channels.ChannelManager class method)</a>
+  </dt>
+
+      
   <dt><a href="api/api_queue.html#connector.queue.job.Job.perform">perform() (connector.queue.job.Job method)</a>
   </dt>
 
@@ -1142,6 +1325,16 @@
 
       </dl></dd>
       
+  <dt><a href="api/api_channels.html#connector.jobrunner.channels.ChannelQueue.pop">pop() (connector.jobrunner.channels.ChannelQueue method)</a>
+  </dt>
+
+      <dd><dl>
+        
+  <dt><a href="api/api_channels.html#connector.jobrunner.channels.PriorityQueue.pop">(connector.jobrunner.channels.PriorityQueue method)</a>
+  </dt>
+
+      </dl></dd>
+      
   <dt><a href="api/api_queue.html#connector.queue.job.Job.postpone">postpone() (connector.queue.job.Job method)</a>
   </dt>
 
@@ -1155,6 +1348,14 @@
   </dt>
 
       </dl></dd>
+      
+  <dt><a href="api/api_channels.html#connector.jobrunner.channels.PriorityQueue">PriorityQueue (class in connector.jobrunner.channels)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_runner.html#connector.jobrunner.runner.ConnectorRunner.process_notifications">process_notifications() (connector.jobrunner.runner.ConnectorRunner method)</a>
+  </dt>
+
   </dl></td>
 </tr></table>
 
@@ -1206,6 +1407,32 @@
 
       </dl></dd>
       
+  <dt><a href="api/api_channels.html#connector.jobrunner.channels.Channel.remove">remove() (connector.jobrunner.channels.Channel method)</a>
+  </dt>
+
+      <dd><dl>
+        
+  <dt><a href="api/api_channels.html#connector.jobrunner.channels.ChannelQueue.remove">(connector.jobrunner.channels.ChannelQueue method)</a>
+  </dt>
+
+        
+  <dt><a href="api/api_channels.html#connector.jobrunner.channels.PriorityQueue.remove">(connector.jobrunner.channels.PriorityQueue method)</a>
+  </dt>
+
+        
+  <dt><a href="api/api_channels.html#connector.jobrunner.channels.SafeSet.remove">(connector.jobrunner.channels.SafeSet method)</a>
+  </dt>
+
+      </dl></dd>
+      
+  <dt><a href="api/api_channels.html#connector.jobrunner.channels.ChannelManager.remove_db">remove_db() (connector.jobrunner.channels.ChannelManager method)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_channels.html#connector.jobrunner.channels.ChannelManager.remove_job">remove_job() (connector.jobrunner.channels.ChannelManager method)</a>
+  </dt>
+
+      
   <dt><a href="api/api_queue.html#connector.queue.model.QueueJob.requeue">requeue() (connector.queue.model.QueueJob method)</a>
   </dt>
 
@@ -1219,6 +1446,8 @@
   <dt><a href="api/api_queue.html#connector.queue.model.RequeueJob">RequeueJob (class in connector.queue.model)</a>
   </dt>
 
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="api/api_queue.html#connector.queue.job.Job.result">result (connector.queue.job.Job attribute)</a>
   </dt>
@@ -1229,8 +1458,6 @@
   </dt>
 
       </dl></dd>
-  </dl></td>
-  <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="api/api_queue.html#connector.queue.job.Job.retry">retry (connector.queue.job.Job attribute)</a>
   </dt>
@@ -1264,7 +1491,15 @@
 
       </dl></dd>
       
+  <dt><a href="api/api_runner.html#connector.jobrunner.runner.ConnectorRunner.run_forever">run_forever() (connector.jobrunner.runner.ConnectorRunner method)</a>
+  </dt>
+
+      
   <dt><a href="api/api_queue.html#connector.queue.worker.Worker.run_job">run_job() (connector.queue.worker.Worker method)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_runner.html#connector.jobrunner.runner.ConnectorRunner.run_jobs">run_jobs() (connector.jobrunner.runner.ConnectorRunner method)</a>
   </dt>
 
   </dl></td>
@@ -1273,6 +1508,10 @@
 <h2 id="S">S</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="api/api_channels.html#connector.jobrunner.channels.SafeSet">SafeSet (class in connector.jobrunner.channels)</a>
+  </dt>
+
       
   <dt><a href="api/api_session.html#connector.session.ConnectorSession.search">search() (connector.session.ConnectorSession method)</a>
   </dt>
@@ -1288,6 +1527,10 @@
   </dt>
 
       
+  <dt><a href="api/api_runner.html#connector.jobrunner.runner.Database.select_jobs">select_jobs() (connector.jobrunner.runner.Database method)</a>
+  </dt>
+
+      
   <dt><a href="api/api_backend.html#connector.backend.Backend.service">service (connector.backend.Backend attribute)</a>, <a href="api/api_backend.html#connector.backend.Backend.service">[1]</a>
   </dt>
 
@@ -1300,29 +1543,59 @@
   </dt>
 
       
-  <dt><a href="api/api_queue.html#connector.queue.job.Job.set_done">set_done() (connector.queue.job.Job method)</a>
+  <dt><a href="api/api_channels.html#connector.jobrunner.channels.Channel.set_done">set_done() (connector.jobrunner.channels.Channel method)</a>
   </dt>
 
+      <dd><dl>
+        
+  <dt><a href="api/api_queue.html#connector.queue.job.Job.set_done">(connector.queue.job.Job method)</a>
+  </dt>
+
+      </dl></dd>
       
   <dt><a href="api/api_queue.html#connector.queue.job.Job.set_enqueued">set_enqueued() (connector.queue.job.Job method)</a>
   </dt>
 
       
-  <dt><a href="api/api_queue.html#connector.queue.job.Job.set_failed">set_failed() (connector.queue.job.Job method)</a>
+  <dt><a href="api/api_channels.html#connector.jobrunner.channels.Channel.set_failed">set_failed() (connector.jobrunner.channels.Channel method)</a>
+  </dt>
+
+      <dd><dl>
+        
+  <dt><a href="api/api_queue.html#connector.queue.job.Job.set_failed">(connector.queue.job.Job method)</a>
+  </dt>
+
+      </dl></dd>
+      
+  <dt><a href="api/api_runner.html#connector.jobrunner.runner.Database.set_job_enqueued">set_job_enqueued() (connector.jobrunner.runner.Database method)</a>
   </dt>
 
       
   <dt><a href="api/api_connector.html#connector.connector.ConnectorEnvironment.set_lang">set_lang() (connector.connector.ConnectorEnvironment method)</a>
   </dt>
 
-      
-  <dt><a href="api/api_queue.html#connector.queue.job.Job.set_pending">set_pending() (connector.queue.job.Job method)</a>
-  </dt>
-
   </dl></td>
   <td style="width: 33%" valign="top"><dl>
       
+  <dt><a href="api/api_channels.html#connector.jobrunner.channels.Channel.set_pending">set_pending() (connector.jobrunner.channels.Channel method)</a>
+  </dt>
+
+      <dd><dl>
+        
+  <dt><a href="api/api_queue.html#connector.queue.job.Job.set_pending">(connector.queue.job.Job method)</a>
+  </dt>
+
+      </dl></dd>
+      
+  <dt><a href="api/api_channels.html#connector.jobrunner.channels.Channel.set_running">set_running() (connector.jobrunner.channels.Channel method)</a>
+  </dt>
+
+      
   <dt><a href="api/api_queue.html#connector.queue.job.Job.set_started">set_started() (connector.queue.job.Job method)</a>
+  </dt>
+
+      
+  <dt><a href="api/api_channels.html#connector.jobrunner.channels.ChannelManager.simple_configure">simple_configure() (connector.jobrunner.channels.ChannelManager method)</a>
   </dt>
 
       
@@ -1406,9 +1679,15 @@
   </dt>
 
       
-  <dt><a href="api/api_session.html#connector.session.ConnectorSession.unlink">unlink() (connector.session.ConnectorSession method)</a>
+  <dt><a href="api/api_queue.html#connector.queue.model.JobChannel.unlink">unlink() (connector.queue.model.JobChannel method)</a>
   </dt>
 
+      <dd><dl>
+        
+  <dt><a href="api/api_session.html#connector.session.ConnectorSession.unlink">(connector.session.ConnectorSession method)</a>
+  </dt>
+
+      </dl></dd>
       
   <dt><a href="api/api_event.html#connector.event.Event.unsubscribe">unsubscribe() (connector.event.Event method)</a>
   </dt>
@@ -1480,6 +1759,10 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%" valign="top"><dl>
       
+  <dt><a href="api/api_runner.html#connector.jobrunner.runner.ConnectorRunner.wait_notification">wait_notification() (connector.jobrunner.runner.ConnectorRunner method)</a>
+  </dt>
+
+      
   <dt><a href="api/api_queue.html#connector.queue.worker.Worker">Worker (class in connector.queue.worker)</a>
   </dt>
 
@@ -1510,10 +1793,14 @@
   </dt>
 
       
-  <dt><a href="api/api_queue.html#connector.queue.model.QueueJob.write">write() (connector.queue.model.QueueJob method)</a>
+  <dt><a href="api/api_queue.html#connector.queue.model.JobChannel.write">write() (connector.queue.model.JobChannel method)</a>
   </dt>
 
       <dd><dl>
+        
+  <dt><a href="api/api_queue.html#connector.queue.model.QueueJob.write">(connector.queue.model.QueueJob method)</a>
+  </dt>
+
         
   <dt><a href="api/api_session.html#connector.session.ConnectorSession.write">(connector.session.ConnectorSession method)</a>
   </dt>

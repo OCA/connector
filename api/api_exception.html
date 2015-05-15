@@ -29,6 +29,7 @@
     <script type="text/javascript" src="../_static/bootstrap-3.2.0/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
     <link rel="top" title="Connector  documentation" href="../index.html" />
+    <link rel="next" title="Channels" href="api_channels.html" />
     <link rel="prev" title="Queue" href="api_queue.html" />
 
 <meta charset='utf-8'>
@@ -141,7 +142,17 @@
 <li class="toctree-l2"><a class="reference internal" href="../guides/bootstrap_connector.html#connectorunit-classes">ConnectorUnit classes</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../guides/multiprocessing.html">Use the connector with multiprocessing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/jobrunner.html">Configuring channels and the job runner</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../guides/jobrunner.html#what-s-is-the-job-runner">What&#8217;s is the job runner?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/jobrunner.html#how-does-it-work">How does it work?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/jobrunner.html#how-to-use-it">How to use it?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/jobrunner.html#caveat">Caveat</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/jobrunner.html#notes">Notes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/jobrunner.html#what-is-a-channel">What is a channel?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/jobrunner.html#how-to-configure-channels">How to configure Channels?</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/multiprocessing.html">Use the connector with multiprocessing workers</a></li>
 </ul>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="api_connector.html">Connector</a></li>
@@ -164,6 +175,15 @@
 </ul>
 </li>
 <li class="toctree-l1 current"><a class="current reference internal" href="">Exceptions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_channels.html">Channels</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_runner.html">Job Runner</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api_runner.html#what-s-is-the-job-runner">What&#8217;s is the job runner?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_runner.html#how-does-it-work">How does it work?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_runner.html#how-to-use-it">How to use it?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_runner.html#caveat">Caveat</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_runner.html#notes">Notes</a></li>
+</ul>
+</li>
 </ul>
 </ul>
 </li>
@@ -189,6 +209,10 @@
                 
   <li>
     <a href="api_queue.html" title="Previous Chapter: Queue"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Queue</span>
+    </a>
+  </li>
+  <li>
+    <a href="api_channels.html" title="Next Chapter: Channels"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Channels &raquo;</span>
     </a>
   </li>
               
@@ -218,6 +242,13 @@
       
   <div class="section" id="module-connector.exception">
 <span id="exceptions"></span><h1>Exceptions<a class="headerlink" href="#module-connector.exception" title="Permalink to this headline">¶</a></h1>
+<dl class="exception">
+<dt id="connector.exception.ChannelNotFound">
+<em class="property">exception </em><code class="descclassname">connector.exception.</code><code class="descname">ChannelNotFound</code><a class="reference internal" href="../_modules/connector/exception.html#ChannelNotFound"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.exception.ChannelNotFound" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#connector.exception.ConnectorException" title="connector.exception.ConnectorException"><code class="xref py py-class docutils literal"><span class="pre">connector.exception.ConnectorException</span></code></a></p>
+<p>A channel could not be found</p>
+</dd></dl>
+
 <dl class="exception">
 <dt id="connector.exception.ConnectorException">
 <em class="property">exception </em><code class="descclassname">connector.exception.</code><code class="descname">ConnectorException</code><a class="reference internal" href="../_modules/connector/exception.html#ConnectorException"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.exception.ConnectorException" title="Permalink to this definition">¶</a></dt>

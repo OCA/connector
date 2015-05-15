@@ -31,7 +31,7 @@
     <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
     <link rel="top" title="documentation Connector " href="../index.html" />
     <link rel="next" title="Session" href="api_session.html" />
-    <link rel="prev" title="Connecteur et multiprocessing" href="../guides/multiprocessing.html" />
+    <link rel="prev" title="Use the connector with multiprocessing workers" href="../guides/multiprocessing.html" />
 
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
@@ -143,7 +143,17 @@
 <li class="toctree-l2"><a class="reference internal" href="../guides/bootstrap_connector.html#connectorunit-classes">Classes ConnectorUnit</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../guides/multiprocessing.html">Connecteur et multiprocessing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/jobrunner.html">Configuring channels and the job runner</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../guides/jobrunner.html#what-s-is-the-job-runner">What&#8217;s is the job runner?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/jobrunner.html#how-does-it-work">How does it work?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/jobrunner.html#how-to-use-it">How to use it?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/jobrunner.html#caveat">Caveat</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/jobrunner.html#notes">Notes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/jobrunner.html#what-is-a-channel">What is a channel?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/jobrunner.html#how-to-configure-channels">How to configure Channels?</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/multiprocessing.html">Use the connector with multiprocessing workers</a></li>
 </ul>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="">Connecteur</a></li>
@@ -166,6 +176,15 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="api_exception.html">Exceptions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_channels.html">Channels</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_runner.html">Job Runner</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api_runner.html#what-s-is-the-job-runner">What&#8217;s is the job runner?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_runner.html#how-does-it-work">How does it work?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_runner.html#how-to-use-it">How to use it?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_runner.html#caveat">Caveat</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_runner.html#notes">Notes</a></li>
+</ul>
+</li>
 </ul>
 </ul>
 </li>
@@ -190,7 +209,7 @@
               
                 
   <li>
-    <a href="../guides/multiprocessing.html" title="Previous Chapter: Connecteur et multiprocessing"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Connecteur et mu...</span>
+    <a href="../guides/multiprocessing.html" title="Previous Chapter: Use the connector with multiprocessing workers"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Use the connecto...</span>
     </a>
   </li>
   <li>
@@ -528,6 +547,11 @@
 <p>Pour être précis, il crée un <code class="docutils literal"><span class="pre">openerp.models.AbstractModel</span></code> dont le nom est le nom du module avec un suffixe <code class="docutils literal"><span class="pre">.intalled</span></code> : <code class="docutils literal"><span class="pre">{name_of_the_openerp_module_to_install}.installed</span></code>.</p>
 <p>Le connecteur utilise ensuite ce modèle pour savoir quand le module OpenERP est installé ou non, s&#8217;il doit utiliser les classes ConnectorUnit de ce module ou non et s&#8217;il doit allumer les consommateurs d&#8217;événements ou non.</p>
 </dd></dl>
+
+<dl class="function">
+<dt id="connector.connector.is_module_installed">
+<code class="descclassname">connector.connector.</code><code class="descname">is_module_installed</code><span class="sig-paren">(</span><em>pool</em>, <em>module_name</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/connector.html#is_module_installed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.connector.is_module_installed" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
 
 </div>
 

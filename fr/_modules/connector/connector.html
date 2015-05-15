@@ -142,7 +142,17 @@
 <li class="toctree-l2"><a class="reference internal" href="../../guides/bootstrap_connector.html#connectorunit-classes">Classes ConnectorUnit</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../guides/multiprocessing.html">Connecteur et multiprocessing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../guides/jobrunner.html">Configuring channels and the job runner</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/jobrunner.html#what-s-is-the-job-runner">What&#8217;s is the job runner?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/jobrunner.html#how-does-it-work">How does it work?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/jobrunner.html#how-to-use-it">How to use it?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/jobrunner.html#caveat">Caveat</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/jobrunner.html#notes">Notes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/jobrunner.html#what-is-a-channel">What is a channel?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/jobrunner.html#how-to-configure-channels">How to configure Channels?</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../guides/multiprocessing.html">Use the connector with multiprocessing workers</a></li>
 </ul>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../api/api_connector.html">Connecteur</a></li>
@@ -165,6 +175,15 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../api/api_exception.html">Exceptions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/api_channels.html">Channels</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/api_runner.html">Job Runner</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../api/api_runner.html#what-s-is-the-job-runner">What&#8217;s is the job runner?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/api_runner.html#how-does-it-work">How does it work?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/api_runner.html#how-to-use-it">How to use it?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/api_runner.html#caveat">Caveat</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/api_runner.html#notes">Notes</a></li>
+</ul>
+</li>
 </ul>
 </ul>
 </li>
@@ -296,6 +315,10 @@
 <span class="n">install_in_connector</span><span class="p">()</span>
 
 
+<div class="viewcode-block" id="is_module_installed"><a class="viewcode-back" href="../../api/api_connector.html#connector.connector.is_module_installed">[docs]</a><span class="k">def</span> <span class="nf">is_module_installed</span><span class="p">(</span><span class="n">pool</span><span class="p">,</span> <span class="n">module_name</span><span class="p">):</span>
+    <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="n">pool</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;</span><span class="si">%s</span><span class="s">.installed&#39;</span> <span class="o">%</span> <span class="n">module_name</span><span class="p">))</span>
+
+</div>
 <div class="viewcode-block" id="get_openerp_module"><a class="viewcode-back" href="../../api/api_connector.html#connector.connector.get_openerp_module">[docs]</a><span class="k">def</span> <span class="nf">get_openerp_module</span><span class="p">(</span><span class="n">cls_or_func</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; For a top level function or class, returns the</span>
 <span class="sd">    name of the OpenERP module where it lives.</span>

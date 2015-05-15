@@ -141,7 +141,17 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../guides/bootstrap_connector.html#connectorunit-classes">ConnectorUnit classes</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../../guides/multiprocessing.html">Use the connector with multiprocessing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../guides/jobrunner.html">Configuring channels and the job runner</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/jobrunner.html#what-s-is-the-job-runner">What&#8217;s is the job runner?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/jobrunner.html#how-does-it-work">How does it work?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/jobrunner.html#how-to-use-it">How to use it?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/jobrunner.html#caveat">Caveat</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/jobrunner.html#notes">Notes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/jobrunner.html#what-is-a-channel">What is a channel?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/jobrunner.html#how-to-configure-channels">How to configure Channels?</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../guides/multiprocessing.html">Use the connector with multiprocessing workers</a></li>
 </ul>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../api/api_connector.html">Connector</a></li>
@@ -164,6 +174,15 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../api/api_exception.html">Exceptions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/api_channels.html">Channels</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/api_runner.html">Job Runner</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/api_runner.html#what-s-is-the-job-runner">What&#8217;s is the job runner?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/api_runner.html#how-does-it-work">How does it work?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/api_runner.html#how-to-use-it">How to use it?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/api_runner.html#caveat">Caveat</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/api_runner.html#notes">Notes</a></li>
+</ul>
+</li>
 </ul>
 </ul>
 </li>
@@ -237,10 +256,11 @@
 
 <span class="kn">from</span> <span class="nn">openerp</span> <span class="kn">import</span> <span class="n">models</span><span class="p">,</span> <span class="n">fields</span><span class="p">,</span> <span class="n">api</span><span class="p">,</span> <span class="n">exceptions</span><span class="p">,</span> <span class="n">_</span>
 
-<span class="kn">from</span> <span class="nn">.job</span> <span class="kn">import</span> <span class="n">STATES</span><span class="p">,</span> <span class="n">DONE</span><span class="p">,</span> <span class="n">PENDING</span><span class="p">,</span> <span class="n">OpenERPJobStorage</span>
+<span class="kn">from</span> <span class="nn">.job</span> <span class="kn">import</span> <span class="n">STATES</span><span class="p">,</span> <span class="n">DONE</span><span class="p">,</span> <span class="n">PENDING</span><span class="p">,</span> <span class="n">OpenERPJobStorage</span><span class="p">,</span> <span class="n">JOB_REGISTRY</span>
 <span class="kn">from</span> <span class="nn">.worker</span> <span class="kn">import</span> <span class="n">WORKER_TIMEOUT</span>
 <span class="kn">from</span> <span class="nn">..session</span> <span class="kn">import</span> <span class="n">ConnectorSession</span>
 <span class="kn">from</span> <span class="nn">.worker</span> <span class="kn">import</span> <span class="n">watcher</span>
+<span class="kn">from</span> <span class="nn">..connector</span> <span class="kn">import</span> <span class="n">get_openerp_module</span><span class="p">,</span> <span class="n">is_module_installed</span>
 
 <span class="n">_logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">__name__</span><span class="p">)</span>
 
@@ -296,6 +316,21 @@
              <span class="s">&quot;max. retries.</span><span class="se">\n</span><span class="s">&quot;</span>
              <span class="s">&quot;Retries are infinite when empty.&quot;</span><span class="p">,</span>
     <span class="p">)</span>
+    <span class="n">func_name</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Char</span><span class="p">(</span><span class="n">readonly</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">job_function_id</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Many2one</span><span class="p">(</span><span class="n">comodel_name</span><span class="o">=</span><span class="s">&#39;queue.job.function&#39;</span><span class="p">,</span>
+                                      <span class="n">compute</span><span class="o">=</span><span class="s">&#39;_compute_channel&#39;</span><span class="p">,</span>
+                                      <span class="n">readonly</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+                                      <span class="n">store</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="c"># for searching without JOIN on channels</span>
+    <span class="n">channel</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Char</span><span class="p">(</span><span class="n">compute</span><span class="o">=</span><span class="s">&#39;_compute_channel&#39;</span><span class="p">,</span> <span class="n">store</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">select</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+    <span class="nd">@api.one</span>
+    <span class="nd">@api.depends</span><span class="p">(</span><span class="s">&#39;func_name&#39;</span><span class="p">,</span> <span class="s">&#39;job_function_id.channel_id&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">_compute_channel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">func_model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="p">[</span><span class="s">&#39;queue.job.function&#39;</span><span class="p">]</span>
+        <span class="n">function</span> <span class="o">=</span> <span class="n">func_model</span><span class="o">.</span><span class="n">search</span><span class="p">([(</span><span class="s">&#39;name&#39;</span><span class="p">,</span> <span class="s">&#39;=&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">func_name</span><span class="p">)])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">job_function_id</span> <span class="o">=</span> <span class="n">function</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">channel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">job_function_id</span><span class="o">.</span><span class="n">channel</span>
 
     <span class="nd">@api.multi</span>
 <div class="viewcode-block" id="QueueJob.open_related_action"><a class="viewcode-back" href="../../../api/api_queue.html#connector.queue.model.QueueJob.open_related_action">[docs]</a>    <span class="k">def</span> <span class="nf">open_related_action</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -599,7 +634,100 @@
 <div class="viewcode-block" id="RequeueJob.requeue"><a class="viewcode-back" href="../../../api/api_queue.html#connector.queue.model.RequeueJob.requeue">[docs]</a>    <span class="k">def</span> <span class="nf">requeue</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">jobs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">job_ids</span>
         <span class="n">jobs</span><span class="o">.</span><span class="n">requeue</span><span class="p">()</span>
-        <span class="k">return</span> <span class="p">{</span><span class="s">&#39;type&#39;</span><span class="p">:</span> <span class="s">&#39;ir.actions.act_window_close&#39;</span><span class="p">}</span></div></div>
+        <span class="k">return</span> <span class="p">{</span><span class="s">&#39;type&#39;</span><span class="p">:</span> <span class="s">&#39;ir.actions.act_window_close&#39;</span><span class="p">}</span>
+
+</div></div>
+<div class="viewcode-block" id="JobChannel"><a class="viewcode-back" href="../../../api/api_queue.html#connector.queue.model.JobChannel">[docs]</a><span class="k">class</span> <span class="nc">JobChannel</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">_name</span> <span class="o">=</span> <span class="s">&#39;queue.job.channel&#39;</span>
+    <span class="n">_description</span> <span class="o">=</span> <span class="s">&#39;Job Channels&#39;</span>
+
+    <span class="n">name</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Char</span><span class="p">()</span>
+    <span class="n">complete_name</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Char</span><span class="p">(</span><span class="n">compute</span><span class="o">=</span><span class="s">&#39;_compute_complete_name&#39;</span><span class="p">,</span>
+                                <span class="n">string</span><span class="o">=</span><span class="s">&#39;Complete Name&#39;</span><span class="p">,</span>
+                                <span class="n">store</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+                                <span class="n">readonly</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">parent_id</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Many2one</span><span class="p">(</span><span class="n">comodel_name</span><span class="o">=</span><span class="s">&#39;queue.job.channel&#39;</span><span class="p">,</span>
+                                <span class="n">string</span><span class="o">=</span><span class="s">&#39;Parent Channel&#39;</span><span class="p">,</span>
+                                <span class="n">ondelete</span><span class="o">=</span><span class="s">&#39;restrict&#39;</span><span class="p">)</span>
+    <span class="n">job_function_ids</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">One2many</span><span class="p">(</span><span class="n">comodel_name</span><span class="o">=</span><span class="s">&#39;queue.job.function&#39;</span><span class="p">,</span>
+                                       <span class="n">inverse_name</span><span class="o">=</span><span class="s">&#39;channel_id&#39;</span><span class="p">,</span>
+                                       <span class="n">string</span><span class="o">=</span><span class="s">&#39;Job Functions&#39;</span><span class="p">)</span>
+
+    <span class="n">_sql_constraints</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">(</span><span class="s">&#39;name_uniq&#39;</span><span class="p">,</span>
+         <span class="s">&#39;unique(complete_name)&#39;</span><span class="p">,</span>
+         <span class="s">&#39;Channel complete name must be unique&#39;</span><span class="p">),</span>
+    <span class="p">]</span>
+
+    <span class="nd">@api.one</span>
+    <span class="nd">@api.depends</span><span class="p">(</span><span class="s">&#39;name&#39;</span><span class="p">,</span> <span class="s">&#39;parent_id&#39;</span><span class="p">,</span> <span class="s">&#39;parent_id.name&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">_compute_complete_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
+            <span class="k">return</span>  <span class="c"># new record</span>
+        <span class="n">channel</span> <span class="o">=</span> <span class="bp">self</span>
+        <span class="n">parts</span> <span class="o">=</span> <span class="p">[</span><span class="n">channel</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>
+        <span class="k">while</span> <span class="n">channel</span><span class="o">.</span><span class="n">parent_id</span><span class="p">:</span>
+            <span class="n">channel</span> <span class="o">=</span> <span class="n">channel</span><span class="o">.</span><span class="n">parent_id</span>
+            <span class="n">parts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">channel</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">complete_name</span> <span class="o">=</span> <span class="s">&#39;.&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">reversed</span><span class="p">(</span><span class="n">parts</span><span class="p">))</span>
+
+    <span class="nd">@api.one</span>
+    <span class="nd">@api.constrains</span><span class="p">(</span><span class="s">&#39;parent_id&#39;</span><span class="p">)</span>
+<div class="viewcode-block" id="JobChannel.parent_required"><a class="viewcode-back" href="../../../api/api_queue.html#connector.queue.model.JobChannel.parent_required">[docs]</a>    <span class="k">def</span> <span class="nf">parent_required</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">!=</span> <span class="s">&#39;root&#39;</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent_id</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">ValidationError</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s">&#39;Parent channel required.&#39;</span><span class="p">))</span>
+</div>
+    <span class="nd">@api.multi</span>
+<div class="viewcode-block" id="JobChannel.write"><a class="viewcode-back" href="../../../api/api_queue.html#connector.queue.model.JobChannel.write">[docs]</a>    <span class="k">def</span> <span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">values</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">channel</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
+            <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;install_mode&#39;</span><span class="p">)</span> <span class="ow">and</span>
+                    <span class="n">channel</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s">&#39;root&#39;</span> <span class="ow">and</span>
+                    <span class="p">(</span><span class="s">&#39;name&#39;</span> <span class="ow">in</span> <span class="n">values</span> <span class="ow">or</span> <span class="s">&#39;parent_id&#39;</span> <span class="ow">in</span> <span class="n">values</span><span class="p">)):</span>
+                <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">Warning</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s">&#39;Cannot change the root channel&#39;</span><span class="p">))</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">JobChannel</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">values</span><span class="p">)</span>
+</div>
+    <span class="nd">@api.multi</span>
+<div class="viewcode-block" id="JobChannel.unlink"><a class="viewcode-back" href="../../../api/api_queue.html#connector.queue.model.JobChannel.unlink">[docs]</a>    <span class="k">def</span> <span class="nf">unlink</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">channel</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">channel</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s">&#39;root&#39;</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">Warning</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s">&#39;Cannot remove the root channel&#39;</span><span class="p">))</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">JobChannel</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">unlink</span><span class="p">()</span>
+</div>
+    <span class="nd">@api.multi</span>
+<div class="viewcode-block" id="JobChannel.name_get"><a class="viewcode-back" href="../../../api/api_queue.html#connector.queue.model.JobChannel.name_get">[docs]</a>    <span class="k">def</span> <span class="nf">name_get</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">record</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">record</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">record</span><span class="o">.</span><span class="n">complete_name</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">result</span>
+
+</div></div>
+<div class="viewcode-block" id="JobFunction"><a class="viewcode-back" href="../../../api/api_queue.html#connector.queue.model.JobFunction">[docs]</a><span class="k">class</span> <span class="nc">JobFunction</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">_name</span> <span class="o">=</span> <span class="s">&#39;queue.job.function&#39;</span>
+    <span class="n">_description</span> <span class="o">=</span> <span class="s">&#39;Job Functions&#39;</span>
+    <span class="n">_log_access</span> <span class="o">=</span> <span class="bp">False</span>
+
+    <span class="nd">@api.model</span>
+    <span class="k">def</span> <span class="nf">_default_channel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">ref</span><span class="p">(</span><span class="s">&#39;connector.channel_root&#39;</span><span class="p">)</span>
+
+    <span class="n">name</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Char</span><span class="p">(</span><span class="n">select</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">channel_id</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Many2one</span><span class="p">(</span><span class="n">comodel_name</span><span class="o">=</span><span class="s">&#39;queue.job.channel&#39;</span><span class="p">,</span>
+                                 <span class="n">string</span><span class="o">=</span><span class="s">&#39;Channel&#39;</span><span class="p">,</span>
+                                 <span class="n">required</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+                                 <span class="n">default</span><span class="o">=</span><span class="n">_default_channel</span><span class="p">)</span>
+    <span class="n">channel</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Char</span><span class="p">(</span><span class="n">related</span><span class="o">=</span><span class="s">&#39;channel_id.complete_name&#39;</span><span class="p">,</span>
+                          <span class="n">store</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+                          <span class="n">readonly</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+    <span class="nd">@api.model</span>
+    <span class="k">def</span> <span class="nf">_setup_complete</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">JobFunction</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">_setup_complete</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">func</span> <span class="ow">in</span> <span class="n">JOB_REGISTRY</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">is_module_installed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pool</span><span class="p">,</span> <span class="n">get_openerp_module</span><span class="p">(</span><span class="n">func</span><span class="p">)):</span>
+                <span class="k">continue</span>
+            <span class="n">func_name</span> <span class="o">=</span> <span class="s">&#39;</span><span class="si">%s</span><span class="s">.</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">func</span><span class="o">.</span><span class="n">__module__</span><span class="p">,</span> <span class="n">func</span><span class="o">.</span><span class="n">__name__</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">search_count</span><span class="p">([(</span><span class="s">&#39;name&#39;</span><span class="p">,</span> <span class="s">&#39;=&#39;</span><span class="p">,</span> <span class="n">func_name</span><span class="p">)]):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">create</span><span class="p">({</span><span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="n">func_name</span><span class="p">})</span></div>
 </pre></div>
 
     </div>

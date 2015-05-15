@@ -142,7 +142,17 @@
 <li class="toctree-l2"><a class="reference internal" href="../guides/bootstrap_connector.html#connectorunit-classes">ConnectorUnit classes</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../guides/multiprocessing.html">Use the connector with multiprocessing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/jobrunner.html">Configuring channels and the job runner</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../guides/jobrunner.html#what-s-is-the-job-runner">What&#8217;s is the job runner?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/jobrunner.html#how-does-it-work">How does it work?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/jobrunner.html#how-to-use-it">How to use it?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/jobrunner.html#caveat">Caveat</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/jobrunner.html#notes">Notes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/jobrunner.html#what-is-a-channel">What is a channel?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/jobrunner.html#how-to-configure-channels">How to configure Channels?</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/multiprocessing.html">Use the connector with multiprocessing workers</a></li>
 </ul>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="api_connector.html">Connector</a></li>
@@ -165,6 +175,15 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="api_exception.html">Exceptions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_channels.html">Channels</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_runner.html">Job Runner</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api_runner.html#what-s-is-the-job-runner">What&#8217;s is the job runner?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_runner.html#how-does-it-work">How does it work?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_runner.html#how-to-use-it">How to use it?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_runner.html#caveat">Caveat</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_runner.html#notes">Notes</a></li>
+</ul>
+</li>
 </ul>
 </ul>
 </li>
@@ -611,7 +630,7 @@ to a job</p>
 
 <dl class="function">
 <dt id="connector.queue.job.related_action">
-<code class="descclassname">connector.queue.job.</code><code class="descname">related_action</code><span class="sig-paren">(</span><em>action=&lt;function &lt;lambda&gt; at 0x53465f0&gt;</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/queue/job.html#related_action"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.job.related_action" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">connector.queue.job.</code><code class="descname">related_action</code><span class="sig-paren">(</span><em>action=&lt;function &lt;lambda&gt; at 0x5b2c578&gt;</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/queue/job.html#related_action"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.job.related_action" title="Permalink to this definition">¶</a></dt>
 <dd><p>Attach a <em>Related Action</em> to a job.</p>
 <p>A <em>Related Action</em> will appear as a button on the OpenERP view.
 The button will execute the action, usually it will open the
@@ -788,6 +807,204 @@ and return it</p>
 <div class="section" id="module-connector.queue.model">
 <span id="models"></span><h2>Models<a class="headerlink" href="#module-connector.queue.model" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
+<dt id="connector.queue.model.JobChannel">
+<em class="property">class </em><code class="descclassname">connector.queue.model.</code><code class="descname">JobChannel</code><span class="sig-paren">(</span><em>pool</em>, <em>cr</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/queue/model.html#JobChannel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.model.JobChannel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://www.odoo.com/documentation/8.0/reference/orm.html#openerp.models.Model" title="(in odoo v8.0)"><code class="xref py py-class docutils literal"><span class="pre">openerp.models.Model</span></code></a></p>
+<dl class="attribute">
+<dt id="connector.queue.model.JobChannel.complete_name">
+<code class="descname">complete_name</code><a class="headerlink" href="#connector.queue.model.JobChannel.complete_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Basic string field, can be length-limited, usually displayed as a
+single-line string in clients</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>size</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; the maximum size of values stored for that field</li>
+<li><strong>translate</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; whether the values of this field can be translated</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="connector.queue.model.JobChannel.job_function_ids">
+<code class="descname">job_function_ids</code><a class="headerlink" href="#connector.queue.model.JobChannel.job_function_ids" title="Permalink to this definition">¶</a></dt>
+<dd><p>One2many field; the value of such a field is the recordset of all the
+records in <cite>comodel_name</cite> such that the field <cite>inverse_name</cite> is equal to
+the current record.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>comodel_name</strong> &#8211; name of the target model (string)</li>
+<li><strong>inverse_name</strong> &#8211; name of the inverse <cite>Many2one</cite> field in
+<cite>comodel_name</cite> (string)</li>
+<li><strong>domain</strong> &#8211; an optional domain to set on candidate values on the
+client side (domain or string)</li>
+<li><strong>context</strong> &#8211; an optional context to use on the client side when
+handling that field (dictionary)</li>
+<li><strong>auto_join</strong> &#8211; whether JOINs are generated upon search through that
+field (boolean, by default <code class="docutils literal"><span class="pre">False</span></code>)</li>
+<li><strong>limit</strong> &#8211; optional limit to use upon read (integer)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>The attributes <cite>comodel_name</cite> and <cite>inverse_name</cite> are mandatory except in
+the case of related fields or field extensions.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="connector.queue.model.JobChannel.name">
+<code class="descname">name</code><a class="headerlink" href="#connector.queue.model.JobChannel.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Basic string field, can be length-limited, usually displayed as a
+single-line string in clients</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>size</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; the maximum size of values stored for that field</li>
+<li><strong>translate</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; whether the values of this field can be translated</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="connector.queue.model.JobChannel.name_get">
+<code class="descname">name_get</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/queue/model.html#JobChannel.name_get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.model.JobChannel.name_get" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="connector.queue.model.JobChannel.parent_id">
+<code class="descname">parent_id</code><a class="headerlink" href="#connector.queue.model.JobChannel.parent_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>The value of such a field is a recordset of size 0 (no
+record) or 1 (a single record).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>comodel_name</strong> &#8211; name of the target model (string)</li>
+<li><strong>domain</strong> &#8211; an optional domain to set on candidate values on the
+client side (domain or string)</li>
+<li><strong>context</strong> &#8211; an optional context to use on the client side when
+handling that field (dictionary)</li>
+<li><strong>ondelete</strong> &#8211; what to do when the referred record is deleted;
+possible values are: <code class="docutils literal"><span class="pre">'set</span> <span class="pre">null'</span></code>, <code class="docutils literal"><span class="pre">'restrict'</span></code>, <code class="docutils literal"><span class="pre">'cascade'</span></code></li>
+<li><strong>auto_join</strong> &#8211; whether JOINs are generated upon search through that
+field (boolean, by default <code class="docutils literal"><span class="pre">False</span></code>)</li>
+<li><strong>delegate</strong> &#8211; set it to <code class="docutils literal"><span class="pre">True</span></code> to make fields of the target model
+accessible from the current model (corresponds to <code class="docutils literal"><span class="pre">_inherits</span></code>)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>The attribute <cite>comodel_name</cite> is mandatory except in the case of related
+fields or field extensions.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="connector.queue.model.JobChannel.parent_required">
+<code class="descname">parent_required</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/queue/model.html#JobChannel.parent_required"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.model.JobChannel.parent_required" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="connector.queue.model.JobChannel.unlink">
+<code class="descname">unlink</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/queue/model.html#JobChannel.unlink"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.model.JobChannel.unlink" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="connector.queue.model.JobChannel.write">
+<code class="descname">write</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/queue/model.html#JobChannel.write"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.model.JobChannel.write" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="connector.queue.model.JobFunction">
+<em class="property">class </em><code class="descclassname">connector.queue.model.</code><code class="descname">JobFunction</code><span class="sig-paren">(</span><em>pool</em>, <em>cr</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/queue/model.html#JobFunction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.model.JobFunction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://www.odoo.com/documentation/8.0/reference/orm.html#openerp.models.Model" title="(in odoo v8.0)"><code class="xref py py-class docutils literal"><span class="pre">openerp.models.Model</span></code></a></p>
+<dl class="attribute">
+<dt id="connector.queue.model.JobFunction.channel">
+<code class="descname">channel</code><a class="headerlink" href="#connector.queue.model.JobFunction.channel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Basic string field, can be length-limited, usually displayed as a
+single-line string in clients</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>size</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; the maximum size of values stored for that field</li>
+<li><strong>translate</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; whether the values of this field can be translated</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="connector.queue.model.JobFunction.channel_id">
+<code class="descname">channel_id</code><a class="headerlink" href="#connector.queue.model.JobFunction.channel_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>The value of such a field is a recordset of size 0 (no
+record) or 1 (a single record).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>comodel_name</strong> &#8211; name of the target model (string)</li>
+<li><strong>domain</strong> &#8211; an optional domain to set on candidate values on the
+client side (domain or string)</li>
+<li><strong>context</strong> &#8211; an optional context to use on the client side when
+handling that field (dictionary)</li>
+<li><strong>ondelete</strong> &#8211; what to do when the referred record is deleted;
+possible values are: <code class="docutils literal"><span class="pre">'set</span> <span class="pre">null'</span></code>, <code class="docutils literal"><span class="pre">'restrict'</span></code>, <code class="docutils literal"><span class="pre">'cascade'</span></code></li>
+<li><strong>auto_join</strong> &#8211; whether JOINs are generated upon search through that
+field (boolean, by default <code class="docutils literal"><span class="pre">False</span></code>)</li>
+<li><strong>delegate</strong> &#8211; set it to <code class="docutils literal"><span class="pre">True</span></code> to make fields of the target model
+accessible from the current model (corresponds to <code class="docutils literal"><span class="pre">_inherits</span></code>)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>The attribute <cite>comodel_name</cite> is mandatory except in the case of related
+fields or field extensions.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="connector.queue.model.JobFunction.name">
+<code class="descname">name</code><a class="headerlink" href="#connector.queue.model.JobFunction.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Basic string field, can be length-limited, usually displayed as a
+single-line string in clients</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>size</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; the maximum size of values stored for that field</li>
+<li><strong>translate</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; whether the values of this field can be translated</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
 <dt id="connector.queue.model.QueueJob">
 <em class="property">class </em><code class="descclassname">connector.queue.model.</code><code class="descname">QueueJob</code><span class="sig-paren">(</span><em>pool</em>, <em>cr</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/queue/model.html#QueueJob"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.model.QueueJob" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://www.odoo.com/documentation/8.0/reference/orm.html#openerp.models.Model" title="(in odoo v8.0)"><code class="xref py py-class docutils literal"><span class="pre">openerp.models.Model</span></code></a></p>
@@ -809,6 +1026,25 @@ and return it</p>
 <dt id="connector.queue.model.QueueJob.button_done">
 <code class="descname">button_done</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/queue/model.html#QueueJob.button_done"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.model.QueueJob.button_done" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
+
+<dl class="attribute">
+<dt id="connector.queue.model.QueueJob.channel">
+<code class="descname">channel</code><a class="headerlink" href="#connector.queue.model.QueueJob.channel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Basic string field, can be length-limited, usually displayed as a
+single-line string in clients</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>size</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; the maximum size of values stored for that field</li>
+<li><strong>translate</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; whether the values of this field can be translated</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="attribute">
 <dt id="connector.queue.model.QueueJob.company_id">
@@ -886,6 +1122,25 @@ have a size and usually displayed as a multiline text box.</p>
 <dd></dd></dl>
 
 <dl class="attribute">
+<dt id="connector.queue.model.QueueJob.func_name">
+<code class="descname">func_name</code><a class="headerlink" href="#connector.queue.model.QueueJob.func_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Basic string field, can be length-limited, usually displayed as a
+single-line string in clients</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>size</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; the maximum size of values stored for that field</li>
+<li><strong>translate</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; whether the values of this field can be translated</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
 <dt id="connector.queue.model.QueueJob.func_string">
 <code class="descname">func_string</code><a class="headerlink" href="#connector.queue.model.QueueJob.func_string" title="Permalink to this definition">¶</a></dt>
 <dd><p>Basic string field, can be length-limited, usually displayed as a
@@ -902,6 +1157,36 @@ single-line string in clients</p>
 </tr>
 </tbody>
 </table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="connector.queue.model.QueueJob.job_function_id">
+<code class="descname">job_function_id</code><a class="headerlink" href="#connector.queue.model.QueueJob.job_function_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>The value of such a field is a recordset of size 0 (no
+record) or 1 (a single record).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>comodel_name</strong> &#8211; name of the target model (string)</li>
+<li><strong>domain</strong> &#8211; an optional domain to set on candidate values on the
+client side (domain or string)</li>
+<li><strong>context</strong> &#8211; an optional context to use on the client side when
+handling that field (dictionary)</li>
+<li><strong>ondelete</strong> &#8211; what to do when the referred record is deleted;
+possible values are: <code class="docutils literal"><span class="pre">'set</span> <span class="pre">null'</span></code>, <code class="docutils literal"><span class="pre">'restrict'</span></code>, <code class="docutils literal"><span class="pre">'cascade'</span></code></li>
+<li><strong>auto_join</strong> &#8211; whether JOINs are generated upon search through that
+field (boolean, by default <code class="docutils literal"><span class="pre">False</span></code>)</li>
+<li><strong>delegate</strong> &#8211; set it to <code class="docutils literal"><span class="pre">True</span></code> to make fields of the target model
+accessible from the current model (corresponds to <code class="docutils literal"><span class="pre">_inherits</span></code>)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>The attribute <cite>comodel_name</cite> is mandatory except in the case of related
+fields or field extensions.</p>
 </dd></dl>
 
 <dl class="attribute">

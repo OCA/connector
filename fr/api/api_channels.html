@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Channels &mdash; documentation Connector </title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootswatch-3.2.0/united/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/translations.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-3.2.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <link rel="top" title="documentation Connector " href="../index.html" />
+    <link rel="next" title="Job Runner" href="api_runner.html" />
+    <link rel="prev" title="Exceptions" href="api_exception.html" />
+
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-7628916-3', 'odoo-connector.com');
+  ga('send', 'pageview');
+</script>
+
+  </head>
+  <body role="document">
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../index.html">
+          Odoo Connector</a>
+        <span class="navbar-text navbar-version pull-left"><b></b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+  <li class="dropdown">
+    <a role="button"
+       id="dLabelTranslations"
+       data-toggle="dropdown"
+       data-target="#"
+       href="#">Translations<b class="caret"></b></a>
+    <ul class="dropdown-menu"
+        role="menu"
+        aria-labelledby="dLabelTranslations">
+      <li><a class="reference" href="http://odoo-connector.com">English</a><li>
+      <li><a class="reference" href="http://odoo-connector.com/fr">French</a><li>
+    </ul>
+  </li>
+  
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../project/contribute.html">Contribuer</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../project/contribute.html#want-to-start-a-new-connector">Démarrer un nouveau connecteur</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../project/contribute.html#creating-or-maintaining-a-translation-of-this-doc">Créer ou maintenir une traduction de cette doc</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../project/contributors.html">Contributeurs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../project/contributors.html#financial-contributors">Contributeurs financiers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../project/license.html">Licence</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../project/changes.html">Changements</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../project/changes.html#id2">3.0.0 (2015-04-01)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../project/changes.html#id3">2.2.0 (2014-05-26)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../project/changes.html#id4">2.1.1 (2014-02-06)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../project/changes.html#warning-breaks-compatibility">2.1.0 (2014-01-15 - attention : rupture de compatibilité)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../project/changes.html#id5">2.0.1 (2013-09-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../project/changes.html#id6">2.0.0</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../project/roadmap.html">Roadmap</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../guides/code_overview.html">Survol du code</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../guides/code_overview.html#backends">Backends</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/code_overview.html#bindings">Bindings (Liaisons)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/code_overview.html#session">Session</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/code_overview.html#events">Événements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/code_overview.html#jobs">Jobs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/code_overview.html#connectorunit">ConnectorUnit</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/concepts.html">Concepts du connecteur</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../guides/concepts.html#events">Événements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/concepts.html#jobs-queue">Queue de jobs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/concepts.html#session">Session</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/concepts.html#backend">Backend</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/concepts.html#environment">Environnement</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/concepts.html#connectorunit">ConnectorUnit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/concepts.html#bindings">Bindings (Liaisons)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/concepts.html#checkpoint">Point de contrôle</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/bootstrap_connector.html">Amorcer la création un nouveau connecteur</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../guides/bootstrap_connector.html#odoo-manifest">Odoo Manifest</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/bootstrap_connector.html#install-the-module-in-the-connector">Installation du module dans le connecteur</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/bootstrap_connector.html#declare-the-backends">Déclaration des backends</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/bootstrap_connector.html#backend-model">Modèle du backend</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/bootstrap_connector.html#abstract-binding">Binding abstrait</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/bootstrap_connector.html#environment">Environnement</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/bootstrap_connector.html#checkpoints">Points de contrôle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/bootstrap_connector.html#connectorunit-classes">Classes ConnectorUnit</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/jobrunner.html">Configuring channels and the job runner</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../guides/jobrunner.html#what-s-is-the-job-runner">What&#8217;s is the job runner?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/jobrunner.html#how-does-it-work">How does it work?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/jobrunner.html#how-to-use-it">How to use it?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/jobrunner.html#caveat">Caveat</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/jobrunner.html#notes">Notes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/jobrunner.html#what-is-a-channel">What is a channel?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/jobrunner.html#how-to-configure-channels">How to configure Channels?</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/multiprocessing.html">Use the connector with multiprocessing workers</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="api_connector.html">Connecteur</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_session.html">Session</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_backend.html">Backend</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_backend.html#module-connector.backend_model">Modèles du backend</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_event.html">Événement</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_binder.html">Binder (Liant)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_mapper.html">Mappeur</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api_mapper.html#mappers">Mappeurs</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api_synchronizer.html">Synchroniseur</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_backend_adapter.html">Adaptateur de backend</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_queue.html">Queue</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api_queue.html#module-connector.queue.job">Job</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_queue.html#module-connector.queue.worker">Worker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_queue.html#id5">Queue</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_queue.html#module-connector.queue.model">Modèles</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api_exception.html">Exceptions</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Channels</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_runner.html">Job Runner</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api_runner.html#what-s-is-the-job-runner">What&#8217;s is the job runner?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_runner.html#how-does-it-work">How does it work?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_runner.html#how-to-use-it">How to use it?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_runner.html#caveat">Caveat</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_runner.html#notes">Notes</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">Channels</a></li>
+</ul>
+</ul>
+</li>
+              
+            
+
+            
+              
+                
+  <li>
+    <a href="api_exception.html" title="Previous Chapter: Exceptions"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Exceptions</span>
+    </a>
+  </li>
+  <li>
+    <a href="api_runner.html" title="Next Chapter: Job Runner"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Job Runner &raquo;</span>
+    </a>
+  </li>
+              
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      
+  <div class="section" id="channels">
+<h1>Channels<a class="headerlink" href="#channels" title="Lien permanent vers ce titre">¶</a></h1>
+<p>This is the API documentation for the job channels and the
+scheduling mechanisms of the job runner.</p>
+<p>These classes are not intended for use by module developers.</p>
+<span class="target" id="module-connector.jobrunner.channels"></span><dl class="class">
+<dt id="connector.jobrunner.channels.Channel">
+<em class="property">class </em><code class="descclassname">connector.jobrunner.channels.</code><code class="descname">Channel</code><span class="sig-paren">(</span><em>name</em>, <em>parent</em>, <em>capacity=None</em>, <em>sequential=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/jobrunner/channels.html#Channel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.jobrunner.channels.Channel" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Bases : <a class="reference external" href="http://docs.python.org/library/functions.html#object" title="(disponible dans Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<blockquote>
+<div><p>A channel for jobs, with a maximum capacity.</p>
+<p>When jobs are created by connector modules, they may be associated
+to a job channel. Jobs with no channel are inserted into the root channel.</p>
+<p>Job channels are joined in a hierarchy down to the root channel.
+When a job channel has available capacity, jobs are dequeued, marked
+as running in the channel and are inserted into the queue of the
+parent channel where they wait for available capacity and so on.</p>
+<p>Job channels can be visualized as water channels with a given flow
+limit (= capacity). Channels are joined together in a downstream channel
+and the flow limit of the downstream channel limits upstream channels.:</p>
+<div class="highlight-python"><div class="highlight"><pre>---------------------+
+                     |
+                     |
+ Ch. A C:4,Q:12,R:4  +-----------------------
+
+---------------------+  Ch. root C:5,Q:0,R:4
+                     |
+---------------------+
+ Ch. B C:1,Q:0,R:0
+---------------------+-----------------------
+</pre></div>
+</div>
+<p>The above diagram illustrates two channels joining in the root channel.
+The root channel has a capacity of 5, and 4 running jobs coming from
+Channel A. Channel A has a capacity of 4, all in use (passed down to the
+root channel), and 12 jobs enqueued. Channel B has a capacity of 1,
+none in use. This means that whenever a new job comes in channel B,
+there will be available room for it to run in the root channel.</p>
+<p>Note that from the point of view of a channel, &#8216;running&#8217; means enqueued
+in the downstream channel. Only jobs marked running in the root channel
+are actually sent to Odoo for execution.</p>
+<p>Should a downstream channel have less capacity than its upstream channels,
+jobs going downstream will be enqueued in the downstream channel,
+and compete normally according to their properties (priority, etc).</p>
+<p>Using this technique, it is possible to enforce sequence in a channel
+with a capacity of 1. It is also possible to dedicate a channel with a
+limited capacity for application-autocreated subchannels
+without risking to overflow the system.</p>
+<dl class="method">
+<dt id="connector.jobrunner.channels.Channel.configure">
+<code class="descclassname">Channel.</code><code class="descname">configure</code><span class="sig-paren">(</span><em>config</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/jobrunner/channels.html#Channel.configure"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.jobrunner.channels.Channel.configure" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Configure a channel from a dictionary.</p>
+<p>Supported keys are:</p>
+<ul class="simple">
+<li>capacity</li>
+<li>sequential</li>
+</ul>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="connector.jobrunner.channels.Channel.fullname">
+<code class="descclassname">Channel.</code><code class="descname">fullname</code><a class="headerlink" href="#connector.jobrunner.channels.Channel.fullname" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>The full name of the channel, in dot separated notation.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="connector.jobrunner.channels.Channel.get_jobs_to_run">
+<code class="descclassname">Channel.</code><code class="descname">get_jobs_to_run</code><span class="sig-paren">(</span><em>now</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/jobrunner/channels.html#Channel.get_jobs_to_run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.jobrunner.channels.Channel.get_jobs_to_run" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Get jobs that are ready to run in channel.</p>
+<p>This works by enqueuing jobs that are ready to run in children
+channels, then yielding jobs from the channel queue until
+<code class="docutils literal"><span class="pre">capacity</span></code> jobs are marked running in the channel.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><strong>now</strong> &#8211; the current datetime using a type that is comparable to
+jobs eta attribute</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Retourne:</th><td class="field-body">iterator of <code class="xref py py-class docutils literal"><span class="pre">connector.jobrunner.ChannelJob</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="connector.jobrunner.channels.Channel.get_subchannel_by_name">
+<code class="descclassname">Channel.</code><code class="descname">get_subchannel_by_name</code><span class="sig-paren">(</span><em>subchannel_name</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/jobrunner/channels.html#Channel.get_subchannel_by_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.jobrunner.channels.Channel.get_subchannel_by_name" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="connector.jobrunner.channels.Channel.remove">
+<code class="descclassname">Channel.</code><code class="descname">remove</code><span class="sig-paren">(</span><em>job</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/jobrunner/channels.html#Channel.remove"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.jobrunner.channels.Channel.remove" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Remove a job from the channel.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="connector.jobrunner.channels.Channel.set_done">
+<code class="descclassname">Channel.</code><code class="descname">set_done</code><span class="sig-paren">(</span><em>job</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/jobrunner/channels.html#Channel.set_done"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.jobrunner.channels.Channel.set_done" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Mark a job as done.</p>
+<p>This removes it from the channel queue.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="connector.jobrunner.channels.Channel.set_failed">
+<code class="descclassname">Channel.</code><code class="descname">set_failed</code><span class="sig-paren">(</span><em>job</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/jobrunner/channels.html#Channel.set_failed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.jobrunner.channels.Channel.set_failed" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Mark the job as failed.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="connector.jobrunner.channels.Channel.set_pending">
+<code class="descclassname">Channel.</code><code class="descname">set_pending</code><span class="sig-paren">(</span><em>job</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/jobrunner/channels.html#Channel.set_pending"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.jobrunner.channels.Channel.set_pending" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Mark a job as pending.</p>
+<p>This puts the job in the channel queue and remove it
+from parent channels queues.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="connector.jobrunner.channels.Channel.set_running">
+<code class="descclassname">Channel.</code><code class="descname">set_running</code><span class="sig-paren">(</span><em>job</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/jobrunner/channels.html#Channel.set_running"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.jobrunner.channels.Channel.set_running" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Mark a job as running.</p>
+<p>This also marks the job as running in parent channels.</p>
+</dd></dl>
+
+</div></blockquote>
+<dl class="class">
+<dt id="connector.jobrunner.channels.ChannelJob">
+<em class="property">class </em><code class="descclassname">connector.jobrunner.channels.</code><code class="descname">ChannelJob</code><span class="sig-paren">(</span><em>db_name</em>, <em>channel</em>, <em>uuid</em>, <em>seq</em>, <em>date_created</em>, <em>priority</em>, <em>eta</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/jobrunner/channels.html#ChannelJob"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.jobrunner.channels.ChannelJob" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Bases : <a class="reference external" href="http://docs.python.org/library/functions.html#object" title="(disponible dans Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<blockquote>
+<div><p>A channel job is attached to a channel and holds the properties of a
+job that are necessary to prioritise them.</p>
+<dl class="docutils">
+<dt>Channel jobs are comparable according to the following rules:</dt>
+<dd><ul class="first last simple">
+<li>jobs with an eta come before all other jobs</li>
+<li>then jobs with a smaller eta come first</li>
+<li>then jobs with smaller priority come first</li>
+<li>then jobs with a smaller creation time come first</li>
+<li>then jobs with a smaller sequence come first</li>
+</ul>
+</dd>
+</dl>
+<p>Here are some examples.</p>
+<p>j1 comes before j2 before it has a smaller date_created</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">j1</span> <span class="o">=</span> <span class="n">ChannelJob</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span>
+<span class="gp">... </span>                <span class="n">seq</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">date_created</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">priority</span><span class="o">=</span><span class="mi">9</span><span class="p">,</span> <span class="n">eta</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">j1</span>
+<span class="go">&lt;ChannelJob 1&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">j2</span> <span class="o">=</span> <span class="n">ChannelJob</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span>
+<span class="gp">... </span>                <span class="n">seq</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">date_created</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">priority</span><span class="o">=</span><span class="mi">9</span><span class="p">,</span> <span class="n">eta</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">j1</span> <span class="o">&lt;</span> <span class="n">j2</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+<p>j3 comes first because it has lower priority,
+despite having a creation date after j1 and j2</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">j3</span> <span class="o">=</span> <span class="n">ChannelJob</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span>
+<span class="gp">... </span>                <span class="n">seq</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">date_created</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">priority</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">eta</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">j3</span> <span class="o">&lt;</span> <span class="n">j1</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+<p>j4 and j5 comes even before j3, because they have an eta</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">j4</span> <span class="o">=</span> <span class="n">ChannelJob</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span>
+<span class="gp">... </span>                <span class="n">seq</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">date_created</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">priority</span><span class="o">=</span><span class="mi">9</span><span class="p">,</span> <span class="n">eta</span><span class="o">=</span><span class="mi">9</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">j5</span> <span class="o">=</span> <span class="n">ChannelJob</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span>
+<span class="gp">... </span>                <span class="n">seq</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">date_created</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">priority</span><span class="o">=</span><span class="mi">9</span><span class="p">,</span> <span class="n">eta</span><span class="o">=</span><span class="mi">9</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">j4</span> <span class="o">&lt;</span> <span class="n">j5</span> <span class="o">&lt;</span> <span class="n">j3</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+<p>j6 has same date_created and priority as j5 but a smaller eta</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">j6</span> <span class="o">=</span> <span class="n">ChannelJob</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span>
+<span class="gp">... </span>                <span class="n">seq</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">date_created</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">priority</span><span class="o">=</span><span class="mi">9</span><span class="p">,</span> <span class="n">eta</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">j6</span> <span class="o">&lt;</span> <span class="n">j4</span> <span class="o">&lt;</span> <span class="n">j5</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+<p>Here is the complete suite:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">j6</span> <span class="o">&lt;</span> <span class="n">j4</span> <span class="o">&lt;</span> <span class="n">j5</span> <span class="o">&lt;</span> <span class="n">j3</span> <span class="o">&lt;</span> <span class="n">j1</span> <span class="o">&lt;</span> <span class="n">j2</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+<p>j0 has the same properties as j1 but they are not considered
+equal as they are different instances</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">j0</span> <span class="o">=</span> <span class="n">ChannelJob</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span>
+<span class="gp">... </span>                <span class="n">seq</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">date_created</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">priority</span><span class="o">=</span><span class="mi">9</span><span class="p">,</span> <span class="n">eta</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">j0</span> <span class="o">==</span> <span class="n">j1</span>
+<span class="go">False</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">j0</span> <span class="o">==</span> <span class="n">j0</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+</div></blockquote>
+<dl class="class">
+<dt id="connector.jobrunner.channels.ChannelManager">
+<em class="property">class </em><code class="descclassname">connector.jobrunner.channels.</code><code class="descname">ChannelManager</code><a class="reference internal" href="../_modules/connector/jobrunner/channels.html#ChannelManager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.jobrunner.channels.ChannelManager" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Bases : <a class="reference external" href="http://docs.python.org/library/functions.html#object" title="(disponible dans Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<blockquote>
+<div><p>High level interface for channels</p>
+<p>This class handles:</p>
+<ul class="simple">
+<li>configuration of channels</li>
+<li>high level api to create and remove jobs (notify, remove_job, remove_db)</li>
+<li>get jobs to run</li>
+</ul>
+<p>Here is how the runner will use it.</p>
+<p>Let&#8217;s create a channel manager and configure it.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pprint</span> <span class="kn">import</span> <span class="n">pprint</span> <span class="k">as</span> <span class="n">pp</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cm</span> <span class="o">=</span> <span class="n">ChannelManager</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cm</span><span class="o">.</span><span class="n">simple_configure</span><span class="p">(</span><span class="s">&#39;root:4,A:4,B:1&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">db</span> <span class="o">=</span> <span class="s">&#39;db&#39;</span>
+</pre></div>
+</div>
+<p>Add a few jobs in channel A with priority 10</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">cm</span><span class="o">.</span><span class="n">notify</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="s">&#39;A&#39;</span><span class="p">,</span> <span class="s">&#39;A1&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="s">&#39;pending&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cm</span><span class="o">.</span><span class="n">notify</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="s">&#39;A&#39;</span><span class="p">,</span> <span class="s">&#39;A2&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="s">&#39;pending&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cm</span><span class="o">.</span><span class="n">notify</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="s">&#39;A&#39;</span><span class="p">,</span> <span class="s">&#39;A3&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="s">&#39;pending&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cm</span><span class="o">.</span><span class="n">notify</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="s">&#39;A&#39;</span><span class="p">,</span> <span class="s">&#39;A4&#39;</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="s">&#39;pending&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cm</span><span class="o">.</span><span class="n">notify</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="s">&#39;A&#39;</span><span class="p">,</span> <span class="s">&#39;A5&#39;</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="s">&#39;pending&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cm</span><span class="o">.</span><span class="n">notify</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="s">&#39;A&#39;</span><span class="p">,</span> <span class="s">&#39;A6&#39;</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="s">&#39;pending&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Add a few jobs in channel B with priority 5</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">cm</span><span class="o">.</span><span class="n">notify</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="s">&#39;B&#39;</span><span class="p">,</span> <span class="s">&#39;B1&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="s">&#39;pending&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cm</span><span class="o">.</span><span class="n">notify</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="s">&#39;B&#39;</span><span class="p">,</span> <span class="s">&#39;B2&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="s">&#39;pending&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>We must now run one job from queue B which has a capacity of 1
+and 3 jobs from queue A so the root channel capacity of 4 is filled.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">pp</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">cm</span><span class="o">.</span><span class="n">get_jobs_to_run</span><span class="p">(</span><span class="n">now</span><span class="o">=</span><span class="mi">100</span><span class="p">)))</span>
+<span class="go">[&lt;ChannelJob B1&gt;, &lt;ChannelJob A1&gt;, &lt;ChannelJob A2&gt;, &lt;ChannelJob A3&gt;]</span>
+</pre></div>
+</div>
+<p>Job A2 is done. Next job to run is A5, even if we have
+higher priority job in channel B, because channel B has a capacity of 1.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">cm</span><span class="o">.</span><span class="n">notify</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="s">&#39;A&#39;</span><span class="p">,</span> <span class="s">&#39;A2&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="s">&#39;done&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pp</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">cm</span><span class="o">.</span><span class="n">get_jobs_to_run</span><span class="p">(</span><span class="n">now</span><span class="o">=</span><span class="mi">100</span><span class="p">)))</span>
+<span class="go">[&lt;ChannelJob A4&gt;]</span>
+</pre></div>
+</div>
+<p>Job B1 is done. Next job to run is B2 because it has higher priority.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">cm</span><span class="o">.</span><span class="n">notify</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="s">&#39;B&#39;</span><span class="p">,</span> <span class="s">&#39;B1&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="s">&#39;done&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pp</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">cm</span><span class="o">.</span><span class="n">get_jobs_to_run</span><span class="p">(</span><span class="n">now</span><span class="o">=</span><span class="mi">100</span><span class="p">)))</span>
+<span class="go">[&lt;ChannelJob B2&gt;]</span>
+</pre></div>
+</div>
+<p>Let&#8217;s say A1 is done and A6 gets a higher priority. A6 will run next.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">cm</span><span class="o">.</span><span class="n">notify</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="s">&#39;A&#39;</span><span class="p">,</span> <span class="s">&#39;A1&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="s">&#39;done&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cm</span><span class="o">.</span><span class="n">notify</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="s">&#39;A&#39;</span><span class="p">,</span> <span class="s">&#39;A6&#39;</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="s">&#39;pending&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pp</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">cm</span><span class="o">.</span><span class="n">get_jobs_to_run</span><span class="p">(</span><span class="n">now</span><span class="o">=</span><span class="mi">100</span><span class="p">)))</span>
+<span class="go">[&lt;ChannelJob A6&gt;]</span>
+</pre></div>
+</div>
+<dl class="method">
+<dt id="connector.jobrunner.channels.ChannelManager.get_channel_by_name">
+<code class="descclassname">ChannelManager.</code><code class="descname">get_channel_by_name</code><span class="sig-paren">(</span><em>channel_name</em>, <em>autocreate=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/jobrunner/channels.html#ChannelManager.get_channel_by_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.jobrunner.channels.ChannelManager.get_channel_by_name" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Return a Channel object by its name.</p>
+<p>If it does not exist and autocreate is True, it is created
+with a default configuration and inserted in the Channels structure.
+If autocreate is False and the channel does not exist, an exception
+is raised.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">cm</span> <span class="o">=</span> <span class="n">ChannelManager</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c</span> <span class="o">=</span> <span class="n">cm</span><span class="o">.</span><span class="n">get_channel_by_name</span><span class="p">(</span><span class="s">&#39;root&#39;</span><span class="p">,</span> <span class="n">autocreate</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c</span><span class="o">.</span><span class="n">name</span>
+<span class="go">&#39;root&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c</span><span class="o">.</span><span class="n">fullname</span>
+<span class="go">&#39;root&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c</span> <span class="o">=</span> <span class="n">cm</span><span class="o">.</span><span class="n">get_channel_by_name</span><span class="p">(</span><span class="s">&#39;root.sub&#39;</span><span class="p">,</span> <span class="n">autocreate</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c</span><span class="o">.</span><span class="n">name</span>
+<span class="go">&#39;sub&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c</span><span class="o">.</span><span class="n">fullname</span>
+<span class="go">&#39;root.sub&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c</span> <span class="o">=</span> <span class="n">cm</span><span class="o">.</span><span class="n">get_channel_by_name</span><span class="p">(</span><span class="s">&#39;sub&#39;</span><span class="p">,</span> <span class="n">autocreate</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c</span><span class="o">.</span><span class="n">name</span>
+<span class="go">&#39;sub&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c</span><span class="o">.</span><span class="n">fullname</span>
+<span class="go">&#39;root.sub&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c</span> <span class="o">=</span> <span class="n">cm</span><span class="o">.</span><span class="n">get_channel_by_name</span><span class="p">(</span><span class="s">&#39;autosub.sub&#39;</span><span class="p">,</span> <span class="n">autocreate</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c</span><span class="o">.</span><span class="n">name</span>
+<span class="go">&#39;sub&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c</span><span class="o">.</span><span class="n">fullname</span>
+<span class="go">&#39;root.autosub.sub&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c</span> <span class="o">=</span> <span class="n">cm</span><span class="o">.</span><span class="n">get_channel_by_name</span><span class="p">(</span><span class="bp">None</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c</span><span class="o">.</span><span class="n">fullname</span>
+<span class="go">&#39;root&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c</span> <span class="o">=</span> <span class="n">cm</span><span class="o">.</span><span class="n">get_channel_by_name</span><span class="p">(</span><span class="s">&#39;root.sub&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c</span><span class="o">.</span><span class="n">fullname</span>
+<span class="go">&#39;root.sub&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c</span> <span class="o">=</span> <span class="n">cm</span><span class="o">.</span><span class="n">get_channel_by_name</span><span class="p">(</span><span class="s">&#39;sub&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c</span><span class="o">.</span><span class="n">fullname</span>
+<span class="go">&#39;root.sub&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="connector.jobrunner.channels.ChannelManager.get_channel_from_config">
+<code class="descclassname">ChannelManager.</code><code class="descname">get_channel_from_config</code><span class="sig-paren">(</span><em>config</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/jobrunner/channels.html#ChannelManager.get_channel_from_config"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.jobrunner.channels.ChannelManager.get_channel_from_config" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Return a Channel object from a parsed configuration.</p>
+<p>If the channel does not exist it is created.
+The configuration is applied on the channel before returning it.
+If some of the parent channels are missing when creating a subchannel,
+the parent channels are auto created with an infinite capacity
+(except for the root channel, which defaults to a capacity of 1
+when not configured explicity).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="connector.jobrunner.channels.ChannelManager.get_jobs_to_run">
+<code class="descclassname">ChannelManager.</code><code class="descname">get_jobs_to_run</code><span class="sig-paren">(</span><em>now</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/jobrunner/channels.html#ChannelManager.get_jobs_to_run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.jobrunner.channels.ChannelManager.get_jobs_to_run" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="connector.jobrunner.channels.ChannelManager.notify">
+<code class="descclassname">ChannelManager.</code><code class="descname">notify</code><span class="sig-paren">(</span><em>db_name</em>, <em>channel_name</em>, <em>uuid</em>, <em>seq</em>, <em>date_created</em>, <em>priority</em>, <em>eta</em>, <em>state</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/jobrunner/channels.html#ChannelManager.notify"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.jobrunner.channels.ChannelManager.notify" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="classmethod">
+<dt id="connector.jobrunner.channels.ChannelManager.parse_simple_config">
+<em class="property">classmethod </em><code class="descclassname">ChannelManager.</code><code class="descname">parse_simple_config</code><span class="sig-paren">(</span><em>config_string</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/jobrunner/channels.html#ChannelManager.parse_simple_config"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.jobrunner.channels.ChannelManager.parse_simple_config" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Parse a simple channels configuration string.</p>
+<p>The general form is as follow:
+channel(.subchannel)*(:capacity(:key(=value)?)*)?,...</p>
+<p>If capacity is absent, it defaults to 1.
+If a key is present without value, it gets True as value.
+When declaring subchannels, the root channel may be omitted
+(ie sub:4 is the same as root.sub:4).</p>
+<p>Returns a list of channel configuration dictionaries.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pprint</span> <span class="kn">import</span> <span class="n">pprint</span> <span class="k">as</span> <span class="n">pp</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pp</span><span class="p">(</span><span class="n">ChannelManager</span><span class="o">.</span><span class="n">parse_simple_config</span><span class="p">(</span><span class="s">&#39;root:4&#39;</span><span class="p">))</span>
+<span class="go">[{&#39;capacity&#39;: 4, &#39;name&#39;: &#39;root&#39;}]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pp</span><span class="p">(</span><span class="n">ChannelManager</span><span class="o">.</span><span class="n">parse_simple_config</span><span class="p">(</span><span class="s">&#39;root:4,root.sub:2&#39;</span><span class="p">))</span>
+<span class="go">[{&#39;capacity&#39;: 4, &#39;name&#39;: &#39;root&#39;}, {&#39;capacity&#39;: 2, &#39;name&#39;: &#39;root.sub&#39;}]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pp</span><span class="p">(</span><span class="n">ChannelManager</span><span class="o">.</span><span class="n">parse_simple_config</span><span class="p">(</span><span class="s">&#39;root:4,root.sub:2:&#39;</span>
+<span class="gp">... </span>                                      <span class="s">&#39;sequential:k=v&#39;</span><span class="p">))</span>
+<span class="go">[{&#39;capacity&#39;: 4, &#39;name&#39;: &#39;root&#39;},</span>
+<span class="go"> {&#39;capacity&#39;: 2, &#39;k&#39;: &#39;v&#39;, &#39;name&#39;: &#39;root.sub&#39;, &#39;sequential&#39;: True}]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pp</span><span class="p">(</span><span class="n">ChannelManager</span><span class="o">.</span><span class="n">parse_simple_config</span><span class="p">(</span><span class="s">&#39;root&#39;</span><span class="p">))</span>
+<span class="go">[{&#39;capacity&#39;: 1, &#39;name&#39;: &#39;root&#39;}]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pp</span><span class="p">(</span><span class="n">ChannelManager</span><span class="o">.</span><span class="n">parse_simple_config</span><span class="p">(</span><span class="s">&#39;sub:2&#39;</span><span class="p">))</span>
+<span class="go">[{&#39;capacity&#39;: 2, &#39;name&#39;: &#39;sub&#39;}]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="connector.jobrunner.channels.ChannelManager.remove_db">
+<code class="descclassname">ChannelManager.</code><code class="descname">remove_db</code><span class="sig-paren">(</span><em>db_name</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/jobrunner/channels.html#ChannelManager.remove_db"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.jobrunner.channels.ChannelManager.remove_db" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="connector.jobrunner.channels.ChannelManager.remove_job">
+<code class="descclassname">ChannelManager.</code><code class="descname">remove_job</code><span class="sig-paren">(</span><em>uuid</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/jobrunner/channels.html#ChannelManager.remove_job"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.jobrunner.channels.ChannelManager.remove_job" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="connector.jobrunner.channels.ChannelManager.simple_configure">
+<code class="descclassname">ChannelManager.</code><code class="descname">simple_configure</code><span class="sig-paren">(</span><em>config_string</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/jobrunner/channels.html#ChannelManager.simple_configure"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.jobrunner.channels.ChannelManager.simple_configure" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Configure the channel manager from a simple configuration string</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">cm</span> <span class="o">=</span> <span class="n">ChannelManager</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c</span> <span class="o">=</span> <span class="n">cm</span><span class="o">.</span><span class="n">get_channel_by_name</span><span class="p">(</span><span class="s">&#39;root&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c</span><span class="o">.</span><span class="n">capacity</span>
+<span class="go">1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cm</span><span class="o">.</span><span class="n">simple_configure</span><span class="p">(</span><span class="s">&#39;root:4,autosub.sub:2&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cm</span><span class="o">.</span><span class="n">get_channel_by_name</span><span class="p">(</span><span class="s">&#39;root&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">capacity</span>
+<span class="go">4</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cm</span><span class="o">.</span><span class="n">get_channel_by_name</span><span class="p">(</span><span class="s">&#39;root.autosub&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">capacity</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cm</span><span class="o">.</span><span class="n">get_channel_by_name</span><span class="p">(</span><span class="s">&#39;root.autosub.sub&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">capacity</span>
+<span class="go">2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cm</span><span class="o">.</span><span class="n">get_channel_by_name</span><span class="p">(</span><span class="s">&#39;autosub.sub&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">capacity</span>
+<span class="go">2</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div></blockquote>
+<dl class="class">
+<dt id="connector.jobrunner.channels.ChannelQueue">
+<em class="property">class </em><code class="descclassname">connector.jobrunner.channels.</code><code class="descname">ChannelQueue</code><a class="reference internal" href="../_modules/connector/jobrunner/channels.html#ChannelQueue"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.jobrunner.channels.ChannelQueue" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Bases : <a class="reference external" href="http://docs.python.org/library/functions.html#object" title="(disponible dans Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<blockquote>
+<div><p>A channel queue is a priority queue for jobs that returns
+jobs with a past ETA first.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">q</span> <span class="o">=</span> <span class="n">ChannelQueue</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">j1</span> <span class="o">=</span> <span class="n">ChannelJob</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span>
+<span class="gp">... </span>                <span class="n">seq</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">date_created</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">priority</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">eta</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">j2</span> <span class="o">=</span> <span class="n">ChannelJob</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span>
+<span class="gp">... </span>                <span class="n">seq</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">date_created</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">priority</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">eta</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">j3</span> <span class="o">=</span> <span class="n">ChannelJob</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span>
+<span class="gp">... </span>                <span class="n">seq</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">date_created</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">priority</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">eta</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">q</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">j1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">q</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">j2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">q</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">j3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">q</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">now</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="go">&lt;ChannelJob 2&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">q</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">now</span><span class="o">=</span><span class="mi">11</span><span class="p">)</span>
+<span class="go">&lt;ChannelJob 1&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">q</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">now</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="go">&lt;ChannelJob 3&gt;</span>
+</pre></div>
+</div>
+<dl class="method">
+<dt id="connector.jobrunner.channels.ChannelQueue.add">
+<code class="descclassname">ChannelQueue.</code><code class="descname">add</code><span class="sig-paren">(</span><em>job</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/jobrunner/channels.html#ChannelQueue.add"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.jobrunner.channels.ChannelQueue.add" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="connector.jobrunner.channels.ChannelQueue.pop">
+<code class="descclassname">ChannelQueue.</code><code class="descname">pop</code><span class="sig-paren">(</span><em>now</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/jobrunner/channels.html#ChannelQueue.pop"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.jobrunner.channels.ChannelQueue.pop" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="connector.jobrunner.channels.ChannelQueue.remove">
+<code class="descclassname">ChannelQueue.</code><code class="descname">remove</code><span class="sig-paren">(</span><em>job</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/jobrunner/channels.html#ChannelQueue.remove"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.jobrunner.channels.ChannelQueue.remove" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+</div></blockquote>
+<dl class="class">
+<dt id="connector.jobrunner.channels.PriorityQueue">
+<em class="property">class </em><code class="descclassname">connector.jobrunner.channels.</code><code class="descname">PriorityQueue</code><a class="reference internal" href="../_modules/connector/jobrunner/channels.html#PriorityQueue"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.jobrunner.channels.PriorityQueue" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Bases : <a class="reference external" href="http://docs.python.org/library/functions.html#object" title="(disponible dans Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<blockquote>
+<div><p>A priority queue that supports removing arbitrary objects.</p>
+<p>Adding an object already in the queue is a no op.
+Popping an empty queue returns None.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">q</span> <span class="o">=</span> <span class="n">PriorityQueue</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">q</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">q</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">q</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">q</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">q</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="go">1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">q</span><span class="p">)</span>
+<span class="go">3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">q</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+<span class="go">1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">q</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">q</span><span class="p">)</span>
+<span class="go">1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">q</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="go">3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">q</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+<span class="go">3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">q</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">q</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">q</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">q</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">q</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+<span class="go">2</span>
+</pre></div>
+</div>
+<dl class="method">
+<dt id="connector.jobrunner.channels.PriorityQueue.add">
+<code class="descclassname">PriorityQueue.</code><code class="descname">add</code><span class="sig-paren">(</span><em>o</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/jobrunner/channels.html#PriorityQueue.add"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.jobrunner.channels.PriorityQueue.add" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="connector.jobrunner.channels.PriorityQueue.pop">
+<code class="descclassname">PriorityQueue.</code><code class="descname">pop</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/jobrunner/channels.html#PriorityQueue.pop"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.jobrunner.channels.PriorityQueue.pop" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="connector.jobrunner.channels.PriorityQueue.remove">
+<code class="descclassname">PriorityQueue.</code><code class="descname">remove</code><span class="sig-paren">(</span><em>o</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/jobrunner/channels.html#PriorityQueue.remove"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.jobrunner.channels.PriorityQueue.remove" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+</div></blockquote>
+<dl class="class">
+<dt id="connector.jobrunner.channels.SafeSet">
+<em class="property">class </em><code class="descclassname">connector.jobrunner.channels.</code><code class="descname">SafeSet</code><a class="reference internal" href="../_modules/connector/jobrunner/channels.html#SafeSet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.jobrunner.channels.SafeSet" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Bases: <a class="reference external" href="http://docs.python.org/library/stdtypes.html#set" title="(disponible dans Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">set</span></code></a></p>
+<blockquote>
+<div><p>A set that does not raise KeyError when removing non-existent items.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">SafeSet</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+<span class="go">0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="method">
+<dt id="connector.jobrunner.channels.SafeSet.remove">
+<code class="descclassname">SafeSet.</code><code class="descname">remove</code><span class="sig-paren">(</span><em>o</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/jobrunner/channels.html#SafeSet.remove"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.jobrunner.channels.SafeSet.remove" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+</div></blockquote>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+        <br/>
+        
+<div id="sourcelink">
+  <a href="../_sources/api/api_channels.txt"
+     rel="nofollow">Source</a>
+</div>
+      
+    </p>
+    <p>
+        &copy; Copyright 2013, Camptocamp SA.<br/>
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.1.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

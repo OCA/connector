@@ -10,7 +10,7 @@ Use the connector with multiprocessing workers
           supports job channels. You should try the job runner first
           and fall back to using workers in case the runner does not
           work (sic) for you, in which case we will very much appreciate
-          a github issue describing the problems you encoutered.
+          a github issue describing the problems you encountered.
 
 When Odoo is launched with 1 process, the jobs worker will run
 threaded in the same process.

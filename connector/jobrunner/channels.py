@@ -302,12 +302,12 @@ class Channel(object):
         ---------------------+
                              |
                              |
-         Ch. A W:4,Q:12,R:4  +-----------------------
+         Ch. A C:4,Q:12,R:4  +-----------------------
 
-        ---------------------+  Ch. root W:5,Q:0,R:4
+        ---------------------+  Ch. root C:5,Q:0,R:4
                              |
         ---------------------+
-         Ch. B W:1,Q:0,R:0
+         Ch. B C:1,Q:0,R:0
         ---------------------+-----------------------
 
     The above diagram illustrates two channels joining in the root channel.
@@ -369,7 +369,7 @@ class Channel(object):
         return self.children.get(subchannel_name)
 
     def __str__(self):
-        return "%s(W:%d,Q:%d,R:%d,F:%d)" % (self.fullname,
+        return "%s(C:%d,Q:%d,R:%d,F:%d)" % (self.fullname,
                                             self.capacity,
                                             len(self._queue),
                                             len(self._running),
@@ -505,7 +505,7 @@ class ChannelManager(object):
     [<ChannelJob B1>, <ChannelJob A1>, <ChannelJob A2>, <ChannelJob A3>]
 
     Job A2 is done. Next job to run is A5, even if we have
-    higher priority job in channel B, because channel B as a capacity of 1.
+    higher priority job in channel B, because channel B has a capacity of 1.
 
     >>> cm.notify(db, 'A', 'A2', 2, 0, 10, None, 'done')
     >>> pp(list(cm.get_jobs_to_run(now=100)))

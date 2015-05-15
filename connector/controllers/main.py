@@ -66,7 +66,7 @@ class RunJobController(http.Controller):
             if job.state != ENQUEUED:
                 _logger.warning('job %s is in state %s '
                                 'instead of enqueued in /runjob',
-                                job.state, job_uuid)
+                                job_uuid, job.state)
                 return
 
             with session_hdl.session() as session:

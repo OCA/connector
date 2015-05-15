@@ -1,6 +1,16 @@
 Changelog
 ---------
 
+
+3.1.0 (2015-05-15)
+~~~~~~~~~~~~~~~~~~
+
+* New jobs runner (details on https://github.com/OCA/connector/pull/52)
+* French documentation (https://github.com/OCA/connector/pull/57)
+* Add ConnectorSession.from_env() (https://github.com/OCA/connector/pull/66)
+* Fix: missing indexes on jobs (https://github.com/OCA/connector/pull/65)
+
+
 3.0.0 (2015-04-01)
 ~~~~~~~~~~~~~~~~~~
 

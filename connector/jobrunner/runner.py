@@ -79,6 +79,7 @@ Notes
 
 from contextlib import closing
 import logging
+import os
 import re
 import select
 import threading
@@ -209,6 +210,8 @@ class ConnectorRunner(object):
         self.channel_manager = ChannelManager()
         self.channel_manager.simple_configure(channel_config_string)
         self.db_by_name = {}
+        self._stop = False
+        self._stop_pipe = os.pipe()
 
     def get_db_names(self):
         if openerp.tools.config['db_name']:
@@ -220,15 +223,18 @@ class ConnectorRunner(object):
             db_names = [d for d in db_names if re.match(dbfilter, d)]
         return db_names
 
-    def initialize_databases(self):
+    def close_databases(self, remove_jobs=True):
         for db_name, db in self.db_by_name.items():
             try:
-                self.channel_manager.remove_db(db_name)
+                if remove_jobs:
+                    self.channel_manager.remove_db(db_name)
                 db.close()
             except:
                 _logger.warning('error closing database %s',
                                 db_name, exc_info=True)
         self.db_by_name = {}
+
+    def initialize_databases(self):
         for db_name in self.get_db_names():
             db = Database(db_name)
             if not db.has_connector:
@@ -242,6 +248,8 @@ class ConnectorRunner(object):
     def run_jobs(self):
         now = openerp.fields.Datetime.now()
         for job in self.channel_manager.get_jobs_to_run(now):
+            if self._stop:
+                break
             _logger.info("asking Odoo to run job %s on db %s",
                          job.uuid, job.db_name)
             self.db_by_name[job.db_name].set_job_enqueued(job.uuid)
@@ -252,6 +260,8 @@ class ConnectorRunner(object):
     def process_notifications(self):
         for db in self.db_by_name.values():
             while db.conn.notifies:
+                if self._stop:
+                    break
                 notification = db.conn.notifies.pop()
                 uuid = notification.payload
                 job_datas = db.select_jobs('uuid = %s', (uuid,))
@@ -266,16 +276,21 @@ class ConnectorRunner(object):
                 return
         # wait for something to happen in the queue_job tables
         conns = [db.conn for db in self.db_by_name.values()]
+        conns.append(self._stop_pipe[0])
         conns, _, _ = select.select(conns, [], [], SELECT_TIMEOUT)
-        if conns:
+        if conns and not self._stop:
             for conn in conns:
                 conn.poll()
-        else:
-            _logger.debug("select timeout")
 
-    def run_forever(self):
+    def stop(self):
+        _logger.info("graceful stop requested")
+        self._stop = True
+        # wakeup the select() in wait_notification
+        os.write(self._stop_pipe[1], '.')
+
+    def run(self):
         _logger.info("starting")
-        while True:
+        while not self._stop:
             # outer loop does exception recovery
             try:
                 _logger.info("initializing database connections")
@@ -284,14 +299,16 @@ class ConnectorRunner(object):
                 self.initialize_databases()
                 _logger.info("database connections ready")
                 # inner loop does the normal processing
-                while True:
+                while not self._stop:
                     self.process_notifications()
                     self.run_jobs()
                     self.wait_notification()
             except KeyboardInterrupt:
-                _logger.info("stopping")
-                break
+                self.stop()
             except:
                 _logger.exception("exception: sleeping %ds and retrying",
                                   ERROR_RECOVERY_DELAY)
+                self.close_databases()
                 time.sleep(ERROR_RECOVERY_DELAY)
+        self.close_databases(remove_jobs=False)
+        _logger.info("stopped")

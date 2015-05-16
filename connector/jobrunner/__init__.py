@@ -49,49 +49,75 @@ START_DELAY = 5
 enable = os.environ.get('ODOO_CONNECTOR_CHANNELS')
 
 
-def run():
-    # sleep a bit to let the workers start at ease
-    time.sleep(START_DELAY)
-    port = os.environ.get('ODOO_CONNECTOR_PORT') or config['xmlrpc_port']
-    channels = os.environ.get('ODOO_CONNECTOR_CHANNELS')
-    runner = ConnectorRunner(port or 8069, channels or 'root:1')
-    runner.run_forever()
+class ConnectorRunnerThread(Thread):
 
+    def __init__(self):
+        Thread.__init__(self)
+        self.daemon = True
+        port = os.environ.get('ODOO_CONNECTOR_PORT') or config['xmlrpc_port']
+        channels = os.environ.get('ODOO_CONNECTOR_CHANNELS')
+        self.runner = ConnectorRunner(port or 8069, channels or 'root:1')
+
+    def run(self):
+        # sleep a bit to let the workers start at ease
+        time.sleep(START_DELAY)
+        self.runner.run()
+
+    def stop(self):
+        self.runner.stop()
+
+
+runner_thread = None
 
 orig_prefork_start = server.PreforkServer.start
+orig_prefork_stop = server.PreforkServer.stop
 orig_threaded_start = server.ThreadedServer.start
-orig_gevent_start = server.GeventServer.start
+orig_threaded_stop = server.ThreadedServer.stop
 
 
 def prefork_start(server, *args, **kwargs):
+    global runner_thread
     res = orig_prefork_start(server, *args, **kwargs)
     if enable and not config['stop_after_init']:
         _logger.info("starting jobrunner thread (in prefork server)")
-        thread = Thread(target=run)
-        thread.daemon = True
-        thread.start()
+        runner_thread = ConnectorRunnerThread()
+        runner_thread.start()
+    return res
+
+
+def prefork_stop(server, graceful=True):
+    global runner_thread
+    if runner_thread:
+        runner_thread.stop()
+    res = orig_prefork_stop(server, graceful)
+    if runner_thread:
+        runner_thread.join()
+        runner_thread = None
     return res
 
 
 def threaded_start(server, *args, **kwargs):
+    global runner_thread
     res = orig_threaded_start(server, *args, **kwargs)
     if enable and not config['stop_after_init']:
         _logger.info("starting jobrunner thread (in threaded server)")
-        thread = Thread(target=run)
-        thread.daemon = True
-        thread.start()
+        runner_thread = ConnectorRunnerThread()
+        runner_thread.start()
     return res
 
 
-def gevent_start(server, *args, **kwargs):
-    res = orig_gevent_start(server, *args, **kwargs)
-    if enable and not config['stop_after_init']:
-        _logger.info("starting jobrunner thread (in gevent server)")
-        # TODO: gevent spawn?
-        raise RuntimeError("not implemented")
+def threaded_stop(server):
+    global runner_thread
+    if runner_thread:
+        runner_thread.stop()
+    res = orig_threaded_stop(server)
+    if runner_thread:
+        runner_thread.join()
+        runner_thread = None
     return res
 
 
 server.PreforkServer.start = prefork_start
+server.PreforkServer.stop = prefork_stop
 server.ThreadedServer.start = threaded_start
-server.GeventServer.start = gevent_start
+server.ThreadedServer.stop = threaded_stop

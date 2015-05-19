@@ -29,6 +29,8 @@ from . import test_producer
 from . import test_connector
 from . import test_mapper
 from . import test_related_action
+from . import test_runner_channels
+from . import test_runner_runner
 fast_suite = [
 ]
 
@@ -43,6 +45,6 @@ checks = [
     test_connector,
     test_mapper,
     test_related_action,
+    test_runner_channels,
+    test_runner_runner
 ]
-from . import test_runner_channels
-from . import test_runner_runner

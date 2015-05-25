@@ -293,6 +293,23 @@ class MetaMapper(MetaConnectorUnit):
                 cls._map_methods[attr_name] = definition
         return cls
 
+    def __init__(cls, name, bases, attrs):
+        """
+        Build a ``exported_fields`` list of synchronized fields with mapper.
+        """
+        exported_fields = []
+        if attrs.get('direct'):
+            for field_tuple in attrs['direct']:
+                exported_fields.append(field_tuple[0])
+        for method_name, method_def in attrs['_map_methods'].iteritems():
+            exported_fields += list(method_def[0])
+        for base in bases:
+            if hasattr(base, 'exported_fields') and base.exported_fields:
+                exported_fields += base.exported_fields
+        cls.exported_fields = list(set(exported_fields))
+        print name, cls.exported_fields
+        super(MetaMapper, cls).__init__(name, bases, attrs)
+
 
 class MapChild(ConnectorUnit):
     """ MapChild is responsible to convert items.

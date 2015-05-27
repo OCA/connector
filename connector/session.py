@@ -24,14 +24,8 @@ from contextlib import contextmanager
 import openerp
 from openerp.modules.registry import RegistryManager
 
-<<<<<<< HEAD
-=======
 from .connector import is_module_installed
-from .deprecate import log_deprecate
 
-_logger = logging.getLogger(__name__)
-
->>>>>>> b9134e8... Allow to configure the channels on the job functions
 
 class ConnectorSessionHandler(object):
     """ Allow to create a new instance of

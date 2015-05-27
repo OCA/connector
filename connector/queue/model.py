@@ -23,9 +23,11 @@ import os
 import logging
 from datetime import datetime, timedelta
 
+import openerp
 from openerp.osv import orm, fields
 from openerp.tools import DEFAULT_SERVER_DATETIME_FORMAT
 from openerp.tools.translate import _
+from openerp import exceptions
 
 from .job import STATES, DONE, PENDING, OpenERPJobStorage, JOB_REGISTRY
 from .worker import WORKER_TIMEOUT
@@ -47,7 +49,31 @@ class QueueJob(orm.Model):
 
     _removal_interval = 30  # days
 
-<<<<<<< HEAD
+    def _job_function_mapping_function(self, cr, uid, trigger_ids,
+                                       context=None):
+        res = self.pool['queue.job.function'].read(
+            cr, uid, trigger_ids, ['name'], context=context)
+        names = [r['name'] for r in res]
+        return self.pool['queue.job'].search(
+            cr, uid, [('name', 'in', names)], context=context)
+
+    def _compute_channel(self, cr, uid, ids, field_names=None,
+                         arg=False, context=None):
+        res = dict.fromkeys(ids)
+        func_model = self.pool['queue.job.function']
+        for info in self.read(cr, uid, ids, ['func_name'], context=context):
+            val = {'job_function_id': False,
+                   'channel': False}
+            func_id = func_model.search(
+                cr, uid, [('name', '=', info['func_name'])], context=context)
+            if func_id:
+                function = func_model.browse(cr, uid, func_id[0],
+                                             context=context)
+                val['job_function_id'] = function.id
+                val['channel'] = function.channel
+            res[info['id']] = val
+        return res
+
     _columns = {
         'worker_id': fields.many2one('queue.worker', string='Worker',
                                      ondelete='set null', readonly=True),
@@ -79,6 +105,28 @@ class QueueJob(orm.Model):
             help="The job will fail if the number of tries reach the "
                  "max. retries.\n"
                  "Retries are infinite when empty."),
+        'func_name':  fields.char(readonly=True, string='func_name'),
+        'job_function_id': fields.function(
+            _compute_channel, type='many2one', obj='queue.job.function',
+            string='Job Function',
+            store={'queue.job.function':
+                   (_job_function_mapping_function,
+                    ['channel_id'], 10),
+                   'queue.job':
+                   ((lambda self, cr, uid, ids, c={}: ids),
+                    ['func_name'], 10)},
+            readonly=True, multi=True),
+        # for searching without JOIN on channels
+        'channel': fields.function(
+            _compute_channel, string='Channel', type='char',
+            store={'queue.job.function':
+                   (_job_function_mapping_function,
+                    ['channel_id'], 10),
+                   'queue.job':
+                   ((lambda self, cr, uid, ids, c={}: ids),
+                    ['func_name'], 10)},
+            select=True, multi=True)
+
     }
 
     _defaults = {
@@ -86,66 +134,6 @@ class QueueJob(orm.Model):
     }
 
     def open_related_action(self, cr, uid, ids, context=None):
-=======
-    worker_id = fields.Many2one(comodel_name='queue.worker',
-                                string='Worker',
-                                ondelete='set null',
-                                readonly=True)
-    uuid = fields.Char(string='UUID',
-                       readonly=True,
-                       select=True,
-                       required=True)
-    user_id = fields.Many2one(comodel_name='res.users',
-                              string='User ID',
-                              required=True)
-    company_id = fields.Many2one(comodel_name='res.company',
-                                 string='Company', select=True)
-    name = fields.Char(string='Description', readonly=True)
-    func_string = fields.Char(string='Task', readonly=True)
-    func = fields.Binary(string='Pickled Function',
-                         readonly=True,
-                         required=True)
-    state = fields.Selection(STATES,
-                             string='State',
-                             readonly=True,
-                             required=True,
-                             select=True)
-    priority = fields.Integer()
-    exc_info = fields.Text(string='Exception Info', readonly=True)
-    result = fields.Text(string='Result', readonly=True)
-    date_created = fields.Datetime(string='Created Date', readonly=True)
-    date_started = fields.Datetime(string='Start Date', readonly=True)
-    date_enqueued = fields.Datetime(string='Enqueue Time', readonly=True)
-    date_done = fields.Datetime(string='Date Done', readonly=True)
-    eta = fields.Datetime(string='Execute only after')
-    active = fields.Boolean(default=True)
-    model_name = fields.Char(string='Model', readonly=True)
-    retry = fields.Integer(string='Current try')
-    max_retries = fields.Integer(
-        string='Max. retries',
-        help="The job will fail if the number of tries reach the "
-             "max. retries.\n"
-             "Retries are infinite when empty.",
-    )
-    func_name = fields.Char(readonly=True)
-    job_function_id = fields.Many2one(comodel_name='queue.job.function',
-                                      compute='_compute_channel',
-                                      readonly=True,
-                                      store=True)
-    # for searching without JOIN on channels
-    channel = fields.Char(compute='_compute_channel', store=True, select=True)
-
-    @api.one
-    @api.depends('func_name', 'job_function_id.channel_id')
-    def _compute_channel(self):
-        func_model = self.env['queue.job.function']
-        function = func_model.search([('name', '=', self.func_name)])
-        self.job_function_id = function
-        self.channel = self.job_function_id.channel
-
-    @api.multi
-    def open_related_action(self):
->>>>>>> b9134e8... Allow to configure the channels on the job functions
         """ Open the related action associated to the job """
         if hasattr(ids, '__iter__'):
             assert len(ids) == 1, "1 ID expected, got %s" % ids
@@ -468,21 +456,46 @@ class requeue_job(orm.TransientModel):
         return {'type': 'ir.actions.act_window_close'}
 
 
-class JobChannel(models.Model):
+class JobChannel(orm.Model):
     _name = 'queue.job.channel'
     _description = 'Job Channels'
 
-    name = fields.Char()
-    complete_name = fields.Char(compute='_compute_complete_name',
-                                string='Complete Name',
-                                store=True,
-                                readonly=True)
-    parent_id = fields.Many2one(comodel_name='queue.job.channel',
-                                string='Parent Channel',
-                                ondelete='restrict')
-    job_function_ids = fields.One2many(comodel_name='queue.job.function',
-                                       inverse_name='channel_id',
-                                       string='Job Functions')
+    def _get_subchannels(self, cr, uid, ids, context=None):
+        """ return all sub channel of the given channel (included) """
+        res = []
+        for m in self.browse(cr, uid, ids, context=context):
+            res.append(m.id)
+            while m.parent_id:
+                res.append(m.parent_id)
+                m = m.parent_id
+        return res
+
+    def _compute_complete_name(self, cr, uid, ids, name, args, context=None):
+        res = {}
+        for m in self.browse(cr, uid, ids, context=context):
+            channel = m
+            parts = [m.name]
+            while channel.parent_id:
+                channel = channel.parent_id
+                parts.append(channel.name)
+            res[m.id] = '.'.join(reversed(parts))
+        return res
+
+    _columns = {
+        'name':  fields.char(string='Name'),
+        'complete_name':  fields.function(
+            _compute_complete_name, type='char', string='Complete Name',
+            store={'queue.job.channel':
+                   (_get_subchannels,
+                    ['name', 'parent_id', 'parent_id.name'], 10)},
+            readonly=True),
+        'parent_id': fields.many2one('queue.job.channel',
+                                     string='Parent Channel',
+                                     ondelete='restrict'),
+        'job_function_ids':  fields.one2many('queue.job.function',
+                                             fields_id='channel_id',
+                                             string='Job Functions')
+    }
 
     _sql_constraints = [
         ('name_uniq',
@@ -490,72 +503,72 @@ class JobChannel(models.Model):
          'Channel complete name must be unique'),
     ]
 
-    @api.one
-    @api.depends('name', 'parent_id', 'parent_id.name')
-    def _compute_complete_name(self):
-        if not self.name:
-            return  # new record
-        channel = self
-        parts = [channel.name]
-        while channel.parent_id:
-            channel = channel.parent_id
-            parts.append(channel.name)
-        self.complete_name = '.'.join(reversed(parts))
+    def parent_required(self, cr, uid, ids, context=None):
+        for channel in self.browse(cr, uid, ids, context=context):
+            if channel.name != 'root' and not channel.parent_id:
+                return False
+        return True
 
-    @api.one
-    @api.constrains('parent_id')
-    def parent_required(self):
-        if self.name != 'root' and not self.parent_id:
-            raise exceptions.ValidationError(_('Parent channel required.'))
+    _constraints = [
+        (parent_required,
+         _('Parent channel required.'),
+         ['parent_id'])
+    ]
 
-    @api.multi
-    def write(self, values):
-        for channel in self:
-            if (not self.env.context.get('install_mode') and
+    def write(self, cr, uid, ids, values, context=None):
+        for channel in self.browse(cr, uid, ids, context=context):
+            if (not context.get('install_mode') and
                     channel.name == 'root' and
                     ('name' in values or 'parent_id' in values)):
                 raise exceptions.Warning(_('Cannot change the root channel'))
-        return super(JobChannel, self).write(values)
+        return super(JobChannel, self).write(cr, uid, ids, values)
 
-    @api.multi
-    def unlink(self):
-        for channel in self:
+    def unlink(self, cr, uid, ids, context=None):
+        for channel in self.browse(cr, uid, ids, context=context):
             if channel.name == 'root':
                 raise exceptions.Warning(_('Cannot remove the root channel'))
         return super(JobChannel, self).unlink()
 
-    @api.multi
-    def name_get(self):
-        result = []
-        for record in self:
-            result.append((record.id, record.complete_name))
-        return result
+    def name_get(self, cr, uid, ids, context=None):
+        if not ids:
+            return []
+        res = []
+        for channel in self.browse(cr, uid, ids, context=context):
+            res.append((channel.id, channel.complete_name))
+        return res
 
 
-class JobFunction(models.Model):
+class JobFunction(orm.Model):
     _name = 'queue.job.function'
     _description = 'Job Functions'
     _log_access = False
 
-    @api.model
-    def _default_channel(self):
-        return self.env.ref('connector.channel_root')
+    def _default_channel(self, cr, uid, context=None):
+        return self.pool.get('ir.model.data').get_object_reference(
+            cr, uid, 'connector', 'channel_root')[1]
 
-    name = fields.Char(select=True)
-    channel_id = fields.Many2one(comodel_name='queue.job.channel',
-                                 string='Channel',
-                                 required=True,
-                                 default=_default_channel)
-    channel = fields.Char(related='channel_id.complete_name',
-                          store=True,
-                          readonly=True)
+    _columns = {
+        'name': fields.char(select=True, string='Name'),
+        'channel_id': fields.many2one('queue.job.channel',
+                                      string='Channel',
+                                      required=True),
+        'channel': fields.related('channel_id', 'complete_name', type='char',
+                                  store=True,
+                                  readonly=True),
+    }
 
-    @api.model
-    def _setup_complete(self):
-        super(JobFunction, self)._setup_complete()
+    _defaults = {
+        'channel_id': _default_channel,
+    }
+
+    def _register_hook(self, cr):
+        vals = super(JobFunction, self)._register_hook(cr)
         for func in JOB_REGISTRY:
             if not is_module_installed(self.pool, get_openerp_module(func)):
                 continue
             func_name = '%s.%s' % (func.__module__, func.__name__)
-            if not self.search_count([('name', '=', func_name)]):
-                self.create({'name': func_name})
+            if not self.search_count(
+                    cr, openerp.SUPERUSER_ID, [('name', '=', func_name)]):
+                self.create(cr, openerp.SUPERUSER_ID, {'name': func_name})
+        cr.commit()
+        return vals

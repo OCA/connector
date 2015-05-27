@@ -441,7 +441,7 @@ class JobChannel(models.Model):
         self.complete_name = '.'.join(reversed(parts))
 
     @api.one
-    @api.constrains('parent_id')
+    @api.constrains('parent_id', 'name')
     def parent_required(self):
         if self.name != 'root' and not self.parent_id:
             raise exceptions.ValidationError(_('Parent channel required.'))
@@ -489,11 +489,40 @@ class JobFunction(models.Model):
                           readonly=True)
 
     @api.model
-    def _setup_complete(self):
-        super(JobFunction, self)._setup_complete()
+    def _find_or_create_channel(self, channel_path):
+        channel_model = self.env['queue.job.channel']
+        parts = channel_path.split('.')
+        parts.reverse()
+        channel_name = parts.pop()
+        assert channel_name == 'root', "A channel path starts with 'root'"
+        # get the root channel
+        channel = channel_model.search([('name', '=', channel_name)])
+        while parts:
+            channel_name = parts.pop()
+            parent_channel = channel
+            channel = channel_model.search([
+                ('name', '=', channel_name),
+                ('parent_id', '=', parent_channel.id)],
+                limit=1,
+            )
+            if not channel:
+                channel = channel_model.create({
+                    'name': channel_name,
+                    'parent_id': parent_channel.id,
+                })
+        return channel
+
+    @api.model
+    def _register_jobs(self):
         for func in JOB_REGISTRY:
             if not is_module_installed(self.pool, get_openerp_module(func)):
                 continue
             func_name = '%s.%s' % (func.__module__, func.__name__)
             if not self.search_count([('name', '=', func_name)]):
-                self.create({'name': func_name})
+                channel = self._find_or_create_channel(func.default_channel)
+                self.create({'name': func_name, 'channel_id': channel.id})
+
+    @api.model
+    def _setup_complete(self):
+        super(JobFunction, self)._setup_complete()
+        self._register_jobs()

@@ -466,7 +466,7 @@ class JobChannel(orm.Model):
         for m in self.browse(cr, uid, ids, context=context):
             res.append(m.id)
             while m.parent_id:
-                res.append(m.parent_id)
+                res.append(m.parent_id.id)
                 m = m.parent_id
         return res
 
@@ -500,7 +500,7 @@ class JobChannel(orm.Model):
     _sql_constraints = [
         ('name_uniq',
          'unique(complete_name)',
-         'Channel complete name must be unique'),
+         _('Channel complete name must be unique')),
     ]
 
     def parent_required(self, cr, uid, ids, context=None):
@@ -516,6 +516,9 @@ class JobChannel(orm.Model):
     ]
 
     def write(self, cr, uid, ids, values, context=None):
+        if not hasattr(ids, '__iter__'):
+            ids = [ids]
+        context = context or {}
         for channel in self.browse(cr, uid, ids, context=context):
             if (not context.get('install_mode') and
                     channel.name == 'root' and
@@ -524,6 +527,8 @@ class JobChannel(orm.Model):
         return super(JobChannel, self).write(cr, uid, ids, values)
 
     def unlink(self, cr, uid, ids, context=None):
+        if not hasattr(ids, '__iter__'):
+            ids = [ids]
         for channel in self.browse(cr, uid, ids, context=context):
             if channel.name == 'root':
                 raise exceptions.Warning(_('Cannot remove the root channel'))

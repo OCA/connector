@@ -307,7 +307,6 @@ class MetaMapper(MetaConnectorUnit):
             if hasattr(base, 'exported_fields') and base.exported_fields:
                 exported_fields += base.exported_fields
         cls.exported_fields = list(set(exported_fields))
-        print name, cls.exported_fields
         super(MetaMapper, cls).__init__(name, bases, attrs)
 
 

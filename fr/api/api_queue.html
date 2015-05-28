@@ -554,8 +554,22 @@
 </div></blockquote>
 <dl class="function">
 <dt id="connector.queue.job.job">
-<code class="descclassname">connector.queue.job.</code><code class="descname">job</code><span class="sig-paren">(</span><em>func</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/queue/job.html#job"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.job.job" title="Lien permanent vers cette définition">¶</a></dt>
+<code class="descclassname">connector.queue.job.</code><code class="descname">job</code><span class="sig-paren">(</span><em>func=None</em>, <em>default_channel='root'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/queue/job.html#job"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.job.job" title="Lien permanent vers cette définition">¶</a></dt>
 <dd><p>Décorateur pour les jobs.</p>
+<blockquote>
+<div><p>Optional argument:</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">param default_channel:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body">the channel wherein the job will be assigned. This
+channel is set at the installation of the module
+and can be manually changed later using the views.</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
 <p>Ajoute un attribut <code class="docutils literal"><span class="pre">delay</span></code> sur la fonction décorée.</p>
 <p>Quand <code class="docutils literal"><span class="pre">delay</span></code> est appelée, la fonction est transformée en job et stockée dans le modèle OpenERP queue.job. Les arguments positionnels et nommés transmis à <code class="docutils literal"><span class="pre">delay</span></code> seront les arguments utilisés par la fonction décorée lorsqu&#8217;elle sera exécutée.</p>
 <p>La fonction <code class="docutils literal"><span class="pre">delay()</span></code> d&#8217;un job reçoit les arguments suivants :</p>
@@ -616,6 +630,11 @@
                        <span class="n">priority</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">eta</span><span class="o">=</span><span class="mi">60</span><span class="o">*</span><span class="mi">60</span><span class="o">*</span><span class="mi">5</span><span class="p">)</span>
 <span class="c"># =&gt; the job will be executed with a low priority and not before a</span>
 <span class="c"># delay of 5 hours from now</span>
+
+<span class="nd">@job</span><span class="p">(</span><span class="n">default_channel</span><span class="o">=</span><span class="s">&#39;root.subchannel&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">export_one_thing</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">one_thing</span><span class="p">):</span>
+    <span class="c"># work</span>
+    <span class="c"># export one_thing</span>
 </pre></div>
 </div>
 <p class="last">Voir aussi : <a class="reference internal" href="#connector.queue.job.related_action" title="connector.queue.job.related_action"><code class="xref py py-func docutils literal"><span class="pre">related_action()</span></code></a> une action connexe peut être attachée à un job</p>
@@ -625,7 +644,7 @@
 
 <dl class="function">
 <dt id="connector.queue.job.related_action">
-<code class="descclassname">connector.queue.job.</code><code class="descname">related_action</code><span class="sig-paren">(</span><em>action=&lt;function &lt;lambda&gt; at 0x5a4a0c8&gt;</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/queue/job.html#related_action"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.job.related_action" title="Lien permanent vers cette définition">¶</a></dt>
+<code class="descclassname">connector.queue.job.</code><code class="descname">related_action</code><span class="sig-paren">(</span><em>action=&lt;function &lt;lambda&gt; at 0x543f1b8&gt;</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/queue/job.html#related_action"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.job.related_action" title="Lien permanent vers cette définition">¶</a></dt>
 <dd><p>Attache une <em>action connexe</em> à un job</p>
 <p>Un <em>action connexe</em> apparaîtra comme un bouton dans la vue OpenERP. Le bouton exécutera l&#8217;action, habituellement une ouverture de formulaire de l&#8217;enregistrement lié au job.</p>
 <p>L&#8217;<code class="docutils literal"><span class="pre">action</span></code> doit être un objet <cite>callable</cite> qui prends les arguments</p>

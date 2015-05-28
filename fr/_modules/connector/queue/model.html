@@ -674,7 +674,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">complete_name</span> <span class="o">=</span> <span class="s">&#39;.&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">reversed</span><span class="p">(</span><span class="n">parts</span><span class="p">))</span>
 
     <span class="nd">@api.one</span>
-    <span class="nd">@api.constrains</span><span class="p">(</span><span class="s">&#39;parent_id&#39;</span><span class="p">)</span>
+    <span class="nd">@api.constrains</span><span class="p">(</span><span class="s">&#39;parent_id&#39;</span><span class="p">,</span> <span class="s">&#39;name&#39;</span><span class="p">)</span>
 <div class="viewcode-block" id="JobChannel.parent_required"><a class="viewcode-back" href="../../../api/api_queue.html#connector.queue.model.JobChannel.parent_required">[docs]</a>    <span class="k">def</span> <span class="nf">parent_required</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">!=</span> <span class="s">&#39;root&#39;</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent_id</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">ValidationError</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s">&#39;Parent channel required.&#39;</span><span class="p">))</span>
@@ -722,14 +722,43 @@
                           <span class="n">readonly</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 
     <span class="nd">@api.model</span>
-    <span class="k">def</span> <span class="nf">_setup_complete</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">JobFunction</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">_setup_complete</span><span class="p">()</span>
+    <span class="k">def</span> <span class="nf">_find_or_create_channel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">channel_path</span><span class="p">):</span>
+        <span class="n">channel_model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="p">[</span><span class="s">&#39;queue.job.channel&#39;</span><span class="p">]</span>
+        <span class="n">parts</span> <span class="o">=</span> <span class="n">channel_path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;.&#39;</span><span class="p">)</span>
+        <span class="n">parts</span><span class="o">.</span><span class="n">reverse</span><span class="p">()</span>
+        <span class="n">channel_name</span> <span class="o">=</span> <span class="n">parts</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+        <span class="k">assert</span> <span class="n">channel_name</span> <span class="o">==</span> <span class="s">&#39;root&#39;</span><span class="p">,</span> <span class="s">&quot;A channel path starts with &#39;root&#39;&quot;</span>
+        <span class="c"># get the root channel</span>
+        <span class="n">channel</span> <span class="o">=</span> <span class="n">channel_model</span><span class="o">.</span><span class="n">search</span><span class="p">([(</span><span class="s">&#39;name&#39;</span><span class="p">,</span> <span class="s">&#39;=&#39;</span><span class="p">,</span> <span class="n">channel_name</span><span class="p">)])</span>
+        <span class="k">while</span> <span class="n">parts</span><span class="p">:</span>
+            <span class="n">channel_name</span> <span class="o">=</span> <span class="n">parts</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+            <span class="n">parent_channel</span> <span class="o">=</span> <span class="n">channel</span>
+            <span class="n">channel</span> <span class="o">=</span> <span class="n">channel_model</span><span class="o">.</span><span class="n">search</span><span class="p">([</span>
+                <span class="p">(</span><span class="s">&#39;name&#39;</span><span class="p">,</span> <span class="s">&#39;=&#39;</span><span class="p">,</span> <span class="n">channel_name</span><span class="p">),</span>
+                <span class="p">(</span><span class="s">&#39;parent_id&#39;</span><span class="p">,</span> <span class="s">&#39;=&#39;</span><span class="p">,</span> <span class="n">parent_channel</span><span class="o">.</span><span class="n">id</span><span class="p">)],</span>
+                <span class="n">limit</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">channel</span><span class="p">:</span>
+                <span class="n">channel</span> <span class="o">=</span> <span class="n">channel_model</span><span class="o">.</span><span class="n">create</span><span class="p">({</span>
+                    <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="n">channel_name</span><span class="p">,</span>
+                    <span class="s">&#39;parent_id&#39;</span><span class="p">:</span> <span class="n">parent_channel</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+                <span class="p">})</span>
+        <span class="k">return</span> <span class="n">channel</span>
+
+    <span class="nd">@api.model</span>
+    <span class="k">def</span> <span class="nf">_register_jobs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">func</span> <span class="ow">in</span> <span class="n">JOB_REGISTRY</span><span class="p">:</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">is_module_installed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pool</span><span class="p">,</span> <span class="n">get_openerp_module</span><span class="p">(</span><span class="n">func</span><span class="p">)):</span>
                 <span class="k">continue</span>
             <span class="n">func_name</span> <span class="o">=</span> <span class="s">&#39;</span><span class="si">%s</span><span class="s">.</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">func</span><span class="o">.</span><span class="n">__module__</span><span class="p">,</span> <span class="n">func</span><span class="o">.</span><span class="n">__name__</span><span class="p">)</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">search_count</span><span class="p">([(</span><span class="s">&#39;name&#39;</span><span class="p">,</span> <span class="s">&#39;=&#39;</span><span class="p">,</span> <span class="n">func_name</span><span class="p">)]):</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">create</span><span class="p">({</span><span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="n">func_name</span><span class="p">})</span></div>
+                <span class="n">channel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_find_or_create_channel</span><span class="p">(</span><span class="n">func</span><span class="o">.</span><span class="n">default_channel</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">create</span><span class="p">({</span><span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="n">func_name</span><span class="p">,</span> <span class="s">&#39;channel_id&#39;</span><span class="p">:</span> <span class="n">channel</span><span class="o">.</span><span class="n">id</span><span class="p">})</span>
+
+    <span class="nd">@api.model</span>
+    <span class="k">def</span> <span class="nf">_setup_complete</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">JobFunction</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">_setup_complete</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_register_jobs</span><span class="p">()</span></div>
 </pre></div>
 
     </div>

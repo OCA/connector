@@ -822,8 +822,14 @@
 <span class="n">JOB_REGISTRY</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
 
 
-<div class="viewcode-block" id="job"><a class="viewcode-back" href="../../../api/api_queue.html#connector.queue.job.job">[docs]</a><span class="k">def</span> <span class="nf">job</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+<div class="viewcode-block" id="job"><a class="viewcode-back" href="../../../api/api_queue.html#connector.queue.job.job">[docs]</a><span class="k">def</span> <span class="nf">job</span><span class="p">(</span><span class="n">func</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">default_channel</span><span class="o">=</span><span class="s">&#39;root&#39;</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Decorator for jobs.</span>
+
+<span class="sd">    Optional argument:</span>
+
+<span class="sd">    :param default_channel: the channel wherein the job will be assigned. This</span>
+<span class="sd">                            channel is set at the installation of the module</span>
+<span class="sd">                            and can be manually changed later using the views.</span>
 
 <span class="sd">   Add a ``delay`` attribute on the decorated function.</span>
 
@@ -879,10 +885,18 @@
 <span class="sd">        # =&gt; the job will be executed with a low priority and not before a</span>
 <span class="sd">        # delay of 5 hours from now</span>
 
+<span class="sd">        @job(default_channel=&#39;root.subchannel&#39;)</span>
+<span class="sd">        def export_one_thing(session, model_name, one_thing):</span>
+<span class="sd">            # work</span>
+<span class="sd">            # export one_thing</span>
+
 <span class="sd">    See also: :py:func:`related_action` a related action can be attached</span>
 <span class="sd">    to a job</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">func</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">functools</span><span class="o">.</span><span class="n">partial</span><span class="p">(</span><span class="n">job</span><span class="p">,</span> <span class="n">default_channel</span><span class="o">=</span><span class="n">default_channel</span><span class="p">)</span>
+
     <span class="k">def</span> <span class="nf">delay</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Enqueue the function. Return the uuid of the created job.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">OpenERPJobStorage</span><span class="p">(</span><span class="n">session</span><span class="p">)</span><span class="o">.</span><span class="n">enqueue_resolve_args</span><span class="p">(</span>
@@ -890,8 +904,12 @@
             <span class="n">model_name</span><span class="o">=</span><span class="n">model_name</span><span class="p">,</span>
             <span class="o">*</span><span class="n">args</span><span class="p">,</span>
             <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-    <span class="n">JOB_REGISTRY</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+
+    <span class="k">assert</span> <span class="n">default_channel</span> <span class="o">==</span> <span class="s">&#39;root&#39;</span> <span class="ow">or</span> <span class="n">default_channel</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s">&#39;root.&#39;</span><span class="p">),</span> <span class="p">(</span>
+        <span class="s">&quot;The channel path must start by &#39;root&#39;&quot;</span><span class="p">)</span>
+    <span class="n">func</span><span class="o">.</span><span class="n">default_channel</span> <span class="o">=</span> <span class="n">default_channel</span>
     <span class="n">func</span><span class="o">.</span><span class="n">delay</span> <span class="o">=</span> <span class="n">delay</span>
+    <span class="n">JOB_REGISTRY</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">func</span>
 
 </div>

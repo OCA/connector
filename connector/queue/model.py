@@ -24,6 +24,7 @@ import logging
 from datetime import datetime, timedelta
 
 import openerp
+from openerp import tools
 from openerp.osv import orm, fields
 from openerp.tools import DEFAULT_SERVER_DATETIME_FORMAT
 from openerp.tools.translate import _
@@ -604,7 +605,8 @@ class JobFunction(orm.Model):
                 self.create(cr, openerp.SUPERUSER_ID,
                             {'name': func_name,
                              'channel_id': channel_id})
-        cr.commit()
+        if not tools.config.options['test_enable']:
+            cr.commit()
 
     def _register_hook(self, cr):
         vals = super(JobFunction, self)._register_hook(cr)

@@ -375,8 +375,6 @@ class TestJobChannels(common.TransactionCase):
         self.job_model = self.registry('queue.job')
         self.root_channel = self.ref('connector.channel_root')
         self.session = ConnectorSession(self.cr, self.uid, context={})
-        # disable commit done by register_jobs
-        self.cr.commit = mock.MagicMock()
 
     def test_channel_complete_name(self):
         cr, uid = self.cr, self.uid

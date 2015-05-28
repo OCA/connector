@@ -605,10 +605,10 @@ class JobFunction(orm.Model):
                 self.create(cr, openerp.SUPERUSER_ID,
                             {'name': func_name,
                              'channel_id': channel_id})
-        if not tools.config.options['test_enable']:
-            cr.commit()
 
     def _register_hook(self, cr):
         vals = super(JobFunction, self)._register_hook(cr)
         self._register_jobs(cr)
+        if not tools.config.options['test_enable']:
+            cr.commit()
         return vals

@@ -22,7 +22,6 @@
 from . import test_session
 from . import test_event
 from . import test_job
-from . import test_job_channel
 from . import test_queue
 from . import test_worker
 from . import test_backend
@@ -39,7 +38,6 @@ checks = [
     test_session,
     test_event,
     test_job,
-    test_job_channel,
     test_queue,
     test_worker,
     test_backend,

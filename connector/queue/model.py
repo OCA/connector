@@ -533,7 +533,7 @@ class JobChannel(orm.Model):
         for channel in self.browse(cr, uid, ids, context=context):
             if channel.name == 'root':
                 raise exceptions.Warning(_('Cannot remove the root channel'))
-        return super(JobChannel, self).unlink()
+        return super(JobChannel, self).unlink(cr, uid, ids, context=context)
 
     def name_get(self, cr, uid, ids, context=None):
         if not ids:

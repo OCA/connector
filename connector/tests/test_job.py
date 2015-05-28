@@ -429,7 +429,7 @@ class TestJobChannels(common.TransactionCase):
         storage = OpenERPJobStorage(self.session)
         storage.store(test_job)
         stored_ids = self.job_model.search(
-                self.cr, self.uid, [('uuid', '=', test_job.uuid)])
+            self.cr, self.uid, [('uuid', '=', test_job.uuid)])
         self.assertEqual(len(stored_ids), 1)
         stored = self.job_model.browse(self.cr, self.uid, stored_ids[0])
         self.assertEquals(stored.channel, 'root')

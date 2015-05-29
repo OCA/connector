@@ -73,6 +73,7 @@ orm.BaseModel.write = write
 unlink_original = orm.BaseModel.unlink
 
 
+@openerp.api.cr_uid_ids_context
 def unlink(self, cr, uid, ids, context=None):
     if self.pool.get('connector.installed') is not None:
         if not hasattr(ids, '__iter__'):

@@ -26,6 +26,7 @@ import uuid
 import sys
 from datetime import datetime, timedelta, MINYEAR
 from pickle import loads, dumps, UnpicklingError
+from collections import OrderedDict
 
 import openerp
 from openerp.tools.translate import _
@@ -102,7 +103,8 @@ class OpenERPJobStorage(JobStorage):
             "Model %s not found" % self._job_model_name)
 
     def enqueue(self, func, model_name=None, args=None, kwargs=None,
-                priority=None, eta=None, max_retries=None, description=None):
+                priority=None, eta=None, max_retries=None, retry_pattern=None,
+                description=None):
         """Create a Job and enqueue it in the queue. Return the job uuid.
 
         This expects the arguments specific to the job to be already extracted
@@ -111,7 +113,8 @@ class OpenERPJobStorage(JobStorage):
         """
         new_job = Job(func=func, model_name=model_name, args=args,
                       kwargs=kwargs, priority=priority, eta=eta,
-                      max_retries=max_retries, description=description)
+                      max_retries=max_retries, retry_pattern=retry_pattern,
+                      description=description)
         new_job.user_id = self.session.uid
         if 'company_id' in self.session.context:
             company_id = self.session.context['company_id']
@@ -131,6 +134,7 @@ class OpenERPJobStorage(JobStorage):
         eta = kwargs.pop('eta', None)
         model_name = kwargs.pop('model_name', None)
         max_retries = kwargs.pop('max_retries', None)
+        retry_pattern = kwargs.pop('retry_pattern', None)
         description = kwargs.pop('description', None)
 
         return self.enqueue(func, model_name=model_name,
@@ -138,6 +142,7 @@ class OpenERPJobStorage(JobStorage):
                             priority=priority,
                             max_retries=max_retries,
                             eta=eta,
+                            retry_pattern=retry_pattern,
                             description=description)
 
     def exists(self, job_uuid):
@@ -166,6 +171,7 @@ class OpenERPJobStorage(JobStorage):
                 'priority': job_.priority,
                 'retry': job_.retry,
                 'max_retries': job_.max_retries,
+                'retry_pattern': dumps(job_.retry_pattern),
                 'exc_info': job_.exc_info,
                 'user_id': job_.user_id or self.session.uid,
                 'company_id': job_.company_id,
@@ -230,9 +236,14 @@ class OpenERPJobStorage(JobStorage):
         if stored.eta:
             eta = dt_from_string(stored.eta)
 
+        retry_pattern = None
+        if stored.retry_pattern:
+            retry_pattern = loads(stored.retry_pattern)
+
         job_ = Job(func=func_name, args=args, kwargs=kwargs,
                    priority=stored.priority, eta=eta,
-                   job_uuid=stored.uuid, description=stored.name)
+                   retry_pattern=retry_pattern, job_uuid=stored.uuid,
+                   description=stored.name)
 
         if stored.date_created:
             job_.date_created = dt_from_string(stored.date_created)
@@ -353,6 +364,12 @@ class Job(object):
         Estimated Time of Arrival of the job. It will not be executed
         before this date/time.
 
+    .. attribute:: retry_pattern
+
+        The retry pattern to use for a job.  If a job is postponed
+        and there is no eta specified, the eta will be determined
+        from the dict in retry_pattern
+
     .. attribute:: canceled
 
         True if the job has been canceled.
@@ -361,7 +378,8 @@ class Job(object):
 
     def __init__(self, func=None, model_name=None,
                  args=None, kwargs=None, priority=None,
-                 eta=None, job_uuid=None, max_retries=None, description=None):
+                 eta=None, job_uuid=None, max_retries=None,
+                 retry_pattern=None, description=None):
         """ Create a Job
 
         :param func: function to execute
@@ -378,6 +396,9 @@ class Job(object):
         :param eta: the job can be executed only after this datetime
                            (or now + timedelta)
         :type eta: datetime or timedelta
+        :param retry_pattern: when the job is postponed this pattern will
+                              be used to determine next default eta
+        :type retry_pattern: dict(retry_count,retry_eta_seconds)
         :param job_uuid: UUID of the job
         :param max_retries: maximum number of retries before giving up and set
             the job state to 'failed'. A value of 0 means infinite retries.
@@ -439,6 +460,7 @@ class Job(object):
         self.company_id = None
         self._eta = None
         self.eta = eta
+        self.retry_pattern = retry_pattern
         self.canceled = False
         self.worker_uuid = None
 
@@ -571,13 +593,27 @@ class Job(object):
         result = msg if msg is not None else _('Canceled. Nothing to do.')
         self.set_done(result=result)
 
+    def _get_retry_seconds(self, seconds=None):
+        if not seconds and self.retry_pattern:
+            patt = OrderedDict(sorted(
+                self.retry_pattern.items(), key=lambda t: t[1]))
+            for retry_count, postpone_seconds in patt.iteritems():
+                if retry_count and self.retry <= retry_count:
+                    seconds = postpone_seconds
+                    break
+            # check for 'infinite seconds entry'
+            if not seconds and patt.get(0):
+                seconds = patt.get(0)
+        if seconds is None:
+            seconds = RETRY_INTERVAL
+        return seconds
+
     def postpone(self, result=None, seconds=None):
         """ Write an estimated time arrival to n seconds
         later than now. Used when an retryable exception
         want to retry a job later. """
-        if seconds is None:
-            seconds = RETRY_INTERVAL
-        self.eta = timedelta(seconds=seconds)
+        eta_seconds = self._get_retry_seconds(seconds)
+        self.eta = timedelta(seconds=eta_seconds)
         self.exc_info = None
         if result is not None:
             self.result = result
@@ -619,7 +655,7 @@ def job(func=None, default_channel='root'):
      Arguments and keyword arguments which will be given to the called
      function once the job is executed. They should be ``pickle-able``.
 
-     There is 4 special and reserved keyword arguments that you can use:
+     There are 5 special and reserved keyword arguments that you can use:
 
      * priority: priority of the job, the smaller is the higher priority.
                  Default is 10.
@@ -628,7 +664,10 @@ def job(func=None, default_channel='root'):
                     infinite retries. Default is 5.
      * eta: the job can be executed only after this datetime
             (or now + timedelta if a timedelta or integer is given)
-
+     * retry_pattern: a dictionary with the count as keys and the
+                      postponing time as values in seconds.
+                      the key 0 stands for infinite retries
+                      the value of 'max_eta' symbolizes the maximum eta (why?)
      * description : a human description of the job,
                      intended to discriminate job instances
                      (Default is the func.__doc__ or
@@ -653,6 +692,19 @@ def job(func=None, default_channel='root'):
                                priority=30, eta=60*60*5)
         # => the job will be executed with a low priority and not before a
         # delay of 5 hours from now
+
+        export_one_thing.delay(session, 'a.model', the_thing_to_export,
+                               eta=60*60*5,
+                               retry_pattern={
+                                    3:600, 6:1200, 50:1800, 0:3600
+                                    },
+                                )
+        # => the job will be executed with a low priority and not before a
+        # delay of 5 hours from now. If the job fails with a
+        # RetryableJobError, the retries will be scheduled according to the
+        # pattern.  In this case, up until try 3, we wait 10 minutes, until
+        # try 6, 20 minutes, up until try 50: 30 minutes and after
+        # try 50 the delay is one hour.
 
         @job(default_channel='root.subchannel')
         def export_one_thing(session, model_name, one_thing):

@@ -596,7 +596,7 @@ class Job(object):
     def _get_retry_seconds(self, seconds=None):
         if not seconds and self.retry_pattern:
             patt = OrderedDict(sorted(
-                self.retry_pattern.items(), key=lambda t: t[1]))
+                self.retry_pattern.items(), key=lambda t: t[0]))
             for retry_count, postpone_seconds in patt.iteritems():
                 if retry_count and self.retry <= retry_count:
                     seconds = postpone_seconds

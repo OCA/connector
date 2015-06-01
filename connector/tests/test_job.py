@@ -159,6 +159,7 @@ class TestJobs(unittest2.TestCase):
         test_pattern = {
             1:  60,
             2: 180,
+            4:  10,
             0: 300,
         }
         with mock.patch(datetime_path, autospec=True) as mock_datetime:
@@ -177,11 +178,15 @@ class TestJobs(unittest2.TestCase):
             test_job.retry += 1
             test_job.postpone(self.session)
             self.assertEqual(test_job.retry, 3)
-            self.assertEqual(test_job.eta, datetime(2015, 6, 1, 15, 15, 0))
+            self.assertEqual(test_job.eta, datetime(2015, 6, 1, 15, 10, 10))
             test_job.retry += 1
             test_job.postpone(self.session)
             self.assertEqual(test_job.retry, 4)
-            self.assertEqual(test_job.eta, datetime(2015, 6, 1, 15, 15, 0))
+            self.assertEqual(test_job.eta, datetime(2015, 6, 1, 15, 10, 10))
+            test_job.retry += 1
+            test_job.postpone(self.session)
+            self.assertEqual(test_job.retry, 5)
+            self.assertEqual(test_job.eta, datetime(2015, 6, 1, 15, 15, 00))
 
     def test_on_method(self):
 

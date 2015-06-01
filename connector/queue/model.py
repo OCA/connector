@@ -515,7 +515,7 @@ class JobFunction(models.Model):
     @api.model
     def _register_jobs(self):
         for func in JOB_REGISTRY:
-            if not is_module_installed(self.pool, get_openerp_module(func)):
+            if not is_module_installed(self.env, get_openerp_module(func)):
                 continue
             func_name = '%s.%s' % (func.__module__, func.__name__)
             if not self.search_count([('name', '=', func_name)]):

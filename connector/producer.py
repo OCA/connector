@@ -60,7 +60,7 @@ write_original = models.BaseModel.write
 @openerp.api.multi
 def write(self, vals):
     result = write_original(self, vals)
-    if is_module_installed(self.env, 'connector') is not None:
+    if is_module_installed(self.env, 'connector'):
         session = ConnectorSession(self.env.cr, self.env.uid,
                                    context=self.env.context)
         if on_record_write.has_consumer_for(session, self._name):
@@ -76,7 +76,7 @@ unlink_original = models.BaseModel.unlink
 
 @openerp.api.multi
 def unlink(self):
-    if is_module_installed(self.env, 'connector') is not None:
+    if is_module_installed(self.env, 'connector'):
         session = ConnectorSession(self.env.cr, self.env.uid,
                                    context=self.env.context)
         if on_record_unlink.has_consumer_for(session, self._name):

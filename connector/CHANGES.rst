@@ -1,6 +1,10 @@
 Changelog
 ---------
 
+Future
+~~~~~~
+
+* method 'install_in_connector' is now deprecated
 
 3.1.0 (2015-05-15)
 ~~~~~~~~~~~~~~~~~~

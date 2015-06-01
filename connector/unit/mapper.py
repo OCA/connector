@@ -327,7 +327,7 @@ class MetaMapper(MetaConnectorUnit):
                 # type object (ex 'bool', 'str') are callable but doesn't have
                 # attribute 'func_closure'
                 if callable(contents) and type(contents) != type:
-                    attr_name = _mapping_field_name(contents)
+                    attr_name = MetaMapper._mapping_field_name(contents)
                 else:
                     attr_name = contents
         return attr_name

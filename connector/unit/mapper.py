@@ -295,9 +295,11 @@ class MetaMapper(MetaConnectorUnit):
 
     def __init__(cls, name, bases, attrs):
         """
-        Build a ``exported_fields`` list of synchronized fields with mapper.
+        Build a ``changed_by_fields`` list of synchronized fields with mapper.
+        It takes in account the ``direct`` fields and the fields declared in
+        the decorator : ``changed_by``.
         """
-        exported_fields = []
+        changed_by_fields = []
         if attrs.get('direct'):
             for from_attr, to_attr in attrs['direct']:
                 attr_name = from_attr
@@ -306,13 +308,13 @@ class MetaMapper(MetaConnectorUnit):
                         contents = cell.cell_contents
                         if not callable(contents):
                             attr_name = contents
-                exported_fields.append(attr_name)
+                changed_by_fields.append(attr_name)
         for method_name, method_def in attrs['_map_methods'].iteritems():
-            exported_fields += list(method_def[0])
+            changed_by_fields += list(method_def[0])
         for base in bases:
-            if hasattr(base, 'exported_fields') and base.exported_fields:
-                exported_fields += base.exported_fields
-        cls.exported_fields = list(set(exported_fields))
+            if hasattr(base, 'changed_by_fields') and base.changed_by_fields:
+                changed_by_fields += base.changed_by_fields
+        cls.changed_by_fields = list(set(changed_by_fields))
         super(MetaMapper, cls).__init__(name, bases, attrs)
 
 

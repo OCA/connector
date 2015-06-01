@@ -36,6 +36,7 @@ from .session import ConnectorSession
 from .event import (on_record_create,
                     on_record_write,
                     on_record_unlink)
+from .connector import is_module_installed
 
 
 create_original = models.BaseModel.create
@@ -45,7 +46,7 @@ create_original = models.BaseModel.create
 @openerp.api.returns('self', lambda value: value.id)
 def create(self, vals):
     record_id = create_original(self, vals)
-    if self.pool.get('connector.installed') is not None:
+    if is_module_installed(self.env, 'connector') is not None:
         session = ConnectorSession(self.env.cr, self.env.uid,
                                    context=self.env.context)
         on_record_create.fire(session, self._name, record_id.id, vals)
@@ -59,7 +60,7 @@ write_original = models.BaseModel.write
 @openerp.api.multi
 def write(self, vals):
     result = write_original(self, vals)
-    if self.pool.get('connector.installed') is not None:
+    if is_module_installed(self.env, 'connector') is not None:
         session = ConnectorSession(self.env.cr, self.env.uid,
                                    context=self.env.context)
         if on_record_write.has_consumer_for(session, self._name):
@@ -75,7 +76,7 @@ unlink_original = models.BaseModel.unlink
 
 @openerp.api.multi
 def unlink(self):
-    if self.pool.get('connector.installed') is not None:
+    if is_module_installed(self.env, 'connector') is not None:
         session = ConnectorSession(self.env.cr, self.env.uid,
                                    context=self.env.context)
         if on_record_unlink.has_consumer_for(session, self._name):

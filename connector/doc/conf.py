@@ -22,8 +22,18 @@ import sphinx_bootstrap_theme
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #sys.path.insert(0, os.path.abspath('.'))
 sys.path.append(os.path.abspath('_themes'))
-sys.path.append(os.path.abspath('../../../odoo'))
-sys.path.append(os.path.abspath('../../../odoo/addons'))
+
+if os.environ.get('ODOO_REPO') and os.environ.get('VERSION'):
+    # build from travis
+    odoo_root = os.path.join(
+        '~',
+        os.environ['ODOO_REPO'].split('/')[1] + '-' + os.environ['VERSION']
+    )
+else:
+    # build from a buildout
+    odoo_root = '../../../odoo'
+sys.path.append(os.path.abspath(os.path.join(odoo_root, 'openerp')))
+sys.path.append(os.path.abspath(os.path.join(odoo_root, 'addons')))
 sys.path.append(os.path.abspath('../..'))
 
 

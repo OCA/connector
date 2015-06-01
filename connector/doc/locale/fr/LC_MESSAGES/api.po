@@ -937,38 +937,6 @@ msgstr ""
 "Ainsi nous serons capable de les filtrer en fonction de l'état "
 "d'installation des modules."
 
-#: ../../../connector.pydocstring of
-#: connector.connector.install_in_connector:1
-msgid "Installs an OpenERP module in the ``Connector`` framework."
-msgstr "Installe un module OpenERP dans le framework ``Connector``."
-
-#: ../../../connector.pydocstring of
-#: connector.connector.install_in_connector:3
-msgid "It has to be called once per OpenERP module to plug."
-msgstr "Il doit être appelé une fois par module OpenERP à brancher."
-
-#: ../../../connector.pydocstring of
-#: connector.connector.install_in_connector:5
-msgid ""
-"Under the cover, it creates a ``openerp.models.AbstractModel`` whose name is"
-" the name of the module with a ``.intalled`` suffix: "
-"``{name_of_the_openerp_module_to_install}.installed``."
-msgstr ""
-"Pour être précis, il crée un ``openerp.models.AbstractModel`` dont le nom "
-"est le nom du module avec un suffixe ``.intalled`` : "
-"``{name_of_the_openerp_module_to_install}.installed``."
-
-#: ../../../connector.pydocstring of
-#: connector.connector.install_in_connector:9
-msgid ""
-"The connector then uses this model to know when the OpenERP module is "
-"installed or not and whether it should use the ConnectorUnit classes of this"
-" module or not and whether it should fire the consumers of events or not."
-msgstr ""
-"Le connecteur utilise ensuite ce modèle pour savoir quand le module OpenERP "
-"est installé ou non, s'il doit utiliser les classes ConnectorUnit de ce "
-"module ou non et s'il doit allumer les consommateurs d'événements ou non."
-
 #: ../../api/api_event.rst:2
 msgid "Event"
 msgstr "Événement"

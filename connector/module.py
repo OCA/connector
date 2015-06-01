@@ -25,6 +25,17 @@ from openerp.tools.cache import ormcache
 
 
 class IrModuleModule(models.Model):
+    """Overwrite ir.module.module to add cached method 'is_module_installed'.
+    This method is cached, because connector will always check if a module is
+    installed before do action.
+
+    The next methods change the state of the module, then they must invalidate
+    the cache of 'is_module_installed' method:
+
+    * state_update
+    * module_uninstall
+
+    """
     _inherit = 'ir.module.module'
 
     @ormcache(skiparg=1)
@@ -35,5 +46,10 @@ class IrModuleModule(models.Model):
 
     def state_update(self, *args, **kwargs):
         res = super(IrModuleModule, self).state_update(*args, **kwargs)
+        self.clear_caches()
+        return res
+
+    def module_uninstall(self, *args, **kwargs):
+        res = super(IrModuleModule, self).module_uninstall(*args, **kwargs)
         self.clear_caches()
         return res

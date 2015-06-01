@@ -153,6 +153,36 @@ class TestJobs(unittest2.TestCase):
             test_job.perform(self.session)
         self.assertEqual(test_job.retry, 1)
 
+    def test_retry_pattern(self):
+        """ When we specify a retry pattern, the eta must follow it"""
+        datetime_path = 'openerp.addons.connector.queue.job.datetime'
+        test_pattern = {
+            1:  60,
+            2: 180,
+            0: 300,
+        }
+        with mock.patch(datetime_path, autospec=True) as mock_datetime:
+            mock_datetime.now.return_value = datetime(2015, 6, 1, 15, 10, 0)
+            test_job = Job(func=retryable_error_task,
+                           retry_pattern=test_pattern,
+                           max_retries=0)
+            test_job.retry += 1
+            test_job.postpone(self.session)
+            self.assertEqual(test_job.retry, 1)
+            self.assertEqual(test_job.eta, datetime(2015, 6, 1, 15, 11, 0))
+            test_job.retry += 1
+            test_job.postpone(self.session)
+            self.assertEqual(test_job.retry, 2)
+            self.assertEqual(test_job.eta, datetime(2015, 6, 1, 15, 13, 0))
+            test_job.retry += 1
+            test_job.postpone(self.session)
+            self.assertEqual(test_job.retry, 3)
+            self.assertEqual(test_job.eta, datetime(2015, 6, 1, 15, 15, 0))
+            test_job.retry += 1
+            test_job.postpone(self.session)
+            self.assertEqual(test_job.retry, 4)
+            self.assertEqual(test_job.eta, datetime(2015, 6, 1, 15, 15, 0))
+
     def test_on_method(self):
 
         class A(object):

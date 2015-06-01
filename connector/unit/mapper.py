@@ -299,23 +299,23 @@ class MetaMapper(MetaConnectorUnit):
         It takes in account the ``direct`` fields and the fields declared in
         the decorator : ``changed_by``.
         """
-        changed_by_fields = set([])
+        changed_by_fields = set()
         if attrs.get('direct'):
-            for from_attr, to_attr in attrs['direct']:
+            for from_attr, __ in attrs['direct']:
                 attr_name = cls._mapping_field_name(from_attr)
                 changed_by_fields.add(attr_name)
         for method_name, method_def in attrs['_map_methods'].iteritems():
-            changed_by_fields = changed_by_fields.union(method_def[0])
+            changed_by_fields |= method_def[0]
         for base in bases:
             if hasattr(base, '_changed_by_fields') and base._changed_by_fields:
-                changed_by_fields = changed_by_fields.union(base._changed_by_fields)
+                changed_by_fields |= base._changed_by_fields
         cls._changed_by_fields = changed_by_fields
         super(MetaMapper, cls).__init__(name, bases, attrs)
 
     @staticmethod
     def _mapping_field_name(mapping_attr):
-        """
-        Get the mapping field name. Goes through the function modifiers.
+        """ Get the mapping field name. Goes through the function modifiers.
+
         Ex: [(none(convert(field_name, str)), out_field_name)]
         """
         attr_name = mapping_attr

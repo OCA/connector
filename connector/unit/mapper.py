@@ -302,7 +302,7 @@ class MetaMapper(MetaConnectorUnit):
         changed_by_fields = set()
         if attrs.get('direct'):
             for from_attr, __ in attrs['direct']:
-                attr_name = cls._mapping_field_name(from_attr)
+                attr_name = cls._direct_source_field_name(from_attr)
                 changed_by_fields.add(attr_name)
         for method_name, method_def in attrs['_map_methods'].iteritems():
             changed_by_fields |= method_def[0]
@@ -313,7 +313,7 @@ class MetaMapper(MetaConnectorUnit):
         super(MetaMapper, cls).__init__(name, bases, attrs)
 
     @staticmethod
-    def _mapping_field_name(mapping_attr):
+    def _direct_source_field_name(mapping_attr):
         """ Get the mapping field name. Goes through the function modifiers.
 
         Ex: [(none(convert(field_name, str)), out_field_name)]
@@ -326,7 +326,7 @@ class MetaMapper(MetaConnectorUnit):
                 # type object (ex 'bool', 'str') are callable but doesn't have
                 # attribute 'func_closure'
                 if callable(contents) and type(contents) != type:
-                    attr_name = MetaMapper._mapping_field_name(contents)
+                    attr_name = MetaMapper._direct_source_field_name(contents)
                 else:
                     attr_name = contents
         return attr_name
@@ -712,7 +712,7 @@ class Mapper(ConnectorUnit):
                 # function. BUT the argument order seems to be not enforced
                 # by python in the closure so we use the first non callable
                 # cell_contents in the closure as attr_name
-                attr_name = MetaMapper._mapping_field_name(from_attr)
+                attr_name = MetaMapper._direct_source_field_name(from_attr)
             else:
                 attr_name = from_attr
 

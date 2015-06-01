@@ -497,8 +497,9 @@ class test_mapper(unittest2.TestCase):
             def no_decorator(self):
                 pass
 
-        self.assertEqual(MyExportMapper._changed_by_fields,
-                         set(['street', 'in_t', 'in_f', 'name', 'city', 'email']))
+        self.assertEqual(
+            MyExportMapper._changed_by_fields,
+            set(['street', 'in_t', 'in_f', 'name', 'city', 'email']))
 
 
 class test_mapper_binding(common.TransactionCase):

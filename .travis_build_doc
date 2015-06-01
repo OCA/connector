@@ -1,40 +1,10 @@
 #!/bin/bash
 
 cd ${HOME}
-mkdir buildout && cd buildout
-ln -s ${TRAVIS_BUILD_DIR} connector
-ln -s ${HOME}/odoo-${VERSION} odoo
-cat <<EOF > buildout.cfg
-[buildout]
-parts = openerp
-versions = versions
-find-links = http://download.gna.org/pychart/
+mkdir build_doc
 
-# just for issue 9 of sphinx-intl
-extensions = gp.vcsdevelop
-vcs-extend-develop = hg+http://bitbucket.org/ccomb/sphinx-intl#egg=sphinx-intl
-vcs-update = True
+cd ${TRAVIS_BUILD_DIR}
 
-[openerp]
-recipe = anybox.recipe.odoo:server
-version = local odoo
-addons = local connector
-
-eggs = sphinx
-       sphinx_bootstrap_theme
-       sphinx-intl
-
-openerp_scripts = sphinx-build=sphinx-build command-line-options=-d
-                  sphinx-apidoc=sphinx-apidoc command-line-options=-d
-                  sphinx-intl=sphinx-intl command-line-options=-d
-
-[versions]
-EOF
-wget https://bootstrap.pypa.io/bootstrap-buildout.py -O bootstrap.py
-python bootstrap.py && bin/buildout
-createdb connectordb
-bin/start_openerp -d connectordb --stop-after-init
-cd connector/connector/doc/
-${HOME}/buildout/bin/sphinx-build -d connectordb -- -b html ./ ${HOME}/doc
-${HOME}/buildout/bin/sphinx-intl -d connectordb -- build
-${HOME}/buildout/bin/sphinx-build -d connectordb -- -D language=fr -b html ./ ${HOME}/doc/fr
+sphinx-build -b html ./connector/doc/ ${HOME}/doc
+sphinx-intl build
+sphinx-build -D language=fr -b html ./connector/doc/ ${HOME}/doc/fr

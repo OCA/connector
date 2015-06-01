@@ -654,7 +654,7 @@ class TestJobChannels(common.TransactionCase):
     def test_channel_on_job(self):
         job(task_a)
         self.function_model._register_jobs()
-        path_a = 'openerp.addons.connector.tests.test_job.task_a'
+        path_a = '%s.%s' % (task_a.__module__, task_a.__name__)
         job_func = self.function_model.search([('name', '=', path_a)])
         self.assertEquals(job_func.channel, 'root')
 
@@ -682,7 +682,7 @@ class TestJobChannels(common.TransactionCase):
 
         self.function_model._register_jobs()
 
-        path_a = 'openerp.addons.connector.tests.test_job.task_a'
+        path_a = '%s.%s' % (task_a.__module__, task_a.__name__)
         job_func = self.function_model.search([('name', '=', path_a)])
 
         self.assertEquals(job_func.channel, 'root.sub.subsub')

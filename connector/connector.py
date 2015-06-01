@@ -50,10 +50,6 @@ def install_in_connector():
                   "not required.")
 
 
-# install the connector itself
-install_in_connector()
-
-
 def is_module_installed(env, module_name):
     return env['ir.module.module'].is_module_installed(module_name)
 

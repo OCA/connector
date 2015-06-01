@@ -65,32 +65,6 @@ Of course, we also need to create the ``__init__.py`` file where we will
 put the imports of our python modules.
 
 
-***********************************
-Install the module in the connector
-***********************************
-
-Each new module needs to be plugged in the connector's framework.
-That's just a matter of following a convention and creating
-``connector_coffee/connector.py`` in which you will call the
-``install_in_connector`` function::
-
-    from openerp.addons.connector.connector import install_in_connector
-
-
-    install_in_connector()
-
-.. warning:: If you miss this line of code, your ConnectorUnit classes won't
-             be found.
-
-.. note:: The reason for this is that Odoo may import the Python modules
-          of uninstalled modules, so it automatically registers the
-          events and ConnectorUnit classes, even for uninstalled
-          modules.
-
-          To prevent this, we use a little trick: create an abstract
-          model and look in the registry if it is loaded.
-
-
 ********************
 Declare the backends
 ********************

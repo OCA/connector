@@ -145,3 +145,16 @@ class test_connector_session(common.TransactionCase):
     def test_is_module_uninstalled(self):
         """ Test on an installed module """
         self.assertFalse(self.session.is_module_installed('lambda'))
+
+    def test_is_module_installed_cache_invalidation(self):
+        """ Test on an invalidation of cache about installed modules """
+        module = self.env['ir.module.module']
+        domain = [('name', '=', 'connector')]
+        self.assertTrue(self.session.is_module_installed('connector'))
+        module.search(domain).state = 'uninstalled'
+        self.assertTrue(self.session.is_module_installed('connector'))
+        module.state_update('onestate', ['otherstate'])
+        self.assertFalse(self.session.is_module_installed('connector'))
+        module.search(domain).state = 'installed'
+        module.state_update('onestate', ['otherstate'])
+        self.assertTrue(self.session.is_module_installed('connector'))

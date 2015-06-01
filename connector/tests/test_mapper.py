@@ -476,6 +476,30 @@ class test_mapper(unittest2.TestCase):
         self.assertEqual(options['undefined'], None)
         self.assertEqual(options.undefined, None)
 
+    def test_changed_by_fields(self):
+        """ Test attribute ``_changed_by_fields`` on Mapper."""
+        class MyExportMapper(ExportMapper):
+
+            direct = [('street', 'out_street'),
+                      (none('in_t'), 'out_t'),
+                      (none(convert('in_f', bool)), 'out_f')]
+
+            @changed_by('name', 'city')
+            @mapping
+            def name(self):
+                pass
+
+            @changed_by('email')
+            @mapping
+            def email(self):
+                pass
+
+            def no_decorator(self):
+                pass
+
+        self.assertEqual(MyExportMapper._changed_by_fields,
+                         set(['street', 'in_t', 'in_f', 'name', 'city', 'email']))
+
 
 class test_mapper_binding(common.TransactionCase):
     """ Test Mapper with Bindings"""

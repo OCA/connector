@@ -25,6 +25,7 @@ install:
   - git clone https://github.com/OCA/maintainer-quality-tools.git ${HOME}/maintainer-quality-tools
   - export PATH=${HOME}/maintainer-quality-tools/travis:${PATH}
   - travis_install_nightly
+  - pip install sphinx sphinx_bootstrap_theme sphinx-intl
 
 services:
   - postgresql

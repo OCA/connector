@@ -40,9 +40,8 @@ class IrModuleModule(models.Model):
 
     @ormcache(skiparg=1)
     def is_module_installed(self, module_name):
-        return bool(len(self.env['ir.module.module'].search([
-            ('name', '=', module_name),
-            ('state', '=', 'installed')])))
+        return bool(len(self.search([('name', '=', module_name),
+                                     ('state', '=', 'installed')])))
 
     def state_update(self, *args, **kwargs):
         res = super(IrModuleModule, self).state_update(*args, **kwargs)

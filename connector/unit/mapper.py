@@ -239,7 +239,6 @@ def backend_to_m2o(field, binding=None, with_inactive=False):
     return modifier
 
 
-
 MappingDefinition = namedtuple('MappingDefinition',
                                ['changed_by',
                                 'only_create'])

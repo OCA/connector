@@ -303,6 +303,7 @@ class MetaMapper(MetaConnectorUnit):
         if attrs.get('direct'):
             for from_attr, to_attr in attrs['direct']:
                 attr_name = from_attr
+                # Support if the direct mapping has a function modifier
                 if callable(from_attr):
                     for cell in from_attr.func_closure:
                         contents = cell.cell_contents

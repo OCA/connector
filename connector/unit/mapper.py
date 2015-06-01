@@ -299,8 +299,14 @@ class MetaMapper(MetaConnectorUnit):
         """
         exported_fields = []
         if attrs.get('direct'):
-            for field_tuple in attrs['direct']:
-                exported_fields.append(field_tuple[0])
+            for from_attr, to_attr in attrs['direct']:
+                attr_name = from_attr
+                if callable(from_attr):
+                    for cell in from_attr.func_closure:
+                        contents = cell.cell_contents
+                        if not callable(contents):
+                            attr_name = contents
+                exported_fields.append(attr_name)
         for method_name, method_def in attrs['_map_methods'].iteritems():
             exported_fields += list(method_def[0])
         for base in bases:

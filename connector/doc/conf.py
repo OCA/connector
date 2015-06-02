@@ -23,18 +23,28 @@ import sphinx_bootstrap_theme
 #sys.path.insert(0, os.path.abspath('.'))
 sys.path.append(os.path.abspath('_themes'))
 
-if os.environ.get('ODOO_REPO') and os.environ.get('VERSION'):
+if os.environ.get('TRAVIS_BUILD_DIR') and os.environ.get('VERSION'):
     # build from travis
-    odoo_root = os.path.join(
-        '~',
-        os.environ['ODOO_REPO'].split('/')[1] + '-' + os.environ['VERSION']
-    )
+    odoo_folder = 'odoo-8.0'
+    odoo_root = os.path.join(os.environ['HOME'], odoo_folder)
+    sphinxodoo_root_path = os.path.abspath(odoo_root)
+    sphinxodoo_addons_path = [
+        os.path.abspath(os.path.join(odoo_root, 'openerp', 'addons')),
+        os.path.abspath(os.path.join(odoo_root, 'addons')),
+        os.path.abspath(os.environ['TRAVIS_BUILD_DIR']),
+    ]
+    build_path = os.environ['TRAVIS_BUILD_DIR']
+    addons = [x for x in os.listdir(build_path)
+              if not x.startswith('.') and
+              os.path.isdir(os.path.join(build_path, x))]
+    sphinxodoo_addons = addons
+    sys.path.append(os.environ['TRAVIS_BUILD_DIR'])
 else:
     # build from a buildout
     odoo_root = '../../../odoo'
-sys.path.append(os.path.abspath(os.path.join(odoo_root, 'openerp')))
-sys.path.append(os.path.abspath(os.path.join(odoo_root, 'addons')))
-sys.path.append(os.path.abspath('../..'))
+    sys.path.append(os.path.abspath(os.path.join(odoo_root, 'openerp')))
+    sys.path.append(os.path.abspath(os.path.join(odoo_root, 'addons')))
+    sys.path.append(os.path.abspath('../..'))
 
 
 # -- General configuration -----------------------------------------------
@@ -45,7 +55,8 @@ sys.path.append(os.path.abspath('../..'))
 # Add any Sphinx extension module names here, as strings. They can be extensions
 # coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
 extensions = ['sphinx.ext.autodoc', 'sphinx.ext.intersphinx',
-              'sphinx.ext.todo', 'sphinx.ext.viewcode']
+              'sphinx.ext.todo', 'sphinx.ext.viewcode',
+              'sphinxodoo.ext.autodoc']
 
 todo_include_todos = False
 

@@ -22,20 +22,11 @@ How to use
   $ export ODOO_CONNECTOR_CHANNELS=root:4 
   $ python connector/openerp-connector-runner -d production
 """
-import re
+
 import sys
-import logging
-import os
-import signal
-import time
-import threading
-from contextlib import closing
-from psycopg2 import ProgrammingError
 
 import openerp
 from openerp.cli import server as servercli
-import openerp.service.workers as workers
-from openerp.modules.registry import RegistryManager
 from openerp.tools import config
 
 

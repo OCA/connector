@@ -20,7 +20,7 @@
 #
 ##############################################################################
 
-from openerp import models
+from openerp import models, api
 from openerp.tools.cache import ormcache
 import threading
 
@@ -30,12 +30,7 @@ class IrModuleModule(models.Model):
     This method is cached, because connector will always check if a module is
     installed before do action.
 
-    The next methods change the state of the module, then they must invalidate
-    the cache of 'is_module_installed' method:
-
-    * state_update
-    * module_uninstall
-
+    All update (write method) on the field state, invalidate the cache
     """
     _inherit = 'ir.module.module'
 
@@ -50,12 +45,10 @@ class IrModuleModule(models.Model):
         return bool(len(self.search([('name', '=', module_name),
                                      ('state', 'in', states)])))
 
-    def state_update(self, *args, **kwargs):
-        res = super(IrModuleModule, self).state_update(*args, **kwargs)
-        self.clear_caches()
-        return res
+    @api.multi
+    def write(self, values):
+        res = super(IrModuleModule, self).write(values)
+        if 'state' in values:
+            self.clear_caches()
 
-    def module_uninstall(self, *args, **kwargs):
-        res = super(IrModuleModule, self).module_uninstall(*args, **kwargs)
-        self.clear_caches()
         return res

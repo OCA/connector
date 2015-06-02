@@ -162,10 +162,10 @@ class TestJobs(unittest2.TestCase):
             4:  10,
             0: 300,
         }
+        job(retryable_error_task, retry_pattern=test_pattern)
         with mock.patch(datetime_path, autospec=True) as mock_datetime:
             mock_datetime.now.return_value = datetime(2015, 6, 1, 15, 10, 0)
             test_job = Job(func=retryable_error_task,
-                           retry_pattern=test_pattern,
                            max_retries=0)
             test_job.retry += 1
             test_job.postpone(self.session)

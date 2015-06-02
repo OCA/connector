@@ -51,13 +51,27 @@ def install_in_connector():
 
 
 def is_module_installed(env, module_name):
-    if env.registry.get('connector.backend') is None:
-        # At the install the module connector is not
-        # installed yet, them we check if one model
-        # which come from connector exist else return False
-        return False
+    """ Check if an Odoo addon is installed.
 
-    return env['ir.module.module'].is_module_installed(module_name)
+    The function might be called before `connector` is even installed;
+    in such case, `ir_module_module.is_module_installed()` is not available yet
+    and this is why we first check the installation of `connector` by looking
+    up for a model in the registry.
+
+    :param module_name: name of the addon to check being 'connector' or
+                        an addon depending on it
+
+    """
+    if env.registry.get('connector.backend'):
+        if module_name == 'connector':
+            # fast-path: connector is necessarily installed because
+            # the model is in the registry
+            return True
+        # for another addon, check in ir.module.module
+        return env['ir.module.module'].is_module_installed(module_name)
+
+    # connector module is not installed neither any sub-addons
+    return False
 
 
 def get_openerp_module(cls_or_func):

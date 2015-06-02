@@ -26,7 +26,6 @@ import uuid
 import sys
 from datetime import datetime, timedelta, MINYEAR
 from pickle import loads, dumps, UnpicklingError
-from collections import OrderedDict
 
 import openerp
 from openerp.tools.translate import _
@@ -576,17 +575,14 @@ class Job(object):
     def _get_retry_seconds(self, seconds=None):
         retry_pattern = self.func.retry_pattern
         if not seconds and retry_pattern:
-            patt = OrderedDict(sorted(
-                retry_pattern.items(), key=lambda t: t[0]))
-            for retry_count, postpone_seconds in patt.iteritems():
-                if retry_count and self.retry <= retry_count:
-                    seconds = postpone_seconds
-                    break
-            # check for 'infinite seconds entry'
-            if not seconds and patt.get(0):
-                seconds = patt.get(0)
-        if seconds is None:
+            # ordered from higher to lower count of retries
+            patt = sorted(retry_pattern.iteritems(), key=lambda t: t[0])
             seconds = RETRY_INTERVAL
+            for retry_count, postpone_seconds in patt:
+                if self.retry >= retry_count:
+                    seconds = postpone_seconds
+                else:
+                    break
         return seconds
 
     def postpone(self, result=None, seconds=None):
@@ -616,7 +612,7 @@ def job(func=None, default_channel='root', retry_pattern=None):
     :param default_channel: the channel wherein the job will be assigned. This
                             channel is set at the installation of the module
                             and can be manually changed later using the views.
-    :param retry_pattern: The retry pattern to use for a job.
+    :param retry_pattern: The retry pattern to use for postponing a job.
                           If a job is postponed and there is no eta
                           specified, the eta will be determined from the
                           dict in retry_pattern. When no retry pattern
@@ -655,10 +651,6 @@ def job(func=None, default_channel='root', retry_pattern=None):
                     infinite retries. Default is 5.
      * eta: the job can be executed only after this datetime
             (or now + timedelta if a timedelta or integer is given)
-     * retry_pattern: a dictionary with the count as keys and the
-                      postponing time as values in seconds.
-                      the key 0 stands for infinite retries
-                      the value of 'max_eta' symbolizes the maximum eta (why?)
      * description : a human description of the job,
                      intended to discriminate job instances
                      (Default is the func.__doc__ or
@@ -689,10 +681,10 @@ def job(func=None, default_channel='root', retry_pattern=None):
             # work
             # export one_thing
 
-        @job(retry_pattern={5: 10 * 60,
-                            10: 20 * 60,
-                            15: 30 * 60,
-                            0: 12 * 60 * 60})
+        @job(retry_pattern={1: 10 * 60,
+                            5: 20 * 60,
+                            10: 30 * 60,
+                            15: 12 * 60 * 60})
         def retryable_example(session):
             # 5 first retries postponed 10 minutes later
             # retries 5 to 10 postponed 20 minutes later

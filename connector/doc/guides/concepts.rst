@@ -203,7 +203,8 @@ The base class is
 
 Binders are classes which know how to find the external ID for an
 Odoo ID, how to find the Odoo ID for an external ID and how to
-create the binding between them.
+create the binding between them. A default implementation is
+available and can be inherited if needed.
 
 
 .. _binding:

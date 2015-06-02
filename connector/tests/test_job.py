@@ -17,6 +17,7 @@ from openerp.addons.connector.queue.job import (
     STARTED,
     FAILED,
     _unpickle,
+    RETRY_INTERVAL,
 )
 from openerp.addons.connector.session import (
     ConnectorSession,
@@ -159,8 +160,8 @@ class TestJobs(unittest2.TestCase):
         test_pattern = {
             1:  60,
             2: 180,
-            4:  10,
-            0: 300,
+            3:  10,
+            5: 300,
         }
         job(retryable_error_task, retry_pattern=test_pattern)
         with mock.patch(datetime_path, autospec=True) as mock_datetime:
@@ -187,6 +188,27 @@ class TestJobs(unittest2.TestCase):
             test_job.postpone(self.session)
             self.assertEqual(test_job.retry, 5)
             self.assertEqual(test_job.eta, datetime(2015, 6, 1, 15, 15, 00))
+
+    def test_retry_pattern_no_zero(self):
+        """ When we specify a retry pattern without 0, uses RETRY_INTERVAL"""
+        test_pattern = {
+            3: 180,
+        }
+        job(retryable_error_task, retry_pattern=test_pattern)
+        test_job = Job(func=retryable_error_task,
+                       max_retries=0)
+        test_job.retry += 1
+        self.assertEqual(test_job.retry, 1)
+        self.assertEqual(test_job._get_retry_seconds(), RETRY_INTERVAL)
+        test_job.retry += 1
+        self.assertEqual(test_job.retry, 2)
+        self.assertEqual(test_job._get_retry_seconds(), RETRY_INTERVAL)
+        test_job.retry += 1
+        self.assertEqual(test_job.retry, 3)
+        self.assertEqual(test_job._get_retry_seconds(), 180)
+        test_job.retry += 1
+        self.assertEqual(test_job.retry, 4)
+        self.assertEqual(test_job._get_retry_seconds(), 180)
 
     def test_on_method(self):
 

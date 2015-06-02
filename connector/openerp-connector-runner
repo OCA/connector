@@ -16,30 +16,24 @@ replaces workers.
 How to use
 ----------
 * set the following environment variables:
-  - ODOO_CONNECTOR_CHANNELS=root:4 (or any other channels configuration)
-* launch the script.
-  ex:
-  $ export ODOO_CONNECTOR_CHANNELS=root:4 
+  - `ODOO_CONNECTOR_CHANNELS=root:4` (or any other channels configuration)
+* launch the script, example:
+  ```
+  $ export ODOO_CONNECTOR_CHANNELS=root:4
   $ python connector/openerp-connector-runner -d production
+  ```
+
+.. important:: The Python path must contain the path to the Odoo server when
+               openerp-connector-worker is launched. You may need to export
+               `PYTHONPATH=/path/to/server`.
 """
-import re
+
 import sys
-import logging
-import os
-import signal
-import time
-import threading
-from contextlib import closing
-from psycopg2 import ProgrammingError
 
 import openerp
 from openerp.cli import server as servercli
-import openerp.service.workers as workers
-from openerp.modules.registry import RegistryManager
 from openerp.tools import config
 
-
-from openerp.addons.connector import jobrunner
 
 if __name__ == "__main__":
     args = sys.argv[1:]
@@ -47,4 +41,5 @@ if __name__ == "__main__":
     config.parse_config(args)
     openerp.netsvc.init_logger()
     servercli.report_configuration()
+    from openerp.addons.connector import jobrunner
     jobrunner.run()

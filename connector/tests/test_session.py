@@ -151,10 +151,15 @@ class test_connector_session(common.TransactionCase):
         module = self.env['ir.module.module']
         domain = [('name', '=', 'connector')]
         self.assertTrue(self.session.is_module_installed('connector'))
-        module.search(domain).state = 'uninstalled'
+        # only to check that the cache works, the in validation is done only
+        # if the field state is modified by write method, UGLY but no other
+        # solution
+        self.env.cr.execute("""
+            UPDATE ir_module_module
+            SET state='uninstalled'
+            WHERE name='connector'""")
         self.assertTrue(self.session.is_module_installed('connector'))
-        module.state_update('onestate', ['otherstate'])
+        module.search(domain).state = 'uninstalled'
         self.assertFalse(self.session.is_module_installed('connector'))
         module.search(domain).state = 'installed'
-        module.state_update('onestate', ['otherstate'])
         self.assertTrue(self.session.is_module_installed('connector'))

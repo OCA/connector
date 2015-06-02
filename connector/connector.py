@@ -51,6 +51,12 @@ def install_in_connector():
 
 
 def is_module_installed(env, module_name):
+    if env.registry.get('connector.backend') is None:
+        # At the install the module connector is not
+        # installed yet, them we check if one model
+        # which come from connector exist else return False
+        return False
+
     return env['ir.module.module'].is_module_installed(module_name)
 
 

@@ -22,6 +22,7 @@
 
 from openerp import models
 from openerp.tools.cache import ormcache
+import threading
 
 
 class IrModuleModule(models.Model):
@@ -40,8 +41,14 @@ class IrModuleModule(models.Model):
 
     @ormcache(skiparg=1)
     def is_module_installed(self, module_name):
+        states = ['installed', 'to upgrade']
+        if getattr(threading.currentThread(), 'testing', False):
+            # In the case of the test is doing during the installation,
+            # then state of the module connector is 'to install'
+            states.append('to install')
+
         return bool(len(self.search([('name', '=', module_name),
-                                     ('state', '=', 'installed')])))
+                                     ('state', 'in', states)])))
 
     def state_update(self, *args, **kwargs):
         res = super(IrModuleModule, self).state_update(*args, **kwargs)

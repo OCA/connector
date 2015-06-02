@@ -39,12 +39,11 @@ from openerp.modules.registry import RegistryManager
 from openerp.tools import config
 
 
-from openerp.addons.connector import jobrunner
-
 if __name__ == "__main__":
     args = sys.argv[1:]
     servercli.check_root_user()
     config.parse_config(args)
     openerp.netsvc.init_logger()
     servercli.report_configuration()
+    from openerp.addons.connector import jobrunner
     jobrunner.run()

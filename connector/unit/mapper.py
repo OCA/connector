@@ -317,18 +317,23 @@ class MetaMapper(MetaConnectorUnit):
         """ Get the mapping field name. Goes through the function modifiers.
 
         Ex: [(none(convert(field_name, str)), out_field_name)]
+
+        It assumes that the modifier has ``field`` as first argument like:
+            def modifier(field, args):
         """
         attr_name = mapping_attr
 
         if callable(mapping_attr):
-            for cell in mapping_attr.func_closure:
-                contents = cell.cell_contents
-                # type object (ex 'bool', 'str') are callable but doesn't have
-                # attribute 'func_closure'
-                if callable(contents) and type(contents) != type:
-                    attr_name = MetaMapper._direct_source_field_name(contents)
-                else:
-                    attr_name = contents
+            # Map the closure entries with variable names
+            cells = dict(zip(
+                mapping_attr.func_code.co_freevars,
+                (c.cell_contents for c in mapping_attr.func_closure)))
+            assert 'field' in cells, "Modifier without 'field' argument."
+            if callable(cells['field']):
+                attr_name = MetaMapper._direct_source_field_name(
+                    cells['field'])
+            else:
+                attr_name = cells['field']
         return attr_name
 
 
@@ -502,7 +507,9 @@ class Mapper(ConnectorUnit):
         It should be a closure function respecting this idiom::
 
             def a_function(field):
-                ''' ``field`` is the name of the source field '''
+                ''' ``field`` is the name of the source field.
+
+                    Naming the arg: ``field`` is required for the conversion'''
                 def modifier(self, record, to_attr):
                     ''' self is the current Mapper,
                         record is the current record to map,
@@ -707,11 +714,7 @@ class Mapper(ConnectorUnit):
         for_create = self.options.for_create
         result = {}
         for from_attr, to_attr in self.direct:
-            if callable(from_attr):  # in a modifier
-                # the name of the attribute is the first arg the original
-                # function. BUT the argument order seems to be not enforced
-                # by python in the closure so we use the first non callable
-                # cell_contents in the closure as attr_name
+            if callable(from_attr):
                 attr_name = MetaMapper._direct_source_field_name(from_attr)
             else:
                 attr_name = from_attr

@@ -16,11 +16,16 @@ replaces workers.
 How to use
 ----------
 * set the following environment variables:
-  - ODOO_CONNECTOR_CHANNELS=root:4 (or any other channels configuration)
-* launch the script.
-  ex:
-  $ export ODOO_CONNECTOR_CHANNELS=root:4 
+  - `ODOO_CONNECTOR_CHANNELS=root:4` (or any other channels configuration)
+* launch the script, example:
+  ```
+  $ export ODOO_CONNECTOR_CHANNELS=root:4
   $ python connector/openerp-connector-runner -d production
+  ```
+
+.. important:: The Python path must contain the path to the Odoo server when
+               openerp-connector-worker is launched. You may need to export
+               `PYTHONPATH=/path/to/server`.
 """
 
 import sys

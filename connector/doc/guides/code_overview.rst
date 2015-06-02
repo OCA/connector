@@ -128,7 +128,7 @@ The main types of :py:class:`~connector.connector.ConnectorUnit` are
 :py:class:`~connector.connector.Binder`
 
   The ``binders`` give the external ID or Odoo ID from respectively an
-  Odoo ID or an external ID.
+  Odoo ID or an external ID. A default implementation is available.
 
 :py:class:`~connector.unit.mapper.Mapper`
 

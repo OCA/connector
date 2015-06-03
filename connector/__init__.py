@@ -7,4 +7,4 @@ from . import producer
 from . import checkpoint
 from . import controllers
 from . import jobrunner
-from . import module
+from . import ir_module_module

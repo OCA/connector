@@ -262,4 +262,4 @@ class ConnectorSession(object):
         model with name ``module_name.installed`` is loaded in the
         registry.
         """
-        return is_module_installed(self.pool, module_name)
+        return is_module_installed(self.env, module_name)

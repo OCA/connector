@@ -19,11 +19,8 @@
 #
 ##############################################################################
 
-import inspect
 import logging
 from contextlib import contextmanager
-from openerp import models
-
 from .deprecate import log_deprecate, DeprecatedClass
 
 _logger = logging.getLogger(__name__)
@@ -49,42 +46,32 @@ def _get_openerp_module_name(module_path):
 
 
 def install_in_connector():
-    """ Installs an OpenERP module in the ``Connector`` framework.
+    log_deprecate("This call to 'install_in_connector()' has no effect and is "
+                  "not required.")
 
-    It has to be called once per OpenERP module to plug.
 
-    Under the cover, it creates a ``openerp.models.AbstractModel`` whose
-    name is the name of the module with a ``.intalled`` suffix:
-    ``{name_of_the_openerp_module_to_install}.installed``.
+def is_module_installed(env, module_name):
+    """ Check if an Odoo addon is installed.
 
-    The connector then uses this model to know when the OpenERP module
-    is installed or not and whether it should use the ConnectorUnit
-    classes of this module or not and whether it should fire the
-    consumers of events or not.
+    The function might be called before `connector` is even installed;
+    in such case, `ir_module_module.is_module_installed()` is not available yet
+    and this is why we first check the installation of `connector` by looking
+    up for a model in the registry.
+
+    :param module_name: name of the addon to check being 'connector' or
+                        an addon depending on it
+
     """
-    # Get the module of the caller
-    module = inspect.getmodule(inspect.currentframe().f_back)
-    openerp_module_name = _get_openerp_module_name(module.__name__)
-    # Build a new AbstractModel with the name of the module and the suffix
-    name = "%s.installed" % openerp_module_name
-    class_name = name.replace('.', '_')
-    # we need to call __new__ and __init__ in 2 phases because
-    # __init__ needs to have the right __module__ and _module attributes
-    model = models.MetaModel.__new__(models.MetaModel, class_name,
-                                     (models.AbstractModel,), {'_name': name})
-    # Update the module of the model, it should be the caller's one
-    model._module = openerp_module_name
-    model.__module__ = module.__name__
-    models.MetaModel.__init__(model, class_name,
-                              (models.AbstractModel,), {'_name': name})
+    if env.registry.get('connector.backend'):
+        if module_name == 'connector':
+            # fast-path: connector is necessarily installed because
+            # the model is in the registry
+            return True
+        # for another addon, check in ir.module.module
+        return env['ir.module.module'].is_module_installed(module_name)
 
-
-# install the connector itself
-install_in_connector()
-
-
-def is_module_installed(pool, module_name):
-    return bool(pool.get('%s.installed' % module_name))
+    # connector module is not installed neither any sub-addons
+    return False
 
 
 def get_openerp_module(cls_or_func):

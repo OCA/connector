@@ -100,6 +100,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../project/contributors.html#financial-contributors">Contributeurs financiers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../project/license.html">Licence</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../project/changes.html">Changements</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../project/changes.html#future">Future</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../project/changes.html#id2">3.1.0 (2015-05-15)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../project/changes.html#id3">3.0.0 (2015-04-01)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../project/changes.html#id4">2.2.0 (2014-05-26)</a></li>
@@ -134,7 +135,6 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../guides/bootstrap_connector.html">Amorcer la création un nouveau connecteur</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../guides/bootstrap_connector.html#odoo-manifest">Odoo Manifest</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../guides/bootstrap_connector.html#install-the-module-in-the-connector">Installation du module dans le connecteur</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../guides/bootstrap_connector.html#declare-the-backends">Déclaration des backends</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../guides/bootstrap_connector.html#backend-model">Modèle du backend</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../guides/bootstrap_connector.html#abstract-binding">Binding abstrait</a></li>
@@ -495,7 +495,7 @@
 <span class="sd">        model with name ``module_name.installed`` is loaded in the</span>
 <span class="sd">        registry.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">is_module_installed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pool</span><span class="p">,</span> <span class="n">module_name</span><span class="p">)</span></div></div>
+        <span class="k">return</span> <span class="n">is_module_installed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="p">,</span> <span class="n">module_name</span><span class="p">)</span></div></div>
 </pre></div>
 
     </div>

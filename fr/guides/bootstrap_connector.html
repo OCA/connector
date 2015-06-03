@@ -101,6 +101,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../project/contributors.html#financial-contributors">Contributeurs financiers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../project/license.html">Licence</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../project/changes.html">Changements</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../project/changes.html#future">Future</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../project/changes.html#id2">3.1.0 (2015-05-15)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../project/changes.html#id3">3.0.0 (2015-04-01)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../project/changes.html#id4">2.2.0 (2014-05-26)</a></li>
@@ -135,7 +136,6 @@
 </li>
 <li class="toctree-l1 current"><a class="current reference internal" href="">Amorcer la création un nouveau connecteur</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#odoo-manifest">Odoo Manifest</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#install-the-module-in-the-connector">Installation du module dans le connecteur</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#declare-the-backends">Déclaration des backends</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#backend-model">Modèle du backend</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#abstract-binding">Binding abstrait</a></li>
@@ -201,7 +201,6 @@
       aria-labelledby="dLabelLocalToc"><ul>
 <li><a class="reference internal" href="#">Amorcer la création un nouveau connecteur</a><ul>
 <li><a class="reference internal" href="#odoo-manifest">Odoo Manifest</a></li>
-<li><a class="reference internal" href="#install-the-module-in-the-connector">Installation du module dans le connecteur</a></li>
 <li><a class="reference internal" href="#declare-the-backends">Déclaration des backends</a></li>
 <li><a class="reference internal" href="#backend-model">Modèle du backend</a></li>
 <li><a class="reference internal" href="#abstract-binding">Binding abstrait</a></li>
@@ -300,25 +299,6 @@
 </li>
 </ul>
 <p>Bien sûr, nous devons aussi créer le fichier <code class="docutils literal"><span class="pre">__init__.py</span></code> où nous plaçons les imports de nos modules Python.</p>
-</div>
-<div class="section" id="install-the-module-in-the-connector">
-<h2>Installation du module dans le connecteur<a class="headerlink" href="#install-the-module-in-the-connector" title="Lien permanent vers ce titre">¶</a></h2>
-<p>Chaque nouveau module doit être branché dans le framework du connecteur. C&#8217;est juste un question de suivre une convention et créer un fichier <code class="docutils literal"><span class="pre">connector_coffee/connector.py</span></code> dans lequel vous allez appeler la fonction <code class="docutils literal"><span class="pre">install_in_connector</span></code>:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">openerp.addons.connector.connector</span> <span class="kn">import</span> <span class="n">install_in_connector</span>
-
-
-<span class="n">install_in_connector</span><span class="p">()</span>
-</pre></div>
-</div>
-<div class="admonition warning">
-<p class="first admonition-title">Avertissement</p>
-<p class="last">Si vous oubliez cette ligne de code, vos classes ConnectorUnit seront introuvables.</p>
-</div>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p>La raison de ce fonctionnement est qu&#8217;Odoo importe les modules Python des addons non installés, donc il inscrit automatiquement les événements et les classes ConnectorUnit, même pour les modules non installés.</p>
-<p class="last">Pour éviter cela, nous utilisons une astuce: créer un « abstract model » et regarder dans le registre s&#8217;il est chargé.</p>
-</div>
 </div>
 <div class="section" id="declare-the-backends">
 <h2>Déclaration des backends<a class="headerlink" href="#declare-the-backends" title="Lien permanent vers ce titre">¶</a></h2>

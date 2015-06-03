@@ -100,6 +100,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../project/contributors.html#financial-contributors">Contributeurs financiers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../project/license.html">Licence</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../project/changes.html">Changements</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../project/changes.html#future">Future</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../project/changes.html#id2">3.1.0 (2015-05-15)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../project/changes.html#id3">3.0.0 (2015-04-01)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../project/changes.html#id4">2.2.0 (2014-05-26)</a></li>
@@ -134,7 +135,6 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../guides/bootstrap_connector.html">Amorcer la création un nouveau connecteur</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../guides/bootstrap_connector.html#odoo-manifest">Odoo Manifest</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../guides/bootstrap_connector.html#install-the-module-in-the-connector">Installation du module dans le connecteur</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../guides/bootstrap_connector.html#declare-the-backends">Déclaration des backends</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../guides/bootstrap_connector.html#backend-model">Modèle du backend</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../guides/bootstrap_connector.html#abstract-binding">Binding abstrait</a></li>
@@ -252,11 +252,8 @@
 <span class="c">#</span>
 <span class="c">##############################################################################</span>
 
-<span class="kn">import</span> <span class="nn">inspect</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">from</span> <span class="nn">contextlib</span> <span class="kn">import</span> <span class="n">contextmanager</span>
-<span class="kn">from</span> <span class="nn">openerp</span> <span class="kn">import</span> <span class="n">models</span>
-
 <span class="kn">from</span> <span class="nn">.deprecate</span> <span class="kn">import</span> <span class="n">log_deprecate</span><span class="p">,</span> <span class="n">DeprecatedClass</span>
 
 <span class="n">_logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">__name__</span><span class="p">)</span>
@@ -282,42 +279,32 @@
 
 
 <div class="viewcode-block" id="install_in_connector"><a class="viewcode-back" href="../../api/api_connector.html#connector.connector.install_in_connector">[docs]</a><span class="k">def</span> <span class="nf">install_in_connector</span><span class="p">():</span>
-    <span class="sd">&quot;&quot;&quot; Installs an OpenERP module in the ``Connector`` framework.</span>
+    <span class="n">log_deprecate</span><span class="p">(</span><span class="s">&quot;This call to &#39;install_in_connector()&#39; has no effect and is &quot;</span>
+                  <span class="s">&quot;not required.&quot;</span><span class="p">)</span>
 
-<span class="sd">    It has to be called once per OpenERP module to plug.</span>
+</div>
+<div class="viewcode-block" id="is_module_installed"><a class="viewcode-back" href="../../api/api_connector.html#connector.connector.is_module_installed">[docs]</a><span class="k">def</span> <span class="nf">is_module_installed</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">module_name</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Check if an Odoo addon is installed.</span>
 
-<span class="sd">    Under the cover, it creates a ``openerp.models.AbstractModel`` whose</span>
-<span class="sd">    name is the name of the module with a ``.intalled`` suffix:</span>
-<span class="sd">    ``{name_of_the_openerp_module_to_install}.installed``.</span>
+<span class="sd">    The function might be called before `connector` is even installed;</span>
+<span class="sd">    in such case, `ir_module_module.is_module_installed()` is not available yet</span>
+<span class="sd">    and this is why we first check the installation of `connector` by looking</span>
+<span class="sd">    up for a model in the registry.</span>
 
-<span class="sd">    The connector then uses this model to know when the OpenERP module</span>
-<span class="sd">    is installed or not and whether it should use the ConnectorUnit</span>
-<span class="sd">    classes of this module or not and whether it should fire the</span>
-<span class="sd">    consumers of events or not.</span>
+<span class="sd">    :param module_name: name of the addon to check being &#39;connector&#39; or</span>
+<span class="sd">                        an addon depending on it</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c"># Get the module of the caller</span>
-    <span class="n">module</span> <span class="o">=</span> <span class="n">inspect</span><span class="o">.</span><span class="n">getmodule</span><span class="p">(</span><span class="n">inspect</span><span class="o">.</span><span class="n">currentframe</span><span class="p">()</span><span class="o">.</span><span class="n">f_back</span><span class="p">)</span>
-    <span class="n">openerp_module_name</span> <span class="o">=</span> <span class="n">_get_openerp_module_name</span><span class="p">(</span><span class="n">module</span><span class="o">.</span><span class="n">__name__</span><span class="p">)</span>
-    <span class="c"># Build a new AbstractModel with the name of the module and the suffix</span>
-    <span class="n">name</span> <span class="o">=</span> <span class="s">&quot;</span><span class="si">%s</span><span class="s">.installed&quot;</span> <span class="o">%</span> <span class="n">openerp_module_name</span>
-    <span class="n">class_name</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;.&#39;</span><span class="p">,</span> <span class="s">&#39;_&#39;</span><span class="p">)</span>
-    <span class="c"># we need to call __new__ and __init__ in 2 phases because</span>
-    <span class="c"># __init__ needs to have the right __module__ and _module attributes</span>
-    <span class="n">model</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">MetaModel</span><span class="o">.</span><span class="n">__new__</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">MetaModel</span><span class="p">,</span> <span class="n">class_name</span><span class="p">,</span>
-                                     <span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">AbstractModel</span><span class="p">,),</span> <span class="p">{</span><span class="s">&#39;_name&#39;</span><span class="p">:</span> <span class="n">name</span><span class="p">})</span>
-    <span class="c"># Update the module of the model, it should be the caller&#39;s one</span>
-    <span class="n">model</span><span class="o">.</span><span class="n">_module</span> <span class="o">=</span> <span class="n">openerp_module_name</span>
-    <span class="n">model</span><span class="o">.</span><span class="n">__module__</span> <span class="o">=</span> <span class="n">module</span><span class="o">.</span><span class="n">__name__</span>
-    <span class="n">models</span><span class="o">.</span><span class="n">MetaModel</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">class_name</span><span class="p">,</span>
-                              <span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">AbstractModel</span><span class="p">,),</span> <span class="p">{</span><span class="s">&#39;_name&#39;</span><span class="p">:</span> <span class="n">name</span><span class="p">})</span>
+    <span class="k">if</span> <span class="n">env</span><span class="o">.</span><span class="n">registry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;connector.backend&#39;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">module_name</span> <span class="o">==</span> <span class="s">&#39;connector&#39;</span><span class="p">:</span>
+            <span class="c"># fast-path: connector is necessarily installed because</span>
+            <span class="c"># the model is in the registry</span>
+            <span class="k">return</span> <span class="bp">True</span>
+        <span class="c"># for another addon, check in ir.module.module</span>
+        <span class="k">return</span> <span class="n">env</span><span class="p">[</span><span class="s">&#39;ir.module.module&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">is_module_installed</span><span class="p">(</span><span class="n">module_name</span><span class="p">)</span>
 
-
-<span class="c"># install the connector itself</span></div>
-<span class="n">install_in_connector</span><span class="p">()</span>
-
-
-<div class="viewcode-block" id="is_module_installed"><a class="viewcode-back" href="../../api/api_connector.html#connector.connector.is_module_installed">[docs]</a><span class="k">def</span> <span class="nf">is_module_installed</span><span class="p">(</span><span class="n">pool</span><span class="p">,</span> <span class="n">module_name</span><span class="p">):</span>
-    <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="n">pool</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;</span><span class="si">%s</span><span class="s">.installed&#39;</span> <span class="o">%</span> <span class="n">module_name</span><span class="p">))</span>
+    <span class="c"># connector module is not installed neither any sub-addons</span>
+    <span class="k">return</span> <span class="bp">False</span>
 
 </div>
 <div class="viewcode-block" id="get_openerp_module"><a class="viewcode-back" href="../../api/api_connector.html#connector.connector.get_openerp_module">[docs]</a><span class="k">def</span> <span class="nf">get_openerp_module</span><span class="p">(</span><span class="n">cls_or_func</span><span class="p">):</span>

@@ -100,6 +100,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../project/contributors.html#financial-contributors">Financial Contributors</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../project/license.html">License</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../project/changes.html">Changes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../project/changes.html#future">Future</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../project/changes.html#id2">3.1.0 (2015-05-15)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../project/changes.html#id3">3.0.0 (2015-04-01)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../project/changes.html#id4">2.2.0 (2014-05-26)</a></li>
@@ -134,7 +135,6 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../guides/bootstrap_connector.html">Boostrapping a connector</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../guides/bootstrap_connector.html#odoo-manifest">Odoo Manifest</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../guides/bootstrap_connector.html#install-the-module-in-the-connector">Install the module in the connector</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../guides/bootstrap_connector.html#declare-the-backends">Declare the backends</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../guides/bootstrap_connector.html#backend-model">Backend Model</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../guides/bootstrap_connector.html#abstract-binding">Abstract Binding</a></li>
@@ -570,21 +570,26 @@ installation state.</p>
 <dl class="function">
 <dt id="connector.connector.install_in_connector">
 <code class="descclassname">connector.connector.</code><code class="descname">install_in_connector</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/connector.html#install_in_connector"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.connector.install_in_connector" title="Permalink to this definition">¶</a></dt>
-<dd><p>Installs an OpenERP module in the <code class="docutils literal"><span class="pre">Connector</span></code> framework.</p>
-<p>It has to be called once per OpenERP module to plug.</p>
-<p>Under the cover, it creates a <code class="docutils literal"><span class="pre">openerp.models.AbstractModel</span></code> whose
-name is the name of the module with a <code class="docutils literal"><span class="pre">.intalled</span></code> suffix:
-<code class="docutils literal"><span class="pre">{name_of_the_openerp_module_to_install}.installed</span></code>.</p>
-<p>The connector then uses this model to know when the OpenERP module
-is installed or not and whether it should use the ConnectorUnit
-classes of this module or not and whether it should fire the
-consumers of events or not.</p>
-</dd></dl>
+<dd></dd></dl>
 
 <dl class="function">
 <dt id="connector.connector.is_module_installed">
-<code class="descclassname">connector.connector.</code><code class="descname">is_module_installed</code><span class="sig-paren">(</span><em>pool</em>, <em>module_name</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/connector.html#is_module_installed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.connector.is_module_installed" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<code class="descclassname">connector.connector.</code><code class="descname">is_module_installed</code><span class="sig-paren">(</span><em>env</em>, <em>module_name</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/connector.html#is_module_installed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.connector.is_module_installed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if an Odoo addon is installed.</p>
+<p>The function might be called before <cite>connector</cite> is even installed;
+in such case, <cite>ir_module_module.is_module_installed()</cite> is not available yet
+and this is why we first check the installation of <cite>connector</cite> by looking
+up for a model in the registry.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>module_name</strong> &#8211; name of the addon to check being &#8216;connector&#8217; or
+an addon depending on it</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 </div>
 

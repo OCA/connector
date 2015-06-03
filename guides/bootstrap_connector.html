@@ -100,6 +100,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../project/contributors.html#financial-contributors">Financial Contributors</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../project/license.html">License</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../project/changes.html">Changes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../project/changes.html#future">Future</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../project/changes.html#id2">3.1.0 (2015-05-15)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../project/changes.html#id3">3.0.0 (2015-04-01)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../project/changes.html#id4">2.2.0 (2014-05-26)</a></li>
@@ -134,7 +135,6 @@
 </li>
 <li class="toctree-l1 current"><a class="current reference internal" href="">Boostrapping a connector</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#odoo-manifest">Odoo Manifest</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#install-the-module-in-the-connector">Install the module in the connector</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#declare-the-backends">Declare the backends</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#backend-model">Backend Model</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#abstract-binding">Abstract Binding</a></li>
@@ -200,7 +200,6 @@
       aria-labelledby="dLabelLocalToc"><ul>
 <li><a class="reference internal" href="#">Boostrapping a connector</a><ul>
 <li><a class="reference internal" href="#odoo-manifest">Odoo Manifest</a></li>
-<li><a class="reference internal" href="#install-the-module-in-the-connector">Install the module in the connector</a></li>
 <li><a class="reference internal" href="#declare-the-backends">Declare the backends</a></li>
 <li><a class="reference internal" href="#backend-model">Backend Model</a></li>
 <li><a class="reference internal" href="#abstract-binding">Abstract Binding</a></li>
@@ -301,33 +300,6 @@ our connector connector_coffee.</p>
 </ul>
 <p>Of course, we also need to create the <code class="docutils literal"><span class="pre">__init__.py</span></code> file where we will
 put the imports of our python modules.</p>
-</div>
-<div class="section" id="install-the-module-in-the-connector">
-<h2>Install the module in the connector<a class="headerlink" href="#install-the-module-in-the-connector" title="Permalink to this headline">¶</a></h2>
-<p>Each new module needs to be plugged in the connector&#8217;s framework.
-That&#8217;s just a matter of following a convention and creating
-<code class="docutils literal"><span class="pre">connector_coffee/connector.py</span></code> in which you will call the
-<code class="docutils literal"><span class="pre">install_in_connector</span></code> function:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">openerp.addons.connector.connector</span> <span class="kn">import</span> <span class="n">install_in_connector</span>
-
-
-<span class="n">install_in_connector</span><span class="p">()</span>
-</pre></div>
-</div>
-<div class="admonition warning">
-<p class="first admonition-title">Warning</p>
-<p class="last">If you miss this line of code, your ConnectorUnit classes won&#8217;t
-be found.</p>
-</div>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p>The reason for this is that Odoo may import the Python modules
-of uninstalled modules, so it automatically registers the
-events and ConnectorUnit classes, even for uninstalled
-modules.</p>
-<p class="last">To prevent this, we use a little trick: create an abstract
-model and look in the registry if it is loaded.</p>
-</div>
 </div>
 <div class="section" id="declare-the-backends">
 <h2>Declare the backends<a class="headerlink" href="#declare-the-backends" title="Permalink to this headline">¶</a></h2>

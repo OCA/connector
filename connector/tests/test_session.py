@@ -146,6 +146,11 @@ class test_connector_session(common.TransactionCase):
         """ Test on an installed module """
         self.assertFalse(self.session.is_module_installed('lambda'))
 
+    def test_is_module_installed_cache_not_propagated(self):
+        """ Test if the cache is well different for the different modules """
+        self.assertTrue(self.session.is_module_installed('connector'))
+        self.assertFalse(self.session.is_module_installed('#dummy#'))
+
     def test_is_module_installed_cache_invalidation(self):
         """ Test on an invalidation of cache about installed modules """
         module = self.env['ir.module.module']

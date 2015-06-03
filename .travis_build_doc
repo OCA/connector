@@ -1,8 +1,5 @@
 #!/bin/bash
 
-cd ${HOME}
-mkdir build_doc
-
 cd ${TRAVIS_BUILD_DIR}
 
 sphinx-build -b html ./connector/doc/ ${HOME}/doc

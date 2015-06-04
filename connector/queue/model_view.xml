@@ -81,17 +81,25 @@
                         <group>
                             <field name="uuid"/>
                             <field name="func_string"/>
-                            <field name="priority"/>
-                            <field name="eta"/>
-                            <field name="company_id" groups="base.group_multi_company"/>
-                            <field name="user_id"/>
-                            <field name="date_created"/>
-                            <field name="date_enqueued"/>
-                            <field name="date_started"/>
-                            <field name="date_done"/>
-                            <field name="worker_id"/>
-                            <field name="job_function_id"/>
-                            <field name="channel"/>
+                        </group>
+                        <group col="6">
+                            <group>
+                                <field name="priority"/>
+                                <field name="eta"/>
+                                <field name="company_id" groups="base.group_multi_company"/>
+                                <field name="user_id"/>
+                            </group>
+                            <group>
+                                <field name="worker_id"/>
+                                <field name="job_function_id"/>
+                                <field name="channel"/>
+                            </group>
+                            <group>
+                                <field name="date_created"/>
+                                <field name="date_enqueued"/>
+                                <field name="date_started"/>
+                                <field name="date_done"/>
+                            </group>
                         </group>
                         <group colspan="4">
                             <div>

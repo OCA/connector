@@ -70,6 +70,9 @@ It is actually used to connect Magento_ and Prestashop_
 """,
  'depends': ['mail'
              ],
+ 'external_dependencies': {'python': ['requests'
+                                      ],
+                           },
  'data': ['security/connector_security.xml',
           'security/ir.model.access.csv',
           'queue/model_view.xml',

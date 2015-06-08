@@ -24,6 +24,8 @@ from contextlib import contextmanager
 import openerp
 from openerp.modules.registry import RegistryManager
 
+from .connector import is_module_installed
+
 
 class ConnectorSessionHandler(object):
     """ Allow to create a new instance of
@@ -201,4 +203,4 @@ class ConnectorSession(object):
         model with name ``module_name.installed`` is loaded in the
         registry.
         """
-        return bool(self.pool.get('%s.installed' % module_name))
+        return is_module_installed(self.pool, module_name)

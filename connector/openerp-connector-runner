@@ -1,0 +1,45 @@
+#!/usr/bin/env python
+"""
+Odoo Connector jobs runner
+==========================
+
+What's this?
+------------
+This is an alternative to connector workers, with the goal
+of resolving issues due to the polling nature of workers:
+* jobs do not start immediately even if there is a free connector worker
+* connector workers may starve while other workers have too many jobs enqueued
+
+It is fully compatible with the connector mechanism and only
+replaces workers.
+
+How to use
+----------
+* set the following environment variables:
+  - `ODOO_CONNECTOR_CHANNELS=root:4` (or any other channels configuration)
+* launch the script, example:
+  ```
+  $ export ODOO_CONNECTOR_CHANNELS=root:4
+  $ python connector/openerp-connector-runner -d production
+  ```
+
+.. important:: The Python path must contain the path to the Odoo server when
+               openerp-connector-worker is launched. You may need to export
+               `PYTHONPATH=/path/to/server`.
+"""
+
+import sys
+
+import openerp
+from openerp.cli import server as servercli
+from openerp.tools import config
+
+
+if __name__ == "__main__":
+    args = sys.argv[1:]
+    servercli.check_root_user()
+    config.parse_config(args)
+    openerp.netsvc.init_logger()
+    servercli.report_configuration()
+    from openerp.addons.connector import jobrunner
+    jobrunner.run()

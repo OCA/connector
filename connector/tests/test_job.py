@@ -4,8 +4,10 @@ import mock
 import unittest2
 from datetime import datetime, timedelta
 
+
 import openerp
-from openerp import SUPERUSER_ID
+from openerp.osv import orm
+from openerp import SUPERUSER_ID, exceptions
 import openerp.tests.common as common
 from openerp.addons.connector.queue.job import (
     Job,
@@ -362,3 +364,107 @@ class TestJobStorageMultiCompany(common.TransactionCase):
         followers_id = [f.id for f in stored_brw.message_follower_ids]
         self.assertIn(self.other_partner_id_a, followers_id)
         self.assertNotIn(self.other_partner_id_b, followers_id)
+
+
+class TestJobChannels(common.TransactionCase):
+
+    def setUp(self):
+        super(TestJobChannels, self).setUp()
+        self.function_model = self.registry('queue.job.function')
+        self.channel_model = self.registry('queue.job.channel')
+        self.job_model = self.registry('queue.job')
+        self.root_channel = self.ref('connector.channel_root')
+        self.session = ConnectorSession(self.cr, self.uid, context={})
+
+    def test_channel_complete_name(self):
+        cr, uid = self.cr, self.uid
+        channel = self.channel_model.create(cr, uid,
+                                            {'name': 'number',
+                                             'parent_id': self.root_channel,
+                                             })
+        subchannel = self.channel_model.create(cr, uid,
+                                               {'name': 'five',
+                                                'parent_id': channel,
+                                                })
+        channel = self.channel_model.browse(cr, uid, channel)
+        subchannel = self.channel_model.browse(cr, uid, subchannel)
+        self.assertEquals(channel.complete_name, 'root.number')
+        self.assertEquals(subchannel.complete_name, 'root.number.five')
+
+    def test_channel_tree(self):
+        with self.assertRaises(orm.except_orm):
+            self.channel_model.create(self.cr, self.uid, {'name': 'sub'})
+
+    def test_channel_root(self):
+        with self.assertRaises(exceptions.Warning):
+            self.channel_model.unlink(self.cr, self.uid, self.root_channel)
+        with self.assertRaises(exceptions.Warning):
+            self.channel_model.write(self.cr, self.uid, self.root_channel,
+                                     {'name': 'leaf'})
+
+    def test_register_jobs(self):
+        job(task_a)
+        job(task_b)
+        self.function_model._register_jobs(self.cr)
+        path_a = 'openerp.addons.connector.tests.test_job.task_a'
+        path_b = 'openerp.addons.connector.tests.test_job.task_b'
+        self.assertTrue(self.function_model.search(
+            self.cr, self.uid, [('name', '=', path_a)]))
+        self.assertTrue(self.function_model.search(
+            self.cr, self.uid, [('name', '=', path_b)]))
+
+    def test_channel_on_job(self):
+        job(task_a)
+        self.function_model._register_jobs(self.cr)
+        path_a = 'openerp.addons.connector.tests.test_job.task_a'
+        func_ids = self.function_model.search(
+            self.cr, self.uid, [('name', '=', path_a)])
+        self.assertEqual(len(func_ids), 1)
+        job_func = self.function_model.browse(self.cr, self.uid, func_ids[0])
+        self.assertEquals(job_func.channel, 'root')
+
+        test_job = Job(func=task_a)
+        storage = OpenERPJobStorage(self.session)
+        storage.store(test_job)
+        stored_ids = self.job_model.search(
+            self.cr, self.uid, [('uuid', '=', test_job.uuid)])
+        self.assertEqual(len(stored_ids), 1)
+        stored = self.job_model.browse(self.cr, self.uid, stored_ids[0])
+        self.assertEquals(stored.channel, 'root')
+
+        channel = self.channel_model.create(self.cr, self.uid,
+                                            {'name': 'sub',
+                                             'parent_id': self.root_channel,
+                                             })
+        job_func.refresh()
+        self.function_model.write(
+            self.cr, self.uid, job_func.id, {'channel_id': channel})
+
+        test_job = Job(func=task_a)
+        storage = OpenERPJobStorage(self.session)
+        storage.store(test_job)
+        stored_ids = self.job_model.search(
+            self.cr, self.uid, [('uuid', '=', test_job.uuid)])
+        self.assertEqual(len(stored_ids), 1)
+        stored = self.job_model.browse(self.cr, self.uid, stored_ids[0])
+        self.assertEquals(stored.channel, 'root.sub')
+
+    def test_default_channel(self):
+        func_ids = self.function_model.search(self.cr, self.uid, [])
+        self.function_model.unlink(self.cr, self.uid, func_ids)
+        job(task_a, default_channel='root.sub.subsub')
+        self.assertEquals(task_a.default_channel, 'root.sub.subsub')
+
+        self.function_model._register_jobs(self.cr)
+
+        path_a = 'openerp.addons.connector.tests.test_job.task_a'
+        func_ids = self.function_model.search(
+            self.cr, self.uid, [('name', '=', path_a)])
+        self.assertEqual(len(func_ids), 1)
+        job_func = self.function_model.browse(self.cr, self.uid, func_ids[0])
+
+        self.assertEquals(job_func.channel, 'root.sub.subsub')
+        channel = job_func.channel_id
+        self.assertEquals(channel.name, 'subsub')
+        self.assertEquals(channel.parent_id.name, 'sub')
+        self.assertEquals(channel.parent_id.parent_id.name, 'root')

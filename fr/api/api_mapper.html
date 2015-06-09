@@ -536,7 +536,9 @@
 <p>Ici le champs <code class="docutils literal"><span class="pre">source</span></code> sera copié vers le champ <code class="docutils literal"><span class="pre">target</span></code>.</p>
 <p>Un modificateur peut être utilisé dans l&#8217;item source. Le modificateur sera appliqué au champ source avant d&#8217;être copié dans le champ destination. Il doit être une fonction de type <cite>closure</cite> pour respecter cet idiome</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">a_function</span><span class="p">(</span><span class="n">field</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39; ``field`` is the name of the source field &#39;&#39;&#39;</span>
+    <span class="sd">&#39;&#39;&#39; ``field`` is the name of the source field.</span>
+
+<span class="sd">        Naming the arg: ``field`` is required for the conversion&#39;&#39;&#39;</span>
     <span class="k">def</span> <span class="nf">modifier</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="n">to_attr</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39; self is the current Mapper,</span>
 <span class="sd">            record is the current record to map,</span>

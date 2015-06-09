@@ -525,6 +525,49 @@
                 <span class="n">cls</span><span class="o">.</span><span class="n">_map_methods</span><span class="p">[</span><span class="n">attr_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">definition</span>
         <span class="k">return</span> <span class="n">cls</span>
 
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">attrs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Build a ``_changed_by_fields`` list of synchronized fields with mapper.</span>
+<span class="sd">        It takes in account the ``direct`` fields and the fields declared in</span>
+<span class="sd">        the decorator : ``changed_by``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">changed_by_fields</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">attrs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;direct&#39;</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">from_attr</span><span class="p">,</span> <span class="n">__</span> <span class="ow">in</span> <span class="n">attrs</span><span class="p">[</span><span class="s">&#39;direct&#39;</span><span class="p">]:</span>
+                <span class="n">attr_name</span> <span class="o">=</span> <span class="n">cls</span><span class="o">.</span><span class="n">_direct_source_field_name</span><span class="p">(</span><span class="n">from_attr</span><span class="p">)</span>
+                <span class="n">changed_by_fields</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">attr_name</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">method_name</span><span class="p">,</span> <span class="n">method_def</span> <span class="ow">in</span> <span class="n">attrs</span><span class="p">[</span><span class="s">&#39;_map_methods&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
+            <span class="n">changed_by_fields</span> <span class="o">|=</span> <span class="n">method_def</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">base</span> <span class="ow">in</span> <span class="n">bases</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="s">&#39;_changed_by_fields&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">base</span><span class="o">.</span><span class="n">_changed_by_fields</span><span class="p">:</span>
+                <span class="n">changed_by_fields</span> <span class="o">|=</span> <span class="n">base</span><span class="o">.</span><span class="n">_changed_by_fields</span>
+        <span class="n">cls</span><span class="o">.</span><span class="n">_changed_by_fields</span> <span class="o">=</span> <span class="n">changed_by_fields</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">MetaMapper</span><span class="p">,</span> <span class="n">cls</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">attrs</span><span class="p">)</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_direct_source_field_name</span><span class="p">(</span><span class="n">mapping_attr</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Get the mapping field name. Goes through the function modifiers.</span>
+
+<span class="sd">        Ex: [(none(convert(field_name, str)), out_field_name)]</span>
+
+<span class="sd">        It assumes that the modifier has ``field`` as first argument like:</span>
+<span class="sd">            def modifier(field, args):</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">attr_name</span> <span class="o">=</span> <span class="n">mapping_attr</span>
+
+        <span class="k">if</span> <span class="nb">callable</span><span class="p">(</span><span class="n">mapping_attr</span><span class="p">):</span>
+            <span class="c"># Map the closure entries with variable names</span>
+            <span class="n">cells</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span>
+                <span class="n">mapping_attr</span><span class="o">.</span><span class="n">func_code</span><span class="o">.</span><span class="n">co_freevars</span><span class="p">,</span>
+                <span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">cell_contents</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">mapping_attr</span><span class="o">.</span><span class="n">func_closure</span><span class="p">)))</span>
+            <span class="k">assert</span> <span class="s">&#39;field&#39;</span> <span class="ow">in</span> <span class="n">cells</span><span class="p">,</span> <span class="s">&quot;Modifier without &#39;field&#39; argument.&quot;</span>
+            <span class="k">if</span> <span class="nb">callable</span><span class="p">(</span><span class="n">cells</span><span class="p">[</span><span class="s">&#39;field&#39;</span><span class="p">]):</span>
+                <span class="n">attr_name</span> <span class="o">=</span> <span class="n">MetaMapper</span><span class="o">.</span><span class="n">_direct_source_field_name</span><span class="p">(</span>
+                    <span class="n">cells</span><span class="p">[</span><span class="s">&#39;field&#39;</span><span class="p">])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">attr_name</span> <span class="o">=</span> <span class="n">cells</span><span class="p">[</span><span class="s">&#39;field&#39;</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">attr_name</span>
+
 </div>
 <div class="viewcode-block" id="MapChild"><a class="viewcode-back" href="../../../api/api_mapper.html#connector.unit.mapper.MapChild">[docs]</a><span class="k">class</span> <span class="nc">MapChild</span><span class="p">(</span><span class="n">ConnectorUnit</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; MapChild is responsible to convert items.</span>
@@ -696,7 +739,9 @@
 <span class="sd">        It should be a closure function respecting this idiom::</span>
 
 <span class="sd">            def a_function(field):</span>
-<span class="sd">                &#39;&#39;&#39; ``field`` is the name of the source field &#39;&#39;&#39;</span>
+<span class="sd">                &#39;&#39;&#39; ``field`` is the name of the source field.</span>
+
+<span class="sd">                    Naming the arg: ``field`` is required for the conversion&#39;&#39;&#39;</span>
 <span class="sd">                def modifier(self, record, to_attr):</span>
 <span class="sd">                    &#39;&#39;&#39; self is the current Mapper,</span>
 <span class="sd">                        record is the current record to map,</span>
@@ -901,15 +946,8 @@
         <span class="n">for_create</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">for_create</span>
         <span class="n">result</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">for</span> <span class="n">from_attr</span><span class="p">,</span> <span class="n">to_attr</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">direct</span><span class="p">:</span>
-            <span class="k">if</span> <span class="nb">callable</span><span class="p">(</span><span class="n">from_attr</span><span class="p">):</span>  <span class="c"># in a modifier</span>
-                <span class="c"># the name of the attribute is the first arg the original</span>
-                <span class="c"># function. BUT the argument order seems to be not enforced</span>
-                <span class="c"># by python in the closure so we use the first non callable</span>
-                <span class="c"># cell_contents in the closure as attr_name</span>
-                <span class="k">for</span> <span class="n">cell</span> <span class="ow">in</span> <span class="n">from_attr</span><span class="o">.</span><span class="n">func_closure</span><span class="p">:</span>
-                    <span class="n">contents</span> <span class="o">=</span> <span class="n">cell</span><span class="o">.</span><span class="n">cell_contents</span>
-                    <span class="k">if</span> <span class="ow">not</span> <span class="nb">callable</span><span class="p">(</span><span class="n">contents</span><span class="p">):</span>
-                        <span class="n">attr_name</span> <span class="o">=</span> <span class="n">contents</span>
+            <span class="k">if</span> <span class="nb">callable</span><span class="p">(</span><span class="n">from_attr</span><span class="p">):</span>
+                <span class="n">attr_name</span> <span class="o">=</span> <span class="n">MetaMapper</span><span class="o">.</span><span class="n">_direct_source_field_name</span><span class="p">(</span><span class="n">from_attr</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">attr_name</span> <span class="o">=</span> <span class="n">from_attr</span>
 

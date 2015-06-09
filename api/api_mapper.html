@@ -555,7 +555,9 @@ The modifier will be applied to the source field before being
 copied in the target field.
 It should be a closure function respecting this idiom:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">a_function</span><span class="p">(</span><span class="n">field</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39; ``field`` is the name of the source field &#39;&#39;&#39;</span>
+    <span class="sd">&#39;&#39;&#39; ``field`` is the name of the source field.</span>
+
+<span class="sd">        Naming the arg: ``field`` is required for the conversion&#39;&#39;&#39;</span>
     <span class="k">def</span> <span class="nf">modifier</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="n">to_attr</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39; self is the current Mapper,</span>
 <span class="sd">            record is the current record to map,</span>

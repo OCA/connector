@@ -77,7 +77,6 @@ class QueueJob(models.Model):
     date_enqueued = fields.Datetime(string='Enqueue Time', readonly=True)
     date_done = fields.Datetime(string='Date Done', readonly=True)
     eta = fields.Datetime(string='Execute only after')
-    retry_pattern = fields.Char(string='Retry Pattern')
     active = fields.Boolean(default=True)
     model_name = fields.Char(string='Model', readonly=True)
     retry = fields.Integer(string='Current try')

@@ -293,6 +293,49 @@ class MetaMapper(MetaConnectorUnit):
                 cls._map_methods[attr_name] = definition
         return cls
 
+    def __init__(cls, name, bases, attrs):
+        """
+        Build a ``_changed_by_fields`` list of synchronized fields with mapper.
+        It takes in account the ``direct`` fields and the fields declared in
+        the decorator : ``changed_by``.
+        """
+        changed_by_fields = set()
+        if attrs.get('direct'):
+            for from_attr, __ in attrs['direct']:
+                attr_name = cls._direct_source_field_name(from_attr)
+                changed_by_fields.add(attr_name)
+        for method_name, method_def in attrs['_map_methods'].iteritems():
+            changed_by_fields |= method_def[0]
+        for base in bases:
+            if hasattr(base, '_changed_by_fields') and base._changed_by_fields:
+                changed_by_fields |= base._changed_by_fields
+        cls._changed_by_fields = changed_by_fields
+        super(MetaMapper, cls).__init__(name, bases, attrs)
+
+    @staticmethod
+    def _direct_source_field_name(mapping_attr):
+        """ Get the mapping field name. Goes through the function modifiers.
+
+        Ex: [(none(convert(field_name, str)), out_field_name)]
+
+        It assumes that the modifier has ``field`` as first argument like:
+            def modifier(field, args):
+        """
+        attr_name = mapping_attr
+
+        if callable(mapping_attr):
+            # Map the closure entries with variable names
+            cells = dict(zip(
+                mapping_attr.func_code.co_freevars,
+                (c.cell_contents for c in mapping_attr.func_closure)))
+            assert 'field' in cells, "Modifier without 'field' argument."
+            if callable(cells['field']):
+                attr_name = MetaMapper._direct_source_field_name(
+                    cells['field'])
+            else:
+                attr_name = cells['field']
+        return attr_name
+
 
 class MapChild(ConnectorUnit):
     """ MapChild is responsible to convert items.
@@ -464,7 +507,9 @@ class Mapper(ConnectorUnit):
         It should be a closure function respecting this idiom::
 
             def a_function(field):
-                ''' ``field`` is the name of the source field '''
+                ''' ``field`` is the name of the source field.
+
+                    Naming the arg: ``field`` is required for the conversion'''
                 def modifier(self, record, to_attr):
                     ''' self is the current Mapper,
                         record is the current record to map,
@@ -669,15 +714,8 @@ class Mapper(ConnectorUnit):
         for_create = self.options.for_create
         result = {}
         for from_attr, to_attr in self.direct:
-            if callable(from_attr):  # in a modifier
-                # the name of the attribute is the first arg the original
-                # function. BUT the argument order seems to be not enforced
-                # by python in the closure so we use the first non callable
-                # cell_contents in the closure as attr_name
-                for cell in from_attr.func_closure:
-                    contents = cell.cell_contents
-                    if not callable(contents):
-                        attr_name = contents
+            if callable(from_attr):
+                attr_name = MetaMapper._direct_source_field_name(from_attr)
             else:
                 attr_name = from_attr
 

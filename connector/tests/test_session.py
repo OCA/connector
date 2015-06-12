@@ -1,12 +1,11 @@
 # -*- coding: utf-8 -*-
 
-import openerp
 import openerp.tests.common as common
+import openerp.modules.registry as registry
 from openerp.addons.connector.session import (
     ConnectorSession,
     ConnectorSessionHandler)
 
-DB = common.DB
 ADMIN_USER_ID = common.ADMIN_USER_ID
 
 
@@ -17,14 +16,14 @@ class test_connector_session_handler(common.TransactionCase):
         super(test_connector_session_handler, self).setUp()
         self.context = {'lang': 'fr_FR'}
         self.session_hdl = ConnectorSessionHandler(
-            DB, ADMIN_USER_ID,
+            common.get_db_name(), ADMIN_USER_ID,
             context=self.context)
 
     def test_empty_session(self):
         """
         Create a session without transaction
         """
-        self.assertEqual(self.session_hdl.db_name, DB)
+        self.assertEqual(self.session_hdl.db_name, common.get_db_name())
         self.assertEqual(self.session_hdl.uid, ADMIN_USER_ID)
         self.assertEqual(self.session_hdl.context, self.context)
 
@@ -33,7 +32,7 @@ class test_connector_session_handler(common.TransactionCase):
         Create a session from the handler
         """
         with self.session_hdl.session() as session:
-            pool = openerp.modules.registry.RegistryManager.get(DB)
+            pool = registry.RegistryManager.get(common.get_db_name())
             self.assertIsNotNone(session.cr)
             self.assertEqual(session.pool, pool)
             self.assertEqual(session.context, self.session_hdl.context)

@@ -96,7 +96,7 @@ We declared the backends, but we need a model to configure them.
 We create a model ``coffee.backend`` which is an ``_inherit`` of
 ``connector.backend``. In ``connector_coffee/coffee_model.py``::
 
-    from openerp import fields, models
+    from openerp import fields, models, api
 
 
     class CoffeeBackend(models.Model):

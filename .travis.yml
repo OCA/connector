@@ -36,9 +36,9 @@ services:
   - postgresql
 
 script:
-  - if [ -z "$DOCS" ] ; then travis_run_tests; fi
-  - if [ -n "$DOCS" ] ; then ./.travis_build_doc; fi
+  - if [ "$DOCS" != "1" ] ; then travis_run_tests; fi
+  - if [ "$DOCS" == "1" ] ; then ./.travis_build_doc; fi
 
 after_success:
-  - if [ -z "$DOCS" ] ; then travis_after_test_success; fi
-  - if [ -n "$DOCS" ] ; then ./.travis_push_doc; fi
+  - if [ "$DOCS" != "1" ] ; then travis_after_test_success; fi
+  - if [ "$DOCS" == "1" ] ; then ./.travis_push_doc; fi

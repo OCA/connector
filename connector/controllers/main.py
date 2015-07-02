@@ -51,7 +51,7 @@ class RunJobController(http.Controller):
         def retry_postpone(job, message, seconds=None):
             with session_hdl.session() as session:
                 job.postpone(result=message, seconds=seconds)
-                job.set_pending(self)
+                job.set_pending(self, reset_retry=False)
                 self.job_storage_class(session).store(job)
 
         with session_hdl.session() as session:

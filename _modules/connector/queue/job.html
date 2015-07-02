@@ -760,12 +760,13 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_eta</span> <span class="o">=</span> <span class="n">value</span>
 
-<div class="viewcode-block" id="Job.set_pending"><a class="viewcode-back" href="../../../api/api_queue.html#connector.queue.job.Job.set_pending">[docs]</a>    <span class="k">def</span> <span class="nf">set_pending</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">result</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="Job.set_pending"><a class="viewcode-back" href="../../../api/api_queue.html#connector.queue.job.Job.set_pending">[docs]</a>    <span class="k">def</span> <span class="nf">set_pending</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">result</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">reset_retry</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="n">PENDING</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">date_enqueued</span> <span class="o">=</span> <span class="bp">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">date_started</span> <span class="o">=</span> <span class="bp">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">worker_uuid</span> <span class="o">=</span> <span class="bp">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">retry</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">if</span> <span class="n">reset_retry</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">retry</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">result</span> <span class="o">=</span> <span class="n">result</span>
 </div>

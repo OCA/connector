@@ -263,7 +263,7 @@
 <span class="kn">import</span> <span class="nn">pytz</span>
 <span class="kn">import</span> <span class="nn">xmlrpclib</span>
 
-<span class="kn">from</span> <span class="nn">openerp.tools</span> <span class="kn">import</span> <span class="n">float_round</span><span class="p">,</span> <span class="n">frozendict</span><span class="p">,</span> <span class="n">html_sanitize</span><span class="p">,</span> <span class="n">ustr</span>
+<span class="kn">from</span> <span class="nn">openerp.tools</span> <span class="kn">import</span> <span class="n">float_round</span><span class="p">,</span> <span class="n">frozendict</span><span class="p">,</span> <span class="n">html_sanitize</span><span class="p">,</span> <span class="n">ustr</span><span class="p">,</span> <span class="n">OrderedSet</span>
 <span class="kn">from</span> <span class="nn">openerp.tools</span> <span class="kn">import</span> <span class="n">DEFAULT_SERVER_DATE_FORMAT</span> <span class="k">as</span> <span class="n">DATE_FORMAT</span>
 <span class="kn">from</span> <span class="nn">openerp.tools</span> <span class="kn">import</span> <span class="n">DEFAULT_SERVER_DATETIME_FORMAT</span> <span class="k">as</span> <span class="n">DATETIME_FORMAT</span>
 
@@ -409,11 +409,11 @@
 <span class="sd">            @api.depends(&#39;name&#39;)</span>
 <span class="sd">            def _compute_upper(self):</span>
 <span class="sd">                for rec in self:</span>
-<span class="sd">                    self.upper = self.name.upper() if self.name else False</span>
+<span class="sd">                    rec.upper = rec.name.upper() if rec.name else False</span>
 
 <span class="sd">            def _inverse_upper(self):</span>
 <span class="sd">                for rec in self:</span>
-<span class="sd">                    self.name = self.upper.lower() if self.upper else False</span>
+<span class="sd">                    rec.name = rec.upper.lower() if rec.upper else False</span>
 
 <span class="sd">            def _search_upper(self, operator, value):</span>
 <span class="sd">                if operator == &#39;like&#39;:</span>
@@ -1839,34 +1839,33 @@
                 <span class="k">return</span> <span class="n">value</span><span class="o">.</span><span class="n">with_env</span><span class="p">(</span><span class="n">record</span><span class="o">.</span><span class="n">env</span><span class="p">)</span>
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
             <span class="c"># value is a list of record ids or commands</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="n">record</span><span class="o">.</span><span class="n">id</span><span class="p">:</span>
-                <span class="n">record</span> <span class="o">=</span> <span class="n">record</span><span class="o">.</span><span class="n">browse</span><span class="p">()</span>        <span class="c"># new record has no value</span>
-            <span class="n">result</span> <span class="o">=</span> <span class="n">record</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>
-            <span class="c"># modify result with the commands;</span>
-            <span class="c"># beware to not introduce duplicates in result</span>
+            <span class="n">comodel</span> <span class="o">=</span> <span class="n">record</span><span class="o">.</span><span class="n">env</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">comodel_name</span><span class="p">]</span>
+            <span class="n">ids</span> <span class="o">=</span> <span class="n">OrderedSet</span><span class="p">(</span><span class="n">record</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">ids</span><span class="p">)</span>
+            <span class="c"># modify ids with the commands</span>
             <span class="k">for</span> <span class="n">command</span> <span class="ow">in</span> <span class="n">value</span><span class="p">:</span>
                 <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="p">(</span><span class="nb">tuple</span><span class="p">,</span> <span class="nb">list</span><span class="p">)):</span>
                     <span class="k">if</span> <span class="n">command</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-                        <span class="n">result</span> <span class="o">+=</span> <span class="n">result</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">command</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+                        <span class="n">ids</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">comodel</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">command</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
                     <span class="k">elif</span> <span class="n">command</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-                        <span class="n">result</span><span class="o">.</span><span class="n">browse</span><span class="p">(</span><span class="n">command</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">command</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
-                        <span class="n">result</span> <span class="o">+=</span> <span class="n">result</span><span class="o">.</span><span class="n">browse</span><span class="p">(</span><span class="n">command</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">-</span> <span class="n">result</span>
+                        <span class="n">comodel</span><span class="o">.</span><span class="n">browse</span><span class="p">(</span><span class="n">command</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">command</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+                        <span class="n">ids</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">command</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
                     <span class="k">elif</span> <span class="n">command</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
                         <span class="c"># note: the record will be deleted by write()</span>
-                        <span class="n">result</span> <span class="o">-=</span> <span class="n">result</span><span class="o">.</span><span class="n">browse</span><span class="p">(</span><span class="n">command</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+                        <span class="n">ids</span><span class="o">.</span><span class="n">discard</span><span class="p">(</span><span class="n">command</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
                     <span class="k">elif</span> <span class="n">command</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
-                        <span class="n">result</span> <span class="o">-=</span> <span class="n">result</span><span class="o">.</span><span class="n">browse</span><span class="p">(</span><span class="n">command</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+                        <span class="n">ids</span><span class="o">.</span><span class="n">discard</span><span class="p">(</span><span class="n">command</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
                     <span class="k">elif</span> <span class="n">command</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>
-                        <span class="n">result</span> <span class="o">+=</span> <span class="n">result</span><span class="o">.</span><span class="n">browse</span><span class="p">(</span><span class="n">command</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">-</span> <span class="n">result</span>
+                        <span class="n">ids</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">command</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
                     <span class="k">elif</span> <span class="n">command</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">5</span><span class="p">:</span>
-                        <span class="n">result</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">browse</span><span class="p">()</span>
+                        <span class="n">ids</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
                     <span class="k">elif</span> <span class="n">command</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">6</span><span class="p">:</span>
-                        <span class="n">result</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">browse</span><span class="p">(</span><span class="n">command</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+                        <span class="n">ids</span> <span class="o">=</span> <span class="n">OrderedSet</span><span class="p">(</span><span class="n">command</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
                 <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
-                    <span class="n">result</span> <span class="o">+=</span> <span class="n">result</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">command</span><span class="p">)</span>
+                    <span class="n">ids</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">comodel</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">command</span><span class="p">)</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="n">result</span> <span class="o">+=</span> <span class="n">result</span><span class="o">.</span><span class="n">browse</span><span class="p">(</span><span class="n">command</span><span class="p">)</span> <span class="o">-</span> <span class="n">result</span>
-            <span class="k">return</span> <span class="n">result</span>
+                    <span class="n">ids</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">command</span><span class="p">)</span>
+            <span class="c"># return result as a recordset</span>
+            <span class="k">return</span> <span class="n">comodel</span><span class="o">.</span><span class="n">browse</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">ids</span><span class="p">))</span>
         <span class="k">elif</span> <span class="ow">not</span> <span class="n">value</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">null</span><span class="p">(</span><span class="n">record</span><span class="o">.</span><span class="n">env</span><span class="p">)</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;Wrong value for </span><span class="si">%s</span><span class="s">: </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">))</span>

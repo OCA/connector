@@ -48,6 +48,7 @@ class QueueJob(models.Model):
     worker_id = fields.Many2one(comodel_name='queue.worker',
                                 string='Worker',
                                 ondelete='set null',
+                                select=True,
                                 readonly=True)
     uuid = fields.Char(string='UUID',
                        readonly=True,

@@ -559,12 +559,13 @@ class Job(object):
                              " it must be an 'int', a 'timedelta' "
                              "or a 'datetime'" % type(value))
 
-    def set_pending(self, result=None):
+    def set_pending(self, result=None, reset_retry=True):
         self.state = PENDING
         self.date_enqueued = None
         self.date_started = None
         self.worker_uuid = None
-        self.retry = 0
+        if reset_retry:
+            self.retry = 0
         if result is not None:
             self.result = result
 

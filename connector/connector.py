@@ -375,28 +375,27 @@ class Binder(ConnectorUnit):
     _openerp_field = 'openerp_id'  # override in sub-classes
     _sync_date_field = 'sync_date'  # override in sub-classes
 
-    def to_openerp(self, external_id, unwrap=False, browse=False):
+    def to_openerp(self, external_id, unwrap=False):
         """ Give the OpenERP ID for an external ID
 
         :param external_id: external ID for which we want
                             the OpenERP ID
-        :param unwrap: if True, returns the openerp_id
-                       else return the id of the binding record
-        :param browse: if True, returns a recordset
-        :return: a record ID, depending on the value of unwrap,
-                 or None if the external_id is not mapped
-        :rtype: int or recordset
+        :param unwrap: if True, returns the normal record
+                       else return the binding record
+        :return: a recordset, depending on the value of unwrap,
+                 or an empty recordset if the external_id is not mapped
+        :rtype: recordset
         """
         bindings = self.model.with_context(active_test=False).search(
             [(self._external_field, '=', str(external_id)),
              (self._backend_field, '=', self.backend_record.id)]
         )
         if not bindings:
-            return self.model.browse() if browse else None
+            return self.model.browse()
         bindings.ensure_one()
         if unwrap:
             bindings = getattr(bindings, self._openerp_field)
-        return bindings if browse else bindings.id
+        return bindings
 
     def to_backend(self, binding_id, wrap=False):
         """ Give the external ID for an OpenERP binding ID

@@ -463,8 +463,8 @@
             <span class="n">eta</span> <span class="o">=</span> <span class="n">dt_from_string</span><span class="p">(</span><span class="n">stored</span><span class="o">.</span><span class="n">eta</span><span class="p">)</span>
 
         <span class="n">job_</span> <span class="o">=</span> <span class="n">Job</span><span class="p">(</span><span class="n">func</span><span class="o">=</span><span class="n">func_name</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">=</span><span class="n">kwargs</span><span class="p">,</span>
-                   <span class="n">priority</span><span class="o">=</span><span class="n">stored</span><span class="o">.</span><span class="n">priority</span><span class="p">,</span> <span class="n">eta</span><span class="o">=</span><span class="n">eta</span><span class="p">,</span>
-                   <span class="n">job_uuid</span><span class="o">=</span><span class="n">stored</span><span class="o">.</span><span class="n">uuid</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="n">stored</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+                   <span class="n">priority</span><span class="o">=</span><span class="n">stored</span><span class="o">.</span><span class="n">priority</span><span class="p">,</span> <span class="n">eta</span><span class="o">=</span><span class="n">eta</span><span class="p">,</span> <span class="n">job_uuid</span><span class="o">=</span><span class="n">stored</span><span class="o">.</span><span class="n">uuid</span><span class="p">,</span>
+                   <span class="n">description</span><span class="o">=</span><span class="n">stored</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">stored</span><span class="o">.</span><span class="n">date_created</span><span class="p">:</span>
             <span class="n">job_</span><span class="o">.</span><span class="n">date_created</span> <span class="o">=</span> <span class="n">dt_from_string</span><span class="p">(</span><span class="n">stored</span><span class="o">.</span><span class="n">date_created</span><span class="p">)</span>
@@ -593,7 +593,8 @@
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">model_name</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
                  <span class="n">args</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">priority</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
-                 <span class="n">eta</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">job_uuid</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">max_retries</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+                 <span class="n">eta</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">job_uuid</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">max_retries</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+                 <span class="n">description</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Create a Job</span>
 
 <span class="sd">        :param func: function to execute</span>
@@ -802,13 +803,25 @@
         <span class="n">result</span> <span class="o">=</span> <span class="n">msg</span> <span class="k">if</span> <span class="n">msg</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="k">else</span> <span class="n">_</span><span class="p">(</span><span class="s">&#39;Canceled. Nothing to do.&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">set_done</span><span class="p">(</span><span class="n">result</span><span class="o">=</span><span class="n">result</span><span class="p">)</span>
 </div>
+    <span class="k">def</span> <span class="nf">_get_retry_seconds</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">seconds</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="n">retry_pattern</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">func</span><span class="o">.</span><span class="n">retry_pattern</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">seconds</span> <span class="ow">and</span> <span class="n">retry_pattern</span><span class="p">:</span>
+            <span class="c"># ordered from higher to lower count of retries</span>
+            <span class="n">patt</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">retry_pattern</span><span class="o">.</span><span class="n">iteritems</span><span class="p">(),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">t</span><span class="p">:</span> <span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">seconds</span> <span class="o">=</span> <span class="n">RETRY_INTERVAL</span>
+            <span class="k">for</span> <span class="n">retry_count</span><span class="p">,</span> <span class="n">postpone_seconds</span> <span class="ow">in</span> <span class="n">patt</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">retry</span> <span class="o">&gt;=</span> <span class="n">retry_count</span><span class="p">:</span>
+                    <span class="n">seconds</span> <span class="o">=</span> <span class="n">postpone_seconds</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">break</span>
+        <span class="k">return</span> <span class="n">seconds</span>
+
 <div class="viewcode-block" id="Job.postpone"><a class="viewcode-back" href="../../../api/api_queue.html#connector.queue.job.Job.postpone">[docs]</a>    <span class="k">def</span> <span class="nf">postpone</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">result</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">seconds</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Write an estimated time arrival to n seconds</span>
 <span class="sd">        later than now. Used when an retryable exception</span>
 <span class="sd">        want to retry a job later. &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">seconds</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-            <span class="n">seconds</span> <span class="o">=</span> <span class="n">RETRY_INTERVAL</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">eta</span> <span class="o">=</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="n">seconds</span><span class="p">)</span>
+        <span class="n">eta_seconds</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_retry_seconds</span><span class="p">(</span><span class="n">seconds</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">eta</span> <span class="o">=</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="n">eta_seconds</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">exc_info</span> <span class="o">=</span> <span class="bp">None</span>
         <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">result</span> <span class="o">=</span> <span class="n">result</span>
@@ -822,7 +835,7 @@
 <span class="n">JOB_REGISTRY</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
 
 
-<div class="viewcode-block" id="job"><a class="viewcode-back" href="../../../api/api_queue.html#connector.queue.job.job">[docs]</a><span class="k">def</span> <span class="nf">job</span><span class="p">(</span><span class="n">func</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">default_channel</span><span class="o">=</span><span class="s">&#39;root&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="job"><a class="viewcode-back" href="../../../api/api_queue.html#connector.queue.job.job">[docs]</a><span class="k">def</span> <span class="nf">job</span><span class="p">(</span><span class="n">func</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">default_channel</span><span class="o">=</span><span class="s">&#39;root&#39;</span><span class="p">,</span> <span class="n">retry_pattern</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Decorator for jobs.</span>
 
 <span class="sd">    Optional argument:</span>
@@ -830,27 +843,37 @@
 <span class="sd">    :param default_channel: the channel wherein the job will be assigned. This</span>
 <span class="sd">                            channel is set at the installation of the module</span>
 <span class="sd">                            and can be manually changed later using the views.</span>
+<span class="sd">    :param retry_pattern: The retry pattern to use for postponing a job.</span>
+<span class="sd">                          If a job is postponed and there is no eta</span>
+<span class="sd">                          specified, the eta will be determined from the</span>
+<span class="sd">                          dict in retry_pattern. When no retry pattern</span>
+<span class="sd">                          is provided, jobs will be retried after</span>
+<span class="sd">                          :const:`RETRY_INTERVAL` seconds.</span>
+<span class="sd">    :type retry_pattern: dict(retry_count,retry_eta_seconds)</span>
 
-<span class="sd">   Add a ``delay`` attribute on the decorated function.</span>
+<span class="sd">    Add a ``delay`` attribute on the decorated function.</span>
 
-<span class="sd">   When ``delay`` is called, the function is transformed to a job and</span>
-<span class="sd">   stored in the OpenERP queue.job model. The arguments and keyword</span>
-<span class="sd">   arguments given in ``delay`` will be the arguments used by the</span>
-<span class="sd">   decorated function when it is executed.</span>
+<span class="sd">    When ``delay`` is called, the function is transformed to a job and</span>
+<span class="sd">    stored in the OpenERP queue.job model. The arguments and keyword</span>
+<span class="sd">    arguments given in ``delay`` will be the arguments used by the</span>
+<span class="sd">    decorated function when it is executed.</span>
 
-<span class="sd">   The ``delay()`` function of a job takes the following arguments:</span>
+<span class="sd">    ``retry_pattern`` is a dict where keys are the count of retries and the</span>
+<span class="sd">    values are the delay to postpone a job.</span>
 
-<span class="sd">   session</span>
-<span class="sd">     Current :py:class:`~openerp.addons.connector.session.ConnectorSession`</span>
+<span class="sd">    The ``delay()`` function of a job takes the following arguments:</span>
 
-<span class="sd">   model_name</span>
-<span class="sd">     name of the model on which the job has something to do</span>
+<span class="sd">    session</span>
+<span class="sd">      Current :py:class:`~openerp.addons.connector.session.ConnectorSession`</span>
 
-<span class="sd">   *args and **kargs</span>
+<span class="sd">    model_name</span>
+<span class="sd">      name of the model on which the job has something to do</span>
+
+<span class="sd">    *args and **kargs</span>
 <span class="sd">     Arguments and keyword arguments which will be given to the called</span>
 <span class="sd">     function once the job is executed. They should be ``pickle-able``.</span>
 
-<span class="sd">     There is 4 special and reserved keyword arguments that you can use:</span>
+<span class="sd">     There are 5 special and reserved keyword arguments that you can use:</span>
 
 <span class="sd">     * priority: priority of the job, the smaller is the higher priority.</span>
 <span class="sd">                 Default is 10.</span>
@@ -859,7 +882,6 @@
 <span class="sd">                    infinite retries. Default is 5.</span>
 <span class="sd">     * eta: the job can be executed only after this datetime</span>
 <span class="sd">            (or now + timedelta if a timedelta or integer is given)</span>
-
 <span class="sd">     * description : a human description of the job,</span>
 <span class="sd">                     intended to discriminate job instances</span>
 <span class="sd">                     (Default is the func.__doc__ or</span>
@@ -890,6 +912,20 @@
 <span class="sd">            # work</span>
 <span class="sd">            # export one_thing</span>
 
+<span class="sd">        @job(retry_pattern={1: 10 * 60,</span>
+<span class="sd">                            5: 20 * 60,</span>
+<span class="sd">                            10: 30 * 60,</span>
+<span class="sd">                            15: 12 * 60 * 60})</span>
+<span class="sd">        def retryable_example(session):</span>
+<span class="sd">            # 5 first retries postponed 10 minutes later</span>
+<span class="sd">            # retries 5 to 10 postponed 20 minutes later</span>
+<span class="sd">            # retries 10 to 15 postponed 30 minutes later</span>
+<span class="sd">            # all subsequent retries postponed 12 hours later</span>
+<span class="sd">            raise RetryableJobError</span>
+
+<span class="sd">        retryable_example.delay(session)</span>
+
+
 <span class="sd">    See also: :py:func:`related_action` a related action can be attached</span>
 <span class="sd">    to a job</span>
 
@@ -908,6 +944,10 @@
     <span class="k">assert</span> <span class="n">default_channel</span> <span class="o">==</span> <span class="s">&#39;root&#39;</span> <span class="ow">or</span> <span class="n">default_channel</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s">&#39;root.&#39;</span><span class="p">),</span> <span class="p">(</span>
         <span class="s">&quot;The channel path must start by &#39;root&#39;&quot;</span><span class="p">)</span>
     <span class="n">func</span><span class="o">.</span><span class="n">default_channel</span> <span class="o">=</span> <span class="n">default_channel</span>
+    <span class="k">assert</span> <span class="n">retry_pattern</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">retry_pattern</span><span class="p">,</span> <span class="nb">dict</span><span class="p">),</span> <span class="p">(</span>
+        <span class="s">&quot;retry_pattern must be a dict&quot;</span>
+    <span class="p">)</span>
+    <span class="n">func</span><span class="o">.</span><span class="n">retry_pattern</span> <span class="o">=</span> <span class="n">retry_pattern</span>
     <span class="n">func</span><span class="o">.</span><span class="n">delay</span> <span class="o">=</span> <span class="n">delay</span>
     <span class="n">JOB_REGISTRY</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">func</span>

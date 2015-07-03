@@ -554,24 +554,32 @@
 </div></blockquote>
 <dl class="function">
 <dt id="connector.queue.job.job">
-<code class="descclassname">connector.queue.job.</code><code class="descname">job</code><span class="sig-paren">(</span><em>func=None</em>, <em>default_channel='root'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/queue/job.html#job"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.job.job" title="Lien permanent vers cette définition">¶</a></dt>
+<code class="descclassname">connector.queue.job.</code><code class="descname">job</code><span class="sig-paren">(</span><em>func=None</em>, <em>default_channel='root'</em>, <em>retry_pattern=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/queue/job.html#job"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.job.job" title="Lien permanent vers cette définition">¶</a></dt>
 <dd><p>Décorateur pour les jobs.</p>
-<blockquote>
-<div><p>Optional argument:</p>
+<p>Optional argument:</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name" colspan="2">param default_channel:</th></tr>
-<tr class="field-odd field"><td>&nbsp;</td><td class="field-body">the channel wherein the job will be assigned. This
+<tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><ul class="first last simple">
+<li><strong>default_channel</strong> &#8211; the channel wherein the job will be assigned. This
 channel is set at the installation of the module
-and can be manually changed later using the views.</td>
+and can be manually changed later using the views.</li>
+<li><strong>retry_pattern</strong> (<em>dict(retry_count,retry_eta_seconds)</em>) &#8211; The retry pattern to use for postponing a job.
+If a job is postponed and there is no eta
+specified, the eta will be determined from the
+dict in retry_pattern. When no retry pattern
+is provided, jobs will be retried after
+<code class="xref py py-const docutils literal"><span class="pre">RETRY_INTERVAL</span></code> seconds.</li>
+</ul>
+</td>
 </tr>
 </tbody>
 </table>
-</div></blockquote>
 <p>Ajoute un attribut <code class="docutils literal"><span class="pre">delay</span></code> sur la fonction décorée.</p>
 <p>Quand <code class="docutils literal"><span class="pre">delay</span></code> est appelée, la fonction est transformée en job et stockée dans le modèle OpenERP queue.job. Les arguments positionnels et nommés transmis à <code class="docutils literal"><span class="pre">delay</span></code> seront les arguments utilisés par la fonction décorée lorsqu&#8217;elle sera exécutée.</p>
+<p><code class="docutils literal"><span class="pre">retry_pattern</span></code> is a dict where keys are the count of retries and the
+values are the delay to postpone a job.</p>
 <p>La fonction <code class="docutils literal"><span class="pre">delay()</span></code> d&#8217;un job reçoit les arguments suivants :</p>
 <dl class="docutils">
 <dt>session</dt>
@@ -581,10 +589,9 @@ and can be manually changed later using the views.</td>
 <dd><p class="first last">nom du modèle sur lequel le job a quelque chose à faire</p>
 </dd>
 <dt><a href="#id1"><span class="problematic" id="id2">*</span></a>args et <a href="#id3"><span class="problematic" id="id4">**</span></a>kargs</dt>
-<dd><blockquote class="first">
-<div><p>Arguments positionnels et nommés qui seront transmis à la fonction une fois que le job est exécuté. Ils doivent être « pickle-able ».</p>
-<p>Il existe 4 arguments nommés spéciaux et réservés que vous pouvez utiliser :</p>
-<ul>
+<dd><p class="first">Arguments positionnels et nommés qui seront transmis à la fonction une fois que le job est exécuté. Ils doivent être « pickle-able ».</p>
+<p>There are 5 special and reserved keyword arguments that you can use:</p>
+<ul class="last">
 <li><dl class="first docutils">
 <dt>priority : priorité du job, une valeur plus petite étant prioritaire.</dt>
 <dd><p class="first last">10 par défaut.</p>
@@ -613,7 +620,8 @@ and can be manually changed later using the views.</td>
 </dl>
 </li>
 </ul>
-</div></blockquote>
+</dd>
+</dl>
 <p>Exemple :</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="nd">@job</span>
 <span class="k">def</span> <span class="nf">export_one_thing</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">one_thing</span><span class="p">):</span>
@@ -635,16 +643,27 @@ and can be manually changed later using the views.</td>
 <span class="k">def</span> <span class="nf">export_one_thing</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">one_thing</span><span class="p">):</span>
     <span class="c"># work</span>
     <span class="c"># export one_thing</span>
+
+<span class="nd">@job</span><span class="p">(</span><span class="n">retry_pattern</span><span class="o">=</span><span class="p">{</span><span class="mi">1</span><span class="p">:</span> <span class="mi">10</span> <span class="o">*</span> <span class="mi">60</span><span class="p">,</span>
+                    <span class="mi">5</span><span class="p">:</span> <span class="mi">20</span> <span class="o">*</span> <span class="mi">60</span><span class="p">,</span>
+                    <span class="mi">10</span><span class="p">:</span> <span class="mi">30</span> <span class="o">*</span> <span class="mi">60</span><span class="p">,</span>
+                    <span class="mi">15</span><span class="p">:</span> <span class="mi">12</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">60</span><span class="p">})</span>
+<span class="k">def</span> <span class="nf">retryable_example</span><span class="p">(</span><span class="n">session</span><span class="p">):</span>
+    <span class="c"># 5 first retries postponed 10 minutes later</span>
+    <span class="c"># retries 5 to 10 postponed 20 minutes later</span>
+    <span class="c"># retries 10 to 15 postponed 30 minutes later</span>
+    <span class="c"># all subsequent retries postponed 12 hours later</span>
+    <span class="k">raise</span> <span class="n">RetryableJobError</span>
+
+<span class="n">retryable_example</span><span class="o">.</span><span class="n">delay</span><span class="p">(</span><span class="n">session</span><span class="p">)</span>
 </pre></div>
 </div>
-<p class="last">Voir aussi : <a class="reference internal" href="#connector.queue.job.related_action" title="connector.queue.job.related_action"><code class="xref py py-func docutils literal"><span class="pre">related_action()</span></code></a> une action connexe peut être attachée à un job</p>
-</dd>
-</dl>
+<p>Voir aussi : <a class="reference internal" href="#connector.queue.job.related_action" title="connector.queue.job.related_action"><code class="xref py py-func docutils literal"><span class="pre">related_action()</span></code></a> une action connexe peut être attachée à un job</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="connector.queue.job.related_action">
-<code class="descclassname">connector.queue.job.</code><code class="descname">related_action</code><span class="sig-paren">(</span><em>action=&lt;function &lt;lambda&gt; at 0x57fb488&gt;</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/queue/job.html#related_action"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.job.related_action" title="Lien permanent vers cette définition">¶</a></dt>
+<code class="descclassname">connector.queue.job.</code><code class="descname">related_action</code><span class="sig-paren">(</span><em>action=&lt;function &lt;lambda&gt; at 0x54e6578&gt;</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/queue/job.html#related_action"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.job.related_action" title="Lien permanent vers cette définition">¶</a></dt>
 <dd><p>Attache une <em>action connexe</em> à un job</p>
 <p>Un <em>action connexe</em> apparaîtra comme un bouton dans la vue OpenERP. Le bouton exécutera l&#8217;action, habituellement une ouverture de formulaire de l&#8217;enregistrement lié au job.</p>
 <p>L&#8217;<code class="docutils literal"><span class="pre">action</span></code> doit être un objet <cite>callable</cite> qui prends les arguments</p>

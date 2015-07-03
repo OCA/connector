@@ -13,3 +13,7 @@ Please join and subscribe to the mailing list.
 
 Documentation:
 http://www.odoo-connector.com
+
+Translation Status
+------------------
+[![Transifex Status](https://www.transifex.com/projects/p/OCA-connector-7-0/chart/image_png)](https://www.transifex.com/projects/p/OCA-connector-7-0)

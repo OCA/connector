@@ -10,20 +10,25 @@ python:
   - "2.7"
 
 env:
-  - VERSION="7.0" ODOO_REPO="odoo/odoo"
-  - VERSION="7.0" ODOO_REPO="OCA/OCB"
+  - LINT_CHECK="1"
+  - ODOO_REPO="odoo/odoo" TESTS="1"
+  - ODOO_REPO="OCA/OCB" TESTS="1"
+  - TRANSIFEX="1" TRANSIFEX_USER='transbot@odoo-community.org'
+  global:
+  - VERSION="8.0" TESTS="0" LINT_CHECK="0" TRANSIFEX="0"
+  # transifex
+  - secure: "HLsfDkckZKfcyIFdLLYI2Q/SKBsI48QoYKJm2WSttlSIp4Bli6rYc/2WLwcKyQmkS0TITYRhKAjzBYYHZCThj77lwQgXFm5Di+MFpDbH5R5llCdQJD+A5gSs/GxzIEXX6YxVajcLe6MrI15pdv3p9Bl8K14owLXZaypvkV1XrBA="
 
 virtualenv:
   system_site_packages: true
 
 install:
-  - git clone https://github.com/OCA/maintainer-quality-tools.git ${HOME}/maintainer-quality-tools
+  - git clone --depth=1 https://github.com/OCA/maintainer-quality-tools.git ${HOME}/maintainer-quality-tools
   - export PATH=${HOME}/maintainer-quality-tools/travis:${PATH}
   - travis_install_nightly
 
 script:
-  - travis_run_flake8
   - travis_run_tests
 
 after_success:
-  coveralls
+  travis_after_tests_success

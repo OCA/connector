@@ -363,7 +363,10 @@ class Binder(ConnectorUnit):
     internal id, or create the binding (link) between them
 
     This is a default implementation that can be inherited or reimplemented
-    in the connectors
+    in the connectors.
+
+    This implementation assumes that binding models are ``_inherits`` of
+    the models they are binding.
     """
 
     _model_name = None  # define in sub-classes
@@ -382,7 +385,7 @@ class Binder(ConnectorUnit):
         :param browse: if True, returns a recordset
         :return: a record ID, depending on the value of unwrap,
                  or None if the external_id is not mapped
-        :rtype: int
+        :rtype: int or recordset
         """
         bindings = self.model.with_context(active_test=False).search(
             [(self._external_field, '=', str(external_id)),
@@ -397,7 +400,6 @@ class Binder(ConnectorUnit):
 
     def to_backend(self, binding_id, wrap=False):
         """ Give the external ID for an OpenERP binding ID
-        (ID in a model magento.*)
 
         :param binding_id: OpenERP binding ID for which we want the backend id
         :param wrap: if False, binding_id is the ID of the binding,

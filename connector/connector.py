@@ -391,7 +391,8 @@ class Binder(ConnectorUnit):
         if not bindings:
             return self.model.browse() if browse else None
         bindings.ensure_one()
-        bindings = getattr(bindings, self._openerp_field) if unwrap else bindings
+        if unwrap:
+            bindings = getattr(bindings, self._openerp_field)
         return bindings if browse else bindings.id
 
     def to_backend(self, binding_id, wrap=False):

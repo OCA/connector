@@ -5,6 +5,7 @@ Future
 ~~~~~~
 
 * method 'install_in_connector' is now deprecated
+* Add a retry pattern for jobs (https://github.com/OCA/connector/pull/75)
 
 3.1.0 (2015-05-15)
 ~~~~~~~~~~~~~~~~~~

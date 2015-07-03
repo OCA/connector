@@ -280,6 +280,7 @@
     <span class="n">worker_id</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Many2one</span><span class="p">(</span><span class="n">comodel_name</span><span class="o">=</span><span class="s">&#39;queue.worker&#39;</span><span class="p">,</span>
                                 <span class="n">string</span><span class="o">=</span><span class="s">&#39;Worker&#39;</span><span class="p">,</span>
                                 <span class="n">ondelete</span><span class="o">=</span><span class="s">&#39;set null&#39;</span><span class="p">,</span>
+                                <span class="n">select</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
                                 <span class="n">readonly</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
     <span class="n">uuid</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Char</span><span class="p">(</span><span class="n">string</span><span class="o">=</span><span class="s">&#39;UUID&#39;</span><span class="p">,</span>
                        <span class="n">readonly</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>

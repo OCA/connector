@@ -77,7 +77,8 @@ class QueueJob(orm.Model):
 
     _columns = {
         'worker_id': fields.many2one('queue.worker', string='Worker',
-                                     ondelete='set null', readonly=True),
+                                     ondelete='set null', readonly=True,
+                                     select=True),
         'uuid': fields.char('UUID', readonly=True, select=True, required=True),
         'user_id': fields.many2one('res.users', string='User ID',
                                    required=True),

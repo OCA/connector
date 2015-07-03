@@ -231,8 +231,8 @@ class OpenERPJobStorage(JobStorage):
             eta = dt_from_string(stored.eta)
 
         job_ = Job(func=func_name, args=args, kwargs=kwargs,
-                   priority=stored.priority, eta=eta,
-                   job_uuid=stored.uuid, description=stored.name)
+                   priority=stored.priority, eta=eta, job_uuid=stored.uuid,
+                   description=stored.name)
 
         if stored.date_created:
             job_.date_created = dt_from_string(stored.date_created)
@@ -361,7 +361,8 @@ class Job(object):
 
     def __init__(self, func=None, model_name=None,
                  args=None, kwargs=None, priority=None,
-                 eta=None, job_uuid=None, max_retries=None, description=None):
+                 eta=None, job_uuid=None, max_retries=None,
+                 description=None):
         """ Create a Job
 
         :param func: function to execute
@@ -570,13 +571,25 @@ class Job(object):
         result = msg if msg is not None else _('Canceled. Nothing to do.')
         self.set_done(result=result)
 
+    def _get_retry_seconds(self, seconds=None):
+        retry_pattern = self.func.retry_pattern
+        if not seconds and retry_pattern:
+            # ordered from higher to lower count of retries
+            patt = sorted(retry_pattern.iteritems(), key=lambda t: t[0])
+            seconds = RETRY_INTERVAL
+            for retry_count, postpone_seconds in patt:
+                if self.retry >= retry_count:
+                    seconds = postpone_seconds
+                else:
+                    break
+        return seconds
+
     def postpone(self, result=None, seconds=None):
         """ Write an estimated time arrival to n seconds
         later than now. Used when an retryable exception
         want to retry a job later. """
-        if seconds is None:
-            seconds = RETRY_INTERVAL
-        self.eta = timedelta(seconds=seconds)
+        eta_seconds = self._get_retry_seconds(seconds)
+        self.eta = timedelta(seconds=eta_seconds)
         self.exc_info = None
         if result is not None:
             self.result = result
@@ -590,7 +603,7 @@ class Job(object):
 JOB_REGISTRY = set()
 
 
-def job(func=None, default_channel='root'):
+def job(func=None, default_channel='root', retry_pattern=None):
     """ Decorator for jobs.
 
     Optional argument:
@@ -598,27 +611,37 @@ def job(func=None, default_channel='root'):
     :param default_channel: the channel wherein the job will be assigned. This
                             channel is set at the installation of the module
                             and can be manually changed later using the views.
+    :param retry_pattern: The retry pattern to use for postponing a job.
+                          If a job is postponed and there is no eta
+                          specified, the eta will be determined from the
+                          dict in retry_pattern. When no retry pattern
+                          is provided, jobs will be retried after
+                          :const:`RETRY_INTERVAL` seconds.
+    :type retry_pattern: dict(retry_count,retry_eta_seconds)
 
-   Add a ``delay`` attribute on the decorated function.
+    Add a ``delay`` attribute on the decorated function.
 
-   When ``delay`` is called, the function is transformed to a job and
-   stored in the OpenERP queue.job model. The arguments and keyword
-   arguments given in ``delay`` will be the arguments used by the
-   decorated function when it is executed.
+    When ``delay`` is called, the function is transformed to a job and
+    stored in the OpenERP queue.job model. The arguments and keyword
+    arguments given in ``delay`` will be the arguments used by the
+    decorated function when it is executed.
 
-   The ``delay()`` function of a job takes the following arguments:
+    ``retry_pattern`` is a dict where keys are the count of retries and the
+    values are the delay to postpone a job.
 
-   session
-     Current :py:class:`~openerp.addons.connector.session.ConnectorSession`
+    The ``delay()`` function of a job takes the following arguments:
 
-   model_name
-     name of the model on which the job has something to do
+    session
+      Current :py:class:`~openerp.addons.connector.session.ConnectorSession`
 
-   *args and **kargs
+    model_name
+      name of the model on which the job has something to do
+
+    *args and **kargs
      Arguments and keyword arguments which will be given to the called
      function once the job is executed. They should be ``pickle-able``.
 
-     There is 4 special and reserved keyword arguments that you can use:
+     There are 5 special and reserved keyword arguments that you can use:
 
      * priority: priority of the job, the smaller is the higher priority.
                  Default is 10.
@@ -627,7 +650,6 @@ def job(func=None, default_channel='root'):
                     infinite retries. Default is 5.
      * eta: the job can be executed only after this datetime
             (or now + timedelta if a timedelta or integer is given)
-
      * description : a human description of the job,
                      intended to discriminate job instances
                      (Default is the func.__doc__ or
@@ -658,6 +680,20 @@ def job(func=None, default_channel='root'):
             # work
             # export one_thing
 
+        @job(retry_pattern={1: 10 * 60,
+                            5: 20 * 60,
+                            10: 30 * 60,
+                            15: 12 * 60 * 60})
+        def retryable_example(session):
+            # 5 first retries postponed 10 minutes later
+            # retries 5 to 10 postponed 20 minutes later
+            # retries 10 to 15 postponed 30 minutes later
+            # all subsequent retries postponed 12 hours later
+            raise RetryableJobError
+
+        retryable_example.delay(session)
+
+
     See also: :py:func:`related_action` a related action can be attached
     to a job
 
@@ -676,6 +712,10 @@ def job(func=None, default_channel='root'):
     assert default_channel == 'root' or default_channel.startswith('root.'), (
         "The channel path must start by 'root'")
     func.default_channel = default_channel
+    assert retry_pattern is None or isinstance(retry_pattern, dict), (
+        "retry_pattern must be a dict"
+    )
+    func.retry_pattern = retry_pattern
     func.delay = delay
     JOB_REGISTRY.add(func)
     return func

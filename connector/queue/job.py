@@ -51,6 +51,7 @@ STATES = [(PENDING, 'Pending'),
 DEFAULT_PRIORITY = 10  # used by the PriorityQueue to sort the jobs
 DEFAULT_MAX_RETRIES = 5
 RETRY_INTERVAL = 10 * 60  # seconds
+POSTPONE_INTERVAL = 3 * 60  # seconds between postpones
 
 _logger = logging.getLogger(__name__)
 
@@ -601,13 +602,32 @@ class Job(object):
         result = msg if msg is not None else _('Canceled. Nothing to do.')
         self.set_done(result=result)
 
-    def postpone(self, result=None, seconds=None):
+    def postpone(self, result=None, session=None, seconds=None):
         """ Write an estimated time arrival to n seconds
         later than now. Used when an retryable exception
         want to retry a job later. """
-        if seconds is None:
-            seconds = RETRY_INTERVAL
-        self.eta = timedelta(seconds=seconds)
+        job_model = session.pool.get('queue.job')
+        job_ids = job_model.search(session.cr,
+                                   session.uid,
+                                   [('eta', '!=', False), ('state', 'not in', ['done', 'failed'])],
+                                   order='eta desc', limit=1,
+                                   context=session.context)
+
+        if job_ids:
+            reads = job_model.read(session.cr,
+                                   session.uid,
+                                   job_ids[0],
+                                   ['uuid', 'eta', 'state'],
+                                   context=session.context)
+
+            self.eta = datetime.strptime(reads['eta'],
+                                         DEFAULT_SERVER_DATETIME_FORMAT) + \
+                                         timedelta(seconds=POSTPONE_INTERVAL)
+        else:
+            if seconds is None:
+                seconds = RETRY_INTERVAL
+            self.eta = timedelta(seconds=seconds)
+
         self.exc_info = None
         if result is not None:
             self.result = result

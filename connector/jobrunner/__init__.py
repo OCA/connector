@@ -25,7 +25,6 @@
 
 import logging
 import os
-from threading import Thread
 import time
 
 from openerp.tools import config

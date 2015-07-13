@@ -56,7 +56,7 @@ How to use it?
   - ODOO_CONNECTOR_CHANNELS=root:4 (or any other channels configuration)
   - optional if xmlrpc_port is not set: ODOO_CONNECTOR_PORT=8069
 
-* Start Odoo with --load=web,connector and --workers > 1. [2]
+* Start Odoo with --workers > 1. [2]
 * Disable then "Enqueue Jobs" cron.
 * Do NOT start openerp-connector-worker.
 * Create jobs (eg using base_import_async) and observe they

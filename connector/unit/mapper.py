@@ -248,7 +248,7 @@ def follow_m2o_relations(field):
         Assuming model is ``product.product``::
 
         direct = [
-            (follow_m2o_relations('product_tmpl_id.categ_id.name'), 'cat_name')]
+            (follow_m2o_relations('product_tmpl_id.categ_id.name'), 'cat')]
 
     :param field: field "path", using dots for relations as usual in Odoo
     """

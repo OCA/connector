@@ -13,6 +13,7 @@ from openerp.addons.connector.unit.mapper import (
     changed_by,
     only_create,
     convert,
+    follow_m2o_relations,
     m2o_to_backend,
     backend_to_m2o,
     none,
@@ -500,6 +501,34 @@ class test_mapper(unittest2.TestCase):
         self.assertEqual(
             MyExportMapper._changed_by_fields,
             set(['street', 'in_t', 'in_f', 'name', 'city', 'email']))
+
+
+class test_mapper_recordsets(common.TransactionCase):
+    """ Test mapper with "real" records instead of mocks """
+
+    def setUp(self):
+        super(test_mapper_recordsets, self).setUp()
+        self.session = ConnectorSession(self.cr, self.uid)
+        self.backend = mock.Mock(wraps=Backend('x', version='y'),
+                                 name='backend')
+        backend_record = mock.Mock()
+        backend_record.get_backend.return_value = self.backend
+        self.connector_env = ConnectorEnvironment(
+            backend_record, self.session, 'res.partner')
+
+    def test_mapping_modifier_follow_m2o_relations(self):
+        """ Map with the follow_m2o_relations modifier """
+        class MyMapper(ImportMapper):
+            direct = [
+                (follow_m2o_relations('parent_id.name'), 'parent_name'),
+            ]
+
+        partner = self.browse_ref('base.res_partner_address_4')
+        mapper = MyMapper(self.connector_env)
+        map_record = mapper.map_record(partner)
+        expected = {'parent_name': 'Agrolait'}
+        self.assertEqual(map_record.values(), expected)
+        self.assertEqual(map_record.values(for_create=True), expected)
 
 
 class test_mapper_binding(common.TransactionCase):

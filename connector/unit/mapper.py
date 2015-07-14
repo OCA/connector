@@ -239,6 +239,28 @@ def backend_to_m2o(field, binding=None, with_inactive=False):
     return modifier
 
 
+def follow_m2o_relations(field):
+    """A modifier intended to be used on ``direct`` mappings.
+
+    'Follows' Many2one relations and return the final field value.
+
+    Examples:
+        Assuming model is ``product.product``::
+
+        direct = [
+            (follow_m2o_relations('product_tmpl_id.categ_id.name'), 'cat_name')]
+
+    :param field: field "path", using dots for relations as usual in Odoo
+    """
+    def modifier(self, record, to_attr):
+        attrs = field.split('.')
+        value = record
+        for attr in attrs:
+            value = getattr(value, attr)
+        return value
+    return modifier
+
+
 MappingDefinition = namedtuple('MappingDefinition',
                                ['changed_by',
                                 'only_create'])

@@ -472,6 +472,28 @@
     <span class="k">return</span> <span class="n">modifier</span>
 
 </div>
+<div class="viewcode-block" id="follow_m2o_relations"><a class="viewcode-back" href="../../../api/api_mapper.html#connector.unit.mapper.follow_m2o_relations">[docs]</a><span class="k">def</span> <span class="nf">follow_m2o_relations</span><span class="p">(</span><span class="n">field</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A modifier intended to be used on ``direct`` mappings.</span>
+
+<span class="sd">    &#39;Follows&#39; Many2one relations and return the final field value.</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        Assuming model is ``product.product``::</span>
+
+<span class="sd">        direct = [</span>
+<span class="sd">            (follow_m2o_relations(&#39;product_tmpl_id.categ_id.name&#39;), &#39;cat&#39;)]</span>
+
+<span class="sd">    :param field: field &quot;path&quot;, using dots for relations as usual in Odoo</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">modifier</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="n">to_attr</span><span class="p">):</span>
+        <span class="n">attrs</span> <span class="o">=</span> <span class="n">field</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;.&#39;</span><span class="p">)</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="n">record</span>
+        <span class="k">for</span> <span class="n">attr</span> <span class="ow">in</span> <span class="n">attrs</span><span class="p">:</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">attr</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">value</span>
+    <span class="k">return</span> <span class="n">modifier</span>
+
+</div>
 <span class="n">MappingDefinition</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="s">&#39;MappingDefinition&#39;</span><span class="p">,</span>
                                <span class="p">[</span><span class="s">&#39;changed_by&#39;</span><span class="p">,</span>
                                 <span class="s">&#39;only_create&#39;</span><span class="p">])</span>

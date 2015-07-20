@@ -669,7 +669,7 @@ to a job</p>
 
 <dl class="function">
 <dt id="connector.queue.job.related_action">
-<code class="descclassname">connector.queue.job.</code><code class="descname">related_action</code><span class="sig-paren">(</span><em>action=&lt;function &lt;lambda&gt; at 0x52b68c0&gt;</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/queue/job.html#related_action"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.job.related_action" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">connector.queue.job.</code><code class="descname">related_action</code><span class="sig-paren">(</span><em>action=&lt;function &lt;lambda&gt; at 0x6056d70&gt;</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/queue/job.html#related_action"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.job.related_action" title="Permalink to this definition">¶</a></dt>
 <dd><p>Attach a <em>Related Action</em> to a job.</p>
 <p>A <em>Related Action</em> will appear as a button on the OpenERP view.
 The button will execute the action, usually it will open the
@@ -872,7 +872,7 @@ single-line string in clients</p>
 <dt id="connector.queue.model.JobChannel.job_function_ids">
 <code class="descname">job_function_ids</code><a class="headerlink" href="#connector.queue.model.JobChannel.job_function_ids" title="Permalink to this definition">¶</a></dt>
 <dd><p>One2many field; the value of such a field is the recordset of all the
-records in <cite>comodel_name</cite> such that the field <cite>inverse_name</cite> is equal to
+records in <code class="docutils literal"><span class="pre">comodel_name</span></code> such that the field <code class="docutils literal"><span class="pre">inverse_name</span></code> is equal to
 the current record.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -880,8 +880,8 @@ the current record.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>comodel_name</strong> &#8211; name of the target model (string)</li>
-<li><strong>inverse_name</strong> &#8211; name of the inverse <cite>Many2one</cite> field in
-<cite>comodel_name</cite> (string)</li>
+<li><strong>inverse_name</strong> &#8211; name of the inverse <code class="docutils literal"><span class="pre">Many2one</span></code> field in
+<code class="docutils literal"><span class="pre">comodel_name</span></code> (string)</li>
 <li><strong>domain</strong> &#8211; an optional domain to set on candidate values on the
 client side (domain or string)</li>
 <li><strong>context</strong> &#8211; an optional context to use on the client side when
@@ -894,7 +894,7 @@ field (boolean, by default <code class="docutils literal"><span class="pre">Fals
 </tr>
 </tbody>
 </table>
-<p>The attributes <cite>comodel_name</cite> and <cite>inverse_name</cite> are mandatory except in
+<p>The attributes <code class="docutils literal"><span class="pre">comodel_name</span></code> and <code class="docutils literal"><span class="pre">inverse_name</span></code> are mandatory except in
 the case of related fields or field extensions.</p>
 </dd></dl>
 
@@ -948,7 +948,7 @@ accessible from the current model (corresponds to <code class="docutils literal"
 </tr>
 </tbody>
 </table>
-<p>The attribute <cite>comodel_name</cite> is mandatory except in the case of related
+<p>The attribute <code class="docutils literal"><span class="pre">comodel_name</span></code> is mandatory except in the case of related
 fields or field extensions.</p>
 </dd></dl>
 
@@ -1018,7 +1018,7 @@ accessible from the current model (corresponds to <code class="docutils literal"
 </tr>
 </tbody>
 </table>
-<p>The attribute <cite>comodel_name</cite> is mandatory except in the case of related
+<p>The attribute <code class="docutils literal"><span class="pre">comodel_name</span></code> is mandatory except in the case of related
 fields or field extensions.</p>
 </dd></dl>
 
@@ -1111,7 +1111,7 @@ accessible from the current model (corresponds to <code class="docutils literal"
 </tr>
 </tbody>
 </table>
-<p>The attribute <cite>comodel_name</cite> is mandatory except in the case of related
+<p>The attribute <code class="docutils literal"><span class="pre">comodel_name</span></code> is mandatory except in the case of related
 fields or field extensions.</p>
 </dd></dl>
 
@@ -1224,7 +1224,7 @@ accessible from the current model (corresponds to <code class="docutils literal"
 </tr>
 </tbody>
 </table>
-<p>The attribute <cite>comodel_name</cite> is mandatory except in the case of related
+<p>The attribute <code class="docutils literal"><span class="pre">comodel_name</span></code> is mandatory except in the case of related
 fields or field extensions.</p>
 </dd></dl>
 
@@ -1316,16 +1316,16 @@ have a size and usually displayed as a multiline text box.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>selection</strong> &#8211; specifies the possible values for this field.
-It is given as either a list of pairs (<cite>value</cite>, <cite>string</cite>), or a
+It is given as either a list of pairs (<code class="docutils literal"><span class="pre">value</span></code>, <code class="docutils literal"><span class="pre">string</span></code>), or a
 model method, or a method name.</li>
 <li><strong>selection_add</strong> &#8211; provides an extension of the selection in the case
-of an overridden field. It is a list of pairs (<cite>value</cite>, <cite>string</cite>).</li>
+of an overridden field. It is a list of pairs (<code class="docutils literal"><span class="pre">value</span></code>, <code class="docutils literal"><span class="pre">string</span></code>).</li>
 </ul>
 </td>
 </tr>
 </tbody>
 </table>
-<p>The attribute <cite>selection</cite> is mandatory except in the case of
+<p>The attribute <code class="docutils literal"><span class="pre">selection</span></code> is mandatory except in the case of
 <a class="reference external" href="https://www.odoo.com/documentation/8.0/reference/orm.html#field-related" title="(in odoo v8.0)"><span class="xref std std-ref">related fields</span></a> or <a class="reference external" href="https://www.odoo.com/documentation/8.0/reference/orm.html#field-incremental-definition" title="(in odoo v8.0)"><span class="xref std std-ref">field extensions</span></a>.</p>
 </dd></dl>
 
@@ -1355,7 +1355,7 @@ accessible from the current model (corresponds to <code class="docutils literal"
 </tr>
 </tbody>
 </table>
-<p>The attribute <cite>comodel_name</cite> is mandatory except in the case of related
+<p>The attribute <code class="docutils literal"><span class="pre">comodel_name</span></code> is mandatory except in the case of related
 fields or field extensions.</p>
 </dd></dl>
 
@@ -1404,7 +1404,7 @@ accessible from the current model (corresponds to <code class="docutils literal"
 </tr>
 </tbody>
 </table>
-<p>The attribute <cite>comodel_name</cite> is mandatory except in the case of related
+<p>The attribute <code class="docutils literal"><span class="pre">comodel_name</span></code> is mandatory except in the case of related
 fields or field extensions.</p>
 </dd></dl>
 
@@ -1479,7 +1479,7 @@ process</p>
 <dt id="connector.queue.model.QueueWorker.job_ids">
 <code class="descname">job_ids</code><a class="headerlink" href="#connector.queue.model.QueueWorker.job_ids" title="Permalink to this definition">¶</a></dt>
 <dd><p>One2many field; the value of such a field is the recordset of all the
-records in <cite>comodel_name</cite> such that the field <cite>inverse_name</cite> is equal to
+records in <code class="docutils literal"><span class="pre">comodel_name</span></code> such that the field <code class="docutils literal"><span class="pre">inverse_name</span></code> is equal to
 the current record.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1487,8 +1487,8 @@ the current record.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>comodel_name</strong> &#8211; name of the target model (string)</li>
-<li><strong>inverse_name</strong> &#8211; name of the inverse <cite>Many2one</cite> field in
-<cite>comodel_name</cite> (string)</li>
+<li><strong>inverse_name</strong> &#8211; name of the inverse <code class="docutils literal"><span class="pre">Many2one</span></code> field in
+<code class="docutils literal"><span class="pre">comodel_name</span></code> (string)</li>
 <li><strong>domain</strong> &#8211; an optional domain to set on candidate values on the
 client side (domain or string)</li>
 <li><strong>context</strong> &#8211; an optional context to use on the client side when
@@ -1501,7 +1501,7 @@ field (boolean, by default <code class="docutils literal"><span class="pre">Fals
 </tr>
 </tbody>
 </table>
-<p>The attributes <cite>comodel_name</cite> and <cite>inverse_name</cite> are mandatory except in
+<p>The attributes <code class="docutils literal"><span class="pre">comodel_name</span></code> and <code class="docutils literal"><span class="pre">inverse_name</span></code> are mandatory except in
 the case of related fields or field extensions.</p>
 </dd></dl>
 
@@ -1566,7 +1566,7 @@ single-line string in clients</p>
 </tr>
 </tbody>
 </table>
-<p>The attribute <cite>comodel_name</cite> is mandatory except in the case of related
+<p>The attribute <code class="docutils literal"><span class="pre">comodel_name</span></code> is mandatory except in the case of related
 fields or field extensions.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1576,17 +1576,17 @@ fields or field extensions.</p>
 <li><strong>relation</strong> &#8211; optional name of the table that stores the relation in
 the database (string)</li>
 <li><strong>column1</strong> &#8211; optional name of the column referring to &#8220;these&#8221; records
-in the table <cite>relation</cite> (string)</li>
+in the table <code class="docutils literal"><span class="pre">relation</span></code> (string)</li>
 <li><strong>column2</strong> &#8211; optional name of the column referring to &#8220;those&#8221; records
-in the table <cite>relation</cite> (string)</li>
+in the table <code class="docutils literal"><span class="pre">relation</span></code> (string)</li>
 </ul>
 </td>
 </tr>
 </tbody>
 </table>
-<p>The attributes <cite>relation</cite>, <cite>column1</cite> and <cite>column2</cite> are optional. If not
+<p>The attributes <code class="docutils literal"><span class="pre">relation</span></code>, <code class="docutils literal"><span class="pre">column1</span></code> and <code class="docutils literal"><span class="pre">column2</span></code> are optional. If not
 given, names are automatically generated from model names, provided
-<cite>model_name</cite> and <cite>comodel_name</cite> are different!</p>
+<code class="docutils literal"><span class="pre">model_name</span></code> and <code class="docutils literal"><span class="pre">comodel_name</span></code> are different!</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />

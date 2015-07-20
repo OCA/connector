@@ -822,6 +822,30 @@ fields really having to be exported.</p>
 </dd></dl>
 
 <dl class="function">
+<dt id="connector.unit.mapper.follow_m2o_relations">
+<code class="descclassname">connector.unit.mapper.</code><code class="descname">follow_m2o_relations</code><span class="sig-paren">(</span><em>field</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/unit/mapper.html#follow_m2o_relations"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.unit.mapper.follow_m2o_relations" title="Permalink to this definition">¶</a></dt>
+<dd><p>A modifier intended to be used on <code class="docutils literal"><span class="pre">direct</span></code> mappings.</p>
+<p>&#8216;Follows&#8217; Many2one relations and return the final field value.</p>
+<dl class="docutils">
+<dt>Examples:</dt>
+<dd><p class="first">Assuming model is <code class="docutils literal"><span class="pre">product.product</span></code>:</p>
+<dl class="last docutils">
+<dt>direct = [</dt>
+<dd>(follow_m2o_relations(&#8216;product_tmpl_id.categ_id.name&#8217;), &#8216;cat&#8217;)]</dd>
+</dl>
+</dd>
+</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>field</strong> &#8211; field &#8220;path&#8221;, using dots for relations as usual in Odoo</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
 <dt id="connector.unit.mapper.m2o_to_backend">
 <code class="descclassname">connector.unit.mapper.</code><code class="descname">m2o_to_backend</code><span class="sig-paren">(</span><em>field</em>, <em>binding=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/unit/mapper.html#m2o_to_backend"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.unit.mapper.m2o_to_backend" title="Permalink to this definition">¶</a></dt>
 <dd><p>A modifier intended to be used on the <code class="docutils literal"><span class="pre">direct</span></code> mappings.</p>

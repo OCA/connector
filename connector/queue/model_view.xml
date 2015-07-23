@@ -81,18 +81,16 @@
                         <group>
                             <field name="uuid"/>
                             <field name="func_string"/>
+                            <field name="job_function_id"/>
+                            <field name="channel"/>
+                            <field name="worker_id"/>
                         </group>
-                        <group col="6">
+                        <group>
                             <group>
                                 <field name="priority"/>
                                 <field name="eta"/>
                                 <field name="company_id" groups="base.group_multi_company"/>
                                 <field name="user_id"/>
-                            </group>
-                            <group>
-                                <field name="worker_id"/>
-                                <field name="job_function_id"/>
-                                <field name="channel"/>
                             </group>
                             <group>
                                 <field name="date_created"/>

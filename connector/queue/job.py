@@ -583,6 +583,8 @@ class Job(object):
                     seconds = postpone_seconds
                 else:
                     break
+        elif not seconds:
+            seconds = RETRY_INTERVAL
         return seconds
 
     def postpone(self, result=None, seconds=None):

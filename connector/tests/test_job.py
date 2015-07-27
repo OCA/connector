@@ -747,3 +747,13 @@ class TestJobChannels(common.TransactionCase):
         self.assertEquals(channel.name, 'subsub')
         self.assertEquals(channel.parent_id.name, 'sub')
         self.assertEquals(channel.parent_id.parent_id.name, 'root')
+
+    def test_job_decorator(self):
+        """ Test the job decorator """
+        default_channel = 'channel'
+        retry_pattern = {1: 5}
+        partial = job(None, default_channel=default_channel,
+                      retry_pattern=retry_pattern)
+        self.assertEquals(partial.keywords.get('default_channel'),
+                          default_channel)
+        self.assertEquals(partial.keywords.get('retry_pattern'), retry_pattern)

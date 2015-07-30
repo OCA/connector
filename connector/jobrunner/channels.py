@@ -369,8 +369,9 @@ class Channel(object):
         return self.children.get(subchannel_name)
 
     def __str__(self):
-        return "%s(C:%d,Q:%d,R:%d,F:%d)" % (self.fullname,
-                                            self.capacity,
+        capacity = u'∞' if self.capacity is None else str(self.capacity)
+        return "%s(C:%s,Q:%d,R:%d,F:%d)" % (self.fullname,
+                                            capacity,
                                             len(self._queue),
                                             len(self._running),
                                             len(self._failed))

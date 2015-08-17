@@ -1014,9 +1014,9 @@
         <span class="sd">&quot;&quot;&quot; convert ``value`` from the cache to a valid value for export. The</span>
 <span class="sd">            parameter ``env`` is given for managing translations.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">env</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;export_raw_data&#39;</span><span class="p">):</span>
-            <span class="k">return</span> <span class="n">value</span>
-        <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="ow">and</span> <span class="n">ustr</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">value</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s">&#39;&#39;</span>
+        <span class="k">return</span> <span class="n">value</span> <span class="k">if</span> <span class="n">env</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;export_raw_data&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="n">ustr</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">convert_to_display_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">record</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; convert ``value`` from the cache to a suitable display name. &quot;&quot;&quot;</span>
@@ -1268,6 +1268,11 @@
         <span class="c"># special case, when an integer field is used as inverse for a one2many</span>
         <span class="n">records</span><span class="o">.</span><span class="n">_cache</span><span class="p">[</span><span class="bp">self</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">id</span> <span class="ow">or</span> <span class="mi">0</span>
 
+    <span class="k">def</span> <span class="nf">convert_to_export</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">env</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="ow">or</span> <span class="n">value</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">value</span> <span class="k">if</span> <span class="n">env</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;export_raw_data&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="n">ustr</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s">&#39;&#39;</span>
+
 
 <span class="k">class</span> <span class="nc">Float</span><span class="p">(</span><span class="n">Field</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; The precision digits are given by the attribute</span>
@@ -1315,6 +1320,11 @@
         <span class="n">digits</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">digits</span>
         <span class="k">return</span> <span class="n">float_round</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">precision_digits</span><span class="o">=</span><span class="n">digits</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="k">if</span> <span class="n">digits</span> <span class="k">else</span> <span class="n">value</span>
 
+    <span class="k">def</span> <span class="nf">convert_to_export</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">env</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="ow">or</span> <span class="n">value</span> <span class="o">==</span> <span class="mf">0.0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">value</span> <span class="k">if</span> <span class="n">env</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;export_raw_data&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="n">ustr</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s">&#39;&#39;</span>
+
 
 <span class="k">class</span> <span class="nc">_String</span><span class="p">(</span><span class="n">Field</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Abstract class for string fields. &quot;&quot;&quot;</span>
@@ -1326,11 +1336,6 @@
     <span class="n">_related_translate</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">attrgetter</span><span class="p">(</span><span class="s">&#39;translate&#39;</span><span class="p">))</span>
     <span class="n">_description_translate</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">attrgetter</span><span class="p">(</span><span class="s">&#39;translate&#39;</span><span class="p">))</span>
     
-    <span class="k">def</span> <span class="nf">convert_to_export</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">env</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">env</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;export_raw_data&#39;</span><span class="p">):</span>
-            <span class="k">return</span> <span class="n">value</span> <span class="k">if</span> <span class="n">value</span> <span class="k">else</span> <span class="bp">None</span>
-        <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="ow">and</span> <span class="n">ustr</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
-
 
 <span class="k">class</span> <span class="nc">Char</span><span class="p">(</span><span class="n">_String</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Basic string field, can be length-limited, usually displayed as a</span>
@@ -1449,9 +1454,9 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_string</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">convert_to_export</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">env</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">value</span> <span class="ow">and</span> <span class="n">env</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;export_raw_data&#39;</span><span class="p">):</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="ow">or</span> <span class="bp">None</span>
-        <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="ow">and</span> <span class="n">ustr</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">value</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s">&#39;&#39;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="k">if</span> <span class="n">env</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;export_raw_data&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="n">ustr</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
 
 
 <span class="k">class</span> <span class="nc">Datetime</span><span class="p">(</span><span class="n">Field</span><span class="p">):</span>
@@ -1518,9 +1523,9 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_string</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">convert_to_export</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">env</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">value</span> <span class="ow">and</span> <span class="n">env</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;export_raw_data&#39;</span><span class="p">):</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="ow">or</span> <span class="bp">None</span>
-        <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="ow">and</span> <span class="n">ustr</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">value</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s">&#39;&#39;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="k">if</span> <span class="n">env</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;export_raw_data&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="n">ustr</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">convert_to_display_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">record</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="k">assert</span> <span class="n">record</span><span class="p">,</span> <span class="s">&#39;Record expected&#39;</span>
@@ -1628,7 +1633,7 @@
     <span class="k">def</span> <span class="nf">convert_to_export</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">env</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">selection</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
             <span class="c"># FIXME: this reproduces an existing buggy behavior!</span>
-            <span class="k">return</span> <span class="n">value</span> <span class="ow">or</span> <span class="bp">None</span>
+            <span class="k">return</span> <span class="n">value</span> <span class="k">if</span> <span class="n">value</span> <span class="k">else</span> <span class="s">&#39;&#39;</span>
         <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_description_selection</span><span class="p">(</span><span class="n">env</span><span class="p">):</span>
             <span class="k">if</span> <span class="n">item</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">value</span><span class="p">:</span>
                 <span class="k">return</span> <span class="n">item</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
@@ -1665,7 +1670,7 @@
         <span class="k">return</span> <span class="s">&quot;</span><span class="si">%s</span><span class="s">,</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">value</span><span class="o">.</span><span class="n">_name</span><span class="p">,</span> <span class="n">value</span><span class="o">.</span><span class="n">id</span><span class="p">)</span> <span class="k">if</span> <span class="n">value</span> <span class="k">else</span> <span class="bp">False</span>
 
     <span class="k">def</span> <span class="nf">convert_to_export</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">env</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">value</span><span class="o">.</span><span class="n">name_get</span><span class="p">()[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="k">if</span> <span class="n">value</span> <span class="k">else</span> <span class="bp">None</span>
+        <span class="k">return</span> <span class="n">value</span><span class="o">.</span><span class="n">name_get</span><span class="p">()[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="k">if</span> <span class="n">value</span> <span class="k">else</span> <span class="s">&#39;&#39;</span>
 
     <span class="k">def</span> <span class="nf">convert_to_display_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">record</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">ustr</span><span class="p">(</span><span class="n">value</span> <span class="ow">and</span> <span class="n">value</span><span class="o">.</span><span class="n">display_name</span><span class="p">)</span>
@@ -1805,7 +1810,7 @@
         <span class="k">return</span> <span class="n">value</span><span class="o">.</span><span class="n">id</span>
 
     <span class="k">def</span> <span class="nf">convert_to_export</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">env</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">value</span><span class="o">.</span><span class="n">name_get</span><span class="p">()[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="k">if</span> <span class="n">value</span> <span class="k">else</span> <span class="bp">None</span>
+        <span class="k">return</span> <span class="n">value</span><span class="o">.</span><span class="n">name_get</span><span class="p">()[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="k">if</span> <span class="n">value</span> <span class="k">else</span> <span class="s">&#39;&#39;</span>
 
     <span class="k">def</span> <span class="nf">convert_to_display_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">record</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">ustr</span><span class="p">(</span><span class="n">value</span><span class="o">.</span><span class="n">display_name</span><span class="p">)</span>
@@ -1911,7 +1916,7 @@
         <span class="k">return</span> <span class="n">result</span>
 
     <span class="k">def</span> <span class="nf">convert_to_export</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">env</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">name</span> <span class="k">for</span> <span class="nb">id</span><span class="p">,</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">value</span><span class="o">.</span><span class="n">name_get</span><span class="p">())</span> <span class="k">if</span> <span class="n">value</span> <span class="k">else</span> <span class="bp">None</span>
+        <span class="k">return</span> <span class="s">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">name</span> <span class="k">for</span> <span class="nb">id</span><span class="p">,</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">value</span><span class="o">.</span><span class="n">name_get</span><span class="p">())</span> <span class="k">if</span> <span class="n">value</span> <span class="k">else</span> <span class="s">&#39;&#39;</span>
 
     <span class="k">def</span> <span class="nf">convert_to_display_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">record</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span>

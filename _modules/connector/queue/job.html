@@ -931,7 +931,8 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">func</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">functools</span><span class="o">.</span><span class="n">partial</span><span class="p">(</span><span class="n">job</span><span class="p">,</span> <span class="n">default_channel</span><span class="o">=</span><span class="n">default_channel</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">functools</span><span class="o">.</span><span class="n">partial</span><span class="p">(</span><span class="n">job</span><span class="p">,</span> <span class="n">default_channel</span><span class="o">=</span><span class="n">default_channel</span><span class="p">,</span>
+                                 <span class="n">retry_pattern</span><span class="o">=</span><span class="n">retry_pattern</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">delay</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Enqueue the function. Return the uuid of the created job.&quot;&quot;&quot;</span>

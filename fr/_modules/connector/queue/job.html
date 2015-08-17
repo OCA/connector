@@ -815,6 +815,8 @@
                     <span class="n">seconds</span> <span class="o">=</span> <span class="n">postpone_seconds</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="k">break</span>
+        <span class="k">elif</span> <span class="ow">not</span> <span class="n">seconds</span><span class="p">:</span>
+            <span class="n">seconds</span> <span class="o">=</span> <span class="n">RETRY_INTERVAL</span>
         <span class="k">return</span> <span class="n">seconds</span>
 
 <div class="viewcode-block" id="Job.postpone"><a class="viewcode-back" href="../../../api/api_queue.html#connector.queue.job.Job.postpone">[docs]</a>    <span class="k">def</span> <span class="nf">postpone</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">result</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">seconds</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>

@@ -342,7 +342,6 @@ class ConnectorEnvironment(object):
         :type connector_env:
             :py:class:`connector.connector.ConnectorEnvironment`
         """
-        # cls = self.__class__
         if connector_env:
             kwargs = {key: getattr(connector_env, key)
                       for key in connector_env._propagate_kwargs}

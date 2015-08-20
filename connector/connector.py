@@ -214,8 +214,9 @@ class ConnectorUnit(object):
             env = self.connector_env
         else:
             env = self.connector_env.create_environment(
-                    self.backend_record, self.session, model,
-                    connector_env=self.connector_env)
+                self.backend_record,
+                self.session, model,
+                connector_env=self.connector_env)
 
         return env.get_connector_unit(connector_unit_class)
 

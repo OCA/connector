@@ -268,7 +268,7 @@ class ConnectorEnvironment(object):
     .. attribute:: _propagate_kwargs
 
         List of attributes that must be used by
-        :py:class:`connector.connector.ConnectorEnvironment.create_environment`
+        :py:meth:`connector.connector.ConnectorEnvironment.create_environment`
         when a new connector environment is instantiated.
     """
 

@@ -269,7 +269,7 @@ class ConnectorEnvironment(object):
 
         List of attributes that must be used by
         :py:class:`connector.connector.ConnectorEnvironment.create_environment`
-        when a new connector environment is instiated.
+        when a new connector environment is instantiated.
     """
 
     _propagate_kwargs = []
@@ -338,7 +338,8 @@ class ConnectorEnvironment(object):
         :type session: :py:class:`connector.session.ConnectorSession`
         :param model_name: name of the model
         :type model_name: str
-        :param connector_env:
+        :param connector_env: an existing environment from which the kwargs
+                              will be propagated to the new one
         :type connector_env:
             :py:class:`connector.connector.ConnectorEnvironment`
         """

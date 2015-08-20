@@ -197,9 +197,10 @@ class ConnectorUnit(object):
         :py:class:`~connector.connector.ConnectorUnit` for the current
         model and being a class or subclass of ``connector_unit_class``.
 
-        If a different ``model`` is given, a new
-        :py:class:`~connector.connector.ConnectorEnvironment`
-        is built for this model.
+        If a different ``model`` is given, a new ConnectorEnvironment is built
+        for this model. The class used for creating the new environment is
+        the same class as in `self.connector_env` which must be
+        :py:class:`~connector.connector.ConnectorEnvironment` or a subclass.
 
         :param connector_unit_class: ``ConnectorUnit`` to search
                                      (class or subclass)
@@ -212,9 +213,10 @@ class ConnectorUnit(object):
         if model is None or model == self.model._name:
             env = self.connector_env
         else:
-            env = ConnectorEnvironment(self.backend_record,
-                                       self.session,
-                                       model)
+            env = self.connector_env.create_environment(
+                    self.backend_record, self.session, model,
+                    connector_env=self.connector_env)
+
         return env.get_connector_unit(connector_unit_class)
 
     def get_connector_unit_for_model(self, connector_unit_class, model=None):
@@ -261,7 +263,15 @@ class ConnectorEnvironment(object):
     .. attribute:: model_name
 
         Name of the OpenERP model to work with.
+
+    .. attribute:: _propagate_kwargs
+
+        List of attributes that must be used by
+        :py:class:`connector.connector.ConnectorEnvironment.create_environment`
+        when a new connector environment is instiated.
     """
+
+    _propagate_kwargs = []
 
     def __init__(self, backend_record, session, model_name):
         """
@@ -316,6 +326,29 @@ class ConnectorEnvironment(object):
         return self.backend.get_class(base_class, self.session,
                                       self.model_name)(self)
 
+    @classmethod
+    def create_environment(cls, backend_record, session, model,
+                           connector_env=None):
+        """ Create a new environment ConnectorEnvironment.
+
+        :param backend_record: browse record of the backend
+        :type backend_record: :py:class:`openerp.models.Model`
+        :param session: current session (cr, uid, context)
+        :type session: :py:class:`connector.session.ConnectorSession`
+        :param model_name: name of the model
+        :type model_name: str
+        :param connector_env:
+        :type connector_env:
+            :py:class:`connector.connector.ConnectorEnvironment`
+        """
+        # cls = self.__class__
+        if connector_env:
+            kwargs = {key: getattr(connector_env, key)
+                      for key in connector_env._propagate_kwargs}
+        if kwargs:
+            return cls(backend_record, session, model, **kwargs)
+        else:
+            return cls(backend_record, session, model)
 
 Environment = DeprecatedClass('Environment',
                               ConnectorEnvironment)

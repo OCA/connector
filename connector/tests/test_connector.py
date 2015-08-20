@@ -5,7 +5,8 @@ import unittest2
 
 from openerp.tests import common
 from openerp.addons.connector import connector
-from openerp.addons.connector.connector import ConnectorUnit
+from openerp.addons.connector.connector import (ConnectorUnit,
+                                                ConnectorEnvironment)
 from openerp.addons.connector.session import ConnectorSession
 
 
@@ -133,3 +134,46 @@ class TestConnectorUnitTransaction(common.TransactionCase):
         self.assertEqual(unit.model, self.env['res.users'])
         self.assertEqual(unit.env, self.env)
         self.assertEqual(unit.localcontext, self.env.context)
+
+
+class TestConnectorEnvironment(unittest2.TestCase):
+
+    def test_create_environment_no_connector_env(self):
+        session = mock.MagicMock(name='Session')
+        backend_record = mock.Mock(name='BackendRecord')
+        backend = mock.Mock(name='Backend')
+        backend_record.get_backend.return_value = backend
+        model = 'res.user'
+
+        connector_env = ConnectorEnvironment.create_environment(
+            backend_record, session, model
+        )
+
+        self.assertEqual(type(connector_env), ConnectorEnvironment)
+
+    def test_create_environment_existing_connector_env(self):
+
+        class MyConnectorEnvironment(ConnectorEnvironment):
+            _propagate_kwargs = ['api']
+
+            def __init__(self, backend_record, session, model_name, api=None):
+                super(MyConnectorEnvironment, self).__init__(backend_record,
+                                                             session,
+                                                             model_name)
+                self.api = api
+
+        session = mock.MagicMock(name='Session')
+        backend_record = mock.Mock(name='BackendRecord')
+        backend = mock.Mock(name='Backend')
+        backend_record.get_backend.return_value = backend
+        model = 'res.user'
+        api = object()
+
+        cust_env = MyConnectorEnvironment(backend_record, session, model,
+                                          api=api)
+
+        new_env = cust_env.create_environment(backend_record, session, model,
+                                              connector_env=cust_env)
+
+        self.assertEqual(type(new_env), MyConnectorEnvironment)
+        self.assertEqual(new_env.api, api)

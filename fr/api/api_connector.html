@@ -374,6 +374,35 @@
 </dd></dl>
 
 <dl class="attribute">
+<dt id="connector.connector._propagate_kwargs">
+<code class="descclassname">connector.connector.</code><code class="descname">_propagate_kwargs</code><a class="headerlink" href="#connector.connector._propagate_kwargs" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>List of attributes that must be used by
+<a class="reference internal" href="#connector.connector.ConnectorEnvironment.create_environment" title="connector.connector.ConnectorEnvironment.create_environment"><code class="xref py py-meth docutils literal"><span class="pre">connector.connector.ConnectorEnvironment.create_environment()</span></code></a>
+when a new connector environment is instantiated.</p>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="connector.connector.ConnectorEnvironment.create_environment">
+<em class="property">classmethod </em><code class="descclassname">ConnectorEnvironment.</code><code class="descname">create_environment</code><span class="sig-paren">(</span><em>backend_record</em>, <em>session</em>, <em>model</em>, <em>connector_env=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/connector.html#ConnectorEnvironment.create_environment"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.connector.ConnectorEnvironment.create_environment" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Create a new environment ConnectorEnvironment.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><ul class="first last simple">
+<li><strong>backend_record</strong> (<a class="reference external" href="https://www.odoo.com/documentation/8.0/reference/orm.html#openerp.models.Model" title="(disponible dans odoo v8.0)"><code class="xref py py-class docutils literal"><span class="pre">openerp.models.Model</span></code></a>) &#8211; browse record of the backend</li>
+<li><strong>session</strong> (<a class="reference internal" href="api_session.html#connector.session.ConnectorSession" title="connector.session.ConnectorSession"><code class="xref py py-class docutils literal"><span class="pre">connector.session.ConnectorSession</span></code></a>) &#8211; current session (cr, uid, context)</li>
+<li><strong>model_name</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(disponible dans Python v2.7)"><em>str</em></a>) &#8211; nom du modèle</li>
+<li><strong>connector_env</strong> (<a class="reference internal" href="#connector.connector.ConnectorEnvironment" title="connector.connector.ConnectorEnvironment"><code class="xref py py-class docutils literal"><span class="pre">connector.connector.ConnectorEnvironment</span></code></a>) &#8211; an existing environment from which the kwargs
+will be propagated to the new one</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
 <dt id="connector.connector.ConnectorEnvironment.env">
 <code class="descclassname">ConnectorEnvironment.</code><code class="descname">env</code><a class="headerlink" href="#connector.connector.ConnectorEnvironment.env" title="Lien permanent vers cette définition">¶</a></dt>
 <dd></dd></dl>
@@ -495,7 +524,10 @@
 <dt id="connector.connector.ConnectorUnit.unit_for">
 <code class="descclassname">ConnectorUnit.</code><code class="descname">unit_for</code><span class="sig-paren">(</span><em>connector_unit_class</em>, <em>model=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/connector.html#ConnectorUnit.unit_for"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.connector.ConnectorUnit.unit_for" title="Lien permanent vers cette définition">¶</a></dt>
 <dd><p>Selon le <a class="reference internal" href="#connector.connector.ConnectorEnvironment" title="connector.connector.ConnectorEnvironment"><code class="xref py py-class docutils literal"><span class="pre">ConnectorEnvironment</span></code></a> en cours, recherche et renvoie une instance de <a class="reference internal" href="#connector.connector.ConnectorUnit" title="connector.connector.ConnectorUnit"><code class="xref py py-class docutils literal"><span class="pre">ConnectorUnit</span></code></a> pour le modèle actuel et étant une classe ou sous-classe de <code class="docutils literal"><span class="pre">connector_unit_class</span></code>.</p>
-<p>Si un <code class="docutils literal"><span class="pre">model</span></code> différent est donné, un nouveau <a class="reference internal" href="#connector.connector.ConnectorEnvironment" title="connector.connector.ConnectorEnvironment"><code class="xref py py-class docutils literal"><span class="pre">ConnectorEnvironment</span></code></a> est construit pour ce modèle.</p>
+<p>If a different <code class="docutils literal"><span class="pre">model</span></code> is given, a new ConnectorEnvironment is built
+for this model. The class used for creating the new environment is
+the same class as in <cite>self.connector_env</cite> which must be
+<a class="reference internal" href="#connector.connector.ConnectorEnvironment" title="connector.connector.ConnectorEnvironment"><code class="xref py py-class docutils literal"><span class="pre">ConnectorEnvironment</span></code></a> or a subclass.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />

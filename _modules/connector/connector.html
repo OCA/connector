@@ -429,9 +429,10 @@
 <span class="sd">        :py:class:`~connector.connector.ConnectorUnit` for the current</span>
 <span class="sd">        model and being a class or subclass of ``connector_unit_class``.</span>
 
-<span class="sd">        If a different ``model`` is given, a new</span>
-<span class="sd">        :py:class:`~connector.connector.ConnectorEnvironment`</span>
-<span class="sd">        is built for this model.</span>
+<span class="sd">        If a different ``model`` is given, a new ConnectorEnvironment is built</span>
+<span class="sd">        for this model. The class used for creating the new environment is</span>
+<span class="sd">        the same class as in `self.connector_env` which must be</span>
+<span class="sd">        :py:class:`~connector.connector.ConnectorEnvironment` or a subclass.</span>
 
 <span class="sd">        :param connector_unit_class: ``ConnectorUnit`` to search</span>
 <span class="sd">                                     (class or subclass)</span>
@@ -444,9 +445,11 @@
         <span class="k">if</span> <span class="n">model</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">or</span> <span class="n">model</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">_name</span><span class="p">:</span>
             <span class="n">env</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">connector_env</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">env</span> <span class="o">=</span> <span class="n">ConnectorEnvironment</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">backend_record</span><span class="p">,</span>
-                                       <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="p">,</span>
-                                       <span class="n">model</span><span class="p">)</span>
+            <span class="n">env</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">connector_env</span><span class="o">.</span><span class="n">create_environment</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">backend_record</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span>
+                <span class="n">connector_env</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">connector_env</span><span class="p">)</span>
+
         <span class="k">return</span> <span class="n">env</span><span class="o">.</span><span class="n">get_connector_unit</span><span class="p">(</span><span class="n">connector_unit_class</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="ConnectorUnit.get_connector_unit_for_model"><a class="viewcode-back" href="../../api/api_connector.html#connector.connector.ConnectorUnit.get_connector_unit_for_model">[docs]</a>    <span class="k">def</span> <span class="nf">get_connector_unit_for_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">connector_unit_class</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
@@ -493,7 +496,15 @@
 <span class="sd">    .. attribute:: model_name</span>
 
 <span class="sd">        Name of the OpenERP model to work with.</span>
+
+<span class="sd">    .. attribute:: _propagate_kwargs</span>
+
+<span class="sd">        List of attributes that must be used by</span>
+<span class="sd">        :py:meth:`connector.connector.ConnectorEnvironment.create_environment`</span>
+<span class="sd">        when a new connector environment is instantiated.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">_propagate_kwargs</span> <span class="o">=</span> <span class="p">[]</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">backend_record</span><span class="p">,</span> <span class="n">session</span><span class="p">,</span> <span class="n">model_name</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -547,7 +558,31 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">backend</span><span class="o">.</span><span class="n">get_class</span><span class="p">(</span><span class="n">base_class</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="p">,</span>
                                       <span class="bp">self</span><span class="o">.</span><span class="n">model_name</span><span class="p">)(</span><span class="bp">self</span><span class="p">)</span>
+</div>
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="ConnectorEnvironment.create_environment"><a class="viewcode-back" href="../../api/api_connector.html#connector.connector.ConnectorEnvironment.create_environment">[docs]</a>    <span class="k">def</span> <span class="nf">create_environment</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">backend_record</span><span class="p">,</span> <span class="n">session</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span>
+                           <span class="n">connector_env</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Create a new environment ConnectorEnvironment.</span>
 
+<span class="sd">        :param backend_record: browse record of the backend</span>
+<span class="sd">        :type backend_record: :py:class:`openerp.models.Model`</span>
+<span class="sd">        :param session: current session (cr, uid, context)</span>
+<span class="sd">        :type session: :py:class:`connector.session.ConnectorSession`</span>
+<span class="sd">        :param model_name: name of the model</span>
+<span class="sd">        :type model_name: str</span>
+<span class="sd">        :param connector_env: an existing environment from which the kwargs</span>
+<span class="sd">                              will be propagated to the new one</span>
+<span class="sd">        :type connector_env:</span>
+<span class="sd">            :py:class:`connector.connector.ConnectorEnvironment`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">if</span> <span class="n">connector_env</span><span class="p">:</span>
+            <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">connector_env</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
+                      <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">connector_env</span><span class="o">.</span><span class="n">_propagate_kwargs</span><span class="p">}</span>
+        <span class="k">if</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">cls</span><span class="p">(</span><span class="n">backend_record</span><span class="p">,</span> <span class="n">session</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">cls</span><span class="p">(</span><span class="n">backend_record</span><span class="p">,</span> <span class="n">session</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span>
 </div></div>
 <span class="n">Environment</span> <span class="o">=</span> <span class="n">DeprecatedClass</span><span class="p">(</span><span class="s">&#39;Environment&#39;</span><span class="p">,</span>
                               <span class="n">ConnectorEnvironment</span><span class="p">)</span>

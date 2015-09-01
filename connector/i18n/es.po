@@ -1,156 +1,22 @@
-# Spanish translation for openerp-connector
-# Copyright (c) 2014 Rosetta Contributors and Canonical Ltd 2014
-# This file is distributed under the same license as the openerp-connector package.
-# Alberto Garcia <alberto.garcia@factorlibre.com>, 2014.
-#
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# * connector
+# 
+# Translators:
+# Alberto Garcia <alberto.garcia@factorlibre.com>, 2014
 msgid ""
 msgstr ""
-"Project-Id-Version: openerp-connector\n"
-"Report-Msgid-Bugs-To: Alberto Garcia <alberto.garcia@factorlibre.com>\n"
-"POT-Creation-Date: 2013-05-01 13:36+0000\n"
-"PO-Revision-Date: 2014-06-25 08:24+0000\n"
-"Last-Translator: Alberto Garcia (Factor Libre) "
-"<alberto.garcia@factorlibre.com>\n"
-"Language-Team: Spanish <es@li.org>\n"
+"Project-Id-Version: connector (8.0)\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-08-21 14:26+0000\n"
+"PO-Revision-Date: 2015-06-17 07:37+0000\n"
+"Last-Translator: OCA Transbot <transbot@odoo-community.org>\n"
+"Language-Team: Spanish (http://www.transifex.com/oca/OCA-connector-8-0/language/es/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2014-06-26 07:10+0000\n"
-"X-Generator: Launchpad (build 17065)\n"
-
-#. module: connector
-#: view:connector.config.settings:0
-msgid "Apply"
-msgstr "Aplicar"
-
-#. module: connector
-#: model:ir.actions.act_window,name:connector.action_queue_worker
-#: model:ir.ui.menu,name:connector.menu_queue_worker
-msgid "Workers"
-msgstr "Trabajadores"
-
-#. module: connector
-#: model:ir.module.category,name:connector.module_category_connector
-#: model:ir.ui.menu,name:connector.menu_connector_config_settings
-msgid "Connector"
-msgstr "Conector"
-
-#. module: connector
-#: view:connector.checkpoint:0
-msgid "Group By..."
-msgstr "Agrupar Por..."
-
-#. module: connector
-#: field:queue.job,date_done:0
-msgid "Date Done"
-msgstr "Fecha de finalización"
-
-#. module: connector
-#: model:ir.actions.act_window,name:connector.action_queue_job
-#: model:ir.ui.menu,name:connector.menu_queue_job
-#: view:queue.job:0
-#: field:queue.requeue.job,job_ids:0
-#: field:queue.worker,job_ids:0
-msgid "Jobs"
-msgstr "Trabajos"
-
-#. module: connector
-#: field:connector.config.settings,module_multi_company:0
-msgid "Manage multiple companies"
-msgstr "Administrar múltiples compañías"
-
-#. module: connector
-#: field:connector.checkpoint,message_unread:0
-#: field:queue.job,message_unread:0
-msgid "Unread Messages"
-msgstr "Mensajes No Leídos"
-
-#. module: connector
-#: field:queue.worker,pid:0
-msgid "PID"
-msgstr "PID"
-
-#. module: connector
-#: field:queue.job,user_id:0
-msgid "User ID"
-msgstr "ID de Usuario"
-
-#. module: connector
-#: field:connector.checkpoint.review,checkpoint_ids:0
-msgid "Checkpoints"
-msgstr "Puntos de control"
-
-#. module: connector
-#: view:queue.requeue.job:0
-msgid "The selected jobs will be requeued."
-msgstr "Los trabajos seleccionados serán puestos en la cola."
-
-#. module: connector
-#: field:queue.job,func_string:0
-msgid "Task"
-msgstr "Tarea"
-
-#. module: connector
-#: help:connector.checkpoint,record:0
-msgid "The record to check."
-msgstr "El registro a comprobar"
-
-#. module: connector
-#: help:connector.checkpoint,backend_id:0
-msgid "The record has been imported from this backend"
-msgstr "El registro ha sido importado de esta área de administación"
-
-#. module: connector
-#: model:ir.actions.client,name:connector.action_client_connector_menu
-msgid "Open Connector Menu"
-msgstr "Menú del Open Connector"
-
-#. module: connector
-#: field:connector.checkpoint,message_ids:0
-#: field:queue.job,message_ids:0
-msgid "Messages"
-msgstr "Mensajes"
-
-#. module: connector
-#: view:queue.job:0
-#: selection:queue.job,state:0
-msgid "Enqueued"
-msgstr "En Cola"
-
-#. module: connector
-#: help:connector.config.settings,module_portal_anonymous:0
-msgid "Enable the public part of openerp, openerp becomes a public website."
-msgstr ""
-"Habilitar la parte pública de openerp, openerp se convertirá en un sitio "
-"público"
-
-#. module: connector
-#: field:queue.job,max_retries:0
-msgid "Max. retries"
-msgstr "Max. reintentos"
-
-#. module: connector
-#: help:connector.checkpoint,message_unread:0
-#: help:queue.job,message_unread:0
-msgid "If checked new messages require your attention."
-msgstr "Si está marcado los nuevos mensajes requerirán su atención."
-
-#. module: connector
-#: field:queue.job,uuid:0
-#: field:queue.worker,uuid:0
-msgid "UUID"
-msgstr "UUID"
-
-#. module: connector
-#: view:connector.config.settings:0
-#: model:ir.actions.act_window,name:connector.action_connector_config_settings
-msgid "Configure Connector"
-msgstr "Configurar el conector"
-
-#. module: connector
-#: field:external.binding,sync_date:0
-msgid "Last synchronization date"
-msgstr "Última fecha de sincronización"
+"Content-Transfer-Encoding: \n"
+"Language: es\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #. module: connector
 #: model:ir.actions.act_window,help:connector.action_connector_checkpoint
@@ -164,72 +30,264 @@ msgid ""
 "                    based on their type.  Only some need a manual\n"
 "                    review.</p>\n"
 "            "
-msgstr ""
-"<p>Ningún registro a comprobar.</p>\n"
-"                <p>Cuando un conector importa nuevos registros que\n"
-"                tengan configuraciones o revisiones a hacer manualmente,\n"
-"                aparecerán en esta lista. Una vez que un registro\n"
-"                ha sido comprobado, hacer clic en el botón 'Revisado'</p>\n"
-"                <p>Lista de los nuevos registros de los conectores a \n"
-"                verificar basados en su tipo. Solo algunos necesitan\n"
-"                manual.</p>\n"
-"            "
+msgstr "<p>Ningún registro a comprobar.</p>\n                <p>Cuando un conector importa nuevos registros que\n                tengan configuraciones o revisiones a hacer manualmente,\n                aparecerán en esta lista. Una vez que un registro\n                ha sido comprobado, hacer clic en el botón 'Revisado'</p>\n                <p>Lista de los nuevos registros de los conectores a \n                verificar basados en su tipo. Solo algunos necesitan\n                manual.</p>\n            "
 
 #. module: connector
-#: help:connector.checkpoint,message_summary:0
-#: help:queue.job,message_summary:0
-msgid ""
-"Holds the Chatter summary (number of messages, ...). This summary is "
-"directly in html format in order to be inserted in kanban views."
+#: code:addons/connector/checkpoint/checkpoint.py:136
+#, python-format
+msgid "A %s needs a review."
 msgstr ""
-"Mantener el resumen de la Charla (número de mensajes, ...). Este resumen "
-"está directamente en formato html para ser insertado en vistas kanban."
+
+#. module: connector
+#: field:connector.config.settings,module_portal:0
+msgid "Activate the customer portal"
+msgstr "Activar el portal del cliente"
+
+#. module: connector
+#: field:queue.job,active:0
+msgid "Active"
+msgstr "Activo"
+
+#. module: connector
+#: field:connector.config.settings,alias_domain:0
+msgid "Alias Domain"
+msgstr "Alias de dominio"
+
+#. module: connector
+#: field:connector.config.settings,module_share:0
+msgid "Allow documents sharing"
+msgstr "Permitir compartir documentos"
+
+#. module: connector
+#: field:connector.config.settings,module_google_calendar:0
+msgid "Allow the users to synchronize their calendar  with Google Calendar"
+msgstr ""
+
+#. module: connector
+#: field:connector.config.settings,module_base_import:0
+msgid "Allow users to import data from CSV files"
+msgstr "Permitir a los usuarios importar datos desde archivos CSV"
+
+#. module: connector
+#: view:connector.config.settings:connector.view_connector_config_settings
+msgid "Apply"
+msgstr "Aplicar"
+
+#. module: connector
+#: field:connector.config.settings,module_google_drive:0
+msgid "Attach Google documents to any record"
+msgstr ""
+
+#. module: connector
+#: view:connector.config.settings:connector.view_connector_config_settings
+msgid "Backends"
+msgstr "Áreas de administración"
+
+#. module: connector
+#: view:connector.checkpoint.review:connector.view_connector_checkpoint_review
+#: view:connector.config.settings:connector.view_connector_config_settings
+#: view:queue.requeue.job:connector.view_requeue_job
+msgid "Cancel"
+msgstr "Cancelar"
+
+#. module: connector
+#: code:addons/connector/queue/job.py:571
+#, python-format
+msgid "Canceled. Nothing to do."
+msgstr ""
+
+#. module: connector
+#: code:addons/connector/queue/model.py:456
+#, python-format
+msgid "Cannot change the root channel"
+msgstr ""
+
+#. module: connector
+#: code:addons/connector/queue/model.py:463
+#, python-format
+msgid "Cannot remove the root channel"
+msgstr ""
+
+#. module: connector
+#: view:queue.job:connector.view_queue_job_search field:queue.job,channel:0
+#: view:queue.job.function:connector.view_queue_job_function_search
+#: field:queue.job.function,channel_id:0
+msgid "Channel"
+msgstr ""
+
+#. module: connector
+#: sql_constraint:queue.job.channel:0
+msgid "Channel complete name must be unique"
+msgstr ""
+
+#. module: connector
+#: model:ir.actions.act_window,name:connector.action_queue_job_channel
+#: model:ir.ui.menu,name:connector.menu_queue_job_channel
+#: view:queue.job.channel:connector.view_queue_job_channel_form
+#: view:queue.job.channel:connector.view_queue_job_channel_search
+#: view:queue.job.channel:connector.view_queue_job_channel_tree
+msgid "Channels"
+msgstr ""
+
+#. module: connector
+#: model:ir.ui.menu,name:connector.menu_checkpoint
+msgid "Checkpoint"
+msgstr "Punto Control"
+
+#. module: connector
+#: field:connector.checkpoint.review,checkpoint_ids:0
+msgid "Checkpoints"
+msgstr "Puntos de control"
+
+#. module: connector
+#: model:ir.model,name:connector.model_connector_checkpoint_review
+msgid "Checkpoints Review"
+msgstr "Revisión de puntos de control"
+
+#. module: connector
+#: view:connector.checkpoint:connector.view_connector_checkpoint_form
+msgid "Click on the"
+msgstr "Hcer clic en"
+
+#. module: connector
+#: field:queue.job,company_id:0
+msgid "Company"
+msgstr ""
+
+#. module: connector
+#: field:queue.job.channel,complete_name:0 field:queue.job.function,channel:0
+msgid "Complete Name"
+msgstr ""
+
+#. module: connector
+#: view:connector.config.settings:connector.view_connector_config_settings
+#: model:ir.actions.act_window,name:connector.action_connector_config_settings
+msgid "Configure Connector"
+msgstr "Configurar el conector"
+
+#. module: connector
+#: model:ir.module.category,name:connector.module_category_connector
+#: model:ir.ui.menu,name:connector.menu_connector_config_settings
+msgid "Connector"
+msgstr "Conector"
+
+#. module: connector
+#: model:ir.model,name:connector.model_connector_backend
+msgid "Connector Backend"
+msgstr ""
+
+#. module: connector
+#: view:connector.checkpoint:connector.view_connector_checkpoint_form
+#: view:connector.checkpoint:connector.view_connector_checkpoint_search
+#: view:connector.checkpoint:connector.view_connector_checkpoint_tree
+#: model:ir.actions.act_window,name:connector.action_connector_checkpoint
+#: model:ir.model,name:connector.model_connector_checkpoint
+msgid "Connector Checkpoint"
+msgstr "Punto de Control del Conector"
 
 #. module: connector
 #: model:ir.model,name:connector.model_connector_config_settings
-msgid "connector.config.settings"
+msgid "Connector Configuration"
 msgstr ""
 
 #. module: connector
-#: model:ir.model,name:connector.model_queue_worker
-msgid "queue.worker"
+#: model:res.groups,name:connector.group_connector_manager
+msgid "Connector Manager"
+msgstr "Administrador del Conector"
+
+#. module: connector
+#: model:ir.ui.menu,name:connector.menu_connector
+#: model:ir.ui.menu,name:connector.menu_connector_root
+#: view:res.partner:connector.view_partner_connector_form
+msgid "Connectors"
+msgstr "Conectores"
+
+#. module: connector
+#: field:queue.job,date_created:0
+msgid "Created Date"
+msgstr "Fecha de Creación"
+
+#. module: connector
+#: field:connector.checkpoint,create_uid:0
+#: field:connector.checkpoint.review,create_uid:0
+#: field:connector.config.settings,create_uid:0
+#: field:queue.job.channel,create_uid:0 field:queue.requeue.job,create_uid:0
+msgid "Created by"
 msgstr ""
 
 #. module: connector
-#: help:connector.config.settings,module_magentoerpconnect:0
-msgid "This installs the module magentoerpconnect."
-msgstr "Esto instala el módulo magentoerpconnect"
+#: field:connector.checkpoint,create_date:0
+#: field:connector.checkpoint.review,create_date:0
+#: field:connector.config.settings,create_date:0
+#: field:queue.job.channel,create_date:0 field:queue.requeue.job,create_date:0
+msgid "Created on"
+msgstr ""
 
 #. module: connector
-#: field:connector.checkpoint,backend_id:0
-msgid "Imported from"
-msgstr "Importado de"
+#: field:queue.job,retry:0
+msgid "Current try"
+msgstr "Intento actual"
 
 #. module: connector
-#: model:ir.model,name:connector.model_queue_requeue_job
-msgid "Wizard to requeue a selection of jobs"
-msgstr "Asistente para poner en cola una selección de trabajos"
+#: view:queue.job:connector.view_queue_job_form
+msgid "Current try / max. retries"
+msgstr "Intento actual / max. reintentos"
 
 #. module: connector
-#: field:queue.job,priority:0
-msgid "Priority"
-msgstr "Prioridad"
+#: field:queue.job,date_done:0
+msgid "Date Done"
+msgstr "Fecha de finalización"
 
 #. module: connector
-#: view:queue.job:0
-#: selection:queue.job,state:0
+#: help:connector.checkpoint,message_last_post:0
+#: help:queue.job,message_last_post:0
+msgid "Date of the last message posted on the record."
+msgstr ""
+
+#. module: connector
+#: field:queue.job,name:0
+msgid "Description"
+msgstr "Descripción"
+
+#. module: connector
+#: view:queue.job:connector.view_queue_job_search selection:queue.job,state:0
+msgid "Done"
+msgstr "Hecho"
+
+#. module: connector
+#: field:queue.job,date_enqueued:0
+msgid "Enqueue Time"
+msgstr "Tiempo de Puesta en Cola"
+
+#. module: connector
+#: view:queue.job:connector.view_queue_job_search selection:queue.job,state:0
+msgid "Enqueued"
+msgstr "En Cola"
+
+#. module: connector
+#: field:queue.job,exc_info:0
+msgid "Exception Info"
+msgstr "Info de Excepción"
+
+#. module: connector
+#: view:queue.job:connector.view_queue_job_form
+msgid "Exception Information"
+msgstr "Información de la Excepción"
+
+#. module: connector
+#: field:queue.job,eta:0
+msgid "Execute only after"
+msgstr "Ejecutar solo después"
+
+#. module: connector
+#: model:ir.model,name:connector.model_external_binding
+msgid "External Binding (abstract)"
+msgstr "Unión Externa (abstracto)"
+
+#. module: connector
+#: view:queue.job:connector.view_queue_job_search selection:queue.job,state:0
 msgid "Failed"
 msgstr "Fallido"
-
-#. module: connector
-#: field:queue.job,state:0
-msgid "State"
-msgstr "Estado"
-
-#. module: connector
-#: view:connector.config.settings:0
-msgid "Backends"
-msgstr "Áreas de administración"
 
 #. module: connector
 #: field:connector.checkpoint,message_follower_ids:0
@@ -238,151 +296,64 @@ msgid "Followers"
 msgstr "Seguidores"
 
 #. module: connector
-#: model:ir.model,name:connector.model_queue_job
-msgid "Queue Job"
-msgstr "Trabajo de Cola"
-
-#. module: connector
-#: field:connector.config.settings,module_base_import:0
-msgid "Allow users to import data from CSV files"
-msgstr "Permitir a los usuarios importar datos desde archivos CSV"
-
-#. module: connector
-#: field:queue.job,worker_id:0
-#: view:queue.worker:0
-msgid "Worker"
-msgstr "Trabajador"
-
-#. module: connector
-#: view:connector.checkpoint:0
-#: model:ir.actions.act_window,name:connector.action_connector_checkpoint
-#: model:ir.model,name:connector.model_connector_checkpoint
-msgid "Connector Checkpoint"
-msgstr "Punto de Control del Conector"
-
-#. module: connector
-#: view:connector.checkpoint.review:0
-#: view:connector.config.settings:0
-#: view:queue.requeue.job:0
-msgid "Cancel"
-msgstr "Cancelar"
-
-#. module: connector
-#: field:queue.job,func:0
-msgid "Pickled Function"
+#: field:queue.job,func_name:0
+msgid "Func name"
 msgstr ""
 
 #. module: connector
-#: model:ir.model,name:connector.model_connector_checkpoint_review
-msgid "Checkpoints Review"
-msgstr "Revisión de puntos de control"
+#: help:connector.config.settings,module_portal:0
+msgid "Give your customers access to their documents."
+msgstr "Dé a sus clientes acceso a sus documentos"
 
 #. module: connector
-#: model:ir.ui.menu,name:connector.menu_queue
-msgid "Queue"
-msgstr "Cola"
+#: view:queue.job:connector.view_queue_job_search
+#: view:queue.job.function:connector.view_queue_job_function_search
+msgid "Group By"
+msgstr ""
 
 #. module: connector
-#: view:connector.checkpoint.review:0
-msgid "Set as reviewed"
-msgstr "Marcar como Revisado"
+#: view:connector.checkpoint:connector.view_connector_checkpoint_search
+msgid "Group By..."
+msgstr "Agrupar Por..."
 
 #. module: connector
-#: field:queue.job,retry:0
-msgid "Current try"
-msgstr "Intento actual"
-
-#. module: connector
-#: field:connector.config.settings,module_portal:0
-msgid "Activate the customer portal"
-msgstr "Activar el portal del cliente"
-
-#. module: connector
-#: field:queue.job,date_created:0
-msgid "Created Date"
-msgstr "Fecha de Creación"
-
-#. module: connector
-#: field:connector.checkpoint,record:0
-msgid "Record"
-msgstr "Registro"
-
-#. module: connector
-#: field:queue.worker,date_alive:0
-msgid "Last Alive Check"
-msgstr "Última Comprobación Viva"
-
-#. module: connector
-#: view:queue.job:0
-msgid "Set to 'Done'"
-msgstr "Marcar como 'Hecho'"
-
-#. module: connector
-#: model:ir.ui.menu,name:connector.menu_connector
-#: model:ir.ui.menu,name:connector.menu_connector_root
-#: view:res.partner:0
-msgid "Connectors"
-msgstr "Conectores"
-
-#. module: connector
-#: view:queue.job:0
-#: field:queue.job,result:0
-msgid "Result"
-msgstr "Resultado"
-
-#. module: connector
-#: field:queue.job,date_started:0
-#: field:queue.worker,date_start:0
-msgid "Start Date"
-msgstr "Fecha de Inicio"
-
-#. module: connector
-#: view:connector.checkpoint.review:0
-#: view:connector.config.settings:0
-#: view:queue.requeue.job:0
-msgid "or"
-msgstr "o"
-
-#. module: connector
-#: field:connector.config.settings,module_auth_oauth:0
+#: help:connector.checkpoint,message_summary:0
+#: help:queue.job,message_summary:0
 msgid ""
-"Use external authentication providers, sign in with google, facebook, ..."
+"Holds the Chatter summary (number of messages, ...). This summary is "
+"directly in html format in order to be inserted in kanban views."
+msgstr "Mantener el resumen de la Charla (número de mensajes, ...). Este resumen está directamente en formato html para ser insertado en vistas kanban."
+
+#. module: connector
+#: field:connector.backend,id:0 field:connector.checkpoint,id:0
+#: field:connector.checkpoint.review,id:0 field:connector.config.settings,id:0
+#: field:external.binding,id:0 field:queue.job,id:0
+#: field:queue.job.channel,id:0 field:queue.job.function,id:0
+#: field:queue.requeue.job,id:0 field:queue.worker,id:0
+msgid "ID"
 msgstr ""
-"Usar proveedores de autenticación externos, registrarse con google, "
-"facebook, ..."
 
 #. module: connector
-#: model:ir.model,name:connector.model_connector_backend
-msgid "connector.backend"
+#: help:connector.checkpoint,message_unread:0 help:queue.job,message_unread:0
+msgid "If checked new messages require your attention."
+msgstr "Si está marcado los nuevos mensajes requerirán su atención."
+
+#. module: connector
+#: view:queue.job:connector.view_queue_job_form
+msgid "If the max. retries is 0, the number of retries is infinite."
+msgstr "Si el max. de reintentos es 0, el número de reintentos es infinito."
+
+#. module: connector
+#: help:connector.config.settings,alias_domain:0
+msgid ""
+"If you have setup a catch-all email domain redirected to the Odoo server, "
+"enter the domain name here."
 msgstr ""
 
 #. module: connector
-#: view:connector.checkpoint.review:0
-#: model:ir.actions.act_window,name:connector.action_connector_checkpoint_review
-msgid "Review Checkpoints"
-msgstr "Puntos de Control de Revisión"
-
-#. module: connector
-#: view:queue.job:0
-#: selection:queue.job,state:0
-msgid "Pending"
-msgstr "Pendiente"
-
-#. module: connector
-#: field:connector.checkpoint,state:0
-msgid "Status"
-msgstr "Estado"
-
-#. module: connector
-#: view:queue.job:0
-#: selection:queue.job,state:0
-msgid "Started"
-msgstr "Empezado"
-
-#. module: connector
-#: model:ir.model,name:connector.model_connector_installed
-msgid "connector.installed"
-msgstr "connector.installed"
+#: field:connector.checkpoint,backend_id:0
+msgid "Imported from"
+msgstr "Importado de"
 
 #. module: connector
 #: field:connector.checkpoint,message_is_follower:0
@@ -391,14 +362,300 @@ msgid "Is a Follower"
 msgstr "Es un seguidor"
 
 #. module: connector
-#: help:connector.config.settings,module_share:0
-msgid "Share or embbed any screen of openerp."
-msgstr "Compartir o embeber alguna pantalla de openerp"
+#: model:ir.model,name:connector.model_queue_job_channel
+msgid "Job Channels"
+msgstr ""
 
 #. module: connector
-#: field:queue.job,active:0
-msgid "Active"
-msgstr "Activo"
+#: view:queue.job:connector.view_queue_job_search
+msgid "Job Function"
+msgstr ""
+
+#. module: connector
+#: model:ir.actions.act_window,name:connector.action_queue_job_function
+#: model:ir.model,name:connector.model_queue_job_function
+#: model:ir.ui.menu,name:connector.menu_queue_job_function
+#: field:queue.job.channel,job_function_ids:0
+#: view:queue.job.function:connector.view_queue_job_function_form
+#: view:queue.job.function:connector.view_queue_job_function_search
+#: view:queue.job.function:connector.view_queue_job_function_tree
+msgid "Job Functions"
+msgstr ""
+
+#. module: connector
+#: model:mail.message.subtype,name:connector.mt_job_failed
+msgid "Job failed"
+msgstr "Trabajo fallido"
+
+#. module: connector
+#: field:queue.job,job_function_id:0
+msgid "Job function id"
+msgstr ""
+
+#. module: connector
+#: model:ir.actions.act_window,name:connector.action_queue_job
+#: model:ir.ui.menu,name:connector.menu_queue_job
+#: view:queue.job:connector.view_queue_job_form
+#: view:queue.job:connector.view_queue_job_search
+#: view:queue.job:connector.view_queue_job_tree
+#: field:queue.requeue.job,job_ids:0 field:queue.worker,job_ids:0
+msgid "Jobs"
+msgstr "Trabajos"
+
+#. module: connector
+#: field:queue.worker,date_alive:0
+msgid "Last Alive Check"
+msgstr "Última Comprobación Viva"
+
+#. module: connector
+#: field:connector.checkpoint,message_last_post:0
+#: field:queue.job,message_last_post:0
+msgid "Last Message Date"
+msgstr ""
+
+#. module: connector
+#: field:connector.checkpoint,write_uid:0
+#: field:connector.checkpoint.review,write_uid:0
+#: field:connector.config.settings,write_uid:0
+#: field:queue.job.channel,write_uid:0 field:queue.requeue.job,write_uid:0
+msgid "Last Updated by"
+msgstr ""
+
+#. module: connector
+#: field:connector.checkpoint,write_date:0
+#: field:connector.checkpoint.review,write_date:0
+#: field:connector.config.settings,write_date:0
+#: field:queue.job.channel,write_date:0 field:queue.requeue.job,write_date:0
+msgid "Last Updated on"
+msgstr ""
+
+#. module: connector
+#: field:external.binding,sync_date:0
+msgid "Last synchronization date"
+msgstr "Última fecha de sincronización"
+
+#. module: connector
+#: field:connector.config.settings,module_multi_company:0
+msgid "Manage multiple companies"
+msgstr "Administrar múltiples compañías"
+
+#. module: connector
+#: code:addons/connector/queue/model.py:140
+#, python-format
+msgid "Manually set to done by %s"
+msgstr ""
+
+#. module: connector
+#: field:queue.job,max_retries:0
+msgid "Max. retries"
+msgstr "Max. reintentos"
+
+#. module: connector
+#: field:connector.checkpoint,message_ids:0 field:queue.job,message_ids:0
+msgid "Messages"
+msgstr "Mensajes"
+
+#. module: connector
+#: help:connector.checkpoint,message_ids:0 help:queue.job,message_ids:0
+msgid "Messages and communication history"
+msgstr "Historial de mensajes y comunicaciónes"
+
+#. module: connector
+#: view:connector.checkpoint:connector.view_connector_checkpoint_search
+#: field:connector.checkpoint,model_id:0 field:queue.job,model_name:0
+msgid "Model"
+msgstr "Modelo"
+
+#. module: connector
+#: model:ir.model,name:connector.model_ir_module_module
+msgid "Module"
+msgstr ""
+
+#. module: connector
+#: field:connector.backend,name:0 field:queue.job.channel,name:0
+#: field:queue.job.function,name:0
+msgid "Name"
+msgstr "Nombre"
+
+#. module: connector
+#: view:connector.checkpoint:connector.view_connector_checkpoint_search
+#: selection:connector.checkpoint,state:0
+msgid "Need Review"
+msgstr "Necesita Revisión"
+
+#. module: connector
+#: code:addons/connector/queue/model.py:116
+#, python-format
+msgid "No action available for this job"
+msgstr ""
+
+#. module: connector
+#: model:ir.actions.client,name:connector.action_client_connector_menu
+msgid "Open Connector Menu"
+msgstr "Menú del Open Connector"
+
+#. module: connector
+#: field:queue.worker,pid:0
+msgid "PID"
+msgstr "PID"
+
+#. module: connector
+#: field:queue.job.channel,parent_id:0
+msgid "Parent Channel"
+msgstr ""
+
+#. module: connector
+#: code:addons/connector/queue/model.py:448
+#, python-format
+msgid "Parent channel required."
+msgstr ""
+
+#. module: connector
+#: view:queue.job:connector.view_queue_job_search selection:queue.job,state:0
+msgid "Pending"
+msgstr "Pendiente"
+
+#. module: connector
+#: field:queue.job,func:0
+msgid "Pickled Function"
+msgstr ""
+
+#. module: connector
+#: field:queue.job,priority:0
+msgid "Priority"
+msgstr "Prioridad"
+
+#. module: connector
+#: model:ir.ui.menu,name:connector.menu_queue
+msgid "Queue"
+msgstr "Cola"
+
+#. module: connector
+#: model:ir.model,name:connector.model_queue_job
+msgid "Queue Job"
+msgstr "Trabajo de Cola"
+
+#. module: connector
+#: model:ir.model,name:connector.model_queue_worker
+msgid "Queue Worker"
+msgstr ""
+
+#. module: connector
+#: field:connector.checkpoint,record_id:0
+msgid "Record ID"
+msgstr "ID de Registro"
+
+#. module: connector
+#: view:queue.job:connector.view_queue_job_form
+msgid "Related"
+msgstr ""
+
+#. module: connector
+#: code:addons/connector/related_action.py:48
+#, python-format
+msgid "Related Record"
+msgstr ""
+
+#. module: connector
+#: field:connector.config.settings,font:0
+msgid "Report Font"
+msgstr ""
+
+#. module: connector
+#: view:queue.requeue.job:connector.view_requeue_job
+msgid "Requeue"
+msgstr "Poner en cola"
+
+#. module: connector
+#: view:queue.job:connector.view_queue_job_form
+msgid "Requeue Job"
+msgstr "Trabajo de Poner en Cola"
+
+#. module: connector
+#: model:ir.actions.act_window,name:connector.action_requeue_job
+#: view:queue.requeue.job:connector.view_requeue_job
+msgid "Requeue Jobs"
+msgstr "Trabajos de Poner en Cola"
+
+#. module: connector
+#: view:queue.job:connector.view_queue_job_form field:queue.job,result:0
+msgid "Result"
+msgstr "Resultado"
+
+#. module: connector
+#: view:connector.checkpoint.review:connector.view_connector_checkpoint_review
+#: model:ir.actions.act_window,name:connector.action_connector_checkpoint_review
+msgid "Review Checkpoints"
+msgstr "Puntos de Control de Revisión"
+
+#. module: connector
+#: view:connector.checkpoint:connector.view_connector_checkpoint_form
+#: view:connector.checkpoint:connector.view_connector_checkpoint_search
+#: view:connector.checkpoint:connector.view_connector_checkpoint_tree
+#: selection:connector.checkpoint,state:0
+msgid "Reviewed"
+msgstr "Revisado"
+
+#. module: connector
+#: view:connector.checkpoint.review:connector.view_connector_checkpoint_review
+msgid "Set as reviewed"
+msgstr "Marcar como Revisado"
+
+#. module: connector
+#: help:connector.config.settings,font:0
+msgid ""
+"Set the font into the report header, it will be used as default font in the "
+"RML reports of the user company"
+msgstr ""
+
+#. module: connector
+#: view:queue.job:connector.view_queue_job_form
+msgid "Set to 'Done'"
+msgstr "Marcar como 'Hecho'"
+
+#. module: connector
+#: help:connector.config.settings,module_share:0
+msgid "Share or embbed any screen of Odoo."
+msgstr ""
+
+#. module: connector
+#: code:addons/connector/queue/model.py:186
+#, python-format
+msgid ""
+"Something bad happened during the execution of the job. More details in the "
+"'Exception Information' section."
+msgstr ""
+
+#. module: connector
+#: field:queue.job,date_started:0 field:queue.worker,date_start:0
+msgid "Start Date"
+msgstr "Fecha de Inicio"
+
+#. module: connector
+#: view:queue.job:connector.view_queue_job_search selection:queue.job,state:0
+msgid "Started"
+msgstr "Empezado"
+
+#. module: connector
+#: view:queue.job:connector.view_queue_job_search field:queue.job,state:0
+msgid "State"
+msgstr "Estado"
+
+#. module: connector
+#: field:connector.checkpoint,state:0
+msgid "Status"
+msgstr "Estado"
+
+#. module: connector
+#: field:connector.checkpoint,message_summary:0
+#: field:queue.job,message_summary:0
+msgid "Summary"
+msgstr "Resumen"
+
+#. module: connector
+#: field:queue.job,func_string:0
+msgid "Task"
+msgstr "Tarea"
 
 #. module: connector
 #: help:queue.job,max_retries:0
@@ -408,36 +665,51 @@ msgid ""
 msgstr "Reintentos infinitos cuando está vacío"
 
 #. module: connector
-#: view:connector.checkpoint:0
-msgid "Click on the"
-msgstr "Hcer clic en"
+#: help:connector.checkpoint,backend_id:0
+msgid "The record has been imported from this backend"
+msgstr "El registro ha sido importado de esta área de administación"
 
 #. module: connector
-#: field:connector.checkpoint,message_summary:0
-#: field:queue.job,message_summary:0
-msgid "Summary"
-msgstr "Resumen"
+#: view:connector.checkpoint.review:connector.view_connector_checkpoint_review
+msgid "The selected checkpoints will be set as reviewed."
+msgstr "Los puntos de control seleccionados serán marcados como revisados"
 
 #. module: connector
-#: view:queue.job:0
-msgid "Exception Information"
-msgstr "Información de la Excepción"
+#: view:queue.requeue.job:connector.view_requeue_job
+msgid "The selected jobs will be requeued."
+msgstr "Los trabajos seleccionados serán puestos en la cola."
 
 #. module: connector
-#: view:queue.requeue.job:0
-msgid "Requeue"
-msgstr "Poner en cola"
+#: help:connector.config.settings,module_google_calendar:0
+msgid "This installs the module google_calendar."
+msgstr ""
 
 #. module: connector
-#: model:ir.ui.menu,name:connector.menu_checkpoint
-msgid "Checkpoint"
-msgstr "Punto Control"
+#: help:connector.config.settings,module_google_drive:0
+msgid "This installs the module google_docs."
+msgstr ""
 
 #. module: connector
-#: view:connector.checkpoint:0
-#: selection:connector.checkpoint,state:0
-msgid "Reviewed"
-msgstr "Revisado"
+#: field:queue.job,uuid:0 field:queue.worker,uuid:0
+msgid "UUID"
+msgstr "UUID"
+
+#. module: connector
+#: field:connector.checkpoint,message_unread:0
+#: field:queue.job,message_unread:0
+msgid "Unread Messages"
+msgstr "Mensajes No Leídos"
+
+#. module: connector
+#: field:connector.config.settings,module_auth_oauth:0
+msgid ""
+"Use external authentication providers, sign in with google, facebook, ..."
+msgstr "Usar proveedores de autenticación externos, registrarse con google, facebook, ..."
+
+#. module: connector
+#: field:queue.job,user_id:0
+msgid "User ID"
+msgstr "ID de Usuario"
 
 #. module: connector
 #: field:connector.backend,version:0
@@ -445,146 +717,38 @@ msgid "Version"
 msgstr "Versión"
 
 #. module: connector
-#: view:queue.job:0
-#: selection:queue.job,state:0
-msgid "Done"
-msgstr "Hecho"
-
-#. module: connector
-#: view:connector.checkpoint.review:0
-msgid "The selected checkpoints will be set as reviewed."
-msgstr "Los puntos de control seleccionados serán marcados como revisados"
-
-#. module: connector
-#: model:ir.actions.act_window,name:connector.action_requeue_job
-#: view:queue.requeue.job:0
-msgid "Requeue Jobs"
-msgstr "Trabajos de Poner en Cola"
-
-#. module: connector
-#: field:queue.job,exc_info:0
-msgid "Exception Info"
-msgstr "Info de Excepción"
-
-#. module: connector
-#: view:queue.job:0
-msgid "Requeue Job"
-msgstr "Trabajo de Poner en Cola"
-
-#. module: connector
-#: model:ir.model,name:connector.model_external_binding
-msgid "External Binding (abstract)"
-msgstr "Unión Externa (abstracto)"
-
-#. module: connector
-#: field:queue.job,name:0
-msgid "Description"
-msgstr "Descripción"
-
-#. module: connector
-#: view:queue.job:0
-msgid "If the max. retries is 0, the number of retries is infinite."
-msgstr "Si el max. de reintentos es 0, el número de reintentos es infinito."
-
-#. module: connector
-#: field:queue.job,date_enqueued:0
-msgid "Enqueue Time"
-msgstr "Tiempo de Puesta en Cola"
-
-#. module: connector
-#: field:connector.checkpoint,record_id:0
-msgid "Record ID"
-msgstr "ID de Registro"
+#: model:ir.model,name:connector.model_queue_requeue_job
+msgid "Wizard to requeue a selection of jobs"
+msgstr "Asistente para poner en cola una selección de trabajos"
 
 #. module: connector
 #: help:connector.config.settings,module_multi_company:0
 msgid ""
-"Work in multi-company environments, with appropriate security access between "
-"companies.\n"
-"                This installs the module multi_company."
+"Work in multi-company environments, with appropriate security access between companies.\n"
+"-This installs the module multi_company."
 msgstr ""
-"Trabajar en entornos multi compañía, con la seguridad de acceso apropiada "
-"entre compañías."
 
 #. module: connector
-#: field:connector.backend,name:0
-msgid "Name"
-msgstr "Nombre"
+#: field:queue.job,worker_id:0
+#: view:queue.worker:connector.view_queue_worker_form
+#: view:queue.worker:connector.view_queue_worker_tree
+msgid "Worker"
+msgstr "Trabajador"
 
 #. module: connector
-#: help:connector.config.settings,alias_domain:0
-msgid ""
-"If you have setup a catch-all email domain redirected to the OpenERP server, "
-"enter the domain name here."
-msgstr ""
-"Si tiene configurado un email de catch-all de dominio redirigido a el "
-"servidor OpenERP, introduzca aquí el nombre."
+#: model:ir.actions.act_window,name:connector.action_queue_worker
+#: model:ir.ui.menu,name:connector.menu_queue_worker
+msgid "Workers"
+msgstr "Trabajadores"
 
 #. module: connector
-#: field:connector.config.settings,alias_domain:0
-msgid "Alias Domain"
-msgstr "Alias de dominio"
+#: view:connector.checkpoint.review:connector.view_connector_checkpoint_review
+#: view:connector.config.settings:connector.view_connector_config_settings
+#: view:queue.requeue.job:connector.view_requeue_job
+msgid "or"
+msgstr "o"
 
 #. module: connector
-#: view:queue.job:0
-msgid "Current try / max. retries"
-msgstr "Intento actual / max. reintentos"
-
-#. module: connector
-#: field:connector.config.settings,module_magentoerpconnect:0
-msgid "Synchronize with Magento"
-msgstr "Sincronizado con Magento"
-
-#. module: connector
-#: view:connector.checkpoint:0
+#: view:connector.checkpoint:connector.view_connector_checkpoint_form
 msgid "to verify it:"
 msgstr "para verificar:"
-
-#. module: connector
-#: view:connector.checkpoint:0
-#: field:connector.checkpoint,model_id:0
-#: field:queue.job,model_name:0
-msgid "Model"
-msgstr "Modelo"
-
-#. module: connector
-#: help:connector.checkpoint,message_ids:0
-#: help:queue.job,message_ids:0
-msgid "Messages and communication history"
-msgstr "Historial de mensajes y comunicaciónes"
-
-#. module: connector
-#: field:connector.config.settings,module_share:0
-msgid "Allow documents sharing"
-msgstr "Permitir compartir documentos"
-
-#. module: connector
-#: field:connector.config.settings,module_portal_anonymous:0
-msgid "Activate the public portal"
-msgstr "Activar el portar público"
-
-#. module: connector
-#: model:res.groups,name:connector.group_connector_manager
-msgid "Connector Manager"
-msgstr "Administrador del Conector"
-
-#. module: connector
-#: model:mail.message.subtype,name:connector.mt_job_failed
-msgid "Job failed"
-msgstr "Trabajo fallido"
-
-#. module: connector
-#: help:connector.config.settings,module_portal:0
-msgid "Give your customers access to their documents."
-msgstr "Dé a sus clientes acceso a sus documentos"
-
-#. module: connector
-#: field:queue.job,eta:0
-msgid "Execute only after"
-msgstr "Ejecutar solo después"
-
-#. module: connector
-#: view:connector.checkpoint:0
-#: selection:connector.checkpoint,state:0
-msgid "Need Review"
-msgstr "Necesita Revisión"

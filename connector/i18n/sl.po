@@ -3,19 +3,20 @@
 # * connector
 # 
 # Translators:
+# Matjaž Mozetič <m.mozetic@matmoz.si>, 2015
 msgid ""
 msgstr ""
 "Project-Id-Version: connector (8.0)\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-08-21 14:26+0000\n"
-"PO-Revision-Date: 2015-06-17 07:37+0000\n"
-"Last-Translator: OCA Transbot <transbot@odoo-community.org>\n"
-"Language-Team: Chinese (China) (http://www.transifex.com/oca/OCA-connector-8-0/language/zh_CN/)\n"
+"PO-Revision-Date: 2015-07-05 13:13+0000\n"
+"Last-Translator: Matjaž Mozetič <m.mozetic@matmoz.si>\n"
+"Language-Team: Slovenian (http://www.transifex.com/oca/OCA-connector-8-0/language/sl/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Language: zh_CN\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
+"Language: sl\n"
+"Plural-Forms: nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n%100==4 ? 2 : 3);\n"
 
 #. module: connector
 #: model:ir.actions.act_window,help:connector.action_connector_checkpoint
@@ -29,95 +30,95 @@ msgid ""
 "                    based on their type.  Only some need a manual\n"
 "                    review.</p>\n"
 "            "
-msgstr "<p>没有记录待检查.</p>\n                <p> 当连接器导入新记录时\n                    它们会显示在这里\n                 记录导入完成后\n                    单击'审阅' 按钮.  </p>\n                <p>连接器列出需要审阅的新记录\n                    根据类型，一部分需要手动审查\n            "
+msgstr "<p>Ni zapisov za preverjanje.</p>\n                <p> Ko povezovalnik uvaža nove zapise, ki imajo\n                    nastavitve ali revizije za ročno obdelavo, se\n                    pojavijo na tem seznamu. Ko je enkrat zapis preverjen,\nkliknite na gumb 'Preverjeno'.  </p>\n                <p>Povezovalnik prikazuje seznam novih zapisov za preverjanje\n                    glede na njihov tip.  Le nekateri potrebujejo ročno\n                    preverjanje.</p>\n            "
 
 #. module: connector
 #: code:addons/connector/checkpoint/checkpoint.py:136
 #, python-format
 msgid "A %s needs a review."
-msgstr ""
+msgstr "Potrebna je revizija %s ."
 
 #. module: connector
 #: field:connector.config.settings,module_portal:0
 msgid "Activate the customer portal"
-msgstr "激活来宾入口"
+msgstr "Aktiviranje portala kupcev"
 
 #. module: connector
 #: field:queue.job,active:0
 msgid "Active"
-msgstr "活跃"
+msgstr "Aktivno"
 
 #. module: connector
 #: field:connector.config.settings,alias_domain:0
 msgid "Alias Domain"
-msgstr "域别名"
+msgstr "Domenski psevdonim"
 
 #. module: connector
 #: field:connector.config.settings,module_share:0
 msgid "Allow documents sharing"
-msgstr "允许文档分享"
+msgstr "Omogoči souporabo dokumentov"
 
 #. module: connector
 #: field:connector.config.settings,module_google_calendar:0
 msgid "Allow the users to synchronize their calendar  with Google Calendar"
-msgstr ""
+msgstr "Dovoli uporabnikom sinhronizacijo njihovega koledarja z Google koledarjem"
 
 #. module: connector
 #: field:connector.config.settings,module_base_import:0
 msgid "Allow users to import data from CSV files"
-msgstr "允许用户从CSV文件导入数据"
+msgstr "Dovoli uporabnikom uvoz podatkov iz CSV datotek"
 
 #. module: connector
 #: view:connector.config.settings:connector.view_connector_config_settings
 msgid "Apply"
-msgstr "应用"
+msgstr "Uporabi"
 
 #. module: connector
 #: field:connector.config.settings,module_google_drive:0
 msgid "Attach Google documents to any record"
-msgstr ""
+msgstr "Pripni Google dokument kateremukoli zapisu"
 
 #. module: connector
 #: view:connector.config.settings:connector.view_connector_config_settings
 msgid "Backends"
-msgstr "后台"
+msgstr "Ozadja"
 
 #. module: connector
 #: view:connector.checkpoint.review:connector.view_connector_checkpoint_review
 #: view:connector.config.settings:connector.view_connector_config_settings
 #: view:queue.requeue.job:connector.view_requeue_job
 msgid "Cancel"
-msgstr "取消"
+msgstr "Preklic"
 
 #. module: connector
 #: code:addons/connector/queue/job.py:571
 #, python-format
 msgid "Canceled. Nothing to do."
-msgstr ""
+msgstr "Preklicano. Ni opravkov."
 
 #. module: connector
 #: code:addons/connector/queue/model.py:456
 #, python-format
 msgid "Cannot change the root channel"
-msgstr ""
+msgstr "Korenskega kanala ni mogoče spreminjati"
 
 #. module: connector
 #: code:addons/connector/queue/model.py:463
 #, python-format
 msgid "Cannot remove the root channel"
-msgstr ""
+msgstr "Korenskega kanala ni mogoče odstraniti"
 
 #. module: connector
 #: view:queue.job:connector.view_queue_job_search field:queue.job,channel:0
 #: view:queue.job.function:connector.view_queue_job_function_search
 #: field:queue.job.function,channel_id:0
 msgid "Channel"
-msgstr ""
+msgstr "Kanal"
 
 #. module: connector
 #: sql_constraint:queue.job.channel:0
 msgid "Channel complete name must be unique"
-msgstr ""
+msgstr "Celotni naziv kanala mora biti unikaten"
 
 #. module: connector
 #: model:ir.actions.act_window,name:connector.action_queue_job_channel
@@ -126,54 +127,54 @@ msgstr ""
 #: view:queue.job.channel:connector.view_queue_job_channel_search
 #: view:queue.job.channel:connector.view_queue_job_channel_tree
 msgid "Channels"
-msgstr ""
+msgstr "Kanali"
 
 #. module: connector
 #: model:ir.ui.menu,name:connector.menu_checkpoint
 msgid "Checkpoint"
-msgstr "检查点"
+msgstr "Kontrolna točka"
 
 #. module: connector
 #: field:connector.checkpoint.review,checkpoint_ids:0
 msgid "Checkpoints"
-msgstr "检查点"
+msgstr "Kontrolne točke"
 
 #. module: connector
 #: model:ir.model,name:connector.model_connector_checkpoint_review
 msgid "Checkpoints Review"
-msgstr "检查点视图"
+msgstr "Preverjanje kontrolnih točk"
 
 #. module: connector
 #: view:connector.checkpoint:connector.view_connector_checkpoint_form
 msgid "Click on the"
-msgstr "单击"
+msgstr "Kliknite na"
 
 #. module: connector
 #: field:queue.job,company_id:0
 msgid "Company"
-msgstr ""
+msgstr "Družba"
 
 #. module: connector
 #: field:queue.job.channel,complete_name:0 field:queue.job.function,channel:0
 msgid "Complete Name"
-msgstr ""
+msgstr "Polni naziv"
 
 #. module: connector
 #: view:connector.config.settings:connector.view_connector_config_settings
 #: model:ir.actions.act_window,name:connector.action_connector_config_settings
 msgid "Configure Connector"
-msgstr "配置连接器"
+msgstr "Nastavitve povezovalnika"
 
 #. module: connector
 #: model:ir.module.category,name:connector.module_category_connector
 #: model:ir.ui.menu,name:connector.menu_connector_config_settings
 msgid "Connector"
-msgstr "连接器"
+msgstr "Povezovalnik"
 
 #. module: connector
 #: model:ir.model,name:connector.model_connector_backend
 msgid "Connector Backend"
-msgstr ""
+msgstr "Ozadje povezovalnika"
 
 #. module: connector
 #: view:connector.checkpoint:connector.view_connector_checkpoint_form
@@ -182,29 +183,29 @@ msgstr ""
 #: model:ir.actions.act_window,name:connector.action_connector_checkpoint
 #: model:ir.model,name:connector.model_connector_checkpoint
 msgid "Connector Checkpoint"
-msgstr "连接器检查点"
+msgstr "Kontrolna točka povezovalnika"
 
 #. module: connector
 #: model:ir.model,name:connector.model_connector_config_settings
 msgid "Connector Configuration"
-msgstr ""
+msgstr "Nastavitve povezovalnika"
 
 #. module: connector
 #: model:res.groups,name:connector.group_connector_manager
 msgid "Connector Manager"
-msgstr "连接器管理"
+msgstr "Upravitelj povezovalnika"
 
 #. module: connector
 #: model:ir.ui.menu,name:connector.menu_connector
 #: model:ir.ui.menu,name:connector.menu_connector_root
 #: view:res.partner:connector.view_partner_connector_form
 msgid "Connectors"
-msgstr "连接器"
+msgstr "Konektorji"
 
 #. module: connector
 #: field:queue.job,date_created:0
 msgid "Created Date"
-msgstr "创建日期"
+msgstr "Datum nastanka"
 
 #. module: connector
 #: field:connector.checkpoint,create_uid:0
@@ -212,7 +213,7 @@ msgstr "创建日期"
 #: field:connector.config.settings,create_uid:0
 #: field:queue.job.channel,create_uid:0 field:queue.requeue.job,create_uid:0
 msgid "Created by"
-msgstr ""
+msgstr "Ustvaril"
 
 #. module: connector
 #: field:connector.checkpoint,create_date:0
@@ -220,100 +221,100 @@ msgstr ""
 #: field:connector.config.settings,create_date:0
 #: field:queue.job.channel,create_date:0 field:queue.requeue.job,create_date:0
 msgid "Created on"
-msgstr ""
+msgstr "Ustvarjeno"
 
 #. module: connector
 #: field:queue.job,retry:0
 msgid "Current try"
-msgstr "已尝试次数"
+msgstr "Trenutni poskus"
 
 #. module: connector
 #: view:queue.job:connector.view_queue_job_form
 msgid "Current try / max. retries"
-msgstr "当前最大重试次数"
+msgstr "Trenutni poskus / maks. ponovitev"
 
 #. module: connector
 #: field:queue.job,date_done:0
 msgid "Date Done"
-msgstr "完成日期"
+msgstr "Datum dokončanja"
 
 #. module: connector
 #: help:connector.checkpoint,message_last_post:0
 #: help:queue.job,message_last_post:0
 msgid "Date of the last message posted on the record."
-msgstr ""
+msgstr "Datum zadnjega sporočila na zapisu."
 
 #. module: connector
 #: field:queue.job,name:0
 msgid "Description"
-msgstr "描述"
+msgstr "Opis"
 
 #. module: connector
 #: view:queue.job:connector.view_queue_job_search selection:queue.job,state:0
 msgid "Done"
-msgstr "完成"
+msgstr "Opravljeno"
 
 #. module: connector
 #: field:queue.job,date_enqueued:0
 msgid "Enqueue Time"
-msgstr "排队时间"
+msgstr "Čas čakanja"
 
 #. module: connector
 #: view:queue.job:connector.view_queue_job_search selection:queue.job,state:0
 msgid "Enqueued"
-msgstr "队列中"
+msgstr "V čakalni vrsti"
 
 #. module: connector
 #: field:queue.job,exc_info:0
 msgid "Exception Info"
-msgstr "异常信息"
+msgstr "Podatki o izjemi"
 
 #. module: connector
 #: view:queue.job:connector.view_queue_job_form
 msgid "Exception Information"
-msgstr "异常信息"
+msgstr "Podatki o izjemi"
 
 #. module: connector
 #: field:queue.job,eta:0
 msgid "Execute only after"
-msgstr "进行中"
+msgstr "Izvedba le po"
 
 #. module: connector
 #: model:ir.model,name:connector.model_external_binding
 msgid "External Binding (abstract)"
-msgstr "外部绑定"
+msgstr "Zunanja povezava (povzetek)"
 
 #. module: connector
 #: view:queue.job:connector.view_queue_job_search selection:queue.job,state:0
 msgid "Failed"
-msgstr "失败"
+msgstr "Spodletelo"
 
 #. module: connector
 #: field:connector.checkpoint,message_follower_ids:0
 #: field:queue.job,message_follower_ids:0
 msgid "Followers"
-msgstr "听众"
+msgstr "Sledilci"
 
 #. module: connector
 #: field:queue.job,func_name:0
 msgid "Func name"
-msgstr ""
+msgstr "Naziv funkcije"
 
 #. module: connector
 #: help:connector.config.settings,module_portal:0
 msgid "Give your customers access to their documents."
-msgstr "让你的顾客获取他们的文档"
+msgstr "Kupcem omogočite dostop do njihovih dokumentov."
 
 #. module: connector
 #: view:queue.job:connector.view_queue_job_search
 #: view:queue.job.function:connector.view_queue_job_function_search
 msgid "Group By"
-msgstr ""
+msgstr "Združi po"
 
 #. module: connector
 #: view:connector.checkpoint:connector.view_connector_checkpoint_search
 msgid "Group By..."
-msgstr "分组依据是"
+msgstr "Združi po..."
 
 #. module: connector
 #: help:connector.checkpoint,message_summary:0
@@ -321,7 +322,7 @@ msgstr "分组依据是"
 msgid ""
 "Holds the Chatter summary (number of messages, ...). This summary is "
 "directly in html format in order to be inserted in kanban views."
-msgstr "HTML格式的简介，包括了各种项目的总结信息（比如消息数，作业数……）"
+msgstr "Zajema povzetek komunikacij (število sporočil, ...). Povzetek je neposredno v html formatu, da se ga lahko vnaša v kanban prikaze."
 
 #. module: connector
 #: field:connector.backend,id:0 field:connector.checkpoint,id:0
@@ -330,45 +331,45 @@ msgstr "HTML格式的简介，包括了各种项目的总结信息（比如消�
 #: field:queue.job.channel,id:0 field:queue.job.function,id:0
 #: field:queue.requeue.job,id:0 field:queue.worker,id:0
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #. module: connector
 #: help:connector.checkpoint,message_unread:0 help:queue.job,message_unread:0
 msgid "If checked new messages require your attention."
-msgstr "勾选后将提示您新消息"
+msgstr "Ko je označeno, nova sporočila zahtevajo vašo pozornost."
 
 #. module: connector
 #: view:queue.job:connector.view_queue_job_form
 msgid "If the max. retries is 0, the number of retries is infinite."
-msgstr "如果最大重试次数为0，将会无限次重试."
+msgstr "Če je maks. št. poskusov 0, je število poskusov neskončno."
 
 #. module: connector
 #: help:connector.config.settings,alias_domain:0
 msgid ""
 "If you have setup a catch-all email domain redirected to the Odoo server, "
 "enter the domain name here."
-msgstr ""
+msgstr "Če ste nastavili catch-all domensko e-pošto, ki je preusmerjena na Odoo strežnik, vnesite naziv domene."
 
 #. module: connector
 #: field:connector.checkpoint,backend_id:0
 msgid "Imported from"
-msgstr "导入自"
+msgstr "Uvoženo iz"
 
 #. module: connector
 #: field:connector.checkpoint,message_is_follower:0
 #: field:queue.job,message_is_follower:0
 msgid "Is a Follower"
-msgstr "是听众"
+msgstr "Je sledilec"
 
 #. module: connector
 #: model:ir.model,name:connector.model_queue_job_channel
 msgid "Job Channels"
-msgstr ""
+msgstr "Delovni kanali"
 
 #. module: connector
 #: view:queue.job:connector.view_queue_job_search
 msgid "Job Function"
-msgstr ""
+msgstr "Delovna funkcija"
 
 #. module: connector
 #: model:ir.actions.act_window,name:connector.action_queue_job_function
@@ -379,17 +380,17 @@ msgstr ""
 #: view:queue.job.function:connector.view_queue_job_function_search
 #: view:queue.job.function:connector.view_queue_job_function_tree
 msgid "Job Functions"
-msgstr ""
+msgstr "Delovne funkcije"
 
 #. module: connector
 #: model:mail.message.subtype,name:connector.mt_job_failed
 msgid "Job failed"
-msgstr "作业失败"
+msgstr "Opravilo spodletelo"
 
 #. module: connector
 #: field:queue.job,job_function_id:0
 msgid "Job function id"
-msgstr ""
+msgstr "ID delovne funkcije"
 
 #. module: connector
 #: model:ir.actions.act_window,name:connector.action_queue_job
@@ -399,18 +400,18 @@ msgstr ""
 #: view:queue.job:connector.view_queue_job_tree
 #: field:queue.requeue.job,job_ids:0 field:queue.worker,job_ids:0
 msgid "Jobs"
-msgstr "任务"
+msgstr "Dela"
 
 #. module: connector
 #: field:queue.worker,date_alive:0
 msgid "Last Alive Check"
-msgstr "最后一次检查"
+msgstr "Zadnje preverjanje aktivnosti"
 
 #. module: connector
 #: field:connector.checkpoint,message_last_post:0
 #: field:queue.job,message_last_post:0
 msgid "Last Message Date"
-msgstr ""
+msgstr "Datum zadnjega sporočila"
 
 #. module: connector
 #: field:connector.checkpoint,write_uid:0
@@ -418,7 +419,7 @@ msgstr ""
 #: field:connector.config.settings,write_uid:0
 #: field:queue.job.channel,write_uid:0 field:queue.requeue.job,write_uid:0
 msgid "Last Updated by"
-msgstr ""
+msgstr "Zadnji posodobil"
 
 #. module: connector
 #: field:connector.checkpoint,write_date:0
@@ -426,166 +427,166 @@ msgstr ""
 #: field:connector.config.settings,write_date:0
 #: field:queue.job.channel,write_date:0 field:queue.requeue.job,write_date:0
 msgid "Last Updated on"
-msgstr ""
+msgstr "Zadnjič posodobljeno"
 
 #. module: connector
 #: field:external.binding,sync_date:0
 msgid "Last synchronization date"
-msgstr "最后同步日期"
+msgstr "Datum zadnje sinhronizacije"
 
 #. module: connector
 #: field:connector.config.settings,module_multi_company:0
 msgid "Manage multiple companies"
-msgstr "管理多公司"
+msgstr "Upravljanje več družb"
 
 #. module: connector
 #: code:addons/connector/queue/model.py:140
 #, python-format
 msgid "Manually set to done by %s"
-msgstr ""
+msgstr "Ročno nastavil kot opravljeno: %s"
 
 #. module: connector
 #: field:queue.job,max_retries:0
 msgid "Max. retries"
-msgstr "最大尝试数"
+msgstr "Maks. št. poskusov"
 
 #. module: connector
 #: field:connector.checkpoint,message_ids:0 field:queue.job,message_ids:0
 msgid "Messages"
-msgstr "消息"
+msgstr "Sporočila"
 
 #. module: connector
 #: help:connector.checkpoint,message_ids:0 help:queue.job,message_ids:0
 msgid "Messages and communication history"
-msgstr "消息历史"
+msgstr "Sporočila in kronologija komunikacij"
 
 #. module: connector
 #: view:connector.checkpoint:connector.view_connector_checkpoint_search
 #: field:connector.checkpoint,model_id:0 field:queue.job,model_name:0
 msgid "Model"
-msgstr "模型"
+msgstr "Model"
 
 #. module: connector
 #: model:ir.model,name:connector.model_ir_module_module
 msgid "Module"
-msgstr ""
+msgstr "Modul"
 
 #. module: connector
 #: field:connector.backend,name:0 field:queue.job.channel,name:0
 #: field:queue.job.function,name:0
 msgid "Name"
-msgstr "名称"
+msgstr "Naziv"
 
 #. module: connector
 #: view:connector.checkpoint:connector.view_connector_checkpoint_search
 #: selection:connector.checkpoint,state:0
 msgid "Need Review"
-msgstr "需要审阅"
+msgstr "Potrebna revizija"
 
 #. module: connector
 #: code:addons/connector/queue/model.py:116
 #, python-format
 msgid "No action available for this job"
-msgstr ""
+msgstr "Za to delo ni aktivnosti"
 
 #. module: connector
 #: model:ir.actions.client,name:connector.action_client_connector_menu
 msgid "Open Connector Menu"
-msgstr "打开连接器菜单"
+msgstr "Odpri meni povezovalnika"
 
 #. module: connector
 #: field:queue.worker,pid:0
 msgid "PID"
-msgstr "进程号"
+msgstr "PID"
 
 #. module: connector
 #: field:queue.job.channel,parent_id:0
 msgid "Parent Channel"
-msgstr ""
+msgstr "Nadrejeni kanal"
 
 #. module: connector
 #: code:addons/connector/queue/model.py:448
 #, python-format
 msgid "Parent channel required."
-msgstr ""
+msgstr "Zahteva se nadrejeni kanal."
 
 #. module: connector
 #: view:queue.job:connector.view_queue_job_search selection:queue.job,state:0
 msgid "Pending"
-msgstr "暂停中"
+msgstr "Na čakanju"
 
 #. module: connector
 #: field:queue.job,func:0
 msgid "Pickled Function"
-msgstr "Pickled Function"
+msgstr "Vložena funkcija"
 
 #. module: connector
 #: field:queue.job,priority:0
 msgid "Priority"
-msgstr "优先级"
+msgstr "Prioriteta"
 
 #. module: connector
 #: model:ir.ui.menu,name:connector.menu_queue
 msgid "Queue"
-msgstr "队列任务"
+msgstr "Čakalna vrsta"
 
 #. module: connector
 #: model:ir.model,name:connector.model_queue_job
 msgid "Queue Job"
-msgstr "队列中作业"
+msgstr "Delo čakalne vrste"
 
 #. module: connector
 #: model:ir.model,name:connector.model_queue_worker
 msgid "Queue Worker"
-msgstr ""
+msgstr "Delavec čakalne vrste"
 
 #. module: connector
 #: field:connector.checkpoint,record_id:0
 msgid "Record ID"
-msgstr "记录 ID"
+msgstr "ID zapisa"
 
 #. module: connector
 #: view:queue.job:connector.view_queue_job_form
 msgid "Related"
-msgstr ""
+msgstr "Povezano"
 
 #. module: connector
 #: code:addons/connector/related_action.py:48
 #, python-format
 msgid "Related Record"
-msgstr ""
+msgstr "Povezani zapis"
 
 #. module: connector
 #: field:connector.config.settings,font:0
 msgid "Report Font"
-msgstr ""
+msgstr "Pisava poročila"
 
 #. module: connector
 #: view:queue.requeue.job:connector.view_requeue_job
 msgid "Requeue"
-msgstr "重新排队"
+msgstr "Razvrščanje"
 
 #. module: connector
 #: view:queue.job:connector.view_queue_job_form
 msgid "Requeue Job"
-msgstr "重置中作业"
+msgstr "Razvrščeno delo"
 
 #. module: connector
 #: model:ir.actions.act_window,name:connector.action_requeue_job
 #: view:queue.requeue.job:connector.view_requeue_job
 msgid "Requeue Jobs"
-msgstr "重置中作业"
+msgstr "Razvrščena dela"
 
 #. module: connector
 #: view:queue.job:connector.view_queue_job_form field:queue.job,result:0
 msgid "Result"
-msgstr "结果"
+msgstr "Rezultat"
 
 #. module: connector
 #: view:connector.checkpoint.review:connector.view_connector_checkpoint_review
 #: model:ir.actions.act_window,name:connector.action_connector_checkpoint_review
 msgid "Review Checkpoints"
-msgstr "审查检查点"
+msgstr "Pregled kontrolnih točk"
 
 #. module: connector
 #: view:connector.checkpoint:connector.view_connector_checkpoint_form
@@ -593,29 +594,29 @@ msgstr "审查检查点"
 #: view:connector.checkpoint:connector.view_connector_checkpoint_tree
 #: selection:connector.checkpoint,state:0
 msgid "Reviewed"
-msgstr "已审阅"
+msgstr "Pregledano"
 
 #. module: connector
 #: view:connector.checkpoint.review:connector.view_connector_checkpoint_review
 msgid "Set as reviewed"
-msgstr "设置为已读"
+msgstr "Nastavi kot pregledano"
 
 #. module: connector
 #: help:connector.config.settings,font:0
 msgid ""
 "Set the font into the report header, it will be used as default font in the "
 "RML reports of the user company"
-msgstr ""
+msgstr "Nastavitev pisave v glavi poročila, ki se uporablja kot privzeta pisava v RML poročilih uporabnikove družbe."
 
 #. module: connector
 #: view:queue.job:connector.view_queue_job_form
 msgid "Set to 'Done'"
-msgstr "设置为完成"
+msgstr "Nastavi kot 'opravljeno'"
 
 #. module: connector
 #: help:connector.config.settings,module_share:0
 msgid "Share or embbed any screen of Odoo."
-msgstr ""
+msgstr "Souporaba ali vgradnja kateregakoli zaslona Odoo"
 
 #. module: connector
 #: code:addons/connector/queue/model.py:186
@@ -623,70 +624,70 @@ msgstr ""
 msgid ""
 "Something bad happened during the execution of the job. More details in the "
 "'Exception Information' section."
-msgstr ""
+msgstr "Med izvedbo opravila je prišlo do težav. Več podrobnosti je na voljo v razdelku 'Podatki o izjemah'"
 
 #. module: connector
 #: field:queue.job,date_started:0 field:queue.worker,date_start:0
 msgid "Start Date"
-msgstr "开始日期"
+msgstr "Začetni datum"
 
 #. module: connector
 #: view:queue.job:connector.view_queue_job_search selection:queue.job,state:0
 msgid "Started"
-msgstr "已开始"
+msgstr "Začeto"
 
 #. module: connector
 #: view:queue.job:connector.view_queue_job_search field:queue.job,state:0
 msgid "State"
-msgstr "状态"
+msgstr "Stanje"
 
 #. module: connector
 #: field:connector.checkpoint,state:0
 msgid "Status"
-msgstr "状态"
+msgstr "Status"
 
 #. module: connector
 #: field:connector.checkpoint,message_summary:0
 #: field:queue.job,message_summary:0
 msgid "Summary"
-msgstr "摘要"
+msgstr "Povzetek"
 
 #. module: connector
 #: field:queue.job,func_string:0
 msgid "Task"
-msgstr "任务"
+msgstr "Opravilo"
 
 #. module: connector
 #: help:queue.job,max_retries:0
 msgid ""
 "The job will fail if the number of tries reach the max. retries.\n"
 "Retries are infinite when empty."
-msgstr "如果尝试次数达到最大重试数，作业将被标记为失败\n如果没有设置最大重试次数，将会无限次重试."
+msgstr "Opravilo bo spodletelo, če število poskusov doseže maksimalno število poskusov.\nKadar je prazno, je število poskusov neskončno."
 
 #. module: connector
 #: help:connector.checkpoint,backend_id:0
 msgid "The record has been imported from this backend"
-msgstr "记录已经成功从后台导入"
+msgstr "Zapis je bil uvožen iz tega ozadja."
 
 #. module: connector
 #: view:connector.checkpoint.review:connector.view_connector_checkpoint_review
 msgid "The selected checkpoints will be set as reviewed."
-msgstr "已选择的检查点将被设置为已审阅"
+msgstr "Izbrane kontrolne točke bodo označene kot pregledane."
 
 #. module: connector
 #: view:queue.requeue.job:connector.view_requeue_job
 msgid "The selected jobs will be requeued."
-msgstr "已选择的作业将会重新进行排队"
+msgstr "Izbrana opravila bodo prerazporejena."
 
 #. module: connector
 #: help:connector.config.settings,module_google_calendar:0
 msgid "This installs the module google_calendar."
-msgstr ""
+msgstr "Namesti modul google_calendar."
 
 #. module: connector
 #: help:connector.config.settings,module_google_drive:0
 msgid "This installs the module google_docs."
-msgstr ""
+msgstr "Namesti modul google_docs."
 
 #. module: connector
 #: field:queue.job,uuid:0 field:queue.worker,uuid:0
@@ -697,57 +698,57 @@ msgstr "UUID"
 #: field:connector.checkpoint,message_unread:0
 #: field:queue.job,message_unread:0
 msgid "Unread Messages"
-msgstr "未读消息"
+msgstr "Neprebrana sporočila"
 
 #. module: connector
 #: field:connector.config.settings,module_auth_oauth:0
 msgid ""
 "Use external authentication providers, sign in with google, facebook, ..."
-msgstr "允许外部用户使用google, facebook账户注册"
+msgstr "Uporaba zunanjih ponudnikov overjanja, prijava z google, facebook, ..."
 
 #. module: connector
 #: field:queue.job,user_id:0
 msgid "User ID"
-msgstr "用户ID"
+msgstr "ID uporabnika"
 
 #. module: connector
 #: field:connector.backend,version:0
 msgid "Version"
-msgstr "版本"
+msgstr "Verzija"
 
 #. module: connector
 #: model:ir.model,name:connector.model_queue_requeue_job
 msgid "Wizard to requeue a selection of jobs"
-msgstr "对已选作业进行重排"
+msgstr "Čarovnik za prerazporeditev izbire opravil."
 
 #. module: connector
 #: help:connector.config.settings,module_multi_company:0
 msgid ""
 "Work in multi-company environments, with appropriate security access between companies.\n"
 "-This installs the module multi_company."
-msgstr ""
+msgstr "Delo v okolju z več družbami s primerno varnostjo dostopa med družbami.\n- Namesti modul multi_company."
 
 #. module: connector
 #: field:queue.job,worker_id:0
 #: view:queue.worker:connector.view_queue_worker_form
 #: view:queue.worker:connector.view_queue_worker_tree
 msgid "Worker"
-msgstr "工作记录"
+msgstr "Delavec"
 
 #. module: connector
 #: model:ir.actions.act_window,name:connector.action_queue_worker
 #: model:ir.ui.menu,name:connector.menu_queue_worker
 msgid "Workers"
-msgstr "工作记录"
+msgstr "Delavci"
 
 #. module: connector
 #: view:connector.checkpoint.review:connector.view_connector_checkpoint_review
 #: view:connector.config.settings:connector.view_connector_config_settings
 #: view:queue.requeue.job:connector.view_requeue_job
 msgid "or"
-msgstr "或"
+msgstr "ali"
 
 #. module: connector
 #: view:connector.checkpoint:connector.view_connector_checkpoint_form
 msgid "to verify it:"
-msgstr "来验证他"
+msgstr "za preverjanje:"

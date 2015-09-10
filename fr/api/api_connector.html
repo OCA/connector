@@ -252,7 +252,10 @@
 <p>Bases : <a class="reference internal" href="#connector.connector.ConnectorUnit" title="connector.connector.ConnectorUnit"><code class="xref py py-class docutils literal"><span class="pre">connector.connector.ConnectorUnit</span></code></a></p>
 <blockquote>
 <div><p>Pour un enregistrement d&#8217;un modèle, capable de trouver un ID externe ou interne, ou crée la liaison entre eux</p>
-<p>Le Binder devrait être implémenté dans les connecteurs.</p>
+<p>This is a default implementation that can be inherited or reimplemented
+in the connectors.</p>
+<p>This implementation assumes that binding models are <code class="docutils literal"><span class="pre">_inherits</span></code> of
+the models they are binding.</p>
 <dl class="method">
 <dt id="connector.connector.Binder.bind">
 <code class="descclassname">Binder.</code><code class="descname">bind</code><span class="sig-paren">(</span><em>external_id</em>, <em>binding_id</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/connector.html#Binder.bind"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.connector.Binder.bind" title="Lien permanent vers cette définition">¶</a></dt>
@@ -274,7 +277,7 @@
 <dl class="method">
 <dt id="connector.connector.Binder.to_backend">
 <code class="descclassname">Binder.</code><code class="descname">to_backend</code><span class="sig-paren">(</span><em>binding_id</em>, <em>wrap=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/connector.html#Binder.to_backend"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.connector.Binder.to_backend" title="Lien permanent vers cette définition">¶</a></dt>
-<dd><p>Donne l&#8217;ID externe pour un ID de liaison OpenERP (ID dans un modèle magento.*)</p>
+<dd><p>Give the external ID for an OpenERP binding ID</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -294,7 +297,7 @@
 
 <dl class="method">
 <dt id="connector.connector.Binder.to_openerp">
-<code class="descclassname">Binder.</code><code class="descname">to_openerp</code><span class="sig-paren">(</span><em>external_id</em>, <em>unwrap=False</em>, <em>browse=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/connector.html#Binder.to_openerp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.connector.Binder.to_openerp" title="Lien permanent vers cette définition">¶</a></dt>
+<code class="descclassname">Binder.</code><code class="descname">to_openerp</code><span class="sig-paren">(</span><em>external_id</em>, <em>unwrap=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/connector.html#Binder.to_openerp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.connector.Binder.to_openerp" title="Lien permanent vers cette définition">¶</a></dt>
 <dd><p>Donne l&#8217;ID OpenERP pour un ID externe</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -302,15 +305,16 @@
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><ul class="first simple">
 <li><strong>external_id</strong> &#8211; ID externe pour lequel on veut l&#8217;ID OpenERP</li>
-<li><strong>unwrap</strong> &#8211; si Vrai, renvoie l&#8217;openerp_id, sinon renvoie l&#8217;ID de la liaison</li>
-<li><strong>browse</strong> &#8211; si Vrai, renvoie un <cite>recordset</cite></li>
+<li><strong>unwrap</strong> &#8211; if True, returns the normal record
+else return the binding record</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Retourne:</th><td class="field-body"><p class="first">un ID d&#8217;enregistrement, en fonction de la valeur à déballer, ou None si l&#8217;external_id n&#8217;est pas mappé</p>
+<tr class="field-even field"><th class="field-name">Retourne:</th><td class="field-body"><p class="first">a recordset, depending on the value of unwrap,
+or an empty recordset if the external_id is not mapped</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Type retourné:</th><td class="field-body"><p class="first last"><a class="reference external" href="http://docs.python.org/library/functions.html#int" title="(disponible dans Python v2.7)">int</a></p>
+<tr class="field-odd field"><th class="field-name">Type retourné:</th><td class="field-body"><p class="first last">recordset</p>
 </td>
 </tr>
 </tbody>

@@ -253,6 +253,8 @@
 
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">from</span> <span class="nn">contextlib</span> <span class="kn">import</span> <span class="n">contextmanager</span>
+<span class="kn">from</span> <span class="nn">openerp</span> <span class="kn">import</span> <span class="n">models</span><span class="p">,</span> <span class="n">fields</span>
+
 <span class="kn">from</span> <span class="nn">.deprecate</span> <span class="kn">import</span> <span class="n">log_deprecate</span><span class="p">,</span> <span class="n">DeprecatedClass</span>
 
 <span class="n">_logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">__name__</span><span class="p">)</span>
@@ -592,28 +594,43 @@
     <span class="sd">&quot;&quot;&quot; For one record of a model, capable to find an external or</span>
 <span class="sd">    internal id, or create the binding (link) between them</span>
 
-<span class="sd">    The Binder should be implemented in the connectors.</span>
+<span class="sd">    This is a default implementation that can be inherited or reimplemented</span>
+<span class="sd">    in the connectors.</span>
+
+<span class="sd">    This implementation assumes that binding models are ``_inherits`` of</span>
+<span class="sd">    the models they are binding.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">_model_name</span> <span class="o">=</span> <span class="bp">None</span>  <span class="c"># define in sub-classes</span>
+    <span class="n">_external_field</span> <span class="o">=</span> <span class="s">&#39;external_id&#39;</span>  <span class="c"># override in sub-classes</span>
+    <span class="n">_backend_field</span> <span class="o">=</span> <span class="s">&#39;backend_id&#39;</span>  <span class="c"># override in sub-classes</span>
+    <span class="n">_openerp_field</span> <span class="o">=</span> <span class="s">&#39;openerp_id&#39;</span>  <span class="c"># override in sub-classes</span>
+    <span class="n">_sync_date_field</span> <span class="o">=</span> <span class="s">&#39;sync_date&#39;</span>  <span class="c"># override in sub-classes</span>
 
-<div class="viewcode-block" id="Binder.to_openerp"><a class="viewcode-back" href="../../api/api_connector.html#connector.connector.Binder.to_openerp">[docs]</a>    <span class="k">def</span> <span class="nf">to_openerp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">external_id</span><span class="p">,</span> <span class="n">unwrap</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">browse</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="Binder.to_openerp"><a class="viewcode-back" href="../../api/api_connector.html#connector.connector.Binder.to_openerp">[docs]</a>    <span class="k">def</span> <span class="nf">to_openerp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">external_id</span><span class="p">,</span> <span class="n">unwrap</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Give the OpenERP ID for an external ID</span>
 
 <span class="sd">        :param external_id: external ID for which we want</span>
 <span class="sd">                            the OpenERP ID</span>
-<span class="sd">        :param unwrap: if True, returns the openerp_id</span>
-<span class="sd">                       else return the id of the binding</span>
-<span class="sd">        :param browse: if True, returns a recordset</span>
-<span class="sd">        :return: a record ID, depending on the value of unwrap,</span>
-<span class="sd">                 or None if the external_id is not mapped</span>
-<span class="sd">        :rtype: int</span>
+<span class="sd">        :param unwrap: if True, returns the normal record</span>
+<span class="sd">                       else return the binding record</span>
+<span class="sd">        :return: a recordset, depending on the value of unwrap,</span>
+<span class="sd">                 or an empty recordset if the external_id is not mapped</span>
+<span class="sd">        :rtype: recordset</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+        <span class="n">bindings</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">with_context</span><span class="p">(</span><span class="n">active_test</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span><span class="o">.</span><span class="n">search</span><span class="p">(</span>
+            <span class="p">[(</span><span class="bp">self</span><span class="o">.</span><span class="n">_external_field</span><span class="p">,</span> <span class="s">&#39;=&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">external_id</span><span class="p">)),</span>
+             <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_backend_field</span><span class="p">,</span> <span class="s">&#39;=&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">backend_record</span><span class="o">.</span><span class="n">id</span><span class="p">)]</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">bindings</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">browse</span><span class="p">()</span>
+        <span class="n">bindings</span><span class="o">.</span><span class="n">ensure_one</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">unwrap</span><span class="p">:</span>
+            <span class="n">bindings</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">bindings</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_openerp_field</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">bindings</span>
 </div>
 <div class="viewcode-block" id="Binder.to_backend"><a class="viewcode-back" href="../../api/api_connector.html#connector.connector.Binder.to_backend">[docs]</a>    <span class="k">def</span> <span class="nf">to_backend</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">binding_id</span><span class="p">,</span> <span class="n">wrap</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Give the external ID for an OpenERP binding ID</span>
-<span class="sd">        (ID in a model magento.*)</span>
 
 <span class="sd">        :param binding_id: OpenERP binding ID for which we want the backend id</span>
 <span class="sd">        :param wrap: if False, binding_id is the ID of the binding,</span>
@@ -622,7 +639,25 @@
 <span class="sd">                     the backend id of the binding</span>
 <span class="sd">        :return: external ID of the record</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+        <span class="n">record</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">browse</span><span class="p">()</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">binding_id</span><span class="p">,</span> <span class="n">models</span><span class="o">.</span><span class="n">BaseModel</span><span class="p">):</span>
+            <span class="n">binding_id</span><span class="o">.</span><span class="n">ensure_one</span><span class="p">()</span>
+            <span class="n">record</span> <span class="o">=</span> <span class="n">binding_id</span>
+            <span class="n">binding_id</span> <span class="o">=</span> <span class="n">binding_id</span><span class="o">.</span><span class="n">id</span>
+        <span class="k">if</span> <span class="n">wrap</span><span class="p">:</span>
+            <span class="n">binding</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">with_context</span><span class="p">(</span><span class="n">active_test</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span><span class="o">.</span><span class="n">search</span><span class="p">(</span>
+                <span class="p">[(</span><span class="bp">self</span><span class="o">.</span><span class="n">_openerp_field</span><span class="p">,</span> <span class="s">&#39;=&#39;</span><span class="p">,</span> <span class="n">binding_id</span><span class="p">),</span>
+                 <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_backend_field</span><span class="p">,</span> <span class="s">&#39;=&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">backend_record</span><span class="o">.</span><span class="n">id</span><span class="p">),</span>
+                 <span class="p">]</span>
+            <span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">binding</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">None</span>
+            <span class="n">binding</span><span class="o">.</span><span class="n">ensure_one</span><span class="p">()</span>
+            <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">binding</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_external_field</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">record</span><span class="p">:</span>
+            <span class="n">record</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">browse</span><span class="p">(</span><span class="n">binding_id</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">record</span>
+        <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">record</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_external_field</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="Binder.bind"><a class="viewcode-back" href="../../api/api_connector.html#connector.connector.Binder.bind">[docs]</a>    <span class="k">def</span> <span class="nf">bind</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">external_id</span><span class="p">,</span> <span class="n">binding_id</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Create the link between an external ID and an OpenERP ID</span>
@@ -631,7 +666,19 @@
 <span class="sd">        :param binding_id: OpenERP ID to bind</span>
 <span class="sd">        :type binding_id: int</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+        <span class="c"># Prevent False, None, or &quot;&quot;, but not 0</span>
+        <span class="k">assert</span> <span class="p">(</span><span class="n">external_id</span> <span class="ow">or</span> <span class="n">external_id</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">and</span> <span class="n">binding_id</span><span class="p">,</span> <span class="p">(</span>
+            <span class="s">&quot;external_id or binding_id missing, &quot;</span>
+            <span class="s">&quot;got: </span><span class="si">%s</span><span class="s">, </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">external_id</span><span class="p">,</span> <span class="n">binding_id</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="c"># avoid to trigger the export when we modify the `external_id`</span>
+        <span class="n">now_fmt</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">binding_id</span><span class="p">,</span> <span class="n">models</span><span class="o">.</span><span class="n">BaseModel</span><span class="p">):</span>
+            <span class="n">binding_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">browse</span><span class="p">(</span><span class="n">binding_id</span><span class="p">)</span>
+        <span class="n">binding_id</span><span class="o">.</span><span class="n">with_context</span><span class="p">(</span><span class="n">connector_no_export</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
+            <span class="p">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_external_field</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">external_id</span><span class="p">),</span>
+             <span class="bp">self</span><span class="o">.</span><span class="n">_sync_date_field</span><span class="p">:</span> <span class="n">now_fmt</span><span class="p">,</span>
+             <span class="p">})</span>
 </div>
 <div class="viewcode-block" id="Binder.unwrap_binding"><a class="viewcode-back" href="../../api/api_connector.html#connector.connector.Binder.unwrap_binding">[docs]</a>    <span class="k">def</span> <span class="nf">unwrap_binding</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">binding_id</span><span class="p">,</span> <span class="n">browse</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; For a binding record, gives the normal record.</span>
@@ -642,7 +689,15 @@
 <span class="sd">        :param browse: when True, returns a browse_record instance</span>
 <span class="sd">                       rather than an ID</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">binding_id</span><span class="p">,</span> <span class="n">models</span><span class="o">.</span><span class="n">BaseModel</span><span class="p">):</span>
+            <span class="n">binding</span> <span class="o">=</span> <span class="n">binding_id</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">binding</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">browse</span><span class="p">(</span><span class="n">binding_id</span><span class="p">)</span>
+
+        <span class="n">openerp_record</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">binding</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_openerp_field</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">browse</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">openerp_record</span>
+        <span class="k">return</span> <span class="n">openerp_record</span><span class="o">.</span><span class="n">id</span>
 </div>
 <div class="viewcode-block" id="Binder.unwrap_model"><a class="viewcode-back" href="../../api/api_connector.html#connector.connector.Binder.unwrap_model">[docs]</a>    <span class="k">def</span> <span class="nf">unwrap_model</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; For a binding model, gives the normal model.</span>
@@ -650,7 +705,13 @@
 <span class="sd">        Example: when called on a binder for ``magento.product.product``,</span>
 <span class="sd">        it will return ``product.product``.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div></div>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">column</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">_fields</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_openerp_field</span><span class="p">]</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s">&#39;Cannot unwrap model </span><span class="si">%s</span><span class="s">, because it has no </span><span class="si">%s</span><span class="s"> fields&#39;</span>
+                <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_openerp_field</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">column</span><span class="o">.</span><span class="n">comodel_name</span></div></div>
 </pre></div>
 
     </div>

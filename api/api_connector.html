@@ -249,7 +249,10 @@
 <dd><p>Bases: <a class="reference internal" href="#connector.connector.ConnectorUnit" title="connector.connector.ConnectorUnit"><code class="xref py py-class docutils literal"><span class="pre">connector.connector.ConnectorUnit</span></code></a></p>
 <p>For one record of a model, capable to find an external or
 internal id, or create the binding (link) between them</p>
-<p>The Binder should be implemented in the connectors.</p>
+<p>This is a default implementation that can be inherited or reimplemented
+in the connectors.</p>
+<p>This implementation assumes that binding models are <code class="docutils literal"><span class="pre">_inherits</span></code> of
+the models they are binding.</p>
 <dl class="method">
 <dt id="connector.connector.Binder.bind">
 <code class="descname">bind</code><span class="sig-paren">(</span><em>external_id</em>, <em>binding_id</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/connector.html#Binder.bind"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.connector.Binder.bind" title="Permalink to this definition">¶</a></dt>
@@ -271,8 +274,7 @@ internal id, or create the binding (link) between them</p>
 <dl class="method">
 <dt id="connector.connector.Binder.to_backend">
 <code class="descname">to_backend</code><span class="sig-paren">(</span><em>binding_id</em>, <em>wrap=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/connector.html#Binder.to_backend"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.connector.Binder.to_backend" title="Permalink to this definition">¶</a></dt>
-<dd><p>Give the external ID for an OpenERP binding ID
-(ID in a model magento.*)</p>
+<dd><p>Give the external ID for an OpenERP binding ID</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -295,7 +297,7 @@ the backend id of the binding</li>
 
 <dl class="method">
 <dt id="connector.connector.Binder.to_openerp">
-<code class="descname">to_openerp</code><span class="sig-paren">(</span><em>external_id</em>, <em>unwrap=False</em>, <em>browse=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/connector.html#Binder.to_openerp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.connector.Binder.to_openerp" title="Permalink to this definition">¶</a></dt>
+<code class="descname">to_openerp</code><span class="sig-paren">(</span><em>external_id</em>, <em>unwrap=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/connector.html#Binder.to_openerp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.connector.Binder.to_openerp" title="Permalink to this definition">¶</a></dt>
 <dd><p>Give the OpenERP ID for an external ID</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -304,17 +306,16 @@ the backend id of the binding</li>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>external_id</strong> &#8211; external ID for which we want
 the OpenERP ID</li>
-<li><strong>unwrap</strong> &#8211; if True, returns the openerp_id
-else return the id of the binding</li>
-<li><strong>browse</strong> &#8211; if True, returns a recordset</li>
+<li><strong>unwrap</strong> &#8211; if True, returns the normal record
+else return the binding record</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">a record ID, depending on the value of unwrap,
-or None if the external_id is not mapped</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">a recordset, depending on the value of unwrap,
+or an empty recordset if the external_id is not mapped</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="http://docs.python.org/library/functions.html#int" title="(in Python v2.7)">int</a></p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">recordset</p>
 </td>
 </tr>
 </tbody>

@@ -321,6 +321,7 @@
     <span class="n">func_name</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Char</span><span class="p">(</span><span class="n">readonly</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
     <span class="n">job_function_id</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Many2one</span><span class="p">(</span><span class="n">comodel_name</span><span class="o">=</span><span class="s">&#39;queue.job.function&#39;</span><span class="p">,</span>
                                       <span class="n">compute</span><span class="o">=</span><span class="s">&#39;_compute_channel&#39;</span><span class="p">,</span>
+                                      <span class="n">string</span><span class="o">=</span><span class="s">&#39;Job Function&#39;</span><span class="p">,</span>
                                       <span class="n">readonly</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
                                       <span class="n">store</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
     <span class="c"># for searching without JOIN on channels</span>

@@ -7,6 +7,7 @@ Future
 * method 'install_in_connector' is now deprecated
 * Add a retry pattern for jobs (https://github.com/OCA/connector/pull/75)
 * Use custom connector environments and instantiate them with needed attributes (https://github.com/OCA/connector/pull/108)
+* A new default implementation for the binder (https://github.com/OCA/connector/pull/76)
 
 3.1.0 (2015-05-15)
 ~~~~~~~~~~~~~~~~~~

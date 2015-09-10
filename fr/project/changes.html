@@ -101,14 +101,14 @@
 <li class="toctree-l1"><a class="reference internal" href="contributors.html#financial-contributors">Contributeurs financiers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="license.html">Licence</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="">Changements</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#future">Future</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#id2">3.1.0 (2015-05-15)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#id3">3.0.0 (2015-04-01)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#id4">2.2.0 (2014-05-26)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#id5">2.1.1 (2014-02-06)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id2">3.2.0 (2015-09-10)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id3">3.1.0 (2015-05-15)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id4">3.0.0 (2015-04-01)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id5">2.2.0 (2014-05-26)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id6">2.1.1 (2014-02-06)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#warning-breaks-compatibility">2.1.0 (2014-01-15 - attention : rupture de compatibilité)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#id6">2.0.1 (2013-09-12)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#id7">2.0.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id7">2.0.1 (2013-09-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id8">2.0.0</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="roadmap.html">Roadmap</a></li>
@@ -200,14 +200,14 @@
       role="menu"
       aria-labelledby="dLabelLocalToc"><ul>
 <li><a class="reference internal" href="#">Changements</a><ul>
-<li><a class="reference internal" href="#future">Future</a></li>
-<li><a class="reference internal" href="#id2">3.1.0 (2015-05-15)</a></li>
-<li><a class="reference internal" href="#id3">3.0.0 (2015-04-01)</a></li>
-<li><a class="reference internal" href="#id4">2.2.0 (2014-05-26)</a></li>
-<li><a class="reference internal" href="#id5">2.1.1 (2014-02-06)</a></li>
+<li><a class="reference internal" href="#id2">3.2.0 (2015-09-10)</a></li>
+<li><a class="reference internal" href="#id3">3.1.0 (2015-05-15)</a></li>
+<li><a class="reference internal" href="#id4">3.0.0 (2015-04-01)</a></li>
+<li><a class="reference internal" href="#id5">2.2.0 (2014-05-26)</a></li>
+<li><a class="reference internal" href="#id6">2.1.1 (2014-02-06)</a></li>
 <li><a class="reference internal" href="#warning-breaks-compatibility">2.1.0 (2014-01-15 - attention : rupture de compatibilité)</a></li>
-<li><a class="reference internal" href="#id6">2.0.1 (2013-09-12)</a></li>
-<li><a class="reference internal" href="#id7">2.0.0</a></li>
+<li><a class="reference internal" href="#id7">2.0.1 (2013-09-12)</a></li>
+<li><a class="reference internal" href="#id8">2.0.0</a></li>
 </ul>
 </li>
 </ul>
@@ -254,17 +254,28 @@
       
   <div class="section" id="changes">
 <span id="id1"></span><h1>Changements<a class="headerlink" href="#changes" title="Lien permanent vers ce titre">¶</a></h1>
-<div class="section" id="future">
-<h2>Future<a class="headerlink" href="#future" title="Lien permanent vers ce titre">¶</a></h2>
+<div class="section" id="id2">
+<h2>3.2.0 (2015-09-10)<a class="headerlink" href="#id2" title="Lien permanent vers ce titre">¶</a></h2>
 <ul class="simple">
-<li>method &#8216;install_in_connector&#8217; is now deprecated</li>
-<li>Add a retry pattern for jobs (<a class="reference external" href="https://github.com/OCA/connector/pull/75">https://github.com/OCA/connector/pull/75</a>)</li>
+<li>method &#8216;install_in_connector&#8217; is now deprecated (<a class="reference external" href="https://github.com/OCA/connector/pull/74">https://github.com/OCA/connector/pull/74</a>)</li>
+<li>Add a retry pattern for jobs (<a class="reference external" href="https://github.com/OCA/connector/pull/75">https://github.com/OCA/connector/pull/75</a>, <a class="reference external" href="https://github.com/OCA/connector/pull/92">https://github.com/OCA/connector/pull/92</a>)</li>
 <li>Use custom connector environments and instantiate them with needed attributes (<a class="reference external" href="https://github.com/OCA/connector/pull/108">https://github.com/OCA/connector/pull/108</a>)</li>
 <li>A new default implementation for the binder (<a class="reference external" href="https://github.com/OCA/connector/pull/76">https://github.com/OCA/connector/pull/76</a>)</li>
+<li>Translations are now automatically synchronized from Transifex</li>
+<li>Mapper: add modifier to follow m2o relations with dot notation (<a class="reference external" href="https://github.com/OCA/connector/pull/94">https://github.com/OCA/connector/pull/94</a>)</li>
+<li>Mapper: add &#8216;changed_by_fields&#8217; which indicates which source fields will output data (<a class="reference external" href="https://github.com/OCA/connector/pull/73">https://github.com/OCA/connector/pull/73</a>)</li>
+<li>Allow to assign a default channel on &#64;job functions (<a class="reference external" href="https://github.com/OCA/connector/pull/71">https://github.com/OCA/connector/pull/71</a>)</li>
+<li>Fix: connector-runner: manages retryable errors (<a class="reference external" href="https://github.com/OCA/connector/pull/87">https://github.com/OCA/connector/pull/87</a>)</li>
+<li>Fix: connector-runner: logging error when a capacity is None (<a class="reference external" href="https://github.com/OCA/connector/pull/98">https://github.com/OCA/connector/pull/98</a>)</li>
+<li>Fix: connector-runner: shows a wrong job result on retried jobs (<a class="reference external" href="https://github.com/OCA/connector/pull/101">https://github.com/OCA/connector/pull/101</a>)</li>
+<li>Fix: add an index on queue_job.worker_id (<a class="reference external" href="https://github.com/OCA/connector/pull/89">https://github.com/OCA/connector/pull/89</a>)</li>
+<li>Fix: Tests: common.DB is gone in 8.0 stable (<a class="reference external" href="https://github.com/OCA/connector/pull/79">https://github.com/OCA/connector/pull/79</a>)</li>
+<li>Fix: connector-runner: graceful stop mechanism (<a class="reference external" href="https://github.com/OCA/connector/pull/69">https://github.com/OCA/connector/pull/69</a>)</li>
+<li>Fix: connector-runner: Wrong arguments position in a log message (<a class="reference external" href="https://github.com/OCA/connector/pull/67">https://github.com/OCA/connector/pull/67</a>)</li>
 </ul>
 </div>
-<div class="section" id="id2">
-<h2>3.1.0 (2015-05-15)<a class="headerlink" href="#id2" title="Lien permanent vers ce titre">¶</a></h2>
+<div class="section" id="id3">
+<h2>3.1.0 (2015-05-15)<a class="headerlink" href="#id3" title="Lien permanent vers ce titre">¶</a></h2>
 <ul class="simple">
 <li>New jobs runner (details on <a class="reference external" href="https://github.com/OCA/connector/pull/52">https://github.com/OCA/connector/pull/52</a>)</li>
 <li>French documentation (<a class="reference external" href="https://github.com/OCA/connector/pull/57">https://github.com/OCA/connector/pull/57</a>)</li>
@@ -272,8 +283,8 @@
 <li>Fix: missing indexes on jobs (<a class="reference external" href="https://github.com/OCA/connector/pull/65">https://github.com/OCA/connector/pull/65</a>)</li>
 </ul>
 </div>
-<div class="section" id="id3">
-<h2>3.0.0 (2015-04-01)<a class="headerlink" href="#id3" title="Lien permanent vers ce titre">¶</a></h2>
+<div class="section" id="id4">
+<h2>3.0.0 (2015-04-01)<a class="headerlink" href="#id4" title="Lien permanent vers ce titre">¶</a></h2>
 <p>Attention : changements non rétro-compatibles dans cette version.</p>
 <ul>
 <li><p class="first">Ajout de <code class="docutils literal"><span class="pre">openerp.api.Environment</span></code> dans <code class="docutils literal"><span class="pre">Session</span></code> Accessible via <code class="docutils literal"><span class="pre">self.env</span></code> dans <code class="docutils literal"><span class="pre">Session</span></code> et toutes les instances <code class="docutils literal"><span class="pre">ConnectorUnit</span></code>. Également dans <code class="docutils literal"><span class="pre">ConnectorUnit</span></code>, <code class="docutils literal"><span class="pre">model</span></code> renvoie le modèle en cours (nouvelle API!) :</p>
@@ -332,8 +343,8 @@
 </li>
 </ul>
 </div>
-<div class="section" id="id4">
-<h2>2.2.0 (2014-05-26)<a class="headerlink" href="#id4" title="Lien permanent vers ce titre">¶</a></h2>
+<div class="section" id="id5">
+<h2>2.2.0 (2014-05-26)<a class="headerlink" href="#id5" title="Lien permanent vers ce titre">¶</a></h2>
 <ul class="simple">
 <li><p class="first">Les arguments d&#8217;un Job peuvent maintenant contenir des chaînes unicode (merci à Stéphane Bidoul) lp:1288187</p>
 </li>
@@ -345,8 +356,8 @@
 </li>
 </ul>
 </div>
-<div class="section" id="id5">
-<h2>2.1.1 (2014-02-06)<a class="headerlink" href="#id5" title="Lien permanent vers ce titre">¶</a></h2>
+<div class="section" id="id6">
+<h2>2.1.1 (2014-02-06)<a class="headerlink" href="#id6" title="Lien permanent vers ce titre">¶</a></h2>
 <ul class="simple">
 <li><p class="first">Un utilisateur peut être bloqué s&#8217;il n&#8217;a pas accès au modèle queue.job quand un job a été retardé. La création d&#8217;un job est à bas niveau et ne devrait pas être contrainte par les accès de l&#8217;utilisateur. (lp:1276182)</p>
 </li>
@@ -371,8 +382,8 @@
 </li>
 </ul>
 </div>
-<div class="section" id="id6">
-<h2>2.0.1 (2013-09-12)<a class="headerlink" href="#id6" title="Lien permanent vers ce titre">¶</a></h2>
+<div class="section" id="id7">
+<h2>2.0.1 (2013-09-12)<a class="headerlink" href="#id7" title="Lien permanent vers ce titre">¶</a></h2>
 <ul class="simple">
 <li><p class="first">Les développeurs d&#8217;addons n&#8217;ont plus besoin de créer un AbstractModel avec un _name &#8216;nom_module.installed&#8217;, ils doivent simplement appeler <code class="docutils literal"><span class="pre">connector.connector.install_in_connector()</span></code> lp:1196859</p>
 </li>
@@ -384,8 +395,8 @@
 </li>
 </ul>
 </div>
-<div class="section" id="id7">
-<h2>2.0.0<a class="headerlink" href="#id7" title="Lien permanent vers ce titre">¶</a></h2>
+<div class="section" id="id8">
+<h2>2.0.0<a class="headerlink" href="#id8" title="Lien permanent vers ce titre">¶</a></h2>
 <ul class="simple">
 <li><p class="first">Première version</p>
 </li>

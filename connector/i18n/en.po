@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: connector (8.0)\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-08-21 14:26+0000\n"
-"PO-Revision-Date: 2015-06-17 07:37+0000\n"
+"POT-Creation-Date: 2015-09-11 07:47+0000\n"
+"PO-Revision-Date: 2015-09-10 13:20+0000\n"
 "Last-Translator: OCA Transbot <transbot@odoo-community.org>\n"
 "Language-Team: English (http://www.transifex.com/oca/OCA-connector-8-0/language/en/)\n"
 "MIME-Version: 1.0\n"
@@ -96,13 +96,13 @@ msgid "Canceled. Nothing to do."
 msgstr "Canceled. Nothing to do."
 
 #. module: connector
-#: code:addons/connector/queue/model.py:456
+#: code:addons/connector/queue/model.py:457
 #, python-format
 msgid "Cannot change the root channel"
 msgstr "Cannot change the root channel"
 
 #. module: connector
-#: code:addons/connector/queue/model.py:463
+#: code:addons/connector/queue/model.py:464
 #, python-format
 msgid "Cannot remove the root channel"
 msgstr "Cannot remove the root channel"
@@ -367,6 +367,7 @@ msgstr "Job Channels"
 
 #. module: connector
 #: view:queue.job:connector.view_queue_job_search
+#: field:queue.job,job_function_id:0
 msgid "Job Function"
 msgstr "Job Function"
 
@@ -385,11 +386,6 @@ msgstr "Job Functions"
 #: model:mail.message.subtype,name:connector.mt_job_failed
 msgid "Job failed"
 msgstr "Job failed"
-
-#. module: connector
-#: field:queue.job,job_function_id:0
-msgid "Job function id"
-msgstr "Job function id"
 
 #. module: connector
 #: model:ir.actions.act_window,name:connector.action_queue_job
@@ -439,7 +435,7 @@ msgid "Manage multiple companies"
 msgstr "Manage multiple companies"
 
 #. module: connector
-#: code:addons/connector/queue/model.py:140
+#: code:addons/connector/queue/model.py:141
 #, python-format
 msgid "Manually set to done by %s"
 msgstr "Manually set to done by %s"
@@ -483,7 +479,7 @@ msgid "Need Review"
 msgstr "Need Review"
 
 #. module: connector
-#: code:addons/connector/queue/model.py:116
+#: code:addons/connector/queue/model.py:117
 #, python-format
 msgid "No action available for this job"
 msgstr "No action available for this job"
@@ -504,7 +500,7 @@ msgid "Parent Channel"
 msgstr "Parent Channel"
 
 #. module: connector
-#: code:addons/connector/queue/model.py:448
+#: code:addons/connector/queue/model.py:449
 #, python-format
 msgid "Parent channel required."
 msgstr "Parent channel required."
@@ -618,7 +614,7 @@ msgid "Share or embbed any screen of Odoo."
 msgstr "Share or embbed any screen of Odoo."
 
 #. module: connector
-#: code:addons/connector/queue/model.py:186
+#: code:addons/connector/queue/model.py:187
 #, python-format
 msgid ""
 "Something bad happened during the execution of the job. More details in the "

@@ -484,6 +484,21 @@ class TestJobChannels(common.TransactionCase):
         self.job_model = self.registry('queue.job')
         self.root_channel = self.ref('connector.channel_root')
         self.session = ConnectorSession(self.cr, self.uid, context={})
+        Company = self.registry('res.company')
+        Partner = self.registry('res.partner')
+        other_partner_id_a = Partner.create(
+            self.cr, self.uid,
+            {"name": "My Company a",
+             "is_company": True,
+             "email": "test@tes.ttest",
+             })
+        self.other_company_id_a = Company.create(
+            self.cr, self.uid,
+            {"name": "My Company a",
+             "partner_id": other_partner_id_a,
+             "rml_header1": "My Company Tagline",
+             "currency_id": self.ref("base.EUR")
+             })
 
     def test_channel_complete_name(self):
         cr, uid = self.cr, self.uid
@@ -587,3 +602,69 @@ class TestJobChannels(common.TransactionCase):
         self.assertEquals(partial.keywords.get('default_channel'),
                           default_channel)
         self.assertEquals(partial.keywords.get('retry_pattern'), retry_pattern)
+
+    def test_company_channel(self):
+        channel_id = self.channel_model.create(
+            self.cr, self.uid, {'name': 'sub',
+                                'parent_id': self.root_channel,
+                                'channel_by_company': True
+                                })
+        channel_ids = self.channel_model.search(
+            self.cr, self.uid, [('name', 'like', 'sub_')])
+        company_ids = self.registry('res.company').search(self.cr, self.uid,
+                                                          [])
+        self.assertEqual(len(channel_ids), len(company_ids))
+
+        self.channel_model.write(self.cr, self.uid, channel_id,
+                                 {'channel_by_company': False})
+        channel_ids = self.channel_model.search(
+            self.cr, self.uid, [('name', 'like', 'sub_')])
+        self.assertEqual(0, len(channel_ids))
+
+        self.channel_model.write(self.cr, self.uid, channel_id,
+                                 {'channel_by_company': True})
+        channel_ids = self.channel_model.search(
+            self.cr, self.uid, [('name', 'like', 'sub_')])
+        self.assertEqual(len(channel_ids), len(company_ids))
+
+        self.channel_model.unlink(self.cr, self.uid, channel_id)
+        channel_ids = self.channel_model.search(
+            self.cr, self.uid, [('name', 'like', 'sub_')])
+        self.assertEqual(0, len(channel_ids))
+
+        channel_id = self.channel_model.create(
+            self.cr, self.uid, {'name': 'sub',
+                                'parent_id': self.root_channel,
+                                'channel_by_company': True
+                                })
+
+        self.function_model._register_jobs(self.cr)
+        path_a = 'openerp.addons.connector.tests.test_job.task_a'
+        func_ids = self.function_model.search(
+            self.cr, self.uid, [('name', '=', path_a)])
+        job_func = self.function_model.browse(self.cr, self.uid, func_ids[0])
+        self.function_model.write(
+            self.cr, self.uid, job_func.id, {'channel_id': channel_id})
+
+        job(task_a)
+        test_job = Job(func=task_a)
+        storage = OpenERPJobStorage(self.session)
+        storage.store(test_job)
+        stored_ids = self.job_model.search(
+            self.cr, self.uid, [('uuid', '=', test_job.uuid)])
+        self.assertEqual(len(stored_ids), 1)
+        stored = self.job_model.browse(self.cr, self.uid, stored_ids[0])
+        self.assertEquals(stored.channel, 'root.sub')
+
+        job(task_a)
+        test_job = Job(func=task_a)
+        test_job.company_id = self.other_company_id_a
+        storage = OpenERPJobStorage(self.session)
+        storage.store(test_job)
+        stored_ids = self.job_model.search(
+            self.cr, self.uid, [('uuid', '=', test_job.uuid)])
+        self.assertEqual(len(stored_ids), 1)
+        stored = self.job_model.browse(self.cr, self.uid, stored_ids[0])
+        self.assertEqual(stored.company_id.id, self.other_company_id_a)
+        self.assertEquals(stored.channel,
+                          'root.sub_%s' % self.other_company_id_a)

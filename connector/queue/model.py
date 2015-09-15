@@ -29,6 +29,7 @@ from openerp.osv import orm, fields
 from openerp.tools import DEFAULT_SERVER_DATETIME_FORMAT
 from openerp.tools.translate import _
 from openerp import exceptions
+from openerp import SUPERUSER_ID
 
 from .job import STATES, DONE, PENDING, OpenERPJobStorage, JOB_REGISTRY
 from .worker import WORKER_TIMEOUT
@@ -57,13 +58,15 @@ class QueueJob(orm.Model):
             cr, uid, trigger_ids, ['name'], context=context)
         names = [r['name'] for r in res]
         return self.pool['queue.job'].search(
-            cr, uid, [('name', 'in', names)], context=context)
+            cr, uid, [('func_name', 'in', names)], context=context)
 
     def _compute_channel(self, cr, uid, ids, field_names=None,
                          arg=False, context=None):
         res = dict.fromkeys(ids)
         func_model = self.pool['queue.job.function']
-        for info in self.read(cr, uid, ids, ['func_name'], context=context):
+        channel_model = self.pool['queue.job.channel']
+        for info in self.read(cr, uid, ids, ['func_name', 'company_id'],
+                              context=context):
             val = {'job_function_id': False,
                    'channel': False}
             func_id = func_model.search(
@@ -72,7 +75,16 @@ class QueueJob(orm.Model):
                 function = func_model.browse(cr, uid, func_id[0],
                                              context=context)
                 val['job_function_id'] = function.id
-                val['channel'] = function.channel
+                channel = function.channel_id.complete_name
+                if function.channel_id.channel_by_company \
+                        and info['company_id']:
+                    channel_company = '%s_%s' % (channel,
+                                                 info['company_id'][0])
+                    channel_id = channel_model.search(cr, uid, [
+                        ('complete_name', '=', channel_company)])
+                    if channel_id:
+                        channel = channel_company
+                val['channel'] = channel
             res[info['id']] = val
         return res
 
@@ -109,7 +121,7 @@ class QueueJob(orm.Model):
             help="The job will fail if the number of tries reach the "
                  "max. retries.\n"
                  "Retries are infinite when empty."),
-        'func_name':  fields.char(readonly=True, string='func_name'),
+        'func_name': fields.char(readonly=True, string='func_name'),
         'job_function_id': fields.function(
             _compute_channel, type='many2one', obj='queue.job.function',
             string='Job Function',
@@ -504,9 +516,14 @@ class JobChannel(orm.Model):
         'parent_id': fields.many2one('queue.job.channel',
                                      string='Parent Channel',
                                      ondelete='restrict'),
-        'job_function_ids':  fields.one2many('queue.job.function',
+        'job_function_ids': fields.one2many('queue.job.function',
                                              fields_id='channel_id',
-                                             string='Job Functions')
+                                             string='Job Functions'),
+        'channel_by_company': fields.boolean(
+            'Channel by Company',
+            help=("determine if this channel should be defined by company,"
+                  "a company channel is identified by "
+                  "<channel_name>_<company_id>"))
     }
 
     _sql_constraints = [
@@ -527,23 +544,86 @@ class JobChannel(orm.Model):
          ['parent_id', 'name'])
     ]
 
+    def create(self, cr, uid, values, context=None):
+        res = super(JobChannel, self).create(cr, uid, values, context=context)
+        if values.get('channel_by_company'):
+            # create company channel
+            company_ids = self.pool['res.company'].search(
+                cr, SUPERUSER_ID, [], context=context)
+
+            for company_id in company_ids:
+                channel_name = '%s_%s' % (values['name'], company_id)
+                self.copy(cr, uid, res,
+                          {'name': channel_name,
+                           'job_function_ids': False,
+                           'channel_by_company': False}, context=context)
+
+        return res
+
     def write(self, cr, uid, ids, values, context=None):
         if not hasattr(ids, '__iter__'):
             ids = [ids]
         context = context or {}
+
+        channel_by_name = {}
+
         for channel in self.browse(cr, uid, ids, context=context):
             if (not context.get('install_mode') and
                     channel.name == 'root' and
                     ('name' in values or 'parent_id' in values)):
                 raise exceptions.Warning(_('Cannot change the root channel'))
-        return super(JobChannel, self).write(cr, uid, ids, values)
+            channel_by_name[channel.id] = \
+                {'name': channel.name, 'complete_name': channel.complete_name}
+
+        if 'channel_by_company' in values.keys():
+            company_ids = self.pool['res.company'].search(
+                cr, SUPERUSER_ID, [], context=context)
+
+            for company_id in company_ids:
+                for channel_id in ids:
+                    channel = channel_by_name[channel_id]
+                    channel_name = '%s_%s' % (channel['name'],
+                                              company_id)
+                    channel_complete_name = '%s_%s' % (
+                        channel['complete_name'], company_id)
+                    if values['channel_by_company']:
+                        # create channel by company
+                        self.copy(cr, uid, channel_id,
+                                  {'name': channel_name,
+                                   'job_function_ids': False,
+                                   'channel_by_company': False},
+                                  context=context)
+                    else:
+                        # remove channel by company
+                        channel_ids = self.search(
+                            cr, uid, [('complete_name', '=',
+                                       channel_complete_name)],
+                            context=context)
+                        if channel_ids:
+                            self.unlink(cr, uid, channel_ids, context=context)
+
+        return super(JobChannel, self).write(cr, uid, ids, values,
+                                             context=context)
 
     def unlink(self, cr, uid, ids, context=None):
         if not hasattr(ids, '__iter__'):
             ids = [ids]
+        company_ids = self.pool['res.company'].search(
+            cr, SUPERUSER_ID, [], context=context)
         for channel in self.browse(cr, uid, ids, context=context):
             if channel.name == 'root':
                 raise exceptions.Warning(_('Cannot remove the root channel'))
+            if channel.channel_by_company:
+                # remove company channel
+                for company_id in company_ids:
+                    channel_complete_name = '%s_%s' % (
+                        channel.complete_name, company_id)
+                    channel_ids = self.search(
+                        cr, uid, [('complete_name', '=',
+                                   channel_complete_name)],
+                        context=context)
+                    if channel_ids:
+                        self.unlink(cr, uid, channel_ids, context=context)
         return super(JobChannel, self).unlink(cr, uid, ids, context=context)
 
     def name_get(self, cr, uid, ids, context=None):

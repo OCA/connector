@@ -15,6 +15,16 @@ Please join and subscribe to the mailing list.
 Documentation:
 http://www.odoo-connector.com
 
+[//]: # (addons)
+Available addons
+----------------
+addon | version | summary
+--- | --- | ---
+[connector](connector/) | 3.2.0 | Connector
+[connector_base_product](connector_base_product/) | 1.0 | Connector Base Product
+
+[//]: # (end addons)
+
 Translation Status
 ------------------
 [![Transifex Status](https://www.transifex.com/projects/p/OCA-connector-8-0/chart/image_png)](https://www.transifex.com/projects/p/OCA-connector-8-0)

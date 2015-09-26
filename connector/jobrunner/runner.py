@@ -24,8 +24,8 @@
 #
 ##############################################################################
 """
-What's is the job runner?
--------------------------
+What is the job runner?
+-----------------------
 This is an alternative to connector workers, with the goal
 of resolving issues due to the polling nature of workers:
 
@@ -46,17 +46,18 @@ How does it work?
 * It maintains an in-memory priority queue of jobs that
   is populated from the queue_job tables in all databases.
 * It does not run jobs itself, but asks Odoo to run them through an
-  anonymous /connector/runjob HTTP request. [1]_
+  anonymous ``/connector/runjob`` HTTP request. [1]_
 
 How to use it?
 --------------
 
 * Set the following environment variables:
 
-  - ODOO_CONNECTOR_CHANNELS=root:4 (or any other channels configuration)
-  - optional if xmlrpc_port is not set: ODOO_CONNECTOR_PORT=8069
+  - ``ODOO_CONNECTOR_CHANNELS=root:4`` (or any other channels configuration)
+  - optional if ``xmlrpc_port`` is not set: ``ODOO_CONNECTOR_PORT=8069``
 
-* Start Odoo with --load=web,connector and --workers greater than 1. [2]_
+* Start Odoo with ``--load=web,web_kanban,connector``
+  and ``--workers`` greater than 1. [2]_
 
 * Confirm the runner is starting correctly by checking the odoo log file:
 

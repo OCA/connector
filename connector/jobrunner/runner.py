@@ -46,7 +46,7 @@ How does it work?
 * It maintains an in-memory priority queue of jobs that
   is populated from the queue_job tables in all databases.
 * It does not run jobs itself, but asks Odoo to run them through an
-  anonymous /connector/runjob HTTP request [1].
+  anonymous /connector/runjob HTTP request. [1]_
 
 How to use it?
 --------------
@@ -56,11 +56,26 @@ How to use it?
   - ODOO_CONNECTOR_CHANNELS=root:4 (or any other channels configuration)
   - optional if xmlrpc_port is not set: ODOO_CONNECTOR_PORT=8069
 
-* Start Odoo with --load=web,connector and --workers > 1. [2]
-* Disable then "Enqueue Jobs" cron.
+* Start Odoo with --load=web,connector and --workers greater than 1. [2]_
+
+* Confirm the runner is starting correctly by checking the odoo log file:
+
+.. code-block:: none
+
+  ...INFO...connector.jobrunner.runner: starting
+  ...INFO...connector.jobrunner.runner: initializing database connections
+  ...INFO...connector.jobrunner.runner: connector runner ready for db <dbname>
+  ...INFO...connector.jobrunner.runner: database connections ready
+
+* Disable the "Enqueue Jobs" cron.
+
 * Do NOT start openerp-connector-worker.
+
 * Create jobs (eg using base_import_async) and observe they
   start immediately and in parallel.
+
+* Tip: to enable debug logging for the connector, use
+  ``--log-handler=openerp.addons.connector:DEBUG``
 
 Caveat
 ------
@@ -68,13 +83,13 @@ Caveat
 * After creating a new database or installing connector on an
   existing database, Odoo must be restarted for the runner to detect it.
 
-Notes
------
-[1] From a security standpoint, it is safe to have an anonymous HTTP
-    request because this request only accepts to run jobs that are
-    enqueued.
-[2] It works with the threaded Odoo server too, although this is
-    obviously not for production purposes.
+.. rubric:: Footnotes
+
+.. [1] From a security standpoint, it is safe to have an anonymous HTTP
+       request because this request only accepts to run jobs that are
+       enqueued.
+.. [2] It works with the threaded Odoo server too, although this way
+       of running Odoo is obviously not for production purposes.
 """
 
 from contextlib import closing

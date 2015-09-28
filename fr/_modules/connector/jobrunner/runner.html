@@ -315,6 +315,22 @@
 <span class="sd">* After creating a new database or installing connector on an</span>
 <span class="sd">  existing database, Odoo must be restarted for the runner to detect it.</span>
 
+<span class="sd">* When Odoo shuts down normally, it waits for running jobs to finish.</span>
+<span class="sd">  However, when the Odoo server crashes or is otherwise force-stopped,</span>
+<span class="sd">  running jobs are interrupted while the runner has no chance to know</span>
+<span class="sd">  they have been aborted. In such situations, jobs may remain in</span>
+<span class="sd">  ``started`` or ``enqueued`` state after the Odoo server is halted.</span>
+<span class="sd">  Since the runner has no way to know if they are actually running or</span>
+<span class="sd">  not, and does not know for sure if it is safe to restart the jobs,</span>
+<span class="sd">  it does not attempt to restart them automatically. Such stale jobs</span>
+<span class="sd">  therefore fill the running queue and prevent other jobs to start.</span>
+<span class="sd">  You must therefore requeue them manually, either from the Jobs view,</span>
+<span class="sd">  or by running the following SQL statement *before starting Odoo*:</span>
+
+<span class="sd">.. code-block:: sql</span>
+
+<span class="sd">  update queue_job set state=&#39;pending&#39; where state in (&#39;started&#39;, &#39;enqueued&#39;)</span>
+
 <span class="sd">.. rubric:: Footnotes</span>
 
 <span class="sd">.. [1] From a security standpoint, it is safe to have an anonymous HTTP</span>

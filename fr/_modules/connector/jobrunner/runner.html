@@ -144,11 +144,10 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../guides/jobrunner.html">Configuring channels and the job runner</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../guides/jobrunner.html#what-s-is-the-job-runner">What&#8217;s is the job runner?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/jobrunner.html#what-is-the-job-runner">What is the job runner?</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../guides/jobrunner.html#how-does-it-work">How does it work?</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../guides/jobrunner.html#how-to-use-it">How to use it?</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../guides/jobrunner.html#caveat">Caveat</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../guides/jobrunner.html#notes">Notes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../guides/jobrunner.html#what-is-a-channel">What is a channel?</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../guides/jobrunner.html#how-to-configure-channels">How to configure Channels?</a></li>
 </ul>
@@ -178,11 +177,10 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../api/api_exception.html">Exceptions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../api/api_channels.html">Channels</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../api/api_runner.html">Job Runner</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../api/api_runner.html#what-s-is-the-job-runner">What&#8217;s is the job runner?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/api_runner.html#what-is-the-job-runner">What is the job runner?</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/api_runner.html#how-does-it-work">How does it work?</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/api_runner.html#how-to-use-it">How to use it?</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/api_runner.html#caveat">Caveat</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../api/api_runner.html#notes">Notes</a></li>
 </ul>
 </li>
 </ul>
@@ -257,8 +255,8 @@
 <span class="c">#</span>
 <span class="c">##############################################################################</span>
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">What&#39;s is the job runner?</span>
-<span class="sd">-------------------------</span>
+<span class="sd">What is the job runner?</span>
+<span class="sd">-----------------------</span>
 <span class="sd">This is an alternative to connector workers, with the goal</span>
 <span class="sd">of resolving issues due to the polling nature of workers:</span>
 
@@ -279,21 +277,37 @@
 <span class="sd">* It maintains an in-memory priority queue of jobs that</span>
 <span class="sd">  is populated from the queue_job tables in all databases.</span>
 <span class="sd">* It does not run jobs itself, but asks Odoo to run them through an</span>
-<span class="sd">  anonymous /connector/runjob HTTP request [1].</span>
+<span class="sd">  anonymous ``/connector/runjob`` HTTP request. [1]_</span>
 
 <span class="sd">How to use it?</span>
 <span class="sd">--------------</span>
 
 <span class="sd">* Set the following environment variables:</span>
 
-<span class="sd">  - ODOO_CONNECTOR_CHANNELS=root:4 (or any other channels configuration)</span>
-<span class="sd">  - optional if xmlrpc_port is not set: ODOO_CONNECTOR_PORT=8069</span>
+<span class="sd">  - ``ODOO_CONNECTOR_CHANNELS=root:4`` (or any other channels configuration)</span>
+<span class="sd">  - optional if ``xmlrpc_port`` is not set: ``ODOO_CONNECTOR_PORT=8069``</span>
 
-<span class="sd">* Start Odoo with --load=web,connector and --workers &gt; 1. [2]</span>
-<span class="sd">* Disable then &quot;Enqueue Jobs&quot; cron.</span>
+<span class="sd">* Start Odoo with ``--load=web,web_kanban,connector``</span>
+<span class="sd">  and ``--workers`` greater than 1. [2]_</span>
+
+<span class="sd">* Confirm the runner is starting correctly by checking the odoo log file:</span>
+
+<span class="sd">.. code-block:: none</span>
+
+<span class="sd">  ...INFO...connector.jobrunner.runner: starting</span>
+<span class="sd">  ...INFO...connector.jobrunner.runner: initializing database connections</span>
+<span class="sd">  ...INFO...connector.jobrunner.runner: connector runner ready for db &lt;dbname&gt;</span>
+<span class="sd">  ...INFO...connector.jobrunner.runner: database connections ready</span>
+
+<span class="sd">* Disable the &quot;Enqueue Jobs&quot; cron.</span>
+
 <span class="sd">* Do NOT start openerp-connector-worker.</span>
+
 <span class="sd">* Create jobs (eg using base_import_async) and observe they</span>
 <span class="sd">  start immediately and in parallel.</span>
+
+<span class="sd">* Tip: to enable debug logging for the connector, use</span>
+<span class="sd">  ``--log-handler=openerp.addons.connector:DEBUG``</span>
 
 <span class="sd">Caveat</span>
 <span class="sd">------</span>
@@ -301,13 +315,13 @@
 <span class="sd">* After creating a new database or installing connector on an</span>
 <span class="sd">  existing database, Odoo must be restarted for the runner to detect it.</span>
 
-<span class="sd">Notes</span>
-<span class="sd">-----</span>
-<span class="sd">[1] From a security standpoint, it is safe to have an anonymous HTTP</span>
-<span class="sd">    request because this request only accepts to run jobs that are</span>
-<span class="sd">    enqueued.</span>
-<span class="sd">[2] It works with the threaded Odoo server too, although this is</span>
-<span class="sd">    obviously not for production purposes.</span>
+<span class="sd">.. rubric:: Footnotes</span>
+
+<span class="sd">.. [1] From a security standpoint, it is safe to have an anonymous HTTP</span>
+<span class="sd">       request because this request only accepts to run jobs that are</span>
+<span class="sd">       enqueued.</span>
+<span class="sd">.. [2] It works with the threaded Odoo server too, although this way</span>
+<span class="sd">       of running Odoo is obviously not for production purposes.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">from</span> <span class="nn">contextlib</span> <span class="kn">import</span> <span class="n">closing</span>

@@ -144,11 +144,10 @@
 </ul>
 </li>
 <li class="toctree-l1 current"><a class="current reference internal" href="">Configuring channels and the job runner</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#what-s-is-the-job-runner">What&#8217;s is the job runner?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#what-is-the-job-runner">What is the job runner?</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#how-does-it-work">How does it work?</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#how-to-use-it">How to use it?</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#caveat">Caveat</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#notes">Notes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#what-is-a-channel">What is a channel?</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#how-to-configure-channels">How to configure Channels?</a></li>
 </ul>
@@ -178,11 +177,10 @@
 <li class="toctree-l1"><a class="reference internal" href="../api/api_exception.html">Exceptions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../api/api_channels.html">Channels</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../api/api_runner.html">Job Runner</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../api/api_runner.html#what-s-is-the-job-runner">What&#8217;s is the job runner?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/api_runner.html#what-is-the-job-runner">What is the job runner?</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../api/api_runner.html#how-does-it-work">How does it work?</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../api/api_runner.html#how-to-use-it">How to use it?</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../api/api_runner.html#caveat">Caveat</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../api/api_runner.html#notes">Notes</a></li>
 </ul>
 </li>
 </ul>
@@ -199,11 +197,10 @@
       role="menu"
       aria-labelledby="dLabelLocalToc"><ul>
 <li><a class="reference internal" href="#">Configuring channels and the job runner</a><ul>
-<li><a class="reference internal" href="#what-s-is-the-job-runner">What&#8217;s is the job runner?</a></li>
+<li><a class="reference internal" href="#what-is-the-job-runner">What is the job runner?</a></li>
 <li><a class="reference internal" href="#how-does-it-work">How does it work?</a></li>
 <li><a class="reference internal" href="#how-to-use-it">How to use it?</a></li>
 <li><a class="reference internal" href="#caveat">Caveat</a></li>
-<li><a class="reference internal" href="#notes">Notes</a></li>
 <li><a class="reference internal" href="#what-is-a-channel">What is a channel?</a></li>
 <li><a class="reference internal" href="#how-to-configure-channels">How to configure Channels?</a></li>
 </ul>
@@ -252,8 +249,8 @@
       
   <div class="section" id="module-connector.jobrunner.runner">
 <span id="configuring-channels-and-the-job-runner"></span><span id="jobrunner"></span><h1>Configuring channels and the job runner<a class="headerlink" href="#module-connector.jobrunner.runner" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="what-s-is-the-job-runner">
-<h2>What&#8217;s is the job runner?<a class="headerlink" href="#what-s-is-the-job-runner" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="what-is-the-job-runner">
+<h2>What is the job runner?<a class="headerlink" href="#what-is-the-job-runner" title="Permalink to this headline">¶</a></h2>
 <p>This is an alternative to connector workers, with the goal
 of resolving issues due to the polling nature of workers:</p>
 <ul class="simple">
@@ -274,22 +271,34 @@ added or updated in the queue_job table.</li>
 <li>It maintains an in-memory priority queue of jobs that
 is populated from the queue_job tables in all databases.</li>
 <li>It does not run jobs itself, but asks Odoo to run them through an
-anonymous /connector/runjob HTTP request [1].</li>
+anonymous <code class="docutils literal"><span class="pre">/connector/runjob</span></code> HTTP request. <a class="footnote-reference" href="#id3" id="id1">[1]</a></li>
 </ul>
 </div>
 <div class="section" id="how-to-use-it">
 <h2>How to use it?<a class="headerlink" href="#how-to-use-it" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li>Set the following environment variables:<ul>
-<li>ODOO_CONNECTOR_CHANNELS=root:4 (or any other channels configuration)</li>
-<li>optional if xmlrpc_port is not set: ODOO_CONNECTOR_PORT=8069</li>
+<li><code class="docutils literal"><span class="pre">ODOO_CONNECTOR_CHANNELS=root:4</span></code> (or any other channels configuration)</li>
+<li>optional if <code class="docutils literal"><span class="pre">xmlrpc_port</span></code> is not set: <code class="docutils literal"><span class="pre">ODOO_CONNECTOR_PORT=8069</span></code></li>
 </ul>
 </li>
-<li>Start Odoo with &#8211;load=web,connector and &#8211;workers &gt; 1. [2]</li>
-<li>Disable then &#8220;Enqueue Jobs&#8221; cron.</li>
+<li>Start Odoo with <code class="docutils literal"><span class="pre">--load=web,web_kanban,connector</span></code>
+and <code class="docutils literal"><span class="pre">--workers</span></code> greater than 1. <a class="footnote-reference" href="#id4" id="id2">[2]</a></li>
+<li>Confirm the runner is starting correctly by checking the odoo log file:</li>
+</ul>
+<div class="highlight-none"><div class="highlight"><pre>...INFO...connector.jobrunner.runner: starting
+...INFO...connector.jobrunner.runner: initializing database connections
+...INFO...connector.jobrunner.runner: connector runner ready for db &lt;dbname&gt;
+...INFO...connector.jobrunner.runner: database connections ready
+</pre></div>
+</div>
+<ul class="simple">
+<li>Disable the &#8220;Enqueue Jobs&#8221; cron.</li>
 <li>Do NOT start openerp-connector-worker.</li>
 <li>Create jobs (eg using base_import_async) and observe they
 start immediately and in parallel.</li>
+<li>Tip: to enable debug logging for the connector, use
+<code class="docutils literal"><span class="pre">--log-handler=openerp.addons.connector:DEBUG</span></code></li>
 </ul>
 </div>
 <div class="section" id="caveat">
@@ -298,16 +307,22 @@ start immediately and in parallel.</li>
 <li>After creating a new database or installing connector on an
 existing database, Odoo must be restarted for the runner to detect it.</li>
 </ul>
-</div>
-<div class="section" id="notes">
-<h2>Notes<a class="headerlink" href="#notes" title="Permalink to this headline">¶</a></h2>
-<dl class="docutils">
-<dt>[1] From a security standpoint, it is safe to have an anonymous HTTP</dt>
-<dd>request because this request only accepts to run jobs that are
-enqueued.</dd>
-<dt>[2] It works with the threaded Odoo server too, although this is</dt>
-<dd>obviously not for production purposes.</dd>
-</dl>
+<p class="rubric">Footnotes</p>
+<table class="docutils footnote" frame="void" id="id3" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td>From a security standpoint, it is safe to have an anonymous HTTP
+request because this request only accepts to run jobs that are
+enqueued.</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id4" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id2">[2]</a></td><td>It works with the threaded Odoo server too, although this way
+of running Odoo is obviously not for production purposes.</td></tr>
+</tbody>
+</table>
 </div>
 <div class="section" id="what-is-a-channel">
 <h2>What is a channel?<a class="headerlink" href="#what-is-a-channel" title="Permalink to this headline">¶</a></h2>

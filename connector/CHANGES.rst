@@ -6,6 +6,8 @@ Future (?)
 
 * Allow to define seconds when raising a RetryableJobError (https://github.com/OCA/connector/pull/124)
 * Allow to ignore the retry counter when raising a RetryableJobError (https://github.com/OCA/connector/pull/124)
+* Add 'mock_job_delay_to_direct' to ease tests on jobs (https://github.com/OCA/connector/pull/123)
+
 
 3.2.0 (2015-09-10)
 ~~~~~~~~~~~~~~~~~~

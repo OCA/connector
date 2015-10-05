@@ -778,13 +778,15 @@
 
     <span class="k">def</span> <span class="nf">_inverse_related</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">records</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Inverse the related field ``self`` on ``records``. &quot;&quot;&quot;</span>
+        <span class="c"># store record values, otherwise they may be lost by cache invalidation!</span>
+        <span class="n">record_value</span> <span class="o">=</span> <span class="p">{</span><span class="n">record</span><span class="p">:</span> <span class="n">record</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="k">for</span> <span class="n">record</span> <span class="ow">in</span> <span class="n">records</span><span class="p">}</span>
         <span class="k">for</span> <span class="n">record</span> <span class="ow">in</span> <span class="n">records</span><span class="p">:</span>
             <span class="n">other</span> <span class="o">=</span> <span class="n">record</span>
             <span class="c"># traverse the intermediate fields, and keep at most one record</span>
             <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">related</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
                 <span class="n">other</span> <span class="o">=</span> <span class="n">other</span><span class="p">[</span><span class="n">name</span><span class="p">][:</span><span class="mi">1</span><span class="p">]</span>
             <span class="k">if</span> <span class="n">other</span><span class="p">:</span>
-                <span class="n">other</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">related</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span> <span class="o">=</span> <span class="n">record</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>
+                <span class="n">other</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">related</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span> <span class="o">=</span> <span class="n">record_value</span><span class="p">[</span><span class="n">record</span><span class="p">]</span>
 
     <span class="k">def</span> <span class="nf">_search_related</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">records</span><span class="p">,</span> <span class="n">operator</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Determine the domain to search on field ``self``. &quot;&quot;&quot;</span>

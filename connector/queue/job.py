@@ -465,8 +465,11 @@ class Job(object):
             self.retry += 1
             try:
                 self.result = self.func(session, *self.args, **self.kwargs)
-            except RetryableJobError:
-                if not self.max_retries:  # infinite retries
+            except RetryableJobError as err:
+                if err.ignore_retry:
+                    self.retry -= 1
+                    raise
+                elif not self.max_retries:  # infinite retries
                     raise
                 elif self.retry >= self.max_retries:
                     type_, value, traceback = sys.exc_info()

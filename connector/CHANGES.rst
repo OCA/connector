@@ -5,6 +5,7 @@ Future (?)
 ~~~~~~~~~~
 
 * Allow to define seconds when raising a RetryableJobError (https://github.com/OCA/connector/pull/124)
+* Allow to ignore the retry counter when raising a RetryableJobError (https://github.com/OCA/connector/pull/124)
 
 3.2.0 (2015-09-10)
 ~~~~~~~~~~~~~~~~~~

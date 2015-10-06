@@ -59,11 +59,14 @@ class RetryableJobError(JobError):
     If seconds is empty, it will be retried according to the ``retry_pattern``
     of the job or by :const:`connector.queue.job.RETRY_INTERVAL` if nothing
     is defined.
+
+    If ``ignore_retry`` is True, the retry counter will not be increased.
     """
 
-    def __init__(self, msg, seconds=None):
+    def __init__(self, msg, seconds=None, ignore_retry=False):
         super(RetryableJobError, self).__init__(msg)
         self.seconds = seconds
+        self.ignore_retry = ignore_retry
 
 
 class NetworkRetryableError(RetryableJobError):

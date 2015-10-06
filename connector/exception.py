@@ -53,7 +53,17 @@ class FailedJobError(JobError):
 
 
 class RetryableJobError(JobError):
-    """ A job had an error but can be retried. """
+    """ A job had an error but can be retried.
+
+    The job will be retried after the given number of seconds.
+    If seconds is empty, it will be retried according to the ``retry_pattern``
+    of the job or by :const:`connector.queue.job.RETRY_INTERVAL` if nothing
+    is defined.
+    """
+
+    def __init__(self, msg, seconds=None):
+        super(RetryableJobError, self).__init__(msg)
+        self.seconds = seconds
 
 
 class NetworkRetryableError(RetryableJobError):

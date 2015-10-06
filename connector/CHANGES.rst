@@ -1,6 +1,11 @@
 Changelog
 ---------
 
+Future (?)
+~~~~~~~~~~
+
+* Allow to define seconds when raising a RetryableJobError (https://github.com/OCA/connector/pull/124)
+
 3.2.0 (2015-09-10)
 ~~~~~~~~~~~~~~~~~~
 

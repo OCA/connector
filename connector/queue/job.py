@@ -695,7 +695,7 @@ def job(func=None, default_channel='root', retry_pattern=None):
             # retries 5 to 10 postponed 20 minutes later
             # retries 10 to 15 postponed 30 minutes later
             # all subsequent retries postponed 12 hours later
-            raise RetryableJobError
+            raise RetryableJobError('Must be retried later')
 
         retryable_example.delay(session)
 

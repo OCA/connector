@@ -48,7 +48,7 @@ def dummy_task_args(session, model_name, a, b, c=None):
 
 
 def retryable_error_task(session):
-    raise RetryableJobError
+    raise RetryableJobError('Must be retried later')
 
 
 class TestJobs(unittest2.TestCase):

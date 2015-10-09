@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: connector (8.0)\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-08-21 14:26+0000\n"
+"POT-Creation-Date: 2015-10-09 10:06+0000\n"
 "PO-Revision-Date: 2015-07-01 12:37+0000\n"
 "Last-Translator: Matjaž Mozetič <m.mozetic@matmoz.si>\n"
 "Language-Team: Slovenian (http://www.transifex.com/oca/OCA-connector-8-0/language/sl/)\n"
@@ -20,5 +20,6 @@ msgstr ""
 
 #. module: connector_base_product
 #: view:product.product:connector_base_product.product_normal_form_view
+#: view:product.template:connector_base_product.product_template_common_form
 msgid "Connectors"
 msgstr "Povezovalniki"

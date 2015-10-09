@@ -20,8 +20,8 @@ Available addons
 ----------------
 addon | version | summary
 --- | --- | ---
-[connector](connector/) | 3.2.0 | Connector
-[connector_base_product](connector_base_product/) | 1.0 | Connector Base Product
+[connector](connector/) | 8.0.3.2.0 | Connector
+[connector_base_product](connector_base_product/) | 8.0.1.0.0 | Connector Base Product
 
 [//]: # (end addons)
 

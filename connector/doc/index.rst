@@ -56,6 +56,7 @@ Connectors based on the framework
 * `Odoo Asynchronous import module <https://github.com/OCA/connector-interfaces/tree/8.0/base_import_async>`_
 * `Salesforce Connector <https://github.com/OCA/connector-salesforce>`_
 * `Google Spreadsheet Connector <https://github.com/akretion/connector-google-spreadsheet>`_
+* `WooCommerce Connector <https://github.com/OCA/connector-woocommerce>`_
 * Develop easily and rapidly your own connector based on this powerful
   framework and list your project on this page! Examples:
 

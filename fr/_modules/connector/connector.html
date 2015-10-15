@@ -286,25 +286,11 @@
 <div class="viewcode-block" id="is_module_installed"><a class="viewcode-back" href="../../api/api_connector.html#connector.connector.is_module_installed">[docs]</a><span class="k">def</span> <span class="nf">is_module_installed</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">module_name</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Check if an Odoo addon is installed.</span>
 
-<span class="sd">    The function might be called before `connector` is even installed;</span>
-<span class="sd">    in such case, `ir_module_module.is_module_installed()` is not available yet</span>
-<span class="sd">    and this is why we first check the installation of `connector` by looking</span>
-<span class="sd">    up for a model in the registry.</span>
-
-<span class="sd">    :param module_name: name of the addon to check being &#39;connector&#39; or</span>
-<span class="sd">                        an addon depending on it</span>
-
+<span class="sd">    :param module_name: name of the addon</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="n">env</span><span class="o">.</span><span class="n">registry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;connector.backend&#39;</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">module_name</span> <span class="o">==</span> <span class="s">&#39;connector&#39;</span><span class="p">:</span>
-            <span class="c"># fast-path: connector is necessarily installed because</span>
-            <span class="c"># the model is in the registry</span>
-            <span class="k">return</span> <span class="bp">True</span>
-        <span class="c"># for another addon, check in ir.module.module</span>
-        <span class="k">return</span> <span class="n">env</span><span class="p">[</span><span class="s">&#39;ir.module.module&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">is_module_installed</span><span class="p">(</span><span class="n">module_name</span><span class="p">)</span>
-
-    <span class="c"># connector module is not installed neither any sub-addons</span>
-    <span class="k">return</span> <span class="bp">False</span>
+    <span class="c"># the registry maintains a set of fully loaded modules so we can</span>
+    <span class="c"># lookup for our module there</span>
+    <span class="k">return</span> <span class="n">module_name</span> <span class="ow">in</span> <span class="n">env</span><span class="o">.</span><span class="n">registry</span><span class="o">.</span><span class="n">_init_modules</span>
 
 </div>
 <div class="viewcode-block" id="get_openerp_module"><a class="viewcode-back" href="../../api/api_connector.html#connector.connector.get_openerp_module">[docs]</a><span class="k">def</span> <span class="nf">get_openerp_module</span><span class="p">(</span><span class="n">cls_or_func</span><span class="p">):</span>

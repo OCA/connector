@@ -605,16 +605,11 @@ installation state.</p>
 <dt id="connector.connector.is_module_installed">
 <code class="descclassname">connector.connector.</code><code class="descname">is_module_installed</code><span class="sig-paren">(</span><em>env</em>, <em>module_name</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/connector.html#is_module_installed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.connector.is_module_installed" title="Permalink to this definition">¶</a></dt>
 <dd><p>Check if an Odoo addon is installed.</p>
-<p>The function might be called before <cite>connector</cite> is even installed;
-in such case, <cite>ir_module_module.is_module_installed()</cite> is not available yet
-and this is why we first check the installation of <cite>connector</cite> by looking
-up for a model in the registry.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>module_name</strong> &#8211; name of the addon to check being &#8216;connector&#8217; or
-an addon depending on it</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>module_name</strong> &#8211; name of the addon</td>
 </tr>
 </tbody>
 </table>

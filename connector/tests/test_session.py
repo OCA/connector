@@ -149,20 +149,3 @@ class test_connector_session(common.TransactionCase):
         """ Test if the cache is well different for the different modules """
         self.assertTrue(self.session.is_module_installed('connector'))
         self.assertFalse(self.session.is_module_installed('#dummy#'))
-
-    def test_is_module_installed_cache_invalidation(self):
-        """ Test on an invalidation of cache about installed modules """
-        module = self.env['ir.module.module']
-        domain = [('name', '=', 'base')]
-        self.assertTrue(self.session.is_module_installed('base'))
-        # only to check that the cache works, the in validation is done only
-        # if the field state is modified by write method, UGLY but no other
-        # solution
-        self.env.cr.execute("UPDATE ir_module_module "
-                            "SET state='uninstalled' "
-                            "WHERE name='base'")
-        self.assertTrue(self.session.is_module_installed('base'))
-        module.search(domain).state = 'uninstalled'
-        self.assertFalse(self.session.is_module_installed('base'))
-        module.search(domain).state = 'installed'
-        self.assertTrue(self.session.is_module_installed('base'))

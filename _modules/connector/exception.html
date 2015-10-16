@@ -99,6 +99,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../project/contributors.html#financial-contributors">Financial Contributors</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../project/license.html">License</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../project/changes.html">Changes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../project/changes.html#future">Future (?)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../project/changes.html#id2">3.2.0 (2015-09-10)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../project/changes.html#id3">3.1.0 (2015-05-15)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../project/changes.html#id4">3.0.0 (2015-04-01)</a></li>
@@ -283,7 +284,20 @@
 
 </div>
 <div class="viewcode-block" id="RetryableJobError"><a class="viewcode-back" href="../../api/api_exception.html#connector.exception.RetryableJobError">[docs]</a><span class="k">class</span> <span class="nc">RetryableJobError</span><span class="p">(</span><span class="n">JobError</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; A job had an error but can be retried. &quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot; A job had an error but can be retried.</span>
+
+<span class="sd">    The job will be retried after the given number of seconds.</span>
+<span class="sd">    If seconds is empty, it will be retried according to the ``retry_pattern``</span>
+<span class="sd">    of the job or by :const:`connector.queue.job.RETRY_INTERVAL` if nothing</span>
+<span class="sd">    is defined.</span>
+
+<span class="sd">    If ``ignore_retry`` is True, the retry counter will not be increased.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">seconds</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">ignore_retry</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">RetryableJobError</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">seconds</span> <span class="o">=</span> <span class="n">seconds</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ignore_retry</span> <span class="o">=</span> <span class="n">ignore_retry</span>
 
 </div>
 <div class="viewcode-block" id="NetworkRetryableError"><a class="viewcode-back" href="../../api/api_exception.html#connector.exception.NetworkRetryableError">[docs]</a><span class="k">class</span> <span class="nc">NetworkRetryableError</span><span class="p">(</span><span class="n">RetryableJobError</span><span class="p">):</span>

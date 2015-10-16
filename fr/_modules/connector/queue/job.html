@@ -100,6 +100,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../project/contributors.html#financial-contributors">Contributeurs financiers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../project/license.html">Licence</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../project/changes.html">Changements</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../project/changes.html#future">Future (?)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../project/changes.html#id2">3.2.0 (2015-09-10)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../project/changes.html#id3">3.1.0 (2015-05-15)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../project/changes.html#id4">3.0.0 (2015-04-01)</a></li>
@@ -696,8 +697,11 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">retry</span> <span class="o">+=</span> <span class="mi">1</span>
             <span class="k">try</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">func</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span><span class="p">)</span>
-            <span class="k">except</span> <span class="n">RetryableJobError</span><span class="p">:</span>
-                <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_retries</span><span class="p">:</span>  <span class="c"># infinite retries</span>
+            <span class="k">except</span> <span class="n">RetryableJobError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">err</span><span class="o">.</span><span class="n">ignore_retry</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">retry</span> <span class="o">-=</span> <span class="mi">1</span>
+                    <span class="k">raise</span>
+                <span class="k">elif</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_retries</span><span class="p">:</span>  <span class="c"># infinite retries</span>
                     <span class="k">raise</span>
                 <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">retry</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_retries</span><span class="p">:</span>
                     <span class="n">type_</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">traceback</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">exc_info</span><span class="p">()</span>
@@ -922,7 +926,7 @@
 <span class="sd">            # retries 5 to 10 postponed 20 minutes later</span>
 <span class="sd">            # retries 10 to 15 postponed 30 minutes later</span>
 <span class="sd">            # all subsequent retries postponed 12 hours later</span>
-<span class="sd">            raise RetryableJobError</span>
+<span class="sd">            raise RetryableJobError(&#39;Must be retried later&#39;)</span>
 
 <span class="sd">        retryable_example.delay(session)</span>
 

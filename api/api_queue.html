@@ -100,6 +100,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../project/contributors.html#financial-contributors">Financial Contributors</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../project/license.html">License</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../project/changes.html">Changes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../project/changes.html#future">Future (?)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../project/changes.html#id2">3.2.0 (2015-09-10)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../project/changes.html#id3">3.1.0 (2015-05-15)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../project/changes.html#id4">3.0.0 (2015-04-01)</a></li>
@@ -656,7 +657,7 @@ infinite retries. Default is 5.</p>
     <span class="c"># retries 5 to 10 postponed 20 minutes later</span>
     <span class="c"># retries 10 to 15 postponed 30 minutes later</span>
     <span class="c"># all subsequent retries postponed 12 hours later</span>
-    <span class="k">raise</span> <span class="n">RetryableJobError</span>
+    <span class="k">raise</span> <span class="n">RetryableJobError</span><span class="p">(</span><span class="s">&#39;Must be retried later&#39;</span><span class="p">)</span>
 
 <span class="n">retryable_example</span><span class="o">.</span><span class="n">delay</span><span class="p">(</span><span class="n">session</span><span class="p">)</span>
 </pre></div>
@@ -667,7 +668,7 @@ to a job</p>
 
 <dl class="function">
 <dt id="connector.queue.job.related_action">
-<code class="descclassname">connector.queue.job.</code><code class="descname">related_action</code><span class="sig-paren">(</span><em>action=&lt;function &lt;lambda&gt; at 0x48c8230&gt;</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/queue/job.html#related_action"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.job.related_action" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">connector.queue.job.</code><code class="descname">related_action</code><span class="sig-paren">(</span><em>action=&lt;function &lt;lambda&gt; at 0x45d0320&gt;</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/queue/job.html#related_action"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.job.related_action" title="Permalink to this definition">¶</a></dt>
 <dd><p>Attach a <em>Related Action</em> to a job.</p>
 <p>A <em>Related Action</em> will appear as a button on the OpenERP view.
 The button will execute the action, usually it will open the

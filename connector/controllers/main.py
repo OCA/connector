@@ -94,7 +94,7 @@ class RunJobController(http.Controller):
 
         except RetryableJobError as err:
             # delay the job later, requeue
-            retry_postpone(job, unicode(err))
+            retry_postpone(job, unicode(err), seconds=err.seconds)
             _logger.debug('%s postponed', job)
 
         except OperationalError as err:

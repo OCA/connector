@@ -465,8 +465,11 @@ class Job(object):
             self.retry += 1
             try:
                 self.result = self.func(session, *self.args, **self.kwargs)
-            except RetryableJobError:
-                if not self.max_retries:  # infinite retries
+            except RetryableJobError as err:
+                if err.ignore_retry:
+                    self.retry -= 1
+                    raise
+                elif not self.max_retries:  # infinite retries
                     raise
                 elif self.retry >= self.max_retries:
                     type_, value, traceback = sys.exc_info()
@@ -691,7 +694,7 @@ def job(func=None, default_channel='root', retry_pattern=None):
             # retries 5 to 10 postponed 20 minutes later
             # retries 10 to 15 postponed 30 minutes later
             # all subsequent retries postponed 12 hours later
-            raise RetryableJobError
+            raise RetryableJobError('Must be retried later')
 
         retryable_example.delay(session)
 

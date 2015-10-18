@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: connector (8.0)\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-11 07:47+0000\n"
-"PO-Revision-Date: 2015-09-10 13:20+0000\n"
+"POT-Creation-Date: 2015-10-16 06:23+0000\n"
+"PO-Revision-Date: 2015-10-15 13:38+0000\n"
 "Last-Translator: OCA Transbot <transbot@odoo-community.org>\n"
 "Language-Team: Portuguese (Brazil) (http://www.transifex.com/oca/OCA-connector-8-0/language/pt_BR/)\n"
 "MIME-Version: 1.0\n"
@@ -92,7 +92,7 @@ msgid "Cancel"
 msgstr "Cancelar"
 
 #. module: connector
-#: code:addons/connector/queue/job.py:571
+#: code:addons/connector/queue/job.py:574
 #, python-format
 msgid "Canceled. Nothing to do."
 msgstr "Cancelado. Nada a se fazer"
@@ -462,11 +462,6 @@ msgstr "Mensagens e histórico de comunicação"
 #: field:connector.checkpoint,model_id:0 field:queue.job,model_name:0
 msgid "Model"
 msgstr "Modelo"
-
-#. module: connector
-#: model:ir.model,name:connector.model_ir_module_module
-msgid "Module"
-msgstr "Módulo"
 
 #. module: connector
 #: field:connector.backend,name:0 field:queue.job.channel,name:0

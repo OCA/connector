@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: connector (8.0)\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-11 07:47+0000\n"
-"PO-Revision-Date: 2015-09-10 13:20+0000\n"
+"POT-Creation-Date: 2015-10-16 06:23+0000\n"
+"PO-Revision-Date: 2015-10-15 13:38+0000\n"
 "Last-Translator: OCA Transbot <transbot@odoo-community.org>\n"
 "Language-Team: Slovenian (http://www.transifex.com/oca/OCA-connector-8-0/language/sl/)\n"
 "MIME-Version: 1.0\n"
@@ -91,7 +91,7 @@ msgid "Cancel"
 msgstr "Preklic"
 
 #. module: connector
-#: code:addons/connector/queue/job.py:571
+#: code:addons/connector/queue/job.py:574
 #, python-format
 msgid "Canceled. Nothing to do."
 msgstr "Preklicano. Ni opravkov."
@@ -461,11 +461,6 @@ msgstr "Sporočila in kronologija komunikacij"
 #: field:connector.checkpoint,model_id:0 field:queue.job,model_name:0
 msgid "Model"
 msgstr "Model"
-
-#. module: connector
-#: model:ir.model,name:connector.model_ir_module_module
-msgid "Module"
-msgstr "Modul"
 
 #. module: connector
 #: field:connector.backend,name:0 field:queue.job.channel,name:0

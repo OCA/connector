@@ -77,9 +77,10 @@ class ConnectorSessionHandler(object):
                                        context=self.context)
 
             try:
-                RegistryManager.check_registry_signaling(self.db_name)
-                yield session
-                RegistryManager.signal_caches_change(self.db_name)
+                with session.env.clear_upon_failure():
+                    RegistryManager.check_registry_signaling(self.db_name)
+                    yield session
+                    RegistryManager.signal_caches_change(self.db_name)
             except:
                 session.rollback()
                 raise

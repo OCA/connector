@@ -42,6 +42,32 @@ class RunJobController(http.Controller):
             raise
         return job
 
+    def _try_perform_job(self, session_hdl, job):
+        """Try to perform the job."""
+
+        # if the job has been manually set to DONE or PENDING,
+        # or if something tries to run a job that is not enqueued
+        # before its execution, stop
+        if job.state != ENQUEUED:
+            _logger.warning('job %s is in state %s '
+                            'instead of enqueued in /runjob',
+                            job.uuid, job.state)
+            return
+
+        with session_hdl.session() as session:
+            # TODO: set_started should be done atomically with
+            #       update queue_job set=state=started
+            #       where state=enqueid and id=
+            job.set_started()
+            self.job_storage_class(session).store(job)
+
+        _logger.debug('%s started', job)
+        with session_hdl.session() as session:
+            job.perform(session)
+            job.set_done()
+            self.job_storage_class(session).store(job)
+        _logger.debug('%s done', job)
+
     @http.route('/connector/runjob', type='http', auth='none')
     def runjob(self, db, job_uuid, **kw):
 
@@ -60,28 +86,16 @@ class RunJobController(http.Controller):
                 return ""
 
         try:
-            # if the job has been manually set to DONE or PENDING,
-            # or if something tries to run a job that is not enqueued
-            # before its execution, stop
-            if job.state != ENQUEUED:
-                _logger.warning('job %s is in state %s '
-                                'instead of enqueued in /runjob',
-                                job_uuid, job.state)
-                return
+            try:
+                self._try_perform_job(session_hdl, job)
+            except OperationalError as err:
+                # Automatically retry the typical transaction serialization
+                # errors
+                if err.pgcode not in PG_CONCURRENCY_ERRORS_TO_RETRY:
+                    raise
 
-            with session_hdl.session() as session:
-                # TODO: set_started should be done atomically with
-                #       update queue_job set=state=started
-                #       where state=enqueid and id=
-                job.set_started()
-                self.job_storage_class(session).store(job)
-
-            _logger.debug('%s started', job)
-            with session_hdl.session() as session:
-                job.perform(session)
-                job.set_done()
-                self.job_storage_class(session).store(job)
-            _logger.debug('%s done', job)
+                retry_postpone(job, unicode(err), seconds=PG_RETRY)
+                _logger.debug('%s OperationalError, postponed', job)
 
         except NothingToDoJob as err:
             if unicode(err):
@@ -96,13 +110,6 @@ class RunJobController(http.Controller):
             # delay the job later, requeue
             retry_postpone(job, unicode(err), seconds=err.seconds)
             _logger.debug('%s postponed', job)
-
-        except OperationalError as err:
-            # Automatically retry the typical transaction serialization errors
-            if err.pgcode not in PG_CONCURRENCY_ERRORS_TO_RETRY:
-                raise
-            retry_postpone(job, unicode(err), seconds=PG_RETRY)
-            _logger.debug('%s OperationalError, postponed', job)
 
         except (FailedJobError, Exception):
             buff = StringIO()

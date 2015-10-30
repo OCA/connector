@@ -148,7 +148,7 @@ class OpenERPJobStorage(JobStorage):
         model = self.job_model.sudo().with_context(active_test=False)
         record = model.search([('uuid', '=', job_uuid)], limit=1)
         if record:
-            return record
+            return record.with_env(self.job_model.env)
 
     def db_record(self, job_):
         return self.db_record_from_uuid(job_.uuid)

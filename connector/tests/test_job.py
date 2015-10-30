@@ -486,12 +486,13 @@ class TestJobModel(common.TransactionCase):
         super(TestJobModel, self).setUp()
         self.session = ConnectorSession(self.cr, self.uid)
         self.queue_job = self.env['queue.job']
+        self.user = self.env['res.users']
 
     def _create_job(self):
         test_job = Job(func=task_a)
         storage = OpenERPJobStorage(self.session)
         storage.store(test_job)
-        stored = self.queue_job.search([('uuid', '=', test_job.uuid)])
+        stored = storage.db_record_from_uuid(test_job.uuid)
         self.assertEqual(len(stored), 1)
         return stored
 
@@ -527,6 +528,23 @@ class TestJobModel(common.TransactionCase):
         self.assertEqual(stored.state, FAILED)
         messages = stored.message_ids
         self.assertEqual(len(messages), 2)
+
+    def test_follower_when_write_fail(self):
+        group = self.env.ref('connector.group_connector_manager')
+        vals = {'name': 'xx',
+                'login': 'xx',
+                'groups_id': [(6, 0, [group.id])],
+                'active': False,
+                }
+        inactiveusr = self.user.create(vals)
+        self.assertTrue(inactiveusr.partner_id.active)
+        self.assertFalse(inactiveusr in group.users)
+        stored = self._create_job()
+        stored.write({'state': 'failed'})
+        followers = stored.message_follower_ids
+        self.assertFalse(inactiveusr.partner_id in followers)
+        self.assertFalse(
+            set([u.partner_id for u in group.users]) - set(followers))
 
     def test_autovacuum(self):
         stored = self._create_job()

@@ -524,6 +524,35 @@ will be propagated to the new one</li>
 <dd></dd></dl>
 
 <dl class="method">
+<dt id="connector.connector.ConnectorUnit.try_advisory_lock">
+<code class="descclassname">ConnectorUnit.</code><code class="descname">try_advisory_lock</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwds</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/connector.html#ConnectorUnit.try_advisory_lock"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.connector.ConnectorUnit.try_advisory_lock" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Context manager, tries to acquire a Postgres transactional
+advisory lock.</p>
+<p>If the lock cannot be acquired, it raises a
+<code class="docutils literal"><span class="pre">RetryableJobError</span></code> so the jobs is retried after n
+<code class="docutils literal"><span class="pre">retry_seconds</span></code>.</p>
+<p>See :func:<code class="docutils literal"><span class="pre">openerp.addons.connector.connector.pg_try_advisory_lock</span></code>
+for details.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><ul class="first last simple">
+<li><strong>lock</strong> &#8211; The lock name. Can be anything convertible to a
+string.  It needs to represents what should not be synchronized
+concurrently so usually the string will contain at least: the
+action, the backend type, the backend id, the model name, the
+external id</li>
+<li><strong>retry_seconds</strong> &#8211; number of seconds after which a job should
+be retried when the lock cannot be acquired.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
 <dt id="connector.connector.ConnectorUnit.unit_for">
 <code class="descclassname">ConnectorUnit.</code><code class="descname">unit_for</code><span class="sig-paren">(</span><em>connector_unit_class</em>, <em>model=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/connector.html#ConnectorUnit.unit_for"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.connector.ConnectorUnit.unit_for" title="Lien permanent vers cette définition">¶</a></dt>
 <dd><p>Selon le <a class="reference internal" href="#connector.connector.ConnectorEnvironment" title="connector.connector.ConnectorEnvironment"><code class="xref py py-class docutils literal"><span class="pre">ConnectorEnvironment</span></code></a> en cours, recherche et renvoie une instance de <a class="reference internal" href="#connector.connector.ConnectorUnit" title="connector.connector.ConnectorUnit"><code class="xref py py-class docutils literal"><span class="pre">ConnectorUnit</span></code></a> pour le modèle actuel et étant une classe ou sous-classe de <code class="docutils literal"><span class="pre">connector_unit_class</span></code>.</p>
@@ -592,6 +621,79 @@ the same class as in <cite>self.connector_env</cite> which must be
 </tr>
 </tbody>
 </table>
+</dd></dl>
+
+<dl class="function">
+<dt id="connector.connector.pg_try_advisory_lock">
+<code class="descclassname">connector.connector.</code><code class="descname">pg_try_advisory_lock</code><span class="sig-paren">(</span><em>env</em>, <em>lock</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/connector.html#pg_try_advisory_lock"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.connector.pg_try_advisory_lock" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Try to acquire a Postgres transactional advisory lock.</p>
+<p>The function tries to acquire a lock, returns a boolean indicating
+if it could be obtained or not. An acquired lock is released at the
+end of the transaction.</p>
+<p>A typical use is to acquire a lock at the beginning of an importer
+to prevent 2 jobs to do the same import at the same time. Since the
+record doesn&#8217;t exist yet, we can&#8217;t put a lock on a record, so we put
+an advisory lock.</p>
+<dl class="docutils">
+<dt>Exemple :</dt>
+<dd><ul class="first last simple">
+<li>Job 1 imports Partner A</li>
+<li>Job 2 imports Partner B</li>
+<li>Partner A has a category X which happens not to exist yet</li>
+<li>Partner B has a category X which happens not to exist yet</li>
+<li>Job 1 import category X as a dependency</li>
+<li>Job 2 import category X as a dependency</li>
+</ul>
+</dd>
+</dl>
+<p>Since both jobs are executed concurrently, they both create a record
+for category X so we have duplicated records.  With this lock:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Job 1 imports Partner A, it acquires a lock for this partner</li>
+<li>Job 2 imports Partner B, it acquires a lock for this partner</li>
+<li>Partner A has a category X which happens not to exist yet</li>
+<li>Partner B has a category X which happens not to exist yet</li>
+<li>Job 1 import category X as a dependency, it acquires a lock for
+this category</li>
+<li>Job 2 import category X as a dependency, try to acquire a lock
+but can&#8217;t, Job 2 is retried later, and when it is retried, it
+sees the category X created by Job 1.</li>
+</ul>
+</div></blockquote>
+<p>The lock is acquired until the end of the transaction.</p>
+<p>Usage example:</p>
+<div class="highlight-python"><div class="highlight"><pre>lock_name = &#39;import_record({}, {}, {}, {})&#39;.format(
+    self.backend_record._name,
+    self.backend_record.id,
+    self.model._name,
+    self.lefac_id,
+)
+if pg_try_advisory_lock(lock_name):
+    # do sync
+else:
+    raise RetryableJobError(&#39;Could not acquire advisory lock&#39;,
+                            seconds=2,
+                            ignore_retry=True)
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><ul class="first last simple">
+<li><strong>env</strong> &#8211; the Odoo Environment</li>
+<li><strong>lock</strong> &#8211; The lock name. Can be anything convertible to a
+string.  It needs to represents what should not be synchronized
+concurrently so usually the string will contain at least: the
+action, the backend type, the backend id, the model name, the
+external id</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>:return True/False whether lock was acquired.</p>
 </dd></dl>
 
 </div>

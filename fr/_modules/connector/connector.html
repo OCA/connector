@@ -251,11 +251,15 @@
 <span class="c">#</span>
 <span class="c">##############################################################################</span>
 
+<span class="kn">import</span> <span class="nn">hashlib</span>
 <span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">struct</span>
+
 <span class="kn">from</span> <span class="nn">contextlib</span> <span class="kn">import</span> <span class="n">contextmanager</span>
 <span class="kn">from</span> <span class="nn">openerp</span> <span class="kn">import</span> <span class="n">models</span><span class="p">,</span> <span class="n">fields</span>
 
 <span class="kn">from</span> <span class="nn">.deprecate</span> <span class="kn">import</span> <span class="n">log_deprecate</span><span class="p">,</span> <span class="n">DeprecatedClass</span>
+<span class="kn">from</span> <span class="nn">.exception</span> <span class="kn">import</span> <span class="n">RetryableJobError</span>
 
 <span class="n">_logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">__name__</span><span class="p">)</span>
 
@@ -458,6 +462,33 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">log_deprecate</span><span class="p">(</span><span class="s">&#39;renamed to binder_for()&#39;</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">binder_for</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">)</span>
+</div>
+    <span class="nd">@contextmanager</span>
+<div class="viewcode-block" id="ConnectorUnit.try_advisory_lock"><a class="viewcode-back" href="../../api/api_connector.html#connector.connector.ConnectorUnit.try_advisory_lock">[docs]</a>    <span class="k">def</span> <span class="nf">try_advisory_lock</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lock</span><span class="p">,</span> <span class="n">retry_seconds</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Context manager, tries to acquire a Postgres transactional</span>
+<span class="sd">        advisory lock.</span>
+
+<span class="sd">        If the lock cannot be acquired, it raises a</span>
+<span class="sd">        ``RetryableJobError`` so the jobs is retried after n</span>
+<span class="sd">        ``retry_seconds``.</span>
+
+<span class="sd">        See :func:``openerp.addons.connector.connector.pg_try_advisory_lock``</span>
+<span class="sd">        for details.</span>
+
+<span class="sd">        :param lock: The lock name. Can be anything convertible to a</span>
+<span class="sd">           string.  It needs to represents what should not be synchronized</span>
+<span class="sd">           concurrently so usually the string will contain at least: the</span>
+<span class="sd">           action, the backend type, the backend id, the model name, the</span>
+<span class="sd">           external id</span>
+<span class="sd">        :param retry_seconds: number of seconds after which a job should</span>
+<span class="sd">           be retried when the lock cannot be acquired.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">pg_try_advisory_lock</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="p">,</span> <span class="n">lock</span><span class="p">):</span>
+            <span class="k">yield</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">RetryableJobError</span><span class="p">(</span><span class="s">&#39;Could not acquire advisory lock&#39;</span><span class="p">,</span>
+                                    <span class="n">seconds</span><span class="o">=</span><span class="n">retry_seconds</span><span class="p">,</span>
+                                    <span class="n">ignore_retry</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 
 </div></div>
 <div class="viewcode-block" id="ConnectorEnvironment"><a class="viewcode-back" href="../../api/api_connector.html#connector.connector.ConnectorEnvironment">[docs]</a><span class="k">class</span> <span class="nc">ConnectorEnvironment</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -697,7 +728,78 @@
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
                 <span class="s">&#39;Cannot unwrap model </span><span class="si">%s</span><span class="s">, because it has no </span><span class="si">%s</span><span class="s"> fields&#39;</span>
                 <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_openerp_field</span><span class="p">))</span>
-        <span class="k">return</span> <span class="n">column</span><span class="o">.</span><span class="n">comodel_name</span></div></div>
+        <span class="k">return</span> <span class="n">column</span><span class="o">.</span><span class="n">comodel_name</span>
+
+</div></div>
+<div class="viewcode-block" id="pg_try_advisory_lock"><a class="viewcode-back" href="../../api/api_connector.html#connector.connector.pg_try_advisory_lock">[docs]</a><span class="k">def</span> <span class="nf">pg_try_advisory_lock</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">lock</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Try to acquire a Postgres transactional advisory lock.</span>
+
+<span class="sd">    The function tries to acquire a lock, returns a boolean indicating</span>
+<span class="sd">    if it could be obtained or not. An acquired lock is released at the</span>
+<span class="sd">    end of the transaction.</span>
+
+<span class="sd">    A typical use is to acquire a lock at the beginning of an importer</span>
+<span class="sd">    to prevent 2 jobs to do the same import at the same time. Since the</span>
+<span class="sd">    record doesn&#39;t exist yet, we can&#39;t put a lock on a record, so we put</span>
+<span class="sd">    an advisory lock.</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">     - Job 1 imports Partner A</span>
+<span class="sd">     - Job 2 imports Partner B</span>
+<span class="sd">     - Partner A has a category X which happens not to exist yet</span>
+<span class="sd">     - Partner B has a category X which happens not to exist yet</span>
+<span class="sd">     - Job 1 import category X as a dependency</span>
+<span class="sd">     - Job 2 import category X as a dependency</span>
+
+<span class="sd">    Since both jobs are executed concurrently, they both create a record</span>
+<span class="sd">    for category X so we have duplicated records.  With this lock:</span>
+
+<span class="sd">     - Job 1 imports Partner A, it acquires a lock for this partner</span>
+<span class="sd">     - Job 2 imports Partner B, it acquires a lock for this partner</span>
+<span class="sd">     - Partner A has a category X which happens not to exist yet</span>
+<span class="sd">     - Partner B has a category X which happens not to exist yet</span>
+<span class="sd">     - Job 1 import category X as a dependency, it acquires a lock for</span>
+<span class="sd">       this category</span>
+<span class="sd">     - Job 2 import category X as a dependency, try to acquire a lock</span>
+<span class="sd">       but can&#39;t, Job 2 is retried later, and when it is retried, it</span>
+<span class="sd">       sees the category X created by Job 1.</span>
+
+<span class="sd">    The lock is acquired until the end of the transaction.</span>
+
+<span class="sd">    Usage example:</span>
+
+<span class="sd">    ::</span>
+
+<span class="sd">        lock_name = &#39;import_record({}, {}, {}, {})&#39;.format(</span>
+<span class="sd">            self.backend_record._name,</span>
+<span class="sd">            self.backend_record.id,</span>
+<span class="sd">            self.model._name,</span>
+<span class="sd">            self.lefac_id,</span>
+<span class="sd">        )</span>
+<span class="sd">        if pg_try_advisory_lock(lock_name):</span>
+<span class="sd">            # do sync</span>
+<span class="sd">        else:</span>
+<span class="sd">            raise RetryableJobError(&#39;Could not acquire advisory lock&#39;,</span>
+<span class="sd">                                    seconds=2,</span>
+<span class="sd">                                    ignore_retry=True)</span>
+
+<span class="sd">    :param env: the Odoo Environment</span>
+<span class="sd">    :param lock: The lock name. Can be anything convertible to a</span>
+<span class="sd">       string.  It needs to represents what should not be synchronized</span>
+<span class="sd">       concurrently so usually the string will contain at least: the</span>
+<span class="sd">       action, the backend type, the backend id, the model name, the</span>
+<span class="sd">       external id</span>
+<span class="sd">    :return True/False whether lock was acquired.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">hasher</span> <span class="o">=</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">sha1</span><span class="p">()</span>
+    <span class="n">hasher</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="s">&#39;{}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">lock</span><span class="p">))</span>
+    <span class="c"># pg_lock accepts an int8 so we build an hash composed with</span>
+    <span class="c"># contextual information and we throw away some bits</span>
+    <span class="n">int_lock</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s">&#39;q&#39;</span><span class="p">,</span> <span class="n">hasher</span><span class="o">.</span><span class="n">digest</span><span class="p">()[:</span><span class="mi">8</span><span class="p">])</span>
+
+    <span class="n">env</span><span class="o">.</span><span class="n">cr</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s">&#39;SELECT pg_try_advisory_xact_lock(</span><span class="si">%s</span><span class="s">);&#39;</span><span class="p">,</span> <span class="p">(</span><span class="n">int_lock</span><span class="p">,))</span>
+    <span class="n">acquired</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">cr</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">acquired</span></div>
 </pre></div>
 
     </div>

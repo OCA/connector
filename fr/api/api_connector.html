@@ -463,6 +463,44 @@ will be propagated to the new one</li>
 </dl>
 <p>Ou en gros n&#8217;importe quelle classe destinée à être inscrite dans un <a class="reference internal" href="api_backend.html#connector.backend.Backend" title="connector.backend.Backend"><code class="xref py py-class docutils literal"><span class="pre">Backend</span></code></a>.</p>
 <dl class="method">
+<dt id="connector.connector.ConnectorUnit.advisory_lock_or_retry">
+<code class="descclassname">ConnectorUnit.</code><code class="descname">advisory_lock_or_retry</code><span class="sig-paren">(</span><em>lock</em>, <em>retry_seconds=1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/connector.html#ConnectorUnit.advisory_lock_or_retry"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.connector.ConnectorUnit.advisory_lock_or_retry" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Acquire a Postgres transactional advisory lock or retry job</p>
+<p>When the lock cannot be acquired, it raises a
+<code class="docutils literal"><span class="pre">RetryableJobError</span></code> so the job is retried after n
+<code class="docutils literal"><span class="pre">retry_seconds</span></code>.</p>
+<p>Usage example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">lock_name</span> <span class="o">=</span> <span class="s">&#39;import_record({}, {}, {}, {})&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">backend_record</span><span class="o">.</span><span class="n">_name</span><span class="p">,</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">backend_record</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">_name</span><span class="p">,</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">external_id</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">advisory_lock_or_retry</span><span class="p">(</span><span class="n">lock_name</span><span class="p">,</span> <span class="n">retry_seconds</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>See :func:<code class="docutils literal"><span class="pre">openerp.addons.connector.connector.pg_try_advisory_lock</span></code>
+for details.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><ul class="first last simple">
+<li><strong>lock</strong> &#8211; The lock name. Can be anything convertible to a
+string.  It needs to represent what should not be synchronized
+concurrently, usually the string will contain at least: the
+action, the backend type, the backend id, the model name, the
+external id</li>
+<li><strong>retry_seconds</strong> &#8211; number of seconds after which a job should
+be retried when the lock cannot be acquired.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
 <dt id="connector.connector.ConnectorUnit.binder_for">
 <code class="descclassname">ConnectorUnit.</code><code class="descname">binder_for</code><span class="sig-paren">(</span><em>model=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/connector.html#ConnectorUnit.binder_for"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.connector.ConnectorUnit.binder_for" title="Lien permanent vers cette définition">¶</a></dt>
 <dd><p>Renvoie une nouvelle instance du bon <code class="docutils literal"><span class="pre">Binder</span></code> pour un modèle</p>
@@ -522,35 +560,6 @@ will be propagated to the new one</li>
 <dt id="connector.connector.ConnectorUnit.model">
 <code class="descclassname">ConnectorUnit.</code><code class="descname">model</code><a class="headerlink" href="#connector.connector.ConnectorUnit.model" title="Lien permanent vers cette définition">¶</a></dt>
 <dd></dd></dl>
-
-<dl class="method">
-<dt id="connector.connector.ConnectorUnit.try_advisory_lock">
-<code class="descclassname">ConnectorUnit.</code><code class="descname">try_advisory_lock</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwds</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/connector.html#ConnectorUnit.try_advisory_lock"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.connector.ConnectorUnit.try_advisory_lock" title="Lien permanent vers cette définition">¶</a></dt>
-<dd><p>Context manager, tries to acquire a Postgres transactional
-advisory lock.</p>
-<p>If the lock cannot be acquired, it raises a
-<code class="docutils literal"><span class="pre">RetryableJobError</span></code> so the jobs is retried after n
-<code class="docutils literal"><span class="pre">retry_seconds</span></code>.</p>
-<p>See :func:<code class="docutils literal"><span class="pre">openerp.addons.connector.connector.pg_try_advisory_lock</span></code>
-for details.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><ul class="first last simple">
-<li><strong>lock</strong> &#8211; The lock name. Can be anything convertible to a
-string.  It needs to represents what should not be synchronized
-concurrently so usually the string will contain at least: the
-action, the backend type, the backend id, the model name, the
-external id</li>
-<li><strong>retry_seconds</strong> &#8211; number of seconds after which a job should
-be retried when the lock cannot be acquired.</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
 
 <dl class="method">
 <dt id="connector.connector.ConnectorUnit.unit_for">
@@ -667,7 +676,7 @@ sees the category X created by Job 1.</li>
     self.backend_record._name,
     self.backend_record.id,
     self.model._name,
-    self.lefac_id,
+    self.external_id,
 )
 if pg_try_advisory_lock(lock_name):
     # do sync

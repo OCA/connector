@@ -462,29 +462,37 @@
         <span class="n">log_deprecate</span><span class="p">(</span><span class="s">&#39;renamed to binder_for()&#39;</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">binder_for</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">)</span>
 </div>
-    <span class="nd">@contextmanager</span>
-<div class="viewcode-block" id="ConnectorUnit.try_advisory_lock"><a class="viewcode-back" href="../../api/api_connector.html#connector.connector.ConnectorUnit.try_advisory_lock">[docs]</a>    <span class="k">def</span> <span class="nf">try_advisory_lock</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lock</span><span class="p">,</span> <span class="n">retry_seconds</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Context manager, tries to acquire a Postgres transactional</span>
-<span class="sd">        advisory lock.</span>
+<div class="viewcode-block" id="ConnectorUnit.advisory_lock_or_retry"><a class="viewcode-back" href="../../api/api_connector.html#connector.connector.ConnectorUnit.advisory_lock_or_retry">[docs]</a>    <span class="k">def</span> <span class="nf">advisory_lock_or_retry</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lock</span><span class="p">,</span> <span class="n">retry_seconds</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Acquire a Postgres transactional advisory lock or retry job</span>
 
-<span class="sd">        If the lock cannot be acquired, it raises a</span>
-<span class="sd">        ``RetryableJobError`` so the jobs is retried after n</span>
+<span class="sd">        When the lock cannot be acquired, it raises a</span>
+<span class="sd">        ``RetryableJobError`` so the job is retried after n</span>
 <span class="sd">        ``retry_seconds``.</span>
+
+<span class="sd">        Usage example:</span>
+
+<span class="sd">        ::</span>
+
+<span class="sd">            lock_name = &#39;import_record({}, {}, {}, {})&#39;.format(</span>
+<span class="sd">                self.backend_record._name,</span>
+<span class="sd">                self.backend_record.id,</span>
+<span class="sd">                self.model._name,</span>
+<span class="sd">                self.external_id,</span>
+<span class="sd">            )</span>
+<span class="sd">            self.advisory_lock_or_retry(lock_name, retry_seconds=2)</span>
 
 <span class="sd">        See :func:``openerp.addons.connector.connector.pg_try_advisory_lock``</span>
 <span class="sd">        for details.</span>
 
 <span class="sd">        :param lock: The lock name. Can be anything convertible to a</span>
-<span class="sd">           string.  It needs to represents what should not be synchronized</span>
-<span class="sd">           concurrently so usually the string will contain at least: the</span>
+<span class="sd">           string.  It needs to represent what should not be synchronized</span>
+<span class="sd">           concurrently, usually the string will contain at least: the</span>
 <span class="sd">           action, the backend type, the backend id, the model name, the</span>
 <span class="sd">           external id</span>
 <span class="sd">        :param retry_seconds: number of seconds after which a job should</span>
 <span class="sd">           be retried when the lock cannot be acquired.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">pg_try_advisory_lock</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="p">,</span> <span class="n">lock</span><span class="p">):</span>
-            <span class="k">yield</span>
-        <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">pg_try_advisory_lock</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="p">,</span> <span class="n">lock</span><span class="p">):</span>
             <span class="k">raise</span> <span class="n">RetryableJobError</span><span class="p">(</span><span class="s">&#39;Could not acquire advisory lock&#39;</span><span class="p">,</span>
                                     <span class="n">seconds</span><span class="o">=</span><span class="n">retry_seconds</span><span class="p">,</span>
                                     <span class="n">ignore_retry</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
@@ -773,7 +781,7 @@
 <span class="sd">            self.backend_record._name,</span>
 <span class="sd">            self.backend_record.id,</span>
 <span class="sd">            self.model._name,</span>
-<span class="sd">            self.lefac_id,</span>
+<span class="sd">            self.external_id,</span>
 <span class="sd">        )</span>
 <span class="sd">        if pg_try_advisory_lock(lock_name):</span>
 <span class="sd">            # do sync</span>

@@ -231,29 +231,37 @@ class ConnectorUnit(object):
         log_deprecate('renamed to binder_for()')
         return self.binder_for(model=model)
 
-    @contextmanager
-    def try_advisory_lock(self, lock, retry_seconds=1):
-        """ Context manager, tries to acquire a Postgres transactional
-        advisory lock.
+    def advisory_lock_or_retry(self, lock, retry_seconds=1):
+        """ Acquire a Postgres transactional advisory lock or retry job
 
-        If the lock cannot be acquired, it raises a
-        ``RetryableJobError`` so the jobs is retried after n
+        When the lock cannot be acquired, it raises a
+        ``RetryableJobError`` so the job is retried after n
         ``retry_seconds``.
+
+        Usage example:
+
+        ::
+
+            lock_name = 'import_record({}, {}, {}, {})'.format(
+                self.backend_record._name,
+                self.backend_record.id,
+                self.model._name,
+                self.external_id,
+            )
+            self.advisory_lock_or_retry(lock_name, retry_seconds=2)
 
         See :func:``openerp.addons.connector.connector.pg_try_advisory_lock``
         for details.
 
         :param lock: The lock name. Can be anything convertible to a
-           string.  It needs to represents what should not be synchronized
-           concurrently so usually the string will contain at least: the
+           string.  It needs to represent what should not be synchronized
+           concurrently, usually the string will contain at least: the
            action, the backend type, the backend id, the model name, the
            external id
         :param retry_seconds: number of seconds after which a job should
            be retried when the lock cannot be acquired.
         """
-        if pg_try_advisory_lock(self.env, lock):
-            yield
-        else:
+        if not pg_try_advisory_lock(self.env, lock):
             raise RetryableJobError('Could not acquire advisory lock',
                                     seconds=retry_seconds,
                                     ignore_retry=True)
@@ -542,7 +550,7 @@ def pg_try_advisory_lock(env, lock):
             self.backend_record._name,
             self.backend_record.id,
             self.model._name,
-            self.lefac_id,
+            self.external_id,
         )
         if pg_try_advisory_lock(lock_name):
             # do sync

@@ -226,9 +226,8 @@ class TestAdvisoryLock(common.TransactionCase):
             '999999',
         )
         connector_unit = mock_connector_unit(self.env)
-        with connector_unit.try_advisory_lock(lock):
-            connector_unit2 = mock_connector_unit(self.env2)
-            with self.assertRaises(RetryableJobError) as cm:
-                with connector_unit2.try_advisory_lock(lock, retry_seconds=3):
-                    pass
+        connector_unit.advisory_lock_or_retry(lock)
+        connector_unit2 = mock_connector_unit(self.env2)
+        with self.assertRaises(RetryableJobError) as cm:
+            connector_unit2.advisory_lock_or_retry(lock, retry_seconds=3)
             self.assertEquals(cm.exception.seconds, 3)

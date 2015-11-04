@@ -9,8 +9,8 @@ Odoo Connector Modules
 
 This Odoo add-on has a modular and generic core, with the ability to be extended with additional modules for new features or customizations.
 
-The team for the community is here: https://launchpad.net/~openerp-connector-community
-Please join and subscribe to the mailing list.
+Feel free to subscribe on the mailing list (its name is 'Connectors'):
+https://odoo-community.org/groups
 
 Documentation:
 http://www.odoo-connector.com

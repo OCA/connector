@@ -66,7 +66,7 @@ It features:
 It is actually used to connect Magento_ and Prestashop_
 
 .. _Magento: http://odoo-magento-connector.com
-.. _Prestashop: https://launchpad.net/prestashoperpconnect
+.. _Prestashop: https://github.com/OCA/connector-prestashop
 """,
  'depends': ['mail'
              ],

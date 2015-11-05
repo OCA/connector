@@ -47,9 +47,15 @@ add_path(odoo_root, 'openerp', 'addons')
 add_path(odoo_root, 'addons')
 add_path(build_path)
 
+print 'odoo_root: %s' % odoo_root
+print 'build_path: %s' % build_path
+print 'deps_path: %s' % deps_path
+
 deps_repos = [repo for repo in os.listdir(deps_path)
               if os.path.isdir(os.path.join(deps_path, repo))
               and not repo.startswith('.')]
+
+print 'deps_repos: %s' % (deps_repos,)
 
 for repo in deps_repos:
     add_path(deps_path, repo)
@@ -58,6 +64,8 @@ addons = [x for x in os.listdir(build_path)
           if not x.startswith(('.', '__')) and
           os.path.isdir(os.path.join(build_path, x))]
 
+print 'addons_paths: %s' % (addons_paths,)
+print 'addons: %s' % (addons,)
 # sphinxodoo.ext.autodoc variables
 sphinxodoo_root_path = odoo_root
 sphinxodoo_addons = addons

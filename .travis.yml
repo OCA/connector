@@ -30,7 +30,7 @@ env:
   - secure: "HLsfDkckZKfcyIFdLLYI2Q/SKBsI48QoYKJm2WSttlSIp4Bli6rYc/2WLwcKyQmkS0TITYRhKAjzBYYHZCThj77lwQgXFm5Di+MFpDbH5R5llCdQJD+A5gSs/GxzIEXX6YxVajcLe6MrI15pdv3p9Bl8K14owLXZaypvkV1XrBA="
 
 install:
-  - git clone --depth=1 https://github.com/OCA/maintainer-quality-tools.git ${HOME}/maintainer-quality-tools
+  - git clone --depth=1 https://github.com/guewen/maintainer-quality-tools.git -b global-node ${HOME}/maintainer-quality-tools
   - export PATH=${HOME}/maintainer-quality-tools/travis:${PATH}
   - travis_install_nightly
   - pip install sphinx sphinx_bootstrap_theme sphinx-intl odoo-sphinx-autodoc

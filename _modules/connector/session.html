@@ -308,9 +308,10 @@
                                        <span class="n">context</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">)</span>
 
             <span class="k">try</span><span class="p">:</span>
-                <span class="n">RegistryManager</span><span class="o">.</span><span class="n">check_registry_signaling</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">db_name</span><span class="p">)</span>
-                <span class="k">yield</span> <span class="n">session</span>
-                <span class="n">RegistryManager</span><span class="o">.</span><span class="n">signal_caches_change</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">db_name</span><span class="p">)</span>
+                <span class="k">with</span> <span class="n">session</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">clear_upon_failure</span><span class="p">():</span>
+                    <span class="n">RegistryManager</span><span class="o">.</span><span class="n">check_registry_signaling</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">db_name</span><span class="p">)</span>
+                    <span class="k">yield</span> <span class="n">session</span>
+                    <span class="n">RegistryManager</span><span class="o">.</span><span class="n">signal_caches_change</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">db_name</span><span class="p">)</span>
             <span class="k">except</span><span class="p">:</span>
                 <span class="n">session</span><span class="o">.</span><span class="n">rollback</span><span class="p">()</span>
                 <span class="k">raise</span>

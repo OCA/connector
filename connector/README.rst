@@ -1,5 +1,12 @@
 .. image:: https://img.shields.io/badge/licence-AGPL--3-blue.svg
     :alt: License
+    
+Last minute information regarding Odoo 9
+========================================
+
+* A crowdfunding campaign is currently running to finance the migration of this connector to make it compatible with Odoo 9. **Be part of this project now!** `More info here`_
+
+.. _`More info here`: https://www.indiegogo.com/projects/odoo-connector-odoo-magento-connector-for-odoo-9#/
 
 Connector
 =========

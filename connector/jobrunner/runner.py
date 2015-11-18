@@ -123,7 +123,7 @@ import requests
 
 import openerp
 
-from .channels import ChannelManager, ENQUEUED, NOT_DONE
+from .channels import ChannelManager, PENDING, ENQUEUED, NOT_DONE
 
 SELECT_TIMEOUT = 60
 ERROR_RECOVERY_DELAY = 5
@@ -131,19 +131,34 @@ ERROR_RECOVERY_DELAY = 5
 _logger = logging.getLogger(__name__)
 
 
-def _async_http_get(url):
+def _async_http_get(port, db_name, job_uuid):
+    # Method to set failed job (due to timeout, etc) as pending,
+    # to avoid keeping it as enqueued.
+    def set_job_pending():
+        conn = psycopg2.connect(openerp.sql_db.dsn(db_name))
+        conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
+        with closing(conn.cursor()) as cr:
+            cr.execute(
+                "UPDATE queue_job SET state=%s, "
+                "date_enqueued=NULL, date_started=NULL "
+                "WHERE uuid=%s and state=%s", (PENDING, job_uuid, ENQUEUED)
+            )
+
     # TODO: better way to HTTP GET asynchronously (grequest, ...)?
     #       if this was python3 I would be doing this with
     #       asyncio, aiohttp and aiopg
     def urlopen():
+        url = ('http://localhost:%s/connector/runjob?db=%s&job_uuid=%s' %
+               (port, db_name, job_uuid))
         try:
             # we are not interested in the result, so we set a short timeout
             # but not too short so we trap and log hard configuration errors
             requests.get(url, timeout=1)
         except requests.Timeout:
-            pass
+            set_job_pending()
         except:
             _logger.exception("exception in GET %s", url)
+            set_job_pending()
     thread = threading.Thread(target=urlopen)
     thread.daemon = True
     thread.start()
@@ -285,9 +300,7 @@ class ConnectorRunner(object):
             _logger.info("asking Odoo to run job %s on db %s",
                          job.uuid, job.db_name)
             self.db_by_name[job.db_name].set_job_enqueued(job.uuid)
-            _async_http_get('http://localhost:%s'
-                            '/connector/runjob?db=%s&job_uuid=%s' %
-                            (self.port, job.db_name, job.uuid))
+            _async_http_get(self.port, job.db_name, job.uuid)
 
     def process_notifications(self):
         for db in self.db_by_name.values():

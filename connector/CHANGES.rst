@@ -7,6 +7,12 @@ Changelog
 .. * 
 
 
+Future (?)
+~~~~~~~~~~
+
+* Fix backend_to_m2o to extract id of the binding (https://github.com/OCA/connector/pull/153)
+
+
 8.0.3.3.0 (2016-02-29)
 ~~~~~~~~~~~~~~~~~~~~~~
 

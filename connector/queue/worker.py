@@ -263,6 +263,8 @@ class WorkerWatcher(threading.Thread):
             db_names = db.exp_list(True)
         dbfilter = config['dbfilter']
         if dbfilter and db_names:
+            # Remove %d and %h from dbfilter (issue #58)
+            dbfilter = re.sub('(%d|%h).*$', '', dbfilter)
             db_names = [d for d in db_names if re.match(dbfilter, d)]
         available_db_names = []
         for db_name in db_names:

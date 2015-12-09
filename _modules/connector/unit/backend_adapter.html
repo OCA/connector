@@ -256,9 +256,9 @@
 <div class="viewcode-block" id="BackendAdapter"><a class="viewcode-back" href="../../../api/api_backend_adapter.html#connector.unit.backend_adapter.BackendAdapter">[docs]</a><span class="k">class</span> <span class="nc">BackendAdapter</span><span class="p">(</span><span class="n">ConnectorUnit</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Base Backend Adapter for the connectors &quot;&quot;&quot;</span>
 
-    <span class="n">_model_name</span> <span class="o">=</span> <span class="bp">None</span>  <span class="c"># define in sub-classes</span>
+    <span class="n">_model_name</span> <span class="o">=</span> <span class="bp">None</span>  <span class="c"># define in sub-classes</span></div>
 
-</div>
+
 <div class="viewcode-block" id="CRUDAdapter"><a class="viewcode-back" href="../../../api/api_backend_adapter.html#connector.unit.backend_adapter.CRUDAdapter">[docs]</a><span class="k">class</span> <span class="nc">CRUDAdapter</span><span class="p">(</span><span class="n">BackendAdapter</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Base External Adapter specialized in the handling</span>
 <span class="sd">    of records on external systems.</span>
@@ -272,25 +272,25 @@
 <div class="viewcode-block" id="CRUDAdapter.search"><a class="viewcode-back" href="../../../api/api_backend_adapter.html#connector.unit.backend_adapter.CRUDAdapter.search">[docs]</a>    <span class="k">def</span> <span class="nf">search</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Search records according to some criterias</span>
 <span class="sd">        and returns a list of ids &quot;&quot;&quot;</span>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
-</div>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+
 <div class="viewcode-block" id="CRUDAdapter.read"><a class="viewcode-back" href="../../../api/api_backend_adapter.html#connector.unit.backend_adapter.CRUDAdapter.read">[docs]</a>    <span class="k">def</span> <span class="nf">read</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Returns the information of a record &quot;&quot;&quot;</span>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
-</div>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+
 <div class="viewcode-block" id="CRUDAdapter.search_read"><a class="viewcode-back" href="../../../api/api_backend_adapter.html#connector.unit.backend_adapter.CRUDAdapter.search_read">[docs]</a>    <span class="k">def</span> <span class="nf">search_read</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Search records according to some criterias</span>
 <span class="sd">        and returns their information&quot;&quot;&quot;</span>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
-</div>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+
 <div class="viewcode-block" id="CRUDAdapter.create"><a class="viewcode-back" href="../../../api/api_backend_adapter.html#connector.unit.backend_adapter.CRUDAdapter.create">[docs]</a>    <span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Create a record on the external system &quot;&quot;&quot;</span>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
-</div>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+
 <div class="viewcode-block" id="CRUDAdapter.write"><a class="viewcode-back" href="../../../api/api_backend_adapter.html#connector.unit.backend_adapter.CRUDAdapter.write">[docs]</a>    <span class="k">def</span> <span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Update records on the external system &quot;&quot;&quot;</span>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
-</div>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+
 <div class="viewcode-block" id="CRUDAdapter.delete"><a class="viewcode-back" href="../../../api/api_backend_adapter.html#connector.unit.backend_adapter.CRUDAdapter.delete">[docs]</a>    <span class="k">def</span> <span class="nf">delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Delete a record on the external system &quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span></div></div>
@@ -311,7 +311,7 @@
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.3.<br/>
     </p>
   </div>
 </footer>

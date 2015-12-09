@@ -285,9 +285,9 @@
 
 <div class="viewcode-block" id="install_in_connector"><a class="viewcode-back" href="../../api/api_connector.html#connector.connector.install_in_connector">[docs]</a><span class="k">def</span> <span class="nf">install_in_connector</span><span class="p">():</span>
     <span class="n">log_deprecate</span><span class="p">(</span><span class="s">&quot;This call to &#39;install_in_connector()&#39; has no effect and is &quot;</span>
-                  <span class="s">&quot;not required.&quot;</span><span class="p">)</span>
+                  <span class="s">&quot;not required.&quot;</span><span class="p">)</span></div>
 
-</div>
+
 <div class="viewcode-block" id="is_module_installed"><a class="viewcode-back" href="../../api/api_connector.html#connector.connector.is_module_installed">[docs]</a><span class="k">def</span> <span class="nf">is_module_installed</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">module_name</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Check if an Odoo addon is installed.</span>
 
@@ -295,9 +295,9 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c"># the registry maintains a set of fully loaded modules so we can</span>
     <span class="c"># lookup for our module there</span>
-    <span class="k">return</span> <span class="n">module_name</span> <span class="ow">in</span> <span class="n">env</span><span class="o">.</span><span class="n">registry</span><span class="o">.</span><span class="n">_init_modules</span>
+    <span class="k">return</span> <span class="n">module_name</span> <span class="ow">in</span> <span class="n">env</span><span class="o">.</span><span class="n">registry</span><span class="o">.</span><span class="n">_init_modules</span></div>
 
-</div>
+
 <div class="viewcode-block" id="get_openerp_module"><a class="viewcode-back" href="../../api/api_connector.html#connector.connector.get_openerp_module">[docs]</a><span class="k">def</span> <span class="nf">get_openerp_module</span><span class="p">(</span><span class="n">cls_or_func</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; For a top level function or class, returns the</span>
 <span class="sd">    name of the OpenERP module where it lives.</span>
@@ -305,9 +305,9 @@
 <span class="sd">    So we will be able to filter them according to the modules</span>
 <span class="sd">    installation state.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">_get_openerp_module_name</span><span class="p">(</span><span class="n">cls_or_func</span><span class="o">.</span><span class="n">__module__</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">_get_openerp_module_name</span><span class="p">(</span><span class="n">cls_or_func</span><span class="o">.</span><span class="n">__module__</span><span class="p">)</span></div>
 
-</div>
+
 <div class="viewcode-block" id="MetaConnectorUnit"><a class="viewcode-back" href="../../api/api_connector.html#connector.connector.MetaConnectorUnit">[docs]</a><span class="k">class</span> <span class="nc">MetaConnectorUnit</span><span class="p">(</span><span class="nb">type</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Metaclass for ConnectorUnit.</span>
 
@@ -339,9 +339,9 @@
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">attrs</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">MetaConnectorUnit</span><span class="p">,</span> <span class="n">cls</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">attrs</span><span class="p">)</span>
-        <span class="n">cls</span><span class="o">.</span><span class="n">_openerp_module_</span> <span class="o">=</span> <span class="n">get_openerp_module</span><span class="p">(</span><span class="n">cls</span><span class="p">)</span>
+        <span class="n">cls</span><span class="o">.</span><span class="n">_openerp_module_</span> <span class="o">=</span> <span class="n">get_openerp_module</span><span class="p">(</span><span class="n">cls</span><span class="p">)</span></div>
 
-</div>
+
 <div class="viewcode-block" id="ConnectorUnit"><a class="viewcode-back" href="../../api/api_connector.html#connector.connector.ConnectorUnit">[docs]</a><span class="k">class</span> <span class="nc">ConnectorUnit</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Abstract class for each piece of the connector:</span>
 
@@ -392,8 +392,8 @@
             <span class="n">model_name</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">_name</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">model_name</span> <span class="o">=</span> <span class="n">model</span>  <span class="c"># str</span>
-        <span class="k">return</span> <span class="n">model_name</span> <span class="ow">in</span> <span class="n">cls</span><span class="o">.</span><span class="n">for_model_names</span>
-</div>
+        <span class="k">return</span> <span class="n">model_name</span> <span class="ow">in</span> <span class="n">cls</span><span class="o">.</span><span class="n">for_model_names</span></div>
+
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">env</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Returns the openerp.api.environment &quot;&quot;&quot;</span>
@@ -442,18 +442,18 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span>
                 <span class="n">connector_env</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">connector_env</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">env</span><span class="o">.</span><span class="n">get_connector_unit</span><span class="p">(</span><span class="n">connector_unit_class</span><span class="p">)</span>
-</div>
+        <span class="k">return</span> <span class="n">env</span><span class="o">.</span><span class="n">get_connector_unit</span><span class="p">(</span><span class="n">connector_unit_class</span><span class="p">)</span></div>
+
 <div class="viewcode-block" id="ConnectorUnit.get_connector_unit_for_model"><a class="viewcode-back" href="../../api/api_connector.html#connector.connector.ConnectorUnit.get_connector_unit_for_model">[docs]</a>    <span class="k">def</span> <span class="nf">get_connector_unit_for_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">connector_unit_class</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Deprecated in favor of :meth:`~unit_for` &quot;&quot;&quot;</span>
         <span class="n">log_deprecate</span><span class="p">(</span><span class="s">&#39;renamed to unit_for()&#39;</span><span class="p">)</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">unit_for</span><span class="p">(</span><span class="n">connector_unit_class</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">)</span>
-</div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">unit_for</span><span class="p">(</span><span class="n">connector_unit_class</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">)</span></div>
+
 <div class="viewcode-block" id="ConnectorUnit.binder_for"><a class="viewcode-back" href="../../api/api_connector.html#connector.connector.ConnectorUnit.binder_for">[docs]</a>    <span class="k">def</span> <span class="nf">binder_for</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Returns an new instance of the correct ``Binder`` for</span>
 <span class="sd">        a model &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">unit_for</span><span class="p">(</span><span class="n">Binder</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span>
-</div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">unit_for</span><span class="p">(</span><span class="n">Binder</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span></div>
+
 <div class="viewcode-block" id="ConnectorUnit.get_binder_for_model"><a class="viewcode-back" href="../../api/api_connector.html#connector.connector.ConnectorUnit.get_binder_for_model">[docs]</a>    <span class="k">def</span> <span class="nf">get_binder_for_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Returns an new instance of the correct ``Binder`` for</span>
 <span class="sd">        a model</span>
@@ -461,8 +461,8 @@
 <span class="sd">        Deprecated, use ``binder_for`` now.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">log_deprecate</span><span class="p">(</span><span class="s">&#39;renamed to binder_for()&#39;</span><span class="p">)</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">binder_for</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">)</span>
-</div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">binder_for</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">)</span></div>
+
 <div class="viewcode-block" id="ConnectorUnit.advisory_lock_or_retry"><a class="viewcode-back" href="../../api/api_connector.html#connector.connector.ConnectorUnit.advisory_lock_or_retry">[docs]</a>    <span class="k">def</span> <span class="nf">advisory_lock_or_retry</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lock</span><span class="p">,</span> <span class="n">retry_seconds</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Acquire a Postgres transactional advisory lock or retry job</span>
 
@@ -496,9 +496,9 @@
         <span class="k">if</span> <span class="ow">not</span> <span class="n">pg_try_advisory_lock</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="p">,</span> <span class="n">lock</span><span class="p">):</span>
             <span class="k">raise</span> <span class="n">RetryableJobError</span><span class="p">(</span><span class="s">&#39;Could not acquire advisory lock&#39;</span><span class="p">,</span>
                                     <span class="n">seconds</span><span class="o">=</span><span class="n">retry_seconds</span><span class="p">,</span>
-                                    <span class="n">ignore_retry</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+                                    <span class="n">ignore_retry</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span></div></div>
 
-</div></div>
+
 <div class="viewcode-block" id="ConnectorEnvironment"><a class="viewcode-back" href="../../api/api_connector.html#connector.connector.ConnectorEnvironment">[docs]</a><span class="k">class</span> <span class="nc">ConnectorEnvironment</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Environment used by the different units for the synchronization.</span>
 
@@ -571,8 +571,8 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">DeprecationWarning</span><span class="p">(</span><span class="s">&#39;ConnectorEnvironment.set_lang has been &#39;</span>
                                  <span class="s">&#39;deprecated. session.change_context should &#39;</span>
-                                 <span class="s">&#39;be used instead.&#39;</span><span class="p">)</span>
-</div>
+                                 <span class="s">&#39;be used instead.&#39;</span><span class="p">)</span></div>
+
 <div class="viewcode-block" id="ConnectorEnvironment.get_connector_unit"><a class="viewcode-back" href="../../api/api_connector.html#connector.connector.ConnectorEnvironment.get_connector_unit">[docs]</a>    <span class="k">def</span> <span class="nf">get_connector_unit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">base_class</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Searches and returns an instance of the</span>
 <span class="sd">        :py:class:`~connector.connector.ConnectorUnit` for the current</span>
@@ -584,8 +584,8 @@
 <span class="sd">        :type base_class: :py:class:`connector.connector.ConnectorUnit`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">backend</span><span class="o">.</span><span class="n">get_class</span><span class="p">(</span><span class="n">base_class</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="p">,</span>
-                                      <span class="bp">self</span><span class="o">.</span><span class="n">model_name</span><span class="p">)(</span><span class="bp">self</span><span class="p">)</span>
-</div>
+                                      <span class="bp">self</span><span class="o">.</span><span class="n">model_name</span><span class="p">)(</span><span class="bp">self</span><span class="p">)</span></div>
+
     <span class="nd">@classmethod</span>
 <div class="viewcode-block" id="ConnectorEnvironment.create_environment"><a class="viewcode-back" href="../../api/api_connector.html#connector.connector.ConnectorEnvironment.create_environment">[docs]</a>    <span class="k">def</span> <span class="nf">create_environment</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">backend_record</span><span class="p">,</span> <span class="n">session</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span>
                            <span class="n">connector_env</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
@@ -609,8 +609,8 @@
         <span class="k">if</span> <span class="n">kwargs</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">cls</span><span class="p">(</span><span class="n">backend_record</span><span class="p">,</span> <span class="n">session</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">cls</span><span class="p">(</span><span class="n">backend_record</span><span class="p">,</span> <span class="n">session</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span>
-</div></div>
+            <span class="k">return</span> <span class="n">cls</span><span class="p">(</span><span class="n">backend_record</span><span class="p">,</span> <span class="n">session</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span></div></div>
+
 <span class="n">Environment</span> <span class="o">=</span> <span class="n">DeprecatedClass</span><span class="p">(</span><span class="s">&#39;Environment&#39;</span><span class="p">,</span>
                               <span class="n">ConnectorEnvironment</span><span class="p">)</span>
 
@@ -652,8 +652,8 @@
         <span class="n">bindings</span><span class="o">.</span><span class="n">ensure_one</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">unwrap</span><span class="p">:</span>
             <span class="n">bindings</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">bindings</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_openerp_field</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">bindings</span>
-</div>
+        <span class="k">return</span> <span class="n">bindings</span></div>
+
 <div class="viewcode-block" id="Binder.to_backend"><a class="viewcode-back" href="../../api/api_connector.html#connector.connector.Binder.to_backend">[docs]</a>    <span class="k">def</span> <span class="nf">to_backend</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">binding_id</span><span class="p">,</span> <span class="n">wrap</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Give the external ID for an OpenERP binding ID</span>
 
@@ -682,8 +682,8 @@
         <span class="k">if</span> <span class="ow">not</span> <span class="n">record</span><span class="p">:</span>
             <span class="n">record</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">browse</span><span class="p">(</span><span class="n">binding_id</span><span class="p">)</span>
         <span class="k">assert</span> <span class="n">record</span>
-        <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">record</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_external_field</span><span class="p">)</span>
-</div>
+        <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">record</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_external_field</span><span class="p">)</span></div>
+
 <div class="viewcode-block" id="Binder.bind"><a class="viewcode-back" href="../../api/api_connector.html#connector.connector.Binder.bind">[docs]</a>    <span class="k">def</span> <span class="nf">bind</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">external_id</span><span class="p">,</span> <span class="n">binding_id</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Create the link between an external ID and an OpenERP ID</span>
 
@@ -703,8 +703,8 @@
         <span class="n">binding_id</span><span class="o">.</span><span class="n">with_context</span><span class="p">(</span><span class="n">connector_no_export</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
             <span class="p">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_external_field</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">external_id</span><span class="p">),</span>
              <span class="bp">self</span><span class="o">.</span><span class="n">_sync_date_field</span><span class="p">:</span> <span class="n">now_fmt</span><span class="p">,</span>
-             <span class="p">})</span>
-</div>
+             <span class="p">})</span></div>
+
 <div class="viewcode-block" id="Binder.unwrap_binding"><a class="viewcode-back" href="../../api/api_connector.html#connector.connector.Binder.unwrap_binding">[docs]</a>    <span class="k">def</span> <span class="nf">unwrap_binding</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">binding_id</span><span class="p">,</span> <span class="n">browse</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; For a binding record, gives the normal record.</span>
 
@@ -722,8 +722,8 @@
         <span class="n">openerp_record</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">binding</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_openerp_field</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">browse</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">openerp_record</span>
-        <span class="k">return</span> <span class="n">openerp_record</span><span class="o">.</span><span class="n">id</span>
-</div>
+        <span class="k">return</span> <span class="n">openerp_record</span><span class="o">.</span><span class="n">id</span></div>
+
 <div class="viewcode-block" id="Binder.unwrap_model"><a class="viewcode-back" href="../../api/api_connector.html#connector.connector.Binder.unwrap_model">[docs]</a>    <span class="k">def</span> <span class="nf">unwrap_model</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; For a binding model, gives the normal model.</span>
 
@@ -736,9 +736,9 @@
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
                 <span class="s">&#39;Cannot unwrap model </span><span class="si">%s</span><span class="s">, because it has no </span><span class="si">%s</span><span class="s"> fields&#39;</span>
                 <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_openerp_field</span><span class="p">))</span>
-        <span class="k">return</span> <span class="n">column</span><span class="o">.</span><span class="n">comodel_name</span>
+        <span class="k">return</span> <span class="n">column</span><span class="o">.</span><span class="n">comodel_name</span></div></div>
 
-</div></div>
+
 <div class="viewcode-block" id="pg_try_advisory_lock"><a class="viewcode-back" href="../../api/api_connector.html#connector.connector.pg_try_advisory_lock">[docs]</a><span class="k">def</span> <span class="nf">pg_try_advisory_lock</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">lock</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Try to acquire a Postgres transactional advisory lock.</span>
 
@@ -825,7 +825,7 @@
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.<br/>
+      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.3.<br/>
     </p>
   </div>
 </footer>

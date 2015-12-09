@@ -264,8 +264,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_queue</span> <span class="o">=</span> <span class="n">PriorityQueue</span><span class="p">()</span>
 
 <div class="viewcode-block" id="JobsQueue.enqueue"><a class="viewcode-back" href="../../../api/api_queue.html#connector.queue.worker.JobsQueue.enqueue">[docs]</a>    <span class="k">def</span> <span class="nf">enqueue</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">job</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_queue</span><span class="o">.</span><span class="n">put_nowait</span><span class="p">(</span><span class="n">job</span><span class="p">)</span>
-</div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_queue</span><span class="o">.</span><span class="n">put_nowait</span><span class="p">(</span><span class="n">job</span><span class="p">)</span></div>
+
 <div class="viewcode-block" id="JobsQueue.dequeue"><a class="viewcode-back" href="../../../api/api_queue.html#connector.queue.worker.JobsQueue.dequeue">[docs]</a>    <span class="k">def</span> <span class="nf">dequeue</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Take the first job according to its priority</span>
 <span class="sd">        and return it&quot;&quot;&quot;</span>
@@ -287,7 +287,7 @@
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.3.<br/>
     </p>
   </div>
 </footer>

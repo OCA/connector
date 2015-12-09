@@ -273,8 +273,8 @@
 
 <div class="viewcode-block" id="Synchronizer.run"><a class="viewcode-back" href="../../../api/api_synchronizer.html#connector.unit.synchronizer.Synchronizer.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Run the synchronization &quot;&quot;&quot;</span>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
-</div>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">mapper</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Return an instance of ``Mapper`` for the synchronization.</span>
@@ -313,31 +313,31 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_backend_adapter</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_backend_adapter</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">unit_for</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_base_backend_adapter</span><span class="p">)</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_backend_adapter</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_backend_adapter</span></div>
 
-</div>
+
 <div class="viewcode-block" id="Exporter"><a class="viewcode-back" href="../../../api/api_synchronizer.html#connector.unit.synchronizer.Exporter">[docs]</a><span class="k">class</span> <span class="nc">Exporter</span><span class="p">(</span><span class="n">Synchronizer</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Synchronizer for exporting data from OpenERP to a backend &quot;&quot;&quot;</span>
 
-    <span class="n">_base_mapper</span> <span class="o">=</span> <span class="n">ExportMapper</span>
+    <span class="n">_base_mapper</span> <span class="o">=</span> <span class="n">ExportMapper</span></div>
 
-</div>
+
 <span class="n">ExportSynchronizer</span> <span class="o">=</span> <span class="n">Exporter</span>  <span class="c"># deprecated</span>
 
 
 <div class="viewcode-block" id="Importer"><a class="viewcode-back" href="../../../api/api_synchronizer.html#connector.unit.synchronizer.Importer">[docs]</a><span class="k">class</span> <span class="nc">Importer</span><span class="p">(</span><span class="n">Synchronizer</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Synchronizer for importing data from a backend to OpenERP &quot;&quot;&quot;</span>
 
-    <span class="n">_base_mapper</span> <span class="o">=</span> <span class="n">ImportMapper</span>
+    <span class="n">_base_mapper</span> <span class="o">=</span> <span class="n">ImportMapper</span></div>
 
-</div>
+
 <span class="n">ImportSynchronizer</span> <span class="o">=</span> <span class="n">Importer</span>  <span class="c"># deprecated</span>
 
 
 <div class="viewcode-block" id="Deleter"><a class="viewcode-back" href="../../../api/api_synchronizer.html#connector.unit.synchronizer.Deleter">[docs]</a><span class="k">class</span> <span class="nc">Deleter</span><span class="p">(</span><span class="n">Synchronizer</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; Synchronizer for deleting a record on the backend &quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot; Synchronizer for deleting a record on the backend &quot;&quot;&quot;</span></div>
 
-</div>
+
 <span class="n">DeleteSynchronizer</span> <span class="o">=</span> <span class="n">Deleter</span>  <span class="c"># deprecated</span>
 </pre></div>
 
@@ -356,7 +356,7 @@
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.<br/>
+      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.3.<br/>
     </p>
   </div>
 </footer>

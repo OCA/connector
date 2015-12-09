@@ -308,17 +308,17 @@
 
 <div class="viewcode-block" id="JobStorage.store"><a class="viewcode-back" href="../../../api/api_queue.html#connector.queue.job.JobStorage.store">[docs]</a>    <span class="k">def</span> <span class="nf">store</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">job_</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Store a job &quot;&quot;&quot;</span>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
-</div>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+
 <div class="viewcode-block" id="JobStorage.load"><a class="viewcode-back" href="../../../api/api_queue.html#connector.queue.job.JobStorage.load">[docs]</a>    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">job_uuid</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Read the job&#39;s data from the storage &quot;&quot;&quot;</span>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
-</div>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+
 <div class="viewcode-block" id="JobStorage.exists"><a class="viewcode-back" href="../../../api/api_queue.html#connector.queue.job.JobStorage.exists">[docs]</a>    <span class="k">def</span> <span class="nf">exists</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">job_uuid</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Returns if a job still exists in the storage.&quot;&quot;&quot;</span>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div></div>
 
-</div></div>
+
 <div class="viewcode-block" id="OpenERPJobStorage"><a class="viewcode-back" href="../../../api/api_queue.html#connector.queue.job.OpenERPJobStorage">[docs]</a><span class="k">class</span> <span class="nc">OpenERPJobStorage</span><span class="p">(</span><span class="n">JobStorage</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Store a job on OpenERP &quot;&quot;&quot;</span>
 
@@ -355,8 +355,8 @@
                 <span class="n">field</span><span class="o">=</span><span class="s">&#39;company_id&#39;</span><span class="p">)</span>
         <span class="n">new_job</span><span class="o">.</span><span class="n">company_id</span> <span class="o">=</span> <span class="n">company_id</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="n">new_job</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">new_job</span><span class="o">.</span><span class="n">uuid</span>
-</div>
+        <span class="k">return</span> <span class="n">new_job</span><span class="o">.</span><span class="n">uuid</span></div>
+
 <div class="viewcode-block" id="OpenERPJobStorage.enqueue_resolve_args"><a class="viewcode-back" href="../../../api/api_queue.html#connector.queue.job.OpenERPJobStorage.enqueue_resolve_args">[docs]</a>    <span class="k">def</span> <span class="nf">enqueue_resolve_args</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Create a Job and enqueue it in the queue. Return the job uuid.&quot;&quot;&quot;</span>
         <span class="n">priority</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s">&#39;priority&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
@@ -370,21 +370,21 @@
                             <span class="n">priority</span><span class="o">=</span><span class="n">priority</span><span class="p">,</span>
                             <span class="n">max_retries</span><span class="o">=</span><span class="n">max_retries</span><span class="p">,</span>
                             <span class="n">eta</span><span class="o">=</span><span class="n">eta</span><span class="p">,</span>
-                            <span class="n">description</span><span class="o">=</span><span class="n">description</span><span class="p">)</span>
-</div>
+                            <span class="n">description</span><span class="o">=</span><span class="n">description</span><span class="p">)</span></div>
+
 <div class="viewcode-block" id="OpenERPJobStorage.exists"><a class="viewcode-back" href="../../../api/api_queue.html#connector.queue.job.OpenERPJobStorage.exists">[docs]</a>    <span class="k">def</span> <span class="nf">exists</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">job_uuid</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Returns if a job still exists in the storage.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">db_record_from_uuid</span><span class="p">(</span><span class="n">job_uuid</span><span class="p">))</span>
-</div>
+        <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">db_record_from_uuid</span><span class="p">(</span><span class="n">job_uuid</span><span class="p">))</span></div>
+
 <div class="viewcode-block" id="OpenERPJobStorage.db_record_from_uuid"><a class="viewcode-back" href="../../../api/api_queue.html#connector.queue.job.OpenERPJobStorage.db_record_from_uuid">[docs]</a>    <span class="k">def</span> <span class="nf">db_record_from_uuid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">job_uuid</span><span class="p">):</span>
         <span class="n">model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">job_model</span><span class="o">.</span><span class="n">sudo</span><span class="p">()</span><span class="o">.</span><span class="n">with_context</span><span class="p">(</span><span class="n">active_test</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
         <span class="n">record</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">search</span><span class="p">([(</span><span class="s">&#39;uuid&#39;</span><span class="p">,</span> <span class="s">&#39;=&#39;</span><span class="p">,</span> <span class="n">job_uuid</span><span class="p">)],</span> <span class="n">limit</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">record</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">record</span><span class="o">.</span><span class="n">with_env</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">job_model</span><span class="o">.</span><span class="n">env</span><span class="p">)</span>
-</div>
+            <span class="k">return</span> <span class="n">record</span><span class="o">.</span><span class="n">with_env</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">job_model</span><span class="o">.</span><span class="n">env</span><span class="p">)</span></div>
+
 <div class="viewcode-block" id="OpenERPJobStorage.db_record"><a class="viewcode-back" href="../../../api/api_queue.html#connector.queue.job.OpenERPJobStorage.db_record">[docs]</a>    <span class="k">def</span> <span class="nf">db_record</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">job_</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">db_record_from_uuid</span><span class="p">(</span><span class="n">job_</span><span class="o">.</span><span class="n">uuid</span><span class="p">)</span>
-</div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">db_record_from_uuid</span><span class="p">(</span><span class="n">job_</span><span class="o">.</span><span class="n">uuid</span><span class="p">)</span></div>
+
     <span class="k">def</span> <span class="nf">_worker_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">worker_uuid</span><span class="p">):</span>
         <span class="n">worker</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">worker_model</span><span class="o">.</span><span class="n">sudo</span><span class="p">()</span><span class="o">.</span><span class="n">search</span><span class="p">(</span>
             <span class="p">[(</span><span class="s">&#39;uuid&#39;</span><span class="p">,</span> <span class="s">&#39;=&#39;</span><span class="p">,</span> <span class="n">worker_uuid</span><span class="p">)],</span>
@@ -444,8 +444,8 @@
                                   <span class="n">job_</span><span class="o">.</span><span class="n">args</span><span class="p">,</span>
                                   <span class="n">job_</span><span class="o">.</span><span class="n">kwargs</span><span class="p">))</span>
 
-            <span class="bp">self</span><span class="o">.</span><span class="n">job_model</span><span class="o">.</span><span class="n">sudo</span><span class="p">()</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">vals</span><span class="p">)</span>
-</div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">job_model</span><span class="o">.</span><span class="n">sudo</span><span class="p">()</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">vals</span><span class="p">)</span></div>
+
 <div class="viewcode-block" id="OpenERPJobStorage.load"><a class="viewcode-back" href="../../../api/api_queue.html#connector.queue.job.OpenERPJobStorage.load">[docs]</a>    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">job_uuid</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Read a job from the Database&quot;&quot;&quot;</span>
         <span class="n">stored</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">db_record_from_uuid</span><span class="p">(</span><span class="n">job_uuid</span><span class="p">)</span>
@@ -490,9 +490,9 @@
             <span class="n">job_</span><span class="o">.</span><span class="n">worker_uuid</span> <span class="o">=</span> <span class="n">stored</span><span class="o">.</span><span class="n">worker_id</span><span class="o">.</span><span class="n">uuid</span>
         <span class="k">if</span> <span class="n">stored</span><span class="o">.</span><span class="n">company_id</span><span class="p">:</span>
             <span class="n">job_</span><span class="o">.</span><span class="n">company_id</span> <span class="o">=</span> <span class="n">stored</span><span class="o">.</span><span class="n">company_id</span><span class="o">.</span><span class="n">id</span>
-        <span class="k">return</span> <span class="n">job_</span>
+        <span class="k">return</span> <span class="n">job_</span></div></div>
 
-</div></div>
+
 <div class="viewcode-block" id="Job"><a class="viewcode-back" href="../../../api/api_queue.html#connector.queue.job.Job">[docs]</a><span class="k">class</span> <span class="nc">Job</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; A Job is a task to execute.</span>
 
@@ -713,8 +713,8 @@
                                              <span class="p">)</span>
                     <span class="k">raise</span> <span class="n">new_exc</span><span class="o">.</span><span class="n">__class__</span><span class="p">,</span> <span class="n">new_exc</span><span class="p">,</span> <span class="n">traceback</span>
                 <span class="k">raise</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">result</span>
-</div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">result</span></div>
+
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">func_string</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">func_name</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
@@ -772,40 +772,40 @@
         <span class="k">if</span> <span class="n">reset_retry</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">retry</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">result</span> <span class="o">=</span> <span class="n">result</span>
-</div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">result</span> <span class="o">=</span> <span class="n">result</span></div>
+
 <div class="viewcode-block" id="Job.set_enqueued"><a class="viewcode-back" href="../../../api/api_queue.html#connector.queue.job.Job.set_enqueued">[docs]</a>    <span class="k">def</span> <span class="nf">set_enqueued</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">worker</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="n">ENQUEUED</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">date_enqueued</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">date_started</span> <span class="o">=</span> <span class="bp">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">worker_uuid</span> <span class="o">=</span> <span class="n">worker</span><span class="o">.</span><span class="n">uuid</span>
-</div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">worker_uuid</span> <span class="o">=</span> <span class="n">worker</span><span class="o">.</span><span class="n">uuid</span></div>
+
 <div class="viewcode-block" id="Job.set_started"><a class="viewcode-back" href="../../../api/api_queue.html#connector.queue.job.Job.set_started">[docs]</a>    <span class="k">def</span> <span class="nf">set_started</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="n">STARTED</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">date_started</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
-</div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">date_started</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span></div>
+
 <div class="viewcode-block" id="Job.set_done"><a class="viewcode-back" href="../../../api/api_queue.html#connector.queue.job.Job.set_done">[docs]</a>    <span class="k">def</span> <span class="nf">set_done</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">result</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="n">DONE</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">exc_info</span> <span class="o">=</span> <span class="bp">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">date_done</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">worker_uuid</span> <span class="o">=</span> <span class="bp">None</span>
         <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">result</span> <span class="o">=</span> <span class="n">result</span>
-</div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">result</span> <span class="o">=</span> <span class="n">result</span></div>
+
 <div class="viewcode-block" id="Job.set_failed"><a class="viewcode-back" href="../../../api/api_queue.html#connector.queue.job.Job.set_failed">[docs]</a>    <span class="k">def</span> <span class="nf">set_failed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc_info</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="n">FAILED</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">worker_uuid</span> <span class="o">=</span> <span class="bp">None</span>
         <span class="k">if</span> <span class="n">exc_info</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">exc_info</span> <span class="o">=</span> <span class="n">exc_info</span>
-</div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">exc_info</span> <span class="o">=</span> <span class="n">exc_info</span></div>
+
     <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s">&#39;&lt;Job </span><span class="si">%s</span><span class="s">, priority:</span><span class="si">%d</span><span class="s">&gt;&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">uuid</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">priority</span><span class="p">)</span>
 
 <div class="viewcode-block" id="Job.cancel"><a class="viewcode-back" href="../../../api/api_queue.html#connector.queue.job.Job.cancel">[docs]</a>    <span class="k">def</span> <span class="nf">cancel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">canceled</span> <span class="o">=</span> <span class="bp">True</span>
         <span class="n">result</span> <span class="o">=</span> <span class="n">msg</span> <span class="k">if</span> <span class="n">msg</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="k">else</span> <span class="n">_</span><span class="p">(</span><span class="s">&#39;Canceled. Nothing to do.&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">set_done</span><span class="p">(</span><span class="n">result</span><span class="o">=</span><span class="n">result</span><span class="p">)</span>
-</div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_done</span><span class="p">(</span><span class="n">result</span><span class="o">=</span><span class="n">result</span><span class="p">)</span></div>
+
     <span class="k">def</span> <span class="nf">_get_retry_seconds</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">seconds</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="n">retry_pattern</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">func</span><span class="o">.</span><span class="n">retry_pattern</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">seconds</span> <span class="ow">and</span> <span class="n">retry_pattern</span><span class="p">:</span>
@@ -829,14 +829,14 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">eta</span> <span class="o">=</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="n">eta_seconds</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">exc_info</span> <span class="o">=</span> <span class="bp">None</span>
         <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">result</span> <span class="o">=</span> <span class="n">result</span>
-</div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">result</span> <span class="o">=</span> <span class="n">result</span></div>
+
 <div class="viewcode-block" id="Job.related_action"><a class="viewcode-back" href="../../../api/api_queue.html#connector.queue.job.Job.related_action">[docs]</a>    <span class="k">def</span> <span class="nf">related_action</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">session</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">func</span><span class="p">,</span> <span class="s">&#39;related_action&#39;</span><span class="p">):</span>
             <span class="k">return</span> <span class="bp">None</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">func</span><span class="o">.</span><span class="n">related_action</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">func</span><span class="o">.</span><span class="n">related_action</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span></div></div>
 
-</div></div>
+
 <span class="n">JOB_REGISTRY</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
 
 
@@ -956,9 +956,9 @@
     <span class="n">func</span><span class="o">.</span><span class="n">retry_pattern</span> <span class="o">=</span> <span class="n">retry_pattern</span>
     <span class="n">func</span><span class="o">.</span><span class="n">delay</span> <span class="o">=</span> <span class="n">delay</span>
     <span class="n">JOB_REGISTRY</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">func</span>
+    <span class="k">return</span> <span class="n">func</span></div>
 
-</div>
+
 <div class="viewcode-block" id="related_action"><a class="viewcode-back" href="../../../api/api_queue.html#connector.queue.job.related_action">[docs]</a><span class="k">def</span> <span class="nf">related_action</span><span class="p">(</span><span class="n">action</span><span class="o">=</span><span class="k">lambda</span> <span class="n">session</span><span class="p">,</span> <span class="n">job</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Attach a *Related Action* to a job.</span>
 
@@ -1032,7 +1032,7 @@
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.<br/>
+      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.3.<br/>
     </p>
   </div>
 </footer>

@@ -319,9 +319,9 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
             <span class="k">finally</span><span class="p">:</span>
-                <span class="n">session</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+                <span class="n">session</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div></div>
 
-</div></div>
+
 <div class="viewcode-block" id="ConnectorSession"><a class="viewcode-back" href="../../api/api_session.html#connector.session.ConnectorSession">[docs]</a><span class="k">class</span> <span class="nc">ConnectorSession</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Container for the OpenERP transactional stuff:</span>
 
@@ -354,8 +354,8 @@
     <span class="nd">@classmethod</span>
 <div class="viewcode-block" id="ConnectorSession.from_env"><a class="viewcode-back" href="../../api/api_session.html#connector.session.ConnectorSession.from_env">[docs]</a>    <span class="k">def</span> <span class="nf">from_env</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">env</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Return a ConnectorSession from :class:`openerp.api.Environment` &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">cls</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">cr</span><span class="p">,</span> <span class="n">env</span><span class="o">.</span><span class="n">uid</span><span class="p">,</span> <span class="n">context</span><span class="o">=</span><span class="n">env</span><span class="o">.</span><span class="n">context</span><span class="p">)</span>
-</div>
+        <span class="k">return</span> <span class="n">cls</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">cr</span><span class="p">,</span> <span class="n">env</span><span class="o">.</span><span class="n">uid</span><span class="p">,</span> <span class="n">context</span><span class="o">=</span><span class="n">env</span><span class="o">.</span><span class="n">context</span><span class="p">)</span></div>
+
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">cr</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">cr</span>
@@ -389,8 +389,8 @@
         <span class="n">env</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">env</span> <span class="o">=</span> <span class="n">env</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="n">uid</span><span class="p">)</span>
         <span class="k">yield</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">env</span> <span class="o">=</span> <span class="n">env</span>
-</div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">env</span> <span class="o">=</span> <span class="n">env</span></div>
+
     <span class="nd">@contextmanager</span>
 <div class="viewcode-block" id="ConnectorSession.change_context"><a class="viewcode-back" href="../../api/api_session.html#connector.session.ConnectorSession.change_context">[docs]</a>    <span class="k">def</span> <span class="nf">change_context</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Context Manager: create a new Env with an updated context</span>
@@ -421,66 +421,66 @@
         <span class="n">env</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">env</span> <span class="o">=</span> <span class="n">env</span><span class="p">(</span><span class="n">context</span><span class="o">=</span><span class="n">context</span><span class="p">)</span>
         <span class="k">yield</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">env</span> <span class="o">=</span> <span class="n">env</span>
-</div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">env</span> <span class="o">=</span> <span class="n">env</span></div>
+
 <div class="viewcode-block" id="ConnectorSession.commit"><a class="viewcode-back" href="../../api/api_session.html#connector.session.ConnectorSession.commit">[docs]</a>    <span class="k">def</span> <span class="nf">commit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Commit the cursor &quot;&quot;&quot;</span>
         <span class="c"># do never commit during tests</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">threading</span><span class="o">.</span><span class="n">currentThread</span><span class="p">(),</span> <span class="s">&#39;testing&#39;</span><span class="p">,</span> <span class="bp">False</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">cr</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
-</div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cr</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span></div>
+
 <div class="viewcode-block" id="ConnectorSession.rollback"><a class="viewcode-back" href="../../api/api_session.html#connector.session.ConnectorSession.rollback">[docs]</a>    <span class="k">def</span> <span class="nf">rollback</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Rollback the cursor &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">cr</span><span class="o">.</span><span class="n">rollback</span><span class="p">()</span>
-</div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cr</span><span class="o">.</span><span class="n">rollback</span><span class="p">()</span></div>
+
 <div class="viewcode-block" id="ConnectorSession.close"><a class="viewcode-back" href="../../api/api_session.html#connector.session.ConnectorSession.close">[docs]</a>    <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Close the cursor &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">cr</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-</div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cr</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+
 <div class="viewcode-block" id="ConnectorSession.search"><a class="viewcode-back" href="../../api/api_session.html#connector.session.ConnectorSession.search">[docs]</a>    <span class="k">def</span> <span class="nf">search</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">domain</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Shortcut to :py:class:`openerp.models.BaseModel.search` &quot;&quot;&quot;</span>
         <span class="n">log_deprecate</span><span class="p">(</span><span class="s">&quot;&#39;Session(...).search(...)&#39; has been deprecated in &quot;</span>
                       <span class="s">&quot;favor of &#39;Session(...).env[&#39;model&#39;].search(...)&#39;&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">pool</span><span class="p">[</span><span class="n">model</span><span class="p">]</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cr</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">uid</span><span class="p">,</span> <span class="n">domain</span><span class="p">,</span>
                                        <span class="n">limit</span><span class="o">=</span><span class="n">limit</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="n">offset</span><span class="p">,</span>
-                                       <span class="n">order</span><span class="o">=</span><span class="n">order</span><span class="p">,</span> <span class="n">context</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">)</span>
-</div>
+                                       <span class="n">order</span><span class="o">=</span><span class="n">order</span><span class="p">,</span> <span class="n">context</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">)</span></div>
+
 <div class="viewcode-block" id="ConnectorSession.browse"><a class="viewcode-back" href="../../api/api_session.html#connector.session.ConnectorSession.browse">[docs]</a>    <span class="k">def</span> <span class="nf">browse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">ids</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Shortcut to :py:class:`openerp.models.BaseModel.browse` &quot;&quot;&quot;</span>
         <span class="n">model_obj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pool</span><span class="p">[</span><span class="n">model</span><span class="p">]</span>
         <span class="n">log_deprecate</span><span class="p">(</span><span class="s">&quot;&#39;Session(...).browse(...)&#39; has been deprecated in &quot;</span>
                       <span class="s">&quot;favor of &#39;Session(...).env[&#39;model&#39;].browse(...)&#39;&quot;</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">model_obj</span><span class="o">.</span><span class="n">browse</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cr</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">uid</span><span class="p">,</span> <span class="n">ids</span><span class="p">,</span> <span class="n">context</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">)</span>
-</div>
+        <span class="k">return</span> <span class="n">model_obj</span><span class="o">.</span><span class="n">browse</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cr</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">uid</span><span class="p">,</span> <span class="n">ids</span><span class="p">,</span> <span class="n">context</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">)</span></div>
+
 <div class="viewcode-block" id="ConnectorSession.read"><a class="viewcode-back" href="../../api/api_session.html#connector.session.ConnectorSession.read">[docs]</a>    <span class="k">def</span> <span class="nf">read</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">ids</span><span class="p">,</span> <span class="n">fields</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Shortcut to :py:class:`openerp.models.BaseModel.read` &quot;&quot;&quot;</span>
         <span class="n">log_deprecate</span><span class="p">(</span><span class="s">&quot;&#39;Session(...).read(...)&#39; has been deprecated in &quot;</span>
                       <span class="s">&quot;favor of &#39;Session(...).env[&#39;model&#39;].read(...)&#39;&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">pool</span><span class="p">[</span><span class="n">model</span><span class="p">]</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cr</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">uid</span><span class="p">,</span> <span class="n">ids</span><span class="p">,</span> <span class="n">fields</span><span class="p">,</span>
-                                     <span class="n">context</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">)</span>
-</div>
+                                     <span class="n">context</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">)</span></div>
+
 <div class="viewcode-block" id="ConnectorSession.create"><a class="viewcode-back" href="../../api/api_session.html#connector.session.ConnectorSession.create">[docs]</a>    <span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">values</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Shortcut to :py:class:`openerp.models.BaseModel.create` &quot;&quot;&quot;</span>
         <span class="n">log_deprecate</span><span class="p">(</span><span class="s">&quot;&#39;Session(...).create(...)&#39; has been deprecated in &quot;</span>
                       <span class="s">&quot;favor of &#39;Session(...).env[&#39;model&#39;].create(...)&#39;&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">pool</span><span class="p">[</span><span class="n">model</span><span class="p">]</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cr</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">uid</span><span class="p">,</span> <span class="n">values</span><span class="p">,</span>
-                                       <span class="n">context</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">)</span>
-</div>
+                                       <span class="n">context</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">)</span></div>
+
 <div class="viewcode-block" id="ConnectorSession.write"><a class="viewcode-back" href="../../api/api_session.html#connector.session.ConnectorSession.write">[docs]</a>    <span class="k">def</span> <span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">ids</span><span class="p">,</span> <span class="n">values</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Shortcut to :py:class:`openerp.models.BaseModel.write` &quot;&quot;&quot;</span>
         <span class="n">log_deprecate</span><span class="p">(</span><span class="s">&quot;&#39;Session(...).write(...)&#39; has been deprecated in &quot;</span>
                       <span class="s">&quot;favor of &#39;Session(...).env[&#39;model&#39;].write(...)&#39;&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">pool</span><span class="p">[</span><span class="n">model</span><span class="p">]</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cr</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">uid</span><span class="p">,</span> <span class="n">ids</span><span class="p">,</span> <span class="n">values</span><span class="p">,</span>
-                                      <span class="n">context</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">)</span>
-</div>
+                                      <span class="n">context</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">)</span></div>
+
 <div class="viewcode-block" id="ConnectorSession.unlink"><a class="viewcode-back" href="../../api/api_session.html#connector.session.ConnectorSession.unlink">[docs]</a>    <span class="k">def</span> <span class="nf">unlink</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">ids</span><span class="p">):</span>
         <span class="n">model_obj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pool</span><span class="p">[</span><span class="n">model</span><span class="p">]</span>
         <span class="n">_logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s">&quot;&#39;Session.unlink()&#39; has been deprecated, prefer &quot;</span>
                         <span class="s">&quot;&#39;self.env[&#39;model&#39;].unlink()&#39; or &quot;</span>
                         <span class="s">&quot;self.recordset().unlink() if you are in a &quot;</span>
                         <span class="s">&quot;ConnectorUnit.&quot;</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">model_obj</span><span class="o">.</span><span class="n">unlink</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cr</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">uid</span><span class="p">,</span> <span class="n">ids</span><span class="p">,</span> <span class="n">context</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">)</span>
-</div>
+        <span class="k">return</span> <span class="n">model_obj</span><span class="o">.</span><span class="n">unlink</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cr</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">uid</span><span class="p">,</span> <span class="n">ids</span><span class="p">,</span> <span class="n">context</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">)</span></div>
+
     <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s">&#39;&lt;Session db_name: </span><span class="si">%s</span><span class="s">, uid: </span><span class="si">%d</span><span class="s">, context: </span><span class="si">%s</span><span class="s">&gt;&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cr</span><span class="o">.</span><span class="n">dbname</span><span class="p">,</span>
                                                                 <span class="bp">self</span><span class="o">.</span><span class="n">uid</span><span class="p">,</span>
@@ -513,7 +513,7 @@
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.<br/>
+      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.3.<br/>
     </p>
   </div>
 </footer>

@@ -386,8 +386,8 @@
             <span class="n">job</span><span class="o">.</span><span class="n">set_failed</span><span class="p">(</span><span class="n">exc_info</span><span class="o">=</span><span class="n">buff</span><span class="o">.</span><span class="n">getvalue</span><span class="p">())</span>
             <span class="k">with</span> <span class="n">session_hdl</span><span class="o">.</span><span class="n">session</span><span class="p">()</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">job_storage_class</span><span class="p">(</span><span class="n">session</span><span class="p">)</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="n">job</span><span class="p">)</span>
-            <span class="k">raise</span>
-</div>
+            <span class="k">raise</span></div>
+
     <span class="k">def</span> <span class="nf">_load_job</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">session</span><span class="p">,</span> <span class="n">job_uuid</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Reload a job from the backend &quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
@@ -417,8 +417,8 @@
             <span class="k">try</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">run_job</span><span class="p">(</span><span class="n">job</span><span class="p">)</span>
             <span class="k">except</span><span class="p">:</span>
-                <span class="k">continue</span>
-</div>
+                <span class="k">continue</span></div>
+
 <div class="viewcode-block" id="Worker.enqueue_job_uuid"><a class="viewcode-back" href="../../../api/api_queue.html#connector.queue.worker.Worker.enqueue_job_uuid">[docs]</a>    <span class="k">def</span> <span class="nf">enqueue_job_uuid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">job_uuid</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Enqueue a job:</span>
 
@@ -438,9 +438,9 @@
         <span class="c"># the enqueue otherwise we may have concurrent updates</span>
         <span class="c"># if the job is started directly</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">queue</span><span class="o">.</span><span class="n">enqueue</span><span class="p">(</span><span class="n">job</span><span class="p">)</span>
-        <span class="n">_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;</span><span class="si">%s</span><span class="s"> enqueued in </span><span class="si">%s</span><span class="s">&#39;</span><span class="p">,</span> <span class="n">job</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;</span><span class="si">%s</span><span class="s"> enqueued in </span><span class="si">%s</span><span class="s">&#39;</span><span class="p">,</span> <span class="n">job</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span></div></div>
 
-</div></div>
+
 <div class="viewcode-block" id="WorkerWatcher"><a class="viewcode-back" href="../../../api/api_queue.html#connector.queue.worker.WorkerWatcher">[docs]</a><span class="k">class</span> <span class="nc">WorkerWatcher</span><span class="p">(</span><span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Keep a sight on the workers and signal their aliveness.</span>
 
@@ -469,15 +469,15 @@
             <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_workers</span><span class="p">[</span><span class="n">db_name</span><span class="p">]</span>
 
 <div class="viewcode-block" id="WorkerWatcher.worker_for_db"><a class="viewcode-back" href="../../../api/api_queue.html#connector.queue.worker.WorkerWatcher.worker_for_db">[docs]</a>    <span class="k">def</span> <span class="nf">worker_for_db</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">db_name</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_workers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">db_name</span><span class="p">)</span>
-</div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_workers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">db_name</span><span class="p">)</span></div>
+
 <div class="viewcode-block" id="WorkerWatcher.worker_lost"><a class="viewcode-back" href="../../../api/api_queue.html#connector.queue.worker.WorkerWatcher.worker_lost">[docs]</a>    <span class="k">def</span> <span class="nf">worker_lost</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">worker</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Indicate if a worker is no longer referenced by the watcher.</span>
 
 <span class="sd">        Used by the worker threads to know if they have to exit.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">worker</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_workers</span><span class="o">.</span><span class="n">itervalues</span><span class="p">()</span>
-</div>
+        <span class="k">return</span> <span class="n">worker</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_workers</span><span class="o">.</span><span class="n">itervalues</span><span class="p">()</span></div>
+
     <span class="nd">@staticmethod</span>
 <div class="viewcode-block" id="WorkerWatcher.available_db_names"><a class="viewcode-back" href="../../../api/api_queue.html#connector.queue.worker.WorkerWatcher.available_db_names">[docs]</a>    <span class="k">def</span> <span class="nf">available_db_names</span><span class="p">():</span>
         <span class="sd">&quot;&quot;&quot; Returns the databases for the server having</span>
@@ -516,8 +516,8 @@
                 <span class="k">else</span><span class="p">:</span>
                     <span class="k">if</span> <span class="n">cr</span><span class="o">.</span><span class="n">fetchone</span><span class="p">():</span>
                         <span class="n">available_db_names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">db_name</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">available_db_names</span>
-</div>
+        <span class="k">return</span> <span class="n">available_db_names</span></div>
+
     <span class="k">def</span> <span class="nf">_update_workers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Refresh the list of workers according to the available</span>
 <span class="sd">        databases and registries.</span>
@@ -541,8 +541,8 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_update_workers</span><span class="p">()</span>
             <span class="k">for</span> <span class="n">db_name</span><span class="p">,</span> <span class="n">worker</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_workers</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">check_alive</span><span class="p">(</span><span class="n">db_name</span><span class="p">,</span> <span class="n">worker</span><span class="p">)</span>
-            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">WAIT_CHECK_WORKER_ALIVE</span><span class="p">)</span>
-</div>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">WAIT_CHECK_WORKER_ALIVE</span><span class="p">)</span></div>
+
 <div class="viewcode-block" id="WorkerWatcher.check_alive"><a class="viewcode-back" href="../../../api/api_queue.html#connector.queue.worker.WorkerWatcher.check_alive">[docs]</a>    <span class="k">def</span> <span class="nf">check_alive</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">db_name</span><span class="p">,</span> <span class="n">worker</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Check if the the worker is still alive and notify</span>
 <span class="sd">        its aliveness.</span>
@@ -556,31 +556,31 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">_notify_alive</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">worker</span><span class="p">)</span>
                 <span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_purge_dead_workers</span><span class="p">(</span><span class="n">session</span><span class="p">)</span>
-            <span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
-</div>
+            <span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span></div>
+
     <span class="k">def</span> <span class="nf">_notify_alive</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">session</span><span class="p">,</span> <span class="n">worker</span><span class="p">):</span>
         <span class="n">_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;Worker </span><span class="si">%s</span><span class="s"> is alive on process </span><span class="si">%s</span><span class="s">&#39;</span><span class="p">,</span>
                       <span class="n">worker</span><span class="o">.</span><span class="n">uuid</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">getpid</span><span class="p">())</span>
         <span class="n">session</span><span class="o">.</span><span class="n">env</span><span class="p">[</span><span class="s">&#39;queue.worker&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">_notify_alive</span><span class="p">(</span><span class="n">worker</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_purge_dead_workers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">session</span><span class="p">):</span>
-        <span class="n">session</span><span class="o">.</span><span class="n">env</span><span class="p">[</span><span class="s">&#39;queue.worker&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">_purge_dead_workers</span><span class="p">()</span>
+        <span class="n">session</span><span class="o">.</span><span class="n">env</span><span class="p">[</span><span class="s">&#39;queue.worker&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">_purge_dead_workers</span><span class="p">()</span></div>
 
-</div>
+
 <span class="n">watcher</span> <span class="o">=</span> <span class="n">WorkerWatcher</span><span class="p">()</span>
 
 
 <div class="viewcode-block" id="start_service"><a class="viewcode-back" href="../../../api/api_queue.html#connector.queue.worker.start_service">[docs]</a><span class="k">def</span> <span class="nf">start_service</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot; Start the watcher &quot;&quot;&quot;</span>
     <span class="n">watcher</span><span class="o">.</span><span class="n">daemon</span> <span class="o">=</span> <span class="bp">True</span>
-    <span class="n">watcher</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+    <span class="n">watcher</span><span class="o">.</span><span class="n">start</span><span class="p">()</span></div>
 
 <span class="c"># We have to launch the Jobs Workers only if:</span>
 <span class="c"># 0. The alternative connector runner is not enabled</span>
 <span class="c"># 1. OpenERP is used in standalone mode (monoprocess)</span>
 <span class="c"># 2. Or it is used in multiprocess (with option ``--workers``)</span>
 <span class="c">#    but the current process is a Connector Worker</span>
-<span class="c">#    (launched with the ``openerp-connector-worker`` script).</span></div>
+<span class="c">#    (launched with the ``openerp-connector-worker`` script).</span>
 <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;ODOO_CONNECTOR_CHANNELS&#39;</span><span class="p">):</span>
     <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">openerp</span><span class="p">,</span> <span class="s">&#39;multi_process&#39;</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span> <span class="ow">or</span>
             <span class="nb">getattr</span><span class="p">(</span><span class="n">openerp</span><span class="p">,</span> <span class="s">&#39;worker_connector&#39;</span><span class="p">,</span> <span class="bp">False</span><span class="p">)):</span>
@@ -602,7 +602,7 @@
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.3.<br/>
     </p>
   </div>
 </footer>

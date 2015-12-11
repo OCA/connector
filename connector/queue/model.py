@@ -38,6 +38,7 @@ from ..connector import get_openerp_module, is_module_installed
 
 _logger = logging.getLogger(__name__)
 
+DEFAULT_LIMIT = 1000
 
 class QueueJob(orm.Model):
     """ Job status and result """
@@ -236,21 +237,29 @@ class QueueJob(orm.Model):
         """
         return [('state', '=', 'failed')]
 
-    def autovacuum(self, cr, uid, context=None):
+    def autovacuum(self, cr, uid, limit=None, context=None):
         """ Delete all jobs (active or not) done since more than
-        ``_removal_interval`` days.
+        ``_removal_interval`` days limited by ``limit``.
 
         Called from a cron.
+
+        :param limit: optional maximum number of records to delete at once
+        :type limit: int
         """
         if context is None:
             context = {}
         context = dict(context, active_test=False)
         deadline = datetime.now() - timedelta(days=self._removal_interval)
         deadline_fmt = deadline.strftime(DEFAULT_SERVER_DATETIME_FORMAT)
-        job_ids = self.search(cr, uid,
-                              [('date_done', '<=', deadline_fmt)],
-                              context=context)
-        self.unlink(cr, uid, job_ids, context=context)
+        while True:
+            job_ids = self.search(cr, uid,
+                                [('date_done', '<=', deadline_fmt)],
+                                limit=limit or DEFAULT_LIMIT,
+                                context=context)
+            if not job_ids:
+                break
+            self.unlink(cr, uid, job_ids, context=context)
+            cr.commit()
         return True
 
 

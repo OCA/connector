@@ -264,7 +264,7 @@ class ConnectorRunner(object):
         if openerp.tools.config['db_name']:
             db_names = openerp.tools.config['db_name'].split(',')
         else:
-            db_names = openerp.service.db.exp_list()
+            db_names = openerp.service.db.exp_list(True)
         dbfilter = openerp.tools.config['dbfilter']
         if dbfilter:
             db_names = [d for d in db_names if re.match(dbfilter, d)]

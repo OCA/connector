@@ -266,7 +266,7 @@ class WorkerWatcher(threading.Thread):
             else:
                 db_names = []
         dbfilter = config['dbfilter']
-        if dbfilter and db_names:
+        if dbfilter and '%d' not in dbfilter and '%h' not in dbfilter:
             db_names = [d for d in db_names if re.match(dbfilter, d)]
         available_db_names = []
         for db_name in db_names:

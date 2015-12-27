@@ -266,7 +266,7 @@ class ConnectorRunner(object):
         else:
             db_names = openerp.service.db.exp_list(True)
         dbfilter = openerp.tools.config['dbfilter']
-        if dbfilter:
+        if dbfilter and '%d' not in dbfilter and '%h' not in dbfilter:
             db_names = [d for d in db_names if re.match(dbfilter, d)]
         return db_names
 

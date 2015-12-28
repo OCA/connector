@@ -94,7 +94,8 @@ class RunJobController(http.Controller):
                 if err.pgcode not in PG_CONCURRENCY_ERRORS_TO_RETRY:
                     raise
 
-                retry_postpone(job, unicode(err), seconds=PG_RETRY)
+                retry_postpone(job, unicode(err.pgerror, errors='replace'), 
+                               seconds=PG_RETRY)
                 _logger.debug('%s OperationalError, postponed', job)
 
         except NothingToDoJob as err:

@@ -494,7 +494,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">db_names</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">exp_list</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
         <span class="n">dbfilter</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s">&#39;dbfilter&#39;</span><span class="p">]</span>
-        <span class="k">if</span> <span class="n">dbfilter</span> <span class="ow">and</span> <span class="n">db_names</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">dbfilter</span> <span class="ow">and</span> <span class="s">&#39;</span><span class="si">%d</span><span class="s">&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dbfilter</span> <span class="ow">and</span> <span class="s">&#39;%h&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dbfilter</span><span class="p">:</span>
             <span class="n">db_names</span> <span class="o">=</span> <span class="p">[</span><span class="n">d</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">db_names</span> <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">dbfilter</span><span class="p">,</span> <span class="n">d</span><span class="p">)]</span>
         <span class="n">available_db_names</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">db_name</span> <span class="ow">in</span> <span class="n">db_names</span><span class="p">:</span>

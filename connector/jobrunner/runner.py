@@ -112,7 +112,6 @@ Caveat
 from contextlib import closing
 import logging
 import os
-import re
 import select
 import threading
 import time
@@ -266,9 +265,6 @@ class ConnectorRunner(object):
             db_names = openerp.tools.config['db_name'].split(',')
         else:
             db_names = openerp.service.db.exp_list(True)
-        dbfilter = openerp.tools.config['dbfilter']
-        if dbfilter and '%d' not in dbfilter and '%h' not in dbfilter:
-            db_names = [d for d in db_names if re.match(dbfilter, d)]
         return db_names
 
     def close_databases(self, remove_jobs=True):

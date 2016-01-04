@@ -5,7 +5,7 @@ from cStringIO import StringIO
 from psycopg2 import OperationalError
 
 import openerp
-from openerp import http
+from openerp import http, tools
 from openerp.service.model import PG_CONCURRENCY_ERRORS_TO_RETRY
 
 from ..session import ConnectorSessionHandler
@@ -94,7 +94,7 @@ class RunJobController(http.Controller):
                 if err.pgcode not in PG_CONCURRENCY_ERRORS_TO_RETRY:
                     raise
 
-                retry_postpone(job, unicode(err.pgerror, errors='replace'),
+                retry_postpone(job, tools.ustr(err.pgerror, errors='replace'),
                                seconds=PG_RETRY)
                 _logger.debug('%s OperationalError, postponed', job)
 

@@ -4,13 +4,14 @@
 # 
 # Translators:
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2014
+# Rudolf Schnapka <rs@techno-flex.de>, 2016
 msgid ""
 msgstr ""
 "Project-Id-Version: connector (8.0)\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-08-21 14:26+0000\n"
-"PO-Revision-Date: 2015-06-17 07:37+0000\n"
-"Last-Translator: OCA Transbot <transbot@odoo-community.org>\n"
+"POT-Creation-Date: 2016-01-04 08:58+0000\n"
+"PO-Revision-Date: 2016-01-14 12:58+0000\n"
+"Last-Translator: Rudolf Schnapka <rs@techno-flex.de>\n"
 "Language-Team: German (http://www.transifex.com/oca/OCA-connector-8-0/language/de/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -36,7 +37,7 @@ msgstr "<p>Kein Datensatz zum Überprüfen.</p>\n                <p>Wenn ein Con
 #: code:addons/connector/checkpoint/checkpoint.py:136
 #, python-format
 msgid "A %s needs a review."
-msgstr ""
+msgstr "Ein %s erfordert Sichtung"
 
 #. module: connector
 #: field:connector.config.settings,module_portal:0
@@ -61,7 +62,7 @@ msgstr "Erlaube Dokumentenfreigabe"
 #. module: connector
 #: field:connector.config.settings,module_google_calendar:0
 msgid "Allow the users to synchronize their calendar  with Google Calendar"
-msgstr ""
+msgstr "Ermöglichen Sie Benutzern ihren Kalender mit Google-Kalender zu synchronisieren"
 
 #. module: connector
 #: field:connector.config.settings,module_base_import:0
@@ -76,7 +77,7 @@ msgstr "anwenden"
 #. module: connector
 #: field:connector.config.settings,module_google_drive:0
 msgid "Attach Google documents to any record"
-msgstr ""
+msgstr "Google-Dokumente an beliebige Datensätze anhängen"
 
 #. module: connector
 #: view:connector.config.settings:connector.view_connector_config_settings
@@ -91,34 +92,34 @@ msgid "Cancel"
 msgstr "Abbrechen"
 
 #. module: connector
-#: code:addons/connector/queue/job.py:571
+#: code:addons/connector/queue/job.py:574
 #, python-format
 msgid "Canceled. Nothing to do."
-msgstr ""
+msgstr "Storniert. Nicht zu tun."
 
 #. module: connector
-#: code:addons/connector/queue/model.py:456
+#: code:addons/connector/queue/model.py:457
 #, python-format
 msgid "Cannot change the root channel"
-msgstr ""
+msgstr "Kann den Hauptkanal nicht ändern"
 
 #. module: connector
-#: code:addons/connector/queue/model.py:463
+#: code:addons/connector/queue/model.py:464
 #, python-format
 msgid "Cannot remove the root channel"
-msgstr ""
+msgstr "Kann den Hauptkanal nicht entfernen"
 
 #. module: connector
 #: view:queue.job:connector.view_queue_job_search field:queue.job,channel:0
 #: view:queue.job.function:connector.view_queue_job_function_search
 #: field:queue.job.function,channel_id:0
 msgid "Channel"
-msgstr ""
+msgstr "Kanal"
 
 #. module: connector
 #: sql_constraint:queue.job.channel:0
 msgid "Channel complete name must be unique"
-msgstr ""
+msgstr "Vollständige Bezeichnung muss eindeutig sein"
 
 #. module: connector
 #: model:ir.actions.act_window,name:connector.action_queue_job_channel
@@ -127,7 +128,7 @@ msgstr ""
 #: view:queue.job.channel:connector.view_queue_job_channel_search
 #: view:queue.job.channel:connector.view_queue_job_channel_tree
 msgid "Channels"
-msgstr ""
+msgstr "Kanäle"
 
 #. module: connector
 #: model:ir.ui.menu,name:connector.menu_checkpoint
@@ -152,12 +153,12 @@ msgstr "Klicken Sie auf den"
 #. module: connector
 #: field:queue.job,company_id:0
 msgid "Company"
-msgstr ""
+msgstr "Unternehmen"
 
 #. module: connector
 #: field:queue.job.channel,complete_name:0 field:queue.job.function,channel:0
 msgid "Complete Name"
-msgstr ""
+msgstr "Vollständige Bezeichnung"
 
 #. module: connector
 #: view:connector.config.settings:connector.view_connector_config_settings
@@ -174,7 +175,7 @@ msgstr "Connector"
 #. module: connector
 #: model:ir.model,name:connector.model_connector_backend
 msgid "Connector Backend"
-msgstr ""
+msgstr "Connector Backend"
 
 #. module: connector
 #: view:connector.checkpoint:connector.view_connector_checkpoint_form
@@ -188,7 +189,7 @@ msgstr "Connector Checkpunkt"
 #. module: connector
 #: model:ir.model,name:connector.model_connector_config_settings
 msgid "Connector Configuration"
-msgstr ""
+msgstr "Connector-Einstellungen"
 
 #. module: connector
 #: model:res.groups,name:connector.group_connector_manager
@@ -213,7 +214,7 @@ msgstr "Anlagedatum"
 #: field:connector.config.settings,create_uid:0
 #: field:queue.job.channel,create_uid:0 field:queue.requeue.job,create_uid:0
 msgid "Created by"
-msgstr ""
+msgstr "Angelegt durch"
 
 #. module: connector
 #: field:connector.checkpoint,create_date:0
@@ -221,7 +222,7 @@ msgstr ""
 #: field:connector.config.settings,create_date:0
 #: field:queue.job.channel,create_date:0 field:queue.requeue.job,create_date:0
 msgid "Created on"
-msgstr ""
+msgstr "Angelegt am"
 
 #. module: connector
 #: field:queue.job,retry:0
@@ -242,7 +243,7 @@ msgstr "Erledigt am"
 #: help:connector.checkpoint,message_last_post:0
 #: help:queue.job,message_last_post:0
 msgid "Date of the last message posted on the record."
-msgstr ""
+msgstr "Datum der letzten Nachricht zu diesem Datensatz"
 
 #. module: connector
 #: field:queue.job,name:0
@@ -298,7 +299,7 @@ msgstr "Follower"
 #. module: connector
 #: field:queue.job,func_name:0
 msgid "Func name"
-msgstr ""
+msgstr "Funk.bezeichnung"
 
 #. module: connector
 #: help:connector.config.settings,module_portal:0
@@ -309,7 +310,7 @@ msgstr "Erteilen Sie den Kunden Zugriff auf Ihre eigenen Dokumente."
 #: view:queue.job:connector.view_queue_job_search
 #: view:queue.job.function:connector.view_queue_job_function_search
 msgid "Group By"
-msgstr ""
+msgstr "Gruppieren"
 
 #. module: connector
 #: view:connector.checkpoint:connector.view_connector_checkpoint_search
@@ -331,7 +332,7 @@ msgstr "Beinhaltet die Chatter Zusammenfassung (Anzahl der Nachrichten, ...). Di
 #: field:queue.job.channel,id:0 field:queue.job.function,id:0
 #: field:queue.requeue.job,id:0 field:queue.worker,id:0
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #. module: connector
 #: help:connector.checkpoint,message_unread:0 help:queue.job,message_unread:0
@@ -348,7 +349,7 @@ msgstr "Wenn die Anzahl der maximalen Versuche 0 ist, ist die maximal Anzahl der
 msgid ""
 "If you have setup a catch-all email domain redirected to the Odoo server, "
 "enter the domain name here."
-msgstr ""
+msgstr "Wenn Sie eine Catch-All-EMail-Domäne eingerichtet haben, die auf den Oddo-Server weiterleitet, geben Sie hier diesen Domänennamen ein."
 
 #. module: connector
 #: field:connector.checkpoint,backend_id:0
@@ -364,12 +365,13 @@ msgstr "Ist ein Follower"
 #. module: connector
 #: model:ir.model,name:connector.model_queue_job_channel
 msgid "Job Channels"
-msgstr ""
+msgstr "Job-Kanäle"
 
 #. module: connector
 #: view:queue.job:connector.view_queue_job_search
+#: field:queue.job,job_function_id:0
 msgid "Job Function"
-msgstr ""
+msgstr "Job-Funktion"
 
 #. module: connector
 #: model:ir.actions.act_window,name:connector.action_queue_job_function
@@ -380,17 +382,12 @@ msgstr ""
 #: view:queue.job.function:connector.view_queue_job_function_search
 #: view:queue.job.function:connector.view_queue_job_function_tree
 msgid "Job Functions"
-msgstr ""
+msgstr "Job-Funktionen"
 
 #. module: connector
 #: model:mail.message.subtype,name:connector.mt_job_failed
 msgid "Job failed"
 msgstr "Auftrag fehlgeschlagen"
-
-#. module: connector
-#: field:queue.job,job_function_id:0
-msgid "Job function id"
-msgstr ""
 
 #. module: connector
 #: model:ir.actions.act_window,name:connector.action_queue_job
@@ -411,7 +408,7 @@ msgstr "Letzte Statusüberprüfung"
 #: field:connector.checkpoint,message_last_post:0
 #: field:queue.job,message_last_post:0
 msgid "Last Message Date"
-msgstr ""
+msgstr "Letztes Meldungsdatum"
 
 #. module: connector
 #: field:connector.checkpoint,write_uid:0
@@ -419,7 +416,7 @@ msgstr ""
 #: field:connector.config.settings,write_uid:0
 #: field:queue.job.channel,write_uid:0 field:queue.requeue.job,write_uid:0
 msgid "Last Updated by"
-msgstr ""
+msgstr "Zuletzt aktualisiert durch"
 
 #. module: connector
 #: field:connector.checkpoint,write_date:0
@@ -427,7 +424,7 @@ msgstr ""
 #: field:connector.config.settings,write_date:0
 #: field:queue.job.channel,write_date:0 field:queue.requeue.job,write_date:0
 msgid "Last Updated on"
-msgstr ""
+msgstr "Zuletzt aktualisiert am"
 
 #. module: connector
 #: field:external.binding,sync_date:0
@@ -440,10 +437,10 @@ msgid "Manage multiple companies"
 msgstr "Multi-Company Verwaltung"
 
 #. module: connector
-#: code:addons/connector/queue/model.py:140
+#: code:addons/connector/queue/model.py:141
 #, python-format
 msgid "Manually set to done by %s"
-msgstr ""
+msgstr "Manuell auf erledigt gesetzt durch %s"
 
 #. module: connector
 #: field:queue.job,max_retries:0
@@ -467,11 +464,6 @@ msgid "Model"
 msgstr "Modell"
 
 #. module: connector
-#: model:ir.model,name:connector.model_ir_module_module
-msgid "Module"
-msgstr ""
-
-#. module: connector
 #: field:connector.backend,name:0 field:queue.job.channel,name:0
 #: field:queue.job.function,name:0
 msgid "Name"
@@ -484,10 +476,10 @@ msgid "Need Review"
 msgstr "Benötigt Prüfung"
 
 #. module: connector
-#: code:addons/connector/queue/model.py:116
+#: code:addons/connector/queue/model.py:117
 #, python-format
 msgid "No action available for this job"
-msgstr ""
+msgstr "Kein Vorgang für diesen Job verfügbar"
 
 #. module: connector
 #: model:ir.actions.client,name:connector.action_client_connector_menu
@@ -502,18 +494,18 @@ msgstr "Prozess-ID"
 #. module: connector
 #: field:queue.job.channel,parent_id:0
 msgid "Parent Channel"
-msgstr ""
+msgstr "Übergeordneter Kanal"
 
 #. module: connector
-#: code:addons/connector/queue/model.py:448
+#: code:addons/connector/queue/model.py:449
 #, python-format
 msgid "Parent channel required."
-msgstr ""
+msgstr "Übergeordneter Kanal erforderlich."
 
 #. module: connector
 #: view:queue.job:connector.view_queue_job_search selection:queue.job,state:0
 msgid "Pending"
-msgstr "Warteschlange"
+msgstr "Wartend"
 
 #. module: connector
 #: field:queue.job,func:0
@@ -538,7 +530,7 @@ msgstr "Aufgabe in Warteschlange einreihen"
 #. module: connector
 #: model:ir.model,name:connector.model_queue_worker
 msgid "Queue Worker"
-msgstr ""
+msgstr "Warteschlangenarbeiter"
 
 #. module: connector
 #: field:connector.checkpoint,record_id:0
@@ -548,18 +540,18 @@ msgstr "Datensatz Nr."
 #. module: connector
 #: view:queue.job:connector.view_queue_job_form
 msgid "Related"
-msgstr ""
+msgstr "Zugehörig"
 
 #. module: connector
 #: code:addons/connector/related_action.py:48
 #, python-format
 msgid "Related Record"
-msgstr ""
+msgstr "Zugehöriger Datensatz"
 
 #. module: connector
 #: field:connector.config.settings,font:0
 msgid "Report Font"
-msgstr ""
+msgstr "Berichtsschriftart"
 
 #. module: connector
 #: view:queue.requeue.job:connector.view_requeue_job
@@ -606,7 +598,7 @@ msgstr "Als Überprüft markieren"
 msgid ""
 "Set the font into the report header, it will be used as default font in the "
 "RML reports of the user company"
-msgstr ""
+msgstr "Bestimmen Sie die Schriftart im Berichtskopf, diese wird als Vorgabeschriftart für RML-Berichte zum Unternehmen des Benutzers verwendet"
 
 #. module: connector
 #: view:queue.job:connector.view_queue_job_form
@@ -616,15 +608,15 @@ msgstr "Setzte auf 'Fertig'"
 #. module: connector
 #: help:connector.config.settings,module_share:0
 msgid "Share or embbed any screen of Odoo."
-msgstr ""
+msgstr "Teilen oder Einbetten eines jeden Bildschirms von Odoo."
 
 #. module: connector
-#: code:addons/connector/queue/model.py:186
+#: code:addons/connector/queue/model.py:187
 #, python-format
 msgid ""
 "Something bad happened during the execution of the job. More details in the "
 "'Exception Information' section."
-msgstr ""
+msgstr "Etwas schlechtes ist bei der Ausführung des Jobs passiert. Mehr Details finden Sie im Abschnitt 'Ausnahmeninformation'."
 
 #. module: connector
 #: field:queue.job,date_started:0 field:queue.worker,date_start:0
@@ -682,12 +674,12 @@ msgstr "Die ausgewählten Arbeitsschritte werden nochmal eingereiht."
 #. module: connector
 #: help:connector.config.settings,module_google_calendar:0
 msgid "This installs the module google_calendar."
-msgstr ""
+msgstr "Das Modul google_calendar wird installiert."
 
 #. module: connector
 #: help:connector.config.settings,module_google_drive:0
 msgid "This installs the module google_docs."
-msgstr ""
+msgstr "Das Modul google_docs wird installiert."
 
 #. module: connector
 #: field:queue.job,uuid:0 field:queue.worker,uuid:0
@@ -726,7 +718,7 @@ msgstr "Wizard um eine Auswahl an Aufgaben neu in die Warteschlange einzureihen"
 msgid ""
 "Work in multi-company environments, with appropriate security access between companies.\n"
 "-This installs the module multi_company."
-msgstr ""
+msgstr "Arbeiten in Umgebungen mit mehreren Unternehmen, mit entsprechenden Zugriffsbeschränkungen zwischen Unternehmen.\n- Das Modul multi_company wird installiert."
 
 #. module: connector
 #: field:queue.job,worker_id:0
@@ -751,4 +743,4 @@ msgstr "oder"
 #. module: connector
 #: view:connector.checkpoint:connector.view_connector_checkpoint_form
 msgid "to verify it:"
-msgstr "Überprüfe:"
+msgstr "es zu überprüfen:"

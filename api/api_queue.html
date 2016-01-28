@@ -629,35 +629,35 @@ infinite retries. Default is 5.</p>
 <p>Example:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="nd">@job</span>
 <span class="k">def</span> <span class="nf">export_one_thing</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">one_thing</span><span class="p">):</span>
-    <span class="c"># work</span>
-    <span class="c"># export one_thing</span>
+    <span class="c1"># work</span>
+    <span class="c1"># export one_thing</span>
 
-<span class="n">export_one_thing</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="s">&#39;a.model&#39;</span><span class="p">,</span> <span class="n">the_thing_to_export</span><span class="p">)</span>
-<span class="c"># =&gt; normal and synchronous function call</span>
+<span class="n">export_one_thing</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="s1">&#39;a.model&#39;</span><span class="p">,</span> <span class="n">the_thing_to_export</span><span class="p">)</span>
+<span class="c1"># =&gt; normal and synchronous function call</span>
 
-<span class="n">export_one_thing</span><span class="o">.</span><span class="n">delay</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="s">&#39;a.model&#39;</span><span class="p">,</span> <span class="n">the_thing_to_export</span><span class="p">)</span>
-<span class="c"># =&gt; the job will be executed as soon as possible</span>
+<span class="n">export_one_thing</span><span class="o">.</span><span class="n">delay</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="s1">&#39;a.model&#39;</span><span class="p">,</span> <span class="n">the_thing_to_export</span><span class="p">)</span>
+<span class="c1"># =&gt; the job will be executed as soon as possible</span>
 
-<span class="n">export_one_thing</span><span class="o">.</span><span class="n">delay</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="s">&#39;a.model&#39;</span><span class="p">,</span> <span class="n">the_thing_to_export</span><span class="p">,</span>
+<span class="n">export_one_thing</span><span class="o">.</span><span class="n">delay</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="s1">&#39;a.model&#39;</span><span class="p">,</span> <span class="n">the_thing_to_export</span><span class="p">,</span>
                        <span class="n">priority</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">eta</span><span class="o">=</span><span class="mi">60</span><span class="o">*</span><span class="mi">60</span><span class="o">*</span><span class="mi">5</span><span class="p">)</span>
-<span class="c"># =&gt; the job will be executed with a low priority and not before a</span>
-<span class="c"># delay of 5 hours from now</span>
+<span class="c1"># =&gt; the job will be executed with a low priority and not before a</span>
+<span class="c1"># delay of 5 hours from now</span>
 
-<span class="nd">@job</span><span class="p">(</span><span class="n">default_channel</span><span class="o">=</span><span class="s">&#39;root.subchannel&#39;</span><span class="p">)</span>
+<span class="nd">@job</span><span class="p">(</span><span class="n">default_channel</span><span class="o">=</span><span class="s1">&#39;root.subchannel&#39;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">export_one_thing</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">one_thing</span><span class="p">):</span>
-    <span class="c"># work</span>
-    <span class="c"># export one_thing</span>
+    <span class="c1"># work</span>
+    <span class="c1"># export one_thing</span>
 
 <span class="nd">@job</span><span class="p">(</span><span class="n">retry_pattern</span><span class="o">=</span><span class="p">{</span><span class="mi">1</span><span class="p">:</span> <span class="mi">10</span> <span class="o">*</span> <span class="mi">60</span><span class="p">,</span>
                     <span class="mi">5</span><span class="p">:</span> <span class="mi">20</span> <span class="o">*</span> <span class="mi">60</span><span class="p">,</span>
                     <span class="mi">10</span><span class="p">:</span> <span class="mi">30</span> <span class="o">*</span> <span class="mi">60</span><span class="p">,</span>
                     <span class="mi">15</span><span class="p">:</span> <span class="mi">12</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">60</span><span class="p">})</span>
 <span class="k">def</span> <span class="nf">retryable_example</span><span class="p">(</span><span class="n">session</span><span class="p">):</span>
-    <span class="c"># 5 first retries postponed 10 minutes later</span>
-    <span class="c"># retries 5 to 10 postponed 20 minutes later</span>
-    <span class="c"># retries 10 to 15 postponed 30 minutes later</span>
-    <span class="c"># all subsequent retries postponed 12 hours later</span>
-    <span class="k">raise</span> <span class="n">RetryableJobError</span><span class="p">(</span><span class="s">&#39;Must be retried later&#39;</span><span class="p">)</span>
+    <span class="c1"># 5 first retries postponed 10 minutes later</span>
+    <span class="c1"># retries 5 to 10 postponed 20 minutes later</span>
+    <span class="c1"># retries 10 to 15 postponed 30 minutes later</span>
+    <span class="c1"># all subsequent retries postponed 12 hours later</span>
+    <span class="k">raise</span> <span class="n">RetryableJobError</span><span class="p">(</span><span class="s1">&#39;Must be retried later&#39;</span><span class="p">)</span>
 
 <span class="n">retryable_example</span><span class="o">.</span><span class="n">delay</span><span class="p">(</span><span class="n">session</span><span class="p">)</span>
 </pre></div>
@@ -668,7 +668,7 @@ to a job</p>
 
 <dl class="function">
 <dt id="connector.queue.job.related_action">
-<code class="descclassname">connector.queue.job.</code><code class="descname">related_action</code><span class="sig-paren">(</span><em>action=&lt;function &lt;lambda&gt; at 0x50e0848&gt;</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/queue/job.html#related_action"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.job.related_action" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">connector.queue.job.</code><code class="descname">related_action</code><span class="sig-paren">(</span><em>action=&lt;function &lt;lambda&gt; at 0x455d758&gt;</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/queue/job.html#related_action"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.job.related_action" title="Permalink to this definition">¶</a></dt>
 <dd><p>Attach a <em>Related Action</em> to a job.</p>
 <p>A <em>Related Action</em> will appear as a button on the OpenERP view.
 The button will execute the action, usually it will open the
@@ -681,21 +681,21 @@ form view of the record related to the job.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">related_action_partner</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">job</span><span class="p">):</span>
     <span class="n">model</span> <span class="o">=</span> <span class="n">job</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">partner_id</span> <span class="o">=</span> <span class="n">job</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-    <span class="c"># eventually get the real ID if partner_id is a binding ID</span>
+    <span class="c1"># eventually get the real ID if partner_id is a binding ID</span>
     <span class="n">action</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="n">_</span><span class="p">(</span><span class="s">&quot;Partner&quot;</span><span class="p">),</span>
-        <span class="s">&#39;type&#39;</span><span class="p">:</span> <span class="s">&#39;ir.actions.act_window&#39;</span><span class="p">,</span>
-        <span class="s">&#39;res_model&#39;</span><span class="p">:</span> <span class="n">model</span><span class="p">,</span>
-        <span class="s">&#39;view_type&#39;</span><span class="p">:</span> <span class="s">&#39;form&#39;</span><span class="p">,</span>
-        <span class="s">&#39;view_mode&#39;</span><span class="p">:</span> <span class="s">&#39;form&#39;</span><span class="p">,</span>
-        <span class="s">&#39;res_id&#39;</span><span class="p">:</span> <span class="n">partner_id</span><span class="p">,</span>
+        <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;Partner&quot;</span><span class="p">),</span>
+        <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;ir.actions.act_window&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;res_model&#39;</span><span class="p">:</span> <span class="n">model</span><span class="p">,</span>
+        <span class="s1">&#39;view_type&#39;</span><span class="p">:</span> <span class="s1">&#39;form&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;view_mode&#39;</span><span class="p">:</span> <span class="s1">&#39;form&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;res_id&#39;</span><span class="p">:</span> <span class="n">partner_id</span><span class="p">,</span>
     <span class="p">}</span>
     <span class="k">return</span> <span class="n">action</span>
 
 <span class="nd">@job</span>
 <span class="nd">@related_action</span><span class="p">(</span><span class="n">action</span><span class="o">=</span><span class="n">related_action_partner</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">export_partner</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">partner_id</span><span class="p">):</span>
-    <span class="c"># ...</span>
+    <span class="c1"># ...</span>
 </pre></div>
 </div>
 <p>The kwargs are transmitted to the action:</p>
@@ -707,7 +707,7 @@ form view of the record related to the job.</p>
 <span class="nd">@job</span>
 <span class="nd">@related_action</span><span class="p">(</span><span class="n">action</span><span class="o">=</span><span class="n">related_action_product</span><span class="p">,</span> <span class="n">extra_arg</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">export_product</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">product_id</span><span class="p">):</span>
-    <span class="c"># ...</span>
+    <span class="c1"># ...</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -1633,7 +1633,7 @@ handling that field (dictionary)</li>
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.4.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.<br/>
     </p>
   </div>
 </footer>

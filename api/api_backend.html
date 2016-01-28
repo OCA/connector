@@ -252,22 +252,22 @@ to register their backends. For instance, the Magento connector has
 <code class="docutils literal"><span class="pre">version</span></code> field which should have the same list of versions (with the exact
 same name) than the instances of <a class="reference internal" href="#connector.backend.Backend" title="connector.backend.Backend"><code class="xref py py-class docutils literal"><span class="pre">Backend</span></code></a>.</p>
 <p>Example with the Magento Connector:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="c"># in magentoerpconnect/backend.py</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="c1"># in magentoerpconnect/backend.py</span>
 
-<span class="n">magento</span> <span class="o">=</span> <span class="n">backend</span><span class="o">.</span><span class="n">Backend</span><span class="p">(</span><span class="s">&#39;magento&#39;</span><span class="p">)</span>
+<span class="n">magento</span> <span class="o">=</span> <span class="n">backend</span><span class="o">.</span><span class="n">Backend</span><span class="p">(</span><span class="s1">&#39;magento&#39;</span><span class="p">)</span>
 <span class="sd">&quot;&quot;&quot; Generic Magento Backend &quot;&quot;&quot;</span>
 
-<span class="n">magento1700</span> <span class="o">=</span> <span class="n">backend</span><span class="o">.</span><span class="n">Backend</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="n">magento</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s">&#39;1.7&#39;</span><span class="p">)</span>
+<span class="n">magento1700</span> <span class="o">=</span> <span class="n">backend</span><span class="o">.</span><span class="n">Backend</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="n">magento</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s1">&#39;1.7&#39;</span><span class="p">)</span>
 <span class="sd">&quot;&quot;&quot; Magento Backend for version 1.7 &quot;&quot;&quot;</span>
 
-<span class="c"># in magentoerpconnect/magento_model.py</span>
+<span class="c1"># in magentoerpconnect/magento_model.py</span>
 
 <span class="k">class</span> <span class="nc">MagentoBackend</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
-    <span class="n">_name</span> <span class="o">=</span> <span class="s">&#39;magento.backend&#39;</span>
-    <span class="n">_description</span> <span class="o">=</span> <span class="s">&#39;Magento Backend&#39;</span>
-    <span class="n">_inherit</span> <span class="o">=</span> <span class="s">&#39;connector.backend&#39;</span>
+    <span class="n">_name</span> <span class="o">=</span> <span class="s1">&#39;magento.backend&#39;</span>
+    <span class="n">_description</span> <span class="o">=</span> <span class="s1">&#39;Magento Backend&#39;</span>
+    <span class="n">_inherit</span> <span class="o">=</span> <span class="s1">&#39;connector.backend&#39;</span>
 
-    <span class="n">_backend_type</span> <span class="o">=</span> <span class="s">&#39;magento&#39;</span>
+    <span class="n">_backend_type</span> <span class="o">=</span> <span class="s1">&#39;magento&#39;</span>
 
     <span class="nd">@api.model</span>
     <span class="k">def</span> <span class="nf">_select_versions</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -275,20 +275,20 @@ same name) than the instances of <a class="reference internal" href="#connector.
 
 <span class="sd">        Can be inherited to add custom versions.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="p">[(</span><span class="s">&#39;1.7&#39;</span><span class="p">,</span> <span class="s">&#39;Magento 1.7&#39;</span><span class="p">)]</span>
+        <span class="k">return</span> <span class="p">[(</span><span class="s1">&#39;1.7&#39;</span><span class="p">,</span> <span class="s1">&#39;Magento 1.7&#39;</span><span class="p">)]</span>
 
-    <span class="c"># &lt;snip&gt;</span>
+    <span class="c1"># &lt;snip&gt;</span>
 
     <span class="n">version</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Selection</span><span class="p">(</span>
-        <span class="n">selection</span><span class="o">=</span><span class="s">&#39;_select_versions&#39;</span><span class="p">,</span>
-        <span class="n">string</span><span class="o">=</span><span class="s">&#39;Version&#39;</span><span class="p">,</span>
+        <span class="n">selection</span><span class="o">=</span><span class="s1">&#39;_select_versions&#39;</span><span class="p">,</span>
+        <span class="n">string</span><span class="o">=</span><span class="s1">&#39;Version&#39;</span><span class="p">,</span>
         <span class="n">required</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
     <span class="p">)</span>
-    <span class="n">location</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Char</span><span class="p">(</span><span class="n">string</span><span class="o">=</span><span class="s">&#39;Location&#39;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-    <span class="n">username</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Char</span><span class="p">(</span><span class="n">string</span><span class="o">=</span><span class="s">&#39;Username&#39;</span><span class="p">)</span>
-    <span class="n">password</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Char</span><span class="p">(</span><span class="n">string</span><span class="o">=</span><span class="s">&#39;Password&#39;</span><span class="p">)</span>
+    <span class="n">location</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Char</span><span class="p">(</span><span class="n">string</span><span class="o">=</span><span class="s1">&#39;Location&#39;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">username</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Char</span><span class="p">(</span><span class="n">string</span><span class="o">=</span><span class="s1">&#39;Username&#39;</span><span class="p">)</span>
+    <span class="n">password</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Char</span><span class="p">(</span><span class="n">string</span><span class="o">=</span><span class="s1">&#39;Password&#39;</span><span class="p">)</span>
 
-    <span class="c"># &lt;snip&gt;</span>
+    <span class="c1"># &lt;snip&gt;</span>
 </pre></div>
 </div>
 <p>In the code above, &#8216;1.7&#8217; is the matching key between the
@@ -345,11 +345,11 @@ it allows to modify the behavior for 1 version of backend.</p>
 </pre></div>
 </div>
 <p>And here is the way they are declared in Python:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">magento</span> <span class="o">=</span> <span class="n">Backend</span><span class="p">(</span><span class="s">&#39;magento&#39;</span><span class="p">)</span>
-<span class="n">magento1700</span> <span class="o">=</span> <span class="n">Backend</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="n">magento</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s">&#39;1.7&#39;</span><span class="p">)</span>
-<span class="n">magento2000</span> <span class="o">=</span> <span class="n">Backend</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="n">magento</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s">&#39;2.0&#39;</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">magento</span> <span class="o">=</span> <span class="n">Backend</span><span class="p">(</span><span class="s1">&#39;magento&#39;</span><span class="p">)</span>
+<span class="n">magento1700</span> <span class="o">=</span> <span class="n">Backend</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="n">magento</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s1">&#39;1.7&#39;</span><span class="p">)</span>
+<span class="n">magento2000</span> <span class="o">=</span> <span class="n">Backend</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="n">magento</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s1">&#39;2.0&#39;</span><span class="p">)</span>
 
-<span class="n">magento_specific</span> <span class="o">=</span> <span class="n">Backend</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="n">magento1700</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s">&#39;1.7-specific&#39;</span><span class="p">)</span>
+<span class="n">magento_specific</span> <span class="o">=</span> <span class="n">Backend</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="n">magento1700</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s1">&#39;1.7-specific&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>In the graph above, <code class="docutils literal"><span class="pre">&lt;Magento&gt;</span></code> will hold all the classes shared between
@@ -362,22 +362,22 @@ instance (typically you want specific mappings for one instance).</p>
 <code class="docutils literal"><span class="pre">&lt;Magento</span> <span class="pre">1.7&gt;</span></code>:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="nd">@magento</span>
 <span class="k">class</span> <span class="nc">Synchronizer</span><span class="p">(</span><span class="n">ConnectorUnit</span><span class="p">):</span>
-    <span class="n">_model_name</span> <span class="o">=</span> <span class="s">&#39;res.partner&#39;</span>
+    <span class="n">_model_name</span> <span class="o">=</span> <span class="s1">&#39;res.partner&#39;</span>
 
 <span class="nd">@magento</span>
 <span class="k">class</span> <span class="nc">Mapper</span><span class="p">(</span><span class="n">ConnectorUnit</span><span class="p">):</span>
-    <span class="n">_model_name</span> <span class="o">=</span> <span class="s">&#39;res.partner&#39;</span>
+    <span class="n">_model_name</span> <span class="o">=</span> <span class="s1">&#39;res.partner&#39;</span>
 
 <span class="nd">@magento1700</span>
 <span class="k">class</span> <span class="nc">Synchronizer1700</span><span class="p">(</span><span class="n">Synchronizer</span><span class="p">):</span>
-    <span class="n">_model_name</span> <span class="o">=</span> <span class="s">&#39;res.partner&#39;</span>
+    <span class="n">_model_name</span> <span class="o">=</span> <span class="s1">&#39;res.partner&#39;</span>
 </pre></div>
 </div>
 <p>Here, the <a class="reference internal" href="#connector.backend.Backend.get_class" title="connector.backend.Backend.get_class"><code class="xref py py-meth docutils literal"><span class="pre">get_class()</span></code></a> called on <code class="docutils literal"><span class="pre">magento1700</span></code> would return:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">magento1700</span><span class="o">.</span><span class="n">get_class</span><span class="p">(</span><span class="n">Synchronizer</span><span class="p">,</span> <span class="n">session</span><span class="p">,</span> <span class="s">&#39;res.partner&#39;</span><span class="p">)</span>
-<span class="c"># =&gt; Synchronizer1700</span>
-<span class="n">magento1700</span><span class="o">.</span><span class="n">get_class</span><span class="p">(</span><span class="n">Mapper</span><span class="p">,</span> <span class="n">session</span><span class="p">,</span> <span class="s">&#39;res.partner&#39;</span><span class="p">)</span>
-<span class="c"># =&gt; Mapper</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">magento1700</span><span class="o">.</span><span class="n">get_class</span><span class="p">(</span><span class="n">Synchronizer</span><span class="p">,</span> <span class="n">session</span><span class="p">,</span> <span class="s1">&#39;res.partner&#39;</span><span class="p">)</span>
+<span class="c1"># =&gt; Synchronizer1700</span>
+<span class="n">magento1700</span><span class="o">.</span><span class="n">get_class</span><span class="p">(</span><span class="n">Mapper</span><span class="p">,</span> <span class="n">session</span><span class="p">,</span> <span class="s1">&#39;res.partner&#39;</span><span class="p">)</span>
+<span class="c1"># =&gt; Mapper</span>
 </pre></div>
 </div>
 <p>This is the vertical extension mechanism, it says that each child version
@@ -401,7 +401,7 @@ addon is installed. This is the horizontal extension mechanism.</p>
 in a backend:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="nd">@backend</span><span class="p">(</span><span class="n">replacing</span><span class="o">=</span><span class="n">ImportMapper</span><span class="p">)</span>
 <span class="k">class</span> <span class="nc">AdvancedImportMapper</span><span class="p">(</span><span class="n">ImportMapper</span><span class="p">):</span>
-    <span class="n">_model_name</span> <span class="o">=</span> <span class="s">&#39;product.product&#39;</span>
+    <span class="n">_model_name</span> <span class="o">=</span> <span class="s1">&#39;product.product&#39;</span>
 </pre></div>
 </div>
 <div class="admonition warning">
@@ -559,25 +559,25 @@ this addon.</p>
 (this is a consolidation of all the columns from the abstract models,
 in <code class="docutils literal"><span class="pre">magentoerpconnect</span></code> you would not find that):</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">MagentoResPartnerCategory</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
-    <span class="n">_name</span> <span class="o">=</span> <span class="s">&#39;magento.res.partner.category&#39;</span>
+    <span class="n">_name</span> <span class="o">=</span> <span class="s1">&#39;magento.res.partner.category&#39;</span>
 
-    <span class="n">_inherits</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;res.partner.category&#39;</span><span class="p">:</span> <span class="s">&#39;openerp_id&#39;</span><span class="p">}</span>
+    <span class="n">_inherits</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;res.partner.category&#39;</span><span class="p">:</span> <span class="s1">&#39;openerp_id&#39;</span><span class="p">}</span>
 
-    <span class="n">openerp_id</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Many2one</span><span class="p">(</span><span class="n">comodel_name</span><span class="o">=</span><span class="s">&#39;res.partner.category&#39;</span><span class="p">,</span>
-                                  <span class="n">string</span><span class="o">=</span><span class="s">&#39;Partner Category&#39;</span><span class="p">,</span>
+    <span class="n">openerp_id</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Many2one</span><span class="p">(</span><span class="n">comodel_name</span><span class="o">=</span><span class="s1">&#39;res.partner.category&#39;</span><span class="p">,</span>
+                                  <span class="n">string</span><span class="o">=</span><span class="s1">&#39;Partner Category&#39;</span><span class="p">,</span>
                                   <span class="n">required</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
-                                  <span class="n">ondelete</span><span class="o">=</span><span class="s">&#39;cascade&#39;</span><span class="p">)</span>
+                                  <span class="n">ondelete</span><span class="o">=</span><span class="s1">&#39;cascade&#39;</span><span class="p">)</span>
     <span class="n">backend_id</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Many2one</span><span class="p">(</span>
-        <span class="n">comodel_name</span><span class="o">=</span><span class="s">&#39;magento.backend&#39;</span><span class="p">,</span>
-        <span class="n">string</span><span class="o">=</span><span class="s">&#39;Magento Backend&#39;</span><span class="p">,</span>
+        <span class="n">comodel_name</span><span class="o">=</span><span class="s1">&#39;magento.backend&#39;</span><span class="p">,</span>
+        <span class="n">string</span><span class="o">=</span><span class="s1">&#39;Magento Backend&#39;</span><span class="p">,</span>
         <span class="n">required</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
-        <span class="n">ondelete</span><span class="o">=</span><span class="s">&#39;restrict&#39;</span><span class="p">)</span>
-    <span class="n">magento_id</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Char</span><span class="p">(</span><span class="n">string</span><span class="o">=</span><span class="s">&#39;ID on Magento&#39;</span><span class="p">)</span>
-    <span class="n">tax_class_id</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Integer</span><span class="p">(</span><span class="n">string</span><span class="o">=</span><span class="s">&#39;Tax Class ID&#39;</span><span class="p">)</span>
+        <span class="n">ondelete</span><span class="o">=</span><span class="s1">&#39;restrict&#39;</span><span class="p">)</span>
+    <span class="n">magento_id</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Char</span><span class="p">(</span><span class="n">string</span><span class="o">=</span><span class="s1">&#39;ID on Magento&#39;</span><span class="p">)</span>
+    <span class="n">tax_class_id</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Integer</span><span class="p">(</span><span class="n">string</span><span class="o">=</span><span class="s1">&#39;Tax Class ID&#39;</span><span class="p">)</span>
 
     <span class="n">_sql_constraints</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="p">(</span><span class="s">&#39;magento_uniq&#39;</span><span class="p">,</span> <span class="s">&#39;unique(backend_id, magento_id)&#39;</span><span class="p">,</span>
-         <span class="s">&#39;Partner Tag with same ID on Magento already exists.&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;magento_uniq&#39;</span><span class="p">,</span> <span class="s1">&#39;unique(backend_id, magento_id)&#39;</span><span class="p">,</span>
+         <span class="s1">&#39;Partner Tag with same ID on Magento already exists.&#39;</span><span class="p">),</span>
     <span class="p">]</span>
 </pre></div>
 </div>
@@ -610,7 +610,7 @@ in <code class="docutils literal"><span class="pre">magentoerpconnect</span></co
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.4.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.<br/>
     </p>
   </div>
 </footer>

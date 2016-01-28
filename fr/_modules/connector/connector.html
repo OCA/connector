@@ -230,26 +230,26 @@
     <div class="col-md-12 content">
       
   <h1>Code source de connector.connector</h1><div class="highlight"><pre>
-<span class="c"># -*- coding: utf-8 -*-</span>
-<span class="c">##############################################################################</span>
-<span class="c">#</span>
-<span class="c">#    Author: Guewen Baconnier</span>
-<span class="c">#    Copyright 2012 Camptocamp SA</span>
-<span class="c">#</span>
-<span class="c">#    This program is free software: you can redistribute it and/or modify</span>
-<span class="c">#    it under the terms of the GNU Affero General Public License as</span>
-<span class="c">#    published by the Free Software Foundation, either version 3 of the</span>
-<span class="c">#    License, or (at your option) any later version.</span>
-<span class="c">#</span>
-<span class="c">#    This program is distributed in the hope that it will be useful,</span>
-<span class="c">#    but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
-<span class="c">#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
-<span class="c">#    GNU Affero General Public License for more details.</span>
-<span class="c">#</span>
-<span class="c">#    You should have received a copy of the GNU Affero General Public License</span>
-<span class="c">#    along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
-<span class="c">#</span>
-<span class="c">##############################################################################</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1">##############################################################################</span>
+<span class="c1">#</span>
+<span class="c1">#    Author: Guewen Baconnier</span>
+<span class="c1">#    Copyright 2012 Camptocamp SA</span>
+<span class="c1">#</span>
+<span class="c1">#    This program is free software: you can redistribute it and/or modify</span>
+<span class="c1">#    it under the terms of the GNU Affero General Public License as</span>
+<span class="c1">#    published by the Free Software Foundation, either version 3 of the</span>
+<span class="c1">#    License, or (at your option) any later version.</span>
+<span class="c1">#</span>
+<span class="c1">#    This program is distributed in the hope that it will be useful,</span>
+<span class="c1">#    but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c1">#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="c1">#    GNU Affero General Public License for more details.</span>
+<span class="c1">#</span>
+<span class="c1">#    You should have received a copy of the GNU Affero General Public License</span>
+<span class="c1">#    along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+<span class="c1">#</span>
+<span class="c1">##############################################################################</span>
 
 <span class="kn">import</span> <span class="nn">hashlib</span>
 <span class="kn">import</span> <span class="nn">logging</span>
@@ -275,8 +275,8 @@
 <span class="sd">    ``openerp.addons.sale`` (the good way) or ``sale`` (for backward</span>
 <span class="sd">    compatibility).</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">module_parts</span> <span class="o">=</span> <span class="n">module_path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;.&#39;</span><span class="p">)</span>
-    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">module_parts</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span> <span class="ow">and</span> <span class="n">module_parts</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="p">[</span><span class="s">&#39;openerp&#39;</span><span class="p">,</span> <span class="s">&#39;addons&#39;</span><span class="p">]:</span>
+    <span class="n">module_parts</span> <span class="o">=</span> <span class="n">module_path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">module_parts</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span> <span class="ow">and</span> <span class="n">module_parts</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="p">[</span><span class="s1">&#39;openerp&#39;</span><span class="p">,</span> <span class="s1">&#39;addons&#39;</span><span class="p">]:</span>
         <span class="n">module_name</span> <span class="o">=</span> <span class="n">module_parts</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">module_name</span> <span class="o">=</span> <span class="n">module_parts</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -284,8 +284,8 @@
 
 
 <div class="viewcode-block" id="install_in_connector"><a class="viewcode-back" href="../../api/api_connector.html#connector.connector.install_in_connector">[docs]</a><span class="k">def</span> <span class="nf">install_in_connector</span><span class="p">():</span>
-    <span class="n">log_deprecate</span><span class="p">(</span><span class="s">&quot;This call to &#39;install_in_connector()&#39; has no effect and is &quot;</span>
-                  <span class="s">&quot;not required.&quot;</span><span class="p">)</span></div>
+    <span class="n">log_deprecate</span><span class="p">(</span><span class="s2">&quot;This call to &#39;install_in_connector()&#39; has no effect and is &quot;</span>
+                  <span class="s2">&quot;not required.&quot;</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="is_module_installed"><a class="viewcode-back" href="../../api/api_connector.html#connector.connector.is_module_installed">[docs]</a><span class="k">def</span> <span class="nf">is_module_installed</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">module_name</span><span class="p">):</span>
@@ -293,8 +293,8 @@
 
 <span class="sd">    :param module_name: name of the addon</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c"># the registry maintains a set of fully loaded modules so we can</span>
-    <span class="c"># lookup for our module there</span>
+    <span class="c1"># the registry maintains a set of fully loaded modules so we can</span>
+    <span class="c1"># lookup for our module there</span>
     <span class="k">return</span> <span class="n">module_name</span> <span class="ow">in</span> <span class="n">env</span><span class="o">.</span><span class="n">registry</span><span class="o">.</span><span class="n">_init_modules</span></div>
 
 
@@ -318,7 +318,7 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">model_name</span><span class="p">(</span><span class="n">cls</span><span class="p">):</span>
-        <span class="n">log_deprecate</span><span class="p">(</span><span class="s">&#39;renamed to for_model_names&#39;</span><span class="p">)</span>
+        <span class="n">log_deprecate</span><span class="p">(</span><span class="s1">&#39;renamed to for_model_names&#39;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">cls</span><span class="o">.</span><span class="n">for_model_names</span>
 
     <span class="nd">@property</span>
@@ -331,9 +331,9 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">cls</span><span class="o">.</span><span class="n">_model_name</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s">&quot;no _model_name for </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">cls</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;no _model_name for </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">cls</span><span class="p">)</span>
         <span class="n">model_name</span> <span class="o">=</span> <span class="n">cls</span><span class="o">.</span><span class="n">_model_name</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">model_name</span><span class="p">,</span> <span class="s">&#39;__iter__&#39;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">model_name</span><span class="p">,</span> <span class="s1">&#39;__iter__&#39;</span><span class="p">):</span>
             <span class="n">model_name</span> <span class="o">=</span> <span class="p">[</span><span class="n">model_name</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">model_name</span>
 
@@ -357,7 +357,7 @@
 
     <span class="n">__metaclass__</span> <span class="o">=</span> <span class="n">MetaConnectorUnit</span>
 
-    <span class="n">_model_name</span> <span class="o">=</span> <span class="bp">None</span>  <span class="c"># to be defined in sub-classes</span>
+    <span class="n">_model_name</span> <span class="o">=</span> <span class="bp">None</span>  <span class="c1"># to be defined in sub-classes</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">connector_env</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -373,7 +373,7 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">environment</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">log_deprecate</span><span class="p">(</span><span class="s">&#39;renamed to connector_env&#39;</span><span class="p">)</span>
+        <span class="n">log_deprecate</span><span class="p">(</span><span class="s1">&#39;renamed to connector_env&#39;</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">connector_env</span>
 
     <span class="nd">@classmethod</span>
@@ -386,12 +386,12 @@
 <span class="sd">        :param model: model to match</span>
 <span class="sd">        :type model: str or :py:class:`openerp.models.Model`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c"># filter out the ConnectorUnit from modules</span>
-        <span class="c"># not installed in the current DB</span>
-        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="s">&#39;_name&#39;</span><span class="p">):</span>  <span class="c"># Model instance</span>
+        <span class="c1"># filter out the ConnectorUnit from modules</span>
+        <span class="c1"># not installed in the current DB</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="s1">&#39;_name&#39;</span><span class="p">):</span>  <span class="c1"># Model instance</span>
             <span class="n">model_name</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">_name</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">model_name</span> <span class="o">=</span> <span class="n">model</span>  <span class="c"># str</span>
+            <span class="n">model_name</span> <span class="o">=</span> <span class="n">model</span>  <span class="c1"># str</span>
         <span class="k">return</span> <span class="n">model_name</span> <span class="ow">in</span> <span class="n">cls</span><span class="o">.</span><span class="n">for_model_names</span></div>
 
     <span class="nd">@property</span>
@@ -446,7 +446,7 @@
 
 <div class="viewcode-block" id="ConnectorUnit.get_connector_unit_for_model"><a class="viewcode-back" href="../../api/api_connector.html#connector.connector.ConnectorUnit.get_connector_unit_for_model">[docs]</a>    <span class="k">def</span> <span class="nf">get_connector_unit_for_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">connector_unit_class</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Deprecated in favor of :meth:`~unit_for` &quot;&quot;&quot;</span>
-        <span class="n">log_deprecate</span><span class="p">(</span><span class="s">&#39;renamed to unit_for()&#39;</span><span class="p">)</span>
+        <span class="n">log_deprecate</span><span class="p">(</span><span class="s1">&#39;renamed to unit_for()&#39;</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">unit_for</span><span class="p">(</span><span class="n">connector_unit_class</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="ConnectorUnit.binder_for"><a class="viewcode-back" href="../../api/api_connector.html#connector.connector.ConnectorUnit.binder_for">[docs]</a>    <span class="k">def</span> <span class="nf">binder_for</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
@@ -460,7 +460,7 @@
 
 <span class="sd">        Deprecated, use ``binder_for`` now.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">log_deprecate</span><span class="p">(</span><span class="s">&#39;renamed to binder_for()&#39;</span><span class="p">)</span>
+        <span class="n">log_deprecate</span><span class="p">(</span><span class="s1">&#39;renamed to binder_for()&#39;</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">binder_for</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="ConnectorUnit.advisory_lock_or_retry"><a class="viewcode-back" href="../../api/api_connector.html#connector.connector.ConnectorUnit.advisory_lock_or_retry">[docs]</a>    <span class="k">def</span> <span class="nf">advisory_lock_or_retry</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lock</span><span class="p">,</span> <span class="n">retry_seconds</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
@@ -494,7 +494,7 @@
 <span class="sd">           be retried when the lock cannot be acquired.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">pg_try_advisory_lock</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="p">,</span> <span class="n">lock</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="n">RetryableJobError</span><span class="p">(</span><span class="s">&#39;Could not acquire advisory lock&#39;</span><span class="p">,</span>
+            <span class="k">raise</span> <span class="n">RetryableJobError</span><span class="p">(</span><span class="s1">&#39;Could not acquire advisory lock&#39;</span><span class="p">,</span>
                                     <span class="n">seconds</span><span class="o">=</span><span class="n">retry_seconds</span><span class="p">,</span>
                                     <span class="n">ignore_retry</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span></div></div>
 
@@ -569,9 +569,9 @@
 
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">raise</span> <span class="ne">DeprecationWarning</span><span class="p">(</span><span class="s">&#39;ConnectorEnvironment.set_lang has been &#39;</span>
-                                 <span class="s">&#39;deprecated. session.change_context should &#39;</span>
-                                 <span class="s">&#39;be used instead.&#39;</span><span class="p">)</span></div>
+        <span class="k">raise</span> <span class="ne">DeprecationWarning</span><span class="p">(</span><span class="s1">&#39;ConnectorEnvironment.set_lang has been &#39;</span>
+                                 <span class="s1">&#39;deprecated. session.change_context should &#39;</span>
+                                 <span class="s1">&#39;be used instead.&#39;</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="ConnectorEnvironment.get_connector_unit"><a class="viewcode-back" href="../../api/api_connector.html#connector.connector.ConnectorEnvironment.get_connector_unit">[docs]</a>    <span class="k">def</span> <span class="nf">get_connector_unit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">base_class</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Searches and returns an instance of the</span>
@@ -611,7 +611,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">cls</span><span class="p">(</span><span class="n">backend_record</span><span class="p">,</span> <span class="n">session</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span></div></div>
 
-<span class="n">Environment</span> <span class="o">=</span> <span class="n">DeprecatedClass</span><span class="p">(</span><span class="s">&#39;Environment&#39;</span><span class="p">,</span>
+<span class="n">Environment</span> <span class="o">=</span> <span class="n">DeprecatedClass</span><span class="p">(</span><span class="s1">&#39;Environment&#39;</span><span class="p">,</span>
                               <span class="n">ConnectorEnvironment</span><span class="p">)</span>
 
 
@@ -626,11 +626,11 @@
 <span class="sd">    the models they are binding.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">_model_name</span> <span class="o">=</span> <span class="bp">None</span>  <span class="c"># define in sub-classes</span>
-    <span class="n">_external_field</span> <span class="o">=</span> <span class="s">&#39;external_id&#39;</span>  <span class="c"># override in sub-classes</span>
-    <span class="n">_backend_field</span> <span class="o">=</span> <span class="s">&#39;backend_id&#39;</span>  <span class="c"># override in sub-classes</span>
-    <span class="n">_openerp_field</span> <span class="o">=</span> <span class="s">&#39;openerp_id&#39;</span>  <span class="c"># override in sub-classes</span>
-    <span class="n">_sync_date_field</span> <span class="o">=</span> <span class="s">&#39;sync_date&#39;</span>  <span class="c"># override in sub-classes</span>
+    <span class="n">_model_name</span> <span class="o">=</span> <span class="bp">None</span>  <span class="c1"># define in sub-classes</span>
+    <span class="n">_external_field</span> <span class="o">=</span> <span class="s1">&#39;external_id&#39;</span>  <span class="c1"># override in sub-classes</span>
+    <span class="n">_backend_field</span> <span class="o">=</span> <span class="s1">&#39;backend_id&#39;</span>  <span class="c1"># override in sub-classes</span>
+    <span class="n">_openerp_field</span> <span class="o">=</span> <span class="s1">&#39;openerp_id&#39;</span>  <span class="c1"># override in sub-classes</span>
+    <span class="n">_sync_date_field</span> <span class="o">=</span> <span class="s1">&#39;sync_date&#39;</span>  <span class="c1"># override in sub-classes</span>
 
 <div class="viewcode-block" id="Binder.to_openerp"><a class="viewcode-back" href="../../api/api_connector.html#connector.connector.Binder.to_openerp">[docs]</a>    <span class="k">def</span> <span class="nf">to_openerp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">external_id</span><span class="p">,</span> <span class="n">unwrap</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Give the OpenERP ID for an external ID</span>
@@ -644,8 +644,8 @@
 <span class="sd">        :rtype: recordset</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">bindings</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">with_context</span><span class="p">(</span><span class="n">active_test</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span><span class="o">.</span><span class="n">search</span><span class="p">(</span>
-            <span class="p">[(</span><span class="bp">self</span><span class="o">.</span><span class="n">_external_field</span><span class="p">,</span> <span class="s">&#39;=&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">external_id</span><span class="p">)),</span>
-             <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_backend_field</span><span class="p">,</span> <span class="s">&#39;=&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">backend_record</span><span class="o">.</span><span class="n">id</span><span class="p">)]</span>
+            <span class="p">[(</span><span class="bp">self</span><span class="o">.</span><span class="n">_external_field</span><span class="p">,</span> <span class="s1">&#39;=&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">external_id</span><span class="p">)),</span>
+             <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_backend_field</span><span class="p">,</span> <span class="s1">&#39;=&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">backend_record</span><span class="o">.</span><span class="n">id</span><span class="p">)]</span>
         <span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">bindings</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">browse</span><span class="p">()</span>
@@ -671,8 +671,8 @@
             <span class="n">binding_id</span> <span class="o">=</span> <span class="n">binding_id</span><span class="o">.</span><span class="n">id</span>
         <span class="k">if</span> <span class="n">wrap</span><span class="p">:</span>
             <span class="n">binding</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">with_context</span><span class="p">(</span><span class="n">active_test</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span><span class="o">.</span><span class="n">search</span><span class="p">(</span>
-                <span class="p">[(</span><span class="bp">self</span><span class="o">.</span><span class="n">_openerp_field</span><span class="p">,</span> <span class="s">&#39;=&#39;</span><span class="p">,</span> <span class="n">binding_id</span><span class="p">),</span>
-                 <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_backend_field</span><span class="p">,</span> <span class="s">&#39;=&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">backend_record</span><span class="o">.</span><span class="n">id</span><span class="p">),</span>
+                <span class="p">[(</span><span class="bp">self</span><span class="o">.</span><span class="n">_openerp_field</span><span class="p">,</span> <span class="s1">&#39;=&#39;</span><span class="p">,</span> <span class="n">binding_id</span><span class="p">),</span>
+                 <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_backend_field</span><span class="p">,</span> <span class="s1">&#39;=&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">backend_record</span><span class="o">.</span><span class="n">id</span><span class="p">),</span>
                  <span class="p">]</span>
             <span class="p">)</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">binding</span><span class="p">:</span>
@@ -691,12 +691,12 @@
 <span class="sd">        :param binding_id: OpenERP ID to bind</span>
 <span class="sd">        :type binding_id: int</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c"># Prevent False, None, or &quot;&quot;, but not 0</span>
+        <span class="c1"># Prevent False, None, or &quot;&quot;, but not 0</span>
         <span class="k">assert</span> <span class="p">(</span><span class="n">external_id</span> <span class="ow">or</span> <span class="n">external_id</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">and</span> <span class="n">binding_id</span><span class="p">,</span> <span class="p">(</span>
-            <span class="s">&quot;external_id or binding_id missing, &quot;</span>
-            <span class="s">&quot;got: </span><span class="si">%s</span><span class="s">, </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">external_id</span><span class="p">,</span> <span class="n">binding_id</span><span class="p">)</span>
+            <span class="s2">&quot;external_id or binding_id missing, &quot;</span>
+            <span class="s2">&quot;got: </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">external_id</span><span class="p">,</span> <span class="n">binding_id</span><span class="p">)</span>
         <span class="p">)</span>
-        <span class="c"># avoid to trigger the export when we modify the `external_id`</span>
+        <span class="c1"># avoid to trigger the export when we modify the `external_id`</span>
         <span class="n">now_fmt</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">binding_id</span><span class="p">,</span> <span class="n">models</span><span class="o">.</span><span class="n">BaseModel</span><span class="p">):</span>
             <span class="n">binding_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">browse</span><span class="p">(</span><span class="n">binding_id</span><span class="p">)</span>
@@ -734,7 +734,7 @@
             <span class="n">column</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">_fields</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_openerp_field</span><span class="p">]</span>
         <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="s">&#39;Cannot unwrap model </span><span class="si">%s</span><span class="s">, because it has no </span><span class="si">%s</span><span class="s"> fields&#39;</span>
+                <span class="s1">&#39;Cannot unwrap model </span><span class="si">%s</span><span class="s1">, because it has no </span><span class="si">%s</span><span class="s1"> fields&#39;</span>
                 <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_openerp_field</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">column</span><span class="o">.</span><span class="n">comodel_name</span></div></div>
 
@@ -800,12 +800,12 @@
 <span class="sd">    :return True/False whether lock was acquired.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">hasher</span> <span class="o">=</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">sha1</span><span class="p">()</span>
-    <span class="n">hasher</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="s">&#39;{}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">lock</span><span class="p">))</span>
-    <span class="c"># pg_lock accepts an int8 so we build an hash composed with</span>
-    <span class="c"># contextual information and we throw away some bits</span>
-    <span class="n">int_lock</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s">&#39;q&#39;</span><span class="p">,</span> <span class="n">hasher</span><span class="o">.</span><span class="n">digest</span><span class="p">()[:</span><span class="mi">8</span><span class="p">])</span>
+    <span class="n">hasher</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="s1">&#39;{}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">lock</span><span class="p">))</span>
+    <span class="c1"># pg_lock accepts an int8 so we build an hash composed with</span>
+    <span class="c1"># contextual information and we throw away some bits</span>
+    <span class="n">int_lock</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s1">&#39;q&#39;</span><span class="p">,</span> <span class="n">hasher</span><span class="o">.</span><span class="n">digest</span><span class="p">()[:</span><span class="mi">8</span><span class="p">])</span>
 
-    <span class="n">env</span><span class="o">.</span><span class="n">cr</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s">&#39;SELECT pg_try_advisory_xact_lock(</span><span class="si">%s</span><span class="s">);&#39;</span><span class="p">,</span> <span class="p">(</span><span class="n">int_lock</span><span class="p">,))</span>
+    <span class="n">env</span><span class="o">.</span><span class="n">cr</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s1">&#39;SELECT pg_try_advisory_xact_lock(</span><span class="si">%s</span><span class="s1">);&#39;</span><span class="p">,</span> <span class="p">(</span><span class="n">int_lock</span><span class="p">,))</span>
     <span class="n">acquired</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">cr</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
     <span class="k">return</span> <span class="n">acquired</span></div>
 </pre></div>
@@ -825,7 +825,7 @@
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.4.<br/>
+      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.<br/>
     </p>
   </div>
 </footer>

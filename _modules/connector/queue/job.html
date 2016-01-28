@@ -229,26 +229,26 @@
     <div class="col-md-12 content">
       
   <h1>Source code for connector.queue.job</h1><div class="highlight"><pre>
-<span class="c"># -*- coding: utf-8 -*-</span>
-<span class="c">##############################################################################</span>
-<span class="c">#</span>
-<span class="c">#    Author: Guewen Baconnier</span>
-<span class="c">#    Copyright 2013 Camptocamp SA</span>
-<span class="c">#</span>
-<span class="c">#    This program is free software: you can redistribute it and/or modify</span>
-<span class="c">#    it under the terms of the GNU Affero General Public License as</span>
-<span class="c">#    published by the Free Software Foundation, either version 3 of the</span>
-<span class="c">#    License, or (at your option) any later version.</span>
-<span class="c">#</span>
-<span class="c">#    This program is distributed in the hope that it will be useful,</span>
-<span class="c">#    but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
-<span class="c">#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
-<span class="c">#    GNU Affero General Public License for more details.</span>
-<span class="c">#</span>
-<span class="c">#    You should have received a copy of the GNU Affero General Public License</span>
-<span class="c">#    along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
-<span class="c">#</span>
-<span class="c">##############################################################################</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1">##############################################################################</span>
+<span class="c1">#</span>
+<span class="c1">#    Author: Guewen Baconnier</span>
+<span class="c1">#    Copyright 2013 Camptocamp SA</span>
+<span class="c1">#</span>
+<span class="c1">#    This program is free software: you can redistribute it and/or modify</span>
+<span class="c1">#    it under the terms of the GNU Affero General Public License as</span>
+<span class="c1">#    published by the Free Software Foundation, either version 3 of the</span>
+<span class="c1">#    License, or (at your option) any later version.</span>
+<span class="c1">#</span>
+<span class="c1">#    This program is distributed in the hope that it will be useful,</span>
+<span class="c1">#    but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c1">#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="c1">#    GNU Affero General Public License for more details.</span>
+<span class="c1">#</span>
+<span class="c1">#    You should have received a copy of the GNU Affero General Public License</span>
+<span class="c1">#    along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+<span class="c1">#</span>
+<span class="c1">##############################################################################</span>
 
 <span class="kn">import</span> <span class="nn">inspect</span>
 <span class="kn">import</span> <span class="nn">functools</span>
@@ -266,21 +266,21 @@
                          <span class="n">FailedJobError</span><span class="p">,</span>
                          <span class="n">RetryableJobError</span><span class="p">)</span>
 
-<span class="n">PENDING</span> <span class="o">=</span> <span class="s">&#39;pending&#39;</span>
-<span class="n">ENQUEUED</span> <span class="o">=</span> <span class="s">&#39;enqueued&#39;</span>
-<span class="n">DONE</span> <span class="o">=</span> <span class="s">&#39;done&#39;</span>
-<span class="n">STARTED</span> <span class="o">=</span> <span class="s">&#39;started&#39;</span>
-<span class="n">FAILED</span> <span class="o">=</span> <span class="s">&#39;failed&#39;</span>
+<span class="n">PENDING</span> <span class="o">=</span> <span class="s1">&#39;pending&#39;</span>
+<span class="n">ENQUEUED</span> <span class="o">=</span> <span class="s1">&#39;enqueued&#39;</span>
+<span class="n">DONE</span> <span class="o">=</span> <span class="s1">&#39;done&#39;</span>
+<span class="n">STARTED</span> <span class="o">=</span> <span class="s1">&#39;started&#39;</span>
+<span class="n">FAILED</span> <span class="o">=</span> <span class="s1">&#39;failed&#39;</span>
 
-<span class="n">STATES</span> <span class="o">=</span> <span class="p">[(</span><span class="n">PENDING</span><span class="p">,</span> <span class="s">&#39;Pending&#39;</span><span class="p">),</span>
-          <span class="p">(</span><span class="n">ENQUEUED</span><span class="p">,</span> <span class="s">&#39;Enqueued&#39;</span><span class="p">),</span>
-          <span class="p">(</span><span class="n">STARTED</span><span class="p">,</span> <span class="s">&#39;Started&#39;</span><span class="p">),</span>
-          <span class="p">(</span><span class="n">DONE</span><span class="p">,</span> <span class="s">&#39;Done&#39;</span><span class="p">),</span>
-          <span class="p">(</span><span class="n">FAILED</span><span class="p">,</span> <span class="s">&#39;Failed&#39;</span><span class="p">)]</span>
+<span class="n">STATES</span> <span class="o">=</span> <span class="p">[(</span><span class="n">PENDING</span><span class="p">,</span> <span class="s1">&#39;Pending&#39;</span><span class="p">),</span>
+          <span class="p">(</span><span class="n">ENQUEUED</span><span class="p">,</span> <span class="s1">&#39;Enqueued&#39;</span><span class="p">),</span>
+          <span class="p">(</span><span class="n">STARTED</span><span class="p">,</span> <span class="s1">&#39;Started&#39;</span><span class="p">),</span>
+          <span class="p">(</span><span class="n">DONE</span><span class="p">,</span> <span class="s1">&#39;Done&#39;</span><span class="p">),</span>
+          <span class="p">(</span><span class="n">FAILED</span><span class="p">,</span> <span class="s1">&#39;Failed&#39;</span><span class="p">)]</span>
 
-<span class="n">DEFAULT_PRIORITY</span> <span class="o">=</span> <span class="mi">10</span>  <span class="c"># used by the PriorityQueue to sort the jobs</span>
+<span class="n">DEFAULT_PRIORITY</span> <span class="o">=</span> <span class="mi">10</span>  <span class="c1"># used by the PriorityQueue to sort the jobs</span>
 <span class="n">DEFAULT_MAX_RETRIES</span> <span class="o">=</span> <span class="mi">5</span>
-<span class="n">RETRY_INTERVAL</span> <span class="o">=</span> <span class="mi">10</span> <span class="o">*</span> <span class="mi">60</span>  <span class="c"># seconds</span>
+<span class="n">RETRY_INTERVAL</span> <span class="o">=</span> <span class="mi">10</span> <span class="o">*</span> <span class="mi">60</span>  <span class="c1"># seconds</span>
 
 <span class="n">_logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">__name__</span><span class="p">)</span>
 
@@ -298,7 +298,7 @@
     <span class="k">try</span><span class="p">:</span>
         <span class="n">unpickled</span> <span class="o">=</span> <span class="n">loads</span><span class="p">(</span><span class="n">pickled</span><span class="p">)</span>
     <span class="k">except</span> <span class="p">(</span><span class="ne">StandardError</span><span class="p">,</span> <span class="n">UnpicklingError</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="n">NotReadableJobError</span><span class="p">(</span><span class="s">&#39;Could not unpickle.&#39;</span><span class="p">,</span> <span class="n">pickled</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="n">NotReadableJobError</span><span class="p">(</span><span class="s1">&#39;Could not unpickle.&#39;</span><span class="p">,</span> <span class="n">pickled</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">unpickled</span>
 
 
@@ -321,8 +321,8 @@
 <div class="viewcode-block" id="OpenERPJobStorage"><a class="viewcode-back" href="../../../api/api_queue.html#connector.queue.job.OpenERPJobStorage">[docs]</a><span class="k">class</span> <span class="nc">OpenERPJobStorage</span><span class="p">(</span><span class="n">JobStorage</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Store a job on OpenERP &quot;&quot;&quot;</span>
 
-    <span class="n">_job_model_name</span> <span class="o">=</span> <span class="s">&#39;queue.job&#39;</span>
-    <span class="n">_worker_model_name</span> <span class="o">=</span> <span class="s">&#39;queue.worker&#39;</span>
+    <span class="n">_job_model_name</span> <span class="o">=</span> <span class="s1">&#39;queue.job&#39;</span>
+    <span class="n">_worker_model_name</span> <span class="o">=</span> <span class="s1">&#39;queue.worker&#39;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">session</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">OpenERPJobStorage</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">()</span>
@@ -330,7 +330,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">job_model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">env</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_job_model_name</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">worker_model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">env</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_worker_model_name</span><span class="p">]</span>
         <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">job_model</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">,</span> <span class="p">(</span>
-            <span class="s">&quot;Model </span><span class="si">%s</span><span class="s"> not found&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">_job_model_name</span><span class="p">)</span>
+            <span class="s2">&quot;Model </span><span class="si">%s</span><span class="s2"> not found&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">_job_model_name</span><span class="p">)</span>
 
 <div class="viewcode-block" id="OpenERPJobStorage.enqueue"><a class="viewcode-back" href="../../../api/api_queue.html#connector.queue.job.OpenERPJobStorage.enqueue">[docs]</a>    <span class="k">def</span> <span class="nf">enqueue</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span> <span class="n">model_name</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
                 <span class="n">priority</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">eta</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">max_retries</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
@@ -344,25 +344,25 @@
                       <span class="n">kwargs</span><span class="o">=</span><span class="n">kwargs</span><span class="p">,</span> <span class="n">priority</span><span class="o">=</span><span class="n">priority</span><span class="p">,</span> <span class="n">eta</span><span class="o">=</span><span class="n">eta</span><span class="p">,</span>
                       <span class="n">max_retries</span><span class="o">=</span><span class="n">max_retries</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="n">description</span><span class="p">)</span>
         <span class="n">new_job</span><span class="o">.</span><span class="n">user_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">uid</span>
-        <span class="k">if</span> <span class="s">&#39;company_id&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">context</span><span class="p">:</span>
-            <span class="n">company_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">context</span><span class="p">[</span><span class="s">&#39;company_id&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="s1">&#39;company_id&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">context</span><span class="p">:</span>
+            <span class="n">company_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">context</span><span class="p">[</span><span class="s1">&#39;company_id&#39;</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">company_model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">env</span><span class="p">[</span><span class="s">&#39;res.company&#39;</span><span class="p">]</span>
+            <span class="n">company_model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">env</span><span class="p">[</span><span class="s1">&#39;res.company&#39;</span><span class="p">]</span>
             <span class="n">company_model</span> <span class="o">=</span> <span class="n">company_model</span><span class="o">.</span><span class="n">sudo</span><span class="p">(</span><span class="n">new_job</span><span class="o">.</span><span class="n">user_id</span><span class="p">)</span>
             <span class="n">company_id</span> <span class="o">=</span> <span class="n">company_model</span><span class="o">.</span><span class="n">_company_default_get</span><span class="p">(</span>
-                <span class="nb">object</span><span class="o">=</span><span class="s">&#39;queue.job&#39;</span><span class="p">,</span>
-                <span class="n">field</span><span class="o">=</span><span class="s">&#39;company_id&#39;</span><span class="p">)</span>
+                <span class="nb">object</span><span class="o">=</span><span class="s1">&#39;queue.job&#39;</span><span class="p">,</span>
+                <span class="n">field</span><span class="o">=</span><span class="s1">&#39;company_id&#39;</span><span class="p">)</span>
         <span class="n">new_job</span><span class="o">.</span><span class="n">company_id</span> <span class="o">=</span> <span class="n">company_id</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="n">new_job</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">new_job</span><span class="o">.</span><span class="n">uuid</span></div>
 
 <div class="viewcode-block" id="OpenERPJobStorage.enqueue_resolve_args"><a class="viewcode-back" href="../../../api/api_queue.html#connector.queue.job.OpenERPJobStorage.enqueue_resolve_args">[docs]</a>    <span class="k">def</span> <span class="nf">enqueue_resolve_args</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Create a Job and enqueue it in the queue. Return the job uuid.&quot;&quot;&quot;</span>
-        <span class="n">priority</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s">&#39;priority&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
-        <span class="n">eta</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s">&#39;eta&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
-        <span class="n">model_name</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s">&#39;model_name&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
-        <span class="n">max_retries</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s">&#39;max_retries&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
-        <span class="n">description</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s">&#39;description&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+        <span class="n">priority</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;priority&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+        <span class="n">eta</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;eta&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+        <span class="n">model_name</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;model_name&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+        <span class="n">max_retries</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;max_retries&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+        <span class="n">description</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;description&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">enqueue</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">model_name</span><span class="o">=</span><span class="n">model_name</span><span class="p">,</span>
                             <span class="n">args</span><span class="o">=</span><span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">=</span><span class="n">kwargs</span><span class="p">,</span>
@@ -377,7 +377,7 @@
 
 <div class="viewcode-block" id="OpenERPJobStorage.db_record_from_uuid"><a class="viewcode-back" href="../../../api/api_queue.html#connector.queue.job.OpenERPJobStorage.db_record_from_uuid">[docs]</a>    <span class="k">def</span> <span class="nf">db_record_from_uuid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">job_uuid</span><span class="p">):</span>
         <span class="n">model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">job_model</span><span class="o">.</span><span class="n">sudo</span><span class="p">()</span><span class="o">.</span><span class="n">with_context</span><span class="p">(</span><span class="n">active_test</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
-        <span class="n">record</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">search</span><span class="p">([(</span><span class="s">&#39;uuid&#39;</span><span class="p">,</span> <span class="s">&#39;=&#39;</span><span class="p">,</span> <span class="n">job_uuid</span><span class="p">)],</span> <span class="n">limit</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">record</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">search</span><span class="p">([(</span><span class="s1">&#39;uuid&#39;</span><span class="p">,</span> <span class="s1">&#39;=&#39;</span><span class="p">,</span> <span class="n">job_uuid</span><span class="p">)],</span> <span class="n">limit</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">record</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">record</span><span class="o">.</span><span class="n">with_env</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">job_model</span><span class="o">.</span><span class="n">env</span><span class="p">)</span></div>
 
@@ -386,60 +386,60 @@
 
     <span class="k">def</span> <span class="nf">_worker_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">worker_uuid</span><span class="p">):</span>
         <span class="n">worker</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">worker_model</span><span class="o">.</span><span class="n">sudo</span><span class="p">()</span><span class="o">.</span><span class="n">search</span><span class="p">(</span>
-            <span class="p">[(</span><span class="s">&#39;uuid&#39;</span><span class="p">,</span> <span class="s">&#39;=&#39;</span><span class="p">,</span> <span class="n">worker_uuid</span><span class="p">)],</span>
+            <span class="p">[(</span><span class="s1">&#39;uuid&#39;</span><span class="p">,</span> <span class="s1">&#39;=&#39;</span><span class="p">,</span> <span class="n">worker_uuid</span><span class="p">)],</span>
             <span class="n">limit</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">worker</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">worker</span><span class="o">.</span><span class="n">id</span>
 
 <div class="viewcode-block" id="OpenERPJobStorage.store"><a class="viewcode-back" href="../../../api/api_queue.html#connector.queue.job.OpenERPJobStorage.store">[docs]</a>    <span class="k">def</span> <span class="nf">store</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">job_</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Store the Job &quot;&quot;&quot;</span>
-        <span class="n">vals</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;state&#39;</span><span class="p">:</span> <span class="n">job_</span><span class="o">.</span><span class="n">state</span><span class="p">,</span>
-                <span class="s">&#39;priority&#39;</span><span class="p">:</span> <span class="n">job_</span><span class="o">.</span><span class="n">priority</span><span class="p">,</span>
-                <span class="s">&#39;retry&#39;</span><span class="p">:</span> <span class="n">job_</span><span class="o">.</span><span class="n">retry</span><span class="p">,</span>
-                <span class="s">&#39;max_retries&#39;</span><span class="p">:</span> <span class="n">job_</span><span class="o">.</span><span class="n">max_retries</span><span class="p">,</span>
-                <span class="s">&#39;exc_info&#39;</span><span class="p">:</span> <span class="n">job_</span><span class="o">.</span><span class="n">exc_info</span><span class="p">,</span>
-                <span class="s">&#39;user_id&#39;</span><span class="p">:</span> <span class="n">job_</span><span class="o">.</span><span class="n">user_id</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">uid</span><span class="p">,</span>
-                <span class="s">&#39;company_id&#39;</span><span class="p">:</span> <span class="n">job_</span><span class="o">.</span><span class="n">company_id</span><span class="p">,</span>
-                <span class="s">&#39;result&#39;</span><span class="p">:</span> <span class="nb">unicode</span><span class="p">(</span><span class="n">job_</span><span class="o">.</span><span class="n">result</span><span class="p">)</span> <span class="k">if</span> <span class="n">job_</span><span class="o">.</span><span class="n">result</span> <span class="k">else</span> <span class="bp">False</span><span class="p">,</span>
-                <span class="s">&#39;date_enqueued&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
-                <span class="s">&#39;date_started&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
-                <span class="s">&#39;date_done&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
-                <span class="s">&#39;eta&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
-                <span class="s">&#39;func_name&#39;</span><span class="p">:</span> <span class="n">job_</span><span class="o">.</span><span class="n">func_name</span><span class="p">,</span>
+        <span class="n">vals</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;state&#39;</span><span class="p">:</span> <span class="n">job_</span><span class="o">.</span><span class="n">state</span><span class="p">,</span>
+                <span class="s1">&#39;priority&#39;</span><span class="p">:</span> <span class="n">job_</span><span class="o">.</span><span class="n">priority</span><span class="p">,</span>
+                <span class="s1">&#39;retry&#39;</span><span class="p">:</span> <span class="n">job_</span><span class="o">.</span><span class="n">retry</span><span class="p">,</span>
+                <span class="s1">&#39;max_retries&#39;</span><span class="p">:</span> <span class="n">job_</span><span class="o">.</span><span class="n">max_retries</span><span class="p">,</span>
+                <span class="s1">&#39;exc_info&#39;</span><span class="p">:</span> <span class="n">job_</span><span class="o">.</span><span class="n">exc_info</span><span class="p">,</span>
+                <span class="s1">&#39;user_id&#39;</span><span class="p">:</span> <span class="n">job_</span><span class="o">.</span><span class="n">user_id</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">uid</span><span class="p">,</span>
+                <span class="s1">&#39;company_id&#39;</span><span class="p">:</span> <span class="n">job_</span><span class="o">.</span><span class="n">company_id</span><span class="p">,</span>
+                <span class="s1">&#39;result&#39;</span><span class="p">:</span> <span class="nb">unicode</span><span class="p">(</span><span class="n">job_</span><span class="o">.</span><span class="n">result</span><span class="p">)</span> <span class="k">if</span> <span class="n">job_</span><span class="o">.</span><span class="n">result</span> <span class="k">else</span> <span class="bp">False</span><span class="p">,</span>
+                <span class="s1">&#39;date_enqueued&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+                <span class="s1">&#39;date_started&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+                <span class="s1">&#39;date_done&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+                <span class="s1">&#39;eta&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+                <span class="s1">&#39;func_name&#39;</span><span class="p">:</span> <span class="n">job_</span><span class="o">.</span><span class="n">func_name</span><span class="p">,</span>
                 <span class="p">}</span>
 
         <span class="n">dt_to_string</span> <span class="o">=</span> <span class="n">openerp</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">Datetime</span><span class="o">.</span><span class="n">to_string</span>
         <span class="k">if</span> <span class="n">job_</span><span class="o">.</span><span class="n">date_enqueued</span><span class="p">:</span>
-            <span class="n">vals</span><span class="p">[</span><span class="s">&#39;date_enqueued&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dt_to_string</span><span class="p">(</span><span class="n">job_</span><span class="o">.</span><span class="n">date_enqueued</span><span class="p">)</span>
+            <span class="n">vals</span><span class="p">[</span><span class="s1">&#39;date_enqueued&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dt_to_string</span><span class="p">(</span><span class="n">job_</span><span class="o">.</span><span class="n">date_enqueued</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">job_</span><span class="o">.</span><span class="n">date_started</span><span class="p">:</span>
-            <span class="n">vals</span><span class="p">[</span><span class="s">&#39;date_started&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dt_to_string</span><span class="p">(</span><span class="n">job_</span><span class="o">.</span><span class="n">date_started</span><span class="p">)</span>
+            <span class="n">vals</span><span class="p">[</span><span class="s1">&#39;date_started&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dt_to_string</span><span class="p">(</span><span class="n">job_</span><span class="o">.</span><span class="n">date_started</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">job_</span><span class="o">.</span><span class="n">date_done</span><span class="p">:</span>
-            <span class="n">vals</span><span class="p">[</span><span class="s">&#39;date_done&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dt_to_string</span><span class="p">(</span><span class="n">job_</span><span class="o">.</span><span class="n">date_done</span><span class="p">)</span>
+            <span class="n">vals</span><span class="p">[</span><span class="s1">&#39;date_done&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dt_to_string</span><span class="p">(</span><span class="n">job_</span><span class="o">.</span><span class="n">date_done</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">job_</span><span class="o">.</span><span class="n">eta</span><span class="p">:</span>
-            <span class="n">vals</span><span class="p">[</span><span class="s">&#39;eta&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dt_to_string</span><span class="p">(</span><span class="n">job_</span><span class="o">.</span><span class="n">eta</span><span class="p">)</span>
+            <span class="n">vals</span><span class="p">[</span><span class="s1">&#39;eta&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dt_to_string</span><span class="p">(</span><span class="n">job_</span><span class="o">.</span><span class="n">eta</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">job_</span><span class="o">.</span><span class="n">canceled</span><span class="p">:</span>
-            <span class="n">vals</span><span class="p">[</span><span class="s">&#39;active&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">False</span>
+            <span class="n">vals</span><span class="p">[</span><span class="s1">&#39;active&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">False</span>
 
         <span class="k">if</span> <span class="n">job_</span><span class="o">.</span><span class="n">worker_uuid</span><span class="p">:</span>
-            <span class="n">vals</span><span class="p">[</span><span class="s">&#39;worker_id&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_worker_id</span><span class="p">(</span><span class="n">job_</span><span class="o">.</span><span class="n">worker_uuid</span><span class="p">)</span>
+            <span class="n">vals</span><span class="p">[</span><span class="s1">&#39;worker_id&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_worker_id</span><span class="p">(</span><span class="n">job_</span><span class="o">.</span><span class="n">worker_uuid</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">vals</span><span class="p">[</span><span class="s">&#39;worker_id&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">False</span>
+            <span class="n">vals</span><span class="p">[</span><span class="s1">&#39;worker_id&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">False</span>
 
         <span class="n">db_record</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">db_record</span><span class="p">(</span><span class="n">job_</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">db_record</span><span class="p">:</span>
             <span class="n">db_record</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">vals</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">date_created</span> <span class="o">=</span> <span class="n">dt_to_string</span><span class="p">(</span><span class="n">job_</span><span class="o">.</span><span class="n">date_created</span><span class="p">)</span>
-            <span class="n">vals</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s">&#39;uuid&#39;</span><span class="p">:</span> <span class="n">job_</span><span class="o">.</span><span class="n">uuid</span><span class="p">,</span>
-                         <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="n">job_</span><span class="o">.</span><span class="n">description</span><span class="p">,</span>
-                         <span class="s">&#39;func_string&#39;</span><span class="p">:</span> <span class="n">job_</span><span class="o">.</span><span class="n">func_string</span><span class="p">,</span>
-                         <span class="s">&#39;date_created&#39;</span><span class="p">:</span> <span class="n">date_created</span><span class="p">,</span>
-                         <span class="s">&#39;model_name&#39;</span><span class="p">:</span> <span class="p">(</span><span class="n">job_</span><span class="o">.</span><span class="n">model_name</span> <span class="k">if</span> <span class="n">job_</span><span class="o">.</span><span class="n">model_name</span>
+            <span class="n">vals</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">&#39;uuid&#39;</span><span class="p">:</span> <span class="n">job_</span><span class="o">.</span><span class="n">uuid</span><span class="p">,</span>
+                         <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="n">job_</span><span class="o">.</span><span class="n">description</span><span class="p">,</span>
+                         <span class="s1">&#39;func_string&#39;</span><span class="p">:</span> <span class="n">job_</span><span class="o">.</span><span class="n">func_string</span><span class="p">,</span>
+                         <span class="s1">&#39;date_created&#39;</span><span class="p">:</span> <span class="n">date_created</span><span class="p">,</span>
+                         <span class="s1">&#39;model_name&#39;</span><span class="p">:</span> <span class="p">(</span><span class="n">job_</span><span class="o">.</span><span class="n">model_name</span> <span class="k">if</span> <span class="n">job_</span><span class="o">.</span><span class="n">model_name</span>
                                         <span class="k">else</span> <span class="bp">False</span><span class="p">),</span>
                          <span class="p">})</span>
 
-            <span class="n">vals</span><span class="p">[</span><span class="s">&#39;func&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dumps</span><span class="p">((</span><span class="n">job_</span><span class="o">.</span><span class="n">func_name</span><span class="p">,</span>
+            <span class="n">vals</span><span class="p">[</span><span class="s1">&#39;func&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dumps</span><span class="p">((</span><span class="n">job_</span><span class="o">.</span><span class="n">func_name</span><span class="p">,</span>
                                   <span class="n">job_</span><span class="o">.</span><span class="n">args</span><span class="p">,</span>
                                   <span class="n">job_</span><span class="o">.</span><span class="n">kwargs</span><span class="p">))</span>
 
@@ -450,7 +450,7 @@
         <span class="n">stored</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">db_record_from_uuid</span><span class="p">(</span><span class="n">job_uuid</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">stored</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">NoSuchJobError</span><span class="p">(</span>
-                <span class="s">&#39;Job </span><span class="si">%s</span><span class="s"> does no longer exist in the storage.&#39;</span> <span class="o">%</span> <span class="n">job_uuid</span><span class="p">)</span>
+                <span class="s1">&#39;Job </span><span class="si">%s</span><span class="s1"> does no longer exist in the storage.&#39;</span> <span class="o">%</span> <span class="n">job_uuid</span><span class="p">)</span>
 
         <span class="n">func</span> <span class="o">=</span> <span class="n">_unpickle</span><span class="p">(</span><span class="n">stored</span><span class="o">.</span><span class="n">func</span><span class="p">)</span>
 
@@ -618,12 +618,12 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">args</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
             <span class="n">args</span> <span class="o">=</span> <span class="p">()</span>
-        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">),</span> <span class="s">&quot;</span><span class="si">%s</span><span class="s">: args are not a tuple&quot;</span> <span class="o">%</span> <span class="n">args</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">),</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">: args are not a tuple&quot;</span> <span class="o">%</span> <span class="n">args</span>
         <span class="k">if</span> <span class="n">kwargs</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
             <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{}</span>
 
-        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">kwargs</span><span class="p">,</span> <span class="nb">dict</span><span class="p">),</span> <span class="s">&quot;</span><span class="si">%s</span><span class="s">: kwargs are not a dict&quot;</span> <span class="o">%</span> <span class="n">kwargs</span>
-        <span class="k">assert</span> <span class="n">func</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">,</span> <span class="s">&quot;func is required&quot;</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">kwargs</span><span class="p">,</span> <span class="nb">dict</span><span class="p">),</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">: kwargs are not a dict&quot;</span> <span class="o">%</span> <span class="n">kwargs</span>
+        <span class="k">assert</span> <span class="n">func</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">,</span> <span class="s2">&quot;func is required&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="n">PENDING</span>
 
@@ -638,17 +638,17 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">func_name</span> <span class="o">=</span> <span class="bp">None</span>
         <span class="k">if</span> <span class="n">func</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">inspect</span><span class="o">.</span><span class="n">ismethod</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
-                <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s">&#39;Jobs on instances methods are &#39;</span>
-                                          <span class="s">&#39;not supported&#39;</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s1">&#39;Jobs on instances methods are &#39;</span>
+                                          <span class="s1">&#39;not supported&#39;</span><span class="p">)</span>
             <span class="k">elif</span> <span class="n">inspect</span><span class="o">.</span><span class="n">isfunction</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">func_name</span> <span class="o">=</span> <span class="s">&#39;</span><span class="si">%s</span><span class="s">.</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">func</span><span class="o">.</span><span class="n">__module__</span><span class="p">,</span> <span class="n">func</span><span class="o">.</span><span class="n">__name__</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">func_name</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">.</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">func</span><span class="o">.</span><span class="n">__module__</span><span class="p">,</span> <span class="n">func</span><span class="o">.</span><span class="n">__name__</span><span class="p">)</span>
             <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="nb">basestring</span><span class="p">):</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">func_name</span> <span class="o">=</span> <span class="n">func</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s">&#39;</span><span class="si">%s</span><span class="s"> is not a valid function for a job&#39;</span> <span class="o">%</span> <span class="n">func</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1"> is not a valid function for a job&#39;</span> <span class="o">%</span> <span class="n">func</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">model_name</span> <span class="o">=</span> <span class="n">model_name</span>
-        <span class="c"># the model name is by convention the second argument of the job</span>
+        <span class="c1"># the model name is by convention the second argument of the job</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">model_name</span><span class="p">:</span>
             <span class="n">args</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">model_name</span><span class="p">]</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">args</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">args</span> <span class="o">=</span> <span class="n">args</span>
@@ -676,8 +676,8 @@
 
     <span class="k">def</span> <span class="nf">__cmp__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">Job</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s">&quot;Job.__cmp__(self, other) requires other to be &quot;</span>
-                            <span class="s">&quot;a &#39;Job&#39;, not a &#39;</span><span class="si">%s</span><span class="s">&#39;&quot;</span> <span class="o">%</span> <span class="nb">type</span><span class="p">(</span><span class="n">other</span><span class="p">))</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Job.__cmp__(self, other) requires other to be &quot;</span>
+                            <span class="s2">&quot;a &#39;Job&#39;, not a &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span> <span class="o">%</span> <span class="nb">type</span><span class="p">(</span><span class="n">other</span><span class="p">))</span>
         <span class="n">self_eta</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">eta</span> <span class="ow">or</span> <span class="n">datetime</span><span class="p">(</span><span class="n">MINYEAR</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
         <span class="n">other_eta</span> <span class="o">=</span> <span class="n">other</span><span class="o">.</span><span class="n">eta</span> <span class="ow">or</span> <span class="n">datetime</span><span class="p">(</span><span class="n">MINYEAR</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
         <span class="k">return</span> <span class="nb">cmp</span><span class="p">((</span><span class="n">self_eta</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">priority</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">date_created</span><span class="p">),</span>
@@ -691,7 +691,7 @@
 <span class="sd">        :param session: session to execute the job</span>
 <span class="sd">        :type session: ConnectorSession</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">assert</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">canceled</span><span class="p">,</span> <span class="s">&quot;Canceled job&quot;</span>
+        <span class="k">assert</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">canceled</span><span class="p">,</span> <span class="s2">&quot;Canceled job&quot;</span>
         <span class="k">with</span> <span class="n">session</span><span class="o">.</span><span class="n">change_user</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">user_id</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">retry</span> <span class="o">+=</span> <span class="mi">1</span>
             <span class="k">try</span><span class="p">:</span>
@@ -700,14 +700,14 @@
                 <span class="k">if</span> <span class="n">err</span><span class="o">.</span><span class="n">ignore_retry</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">retry</span> <span class="o">-=</span> <span class="mi">1</span>
                     <span class="k">raise</span>
-                <span class="k">elif</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_retries</span><span class="p">:</span>  <span class="c"># infinite retries</span>
+                <span class="k">elif</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_retries</span><span class="p">:</span>  <span class="c1"># infinite retries</span>
                     <span class="k">raise</span>
                 <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">retry</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_retries</span><span class="p">:</span>
                     <span class="n">type_</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">traceback</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">exc_info</span><span class="p">()</span>
-                    <span class="c"># change the exception type but keep the original</span>
-                    <span class="c"># traceback and message:</span>
-                    <span class="c"># http://blog.ianbicking.org/2007/09/12/re-raising-exceptions/</span>
-                    <span class="n">new_exc</span> <span class="o">=</span> <span class="n">FailedJobError</span><span class="p">(</span><span class="s">&quot;Max. retries (</span><span class="si">%d</span><span class="s">) reached: </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span>
+                    <span class="c1"># change the exception type but keep the original</span>
+                    <span class="c1"># traceback and message:</span>
+                    <span class="c1"># http://blog.ianbicking.org/2007/09/12/re-raising-exceptions/</span>
+                    <span class="n">new_exc</span> <span class="o">=</span> <span class="n">FailedJobError</span><span class="p">(</span><span class="s2">&quot;Max. retries (</span><span class="si">%d</span><span class="s2">) reached: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span>
                                              <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">max_retries</span><span class="p">,</span> <span class="n">value</span> <span class="ow">or</span> <span class="n">type_</span><span class="p">)</span>
                                              <span class="p">)</span>
                     <span class="k">raise</span> <span class="n">new_exc</span><span class="o">.</span><span class="n">__class__</span><span class="p">,</span> <span class="n">new_exc</span><span class="p">,</span> <span class="n">traceback</span>
@@ -719,15 +719,15 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">func_name</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">None</span>
         <span class="n">args</span> <span class="o">=</span> <span class="p">[</span><span class="nb">repr</span><span class="p">(</span><span class="n">arg</span><span class="p">)</span> <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">]</span>
-        <span class="n">kwargs</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;</span><span class="si">%s</span><span class="s">=</span><span class="si">%r</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">val</span><span class="p">)</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span>
+        <span class="n">kwargs</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">=</span><span class="si">%r</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">val</span><span class="p">)</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span>
                   <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span><span class="o">.</span><span class="n">iteritems</span><span class="p">()]</span>
-        <span class="k">return</span> <span class="s">&#39;</span><span class="si">%s</span><span class="s">(</span><span class="si">%s</span><span class="s">)&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">func_name</span><span class="p">,</span> <span class="s">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">args</span> <span class="o">+</span> <span class="n">kwargs</span><span class="p">))</span>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">(</span><span class="si">%s</span><span class="s1">)&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">func_name</span><span class="p">,</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">args</span> <span class="o">+</span> <span class="n">kwargs</span><span class="p">))</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">description</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">descr</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_description</span> <span class="ow">or</span>
                  <span class="bp">self</span><span class="o">.</span><span class="n">func</span><span class="o">.</span><span class="n">__doc__</span> <span class="ow">or</span>
-                 <span class="s">&#39;Function </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">func</span><span class="o">.</span><span class="n">__name__</span><span class="p">)</span>
+                 <span class="s1">&#39;Function </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">func</span><span class="o">.</span><span class="n">__name__</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">descr</span>
 
     <span class="nd">@property</span>
@@ -743,7 +743,7 @@
         <span class="k">if</span> <span class="n">func_name</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">None</span>
 
-        <span class="n">module_name</span><span class="p">,</span> <span class="n">func_name</span> <span class="o">=</span> <span class="n">func_name</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="s">&#39;.&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">module_name</span><span class="p">,</span> <span class="n">func_name</span> <span class="o">=</span> <span class="n">func_name</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
         <span class="nb">__import__</span><span class="p">(</span><span class="n">module_name</span><span class="p">)</span>
         <span class="n">module</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="n">module_name</span><span class="p">]</span>
         <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="n">func_name</span><span class="p">)</span>
@@ -798,17 +798,17 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">exc_info</span> <span class="o">=</span> <span class="n">exc_info</span></div>
 
     <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s">&#39;&lt;Job </span><span class="si">%s</span><span class="s">, priority:</span><span class="si">%d</span><span class="s">&gt;&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">uuid</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">priority</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s1">&#39;&lt;Job </span><span class="si">%s</span><span class="s1">, priority:</span><span class="si">%d</span><span class="s1">&gt;&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">uuid</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">priority</span><span class="p">)</span>
 
 <div class="viewcode-block" id="Job.cancel"><a class="viewcode-back" href="../../../api/api_queue.html#connector.queue.job.Job.cancel">[docs]</a>    <span class="k">def</span> <span class="nf">cancel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">canceled</span> <span class="o">=</span> <span class="bp">True</span>
-        <span class="n">result</span> <span class="o">=</span> <span class="n">msg</span> <span class="k">if</span> <span class="n">msg</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="k">else</span> <span class="n">_</span><span class="p">(</span><span class="s">&#39;Canceled. Nothing to do.&#39;</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">msg</span> <span class="k">if</span> <span class="n">msg</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="k">else</span> <span class="n">_</span><span class="p">(</span><span class="s1">&#39;Canceled. Nothing to do.&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">set_done</span><span class="p">(</span><span class="n">result</span><span class="o">=</span><span class="n">result</span><span class="p">)</span></div>
 
     <span class="k">def</span> <span class="nf">_get_retry_seconds</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">seconds</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="n">retry_pattern</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">func</span><span class="o">.</span><span class="n">retry_pattern</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">seconds</span> <span class="ow">and</span> <span class="n">retry_pattern</span><span class="p">:</span>
-            <span class="c"># ordered from higher to lower count of retries</span>
+            <span class="c1"># ordered from higher to lower count of retries</span>
             <span class="n">patt</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">retry_pattern</span><span class="o">.</span><span class="n">iteritems</span><span class="p">(),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">t</span><span class="p">:</span> <span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
             <span class="n">seconds</span> <span class="o">=</span> <span class="n">RETRY_INTERVAL</span>
             <span class="k">for</span> <span class="n">retry_count</span><span class="p">,</span> <span class="n">postpone_seconds</span> <span class="ow">in</span> <span class="n">patt</span><span class="p">:</span>
@@ -831,7 +831,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">result</span> <span class="o">=</span> <span class="n">result</span></div>
 
 <div class="viewcode-block" id="Job.related_action"><a class="viewcode-back" href="../../../api/api_queue.html#connector.queue.job.Job.related_action">[docs]</a>    <span class="k">def</span> <span class="nf">related_action</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">session</span><span class="p">):</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">func</span><span class="p">,</span> <span class="s">&#39;related_action&#39;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">func</span><span class="p">,</span> <span class="s1">&#39;related_action&#39;</span><span class="p">):</span>
             <span class="k">return</span> <span class="bp">None</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">func</span><span class="o">.</span><span class="n">related_action</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span></div></div>
 
@@ -839,7 +839,7 @@
 <span class="n">JOB_REGISTRY</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
 
 
-<div class="viewcode-block" id="job"><a class="viewcode-back" href="../../../api/api_queue.html#connector.queue.job.job">[docs]</a><span class="k">def</span> <span class="nf">job</span><span class="p">(</span><span class="n">func</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">default_channel</span><span class="o">=</span><span class="s">&#39;root&#39;</span><span class="p">,</span> <span class="n">retry_pattern</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="job"><a class="viewcode-back" href="../../../api/api_queue.html#connector.queue.job.job">[docs]</a><span class="k">def</span> <span class="nf">job</span><span class="p">(</span><span class="n">func</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">default_channel</span><span class="o">=</span><span class="s1">&#39;root&#39;</span><span class="p">,</span> <span class="n">retry_pattern</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Decorator for jobs.</span>
 
 <span class="sd">    Optional argument:</span>
@@ -946,11 +946,11 @@
             <span class="o">*</span><span class="n">args</span><span class="p">,</span>
             <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
-    <span class="k">assert</span> <span class="n">default_channel</span> <span class="o">==</span> <span class="s">&#39;root&#39;</span> <span class="ow">or</span> <span class="n">default_channel</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s">&#39;root.&#39;</span><span class="p">),</span> <span class="p">(</span>
-        <span class="s">&quot;The channel path must start by &#39;root&#39;&quot;</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">default_channel</span> <span class="o">==</span> <span class="s1">&#39;root&#39;</span> <span class="ow">or</span> <span class="n">default_channel</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;root.&#39;</span><span class="p">),</span> <span class="p">(</span>
+        <span class="s2">&quot;The channel path must start by &#39;root&#39;&quot;</span><span class="p">)</span>
     <span class="n">func</span><span class="o">.</span><span class="n">default_channel</span> <span class="o">=</span> <span class="n">default_channel</span>
     <span class="k">assert</span> <span class="n">retry_pattern</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">retry_pattern</span><span class="p">,</span> <span class="nb">dict</span><span class="p">),</span> <span class="p">(</span>
-        <span class="s">&quot;retry_pattern must be a dict&quot;</span>
+        <span class="s2">&quot;retry_pattern must be a dict&quot;</span>
     <span class="p">)</span>
     <span class="n">func</span><span class="o">.</span><span class="n">retry_pattern</span> <span class="o">=</span> <span class="n">retry_pattern</span>
     <span class="n">func</span><span class="o">.</span><span class="n">delay</span> <span class="o">=</span> <span class="n">delay</span>
@@ -1031,7 +1031,7 @@
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.4.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.<br/>
     </p>
   </div>
 </footer>

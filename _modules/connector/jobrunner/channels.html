@@ -229,30 +229,30 @@
     <div class="col-md-12 content">
       
   <h1>Source code for connector.jobrunner.channels</h1><div class="highlight"><pre>
-<span class="c"># -*- coding: utf-8 -*-</span>
-<span class="c">##############################################################################</span>
-<span class="c">#</span>
-<span class="c">#     This file is part of connector, an Odoo module.</span>
-<span class="c">#</span>
-<span class="c">#     Author: Stéphane Bidoul &lt;stephane.bidoul@acsone.eu&gt;</span>
-<span class="c">#     Copyright (c) 2015 ACSONE SA/NV (&lt;http://acsone.eu&gt;)</span>
-<span class="c">#</span>
-<span class="c">#     connector is free software: you can redistribute it and/or</span>
-<span class="c">#     modify it under the terms of the GNU Affero General Public License</span>
-<span class="c">#     as published by the Free Software Foundation, either version 3 of</span>
-<span class="c">#     the License, or (at your option) any later version.</span>
-<span class="c">#</span>
-<span class="c">#     connector is distributed in the hope that it will be useful,</span>
-<span class="c">#     but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
-<span class="c">#     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
-<span class="c">#     GNU Affero General Public License for more details.</span>
-<span class="c">#</span>
-<span class="c">#     You should have received a copy of the</span>
-<span class="c">#     GNU Affero General Public License</span>
-<span class="c">#     along with connector.</span>
-<span class="c">#     If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
-<span class="c">#</span>
-<span class="c">##############################################################################</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1">##############################################################################</span>
+<span class="c1">#</span>
+<span class="c1">#     This file is part of connector, an Odoo module.</span>
+<span class="c1">#</span>
+<span class="c1">#     Author: Stéphane Bidoul &lt;stephane.bidoul@acsone.eu&gt;</span>
+<span class="c1">#     Copyright (c) 2015 ACSONE SA/NV (&lt;http://acsone.eu&gt;)</span>
+<span class="c1">#</span>
+<span class="c1">#     connector is free software: you can redistribute it and/or</span>
+<span class="c1">#     modify it under the terms of the GNU Affero General Public License</span>
+<span class="c1">#     as published by the Free Software Foundation, either version 3 of</span>
+<span class="c1">#     the License, or (at your option) any later version.</span>
+<span class="c1">#</span>
+<span class="c1">#     connector is distributed in the hope that it will be useful,</span>
+<span class="c1">#     but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c1">#     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="c1">#     GNU Affero General Public License for more details.</span>
+<span class="c1">#</span>
+<span class="c1">#     You should have received a copy of the</span>
+<span class="c1">#     GNU Affero General Public License</span>
+<span class="c1">#     along with connector.</span>
+<span class="c1">#     If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+<span class="c1">#</span>
+<span class="c1">##############################################################################</span>
 
 <span class="kn">from</span> <span class="nn">heapq</span> <span class="kn">import</span> <span class="n">heappush</span><span class="p">,</span> <span class="n">heappop</span>
 <span class="kn">import</span> <span class="nn">logging</span>
@@ -299,8 +299,8 @@
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_heap</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_known</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>    <span class="c"># all objects in the heap (including removed)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_removed</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>  <span class="c"># all objects that have been removed</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_known</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>    <span class="c1"># all objects in the heap (including removed)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_removed</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>  <span class="c1"># all objects that have been removed</span>
 
     <span class="k">def</span> <span class="nf">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_known</span><span class="p">)</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_removed</span><span class="p">)</span>
@@ -346,7 +346,7 @@
             <span class="k">try</span><span class="p">:</span>
                 <span class="n">o</span> <span class="o">=</span> <span class="n">heappop</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_heap</span><span class="p">)</span>
             <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
-                <span class="c"># queue is empty</span>
+                <span class="c1"># queue is empty</span>
                 <span class="k">return</span> <span class="bp">None</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_known</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">o</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">o</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_removed</span><span class="p">:</span>
@@ -446,7 +446,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">eta</span> <span class="o">=</span> <span class="n">eta</span>
 
     <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s">&quot;&lt;ChannelJob </span><span class="si">%s</span><span class="s">&gt;&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">uuid</span>
+        <span class="k">return</span> <span class="s2">&quot;&lt;ChannelJob </span><span class="si">%s</span><span class="s2">&gt;&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">uuid</span>
 
     <span class="k">def</span> <span class="nf">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
         <span class="k">return</span> <span class="nb">id</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">==</span> <span class="nb">id</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
@@ -582,17 +582,17 @@
 <span class="sd">        * capacity</span>
 <span class="sd">        * sequential</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">fullname</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">])</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">capacity</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;capacity&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">sequential</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;sequential&#39;</span><span class="p">,</span> <span class="bp">False</span><span class="p">))</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">fullname</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">capacity</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;capacity&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sequential</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;sequential&#39;</span><span class="p">,</span> <span class="bp">False</span><span class="p">))</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">sequential</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">capacity</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;A sequential channel must have a capacity of 1&quot;</span><span class="p">)</span></div>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;A sequential channel must have a capacity of 1&quot;</span><span class="p">)</span></div>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">fullname</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; The full name of the channel, in dot separated notation. &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">fullname</span> <span class="o">+</span> <span class="s">&#39;.&#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">fullname</span> <span class="o">+</span> <span class="s1">&#39;.&#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
 
@@ -600,8 +600,8 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">children</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">subchannel_name</span><span class="p">)</span></div>
 
     <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">capacity</span> <span class="o">=</span> <span class="s">u&#39;∞&#39;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">capacity</span> <span class="ow">is</span> <span class="bp">None</span> <span class="k">else</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">capacity</span><span class="p">)</span>
-        <span class="k">return</span> <span class="s">&quot;</span><span class="si">%s</span><span class="s">(C:</span><span class="si">%s</span><span class="s">,Q:</span><span class="si">%d</span><span class="s">,R:</span><span class="si">%d</span><span class="s">,F:</span><span class="si">%d</span><span class="s">)&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fullname</span><span class="p">,</span>
+        <span class="n">capacity</span> <span class="o">=</span> <span class="s1">u&#39;∞&#39;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">capacity</span> <span class="ow">is</span> <span class="bp">None</span> <span class="k">else</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">capacity</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">(C:</span><span class="si">%s</span><span class="s2">,Q:</span><span class="si">%d</span><span class="s2">,R:</span><span class="si">%d</span><span class="s2">,F:</span><span class="si">%d</span><span class="s2">)&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fullname</span><span class="p">,</span>
                                             <span class="n">capacity</span><span class="p">,</span>
                                             <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_queue</span><span class="p">),</span>
                                             <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_running</span><span class="p">),</span>
@@ -621,7 +621,7 @@
 <span class="sd">        This removes it from the channel queue.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">job</span><span class="p">)</span>
-        <span class="n">_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&quot;job </span><span class="si">%s</span><span class="s"> marked done in channel </span><span class="si">%s</span><span class="s">&quot;</span><span class="p">,</span>
+        <span class="n">_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;job </span><span class="si">%s</span><span class="s2"> marked done in channel </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span>
                       <span class="n">job</span><span class="o">.</span><span class="n">uuid</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Channel.set_pending"><a class="viewcode-back" href="../../../api/api_channels.html#connector.jobrunner.channels.Channel.set_pending">[docs]</a>    <span class="k">def</span> <span class="nf">set_pending</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">job</span><span class="p">):</span>
@@ -636,7 +636,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_failed</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">job</span><span class="p">)</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">job</span><span class="p">)</span>
-            <span class="n">_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&quot;job </span><span class="si">%s</span><span class="s"> marked pending in channel </span><span class="si">%s</span><span class="s">&quot;</span><span class="p">,</span>
+            <span class="n">_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;job </span><span class="si">%s</span><span class="s2"> marked pending in channel </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span>
                           <span class="n">job</span><span class="o">.</span><span class="n">uuid</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Channel.set_running"><a class="viewcode-back" href="../../../api/api_channels.html#connector.jobrunner.channels.Channel.set_running">[docs]</a>    <span class="k">def</span> <span class="nf">set_running</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">job</span><span class="p">):</span>
@@ -650,7 +650,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_failed</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">job</span><span class="p">)</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">set_running</span><span class="p">(</span><span class="n">job</span><span class="p">)</span>
-            <span class="n">_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&quot;job </span><span class="si">%s</span><span class="s"> marked running in channel </span><span class="si">%s</span><span class="s">&quot;</span><span class="p">,</span>
+            <span class="n">_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;job </span><span class="si">%s</span><span class="s2"> marked running in channel </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span>
                           <span class="n">job</span><span class="o">.</span><span class="n">uuid</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Channel.set_failed"><a class="viewcode-back" href="../../../api/api_channels.html#connector.jobrunner.channels.Channel.set_failed">[docs]</a>    <span class="k">def</span> <span class="nf">set_failed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">job</span><span class="p">):</span>
@@ -661,7 +661,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_failed</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">job</span><span class="p">)</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">job</span><span class="p">)</span>
-            <span class="n">_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&quot;job </span><span class="si">%s</span><span class="s"> marked failed in channel </span><span class="si">%s</span><span class="s">&quot;</span><span class="p">,</span>
+            <span class="n">_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;job </span><span class="si">%s</span><span class="s2"> marked failed in channel </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span>
                           <span class="n">job</span><span class="o">.</span><span class="n">uuid</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Channel.get_jobs_to_run"><a class="viewcode-back" href="../../../api/api_channels.html#connector.jobrunner.channels.Channel.get_jobs_to_run">[docs]</a>    <span class="k">def</span> <span class="nf">get_jobs_to_run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">now</span><span class="p">):</span>
@@ -676,24 +676,24 @@
 
 <span class="sd">        :return: iterator of :py:class:`connector.jobrunner.ChannelJob`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c"># enqueue jobs of children channels</span>
+        <span class="c1"># enqueue jobs of children channels</span>
         <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">children</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
             <span class="k">for</span> <span class="n">job</span> <span class="ow">in</span> <span class="n">child</span><span class="o">.</span><span class="n">get_jobs_to_run</span><span class="p">(</span><span class="n">now</span><span class="p">):</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_queue</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">job</span><span class="p">)</span>
-        <span class="c"># sequential channels block when there are failed jobs</span>
-        <span class="c"># TODO: this is probably not sufficient to ensure</span>
-        <span class="c">#       sequentiality because of the behaviour in presence</span>
-        <span class="c">#       of jobs with eta; plus: check if there are no</span>
-        <span class="c">#       race conditions.</span>
+        <span class="c1"># sequential channels block when there are failed jobs</span>
+        <span class="c1"># TODO: this is probably not sufficient to ensure</span>
+        <span class="c1">#       sequentiality because of the behaviour in presence</span>
+        <span class="c1">#       of jobs with eta; plus: check if there are no</span>
+        <span class="c1">#       race conditions.</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">sequential</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_failed</span><span class="p">):</span>
             <span class="k">return</span>
-        <span class="c"># yield jobs that are ready to run</span>
+        <span class="c1"># yield jobs that are ready to run</span>
         <span class="k">while</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">capacity</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_running</span><span class="p">)</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">capacity</span><span class="p">:</span>
             <span class="n">job</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_queue</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">now</span><span class="p">)</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">job</span><span class="p">:</span>
                 <span class="k">return</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_running</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">job</span><span class="p">)</span>
-            <span class="n">_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&quot;job </span><span class="si">%s</span><span class="s"> marked running in channel </span><span class="si">%s</span><span class="s">&quot;</span><span class="p">,</span>
+            <span class="n">_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;job </span><span class="si">%s</span><span class="s2"> marked running in channel </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span>
                           <span class="n">job</span><span class="o">.</span><span class="n">uuid</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
             <span class="k">yield</span> <span class="n">job</span></div></div>
 
@@ -759,7 +759,7 @@
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_jobs_by_uuid</span> <span class="o">=</span> <span class="n">WeakValueDictionary</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_root_channel</span> <span class="o">=</span> <span class="n">Channel</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;root&#39;</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">capacity</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_root_channel</span> <span class="o">=</span> <span class="n">Channel</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;root&#39;</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">capacity</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_channels_by_name</span> <span class="o">=</span> <span class="n">WeakValueDictionary</span><span class="p">(</span><span class="n">root</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_root_channel</span><span class="p">)</span>
 
     <span class="nd">@classmethod</span>
@@ -791,39 +791,39 @@
 <span class="sd">        [{&#39;capacity&#39;: 2, &#39;name&#39;: &#39;sub&#39;}]</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">res</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">channel_config_string</span> <span class="ow">in</span> <span class="n">config_string</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;,&#39;</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">channel_config_string</span> <span class="ow">in</span> <span class="n">config_string</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">):</span>
             <span class="n">config</span> <span class="o">=</span> <span class="p">{}</span>
-            <span class="n">config_items</span> <span class="o">=</span> <span class="n">channel_config_string</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;:&#39;</span><span class="p">)</span>
+            <span class="n">config_items</span> <span class="o">=</span> <span class="n">channel_config_string</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;:&#39;</span><span class="p">)</span>
             <span class="n">name</span> <span class="o">=</span> <span class="n">config_items</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">name</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;Invalid channel config </span><span class="si">%s</span><span class="s">: &#39;</span>
-                                 <span class="s">&#39;missing channel name&#39;</span> <span class="o">%</span> <span class="n">config_string</span><span class="p">)</span>
-            <span class="n">config</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">name</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Invalid channel config </span><span class="si">%s</span><span class="s1">: &#39;</span>
+                                 <span class="s1">&#39;missing channel name&#39;</span> <span class="o">%</span> <span class="n">config_string</span><span class="p">)</span>
+            <span class="n">config</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">name</span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">config_items</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
                 <span class="n">capacity</span> <span class="o">=</span> <span class="n">config_items</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
                 <span class="k">try</span><span class="p">:</span>
-                    <span class="n">config</span><span class="p">[</span><span class="s">&#39;capacity&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">capacity</span><span class="p">)</span>
+                    <span class="n">config</span><span class="p">[</span><span class="s1">&#39;capacity&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">capacity</span><span class="p">)</span>
                 <span class="k">except</span><span class="p">:</span>
-                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;Invalid channel config </span><span class="si">%s</span><span class="s">: &#39;</span>
-                                     <span class="s">&#39;invalid capacity </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Invalid channel config </span><span class="si">%s</span><span class="s1">: &#39;</span>
+                                     <span class="s1">&#39;invalid capacity </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span>
                                      <span class="p">(</span><span class="n">config_string</span><span class="p">,</span> <span class="n">capacity</span><span class="p">))</span>
                 <span class="k">for</span> <span class="n">config_item</span> <span class="ow">in</span> <span class="n">config_items</span><span class="p">[</span><span class="mi">2</span><span class="p">:]:</span>
-                    <span class="n">kv</span> <span class="o">=</span> <span class="n">config_item</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;=&#39;</span><span class="p">)</span>
+                    <span class="n">kv</span> <span class="o">=</span> <span class="n">config_item</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;=&#39;</span><span class="p">)</span>
                     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">kv</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
                         <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="n">kv</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">True</span>
                     <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">kv</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
                         <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="n">kv</span>
                     <span class="k">else</span><span class="p">:</span>
-                        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;Invalid channel config </span><span class="si">%s</span><span class="s">: &#39;</span><span class="p">,</span>
-                                         <span class="s">&#39;incorrect config item </span><span class="si">%s</span><span class="s">&#39;</span>
+                        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Invalid channel config </span><span class="si">%s</span><span class="s1">: &#39;</span><span class="p">,</span>
+                                         <span class="s1">&#39;incorrect config item </span><span class="si">%s</span><span class="s1">&#39;</span>
                                          <span class="p">(</span><span class="n">config_string</span><span class="p">,</span> <span class="n">config_item</span><span class="p">))</span>
                     <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">config</span><span class="p">:</span>
-                        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;Invalid channel config </span><span class="si">%s</span><span class="s">: &#39;</span>
-                                         <span class="s">&#39;duplicate key </span><span class="si">%s</span><span class="s">&#39;</span>
+                        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Invalid channel config </span><span class="si">%s</span><span class="s1">: &#39;</span>
+                                         <span class="s1">&#39;duplicate key </span><span class="si">%s</span><span class="s1">&#39;</span>
                                          <span class="p">(</span><span class="n">config_string</span><span class="p">,</span> <span class="n">k</span><span class="p">))</span>
                     <span class="n">config</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">config</span><span class="p">[</span><span class="s">&#39;capacity&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+                <span class="n">config</span><span class="p">[</span><span class="s1">&#39;capacity&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
             <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">res</span></div>
 
@@ -856,7 +856,7 @@
 <span class="sd">        (except for the root channel, which defaults to a capacity of 1</span>
 <span class="sd">        when not configured explicity).</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">channel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_channel_by_name</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">],</span> <span class="n">autocreate</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+        <span class="n">channel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_channel_by_name</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">],</span> <span class="n">autocreate</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
         <span class="n">channel</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">channel</span></div>
 
@@ -901,14 +901,14 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">channel_name</span> <span class="ow">or</span> <span class="n">channel_name</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">_root_channel</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_root_channel</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">channel_name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_root_channel</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s">&#39;.&#39;</span><span class="p">):</span>
-            <span class="n">channel_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_root_channel</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s">&#39;.&#39;</span> <span class="o">+</span> <span class="n">channel_name</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">channel_name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_root_channel</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s1">&#39;.&#39;</span><span class="p">):</span>
+            <span class="n">channel_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_root_channel</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s1">&#39;.&#39;</span> <span class="o">+</span> <span class="n">channel_name</span>
         <span class="k">if</span> <span class="n">channel_name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_channels_by_name</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_channels_by_name</span><span class="p">[</span><span class="n">channel_name</span><span class="p">]</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">autocreate</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="n">ChannelNotFound</span><span class="p">(</span><span class="s">&#39;Channel </span><span class="si">%s</span><span class="s"> not found&#39;</span> <span class="o">%</span> <span class="n">channel_name</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">ChannelNotFound</span><span class="p">(</span><span class="s1">&#39;Channel </span><span class="si">%s</span><span class="s1"> not found&#39;</span> <span class="o">%</span> <span class="n">channel_name</span><span class="p">)</span>
         <span class="n">parent</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_root_channel</span>
-        <span class="k">for</span> <span class="n">subchannel_name</span> <span class="ow">in</span> <span class="n">channel_name</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;.&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">:]:</span>
+        <span class="k">for</span> <span class="n">subchannel_name</span> <span class="ow">in</span> <span class="n">channel_name</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">:]:</span>
             <span class="n">subchannel</span> <span class="o">=</span> <span class="n">parent</span><span class="o">.</span><span class="n">get_subchannel_by_name</span><span class="p">(</span><span class="n">subchannel_name</span><span class="p">)</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">subchannel</span><span class="p">:</span>
                 <span class="n">subchannel</span> <span class="o">=</span> <span class="n">Channel</span><span class="p">(</span><span class="n">subchannel_name</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">capacity</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
@@ -921,24 +921,24 @@
         <span class="k">try</span><span class="p">:</span>
             <span class="n">channel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_channel_by_name</span><span class="p">(</span><span class="n">channel_name</span><span class="p">)</span>
         <span class="k">except</span> <span class="n">ChannelNotFound</span><span class="p">:</span>
-            <span class="n">_logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s">&#39;unknown channel </span><span class="si">%s</span><span class="s">, &#39;</span>
-                            <span class="s">&#39;using root channel for job </span><span class="si">%s</span><span class="s">&#39;</span><span class="p">,</span>
+            <span class="n">_logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;unknown channel </span><span class="si">%s</span><span class="s1">, &#39;</span>
+                            <span class="s1">&#39;using root channel for job </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span>
                             <span class="n">channel_name</span><span class="p">,</span> <span class="n">uuid</span><span class="p">)</span>
             <span class="n">channel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_root_channel</span>
         <span class="n">job</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_jobs_by_uuid</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">uuid</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">job</span><span class="p">:</span>
-            <span class="c"># db_name is invariant</span>
+            <span class="c1"># db_name is invariant</span>
             <span class="k">assert</span> <span class="n">job</span><span class="o">.</span><span class="n">db_name</span> <span class="o">==</span> <span class="n">db_name</span>
-            <span class="c"># date_created is invariant</span>
+            <span class="c1"># date_created is invariant</span>
             <span class="k">assert</span> <span class="n">job</span><span class="o">.</span><span class="n">date_created</span> <span class="o">==</span> <span class="n">date_created</span>
-            <span class="c"># if one of the job properties that influence</span>
-            <span class="c"># scheduling order has changed, we remove the job</span>
-            <span class="c"># from the queues and create a new job object</span>
+            <span class="c1"># if one of the job properties that influence</span>
+            <span class="c1"># scheduling order has changed, we remove the job</span>
+            <span class="c1"># from the queues and create a new job object</span>
             <span class="k">if</span> <span class="p">(</span><span class="n">seq</span> <span class="o">!=</span> <span class="n">job</span><span class="o">.</span><span class="n">seq</span> <span class="ow">or</span>
                     <span class="n">priority</span> <span class="o">!=</span> <span class="n">job</span><span class="o">.</span><span class="n">priority</span> <span class="ow">or</span>
                     <span class="n">eta</span> <span class="o">!=</span> <span class="n">job</span><span class="o">.</span><span class="n">eta</span> <span class="ow">or</span>
                     <span class="n">channel</span> <span class="o">!=</span> <span class="n">job</span><span class="o">.</span><span class="n">channel</span><span class="p">):</span>
-                <span class="n">_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&quot;job </span><span class="si">%s</span><span class="s"> properties changed, rescheduling it&quot;</span><span class="p">,</span>
+                <span class="n">_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;job </span><span class="si">%s</span><span class="s2"> properties changed, rescheduling it&quot;</span><span class="p">,</span>
                               <span class="n">uuid</span><span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">remove_job</span><span class="p">(</span><span class="n">uuid</span><span class="p">)</span>
                 <span class="n">job</span> <span class="o">=</span> <span class="bp">None</span>
@@ -946,7 +946,7 @@
             <span class="n">job</span> <span class="o">=</span> <span class="n">ChannelJob</span><span class="p">(</span><span class="n">db_name</span><span class="p">,</span> <span class="n">channel</span><span class="p">,</span> <span class="n">uuid</span><span class="p">,</span>
                              <span class="n">seq</span><span class="p">,</span> <span class="n">date_created</span><span class="p">,</span> <span class="n">priority</span><span class="p">,</span> <span class="n">eta</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_jobs_by_uuid</span><span class="p">[</span><span class="n">uuid</span><span class="p">]</span> <span class="o">=</span> <span class="n">job</span>
-        <span class="c"># state transitions</span>
+        <span class="c1"># state transitions</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">state</span> <span class="ow">or</span> <span class="n">state</span> <span class="o">==</span> <span class="n">DONE</span><span class="p">:</span>
             <span class="n">job</span><span class="o">.</span><span class="n">channel</span><span class="o">.</span><span class="n">set_done</span><span class="p">(</span><span class="n">job</span><span class="p">)</span>
         <span class="k">elif</span> <span class="n">state</span> <span class="o">==</span> <span class="n">PENDING</span><span class="p">:</span>
@@ -956,7 +956,7 @@
         <span class="k">elif</span> <span class="n">state</span> <span class="o">==</span> <span class="n">FAILED</span><span class="p">:</span>
             <span class="n">job</span><span class="o">.</span><span class="n">channel</span><span class="o">.</span><span class="n">set_failed</span><span class="p">(</span><span class="n">job</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">_logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;unexpected state </span><span class="si">%s</span><span class="s"> for job </span><span class="si">%s</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">job</span><span class="p">)</span></div>
+            <span class="n">_logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;unexpected state </span><span class="si">%s</span><span class="s2"> for job </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">job</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="ChannelManager.remove_job"><a class="viewcode-back" href="../../../api/api_channels.html#connector.jobrunner.channels.ChannelManager.remove_job">[docs]</a>    <span class="k">def</span> <span class="nf">remove_job</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">uuid</span><span class="p">):</span>
         <span class="n">job</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_jobs_by_uuid</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">uuid</span><span class="p">)</span>
@@ -989,7 +989,7 @@
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.4.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.<br/>
     </p>
   </div>
 </footer>

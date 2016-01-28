@@ -296,23 +296,23 @@
 <p>Attention : changements non rétro-compatibles dans cette version.</p>
 <ul>
 <li><p class="first">Ajout de <code class="docutils literal"><span class="pre">openerp.api.Environment</span></code> dans <code class="docutils literal"><span class="pre">Session</span></code> Accessible via <code class="docutils literal"><span class="pre">self.env</span></code> dans <code class="docutils literal"><span class="pre">Session</span></code> et toutes les instances <code class="docutils literal"><span class="pre">ConnectorUnit</span></code>. Également dans <code class="docutils literal"><span class="pre">ConnectorUnit</span></code>, <code class="docutils literal"><span class="pre">model</span></code> renvoie le modèle en cours (nouvelle API!) :</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="c"># On the current model</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="c1"># On the current model</span>
 <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">search</span><span class="p">([])</span>
 <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">browse</span><span class="p">(</span><span class="n">ids</span><span class="p">)</span>
-<span class="c"># on another model</span>
-<span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="p">[</span><span class="s">&#39;res.users&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">search</span><span class="p">([])</span>
-<span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="p">[</span><span class="s">&#39;res.users&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">browse</span><span class="p">(</span><span class="n">ids</span><span class="p">)</span>
+<span class="c1"># on another model</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="p">[</span><span class="s1">&#39;res.users&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">search</span><span class="p">([])</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="p">[</span><span class="s1">&#39;res.users&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">browse</span><span class="p">(</span><span class="n">ids</span><span class="p">)</span>
 </pre></div>
 </div>
 </li>
 <li><p class="first">Dépréciation des méthodes CRUD dans <code class="docutils literal"><span class="pre">Session</span></code></p>
-<div class="highlight-python"><div class="highlight"><pre><span class="c"># NO</span>
-<span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s">&#39;res.partner&#39;</span><span class="p">,</span> <span class="p">[])</span>
-<span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">browse</span><span class="p">(</span><span class="s">&#39;res.partner&#39;</span><span class="p">,</span> <span class="n">ids</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="c1"># NO</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s1">&#39;res.partner&#39;</span><span class="p">,</span> <span class="p">[])</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">browse</span><span class="p">(</span><span class="s1">&#39;res.partner&#39;</span><span class="p">,</span> <span class="n">ids</span><span class="p">)</span>
 
-<span class="c"># YES</span>
-<span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="p">[</span><span class="s">&#39;res.partner&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">search</span><span class="p">([])</span>
-<span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="p">[</span><span class="s">&#39;res.partner&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">browse</span><span class="p">(</span><span class="n">ids</span><span class="p">)</span>
+<span class="c1"># YES</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="p">[</span><span class="s1">&#39;res.partner&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">search</span><span class="p">([])</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="p">[</span><span class="s1">&#39;res.partner&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">browse</span><span class="p">(</span><span class="n">ids</span><span class="p">)</span>
 </pre></div>
 </div>
 </li>
@@ -432,7 +432,7 @@
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.4.<br/>
+      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.<br/>
     </p>
   </div>
 </footer>

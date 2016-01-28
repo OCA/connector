@@ -294,11 +294,11 @@ of the context manager.</p>
 <p>The extended context is either the provided <code class="docutils literal"><span class="pre">context</span></code> in which
 <code class="docutils literal"><span class="pre">overrides</span></code> are merged or the <em>current</em> context in which
 <code class="docutils literal"><span class="pre">overrides</span></code> are merged e.g.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="c"># current context is {&#39;key1&#39;: True}</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="c1"># current context is {&#39;key1&#39;: True}</span>
 <span class="n">r2</span> <span class="o">=</span> <span class="n">records</span><span class="o">.</span><span class="n">with_context</span><span class="p">({},</span> <span class="n">key2</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-<span class="c"># -&gt; r2._context is {&#39;key2&#39;: True}</span>
+<span class="c1"># -&gt; r2._context is {&#39;key2&#39;: True}</span>
 <span class="n">r2</span> <span class="o">=</span> <span class="n">records</span><span class="o">.</span><span class="n">with_context</span><span class="p">(</span><span class="n">key2</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-<span class="c"># -&gt; r2._context is {&#39;key1&#39;: True, &#39;key2&#39;: True}</span>
+<span class="c1"># -&gt; r2._context is {&#39;key1&#39;: True, &#39;key2&#39;: True}</span>
 </pre></div>
 </div>
 <div class="admonition warning">
@@ -480,7 +480,7 @@ session&#8217;s cursor is:</p>
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.4.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.<br/>
     </p>
   </div>
 </footer>

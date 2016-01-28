@@ -230,26 +230,26 @@
     <div class="col-md-12 content">
       
   <h1>Code source de connector.unit.mapper</h1><div class="highlight"><pre>
-<span class="c"># -*- coding: utf-8 -*-</span>
-<span class="c">##############################################################################</span>
-<span class="c">#</span>
-<span class="c">#    Author: Guewen Baconnier</span>
-<span class="c">#    Copyright 2013 Camptocamp SA</span>
-<span class="c">#</span>
-<span class="c">#    This program is free software: you can redistribute it and/or modify</span>
-<span class="c">#    it under the terms of the GNU Affero General Public License as</span>
-<span class="c">#    published by the Free Software Foundation, either version 3 of the</span>
-<span class="c">#    License, or (at your option) any later version.</span>
-<span class="c">#</span>
-<span class="c">#    This program is distributed in the hope that it will be useful,</span>
-<span class="c">#    but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
-<span class="c">#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
-<span class="c">#    GNU Affero General Public License for more details.</span>
-<span class="c">#</span>
-<span class="c">#    You should have received a copy of the GNU Affero General Public License</span>
-<span class="c">#    along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
-<span class="c">#</span>
-<span class="c">##############################################################################</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1">##############################################################################</span>
+<span class="c1">#</span>
+<span class="c1">#    Author: Guewen Baconnier</span>
+<span class="c1">#    Copyright 2013 Camptocamp SA</span>
+<span class="c1">#</span>
+<span class="c1">#    This program is free software: you can redistribute it and/or modify</span>
+<span class="c1">#    it under the terms of the GNU Affero General Public License as</span>
+<span class="c1">#    published by the Free Software Foundation, either version 3 of the</span>
+<span class="c1">#    License, or (at your option) any later version.</span>
+<span class="c1">#</span>
+<span class="c1">#    This program is distributed in the hope that it will be useful,</span>
+<span class="c1">#    but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c1">#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="c1">#    GNU Affero General Public License for more details.</span>
+<span class="c1">#</span>
+<span class="c1">#    You should have received a copy of the GNU Affero General Public License</span>
+<span class="c1">#    along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+<span class="c1">#</span>
+<span class="c1">##############################################################################</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
 
@@ -402,8 +402,8 @@
         <span class="k">if</span> <span class="ow">not</span> <span class="n">record</span><span class="p">[</span><span class="n">field</span><span class="p">]:</span>
             <span class="k">return</span> <span class="bp">False</span>
         <span class="n">column</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">_fields</span><span class="p">[</span><span class="n">field</span><span class="p">]</span>
-        <span class="k">if</span> <span class="n">column</span><span class="o">.</span><span class="n">type</span> <span class="o">!=</span> <span class="s">&#39;many2one&#39;</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;The column </span><span class="si">%s</span><span class="s"> should be a Many2one, got </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span>
+        <span class="k">if</span> <span class="n">column</span><span class="o">.</span><span class="n">type</span> <span class="o">!=</span> <span class="s1">&#39;many2one&#39;</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;The column </span><span class="si">%s</span><span class="s1"> should be a Many2one, got </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span>
                              <span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">column</span><span class="p">)))</span>
         <span class="n">rel_id</span> <span class="o">=</span> <span class="n">record</span><span class="p">[</span><span class="n">field</span><span class="p">]</span><span class="o">.</span><span class="n">id</span>
         <span class="k">if</span> <span class="n">binding</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
@@ -411,15 +411,15 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">binding_model</span> <span class="o">=</span> <span class="n">binding</span>
         <span class="n">binder</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">binder_for</span><span class="p">(</span><span class="n">binding_model</span><span class="p">)</span>
-        <span class="c"># if a relation is not a binding, we wrap the record in the</span>
-        <span class="c"># binding, we&#39;ll return the id of the binding</span>
+        <span class="c1"># if a relation is not a binding, we wrap the record in the</span>
+        <span class="c1"># binding, we&#39;ll return the id of the binding</span>
         <span class="n">wrap</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">binding</span><span class="p">)</span>
         <span class="n">value</span> <span class="o">=</span> <span class="n">binder</span><span class="o">.</span><span class="n">to_backend</span><span class="p">(</span><span class="n">rel_id</span><span class="p">,</span> <span class="n">wrap</span><span class="o">=</span><span class="n">wrap</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">value</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="n">MappingError</span><span class="p">(</span><span class="s">&quot;Can not find an external id for record &quot;</span>
-                               <span class="s">&quot;</span><span class="si">%s</span><span class="s"> in model </span><span class="si">%s</span><span class="s"> </span><span class="si">%s</span><span class="s"> wrapping&quot;</span> <span class="o">%</span>
+            <span class="k">raise</span> <span class="n">MappingError</span><span class="p">(</span><span class="s2">&quot;Can not find an external id for record &quot;</span>
+                               <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> in model </span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2"> wrapping&quot;</span> <span class="o">%</span>
                                <span class="p">(</span><span class="n">rel_id</span><span class="p">,</span> <span class="n">binding_model</span><span class="p">,</span>
-                                <span class="s">&#39;with&#39;</span> <span class="k">if</span> <span class="n">wrap</span> <span class="k">else</span> <span class="s">&#39;without&#39;</span><span class="p">))</span>
+                                <span class="s1">&#39;with&#39;</span> <span class="k">if</span> <span class="n">wrap</span> <span class="k">else</span> <span class="s1">&#39;without&#39;</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">value</span>
     <span class="k">return</span> <span class="n">modifier</span></div>
 
@@ -448,8 +448,8 @@
         <span class="k">if</span> <span class="ow">not</span> <span class="n">record</span><span class="p">[</span><span class="n">field</span><span class="p">]:</span>
             <span class="k">return</span> <span class="bp">False</span>
         <span class="n">column</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">_fields</span><span class="p">[</span><span class="n">to_attr</span><span class="p">]</span>
-        <span class="k">if</span> <span class="n">column</span><span class="o">.</span><span class="n">type</span> <span class="o">!=</span> <span class="s">&#39;many2one&#39;</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;The column </span><span class="si">%s</span><span class="s"> should be a Many2one, got </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span>
+        <span class="k">if</span> <span class="n">column</span><span class="o">.</span><span class="n">type</span> <span class="o">!=</span> <span class="s1">&#39;many2one&#39;</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;The column </span><span class="si">%s</span><span class="s1"> should be a Many2one, got </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span>
                              <span class="p">(</span><span class="n">to_attr</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">column</span><span class="p">)))</span>
         <span class="n">rel_id</span> <span class="o">=</span> <span class="n">record</span><span class="p">[</span><span class="n">field</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">binding</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
@@ -457,16 +457,16 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">binding_model</span> <span class="o">=</span> <span class="n">binding</span>
         <span class="n">binder</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">binder_for</span><span class="p">(</span><span class="n">binding_model</span><span class="p">)</span>
-        <span class="c"># if we want the ID of a normal record, not a binding,</span>
-        <span class="c"># we ask the unwrapped id to the binder</span>
+        <span class="c1"># if we want the ID of a normal record, not a binding,</span>
+        <span class="c1"># we ask the unwrapped id to the binder</span>
         <span class="n">unwrap</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">binding</span><span class="p">)</span>
         <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">change_context</span><span class="p">(</span><span class="n">active_test</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
             <span class="n">value</span> <span class="o">=</span> <span class="n">binder</span><span class="o">.</span><span class="n">to_openerp</span><span class="p">(</span><span class="n">rel_id</span><span class="p">,</span> <span class="n">unwrap</span><span class="o">=</span><span class="n">unwrap</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">value</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="n">MappingError</span><span class="p">(</span><span class="s">&quot;Can not find an existing </span><span class="si">%s</span><span class="s"> for external &quot;</span>
-                               <span class="s">&quot;record </span><span class="si">%s</span><span class="s"> </span><span class="si">%s</span><span class="s"> unwrapping&quot;</span> <span class="o">%</span>
+            <span class="k">raise</span> <span class="n">MappingError</span><span class="p">(</span><span class="s2">&quot;Can not find an existing </span><span class="si">%s</span><span class="s2"> for external &quot;</span>
+                               <span class="s2">&quot;record </span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2"> unwrapping&quot;</span> <span class="o">%</span>
                                <span class="p">(</span><span class="n">binding_model</span><span class="p">,</span> <span class="n">rel_id</span><span class="p">,</span>
-                                <span class="s">&#39;with&#39;</span> <span class="k">if</span> <span class="n">unwrap</span> <span class="k">else</span> <span class="s">&#39;without&#39;</span><span class="p">))</span>
+                                <span class="s1">&#39;with&#39;</span> <span class="k">if</span> <span class="n">unwrap</span> <span class="k">else</span> <span class="s1">&#39;without&#39;</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">value</span>
     <span class="k">return</span> <span class="n">modifier</span></div>
 
@@ -485,7 +485,7 @@
 <span class="sd">    :param field: field &quot;path&quot;, using dots for relations as usual in Odoo</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">modifier</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="n">to_attr</span><span class="p">):</span>
-        <span class="n">attrs</span> <span class="o">=</span> <span class="n">field</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;.&#39;</span><span class="p">)</span>
+        <span class="n">attrs</span> <span class="o">=</span> <span class="n">field</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)</span>
         <span class="n">value</span> <span class="o">=</span> <span class="n">record</span>
         <span class="k">for</span> <span class="n">attr</span> <span class="ow">in</span> <span class="n">attrs</span><span class="p">:</span>
             <span class="n">value</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">attr</span><span class="p">)</span>
@@ -493,9 +493,9 @@
     <span class="k">return</span> <span class="n">modifier</span></div>
 
 
-<span class="n">MappingDefinition</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="s">&#39;MappingDefinition&#39;</span><span class="p">,</span>
-                               <span class="p">[</span><span class="s">&#39;changed_by&#39;</span><span class="p">,</span>
-                                <span class="s">&#39;only_create&#39;</span><span class="p">])</span>
+<span class="n">MappingDefinition</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="s1">&#39;MappingDefinition&#39;</span><span class="p">,</span>
+                               <span class="p">[</span><span class="s1">&#39;changed_by&#39;</span><span class="p">,</span>
+                                <span class="s1">&#39;only_create&#39;</span><span class="p">])</span>
 
 
 <div class="viewcode-block" id="MetaMapper"><a class="viewcode-back" href="../../../api/api_mapper.html#connector.unit.mapper.MetaMapper">[docs]</a><span class="k">class</span> <span class="nc">MetaMapper</span><span class="p">(</span><span class="n">MetaConnectorUnit</span><span class="p">):</span>
@@ -507,41 +507,41 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__new__</span><span class="p">(</span><span class="n">meta</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">attrs</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">attrs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;_map_methods&#39;</span><span class="p">)</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-            <span class="n">attrs</span><span class="p">[</span><span class="s">&#39;_map_methods&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">if</span> <span class="n">attrs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;_map_methods&#39;</span><span class="p">)</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;_map_methods&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
 
         <span class="n">cls</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">MetaMapper</span><span class="p">,</span> <span class="n">meta</span><span class="p">)</span><span class="o">.</span><span class="n">__new__</span><span class="p">(</span><span class="n">meta</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">attrs</span><span class="p">)</span>
 
-        <span class="c"># When a class has several bases: ``class Mapper(Base1, Base2):``</span>
+        <span class="c1"># When a class has several bases: ``class Mapper(Base1, Base2):``</span>
         <span class="k">for</span> <span class="n">base</span> <span class="ow">in</span> <span class="n">bases</span><span class="p">:</span>
-            <span class="c"># Merge the _map_methods of the bases</span>
-            <span class="n">base_map_methods</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="s">&#39;_map_methods&#39;</span><span class="p">,</span> <span class="p">{})</span>
+            <span class="c1"># Merge the _map_methods of the bases</span>
+            <span class="n">base_map_methods</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="s1">&#39;_map_methods&#39;</span><span class="p">,</span> <span class="p">{})</span>
             <span class="k">for</span> <span class="n">attr_name</span><span class="p">,</span> <span class="n">definition</span> <span class="ow">in</span> <span class="n">base_map_methods</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
                 <span class="k">if</span> <span class="n">cls</span><span class="o">.</span><span class="n">_map_methods</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">attr_name</span><span class="p">)</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
                     <span class="n">cls</span><span class="o">.</span><span class="n">_map_methods</span><span class="p">[</span><span class="n">attr_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">definition</span>
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="c"># Update the existing @changed_by with the content</span>
-                    <span class="c"># of each base (it is mutated in place).</span>
-                    <span class="c"># @only_create keeps the value defined in the first</span>
-                    <span class="c"># base.</span>
+                    <span class="c1"># Update the existing @changed_by with the content</span>
+                    <span class="c1"># of each base (it is mutated in place).</span>
+                    <span class="c1"># @only_create keeps the value defined in the first</span>
+                    <span class="c1"># base.</span>
                     <span class="n">mapping_changed_by</span> <span class="o">=</span> <span class="n">cls</span><span class="o">.</span><span class="n">_map_methods</span><span class="p">[</span><span class="n">attr_name</span><span class="p">]</span><span class="o">.</span><span class="n">changed_by</span>
                     <span class="n">mapping_changed_by</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">definition</span><span class="o">.</span><span class="n">changed_by</span><span class="p">)</span>
 
-        <span class="c"># Update the _map_methods from the @mapping methods in attrs,</span>
-        <span class="c"># respecting the class tree.</span>
+        <span class="c1"># Update the _map_methods from the @mapping methods in attrs,</span>
+        <span class="c1"># respecting the class tree.</span>
         <span class="k">for</span> <span class="n">attr_name</span><span class="p">,</span> <span class="n">attr</span> <span class="ow">in</span> <span class="n">attrs</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
-            <span class="n">is_mapping</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">attr</span><span class="p">,</span> <span class="s">&#39;is_mapping&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+            <span class="n">is_mapping</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">attr</span><span class="p">,</span> <span class="s1">&#39;is_mapping&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">is_mapping</span><span class="p">:</span>
-                <span class="n">has_only_create</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">attr</span><span class="p">,</span> <span class="s">&#39;only_create&#39;</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span>
+                <span class="n">has_only_create</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">attr</span><span class="p">,</span> <span class="s1">&#39;only_create&#39;</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span>
 
-                <span class="n">mapping_changed_by</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">attr</span><span class="p">,</span> <span class="s">&#39;changed_by&#39;</span><span class="p">,</span> <span class="p">()))</span>
-                <span class="c"># If already existing, it has been defined in a super</span>
-                <span class="c"># class, extend the @changed_by set</span>
+                <span class="n">mapping_changed_by</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">attr</span><span class="p">,</span> <span class="s1">&#39;changed_by&#39;</span><span class="p">,</span> <span class="p">()))</span>
+                <span class="c1"># If already existing, it has been defined in a super</span>
+                <span class="c1"># class, extend the @changed_by set</span>
                 <span class="k">if</span> <span class="n">cls</span><span class="o">.</span><span class="n">_map_methods</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">attr_name</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
                     <span class="n">definition</span> <span class="o">=</span> <span class="n">cls</span><span class="o">.</span><span class="n">_map_methods</span><span class="p">[</span><span class="n">attr_name</span><span class="p">]</span>
                     <span class="n">mapping_changed_by</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">definition</span><span class="o">.</span><span class="n">changed_by</span><span class="p">)</span>
 
-                <span class="c"># keep the last choice for only_create</span>
+                <span class="c1"># keep the last choice for only_create</span>
                 <span class="n">definition</span> <span class="o">=</span> <span class="n">MappingDefinition</span><span class="p">(</span><span class="n">mapping_changed_by</span><span class="p">,</span>
                                                <span class="n">has_only_create</span><span class="p">)</span>
                 <span class="n">cls</span><span class="o">.</span><span class="n">_map_methods</span><span class="p">[</span><span class="n">attr_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">definition</span>
@@ -554,14 +554,14 @@
 <span class="sd">        the decorator : ``changed_by``.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">changed_by_fields</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
-        <span class="k">if</span> <span class="n">attrs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;direct&#39;</span><span class="p">):</span>
-            <span class="k">for</span> <span class="n">from_attr</span><span class="p">,</span> <span class="n">__</span> <span class="ow">in</span> <span class="n">attrs</span><span class="p">[</span><span class="s">&#39;direct&#39;</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="n">attrs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;direct&#39;</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">from_attr</span><span class="p">,</span> <span class="n">__</span> <span class="ow">in</span> <span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;direct&#39;</span><span class="p">]:</span>
                 <span class="n">attr_name</span> <span class="o">=</span> <span class="n">cls</span><span class="o">.</span><span class="n">_direct_source_field_name</span><span class="p">(</span><span class="n">from_attr</span><span class="p">)</span>
                 <span class="n">changed_by_fields</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">attr_name</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">method_name</span><span class="p">,</span> <span class="n">method_def</span> <span class="ow">in</span> <span class="n">attrs</span><span class="p">[</span><span class="s">&#39;_map_methods&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
+        <span class="k">for</span> <span class="n">method_name</span><span class="p">,</span> <span class="n">method_def</span> <span class="ow">in</span> <span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;_map_methods&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
             <span class="n">changed_by_fields</span> <span class="o">|=</span> <span class="n">method_def</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">for</span> <span class="n">base</span> <span class="ow">in</span> <span class="n">bases</span><span class="p">:</span>
-            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="s">&#39;_changed_by_fields&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">base</span><span class="o">.</span><span class="n">_changed_by_fields</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="s1">&#39;_changed_by_fields&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">base</span><span class="o">.</span><span class="n">_changed_by_fields</span><span class="p">:</span>
                 <span class="n">changed_by_fields</span> <span class="o">|=</span> <span class="n">base</span><span class="o">.</span><span class="n">_changed_by_fields</span>
         <span class="n">cls</span><span class="o">.</span><span class="n">_changed_by_fields</span> <span class="o">=</span> <span class="n">changed_by_fields</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">MetaMapper</span><span class="p">,</span> <span class="n">cls</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">attrs</span><span class="p">)</span>
@@ -578,16 +578,16 @@
         <span class="n">attr_name</span> <span class="o">=</span> <span class="n">mapping_attr</span>
 
         <span class="k">if</span> <span class="nb">callable</span><span class="p">(</span><span class="n">mapping_attr</span><span class="p">):</span>
-            <span class="c"># Map the closure entries with variable names</span>
+            <span class="c1"># Map the closure entries with variable names</span>
             <span class="n">cells</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span>
                 <span class="n">mapping_attr</span><span class="o">.</span><span class="n">func_code</span><span class="o">.</span><span class="n">co_freevars</span><span class="p">,</span>
                 <span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">cell_contents</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">mapping_attr</span><span class="o">.</span><span class="n">func_closure</span><span class="p">)))</span>
-            <span class="k">assert</span> <span class="s">&#39;field&#39;</span> <span class="ow">in</span> <span class="n">cells</span><span class="p">,</span> <span class="s">&quot;Modifier without &#39;field&#39; argument.&quot;</span>
-            <span class="k">if</span> <span class="nb">callable</span><span class="p">(</span><span class="n">cells</span><span class="p">[</span><span class="s">&#39;field&#39;</span><span class="p">]):</span>
+            <span class="k">assert</span> <span class="s1">&#39;field&#39;</span> <span class="ow">in</span> <span class="n">cells</span><span class="p">,</span> <span class="s2">&quot;Modifier without &#39;field&#39; argument.&quot;</span>
+            <span class="k">if</span> <span class="nb">callable</span><span class="p">(</span><span class="n">cells</span><span class="p">[</span><span class="s1">&#39;field&#39;</span><span class="p">]):</span>
                 <span class="n">attr_name</span> <span class="o">=</span> <span class="n">MetaMapper</span><span class="o">.</span><span class="n">_direct_source_field_name</span><span class="p">(</span>
-                    <span class="n">cells</span><span class="p">[</span><span class="s">&#39;field&#39;</span><span class="p">])</span>
+                    <span class="n">cells</span><span class="p">[</span><span class="s1">&#39;field&#39;</span><span class="p">])</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">attr_name</span> <span class="o">=</span> <span class="n">cells</span><span class="p">[</span><span class="s">&#39;field&#39;</span><span class="p">]</span>
+                <span class="n">attr_name</span> <span class="o">=</span> <span class="n">cells</span><span class="p">[</span><span class="s1">&#39;field&#39;</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">attr_name</span></div>
 
 
@@ -847,11 +847,11 @@
 
     <span class="n">__metaclass__</span> <span class="o">=</span> <span class="n">MetaMapper</span>
 
-    <span class="c"># name of the OpenERP model, to be defined in concrete classes</span>
+    <span class="c1"># name of the OpenERP model, to be defined in concrete classes</span>
     <span class="n">_model_name</span> <span class="o">=</span> <span class="bp">None</span>
 
-    <span class="n">direct</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c"># direct conversion of a field to another (from_attr, to_attr)</span>
-    <span class="n">children</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c"># conversion of sub-records (from_attr, to_attr, model)</span>
+    <span class="n">direct</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># direct conversion of a field to another (from_attr, to_attr)</span>
+    <span class="n">children</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># conversion of sub-records (from_attr, to_attr, model)</span>
 
     <span class="n">_map_methods</span> <span class="o">=</span> <span class="bp">None</span>
 
@@ -891,8 +891,8 @@
             <span class="n">mapper_child</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">unit_for</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_map_child_class</span><span class="p">,</span>
                                          <span class="n">model</span><span class="o">=</span><span class="n">model_name</span><span class="p">)</span>
         <span class="k">except</span> <span class="n">NoConnectorUnitError</span><span class="p">:</span>
-            <span class="c"># does not force developers to use a MapChild -&gt;</span>
-            <span class="c"># will use the default one if not explicitely defined</span>
+            <span class="c1"># does not force developers to use a MapChild -&gt;</span>
+            <span class="c1"># will use the default one if not explicitely defined</span>
             <span class="n">env</span> <span class="o">=</span> <span class="n">ConnectorEnvironment</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">backend_record</span><span class="p">,</span>
                                        <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="p">,</span>
                                        <span class="n">model_name</span><span class="p">)</span>
@@ -901,7 +901,7 @@
 
     <span class="k">def</span> <span class="nf">_map_child</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">map_record</span><span class="p">,</span> <span class="n">from_attr</span><span class="p">,</span> <span class="n">to_attr</span><span class="p">,</span> <span class="n">model_name</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Convert items of the record as defined by children &quot;&quot;&quot;</span>
-        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">_map_child_class</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">,</span> <span class="s">&quot;_map_child_class required&quot;</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">_map_child_class</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">,</span> <span class="s2">&quot;_map_child_class required&quot;</span>
         <span class="n">child_records</span> <span class="o">=</span> <span class="n">map_record</span><span class="o">.</span><span class="n">source</span><span class="p">[</span><span class="n">from_attr</span><span class="p">]</span>
         <span class="n">mapper_child</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_map_child_unit</span><span class="p">(</span><span class="n">model_name</span><span class="p">)</span>
         <span class="n">items</span> <span class="o">=</span> <span class="n">mapper_child</span><span class="o">.</span><span class="n">get_items</span><span class="p">(</span><span class="n">child_records</span><span class="p">,</span> <span class="n">map_record</span><span class="p">,</span>
@@ -960,8 +960,8 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">,</span> <span class="p">(</span>
-            <span class="s">&quot;options should be defined with &#39;_mapping_options&#39;&quot;</span><span class="p">)</span>
-        <span class="n">_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;converting record </span><span class="si">%s</span><span class="s"> to model </span><span class="si">%s</span><span class="s">&#39;</span><span class="p">,</span>
+            <span class="s2">&quot;options should be defined with &#39;_mapping_options&#39;&quot;</span><span class="p">)</span>
+        <span class="n">_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;converting record </span><span class="si">%s</span><span class="s1"> to model </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span>
                       <span class="n">map_record</span><span class="o">.</span><span class="n">source</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">)</span>
 
         <span class="n">fields</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">fields</span>
@@ -989,8 +989,8 @@
                 <span class="k">if</span> <span class="ow">not</span> <span class="n">values</span><span class="p">:</span>
                     <span class="k">continue</span>
                 <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
-                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;</span><span class="si">%s</span><span class="s">: invalid return value for the &#39;</span>
-                                     <span class="s">&#39;mapping method </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="n">meth</span><span class="p">))</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">: invalid return value for the &#39;</span>
+                                     <span class="s1">&#39;mapping method </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="n">meth</span><span class="p">))</span>
                 <span class="n">result</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">values</span><span class="p">)</span>
 
         <span class="k">for</span> <span class="n">from_attr</span><span class="p">,</span> <span class="n">to_attr</span><span class="p">,</span> <span class="n">model_name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">children</span><span class="p">:</span>
@@ -1040,12 +1040,12 @@
         <span class="k">if</span> <span class="ow">not</span> <span class="n">value</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">False</span>
 
-        <span class="c"># Backward compatibility: when a field is a relation, and a modifier is</span>
-        <span class="c"># not used, we assume that the relation model is a binding.</span>
-        <span class="c"># Use an explicit modifier backend_to_m2o in the &#39;direct&#39; mappings to</span>
-        <span class="c"># change that.</span>
+        <span class="c1"># Backward compatibility: when a field is a relation, and a modifier is</span>
+        <span class="c1"># not used, we assume that the relation model is a binding.</span>
+        <span class="c1"># Use an explicit modifier backend_to_m2o in the &#39;direct&#39; mappings to</span>
+        <span class="c1"># change that.</span>
         <span class="n">field</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">_fields</span><span class="p">[</span><span class="n">to_attr</span><span class="p">]</span>
-        <span class="k">if</span> <span class="n">field</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s">&#39;many2one&#39;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">field</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s1">&#39;many2one&#39;</span><span class="p">:</span>
             <span class="n">mapping_func</span> <span class="o">=</span> <span class="n">backend_to_m2o</span><span class="p">(</span><span class="n">from_attr</span><span class="p">)</span>
             <span class="n">value</span> <span class="o">=</span> <span class="n">mapping_func</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="n">to_attr</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">value</span></div>
@@ -1076,12 +1076,12 @@
         <span class="k">if</span> <span class="ow">not</span> <span class="n">value</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">False</span>
 
-        <span class="c"># Backward compatibility: when a field is a relation, and a modifier is</span>
-        <span class="c"># not used, we assume that the relation model is a binding.</span>
-        <span class="c"># Use an explicit modifier m2o_to_backend  in the &#39;direct&#39; mappings to</span>
-        <span class="c"># change that.</span>
+        <span class="c1"># Backward compatibility: when a field is a relation, and a modifier is</span>
+        <span class="c1"># not used, we assume that the relation model is a binding.</span>
+        <span class="c1"># Use an explicit modifier m2o_to_backend  in the &#39;direct&#39; mappings to</span>
+        <span class="c1"># change that.</span>
         <span class="n">field</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">_fields</span><span class="p">[</span><span class="n">from_attr</span><span class="p">]</span>
-        <span class="k">if</span> <span class="n">field</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s">&#39;many2one&#39;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">field</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s1">&#39;many2one&#39;</span><span class="p">:</span>
             <span class="n">mapping_func</span> <span class="o">=</span> <span class="n">m2o_to_backend</span><span class="p">(</span><span class="n">from_attr</span><span class="p">)</span>
             <span class="n">value</span> <span class="o">=</span> <span class="n">mapping_func</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="n">to_attr</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">value</span></div>
@@ -1221,7 +1221,7 @@
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.4.<br/>
+      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.<br/>
     </p>
   </div>
 </footer>

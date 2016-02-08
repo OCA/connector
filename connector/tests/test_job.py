@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import cPickle
 import mock
 import unittest2
 from datetime import datetime, timedelta
@@ -49,6 +50,15 @@ def dummy_task_args(session, model_name, a, b, c=None):
 
 def retryable_error_task(session):
     raise RetryableJobError('Must be retried later')
+
+
+def pickle_forbidden_function(session):
+    pass
+
+
+@job
+def pickle_allowed_function(session):
+    pass
 
 
 class TestJobs(unittest2.TestCase):
@@ -309,6 +319,23 @@ class TestJobs(unittest2.TestCase):
         self.assertEqual(_unpickle(pickle),
                          'a small cucumber preserved in vinegar, '
                          'brine, or a similar solution.')
+
+    def test_unpickle_unsafe(self):
+        """ unpickling function not decorated by @job is forbidden """
+        pickled = cPickle.dumps(pickle_forbidden_function)
+        with self.assertRaises(NotReadableJobError):
+            _unpickle(pickled)
+
+    def test_unpickle_safe(self):
+        """ unpickling function decorated by @job is allowed """
+        pickled = cPickle.dumps(pickle_allowed_function)
+        self.assertEqual(_unpickle(pickled), pickle_allowed_function)
+
+    def test_unpickle_whitelist(self):
+        """ unpickling function/class that is in the whitelist is allowed """
+        arg = datetime(2016, 2, 10)
+        pickled = cPickle.dumps(arg)
+        self.assertEqual(_unpickle(pickled), arg)
 
     def test_unpickle_not_readable(self):
         with self.assertRaises(NotReadableJobError):

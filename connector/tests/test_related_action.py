@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import mock
-import unittest2
+import unittest
 
 import openerp.tests.common as common
 from ..connector import Binder
@@ -47,7 +47,7 @@ def try_unwrap_binding(session, model_name, binding_id):
     pass
 
 
-class test_related_action(unittest2.TestCase):
+class test_related_action(unittest.TestCase):
     """ Test Related Actions """
 
     def setUp(self):

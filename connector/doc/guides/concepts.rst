@@ -49,35 +49,6 @@ A connectors developer is mostly interested by:
 Jobs Queue
 **********
 
-This section summarises the Job's Queue,
-which articulates around several classes,
-in broad terms,
-:py:class:`~connector.queue.job.Job`
-are executed by a
-:py:class:`~connector.queue.worker.Worker`
-which stores them in a
-:py:class:`~connector.queue.queue.JobsQueue`.
-
-Jobs are stored in the
-:py:class:`~connector.queue.model.QueueJob` model.
-
-Workers are stored in the
-:py:class:`~connector.queue.model.QueueWorker` model.
-A :py:class:`~connector.queue.worker.WorkerWatcher` create or destroy
-new workers when new :py:class:`~openerp.modules.registry.Registry` are
-created or destroyed, and signal the aliveness of the workers.
-
-Jobs are assigned to a worker in the database by a cron.
-The worker loads all the jobs assigned to itself in memory in the
-:py:class:`~connector.queue.queue.JobsQueue`.
-When a worker is dead, it is removed from the database,
-so the jobs are freeed from the worker and can be assigned to another
-one.
-
-When multiple Odoo processes are running,
-a worker per process is running, but only those which are *CronWorkers*
-enqueue and execute jobs, to avoid to clutter the HTTP processes.
-
 A connectors developer is mostly interested by:
 
 * Delay a job (see the decorator :py:func:`~connector.queue.job.job`)

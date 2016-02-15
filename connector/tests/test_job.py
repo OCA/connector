@@ -243,24 +243,19 @@ class TestJobs(unittest.TestCase):
         self.assertEquals(job_a.state, PENDING)
         self.assertFalse(job_a.date_enqueued)
         self.assertFalse(job_a.date_started)
-        self.assertFalse(job_a.worker_uuid)
         self.assertEquals(job_a.retry, 0)
         self.assertEquals(job_a.result, 'test')
 
     def test_set_enqueued(self):
         job_a = Job(func=task_a)
-        worker = mock.Mock(name='Worker')
-        uuid = 'ae7d1161-dc34-40b1-af06-8057c049133e'
-        worker.uuid = 'ae7d1161-dc34-40b1-af06-8057c049133e'
         datetime_path = 'openerp.addons.connector.queue.job.datetime'
         with mock.patch(datetime_path, autospec=True) as mock_datetime:
             mock_datetime.now.return_value = datetime(2015, 3, 15, 16, 41, 0)
-            job_a.set_enqueued(worker)
+            job_a.set_enqueued()
 
         self.assertEquals(job_a.state, ENQUEUED)
         self.assertEquals(job_a.date_enqueued,
                           datetime(2015, 3, 15, 16, 41, 0))
-        self.assertEquals(job_a.worker_uuid, uuid)
         self.assertFalse(job_a.date_started)
 
     def test_set_started(self):
@@ -285,7 +280,6 @@ class TestJobs(unittest.TestCase):
         self.assertEquals(job_a.result, 'test')
         self.assertEquals(job_a.date_done,
                           datetime(2015, 3, 15, 16, 41, 0))
-        self.assertFalse(job_a.worker_uuid)
         self.assertFalse(job_a.exc_info)
 
     def test_set_failed(self):
@@ -293,7 +287,6 @@ class TestJobs(unittest.TestCase):
         job_a.set_failed(exc_info='failed test')
         self.assertEquals(job_a.state, FAILED)
         self.assertEquals(job_a.exc_info, 'failed test')
-        self.assertFalse(job_a.worker_uuid)
 
     def test_cancel(self):
         job_a = Job(func=task_a)
@@ -421,21 +414,6 @@ class TestJobStorage(common.TransactionCase):
                                delta=delta)
         self.assertEqual(job_read.canceled, True)
 
-    def test_job_worker(self):
-        worker = self.env['queue.worker'].create(
-            {'uuid': '57569b99-c2c1-47b6-aad1-72f953c92c87'}
-        )
-        test_job = Job(func=dummy_task_args,
-                       model_name='res.users',
-                       args=('o', 'k'),
-                       kwargs={'c': '!'})
-        test_job.worker_uuid = worker.uuid
-        storage = OpenERPJobStorage(self.session)
-        self.assertEqual(storage._worker_id(worker.uuid), worker.id)
-        storage.store(test_job)
-        job_read = storage.load(test_job.uuid)
-        self.assertEqual(job_read.worker_uuid, worker.uuid)
-
     def test_job_unlinked(self):
         test_job = Job(func=dummy_task_args,
                        model_name='res.users',
@@ -547,7 +525,6 @@ class TestJobModel(common.TransactionCase):
         stored.write({'state': 'failed'})
         stored.requeue()
         self.assertEqual(stored.state, PENDING)
-        self.assertFalse(stored.worker_id)
 
     def test_message_when_write_fail(self):
         stored = self._create_job()
@@ -589,7 +566,6 @@ class TestJobModel(common.TransactionCase):
                                    active_ids=stored.ids)
         model.create({}).requeue()
         self.assertEqual(stored.state, PENDING)
-        self.assertFalse(stored.worker_id)
 
 
 class TestJobStorageMultiCompany(common.TransactionCase):

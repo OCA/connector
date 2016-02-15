@@ -26,9 +26,7 @@ from datetime import datetime, timedelta
 from openerp import models, fields, api, exceptions, _
 
 from .job import STATES, DONE, PENDING, OpenERPJobStorage, JOB_REGISTRY
-from .worker import WORKER_TIMEOUT
 from ..session import ConnectorSession
-from .worker import watcher
 from ..connector import get_openerp_module, is_module_installed
 
 _logger = logging.getLogger(__name__)
@@ -45,11 +43,6 @@ class QueueJob(models.Model):
 
     _removal_interval = 30  # days
 
-    worker_id = fields.Many2one(comodel_name='queue.worker',
-                                string='Worker',
-                                ondelete='set null',
-                                select=True,
-                                readonly=True)
     uuid = fields.Char(string='UUID',
                        readonly=True,
                        select=True,
@@ -207,181 +200,6 @@ class QueueJob(models.Model):
         )
         jobs.unlink()
         return True
-
-
-class QueueWorker(models.Model):
-    """ Worker """
-    _name = 'queue.worker'
-    _description = 'Queue Worker'
-    _log_access = False
-    _rec_name = 'uuid'
-
-    worker_timeout = WORKER_TIMEOUT
-
-    uuid = fields.Char(string='UUID',
-                       readonly=True,
-                       select=True,
-                       required=True)
-    pid = fields.Char(string='PID', readonly=True)
-    date_start = fields.Datetime(string='Start Date', readonly=True)
-    date_alive = fields.Datetime(string='Last Alive Check', readonly=True)
-    job_ids = fields.One2many(comodel_name='queue.job',
-                              inverse_name='worker_id',
-                              string='Jobs',
-                              readonly=True)
-
-    @api.model
-    def _notify_alive(self, worker):
-        workers = self.search([('uuid', '=', worker.uuid)])
-
-        now = fields.Datetime.now()
-        if not workers:
-            self.create({'uuid': worker.uuid,
-                         'pid': os.getpid(),
-                         'date_start': now,
-                         'date_alive': now,
-                         })
-        else:
-            workers.write({'date_alive': now})
-
-    @api.model
-    def _purge_dead_workers(self):
-        deadline = datetime.now() - timedelta(seconds=self.worker_timeout)
-        deads = self.search(
-            [('date_alive', '<', fields.Datetime.to_string(deadline))],
-        )
-        for worker in deads:
-            _logger.debug('Worker %s is dead', worker.uuid)
-        try:
-            deads.unlink()
-        except Exception:
-            _logger.debug("Failed attempt to unlink a dead worker, likely due "
-                          "to another transaction in progress.")
-
-    @api.model
-    def _worker(self):
-        worker = watcher.worker_for_db(self.env.cr.dbname)
-        assert worker
-        workers = self.search([('uuid', '=', worker.uuid)])
-        assert len(workers) == 1, ("%s worker found in database instead "
-                                   "of 1" % len(workers))
-        return workers
-
-    @api.model
-    def assign_then_enqueue(self, max_jobs=None):
-        """ Assign all the jobs not already assigned to a worker.
-        Then enqueue all the jobs having a worker but not enqueued.
-
-        Each operation is atomic.
-
-        .. warning:: commit transaction
-           ``cr.commit()`` is called, so please always call
-           this method in your own transaction, not in the main
-           OpenERP's transaction
-
-        :param max_jobs: maximal limit of jobs to assign on a worker
-        :type max_jobs: int
-        """
-        self.assign_jobs(max_jobs=max_jobs)
-        self.env.cr.commit()
-        self.enqueue_jobs()
-        self.env.cr.commit()
-        return True
-
-    @api.model
-    def assign_jobs(self, max_jobs=None):
-        """ Assign ``n`` jobs to the worker of the current process
-
-        ``n`` is ``max_jobs`` or unlimited if ``max_jobs`` is None
-
-        :param max_jobs: maximal limit of jobs to assign on a worker
-        :type max_jobs: int
-        """
-        worker = watcher.worker_for_db(self.env.cr.dbname)
-        if worker:
-            self._assign_jobs(max_jobs=max_jobs)
-        else:
-            _logger.debug('No worker started for process %s', os.getpid())
-        return True
-
-    @api.model
-    def enqueue_jobs(self):
-        """ Enqueue all the jobs assigned to the worker of the current
-        process
-        """
-        worker = watcher.worker_for_db(self.env.cr.dbname)
-        if worker:
-            self._enqueue_jobs()
-        else:
-            _logger.debug('No worker started for process %s', os.getpid())
-        return True
-
-    @api.model
-    def _assign_jobs(self, max_jobs=None):
-        sql = ("SELECT id FROM queue_job "
-               "WHERE worker_id IS NULL "
-               "AND state not in ('failed', 'done') "
-               "AND active = true "
-               "ORDER BY eta NULLS LAST, priority, date_created ")
-        if max_jobs is not None:
-            sql += ' LIMIT %d' % max_jobs
-        sql += ' FOR UPDATE NOWAIT'
-        # use a SAVEPOINT to be able to rollback this part of the
-        # transaction without failing the whole transaction if the LOCK
-        # cannot be acquired
-        worker = watcher.worker_for_db(self.env.cr.dbname)
-        self.env.cr.execute("SAVEPOINT queue_assign_jobs")
-        try:
-            self.env.cr.execute(sql, log_exceptions=False)
-        except Exception:
-            # Here it's likely that the FOR UPDATE NOWAIT failed to get
-            # the LOCK, so we ROLLBACK to the SAVEPOINT to restore the
-            # transaction to its earlier state. The assign will be done
-            # the next time.
-            self.env.cr.execute("ROLLBACK TO queue_assign_jobs")
-            _logger.debug("Failed attempt to assign jobs, likely due to "
-                          "another transaction in progress. "
-                          "Trace of the failed assignment of jobs on worker "
-                          "%s attempt: ", worker.uuid, exc_info=True)
-            return
-        job_rows = self.env.cr.fetchall()
-        if not job_rows:
-            _logger.debug('No job to assign to worker %s', worker.uuid)
-            return
-        job_ids = [id for id, in job_rows]
-
-        try:
-            worker_id = self._worker().id
-        except AssertionError as e:
-            _logger.exception(e)
-            return
-        _logger.debug('Assign %d jobs to worker %s', len(job_ids),
-                      worker.uuid)
-        # ready to be enqueued in the worker
-        try:
-            self.env['queue.job'].browse(job_ids).write(
-                {'state': 'pending',
-                 'worker_id': worker_id,
-                 }
-            )
-        except Exception:
-            pass  # will be assigned to another worker
-
-    def _enqueue_jobs(self):
-        """ Add to the queue of the worker all the jobs not
-        yet queued but already assigned."""
-        job_model = self.env['queue.job']
-        try:
-            db_worker_id = self._worker().id
-        except AssertionError as e:
-            _logger.exception(e)
-            return
-        jobs = job_model.search([('worker_id', '=', db_worker_id),
-                                 ('state', '=', 'pending')],
-                                )
-        worker = watcher.worker_for_db(self.env.cr.dbname)
-        for job in jobs:
-            worker.enqueue_job_uuid(job.uuid)
 
 
 class RequeueJob(models.TransientModel):

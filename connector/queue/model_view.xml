@@ -2,50 +2,6 @@
 <openerp>
     <data noupdate="0">
 
-        <record id="view_queue_worker_form" model="ir.ui.view">
-            <field name="name">queue.worker.form</field>
-            <field name="model">queue.worker</field>
-            <field name="arch" type="xml">
-                <form string="Worker" create="false"
-                        delete="false" edit="false" version="7.0">
-                    <group>
-                        <field name="uuid"/>
-                        <field name="pid"/>
-                    </group>
-                    <group>
-                        <field name="date_start"/>
-                        <field name="date_alive"/>
-                    </group>
-                    <group>
-                        <field name="job_ids"/>
-                    </group>
-                </form>
-            </field>
-        </record>
-
-        <record id="view_queue_worker_tree" model="ir.ui.view">
-            <field name="name">queue.worker.tree</field>
-            <field name="model">queue.worker</field>
-            <field name="arch" type="xml">
-                <tree string="Worker" create="false"
-                        delete="false" edit="false" version="7.0">
-                    <field name="uuid"/>
-                    <field name="pid"/>
-                    <field name="date_start"/>
-                    <field name="date_alive"/>
-                </tree>
-            </field>
-        </record>
-
-        <record id="action_queue_worker" model="ir.actions.act_window">
-            <field name="name">Workers</field>
-            <field name="res_model">queue.worker</field>
-            <field name="view_type">form</field>
-            <field name="view_mode">tree,form</field>
-            <field name="context">{}</field>
-            <field name="view_id" ref="view_queue_worker_tree"/>
-        </record>
-
         <record id="view_queue_job_form" model="ir.ui.view">
             <field name="name">queue.job.form</field>
             <field name="model">queue.job</field>
@@ -83,7 +39,6 @@
                             <field name="func_string"/>
                             <field name="job_function_id"/>
                             <field name="channel"/>
-                            <field name="worker_id"/>
                         </group>
                         <group>
                             <group>

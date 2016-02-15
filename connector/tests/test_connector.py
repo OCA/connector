@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import mock
-import unittest2
+import unittest
 
 from openerp import api
 from openerp.modules.registry import RegistryManager
@@ -28,7 +28,7 @@ def mock_connector_unit(env):
     return ConnectorUnit(connector_env)
 
 
-class ConnectorHelpers(unittest2.TestCase):
+class ConnectorHelpers(unittest.TestCase):
 
     def test_openerp_module_name(self):
         name = connector._get_openerp_module_name('openerp.addons.sale')
@@ -37,7 +37,7 @@ class ConnectorHelpers(unittest2.TestCase):
         self.assertEqual(name, 'sale')
 
 
-class TestConnectorUnit(unittest2.TestCase):
+class TestConnectorUnit(unittest.TestCase):
     """ Test Connector Unit """
 
     def test_connector_unit_for_model_names(self):
@@ -146,7 +146,7 @@ class TestConnectorUnitTransaction(common.TransactionCase):
         self.assertEqual(unit.localcontext, self.env.context)
 
 
-class TestConnectorEnvironment(unittest2.TestCase):
+class TestConnectorEnvironment(unittest.TestCase):
 
     def test_create_environment_no_connector_env(self):
         session = mock.MagicMock(name='Session')

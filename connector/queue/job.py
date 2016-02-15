@@ -163,7 +163,7 @@ class OpenERPJobStorage(JobStorage):
             company_model = company_model.sudo(new_job.user_id)
             company_id = company_model._company_default_get(
                 object='queue.job',
-                field='company_id')
+                field='company_id').id
         new_job.company_id = company_id
         self.store(new_job)
         return new_job.uuid

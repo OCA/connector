@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 
-import unittest2
+import unittest
 
 from openerp.addons.connector.queue.queue import JobsQueue
 
 
-class test_worker(unittest2.TestCase):
+class test_worker(unittest.TestCase):
     """ Test Worker """
 
     def setUp(self):

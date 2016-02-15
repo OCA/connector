@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import unittest2
+import unittest
 import mock
 import openerp.tests.common as common
 
@@ -25,7 +25,7 @@ from openerp.addons.connector.connector import ConnectorEnvironment
 from openerp.addons.connector.session import ConnectorSession
 
 
-class test_mapper(unittest2.TestCase):
+class test_mapper(unittest.TestCase):
     """ Test Mapper """
 
     def test_mapping_decorator(self):

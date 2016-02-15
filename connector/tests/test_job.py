@@ -534,6 +534,8 @@ class TestJobModel(common.TransactionCase):
         self.assertEqual(len(messages), 2)
 
     def test_follower_when_write_fail(self):
+        """Check that inactive users doesn't are not followers even if
+        they are linked to an active partner"""
         group = self.env.ref('connector.group_connector_manager')
         vals = {'name': 'xx',
                 'login': 'xx',
@@ -541,7 +543,7 @@ class TestJobModel(common.TransactionCase):
                 'active': False,
                 }
         inactiveusr = self.user.create(vals)
-        self.assertTrue(inactiveusr.partner_id.active)
+        inactiveusr.partner_id.active = True
         self.assertFalse(inactiveusr in group.users)
         stored = self._create_job()
         stored.write({'state': 'failed'})

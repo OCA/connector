@@ -134,13 +134,11 @@ class OpenERPJobStorage(JobStorage):
     """ Store a job on OpenERP """
 
     _job_model_name = 'queue.job'
-    _worker_model_name = 'queue.worker'
 
     def __init__(self, session):
         super(OpenERPJobStorage, self).__init__()
         self.session = session
         self.job_model = self.session.env[self._job_model_name]
-        self.worker_model = self.session.env[self._worker_model_name]
         assert self.job_model is not None, (
             "Model %s not found" % self._job_model_name)
 
@@ -196,13 +194,6 @@ class OpenERPJobStorage(JobStorage):
     def db_record(self, job_):
         return self.db_record_from_uuid(job_.uuid)
 
-    def _worker_id(self, worker_uuid):
-        worker = self.worker_model.sudo().search(
-            [('uuid', '=', worker_uuid)],
-            limit=1)
-        if worker:
-            return worker.id
-
     def store(self, job_):
         """ Store the Job """
         vals = {'state': job_.state,
@@ -232,11 +223,6 @@ class OpenERPJobStorage(JobStorage):
 
         if job_.canceled:
             vals['active'] = False
-
-        if job_.worker_uuid:
-            vals['worker_id'] = self._worker_id(job_.worker_uuid)
-        else:
-            vals['worker_id'] = False
 
         db_record = self.db_record(job_)
         if db_record:
@@ -297,8 +283,6 @@ class OpenERPJobStorage(JobStorage):
         job_.model_name = stored.model_name if stored.model_name else None
         job_.retry = stored.retry
         job_.max_retries = stored.max_retries
-        if stored.worker_id:
-            job_.worker_uuid = stored.worker_id.uuid
         if stored.company_id:
             job_.company_id = stored.company_id.id
         return job_
@@ -310,10 +294,6 @@ class Job(object):
     .. attribute:: uuid
 
         Id (UUID) of the job.
-
-    .. attribute:: worker_uuid
-
-        When the job is enqueued, UUID of the worker.
 
     .. attribute:: state
 
@@ -484,7 +464,6 @@ class Job(object):
         self._eta = None
         self.eta = eta
         self.canceled = False
-        self.worker_uuid = None
 
     def __cmp__(self, other):
         if not isinstance(other, Job):
@@ -580,17 +559,15 @@ class Job(object):
         self.state = PENDING
         self.date_enqueued = None
         self.date_started = None
-        self.worker_uuid = None
         if reset_retry:
             self.retry = 0
         if result is not None:
             self.result = result
 
-    def set_enqueued(self, worker):
+    def set_enqueued(self):
         self.state = ENQUEUED
         self.date_enqueued = datetime.now()
         self.date_started = None
-        self.worker_uuid = worker.uuid
 
     def set_started(self):
         self.state = STARTED
@@ -600,13 +577,11 @@ class Job(object):
         self.state = DONE
         self.exc_info = None
         self.date_done = datetime.now()
-        self.worker_uuid = None
         if result is not None:
             self.result = result
 
     def set_failed(self, exc_info=None):
         self.state = FAILED
-        self.worker_uuid = None
         if exc_info is not None:
             self.exc_info = exc_info
 

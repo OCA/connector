@@ -23,11 +23,6 @@
             sequence="14"
             parent="menu_queue"/>
 
-        <menuitem id="menu_queue_worker"
-            action="action_queue_worker"
-            sequence="16"
-            parent="menu_queue"/>
-
         <menuitem id="menu_queue_job"
             action="action_queue_job"
             sequence="18"

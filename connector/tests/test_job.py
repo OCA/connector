@@ -2,7 +2,7 @@
 
 import cPickle
 import mock
-import unittest2
+import unittest
 from datetime import datetime, timedelta
 
 from openerp import SUPERUSER_ID, exceptions
@@ -61,7 +61,7 @@ def pickle_allowed_function(session):
     pass
 
 
-class TestJobs(unittest2.TestCase):
+class TestJobs(unittest.TestCase):
     """ Test Job """
 
     def setUp(self):

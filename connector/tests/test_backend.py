@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import unittest2
+import unittest
 
 import openerp.tests.common as common
 from openerp.addons.connector.backend import (Backend,
@@ -14,7 +14,7 @@ from openerp.addons.connector.unit.backend_adapter import BackendAdapter
 from openerp.addons.connector.session import ConnectorSession
 
 
-class test_backend(unittest2.TestCase):
+class test_backend(unittest.TestCase):
     """ Test Backend """
 
     def setUp(self):

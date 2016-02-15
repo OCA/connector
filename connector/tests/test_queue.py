@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import unittest2
+import unittest
 from datetime import timedelta
 
 from openerp.addons.connector.queue.queue import JobsQueue
@@ -11,7 +11,7 @@ def dummy_task(session):
     pass
 
 
-class test_queue(unittest2.TestCase):
+class test_queue(unittest.TestCase):
     """ Test Queue """
 
     def setUp(self):

@@ -26,16 +26,8 @@
 """
 What is the job runner?
 -----------------------
-This is an alternative to connector workers, with the goal
-of resolving issues due to the polling nature of workers:
-
-* jobs do not start immediately even if there is a free connector worker,
-* connector workers may starve while other workers have too many jobs enqueued,
-* connector workers require another startup script,
-  making deployment more difficult
-
-It is fully compatible with the connector mechanism and only
-replaces workers.
+The job runner is the main process managing the dispatch of delayed jobs to
+available Odoo workers
 
 How does it work?
 -----------------
@@ -67,10 +59,6 @@ How to use it?
   ...INFO...connector.jobrunner.runner: initializing database connections
   ...INFO...connector.jobrunner.runner: connector runner ready for db <dbname>
   ...INFO...connector.jobrunner.runner: database connections ready
-
-* Disable the "Enqueue Jobs" cron.
-
-* Do NOT start openerp-connector-worker.
 
 * Create jobs (eg using base_import_async) and observe they
   start immediately and in parallel.

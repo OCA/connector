@@ -568,7 +568,7 @@ class TestJobModel(common.TransactionCase):
         self.assertFalse(inactiveusr in group.users)
         stored = self._create_job()
         stored.write({'state': 'failed'})
-        followers = stored.message_follower_ids
+        followers = stored.message_follower_ids.mapped('partner_id')
         self.assertFalse(inactiveusr.partner_id in followers)
         self.assertFalse(
             set([u.partner_id for u in group.users]) - set(followers))
@@ -692,9 +692,10 @@ class TestJobStorageMultiCompany(common.TransactionCase):
         )
         self.assertEqual(len(stored.message_follower_ids), len(users))
         expected_partners = [u.partner_id for u in users]
-        self.assertSetEqual(set(stored.message_follower_ids),
-                            set(expected_partners))
-        followers_id = [f.id for f in stored.message_follower_ids]
+        self.assertSetEqual(
+            set(stored.message_follower_ids.mapped('partner_id')),
+            set(expected_partners))
+        followers_id = stored.message_follower_ids.mapped('partner_id.id')
         self.assertIn(self.other_partner_a.id, followers_id)
         self.assertIn(self.other_partner_b.id, followers_id)
         # jobs created for a specific company_id are followed only by
@@ -707,9 +708,10 @@ class TestJobStorageMultiCompany(common.TransactionCase):
         self.assertEqual(len(stored.message_follower_ids), 2)
         users = User.browse([SUPERUSER_ID, self.other_user_a.id])
         expected_partners = [u.partner_id for u in users]
-        self.assertSetEqual(set(stored.message_follower_ids),
-                            set(expected_partners))
-        followers_id = [f.id for f in stored.message_follower_ids]
+        self.assertSetEqual(
+            set(stored.message_follower_ids.mapped('partner_id')),
+            set(expected_partners))
+        followers_id = stored.message_follower_ids.mapped('partner_id.id')
         self.assertIn(self.other_partner_a.id, followers_id)
         self.assertNotIn(self.other_partner_b.id, followers_id)
 

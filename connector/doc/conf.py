@@ -25,7 +25,7 @@ sys.path.append(os.path.abspath('_themes'))
 
 if os.environ.get('TRAVIS_BUILD_DIR') and os.environ.get('VERSION'):
     # build from travis
-    odoo_folder = 'odoo-8.0'
+    odoo_folder = 'odoo-' + os.environ.get('VERSION')
     odoo_root = os.path.join(os.environ['HOME'], odoo_folder)
     sphinxodoo_root_path = os.path.abspath(odoo_root)
     sphinxodoo_addons_path = [

@@ -233,10 +233,11 @@ class Database(object):
             cr.execute("LISTEN connector")
 
     def select_jobs(self, where, args):
-        query = "SELECT %s, uuid, id as seq, date_created, priority, eta, state " \
-                "FROM queue_job WHERE %s" % \
-                ('channel' if self.has_channel else 'NULL',
-                 where)
+        query = ("SELECT %s, uuid, id as seq, date_created, "
+                 "priority, eta, state "
+                 "FROM queue_job WHERE %s" %
+                 ('channel' if self.has_channel else 'NULL',
+                  where))
         with closing(self.conn.cursor()) as cr:
             cr.execute(query, args)
             return list(cr.fetchall())

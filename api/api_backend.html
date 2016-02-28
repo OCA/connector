@@ -252,7 +252,7 @@ to register their backends. For instance, the Magento connector has
 <code class="docutils literal"><span class="pre">version</span></code> field which should have the same list of versions (with the exact
 same name) than the instances of <a class="reference internal" href="#connector.backend.Backend" title="connector.backend.Backend"><code class="xref py py-class docutils literal"><span class="pre">Backend</span></code></a>.</p>
 <p>Example with the Magento Connector:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="c1"># in magentoerpconnect/backend.py</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1"># in magentoerpconnect/backend.py</span>
 
 <span class="n">magento</span> <span class="o">=</span> <span class="n">backend</span><span class="o">.</span><span class="n">Backend</span><span class="p">(</span><span class="s1">&#39;magento&#39;</span><span class="p">)</span>
 <span class="sd">&quot;&quot;&quot; Generic Magento Backend &quot;&quot;&quot;</span>
@@ -335,7 +335,7 @@ task, it will ask it to its direct parent (and so on)</li>
 vertical - across the versions - and the other would be more horizontal as
 it allows to modify the behavior for 1 version of backend.</p>
 <p>For the sake of the example, let&#8217;s say we have theses backend versions:</p>
-<div class="highlight-python"><div class="highlight"><pre>         &lt;Magento&gt;
+<div class="highlight-python"><div class="highlight"><pre><span></span>         &lt;Magento&gt;
              |
       -----------------
       |               |
@@ -345,7 +345,7 @@ it allows to modify the behavior for 1 version of backend.</p>
 </pre></div>
 </div>
 <p>And here is the way they are declared in Python:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">magento</span> <span class="o">=</span> <span class="n">Backend</span><span class="p">(</span><span class="s1">&#39;magento&#39;</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">magento</span> <span class="o">=</span> <span class="n">Backend</span><span class="p">(</span><span class="s1">&#39;magento&#39;</span><span class="p">)</span>
 <span class="n">magento1700</span> <span class="o">=</span> <span class="n">Backend</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="n">magento</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s1">&#39;1.7&#39;</span><span class="p">)</span>
 <span class="n">magento2000</span> <span class="o">=</span> <span class="n">Backend</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="n">magento</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s1">&#39;2.0&#39;</span><span class="p">)</span>
 
@@ -360,7 +360,7 @@ registered their own ones instead. That&#8217;s the same for <code class="docuti
 instance (typically you want specific mappings for one instance).</p>
 <p>Here is how you would register classes on <code class="docutils literal"><span class="pre">&lt;Magento&gt;</span></code> and another on
 <code class="docutils literal"><span class="pre">&lt;Magento</span> <span class="pre">1.7&gt;</span></code>:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="nd">@magento</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="nd">@magento</span>
 <span class="k">class</span> <span class="nc">Synchronizer</span><span class="p">(</span><span class="n">ConnectorUnit</span><span class="p">):</span>
     <span class="n">_model_name</span> <span class="o">=</span> <span class="s1">&#39;res.partner&#39;</span>
 
@@ -374,7 +374,7 @@ instance (typically you want specific mappings for one instance).</p>
 </pre></div>
 </div>
 <p>Here, the <a class="reference internal" href="#connector.backend.Backend.get_class" title="connector.backend.Backend.get_class"><code class="xref py py-meth docutils literal"><span class="pre">get_class()</span></code></a> called on <code class="docutils literal"><span class="pre">magento1700</span></code> would return:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">magento1700</span><span class="o">.</span><span class="n">get_class</span><span class="p">(</span><span class="n">Synchronizer</span><span class="p">,</span> <span class="n">session</span><span class="p">,</span> <span class="s1">&#39;res.partner&#39;</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">magento1700</span><span class="o">.</span><span class="n">get_class</span><span class="p">(</span><span class="n">Synchronizer</span><span class="p">,</span> <span class="n">session</span><span class="p">,</span> <span class="s1">&#39;res.partner&#39;</span><span class="p">)</span>
 <span class="c1"># =&gt; Synchronizer1700</span>
 <span class="n">magento1700</span><span class="o">.</span><span class="n">get_class</span><span class="p">(</span><span class="n">Mapper</span><span class="p">,</span> <span class="n">session</span><span class="p">,</span> <span class="s1">&#39;res.partner&#39;</span><span class="p">)</span>
 <span class="c1"># =&gt; Mapper</span>
@@ -399,7 +399,7 @@ redefine an <code class="docutils literal"><span class="pre">AdvancedImportMappe
 addon is installed. This is the horizontal extension mechanism.</p>
 <p>Replace a <a class="reference internal" href="api_connector.html#connector.connector.ConnectorUnit" title="connector.connector.ConnectorUnit"><code class="xref py py-class docutils literal"><span class="pre">ConnectorUnit</span></code></a> by another one
 in a backend:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="nd">@backend</span><span class="p">(</span><span class="n">replacing</span><span class="o">=</span><span class="n">ImportMapper</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="nd">@backend</span><span class="p">(</span><span class="n">replacing</span><span class="o">=</span><span class="n">ImportMapper</span><span class="p">)</span>
 <span class="k">class</span> <span class="nc">AdvancedImportMapper</span><span class="p">(</span><span class="n">ImportMapper</span><span class="p">):</span>
     <span class="n">_model_name</span> <span class="o">=</span> <span class="s1">&#39;product.product&#39;</span>
 </pre></div>
@@ -558,7 +558,7 @@ this addon.</p>
 <p>For example, for a <code class="docutils literal"><span class="pre">res.partner.category</span></code> from Magento, I would have
 (this is a consolidation of all the columns from the abstract models,
 in <code class="docutils literal"><span class="pre">magentoerpconnect</span></code> you would not find that):</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">MagentoResPartnerCategory</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">MagentoResPartnerCategory</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
     <span class="n">_name</span> <span class="o">=</span> <span class="s1">&#39;magento.res.partner.category&#39;</span>
 
     <span class="n">_inherits</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;res.partner.category&#39;</span><span class="p">:</span> <span class="s1">&#39;openerp_id&#39;</span><span class="p">}</span>

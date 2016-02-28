@@ -230,7 +230,7 @@
     <div class="col-md-12 content">
       
   <h1>Code source de openerp.fields</h1><div class="highlight"><pre>
-<span class="c1"># -*- coding: utf-8 -*-</span>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
 <span class="c1">##############################################################################</span>
 <span class="c1">#</span>
 <span class="c1">#    OpenERP, Open Source Management Solution</span>
@@ -262,6 +262,7 @@
 <span class="kn">import</span> <span class="nn">pytz</span>
 <span class="kn">import</span> <span class="nn">xmlrpclib</span>
 
+<span class="kn">from</span> <span class="nn">openerp.sql_db</span> <span class="kn">import</span> <span class="n">LazyCursor</span>
 <span class="kn">from</span> <span class="nn">openerp.tools</span> <span class="kn">import</span> <span class="n">float_round</span><span class="p">,</span> <span class="n">frozendict</span><span class="p">,</span> <span class="n">html_sanitize</span><span class="p">,</span> <span class="n">ustr</span><span class="p">,</span> <span class="n">OrderedSet</span>
 <span class="kn">from</span> <span class="nn">openerp.tools</span> <span class="kn">import</span> <span class="n">DEFAULT_SERVER_DATE_FORMAT</span> <span class="k">as</span> <span class="n">DATE_FORMAT</span>
 <span class="kn">from</span> <span class="nn">openerp.tools</span> <span class="kn">import</span> <span class="n">DEFAULT_SERVER_DATETIME_FORMAT</span> <span class="k">as</span> <span class="n">DATETIME_FORMAT</span>
@@ -289,6 +290,20 @@
 <span class="k">def</span> <span class="nf">_check_value</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Return ``value``, or call its getter if ``value`` is a :class:`SpecialValue`. &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">value</span><span class="o">.</span><span class="n">get</span><span class="p">()</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">SpecialValue</span><span class="p">)</span> <span class="k">else</span> <span class="n">value</span>
+
+<span class="k">def</span> <span class="nf">copy_cache</span><span class="p">(</span><span class="n">records</span><span class="p">,</span> <span class="n">env</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Recursively copy the cache of ``records`` to the environment ``env``. &quot;&quot;&quot;</span>
+    <span class="n">todo</span><span class="p">,</span> <span class="n">done</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">records</span><span class="p">),</span> <span class="nb">set</span><span class="p">()</span>
+    <span class="k">while</span> <span class="n">todo</span><span class="p">:</span>
+        <span class="n">record</span> <span class="o">=</span> <span class="n">todo</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">record</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">done</span><span class="p">:</span>
+            <span class="n">done</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">record</span><span class="p">)</span>
+            <span class="n">target</span> <span class="o">=</span> <span class="n">record</span><span class="o">.</span><span class="n">with_env</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">record</span><span class="o">.</span><span class="n">_cache</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">BaseModel</span><span class="p">):</span>
+                    <span class="n">todo</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+                    <span class="n">value</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">with_env</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
+                <span class="n">target</span><span class="o">.</span><span class="n">_cache</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
 
 
 <span class="k">def</span> <span class="nf">resolve_all_mro</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
@@ -770,10 +785,9 @@
         <span class="c1"># when related_sudo, bypass access rights checks when reading values</span>
         <span class="n">others</span> <span class="o">=</span> <span class="n">records</span><span class="o">.</span><span class="n">sudo</span><span class="p">()</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">related_sudo</span> <span class="k">else</span> <span class="n">records</span>
         <span class="k">for</span> <span class="n">record</span><span class="p">,</span> <span class="n">other</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">records</span><span class="p">,</span> <span class="n">others</span><span class="p">):</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="n">record</span><span class="o">.</span><span class="n">id</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">record</span><span class="o">.</span><span class="n">id</span> <span class="ow">and</span> <span class="n">record</span><span class="o">.</span><span class="n">env</span> <span class="o">!=</span> <span class="n">other</span><span class="o">.</span><span class="n">env</span><span class="p">:</span>
                 <span class="c1"># draft records: copy record&#39;s cache to other&#39;s cache first</span>
-                <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">record</span><span class="o">.</span><span class="n">_cache</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
-                    <span class="n">other</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+                <span class="n">copy_cache</span><span class="p">(</span><span class="n">record</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">env</span><span class="p">)</span>
             <span class="c1"># traverse the intermediate fields; follow the first record at each step</span>
             <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">related</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
                 <span class="n">other</span> <span class="o">=</span> <span class="n">other</span><span class="p">[</span><span class="n">name</span><span class="p">][:</span><span class="mi">1</span><span class="p">]</span>
@@ -1294,7 +1308,7 @@
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">digits</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="nb">callable</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_digits</span><span class="p">):</span>
-            <span class="k">with</span> <span class="n">fields</span><span class="o">.</span><span class="n">_get_cursor</span><span class="p">()</span> <span class="k">as</span> <span class="n">cr</span><span class="p">:</span>
+            <span class="k">with</span> <span class="n">LazyCursor</span><span class="p">()</span> <span class="k">as</span> <span class="n">cr</span><span class="p">:</span>
                 <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_digits</span><span class="p">(</span><span class="n">cr</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_digits</span>
@@ -1319,6 +1333,8 @@
     <span class="k">def</span> <span class="nf">convert_to_cache</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="n">validate</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
         <span class="c1"># apply rounding here, otherwise value in cache may be wrong!</span>
         <span class="n">value</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">value</span> <span class="ow">or</span> <span class="mf">0.0</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">validate</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">value</span>
         <span class="n">digits</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">digits</span>
         <span class="k">return</span> <span class="n">float_round</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">precision_digits</span><span class="o">=</span><span class="n">digits</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="k">if</span> <span class="n">digits</span> <span class="k">else</span> <span class="n">value</span>
 
@@ -2106,7 +2122,7 @@
         <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;field &#39;id&#39; cannot be assigned&quot;</span><span class="p">)</span>
 
 <span class="c1"># imported here to avoid dependency cycle issues</span>
-<span class="kn">from</span> <span class="nn">openerp</span> <span class="kn">import</span> <span class="n">SUPERUSER_ID</span><span class="p">,</span> <span class="n">registry</span>
+<span class="kn">from</span> <span class="nn">openerp</span> <span class="kn">import</span> <span class="n">SUPERUSER_ID</span>
 <span class="kn">from</span> <span class="nn">.exceptions</span> <span class="kn">import</span> <span class="ne">Warning</span><span class="p">,</span> <span class="n">AccessError</span><span class="p">,</span> <span class="n">MissingError</span>
 <span class="kn">from</span> <span class="nn">.models</span> <span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">MAGIC_COLUMNS</span>
 <span class="kn">from</span> <span class="nn">.osv</span> <span class="kn">import</span> <span class="n">fields</span>

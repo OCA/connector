@@ -282,7 +282,7 @@ anonymous <code class="docutils literal"><span class="pre">/connector/runjob</sp
 and <code class="docutils literal"><span class="pre">--workers</span></code> greater than 1. <a class="footnote-reference" href="#id4" id="id2">[2]</a></li>
 <li>Confirm the runner is starting correctly by checking the odoo log file:</li>
 </ul>
-<div class="highlight-none"><div class="highlight"><pre>...INFO...connector.jobrunner.runner: starting
+<div class="highlight-none"><div class="highlight"><pre><span></span>...INFO...connector.jobrunner.runner: starting
 ...INFO...connector.jobrunner.runner: initializing database connections
 ...INFO...connector.jobrunner.runner: connector runner ready for db &lt;dbname&gt;
 ...INFO...connector.jobrunner.runner: database connections ready
@@ -314,7 +314,7 @@ therefore fill the running queue and prevent other jobs to start.
 You must therefore requeue them manually, either from the Jobs view,
 or by running the following SQL statement <em>before starting Odoo</em>:</li>
 </ul>
-<div class="highlight-sql"><div class="highlight"><pre><span class="k">update</span> <span class="n">queue_job</span> <span class="k">set</span> <span class="k">state</span><span class="o">=</span><span class="s1">&#39;pending&#39;</span> <span class="k">where</span> <span class="k">state</span> <span class="k">in</span> <span class="p">(</span><span class="s1">&#39;started&#39;</span><span class="p">,</span> <span class="s1">&#39;enqueued&#39;</span><span class="p">)</span>
+<div class="highlight-sql"><div class="highlight"><pre><span></span><span class="k">update</span> <span class="n">queue_job</span> <span class="k">set</span> <span class="k">state</span><span class="o">=</span><span class="s1">&#39;pending&#39;</span> <span class="k">where</span> <span class="k">state</span> <span class="k">in</span> <span class="p">(</span><span class="s1">&#39;started&#39;</span><span class="p">,</span> <span class="s1">&#39;enqueued&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p class="rubric">Footnotes</p>

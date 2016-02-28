@@ -266,7 +266,7 @@
 <h2>Odoo Manifest<a class="headerlink" href="#odoo-manifest" title="Lien permanent vers ce titre">¶</a></h2>
 <p>Comme nous voulons synchroniser Odoo avec une machine à café, nous allons nommer notre connecteur connector_coffee</p>
 <p>Tout d&#8217;abord, nous devons créer le module Odoo lui-même, en modifiant le fichier <code class="docutils literal"><span class="pre">connector_coffee/__openerp__.py</span></code>.</p>
-<div class="highlight-python"><div class="highlight"><pre> <span class="c1"># -*- coding: utf-8 -*-</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span> <span class="c1"># -*- coding: utf-8 -*-</span>
  <span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;Coffee Connector&#39;</span><span class="p">,</span>
   <span class="s1">&#39;version&#39;</span><span class="p">:</span> <span class="s1">&#39;1.0.0&#39;</span><span class="p">,</span>
 <span class="hll">  <span class="s1">&#39;category&#39;</span><span class="p">:</span> <span class="s1">&#39;Connector&#39;</span><span class="p">,</span>
@@ -310,7 +310,7 @@
 </div></blockquote>
 <p>Donc nous allons déclarer un backend <cite>coffee</cite>, l&#8217;entité générique, et un backend différent par version.</p>
 <p>Placez ceci dans <code class="docutils literal"><span class="pre">connector_coffee/backend.py</span></code>:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">openerp.addons.connector.backend</span> <span class="kn">as</span> <span class="nn">backend</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">openerp.addons.connector.backend</span> <span class="kn">as</span> <span class="nn">backend</span>
 
 
 <span class="n">coffee</span> <span class="o">=</span> <span class="n">backend</span><span class="o">.</span><span class="n">Backend</span><span class="p">(</span><span class="s1">&#39;coffee&#39;</span><span class="p">)</span>
@@ -323,7 +323,7 @@
 <h2>Modèle du backend<a class="headerlink" href="#backend-model" title="Lien permanent vers ce titre">¶</a></h2>
 <p>Nous avons déclaré les backends, mais nous avons besoin d&#8217;un modèle pour les configurer.</p>
 <p>Nous créons un modèle <code class="docutils literal"><span class="pre">coffee.backend</span></code> qui est un <code class="docutils literal"><span class="pre">_inherit</span></code> de <code class="docutils literal"><span class="pre">connector.backend</span></code>. Dans <code class="docutils literal"><span class="pre">connector_coffee/coffee_model.py</span></code>:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">openerp</span> <span class="kn">import</span> <span class="n">fields</span><span class="p">,</span> <span class="n">models</span><span class="p">,</span> <span class="n">api</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">openerp</span> <span class="kn">import</span> <span class="n">fields</span><span class="p">,</span> <span class="n">models</span><span class="p">,</span> <span class="n">api</span>
 
 
 <span class="k">class</span> <span class="nc">CoffeeBackend</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
@@ -370,7 +370,7 @@
 <h2>Binding abstrait<a class="headerlink" href="#abstract-binding" title="Lien permanent vers ce titre">¶</a></h2>
 <p>Si nous avons de nombreux <a class="reference internal" href="concepts.html#binding"><span>Bindings (Liaisons)</span></a>, nous pouvons créer un modèle abstrait pour eux.</p>
 <p>Cela peut être comme suit (dans <code class="docutils literal"><span class="pre">connector_coffee/connector.py</span></code>):</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">openerp</span> <span class="kn">import</span> <span class="n">models</span><span class="p">,</span> <span class="n">fields</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">openerp</span> <span class="kn">import</span> <span class="n">models</span><span class="p">,</span> <span class="n">fields</span>
 
 
 <span class="k">class</span> <span class="nc">CoffeeBinding</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">AbstractModel</span><span class="p">):</span>
@@ -394,7 +394,7 @@
 <div class="section" id="environment">
 <h2>Environnement<a class="headerlink" href="#environment" title="Lien permanent vers ce titre">¶</a></h2>
 <p>Nous aurons souvent besoin de créer un nouvel environnement avec lequel travailler. Je propose de créer une méthode auxiliaire qui le construit (dans <code class="docutils literal"><span class="pre">connector_coffee/connector.py</span></code>:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">openerp.addons.connector.connector</span> <span class="kn">import</span> <span class="n">Environment</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">openerp.addons.connector.connector</span> <span class="kn">import</span> <span class="n">Environment</span>
 
 
 <span class="k">def</span> <span class="nf">get_environment</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">backend_id</span><span class="p">):</span>
@@ -415,7 +415,7 @@
 <div class="section" id="checkpoints">
 <h2>Points de contrôle<a class="headerlink" href="#checkpoints" title="Lien permanent vers ce titre">¶</a></h2>
 <p>Quand de nouveaux enregistrements sont importés et ont besoin de vérification, des <a class="reference internal" href="concepts.html#checkpoint"><span>Point de contrôle</span></a> sont créés. Je propose de créer aussi un auxiliaire dans <code class="docutils literal"><span class="pre">connector_coffee/connector.py</span></code>:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">openerp.addons.connector.checkpoint</span> <span class="kn">import</span> <span class="n">checkpoint</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">openerp.addons.connector.checkpoint</span> <span class="kn">import</span> <span class="n">checkpoint</span>
 
 
 <span class="k">def</span> <span class="nf">add_checkpoint</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">record_id</span><span class="p">,</span> <span class="n">backend_id</span><span class="p">):</span>

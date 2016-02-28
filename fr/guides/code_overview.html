@@ -256,7 +256,7 @@
 <div class="section" id="backends">
 <h2>Backends<a class="headerlink" href="#backends" title="Lien permanent vers ce titre">¶</a></h2>
 <p>Tout commence par une déclaration du <a class="reference internal" href="../api/api_backend.html#connector.backend.Backend" title="connector.backend.Backend"><code class="xref py py-class docutils literal"><span class="pre">Backend</span></code></a>:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">openerp.addons.connector.backend</span> <span class="kn">as</span> <span class="nn">backend</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">openerp.addons.connector.backend</span> <span class="kn">as</span> <span class="nn">backend</span>
 
 <span class="n">magento</span> <span class="o">=</span> <span class="n">backend</span><span class="o">.</span><span class="n">Backend</span><span class="p">(</span><span class="s1">&#39;magento&#39;</span><span class="p">)</span>
 <span class="sd">&quot;&quot;&quot; Generic Magento Backend &quot;&quot;&quot;</span>
@@ -270,7 +270,7 @@
 <div class="section" id="bindings">
 <h2>Bindings (Liaisons)<a class="headerlink" href="#bindings" title="Lien permanent vers ce titre">¶</a></h2>
 <p>Un <code class="docutils literal"><span class="pre">binding</span></code> est ce qui permet de lier un enregistrement Odoo et un enregistrement externe. Il n&#8217;y a pas d&#8217;obligation pour l&#8217;implémentation des <code class="docutils literal"><span class="pre">liaisons</span></code>. Les techniques les plus évidentes sont: stocker les ID externes dans le même modèle (<code class="docutils literal"><span class="pre">account.invoice</span></code>), dans un modèle de liaison ou dans un modèle de laison qui <code class="docutils literal"><span class="pre">_inherits</span></code> <code class="docutils literal"><span class="pre">account.invoice</span></code>. Ici nous choisissons la dernière solution</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">MagentoAccountInvoice</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">MagentoAccountInvoice</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
     <span class="n">_name</span> <span class="o">=</span> <span class="s1">&#39;magento.account.invoice&#39;</span>
     <span class="n">_inherits</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;account.invoice&#39;</span><span class="p">:</span> <span class="s1">&#39;openerp_id&#39;</span><span class="p">}</span>
     <span class="n">_description</span> <span class="o">=</span> <span class="s1">&#39;Magento Invoice&#39;</span>
@@ -292,7 +292,7 @@
 <h2>Événements<a class="headerlink" href="#events" title="Lien permanent vers ce titre">¶</a></h2>
 <p>Nous pouvons créer un <a class="reference internal" href="../api/api_event.html#connector.event.Event" title="connector.event.Event"><code class="xref py py-class docutils literal"><span class="pre">Event</span></code></a> sur lequel nous pouvons abonner des consommateurs. Le connecteur fournit d&#8217;origine les plus génériques: <a class="reference internal" href="../api/api_event.html#connector.event.on_record_create" title="connector.event.on_record_create"><code class="xref py py-meth docutils literal"><span class="pre">on_record_create()</span></code></a>, <a class="reference internal" href="../api/api_event.html#connector.event.on_record_write" title="connector.event.on_record_write"><code class="xref py py-meth docutils literal"><span class="pre">on_record_write()</span></code></a>, <a class="reference internal" href="../api/api_event.html#connector.event.on_record_unlink" title="connector.event.on_record_unlink"><code class="xref py py-meth docutils literal"><span class="pre">on_record_unlink()</span></code></a></p>
 <p>À la création d&#8217;un enregistrement <code class="docutils literal"><span class="pre">magento.account.invoice</span></code>, nous voulons lancer un job déporté pour l&#8217;exporter vers Magento, donc nous abonnons un nouveau consommateur à l&#8217;événement <a class="reference internal" href="../api/api_event.html#connector.event.on_record_create" title="connector.event.on_record_create"><code class="xref py py-meth docutils literal"><span class="pre">on_record_create()</span></code></a>:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="nd">@on_record_create</span><span class="p">(</span><span class="n">model_names</span><span class="o">=</span><span class="s1">&#39;magento.account.invoice&#39;</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="nd">@on_record_create</span><span class="p">(</span><span class="n">model_names</span><span class="o">=</span><span class="s1">&#39;magento.account.invoice&#39;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">delay_export_account_invoice</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">record_id</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Delay the job to export the magento invoice.</span>
@@ -306,7 +306,7 @@
 <h2>Jobs<a class="headerlink" href="#jobs" title="Lien permanent vers ce titre">¶</a></h2>
 <p>Un <a class="reference internal" href="../api/api_queue.html#connector.queue.job.Job" title="connector.queue.job.Job"><code class="xref py py-class docutils literal"><span class="pre">Job</span></code></a> est une tâche à exécuter plus tard. Dans le cas présent: créer une facture dans Magento.</p>
 <p>N&#8217;importe quelle fonction décorée avec <a class="reference internal" href="../api/api_queue.html#connector.queue.job.job" title="connector.queue.job.job"><code class="xref py py-meth docutils literal"><span class="pre">job()</span></code></a> peut être envoyée dans la queue de jobs en utilisant la fonction <code class="docutils literal"><span class="pre">delay()</span></code> et sera lancée aussi tôt que possible</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="nd">@job</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="nd">@job</span>
 <span class="k">def</span> <span class="nf">export_invoice</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">record_id</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Export a validated or paid invoice. &quot;&quot;&quot;</span>
     <span class="n">invoice</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">env</span><span class="p">[</span><span class="n">model_name</span><span class="p">]</span><span class="o">.</span><span class="n">browse</span><span class="p">(</span><span class="n">record_id</span><span class="p">)</span>
@@ -346,7 +346,7 @@ Odoo ID or an external ID. A default implementation is available.</div></blockqu
 <div><p>Les <code class="docutils literal"><span class="pre">synchroniseurs</span></code> sont la partie principale d&#8217;une synchronisation. Ils définissent le flux de synchronisation et utilisent les <a class="reference internal" href="../api/api_connector.html#connector.connector.ConnectorUnit" title="connector.connector.ConnectorUnit"><code class="xref py py-class docutils literal"><span class="pre">ConnectorUnit</span></code></a> (ceux ci-dessus ou des spécifiques).</p>
 </div></blockquote>
 <p>Pour l&#8217;export de la facture, nous avons juste besoin d&#8217;un <code class="docutils literal"><span class="pre">adaptateur</span></code> et d&#8217;un <code class="docutils literal"><span class="pre">synchroniseur</span></code> (l&#8217;implémentation réelle est plus complexe):</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="nd">@magento</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="nd">@magento</span>
 <span class="k">class</span> <span class="nc">AccountInvoiceAdapter</span><span class="p">(</span><span class="n">GenericAdapter</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Backend Adapter for the Magento Invoice &quot;&quot;&quot;</span>
     <span class="n">_model_name</span> <span class="o">=</span> <span class="s1">&#39;magento.account.invoice&#39;</span>

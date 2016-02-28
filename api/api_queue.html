@@ -627,7 +627,7 @@ infinite retries. Default is 5.</p>
 </dd>
 </dl>
 <p>Example:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="nd">@job</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="nd">@job</span>
 <span class="k">def</span> <span class="nf">export_one_thing</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">one_thing</span><span class="p">):</span>
     <span class="c1"># work</span>
     <span class="c1"># export one_thing</span>
@@ -668,17 +668,17 @@ to a job</p>
 
 <dl class="function">
 <dt id="connector.queue.job.related_action">
-<code class="descclassname">connector.queue.job.</code><code class="descname">related_action</code><span class="sig-paren">(</span><em>action=&lt;function &lt;lambda&gt; at 0x455d758&gt;</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/queue/job.html#related_action"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.job.related_action" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">connector.queue.job.</code><code class="descname">related_action</code><span class="sig-paren">(</span><em>action=&lt;function &lt;lambda&gt; at 0x3ff7cf8&gt;</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/queue/job.html#related_action"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.job.related_action" title="Permalink to this definition">¶</a></dt>
 <dd><p>Attach a <em>Related Action</em> to a job.</p>
 <p>A <em>Related Action</em> will appear as a button on the OpenERP view.
 The button will execute the action, usually it will open the
 form view of the record related to the job.</p>
 <p>The <code class="docutils literal"><span class="pre">action</span></code> must be a callable that responds to arguments:</p>
-<div class="highlight-python"><div class="highlight"><pre>session, job, **kwargs
+<div class="highlight-python"><div class="highlight"><pre><span></span>session, job, **kwargs
 </pre></div>
 </div>
 <p>Example usage:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">related_action_partner</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">job</span><span class="p">):</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">related_action_partner</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">job</span><span class="p">):</span>
     <span class="n">model</span> <span class="o">=</span> <span class="n">job</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">partner_id</span> <span class="o">=</span> <span class="n">job</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
     <span class="c1"># eventually get the real ID if partner_id is a binding ID</span>
@@ -699,7 +699,7 @@ form view of the record related to the job.</p>
 </pre></div>
 </div>
 <p>The kwargs are transmitted to the action:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">related_action_product</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">job</span><span class="p">,</span> <span class="n">extra_arg</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">related_action_product</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">job</span><span class="p">,</span> <span class="n">extra_arg</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
     <span class="k">assert</span> <span class="n">extra_arg</span> <span class="o">==</span> <span class="mi">2</span>
     <span class="n">model</span> <span class="o">=</span> <span class="n">job</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">product_id</span> <span class="o">=</span> <span class="n">job</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
@@ -708,6 +708,22 @@ form view of the record related to the job.</p>
 <span class="nd">@related_action</span><span class="p">(</span><span class="n">action</span><span class="o">=</span><span class="n">related_action_product</span><span class="p">,</span> <span class="n">extra_arg</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">export_product</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">product_id</span><span class="p">):</span>
     <span class="c1"># ...</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="connector.queue.job.whitelist_unpickle_global">
+<code class="descclassname">connector.queue.job.</code><code class="descname">whitelist_unpickle_global</code><span class="sig-paren">(</span><em>fn_or_class</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/queue/job.html#whitelist_unpickle_global"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.job.whitelist_unpickle_global" title="Permalink to this definition">¶</a></dt>
+<dd><p>Allow a function or class to be used in jobs</p>
+<p>By default, the only types allowed to be used in job arguments are:</p>
+<ul class="simple">
+<li>the builtins: str/unicode, int/long, float, bool, tuple, list, dict, None</li>
+<li>the pre-registered: datetime.datetime datetime.timedelta</li>
+</ul>
+<p>If you need to use an argument in a job which is not in this whitelist,
+you can add it by using:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">whitelist_unpickle_global</span><span class="p">(</span><span class="n">fn_or_class_to_register</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd></dl>

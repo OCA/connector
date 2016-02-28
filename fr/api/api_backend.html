@@ -247,7 +247,7 @@
 <p>Le backend pour une version (par exemple Magento 1.7) est représenté par une instance de la classe <a class="reference internal" href="#connector.backend.Backend" title="connector.backend.Backend"><code class="xref py py-class docutils literal"><span class="pre">Backend</span></code></a>.</p>
 <p>Chaque connecteur va aussi créer un <code class="docutils literal"><span class="pre">connector.backend</span></code> qui permet aux utilisateurs d&#8217;inscrire leurs backends. Par exemple le connecteur Magento a un <code class="docutils literal"><span class="pre">magento.backend</span></code> (<code class="docutils literal"><span class="pre">_inherit</span></code> <code class="xref py py-class docutils literal"><span class="pre">connector.backend_model.connector_backend</span></code>).  Ce modèle contient un champ <code class="docutils literal"><span class="pre">version</span></code> qui doit avoir la même lists de versions (avec exactement le même nom) que les instances de <a class="reference internal" href="#connector.backend.Backend" title="connector.backend.Backend"><code class="xref py py-class docutils literal"><span class="pre">Backend</span></code></a>.</p>
 <p>Exemple avec le connecteur Magento</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="c1"># in magentoerpconnect/backend.py</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1"># in magentoerpconnect/backend.py</span>
 
 <span class="n">magento</span> <span class="o">=</span> <span class="n">backend</span><span class="o">.</span><span class="n">Backend</span><span class="p">(</span><span class="s1">&#39;magento&#39;</span><span class="p">)</span>
 <span class="sd">&quot;&quot;&quot; Generic Magento Backend &quot;&quot;&quot;</span>
@@ -325,7 +325,7 @@
 </ul>
 <p>Les Backends ont deux mécanismes différents d&#8217;extension. L&#8217;un est plus vertical (entre plusieurs versions) et l&#8217;autre est plus horizontal car il permet de modifier le comportement pour une version donnée du backend.</p>
 <p>Pour l&#8217;exemple, disons que nous avons les versions suivantes de backend</p>
-<div class="highlight-python"><div class="highlight"><pre>         &lt;Magento&gt;
+<div class="highlight-python"><div class="highlight"><pre><span></span>         &lt;Magento&gt;
              |
       -----------------
       |               |
@@ -335,7 +335,7 @@
 </pre></div>
 </div>
 <p>Et voici la façon dont elles sont déclarées en Python</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">magento</span> <span class="o">=</span> <span class="n">Backend</span><span class="p">(</span><span class="s1">&#39;magento&#39;</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">magento</span> <span class="o">=</span> <span class="n">Backend</span><span class="p">(</span><span class="s1">&#39;magento&#39;</span><span class="p">)</span>
 <span class="n">magento1700</span> <span class="o">=</span> <span class="n">Backend</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="n">magento</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s1">&#39;1.7&#39;</span><span class="p">)</span>
 <span class="n">magento2000</span> <span class="o">=</span> <span class="n">Backend</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="n">magento</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s1">&#39;2.0&#39;</span><span class="p">)</span>
 
@@ -344,7 +344,7 @@
 </div>
 <p>Dans le graphe ci-dessus, <code class="docutils literal"><span class="pre">&lt;Magento&gt;</span></code> va contenir toutes les classes partagées entre toutes les versions. Chaque version de Magento (<code class="docutils literal"><span class="pre">&lt;Magento</span> <span class="pre">1.7&gt;</span></code>, <code class="docutils literal"><span class="pre">&lt;Magento</span> <span class="pre">2.0&gt;</span></code>) va utiliser les classes définies sur <code class="docutils literal"><span class="pre">&lt;Magento&gt;</span></code>, sauf si elles ont inscrit leur propres classes. C&#8217;est la même chose pour <code class="docutils literal"><span class="pre">&lt;Magento</span> <span class="pre">avec</span> <span class="pre">specifique&gt;</span></code> mais celui-ci contient des personnalisations qui sont spécifiques à une instance (typiquement pour mettre en place des mappeurs spécifiques à une instance).</p>
 <p>Voici comment inscrire des classes sur <code class="docutils literal"><span class="pre">&lt;Magento&gt;</span></code> et une autre sur <code class="docutils literal"><span class="pre">&lt;Magento</span> <span class="pre">1.7&gt;</span></code></p>
-<div class="highlight-python"><div class="highlight"><pre><span class="nd">@magento</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="nd">@magento</span>
 <span class="k">class</span> <span class="nc">Synchronizer</span><span class="p">(</span><span class="n">ConnectorUnit</span><span class="p">):</span>
     <span class="n">_model_name</span> <span class="o">=</span> <span class="s1">&#39;res.partner&#39;</span>
 
@@ -358,7 +358,7 @@
 </pre></div>
 </div>
 <p>Ici, la méthode <code class="xref py py-meth docutils literal"><span class="pre">get_class()</span></code> appelé sur <code class="docutils literal"><span class="pre">magento1700</span></code> renverrait</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">magento1700</span><span class="o">.</span><span class="n">get_class</span><span class="p">(</span><span class="n">Synchronizer</span><span class="p">,</span> <span class="n">session</span><span class="p">,</span> <span class="s1">&#39;res.partner&#39;</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">magento1700</span><span class="o">.</span><span class="n">get_class</span><span class="p">(</span><span class="n">Synchronizer</span><span class="p">,</span> <span class="n">session</span><span class="p">,</span> <span class="s1">&#39;res.partner&#39;</span><span class="p">)</span>
 <span class="c1"># =&gt; Synchronizer1700</span>
 <span class="n">magento1700</span><span class="o">.</span><span class="n">get_class</span><span class="p">(</span><span class="n">Mapper</span><span class="p">,</span> <span class="n">session</span><span class="p">,</span> <span class="s1">&#39;res.partner&#39;</span><span class="p">)</span>
 <span class="c1"># =&gt; Mapper</span>
@@ -373,7 +373,7 @@
 <p>L&#8217;extension verticale est celle que vous utiliserez probablement le plus, parce que la plupart des choses que vous modifierez concerne vos applications personnalisées ou des comportements différents selon les versions du backend.</p>
 <p>Cependant il peut arriver que nous ayons besoin de changer le comportement d&#8217;un connecteur, en installant un module. Par exemple, imaginons que nous ayons déjà un <code class="docutils literal"><span class="pre">ImportMapper</span></code> pour les articles dans le Connecteur Magento. Nous créons un module (générique) pour gérer le catalogue d&#8217;une manière plus avancée. Nous redéfinissons un <code class="docutils literal"><span class="pre">AdvancedImportMapper</span></code> qui devrait être utilisé quand le module est installé. Ceci est le mécanisme d&#8217;extension horizontal.</p>
 <p>Remplace une clase <a class="reference internal" href="api_connector.html#connector.connector.ConnectorUnit" title="connector.connector.ConnectorUnit"><code class="xref py py-class docutils literal"><span class="pre">ConnectorUnit</span></code></a> par une autre dans le backend</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="nd">@backend</span><span class="p">(</span><span class="n">replacing</span><span class="o">=</span><span class="n">ImportMapper</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="nd">@backend</span><span class="p">(</span><span class="n">replacing</span><span class="o">=</span><span class="n">ImportMapper</span><span class="p">)</span>
 <span class="k">class</span> <span class="nc">AdvancedImportMapper</span><span class="p">(</span><span class="n">ImportMapper</span><span class="p">):</span>
     <span class="n">_model_name</span> <span class="o">=</span> <span class="s1">&#39;product.product&#39;</span>
 </pre></div>
@@ -520,7 +520,7 @@ of an overridden field. It is a list of pairs (<code class="docutils literal"><s
 </div></blockquote>
 <p>La définition des relations dans <code class="docutils literal"><span class="pre">_columns</span></code> doit être faite dans les classes concrètes, parce que les relations elle-mêmes n&#8217;existent pas dans ce module.</p>
 <p>Par exemple, pour un <code class="docutils literal"><span class="pre">res.partner.category</span></code> depuis Magento, J&#8217;aurais (ceci est une consolidation de toutes les colonnes des modèles abstraits. Dans <code class="docutils literal"><span class="pre">magentoerpconnect</span></code> vous ne trouveriez pas ça)</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">MagentoResPartnerCategory</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">MagentoResPartnerCategory</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
     <span class="n">_name</span> <span class="o">=</span> <span class="s1">&#39;magento.res.partner.category&#39;</span>
 
     <span class="n">_inherits</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;res.partner.category&#39;</span><span class="p">:</span> <span class="s1">&#39;openerp_id&#39;</span><span class="p">}</span>

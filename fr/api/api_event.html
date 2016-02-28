@@ -253,7 +253,7 @@
 <div><p>Un événement contient des consommateurs qui sont appelés lorsque l&#8217;événement survient.</p>
 <p>Les événements sont capables de filtrer par nom de modèle les consommateurs à exécuter.</p>
 <p>L&#8217;usage classique d&#8217;un événement est d&#8217;instancier un objet <cite>Event</cite></p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">on_my_event</span> <span class="o">=</span> <span class="n">Event</span><span class="p">()</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">on_my_event</span> <span class="o">=</span> <span class="n">Event</span><span class="p">()</span>
 </pre></div>
 </div>
 <p>Un événement a toujours au moins les deux arguments suivants :</p>
@@ -262,7 +262,7 @@
 <li>model_name</li>
 </ul>
 <p>Ensuite pour abonner un ou plusieurs consommateurs, un événement a une fonction :</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">do_something</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">do_something</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
     <span class="k">print</span> <span class="s2">&quot;Event was fired with arguments: </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
 
 <span class="c1"># active on all models</span>
@@ -278,7 +278,7 @@
 </pre></div>
 </div>
 <p>On peut aussi remplacer un consommateur</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">do_something_product2</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">do_something_product2</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
     <span class="k">print</span> <span class="s2">&quot;Consumer 2&quot;</span>
     <span class="k">print</span> <span class="p">(</span><span class="s2">&quot;Event was fired on a product &quot;</span>
           <span class="s2">&quot;with arguments: </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">))</span>
@@ -288,11 +288,11 @@
 </pre></div>
 </div>
 <p>Finalement, on déclenche l&#8217;événement</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">on_my_event</span><span class="o">.</span><span class="n">fire</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="s1">&#39;res.users&#39;</span><span class="p">,</span> <span class="s1">&#39;value_a&#39;</span><span class="p">,</span> <span class="s1">&#39;value_b&#39;</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">on_my_event</span><span class="o">.</span><span class="n">fire</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="s1">&#39;res.users&#39;</span><span class="p">,</span> <span class="s1">&#39;value_a&#39;</span><span class="p">,</span> <span class="s1">&#39;value_b&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Un consommateur peut être inscrit grâce à un décorateur</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="nd">@on_my_event</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="nd">@on_my_event</span>
 <span class="k">def</span> <span class="nf">do_other_thing</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
     <span class="k">print</span> <span class="s1">&#39;foo&#39;</span>
 
@@ -368,7 +368,7 @@
 </div></blockquote>
 <dl class="data">
 <dt id="connector.event.on_record_create">
-<code class="descclassname">connector.event.</code><code class="descname">on_record_create</code><em class="property"> = &lt;connector.event.Event object at 0x4dd4e90&gt;</em><a class="headerlink" href="#connector.event.on_record_create" title="Lien permanent vers cette définition">¶</a></dt>
+<code class="descclassname">connector.event.</code><code class="descname">on_record_create</code><em class="property"> = &lt;connector.event.Event object at 0x43e0550&gt;</em><a class="headerlink" href="#connector.event.on_record_create" title="Lien permanent vers cette définition">¶</a></dt>
 <dd><p><code class="docutils literal"><span class="pre">on_record_create</span></code> est déclenché à la création d&#8217;un enregistrement.</p>
 <p>Les abonnés doivent prendre les arguments suivants :</p>
 <blockquote>
@@ -387,7 +387,7 @@
 
 <dl class="data">
 <dt id="connector.event.on_record_unlink">
-<code class="descclassname">connector.event.</code><code class="descname">on_record_unlink</code><em class="property"> = &lt;connector.event.Event object at 0x4dd4ed0&gt;</em><a class="headerlink" href="#connector.event.on_record_unlink" title="Lien permanent vers cette définition">¶</a></dt>
+<code class="descclassname">connector.event.</code><code class="descname">on_record_unlink</code><em class="property"> = &lt;connector.event.Event object at 0x43e0590&gt;</em><a class="headerlink" href="#connector.event.on_record_unlink" title="Lien permanent vers cette définition">¶</a></dt>
 <dd><p><code class="docutils literal"><span class="pre">on_record_unlink</span></code> est déclenché à la suppression d&#8217;un enregistrement.</p>
 <p>Les abonnés doivent prendre les arguments suivants :</p>
 <blockquote>
@@ -404,7 +404,7 @@
 
 <dl class="data">
 <dt id="connector.event.on_record_write">
-<code class="descclassname">connector.event.</code><code class="descname">on_record_write</code><em class="property"> = &lt;connector.event.Event object at 0x4dd4e10&gt;</em><a class="headerlink" href="#connector.event.on_record_write" title="Lien permanent vers cette définition">¶</a></dt>
+<code class="descclassname">connector.event.</code><code class="descname">on_record_write</code><em class="property"> = &lt;connector.event.Event object at 0x43e04d0&gt;</em><a class="headerlink" href="#connector.event.on_record_write" title="Lien permanent vers cette définition">¶</a></dt>
 <dd><p><code class="docutils literal"><span class="pre">on_record_write</span></code> est déclenché à la mise à jour d&#8217;un enregistrement.</p>
 <p>Les abonnés doivent prendre les arguments suivants :</p>
 <blockquote>

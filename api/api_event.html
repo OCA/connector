@@ -249,7 +249,7 @@
 <p>An event contains consumers called when the event is fired.</p>
 <p>The events are able to filter the consumers to execute by model name.</p>
 <p>The usage of an event is to instantiate an <cite>Event</cite> object:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">on_my_event</span> <span class="o">=</span> <span class="n">Event</span><span class="p">()</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">on_my_event</span> <span class="o">=</span> <span class="n">Event</span><span class="p">()</span>
 </pre></div>
 </div>
 <p>An event always have at least the 2 following arguments:</p>
@@ -258,7 +258,7 @@
 <li>model_name</li>
 </ul>
 <p>Then to subscribe one or more consumers, an event has a function:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">do_something</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">do_something</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
     <span class="k">print</span> <span class="s2">&quot;Event was fired with arguments: </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
 
 <span class="c1"># active on all models</span>
@@ -274,7 +274,7 @@
 </pre></div>
 </div>
 <p>We can also replace a consumer:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">do_something_product2</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">do_something_product2</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
     <span class="k">print</span> <span class="s2">&quot;Consumer 2&quot;</span>
     <span class="k">print</span> <span class="p">(</span><span class="s2">&quot;Event was fired on a product &quot;</span>
           <span class="s2">&quot;with arguments: </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">))</span>
@@ -284,11 +284,11 @@
 </pre></div>
 </div>
 <p>Finally, we fire the event:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">on_my_event</span><span class="o">.</span><span class="n">fire</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="s1">&#39;res.users&#39;</span><span class="p">,</span> <span class="s1">&#39;value_a&#39;</span><span class="p">,</span> <span class="s1">&#39;value_b&#39;</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">on_my_event</span><span class="o">.</span><span class="n">fire</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="s1">&#39;res.users&#39;</span><span class="p">,</span> <span class="s1">&#39;value_a&#39;</span><span class="p">,</span> <span class="s1">&#39;value_b&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>A consumer can be subscribed using a decorator:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="nd">@on_my_event</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="nd">@on_my_event</span>
 <span class="k">def</span> <span class="nf">do_other_thing</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
     <span class="k">print</span> <span class="s1">&#39;foo&#39;</span>
 
@@ -372,7 +372,7 @@ consumer which is active on all models if <code class="docutils literal"><span c
 
 <dl class="data">
 <dt id="connector.event.on_record_create">
-<code class="descclassname">connector.event.</code><code class="descname">on_record_create</code><em class="property"> = &lt;connector.event.Event object at 0x44e88d0&gt;</em><a class="headerlink" href="#connector.event.on_record_create" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">connector.event.</code><code class="descname">on_record_create</code><em class="property"> = &lt;connector.event.Event object at 0x4013c90&gt;</em><a class="headerlink" href="#connector.event.on_record_create" title="Permalink to this definition">¶</a></dt>
 <dd><p><code class="docutils literal"><span class="pre">on_record_create</span></code> is fired when one record has been created.</p>
 <p>Listeners should take the following arguments:</p>
 <blockquote>
@@ -387,7 +387,7 @@ consumer which is active on all models if <code class="docutils literal"><span c
 
 <dl class="data">
 <dt id="connector.event.on_record_unlink">
-<code class="descclassname">connector.event.</code><code class="descname">on_record_unlink</code><em class="property"> = &lt;connector.event.Event object at 0x44e8910&gt;</em><a class="headerlink" href="#connector.event.on_record_unlink" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">connector.event.</code><code class="descname">on_record_unlink</code><em class="property"> = &lt;connector.event.Event object at 0x4013cd0&gt;</em><a class="headerlink" href="#connector.event.on_record_unlink" title="Permalink to this definition">¶</a></dt>
 <dd><p><code class="docutils literal"><span class="pre">on_record_unlink</span></code> is fired when one record has been deleted.</p>
 <p>Listeners should take the following arguments:</p>
 <blockquote>
@@ -401,7 +401,7 @@ consumer which is active on all models if <code class="docutils literal"><span c
 
 <dl class="data">
 <dt id="connector.event.on_record_write">
-<code class="descclassname">connector.event.</code><code class="descname">on_record_write</code><em class="property"> = &lt;connector.event.Event object at 0x44e8850&gt;</em><a class="headerlink" href="#connector.event.on_record_write" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">connector.event.</code><code class="descname">on_record_write</code><em class="property"> = &lt;connector.event.Event object at 0x4013c10&gt;</em><a class="headerlink" href="#connector.event.on_record_write" title="Permalink to this definition">¶</a></dt>
 <dd><p><code class="docutils literal"><span class="pre">on_record_write</span></code> is fired when one record has been updated.</p>
 <p>Listeners should take the following arguments:</p>
 <blockquote>

@@ -268,7 +268,7 @@ Odoo with a coffee machine.</p>
 our connector connector_coffee.</p>
 <p>First, we need to create the Odoo addons itself, editing the
 <code class="docutils literal"><span class="pre">connector_coffee/__openerp__.py</span></code> manifest.</p>
-<div class="highlight-python"><div class="highlight"><pre> <span class="c1"># -*- coding: utf-8 -*-</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span> <span class="c1"># -*- coding: utf-8 -*-</span>
  <span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;Coffee Connector&#39;</span><span class="p">,</span>
   <span class="s1">&#39;version&#39;</span><span class="p">:</span> <span class="s1">&#39;1.0.0&#39;</span><span class="p">,</span>
 <span class="hll">  <span class="s1">&#39;category&#39;</span><span class="p">:</span> <span class="s1">&#39;Connector&#39;</span><span class="p">,</span>
@@ -312,7 +312,7 @@ put the imports of our python modules.</p>
 <p>So we&#8217;ll declare a backend <cite>coffee</cite>, the generic entity,
 and a backend per version.</p>
 <p>Put this in <code class="docutils literal"><span class="pre">connector_coffee/backend.py</span></code>:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">openerp.addons.connector.backend</span> <span class="kn">as</span> <span class="nn">backend</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">openerp.addons.connector.backend</span> <span class="kn">as</span> <span class="nn">backend</span>
 
 
 <span class="n">coffee</span> <span class="o">=</span> <span class="n">backend</span><span class="o">.</span><span class="n">Backend</span><span class="p">(</span><span class="s1">&#39;coffee&#39;</span><span class="p">)</span>
@@ -326,7 +326,7 @@ and a backend per version.</p>
 <p>We declared the backends, but we need a model to configure them.</p>
 <p>We create a model <code class="docutils literal"><span class="pre">coffee.backend</span></code> which is an <code class="docutils literal"><span class="pre">_inherit</span></code> of
 <code class="docutils literal"><span class="pre">connector.backend</span></code>. In <code class="docutils literal"><span class="pre">connector_coffee/coffee_model.py</span></code>:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">openerp</span> <span class="kn">import</span> <span class="n">fields</span><span class="p">,</span> <span class="n">models</span><span class="p">,</span> <span class="n">api</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">openerp</span> <span class="kn">import</span> <span class="n">fields</span><span class="p">,</span> <span class="n">models</span><span class="p">,</span> <span class="n">api</span>
 
 
 <span class="k">class</span> <span class="nc">CoffeeBackend</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
@@ -373,7 +373,7 @@ connection or configuration regarding the backend in that model.</li>
 <p>If we have many <a class="reference internal" href="concepts.html#binding"><span>Bindings</span></a>,
 we may want to create an abstract model for them.</p>
 <p>It can be as follows (in <code class="docutils literal"><span class="pre">connector_coffee/connector.py</span></code>):</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">openerp</span> <span class="kn">import</span> <span class="n">models</span><span class="p">,</span> <span class="n">fields</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">openerp</span> <span class="kn">import</span> <span class="n">models</span><span class="p">,</span> <span class="n">fields</span>
 
 
 <span class="k">class</span> <span class="nc">CoffeeBinding</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">AbstractModel</span><span class="p">):</span>
@@ -399,7 +399,7 @@ we may want to create an abstract model for them.</p>
 <p>We&#8217;ll often need to create a new environment to work with.
 I propose to create a helper method which build it for us (in
 <code class="docutils literal"><span class="pre">connector_coffee/connector.py</span></code>:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">openerp.addons.connector.connector</span> <span class="kn">import</span> <span class="n">Environment</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">openerp.addons.connector.connector</span> <span class="kn">import</span> <span class="n">Environment</span>
 
 
 <span class="k">def</span> <span class="nf">get_environment</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">backend_id</span><span class="p">):</span>
@@ -423,7 +423,7 @@ optional but I left it as an example.</p>
 <p>When new records are imported and need a review, <a class="reference internal" href="concepts.html#checkpoint"><span>Checkpoint</span></a> are
 created. I propose to create a helper too in
 <code class="docutils literal"><span class="pre">connector_coffee/connector.py</span></code>:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">openerp.addons.connector.checkpoint</span> <span class="kn">import</span> <span class="n">checkpoint</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">openerp.addons.connector.checkpoint</span> <span class="kn">import</span> <span class="n">checkpoint</span>
 
 
 <span class="k">def</span> <span class="nf">add_checkpoint</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">record_id</span><span class="p">,</span> <span class="n">backend_id</span><span class="p">):</span>

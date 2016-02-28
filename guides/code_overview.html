@@ -257,7 +257,7 @@ use case exposing the main ideas.</p>
 <div class="section" id="backends">
 <h2>Backends<a class="headerlink" href="#backends" title="Permalink to this headline">¶</a></h2>
 <p>All start with the declaration of the <a class="reference internal" href="../api/api_backend.html#connector.backend.Backend" title="connector.backend.Backend"><code class="xref py py-class docutils literal"><span class="pre">Backend</span></code></a>:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">openerp.addons.connector.backend</span> <span class="kn">as</span> <span class="nn">backend</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">openerp.addons.connector.backend</span> <span class="kn">as</span> <span class="nn">backend</span>
 
 <span class="n">magento</span> <span class="o">=</span> <span class="n">backend</span><span class="o">.</span><span class="n">Backend</span><span class="p">(</span><span class="s1">&#39;magento&#39;</span><span class="p">)</span>
 <span class="sd">&quot;&quot;&quot; Generic Magento Backend &quot;&quot;&quot;</span>
@@ -277,7 +277,7 @@ straightforward techniques are: storing the external ID in the same
 model (<code class="docutils literal"><span class="pre">account.invoice</span></code>), in a new link model or in a new link model
 which <code class="docutils literal"><span class="pre">_inherits</span></code> <code class="docutils literal"><span class="pre">account.invoice</span></code>. Here we choose the latter
 solution:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">MagentoAccountInvoice</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">MagentoAccountInvoice</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
     <span class="n">_name</span> <span class="o">=</span> <span class="s1">&#39;magento.account.invoice&#39;</span>
     <span class="n">_inherits</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;account.invoice&#39;</span><span class="p">:</span> <span class="s1">&#39;openerp_id&#39;</span><span class="p">}</span>
     <span class="n">_description</span> <span class="o">=</span> <span class="s1">&#39;Magento Invoice&#39;</span>
@@ -309,7 +309,7 @@ generic ones:
 <p>When we create a <code class="docutils literal"><span class="pre">magento.account.invoice</span></code> record, we want to delay a
 job to export it to Magento, so we subscribe a new consumer on
 <a class="reference internal" href="../api/api_event.html#connector.event.on_record_create" title="connector.event.on_record_create"><code class="xref py py-meth docutils literal"><span class="pre">on_record_create()</span></code></a>:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="nd">@on_record_create</span><span class="p">(</span><span class="n">model_names</span><span class="o">=</span><span class="s1">&#39;magento.account.invoice&#39;</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="nd">@on_record_create</span><span class="p">(</span><span class="n">model_names</span><span class="o">=</span><span class="s1">&#39;magento.account.invoice&#39;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">delay_export_account_invoice</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">record_id</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Delay the job to export the magento invoice.</span>
@@ -327,7 +327,7 @@ In that case: create the invoice on Magento.</p>
 <p>Any function decorated with <a class="reference internal" href="../api/api_queue.html#connector.queue.job.job" title="connector.queue.job.job"><code class="xref py py-meth docutils literal"><span class="pre">job()</span></code></a> can
 be posted in the queue of jobs using a <code class="docutils literal"><span class="pre">delay()</span></code> function
 and will be run as soon as possible:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="nd">@job</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="nd">@job</span>
 <span class="k">def</span> <span class="nf">export_invoice</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">record_id</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Export a validated or paid invoice. &quot;&quot;&quot;</span>
     <span class="n">invoice</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">env</span><span class="p">[</span><span class="n">model_name</span><span class="p">]</span><span class="o">.</span><span class="n">browse</span><span class="p">(</span><span class="n">record_id</span><span class="p">)</span>
@@ -375,7 +375,7 @@ define the flow of a synchronization and use the other
 specific ones).</div></blockquote>
 <p>For the export of the invoice, we just need an <code class="docutils literal"><span class="pre">adapter</span></code> and a
 <code class="docutils literal"><span class="pre">synchronizer</span></code> (the real implementation is more complete):</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="nd">@magento</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="nd">@magento</span>
 <span class="k">class</span> <span class="nc">AccountInvoiceAdapter</span><span class="p">(</span><span class="n">GenericAdapter</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Backend Adapter for the Magento Invoice &quot;&quot;&quot;</span>
     <span class="n">_model_name</span> <span class="o">=</span> <span class="s1">&#39;magento.account.invoice&#39;</span>

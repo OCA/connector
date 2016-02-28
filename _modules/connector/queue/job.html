@@ -229,7 +229,7 @@
     <div class="col-md-12 content">
       
   <h1>Source code for connector.queue.job</h1><div class="highlight"><pre>
-<span class="c1"># -*- coding: utf-8 -*-</span>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
 <span class="c1">##############################################################################</span>
 <span class="c1">#</span>
 <span class="c1">#    Author: Guewen Baconnier</span>
@@ -256,7 +256,8 @@
 <span class="kn">import</span> <span class="nn">uuid</span>
 <span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">timedelta</span><span class="p">,</span> <span class="n">MINYEAR</span>
-<span class="kn">from</span> <span class="nn">pickle</span> <span class="kn">import</span> <span class="n">loads</span><span class="p">,</span> <span class="n">dumps</span><span class="p">,</span> <span class="n">UnpicklingError</span>
+<span class="kn">from</span> <span class="nn">cPickle</span> <span class="kn">import</span> <span class="n">dumps</span><span class="p">,</span> <span class="n">UnpicklingError</span><span class="p">,</span> <span class="n">Unpickler</span>
+<span class="kn">from</span> <span class="nn">cStringIO</span> <span class="kn">import</span> <span class="n">StringIO</span>
 
 <span class="kn">import</span> <span class="nn">openerp</span>
 <span class="kn">from</span> <span class="nn">openerp.tools.translate</span> <span class="kn">import</span> <span class="n">_</span>
@@ -285,6 +286,31 @@
 <span class="n">_logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">__name__</span><span class="p">)</span>
 
 
+<span class="n">_UNPICKLE_WHITELIST</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+
+
+<div class="viewcode-block" id="whitelist_unpickle_global"><a class="viewcode-back" href="../../../api/api_queue.html#connector.queue.job.whitelist_unpickle_global">[docs]</a><span class="k">def</span> <span class="nf">whitelist_unpickle_global</span><span class="p">(</span><span class="n">fn_or_class</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Allow a function or class to be used in jobs</span>
+
+<span class="sd">    By default, the only types allowed to be used in job arguments are:</span>
+
+<span class="sd">    * the builtins: str/unicode, int/long, float, bool, tuple, list, dict, None</span>
+<span class="sd">    * the pre-registered: datetime.datetime datetime.timedelta</span>
+
+<span class="sd">    If you need to use an argument in a job which is not in this whitelist,</span>
+<span class="sd">    you can add it by using::</span>
+
+<span class="sd">        whitelist_unpickle_global(fn_or_class_to_register)</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">_UNPICKLE_WHITELIST</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">fn_or_class</span><span class="p">)</span></div>
+
+
+<span class="c1"># register common types that might be used in job arguments</span>
+<span class="n">whitelist_unpickle_global</span><span class="p">(</span><span class="n">datetime</span><span class="p">)</span>
+<span class="n">whitelist_unpickle_global</span><span class="p">(</span><span class="n">timedelta</span><span class="p">)</span>
+
+
 <span class="k">def</span> <span class="nf">_unpickle</span><span class="p">(</span><span class="n">pickled</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Unpickles a string and catch all types of errors it can throw,</span>
 <span class="sd">    to raise only NotReadableJobError in case of error.</span>
@@ -294,9 +320,26 @@
 <span class="sd">    `loads()` may raises many types of exceptions (AttributeError,</span>
 <span class="sd">    IndexError, TypeError, KeyError, ...). They are all catched and</span>
 <span class="sd">    raised as `NotReadableJobError`).</span>
+
+<span class="sd">    Pickle could be exploited by an attacker who would write a value in a job</span>
+<span class="sd">    that would run arbitrary code when unpickled. This is why we set a custom</span>
+<span class="sd">    ``find_global`` method on the ``Unpickler``, only jobs and a whitelist of</span>
+<span class="sd">    classes/functions are allowed to be unpickled (plus the builtins types).</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">restricted_find_global</span><span class="p">(</span><span class="n">mod_name</span><span class="p">,</span> <span class="n">fn_name</span><span class="p">):</span>
+        <span class="nb">__import__</span><span class="p">(</span><span class="n">mod_name</span><span class="p">)</span>
+        <span class="n">mod</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="n">mod_name</span><span class="p">]</span>
+        <span class="n">fn</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">mod</span><span class="p">,</span> <span class="n">fn_name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">fn</span> <span class="ow">in</span> <span class="n">JOB_REGISTRY</span> <span class="ow">or</span> <span class="n">fn</span> <span class="ow">in</span> <span class="n">_UNPICKLE_WHITELIST</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="n">UnpicklingError</span><span class="p">(</span>
+                <span class="s1">&#39;{}.{} is not allowed in jobs&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mod_name</span><span class="p">,</span> <span class="n">fn_name</span><span class="p">)</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="n">fn</span>
+
+    <span class="n">unpickler</span> <span class="o">=</span> <span class="n">Unpickler</span><span class="p">(</span><span class="n">StringIO</span><span class="p">(</span><span class="n">pickled</span><span class="p">))</span>
+    <span class="n">unpickler</span><span class="o">.</span><span class="n">find_global</span> <span class="o">=</span> <span class="n">restricted_find_global</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="n">unpickled</span> <span class="o">=</span> <span class="n">loads</span><span class="p">(</span><span class="n">pickled</span><span class="p">)</span>
+        <span class="n">unpickled</span> <span class="o">=</span> <span class="n">unpickler</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
     <span class="k">except</span> <span class="p">(</span><span class="ne">StandardError</span><span class="p">,</span> <span class="n">UnpicklingError</span><span class="p">):</span>
         <span class="k">raise</span> <span class="n">NotReadableJobError</span><span class="p">(</span><span class="s1">&#39;Could not unpickle.&#39;</span><span class="p">,</span> <span class="n">pickled</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">unpickled</span>

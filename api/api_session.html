@@ -294,7 +294,7 @@ of the context manager.</p>
 <p>The extended context is either the provided <code class="docutils literal"><span class="pre">context</span></code> in which
 <code class="docutils literal"><span class="pre">overrides</span></code> are merged or the <em>current</em> context in which
 <code class="docutils literal"><span class="pre">overrides</span></code> are merged e.g.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="c1"># current context is {&#39;key1&#39;: True}</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1"># current context is {&#39;key1&#39;: True}</span>
 <span class="n">r2</span> <span class="o">=</span> <span class="n">records</span><span class="o">.</span><span class="n">with_context</span><span class="p">({},</span> <span class="n">key2</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 <span class="c1"># -&gt; r2._context is {&#39;key2&#39;: True}</span>
 <span class="n">r2</span> <span class="o">=</span> <span class="n">records</span><span class="o">.</span><span class="n">with_context</span><span class="p">(</span><span class="n">key2</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
@@ -438,7 +438,7 @@ registry.</p>
 </dd></dl>
 
 <p>Usage:</p>
-<div class="highlight-python"><div class="highlight"><pre>session_hdl = ConnectorSessionHandler(db_name, 1)
+<div class="highlight-python"><div class="highlight"><pre><span></span>session_hdl = ConnectorSessionHandler(db_name, 1)
 with session_hdl.session() as session:
     # work with session
 </pre></div>

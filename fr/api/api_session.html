@@ -293,7 +293,7 @@
 <dd><p><cite>Context Manager</cite> : crée un nouvel Env avec un <cite>context</cite> mis à jour</p>
 <p>Génère un nouvel <code class="xref py py-class docutils literal"><span class="pre">openerp.api.Environment</span></code> utilisé à l&#8217;intérieur du <cite>context manager</cite>, où le <cite>context</cite> est enrichi avec les arguments. L&#8217;environnement original est restauré à la fermeture du <cite>context manager</cite>.</p>
 <p>Le <cite>context</cite> enrichi est soit le <code class="docutils literal"><span class="pre">context</span></code> fourni, dans lequel les <code class="docutils literal"><span class="pre">overrides</span></code> sont fusionnés, ou le <cite>context</cite> <em>actuel</em> dans lequel  les <code class="docutils literal"><span class="pre">overrides</span></code> sont fusionné, càd</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="c1"># current context is {&#39;key1&#39;: True}</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1"># current context is {&#39;key1&#39;: True}</span>
 <span class="n">r2</span> <span class="o">=</span> <span class="n">records</span><span class="o">.</span><span class="n">with_context</span><span class="p">({},</span> <span class="n">key2</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 <span class="c1"># -&gt; r2._context is {&#39;key2&#39;: True}</span>
 <span class="n">r2</span> <span class="o">=</span> <span class="n">records</span><span class="o">.</span><span class="n">with_context</span><span class="p">(</span><span class="n">key2</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
@@ -425,7 +425,7 @@
 </dd></dl>
 
 <p>Utilisation</p>
-<div class="highlight-python"><div class="highlight"><pre>session_hdl = ConnectorSessionHandler(db_name, 1)
+<div class="highlight-python"><div class="highlight"><pre><span></span>session_hdl = ConnectorSessionHandler(db_name, 1)
 with session_hdl.session() as session:
     # work with session
 </pre></div>

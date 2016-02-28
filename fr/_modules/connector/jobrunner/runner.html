@@ -230,7 +230,7 @@
     <div class="col-md-12 content">
       
   <h1>Code source de connector.jobrunner.runner</h1><div class="highlight"><pre>
-<span class="ch">#!/usr/bin/env python</span>
+<span></span><span class="ch">#!/usr/bin/env python</span>
 <span class="c1"># -*- coding: utf-8 -*-</span>
 <span class="c1">##############################################################################</span>
 <span class="c1">#</span>
@@ -465,10 +465,11 @@
             <span class="n">cr</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;LISTEN connector&quot;</span><span class="p">)</span>
 
 <div class="viewcode-block" id="Database.select_jobs"><a class="viewcode-back" href="../../../api/api_runner.html#connector.jobrunner.runner.Database.select_jobs">[docs]</a>    <span class="k">def</span> <span class="nf">select_jobs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">where</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
-        <span class="n">query</span> <span class="o">=</span> <span class="s2">&quot;SELECT </span><span class="si">%s</span><span class="s2">, uuid, id as seq, date_created, priority, eta, state &quot;</span> \
-                <span class="s2">&quot;FROM queue_job WHERE </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> \
-                <span class="p">(</span><span class="s1">&#39;channel&#39;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">has_channel</span> <span class="k">else</span> <span class="s1">&#39;NULL&#39;</span><span class="p">,</span>
-                 <span class="n">where</span><span class="p">)</span>
+        <span class="n">query</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;SELECT </span><span class="si">%s</span><span class="s2">, uuid, id as seq, date_created, &quot;</span>
+                 <span class="s2">&quot;priority, eta, state &quot;</span>
+                 <span class="s2">&quot;FROM queue_job WHERE </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span>
+                 <span class="p">(</span><span class="s1">&#39;channel&#39;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">has_channel</span> <span class="k">else</span> <span class="s1">&#39;NULL&#39;</span><span class="p">,</span>
+                  <span class="n">where</span><span class="p">))</span>
         <span class="k">with</span> <span class="n">closing</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">())</span> <span class="k">as</span> <span class="n">cr</span><span class="p">:</span>
             <span class="n">cr</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span>
             <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">cr</span><span class="o">.</span><span class="n">fetchall</span><span class="p">())</span></div>

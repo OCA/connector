@@ -90,20 +90,11 @@ class Exporter(Synchronizer):
     _base_mapper = ExportMapper
 
 
-ExportSynchronizer = Exporter  # deprecated
-
-
 class Importer(Synchronizer):
     """ Synchronizer for importing data from a backend to OpenERP """
 
     _base_mapper = ImportMapper
 
 
-ImportSynchronizer = Importer  # deprecated
-
-
 class Deleter(Synchronizer):
     """ Synchronizer for deleting a record on the backend """
-
-
-DeleteSynchronizer = Deleter  # deprecated

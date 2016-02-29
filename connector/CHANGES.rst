@@ -1,6 +1,22 @@
 Changelog
 ---------
 
+7.0.2.3.0 (2016-02-29)
+~~~~~~~~~~~~~~~~~~~~~~
+
+* Backport of jobrunner (https://github.com/OCA/connector/pull/53)
+* Filter out databases with --db-filter (https://github.com/OCA/connector/pull/39)
+* Perf. improvement: Call 'only_create' mapping functions only when the mapper is called with for_create=True (https://github.com/OCA/connector/pull/25)
+* Activate transifex for translations (https://github.com/OCA/connector/pull/90)
+* Security: Prevent to unpickle globals which are not jobs or whitelisted types (https://github.com/OCA/connector/pull/171)
+* Fix: Option --load=web,connector no longer required (only for v7) (https://github.com/OCA/connector/pull/84)
+* Fix: Add an index on queue_job.worker_id  (https://github.com/OCA/connector/pull/88)
+* Fix: correct retry of jobs in jobrunner  (https://github.com/OCA/connector/pull/86)
+* Fix: wrong name of field extracted from a mapping's closure (https://github.com/OCA/connector/pull/26)
+* Fix: error 'AssertionError: 0 worker found in database instead of 1' (https://github.com/OCA/connector/pull/24)
+* Fix: Allow the number of records being deleted to be limited to prevent timeouts or oom (https://github.com/OCA/connector/pull/158)
+
+
 2.2.0 (2014-05-26)
 ~~~~~~~~~~~~~~~~~~
 

@@ -1,12 +1,30 @@
 Changelog
 ---------
 
-Future (?)
-~~~~~~~~~~
+.. Future (?)
+.. ~~~~~~~~~~
+.. 
+.. * 
+
+
+8.0.3.3.0 (2016-02-29)
+~~~~~~~~~~~~~~~~~~~~~~
 
 * Allow to define seconds when raising a RetryableJobError (https://github.com/OCA/connector/pull/124)
 * Allow to ignore the retry counter when raising a RetryableJobError (https://github.com/OCA/connector/pull/124)
 * Add 'mock_job_delay_to_direct' to ease tests on jobs (https://github.com/OCA/connector/pull/123)
+* Add helper function to acquire Posgres advisory locks (https://github.com/OCA/connector/pull/138, https://github.com/OCA/connector/pull/139)
+* Improvement of 'is_module_installed' which now uses the registry instead of db + cache (https://github.com/OCA/connector/pull/130)
+* Security: Prevent to unpickle globals which are not jobs or whitelisted types (https://github.com/OCA/connector/pull/170)
+* Fix: Manage non-ascii Postgres errors (https://github.com/OCA/connector/pull/167)
+* Fix: ignore dbfilter containing %d or %h (https://github.com/OCA/connector/pull/166)
+* Fix: correctly obtain the list of database with odoo is started with --no-database-list (https://github.com/OCA/connector/pull/164)
+* Fix: Set job back to 'pending' in case of exception (https://github.com/OCA/connector/pull/150, https://github.com/OCA/connector/pull/151, https://github.com/OCA/connector/pull/152, https://github.com/OCA/connector/pull/155)
+* Fix: Clear environment caches and recomputations upon failures (https://github.com/OCA/connector/pull/131)
+* Fix: when a job fails, inactive users are no longer added to its followers (https://github.com/OCA/connector/pull/137)
+* Fix: Set job to failed after non-retryable OperationalError (https://github.com/OCA/connector/pull/132)
+* Fix: wrong model in connector_base_product's views (https://github.com/OCA/connector/pull/119)
+* Various documentation improvements
 
 
 3.2.0 (2015-09-10)

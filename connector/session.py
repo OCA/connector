@@ -27,7 +27,6 @@ import openerp
 from openerp.modules.registry import RegistryManager
 
 from .connector import is_module_installed
-from .deprecate import log_deprecate
 
 _logger = logging.getLogger(__name__)
 
@@ -204,50 +203,6 @@ class ConnectorSession(object):
     def close(self):
         """ Close the cursor """
         self.cr.close()
-
-    def search(self, model, domain, limit=None, offset=0, order=None):
-        """ Shortcut to :py:class:`openerp.models.BaseModel.search` """
-        log_deprecate("'Session(...).search(...)' has been deprecated in "
-                      "favor of 'Session(...).env['model'].search(...)'")
-        return self.pool[model].search(self.cr, self.uid, domain,
-                                       limit=limit, offset=offset,
-                                       order=order, context=self.context)
-
-    def browse(self, model, ids):
-        """ Shortcut to :py:class:`openerp.models.BaseModel.browse` """
-        model_obj = self.pool[model]
-        log_deprecate("'Session(...).browse(...)' has been deprecated in "
-                      "favor of 'Session(...).env['model'].browse(...)'")
-        return model_obj.browse(self.cr, self.uid, ids, context=self.context)
-
-    def read(self, model, ids, fields):
-        """ Shortcut to :py:class:`openerp.models.BaseModel.read` """
-        log_deprecate("'Session(...).read(...)' has been deprecated in "
-                      "favor of 'Session(...).env['model'].read(...)'")
-        return self.pool[model].read(self.cr, self.uid, ids, fields,
-                                     context=self.context)
-
-    def create(self, model, values):
-        """ Shortcut to :py:class:`openerp.models.BaseModel.create` """
-        log_deprecate("'Session(...).create(...)' has been deprecated in "
-                      "favor of 'Session(...).env['model'].create(...)'")
-        return self.pool[model].create(self.cr, self.uid, values,
-                                       context=self.context)
-
-    def write(self, model, ids, values):
-        """ Shortcut to :py:class:`openerp.models.BaseModel.write` """
-        log_deprecate("'Session(...).write(...)' has been deprecated in "
-                      "favor of 'Session(...).env['model'].write(...)'")
-        return self.pool[model].write(self.cr, self.uid, ids, values,
-                                      context=self.context)
-
-    def unlink(self, model, ids):
-        model_obj = self.pool[model]
-        _logger.warning("'Session.unlink()' has been deprecated, prefer "
-                        "'self.env['model'].unlink()' or "
-                        "self.recordset().unlink() if you are in a "
-                        "ConnectorUnit.")
-        return model_obj.unlink(self.cr, self.uid, ids, context=self.context)
 
     def __repr__(self):
         return '<Session db_name: %s, uid: %d, context: %s>' % (self.cr.dbname,

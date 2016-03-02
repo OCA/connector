@@ -25,7 +25,8 @@ import logging
 import uuid
 import sys
 from datetime import datetime, timedelta, MINYEAR
-from pickle import loads, dumps, UnpicklingError
+from cPickle import dumps, UnpicklingError, Unpickler
+from cStringIO import StringIO
 
 import openerp
 from openerp.tools.translate import _
@@ -54,6 +55,31 @@ RETRY_INTERVAL = 10 * 60  # seconds
 _logger = logging.getLogger(__name__)
 
 
+_UNPICKLE_WHITELIST = set()
+
+
+def whitelist_unpickle_global(fn_or_class):
+    """ Allow a function or class to be used in jobs
+
+    By default, the only types allowed to be used in job arguments are:
+
+    * the builtins: str/unicode, int/long, float, bool, tuple, list, dict, None
+    * the pre-registered: datetime.datetime datetime.timedelta
+
+    If you need to use an argument in a job which is not in this whitelist,
+    you can add it by using::
+
+        whitelist_unpickle_global(fn_or_class_to_register)
+
+    """
+    _UNPICKLE_WHITELIST.add(fn_or_class)
+
+
+# register common types that might be used in job arguments
+whitelist_unpickle_global(datetime)
+whitelist_unpickle_global(timedelta)
+
+
 def _unpickle(pickled):
     """ Unpickles a string and catch all types of errors it can throw,
     to raise only NotReadableJobError in case of error.
@@ -63,9 +89,26 @@ def _unpickle(pickled):
     `loads()` may raises many types of exceptions (AttributeError,
     IndexError, TypeError, KeyError, ...). They are all catched and
     raised as `NotReadableJobError`).
+
+    Pickle could be exploited by an attacker who would write a value in a job
+    that would run arbitrary code when unpickled. This is why we set a custom
+    ``find_global`` method on the ``Unpickler``, only jobs and a whitelist of
+    classes/functions are allowed to be unpickled (plus the builtins types).
     """
+    def restricted_find_global(mod_name, fn_name):
+        __import__(mod_name)
+        mod = sys.modules[mod_name]
+        fn = getattr(mod, fn_name)
+        if not (fn in JOB_REGISTRY or fn in _UNPICKLE_WHITELIST):
+            raise UnpicklingError(
+                '{}.{} is not allowed in jobs'.format(mod_name, fn_name)
+            )
+        return fn
+
+    unpickler = Unpickler(StringIO(pickled))
+    unpickler.find_global = restricted_find_global
     try:
-        unpickled = loads(pickled)
+        unpickled = unpickler.load()
     except (StandardError, UnpicklingError):
         raise NotReadableJobError('Could not unpickle.', pickled)
     return unpickled
@@ -91,13 +134,11 @@ class OpenERPJobStorage(JobStorage):
     """ Store a job on OpenERP """
 
     _job_model_name = 'queue.job'
-    _worker_model_name = 'queue.worker'
 
     def __init__(self, session):
         super(OpenERPJobStorage, self).__init__()
         self.session = session
         self.job_model = self.session.env[self._job_model_name]
-        self.worker_model = self.session.env[self._worker_model_name]
         assert self.job_model is not None, (
             "Model %s not found" % self._job_model_name)
 
@@ -120,7 +161,7 @@ class OpenERPJobStorage(JobStorage):
             company_model = company_model.sudo(new_job.user_id)
             company_id = company_model._company_default_get(
                 object='queue.job',
-                field='company_id')
+                field='company_id').id
         new_job.company_id = company_id
         self.store(new_job)
         return new_job.uuid
@@ -148,17 +189,10 @@ class OpenERPJobStorage(JobStorage):
         model = self.job_model.sudo().with_context(active_test=False)
         record = model.search([('uuid', '=', job_uuid)], limit=1)
         if record:
-            return record
+            return record.with_env(self.job_model.env)
 
     def db_record(self, job_):
         return self.db_record_from_uuid(job_.uuid)
-
-    def _worker_id(self, worker_uuid):
-        worker = self.worker_model.sudo().search(
-            [('uuid', '=', worker_uuid)],
-            limit=1)
-        if worker:
-            return worker.id
 
     def store(self, job_):
         """ Store the Job """
@@ -189,11 +223,6 @@ class OpenERPJobStorage(JobStorage):
 
         if job_.canceled:
             vals['active'] = False
-
-        if job_.worker_uuid:
-            vals['worker_id'] = self._worker_id(job_.worker_uuid)
-        else:
-            vals['worker_id'] = False
 
         db_record = self.db_record(job_)
         if db_record:
@@ -254,8 +283,6 @@ class OpenERPJobStorage(JobStorage):
         job_.model_name = stored.model_name if stored.model_name else None
         job_.retry = stored.retry
         job_.max_retries = stored.max_retries
-        if stored.worker_id:
-            job_.worker_uuid = stored.worker_id.uuid
         if stored.company_id:
             job_.company_id = stored.company_id.id
         return job_
@@ -267,10 +294,6 @@ class Job(object):
     .. attribute:: uuid
 
         Id (UUID) of the job.
-
-    .. attribute:: worker_uuid
-
-        When the job is enqueued, UUID of the worker.
 
     .. attribute:: state
 
@@ -441,7 +464,6 @@ class Job(object):
         self._eta = None
         self.eta = eta
         self.canceled = False
-        self.worker_uuid = None
 
     def __cmp__(self, other):
         if not isinstance(other, Job):
@@ -465,8 +487,11 @@ class Job(object):
             self.retry += 1
             try:
                 self.result = self.func(session, *self.args, **self.kwargs)
-            except RetryableJobError:
-                if not self.max_retries:  # infinite retries
+            except RetryableJobError as err:
+                if err.ignore_retry:
+                    self.retry -= 1
+                    raise
+                elif not self.max_retries:  # infinite retries
                     raise
                 elif self.retry >= self.max_retries:
                     type_, value, traceback = sys.exc_info()
@@ -533,17 +558,15 @@ class Job(object):
         self.state = PENDING
         self.date_enqueued = None
         self.date_started = None
-        self.worker_uuid = None
         if reset_retry:
             self.retry = 0
         if result is not None:
             self.result = result
 
-    def set_enqueued(self, worker):
+    def set_enqueued(self):
         self.state = ENQUEUED
         self.date_enqueued = datetime.now()
         self.date_started = None
-        self.worker_uuid = worker.uuid
 
     def set_started(self):
         self.state = STARTED
@@ -553,13 +576,11 @@ class Job(object):
         self.state = DONE
         self.exc_info = None
         self.date_done = datetime.now()
-        self.worker_uuid = None
         if result is not None:
             self.result = result
 
     def set_failed(self, exc_info=None):
         self.state = FAILED
-        self.worker_uuid = None
         if exc_info is not None:
             self.exc_info = exc_info
 
@@ -691,7 +712,7 @@ def job(func=None, default_channel='root', retry_pattern=None):
             # retries 5 to 10 postponed 20 minutes later
             # retries 10 to 15 postponed 30 minutes later
             # all subsequent retries postponed 12 hours later
-            raise RetryableJobError
+            raise RetryableJobError('Must be retried later')
 
         retryable_example.delay(session)
 

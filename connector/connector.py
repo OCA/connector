@@ -19,11 +19,14 @@
 #
 ##############################################################################
 
+import hashlib
 import logging
+import struct
+
 from contextlib import contextmanager
 from openerp import models, fields
 
-from .deprecate import log_deprecate, DeprecatedClass
+from .exception import RetryableJobError
 
 _logger = logging.getLogger(__name__)
 
@@ -47,33 +50,14 @@ def _get_openerp_module_name(module_path):
     return module_name
 
 
-def install_in_connector():
-    log_deprecate("This call to 'install_in_connector()' has no effect and is "
-                  "not required.")
-
-
 def is_module_installed(env, module_name):
     """ Check if an Odoo addon is installed.
 
-    The function might be called before `connector` is even installed;
-    in such case, `ir_module_module.is_module_installed()` is not available yet
-    and this is why we first check the installation of `connector` by looking
-    up for a model in the registry.
-
-    :param module_name: name of the addon to check being 'connector' or
-                        an addon depending on it
-
+    :param module_name: name of the addon
     """
-    if env.registry.get('connector.backend'):
-        if module_name == 'connector':
-            # fast-path: connector is necessarily installed because
-            # the model is in the registry
-            return True
-        # for another addon, check in ir.module.module
-        return env['ir.module.module'].is_module_installed(module_name)
-
-    # connector module is not installed neither any sub-addons
-    return False
+    # the registry maintains a set of fully loaded modules so we can
+    # lookup for our module there
+    return module_name in env.registry._init_modules
 
 
 def get_openerp_module(cls_or_func):
@@ -93,11 +77,6 @@ class MetaConnectorUnit(type):
     it for the Model classes. It is then used to filter them according to
     the state of the module (installed or not).
     """
-
-    @property
-    def model_name(cls):
-        log_deprecate('renamed to for_model_names')
-        return cls.for_model_names
 
     @property
     def for_model_names(cls):
@@ -148,11 +127,6 @@ class ConnectorUnit(object):
         self.backend = self.connector_env.backend
         self.backend_record = self.connector_env.backend_record
         self.session = self.connector_env.session
-
-    @property
-    def environment(self):
-        log_deprecate('renamed to connector_env')
-        return self.connector_env
 
     @classmethod
     def match(cls, session, model):
@@ -222,24 +196,45 @@ class ConnectorUnit(object):
 
         return env.get_connector_unit(connector_unit_class)
 
-    def get_connector_unit_for_model(self, connector_unit_class, model=None):
-        """ Deprecated in favor of :meth:`~unit_for` """
-        log_deprecate('renamed to unit_for()')
-        return self.unit_for(connector_unit_class, model=model)
-
     def binder_for(self, model=None):
         """ Returns an new instance of the correct ``Binder`` for
         a model """
         return self.unit_for(Binder, model)
 
-    def get_binder_for_model(self, model=None):
-        """ Returns an new instance of the correct ``Binder`` for
-        a model
+    def advisory_lock_or_retry(self, lock, retry_seconds=1):
+        """ Acquire a Postgres transactional advisory lock or retry job
 
-        Deprecated, use ``binder_for`` now.
+        When the lock cannot be acquired, it raises a
+        ``RetryableJobError`` so the job is retried after n
+        ``retry_seconds``.
+
+        Usage example:
+
+        ::
+
+            lock_name = 'import_record({}, {}, {}, {})'.format(
+                self.backend_record._name,
+                self.backend_record.id,
+                self.model._name,
+                self.external_id,
+            )
+            self.advisory_lock_or_retry(lock_name, retry_seconds=2)
+
+        See :func:``openerp.addons.connector.connector.pg_try_advisory_lock``
+        for details.
+
+        :param lock: The lock name. Can be anything convertible to a
+           string.  It needs to represent what should not be synchronized
+           concurrently, usually the string will contain at least: the
+           action, the backend type, the backend id, the model name, the
+           external id
+        :param retry_seconds: number of seconds after which a job should
+           be retried when the lock cannot be acquired.
         """
-        log_deprecate('renamed to binder_for()')
-        return self.binder_for(model=model)
+        if not pg_try_advisory_lock(self.env, lock):
+            raise RetryableJobError('Could not acquire advisory lock',
+                                    seconds=retry_seconds,
+                                    ignore_retry=True)
 
 
 class ConnectorEnvironment(object):
@@ -304,18 +299,6 @@ class ConnectorEnvironment(object):
     def env(self):
         return self.session.env
 
-    @contextmanager
-    def set_lang(self, code):
-        """ Change the working language in the environment.
-
-        It changes the ``lang`` key in the session's context.
-
-
-        """
-        raise DeprecationWarning('ConnectorEnvironment.set_lang has been '
-                                 'deprecated. session.change_context should '
-                                 'be used instead.')
-
     def get_connector_unit(self, base_class):
         """ Searches and returns an instance of the
         :py:class:`~connector.connector.ConnectorUnit` for the current
@@ -353,9 +336,6 @@ class ConnectorEnvironment(object):
             return cls(backend_record, session, model, **kwargs)
         else:
             return cls(backend_record, session, model)
-
-Environment = DeprecatedClass('Environment',
-                              ConnectorEnvironment)
 
 
 class Binder(ConnectorUnit):
@@ -480,3 +460,74 @@ class Binder(ConnectorUnit):
                 'Cannot unwrap model %s, because it has no %s fields'
                 % (self.model._name, self._openerp_field))
         return column.comodel_name
+
+
+def pg_try_advisory_lock(env, lock):
+    """ Try to acquire a Postgres transactional advisory lock.
+
+    The function tries to acquire a lock, returns a boolean indicating
+    if it could be obtained or not. An acquired lock is released at the
+    end of the transaction.
+
+    A typical use is to acquire a lock at the beginning of an importer
+    to prevent 2 jobs to do the same import at the same time. Since the
+    record doesn't exist yet, we can't put a lock on a record, so we put
+    an advisory lock.
+
+    Example:
+     - Job 1 imports Partner A
+     - Job 2 imports Partner B
+     - Partner A has a category X which happens not to exist yet
+     - Partner B has a category X which happens not to exist yet
+     - Job 1 import category X as a dependency
+     - Job 2 import category X as a dependency
+
+    Since both jobs are executed concurrently, they both create a record
+    for category X so we have duplicated records.  With this lock:
+
+     - Job 1 imports Partner A, it acquires a lock for this partner
+     - Job 2 imports Partner B, it acquires a lock for this partner
+     - Partner A has a category X which happens not to exist yet
+     - Partner B has a category X which happens not to exist yet
+     - Job 1 import category X as a dependency, it acquires a lock for
+       this category
+     - Job 2 import category X as a dependency, try to acquire a lock
+       but can't, Job 2 is retried later, and when it is retried, it
+       sees the category X created by Job 1.
+
+    The lock is acquired until the end of the transaction.
+
+    Usage example:
+
+    ::
+
+        lock_name = 'import_record({}, {}, {}, {})'.format(
+            self.backend_record._name,
+            self.backend_record.id,
+            self.model._name,
+            self.external_id,
+        )
+        if pg_try_advisory_lock(lock_name):
+            # do sync
+        else:
+            raise RetryableJobError('Could not acquire advisory lock',
+                                    seconds=2,
+                                    ignore_retry=True)
+
+    :param env: the Odoo Environment
+    :param lock: The lock name. Can be anything convertible to a
+       string.  It needs to represents what should not be synchronized
+       concurrently so usually the string will contain at least: the
+       action, the backend type, the backend id, the model name, the
+       external id
+    :return True/False whether lock was acquired.
+    """
+    hasher = hashlib.sha1()
+    hasher.update('{}'.format(lock))
+    # pg_lock accepts an int8 so we build an hash composed with
+    # contextual information and we throw away some bits
+    int_lock = struct.unpack('q', hasher.digest()[:8])
+
+    env.cr.execute('SELECT pg_try_advisory_xact_lock(%s);', (int_lock,))
+    acquired = env.cr.fetchone()[0]
+    return acquired

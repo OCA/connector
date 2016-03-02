@@ -26,16 +26,8 @@
 """
 What is the job runner?
 -----------------------
-This is an alternative to connector workers, with the goal
-of resolving issues due to the polling nature of workers:
-
-* jobs do not start immediately even if there is a free connector worker,
-* connector workers may starve while other workers have too many jobs enqueued,
-* connector workers require another startup script,
-  making deployment more difficult
-
-It is fully compatible with the connector mechanism and only
-replaces workers.
+The job runner is the main process managing the dispatch of delayed jobs to
+available Odoo workers
 
 How does it work?
 -----------------
@@ -67,10 +59,6 @@ How to use it?
   ...INFO...connector.jobrunner.runner: initializing database connections
   ...INFO...connector.jobrunner.runner: connector runner ready for db <dbname>
   ...INFO...connector.jobrunner.runner: database connections ready
-
-* Disable the "Enqueue Jobs" cron.
-
-* Do NOT start openerp-connector-worker.
 
 * Create jobs (eg using base_import_async) and observe they
   start immediately and in parallel.
@@ -112,7 +100,6 @@ Caveat
 from contextlib import closing
 import logging
 import os
-import re
 import select
 import threading
 import time
@@ -123,7 +110,7 @@ import requests
 
 import openerp
 
-from .channels import ChannelManager, ENQUEUED, NOT_DONE
+from .channels import ChannelManager, PENDING, ENQUEUED, NOT_DONE
 
 SELECT_TIMEOUT = 60
 ERROR_RECOVERY_DELAY = 5
@@ -131,19 +118,34 @@ ERROR_RECOVERY_DELAY = 5
 _logger = logging.getLogger(__name__)
 
 
-def _async_http_get(url):
+def _async_http_get(port, db_name, job_uuid):
+    # Method to set failed job (due to timeout, etc) as pending,
+    # to avoid keeping it as enqueued.
+    def set_job_pending():
+        conn = psycopg2.connect(openerp.sql_db.dsn(db_name)[1])
+        conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
+        with closing(conn.cursor()) as cr:
+            cr.execute(
+                "UPDATE queue_job SET state=%s, "
+                "date_enqueued=NULL, date_started=NULL "
+                "WHERE uuid=%s and state=%s", (PENDING, job_uuid, ENQUEUED)
+            )
+
     # TODO: better way to HTTP GET asynchronously (grequest, ...)?
     #       if this was python3 I would be doing this with
     #       asyncio, aiohttp and aiopg
     def urlopen():
+        url = ('http://localhost:%s/connector/runjob?db=%s&job_uuid=%s' %
+               (port, db_name, job_uuid))
         try:
             # we are not interested in the result, so we set a short timeout
             # but not too short so we trap and log hard configuration errors
             requests.get(url, timeout=1)
         except requests.Timeout:
-            pass
+            set_job_pending()
         except:
             _logger.exception("exception in GET %s", url)
+            set_job_pending()
     thread = threading.Thread(target=urlopen)
     thread.daemon = True
     thread.start()
@@ -218,10 +220,11 @@ class Database(object):
             cr.execute("LISTEN connector")
 
     def select_jobs(self, where, args):
-        query = "SELECT %s, uuid, id as seq, date_created, priority, eta, state " \
-                "FROM queue_job WHERE %s" % \
-                ('channel' if self.has_channel else 'NULL',
-                 where)
+        query = ("SELECT %s, uuid, id as seq, date_created, "
+                 "priority, eta, state "
+                 "FROM queue_job WHERE %s" %
+                 ('channel' if self.has_channel else 'NULL',
+                  where))
         with closing(self.conn.cursor()) as cr:
             cr.execute(query, args)
             return list(cr.fetchall())
@@ -249,10 +252,7 @@ class ConnectorRunner(object):
         if openerp.tools.config['db_name']:
             db_names = openerp.tools.config['db_name'].split(',')
         else:
-            db_names = openerp.service.db.exp_list()
-        dbfilter = openerp.tools.config['dbfilter']
-        if dbfilter:
-            db_names = [d for d in db_names if re.match(dbfilter, d)]
+            db_names = openerp.service.db.exp_list(True)
         return db_names
 
     def close_databases(self, remove_jobs=True):
@@ -285,9 +285,7 @@ class ConnectorRunner(object):
             _logger.info("asking Odoo to run job %s on db %s",
                          job.uuid, job.db_name)
             self.db_by_name[job.db_name].set_job_enqueued(job.uuid)
-            _async_http_get('http://localhost:%s'
-                            '/connector/runjob?db=%s&job_uuid=%s' %
-                            (self.port, job.db_name, job.uuid))
+            _async_http_get(self.port, job.db_name, job.uuid)
 
     def process_notifications(self):
         for db in self.db_by_name.values():

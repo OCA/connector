@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 
+import cPickle
 import mock
-import unittest2
+import unittest
 from datetime import datetime, timedelta
 
 from openerp import SUPERUSER_ID, exceptions
@@ -48,10 +49,19 @@ def dummy_task_args(session, model_name, a, b, c=None):
 
 
 def retryable_error_task(session):
-    raise RetryableJobError
+    raise RetryableJobError('Must be retried later')
 
 
-class TestJobs(unittest2.TestCase):
+def pickle_forbidden_function(session):
+    pass
+
+
+@job
+def pickle_allowed_function(session):
+    pass
+
+
+class TestJobs(unittest.TestCase):
     """ Test Job """
 
     def setUp(self):
@@ -233,24 +243,19 @@ class TestJobs(unittest2.TestCase):
         self.assertEquals(job_a.state, PENDING)
         self.assertFalse(job_a.date_enqueued)
         self.assertFalse(job_a.date_started)
-        self.assertFalse(job_a.worker_uuid)
         self.assertEquals(job_a.retry, 0)
         self.assertEquals(job_a.result, 'test')
 
     def test_set_enqueued(self):
         job_a = Job(func=task_a)
-        worker = mock.Mock(name='Worker')
-        uuid = 'ae7d1161-dc34-40b1-af06-8057c049133e'
-        worker.uuid = 'ae7d1161-dc34-40b1-af06-8057c049133e'
         datetime_path = 'openerp.addons.connector.queue.job.datetime'
         with mock.patch(datetime_path, autospec=True) as mock_datetime:
             mock_datetime.now.return_value = datetime(2015, 3, 15, 16, 41, 0)
-            job_a.set_enqueued(worker)
+            job_a.set_enqueued()
 
         self.assertEquals(job_a.state, ENQUEUED)
         self.assertEquals(job_a.date_enqueued,
                           datetime(2015, 3, 15, 16, 41, 0))
-        self.assertEquals(job_a.worker_uuid, uuid)
         self.assertFalse(job_a.date_started)
 
     def test_set_started(self):
@@ -275,7 +280,6 @@ class TestJobs(unittest2.TestCase):
         self.assertEquals(job_a.result, 'test')
         self.assertEquals(job_a.date_done,
                           datetime(2015, 3, 15, 16, 41, 0))
-        self.assertFalse(job_a.worker_uuid)
         self.assertFalse(job_a.exc_info)
 
     def test_set_failed(self):
@@ -283,7 +287,6 @@ class TestJobs(unittest2.TestCase):
         job_a.set_failed(exc_info='failed test')
         self.assertEquals(job_a.state, FAILED)
         self.assertEquals(job_a.exc_info, 'failed test')
-        self.assertFalse(job_a.worker_uuid)
 
     def test_cancel(self):
         job_a = Job(func=task_a)
@@ -309,6 +312,23 @@ class TestJobs(unittest2.TestCase):
         self.assertEqual(_unpickle(pickle),
                          'a small cucumber preserved in vinegar, '
                          'brine, or a similar solution.')
+
+    def test_unpickle_unsafe(self):
+        """ unpickling function not decorated by @job is forbidden """
+        pickled = cPickle.dumps(pickle_forbidden_function)
+        with self.assertRaises(NotReadableJobError):
+            _unpickle(pickled)
+
+    def test_unpickle_safe(self):
+        """ unpickling function decorated by @job is allowed """
+        pickled = cPickle.dumps(pickle_allowed_function)
+        self.assertEqual(_unpickle(pickled), pickle_allowed_function)
+
+    def test_unpickle_whitelist(self):
+        """ unpickling function/class that is in the whitelist is allowed """
+        arg = datetime(2016, 2, 10)
+        pickled = cPickle.dumps(arg)
+        self.assertEqual(_unpickle(pickled), arg)
 
     def test_unpickle_not_readable(self):
         with self.assertRaises(NotReadableJobError):
@@ -394,21 +414,6 @@ class TestJobStorage(common.TransactionCase):
                                delta=delta)
         self.assertEqual(job_read.canceled, True)
 
-    def test_job_worker(self):
-        worker = self.env['queue.worker'].create(
-            {'uuid': '57569b99-c2c1-47b6-aad1-72f953c92c87'}
-        )
-        test_job = Job(func=dummy_task_args,
-                       model_name='res.users',
-                       args=('o', 'k'),
-                       kwargs={'c': '!'})
-        test_job.worker_uuid = worker.uuid
-        storage = OpenERPJobStorage(self.session)
-        self.assertEqual(storage._worker_id(worker.uuid), worker.id)
-        storage.store(test_job)
-        job_read = storage.load(test_job.uuid)
-        self.assertEqual(job_read.worker_uuid, worker.uuid)
-
     def test_job_unlinked(self):
         test_job = Job(func=dummy_task_args,
                        model_name='res.users',
@@ -486,12 +491,13 @@ class TestJobModel(common.TransactionCase):
         super(TestJobModel, self).setUp()
         self.session = ConnectorSession(self.cr, self.uid)
         self.queue_job = self.env['queue.job']
+        self.user = self.env['res.users']
 
     def _create_job(self):
         test_job = Job(func=task_a)
         storage = OpenERPJobStorage(self.session)
         storage.store(test_job)
-        stored = self.queue_job.search([('uuid', '=', test_job.uuid)])
+        stored = storage.db_record_from_uuid(test_job.uuid)
         self.assertEqual(len(stored), 1)
         return stored
 
@@ -519,7 +525,6 @@ class TestJobModel(common.TransactionCase):
         stored.write({'state': 'failed'})
         stored.requeue()
         self.assertEqual(stored.state, PENDING)
-        self.assertFalse(stored.worker_id)
 
     def test_message_when_write_fail(self):
         stored = self._create_job()
@@ -527,6 +532,25 @@ class TestJobModel(common.TransactionCase):
         self.assertEqual(stored.state, FAILED)
         messages = stored.message_ids
         self.assertEqual(len(messages), 2)
+
+    def test_follower_when_write_fail(self):
+        """Check that inactive users doesn't are not followers even if
+        they are linked to an active partner"""
+        group = self.env.ref('connector.group_connector_manager')
+        vals = {'name': 'xx',
+                'login': 'xx',
+                'groups_id': [(6, 0, [group.id])],
+                'active': False,
+                }
+        inactiveusr = self.user.create(vals)
+        inactiveusr.partner_id.active = True
+        self.assertFalse(inactiveusr in group.users)
+        stored = self._create_job()
+        stored.write({'state': 'failed'})
+        followers = stored.message_follower_ids.mapped('partner_id')
+        self.assertFalse(inactiveusr.partner_id in followers)
+        self.assertFalse(
+            set([u.partner_id for u in group.users]) - set(followers))
 
     def test_autovacuum(self):
         stored = self._create_job()
@@ -544,7 +568,6 @@ class TestJobModel(common.TransactionCase):
                                    active_ids=stored.ids)
         model.create({}).requeue()
         self.assertEqual(stored.state, PENDING)
-        self.assertFalse(stored.worker_id)
 
 
 class TestJobStorageMultiCompany(common.TransactionCase):
@@ -647,9 +670,10 @@ class TestJobStorageMultiCompany(common.TransactionCase):
         )
         self.assertEqual(len(stored.message_follower_ids), len(users))
         expected_partners = [u.partner_id for u in users]
-        self.assertSetEqual(set(stored.message_follower_ids),
-                            set(expected_partners))
-        followers_id = [f.id for f in stored.message_follower_ids]
+        self.assertSetEqual(
+            set(stored.message_follower_ids.mapped('partner_id')),
+            set(expected_partners))
+        followers_id = stored.message_follower_ids.mapped('partner_id.id')
         self.assertIn(self.other_partner_a.id, followers_id)
         self.assertIn(self.other_partner_b.id, followers_id)
         # jobs created for a specific company_id are followed only by
@@ -662,9 +686,10 @@ class TestJobStorageMultiCompany(common.TransactionCase):
         self.assertEqual(len(stored.message_follower_ids), 2)
         users = User.browse([SUPERUSER_ID, self.other_user_a.id])
         expected_partners = [u.partner_id for u in users]
-        self.assertSetEqual(set(stored.message_follower_ids),
-                            set(expected_partners))
-        followers_id = [f.id for f in stored.message_follower_ids]
+        self.assertSetEqual(
+            set(stored.message_follower_ids.mapped('partner_id')),
+            set(expected_partners))
+        followers_id = stored.message_follower_ids.mapped('partner_id.id')
         self.assertIn(self.other_partner_a.id, followers_id)
         self.assertNotIn(self.other_partner_b.id, followers_id)
 

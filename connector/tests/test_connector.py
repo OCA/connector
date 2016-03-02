@@ -1,16 +1,34 @@
 # -*- coding: utf-8 -*-
 
 import mock
-import unittest2
+import unittest
 
+from openerp import api
+from openerp.modules.registry import RegistryManager
 from openerp.tests import common
 from openerp.addons.connector import connector
-from openerp.addons.connector.connector import (ConnectorUnit,
-                                                ConnectorEnvironment)
+from openerp.addons.connector.exception import RetryableJobError
+from openerp.addons.connector.connector import (
+    ConnectorEnvironment,
+    ConnectorUnit,
+    pg_try_advisory_lock,
+)
 from openerp.addons.connector.session import ConnectorSession
 
 
-class ConnectorHelpers(unittest2.TestCase):
+def mock_connector_unit(env):
+    session = ConnectorSession(env.cr, env.uid,
+                               context=env.context)
+    backend_record = mock.Mock(name='BackendRecord')
+    backend = mock.Mock(name='Backend')
+    backend_record.get_backend.return_value = backend
+    connector_env = connector.ConnectorEnvironment(backend_record,
+                                                   session,
+                                                   'res.users')
+    return ConnectorUnit(connector_env)
+
+
+class ConnectorHelpers(unittest.TestCase):
 
     def test_openerp_module_name(self):
         name = connector._get_openerp_module_name('openerp.addons.sale')
@@ -19,7 +37,7 @@ class ConnectorHelpers(unittest2.TestCase):
         self.assertEqual(name, 'sale')
 
 
-class TestConnectorUnit(unittest2.TestCase):
+class TestConnectorUnit(unittest.TestCase):
     """ Test Connector Unit """
 
     def test_connector_unit_for_model_names(self):
@@ -122,21 +140,13 @@ class TestConnectorUnitTransaction(common.TransactionCase):
         class ModelUnit(ConnectorUnit):
             _model_name = 'res.users'
 
-        session = ConnectorSession(self.env.cr, self.env.uid,
-                                   context=self.env.context)
-        backend_record = mock.Mock(name='BackendRecord')
-        backend = mock.Mock(name='Backend')
-        backend_record.get_backend.return_value = backend
-        connector_env = connector.ConnectorEnvironment(backend_record,
-                                                       session,
-                                                       'res.users')
-        unit = ConnectorUnit(connector_env)
+        unit = mock_connector_unit(self.env)
         self.assertEqual(unit.model, self.env['res.users'])
         self.assertEqual(unit.env, self.env)
         self.assertEqual(unit.localcontext, self.env.context)
 
 
-class TestConnectorEnvironment(unittest2.TestCase):
+class TestConnectorEnvironment(unittest.TestCase):
 
     def test_create_environment_no_connector_env(self):
         session = mock.MagicMock(name='Session')
@@ -177,3 +187,47 @@ class TestConnectorEnvironment(unittest2.TestCase):
 
         self.assertEqual(type(new_env), MyConnectorEnvironment)
         self.assertEqual(new_env.api, api)
+
+
+class TestAdvisoryLock(common.TransactionCase):
+
+    def setUp(self):
+        super(TestAdvisoryLock, self).setUp()
+        self.registry2 = RegistryManager.get(common.get_db_name())
+        self.cr2 = self.registry2.cursor()
+        self.env2 = api.Environment(self.cr2, self.env.uid, {})
+
+        @self.addCleanup
+        def reset_cr2():
+            # rollback and close the cursor, and reset the environments
+            self.env2.reset()
+            self.cr2.rollback()
+            self.cr2.close()
+
+    def test_concurrent_lock(self):
+        """ 2 concurrent transactions cannot acquire the same lock """
+        lock = 'import_record({}, {}, {}, {})'.format(
+            'backend.name',
+            1,
+            'res.partner',
+            '999999',
+        )
+        acquired = pg_try_advisory_lock(self.env, lock)
+        self.assertTrue(acquired)
+        inner_acquired = pg_try_advisory_lock(self.env2, lock)
+        self.assertFalse(inner_acquired)
+
+    def test_concurrent_import_lock(self):
+        """ A 2nd concurrent transaction must retry """
+        lock = 'import_record({}, {}, {}, {})'.format(
+            'backend.name',
+            1,
+            'res.partner',
+            '999999',
+        )
+        connector_unit = mock_connector_unit(self.env)
+        connector_unit.advisory_lock_or_retry(lock)
+        connector_unit2 = mock_connector_unit(self.env2)
+        with self.assertRaises(RetryableJobError) as cm:
+            connector_unit2.advisory_lock_or_retry(lock, retry_seconds=3)
+            self.assertEquals(cm.exception.seconds, 3)

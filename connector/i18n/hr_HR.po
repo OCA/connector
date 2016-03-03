@@ -3,114 +3,114 @@
 # * connector
 # 
 # Translators:
-# danimaribeiro <danimaribeiro@gmail.com>, 2015
+# Marijan Rajic <mr.rajic@gmail.com>, 2016
 msgid ""
 msgstr ""
 "Project-Id-Version: connector (9.0)\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-04 01:38+0000\n"
-"PO-Revision-Date: 2016-03-03 12:55+0000\n"
-"Last-Translator: OCA Transbot <transbot@odoo-community.org>\n"
-"Language-Team: Portuguese (Brazil) (http://www.transifex.com/oca/OCA-connector-9-0/language/pt_BR/)\n"
+"POT-Creation-Date: 2016-03-19 06:52+0000\n"
+"PO-Revision-Date: 2016-03-29 10:10+0000\n"
+"Last-Translator: Marijan Rajic <mr.rajic@gmail.com>\n"
+"Language-Team: Croatian (Croatia) (http://www.transifex.com/oca/OCA-connector-9-0/language/hr_HR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Language: pt_BR\n"
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"Language: hr_HR\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
 #. module: connector
 #: model:ir.ui.view,arch_db:connector.view_queue_job_form
 msgid ""
 "<span class=\"oe_grey oe_inline\"> If the max. retries is 0, the number of "
 "retries is infinite.</span>"
-msgstr ""
+msgstr "<span class=\"oe_grey oe_inline\"> Ukoliko je max. broj pokušaja 0, broj pokušaja postavljen je na beskonačno.</span>"
 
 #. module: connector
 #: code:addons/connector/checkpoint/checkpoint.py:136
 #, python-format
 msgid "A %s needs a review."
-msgstr "Um %s necessita revisão"
+msgstr "%s potrebno je pregledati."
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_message_needaction
 #: model:ir.model.fields,field_description:connector.field_queue_job_message_needaction
 msgid "Action Needed"
-msgstr ""
+msgstr "Potrebna je akcija"
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_config_settings_module_portal
 msgid "Activate the customer portal"
-msgstr "Ativar o portal do cliente"
+msgstr "Aktiviraj korisnički portal"
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_queue_job_active
 msgid "Active"
-msgstr "Ativo"
+msgstr "Aktiviraj"
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_config_settings_alias_domain
 msgid "Alias Domain"
-msgstr "Alias domínio"
+msgstr "Alias domena"
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_config_settings_module_share
 msgid "Allow documents sharing"
-msgstr "Permite compartilhamento de documentos"
+msgstr "Dozvoli dijeljenje dokumenata"
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_config_settings_auth_signup_uninvited
 msgid "Allow external users to sign up"
-msgstr ""
+msgstr "Dozvoli prijavu vanjskim korisnicima"
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_config_settings_module_google_calendar
 msgid "Allow the users to synchronize their calendar  with Google Calendar"
-msgstr "Permite os usuários sincronizar seus calendários com o Calendário Google"
+msgstr "Dozvoli korisnicima sinhronizaciju kalendara sa Google kalendarom"
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_config_settings_module_base_import
 msgid "Allow users to import data from CSV/XLS/XLSX/ODS files"
-msgstr ""
+msgstr "Dozvoli korisnicima uvoz datoteka putem CSV/XLS/XLSX/ODS datoteka"
 
 #. module: connector
 #: model:ir.ui.view,arch_db:connector.view_connector_config_settings
 msgid "Apply"
-msgstr "Aplicar"
+msgstr "Primjeni"
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_config_settings_module_google_drive
 msgid "Attach Google documents to any record"
-msgstr "Anexar documentos do Google para qualquer registro"
+msgstr "Priloži Google dokumente bilo kojem zapisu"
 
 #. module: connector
 #: model:ir.ui.view,arch_db:connector.view_connector_config_settings
 msgid "Backends"
-msgstr "Backends"
+msgstr ""
 
 #. module: connector
 #: model:ir.ui.view,arch_db:connector.view_connector_checkpoint_review
 #: model:ir.ui.view,arch_db:connector.view_connector_config_settings
 #: model:ir.ui.view,arch_db:connector.view_requeue_job
 msgid "Cancel"
-msgstr "Cancelar"
+msgstr ""
 
 #. module: connector
 #: code:addons/connector/queue/job.py:592
 #, python-format
 msgid "Canceled. Nothing to do."
-msgstr "Cancelado. Nada a se fazer"
+msgstr ""
 
 #. module: connector
 #: code:addons/connector/queue/model.py:274
 #, python-format
 msgid "Cannot change the root channel"
-msgstr "Não pode modificar o canal principal"
+msgstr ""
 
 #. module: connector
 #: code:addons/connector/queue/model.py:281
 #, python-format
 msgid "Cannot remove the root channel"
-msgstr "Não pode remover o canal principal"
+msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_queue_job_channel
@@ -118,12 +118,12 @@ msgstr "Não pode remover o canal principal"
 #: model:ir.ui.view,arch_db:connector.view_queue_job_function_search
 #: model:ir.ui.view,arch_db:connector.view_queue_job_search
 msgid "Channel"
-msgstr "Canal"
+msgstr ""
 
 #. module: connector
 #: sql_constraint:queue.job.channel:0
 msgid "Channel complete name must be unique"
-msgstr "Nome completo do canal deve ser unico"
+msgstr ""
 
 #. module: connector
 #: model:ir.actions.act_window,name:connector.action_queue_job_channel
@@ -132,55 +132,55 @@ msgstr "Nome completo do canal deve ser unico"
 #: model:ir.ui.view,arch_db:connector.view_queue_job_channel_search
 #: model:ir.ui.view,arch_db:connector.view_queue_job_channel_tree
 msgid "Channels"
-msgstr "Canais"
+msgstr ""
 
 #. module: connector
 #: model:ir.ui.menu,name:connector.menu_checkpoint
 msgid "Checkpoint"
-msgstr "Ponto de checagem"
+msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_review_checkpoint_ids
 msgid "Checkpoints"
-msgstr "Pontos de checagem"
+msgstr ""
 
 #. module: connector
 #: model:ir.model,name:connector.model_connector_checkpoint_review
 msgid "Checkpoints Review"
-msgstr "Revisão de pontos de checagem"
+msgstr ""
 
 #. module: connector
 #: model:ir.ui.view,arch_db:connector.view_connector_checkpoint_form
 msgid "Click on the"
-msgstr "Clique na"
+msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_queue_job_company_id
 msgid "Company"
-msgstr "Empresa"
+msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_queue_job_channel_complete_name
 #: model:ir.model.fields,field_description:connector.field_queue_job_function_channel
 msgid "Complete Name"
-msgstr "Nome completo"
+msgstr ""
 
 #. module: connector
 #: model:ir.actions.act_window,name:connector.action_connector_config_settings
 #: model:ir.ui.view,arch_db:connector.view_connector_config_settings
 msgid "Configure Connector"
-msgstr "Configurar conector"
+msgstr ""
 
 #. module: connector
 #: model:ir.module.category,name:connector.module_category_connector
 #: model:ir.ui.menu,name:connector.menu_connector_config_settings
 msgid "Connector"
-msgstr "Conector"
+msgstr ""
 
 #. module: connector
 #: model:ir.model,name:connector.model_connector_backend
 msgid "Connector Backend"
-msgstr "Backend do conector"
+msgstr ""
 
 #. module: connector
 #: model:ir.actions.act_window,name:connector.action_connector_checkpoint
@@ -189,29 +189,29 @@ msgstr "Backend do conector"
 #: model:ir.ui.view,arch_db:connector.view_connector_checkpoint_search
 #: model:ir.ui.view,arch_db:connector.view_connector_checkpoint_tree
 msgid "Connector Checkpoint"
-msgstr "Ponto de checagem conector"
+msgstr ""
 
 #. module: connector
 #: model:ir.model,name:connector.model_connector_config_settings
 msgid "Connector Configuration"
-msgstr "Configuração do conector"
+msgstr ""
 
 #. module: connector
 #: model:res.groups,name:connector.group_connector_manager
 msgid "Connector Manager"
-msgstr "Gerenciador do conector"
+msgstr ""
 
 #. module: connector
 #: model:ir.ui.menu,name:connector.menu_connector
 #: model:ir.ui.menu,name:connector.menu_connector_root
 #: model:ir.ui.view,arch_db:connector.view_partner_connector_form
 msgid "Connectors"
-msgstr "Conectores"
+msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_queue_job_date_created
 msgid "Created Date"
-msgstr "Data criação"
+msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_create_uid
@@ -220,7 +220,7 @@ msgstr "Data criação"
 #: model:ir.model.fields,field_description:connector.field_queue_job_channel_create_uid
 #: model:ir.model.fields,field_description:connector.field_queue_requeue_job_create_uid
 msgid "Created by"
-msgstr "Criado por"
+msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_create_date
@@ -229,33 +229,33 @@ msgstr "Criado por"
 #: model:ir.model.fields,field_description:connector.field_queue_job_channel_create_date
 #: model:ir.model.fields,field_description:connector.field_queue_requeue_job_create_date
 msgid "Created on"
-msgstr "Criado em "
+msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_queue_job_retry
 msgid "Current try"
-msgstr "Tentativa atual"
+msgstr ""
 
 #. module: connector
 #: model:ir.ui.view,arch_db:connector.view_queue_job_form
 msgid "Current try / max. retries"
-msgstr "Tentativa atual / máximo tentativas"
+msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_queue_job_date_done
 msgid "Date Done"
-msgstr "Data finalizado"
+msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,help:connector.field_connector_checkpoint_message_last_post
 #: model:ir.model.fields,help:connector.field_queue_job_message_last_post
 msgid "Date of the last message posted on the record."
-msgstr "Data da última mensagem postada no registro"
+msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_queue_job_name
 msgid "Description"
-msgstr "Descrição"
+msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_backend_display_name
@@ -274,7 +274,7 @@ msgstr ""
 #: model:ir.ui.view,arch_db:connector.view_queue_job_search
 #: selection:queue.job,state:0
 msgid "Done"
-msgstr "Pronto"
+msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_config_settings_auth_signup_reset_password
@@ -284,33 +284,33 @@ msgstr ""
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_queue_job_date_enqueued
 msgid "Enqueue Time"
-msgstr "Tempo em fila"
+msgstr ""
 
 #. module: connector
 #: model:ir.ui.view,arch_db:connector.view_queue_job_search
 #: selection:queue.job,state:0
 msgid "Enqueued"
-msgstr "Em fila"
+msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_queue_job_exc_info
 msgid "Exception Info"
-msgstr "Informação do erro"
+msgstr ""
 
 #. module: connector
 #: model:ir.ui.view,arch_db:connector.view_queue_job_form
 msgid "Exception Information"
-msgstr "Informação do erro"
+msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_queue_job_eta
 msgid "Execute only after"
-msgstr "Executar apenas depois"
+msgstr ""
 
 #. module: connector
 #: model:ir.model,name:connector.model_external_binding
 msgid "External Binding (abstract)"
-msgstr "Ligações externas (resumo)"
+msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_config_settings_fail_counter
@@ -321,13 +321,13 @@ msgstr ""
 #: model:ir.ui.view,arch_db:connector.view_queue_job_search
 #: selection:queue.job,state:0
 msgid "Failed"
-msgstr "Falhas"
+msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_message_follower_ids
 #: model:ir.model.fields,field_description:connector.field_queue_job_message_follower_ids
 msgid "Followers"
-msgstr "Seguidores"
+msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_message_channel_ids
@@ -344,23 +344,23 @@ msgstr ""
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_queue_job_func_name
 msgid "Func name"
-msgstr "Nome da função"
+msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,help:connector.field_connector_config_settings_module_portal
 msgid "Give your customers access to their documents."
-msgstr "Liberar acesso para seus clientes de seus documentos"
+msgstr ""
 
 #. module: connector
 #: model:ir.ui.view,arch_db:connector.view_queue_job_function_search
 #: model:ir.ui.view,arch_db:connector.view_queue_job_search
 msgid "Group By"
-msgstr "Agrupar por"
+msgstr ""
 
 #. module: connector
 #: model:ir.ui.view,arch_db:connector.view_connector_checkpoint_search
 msgid "Group By..."
-msgstr "Agrupar por .."
+msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_backend_id
@@ -373,13 +373,13 @@ msgstr "Agrupar por .."
 #: model:ir.model.fields,field_description:connector.field_queue_job_id
 #: model:ir.model.fields,field_description:connector.field_queue_requeue_job_id
 msgid "ID"
-msgstr "ID"
+msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,help:connector.field_connector_checkpoint_message_unread
 #: model:ir.model.fields,help:connector.field_queue_job_message_unread
 msgid "If checked new messages require your attention."
-msgstr "Se novas mensagens checadas precisam de atenção"
+msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,help:connector.field_connector_checkpoint_message_needaction
@@ -397,12 +397,12 @@ msgstr ""
 msgid ""
 "If you have setup a catch-all email domain redirected to the Odoo server, "
 "enter the domain name here."
-msgstr "Se você configurou um catch-all dominio de email no Odoo, coloque aqui o domínio registrado."
+msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_backend_id
 msgid "Imported from"
-msgstr "Importado de"
+msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_message_is_follower
@@ -413,13 +413,13 @@ msgstr ""
 #. module: connector
 #: model:ir.model,name:connector.model_queue_job_channel
 msgid "Job Channels"
-msgstr "Canais de tarefas"
+msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_queue_job_job_function_id
 #: model:ir.ui.view,arch_db:connector.view_queue_job_search
 msgid "Job Function"
-msgstr "Função de tarefa"
+msgstr ""
 
 #. module: connector
 #: model:ir.actions.act_window,name:connector.action_queue_job_function
@@ -430,12 +430,12 @@ msgstr "Função de tarefa"
 #: model:ir.ui.view,arch_db:connector.view_queue_job_function_search
 #: model:ir.ui.view,arch_db:connector.view_queue_job_function_tree
 msgid "Job Functions"
-msgstr "Funções de tarefas"
+msgstr ""
 
 #. module: connector
 #: model:mail.message.subtype,name:connector.mt_job_failed
 msgid "Job failed"
-msgstr "Tarefa falhou"
+msgstr ""
 
 #. module: connector
 #: model:ir.actions.act_window,name:connector.action_queue_job
@@ -445,13 +445,13 @@ msgstr "Tarefa falhou"
 #: model:ir.ui.view,arch_db:connector.view_queue_job_search
 #: model:ir.ui.view,arch_db:connector.view_queue_job_tree
 msgid "Jobs"
-msgstr "Tarefas"
+msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_message_last_post
 #: model:ir.model.fields,field_description:connector.field_queue_job_message_last_post
 msgid "Last Message Date"
-msgstr "Última data de mensagem"
+msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_backend___last_update
@@ -473,7 +473,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:connector.field_queue_job_channel_write_uid
 #: model:ir.model.fields,field_description:connector.field_queue_requeue_job_write_uid
 msgid "Last Updated by"
-msgstr "Última atualização por"
+msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_review_write_date
@@ -482,12 +482,12 @@ msgstr "Última atualização por"
 #: model:ir.model.fields,field_description:connector.field_queue_job_channel_write_date
 #: model:ir.model.fields,field_description:connector.field_queue_requeue_job_write_date
 msgid "Last Updated on"
-msgstr "Última atualização em "
+msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_external_binding_sync_date
 msgid "Last synchronization date"
-msgstr "Última sincronização"
+msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_config_settings_module_inter_company_rules
@@ -497,38 +497,38 @@ msgstr ""
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_config_settings_group_light_multi_company
 msgid "Manage multiple companies"
-msgstr "Gerenciar multiplas companhias"
+msgstr ""
 
 #. module: connector
 #: code:addons/connector/queue/model.py:133
 #, python-format
 msgid "Manually set to done by %s"
-msgstr "Setado para finalizado manualemente por %s"
+msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_queue_job_max_retries
 msgid "Max. retries"
-msgstr "Máximo de tentativas"
+msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_message_ids
 #: model:ir.model.fields,field_description:connector.field_queue_job_message_ids
 msgid "Messages"
-msgstr "Mensagens"
+msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_model_id
 #: model:ir.model.fields,field_description:connector.field_queue_job_model_name
 #: model:ir.ui.view,arch_db:connector.view_connector_checkpoint_search
 msgid "Model"
-msgstr "Modelo"
+msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_backend_name
 #: model:ir.model.fields,field_description:connector.field_queue_job_channel_name
 #: model:ir.model.fields,field_description:connector.field_queue_job_function_name
 msgid "Name"
-msgstr "Nome"
+msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,help:connector.field_connector_checkpoint_name
@@ -539,13 +539,13 @@ msgstr ""
 #: selection:connector.checkpoint,state:0
 #: model:ir.ui.view,arch_db:connector.view_connector_checkpoint_search
 msgid "Need Review"
-msgstr "Necessita revisão"
+msgstr ""
 
 #. module: connector
 #: code:addons/connector/queue/model.py:109
 #, python-format
 msgid "No action available for this job"
-msgstr "Sem ação disponivel para esta tarefa"
+msgstr ""
 
 #. module: connector
 #: model:ir.actions.act_window,help:connector.action_connector_checkpoint
@@ -573,44 +573,44 @@ msgstr ""
 #. module: connector
 #: model:ir.actions.client,name:connector.action_client_connector_menu
 msgid "Open Connector Menu"
-msgstr "Abrir menu do conector"
+msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_queue_job_channel_parent_id
 msgid "Parent Channel"
-msgstr "Canal pai"
+msgstr ""
 
 #. module: connector
 #: code:addons/connector/queue/model.py:266
 #, python-format
 msgid "Parent channel required."
-msgstr "Canal pai é obrigatório"
+msgstr ""
 
 #. module: connector
 #: model:ir.ui.view,arch_db:connector.view_queue_job_search
 #: selection:queue.job,state:0
 msgid "Pending"
-msgstr "Pendente"
+msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_queue_job_func
 msgid "Pickled Function"
-msgstr "Função em espera"
+msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_queue_job_priority
 msgid "Priority"
-msgstr "Prioridade"
+msgstr ""
 
 #. module: connector
 #: model:ir.ui.menu,name:connector.menu_queue
 msgid "Queue"
-msgstr "Fila"
+msgstr ""
 
 #. module: connector
 #: model:ir.model,name:connector.model_queue_job
 msgid "Queue Job"
-msgstr "Fila de tarefas"
+msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_record
@@ -620,7 +620,7 @@ msgstr ""
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_record_id
 msgid "Record ID"
-msgstr "ID do registro"
+msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_name
@@ -630,41 +630,41 @@ msgstr ""
 #. module: connector
 #: model:ir.ui.view,arch_db:connector.view_queue_job_form
 msgid "Related"
-msgstr "Relacionado"
+msgstr ""
 
 #. module: connector
 #: code:addons/connector/related_action.py:48
 #, python-format
 msgid "Related Record"
-msgstr "Registro relacionado"
+msgstr ""
 
 #. module: connector
 #: model:ir.ui.view,arch_db:connector.view_requeue_job
 msgid "Requeue"
-msgstr "Colocar na fila"
+msgstr ""
 
 #. module: connector
 #: model:ir.ui.view,arch_db:connector.view_queue_job_form
 msgid "Requeue Job"
-msgstr "Colocar na fila novamente a tarefa"
+msgstr ""
 
 #. module: connector
 #: model:ir.actions.act_window,name:connector.action_requeue_job
 #: model:ir.ui.view,arch_db:connector.view_requeue_job
 msgid "Requeue Jobs"
-msgstr "Colocar na fila novamente as tarefas"
+msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_queue_job_result
 #: model:ir.ui.view,arch_db:connector.view_queue_job_form
 msgid "Result"
-msgstr "Resultado"
+msgstr ""
 
 #. module: connector
 #: model:ir.actions.act_window,name:connector.action_connector_checkpoint_review
 #: model:ir.ui.view,arch_db:connector.view_connector_checkpoint_review
 msgid "Review Checkpoints"
-msgstr "Revisão dos pontos de checagem"
+msgstr ""
 
 #. module: connector
 #: selection:connector.checkpoint,state:0
@@ -672,22 +672,22 @@ msgstr "Revisão dos pontos de checagem"
 #: model:ir.ui.view,arch_db:connector.view_connector_checkpoint_search
 #: model:ir.ui.view,arch_db:connector.view_connector_checkpoint_tree
 msgid "Reviewed"
-msgstr "Revisado"
+msgstr ""
 
 #. module: connector
 #: model:ir.ui.view,arch_db:connector.view_connector_checkpoint_review
 msgid "Set as reviewed"
-msgstr "Marcar como revisado"
+msgstr ""
 
 #. module: connector
 #: model:ir.ui.view,arch_db:connector.view_queue_job_form
 msgid "Set to 'Done'"
-msgstr "Marcar como 'Finalizado'"
+msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,help:connector.field_connector_config_settings_module_share
 msgid "Share or embbed any screen of Odoo."
-msgstr "Compartilhe ou incorpore qualquer tela do Odoo"
+msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_config_settings_company_share_partner
@@ -708,34 +708,34 @@ msgstr ""
 msgid ""
 "Something bad happened during the execution of the job. More details in the "
 "'Exception Information' section."
-msgstr "Alguma coisa ruim aconteceu durante a execução da tarefa. Mais informações na seção 'Informações do erro'"
+msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_queue_job_date_started
 msgid "Start Date"
-msgstr "Data inicio"
+msgstr ""
 
 #. module: connector
 #: model:ir.ui.view,arch_db:connector.view_queue_job_search
 #: selection:queue.job,state:0
 msgid "Started"
-msgstr "Iniciado"
+msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_queue_job_state
 #: model:ir.ui.view,arch_db:connector.view_queue_job_search
 msgid "State"
-msgstr "Estado"
+msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_state
 msgid "Status"
-msgstr "Situação"
+msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_queue_job_func_string
 msgid "Task"
-msgstr "Tarefa"
+msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_config_settings_auth_signup_template_user_id
@@ -755,12 +755,12 @@ msgstr ""
 msgid ""
 "The job will fail if the number of tries reach the max. retries.\n"
 "Retries are infinite when empty."
-msgstr "A tarefa vai falhar quando o número de tentativas chegar ao limite\nTentativas ilimitas quando vázio."
+msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,help:connector.field_connector_checkpoint_backend_id
 msgid "The record has been imported from this backend"
-msgstr "O registro foi importado deste backend"
+msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,help:connector.field_connector_checkpoint_record
@@ -770,12 +770,12 @@ msgstr ""
 #. module: connector
 #: model:ir.ui.view,arch_db:connector.view_connector_checkpoint_review
 msgid "The selected checkpoints will be set as reviewed."
-msgstr "O pontos de checagem selecionados vão ser marcados como revisados."
+msgstr ""
 
 #. module: connector
 #: model:ir.ui.view,arch_db:connector.view_requeue_job
 msgid "The selected jobs will be requeued."
-msgstr "As tarefas selecionadas entrarão na fila novamente."
+msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,help:connector.field_connector_config_settings_auth_signup_reset_password
@@ -785,12 +785,12 @@ msgstr ""
 #. module: connector
 #: model:ir.model.fields,help:connector.field_connector_config_settings_module_google_calendar
 msgid "This installs the module google_calendar."
-msgstr "Isto instala o módulo google_calendar"
+msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,help:connector.field_connector_config_settings_module_google_drive
 msgid "This installs the module google_docs."
-msgstr "Isto instala o módulo google_docs"
+msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,help:connector.field_connector_config_settings_module_inter_company_rules
@@ -802,13 +802,13 @@ msgstr ""
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_queue_job_uuid
 msgid "UUID"
-msgstr "UUID"
+msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_message_unread
 #: model:ir.model.fields,field_description:connector.field_queue_job_message_unread
 msgid "Unread Messages"
-msgstr "Mensagens não lidas"
+msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_message_unread_counter
@@ -824,12 +824,12 @@ msgstr ""
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_queue_job_user_id
 msgid "User ID"
-msgstr "ID usuário"
+msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_backend_version
 msgid "Version"
-msgstr "Versão"
+msgstr ""
 
 #. module: connector
 #: model:ir.actions.act_window,help:connector.action_connector_checkpoint
@@ -843,7 +843,7 @@ msgstr ""
 #. module: connector
 #: model:ir.model,name:connector.model_queue_requeue_job
 msgid "Wizard to requeue a selection of jobs"
-msgstr "Wizard para enfileirar uma llista de tarefas"
+msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,help:connector.field_connector_config_settings_group_light_multi_company
@@ -857,9 +857,9 @@ msgstr ""
 #: model:ir.ui.view,arch_db:connector.view_connector_config_settings
 #: model:ir.ui.view,arch_db:connector.view_requeue_job
 msgid "or"
-msgstr "ou"
+msgstr ""
 
 #. module: connector
 #: model:ir.ui.view,arch_db:connector.view_connector_checkpoint_form
 msgid "to verify it:"
-msgstr "para verificar."
+msgstr ""

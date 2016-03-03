@@ -6,6 +6,10 @@ Changelog
 .. 
 .. * 
 
+9.0.1.0.2 (2016-03-03)
+~~~~~~~~~~~~~~~~~~~~~~
+
+* Fix: adapt to upstream api change to obtain db connection (https://github.com/OCA/connector/pull/179)
 
 9.0.1.0.1 (2016-03-03)
 ~~~~~~~~~~~~~~~~~~~~~~

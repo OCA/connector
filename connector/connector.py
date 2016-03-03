@@ -23,7 +23,6 @@ import hashlib
 import logging
 import struct
 
-from contextlib import contextmanager
 from openerp import models, fields
 
 from .exception import RetryableJobError

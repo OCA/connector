@@ -46,9 +46,6 @@ START_DELAY = 5
 # to configure the runner (channels mostly).
 
 
-enable = os.environ.get('ODOO_CONNECTOR_CHANNELS')
-
-
 class ConnectorRunnerThread(Thread):
 
     def __init__(self):
@@ -78,7 +75,7 @@ orig_threaded_stop = server.ThreadedServer.stop
 def prefork_start(server, *args, **kwargs):
     global runner_thread
     res = orig_prefork_start(server, *args, **kwargs)
-    if enable and not config['stop_after_init']:
+    if not config['stop_after_init']:
         _logger.info("starting jobrunner thread (in prefork server)")
         runner_thread = ConnectorRunnerThread()
         runner_thread.start()
@@ -99,7 +96,7 @@ def prefork_stop(server, graceful=True):
 def threaded_start(server, *args, **kwargs):
     global runner_thread
     res = orig_threaded_start(server, *args, **kwargs)
-    if enable and not config['stop_after_init']:
+    if not config['stop_after_init']:
         _logger.info("starting jobrunner thread (in threaded server)")
         runner_thread = ConnectorRunnerThread()
         runner_thread.start()

@@ -7,6 +7,14 @@ Changelog
 .. * 
 
 
+9.0.1.0.1 (2016-03-03)
+~~~~~~~~~~~~~~~~~~~~~~
+
+* Enabled the JobRunner by default, with a default channels configuration of root:1
+* Removed the old workers
+* Removed the broken dbfilter support (https://github.com/OCA/connector/issues/58)
+* Cleaned the methods that have been deprecated in version 3.x
+
 8.0.3.3.0 (2016-02-29)
 ~~~~~~~~~~~~~~~~~~~~~~
 

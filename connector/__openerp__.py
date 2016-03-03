@@ -20,7 +20,7 @@
 ##############################################################################
 
 {'name': 'Connector',
- 'version': '9.0.1.0.1',
+ 'version': '9.0.1.0.2',
  'author': 'Camptocamp,Openerp Connector Core Editors,'
            'Odoo Community Association (OCA)',
  'website': 'http://odoo-connector.com',

@@ -49,7 +49,6 @@ def dummy_task_args(session, model_name, a, b, c=None):
 
 
 def dummy_task_context(session):
-    _logger.info("\n\n{0}\n\n".format(session.env.context))
     return session.env.context
 
 

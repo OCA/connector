@@ -48,6 +48,11 @@ def dummy_task_args(session, model_name, a, b, c=None):
     return a + b + c
 
 
+def dummy_task_context(session):
+    _logger.info("\n\n{0}\n\n".format(session.env.context))
+    return session.env.context
+
+
 def retryable_error_task(session):
     raise RetryableJobError('Must be retried later')
 
@@ -568,6 +573,13 @@ class TestJobModel(common.TransactionCase):
                                    active_ids=stored.ids)
         model.create({}).requeue()
         self.assertEqual(stored.state, PENDING)
+
+    def test_context_uuid(self):
+        test_job = Job(func=dummy_task_context)
+        result = test_job.perform(self.session)
+        key_present = 'job_uuid' in result
+        self.assertTrue(key_present)
+        self.assertEqual(result['job_uuid'], test_job._uuid)
 
 
 class TestJobStorageMultiCompany(common.TransactionCase):

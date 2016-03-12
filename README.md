@@ -21,12 +21,7 @@ Available addons
 addon | version | summary
 --- | --- | ---
 [connector](connector/) | 9.0.1.0.2 | Connector
-
-Unported addons
----------------
-addon | version | summary
---- | --- | ---
-[connector_base_product](connector_base_product/) | 8.0.1.0.0 (unported) | Connector Base Product
+[connector_base_product](connector_base_product/) | 9.0.1.0.0 | Connector Base Product
 
 [//]: # (end addons)
 

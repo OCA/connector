@@ -148,8 +148,11 @@ class QueueJob(models.Model):
         return True
 
     @api.multi
-    def write(self, vals):
-        res = super(QueueJob, self).write(vals)
+    def pre_write(self):
+        pass
+
+    @api.multi
+    def post_write(self, vals):
         if vals.get('state') == 'failed':
             # subscribe the users now to avoid to subscribe them
             # at every job creation
@@ -159,6 +162,12 @@ class QueueJob(models.Model):
                 if msg:
                     job.message_post(body=msg,
                                      subtype='connector.mt_job_failed')
+
+    @api.multi
+    def write(self, vals):
+        self.pre_write()
+        res = super(QueueJob, self).write(vals)
+        self.post_write(vals)
         return res
 
     @api.multi

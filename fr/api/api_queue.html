@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="fr">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
@@ -169,7 +169,7 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="api_synchronizer.html">Synchroniseur</a></li>
 <li class="toctree-l1"><a class="reference internal" href="api_backend_adapter.html">Adaptateur de backend</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="">Queue</a><ul>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Queue</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#module-connector.queue.job">Job</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-connector.queue.worker">Worker</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#id5">Queue</a></li>
@@ -610,8 +610,8 @@ values are the delay to postpone a job.</p>
 </dl>
 </li>
 <li><dl class="first docutils">
-<dt>description <span class="classifier-delimiter">:</span> <span class="classifier">a human description of the job,</span></dt>
-<dd><p class="first">destinée à différencier les instances de job (Par défaut func.__doc__ ou</p>
+<dt>description</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">a human description of the job,</span><dd><p class="first">destinée à différencier les instances de job (Par défaut func.__doc__ ou</p>
 <blockquote class="last">
 <div><p>&#8216;Function %s&#8217; % func.__name__)</p>
 </div></blockquote>
@@ -662,11 +662,11 @@ values are the delay to postpone a job.</p>
 
 <dl class="function">
 <dt id="connector.queue.job.related_action">
-<code class="descclassname">connector.queue.job.</code><code class="descname">related_action</code><span class="sig-paren">(</span><em>action=&lt;function &lt;lambda&gt; at 0x4d0ec08&gt;</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/queue/job.html#related_action"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.job.related_action" title="Lien permanent vers cette définition">¶</a></dt>
+<code class="descclassname">connector.queue.job.</code><code class="descname">related_action</code><span class="sig-paren">(</span><em>action=&lt;function &lt;lambda&gt; at 0x4a36848&gt;</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/queue/job.html#related_action"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.job.related_action" title="Lien permanent vers cette définition">¶</a></dt>
 <dd><p>Attache une <em>action connexe</em> à un job</p>
 <p>Un <em>action connexe</em> apparaîtra comme un bouton dans la vue OpenERP. Le bouton exécutera l&#8217;action, habituellement une ouverture de formulaire de l&#8217;enregistrement lié au job.</p>
 <p>L&#8217;<code class="docutils literal"><span class="pre">action</span></code> doit être un objet <cite>callable</cite> qui prends les arguments</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>session, job, **kwargs
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">session</span><span class="p">,</span> <span class="n">job</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
 </pre></div>
 </div>
 <p>Exemple d&#8217;utilisation :</p>
@@ -715,7 +715,7 @@ values are the delay to postpone a job.</p>
 </ul>
 <p>If you need to use an argument in a job which is not in this whitelist,
 you can add it by using:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">whitelist_unpickle_global</span><span class="p">(</span><span class="n">fn_or_class_to_register</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">whitelist_unpickle_global</span><span class="p">(</span><span class="n">fn_or_class_to_register</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -1583,7 +1583,7 @@ given, names are automatically generated from model names, provided
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.6.<br/>
+      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.<br/>
     </p>
   </div>
 </footer>

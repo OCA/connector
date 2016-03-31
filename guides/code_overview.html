@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
@@ -114,7 +114,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../project/roadmap.html">Roadmap</a></li>
 </ul>
 <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="">Code Overview</a><ul>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Code Overview</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#backends">Backends</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#bindings">Bindings</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#session">Session</a></li>
@@ -257,7 +257,7 @@ use case exposing the main ideas.</p>
 <div class="section" id="backends">
 <h2>Backends<a class="headerlink" href="#backends" title="Permalink to this headline">¶</a></h2>
 <p>All start with the declaration of the <a class="reference internal" href="../api/api_backend.html#connector.backend.Backend" title="connector.backend.Backend"><code class="xref py py-class docutils literal"><span class="pre">Backend</span></code></a>:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">openerp.addons.connector.backend</span> <span class="kn">as</span> <span class="nn">backend</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">openerp.addons.connector.backend</span> <span class="k">as</span> <span class="nn">backend</span>
 
 <span class="n">magento</span> <span class="o">=</span> <span class="n">backend</span><span class="o">.</span><span class="n">Backend</span><span class="p">(</span><span class="s1">&#39;magento&#39;</span><span class="p">)</span>
 <span class="sd">&quot;&quot;&quot; Generic Magento Backend &quot;&quot;&quot;</span>
@@ -277,13 +277,13 @@ straightforward techniques are: storing the external ID in the same
 model (<code class="docutils literal"><span class="pre">account.invoice</span></code>), in a new link model or in a new link model
 which <code class="docutils literal"><span class="pre">_inherits</span></code> <code class="docutils literal"><span class="pre">account.invoice</span></code>. Here we choose the latter
 solution:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">MagentoAccountInvoice</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">MagentoAccountInvoice</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
     <span class="n">_name</span> <span class="o">=</span> <span class="s1">&#39;magento.account.invoice&#39;</span>
     <span class="n">_inherits</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;account.invoice&#39;</span><span class="p">:</span> <span class="s1">&#39;openerp_id&#39;</span><span class="p">}</span>
     <span class="n">_description</span> <span class="o">=</span> <span class="s1">&#39;Magento Invoice&#39;</span>
 
-    <span class="n">backend_id</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Many2one</span><span class="p">(</span><span class="n">comodel_name</span><span class="o">=</span><span class="s1">&#39;magento.backend&#39;</span><span class="p">,</span> <span class="n">string</span><span class="o">=</span><span class="s1">&#39;Magento Backend&#39;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">ondelete</span><span class="o">=</span><span class="s1">&#39;restrict&#39;</span><span class="p">)</span>
-    <span class="n">openerp_id</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Many2one</span><span class="p">(</span><span class="n">comodel_name</span><span class="o">=</span><span class="s1">&#39;account.invoice&#39;</span><span class="p">,</span> <span class="n">string</span><span class="o">=</span><span class="s1">&#39;Invoice&#39;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">ondelete</span><span class="o">=</span><span class="s1">&#39;cascade&#39;</span><span class="p">)</span>
+    <span class="n">backend_id</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Many2one</span><span class="p">(</span><span class="n">comodel_name</span><span class="o">=</span><span class="s1">&#39;magento.backend&#39;</span><span class="p">,</span> <span class="n">string</span><span class="o">=</span><span class="s1">&#39;Magento Backend&#39;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">ondelete</span><span class="o">=</span><span class="s1">&#39;restrict&#39;</span><span class="p">)</span>
+    <span class="n">openerp_id</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Many2one</span><span class="p">(</span><span class="n">comodel_name</span><span class="o">=</span><span class="s1">&#39;account.invoice&#39;</span><span class="p">,</span> <span class="n">string</span><span class="o">=</span><span class="s1">&#39;Invoice&#39;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">ondelete</span><span class="o">=</span><span class="s1">&#39;cascade&#39;</span><span class="p">)</span>
     <span class="n">magento_id</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Char</span><span class="p">(</span><span class="n">string</span><span class="o">=</span><span class="s1">&#39;ID on Magento&#39;</span><span class="p">)</span>  <span class="c1"># fields.char because 0 is a valid Magento ID</span>
     <span class="n">sync_date</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Datetime</span><span class="p">(</span><span class="n">string</span><span class="o">=</span><span class="s1">&#39;Last synchronization date&#39;</span><span class="p">)</span>
     <span class="n">magento_order_id</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Many2one</span><span class="p">(</span><span class="n">comodel_name</span><span class="o">=</span><span class="s1">&#39;magento.sale.order&#39;</span><span class="p">,</span> <span class="n">string</span><span class="o">=</span><span class="s1">&#39;Magento Sale Order&#39;</span><span class="p">,</span> <span class="n">ondelete</span><span class="o">=</span><span class="s1">&#39;set null&#39;</span><span class="p">)</span>
@@ -309,7 +309,7 @@ generic ones:
 <p>When we create a <code class="docutils literal"><span class="pre">magento.account.invoice</span></code> record, we want to delay a
 job to export it to Magento, so we subscribe a new consumer on
 <a class="reference internal" href="../api/api_event.html#connector.event.on_record_create" title="connector.event.on_record_create"><code class="xref py py-meth docutils literal"><span class="pre">on_record_create()</span></code></a>:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="nd">@on_record_create</span><span class="p">(</span><span class="n">model_names</span><span class="o">=</span><span class="s1">&#39;magento.account.invoice&#39;</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="nd">@on_record_create</span><span class="p">(</span><span class="n">model_names</span><span class="o">=</span><span class="s1">&#39;magento.account.invoice&#39;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">delay_export_account_invoice</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">record_id</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Delay the job to export the magento invoice.</span>
@@ -327,7 +327,7 @@ In that case: create the invoice on Magento.</p>
 <p>Any function decorated with <a class="reference internal" href="../api/api_queue.html#connector.queue.job.job" title="connector.queue.job.job"><code class="xref py py-meth docutils literal"><span class="pre">job()</span></code></a> can
 be posted in the queue of jobs using a <code class="docutils literal"><span class="pre">delay()</span></code> function
 and will be run as soon as possible:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="nd">@job</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="nd">@job</span>
 <span class="k">def</span> <span class="nf">export_invoice</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">record_id</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Export a validated or paid invoice. &quot;&quot;&quot;</span>
     <span class="n">invoice</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">env</span><span class="p">[</span><span class="n">model_name</span><span class="p">]</span><span class="o">.</span><span class="n">browse</span><span class="p">(</span><span class="n">record_id</span><span class="p">)</span>
@@ -375,7 +375,7 @@ define the flow of a synchronization and use the other
 specific ones).</div></blockquote>
 <p>For the export of the invoice, we just need an <code class="docutils literal"><span class="pre">adapter</span></code> and a
 <code class="docutils literal"><span class="pre">synchronizer</span></code> (the real implementation is more complete):</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="nd">@magento</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="nd">@magento</span>
 <span class="k">class</span> <span class="nc">AccountInvoiceAdapter</span><span class="p">(</span><span class="n">GenericAdapter</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Backend Adapter for the Magento Invoice &quot;&quot;&quot;</span>
     <span class="n">_model_name</span> <span class="o">=</span> <span class="s1">&#39;magento.account.invoice&#39;</span>
@@ -395,7 +395,7 @@ specific ones).</div></blockquote>
         <span class="c1"># use the ``backend adapter`` to create the invoice</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">backend_adapter</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">magento_id</span><span class="p">,</span> <span class="n">lines_info</span><span class="p">,</span>
                                           <span class="n">_</span><span class="p">(</span><span class="s2">&quot;Invoice Created&quot;</span><span class="p">),</span>
-                                          <span class="n">mail_notification</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span>
+                                          <span class="n">mail_notification</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_get_lines_info</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">invoice</span><span class="p">):</span>
         <span class="p">[</span><span class="o">...</span><span class="p">]</span>
@@ -404,7 +404,7 @@ specific ones).</div></blockquote>
         <span class="sd">&quot;&quot;&quot; Run the job to export the validated/paid invoice &quot;&quot;&quot;</span>
         <span class="n">invoice</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">browse</span><span class="p">(</span><span class="n">binding_id</span><span class="p">)</span>
         <span class="n">magento_order</span> <span class="o">=</span> <span class="n">invoice</span><span class="o">.</span><span class="n">magento_order_id</span>
-        <span class="n">magento_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_export_invoice</span><span class="p">(</span><span class="n">magento_order</span><span class="o">.</span><span class="n">magento_id</span><span class="p">,</span> <span class="n">lines_info</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span>
+        <span class="n">magento_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_export_invoice</span><span class="p">(</span><span class="n">magento_order</span><span class="o">.</span><span class="n">magento_id</span><span class="p">,</span> <span class="n">lines_info</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
         <span class="c1"># use the ``binder`` to write the external ID</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">binder</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="n">magento_id</span><span class="p">,</span> <span class="n">binding_id</span><span class="p">)</span>
 </pre></div>
@@ -432,7 +432,7 @@ specific ones).</div></blockquote>
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.6.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.<br/>
     </p>
   </div>
 </footer>

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
@@ -91,7 +91,7 @@
   <ul class="dropdown-menu globaltoc"
       role="menu"
       aria-labelledby="dLabelGlobalToc"><ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="">Contribute</a><ul>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Contribute</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#want-to-start-a-new-connector">Want to start a new connector</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#creating-or-maintaining-a-translation-of-this-doc">Creating or maintaining a translation of this doc</a></li>
 </ul>
@@ -264,7 +264,7 @@ information is the same.</p>
 <h2>Want to start a new connector<a class="headerlink" href="#want-to-start-a-new-connector" title="Permalink to this headline">¶</a></h2>
 <p>If you want to start a new connector based on the framework,
 a sane approach is to read this documentation, especially
-<a class="reference internal" href="../guides/concepts.html#concepts"><span>Connector Concepts</span></a> and <a class="reference internal" href="../guides/bootstrap_connector.html#bootstrap-connector"><span>Boostrapping a connector</span></a>.</p>
+<a class="reference internal" href="../guides/concepts.html#concepts"><span class="std std-ref">Connector Concepts</span></a> and <a class="reference internal" href="../guides/bootstrap_connector.html#bootstrap-connector"><span class="std std-ref">Boostrapping a connector</span></a>.</p>
 <p>Then, my personal advice is to look at the existing connectors (<a class="reference external" href="https://github.com/OCA/connector-magento">Odoo
 Magento Connector</a>, <a class="reference external" href="https://github.com/OCA/connector-prestashop">Odoo Prestashop Connector</a>). You will also probably
 need to dive a bit in the framework&#8217;s code.</p>
@@ -308,7 +308,7 @@ language &#8216;fr&#8217;): <code class="docutils literal"><span class="pre">sph
 <span class="pre">html</span></code></li>
 </ul>
 <p>The same using a <a class="reference external" href="https://bitbucket.org/anybox/public_buildbot_buildouts/src/tip/odoo-connector.cfg">buildout</a>:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>$ mkdir buildout &amp;&amp; cd buildout
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ mkdir buildout &amp;&amp; cd buildout
 $ wget https://bitbucket.org/anybox/public_buildbot_buildouts/raw/tip/odoo-connector.cfg -O buildout.cfg
 $ wget https://bitbucket.org/anybox/public_buildbot_buildouts/raw/tip/bootstrap.py
 $ python bootstrap.py
@@ -347,7 +347,7 @@ $ ../../../bin/sphinx-build -d connectordb -- -D language=fr -b html ./ _build/h
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.6.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.<br/>
     </p>
   </div>
 </footer>

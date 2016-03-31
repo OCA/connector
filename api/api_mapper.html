@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
@@ -162,7 +162,7 @@
 <li class="toctree-l1"><a class="reference internal" href="api_backend.html#module-connector.backend_model">Backend Models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="api_event.html">Event</a></li>
 <li class="toctree-l1"><a class="reference internal" href="api_binder.html">Binder</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="">Mapper</a><ul>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Mapper</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#mappers">Mappers</a></li>
 </ul>
 </li>
@@ -306,7 +306,7 @@ command</p>
 <p>MapChild is responsible to convert items.</p>
 <p>Items are sub-records of a main record.
 In this example, the items are the records in <code class="docutils literal"><span class="pre">lines</span></code>:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">sales</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;SO10&#39;</span><span class="p">,</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">sales</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;SO10&#39;</span><span class="p">,</span>
          <span class="s1">&#39;lines&#39;</span><span class="p">:</span> <span class="p">[{</span><span class="s1">&#39;product_id&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;quantity&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">},</span>
                    <span class="p">{</span><span class="s1">&#39;product_id&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;quantity&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">}]}</span>
 </pre></div>
@@ -315,7 +315,7 @@ In this example, the items are the records in <code class="docutils literal"><sp
 provides a <code class="docutils literal"><span class="pre">children</span></code> configuration.</p>
 <p>Considering the example above, the &#8220;main&#8221; <a class="reference internal" href="#connector.unit.mapper.Mapper" title="connector.unit.mapper.Mapper"><code class="xref py py-class docutils literal"><span class="pre">Mapper</span></code></a> would
 returns something as follows:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;SO10&#39;</span><span class="p">,</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;SO10&#39;</span><span class="p">,</span>
          <span class="s1">&#39;lines&#39;</span><span class="p">:</span> <span class="p">[(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;product_id&#39;</span><span class="p">:</span> <span class="mi">11</span><span class="p">,</span> <span class="s1">&#39;quantity&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">}),</span>
                    <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;product_id&#39;</span><span class="p">:</span> <span class="mi">12</span><span class="p">,</span> <span class="s1">&#39;quantity&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">})]}</span>
 </pre></div>
@@ -446,7 +446,7 @@ option is accessed and does not exist, it returns None.</p>
 <p>A record prepared to be converted using a <a class="reference internal" href="#connector.unit.mapper.Mapper" title="connector.unit.mapper.Mapper"><code class="xref py py-class docutils literal"><span class="pre">Mapper</span></code></a>.</p>
 <p>MapRecord instances are prepared by <a class="reference internal" href="#connector.unit.mapper.Mapper.map_record" title="connector.unit.mapper.Mapper.map_record"><code class="xref py py-meth docutils literal"><span class="pre">Mapper.map_record()</span></code></a>.</p>
 <p>Usage:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">mapper</span> <span class="o">=</span> <span class="n">SomeMapper</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">mapper</span> <span class="o">=</span> <span class="n">SomeMapper</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
 <span class="n">map_record</span> <span class="o">=</span> <span class="n">mapper</span><span class="o">.</span><span class="n">map_record</span><span class="p">(</span><span class="n">record</span><span class="p">)</span>
 <span class="n">output_values</span> <span class="o">=</span> <span class="n">map_record</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
 </pre></div>
@@ -469,7 +469,7 @@ option is accessed and does not exist, it returns None.</p>
 <code class="descname">update</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/unit/mapper.html#MapRecord.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.unit.mapper.MapRecord.update" title="Permalink to this definition">¶</a></dt>
 <dd><p>Force values to be applied after a mapping.</p>
 <p>Usage:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">mapper</span> <span class="o">=</span> <span class="n">SomeMapper</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">mapper</span> <span class="o">=</span> <span class="n">SomeMapper</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
 <span class="n">map_record</span> <span class="o">=</span> <span class="n">mapper</span><span class="o">.</span><span class="n">map_record</span><span class="p">(</span><span class="n">record</span><span class="p">)</span>
 <span class="n">map_record</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="n">output_values</span> <span class="o">=</span> <span class="n">map_record</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
@@ -485,7 +485,7 @@ they have a greater priority than the mapping values.</p>
 <code class="descname">values</code><span class="sig-paren">(</span><em>for_create=None</em>, <em>fields=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/unit/mapper.html#MapRecord.values"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.unit.mapper.MapRecord.values" title="Permalink to this definition">¶</a></dt>
 <dd><p>Build and returns the mapped values according to the options.</p>
 <p>Usage:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">mapper</span> <span class="o">=</span> <span class="n">SomeMapper</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">mapper</span> <span class="o">=</span> <span class="n">SomeMapper</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
 <span class="n">map_record</span> <span class="o">=</span> <span class="n">mapper</span><span class="o">.</span><span class="n">map_record</span><span class="p">(</span><span class="n">record</span><span class="p">)</span>
 <span class="n">output_values</span> <span class="o">=</span> <span class="n">map_record</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
 </pre></div>
@@ -494,7 +494,7 @@ they have a greater priority than the mapping values.</p>
 <dt>Creation of records</dt>
 <dd><p class="first">When using the option <code class="docutils literal"><span class="pre">for_create</span></code>, only the mappings decorated
 with <code class="docutils literal"><span class="pre">&#64;only_create</span></code> will be mapped.</p>
-<div class="last highlight-python"><div class="highlight"><pre><span></span><span class="n">output_values</span> <span class="o">=</span> <span class="n">map_record</span><span class="o">.</span><span class="n">values</span><span class="p">(</span><span class="n">for_create</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<div class="last highlight-default"><div class="highlight"><pre><span></span><span class="n">output_values</span> <span class="o">=</span> <span class="n">map_record</span><span class="o">.</span><span class="n">values</span><span class="p">(</span><span class="n">for_create</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd>
@@ -502,7 +502,7 @@ with <code class="docutils literal"><span class="pre">&#64;only_create</span></c
 <dd><p class="first">When using the <code class="docutils literal"><span class="pre">fields</span></code> argument, the mappings will be
 filtered using either the source key in <code class="docutils literal"><span class="pre">direct</span></code> arguments,
 either the <code class="docutils literal"><span class="pre">changed_by</span></code> arguments for the mapping methods.</p>
-<div class="last highlight-python"><div class="highlight"><pre><span></span><span class="n">output_values</span> <span class="o">=</span> <span class="n">map_record</span><span class="o">.</span><span class="n">values</span><span class="p">(</span><span class="n">fields</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;street&#39;</span><span class="p">])</span>
+<div class="last highlight-default"><div class="highlight"><pre><span></span><span class="n">output_values</span> <span class="o">=</span> <span class="n">map_record</span><span class="o">.</span><span class="n">values</span><span class="p">(</span><span class="n">fields</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;street&#39;</span><span class="p">])</span>
 </pre></div>
 </div>
 </dd>
@@ -510,7 +510,7 @@ either the <code class="docutils literal"><span class="pre">changed_by</span></c
 <dd><p class="first">Arbitrary key and values can be defined in the <code class="docutils literal"><span class="pre">kwargs</span></code>
 arguments.  They can later be used in the mapping methods
 using <code class="docutils literal"><span class="pre">self.options</span></code>.</p>
-<div class="last highlight-python"><div class="highlight"><pre><span></span><span class="n">output_values</span> <span class="o">=</span> <span class="n">map_record</span><span class="o">.</span><span class="n">values</span><span class="p">(</span><span class="n">tax_include</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<div class="last highlight-default"><div class="highlight"><pre><span></span><span class="n">output_values</span> <span class="o">=</span> <span class="n">map_record</span><span class="o">.</span><span class="n">values</span><span class="p">(</span><span class="n">tax_include</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd>
@@ -545,7 +545,7 @@ conversely. The output of a Mapper is a <code class="docutils literal"><span cla
 <dl class="docutils">
 <dt>Direct Mappings</dt>
 <dd><p class="first">Example:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">direct</span> <span class="o">=</span> <span class="p">[(</span><span class="s1">&#39;source&#39;</span><span class="p">,</span> <span class="s1">&#39;target&#39;</span><span class="p">)]</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">direct</span> <span class="o">=</span> <span class="p">[(</span><span class="s1">&#39;source&#39;</span><span class="p">,</span> <span class="s1">&#39;target&#39;</span><span class="p">)]</span>
 </pre></div>
 </div>
 <p>Here, the <code class="docutils literal"><span class="pre">source</span></code> field will be copied in the <code class="docutils literal"><span class="pre">target</span></code> field.</p>
@@ -553,7 +553,7 @@ conversely. The output of a Mapper is a <code class="docutils literal"><span cla
 The modifier will be applied to the source field before being
 copied in the target field.
 It should be a closure function respecting this idiom:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">a_function</span><span class="p">(</span><span class="n">field</span><span class="p">):</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">a_function</span><span class="p">(</span><span class="n">field</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39; ``field`` is the name of the source field.</span>
 
 <span class="sd">        Naming the arg: ``field`` is required for the conversion&#39;&#39;&#39;</span>
@@ -566,25 +566,25 @@ It should be a closure function respecting this idiom:</p>
 </pre></div>
 </div>
 <p>And used like that:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">direct</span> <span class="o">=</span> <span class="p">[</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">direct</span> <span class="o">=</span> <span class="p">[</span>
         <span class="p">(</span><span class="n">a_function</span><span class="p">(</span><span class="s1">&#39;source&#39;</span><span class="p">),</span> <span class="s1">&#39;target&#39;</span><span class="p">),</span>
 <span class="p">]</span>
 </pre></div>
 </div>
 <p>A more concrete example of modifier:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">convert</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">conv_type</span><span class="p">):</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">convert</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">conv_type</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39; Convert the source field to a defined ``conv_type``</span>
 <span class="sd">    (ex. str) before returning it&#39;&#39;&#39;</span>
     <span class="k">def</span> <span class="nf">modifier</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="n">to_attr</span><span class="p">):</span>
         <span class="n">value</span> <span class="o">=</span> <span class="n">record</span><span class="p">[</span><span class="n">field</span><span class="p">]</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">value</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">None</span>
+            <span class="k">return</span> <span class="kc">None</span>
         <span class="k">return</span> <span class="n">conv_type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">modifier</span>
 </pre></div>
 </div>
 <p>And used like that:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">direct</span> <span class="o">=</span> <span class="p">[</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">direct</span> <span class="o">=</span> <span class="p">[</span>
         <span class="p">(</span><span class="n">convert</span><span class="p">(</span><span class="s1">&#39;myfield&#39;</span><span class="p">,</span> <span class="nb">float</span><span class="p">),</span> <span class="s1">&#39;target_field&#39;</span><span class="p">),</span>
 <span class="p">]</span>
 </pre></div>
@@ -599,7 +599,7 @@ It should be a closure function respecting this idiom:</p>
 <dt>Method Mappings</dt>
 <dd><p class="first">A mapping method allows to execute arbitrary code and return one
 or many fields:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="nd">@mapping</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="nd">@mapping</span>
 <span class="k">def</span> <span class="nf">compute_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">):</span>
     <span class="c1"># compute some state, using the ``record`` or not</span>
     <span class="n">state</span> <span class="o">=</span> <span class="s1">&#39;pending&#39;</span>
@@ -609,7 +609,7 @@ or many fields:</p>
 <p>We can also specify that a mapping methods should be applied
 only when an object is created, and never applied on further
 updates:</p>
-<div class="last highlight-python"><div class="highlight"><pre><span></span><span class="nd">@only_create</span>
+<div class="last highlight-default"><div class="highlight"><pre><span></span><span class="nd">@only_create</span>
 <span class="nd">@mapping</span>
 <span class="k">def</span> <span class="nf">default_warehouse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">):</span>
     <span class="c1"># get default warehouse</span>
@@ -621,7 +621,7 @@ updates:</p>
 <dt>Submappings</dt>
 <dd><p class="first">When a record contains sub-items, like the lines of a sales order,
 we can convert the children using another Mapper:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">children</span> <span class="o">=</span> <span class="p">[(</span><span class="s1">&#39;items&#39;</span><span class="p">,</span> <span class="s1">&#39;line_ids&#39;</span><span class="p">,</span> <span class="s1">&#39;model.name&#39;</span><span class="p">)]</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">children</span> <span class="o">=</span> <span class="p">[(</span><span class="s1">&#39;items&#39;</span><span class="p">,</span> <span class="s1">&#39;line_ids&#39;</span><span class="p">,</span> <span class="s1">&#39;model.name&#39;</span><span class="p">)]</span>
 </pre></div>
 </div>
 <p>It allows to create the sales order and all its lines with the
@@ -632,10 +632,10 @@ a <a class="reference internal" href="#connector.unit.mapper.Mapper" title="conn
 </dd>
 </dl>
 <p>Usage of a Mapper:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">mapper</span> <span class="o">=</span> <span class="n">Mapper</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">mapper</span> <span class="o">=</span> <span class="n">Mapper</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
 <span class="n">map_record</span> <span class="o">=</span> <span class="n">mapper</span><span class="o">.</span><span class="n">map_record</span><span class="p">(</span><span class="n">record</span><span class="p">)</span>
 <span class="n">values</span> <span class="o">=</span> <span class="n">map_record</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
-<span class="n">values</span> <span class="o">=</span> <span class="n">map_record</span><span class="o">.</span><span class="n">values</span><span class="p">(</span><span class="n">only_create</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">values</span> <span class="o">=</span> <span class="n">map_record</span><span class="o">.</span><span class="n">values</span><span class="p">(</span><span class="n">only_create</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">values</span> <span class="o">=</span> <span class="n">map_record</span><span class="o">.</span><span class="n">values</span><span class="p">(</span><span class="n">fields</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;street&#39;</span><span class="p">])</span>
 </pre></div>
 </div>
@@ -747,7 +747,7 @@ binding in OpenERP and returns its ID.</p>
 something like <code class="docutils literal"><span class="pre">magento.*</span></code>), the binding model needs to be provided
 in the <code class="docutils literal"><span class="pre">binding</span></code> keyword argument.</p>
 <p>Example:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">direct</span> <span class="o">=</span> <span class="p">[(</span><span class="n">backend_to_m2o</span><span class="p">(</span><span class="s1">&#39;country&#39;</span><span class="p">,</span> <span class="n">binding</span><span class="o">=</span><span class="s1">&#39;magento.res.country&#39;</span><span class="p">),</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">direct</span> <span class="o">=</span> <span class="p">[(</span><span class="n">backend_to_m2o</span><span class="p">(</span><span class="s1">&#39;country&#39;</span><span class="p">,</span> <span class="n">binding</span><span class="o">=</span><span class="s1">&#39;magento.res.country&#39;</span><span class="p">),</span>
            <span class="s1">&#39;country_id&#39;</span><span class="p">),</span>
           <span class="p">(</span><span class="n">backend_to_m2o</span><span class="p">(</span><span class="s1">&#39;country&#39;</span><span class="p">),</span> <span class="s1">&#39;magento_country_id&#39;</span><span class="p">)]</span>
 </pre></div>
@@ -780,7 +780,7 @@ thus, when we do an update on only a small number of fields on a
 record, the size of the output record will be limited to only the
 fields really having to be exported.</p>
 <p>Usage:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="nd">@changed_by</span><span class="p">(</span><span class="s1">&#39;input_field&#39;</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="nd">@changed_by</span><span class="p">(</span><span class="s1">&#39;input_field&#39;</span><span class="p">)</span>
 <span class="nd">@mapping</span>
 <span class="k">def</span> <span class="nf">any</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">):</span>
     <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;output_field&#39;</span><span class="p">:</span> <span class="n">record</span><span class="p">[</span><span class="s1">&#39;input_field&#39;</span><span class="p">]}</span>
@@ -803,7 +803,7 @@ fields really having to be exported.</p>
 <dd><p>A modifier intended to be used on the <code class="docutils literal"><span class="pre">direct</span></code> mappings.</p>
 <p>Convert a field&#8217;s value to a given type.</p>
 <p>Example:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">direct</span> <span class="o">=</span> <span class="p">[(</span><span class="n">convert</span><span class="p">(</span><span class="s1">&#39;source&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">),</span> <span class="s1">&#39;target&#39;</span><span class="p">)]</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">direct</span> <span class="o">=</span> <span class="p">[(</span><span class="n">convert</span><span class="p">(</span><span class="s1">&#39;source&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">),</span> <span class="s1">&#39;target&#39;</span><span class="p">)]</span>
 </pre></div>
 </div>
 <table class="docutils field-list" frame="void" rules="none">
@@ -853,7 +853,7 @@ fields really having to be exported.</p>
 something like <code class="docutils literal"><span class="pre">magento.*</span></code>), the binding model needs to be provided
 in the <code class="docutils literal"><span class="pre">binding</span></code> keyword argument.</p>
 <p>Example:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">direct</span> <span class="o">=</span> <span class="p">[(</span><span class="n">m2o_to_backend</span><span class="p">(</span><span class="s1">&#39;country_id&#39;</span><span class="p">,</span> <span class="n">binding</span><span class="o">=</span><span class="s1">&#39;magento.res.country&#39;</span><span class="p">),</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">direct</span> <span class="o">=</span> <span class="p">[(</span><span class="n">m2o_to_backend</span><span class="p">(</span><span class="s1">&#39;country_id&#39;</span><span class="p">,</span> <span class="n">binding</span><span class="o">=</span><span class="s1">&#39;magento.res.country&#39;</span><span class="p">),</span>
            <span class="s1">&#39;country&#39;</span><span class="p">),</span>
           <span class="p">(</span><span class="n">m2o_to_backend</span><span class="p">(</span><span class="s1">&#39;magento_country_id&#39;</span><span class="p">),</span> <span class="s1">&#39;country&#39;</span><span class="p">)]</span>
 </pre></div>
@@ -878,7 +878,7 @@ in the <code class="docutils literal"><span class="pre">binding</span></code> ke
 <dd><p>Declare that a method is a mapping method.</p>
 <p>It is then used by the <a class="reference internal" href="#connector.unit.mapper.Mapper" title="connector.unit.mapper.Mapper"><code class="xref py py-class docutils literal"><span class="pre">Mapper</span></code></a> to convert the records.</p>
 <p>Usage:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="nd">@mapping</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="nd">@mapping</span>
 <span class="k">def</span> <span class="nf">any</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">):</span>
     <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;output_field&#39;</span><span class="p">:</span> <span class="n">record</span><span class="p">[</span><span class="s1">&#39;input_field&#39;</span><span class="p">]}</span>
 </pre></div>
@@ -892,8 +892,8 @@ in the <code class="docutils literal"><span class="pre">binding</span></code> ke
 <p>Replace the False-ish values by None.
 It can be used in a pipeline of modifiers when .</p>
 <p>Example:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>direct = [(none(&#39;source&#39;), &#39;target&#39;),
-          (none(m2o_to_backend(&#39;rel_id&#39;), &#39;rel_id&#39;)]
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">direct</span> <span class="o">=</span> <span class="p">[(</span><span class="n">none</span><span class="p">(</span><span class="s1">&#39;source&#39;</span><span class="p">),</span> <span class="s1">&#39;target&#39;</span><span class="p">),</span>
+          <span class="p">(</span><span class="n">none</span><span class="p">(</span><span class="n">m2o_to_backend</span><span class="p">(</span><span class="s1">&#39;rel_id&#39;</span><span class="p">),</span> <span class="s1">&#39;rel_id&#39;</span><span class="p">)]</span>
 </pre></div>
 </div>
 <table class="docutils field-list" frame="void" rules="none">
@@ -917,7 +917,7 @@ It can be used in a pipeline of modifiers when .</p>
 <p>A mapping decorated with <code class="docutils literal"><span class="pre">only_create</span></code> means that it has to be
 used only for the creation of the records.</p>
 <p>Usage:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="nd">@only_create</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="nd">@only_create</span>
 <span class="nd">@mapping</span>
 <span class="k">def</span> <span class="nf">any</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">):</span>
     <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;output_field&#39;</span><span class="p">:</span> <span class="n">record</span><span class="p">[</span><span class="s1">&#39;input_field&#39;</span><span class="p">]}</span>
@@ -948,7 +948,7 @@ used only for the creation of the records.</p>
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.6.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.<br/>
     </p>
   </div>
 </footer>

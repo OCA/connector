@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
@@ -134,7 +134,7 @@
 <li class="toctree-l2"><a class="reference internal" href="concepts.html#checkpoint">Checkpoint</a></li>
 </ul>
 </li>
-<li class="toctree-l1 current"><a class="current reference internal" href="">Boostrapping a connector</a><ul>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Boostrapping a connector</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#odoo-manifest">Odoo Manifest</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#declare-the-backends">Declare the backends</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#backend-model">Backend Model</a></li>
@@ -259,7 +259,7 @@ real implementation examples:</p>
 <li><a class="reference external" href="https://github.com/OCA/connector-prestashop">Odoo Prestashop Connector</a></li>
 </ul>
 <p>Some boilerplate is necessary, so this document will guide you through
-some steps. Please also take a look on the <a class="reference internal" href="../project/contribute.html#naming-convention"><span>Naming conventions</span></a>.</p>
+some steps. Please also take a look on the <a class="reference internal" href="../project/contribute.html#naming-convention"><span class="std std-ref">Naming conventions</span></a>.</p>
 <p>For the sake of the example, we&#8217;ll imagine we have to synchronize
 Odoo with a coffee machine.</p>
 <div class="section" id="odoo-manifest">
@@ -312,7 +312,7 @@ put the imports of our python modules.</p>
 <p>So we&#8217;ll declare a backend <cite>coffee</cite>, the generic entity,
 and a backend per version.</p>
 <p>Put this in <code class="docutils literal"><span class="pre">connector_coffee/backend.py</span></code>:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">openerp.addons.connector.backend</span> <span class="kn">as</span> <span class="nn">backend</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">openerp.addons.connector.backend</span> <span class="k">as</span> <span class="nn">backend</span>
 
 
 <span class="n">coffee</span> <span class="o">=</span> <span class="n">backend</span><span class="o">.</span><span class="n">Backend</span><span class="p">(</span><span class="s1">&#39;coffee&#39;</span><span class="p">)</span>
@@ -326,7 +326,7 @@ and a backend per version.</p>
 <p>We declared the backends, but we need a model to configure them.</p>
 <p>We create a model <code class="docutils literal"><span class="pre">coffee.backend</span></code> which is an <code class="docutils literal"><span class="pre">_inherit</span></code> of
 <code class="docutils literal"><span class="pre">connector.backend</span></code>. In <code class="docutils literal"><span class="pre">connector_coffee/coffee_model.py</span></code>:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">openerp</span> <span class="kn">import</span> <span class="n">fields</span><span class="p">,</span> <span class="n">models</span><span class="p">,</span> <span class="n">api</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">openerp</span> <span class="k">import</span> <span class="n">fields</span><span class="p">,</span> <span class="n">models</span><span class="p">,</span> <span class="n">api</span>
 
 
 <span class="k">class</span> <span class="nc">CoffeeBackend</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
@@ -336,7 +336,7 @@ and a backend per version.</p>
 
     <span class="n">_backend_type</span> <span class="o">=</span> <span class="s1">&#39;coffee&#39;</span>
 
-    <span class="nd">@api.model</span>
+    <span class="nd">@api</span><span class="o">.</span><span class="n">model</span>
     <span class="k">def</span> <span class="nf">_select_versions</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Available versions</span>
 
@@ -348,7 +348,7 @@ and a backend per version.</p>
     <span class="n">version</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Selection</span><span class="p">(</span>
         <span class="n">selection</span><span class="o">=</span><span class="s1">&#39;_select_versions&#39;</span><span class="p">,</span>
         <span class="n">string</span><span class="o">=</span><span class="s1">&#39;Version&#39;</span><span class="p">,</span>
-        <span class="n">required</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+        <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="n">location</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Char</span><span class="p">(</span><span class="n">string</span><span class="o">=</span><span class="s1">&#39;Location&#39;</span><span class="p">)</span>
     <span class="n">username</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Char</span><span class="p">(</span><span class="n">string</span><span class="o">=</span><span class="s1">&#39;Username&#39;</span><span class="p">)</span>
@@ -370,10 +370,10 @@ connection or configuration regarding the backend in that model.</li>
 </div>
 <div class="section" id="abstract-binding">
 <h2>Abstract Binding<a class="headerlink" href="#abstract-binding" title="Permalink to this headline">¶</a></h2>
-<p>If we have many <a class="reference internal" href="concepts.html#binding"><span>Bindings</span></a>,
+<p>If we have many <a class="reference internal" href="concepts.html#binding"><span class="std std-ref">Bindings</span></a>,
 we may want to create an abstract model for them.</p>
 <p>It can be as follows (in <code class="docutils literal"><span class="pre">connector_coffee/connector.py</span></code>):</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">openerp</span> <span class="kn">import</span> <span class="n">models</span><span class="p">,</span> <span class="n">fields</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">openerp</span> <span class="k">import</span> <span class="n">models</span><span class="p">,</span> <span class="n">fields</span>
 
 
 <span class="k">class</span> <span class="nc">CoffeeBinding</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">AbstractModel</span><span class="p">):</span>
@@ -385,12 +385,12 @@ we may want to create an abstract model for them.</p>
     <span class="n">backend_id</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Many2one</span><span class="p">(</span>
         <span class="n">comodel_name</span><span class="o">=</span><span class="s1">&#39;coffee.backend&#39;</span><span class="p">,</span>
         <span class="n">string</span><span class="o">=</span><span class="s1">&#39;Coffee Backend&#39;</span><span class="p">,</span>
-        <span class="n">required</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+        <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="n">ondelete</span><span class="o">=</span><span class="s1">&#39;restrict&#39;</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="c1"># fields.char because 0 is a valid coffee ID</span>
     <span class="n">coffee_id</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Char</span><span class="p">(</span><span class="n">string</span><span class="o">=</span><span class="s1">&#39;ID in the Coffee Machine&#39;</span><span class="p">,</span>
-                            <span class="n">select</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+                            <span class="n">select</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -399,7 +399,7 @@ we may want to create an abstract model for them.</p>
 <p>We&#8217;ll often need to create a new environment to work with.
 I propose to create a helper method which build it for us (in
 <code class="docutils literal"><span class="pre">connector_coffee/connector.py</span></code>:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">openerp.addons.connector.connector</span> <span class="kn">import</span> <span class="n">Environment</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">openerp.addons.connector.connector</span> <span class="k">import</span> <span class="n">Environment</span>
 
 
 <span class="k">def</span> <span class="nf">get_environment</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">backend_id</span><span class="p">):</span>
@@ -420,10 +420,10 @@ optional but I left it as an example.</p>
 </div>
 <div class="section" id="checkpoints">
 <h2>Checkpoints<a class="headerlink" href="#checkpoints" title="Permalink to this headline">¶</a></h2>
-<p>When new records are imported and need a review, <a class="reference internal" href="concepts.html#checkpoint"><span>Checkpoint</span></a> are
+<p>When new records are imported and need a review, <a class="reference internal" href="concepts.html#checkpoint"><span class="std std-ref">Checkpoint</span></a> are
 created. I propose to create a helper too in
 <code class="docutils literal"><span class="pre">connector_coffee/connector.py</span></code>:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">openerp.addons.connector.checkpoint</span> <span class="kn">import</span> <span class="n">checkpoint</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">openerp.addons.connector.checkpoint</span> <span class="k">import</span> <span class="n">checkpoint</span>
 
 
 <span class="k">def</span> <span class="nf">add_checkpoint</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">record_id</span><span class="p">,</span> <span class="n">backend_id</span><span class="p">):</span>
@@ -461,7 +461,7 @@ binders and maybe our own types of ConnectorUnit classes.</p>
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.6.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.<br/>
     </p>
   </div>
 </footer>

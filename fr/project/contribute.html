@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="fr">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
@@ -92,7 +92,7 @@
   <ul class="dropdown-menu globaltoc"
       role="menu"
       aria-labelledby="dLabelGlobalToc"><ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="">Contribuer</a><ul>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Contribuer</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#want-to-start-a-new-connector">Démarrer un nouveau connecteur</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#creating-or-maintaining-a-translation-of-this-doc">Créer ou maintenir une traduction de cette doc</a></li>
 </ul>
@@ -266,7 +266,7 @@
 <p>Le projet GitHub est : <a class="reference external" href="https://github.com/OCA/connector">https://github.com/OCA/connector</a></p>
 <div class="section" id="want-to-start-a-new-connector">
 <h2>Démarrer un nouveau connecteur<a class="headerlink" href="#want-to-start-a-new-connector" title="Lien permanent vers ce titre">¶</a></h2>
-<p>Si vous voulez fabriquer un nouveau connecteur basé sur le framework, l&#8217;approche conseillée est de lire cette documentation, en particulier les <a class="reference internal" href="../guides/concepts.html#concepts"><span>Concepts du connecteur</span></a> et <a class="reference internal" href="../guides/bootstrap_connector.html#bootstrap-connector"><span>Amorcer la création un nouveau connecteur</span></a>.</p>
+<p>Si vous voulez fabriquer un nouveau connecteur basé sur le framework, l&#8217;approche conseillée est de lire cette documentation, en particulier les <a class="reference internal" href="../guides/concepts.html#concepts"><span class="std std-ref">Concepts du connecteur</span></a> et <a class="reference internal" href="../guides/bootstrap_connector.html#bootstrap-connector"><span class="std std-ref">Amorcer la création un nouveau connecteur</span></a>.</p>
 <p>Ensuite, il est conseillé de parcourir les connecteurs existants (<a class="reference external" href="https://github.com/OCA/connector-prestashop">Connecteur Odoo Magento</a>, <a class="reference external" href="https://github.com/OCA/connector-magento">Connecteur Odoo Prestashop</a>). Vous devrez aussi plonger peut-être un peu dans le code du framework.</p>
 <p>Si le connecteur est dans le domaine e-commerce, vous devriez réutiliser les composants du module <a class="reference external" href="https://github.com/OCA/connector-ecommerce">E-Commerce Connector</a>.</p>
 <div class="section" id="naming-conventions">
@@ -308,7 +308,7 @@
 </li>
 </ul>
 <p>La même chose en utilisant un <a class="reference external" href="https://bitbucket.org/anybox/public_buildbot_buildouts/src/tip/odoo-connector.cfg">buildout</a>:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>$ mkdir buildout &amp;&amp; cd buildout
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ mkdir buildout &amp;&amp; cd buildout
 $ wget https://bitbucket.org/anybox/public_buildbot_buildouts/raw/tip/odoo-connector.cfg -O buildout.cfg
 $ wget https://bitbucket.org/anybox/public_buildbot_buildouts/raw/tip/bootstrap.py
 $ python bootstrap.py
@@ -347,7 +347,7 @@ $ ../../../bin/sphinx-build -d connectordb -- -D language=fr -b html ./ _build/h
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.6.<br/>
+      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.<br/>
     </p>
   </div>
 </footer>

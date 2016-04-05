@@ -129,7 +129,6 @@ class RunJobController(http.Controller):
             buff = StringIO()
             traceback.print_exc(file=buff)
             _logger.error(buff.getvalue())
-
             job.set_failed(exc_info=buff.getvalue())
             with session_hdl.session() as session:
                 self.job_storage_class(session).store(job)

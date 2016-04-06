@@ -112,7 +112,7 @@ class RunJobController(http.Controller):
             # delay the job later, requeue
             retry_postpone(job, unicode(err), seconds=err.seconds)
             _logger.debug('%s postponed', job)
-        except (FailedJobError, InvaliDataError, Exception):
+        except (FailedJobError, InvalidDataError, Exception):
             buff = StringIO()
             traceback.print_exc(file=buff)
             _logger.error(buff.getvalue())

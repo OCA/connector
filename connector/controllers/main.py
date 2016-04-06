@@ -15,7 +15,8 @@ from ..exception import (NoSuchJobError,
                          NotReadableJobError,
                          RetryableJobError,
                          FailedJobError,
-                         NothingToDoJob)
+                         NothingToDoJob,
+                         InvalidDataError)
 
 _logger = logging.getLogger(__name__)
 
@@ -111,21 +112,7 @@ class RunJobController(http.Controller):
             # delay the job later, requeue
             retry_postpone(job, unicode(err), seconds=err.seconds)
             _logger.debug('%s postponed', job)
-        """
-        Manage Invalid data error in order not to 
-        raise and rollback DB job failed transaction.
-        Explicitly managing InvalidDataError
-        """
-        except InvalidDataError as err:
-            buff = StringIO()
-            traceback.print_exc(file=buff)
-            _logger.error(buff.getvalue())
-
-            job.set_failed(exc_info=buff.getvalue())
-            with session_hdl.session() as session:
-                self.job_storage_class(session).store(job)
-        
-        except (FailedJobError, Exception):
+        except (FailedJobError, InvaliDataError, Exception):
             buff = StringIO()
             traceback.print_exc(file=buff)
             _logger.error(buff.getvalue())

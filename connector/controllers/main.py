@@ -15,8 +15,7 @@ from ..exception import (NoSuchJobError,
                          NotReadableJobError,
                          RetryableJobError,
                          FailedJobError,
-                         NothingToDoJob,
-                         InvalidDataError)
+                         NothingToDoJob)
 
 _logger = logging.getLogger(__name__)
 
@@ -112,7 +111,8 @@ class RunJobController(http.Controller):
             # delay the job later, requeue
             retry_postpone(job, unicode(err), seconds=err.seconds)
             _logger.debug('%s postponed', job)
-        except (FailedJobError, InvalidDataError, Exception):
+
+        except:
             buff = StringIO()
             traceback.print_exc(file=buff)
             _logger.error(buff.getvalue())

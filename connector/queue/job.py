@@ -24,7 +24,7 @@ import functools
 import logging
 import uuid
 import sys
-from datetime import datetime, timedelta, MINYEAR
+from datetime import date, datetime, timedelta, MINYEAR
 from cPickle import dumps, UnpicklingError, Unpickler
 from cStringIO import StringIO
 
@@ -78,6 +78,7 @@ def whitelist_unpickle_global(fn_or_class):
 # register common types that might be used in job arguments
 whitelist_unpickle_global(datetime)
 whitelist_unpickle_global(timedelta)
+whitelist_unpickle_global(date)
 
 
 def _unpickle(pickled):

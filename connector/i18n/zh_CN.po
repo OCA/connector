@@ -3,13 +3,15 @@
 # * connector
 # 
 # Translators:
+# zeng <z_fy@live.cn>, 2016
+# zeng <z_fy@live.cn>, 2016
 msgid ""
 msgstr ""
 "Project-Id-Version: connector (8.0)\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-08-21 14:26+0000\n"
-"PO-Revision-Date: 2015-06-17 07:37+0000\n"
-"Last-Translator: OCA Transbot <transbot@odoo-community.org>\n"
+"POT-Creation-Date: 2016-04-16 08:00+0000\n"
+"PO-Revision-Date: 2016-04-16 14:15+0000\n"
+"Last-Translator: zeng <z_fy@live.cn>\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/oca/OCA-connector-8-0/language/zh_CN/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -60,7 +62,7 @@ msgstr "允许文档分享"
 #. module: connector
 #: field:connector.config.settings,module_google_calendar:0
 msgid "Allow the users to synchronize their calendar  with Google Calendar"
-msgstr ""
+msgstr "允许用户同步Google Calendar"
 
 #. module: connector
 #: field:connector.config.settings,module_base_import:0
@@ -90,34 +92,34 @@ msgid "Cancel"
 msgstr "取消"
 
 #. module: connector
-#: code:addons/connector/queue/job.py:571
+#: code:addons/connector/queue/job.py:619
 #, python-format
 msgid "Canceled. Nothing to do."
 msgstr ""
 
 #. module: connector
-#: code:addons/connector/queue/model.py:456
+#: code:addons/connector/queue/model.py:457
 #, python-format
 msgid "Cannot change the root channel"
-msgstr ""
+msgstr "不能修改根节点"
 
 #. module: connector
-#: code:addons/connector/queue/model.py:463
+#: code:addons/connector/queue/model.py:464
 #, python-format
 msgid "Cannot remove the root channel"
-msgstr ""
+msgstr "不能移除根节点"
 
 #. module: connector
 #: view:queue.job:connector.view_queue_job_search field:queue.job,channel:0
 #: view:queue.job.function:connector.view_queue_job_function_search
 #: field:queue.job.function,channel_id:0
 msgid "Channel"
-msgstr ""
+msgstr "节点"
 
 #. module: connector
 #: sql_constraint:queue.job.channel:0
 msgid "Channel complete name must be unique"
-msgstr ""
+msgstr "节点全称必须是唯一的"
 
 #. module: connector
 #: model:ir.actions.act_window,name:connector.action_queue_job_channel
@@ -126,7 +128,7 @@ msgstr ""
 #: view:queue.job.channel:connector.view_queue_job_channel_search
 #: view:queue.job.channel:connector.view_queue_job_channel_tree
 msgid "Channels"
-msgstr ""
+msgstr "节点"
 
 #. module: connector
 #: model:ir.ui.menu,name:connector.menu_checkpoint
@@ -151,12 +153,12 @@ msgstr "单击"
 #. module: connector
 #: field:queue.job,company_id:0
 msgid "Company"
-msgstr ""
+msgstr "公司"
 
 #. module: connector
 #: field:queue.job.channel,complete_name:0 field:queue.job.function,channel:0
 msgid "Complete Name"
-msgstr ""
+msgstr "全称"
 
 #. module: connector
 #: view:connector.config.settings:connector.view_connector_config_settings
@@ -173,7 +175,7 @@ msgstr "连接器"
 #. module: connector
 #: model:ir.model,name:connector.model_connector_backend
 msgid "Connector Backend"
-msgstr ""
+msgstr "连接器后台"
 
 #. module: connector
 #: view:connector.checkpoint:connector.view_connector_checkpoint_form
@@ -187,7 +189,7 @@ msgstr "连接器检查点"
 #. module: connector
 #: model:ir.model,name:connector.model_connector_config_settings
 msgid "Connector Configuration"
-msgstr ""
+msgstr "连接器配置"
 
 #. module: connector
 #: model:res.groups,name:connector.group_connector_manager
@@ -212,7 +214,7 @@ msgstr "创建日期"
 #: field:connector.config.settings,create_uid:0
 #: field:queue.job.channel,create_uid:0 field:queue.requeue.job,create_uid:0
 msgid "Created by"
-msgstr ""
+msgstr "创建者"
 
 #. module: connector
 #: field:connector.checkpoint,create_date:0
@@ -220,7 +222,7 @@ msgstr ""
 #: field:connector.config.settings,create_date:0
 #: field:queue.job.channel,create_date:0 field:queue.requeue.job,create_date:0
 msgid "Created on"
-msgstr ""
+msgstr "创建于"
 
 #. module: connector
 #: field:queue.job,retry:0
@@ -308,7 +310,7 @@ msgstr "让你的顾客获取他们的文档"
 #: view:queue.job:connector.view_queue_job_search
 #: view:queue.job.function:connector.view_queue_job_function_search
 msgid "Group By"
-msgstr ""
+msgstr "分组"
 
 #. module: connector
 #: view:connector.checkpoint:connector.view_connector_checkpoint_search
@@ -330,7 +332,7 @@ msgstr "HTML格式的简介，包括了各种项目的总结信息（比如消�
 #: field:queue.job.channel,id:0 field:queue.job.function,id:0
 #: field:queue.requeue.job,id:0 field:queue.worker,id:0
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #. module: connector
 #: help:connector.checkpoint,message_unread:0 help:queue.job,message_unread:0
@@ -363,12 +365,13 @@ msgstr "是听众"
 #. module: connector
 #: model:ir.model,name:connector.model_queue_job_channel
 msgid "Job Channels"
-msgstr ""
+msgstr "作业节点"
 
 #. module: connector
 #: view:queue.job:connector.view_queue_job_search
+#: field:queue.job,job_function_id:0
 msgid "Job Function"
-msgstr ""
+msgstr "作业功能"
 
 #. module: connector
 #: model:ir.actions.act_window,name:connector.action_queue_job_function
@@ -379,17 +382,12 @@ msgstr ""
 #: view:queue.job.function:connector.view_queue_job_function_search
 #: view:queue.job.function:connector.view_queue_job_function_tree
 msgid "Job Functions"
-msgstr ""
+msgstr "作业功能"
 
 #. module: connector
 #: model:mail.message.subtype,name:connector.mt_job_failed
 msgid "Job failed"
 msgstr "作业失败"
-
-#. module: connector
-#: field:queue.job,job_function_id:0
-msgid "Job function id"
-msgstr ""
 
 #. module: connector
 #: model:ir.actions.act_window,name:connector.action_queue_job
@@ -410,7 +408,7 @@ msgstr "最后一次检查"
 #: field:connector.checkpoint,message_last_post:0
 #: field:queue.job,message_last_post:0
 msgid "Last Message Date"
-msgstr ""
+msgstr "最近消息日期"
 
 #. module: connector
 #: field:connector.checkpoint,write_uid:0
@@ -418,7 +416,7 @@ msgstr ""
 #: field:connector.config.settings,write_uid:0
 #: field:queue.job.channel,write_uid:0 field:queue.requeue.job,write_uid:0
 msgid "Last Updated by"
-msgstr ""
+msgstr "最后更新于"
 
 #. module: connector
 #: field:connector.checkpoint,write_date:0
@@ -426,7 +424,7 @@ msgstr ""
 #: field:connector.config.settings,write_date:0
 #: field:queue.job.channel,write_date:0 field:queue.requeue.job,write_date:0
 msgid "Last Updated on"
-msgstr ""
+msgstr "最后更新于"
 
 #. module: connector
 #: field:external.binding,sync_date:0
@@ -439,7 +437,7 @@ msgid "Manage multiple companies"
 msgstr "管理多公司"
 
 #. module: connector
-#: code:addons/connector/queue/model.py:140
+#: code:addons/connector/queue/model.py:141
 #, python-format
 msgid "Manually set to done by %s"
 msgstr ""
@@ -466,11 +464,6 @@ msgid "Model"
 msgstr "模型"
 
 #. module: connector
-#: model:ir.model,name:connector.model_ir_module_module
-msgid "Module"
-msgstr ""
-
-#. module: connector
 #: field:connector.backend,name:0 field:queue.job.channel,name:0
 #: field:queue.job.function,name:0
 msgid "Name"
@@ -483,7 +476,7 @@ msgid "Need Review"
 msgstr "需要审阅"
 
 #. module: connector
-#: code:addons/connector/queue/model.py:116
+#: code:addons/connector/queue/model.py:117
 #, python-format
 msgid "No action available for this job"
 msgstr ""
@@ -501,13 +494,13 @@ msgstr "进程号"
 #. module: connector
 #: field:queue.job.channel,parent_id:0
 msgid "Parent Channel"
-msgstr ""
+msgstr "上级节点"
 
 #. module: connector
-#: code:addons/connector/queue/model.py:448
+#: code:addons/connector/queue/model.py:449
 #, python-format
 msgid "Parent channel required."
-msgstr ""
+msgstr "需要指定上级节点"
 
 #. module: connector
 #: view:queue.job:connector.view_queue_job_search selection:queue.job,state:0
@@ -547,18 +540,18 @@ msgstr "记录 ID"
 #. module: connector
 #: view:queue.job:connector.view_queue_job_form
 msgid "Related"
-msgstr ""
+msgstr "相关"
 
 #. module: connector
 #: code:addons/connector/related_action.py:48
 #, python-format
 msgid "Related Record"
-msgstr ""
+msgstr "相关记录"
 
 #. module: connector
 #: field:connector.config.settings,font:0
 msgid "Report Font"
-msgstr ""
+msgstr "报表字体"
 
 #. module: connector
 #: view:queue.requeue.job:connector.view_requeue_job
@@ -605,7 +598,7 @@ msgstr "设置为已读"
 msgid ""
 "Set the font into the report header, it will be used as default font in the "
 "RML reports of the user company"
-msgstr ""
+msgstr "设置RML报表表头的默认字体"
 
 #. module: connector
 #: view:queue.job:connector.view_queue_job_form
@@ -618,12 +611,12 @@ msgid "Share or embbed any screen of Odoo."
 msgstr ""
 
 #. module: connector
-#: code:addons/connector/queue/model.py:186
+#: code:addons/connector/queue/model.py:187
 #, python-format
 msgid ""
 "Something bad happened during the execution of the job. More details in the "
 "'Exception Information' section."
-msgstr ""
+msgstr "作业过程中出现异常。详情请查看异常信息。"
 
 #. module: connector
 #: field:queue.job,date_started:0 field:queue.worker,date_start:0
@@ -681,12 +674,12 @@ msgstr "已选择的作业将会重新进行排队"
 #. module: connector
 #: help:connector.config.settings,module_google_calendar:0
 msgid "This installs the module google_calendar."
-msgstr ""
+msgstr "安装google_calendar模块"
 
 #. module: connector
 #: help:connector.config.settings,module_google_drive:0
 msgid "This installs the module google_docs."
-msgstr ""
+msgstr "安装google_docs模块"
 
 #. module: connector
 #: field:queue.job,uuid:0 field:queue.worker,uuid:0

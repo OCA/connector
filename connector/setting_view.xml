@@ -40,7 +40,7 @@
             <field name="target">inline</field>
         </record>
 
-        <menuitem id="menu_connector_config_settings" name="Connector" parent="base.menu_config"
+        <menuitem id="menu_connector_config_settings" name="Connector" parent="base.menu_custom"
             sequence="20" action="action_connector_config_settings"/>
 
     </data>

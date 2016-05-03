@@ -1,6 +1,11 @@
 Changelog
 ---------
 
+Future
+~~~~~~
+
+* Add a retry pattern for jobs (https://github.com/OCA/connector/pull/75)
+
 7.0.2.3.0 (2016-02-29)
 ~~~~~~~~~~~~~~~~~~~~~~
 

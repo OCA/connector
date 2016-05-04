@@ -20,7 +20,7 @@ Available addons
 ----------------
 addon | version | summary
 --- | --- | ---
-[connector](connector/) | 9.0.1.0.2 | Connector
+[connector](connector/) | 9.0.1.0.3 | Connector
 [connector_base_product](connector_base_product/) | 9.0.1.0.0 | Connector Base Product
 
 [//]: # (end addons)

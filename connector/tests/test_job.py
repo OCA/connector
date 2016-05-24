@@ -292,13 +292,6 @@ class TestJobs(unittest.TestCase):
         self.assertEquals(job_a.state, FAILED)
         self.assertEquals(job_a.exc_info, 'failed test')
 
-    def test_cancel(self):
-        job_a = Job(func=task_a)
-        job_a.cancel(msg='test')
-        self.assertTrue(job_a.canceled)
-        self.assertEquals(job_a.state, DONE)
-        self.assertEquals(job_a.result, 'test')
-
     def test_postpone(self):
         job_a = Job(func=task_a)
         datetime_path = 'openerp.addons.connector.queue.job.datetime'
@@ -406,7 +399,6 @@ class TestJobStorage(common.TransactionCase):
         job_read.date_enqueued = test_date
         job_read.date_started = test_date
         job_read.date_done = test_date
-        job_read.canceled = True
         storage.store(job_read)
 
         job_read = storage.load(test_job.uuid)
@@ -416,7 +408,6 @@ class TestJobStorage(common.TransactionCase):
                                delta=delta)
         self.assertAlmostEqual(job_read.date_done, test_date,
                                delta=delta)
-        self.assertEqual(job_read.canceled, True)
 
     def test_job_unlinked(self):
         test_job = Job(func=dummy_task_args,
@@ -558,9 +549,7 @@ class TestJobModel(common.TransactionCase):
 
     def test_autovacuum(self):
         stored = self._create_job()
-        stored2 = self._create_job()
         stored.write({'date_done': '2000-01-01 00:00:00'})
-        stored2.write({'date_done': '2000-01-01 00:00:00', 'active': False})
         self.env['queue.job'].autovacuum()
         self.assertEqual(len(self.env['queue.job'].search([])), 0)
 

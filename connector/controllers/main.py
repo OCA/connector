@@ -5,7 +5,7 @@ from cStringIO import StringIO
 from psycopg2 import OperationalError
 
 import openerp
-from openerp import http, tools
+from openerp import _, http, tools
 from openerp.service.model import PG_CONCURRENCY_ERRORS_TO_RETRY
 
 from ..session import ConnectorSessionHandler
@@ -102,8 +102,8 @@ class RunJobController(http.Controller):
             if unicode(err):
                 msg = unicode(err)
             else:
-                msg = None
-            job.cancel(msg)
+                msg = _('Job interrupted and set to Done: nothing to do.')
+            job.set_done(msg)
             with session_hdl.session() as session:
                 self.job_storage_class(session).store(job)
 

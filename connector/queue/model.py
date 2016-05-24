@@ -69,7 +69,6 @@ class QueueJob(models.Model):
     date_enqueued = fields.Datetime(string='Enqueue Time', readonly=True)
     date_done = fields.Datetime(string='Date Done', readonly=True)
     eta = fields.Datetime(string='Execute only after')
-    active = fields.Boolean(default=True)
     model_name = fields.Char(string='Model', readonly=True)
     retry = fields.Integer(string='Current try')
     max_retries = fields.Integer(
@@ -188,13 +187,12 @@ class QueueJob(models.Model):
 
     @api.model
     def autovacuum(self):
-        """ Delete all jobs (active or not) done since more than
-        ``_removal_interval`` days.
+        """ Delete all jobs done since more than ``_removal_interval`` days.
 
         Called from a cron.
         """
         deadline = datetime.now() - timedelta(days=self._removal_interval)
-        jobs = self.with_context(active_test=False).search(
+        jobs = self.search(
             [('date_done', '<=', fields.Datetime.to_string(deadline))],
         )
         jobs.unlink()

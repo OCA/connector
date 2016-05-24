@@ -10,7 +10,8 @@ Future (?)
 ~~~~~~~~~~
 
 * Fix backend_to_m2o to extract id of the binding (https://github.com/OCA/connector/pull/194)
-
+* Remove cancellation of jobs / active flag on jobs, now jobs are only set to
+  Done when NothingToDoJob is raised.
 
 9.0.1.0.2 (2016-03-03)
 ~~~~~~~~~~~~~~~~~~~~~~

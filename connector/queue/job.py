@@ -29,7 +29,6 @@ from cPickle import dumps, UnpicklingError, Unpickler
 from cStringIO import StringIO
 
 import openerp
-from openerp.tools.translate import _
 
 from ..exception import (NotReadableJobError,
                          NoSuchJobError,
@@ -186,7 +185,7 @@ class OpenERPJobStorage(JobStorage):
         return bool(self.db_record_from_uuid(job_uuid))
 
     def db_record_from_uuid(self, job_uuid):
-        model = self.job_model.sudo().with_context(active_test=False)
+        model = self.job_model.sudo()
         record = model.search([('uuid', '=', job_uuid)], limit=1)
         if record:
             return record.with_env(self.job_model.env)
@@ -220,9 +219,6 @@ class OpenERPJobStorage(JobStorage):
             vals['date_done'] = dt_to_string(job_.date_done)
         if job_.eta:
             vals['eta'] = dt_to_string(job_.eta)
-
-        if job_.canceled:
-            vals['active'] = False
 
         db_record = self.db_record(job_)
         if db_record:
@@ -279,7 +275,6 @@ class OpenERPJobStorage(JobStorage):
         job_.result = stored.result if stored.result else None
         job_.exc_info = stored.exc_info if stored.exc_info else None
         job_.user_id = stored.user_id.id if stored.user_id else None
-        job_.canceled = not stored.active
         job_.model_name = stored.model_name if stored.model_name else None
         job_.retry = stored.retry
         job_.max_retries = stored.max_retries
@@ -376,10 +371,6 @@ class Job(object):
         Estimated Time of Arrival of the job. It will not be executed
         before this date/time.
 
-    .. attribute:: canceled
-
-        True if the job has been canceled.
-
     """
 
     def __init__(self, func=None, model_name=None,
@@ -463,7 +454,6 @@ class Job(object):
         self.company_id = None
         self._eta = None
         self.eta = eta
-        self.canceled = False
 
     def __cmp__(self, other):
         if not isinstance(other, Job):
@@ -482,7 +472,6 @@ class Job(object):
         :param session: session to execute the job
         :type session: ConnectorSession
         """
-        assert not self.canceled, "Canceled job"
         with session.change_user(self.user_id):
             self.retry += 1
             try:
@@ -588,11 +577,6 @@ class Job(object):
 
     def __repr__(self):
         return '<Job %s, priority:%d>' % (self.uuid, self.priority)
-
-    def cancel(self, msg=None):
-        self.canceled = True
-        result = msg if msg is not None else _('Canceled. Nothing to do.')
-        self.set_done(result=result)
 
     def _get_retry_seconds(self, seconds=None):
         retry_pattern = self.func.retry_pattern

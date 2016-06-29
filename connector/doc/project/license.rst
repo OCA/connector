@@ -8,7 +8,7 @@ This work is licensed under the AGPL3 license.
 
 ------
 
-::
+.. code-block:: none
 
 
                       GNU AFFERO GENERAL PUBLIC LICENSE

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: connector (9.0)\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-04 01:38+0000\n"
+"POT-Creation-Date: 2016-08-15 18:53+0000\n"
 "PO-Revision-Date: 2016-03-03 12:55+0000\n"
 "Last-Translator: OCA Transbot <transbot@odoo-community.org>\n"
 "Language-Team: Catalan (http://www.transifex.com/oca/OCA-connector-9-0/language/ca/)\n"
@@ -96,7 +96,7 @@ msgid "Cancel"
 msgstr "Cancel·la"
 
 #. module: connector
-#: code:addons/connector/queue/job.py:592
+#: code:addons/connector/queue/job.py:593
 #, python-format
 msgid "Canceled. Nothing to do."
 msgstr "Cancel·lat, res a fer."

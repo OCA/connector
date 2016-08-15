@@ -5,12 +5,13 @@
 # Translators:
 # Guewen Baconnier <guewen.baconnier@camptocamp.com>, 2015-2016
 # Maxime Chambreuil <mchambreuil@ursainfosystems.com>, 2015
+# Maxime Chambreuil <mchambreuil@ursainfosystems.com>, 2015
 # Philippe Bach <opera_fr@yahoo.fr>, 2016
 msgid ""
 msgstr ""
 "Project-Id-Version: connector (9.0)\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-06-29 14:28+0000\n"
+"POT-Creation-Date: 2016-08-15 18:53+0000\n"
 "PO-Revision-Date: 2016-08-10 06:21+0000\n"
 "Last-Translator: Philippe Bach <opera_fr@yahoo.fr>\n"
 "Language-Team: French (http://www.transifex.com/oca/OCA-connector-9-0/language/fr/)\n"
@@ -97,7 +98,7 @@ msgid "Cancel"
 msgstr "Annuler"
 
 #. module: connector
-#: code:addons/connector/queue/job.py:592
+#: code:addons/connector/queue/job.py:593
 #, python-format
 msgid "Canceled. Nothing to do."
 msgstr "Annulé. Rien à faire."

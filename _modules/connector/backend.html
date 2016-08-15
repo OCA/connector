@@ -9,7 +9,7 @@
     
     <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/bootswatch-3.3.4/united/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/bootswatch-3.3.6/united/bootstrap.min.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
     
     <script type="text/javascript">
@@ -26,7 +26,7 @@
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <script type="text/javascript" src="../../_static/js/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="../../_static/js/jquery-fix.js"></script>
-    <script type="text/javascript" src="../../_static/bootstrap-3.3.4/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../../_static/bootstrap-sphinx.js"></script>
     <link rel="top" title="Connector  documentation" href="../../index.html" />
     <link rel="up" title="Module code" href="../index.html" />
@@ -249,9 +249,9 @@
 <span class="c1">#    along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
 <span class="c1">#</span>
 <span class="c1">##############################################################################</span>
-<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
-<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">namedtuple</span>
-<span class="kn">from</span> <span class="nn">.exception</span> <span class="kn">import</span> <span class="n">NoConnectorUnitError</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="k">import</span> <span class="n">partial</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">namedtuple</span>
+<span class="kn">from</span> <span class="nn">.exception</span> <span class="k">import</span> <span class="n">NoConnectorUnitError</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Backend&#39;</span><span class="p">]</span>
 
@@ -270,7 +270,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">backends</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">backend</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">get_backend</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">service</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">get_backend</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">service</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Return an instance of</span>
 <span class="sd">        :py:class:`connector.backend.Backend` for a</span>
 <span class="sd">        ``service`` and a ``version``</span>
@@ -290,7 +290,7 @@
 <span class="n">BACKENDS</span> <span class="o">=</span> <span class="n">BackendRegistry</span><span class="p">()</span>
 
 
-<span class="k">def</span> <span class="nf">get_backend</span><span class="p">(</span><span class="n">service</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">get_backend</span><span class="p">(</span><span class="n">service</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Return the correct instance of</span>
 <span class="sd">    :py:class:`connector.backend.Backend` for a</span>
 <span class="sd">    ``service`` and a ``version``</span>
@@ -427,14 +427,14 @@
 <span class="sd">                 circumstances for generic addons.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">service</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">registry</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">service</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">and</span> <span class="n">parent</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">service</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">registry</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">service</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">parent</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;A service or a parent service is expected&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_service</span> <span class="o">=</span> <span class="n">service</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">version</span> <span class="o">=</span> <span class="n">version</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">parent</span> <span class="o">=</span> <span class="n">parent</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_class_entries</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">if</span> <span class="n">registry</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">registry</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">registry</span> <span class="o">=</span> <span class="n">BACKENDS</span>
         <span class="n">registry</span><span class="o">.</span><span class="n">register_backend</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
@@ -461,7 +461,7 @@
         <span class="k">def</span> <span class="nf">follow_replacing</span><span class="p">(</span><span class="n">entries</span><span class="p">):</span>
             <span class="n">candidates</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
             <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">entries</span><span class="p">:</span>
-                <span class="n">replacings</span> <span class="o">=</span> <span class="bp">None</span>
+                <span class="n">replacings</span> <span class="o">=</span> <span class="kc">None</span>
                 <span class="k">if</span> <span class="n">entry</span><span class="o">.</span><span class="n">replaced_by</span><span class="p">:</span>
                     <span class="n">replacings</span> <span class="o">=</span> <span class="n">follow_replacing</span><span class="p">(</span><span class="n">entry</span><span class="o">.</span><span class="n">replaced_by</span><span class="p">)</span>
                     <span class="k">if</span> <span class="n">replacings</span><span class="p">:</span>
@@ -505,7 +505,7 @@
             <span class="p">(</span><span class="n">base_class</span><span class="p">,</span> <span class="n">session</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">matching_classes</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">matching_classes</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="Backend.register_class"><a class="viewcode-back" href="../../api/api_backend.html#connector.backend.Backend.register_class">[docs]</a>    <span class="k">def</span> <span class="nf">register_class</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cls</span><span class="p">,</span> <span class="n">replacing</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="Backend.register_class"><a class="viewcode-back" href="../../api/api_backend.html#connector.backend.Backend.register_class">[docs]</a>    <span class="k">def</span> <span class="nf">register_class</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cls</span><span class="p">,</span> <span class="n">replacing</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Register a class in the backend.</span>
 
 <span class="sd">        :param cls: the ConnectorUnit class class to register</span>
@@ -514,11 +514,11 @@
 <span class="sd">        :type replacing: :py:class:`connector.connector.MetaConnectorUnit`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">def</span> <span class="nf">register_replace</span><span class="p">(</span><span class="n">replacing_cls</span><span class="p">):</span>
-            <span class="n">found</span> <span class="o">=</span> <span class="bp">False</span>
+            <span class="n">found</span> <span class="o">=</span> <span class="kc">False</span>
             <span class="k">for</span> <span class="n">replaced_entry</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_class_entries</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">replaced_entry</span><span class="o">.</span><span class="n">cls</span> <span class="ow">is</span> <span class="n">replacing_cls</span><span class="p">:</span>
                     <span class="n">replaced_entry</span><span class="o">.</span><span class="n">replaced_by</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">entry</span><span class="p">)</span>
-                    <span class="n">found</span> <span class="o">=</span> <span class="bp">True</span>
+                    <span class="n">found</span> <span class="o">=</span> <span class="kc">True</span>
                     <span class="k">break</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">found</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1"> replaces an unregistered class: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span>
@@ -527,7 +527,7 @@
         <span class="n">entry</span> <span class="o">=</span> <span class="n">_ConnectorUnitEntry</span><span class="p">(</span><span class="n">cls</span><span class="o">=</span><span class="n">cls</span><span class="p">,</span>
                                     <span class="n">openerp_module</span><span class="o">=</span><span class="n">cls</span><span class="o">.</span><span class="n">_openerp_module_</span><span class="p">,</span>
                                     <span class="n">replaced_by</span><span class="o">=</span><span class="p">[])</span>
-        <span class="k">if</span> <span class="n">replacing</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">replacing</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">replacing</span> <span class="ow">is</span> <span class="n">cls</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%r</span><span class="s1"> cannot replace itself&#39;</span> <span class="o">%</span> <span class="n">replacing</span><span class="p">)</span>
             <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">replacing</span><span class="p">,</span> <span class="s1">&#39;__iter__&#39;</span><span class="p">):</span>
@@ -537,7 +537,7 @@
                 <span class="n">register_replace</span><span class="p">(</span><span class="n">replacing</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_class_entries</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">entry</span><span class="p">)</span></div>
 
-    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cls</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">replacing</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cls</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">replacing</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Backend decorator</span>
 
 <span class="sd">        For a backend ``magento`` declared like this::</span>
@@ -574,7 +574,7 @@
 <span class="sd">        :param replacing: optional, the ConnectorUnit class to replace</span>
 <span class="sd">        :type replacing: :py:class:`connector.connector.MetaConnectorUnit`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">cls</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">cls</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">partial</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">replacing</span><span class="o">=</span><span class="n">replacing</span><span class="p">)</span>
 
         <span class="k">def</span> <span class="nf">with_subscribe</span><span class="p">():</span>
@@ -599,7 +599,7 @@
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.5.<br/>
     </p>
   </div>
 </footer>

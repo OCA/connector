@@ -9,7 +9,7 @@
     
     <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/bootswatch-3.3.4/united/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootswatch-3.3.6/united/bootstrap.min.css" type="text/css" />
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
     
     <script type="text/javascript">
@@ -27,7 +27,7 @@
     <script type="text/javascript" src="../_static/translations.js"></script>
     <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
-    <script type="text/javascript" src="../_static/bootstrap-3.3.4/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
     <link rel="top" title="documentation Connector " href="../index.html" />
     <link rel="next" title="Job Runner" href="api_runner.html" />
@@ -251,7 +251,7 @@ scheduling mechanisms of the job runner.</p>
 <em class="property">class </em><code class="descclassname">connector.jobrunner.channels.</code><code class="descname">Channel</code><span class="sig-paren">(</span><em>name</em>, <em>parent</em>, <em>capacity=None</em>, <em>sequential=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/jobrunner/channels.html#Channel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.jobrunner.channels.Channel" title="Lien permanent vers cette définition">¶</a></dt>
 <dd></dd></dl>
 
-<p>Bases : <a class="reference external" href="http://docs.python.org/library/functions.html#object" title="(disponible dans Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<p>Bases : <a class="reference external" href="https://docs.python.org/2/library/functions.html#object" title="(disponible dans Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
 <blockquote>
 <div><p>A channel for jobs, with a maximum capacity.</p>
 <p>When jobs are created by connector modules, they may be associated
@@ -373,7 +373,7 @@ from parent channels queues.</p>
 <em class="property">class </em><code class="descclassname">connector.jobrunner.channels.</code><code class="descname">ChannelJob</code><span class="sig-paren">(</span><em>db_name</em>, <em>channel</em>, <em>uuid</em>, <em>seq</em>, <em>date_created</em>, <em>priority</em>, <em>eta</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/jobrunner/channels.html#ChannelJob"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.jobrunner.channels.ChannelJob" title="Lien permanent vers cette définition">¶</a></dt>
 <dd></dd></dl>
 
-<p>Bases : <a class="reference external" href="http://docs.python.org/library/functions.html#object" title="(disponible dans Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<p>Bases : <a class="reference external" href="https://docs.python.org/2/library/functions.html#object" title="(disponible dans Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
 <blockquote>
 <div><p>A channel job is attached to a channel and holds the properties of a
 job that are necessary to prioritise them.</p>
@@ -445,7 +445,7 @@ equal as they are different instances</p>
 <em class="property">class </em><code class="descclassname">connector.jobrunner.channels.</code><code class="descname">ChannelManager</code><a class="reference internal" href="../_modules/connector/jobrunner/channels.html#ChannelManager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.jobrunner.channels.ChannelManager" title="Lien permanent vers cette définition">¶</a></dt>
 <dd></dd></dl>
 
-<p>Bases : <a class="reference external" href="http://docs.python.org/library/functions.html#object" title="(disponible dans Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<p>Bases : <a class="reference external" href="https://docs.python.org/2/library/functions.html#object" title="(disponible dans Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
 <blockquote>
 <div><p>High level interface for channels</p>
 <p>This class handles:</p>
@@ -630,7 +630,7 @@ When declaring subchannels, the root channel may be omitted
 <em class="property">class </em><code class="descclassname">connector.jobrunner.channels.</code><code class="descname">ChannelQueue</code><a class="reference internal" href="../_modules/connector/jobrunner/channels.html#ChannelQueue"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.jobrunner.channels.ChannelQueue" title="Lien permanent vers cette définition">¶</a></dt>
 <dd></dd></dl>
 
-<p>Bases : <a class="reference external" href="http://docs.python.org/library/functions.html#object" title="(disponible dans Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<p>Bases : <a class="reference external" href="https://docs.python.org/2/library/functions.html#object" title="(disponible dans Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
 <blockquote>
 <div><p>A channel queue is a priority queue for jobs that returns
 jobs with a past ETA first.</p>
@@ -673,7 +673,7 @@ jobs with a past ETA first.</p>
 <em class="property">class </em><code class="descclassname">connector.jobrunner.channels.</code><code class="descname">PriorityQueue</code><a class="reference internal" href="../_modules/connector/jobrunner/channels.html#PriorityQueue"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.jobrunner.channels.PriorityQueue" title="Lien permanent vers cette définition">¶</a></dt>
 <dd></dd></dl>
 
-<p>Bases : <a class="reference external" href="http://docs.python.org/library/functions.html#object" title="(disponible dans Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<p>Bases : <a class="reference external" href="https://docs.python.org/2/library/functions.html#object" title="(disponible dans Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
 <blockquote>
 <div><p>A priority queue that supports removing arbitrary objects.</p>
 <p>Adding an object already in the queue is a no op.
@@ -725,7 +725,7 @@ Popping an empty queue returns None.</p>
 <em class="property">class </em><code class="descclassname">connector.jobrunner.channels.</code><code class="descname">SafeSet</code><a class="reference internal" href="../_modules/connector/jobrunner/channels.html#SafeSet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.jobrunner.channels.SafeSet" title="Lien permanent vers cette définition">¶</a></dt>
 <dd></dd></dl>
 
-<p>Bases: <a class="reference external" href="http://docs.python.org/library/stdtypes.html#set" title="(disponible dans Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">set</span></code></a></p>
+<p>Bases: <a class="reference external" href="https://docs.python.org/2/library/stdtypes.html#set" title="(disponible dans Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">set</span></code></a></p>
 <blockquote>
 <div><p>A set that does not raise KeyError when removing non-existent items.</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">SafeSet</span><span class="p">()</span>
@@ -763,7 +763,7 @@ Popping an empty queue returns None.</p>
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.<br/>
+      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.5.<br/>
     </p>
   </div>
 </footer>

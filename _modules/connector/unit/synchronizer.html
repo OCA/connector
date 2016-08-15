@@ -9,7 +9,7 @@
     
     <link rel="stylesheet" href="../../../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/bootswatch-3.3.4/united/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/bootswatch-3.3.6/united/bootstrap.min.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
     
     <script type="text/javascript">
@@ -26,7 +26,7 @@
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
     <script type="text/javascript" src="../../../_static/js/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="../../../_static/js/jquery-fix.js"></script>
-    <script type="text/javascript" src="../../../_static/bootstrap-3.3.4/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../../../_static/bootstrap-sphinx.js"></script>
     <link rel="top" title="Connector  documentation" href="../../../index.html" />
     <link rel="up" title="Module code" href="../../index.html" />
@@ -250,25 +250,25 @@
 <span class="c1">#</span>
 <span class="c1">##############################################################################</span>
 
-<span class="kn">from</span> <span class="nn">..connector</span> <span class="kn">import</span> <span class="n">ConnectorUnit</span>
-<span class="kn">from</span> <span class="nn">.mapper</span> <span class="kn">import</span> <span class="n">Mapper</span><span class="p">,</span> <span class="n">ImportMapper</span><span class="p">,</span> <span class="n">ExportMapper</span>
-<span class="kn">from</span> <span class="nn">.backend_adapter</span> <span class="kn">import</span> <span class="n">BackendAdapter</span>
+<span class="kn">from</span> <span class="nn">..connector</span> <span class="k">import</span> <span class="n">ConnectorUnit</span>
+<span class="kn">from</span> <span class="nn">.mapper</span> <span class="k">import</span> <span class="n">Mapper</span><span class="p">,</span> <span class="n">ImportMapper</span><span class="p">,</span> <span class="n">ExportMapper</span>
+<span class="kn">from</span> <span class="nn">.backend_adapter</span> <span class="k">import</span> <span class="n">BackendAdapter</span>
 
 
 <div class="viewcode-block" id="Synchronizer"><a class="viewcode-back" href="../../../api/api_synchronizer.html#connector.unit.synchronizer.Synchronizer">[docs]</a><span class="k">class</span> <span class="nc">Synchronizer</span><span class="p">(</span><span class="n">ConnectorUnit</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Base class for synchronizers &quot;&quot;&quot;</span>
 
     <span class="c1"># implement in sub-classes</span>
-    <span class="n">_model_name</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="n">_model_name</span> <span class="o">=</span> <span class="kc">None</span>
 
     <span class="n">_base_mapper</span> <span class="o">=</span> <span class="n">Mapper</span>
     <span class="n">_base_backend_adapter</span> <span class="o">=</span> <span class="n">BackendAdapter</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">connector_env</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">Synchronizer</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">connector_env</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_backend_adapter</span> <span class="o">=</span> <span class="bp">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_binder</span> <span class="o">=</span> <span class="bp">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_mapper</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_backend_adapter</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_binder</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_mapper</span> <span class="o">=</span> <span class="kc">None</span>
 
 <div class="viewcode-block" id="Synchronizer.run"><a class="viewcode-back" href="../../../api/api_synchronizer.html#connector.unit.synchronizer.Synchronizer.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Run the synchronization &quot;&quot;&quot;</span>
@@ -283,7 +283,7 @@
 
 <span class="sd">        :rtype: :py:class:`connector.unit.mapper.Mapper`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mapper</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mapper</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_mapper</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">unit_for</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_base_mapper</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mapper</span>
 
@@ -296,7 +296,7 @@
 
 <span class="sd">        :rtype: :py:class:`connector.unit.binder.Binder`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_binder</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_binder</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_binder</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">binder_for</span><span class="p">()</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_binder</span>
 
@@ -310,7 +310,7 @@
 
 <span class="sd">        :rtype: :py:class:`connector.unit.backend_adapter.BackendAdapter`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_backend_adapter</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_backend_adapter</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_backend_adapter</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">unit_for</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_base_backend_adapter</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_backend_adapter</span></div>
 
@@ -355,7 +355,7 @@
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.5.<br/>
     </p>
   </div>
 </footer>

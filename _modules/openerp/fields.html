@@ -9,7 +9,7 @@
     
     <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/bootswatch-3.3.4/united/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/bootswatch-3.3.6/united/bootstrap.min.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
     
     <script type="text/javascript">
@@ -26,7 +26,7 @@
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <script type="text/javascript" src="../../_static/js/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="../../_static/js/jquery-fix.js"></script>
-    <script type="text/javascript" src="../../_static/bootstrap-3.3.4/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../../_static/bootstrap-sphinx.js"></script>
     <link rel="top" title="Connector  documentation" href="../../index.html" />
     <link rel="up" title="Module code" href="../index.html" />
@@ -252,19 +252,19 @@
 
 <span class="sd">&quot;&quot;&quot; High-level objects for fields. &quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">OrderedDict</span>
-<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">date</span><span class="p">,</span> <span class="n">datetime</span>
-<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
-<span class="kn">from</span> <span class="nn">operator</span> <span class="kn">import</span> <span class="n">attrgetter</span>
-<span class="kn">from</span> <span class="nn">types</span> <span class="kn">import</span> <span class="n">NoneType</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">OrderedDict</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="k">import</span> <span class="n">date</span><span class="p">,</span> <span class="n">datetime</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="k">import</span> <span class="n">partial</span>
+<span class="kn">from</span> <span class="nn">operator</span> <span class="k">import</span> <span class="n">attrgetter</span>
+<span class="kn">from</span> <span class="nn">types</span> <span class="k">import</span> <span class="n">NoneType</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">pytz</span>
 <span class="kn">import</span> <span class="nn">xmlrpclib</span>
 
-<span class="kn">from</span> <span class="nn">openerp.sql_db</span> <span class="kn">import</span> <span class="n">LazyCursor</span>
-<span class="kn">from</span> <span class="nn">openerp.tools</span> <span class="kn">import</span> <span class="n">float_round</span><span class="p">,</span> <span class="n">frozendict</span><span class="p">,</span> <span class="n">html_sanitize</span><span class="p">,</span> <span class="n">ustr</span><span class="p">,</span> <span class="n">OrderedSet</span>
-<span class="kn">from</span> <span class="nn">openerp.tools</span> <span class="kn">import</span> <span class="n">DEFAULT_SERVER_DATE_FORMAT</span> <span class="k">as</span> <span class="n">DATE_FORMAT</span>
-<span class="kn">from</span> <span class="nn">openerp.tools</span> <span class="kn">import</span> <span class="n">DEFAULT_SERVER_DATETIME_FORMAT</span> <span class="k">as</span> <span class="n">DATETIME_FORMAT</span>
+<span class="kn">from</span> <span class="nn">openerp.sql_db</span> <span class="k">import</span> <span class="n">LazyCursor</span>
+<span class="kn">from</span> <span class="nn">openerp.tools</span> <span class="k">import</span> <span class="n">float_round</span><span class="p">,</span> <span class="n">frozendict</span><span class="p">,</span> <span class="n">html_sanitize</span><span class="p">,</span> <span class="n">ustr</span><span class="p">,</span> <span class="n">OrderedSet</span>
+<span class="kn">from</span> <span class="nn">openerp.tools</span> <span class="k">import</span> <span class="n">DEFAULT_SERVER_DATE_FORMAT</span> <span class="k">as</span> <span class="n">DATE_FORMAT</span>
+<span class="kn">from</span> <span class="nn">openerp.tools</span> <span class="k">import</span> <span class="n">DEFAULT_SERVER_DATETIME_FORMAT</span> <span class="k">as</span> <span class="n">DATETIME_FORMAT</span>
 
 <span class="n">DATE_LENGTH</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">date</span><span class="o">.</span><span class="n">today</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="n">DATE_FORMAT</span><span class="p">))</span>
 <span class="n">DATETIME_LENGTH</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="n">DATETIME_FORMAT</span><span class="p">))</span>
@@ -305,7 +305,7 @@
                 <span class="n">target</span><span class="o">.</span><span class="n">_cache</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
 
 
-<span class="k">def</span> <span class="nf">resolve_all_mro</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">resolve_all_mro</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Return the (successively overridden) values of attribute ``name`` in ``cls``</span>
 <span class="sd">        in mro order, or inverse mro order if ``reverse`` is true.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -515,56 +515,56 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">__metaclass__</span> <span class="o">=</span> <span class="n">MetaField</span>
 
-    <span class="nb">type</span> <span class="o">=</span> <span class="bp">None</span>                         <span class="c1"># type of the field (string)</span>
-    <span class="n">relational</span> <span class="o">=</span> <span class="bp">False</span>                  <span class="c1"># whether the field is a relational one</span>
+    <span class="nb">type</span> <span class="o">=</span> <span class="kc">None</span>                         <span class="c1"># type of the field (string)</span>
+    <span class="n">relational</span> <span class="o">=</span> <span class="kc">False</span>                  <span class="c1"># whether the field is a relational one</span>
 
     <span class="n">_slots</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s1">&#39;_attrs&#39;</span><span class="p">:</span> <span class="n">EMPTY_DICT</span><span class="p">,</span>           <span class="c1"># dictionary of field attributes; it contains:</span>
                                         <span class="c1">#  - all attributes after __init__()</span>
                                         <span class="c1">#  - free attributes only after set_class_name()</span>
 
-        <span class="s1">&#39;automatic&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>             <span class="c1"># whether the field is automatically created (&quot;magic&quot; field)</span>
-        <span class="s1">&#39;inherited&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>             <span class="c1"># whether the field is inherited (_inherits)</span>
-        <span class="s1">&#39;column&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>                 <span class="c1"># the column corresponding to the field</span>
-        <span class="s1">&#39;setup_done&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>            <span class="c1"># whether the field has been set up</span>
+        <span class="s1">&#39;automatic&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>             <span class="c1"># whether the field is automatically created (&quot;magic&quot; field)</span>
+        <span class="s1">&#39;inherited&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>             <span class="c1"># whether the field is inherited (_inherits)</span>
+        <span class="s1">&#39;column&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>                 <span class="c1"># the column corresponding to the field</span>
+        <span class="s1">&#39;setup_done&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>            <span class="c1"># whether the field has been set up</span>
 
-        <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>                   <span class="c1"># name of the field</span>
-        <span class="s1">&#39;model_name&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>             <span class="c1"># name of the model of this field</span>
-        <span class="s1">&#39;comodel_name&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>           <span class="c1"># name of the model of values (if relational)</span>
+        <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>                   <span class="c1"># name of the field</span>
+        <span class="s1">&#39;model_name&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>             <span class="c1"># name of the model of this field</span>
+        <span class="s1">&#39;comodel_name&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>           <span class="c1"># name of the model of values (if relational)</span>
 
-        <span class="s1">&#39;store&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>                  <span class="c1"># whether the field is stored in database</span>
-        <span class="s1">&#39;index&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>                 <span class="c1"># whether the field is indexed in database</span>
-        <span class="s1">&#39;manual&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>                <span class="c1"># whether the field is a custom field</span>
-        <span class="s1">&#39;copy&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>                   <span class="c1"># whether the field is copied over by BaseModel.copy()</span>
+        <span class="s1">&#39;store&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>                  <span class="c1"># whether the field is stored in database</span>
+        <span class="s1">&#39;index&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>                 <span class="c1"># whether the field is indexed in database</span>
+        <span class="s1">&#39;manual&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>                <span class="c1"># whether the field is a custom field</span>
+        <span class="s1">&#39;copy&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>                   <span class="c1"># whether the field is copied over by BaseModel.copy()</span>
         <span class="s1">&#39;depends&#39;</span><span class="p">:</span> <span class="p">(),</span>                  <span class="c1"># collection of field dependencies</span>
-        <span class="s1">&#39;recursive&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>             <span class="c1"># whether self depends on itself</span>
-        <span class="s1">&#39;compute&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>                <span class="c1"># compute(recs) computes field on recs</span>
-        <span class="s1">&#39;compute_sudo&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>          <span class="c1"># whether field should be recomputed as admin</span>
-        <span class="s1">&#39;inverse&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>                <span class="c1"># inverse(recs) inverses field on recs</span>
-        <span class="s1">&#39;search&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>                 <span class="c1"># search(recs, operator, value) searches on self</span>
-        <span class="s1">&#39;related&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>                <span class="c1"># sequence of field names, for related fields</span>
-        <span class="s1">&#39;related_sudo&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>           <span class="c1"># whether related fields should be read as admin</span>
-        <span class="s1">&#39;company_dependent&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>     <span class="c1"># whether ``self`` is company-dependent (property field)</span>
-        <span class="s1">&#39;default&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>                <span class="c1"># default(recs) returns the default value</span>
+        <span class="s1">&#39;recursive&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>             <span class="c1"># whether self depends on itself</span>
+        <span class="s1">&#39;compute&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>                <span class="c1"># compute(recs) computes field on recs</span>
+        <span class="s1">&#39;compute_sudo&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>          <span class="c1"># whether field should be recomputed as admin</span>
+        <span class="s1">&#39;inverse&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>                <span class="c1"># inverse(recs) inverses field on recs</span>
+        <span class="s1">&#39;search&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>                 <span class="c1"># search(recs, operator, value) searches on self</span>
+        <span class="s1">&#39;related&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>                <span class="c1"># sequence of field names, for related fields</span>
+        <span class="s1">&#39;related_sudo&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>           <span class="c1"># whether related fields should be read as admin</span>
+        <span class="s1">&#39;company_dependent&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>     <span class="c1"># whether ``self`` is company-dependent (property field)</span>
+        <span class="s1">&#39;default&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>                <span class="c1"># default(recs) returns the default value</span>
 
-        <span class="s1">&#39;string&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>                 <span class="c1"># field label</span>
-        <span class="s1">&#39;help&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>                   <span class="c1"># field tooltip</span>
-        <span class="s1">&#39;readonly&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>              <span class="c1"># whether the field is readonly</span>
-        <span class="s1">&#39;required&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>              <span class="c1"># whether the field is required</span>
-        <span class="s1">&#39;states&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>                 <span class="c1"># set readonly and required depending on state</span>
-        <span class="s1">&#39;groups&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>                 <span class="c1"># csv list of group xml ids</span>
-        <span class="s1">&#39;change_default&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>        <span class="c1"># whether the field may trigger a &quot;user-onchange&quot;</span>
-        <span class="s1">&#39;deprecated&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>             <span class="c1"># whether the field is deprecated</span>
+        <span class="s1">&#39;string&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>                 <span class="c1"># field label</span>
+        <span class="s1">&#39;help&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>                   <span class="c1"># field tooltip</span>
+        <span class="s1">&#39;readonly&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>              <span class="c1"># whether the field is readonly</span>
+        <span class="s1">&#39;required&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>              <span class="c1"># whether the field is required</span>
+        <span class="s1">&#39;states&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>                 <span class="c1"># set readonly and required depending on state</span>
+        <span class="s1">&#39;groups&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>                 <span class="c1"># csv list of group xml ids</span>
+        <span class="s1">&#39;change_default&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>        <span class="c1"># whether the field may trigger a &quot;user-onchange&quot;</span>
+        <span class="s1">&#39;deprecated&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>             <span class="c1"># whether the field is deprecated</span>
 
         <span class="s1">&#39;inverse_fields&#39;</span><span class="p">:</span> <span class="p">(),</span>           <span class="c1"># collection of inverse fields (objects)</span>
         <span class="s1">&#39;computed_fields&#39;</span><span class="p">:</span> <span class="p">(),</span>          <span class="c1"># fields computed with the same method as self</span>
-        <span class="s1">&#39;related_field&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>          <span class="c1"># corresponding related field</span>
+        <span class="s1">&#39;related_field&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>          <span class="c1"># corresponding related field</span>
         <span class="s1">&#39;_triggers&#39;</span><span class="p">:</span> <span class="p">(),</span>                <span class="c1"># invalidation and recomputation triggers</span>
     <span class="p">}</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">string</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">string</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;string&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">string</span>
-        <span class="n">attrs</span> <span class="o">=</span> <span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="n">val</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">iteritems</span><span class="p">()</span> <span class="k">if</span> <span class="n">val</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">}</span>
+        <span class="n">attrs</span> <span class="o">=</span> <span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="n">val</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">iteritems</span><span class="p">()</span> <span class="k">if</span> <span class="n">val</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_attrs</span> <span class="o">=</span> <span class="n">attrs</span> <span class="ow">or</span> <span class="n">EMPTY_DICT</span>
 
     <span class="k">def</span> <span class="nf">__getattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
@@ -606,7 +606,7 @@
 
         <span class="c1"># determine all inherited field attributes</span>
         <span class="n">attrs</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">resolve_all_mro</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">resolve_all_mro</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)):</span>
                 <span class="n">attrs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">field</span><span class="o">.</span><span class="n">_attrs</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
@@ -616,17 +616,17 @@
         <span class="c1"># initialize ``self`` with ``attrs``</span>
         <span class="k">if</span> <span class="n">attrs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;compute&#39;</span><span class="p">):</span>
             <span class="c1"># by default, computed fields are not stored, not copied and readonly</span>
-            <span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;store&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">attrs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;store&#39;</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span>
-            <span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;copy&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">attrs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;copy&#39;</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span>
+            <span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;store&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">attrs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;store&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+            <span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;copy&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">attrs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;copy&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
             <span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;readonly&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">attrs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;readonly&#39;</span><span class="p">,</span> <span class="ow">not</span> <span class="n">attrs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;inverse&#39;</span><span class="p">))</span>
         <span class="k">if</span> <span class="n">attrs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;related&#39;</span><span class="p">):</span>
             <span class="c1"># by default, related fields are not stored and not copied</span>
-            <span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;store&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">attrs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;store&#39;</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span>
-            <span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;copy&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">attrs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;copy&#39;</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span>
+            <span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;store&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">attrs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;store&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+            <span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;copy&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">attrs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;copy&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
 
         <span class="c1"># fix for function fields overridden by regular columns</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">attrs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;column&#39;</span><span class="p">),</span> <span class="p">(</span><span class="n">NoneType</span><span class="p">,</span> <span class="n">fields</span><span class="o">.</span><span class="n">function</span><span class="p">)):</span>
-            <span class="n">attrs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;store&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+            <span class="n">attrs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;store&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
 
         <span class="k">for</span> <span class="n">attr</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">attrs</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
             <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
@@ -642,7 +642,7 @@
         <span class="sd">&quot;&quot;&quot; Retrieve the default value for ``self`` in the hierarchy of ``cls``, and</span>
 <span class="sd">            determine ``self.default`` and ``cls._defaults`` accordingly.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">default</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">default</span> <span class="o">=</span> <span class="kc">None</span>
 
         <span class="c1"># traverse the class hierarchy upwards, and take the first field</span>
         <span class="c1"># definition with a default or _defaults for self</span>
@@ -656,8 +656,8 @@
                 <span class="k">if</span> <span class="s1">&#39;default&#39;</span> <span class="ow">in</span> <span class="n">field</span><span class="o">.</span><span class="n">_attrs</span><span class="p">:</span>
                     <span class="c1"># take the default in field, and adapt it for cls._defaults</span>
                     <span class="n">value</span> <span class="o">=</span> <span class="n">field</span><span class="o">.</span><span class="n">_attrs</span><span class="p">[</span><span class="s1">&#39;default&#39;</span><span class="p">]</span>
-                    <span class="k">if</span> <span class="nb">callable</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
-                        <span class="kn">from</span> <span class="nn">openerp</span> <span class="kn">import</span> <span class="n">api</span>
+                    <span class="k">if</span> <span class="n">callable</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+                        <span class="kn">from</span> <span class="nn">openerp</span> <span class="k">import</span> <span class="n">api</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">default</span> <span class="o">=</span> <span class="n">value</span>
                         <span class="n">cls</span><span class="o">.</span><span class="n">_defaults</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">model</span><span class="p">(</span>
                             <span class="k">lambda</span> <span class="n">recs</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">convert_to_write</span><span class="p">(</span><span class="n">value</span><span class="p">(</span><span class="n">recs</span><span class="p">))</span>
@@ -671,12 +671,12 @@
             <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">defaults</span><span class="p">:</span>
                 <span class="c1"># take the value from _defaults, and adapt it for self.default</span>
                 <span class="n">value</span> <span class="o">=</span> <span class="n">defaults</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
-                <span class="k">if</span> <span class="nb">callable</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">callable</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
                     <span class="n">func</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">recs</span><span class="p">:</span> <span class="n">value</span><span class="p">(</span><span class="n">recs</span><span class="o">.</span><span class="n">_model</span><span class="p">,</span> <span class="n">recs</span><span class="o">.</span><span class="n">_cr</span><span class="p">,</span> <span class="n">recs</span><span class="o">.</span><span class="n">_uid</span><span class="p">,</span> <span class="n">recs</span><span class="o">.</span><span class="n">_context</span><span class="p">)</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">func</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">recs</span><span class="p">:</span> <span class="n">value</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">default</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">recs</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">convert_to_cache</span><span class="p">(</span>
-                    <span class="n">func</span><span class="p">(</span><span class="n">recs</span><span class="p">),</span> <span class="n">recs</span><span class="p">,</span> <span class="n">validate</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+                    <span class="n">func</span><span class="p">(</span><span class="n">recs</span><span class="p">),</span> <span class="n">recs</span><span class="p">,</span> <span class="n">validate</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                 <span class="p">)</span>
                 <span class="n">cls</span><span class="o">.</span><span class="n">_defaults</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
                 <span class="k">return</span>
@@ -699,7 +699,7 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">_setup_related</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_setup_regular</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">setup_done</span> <span class="o">=</span> <span class="bp">True</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">setup_done</span> <span class="o">=</span> <span class="kc">True</span>
 
     <span class="c1">#</span>
     <span class="c1"># Setup of non-related fields</span>
@@ -710,22 +710,22 @@
         <span class="n">recs</span> <span class="o">=</span> <span class="n">env</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">model_name</span><span class="p">]</span>
 
         <span class="k">def</span> <span class="nf">make_depends</span><span class="p">(</span><span class="n">deps</span><span class="p">):</span>
-            <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">deps</span><span class="p">(</span><span class="n">recs</span><span class="p">)</span> <span class="k">if</span> <span class="nb">callable</span><span class="p">(</span><span class="n">deps</span><span class="p">)</span> <span class="k">else</span> <span class="n">deps</span><span class="p">)</span>
+            <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">deps</span><span class="p">(</span><span class="n">recs</span><span class="p">)</span> <span class="k">if</span> <span class="n">callable</span><span class="p">(</span><span class="n">deps</span><span class="p">)</span> <span class="k">else</span> <span class="n">deps</span><span class="p">)</span>
 
         <span class="c1"># convert compute into a callable and determine depends</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">compute</span><span class="p">,</span> <span class="nb">basestring</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">compute</span><span class="p">,</span> <span class="n">basestring</span><span class="p">):</span>
             <span class="c1"># if the compute method has been overridden, concatenate all their _depends</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">depends</span> <span class="o">=</span> <span class="p">()</span>
-            <span class="k">for</span> <span class="n">method</span> <span class="ow">in</span> <span class="n">resolve_all_mro</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">recs</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">method</span> <span class="ow">in</span> <span class="n">resolve_all_mro</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">recs</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">depends</span> <span class="o">+=</span> <span class="n">make_depends</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">method</span><span class="p">,</span> <span class="s1">&#39;_depends&#39;</span><span class="p">,</span> <span class="p">()))</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">compute</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">recs</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">depends</span> <span class="o">=</span> <span class="n">make_depends</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">compute</span><span class="p">,</span> <span class="s1">&#39;_depends&#39;</span><span class="p">,</span> <span class="p">()))</span>
 
         <span class="c1"># convert inverse and search into callables</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">inverse</span><span class="p">,</span> <span class="nb">basestring</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">inverse</span><span class="p">,</span> <span class="n">basestring</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">inverse</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">recs</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">inverse</span><span class="p">)</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">search</span><span class="p">,</span> <span class="nb">basestring</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">search</span><span class="p">,</span> <span class="n">basestring</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">search</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">recs</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">search</span><span class="p">)</span>
 
     <span class="c1">#</span>
@@ -735,7 +735,7 @@
     <span class="k">def</span> <span class="nf">_setup_related</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">env</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Setup the attributes of a related field. &quot;&quot;&quot;</span>
         <span class="c1"># fix the type of self.related if necessary</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">related</span><span class="p">,</span> <span class="nb">basestring</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">related</span><span class="p">,</span> <span class="n">basestring</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">related</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">related</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">))</span>
 
         <span class="c1"># determine the chain of fields, and make sure they are all set up</span>
@@ -857,7 +857,7 @@
         <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">fields</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">field</span> <span class="o">==</span> <span class="bp">self</span><span class="p">:</span>
                 <span class="n">_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Field </span><span class="si">%s</span><span class="s2"> is recursively defined&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">recursive</span> <span class="o">=</span> <span class="bp">True</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">recursive</span> <span class="o">=</span> <span class="kc">True</span>
                 <span class="k">continue</span>
 
             <span class="c1">#_logger.debug(&quot;Add trigger on %s to recompute %s&quot;, field, self)</span>
@@ -888,9 +888,9 @@
         <span class="n">desc</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="p">}</span>
         <span class="k">for</span> <span class="n">attr</span><span class="p">,</span> <span class="n">prop</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">description_attrs</span><span class="p">:</span>
             <span class="n">value</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prop</span><span class="p">)</span>
-            <span class="k">if</span> <span class="nb">callable</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">callable</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
                 <span class="n">value</span> <span class="o">=</span> <span class="n">value</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">desc</span><span class="p">[</span><span class="n">attr</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
 
         <span class="k">return</span> <span class="n">desc</span>
@@ -926,7 +926,8 @@
 
     <span class="k">def</span> <span class="nf">_description_help</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">env</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">help</span> <span class="ow">and</span> <span class="n">env</span><span class="o">.</span><span class="n">lang</span><span class="p">:</span>
-            <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">,</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+            <span class="n">field</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_field</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">,</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">field</span><span class="o">.</span><span class="n">model_name</span><span class="p">,</span> <span class="n">field</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
             <span class="n">trans</span> <span class="o">=</span> <span class="n">env</span><span class="p">[</span><span class="s1">&#39;ir.translation&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">_get_source</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="s1">&#39;help&#39;</span><span class="p">,</span> <span class="n">env</span><span class="o">.</span><span class="n">lang</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">trans</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">help</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">help</span>
@@ -940,8 +941,8 @@
         <span class="sd">&quot;&quot;&quot; Return a column object corresponding to ``self``, or ``None``. &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">store</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute</span><span class="p">:</span>
             <span class="c1"># non-stored computed fields do not have a corresponding column</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">column</span> <span class="o">=</span> <span class="bp">None</span>
-            <span class="k">return</span> <span class="bp">None</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">column</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="k">return</span> <span class="kc">None</span>
 
         <span class="c1"># determine column parameters</span>
         <span class="c1">#_logger.debug(&quot;Create fields._column for Field %s&quot;, self)</span>
@@ -985,9 +986,9 @@
 
     <span class="k">def</span> <span class="nf">null</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">env</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; return the null value for this field in the given environment &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">False</span>
+        <span class="k">return</span> <span class="kc">False</span>
 
-    <span class="k">def</span> <span class="nf">convert_to_cache</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="n">validate</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">convert_to_cache</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="n">validate</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; convert ``value`` to the cache level in ``env``; ``value`` may come from</span>
 <span class="sd">            an assignment, or have the format of methods :meth:`BaseModel.read`</span>
 <span class="sd">            or :meth:`BaseModel.write`</span>
@@ -999,7 +1000,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">value</span>
 
-    <span class="k">def</span> <span class="nf">convert_to_read</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">use_name_get</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">convert_to_read</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">use_name_get</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; convert ``value`` from the cache to a value as returned by method</span>
 <span class="sd">            :meth:`BaseModel.read`</span>
 
@@ -1007,9 +1008,9 @@
 <span class="sd">                be computed using :meth:`BaseModel.name_get`, if relevant</span>
 <span class="sd">                for the field</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">False</span> <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="bp">None</span> <span class="k">else</span> <span class="n">value</span>
+        <span class="k">return</span> <span class="kc">False</span> <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">value</span>
 
-    <span class="k">def</span> <span class="nf">convert_to_write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">fnames</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">convert_to_write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fnames</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; convert ``value`` from the cache to a valid value for method</span>
 <span class="sd">            :meth:`BaseModel.write`.</span>
 
@@ -1033,7 +1034,7 @@
             <span class="k">return</span> <span class="s1">&#39;&#39;</span>
         <span class="k">return</span> <span class="n">value</span> <span class="k">if</span> <span class="n">env</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;export_raw_data&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="n">ustr</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">convert_to_display_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">record</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">convert_to_display_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">record</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; convert ``value`` from the cache to a suitable display name. &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">ustr</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
 
@@ -1044,7 +1045,7 @@
 
     <span class="k">def</span> <span class="nf">__get__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="n">owner</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; return the value of field ``self`` on ``record`` &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">record</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">record</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span>         <span class="c1"># the field is accessed through the owner class</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="n">record</span><span class="p">:</span>
@@ -1147,7 +1148,7 @@
                             <span class="k">try</span><span class="p">:</span>
                                 <span class="n">values</span> <span class="o">=</span> <span class="n">target</span><span class="o">.</span><span class="n">_convert_to_cache</span><span class="p">({</span>
                                     <span class="n">f</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="n">source</span><span class="p">[</span><span class="n">f</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">computed_fields</span>
-                                <span class="p">},</span> <span class="n">validate</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+                                <span class="p">},</span> <span class="n">validate</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
                             <span class="k">except</span> <span class="n">MissingError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
                                 <span class="n">values</span> <span class="o">=</span> <span class="n">FailedValue</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
                             <span class="n">target</span><span class="o">.</span><span class="n">_cache</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">values</span><span class="p">)</span>
@@ -1202,9 +1203,9 @@
         <span class="c1"># invalidate the fields that depend on self, and prepare recomputation</span>
         <span class="n">spec</span> <span class="o">=</span> <span class="p">[(</span><span class="bp">self</span><span class="p">,</span> <span class="n">records</span><span class="o">.</span><span class="n">_ids</span><span class="p">)]</span>
         <span class="k">for</span> <span class="n">field</span><span class="p">,</span> <span class="n">path</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_triggers</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">path</span> <span class="ow">and</span> <span class="n">field</span><span class="o">.</span><span class="n">store</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">path</span> <span class="ow">and</span> <span class="n">field</span><span class="o">.</span><span class="n">compute</span> <span class="ow">and</span> <span class="n">field</span><span class="o">.</span><span class="n">store</span><span class="p">:</span>
                 <span class="c1"># don&#39;t move this line to function top, see log</span>
-                <span class="n">env</span> <span class="o">=</span> <span class="n">records</span><span class="o">.</span><span class="n">env</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="n">SUPERUSER_ID</span><span class="p">,</span> <span class="n">context</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;active_test&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">})</span>
+                <span class="n">env</span> <span class="o">=</span> <span class="n">records</span><span class="o">.</span><span class="n">env</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="n">SUPERUSER_ID</span><span class="p">,</span> <span class="n">context</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;active_test&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">})</span>
                 <span class="n">target</span> <span class="o">=</span> <span class="n">env</span><span class="p">[</span><span class="n">field</span><span class="o">.</span><span class="n">model_name</span><span class="p">]</span><span class="o">.</span><span class="n">search</span><span class="p">([(</span><span class="n">path</span><span class="p">,</span> <span class="s1">&#39;in&#39;</span><span class="p">,</span> <span class="n">records</span><span class="o">.</span><span class="n">ids</span><span class="p">)])</span>
                 <span class="k">if</span> <span class="n">target</span><span class="p">:</span>
                     <span class="n">spec</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">field</span><span class="p">,</span> <span class="n">target</span><span class="o">.</span><span class="n">_ids</span><span class="p">))</span>
@@ -1216,7 +1217,7 @@
                         <span class="n">target</span> <span class="o">=</span> <span class="n">target</span><span class="o">.</span><span class="n">with_env</span><span class="p">(</span><span class="n">records</span><span class="o">.</span><span class="n">env</span><span class="p">)</span>
                     <span class="n">target</span><span class="o">.</span><span class="n">_recompute_todo</span><span class="p">(</span><span class="n">field</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">spec</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">field</span><span class="p">,</span> <span class="bp">None</span><span class="p">))</span>
+                <span class="n">spec</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">field</span><span class="p">,</span> <span class="kc">None</span><span class="p">))</span>
 
         <span class="k">return</span> <span class="n">spec</span>
 
@@ -1228,6 +1229,13 @@
         <span class="c1"># ``records``, except fields currently being computed</span>
         <span class="n">spec</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">field</span><span class="p">,</span> <span class="n">path</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_triggers</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">field</span><span class="o">.</span><span class="n">compute</span><span class="p">:</span>
+                <span class="c1"># Note: do not invalidate non-computed fields. Such fields may</span>
+                <span class="c1"># require invalidation in general (like *2many fields with</span>
+                <span class="c1"># domains) but should not be invalidated in this case, because</span>
+                <span class="c1"># we would simply lose their values during an onchange!</span>
+                <span class="k">continue</span>
+
             <span class="n">target</span> <span class="o">=</span> <span class="n">env</span><span class="p">[</span><span class="n">field</span><span class="o">.</span><span class="n">model_name</span><span class="p">]</span>
             <span class="n">computed</span> <span class="o">=</span> <span class="n">target</span><span class="o">.</span><span class="n">browse</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">computed</span><span class="p">[</span><span class="n">field</span><span class="p">])</span>
             <span class="k">if</span> <span class="n">path</span> <span class="o">==</span> <span class="s1">&#39;id&#39;</span><span class="p">:</span>
@@ -1248,7 +1256,7 @@
 <span class="k">class</span> <span class="nc">Boolean</span><span class="p">(</span><span class="n">Field</span><span class="p">):</span>
     <span class="nb">type</span> <span class="o">=</span> <span class="s1">&#39;boolean&#39;</span>
 
-    <span class="k">def</span> <span class="nf">convert_to_cache</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="n">validate</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">convert_to_cache</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="n">validate</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">convert_to_export</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">env</span><span class="p">):</span>
@@ -1260,19 +1268,19 @@
 <span class="k">class</span> <span class="nc">Integer</span><span class="p">(</span><span class="n">Field</span><span class="p">):</span>
     <span class="nb">type</span> <span class="o">=</span> <span class="s1">&#39;integer&#39;</span>
     <span class="n">_slots</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s1">&#39;group_operator&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>         <span class="c1"># operator for aggregating values</span>
+        <span class="s1">&#39;group_operator&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>         <span class="c1"># operator for aggregating values</span>
     <span class="p">}</span>
 
     <span class="n">_related_group_operator</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">attrgetter</span><span class="p">(</span><span class="s1">&#39;group_operator&#39;</span><span class="p">))</span>
     <span class="n">_column_group_operator</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">attrgetter</span><span class="p">(</span><span class="s1">&#39;group_operator&#39;</span><span class="p">))</span>
 
-    <span class="k">def</span> <span class="nf">convert_to_cache</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="n">validate</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">convert_to_cache</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="n">validate</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
             <span class="c1"># special case, when an integer field is used as inverse for a one2many</span>
-            <span class="k">return</span> <span class="n">value</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;id&#39;</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">value</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;id&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
         <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">value</span> <span class="ow">or</span> <span class="mi">0</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">convert_to_read</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">use_name_get</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">convert_to_read</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">use_name_get</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="c1"># Integer values greater than 2^31-1 are not supported in pure XMLRPC,</span>
         <span class="c1"># so we have to pass them as floats :-(</span>
         <span class="k">if</span> <span class="n">value</span> <span class="ow">and</span> <span class="n">value</span> <span class="o">&gt;</span> <span class="n">xmlrpclib</span><span class="o">.</span><span class="n">MAXINT</span><span class="p">:</span>
@@ -1297,16 +1305,16 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="nb">type</span> <span class="o">=</span> <span class="s1">&#39;float&#39;</span>
     <span class="n">_slots</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s1">&#39;_digits&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>                <span class="c1"># digits argument passed to class initializer</span>
-        <span class="s1">&#39;group_operator&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>         <span class="c1"># operator for aggregating values</span>
+        <span class="s1">&#39;_digits&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>                <span class="c1"># digits argument passed to class initializer</span>
+        <span class="s1">&#39;group_operator&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>         <span class="c1"># operator for aggregating values</span>
     <span class="p">}</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">string</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">digits</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">string</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">digits</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">Float</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">string</span><span class="o">=</span><span class="n">string</span><span class="p">,</span> <span class="n">_digits</span><span class="o">=</span><span class="n">digits</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">digits</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">if</span> <span class="nb">callable</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_digits</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">callable</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_digits</span><span class="p">):</span>
             <span class="k">with</span> <span class="n">LazyCursor</span><span class="p">()</span> <span class="k">as</span> <span class="n">cr</span><span class="p">:</span>
                 <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_digits</span><span class="p">(</span><span class="n">cr</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
@@ -1325,11 +1333,11 @@
 
     <span class="n">_description_digits</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">attrgetter</span><span class="p">(</span><span class="s1">&#39;digits&#39;</span><span class="p">))</span>
 
-    <span class="n">_column_digits</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="k">lambda</span> <span class="bp">self</span><span class="p">:</span> <span class="ow">not</span> <span class="nb">callable</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_digits</span><span class="p">)</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_digits</span><span class="p">)</span>
-    <span class="n">_column_digits_compute</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="k">lambda</span> <span class="bp">self</span><span class="p">:</span> <span class="nb">callable</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_digits</span><span class="p">)</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_digits</span><span class="p">)</span>
+    <span class="n">_column_digits</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="k">lambda</span> <span class="bp">self</span><span class="p">:</span> <span class="ow">not</span> <span class="n">callable</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_digits</span><span class="p">)</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_digits</span><span class="p">)</span>
+    <span class="n">_column_digits_compute</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="k">lambda</span> <span class="bp">self</span><span class="p">:</span> <span class="n">callable</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_digits</span><span class="p">)</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_digits</span><span class="p">)</span>
     <span class="n">_column_group_operator</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">attrgetter</span><span class="p">(</span><span class="s1">&#39;group_operator&#39;</span><span class="p">))</span>
 
-    <span class="k">def</span> <span class="nf">convert_to_cache</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="n">validate</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">convert_to_cache</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="n">validate</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="c1"># apply rounding here, otherwise value in cache may be wrong!</span>
         <span class="n">value</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">value</span> <span class="ow">or</span> <span class="mf">0.0</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">validate</span><span class="p">:</span>
@@ -1346,7 +1354,7 @@
 <span class="k">class</span> <span class="nc">_String</span><span class="p">(</span><span class="n">Field</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Abstract class for string fields. &quot;&quot;&quot;</span>
     <span class="n">_slots</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s1">&#39;translate&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>             <span class="c1"># whether the field is translated</span>
+        <span class="s1">&#39;translate&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>             <span class="c1"># whether the field is translated</span>
     <span class="p">}</span>
 
     <span class="n">_column_translate</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">attrgetter</span><span class="p">(</span><span class="s1">&#39;translate&#39;</span><span class="p">))</span>
@@ -1363,7 +1371,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="nb">type</span> <span class="o">=</span> <span class="s1">&#39;char&#39;</span>
     <span class="n">_slots</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s1">&#39;size&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>                   <span class="c1"># maximum size of values (deprecated)</span>
+        <span class="s1">&#39;size&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>                   <span class="c1"># maximum size of values (deprecated)</span>
     <span class="p">}</span>
 
     <span class="n">_column_size</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">attrgetter</span><span class="p">(</span><span class="s1">&#39;size&#39;</span><span class="p">))</span>
@@ -1375,9 +1383,9 @@
         <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="p">(</span><span class="n">NoneType</span><span class="p">,</span> <span class="nb">int</span><span class="p">)),</span> \
             <span class="s2">&quot;Char field </span><span class="si">%s</span><span class="s2"> with non-integer size </span><span class="si">%r</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">convert_to_cache</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="n">validate</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">or</span> <span class="n">value</span> <span class="ow">is</span> <span class="bp">False</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">False</span>
+    <span class="k">def</span> <span class="nf">convert_to_cache</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="n">validate</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
         <span class="k">return</span> <span class="n">ustr</span><span class="p">(</span><span class="n">value</span><span class="p">)[:</span><span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">]</span>
 
 <span class="k">class</span> <span class="nc">Text</span><span class="p">(</span><span class="n">_String</span><span class="p">):</span>
@@ -1388,16 +1396,16 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="nb">type</span> <span class="o">=</span> <span class="s1">&#39;text&#39;</span>
 
-    <span class="k">def</span> <span class="nf">convert_to_cache</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="n">validate</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">or</span> <span class="n">value</span> <span class="ow">is</span> <span class="bp">False</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">False</span>
+    <span class="k">def</span> <span class="nf">convert_to_cache</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="n">validate</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
         <span class="k">return</span> <span class="n">ustr</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
 
 <span class="k">class</span> <span class="nc">Html</span><span class="p">(</span><span class="n">_String</span><span class="p">):</span>
     <span class="nb">type</span> <span class="o">=</span> <span class="s1">&#39;html&#39;</span>
     <span class="n">_slots</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s1">&#39;sanitize&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>               <span class="c1"># whether value must be sanitized</span>
-        <span class="s1">&#39;strip_style&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>           <span class="c1"># whether to strip style attributes</span>
+        <span class="s1">&#39;sanitize&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>               <span class="c1"># whether value must be sanitized</span>
+        <span class="s1">&#39;strip_style&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>           <span class="c1"># whether to strip style attributes</span>
     <span class="p">}</span>
 
     <span class="n">_column_sanitize</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">attrgetter</span><span class="p">(</span><span class="s1">&#39;sanitize&#39;</span><span class="p">))</span>
@@ -1408,9 +1416,9 @@
     <span class="n">_related_strip_style</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">attrgetter</span><span class="p">(</span><span class="s1">&#39;strip_style&#39;</span><span class="p">))</span>
     <span class="n">_description_strip_style</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">attrgetter</span><span class="p">(</span><span class="s1">&#39;strip_style&#39;</span><span class="p">))</span>
 
-    <span class="k">def</span> <span class="nf">convert_to_cache</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="n">validate</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">or</span> <span class="n">value</span> <span class="ow">is</span> <span class="bp">False</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">False</span>
+    <span class="k">def</span> <span class="nf">convert_to_cache</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="n">validate</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
         <span class="k">if</span> <span class="n">validate</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">sanitize</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">html_sanitize</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">strip_style</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">strip_style</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">value</span>
@@ -1427,7 +1435,7 @@
         <span class="k">return</span> <span class="n">date</span><span class="o">.</span><span class="n">today</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="n">DATE_FORMAT</span><span class="p">)</span>
 
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">context_today</span><span class="p">(</span><span class="n">record</span><span class="p">,</span> <span class="n">timestamp</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">context_today</span><span class="p">(</span><span class="n">record</span><span class="p">,</span> <span class="n">timestamp</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Return the current date as seen in the client&#39;s timezone in a format</span>
 <span class="sd">            fit for date fields. This method may be used to compute default</span>
 <span class="sd">            values.</span>
@@ -1438,34 +1446,34 @@
 <span class="sd">            :rtype: str</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">today</span> <span class="o">=</span> <span class="n">timestamp</span> <span class="ow">or</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
-        <span class="n">context_today</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="n">context_today</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="n">tz_name</span> <span class="o">=</span> <span class="n">record</span><span class="o">.</span><span class="n">_context</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;tz&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">record</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">tz</span>
         <span class="k">if</span> <span class="n">tz_name</span><span class="p">:</span>
             <span class="k">try</span><span class="p">:</span>
-                <span class="n">today_utc</span> <span class="o">=</span> <span class="n">pytz</span><span class="o">.</span><span class="n">timezone</span><span class="p">(</span><span class="s1">&#39;UTC&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">localize</span><span class="p">(</span><span class="n">today</span><span class="p">,</span> <span class="n">is_dst</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>  <span class="c1"># UTC = no DST</span>
+                <span class="n">today_utc</span> <span class="o">=</span> <span class="n">pytz</span><span class="o">.</span><span class="n">timezone</span><span class="p">(</span><span class="s1">&#39;UTC&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">localize</span><span class="p">(</span><span class="n">today</span><span class="p">,</span> <span class="n">is_dst</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>  <span class="c1"># UTC = no DST</span>
                 <span class="n">context_today</span> <span class="o">=</span> <span class="n">today_utc</span><span class="o">.</span><span class="n">astimezone</span><span class="p">(</span><span class="n">pytz</span><span class="o">.</span><span class="n">timezone</span><span class="p">(</span><span class="n">tz_name</span><span class="p">))</span>
             <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
                 <span class="n">_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;failed to compute context/client-specific today date, using UTC value for `today`&quot;</span><span class="p">,</span>
-                              <span class="n">exc_info</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+                              <span class="n">exc_info</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="k">return</span> <span class="p">(</span><span class="n">context_today</span> <span class="ow">or</span> <span class="n">today</span><span class="p">)</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="n">DATE_FORMAT</span><span class="p">)</span>
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">from_string</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Convert an ORM ``value`` into a :class:`date` value. &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">value</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">None</span>
+            <span class="k">return</span> <span class="kc">None</span>
         <span class="n">value</span> <span class="o">=</span> <span class="n">value</span><span class="p">[:</span><span class="n">DATE_LENGTH</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">DATE_FORMAT</span><span class="p">)</span><span class="o">.</span><span class="n">date</span><span class="p">()</span>
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">to_string</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Convert a :class:`date` value into the format expected by the ORM. &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">value</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="n">DATE_FORMAT</span><span class="p">)</span> <span class="k">if</span> <span class="n">value</span> <span class="k">else</span> <span class="bp">False</span>
+        <span class="k">return</span> <span class="n">value</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="n">DATE_FORMAT</span><span class="p">)</span> <span class="k">if</span> <span class="n">value</span> <span class="k">else</span> <span class="kc">False</span>
 
-    <span class="k">def</span> <span class="nf">convert_to_cache</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="n">validate</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">convert_to_cache</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="n">validate</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">value</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">False</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">basestring</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">basestring</span><span class="p">):</span>
             <span class="k">if</span> <span class="n">validate</span><span class="p">:</span>
                 <span class="c1"># force parsing for validation</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
@@ -1504,7 +1512,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">timestamp</span><span class="p">,</span> <span class="n">datetime</span><span class="p">),</span> <span class="s1">&#39;Datetime instance expected&#39;</span>
         <span class="n">tz_name</span> <span class="o">=</span> <span class="n">record</span><span class="o">.</span><span class="n">_context</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;tz&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">record</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">tz</span>
-        <span class="n">utc_timestamp</span> <span class="o">=</span> <span class="n">pytz</span><span class="o">.</span><span class="n">utc</span><span class="o">.</span><span class="n">localize</span><span class="p">(</span><span class="n">timestamp</span><span class="p">,</span> <span class="n">is_dst</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>  <span class="c1"># UTC = no DST</span>
+        <span class="n">utc_timestamp</span> <span class="o">=</span> <span class="n">pytz</span><span class="o">.</span><span class="n">utc</span><span class="o">.</span><span class="n">localize</span><span class="p">(</span><span class="n">timestamp</span><span class="p">,</span> <span class="n">is_dst</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>  <span class="c1"># UTC = no DST</span>
         <span class="k">if</span> <span class="n">tz_name</span><span class="p">:</span>
             <span class="k">try</span><span class="p">:</span>
                 <span class="n">context_tz</span> <span class="o">=</span> <span class="n">pytz</span><span class="o">.</span><span class="n">timezone</span><span class="p">(</span><span class="n">tz_name</span><span class="p">)</span>
@@ -1512,14 +1520,14 @@
             <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
                 <span class="n">_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;failed to compute context/client-specific timestamp, &quot;</span>
                               <span class="s2">&quot;using the UTC value&quot;</span><span class="p">,</span>
-                              <span class="n">exc_info</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+                              <span class="n">exc_info</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">utc_timestamp</span>
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">from_string</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Convert an ORM ``value`` into a :class:`datetime` value. &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">value</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">None</span>
+            <span class="k">return</span> <span class="kc">None</span>
         <span class="n">value</span> <span class="o">=</span> <span class="n">value</span><span class="p">[:</span><span class="n">DATETIME_LENGTH</span><span class="p">]</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="o">==</span> <span class="n">DATE_LENGTH</span><span class="p">:</span>
             <span class="n">value</span> <span class="o">+=</span> <span class="s2">&quot; 00:00:00&quot;</span>
@@ -1528,12 +1536,12 @@
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">to_string</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Convert a :class:`datetime` value into the format expected by the ORM. &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">value</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="n">DATETIME_FORMAT</span><span class="p">)</span> <span class="k">if</span> <span class="n">value</span> <span class="k">else</span> <span class="bp">False</span>
+        <span class="k">return</span> <span class="n">value</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="n">DATETIME_FORMAT</span><span class="p">)</span> <span class="k">if</span> <span class="n">value</span> <span class="k">else</span> <span class="kc">False</span>
 
-    <span class="k">def</span> <span class="nf">convert_to_cache</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="n">validate</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">convert_to_cache</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="n">validate</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">value</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">False</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">basestring</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">basestring</span><span class="p">):</span>
             <span class="k">if</span> <span class="n">validate</span><span class="p">:</span>
                 <span class="c1"># force parsing for validation</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
@@ -1548,7 +1556,7 @@
             <span class="k">return</span> <span class="s1">&#39;&#39;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="k">if</span> <span class="n">env</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;export_raw_data&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="n">ustr</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">convert_to_display_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">record</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">convert_to_display_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">record</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="k">assert</span> <span class="n">record</span><span class="p">,</span> <span class="s1">&#39;Record expected&#39;</span>
         <span class="k">return</span> <span class="n">Datetime</span><span class="o">.</span><span class="n">to_string</span><span class="p">(</span><span class="n">Datetime</span><span class="o">.</span><span class="n">context_timestamp</span><span class="p">(</span><span class="n">record</span><span class="p">,</span> <span class="n">Datetime</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="n">value</span><span class="p">)))</span>
 
@@ -1571,18 +1579,18 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="nb">type</span> <span class="o">=</span> <span class="s1">&#39;selection&#39;</span>
     <span class="n">_slots</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s1">&#39;selection&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>              <span class="c1"># [(value, string), ...], function or method name</span>
+        <span class="s1">&#39;selection&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>              <span class="c1"># [(value, string), ...], function or method name</span>
     <span class="p">}</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">selection</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">string</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="k">if</span> <span class="nb">callable</span><span class="p">(</span><span class="n">selection</span><span class="p">):</span>
-            <span class="kn">from</span> <span class="nn">openerp</span> <span class="kn">import</span> <span class="n">api</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">selection</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">string</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">callable</span><span class="p">(</span><span class="n">selection</span><span class="p">):</span>
+            <span class="kn">from</span> <span class="nn">openerp</span> <span class="k">import</span> <span class="n">api</span>
             <span class="n">selection</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">expected</span><span class="p">(</span><span class="n">api</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="n">selection</span><span class="p">)</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">Selection</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">selection</span><span class="o">=</span><span class="n">selection</span><span class="p">,</span> <span class="n">string</span><span class="o">=</span><span class="n">string</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_setup_regular</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">env</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">Selection</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">_setup_regular</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
-        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">selection</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">,</span> <span class="s2">&quot;Field </span><span class="si">%s</span><span class="s2"> without selection&quot;</span> <span class="o">%</span> <span class="bp">self</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">selection</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;Field </span><span class="si">%s</span><span class="s2"> without selection&quot;</span> <span class="o">%</span> <span class="bp">self</span>
 
     <span class="k">def</span> <span class="nf">_setup_related</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">env</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">Selection</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">_setup_related</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
@@ -1593,7 +1601,7 @@
     <span class="k">def</span> <span class="nf">set_class_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">Selection</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">set_class_name</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
         <span class="c1"># determine selection (applying &#39;selection_add&#39; extensions)</span>
-        <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">resolve_all_mro</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">resolve_all_mro</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)):</span>
                 <span class="c1"># We cannot use field.selection or field.selection_add here</span>
                 <span class="c1"># because those attributes are overridden by ``set_class_name``.</span>
@@ -1604,16 +1612,16 @@
                     <span class="n">selection_add</span> <span class="o">=</span> <span class="n">field</span><span class="o">.</span><span class="n">_attrs</span><span class="p">[</span><span class="s1">&#39;selection_add&#39;</span><span class="p">]</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">selection</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">selection</span> <span class="o">+</span> <span class="n">selection_add</span><span class="p">)</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">selection</span> <span class="o">=</span> <span class="bp">None</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">selection</span> <span class="o">=</span> <span class="kc">None</span>
 
     <span class="k">def</span> <span class="nf">_description_selection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">env</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; return the selection list (pairs (value, label)); labels are</span>
 <span class="sd">            translated according to context language</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">selection</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">selection</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">selection</span><span class="p">,</span> <span class="nb">basestring</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">selection</span><span class="p">,</span> <span class="n">basestring</span><span class="p">):</span>
             <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">env</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">model_name</span><span class="p">],</span> <span class="n">selection</span><span class="p">)()</span>
-        <span class="k">if</span> <span class="nb">callable</span><span class="p">(</span><span class="n">selection</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">callable</span><span class="p">(</span><span class="n">selection</span><span class="p">):</span>
             <span class="k">return</span> <span class="n">selection</span><span class="p">(</span><span class="n">env</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">model_name</span><span class="p">])</span>
 
         <span class="c1"># translate selection labels</span>
@@ -1627,7 +1635,7 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">_column_selection</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">selection</span><span class="p">,</span> <span class="nb">basestring</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">selection</span><span class="p">,</span> <span class="n">basestring</span><span class="p">):</span>
             <span class="n">method</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">selection</span>
             <span class="k">return</span> <span class="k">lambda</span> <span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">a</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">:</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method</span><span class="p">)(</span><span class="o">*</span><span class="n">a</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
@@ -1636,19 +1644,19 @@
     <span class="k">def</span> <span class="nf">get_values</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">env</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; return a list of the possible values &quot;&quot;&quot;</span>
         <span class="n">selection</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">selection</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">selection</span><span class="p">,</span> <span class="nb">basestring</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">selection</span><span class="p">,</span> <span class="n">basestring</span><span class="p">):</span>
             <span class="n">selection</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">env</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">model_name</span><span class="p">],</span> <span class="n">selection</span><span class="p">)()</span>
-        <span class="k">elif</span> <span class="nb">callable</span><span class="p">(</span><span class="n">selection</span><span class="p">):</span>
+        <span class="k">elif</span> <span class="n">callable</span><span class="p">(</span><span class="n">selection</span><span class="p">):</span>
             <span class="n">selection</span> <span class="o">=</span> <span class="n">selection</span><span class="p">(</span><span class="n">env</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">model_name</span><span class="p">])</span>
         <span class="k">return</span> <span class="p">[</span><span class="n">value</span> <span class="k">for</span> <span class="n">value</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">selection</span><span class="p">]</span>
 
-    <span class="k">def</span> <span class="nf">convert_to_cache</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="n">validate</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">convert_to_cache</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="n">validate</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">validate</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">value</span> <span class="ow">or</span> <span class="bp">False</span>
+            <span class="k">return</span> <span class="n">value</span> <span class="ow">or</span> <span class="kc">False</span>
         <span class="k">if</span> <span class="n">value</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_values</span><span class="p">(</span><span class="n">record</span><span class="o">.</span><span class="n">env</span><span class="p">):</span>
             <span class="k">return</span> <span class="n">value</span>
         <span class="k">elif</span> <span class="ow">not</span> <span class="n">value</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">False</span>
+            <span class="k">return</span> <span class="kc">False</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Wrong value for </span><span class="si">%s</span><span class="s2">: </span><span class="si">%r</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">))</span>
 
     <span class="k">def</span> <span class="nf">convert_to_export</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">env</span><span class="p">):</span>
@@ -1658,13 +1666,13 @@
         <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_description_selection</span><span class="p">(</span><span class="n">env</span><span class="p">):</span>
             <span class="k">if</span> <span class="n">item</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">value</span><span class="p">:</span>
                 <span class="k">return</span> <span class="n">item</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-        <span class="k">return</span> <span class="bp">False</span>
+        <span class="k">return</span> <span class="kc">False</span>
 
 
 <span class="k">class</span> <span class="nc">Reference</span><span class="p">(</span><span class="n">Selection</span><span class="p">):</span>
     <span class="nb">type</span> <span class="o">=</span> <span class="s1">&#39;reference&#39;</span>
     <span class="n">_slots</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s1">&#39;size&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>                   <span class="c1"># maximum size of values (deprecated)</span>
+        <span class="s1">&#39;size&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>                   <span class="c1"># maximum size of values (deprecated)</span>
     <span class="p">}</span>
 
     <span class="n">_related_size</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">attrgetter</span><span class="p">(</span><span class="s1">&#39;size&#39;</span><span class="p">))</span>
@@ -1675,31 +1683,31 @@
         <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="p">(</span><span class="n">NoneType</span><span class="p">,</span> <span class="nb">int</span><span class="p">)),</span> \
             <span class="s2">&quot;Reference field </span><span class="si">%s</span><span class="s2"> with non-integer size </span><span class="si">%r</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">convert_to_cache</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="n">validate</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">convert_to_cache</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="n">validate</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">BaseModel</span><span class="p">):</span>
             <span class="k">if</span> <span class="p">((</span><span class="ow">not</span> <span class="n">validate</span> <span class="ow">or</span> <span class="n">value</span><span class="o">.</span><span class="n">_name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_values</span><span class="p">(</span><span class="n">record</span><span class="o">.</span><span class="n">env</span><span class="p">))</span>
                     <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">):</span>
-                <span class="k">return</span> <span class="n">value</span><span class="o">.</span><span class="n">with_env</span><span class="p">(</span><span class="n">record</span><span class="o">.</span><span class="n">env</span><span class="p">)</span> <span class="ow">or</span> <span class="bp">False</span>
-        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">basestring</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">value</span><span class="o">.</span><span class="n">with_env</span><span class="p">(</span><span class="n">record</span><span class="o">.</span><span class="n">env</span><span class="p">)</span> <span class="ow">or</span> <span class="kc">False</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">basestring</span><span class="p">):</span>
             <span class="n">res_model</span><span class="p">,</span> <span class="n">res_id</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">record</span><span class="o">.</span><span class="n">env</span><span class="p">[</span><span class="n">res_model</span><span class="p">]</span><span class="o">.</span><span class="n">browse</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">res_id</span><span class="p">))</span>
         <span class="k">elif</span> <span class="ow">not</span> <span class="n">value</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">False</span>
+            <span class="k">return</span> <span class="kc">False</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Wrong value for </span><span class="si">%s</span><span class="s2">: </span><span class="si">%r</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">))</span>
 
-    <span class="k">def</span> <span class="nf">convert_to_read</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">use_name_get</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">,</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">value</span><span class="o">.</span><span class="n">_name</span><span class="p">,</span> <span class="n">value</span><span class="o">.</span><span class="n">id</span><span class="p">)</span> <span class="k">if</span> <span class="n">value</span> <span class="k">else</span> <span class="bp">False</span>
+    <span class="k">def</span> <span class="nf">convert_to_read</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">use_name_get</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">,</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">value</span><span class="o">.</span><span class="n">_name</span><span class="p">,</span> <span class="n">value</span><span class="o">.</span><span class="n">id</span><span class="p">)</span> <span class="k">if</span> <span class="n">value</span> <span class="k">else</span> <span class="kc">False</span>
 
     <span class="k">def</span> <span class="nf">convert_to_export</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">env</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">value</span><span class="o">.</span><span class="n">name_get</span><span class="p">()[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="k">if</span> <span class="n">value</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span>
 
-    <span class="k">def</span> <span class="nf">convert_to_display_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">record</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">convert_to_display_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">record</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">ustr</span><span class="p">(</span><span class="n">value</span> <span class="ow">and</span> <span class="n">value</span><span class="o">.</span><span class="n">display_name</span><span class="p">)</span>
 
 
 <span class="k">class</span> <span class="nc">_Relational</span><span class="p">(</span><span class="n">Field</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Abstract class for relational fields. &quot;&quot;&quot;</span>
-    <span class="n">relational</span> <span class="o">=</span> <span class="bp">True</span>
+    <span class="n">relational</span> <span class="o">=</span> <span class="kc">True</span>
     <span class="n">_slots</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s1">&#39;domain&#39;</span><span class="p">:</span> <span class="p">[],</span>                   <span class="c1"># domain for searching values</span>
         <span class="s1">&#39;context&#39;</span><span class="p">:</span> <span class="p">{},</span>                  <span class="c1"># context for searching values</span>
@@ -1714,7 +1722,7 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">_related_domain</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">if</span> <span class="nb">callable</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">domain</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">callable</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">domain</span><span class="p">):</span>
             <span class="c1"># will be called with another model than self&#39;s</span>
             <span class="k">return</span> <span class="k">lambda</span> <span class="n">recs</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">domain</span><span class="p">(</span><span class="n">recs</span><span class="o">.</span><span class="n">env</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">model_name</span><span class="p">])</span>
         <span class="k">else</span><span class="p">:</span>
@@ -1727,7 +1735,7 @@
     <span class="n">_description_context</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">attrgetter</span><span class="p">(</span><span class="s1">&#39;context&#39;</span><span class="p">))</span>
 
     <span class="k">def</span> <span class="nf">_description_domain</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">env</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">domain</span><span class="p">(</span><span class="n">env</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">model_name</span><span class="p">])</span> <span class="k">if</span> <span class="nb">callable</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">domain</span><span class="p">)</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">domain</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">domain</span><span class="p">(</span><span class="n">env</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">model_name</span><span class="p">])</span> <span class="k">if</span> <span class="n">callable</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">domain</span><span class="p">)</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">domain</span>
 
     <span class="n">_column_obj</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">attrgetter</span><span class="p">(</span><span class="s1">&#39;comodel_name&#39;</span><span class="p">))</span>
     <span class="n">_column_domain</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">attrgetter</span><span class="p">(</span><span class="s1">&#39;domain&#39;</span><span class="p">))</span>
@@ -1742,7 +1750,7 @@
         <span class="c1"># triggers (see above).</span>
         <span class="n">spec</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">_Relational</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">modified</span><span class="p">(</span><span class="n">records</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">invf</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">inverse_fields</span><span class="p">:</span>
-            <span class="n">spec</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">invf</span><span class="p">,</span> <span class="bp">None</span><span class="p">))</span>
+            <span class="n">spec</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">invf</span><span class="p">,</span> <span class="kc">None</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">spec</span>
 
 
@@ -1773,11 +1781,11 @@
     <span class="nb">type</span> <span class="o">=</span> <span class="s1">&#39;many2one&#39;</span>
     <span class="n">_slots</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s1">&#39;ondelete&#39;</span><span class="p">:</span> <span class="s1">&#39;set null&#39;</span><span class="p">,</span>         <span class="c1"># what to do when value is deleted</span>
-        <span class="s1">&#39;auto_join&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>             <span class="c1"># whether joins are generated upon search</span>
-        <span class="s1">&#39;delegate&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>              <span class="c1"># whether self implements delegation</span>
+        <span class="s1">&#39;auto_join&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>             <span class="c1"># whether joins are generated upon search</span>
+        <span class="s1">&#39;delegate&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>              <span class="c1"># whether self implements delegation</span>
     <span class="p">}</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">comodel_name</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">string</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">comodel_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">string</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">Many2one</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">comodel_name</span><span class="o">=</span><span class="n">comodel_name</span><span class="p">,</span> <span class="n">string</span><span class="o">=</span><span class="n">string</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">set_class_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
@@ -1793,8 +1801,8 @@
         <span class="sd">&quot;&quot;&quot; Update the cached value of ``self`` for ``records`` with ``value``. &quot;&quot;&quot;</span>
         <span class="n">records</span><span class="o">.</span><span class="n">_cache</span><span class="p">[</span><span class="bp">self</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
 
-    <span class="k">def</span> <span class="nf">convert_to_cache</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="n">validate</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="p">(</span><span class="n">NoneType</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">long</span><span class="p">)):</span>
+    <span class="k">def</span> <span class="nf">convert_to_cache</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="n">validate</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="p">(</span><span class="n">NoneType</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="n">long</span><span class="p">)):</span>
             <span class="k">return</span> <span class="n">record</span><span class="o">.</span><span class="n">env</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">comodel_name</span><span class="p">]</span><span class="o">.</span><span class="n">browse</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">BaseModel</span><span class="p">):</span>
             <span class="k">if</span> <span class="n">value</span><span class="o">.</span><span class="n">_name</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">comodel_name</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">:</span>
@@ -1807,7 +1815,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">null</span><span class="p">(</span><span class="n">record</span><span class="o">.</span><span class="n">env</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">convert_to_read</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">use_name_get</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">convert_to_read</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">use_name_get</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">use_name_get</span> <span class="ow">and</span> <span class="n">value</span><span class="p">:</span>
             <span class="c1"># evaluate name_get() as superuser, because the visibility of a</span>
             <span class="c1"># many2one field value (id and name) depends on the current record&#39;s</span>
@@ -1820,11 +1828,11 @@
                 <span class="k">return</span> <span class="n">value_sudo</span><span class="o">.</span><span class="n">name_get</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
             <span class="k">except</span> <span class="n">MissingError</span><span class="p">:</span>
                 <span class="c1"># Should not happen, unless the foreign key is missing.</span>
-                <span class="k">return</span> <span class="bp">False</span>
+                <span class="k">return</span> <span class="kc">False</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">value</span><span class="o">.</span><span class="n">id</span>
 
-    <span class="k">def</span> <span class="nf">convert_to_write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">fnames</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">convert_to_write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fnames</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">value</span><span class="o">.</span><span class="n">id</span>
 
     <span class="k">def</span> <span class="nf">convert_to_onchange</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
@@ -1833,7 +1841,7 @@
     <span class="k">def</span> <span class="nf">convert_to_export</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">env</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">value</span><span class="o">.</span><span class="n">name_get</span><span class="p">()[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="k">if</span> <span class="n">value</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span>
 
-    <span class="k">def</span> <span class="nf">convert_to_display_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">record</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">convert_to_display_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">record</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">ustr</span><span class="p">(</span><span class="n">value</span><span class="o">.</span><span class="n">display_name</span><span class="p">)</span>
 
 
@@ -1864,7 +1872,7 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">record</span><span class="o">.</span><span class="n">_cache</span><span class="p">[</span><span class="bp">self</span><span class="p">]</span> <span class="o">=</span> <span class="n">UnionUpdate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">convert_to_cache</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="n">validate</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">convert_to_cache</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="n">validate</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">BaseModel</span><span class="p">):</span>
             <span class="k">if</span> <span class="n">value</span><span class="o">.</span><span class="n">_name</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">comodel_name</span><span class="p">:</span>
                 <span class="k">return</span> <span class="n">value</span><span class="o">.</span><span class="n">with_env</span><span class="p">(</span><span class="n">record</span><span class="o">.</span><span class="n">env</span><span class="p">)</span>
@@ -1901,12 +1909,12 @@
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">null</span><span class="p">(</span><span class="n">record</span><span class="o">.</span><span class="n">env</span><span class="p">)</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Wrong value for </span><span class="si">%s</span><span class="s2">: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">))</span>
 
-    <span class="k">def</span> <span class="nf">convert_to_read</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">use_name_get</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">convert_to_read</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">use_name_get</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">value</span><span class="o">.</span><span class="n">ids</span>
 
-    <span class="k">def</span> <span class="nf">convert_to_write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">fnames</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">convert_to_write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fnames</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="c1"># remove/delete former records</span>
-        <span class="k">if</span> <span class="n">target</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">target</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">set_ids</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="n">result</span> <span class="o">=</span> <span class="p">[(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">set_ids</span><span class="p">)]</span>
             <span class="n">add_existing</span> <span class="o">=</span> <span class="k">lambda</span> <span class="nb">id</span><span class="p">:</span> <span class="n">set_ids</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span>
@@ -1915,7 +1923,7 @@
             <span class="n">result</span> <span class="o">=</span> <span class="p">[(</span><span class="n">tag</span><span class="p">,</span> <span class="n">record</span><span class="o">.</span><span class="n">id</span><span class="p">)</span> <span class="k">for</span> <span class="n">record</span> <span class="ow">in</span> <span class="n">target</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">-</span> <span class="n">value</span><span class="p">]</span>
             <span class="n">add_existing</span> <span class="o">=</span> <span class="k">lambda</span> <span class="nb">id</span><span class="p">:</span> <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="mi">4</span><span class="p">,</span> <span class="nb">id</span><span class="p">))</span>
 
-        <span class="k">if</span> <span class="n">fnames</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">fnames</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="c1"># take all fields in cache, except the inverses of self</span>
             <span class="n">fnames</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">value</span><span class="o">.</span><span class="n">_fields</span><span class="p">)</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="n">MAGIC_COLUMNS</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">invf</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">inverse_fields</span><span class="p">:</span>
@@ -1939,17 +1947,29 @@
     <span class="k">def</span> <span class="nf">convert_to_export</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">env</span><span class="p">):</span>
         <span class="k">return</span> <span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">name</span> <span class="k">for</span> <span class="nb">id</span><span class="p">,</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">value</span><span class="o">.</span><span class="n">name_get</span><span class="p">())</span> <span class="k">if</span> <span class="n">value</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span>
 
-    <span class="k">def</span> <span class="nf">convert_to_display_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">record</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">convert_to_display_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">record</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">_compute_related</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">records</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Compute the related field ``self`` on ``records``. &quot;&quot;&quot;</span>
-        <span class="k">for</span> <span class="n">record</span> <span class="ow">in</span> <span class="n">records</span><span class="p">:</span>
-            <span class="n">value</span> <span class="o">=</span> <span class="n">record</span>
-            <span class="c1"># traverse the intermediate fields, and keep at most one record</span>
-            <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">related</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
-                <span class="n">value</span> <span class="o">=</span> <span class="n">value</span><span class="p">[</span><span class="n">name</span><span class="p">][:</span><span class="mi">1</span><span class="p">]</span>
-            <span class="n">record</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">related</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">_RelationalMulti</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">_compute_related</span><span class="p">(</span><span class="n">records</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">related_sudo</span><span class="p">:</span>
+            <span class="c1"># determine which records in the relation are actually accessible</span>
+            <span class="n">target</span> <span class="o">=</span> <span class="n">records</span><span class="o">.</span><span class="n">mapped</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+            <span class="n">target_ids</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">target</span><span class="o">.</span><span class="n">search</span><span class="p">([(</span><span class="s1">&#39;id&#39;</span><span class="p">,</span> <span class="s1">&#39;in&#39;</span><span class="p">,</span> <span class="n">target</span><span class="o">.</span><span class="n">ids</span><span class="p">)])</span><span class="o">.</span><span class="n">ids</span><span class="p">)</span>
+            <span class="n">accessible</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">target</span><span class="p">:</span> <span class="n">target</span><span class="o">.</span><span class="n">id</span> <span class="ow">in</span> <span class="n">target_ids</span>
+            <span class="c1"># filter values to keep the accessible records only</span>
+            <span class="k">for</span> <span class="n">record</span> <span class="ow">in</span> <span class="n">records</span><span class="p">:</span>
+                <span class="n">record</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">record</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">filtered</span><span class="p">(</span><span class="n">accessible</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">setup_triggers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">env</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">_RelationalMulti</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">setup_triggers</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
+        <span class="c1"># also invalidate self when fields appearing in the domain are modified</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">domain</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="n">comodel</span> <span class="o">=</span> <span class="n">env</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">comodel_name</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">domain</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="p">(</span><span class="nb">tuple</span><span class="p">,</span> <span class="nb">list</span><span class="p">))</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">basestring</span><span class="p">):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_setup_dependency</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">],</span> <span class="n">comodel</span><span class="p">,</span> <span class="n">arg</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">))</span>
 
 
 <span class="k">class</span> <span class="nc">One2many</span><span class="p">(</span><span class="n">_RelationalMulti</span><span class="p">):</span>
@@ -1978,13 +1998,13 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="nb">type</span> <span class="o">=</span> <span class="s1">&#39;one2many&#39;</span>
     <span class="n">_slots</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s1">&#39;inverse_name&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>           <span class="c1"># name of the inverse field</span>
-        <span class="s1">&#39;auto_join&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>             <span class="c1"># whether joins are generated upon search</span>
-        <span class="s1">&#39;limit&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>                  <span class="c1"># optional limit to use upon read</span>
-        <span class="s1">&#39;copy&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>                  <span class="c1"># o2m are not copied by default</span>
+        <span class="s1">&#39;inverse_name&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>           <span class="c1"># name of the inverse field</span>
+        <span class="s1">&#39;auto_join&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>             <span class="c1"># whether joins are generated upon search</span>
+        <span class="s1">&#39;limit&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>                  <span class="c1"># optional limit to use upon read</span>
+        <span class="s1">&#39;copy&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>                  <span class="c1"># o2m are not copied by default</span>
     <span class="p">}</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">comodel_name</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">inverse_name</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">string</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">comodel_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">inverse_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">string</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">One2many</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span>
             <span class="n">comodel_name</span><span class="o">=</span><span class="n">comodel_name</span><span class="p">,</span>
             <span class="n">inverse_name</span><span class="o">=</span><span class="n">inverse_name</span><span class="p">,</span>
@@ -2045,14 +2065,14 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="nb">type</span> <span class="o">=</span> <span class="s1">&#39;many2many&#39;</span>
     <span class="n">_slots</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s1">&#39;relation&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>               <span class="c1"># name of table</span>
-        <span class="s1">&#39;column1&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>                <span class="c1"># column of table referring to model</span>
-        <span class="s1">&#39;column2&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>                <span class="c1"># column of table referring to comodel</span>
-        <span class="s1">&#39;limit&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>                  <span class="c1"># optional limit to use upon read</span>
+        <span class="s1">&#39;relation&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>               <span class="c1"># name of table</span>
+        <span class="s1">&#39;column1&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>                <span class="c1"># column of table referring to model</span>
+        <span class="s1">&#39;column2&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>                <span class="c1"># column of table referring to comodel</span>
+        <span class="s1">&#39;limit&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>                  <span class="c1"># optional limit to use upon read</span>
     <span class="p">}</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">comodel_name</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">relation</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">column1</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">column2</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
-                 <span class="n">string</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">comodel_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">relation</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">column1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">column2</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">string</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">Many2many</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span>
             <span class="n">comodel_name</span><span class="o">=</span><span class="n">comodel_name</span><span class="p">,</span>
             <span class="n">relation</span><span class="o">=</span><span class="n">relation</span><span class="p">,</span>
@@ -2093,7 +2113,7 @@
     <span class="sd">&quot;&quot;&quot; Minimal support for existing sparse and serialized fields. &quot;&quot;&quot;</span>
     <span class="nb">type</span> <span class="o">=</span> <span class="s1">&#39;serialized&#39;</span>
 
-    <span class="k">def</span> <span class="nf">convert_to_cache</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="n">validate</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">convert_to_cache</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="n">validate</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">value</span> <span class="ow">or</span> <span class="p">{}</span>
 
 
@@ -2102,8 +2122,8 @@
     <span class="nb">type</span> <span class="o">=</span> <span class="s1">&#39;integer&#39;</span>
     <span class="n">_slots</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s1">&#39;string&#39;</span><span class="p">:</span> <span class="s1">&#39;ID&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;store&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
-        <span class="s1">&#39;readonly&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+        <span class="s1">&#39;store&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="s1">&#39;readonly&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
     <span class="p">}</span>
 
     <span class="k">def</span> <span class="nf">to_column</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -2111,20 +2131,20 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">column</span>
 
     <span class="k">def</span> <span class="nf">__get__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="n">owner</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">record</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">record</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span>         <span class="c1"># the field is accessed through the class owner</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">record</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">False</span>
+            <span class="k">return</span> <span class="kc">False</span>
         <span class="k">return</span> <span class="n">record</span><span class="o">.</span><span class="n">ensure_one</span><span class="p">()</span><span class="o">.</span><span class="n">_ids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
     <span class="k">def</span> <span class="nf">__set__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;field &#39;id&#39; cannot be assigned&quot;</span><span class="p">)</span>
 
 <span class="c1"># imported here to avoid dependency cycle issues</span>
-<span class="kn">from</span> <span class="nn">openerp</span> <span class="kn">import</span> <span class="n">SUPERUSER_ID</span>
-<span class="kn">from</span> <span class="nn">.exceptions</span> <span class="kn">import</span> <span class="ne">Warning</span><span class="p">,</span> <span class="n">AccessError</span><span class="p">,</span> <span class="n">MissingError</span>
-<span class="kn">from</span> <span class="nn">.models</span> <span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">MAGIC_COLUMNS</span>
-<span class="kn">from</span> <span class="nn">.osv</span> <span class="kn">import</span> <span class="n">fields</span>
+<span class="kn">from</span> <span class="nn">openerp</span> <span class="k">import</span> <span class="n">SUPERUSER_ID</span>
+<span class="kn">from</span> <span class="nn">.exceptions</span> <span class="k">import</span> <span class="ne">Warning</span><span class="p">,</span> <span class="n">AccessError</span><span class="p">,</span> <span class="n">MissingError</span>
+<span class="kn">from</span> <span class="nn">.models</span> <span class="k">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">MAGIC_COLUMNS</span>
+<span class="kn">from</span> <span class="nn">.osv</span> <span class="k">import</span> <span class="n">fields</span>
 </pre></div>
 
     </div>
@@ -2142,7 +2162,7 @@
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.5.<br/>
     </p>
   </div>
 </footer>

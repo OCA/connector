@@ -9,7 +9,7 @@
     
     <link rel="stylesheet" href="../../../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/bootswatch-3.3.4/united/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/bootswatch-3.3.6/united/bootstrap.min.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
     
     <script type="text/javascript">
@@ -27,7 +27,7 @@
     <script type="text/javascript" src="../../../_static/translations.js"></script>
     <script type="text/javascript" src="../../../_static/js/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="../../../_static/js/jquery-fix.js"></script>
-    <script type="text/javascript" src="../../../_static/bootstrap-3.3.4/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../../../_static/bootstrap-sphinx.js"></script>
     <link rel="top" title="documentation Connector " href="../../../index.html" />
     <link rel="up" title="Code du module" href="../../index.html" />
@@ -253,15 +253,15 @@
 
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">logging</span>
-<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">timedelta</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="k">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">timedelta</span>
 
-<span class="kn">from</span> <span class="nn">openerp</span> <span class="kn">import</span> <span class="n">models</span><span class="p">,</span> <span class="n">fields</span><span class="p">,</span> <span class="n">api</span><span class="p">,</span> <span class="n">exceptions</span><span class="p">,</span> <span class="n">_</span>
+<span class="kn">from</span> <span class="nn">openerp</span> <span class="k">import</span> <span class="n">models</span><span class="p">,</span> <span class="n">fields</span><span class="p">,</span> <span class="n">api</span><span class="p">,</span> <span class="n">exceptions</span><span class="p">,</span> <span class="n">_</span>
 
-<span class="kn">from</span> <span class="nn">.job</span> <span class="kn">import</span> <span class="n">STATES</span><span class="p">,</span> <span class="n">DONE</span><span class="p">,</span> <span class="n">PENDING</span><span class="p">,</span> <span class="n">OpenERPJobStorage</span><span class="p">,</span> <span class="n">JOB_REGISTRY</span>
-<span class="kn">from</span> <span class="nn">.worker</span> <span class="kn">import</span> <span class="n">WORKER_TIMEOUT</span>
-<span class="kn">from</span> <span class="nn">..session</span> <span class="kn">import</span> <span class="n">ConnectorSession</span>
-<span class="kn">from</span> <span class="nn">.worker</span> <span class="kn">import</span> <span class="n">watcher</span>
-<span class="kn">from</span> <span class="nn">..connector</span> <span class="kn">import</span> <span class="n">get_openerp_module</span><span class="p">,</span> <span class="n">is_module_installed</span>
+<span class="kn">from</span> <span class="nn">.job</span> <span class="k">import</span> <span class="n">STATES</span><span class="p">,</span> <span class="n">DONE</span><span class="p">,</span> <span class="n">PENDING</span><span class="p">,</span> <span class="n">OpenERPJobStorage</span><span class="p">,</span> <span class="n">JOB_REGISTRY</span>
+<span class="kn">from</span> <span class="nn">.worker</span> <span class="k">import</span> <span class="n">WORKER_TIMEOUT</span>
+<span class="kn">from</span> <span class="nn">..session</span> <span class="k">import</span> <span class="n">ConnectorSession</span>
+<span class="kn">from</span> <span class="nn">.worker</span> <span class="k">import</span> <span class="n">watcher</span>
+<span class="kn">from</span> <span class="nn">..connector</span> <span class="k">import</span> <span class="n">get_openerp_module</span><span class="p">,</span> <span class="n">is_module_installed</span>
 
 <span class="n">_logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">__name__</span><span class="p">)</span>
 
@@ -271,7 +271,7 @@
     <span class="n">_name</span> <span class="o">=</span> <span class="s1">&#39;queue.job&#39;</span>
     <span class="n">_description</span> <span class="o">=</span> <span class="s1">&#39;Queue Job&#39;</span>
     <span class="n">_inherit</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;mail.thread&#39;</span><span class="p">,</span> <span class="s1">&#39;ir.needaction_mixin&#39;</span><span class="p">]</span>
-    <span class="n">_log_access</span> <span class="o">=</span> <span class="bp">False</span>
+    <span class="n">_log_access</span> <span class="o">=</span> <span class="kc">False</span>
 
     <span class="n">_order</span> <span class="o">=</span> <span class="s1">&#39;date_created DESC, date_done DESC&#39;</span>
 
@@ -280,37 +280,37 @@
     <span class="n">worker_id</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Many2one</span><span class="p">(</span><span class="n">comodel_name</span><span class="o">=</span><span class="s1">&#39;queue.worker&#39;</span><span class="p">,</span>
                                 <span class="n">string</span><span class="o">=</span><span class="s1">&#39;Worker&#39;</span><span class="p">,</span>
                                 <span class="n">ondelete</span><span class="o">=</span><span class="s1">&#39;set null&#39;</span><span class="p">,</span>
-                                <span class="n">select</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
-                                <span class="n">readonly</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+                                <span class="n">select</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                <span class="n">readonly</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">uuid</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Char</span><span class="p">(</span><span class="n">string</span><span class="o">=</span><span class="s1">&#39;UUID&#39;</span><span class="p">,</span>
-                       <span class="n">readonly</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
-                       <span class="n">select</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
-                       <span class="n">required</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+                       <span class="n">readonly</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                       <span class="n">select</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                       <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">user_id</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Many2one</span><span class="p">(</span><span class="n">comodel_name</span><span class="o">=</span><span class="s1">&#39;res.users&#39;</span><span class="p">,</span>
                               <span class="n">string</span><span class="o">=</span><span class="s1">&#39;User ID&#39;</span><span class="p">,</span>
-                              <span class="n">required</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+                              <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">company_id</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Many2one</span><span class="p">(</span><span class="n">comodel_name</span><span class="o">=</span><span class="s1">&#39;res.company&#39;</span><span class="p">,</span>
-                                 <span class="n">string</span><span class="o">=</span><span class="s1">&#39;Company&#39;</span><span class="p">,</span> <span class="n">select</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-    <span class="n">name</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Char</span><span class="p">(</span><span class="n">string</span><span class="o">=</span><span class="s1">&#39;Description&#39;</span><span class="p">,</span> <span class="n">readonly</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-    <span class="n">func_string</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Char</span><span class="p">(</span><span class="n">string</span><span class="o">=</span><span class="s1">&#39;Task&#39;</span><span class="p">,</span> <span class="n">readonly</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+                                 <span class="n">string</span><span class="o">=</span><span class="s1">&#39;Company&#39;</span><span class="p">,</span> <span class="n">select</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Char</span><span class="p">(</span><span class="n">string</span><span class="o">=</span><span class="s1">&#39;Description&#39;</span><span class="p">,</span> <span class="n">readonly</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">func_string</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Char</span><span class="p">(</span><span class="n">string</span><span class="o">=</span><span class="s1">&#39;Task&#39;</span><span class="p">,</span> <span class="n">readonly</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">func</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Binary</span><span class="p">(</span><span class="n">string</span><span class="o">=</span><span class="s1">&#39;Pickled Function&#39;</span><span class="p">,</span>
-                         <span class="n">readonly</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
-                         <span class="n">required</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+                         <span class="n">readonly</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                         <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">state</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Selection</span><span class="p">(</span><span class="n">STATES</span><span class="p">,</span>
                              <span class="n">string</span><span class="o">=</span><span class="s1">&#39;State&#39;</span><span class="p">,</span>
-                             <span class="n">readonly</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
-                             <span class="n">required</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
-                             <span class="n">select</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+                             <span class="n">readonly</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                             <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                             <span class="n">select</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">priority</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Integer</span><span class="p">()</span>
-    <span class="n">exc_info</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Text</span><span class="p">(</span><span class="n">string</span><span class="o">=</span><span class="s1">&#39;Exception Info&#39;</span><span class="p">,</span> <span class="n">readonly</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-    <span class="n">result</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Text</span><span class="p">(</span><span class="n">string</span><span class="o">=</span><span class="s1">&#39;Result&#39;</span><span class="p">,</span> <span class="n">readonly</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-    <span class="n">date_created</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Datetime</span><span class="p">(</span><span class="n">string</span><span class="o">=</span><span class="s1">&#39;Created Date&#39;</span><span class="p">,</span> <span class="n">readonly</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-    <span class="n">date_started</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Datetime</span><span class="p">(</span><span class="n">string</span><span class="o">=</span><span class="s1">&#39;Start Date&#39;</span><span class="p">,</span> <span class="n">readonly</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-    <span class="n">date_enqueued</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Datetime</span><span class="p">(</span><span class="n">string</span><span class="o">=</span><span class="s1">&#39;Enqueue Time&#39;</span><span class="p">,</span> <span class="n">readonly</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-    <span class="n">date_done</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Datetime</span><span class="p">(</span><span class="n">string</span><span class="o">=</span><span class="s1">&#39;Date Done&#39;</span><span class="p">,</span> <span class="n">readonly</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">exc_info</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Text</span><span class="p">(</span><span class="n">string</span><span class="o">=</span><span class="s1">&#39;Exception Info&#39;</span><span class="p">,</span> <span class="n">readonly</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Text</span><span class="p">(</span><span class="n">string</span><span class="o">=</span><span class="s1">&#39;Result&#39;</span><span class="p">,</span> <span class="n">readonly</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">date_created</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Datetime</span><span class="p">(</span><span class="n">string</span><span class="o">=</span><span class="s1">&#39;Created Date&#39;</span><span class="p">,</span> <span class="n">readonly</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">date_started</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Datetime</span><span class="p">(</span><span class="n">string</span><span class="o">=</span><span class="s1">&#39;Start Date&#39;</span><span class="p">,</span> <span class="n">readonly</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">date_enqueued</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Datetime</span><span class="p">(</span><span class="n">string</span><span class="o">=</span><span class="s1">&#39;Enqueue Time&#39;</span><span class="p">,</span> <span class="n">readonly</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">date_done</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Datetime</span><span class="p">(</span><span class="n">string</span><span class="o">=</span><span class="s1">&#39;Date Done&#39;</span><span class="p">,</span> <span class="n">readonly</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">eta</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Datetime</span><span class="p">(</span><span class="n">string</span><span class="o">=</span><span class="s1">&#39;Execute only after&#39;</span><span class="p">)</span>
-    <span class="n">active</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Boolean</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-    <span class="n">model_name</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Char</span><span class="p">(</span><span class="n">string</span><span class="o">=</span><span class="s1">&#39;Model&#39;</span><span class="p">,</span> <span class="n">readonly</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">active</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Boolean</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">model_name</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Char</span><span class="p">(</span><span class="n">string</span><span class="o">=</span><span class="s1">&#39;Model&#39;</span><span class="p">,</span> <span class="n">readonly</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">retry</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Integer</span><span class="p">(</span><span class="n">string</span><span class="o">=</span><span class="s1">&#39;Current try&#39;</span><span class="p">)</span>
     <span class="n">max_retries</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Integer</span><span class="p">(</span>
         <span class="n">string</span><span class="o">=</span><span class="s1">&#39;Max. retries&#39;</span><span class="p">,</span>
@@ -318,24 +318,24 @@
              <span class="s2">&quot;max. retries.</span><span class="se">\n</span><span class="s2">&quot;</span>
              <span class="s2">&quot;Retries are infinite when empty.&quot;</span><span class="p">,</span>
     <span class="p">)</span>
-    <span class="n">func_name</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Char</span><span class="p">(</span><span class="n">readonly</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">func_name</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Char</span><span class="p">(</span><span class="n">readonly</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">job_function_id</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Many2one</span><span class="p">(</span><span class="n">comodel_name</span><span class="o">=</span><span class="s1">&#39;queue.job.function&#39;</span><span class="p">,</span>
                                       <span class="n">compute</span><span class="o">=</span><span class="s1">&#39;_compute_channel&#39;</span><span class="p">,</span>
                                       <span class="n">string</span><span class="o">=</span><span class="s1">&#39;Job Function&#39;</span><span class="p">,</span>
-                                      <span class="n">readonly</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
-                                      <span class="n">store</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+                                      <span class="n">readonly</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                      <span class="n">store</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="c1"># for searching without JOIN on channels</span>
-    <span class="n">channel</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Char</span><span class="p">(</span><span class="n">compute</span><span class="o">=</span><span class="s1">&#39;_compute_channel&#39;</span><span class="p">,</span> <span class="n">store</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">select</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">channel</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Char</span><span class="p">(</span><span class="n">compute</span><span class="o">=</span><span class="s1">&#39;_compute_channel&#39;</span><span class="p">,</span> <span class="n">store</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">select</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-    <span class="nd">@api.one</span>
-    <span class="nd">@api.depends</span><span class="p">(</span><span class="s1">&#39;func_name&#39;</span><span class="p">,</span> <span class="s1">&#39;job_function_id.channel_id&#39;</span><span class="p">)</span>
+    <span class="nd">@api</span><span class="o">.</span><span class="n">one</span>
+    <span class="nd">@api</span><span class="o">.</span><span class="n">depends</span><span class="p">(</span><span class="s1">&#39;func_name&#39;</span><span class="p">,</span> <span class="s1">&#39;job_function_id.channel_id&#39;</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">_compute_channel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">func_model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="p">[</span><span class="s1">&#39;queue.job.function&#39;</span><span class="p">]</span>
         <span class="n">function</span> <span class="o">=</span> <span class="n">func_model</span><span class="o">.</span><span class="n">search</span><span class="p">([(</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;=&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">func_name</span><span class="p">)])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">job_function_id</span> <span class="o">=</span> <span class="n">function</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">channel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">job_function_id</span><span class="o">.</span><span class="n">channel</span>
 
-    <span class="nd">@api.multi</span>
+    <span class="nd">@api</span><span class="o">.</span><span class="n">multi</span>
 <div class="viewcode-block" id="QueueJob.open_related_action"><a class="viewcode-back" href="../../../api/api_queue.html#connector.queue.model.QueueJob.open_related_action">[docs]</a>    <span class="k">def</span> <span class="nf">open_related_action</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Open the related action associated to the job &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ensure_one</span><span class="p">()</span>
@@ -345,12 +345,12 @@
         <span class="n">storage</span> <span class="o">=</span> <span class="n">OpenERPJobStorage</span><span class="p">(</span><span class="n">session</span><span class="p">)</span>
         <span class="n">job</span> <span class="o">=</span> <span class="n">storage</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">uuid</span><span class="p">)</span>
         <span class="n">action</span> <span class="o">=</span> <span class="n">job</span><span class="o">.</span><span class="n">related_action</span><span class="p">(</span><span class="n">session</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">action</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">action</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">Warning</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;No action available for this job&#39;</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">action</span></div>
 
-    <span class="nd">@api.multi</span>
-    <span class="k">def</span> <span class="nf">_change_job_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">result</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="nd">@api</span><span class="o">.</span><span class="n">multi</span>
+    <span class="k">def</span> <span class="nf">_change_job_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">result</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Change the state of the `Job` object itself so it</span>
 <span class="sd">        will change the other fields (date, result, ...)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -368,18 +368,18 @@
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;State not supported: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">state</span><span class="p">)</span>
             <span class="n">storage</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="n">job</span><span class="p">)</span>
 
-    <span class="nd">@api.multi</span>
+    <span class="nd">@api</span><span class="o">.</span><span class="n">multi</span>
 <div class="viewcode-block" id="QueueJob.button_done"><a class="viewcode-back" href="../../../api/api_queue.html#connector.queue.model.QueueJob.button_done">[docs]</a>    <span class="k">def</span> <span class="nf">button_done</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">result</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span><span class="s1">&#39;Manually set to done by </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">)</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">name</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_change_job_state</span><span class="p">(</span><span class="n">DONE</span><span class="p">,</span> <span class="n">result</span><span class="o">=</span><span class="n">result</span><span class="p">)</span>
-        <span class="k">return</span> <span class="bp">True</span></div>
+        <span class="k">return</span> <span class="kc">True</span></div>
 
-    <span class="nd">@api.multi</span>
+    <span class="nd">@api</span><span class="o">.</span><span class="n">multi</span>
 <div class="viewcode-block" id="QueueJob.requeue"><a class="viewcode-back" href="../../../api/api_queue.html#connector.queue.model.QueueJob.requeue">[docs]</a>    <span class="k">def</span> <span class="nf">requeue</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_change_job_state</span><span class="p">(</span><span class="n">PENDING</span><span class="p">)</span>
-        <span class="k">return</span> <span class="bp">True</span></div>
+        <span class="k">return</span> <span class="kc">True</span></div>
 
-    <span class="nd">@api.multi</span>
+    <span class="nd">@api</span><span class="o">.</span><span class="n">multi</span>
 <div class="viewcode-block" id="QueueJob.write"><a class="viewcode-back" href="../../../api/api_queue.html#connector.queue.model.QueueJob.write">[docs]</a>    <span class="k">def</span> <span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vals</span><span class="p">):</span>
         <span class="n">res</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">QueueJob</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">vals</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">vals</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;state&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;failed&#39;</span><span class="p">:</span>
@@ -393,7 +393,7 @@
                                      <span class="n">subtype</span><span class="o">=</span><span class="s1">&#39;connector.mt_job_failed&#39;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">res</span></div>
 
-    <span class="nd">@api.multi</span>
+    <span class="nd">@api</span><span class="o">.</span><span class="n">multi</span>
     <span class="k">def</span> <span class="nf">_subscribe_users</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Subscribe all users having the &#39;Connector Manager&#39; group &quot;&quot;&quot;</span>
         <span class="n">group</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">ref</span><span class="p">(</span><span class="s1">&#39;connector.group_connector_manager&#39;</span><span class="p">)</span>
@@ -406,7 +406,7 @@
         <span class="n">users</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="p">[</span><span class="s1">&#39;res.users&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">domain</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">message_subscribe_users</span><span class="p">(</span><span class="n">user_ids</span><span class="o">=</span><span class="n">users</span><span class="o">.</span><span class="n">ids</span><span class="p">)</span>
 
-    <span class="nd">@api.multi</span>
+    <span class="nd">@api</span><span class="o">.</span><span class="n">multi</span>
     <span class="k">def</span> <span class="nf">_message_failed_job</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Return a message which will be posted on the job when it is failed.</span>
 
@@ -419,14 +419,14 @@
         <span class="k">return</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;Something bad happened during the execution of the job. &quot;</span>
                  <span class="s2">&quot;More details in the &#39;Exception Information&#39; section.&quot;</span><span class="p">)</span>
 
-    <span class="nd">@api.model</span>
+    <span class="nd">@api</span><span class="o">.</span><span class="n">model</span>
     <span class="k">def</span> <span class="nf">_needaction_domain_get</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Returns the domain to filter records that require an action</span>
 <span class="sd">            :return: domain or False is no action</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="p">[(</span><span class="s1">&#39;state&#39;</span><span class="p">,</span> <span class="s1">&#39;=&#39;</span><span class="p">,</span> <span class="s1">&#39;failed&#39;</span><span class="p">)]</span>
 
-    <span class="nd">@api.model</span>
+    <span class="nd">@api</span><span class="o">.</span><span class="n">model</span>
 <div class="viewcode-block" id="QueueJob.autovacuum"><a class="viewcode-back" href="../../../api/api_queue.html#connector.queue.model.QueueJob.autovacuum">[docs]</a>    <span class="k">def</span> <span class="nf">autovacuum</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Delete all jobs (active or not) done since more than</span>
 <span class="sd">        ``_removal_interval`` days.</span>
@@ -434,35 +434,35 @@
 <span class="sd">        Called from a cron.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">deadline</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span> <span class="o">-</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_removal_interval</span><span class="p">)</span>
-        <span class="n">jobs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">with_context</span><span class="p">(</span><span class="n">active_test</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span><span class="o">.</span><span class="n">search</span><span class="p">(</span>
+        <span class="n">jobs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">with_context</span><span class="p">(</span><span class="n">active_test</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">search</span><span class="p">(</span>
             <span class="p">[(</span><span class="s1">&#39;date_done&#39;</span><span class="p">,</span> <span class="s1">&#39;&lt;=&#39;</span><span class="p">,</span> <span class="n">fields</span><span class="o">.</span><span class="n">Datetime</span><span class="o">.</span><span class="n">to_string</span><span class="p">(</span><span class="n">deadline</span><span class="p">))],</span>
         <span class="p">)</span>
         <span class="n">jobs</span><span class="o">.</span><span class="n">unlink</span><span class="p">()</span>
-        <span class="k">return</span> <span class="bp">True</span></div></div>
+        <span class="k">return</span> <span class="kc">True</span></div></div>
 
 
 <div class="viewcode-block" id="QueueWorker"><a class="viewcode-back" href="../../../api/api_queue.html#connector.queue.model.QueueWorker">[docs]</a><span class="k">class</span> <span class="nc">QueueWorker</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Worker &quot;&quot;&quot;</span>
     <span class="n">_name</span> <span class="o">=</span> <span class="s1">&#39;queue.worker&#39;</span>
     <span class="n">_description</span> <span class="o">=</span> <span class="s1">&#39;Queue Worker&#39;</span>
-    <span class="n">_log_access</span> <span class="o">=</span> <span class="bp">False</span>
+    <span class="n">_log_access</span> <span class="o">=</span> <span class="kc">False</span>
     <span class="n">_rec_name</span> <span class="o">=</span> <span class="s1">&#39;uuid&#39;</span>
 
     <span class="n">worker_timeout</span> <span class="o">=</span> <span class="n">WORKER_TIMEOUT</span>
 
     <span class="n">uuid</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Char</span><span class="p">(</span><span class="n">string</span><span class="o">=</span><span class="s1">&#39;UUID&#39;</span><span class="p">,</span>
-                       <span class="n">readonly</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
-                       <span class="n">select</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
-                       <span class="n">required</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-    <span class="n">pid</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Char</span><span class="p">(</span><span class="n">string</span><span class="o">=</span><span class="s1">&#39;PID&#39;</span><span class="p">,</span> <span class="n">readonly</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-    <span class="n">date_start</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Datetime</span><span class="p">(</span><span class="n">string</span><span class="o">=</span><span class="s1">&#39;Start Date&#39;</span><span class="p">,</span> <span class="n">readonly</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-    <span class="n">date_alive</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Datetime</span><span class="p">(</span><span class="n">string</span><span class="o">=</span><span class="s1">&#39;Last Alive Check&#39;</span><span class="p">,</span> <span class="n">readonly</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+                       <span class="n">readonly</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                       <span class="n">select</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                       <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">pid</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Char</span><span class="p">(</span><span class="n">string</span><span class="o">=</span><span class="s1">&#39;PID&#39;</span><span class="p">,</span> <span class="n">readonly</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">date_start</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Datetime</span><span class="p">(</span><span class="n">string</span><span class="o">=</span><span class="s1">&#39;Start Date&#39;</span><span class="p">,</span> <span class="n">readonly</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">date_alive</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Datetime</span><span class="p">(</span><span class="n">string</span><span class="o">=</span><span class="s1">&#39;Last Alive Check&#39;</span><span class="p">,</span> <span class="n">readonly</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">job_ids</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">One2many</span><span class="p">(</span><span class="n">comodel_name</span><span class="o">=</span><span class="s1">&#39;queue.job&#39;</span><span class="p">,</span>
                               <span class="n">inverse_name</span><span class="o">=</span><span class="s1">&#39;worker_id&#39;</span><span class="p">,</span>
                               <span class="n">string</span><span class="o">=</span><span class="s1">&#39;Jobs&#39;</span><span class="p">,</span>
-                              <span class="n">readonly</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+                              <span class="n">readonly</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-    <span class="nd">@api.model</span>
+    <span class="nd">@api</span><span class="o">.</span><span class="n">model</span>
     <span class="k">def</span> <span class="nf">_notify_alive</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">worker</span><span class="p">):</span>
         <span class="n">workers</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">search</span><span class="p">([(</span><span class="s1">&#39;uuid&#39;</span><span class="p">,</span> <span class="s1">&#39;=&#39;</span><span class="p">,</span> <span class="n">worker</span><span class="o">.</span><span class="n">uuid</span><span class="p">)])</span>
 
@@ -476,7 +476,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">workers</span><span class="o">.</span><span class="n">write</span><span class="p">({</span><span class="s1">&#39;date_alive&#39;</span><span class="p">:</span> <span class="n">now</span><span class="p">})</span>
 
-    <span class="nd">@api.model</span>
+    <span class="nd">@api</span><span class="o">.</span><span class="n">model</span>
     <span class="k">def</span> <span class="nf">_purge_dead_workers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">deadline</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span> <span class="o">-</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">worker_timeout</span><span class="p">)</span>
         <span class="n">deads</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">search</span><span class="p">(</span>
@@ -490,7 +490,7 @@
             <span class="n">_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Failed attempt to unlink a dead worker, likely due &quot;</span>
                           <span class="s2">&quot;to another transaction in progress.&quot;</span><span class="p">)</span>
 
-    <span class="nd">@api.model</span>
+    <span class="nd">@api</span><span class="o">.</span><span class="n">model</span>
     <span class="k">def</span> <span class="nf">_worker</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">worker</span> <span class="o">=</span> <span class="n">watcher</span><span class="o">.</span><span class="n">worker_for_db</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">cr</span><span class="o">.</span><span class="n">dbname</span><span class="p">)</span>
         <span class="k">assert</span> <span class="n">worker</span>
@@ -499,8 +499,8 @@
                                    <span class="s2">&quot;of 1&quot;</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="n">workers</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">workers</span>
 
-    <span class="nd">@api.model</span>
-<div class="viewcode-block" id="QueueWorker.assign_then_enqueue"><a class="viewcode-back" href="../../../api/api_queue.html#connector.queue.model.QueueWorker.assign_then_enqueue">[docs]</a>    <span class="k">def</span> <span class="nf">assign_then_enqueue</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">max_jobs</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="nd">@api</span><span class="o">.</span><span class="n">model</span>
+<div class="viewcode-block" id="QueueWorker.assign_then_enqueue"><a class="viewcode-back" href="../../../api/api_queue.html#connector.queue.model.QueueWorker.assign_then_enqueue">[docs]</a>    <span class="k">def</span> <span class="nf">assign_then_enqueue</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">max_jobs</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Assign all the jobs not already assigned to a worker.</span>
 <span class="sd">        Then enqueue all the jobs having a worker but not enqueued.</span>
 
@@ -518,10 +518,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">cr</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">enqueue_jobs</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">cr</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
-        <span class="k">return</span> <span class="bp">True</span></div>
+        <span class="k">return</span> <span class="kc">True</span></div>
 
-    <span class="nd">@api.model</span>
-<div class="viewcode-block" id="QueueWorker.assign_jobs"><a class="viewcode-back" href="../../../api/api_queue.html#connector.queue.model.QueueWorker.assign_jobs">[docs]</a>    <span class="k">def</span> <span class="nf">assign_jobs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">max_jobs</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="nd">@api</span><span class="o">.</span><span class="n">model</span>
+<div class="viewcode-block" id="QueueWorker.assign_jobs"><a class="viewcode-back" href="../../../api/api_queue.html#connector.queue.model.QueueWorker.assign_jobs">[docs]</a>    <span class="k">def</span> <span class="nf">assign_jobs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">max_jobs</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Assign ``n`` jobs to the worker of the current process</span>
 
 <span class="sd">        ``n`` is ``max_jobs`` or unlimited if ``max_jobs`` is None</span>
@@ -534,9 +534,9 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_assign_jobs</span><span class="p">(</span><span class="n">max_jobs</span><span class="o">=</span><span class="n">max_jobs</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;No worker started for process </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">getpid</span><span class="p">())</span>
-        <span class="k">return</span> <span class="bp">True</span></div>
+        <span class="k">return</span> <span class="kc">True</span></div>
 
-    <span class="nd">@api.model</span>
+    <span class="nd">@api</span><span class="o">.</span><span class="n">model</span>
 <div class="viewcode-block" id="QueueWorker.enqueue_jobs"><a class="viewcode-back" href="../../../api/api_queue.html#connector.queue.model.QueueWorker.enqueue_jobs">[docs]</a>    <span class="k">def</span> <span class="nf">enqueue_jobs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Enqueue all the jobs assigned to the worker of the current</span>
 <span class="sd">        process</span>
@@ -546,16 +546,16 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_enqueue_jobs</span><span class="p">()</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;No worker started for process </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">getpid</span><span class="p">())</span>
-        <span class="k">return</span> <span class="bp">True</span></div>
+        <span class="k">return</span> <span class="kc">True</span></div>
 
-    <span class="nd">@api.model</span>
-    <span class="k">def</span> <span class="nf">_assign_jobs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">max_jobs</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="nd">@api</span><span class="o">.</span><span class="n">model</span>
+    <span class="k">def</span> <span class="nf">_assign_jobs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">max_jobs</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="n">sql</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;SELECT id FROM queue_job &quot;</span>
                <span class="s2">&quot;WHERE worker_id IS NULL &quot;</span>
                <span class="s2">&quot;AND state not in (&#39;failed&#39;, &#39;done&#39;) &quot;</span>
                <span class="s2">&quot;AND active = true &quot;</span>
                <span class="s2">&quot;ORDER BY eta NULLS LAST, priority, date_created &quot;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">max_jobs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">max_jobs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">sql</span> <span class="o">+=</span> <span class="s1">&#39; LIMIT </span><span class="si">%d</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">max_jobs</span>
         <span class="n">sql</span> <span class="o">+=</span> <span class="s1">&#39; FOR UPDATE NOWAIT&#39;</span>
         <span class="c1"># use a SAVEPOINT to be able to rollback this part of the</span>
@@ -564,7 +564,7 @@
         <span class="n">worker</span> <span class="o">=</span> <span class="n">watcher</span><span class="o">.</span><span class="n">worker_for_db</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">cr</span><span class="o">.</span><span class="n">dbname</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">cr</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;SAVEPOINT queue_assign_jobs&quot;</span><span class="p">)</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">cr</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sql</span><span class="p">,</span> <span class="n">log_exceptions</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">cr</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sql</span><span class="p">,</span> <span class="n">log_exceptions</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
             <span class="c1"># Here it&#39;s likely that the FOR UPDATE NOWAIT failed to get</span>
             <span class="c1"># the LOCK, so we ROLLBACK to the SAVEPOINT to restore the</span>
@@ -574,7 +574,7 @@
             <span class="n">_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Failed attempt to assign jobs, likely due to &quot;</span>
                           <span class="s2">&quot;another transaction in progress. &quot;</span>
                           <span class="s2">&quot;Trace of the failed assignment of jobs on worker &quot;</span>
-                          <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> attempt: &quot;</span><span class="p">,</span> <span class="n">worker</span><span class="o">.</span><span class="n">uuid</span><span class="p">,</span> <span class="n">exc_info</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+                          <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> attempt: &quot;</span><span class="p">,</span> <span class="n">worker</span><span class="o">.</span><span class="n">uuid</span><span class="p">,</span> <span class="n">exc_info</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
             <span class="k">return</span>
         <span class="n">job_rows</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">cr</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">job_rows</span><span class="p">:</span>
@@ -620,9 +620,9 @@
     <span class="n">_name</span> <span class="o">=</span> <span class="s1">&#39;queue.requeue.job&#39;</span>
     <span class="n">_description</span> <span class="o">=</span> <span class="s1">&#39;Wizard to requeue a selection of jobs&#39;</span>
 
-    <span class="nd">@api.model</span>
+    <span class="nd">@api</span><span class="o">.</span><span class="n">model</span>
     <span class="k">def</span> <span class="nf">_default_job_ids</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">res</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="n">context</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">context</span>
         <span class="k">if</span> <span class="p">(</span><span class="n">context</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;active_model&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;queue.job&#39;</span> <span class="ow">and</span>
                 <span class="n">context</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;active_ids&#39;</span><span class="p">)):</span>
@@ -633,7 +633,7 @@
                                <span class="n">string</span><span class="o">=</span><span class="s1">&#39;Jobs&#39;</span><span class="p">,</span>
                                <span class="n">default</span><span class="o">=</span><span class="n">_default_job_ids</span><span class="p">)</span>
 
-    <span class="nd">@api.multi</span>
+    <span class="nd">@api</span><span class="o">.</span><span class="n">multi</span>
 <div class="viewcode-block" id="RequeueJob.requeue"><a class="viewcode-back" href="../../../api/api_queue.html#connector.queue.model.RequeueJob.requeue">[docs]</a>    <span class="k">def</span> <span class="nf">requeue</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">jobs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">job_ids</span>
         <span class="n">jobs</span><span class="o">.</span><span class="n">requeue</span><span class="p">()</span>
@@ -647,8 +647,8 @@
     <span class="n">name</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Char</span><span class="p">()</span>
     <span class="n">complete_name</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Char</span><span class="p">(</span><span class="n">compute</span><span class="o">=</span><span class="s1">&#39;_compute_complete_name&#39;</span><span class="p">,</span>
                                 <span class="n">string</span><span class="o">=</span><span class="s1">&#39;Complete Name&#39;</span><span class="p">,</span>
-                                <span class="n">store</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
-                                <span class="n">readonly</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+                                <span class="n">store</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                <span class="n">readonly</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">parent_id</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Many2one</span><span class="p">(</span><span class="n">comodel_name</span><span class="o">=</span><span class="s1">&#39;queue.job.channel&#39;</span><span class="p">,</span>
                                 <span class="n">string</span><span class="o">=</span><span class="s1">&#39;Parent Channel&#39;</span><span class="p">,</span>
                                 <span class="n">ondelete</span><span class="o">=</span><span class="s1">&#39;restrict&#39;</span><span class="p">)</span>
@@ -662,8 +662,8 @@
          <span class="s1">&#39;Channel complete name must be unique&#39;</span><span class="p">),</span>
     <span class="p">]</span>
 
-    <span class="nd">@api.one</span>
-    <span class="nd">@api.depends</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;parent_id&#39;</span><span class="p">,</span> <span class="s1">&#39;parent_id.name&#39;</span><span class="p">)</span>
+    <span class="nd">@api</span><span class="o">.</span><span class="n">one</span>
+    <span class="nd">@api</span><span class="o">.</span><span class="n">depends</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;parent_id&#39;</span><span class="p">,</span> <span class="s1">&#39;parent_id.name&#39;</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">_compute_complete_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
             <span class="k">return</span>  <span class="c1"># new record</span>
@@ -674,13 +674,13 @@
             <span class="n">parts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">channel</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">complete_name</span> <span class="o">=</span> <span class="s1">&#39;.&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">reversed</span><span class="p">(</span><span class="n">parts</span><span class="p">))</span>
 
-    <span class="nd">@api.one</span>
-    <span class="nd">@api.constrains</span><span class="p">(</span><span class="s1">&#39;parent_id&#39;</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span><span class="p">)</span>
+    <span class="nd">@api</span><span class="o">.</span><span class="n">one</span>
+    <span class="nd">@api</span><span class="o">.</span><span class="n">constrains</span><span class="p">(</span><span class="s1">&#39;parent_id&#39;</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span><span class="p">)</span>
 <div class="viewcode-block" id="JobChannel.parent_required"><a class="viewcode-back" href="../../../api/api_queue.html#connector.queue.model.JobChannel.parent_required">[docs]</a>    <span class="k">def</span> <span class="nf">parent_required</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">!=</span> <span class="s1">&#39;root&#39;</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent_id</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">ValidationError</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;Parent channel required.&#39;</span><span class="p">))</span></div>
 
-    <span class="nd">@api.multi</span>
+    <span class="nd">@api</span><span class="o">.</span><span class="n">multi</span>
 <div class="viewcode-block" id="JobChannel.write"><a class="viewcode-back" href="../../../api/api_queue.html#connector.queue.model.JobChannel.write">[docs]</a>    <span class="k">def</span> <span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">values</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">channel</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
             <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;install_mode&#39;</span><span class="p">)</span> <span class="ow">and</span>
@@ -689,14 +689,14 @@
                 <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">Warning</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;Cannot change the root channel&#39;</span><span class="p">))</span>
         <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">JobChannel</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">values</span><span class="p">)</span></div>
 
-    <span class="nd">@api.multi</span>
+    <span class="nd">@api</span><span class="o">.</span><span class="n">multi</span>
 <div class="viewcode-block" id="JobChannel.unlink"><a class="viewcode-back" href="../../../api/api_queue.html#connector.queue.model.JobChannel.unlink">[docs]</a>    <span class="k">def</span> <span class="nf">unlink</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">channel</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">channel</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;root&#39;</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">Warning</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;Cannot remove the root channel&#39;</span><span class="p">))</span>
         <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">JobChannel</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">unlink</span><span class="p">()</span></div>
 
-    <span class="nd">@api.multi</span>
+    <span class="nd">@api</span><span class="o">.</span><span class="n">multi</span>
 <div class="viewcode-block" id="JobChannel.name_get"><a class="viewcode-back" href="../../../api/api_queue.html#connector.queue.model.JobChannel.name_get">[docs]</a>    <span class="k">def</span> <span class="nf">name_get</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">record</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
@@ -707,22 +707,22 @@
 <div class="viewcode-block" id="JobFunction"><a class="viewcode-back" href="../../../api/api_queue.html#connector.queue.model.JobFunction">[docs]</a><span class="k">class</span> <span class="nc">JobFunction</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
     <span class="n">_name</span> <span class="o">=</span> <span class="s1">&#39;queue.job.function&#39;</span>
     <span class="n">_description</span> <span class="o">=</span> <span class="s1">&#39;Job Functions&#39;</span>
-    <span class="n">_log_access</span> <span class="o">=</span> <span class="bp">False</span>
+    <span class="n">_log_access</span> <span class="o">=</span> <span class="kc">False</span>
 
-    <span class="nd">@api.model</span>
+    <span class="nd">@api</span><span class="o">.</span><span class="n">model</span>
     <span class="k">def</span> <span class="nf">_default_channel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">ref</span><span class="p">(</span><span class="s1">&#39;connector.channel_root&#39;</span><span class="p">)</span>
 
-    <span class="n">name</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Char</span><span class="p">(</span><span class="n">select</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Char</span><span class="p">(</span><span class="n">select</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">channel_id</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Many2one</span><span class="p">(</span><span class="n">comodel_name</span><span class="o">=</span><span class="s1">&#39;queue.job.channel&#39;</span><span class="p">,</span>
                                  <span class="n">string</span><span class="o">=</span><span class="s1">&#39;Channel&#39;</span><span class="p">,</span>
-                                 <span class="n">required</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+                                 <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                                  <span class="n">default</span><span class="o">=</span><span class="n">_default_channel</span><span class="p">)</span>
     <span class="n">channel</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Char</span><span class="p">(</span><span class="n">related</span><span class="o">=</span><span class="s1">&#39;channel_id.complete_name&#39;</span><span class="p">,</span>
-                          <span class="n">store</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
-                          <span class="n">readonly</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+                          <span class="n">store</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                          <span class="n">readonly</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-    <span class="nd">@api.model</span>
+    <span class="nd">@api</span><span class="o">.</span><span class="n">model</span>
     <span class="k">def</span> <span class="nf">_find_or_create_channel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">channel_path</span><span class="p">):</span>
         <span class="n">channel_model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="p">[</span><span class="s1">&#39;queue.job.channel&#39;</span><span class="p">]</span>
         <span class="n">parts</span> <span class="o">=</span> <span class="n">channel_path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)</span>
@@ -746,7 +746,7 @@
                 <span class="p">})</span>
         <span class="k">return</span> <span class="n">channel</span>
 
-    <span class="nd">@api.model</span>
+    <span class="nd">@api</span><span class="o">.</span><span class="n">model</span>
     <span class="k">def</span> <span class="nf">_register_jobs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">func</span> <span class="ow">in</span> <span class="n">JOB_REGISTRY</span><span class="p">:</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">is_module_installed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="p">,</span> <span class="n">get_openerp_module</span><span class="p">(</span><span class="n">func</span><span class="p">)):</span>
@@ -756,7 +756,7 @@
                 <span class="n">channel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_find_or_create_channel</span><span class="p">(</span><span class="n">func</span><span class="o">.</span><span class="n">default_channel</span><span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">create</span><span class="p">({</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="n">func_name</span><span class="p">,</span> <span class="s1">&#39;channel_id&#39;</span><span class="p">:</span> <span class="n">channel</span><span class="o">.</span><span class="n">id</span><span class="p">})</span>
 
-    <span class="nd">@api.model</span>
+    <span class="nd">@api</span><span class="o">.</span><span class="n">model</span>
     <span class="k">def</span> <span class="nf">_setup_complete</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">JobFunction</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">_setup_complete</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_register_jobs</span><span class="p">()</span></div>
@@ -777,7 +777,7 @@
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.<br/>
+      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.5.<br/>
     </p>
   </div>
 </footer>

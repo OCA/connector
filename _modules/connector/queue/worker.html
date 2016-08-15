@@ -9,7 +9,7 @@
     
     <link rel="stylesheet" href="../../../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/bootswatch-3.3.4/united/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/bootswatch-3.3.6/united/bootstrap.min.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
     
     <script type="text/javascript">
@@ -26,7 +26,7 @@
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
     <script type="text/javascript" src="../../../_static/js/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="../../../_static/js/jquery-fix.js"></script>
-    <script type="text/javascript" src="../../../_static/bootstrap-3.3.4/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../../../_static/bootstrap-sphinx.js"></script>
     <link rel="top" title="Connector  documentation" href="../../../index.html" />
     <link rel="up" title="Module code" href="../../index.html" />
@@ -257,21 +257,21 @@
 <span class="kn">import</span> <span class="nn">time</span>
 <span class="kn">import</span> <span class="nn">traceback</span>
 <span class="kn">import</span> <span class="nn">uuid</span>
-<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
-<span class="kn">from</span> <span class="nn">StringIO</span> <span class="kn">import</span> <span class="n">StringIO</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="k">import</span> <span class="n">datetime</span>
+<span class="kn">from</span> <span class="nn">StringIO</span> <span class="k">import</span> <span class="n">StringIO</span>
 
-<span class="kn">from</span> <span class="nn">psycopg2</span> <span class="kn">import</span> <span class="n">OperationalError</span><span class="p">,</span> <span class="n">ProgrammingError</span>
+<span class="kn">from</span> <span class="nn">psycopg2</span> <span class="k">import</span> <span class="n">OperationalError</span><span class="p">,</span> <span class="n">ProgrammingError</span>
 
 <span class="kn">import</span> <span class="nn">openerp</span>
-<span class="kn">from</span> <span class="nn">openerp.service.model</span> <span class="kn">import</span> <span class="n">PG_CONCURRENCY_ERRORS_TO_RETRY</span>
-<span class="kn">from</span> <span class="nn">openerp.service</span> <span class="kn">import</span> <span class="n">db</span>
-<span class="kn">from</span> <span class="nn">openerp.tools</span> <span class="kn">import</span> <span class="n">config</span>
-<span class="kn">from</span> <span class="nn">.queue</span> <span class="kn">import</span> <span class="n">JobsQueue</span>
-<span class="kn">from</span> <span class="nn">..session</span> <span class="kn">import</span> <span class="n">ConnectorSessionHandler</span>
-<span class="kn">from</span> <span class="nn">.job</span> <span class="kn">import</span> <span class="p">(</span><span class="n">OpenERPJobStorage</span><span class="p">,</span>
+<span class="kn">from</span> <span class="nn">openerp.service.model</span> <span class="k">import</span> <span class="n">PG_CONCURRENCY_ERRORS_TO_RETRY</span>
+<span class="kn">from</span> <span class="nn">openerp.service</span> <span class="k">import</span> <span class="n">db</span>
+<span class="kn">from</span> <span class="nn">openerp.tools</span> <span class="k">import</span> <span class="n">config</span>
+<span class="kn">from</span> <span class="nn">.queue</span> <span class="k">import</span> <span class="n">JobsQueue</span>
+<span class="kn">from</span> <span class="nn">..session</span> <span class="k">import</span> <span class="n">ConnectorSessionHandler</span>
+<span class="kn">from</span> <span class="nn">.job</span> <span class="k">import</span> <span class="p">(</span><span class="n">OpenERPJobStorage</span><span class="p">,</span>
                   <span class="n">PENDING</span><span class="p">,</span>
                   <span class="n">DONE</span><span class="p">)</span>
-<span class="kn">from</span> <span class="nn">..exception</span> <span class="kn">import</span> <span class="p">(</span><span class="n">NoSuchJobError</span><span class="p">,</span>
+<span class="kn">from</span> <span class="nn">..exception</span> <span class="k">import</span> <span class="p">(</span><span class="n">NoSuchJobError</span><span class="p">,</span>
                          <span class="n">NotReadableJobError</span><span class="p">,</span>
                          <span class="n">RetryableJobError</span><span class="p">,</span>
                          <span class="n">FailedJobError</span><span class="p">,</span>
@@ -296,12 +296,12 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">queue</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">queue_class</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">db_name</span> <span class="o">=</span> <span class="n">db_name</span>
         <span class="n">threading</span><span class="o">.</span><span class="n">current_thread</span><span class="p">()</span><span class="o">.</span><span class="n">dbname</span> <span class="o">=</span> <span class="n">db_name</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">uuid</span> <span class="o">=</span> <span class="nb">unicode</span><span class="p">(</span><span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">uuid</span> <span class="o">=</span> <span class="n">unicode</span><span class="p">(</span><span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">())</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">watcher</span> <span class="o">=</span> <span class="n">watcher_</span>
 
 <div class="viewcode-block" id="Worker.run_job"><a class="viewcode-back" href="../../../api/api_queue.html#connector.queue.worker.Worker.run_job">[docs]</a>    <span class="k">def</span> <span class="nf">run_job</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">job</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Execute a job &quot;&quot;&quot;</span>
-        <span class="k">def</span> <span class="nf">retry_postpone</span><span class="p">(</span><span class="n">job</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">seconds</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="k">def</span> <span class="nf">retry_postpone</span><span class="p">(</span><span class="n">job</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">seconds</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
             <span class="k">with</span> <span class="n">session_hdl</span><span class="o">.</span><span class="n">session</span><span class="p">()</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
                 <span class="n">job</span><span class="o">.</span><span class="n">postpone</span><span class="p">(</span><span class="n">result</span><span class="o">=</span><span class="n">message</span><span class="p">,</span> <span class="n">seconds</span><span class="o">=</span><span class="n">seconds</span><span class="p">)</span>
                 <span class="n">job</span><span class="o">.</span><span class="n">set_enqueued</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
@@ -313,7 +313,7 @@
         <span class="k">try</span><span class="p">:</span>
             <span class="k">with</span> <span class="n">session_hdl</span><span class="o">.</span><span class="n">session</span><span class="p">()</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
                 <span class="n">job</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_load_job</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">job</span><span class="o">.</span><span class="n">uuid</span><span class="p">)</span>
-                <span class="k">if</span> <span class="n">job</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">job</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                     <span class="k">return</span>
 
             <span class="c1"># if the job has been manually set to DONE or PENDING</span>
@@ -358,29 +358,29 @@
             <span class="n">_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1"> done&#39;</span><span class="p">,</span> <span class="n">job</span><span class="p">)</span>
 
         <span class="k">except</span> <span class="n">NothingToDoJob</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
-            <span class="k">if</span> <span class="nb">unicode</span><span class="p">(</span><span class="n">err</span><span class="p">):</span>
-                <span class="n">msg</span> <span class="o">=</span> <span class="nb">unicode</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">unicode</span><span class="p">(</span><span class="n">err</span><span class="p">):</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="n">unicode</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">msg</span> <span class="o">=</span> <span class="bp">None</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="kc">None</span>
             <span class="n">job</span><span class="o">.</span><span class="n">cancel</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
             <span class="k">with</span> <span class="n">session_hdl</span><span class="o">.</span><span class="n">session</span><span class="p">()</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">job_storage_class</span><span class="p">(</span><span class="n">session</span><span class="p">)</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="n">job</span><span class="p">)</span>
 
         <span class="k">except</span> <span class="n">RetryableJobError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
             <span class="c1"># delay the job later, requeue</span>
-            <span class="n">retry_postpone</span><span class="p">(</span><span class="n">job</span><span class="p">,</span> <span class="nb">unicode</span><span class="p">(</span><span class="n">err</span><span class="p">),</span> <span class="n">seconds</span><span class="o">=</span><span class="n">err</span><span class="o">.</span><span class="n">seconds</span><span class="p">)</span>
+            <span class="n">retry_postpone</span><span class="p">(</span><span class="n">job</span><span class="p">,</span> <span class="n">unicode</span><span class="p">(</span><span class="n">err</span><span class="p">),</span> <span class="n">seconds</span><span class="o">=</span><span class="n">err</span><span class="o">.</span><span class="n">seconds</span><span class="p">)</span>
             <span class="n">_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1"> postponed&#39;</span><span class="p">,</span> <span class="n">job</span><span class="p">)</span>
 
         <span class="k">except</span> <span class="n">OperationalError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
             <span class="c1"># Automatically retry the typical transaction serialization errors</span>
             <span class="k">if</span> <span class="n">err</span><span class="o">.</span><span class="n">pgcode</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">PG_CONCURRENCY_ERRORS_TO_RETRY</span><span class="p">:</span>
                 <span class="k">raise</span>
-            <span class="n">retry_postpone</span><span class="p">(</span><span class="n">job</span><span class="p">,</span> <span class="nb">unicode</span><span class="p">(</span><span class="n">err</span><span class="p">),</span> <span class="n">seconds</span><span class="o">=</span><span class="n">PG_RETRY</span><span class="p">)</span>
+            <span class="n">retry_postpone</span><span class="p">(</span><span class="n">job</span><span class="p">,</span> <span class="n">unicode</span><span class="p">(</span><span class="n">err</span><span class="p">),</span> <span class="n">seconds</span><span class="o">=</span><span class="n">PG_RETRY</span><span class="p">)</span>
             <span class="n">_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1"> OperationalError, postponed&#39;</span><span class="p">,</span> <span class="n">job</span><span class="p">)</span>
 
         <span class="k">except</span> <span class="p">(</span><span class="n">FailedJobError</span><span class="p">,</span> <span class="ne">Exception</span><span class="p">):</span>
             <span class="n">buff</span> <span class="o">=</span> <span class="n">StringIO</span><span class="p">()</span>
-            <span class="n">traceback</span><span class="o">.</span><span class="n">print_exc</span><span class="p">(</span><span class="nb">file</span><span class="o">=</span><span class="n">buff</span><span class="p">)</span>
+            <span class="n">traceback</span><span class="o">.</span><span class="n">print_exc</span><span class="p">(</span><span class="n">file</span><span class="o">=</span><span class="n">buff</span><span class="p">)</span>
             <span class="n">_logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">buff</span><span class="o">.</span><span class="n">getvalue</span><span class="p">())</span>
 
             <span class="n">job</span><span class="o">.</span><span class="n">set_failed</span><span class="p">(</span><span class="n">exc_info</span><span class="o">=</span><span class="n">buff</span><span class="o">.</span><span class="n">getvalue</span><span class="p">())</span>
@@ -394,7 +394,7 @@
             <span class="n">job</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">job_storage_class</span><span class="p">(</span><span class="n">session</span><span class="p">)</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">job_uuid</span><span class="p">)</span>
         <span class="k">except</span> <span class="n">NoSuchJobError</span><span class="p">:</span>
             <span class="c1"># just skip it</span>
-            <span class="n">job</span> <span class="o">=</span> <span class="bp">None</span>
+            <span class="n">job</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">except</span> <span class="n">NotReadableJobError</span><span class="p">:</span>
             <span class="n">_logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s1">&#39;Could not read job: </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">job_uuid</span><span class="p">)</span>
             <span class="k">raise</span>
@@ -429,7 +429,7 @@
                                               <span class="n">openerp</span><span class="o">.</span><span class="n">SUPERUSER_ID</span><span class="p">)</span>
         <span class="k">with</span> <span class="n">session_hdl</span><span class="o">.</span><span class="n">session</span><span class="p">()</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
             <span class="n">job</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_load_job</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">job_uuid</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">job</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">job</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="c1"># skip a deleted job</span>
                 <span class="k">return</span>
             <span class="n">job</span><span class="o">.</span><span class="n">set_enqueued</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
@@ -459,7 +459,7 @@
                             <span class="p">(</span><span class="n">db_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_workers</span><span class="p">[</span><span class="n">db_name</span><span class="p">]</span><span class="o">.</span><span class="n">uuid</span><span class="p">))</span>
         <span class="n">worker</span> <span class="o">=</span> <span class="n">Worker</span><span class="p">(</span><span class="n">db_name</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_workers</span><span class="p">[</span><span class="n">db_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">worker</span>
-        <span class="n">worker</span><span class="o">.</span><span class="n">daemon</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="n">worker</span><span class="o">.</span><span class="n">daemon</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="n">worker</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">_delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">db_name</span><span class="p">):</span>
@@ -491,7 +491,7 @@
         <span class="k">if</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;db_name&#39;</span><span class="p">]:</span>
             <span class="n">db_names</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;db_name&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">db_names</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">exp_list</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
+            <span class="n">db_names</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">exp_list</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
         <span class="n">dbfilter</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;dbfilter&#39;</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">dbfilter</span> <span class="ow">and</span> <span class="s1">&#39;</span><span class="si">%d</span><span class="s1">&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dbfilter</span> <span class="ow">and</span> <span class="s1">&#39;%h&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dbfilter</span><span class="p">:</span>
             <span class="n">db_names</span> <span class="o">=</span> <span class="p">[</span><span class="n">d</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">db_names</span> <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">dbfilter</span><span class="p">,</span> <span class="n">d</span><span class="p">)]</span>
@@ -505,10 +505,10 @@
                     <span class="n">cr</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;SELECT 1 FROM ir_module_module &quot;</span>
                                <span class="s2">&quot;WHERE name = </span><span class="si">%s</span><span class="s2"> &quot;</span>
                                <span class="s2">&quot;AND state = </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;connector&#39;</span><span class="p">,</span> <span class="s1">&#39;installed&#39;</span><span class="p">),</span>
-                               <span class="n">log_exceptions</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+                               <span class="n">log_exceptions</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
                 <span class="k">except</span> <span class="n">ProgrammingError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
                     <span class="n">no_db_error</span> <span class="o">=</span> <span class="s1">&#39;relation &quot;ir_module_module&quot; does not exist&#39;</span>
-                    <span class="k">if</span> <span class="nb">unicode</span><span class="p">(</span><span class="n">err</span><span class="p">)</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">no_db_error</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="n">unicode</span><span class="p">(</span><span class="n">err</span><span class="p">)</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">no_db_error</span><span class="p">):</span>
                         <span class="n">_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Database </span><span class="si">%s</span><span class="s1"> is not an OpenERP database,&#39;</span>
                                       <span class="s1">&#39; connector worker not started&#39;</span><span class="p">,</span> <span class="n">db_name</span><span class="p">)</span>
                     <span class="k">else</span><span class="p">:</span>
@@ -572,7 +572,7 @@
 
 <div class="viewcode-block" id="start_service"><a class="viewcode-back" href="../../../api/api_queue.html#connector.queue.worker.start_service">[docs]</a><span class="k">def</span> <span class="nf">start_service</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot; Start the watcher &quot;&quot;&quot;</span>
-    <span class="n">watcher</span><span class="o">.</span><span class="n">daemon</span> <span class="o">=</span> <span class="bp">True</span>
+    <span class="n">watcher</span><span class="o">.</span><span class="n">daemon</span> <span class="o">=</span> <span class="kc">True</span>
     <span class="n">watcher</span><span class="o">.</span><span class="n">start</span><span class="p">()</span></div>
 
 <span class="c1"># We have to launch the Jobs Workers only if:</span>
@@ -582,8 +582,8 @@
 <span class="c1">#    but the current process is a Connector Worker</span>
 <span class="c1">#    (launched with the ``openerp-connector-worker`` script).</span>
 <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;ODOO_CONNECTOR_CHANNELS&#39;</span><span class="p">):</span>
-    <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">openerp</span><span class="p">,</span> <span class="s1">&#39;multi_process&#39;</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span> <span class="ow">or</span>
-            <span class="nb">getattr</span><span class="p">(</span><span class="n">openerp</span><span class="p">,</span> <span class="s1">&#39;worker_connector&#39;</span><span class="p">,</span> <span class="bp">False</span><span class="p">)):</span>
+    <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">openerp</span><span class="p">,</span> <span class="s1">&#39;multi_process&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span> <span class="ow">or</span>
+            <span class="nb">getattr</span><span class="p">(</span><span class="n">openerp</span><span class="p">,</span> <span class="s1">&#39;worker_connector&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)):</span>
         <span class="n">start_service</span><span class="p">()</span>
 </pre></div>
 
@@ -602,7 +602,7 @@
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.5.<br/>
     </p>
   </div>
 </footer>

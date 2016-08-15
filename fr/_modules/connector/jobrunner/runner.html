@@ -9,7 +9,7 @@
     
     <link rel="stylesheet" href="../../../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/bootswatch-3.3.4/united/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/bootswatch-3.3.6/united/bootstrap.min.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
     
     <script type="text/javascript">
@@ -27,7 +27,7 @@
     <script type="text/javascript" src="../../../_static/translations.js"></script>
     <script type="text/javascript" src="../../../_static/js/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="../../../_static/js/jquery-fix.js"></script>
-    <script type="text/javascript" src="../../../_static/bootstrap-3.3.4/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../../../_static/bootstrap-sphinx.js"></script>
     <link rel="top" title="documentation Connector " href="../../../index.html" />
     <link rel="up" title="Code du module" href="../../index.html" />
@@ -341,7 +341,7 @@
 <span class="sd">       of running Odoo is obviously not for production purposes.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">contextlib</span> <span class="kn">import</span> <span class="n">closing</span>
+<span class="kn">from</span> <span class="nn">contextlib</span> <span class="k">import</span> <span class="n">closing</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">re</span>
@@ -350,12 +350,12 @@
 <span class="kn">import</span> <span class="nn">time</span>
 
 <span class="kn">import</span> <span class="nn">psycopg2</span>
-<span class="kn">from</span> <span class="nn">psycopg2.extensions</span> <span class="kn">import</span> <span class="n">ISOLATION_LEVEL_AUTOCOMMIT</span>
+<span class="kn">from</span> <span class="nn">psycopg2.extensions</span> <span class="k">import</span> <span class="n">ISOLATION_LEVEL_AUTOCOMMIT</span>
 <span class="kn">import</span> <span class="nn">requests</span>
 
 <span class="kn">import</span> <span class="nn">openerp</span>
 
-<span class="kn">from</span> <span class="nn">.channels</span> <span class="kn">import</span> <span class="n">ChannelManager</span><span class="p">,</span> <span class="n">PENDING</span><span class="p">,</span> <span class="n">ENQUEUED</span><span class="p">,</span> <span class="n">NOT_DONE</span>
+<span class="kn">from</span> <span class="nn">.channels</span> <span class="k">import</span> <span class="n">ChannelManager</span><span class="p">,</span> <span class="n">PENDING</span><span class="p">,</span> <span class="n">ENQUEUED</span><span class="p">,</span> <span class="n">NOT_DONE</span>
 
 <span class="n">SELECT_TIMEOUT</span> <span class="o">=</span> <span class="mi">60</span>
 <span class="n">ERROR_RECOVERY_DELAY</span> <span class="o">=</span> <span class="mi">5</span>
@@ -392,7 +392,7 @@
             <span class="n">_logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s2">&quot;exception in GET </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">url</span><span class="p">)</span>
             <span class="n">set_job_pending</span><span class="p">()</span>
     <span class="n">thread</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">urlopen</span><span class="p">)</span>
-    <span class="n">thread</span><span class="o">.</span><span class="n">daemon</span> <span class="o">=</span> <span class="bp">True</span>
+    <span class="n">thread</span><span class="o">.</span><span class="n">daemon</span> <span class="o">=</span> <span class="kc">True</span>
     <span class="n">thread</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
 
 
@@ -412,7 +412,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
         <span class="k">except</span><span class="p">:</span>
             <span class="k">pass</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">conn</span> <span class="o">=</span> <span class="bp">None</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conn</span> <span class="o">=</span> <span class="kc">None</span></div>
 
     <span class="k">def</span> <span class="nf">_has_connector</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">with</span> <span class="n">closing</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">())</span> <span class="k">as</span> <span class="n">cr</span><span class="p">:</span>
@@ -421,16 +421,16 @@
                            <span class="s2">&quot;WHERE name=</span><span class="si">%s</span><span class="s2"> AND state=</span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span>
                            <span class="p">(</span><span class="s1">&#39;connector&#39;</span><span class="p">,</span> <span class="s1">&#39;installed&#39;</span><span class="p">))</span>
             <span class="k">except</span> <span class="n">psycopg2</span><span class="o">.</span><span class="n">ProgrammingError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
-                <span class="k">if</span> <span class="nb">unicode</span><span class="p">(</span><span class="n">err</span><span class="p">)</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;relation &quot;ir_module_module&quot; &#39;</span>
+                <span class="k">if</span> <span class="n">unicode</span><span class="p">(</span><span class="n">err</span><span class="p">)</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;relation &quot;ir_module_module&quot; &#39;</span>
                                            <span class="s1">&#39;does not exist&#39;</span><span class="p">):</span>
-                    <span class="k">return</span> <span class="bp">False</span>
+                    <span class="k">return</span> <span class="kc">False</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="k">raise</span>
             <span class="k">return</span> <span class="n">cr</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">_has_queue_job_column</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">column</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">has_connector</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">False</span>
+            <span class="k">return</span> <span class="kc">False</span>
         <span class="k">with</span> <span class="n">closing</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">())</span> <span class="k">as</span> <span class="n">cr</span><span class="p">:</span>
             <span class="n">cr</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;SELECT 1 FROM information_schema.columns &quot;</span>
                        <span class="s2">&quot;WHERE table_name=</span><span class="si">%s</span><span class="s2"> AND column_name=</span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span>
@@ -490,20 +490,20 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">channel_manager</span> <span class="o">=</span> <span class="n">ChannelManager</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">channel_manager</span><span class="o">.</span><span class="n">simple_configure</span><span class="p">(</span><span class="n">channel_config_string</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">db_by_name</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_stop</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_stop</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_stop_pipe</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">pipe</span><span class="p">()</span>
 
 <div class="viewcode-block" id="ConnectorRunner.get_db_names"><a class="viewcode-back" href="../../../api/api_runner.html#connector.jobrunner.runner.ConnectorRunner.get_db_names">[docs]</a>    <span class="k">def</span> <span class="nf">get_db_names</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">openerp</span><span class="o">.</span><span class="n">tools</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;db_name&#39;</span><span class="p">]:</span>
             <span class="n">db_names</span> <span class="o">=</span> <span class="n">openerp</span><span class="o">.</span><span class="n">tools</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;db_name&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">db_names</span> <span class="o">=</span> <span class="n">openerp</span><span class="o">.</span><span class="n">service</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">exp_list</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
+            <span class="n">db_names</span> <span class="o">=</span> <span class="n">openerp</span><span class="o">.</span><span class="n">service</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">exp_list</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
         <span class="n">dbfilter</span> <span class="o">=</span> <span class="n">openerp</span><span class="o">.</span><span class="n">tools</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;dbfilter&#39;</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">dbfilter</span> <span class="ow">and</span> <span class="s1">&#39;</span><span class="si">%d</span><span class="s1">&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dbfilter</span> <span class="ow">and</span> <span class="s1">&#39;%h&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dbfilter</span><span class="p">:</span>
             <span class="n">db_names</span> <span class="o">=</span> <span class="p">[</span><span class="n">d</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">db_names</span> <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">dbfilter</span><span class="p">,</span> <span class="n">d</span><span class="p">)]</span>
         <span class="k">return</span> <span class="n">db_names</span></div>
 
-<div class="viewcode-block" id="ConnectorRunner.close_databases"><a class="viewcode-back" href="../../../api/api_runner.html#connector.jobrunner.runner.ConnectorRunner.close_databases">[docs]</a>    <span class="k">def</span> <span class="nf">close_databases</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">remove_jobs</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+<div class="viewcode-block" id="ConnectorRunner.close_databases"><a class="viewcode-back" href="../../../api/api_runner.html#connector.jobrunner.runner.ConnectorRunner.close_databases">[docs]</a>    <span class="k">def</span> <span class="nf">close_databases</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">remove_jobs</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">db_name</span><span class="p">,</span> <span class="n">db</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">db_by_name</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="k">try</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">remove_jobs</span><span class="p">:</span>
@@ -511,7 +511,7 @@
                 <span class="n">db</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
             <span class="k">except</span><span class="p">:</span>
                 <span class="n">_logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;error closing database </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span>
-                                <span class="n">db_name</span><span class="p">,</span> <span class="n">exc_info</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+                                <span class="n">db_name</span><span class="p">,</span> <span class="n">exc_info</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">db_by_name</span> <span class="o">=</span> <span class="p">{}</span></div>
 
 <div class="viewcode-block" id="ConnectorRunner.initialize_databases"><a class="viewcode-back" href="../../../api/api_runner.html#connector.jobrunner.runner.ConnectorRunner.initialize_databases">[docs]</a>    <span class="k">def</span> <span class="nf">initialize_databases</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -562,7 +562,7 @@
 
 <div class="viewcode-block" id="ConnectorRunner.stop"><a class="viewcode-back" href="../../../api/api_runner.html#connector.jobrunner.runner.ConnectorRunner.stop">[docs]</a>    <span class="k">def</span> <span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;graceful stop requested&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_stop</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_stop</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="c1"># wakeup the select() in wait_notification</span>
         <span class="n">os</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_stop_pipe</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s1">&#39;.&#39;</span><span class="p">)</span></div>
 
@@ -588,7 +588,7 @@
                                   <span class="n">ERROR_RECOVERY_DELAY</span><span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">close_databases</span><span class="p">()</span>
                 <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">ERROR_RECOVERY_DELAY</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">close_databases</span><span class="p">(</span><span class="n">remove_jobs</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">close_databases</span><span class="p">(</span><span class="n">remove_jobs</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
         <span class="n">_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;stopped&quot;</span><span class="p">)</span></div></div>
 </pre></div>
 
@@ -607,7 +607,7 @@
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.<br/>
+      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.5.<br/>
     </p>
   </div>
 </footer>

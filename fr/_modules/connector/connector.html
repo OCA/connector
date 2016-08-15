@@ -9,7 +9,7 @@
     
     <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/bootswatch-3.3.4/united/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/bootswatch-3.3.6/united/bootstrap.min.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
     
     <script type="text/javascript">
@@ -27,7 +27,7 @@
     <script type="text/javascript" src="../../_static/translations.js"></script>
     <script type="text/javascript" src="../../_static/js/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="../../_static/js/jquery-fix.js"></script>
-    <script type="text/javascript" src="../../_static/bootstrap-3.3.4/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../../_static/bootstrap-sphinx.js"></script>
     <link rel="top" title="documentation Connector " href="../../index.html" />
     <link rel="up" title="Code du module" href="../index.html" />
@@ -255,11 +255,11 @@
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">struct</span>
 
-<span class="kn">from</span> <span class="nn">contextlib</span> <span class="kn">import</span> <span class="n">contextmanager</span>
-<span class="kn">from</span> <span class="nn">openerp</span> <span class="kn">import</span> <span class="n">models</span><span class="p">,</span> <span class="n">fields</span>
+<span class="kn">from</span> <span class="nn">contextlib</span> <span class="k">import</span> <span class="n">contextmanager</span>
+<span class="kn">from</span> <span class="nn">openerp</span> <span class="k">import</span> <span class="n">models</span><span class="p">,</span> <span class="n">fields</span>
 
-<span class="kn">from</span> <span class="nn">.deprecate</span> <span class="kn">import</span> <span class="n">log_deprecate</span><span class="p">,</span> <span class="n">DeprecatedClass</span>
-<span class="kn">from</span> <span class="nn">.exception</span> <span class="kn">import</span> <span class="n">RetryableJobError</span>
+<span class="kn">from</span> <span class="nn">.deprecate</span> <span class="k">import</span> <span class="n">log_deprecate</span><span class="p">,</span> <span class="n">DeprecatedClass</span>
+<span class="kn">from</span> <span class="nn">.exception</span> <span class="k">import</span> <span class="n">RetryableJobError</span>
 
 <span class="n">_logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">__name__</span><span class="p">)</span>
 
@@ -330,7 +330,7 @@
 <span class="sd">        we search the correct ``ConnectorUnit`` for a model.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">cls</span><span class="o">.</span><span class="n">_model_name</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">cls</span><span class="o">.</span><span class="n">_model_name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;no _model_name for </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">cls</span><span class="p">)</span>
         <span class="n">model_name</span> <span class="o">=</span> <span class="n">cls</span><span class="o">.</span><span class="n">_model_name</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">model_name</span><span class="p">,</span> <span class="s1">&#39;__iter__&#39;</span><span class="p">):</span>
@@ -357,7 +357,7 @@
 
     <span class="n">__metaclass__</span> <span class="o">=</span> <span class="n">MetaConnectorUnit</span>
 
-    <span class="n">_model_name</span> <span class="o">=</span> <span class="bp">None</span>  <span class="c1"># to be defined in sub-classes</span>
+    <span class="n">_model_name</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># to be defined in sub-classes</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">connector_env</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -414,7 +414,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">context</span>
 
-<div class="viewcode-block" id="ConnectorUnit.unit_for"><a class="viewcode-back" href="../../api/api_connector.html#connector.connector.ConnectorUnit.unit_for">[docs]</a>    <span class="k">def</span> <span class="nf">unit_for</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">connector_unit_class</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="ConnectorUnit.unit_for"><a class="viewcode-back" href="../../api/api_connector.html#connector.connector.ConnectorUnit.unit_for">[docs]</a>    <span class="k">def</span> <span class="nf">unit_for</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">connector_unit_class</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; According to the current</span>
 <span class="sd">        :py:class:`~connector.connector.ConnectorEnvironment`,</span>
 <span class="sd">        search and returns an instance of the</span>
@@ -434,7 +434,7 @@
 <span class="sd">                      model than the current one</span>
 <span class="sd">        :type model: str</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">model</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">or</span> <span class="n">model</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">_name</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">model</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">model</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">_name</span><span class="p">:</span>
             <span class="n">env</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">connector_env</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">env</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">connector_env</span><span class="o">.</span><span class="n">create_environment</span><span class="p">(</span>
@@ -444,17 +444,17 @@
 
         <span class="k">return</span> <span class="n">env</span><span class="o">.</span><span class="n">get_connector_unit</span><span class="p">(</span><span class="n">connector_unit_class</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="ConnectorUnit.get_connector_unit_for_model"><a class="viewcode-back" href="../../api/api_connector.html#connector.connector.ConnectorUnit.get_connector_unit_for_model">[docs]</a>    <span class="k">def</span> <span class="nf">get_connector_unit_for_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">connector_unit_class</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="ConnectorUnit.get_connector_unit_for_model"><a class="viewcode-back" href="../../api/api_connector.html#connector.connector.ConnectorUnit.get_connector_unit_for_model">[docs]</a>    <span class="k">def</span> <span class="nf">get_connector_unit_for_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">connector_unit_class</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Deprecated in favor of :meth:`~unit_for` &quot;&quot;&quot;</span>
         <span class="n">log_deprecate</span><span class="p">(</span><span class="s1">&#39;renamed to unit_for()&#39;</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">unit_for</span><span class="p">(</span><span class="n">connector_unit_class</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="ConnectorUnit.binder_for"><a class="viewcode-back" href="../../api/api_connector.html#connector.connector.ConnectorUnit.binder_for">[docs]</a>    <span class="k">def</span> <span class="nf">binder_for</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="ConnectorUnit.binder_for"><a class="viewcode-back" href="../../api/api_connector.html#connector.connector.ConnectorUnit.binder_for">[docs]</a>    <span class="k">def</span> <span class="nf">binder_for</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Returns an new instance of the correct ``Binder`` for</span>
 <span class="sd">        a model &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">unit_for</span><span class="p">(</span><span class="n">Binder</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="ConnectorUnit.get_binder_for_model"><a class="viewcode-back" href="../../api/api_connector.html#connector.connector.ConnectorUnit.get_binder_for_model">[docs]</a>    <span class="k">def</span> <span class="nf">get_binder_for_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="ConnectorUnit.get_binder_for_model"><a class="viewcode-back" href="../../api/api_connector.html#connector.connector.ConnectorUnit.get_binder_for_model">[docs]</a>    <span class="k">def</span> <span class="nf">get_binder_for_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Returns an new instance of the correct ``Binder`` for</span>
 <span class="sd">        a model</span>
 
@@ -496,7 +496,7 @@
         <span class="k">if</span> <span class="ow">not</span> <span class="n">pg_try_advisory_lock</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="p">,</span> <span class="n">lock</span><span class="p">):</span>
             <span class="k">raise</span> <span class="n">RetryableJobError</span><span class="p">(</span><span class="s1">&#39;Could not acquire advisory lock&#39;</span><span class="p">,</span>
                                     <span class="n">seconds</span><span class="o">=</span><span class="n">retry_seconds</span><span class="p">,</span>
-                                    <span class="n">ignore_retry</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span></div></div>
+                                    <span class="n">ignore_retry</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div></div>
 
 
 <div class="viewcode-block" id="ConnectorEnvironment"><a class="viewcode-back" href="../../api/api_connector.html#connector.connector.ConnectorEnvironment">[docs]</a><span class="k">class</span> <span class="nc">ConnectorEnvironment</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -588,7 +588,7 @@
 
     <span class="nd">@classmethod</span>
 <div class="viewcode-block" id="ConnectorEnvironment.create_environment"><a class="viewcode-back" href="../../api/api_connector.html#connector.connector.ConnectorEnvironment.create_environment">[docs]</a>    <span class="k">def</span> <span class="nf">create_environment</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">backend_record</span><span class="p">,</span> <span class="n">session</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span>
-                           <span class="n">connector_env</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+                           <span class="n">connector_env</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Create a new environment ConnectorEnvironment.</span>
 
 <span class="sd">        :param backend_record: browse record of the backend</span>
@@ -626,13 +626,13 @@
 <span class="sd">    the models they are binding.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">_model_name</span> <span class="o">=</span> <span class="bp">None</span>  <span class="c1"># define in sub-classes</span>
+    <span class="n">_model_name</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># define in sub-classes</span>
     <span class="n">_external_field</span> <span class="o">=</span> <span class="s1">&#39;external_id&#39;</span>  <span class="c1"># override in sub-classes</span>
     <span class="n">_backend_field</span> <span class="o">=</span> <span class="s1">&#39;backend_id&#39;</span>  <span class="c1"># override in sub-classes</span>
     <span class="n">_openerp_field</span> <span class="o">=</span> <span class="s1">&#39;openerp_id&#39;</span>  <span class="c1"># override in sub-classes</span>
     <span class="n">_sync_date_field</span> <span class="o">=</span> <span class="s1">&#39;sync_date&#39;</span>  <span class="c1"># override in sub-classes</span>
 
-<div class="viewcode-block" id="Binder.to_openerp"><a class="viewcode-back" href="../../api/api_connector.html#connector.connector.Binder.to_openerp">[docs]</a>    <span class="k">def</span> <span class="nf">to_openerp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">external_id</span><span class="p">,</span> <span class="n">unwrap</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="Binder.to_openerp"><a class="viewcode-back" href="../../api/api_connector.html#connector.connector.Binder.to_openerp">[docs]</a>    <span class="k">def</span> <span class="nf">to_openerp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">external_id</span><span class="p">,</span> <span class="n">unwrap</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Give the OpenERP ID for an external ID</span>
 
 <span class="sd">        :param external_id: external ID for which we want</span>
@@ -643,7 +643,7 @@
 <span class="sd">                 or an empty recordset if the external_id is not mapped</span>
 <span class="sd">        :rtype: recordset</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">bindings</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">with_context</span><span class="p">(</span><span class="n">active_test</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span><span class="o">.</span><span class="n">search</span><span class="p">(</span>
+        <span class="n">bindings</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">with_context</span><span class="p">(</span><span class="n">active_test</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">search</span><span class="p">(</span>
             <span class="p">[(</span><span class="bp">self</span><span class="o">.</span><span class="n">_external_field</span><span class="p">,</span> <span class="s1">&#39;=&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">external_id</span><span class="p">)),</span>
              <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_backend_field</span><span class="p">,</span> <span class="s1">&#39;=&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">backend_record</span><span class="o">.</span><span class="n">id</span><span class="p">)]</span>
         <span class="p">)</span>
@@ -654,7 +654,7 @@
             <span class="n">bindings</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">bindings</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_openerp_field</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">bindings</span></div>
 
-<div class="viewcode-block" id="Binder.to_backend"><a class="viewcode-back" href="../../api/api_connector.html#connector.connector.Binder.to_backend">[docs]</a>    <span class="k">def</span> <span class="nf">to_backend</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">binding_id</span><span class="p">,</span> <span class="n">wrap</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="Binder.to_backend"><a class="viewcode-back" href="../../api/api_connector.html#connector.connector.Binder.to_backend">[docs]</a>    <span class="k">def</span> <span class="nf">to_backend</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">binding_id</span><span class="p">,</span> <span class="n">wrap</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Give the external ID for an OpenERP binding ID</span>
 
 <span class="sd">        :param binding_id: OpenERP binding ID for which we want the backend id</span>
@@ -670,13 +670,13 @@
             <span class="n">record</span> <span class="o">=</span> <span class="n">binding_id</span>
             <span class="n">binding_id</span> <span class="o">=</span> <span class="n">binding_id</span><span class="o">.</span><span class="n">id</span>
         <span class="k">if</span> <span class="n">wrap</span><span class="p">:</span>
-            <span class="n">binding</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">with_context</span><span class="p">(</span><span class="n">active_test</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span><span class="o">.</span><span class="n">search</span><span class="p">(</span>
+            <span class="n">binding</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">with_context</span><span class="p">(</span><span class="n">active_test</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">search</span><span class="p">(</span>
                 <span class="p">[(</span><span class="bp">self</span><span class="o">.</span><span class="n">_openerp_field</span><span class="p">,</span> <span class="s1">&#39;=&#39;</span><span class="p">,</span> <span class="n">binding_id</span><span class="p">),</span>
                  <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_backend_field</span><span class="p">,</span> <span class="s1">&#39;=&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">backend_record</span><span class="o">.</span><span class="n">id</span><span class="p">),</span>
                  <span class="p">]</span>
             <span class="p">)</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">binding</span><span class="p">:</span>
-                <span class="k">return</span> <span class="bp">None</span>
+                <span class="k">return</span> <span class="kc">None</span>
             <span class="n">binding</span><span class="o">.</span><span class="n">ensure_one</span><span class="p">()</span>
             <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">binding</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_external_field</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">record</span><span class="p">:</span>
@@ -700,12 +700,12 @@
         <span class="n">now_fmt</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">binding_id</span><span class="p">,</span> <span class="n">models</span><span class="o">.</span><span class="n">BaseModel</span><span class="p">):</span>
             <span class="n">binding_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">browse</span><span class="p">(</span><span class="n">binding_id</span><span class="p">)</span>
-        <span class="n">binding_id</span><span class="o">.</span><span class="n">with_context</span><span class="p">(</span><span class="n">connector_no_export</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
+        <span class="n">binding_id</span><span class="o">.</span><span class="n">with_context</span><span class="p">(</span><span class="n">connector_no_export</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
             <span class="p">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_external_field</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">external_id</span><span class="p">),</span>
              <span class="bp">self</span><span class="o">.</span><span class="n">_sync_date_field</span><span class="p">:</span> <span class="n">now_fmt</span><span class="p">,</span>
              <span class="p">})</span></div>
 
-<div class="viewcode-block" id="Binder.unwrap_binding"><a class="viewcode-back" href="../../api/api_connector.html#connector.connector.Binder.unwrap_binding">[docs]</a>    <span class="k">def</span> <span class="nf">unwrap_binding</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">binding_id</span><span class="p">,</span> <span class="n">browse</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="Binder.unwrap_binding"><a class="viewcode-back" href="../../api/api_connector.html#connector.connector.Binder.unwrap_binding">[docs]</a>    <span class="k">def</span> <span class="nf">unwrap_binding</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">binding_id</span><span class="p">,</span> <span class="n">browse</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; For a binding record, gives the normal record.</span>
 
 <span class="sd">        Example: when called with a ``magento.product.product`` id,</span>
@@ -800,7 +800,7 @@
 <span class="sd">    :return True/False whether lock was acquired.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">hasher</span> <span class="o">=</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">sha1</span><span class="p">()</span>
-    <span class="n">hasher</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="s1">&#39;{}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">lock</span><span class="p">))</span>
+    <span class="n">hasher</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">lock</span><span class="p">))</span>
     <span class="c1"># pg_lock accepts an int8 so we build an hash composed with</span>
     <span class="c1"># contextual information and we throw away some bits</span>
     <span class="n">int_lock</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s1">&#39;q&#39;</span><span class="p">,</span> <span class="n">hasher</span><span class="o">.</span><span class="n">digest</span><span class="p">()[:</span><span class="mi">8</span><span class="p">])</span>
@@ -825,7 +825,7 @@
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.<br/>
+      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.5.<br/>
     </p>
   </div>
 </footer>

@@ -9,7 +9,7 @@
     
     <link rel="stylesheet" href="../../../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/bootswatch-3.3.4/united/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/bootswatch-3.3.6/united/bootstrap.min.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
     
     <script type="text/javascript">
@@ -27,7 +27,7 @@
     <script type="text/javascript" src="../../../_static/translations.js"></script>
     <script type="text/javascript" src="../../../_static/js/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="../../../_static/js/jquery-fix.js"></script>
-    <script type="text/javascript" src="../../../_static/bootstrap-3.3.4/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../../../_static/bootstrap-sphinx.js"></script>
     <link rel="top" title="documentation Connector " href="../../../index.html" />
     <link rel="up" title="Code du module" href="../../index.html" />
@@ -251,13 +251,13 @@
 <span class="c1">#</span>
 <span class="c1">##############################################################################</span>
 
-<span class="kn">from</span> <span class="nn">..connector</span> <span class="kn">import</span> <span class="n">ConnectorUnit</span>
+<span class="kn">from</span> <span class="nn">..connector</span> <span class="k">import</span> <span class="n">ConnectorUnit</span>
 
 
 <div class="viewcode-block" id="BackendAdapter"><a class="viewcode-back" href="../../../api/api_backend_adapter.html#connector.unit.backend_adapter.BackendAdapter">[docs]</a><span class="k">class</span> <span class="nc">BackendAdapter</span><span class="p">(</span><span class="n">ConnectorUnit</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Base Backend Adapter for the connectors &quot;&quot;&quot;</span>
 
-    <span class="n">_model_name</span> <span class="o">=</span> <span class="bp">None</span>  <span class="c1"># define in sub-classes</span></div>
+    <span class="n">_model_name</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># define in sub-classes</span></div>
 
 
 <div class="viewcode-block" id="CRUDAdapter"><a class="viewcode-back" href="../../../api/api_backend_adapter.html#connector.unit.backend_adapter.CRUDAdapter">[docs]</a><span class="k">class</span> <span class="nc">CRUDAdapter</span><span class="p">(</span><span class="n">BackendAdapter</span><span class="p">):</span>
@@ -268,7 +268,7 @@
 <span class="sd">    the methods.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">_model_name</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="n">_model_name</span> <span class="o">=</span> <span class="kc">None</span>
 
 <div class="viewcode-block" id="CRUDAdapter.search"><a class="viewcode-back" href="../../../api/api_backend_adapter.html#connector.unit.backend_adapter.CRUDAdapter.search">[docs]</a>    <span class="k">def</span> <span class="nf">search</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Search records according to some criterias</span>
@@ -312,7 +312,7 @@
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.<br/>
+      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.5.<br/>
     </p>
   </div>
 </footer>

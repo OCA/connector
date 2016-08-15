@@ -9,7 +9,7 @@
     
     <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/bootswatch-3.3.4/united/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootswatch-3.3.6/united/bootstrap.min.css" type="text/css" />
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
     
     <script type="text/javascript">
@@ -27,7 +27,7 @@
     <script type="text/javascript" src="../_static/translations.js"></script>
     <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
-    <script type="text/javascript" src="../_static/bootstrap-3.3.4/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
     <link rel="top" title="documentation Connector " href="../index.html" />
     <link rel="next" title="Exceptions" href="api_exception.html" />
@@ -256,7 +256,7 @@
 <em class="property">class </em><code class="descclassname">connector.queue.job.</code><code class="descname">Job</code><span class="sig-paren">(</span><em>func=None</em>, <em>model_name=None</em>, <em>args=None</em>, <em>kwargs=None</em>, <em>priority=None</em>, <em>eta=None</em>, <em>job_uuid=None</em>, <em>max_retries=None</em>, <em>description=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/queue/job.html#Job"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.job.Job" title="Lien permanent vers cette définition">¶</a></dt>
 <dd></dd></dl>
 
-<p>Bases : <a class="reference external" href="http://docs.python.org/library/functions.html#object" title="(disponible dans Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<p>Bases : <a class="reference external" href="https://docs.python.org/2/library/functions.html#object" title="(disponible dans Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
 <blockquote>
 <div><p>Un job est une tâche à exécuter.</p>
 <dl class="attribute">
@@ -479,7 +479,7 @@
 <em class="property">class </em><code class="descclassname">connector.queue.job.</code><code class="descname">JobStorage</code><a class="reference internal" href="../_modules/connector/queue/job.html#JobStorage"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.job.JobStorage" title="Lien permanent vers cette définition">¶</a></dt>
 <dd></dd></dl>
 
-<p>Bases : <a class="reference external" href="http://docs.python.org/library/functions.html#object" title="(disponible dans Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<p>Bases : <a class="reference external" href="https://docs.python.org/2/library/functions.html#object" title="(disponible dans Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
 <blockquote>
 <div><p>Interface pour le stockage des jobs</p>
 <dl class="method">
@@ -662,7 +662,7 @@ values are the delay to postpone a job.</p>
 
 <dl class="function">
 <dt id="connector.queue.job.related_action">
-<code class="descclassname">connector.queue.job.</code><code class="descname">related_action</code><span class="sig-paren">(</span><em>action=&lt;function &lt;lambda&gt; at 0x4a40938&gt;</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/queue/job.html#related_action"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.job.related_action" title="Lien permanent vers cette définition">¶</a></dt>
+<code class="descclassname">connector.queue.job.</code><code class="descname">related_action</code><span class="sig-paren">(</span><em>action=&lt;function &lt;lambda&gt; at 0x4efcb18&gt;</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/queue/job.html#related_action"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.job.related_action" title="Lien permanent vers cette définition">¶</a></dt>
 <dd><p>Attache une <em>action connexe</em> à un job</p>
 <p>Un <em>action connexe</em> apparaîtra comme un bouton dans la vue OpenERP. Le bouton exécutera l&#8217;action, habituellement une ouverture de formulaire de l&#8217;enregistrement lié au job.</p>
 <p>L&#8217;<code class="docutils literal"><span class="pre">action</span></code> doit être un objet <cite>callable</cite> qui prends les arguments</p>
@@ -728,7 +728,7 @@ you can add it by using:</p>
 <em class="property">class </em><code class="descclassname">connector.queue.worker.</code><code class="descname">Worker</code><span class="sig-paren">(</span><em>db_name</em>, <em>watcher_</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/queue/worker.html#Worker"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.worker.Worker" title="Lien permanent vers cette définition">¶</a></dt>
 <dd></dd></dl>
 
-<p>Bases : <a class="reference external" href="http://docs.python.org/library/threading.html#threading.Thread" title="(disponible dans Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">threading.Thread</span></code></a></p>
+<p>Bases : <a class="reference external" href="https://docs.python.org/2/library/threading.html#threading.Thread" title="(disponible dans Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">threading.Thread</span></code></a></p>
 <blockquote>
 <div><p>Poste et récupère des jobs de la queue, les exécute</p>
 <dl class="method">
@@ -770,7 +770,7 @@ you can add it by using:</p>
 <em class="property">class </em><code class="descclassname">connector.queue.worker.</code><code class="descname">WorkerWatcher</code><a class="reference internal" href="../_modules/connector/queue/worker.html#WorkerWatcher"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.worker.WorkerWatcher" title="Lien permanent vers cette définition">¶</a></dt>
 <dd></dd></dl>
 
-<p>Bases : <a class="reference external" href="http://docs.python.org/library/threading.html#threading.Thread" title="(disponible dans Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">threading.Thread</span></code></a></p>
+<p>Bases : <a class="reference external" href="https://docs.python.org/2/library/threading.html#threading.Thread" title="(disponible dans Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">threading.Thread</span></code></a></p>
 <blockquote>
 <div><p>Garde un œil sur les workers et signale leur changement d&#8217;état.</p>
 <p>Un <cite>WorkerWatcher</cite> est partagé entre plusieurs bases de données, donc seule une instance est nécessaire pour vérifier l&#8217;état des workers pour chaque base de données.</p>
@@ -785,7 +785,7 @@ you can add it by using:</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Retourne:</th><td class="field-body">Noms des bases de données</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Type retourné:</th><td class="field-body"><a class="reference external" href="http://docs.python.org/library/functions.html#list" title="(disponible dans Python v2.7)">list</a></td>
+<tr class="field-even field"><th class="field-name">Type retourné:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2/library/functions.html#list" title="(disponible dans Python v2.7)">list</a></td>
 </tr>
 </tbody>
 </table>
@@ -830,7 +830,7 @@ you can add it by using:</p>
 <em class="property">class </em><code class="descclassname">connector.queue.queue.</code><code class="descname">JobsQueue</code><a class="reference internal" href="../_modules/connector/queue/queue.html#JobsQueue"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.queue.JobsQueue" title="Lien permanent vers cette définition">¶</a></dt>
 <dd></dd></dl>
 
-<p>Bases : <a class="reference external" href="http://docs.python.org/library/functions.html#object" title="(disponible dans Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<p>Bases : <a class="reference external" href="https://docs.python.org/2/library/functions.html#object" title="(disponible dans Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
 <blockquote>
 <div><p>Contient en mémoire les jobs dont l&#8217;exécution est planifiée.</p>
 <p>Les jobs sont triés, plus la priorité est importante, plus tôt les jobs sont dépilés de la queue.</p>
@@ -865,8 +865,8 @@ you can add it by using:</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><ul class="first last simple">
-<li><strong>size</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#int" title="(disponible dans Python v2.7)"><em>int</em></a>) &#8211; la taille maximum des valeurs stockées dans ce champ</li>
-<li><strong>translate</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#bool" title="(disponible dans Python v2.7)"><em>bool</em></a>) &#8211; si les valeurs de ce champ peuvent être traduites</li>
+<li><strong>size</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(disponible dans Python v2.7)"><em>int</em></a>) &#8211; la taille maximum des valeurs stockées dans ce champ</li>
+<li><strong>translate</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#bool" title="(disponible dans Python v2.7)"><em>bool</em></a>) &#8211; si les valeurs de ce champ peuvent être traduites</li>
 </ul>
 </td>
 </tr>
@@ -910,8 +910,8 @@ the case of related fields or field extensions.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><ul class="first last simple">
-<li><strong>size</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#int" title="(disponible dans Python v2.7)"><em>int</em></a>) &#8211; la taille maximum des valeurs stockées dans ce champ</li>
-<li><strong>translate</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#bool" title="(disponible dans Python v2.7)"><em>bool</em></a>) &#8211; si les valeurs de ce champ peuvent être traduites</li>
+<li><strong>size</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(disponible dans Python v2.7)"><em>int</em></a>) &#8211; la taille maximum des valeurs stockées dans ce champ</li>
+<li><strong>translate</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#bool" title="(disponible dans Python v2.7)"><em>bool</em></a>) &#8211; si les valeurs de ce champ peuvent être traduites</li>
 </ul>
 </td>
 </tr>
@@ -980,8 +980,8 @@ fields or field extensions.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><ul class="first last simple">
-<li><strong>size</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#int" title="(disponible dans Python v2.7)"><em>int</em></a>) &#8211; la taille maximum des valeurs stockées dans ce champ</li>
-<li><strong>translate</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#bool" title="(disponible dans Python v2.7)"><em>bool</em></a>) &#8211; si les valeurs de ce champ peuvent être traduites</li>
+<li><strong>size</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(disponible dans Python v2.7)"><em>int</em></a>) &#8211; la taille maximum des valeurs stockées dans ce champ</li>
+<li><strong>translate</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#bool" title="(disponible dans Python v2.7)"><em>bool</em></a>) &#8211; si les valeurs de ce champ peuvent être traduites</li>
 </ul>
 </td>
 </tr>
@@ -1022,8 +1022,8 @@ fields or field extensions.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><ul class="first last simple">
-<li><strong>size</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#int" title="(disponible dans Python v2.7)"><em>int</em></a>) &#8211; la taille maximum des valeurs stockées dans ce champ</li>
-<li><strong>translate</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#bool" title="(disponible dans Python v2.7)"><em>bool</em></a>) &#8211; si les valeurs de ce champ peuvent être traduites</li>
+<li><strong>size</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(disponible dans Python v2.7)"><em>int</em></a>) &#8211; la taille maximum des valeurs stockées dans ce champ</li>
+<li><strong>translate</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#bool" title="(disponible dans Python v2.7)"><em>bool</em></a>) &#8211; si les valeurs de ce champ peuvent être traduites</li>
 </ul>
 </td>
 </tr>
@@ -1066,8 +1066,8 @@ fields or field extensions.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><ul class="first last simple">
-<li><strong>size</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#int" title="(disponible dans Python v2.7)"><em>int</em></a>) &#8211; la taille maximum des valeurs stockées dans ce champ</li>
-<li><strong>translate</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#bool" title="(disponible dans Python v2.7)"><em>bool</em></a>) &#8211; si les valeurs de ce champ peuvent être traduites</li>
+<li><strong>size</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(disponible dans Python v2.7)"><em>int</em></a>) &#8211; la taille maximum des valeurs stockées dans ce champ</li>
+<li><strong>translate</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#bool" title="(disponible dans Python v2.7)"><em>bool</em></a>) &#8211; si les valeurs de ce champ peuvent être traduites</li>
 </ul>
 </td>
 </tr>
@@ -1152,8 +1152,8 @@ fields or field extensions.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><ul class="first last simple">
-<li><strong>size</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#int" title="(disponible dans Python v2.7)"><em>int</em></a>) &#8211; la taille maximum des valeurs stockées dans ce champ</li>
-<li><strong>translate</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#bool" title="(disponible dans Python v2.7)"><em>bool</em></a>) &#8211; si les valeurs de ce champ peuvent être traduites</li>
+<li><strong>size</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(disponible dans Python v2.7)"><em>int</em></a>) &#8211; la taille maximum des valeurs stockées dans ce champ</li>
+<li><strong>translate</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#bool" title="(disponible dans Python v2.7)"><em>bool</em></a>) &#8211; si les valeurs de ce champ peuvent être traduites</li>
 </ul>
 </td>
 </tr>
@@ -1170,8 +1170,8 @@ fields or field extensions.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><ul class="first last simple">
-<li><strong>size</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#int" title="(disponible dans Python v2.7)"><em>int</em></a>) &#8211; la taille maximum des valeurs stockées dans ce champ</li>
-<li><strong>translate</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#bool" title="(disponible dans Python v2.7)"><em>bool</em></a>) &#8211; si les valeurs de ce champ peuvent être traduites</li>
+<li><strong>size</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(disponible dans Python v2.7)"><em>int</em></a>) &#8211; la taille maximum des valeurs stockées dans ce champ</li>
+<li><strong>translate</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#bool" title="(disponible dans Python v2.7)"><em>bool</em></a>) &#8211; si les valeurs de ce champ peuvent être traduites</li>
 </ul>
 </td>
 </tr>
@@ -1217,8 +1217,8 @@ fields or field extensions.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><ul class="first last simple">
-<li><strong>size</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#int" title="(disponible dans Python v2.7)"><em>int</em></a>) &#8211; la taille maximum des valeurs stockées dans ce champ</li>
-<li><strong>translate</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#bool" title="(disponible dans Python v2.7)"><em>bool</em></a>) &#8211; si les valeurs de ce champ peuvent être traduites</li>
+<li><strong>size</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(disponible dans Python v2.7)"><em>int</em></a>) &#8211; la taille maximum des valeurs stockées dans ce champ</li>
+<li><strong>translate</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#bool" title="(disponible dans Python v2.7)"><em>bool</em></a>) &#8211; si les valeurs de ce champ peuvent être traduites</li>
 </ul>
 </td>
 </tr>
@@ -1235,8 +1235,8 @@ fields or field extensions.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><ul class="first last simple">
-<li><strong>size</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#int" title="(disponible dans Python v2.7)"><em>int</em></a>) &#8211; la taille maximum des valeurs stockées dans ce champ</li>
-<li><strong>translate</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#bool" title="(disponible dans Python v2.7)"><em>bool</em></a>) &#8211; si les valeurs de ce champ peuvent être traduites</li>
+<li><strong>size</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(disponible dans Python v2.7)"><em>int</em></a>) &#8211; la taille maximum des valeurs stockées dans ce champ</li>
+<li><strong>translate</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#bool" title="(disponible dans Python v2.7)"><em>bool</em></a>) &#8211; si les valeurs de ce champ peuvent être traduites</li>
 </ul>
 </td>
 </tr>
@@ -1334,8 +1334,8 @@ fields or field extensions.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><ul class="first last simple">
-<li><strong>size</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#int" title="(disponible dans Python v2.7)"><em>int</em></a>) &#8211; la taille maximum des valeurs stockées dans ce champ</li>
-<li><strong>translate</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#bool" title="(disponible dans Python v2.7)"><em>bool</em></a>) &#8211; si les valeurs de ce champ peuvent être traduites</li>
+<li><strong>size</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(disponible dans Python v2.7)"><em>int</em></a>) &#8211; la taille maximum des valeurs stockées dans ce champ</li>
+<li><strong>translate</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#bool" title="(disponible dans Python v2.7)"><em>bool</em></a>) &#8211; si les valeurs de ce champ peuvent être traduites</li>
 </ul>
 </td>
 </tr>
@@ -1390,7 +1390,7 @@ fields or field extensions.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><strong>max_jobs</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#int" title="(disponible dans Python v2.7)"><em>int</em></a>) &#8211; nombre maximal de jobs à affecter à un worker</td>
+<tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><strong>max_jobs</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(disponible dans Python v2.7)"><em>int</em></a>) &#8211; nombre maximal de jobs à affecter à un worker</td>
 </tr>
 </tbody>
 </table>
@@ -1409,7 +1409,7 @@ fields or field extensions.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><strong>max_jobs</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#int" title="(disponible dans Python v2.7)"><em>int</em></a>) &#8211; nombre maximal de jobs à affecter à un worker</td>
+<tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><strong>max_jobs</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(disponible dans Python v2.7)"><em>int</em></a>) &#8211; nombre maximal de jobs à affecter à un worker</td>
 </tr>
 </tbody>
 </table>
@@ -1467,8 +1467,8 @@ the case of related fields or field extensions.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><ul class="first last simple">
-<li><strong>size</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#int" title="(disponible dans Python v2.7)"><em>int</em></a>) &#8211; la taille maximum des valeurs stockées dans ce champ</li>
-<li><strong>translate</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#bool" title="(disponible dans Python v2.7)"><em>bool</em></a>) &#8211; si les valeurs de ce champ peuvent être traduites</li>
+<li><strong>size</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(disponible dans Python v2.7)"><em>int</em></a>) &#8211; la taille maximum des valeurs stockées dans ce champ</li>
+<li><strong>translate</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#bool" title="(disponible dans Python v2.7)"><em>bool</em></a>) &#8211; si les valeurs de ce champ peuvent être traduites</li>
 </ul>
 </td>
 </tr>
@@ -1485,8 +1485,8 @@ the case of related fields or field extensions.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><ul class="first last simple">
-<li><strong>size</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#int" title="(disponible dans Python v2.7)"><em>int</em></a>) &#8211; la taille maximum des valeurs stockées dans ce champ</li>
-<li><strong>translate</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#bool" title="(disponible dans Python v2.7)"><em>bool</em></a>) &#8211; si les valeurs de ce champ peuvent être traduites</li>
+<li><strong>size</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(disponible dans Python v2.7)"><em>int</em></a>) &#8211; la taille maximum des valeurs stockées dans ce champ</li>
+<li><strong>translate</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#bool" title="(disponible dans Python v2.7)"><em>bool</em></a>) &#8211; si les valeurs de ce champ peuvent être traduites</li>
 </ul>
 </td>
 </tr>
@@ -1583,7 +1583,7 @@ given, names are automatically generated from model names, provided
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.<br/>
+      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.5.<br/>
     </p>
   </div>
 </footer>

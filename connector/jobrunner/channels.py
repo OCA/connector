@@ -25,6 +25,7 @@
 
 from heapq import heappush, heappop
 import logging
+import time
 from weakref import WeakValueDictionary
 
 from ..exception import ChannelNotFound
@@ -331,7 +332,7 @@ class Channel(object):
     without risking to overflow the system.
     """
 
-    def __init__(self, name, parent, capacity=None, sequential=False):
+    def __init__(self, name, parent, capacity=None, sequential=False, delay=0):
         self.name = name
         self.parent = parent
         if self.parent:
@@ -339,9 +340,12 @@ class Channel(object):
         self.children = {}
         self.capacity = capacity
         self.sequential = sequential
+        self.delay = delay
         self._queue = ChannelQueue()
         self._running = SafeSet()
         self._failed = SafeSet()
+        # time (as in time.time()) before which no job is returned dequed
+        self._pause_until = None
 
     def configure(self, config):
         """ Configure a channel from a dictionary.
@@ -354,6 +358,7 @@ class Channel(object):
         assert self.fullname.endswith(config['name'])
         self.capacity = config.get('capacity', None)
         self.sequential = bool(config.get('sequential', False))
+        self.delay = int(config.get('delay', 0))
         if self.sequential and self.capacity != 1:
             raise ValueError("A sequential channel must have a capacity of 1")
 
@@ -440,11 +445,17 @@ class Channel(object):
         channels, then yielding jobs from the channel queue until
         ``capacity`` jobs are marked running in the channel.
 
+        If the ``delay`` option is set on the channel, then it yields
+        no job until at least delay seconds have elapsed since the previous
+        yield.
+
         :param now: the current datetime using a type that is comparable to
                     jobs eta attribute
 
         :return: iterator of :py:class:`connector.jobrunner.ChannelJob`
         """
+        if self.delay and time.time() < self._pause_until:
+            return
         # enqueue jobs of children channels
         for child in self.children.values():
             for job in child.get_jobs_to_run(now):
@@ -465,6 +476,9 @@ class Channel(object):
             _logger.debug("job %s marked running in channel %s",
                           job.uuid, self)
             yield job
+            if self.delay:
+                self._pause_until = time.time() + self.delay
+                break
 
 
 class ChannelManager(object):
@@ -524,6 +538,31 @@ class ChannelManager(object):
     >>> cm.notify(db, 'A', 'A6', 6, 0, 5, None, 'pending')
     >>> pp(list(cm.get_jobs_to_run(now=100)))
     [<ChannelJob A6>]
+
+    Let's test the delay mechanism. Configure a 2 seconds delay on channel A,
+    end enqueue two jobs.
+
+    >>> cm = ChannelManager()
+    >>> cm.simple_configure('root:4,A:4:delay=2')
+    >>> cm.notify(db, 'A', 'A1', 1, 0, 10, None, 'pending')
+    >>> cm.notify(db, 'A', 'A2', 2, 0, 10, None, 'pending')
+
+    We have only one job to run, because of the delay.
+
+    >>> pp(list(cm.get_jobs_to_run(now=0)))
+    [<ChannelJob A1>]
+
+    We have no job to run, because of the delay.
+
+    >>> pp(list(cm.get_jobs_to_run(now=0)))
+    []
+
+    2 seconds later, we can run the other job (even though the first one
+    is still running, because we have enough capacity).
+
+    >>> time.sleep(2)
+    >>> pp(list(cm.get_jobs_to_run(now=0)))
+    [<ChannelJob A2>]
     """
 
     def __init__(self):

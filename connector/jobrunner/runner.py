@@ -98,6 +98,7 @@ Caveat
 """
 
 from contextlib import closing
+import datetime
 import logging
 import os
 import select
@@ -116,6 +117,18 @@ SELECT_TIMEOUT = 60
 ERROR_RECOVERY_DELAY = 5
 
 _logger = logging.getLogger(__name__)
+
+
+def _datetime_to_epoch(dt):
+    # important: this must return the same as postgresql
+    # EXTRACT(EPOCH FROM TIMESTAMP dt)
+    return (dt - datetime.datetime(1970, 1, 1)).total_seconds()
+
+
+def _openerp_now():
+    dts = openerp.fields.Datetime.now()
+    dt = openerp.fields.Datetime.from_string(dts)
+    return _datetime_to_epoch(dt)
 
 
 def _async_http_get(port, db_name, job_uuid):
@@ -213,7 +226,7 @@ class Database(object):
 
     def select_jobs(self, where, args):
         query = ("SELECT channel, uuid, id as seq, date_created, "
-                 "priority, eta, state "
+                 "priority, EXTRACT(EPOCH FROM eta), state "
                  "FROM queue_job WHERE %s" %
                  (where, ))
         with closing(self.conn.cursor()) as cr:
@@ -269,7 +282,7 @@ class ConnectorRunner(object):
                 _logger.info('connector runner ready for db %s', db_name)
 
     def run_jobs(self):
-        now = openerp.fields.Datetime.now()
+        now = _openerp_now()
         for job in self.channel_manager.get_jobs_to_run(now):
             if self._stop:
                 break

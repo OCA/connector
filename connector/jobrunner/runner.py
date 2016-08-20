@@ -161,7 +161,6 @@ class Database(object):
         self.conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
         self.has_connector = self._has_connector()
         if self.has_connector:
-            self.has_channel = self._has_queue_job_column('channel')
             self._initialize()
 
     def close(self):
@@ -183,15 +182,6 @@ class Database(object):
                     return False
                 else:
                     raise
-            return cr.fetchone()
-
-    def _has_queue_job_column(self, column):
-        if not self.has_connector:
-            return False
-        with closing(self.conn.cursor()) as cr:
-            cr.execute("SELECT 1 FROM information_schema.columns "
-                       "WHERE table_name=%s AND column_name=%s",
-                       ('queue_job', column))
             return cr.fetchone()
 
     def _initialize(self):
@@ -222,11 +212,10 @@ class Database(object):
             cr.execute("LISTEN connector")
 
     def select_jobs(self, where, args):
-        query = ("SELECT %s, uuid, id as seq, date_created, "
+        query = ("SELECT channel, uuid, id as seq, date_created, "
                  "priority, eta, state "
                  "FROM queue_job WHERE %s" %
-                 ('channel' if self.has_channel else 'NULL',
-                  where))
+                 (where, ))
         with closing(self.conn.cursor()) as cr:
             cr.execute(query, args)
             return list(cr.fetchall())

@@ -583,12 +583,12 @@ class ChannelManager(object):
                     elif len(kv) == 2:
                         k, v = kv
                     else:
-                        raise ValueError('Invalid channel config %s: ',
-                                         'incorrect config item %s'
+                        raise ValueError('Invalid channel config %s: '
+                                         'incorrect config item %s' %
                                          (config_string, config_item))
                     if k in config:
                         raise ValueError('Invalid channel config %s: '
-                                         'duplicate key %s'
+                                         'duplicate key %s' %
                                          (config_string, k))
                     config[k] = v
             else:

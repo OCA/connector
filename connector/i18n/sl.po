@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: connector (9.0)\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-12 06:32+0000\n"
+"POT-Creation-Date: 2016-08-15 18:53+0000\n"
 "PO-Revision-Date: 2016-03-17 11:27+0000\n"
 "Last-Translator: Matjaž Mozetič <m.mozetic@matmoz.si>\n"
 "Language-Team: Slovenian (http://www.transifex.com/oca/OCA-connector-9-0/language/sl/)\n"
@@ -95,7 +95,7 @@ msgid "Cancel"
 msgstr "Preklic"
 
 #. module: connector
-#: code:addons/connector/queue/job.py:592
+#: code:addons/connector/queue/job.py:593
 #, python-format
 msgid "Canceled. Nothing to do."
 msgstr "Preklicano. Ni opravkov."

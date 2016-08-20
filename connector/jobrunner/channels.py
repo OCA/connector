@@ -25,7 +25,6 @@
 
 from heapq import heappush, heappop
 import logging
-import time
 from weakref import WeakValueDictionary
 
 from ..exception import ChannelNotFound
@@ -449,12 +448,13 @@ class Channel(object):
         no job until at least delay seconds have elapsed since the previous
         yield.
 
-        :param now: the current datetime using a type that is comparable to
-                    jobs eta attribute
+        :param now: the current datetime in seconds
 
         :return: iterator of :py:class:`connector.jobrunner.ChannelJob`
         """
-        if self.delay and time.time() < self._pause_until:
+        if self.delay and now < self._pause_until:
+            _logger.debug("channel %s paused because of delay between jobs",
+                          self)
             return
         # enqueue jobs of children channels
         for child in self.children.values():
@@ -477,7 +477,7 @@ class Channel(object):
                           job.uuid, self)
             yield job
             if self.delay:
-                self._pause_until = time.time() + self.delay
+                self._pause_until = now + self.delay
                 break
 
 
@@ -549,19 +549,18 @@ class ChannelManager(object):
 
     We have only one job to run, because of the delay.
 
-    >>> pp(list(cm.get_jobs_to_run(now=0)))
+    >>> pp(list(cm.get_jobs_to_run(now=100)))
     [<ChannelJob A1>]
 
     We have no job to run, because of the delay.
 
-    >>> pp(list(cm.get_jobs_to_run(now=0)))
+    >>> pp(list(cm.get_jobs_to_run(now=101)))
     []
 
     2 seconds later, we can run the other job (even though the first one
     is still running, because we have enough capacity).
 
-    >>> time.sleep(2)
-    >>> pp(list(cm.get_jobs_to_run(now=0)))
+    >>> pp(list(cm.get_jobs_to_run(now=102)))
     [<ChannelJob A2>]
     """
 

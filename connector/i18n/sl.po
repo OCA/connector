@@ -3,14 +3,14 @@
 # * connector
 # 
 # Translators:
-# Matjaž Mozetič <m.mozetic@matmoz.si>, 2015
+# Matjaž Mozetič <m.mozetic@matmoz.si>, 2015-2016
 msgid ""
 msgstr ""
 "Project-Id-Version: connector (8.0)\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-04-11 09:16+0000\n"
-"PO-Revision-Date: 2015-10-15 13:38+0000\n"
-"Last-Translator: OCA Transbot <transbot@odoo-community.org>\n"
+"POT-Creation-Date: 2016-08-15 18:48+0000\n"
+"PO-Revision-Date: 2016-08-16 07:57+0000\n"
+"Last-Translator: Matjaž Mozetič <m.mozetic@matmoz.si>\n"
 "Language-Team: Slovenian (http://www.transifex.com/oca/OCA-connector-8-0/language/sl/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -250,6 +250,18 @@ msgid "Description"
 msgstr "Opis"
 
 #. module: connector
+#: field:connector.backend,display_name:0
+#: field:connector.checkpoint,display_name:0
+#: field:connector.checkpoint.review,display_name:0
+#: field:connector.config.settings,display_name:0
+#: field:external.binding,display_name:0 field:queue.job,display_name:0
+#: field:queue.job.channel,display_name:0
+#: field:queue.job.function,display_name:0
+#: field:queue.requeue.job,display_name:0 field:queue.worker,display_name:0
+msgid "Display Name"
+msgstr "Prikazni naziv"
+
+#. module: connector
 #: view:queue.job:connector.view_queue_job_search selection:queue.job,state:0
 msgid "Done"
 msgstr "Opravljeno"
@@ -410,6 +422,18 @@ msgid "Last Message Date"
 msgstr "Datum zadnjega sporočila"
 
 #. module: connector
+#: field:connector.backend,__last_update:0
+#: field:connector.checkpoint,__last_update:0
+#: field:connector.checkpoint.review,__last_update:0
+#: field:connector.config.settings,__last_update:0
+#: field:external.binding,__last_update:0 field:queue.job,__last_update:0
+#: field:queue.job.channel,__last_update:0
+#: field:queue.job.function,__last_update:0
+#: field:queue.requeue.job,__last_update:0 field:queue.worker,__last_update:0
+msgid "Last Modified on"
+msgstr "Zadnjič spremenjeno"
+
+#. module: connector
 #: field:connector.checkpoint,write_uid:0
 #: field:connector.checkpoint.review,write_uid:0
 #: field:connector.config.settings,write_uid:0
@@ -467,6 +491,11 @@ msgstr "Model"
 #: field:queue.job.function,name:0
 msgid "Name"
 msgstr "Naziv"
+
+#. module: connector
+#: help:connector.checkpoint,name:0
+msgid "Name of the record to review"
+msgstr "Naziv zapisa, ki bo pregledan"
 
 #. module: connector
 #: view:connector.checkpoint:connector.view_connector_checkpoint_search
@@ -532,9 +561,19 @@ msgid "Queue Worker"
 msgstr "Delavec čakalne vrste"
 
 #. module: connector
+#: field:connector.checkpoint,record:0
+msgid "Record"
+msgstr "Zapis"
+
+#. module: connector
 #: field:connector.checkpoint,record_id:0
 msgid "Record ID"
 msgstr "ID zapisa"
+
+#. module: connector
+#: field:connector.checkpoint,name:0
+msgid "Record Name"
+msgstr "Naziv zapisa"
 
 #. module: connector
 #: view:queue.job:connector.view_queue_job_form
@@ -659,6 +698,11 @@ msgstr "Opravilo bo spodletelo, če število poskusov doseže maksimalno števil
 #: help:connector.checkpoint,backend_id:0
 msgid "The record has been imported from this backend"
 msgstr "Zapis je bil uvožen iz tega ozadja."
+
+#. module: connector
+#: help:connector.checkpoint,record:0
+msgid "The record to review."
+msgstr "Zapis, ki bo pregledan"
 
 #. module: connector
 #: view:connector.checkpoint.review:connector.view_connector_checkpoint_review

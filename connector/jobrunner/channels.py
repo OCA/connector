@@ -249,12 +249,34 @@ class ChannelQueue(object):
     >>> q.add(j1)
     >>> q.add(j2)
     >>> q.add(j3)
+
+    Wakeup time is the eta of job 1.
+
+    >>> q.get_wakeup_time()
+    10
+
+    We have not reached the eta of job 1, so we get job 2.
+
     >>> q.pop(now=1)
     <ChannelJob 2>
+
+    Wakeup time is still the eta of job 1, and we get job 1 when we are past
+    it's eta.
+
+    >>> q.get_wakeup_time()
+    10
     >>> q.pop(now=11)
     <ChannelJob 1>
+
+    Now there is no wakeup time anymore, because no job have an eta.
+
+    >>> q.get_wakeup_time()
+    0
     >>> q.pop(now=12)
     <ChannelJob 3>
+    >>> q.get_wakeup_time()
+    0
+    >>> q.pop(now=13)
     """
 
     def __init__(self):
@@ -282,6 +304,14 @@ class ChannelQueue(object):
             return self._eta_queue.pop()
         else:
             return self._queue.pop()
+
+    def get_wakeup_time(self, wakeup_time=0):
+        if len(self._eta_queue):
+            if not wakeup_time:
+                wakeup_time = self._eta_queue[0].eta
+            else:
+                wakeup_time = min(wakeup_time, self._eta_queue[0].eta)
+        return wakeup_time
 
 
 class Channel(object):
@@ -344,7 +374,7 @@ class Channel(object):
         self._running = SafeSet()
         self._failed = SafeSet()
         # time (as in time.time()) before which no job is returned dequed
-        self._pause_until = None
+        self._pause_until = 0
 
     def configure(self, config):
         """ Configure a channel from a dictionary.
@@ -452,14 +482,21 @@ class Channel(object):
 
         :return: iterator of :py:class:`connector.jobrunner.ChannelJob`
         """
-        if self.delay and now < self._pause_until:
-            _logger.debug("channel %s paused because of delay between jobs",
-                          self)
-            return
         # enqueue jobs of children channels
         for child in self.children.values():
             for job in child.get_jobs_to_run(now):
                 self._queue.add(job)
+        # is this channel paused?
+        if self.delay:
+            if now < self._pause_until:
+                if not self.capacity or len(self._running) < self.capacity:
+                    _logger.debug("channel %s paused because of delay "
+                                  "between jobs", self)
+                return
+            else:
+                # unpause, this is important to avoid perpetual wakeup
+                # while the channel is at full capacity
+                self._pause_until = 0
         # sequential channels block when there are failed jobs
         # TODO: this is probably not sufficient to ensure
         #       sequentiality because of the behaviour in presence
@@ -467,7 +504,7 @@ class Channel(object):
         #       race conditions.
         if self.sequential and len(self._failed):
             return
-        # yield jobs that are ready to run
+        # yield jobs that are ready to run, while we have capacity
         while not self.capacity or len(self._running) < self.capacity:
             job = self._queue.pop(now)
             if not job:
@@ -478,7 +515,27 @@ class Channel(object):
             yield job
             if self.delay:
                 self._pause_until = now + self.delay
-                break
+                return
+
+    def get_wakeup_time(self, wakeup_time=0):
+        if self.capacity and len(self._running) >= self.capacity:
+            # this channel is full, do not request timed wakeup, as
+            # a notification will wakeup the runner when a job finishes
+            return wakeup_time
+        if self.delay and self._pause_until:
+            # this channel is paused, request wakeup at the end of the pause
+            if not wakeup_time:
+                wakeup_time = self._pause_until
+            else:
+                wakeup_time = min(wakeup_time, self._pause_until)
+            # since this channel is paused, no need to look at the
+            # wakeup time of children nor eta jobs, as such jobs would not
+            # run anyway because they would end up in this paused channel
+            return wakeup_time
+        wakeup_time = self._queue.get_wakeup_time(wakeup_time)
+        for child in self.children.values():
+            wakeup_time = child.get_wakeup_time(wakeup_time)
+        return wakeup_time
 
 
 class ChannelManager(object):
@@ -551,17 +608,23 @@ class ChannelManager(object):
 
     >>> pp(list(cm.get_jobs_to_run(now=100)))
     [<ChannelJob A1>]
+    >>> cm.get_wakeup_time()
+    102
 
     We have no job to run, because of the delay.
 
     >>> pp(list(cm.get_jobs_to_run(now=101)))
     []
+    >>> cm.get_wakeup_time()
+    102
 
     2 seconds later, we can run the other job (even though the first one
     is still running, because we have enough capacity).
 
     >>> pp(list(cm.get_jobs_to_run(now=102)))
     [<ChannelJob A2>]
+    >>> cm.get_wakeup_time()
+    104
     """
 
     def __init__(self):
@@ -779,3 +842,6 @@ class ChannelManager(object):
 
     def get_jobs_to_run(self, now):
         return self._root_channel.get_jobs_to_run(now)
+
+    def get_wakeup_time(self):
+        return self._root_channel.get_wakeup_time()

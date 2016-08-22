@@ -126,8 +126,7 @@ def _datetime_to_epoch(dt):
 
 
 def _openerp_now():
-    dts = openerp.fields.Datetime.now()
-    dt = openerp.fields.Datetime.from_string(dts)
+    dt = datetime.datetime.utcnow()
     return _datetime_to_epoch(dt)
 
 
@@ -307,14 +306,33 @@ class ConnectorRunner(object):
     def wait_notification(self):
         for db in self.db_by_name.values():
             if db.conn.notifies:
+                # something is going on in the queue, no need to wait
                 return
         # wait for something to happen in the queue_job tables
+        # we'll select() on database connections and the stop pipe
         conns = [db.conn for db in self.db_by_name.values()]
         conns.append(self._stop_pipe[0])
-        conns, _, _ = select.select(conns, [], [], SELECT_TIMEOUT)
-        if conns and not self._stop:
-            for conn in conns:
-                conn.poll()
+        # look if the channels specify a wakeup time
+        wakeup_time = self.channel_manager.get_wakeup_time()
+        if not wakeup_time:
+            # this could very well be no timeout at all, because
+            # any activity in the job queue will wake us up, but
+            # let's have a timeout anyway, just to be safe
+            timeout = SELECT_TIMEOUT
+        else:
+            timeout = wakeup_time - _openerp_now()
+        # wait for a notification or a timeout;
+        # if timeout is negative (ie wakeup time in the past),
+        # do not wait; this should rarely happen
+        # because of how get_wakeup_time is designed; actually
+        # if timeout remains a large negative number, it is most
+        # probably a bug
+        _logger.debug("select() timeout: %.2f sec", timeout)
+        if timeout > 0:
+            conns, _, _ = select.select(conns, [], [], timeout)
+            if conns and not self._stop:
+                for conn in conns:
+                    conn.poll()
 
     def stop(self):
         _logger.info("graceful stop requested")

@@ -25,7 +25,8 @@ Intermediate subchannels which are not configured explicitly are autocreated
 with an unlimited capacity (except the root channel which if not configured gets
 a default capacity of 1).
 
-A delay between jobs can be set at the channel level with the ``delay`` key.
+A delay in seconds between jobs can be set at the channel level with 
+the ``throttle`` key.
 
 Example ``ODOO_CONNECTOR_CHANNELS``:
 
@@ -33,4 +34,4 @@ Example ``ODOO_CONNECTOR_CHANNELS``:
 * ``root:4,root.sub:2``: allow up to 4 concurrent jobs in the root channel and
   up to 2 concurrent jobs in the channel named ``root.sub``.
 * ``sub:2``: the same.
-* ``root:4:delay=2``: wait at least 2 seconds before starting the next job
+* ``root:4:throttle=2``: wait at least 2 seconds before starting the next job

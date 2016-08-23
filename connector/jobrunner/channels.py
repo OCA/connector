@@ -361,7 +361,8 @@ class Channel(object):
     without risking to overflow the system.
     """
 
-    def __init__(self, name, parent, capacity=None, sequential=False, delay=0):
+    def __init__(self, name, parent, capacity=None, sequential=False,
+                 throttle=0):
         self.name = name
         self.parent = parent
         if self.parent:
@@ -369,12 +370,11 @@ class Channel(object):
         self.children = {}
         self.capacity = capacity
         self.sequential = sequential
-        self.delay = delay
+        self.throttle = throttle  # seconds
         self._queue = ChannelQueue()
         self._running = SafeSet()
         self._failed = SafeSet()
-        # time (as in time.time()) before which no job is returned dequed
-        self._pause_until = 0
+        self._pause_until = 0  # utc seconds since the epoch
 
     def configure(self, config):
         """ Configure a channel from a dictionary.
@@ -387,7 +387,7 @@ class Channel(object):
         assert self.fullname.endswith(config['name'])
         self.capacity = config.get('capacity', None)
         self.sequential = bool(config.get('sequential', False))
-        self.delay = int(config.get('delay', 0))
+        self.throttle = int(config.get('throttle', 0))
         if self.sequential and self.capacity != 1:
             raise ValueError("A sequential channel must have a capacity of 1")
 
@@ -474,8 +474,8 @@ class Channel(object):
         channels, then yielding jobs from the channel queue until
         ``capacity`` jobs are marked running in the channel.
 
-        If the ``delay`` option is set on the channel, then it yields
-        no job until at least delay seconds have elapsed since the previous
+        If the ``throttle`` option is set on the channel, then it yields
+        no job until at least throttle seconds have elapsed since the previous
         yield.
 
         :param now: the current datetime in seconds
@@ -487,11 +487,11 @@ class Channel(object):
             for job in child.get_jobs_to_run(now):
                 self._queue.add(job)
         # is this channel paused?
-        if self.delay:
+        if self.throttle:
             if now < self._pause_until:
                 if not self.capacity or len(self._running) < self.capacity:
-                    _logger.debug("channel %s paused because of delay "
-                                  "between jobs", self)
+                    _logger.debug("channel %s paused because of throttle "
+                                  "delay between jobs", self)
                 return
             else:
                 # unpause, this is important to avoid perpetual wakeup
@@ -513,8 +513,8 @@ class Channel(object):
             _logger.debug("job %s marked running in channel %s",
                           job.uuid, self)
             yield job
-            if self.delay:
-                self._pause_until = now + self.delay
+            if self.throttle:
+                self._pause_until = now + self.throttle
                 return
 
     def get_wakeup_time(self, wakeup_time=0):
@@ -522,7 +522,7 @@ class Channel(object):
             # this channel is full, do not request timed wakeup, as
             # a notification will wakeup the runner when a job finishes
             return wakeup_time
-        if self.delay and self._pause_until:
+        if self._pause_until:
             # this channel is paused, request wakeup at the end of the pause
             if not wakeup_time:
                 wakeup_time = self._pause_until
@@ -596,22 +596,22 @@ class ChannelManager(object):
     >>> pp(list(cm.get_jobs_to_run(now=100)))
     [<ChannelJob A6>]
 
-    Let's test the delay mechanism. Configure a 2 seconds delay on channel A,
-    end enqueue two jobs.
+    Let's test the throttling mechanism. Configure a 2 seconds delay
+    on channel A, end enqueue two jobs.
 
     >>> cm = ChannelManager()
-    >>> cm.simple_configure('root:4,A:4:delay=2')
+    >>> cm.simple_configure('root:4,A:4:throttle=2')
     >>> cm.notify(db, 'A', 'A1', 1, 0, 10, None, 'pending')
     >>> cm.notify(db, 'A', 'A2', 2, 0, 10, None, 'pending')
 
-    We have only one job to run, because of the delay.
+    We have only one job to run, because of the throttle.
 
     >>> pp(list(cm.get_jobs_to_run(now=100)))
     [<ChannelJob A1>]
     >>> cm.get_wakeup_time()
     102
 
-    We have no job to run, because of the delay.
+    We have no job to run, because of the throttle.
 
     >>> pp(list(cm.get_jobs_to_run(now=101)))
     []

@@ -98,6 +98,7 @@ Caveat
 """
 
 from contextlib import closing
+import datetime
 import logging
 import os
 import select
@@ -116,6 +117,17 @@ SELECT_TIMEOUT = 60
 ERROR_RECOVERY_DELAY = 5
 
 _logger = logging.getLogger(__name__)
+
+
+def _datetime_to_epoch(dt):
+    # important: this must return the same as postgresql
+    # EXTRACT(EPOCH FROM TIMESTAMP dt)
+    return (dt - datetime.datetime(1970, 1, 1)).total_seconds()
+
+
+def _openerp_now():
+    dt = datetime.datetime.utcnow()
+    return _datetime_to_epoch(dt)
 
 
 def _async_http_get(port, db_name, job_uuid):
@@ -161,7 +173,6 @@ class Database(object):
         self.conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
         self.has_connector = self._has_connector()
         if self.has_connector:
-            self.has_channel = self._has_queue_job_column('channel')
             self._initialize()
 
     def close(self):
@@ -183,15 +194,6 @@ class Database(object):
                     return False
                 else:
                     raise
-            return cr.fetchone()
-
-    def _has_queue_job_column(self, column):
-        if not self.has_connector:
-            return False
-        with closing(self.conn.cursor()) as cr:
-            cr.execute("SELECT 1 FROM information_schema.columns "
-                       "WHERE table_name=%s AND column_name=%s",
-                       ('queue_job', column))
             return cr.fetchone()
 
     def _initialize(self):
@@ -222,11 +224,10 @@ class Database(object):
             cr.execute("LISTEN connector")
 
     def select_jobs(self, where, args):
-        query = ("SELECT %s, uuid, id as seq, date_created, "
-                 "priority, eta, state "
+        query = ("SELECT channel, uuid, id as seq, date_created, "
+                 "priority, EXTRACT(EPOCH FROM eta), state "
                  "FROM queue_job WHERE %s" %
-                 ('channel' if self.has_channel else 'NULL',
-                  where))
+                 (where, ))
         with closing(self.conn.cursor()) as cr:
             cr.execute(query, args)
             return list(cr.fetchall())
@@ -280,7 +281,7 @@ class ConnectorRunner(object):
                 _logger.info('connector runner ready for db %s', db_name)
 
     def run_jobs(self):
-        now = openerp.fields.Datetime.now()
+        now = _openerp_now()
         for job in self.channel_manager.get_jobs_to_run(now):
             if self._stop:
                 break
@@ -305,14 +306,33 @@ class ConnectorRunner(object):
     def wait_notification(self):
         for db in self.db_by_name.values():
             if db.conn.notifies:
+                # something is going on in the queue, no need to wait
                 return
         # wait for something to happen in the queue_job tables
+        # we'll select() on database connections and the stop pipe
         conns = [db.conn for db in self.db_by_name.values()]
         conns.append(self._stop_pipe[0])
-        conns, _, _ = select.select(conns, [], [], SELECT_TIMEOUT)
-        if conns and not self._stop:
-            for conn in conns:
-                conn.poll()
+        # look if the channels specify a wakeup time
+        wakeup_time = self.channel_manager.get_wakeup_time()
+        if not wakeup_time:
+            # this could very well be no timeout at all, because
+            # any activity in the job queue will wake us up, but
+            # let's have a timeout anyway, just to be safe
+            timeout = SELECT_TIMEOUT
+        else:
+            timeout = wakeup_time - _openerp_now()
+        # wait for a notification or a timeout;
+        # if timeout is negative (ie wakeup time in the past),
+        # do not wait; this should rarely happen
+        # because of how get_wakeup_time is designed; actually
+        # if timeout remains a large negative number, it is most
+        # probably a bug
+        _logger.debug("select() timeout: %.2f sec", timeout)
+        if timeout > 0:
+            conns, _, _ = select.select(conns, [], [], timeout)
+            if conns and not self._stop:
+                for conn in conns:
+                    conn.poll()
 
     def stop(self):
         _logger.info("graceful stop requested")

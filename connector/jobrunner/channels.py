@@ -249,12 +249,34 @@ class ChannelQueue(object):
     >>> q.add(j1)
     >>> q.add(j2)
     >>> q.add(j3)
+
+    Wakeup time is the eta of job 1.
+
+    >>> q.get_wakeup_time()
+    10
+
+    We have not reached the eta of job 1, so we get job 2.
+
     >>> q.pop(now=1)
     <ChannelJob 2>
+
+    Wakeup time is still the eta of job 1, and we get job 1 when we are past
+    it's eta.
+
+    >>> q.get_wakeup_time()
+    10
     >>> q.pop(now=11)
     <ChannelJob 1>
+
+    Now there is no wakeup time anymore, because no job have an eta.
+
+    >>> q.get_wakeup_time()
+    0
     >>> q.pop(now=12)
     <ChannelJob 3>
+    >>> q.get_wakeup_time()
+    0
+    >>> q.pop(now=13)
     """
 
     def __init__(self):
@@ -282,6 +304,14 @@ class ChannelQueue(object):
             return self._eta_queue.pop()
         else:
             return self._queue.pop()
+
+    def get_wakeup_time(self, wakeup_time=0):
+        if len(self._eta_queue):
+            if not wakeup_time:
+                wakeup_time = self._eta_queue[0].eta
+            else:
+                wakeup_time = min(wakeup_time, self._eta_queue[0].eta)
+        return wakeup_time
 
 
 class Channel(object):
@@ -331,7 +361,8 @@ class Channel(object):
     without risking to overflow the system.
     """
 
-    def __init__(self, name, parent, capacity=None, sequential=False):
+    def __init__(self, name, parent, capacity=None, sequential=False,
+                 throttle=0):
         self.name = name
         self.parent = parent
         if self.parent:
@@ -339,9 +370,11 @@ class Channel(object):
         self.children = {}
         self.capacity = capacity
         self.sequential = sequential
+        self.throttle = throttle  # seconds
         self._queue = ChannelQueue()
         self._running = SafeSet()
         self._failed = SafeSet()
+        self._pause_until = 0  # utc seconds since the epoch
 
     def configure(self, config):
         """ Configure a channel from a dictionary.
@@ -354,6 +387,7 @@ class Channel(object):
         assert self.fullname.endswith(config['name'])
         self.capacity = config.get('capacity', None)
         self.sequential = bool(config.get('sequential', False))
+        self.throttle = int(config.get('throttle', 0))
         if self.sequential and self.capacity != 1:
             raise ValueError("A sequential channel must have a capacity of 1")
 
@@ -440,8 +474,11 @@ class Channel(object):
         channels, then yielding jobs from the channel queue until
         ``capacity`` jobs are marked running in the channel.
 
-        :param now: the current datetime using a type that is comparable to
-                    jobs eta attribute
+        If the ``throttle`` option is set on the channel, then it yields
+        no job until at least throttle seconds have elapsed since the previous
+        yield.
+
+        :param now: the current datetime in seconds
 
         :return: iterator of :py:class:`connector.jobrunner.ChannelJob`
         """
@@ -449,6 +486,17 @@ class Channel(object):
         for child in self.children.values():
             for job in child.get_jobs_to_run(now):
                 self._queue.add(job)
+        # is this channel paused?
+        if self.throttle:
+            if now < self._pause_until:
+                if not self.capacity or len(self._running) < self.capacity:
+                    _logger.debug("channel %s paused because of throttle "
+                                  "delay between jobs", self)
+                return
+            else:
+                # unpause, this is important to avoid perpetual wakeup
+                # while the channel is at full capacity
+                self._pause_until = 0
         # sequential channels block when there are failed jobs
         # TODO: this is probably not sufficient to ensure
         #       sequentiality because of the behaviour in presence
@@ -456,7 +504,7 @@ class Channel(object):
         #       race conditions.
         if self.sequential and len(self._failed):
             return
-        # yield jobs that are ready to run
+        # yield jobs that are ready to run, while we have capacity
         while not self.capacity or len(self._running) < self.capacity:
             job = self._queue.pop(now)
             if not job:
@@ -465,6 +513,29 @@ class Channel(object):
             _logger.debug("job %s marked running in channel %s",
                           job.uuid, self)
             yield job
+            if self.throttle:
+                self._pause_until = now + self.throttle
+                return
+
+    def get_wakeup_time(self, wakeup_time=0):
+        if self.capacity and len(self._running) >= self.capacity:
+            # this channel is full, do not request timed wakeup, as
+            # a notification will wakeup the runner when a job finishes
+            return wakeup_time
+        if self._pause_until:
+            # this channel is paused, request wakeup at the end of the pause
+            if not wakeup_time:
+                wakeup_time = self._pause_until
+            else:
+                wakeup_time = min(wakeup_time, self._pause_until)
+            # since this channel is paused, no need to look at the
+            # wakeup time of children nor eta jobs, as such jobs would not
+            # run anyway because they would end up in this paused channel
+            return wakeup_time
+        wakeup_time = self._queue.get_wakeup_time(wakeup_time)
+        for child in self.children.values():
+            wakeup_time = child.get_wakeup_time(wakeup_time)
+        return wakeup_time
 
 
 class ChannelManager(object):
@@ -524,6 +595,36 @@ class ChannelManager(object):
     >>> cm.notify(db, 'A', 'A6', 6, 0, 5, None, 'pending')
     >>> pp(list(cm.get_jobs_to_run(now=100)))
     [<ChannelJob A6>]
+
+    Let's test the throttling mechanism. Configure a 2 seconds delay
+    on channel A, end enqueue two jobs.
+
+    >>> cm = ChannelManager()
+    >>> cm.simple_configure('root:4,A:4:throttle=2')
+    >>> cm.notify(db, 'A', 'A1', 1, 0, 10, None, 'pending')
+    >>> cm.notify(db, 'A', 'A2', 2, 0, 10, None, 'pending')
+
+    We have only one job to run, because of the throttle.
+
+    >>> pp(list(cm.get_jobs_to_run(now=100)))
+    [<ChannelJob A1>]
+    >>> cm.get_wakeup_time()
+    102
+
+    We have no job to run, because of the throttle.
+
+    >>> pp(list(cm.get_jobs_to_run(now=101)))
+    []
+    >>> cm.get_wakeup_time()
+    102
+
+    2 seconds later, we can run the other job (even though the first one
+    is still running, because we have enough capacity).
+
+    >>> pp(list(cm.get_jobs_to_run(now=102)))
+    [<ChannelJob A2>]
+    >>> cm.get_wakeup_time()
+    104
     """
 
     def __init__(self):
@@ -583,12 +684,12 @@ class ChannelManager(object):
                     elif len(kv) == 2:
                         k, v = kv
                     else:
-                        raise ValueError('Invalid channel config %s: ',
-                                         'incorrect config item %s'
+                        raise ValueError('Invalid channel config %s: '
+                                         'incorrect config item %s' %
                                          (config_string, config_item))
                     if k in config:
                         raise ValueError('Invalid channel config %s: '
-                                         'duplicate key %s'
+                                         'duplicate key %s' %
                                          (config_string, k))
                     config[k] = v
             else:
@@ -741,3 +842,6 @@ class ChannelManager(object):
 
     def get_jobs_to_run(self, now):
         return self._root_channel.get_jobs_to_run(now)
+
+    def get_wakeup_time(self):
+        return self._root_channel.get_wakeup_time()

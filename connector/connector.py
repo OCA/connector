@@ -370,6 +370,8 @@ class Binder(ConnectorUnit):
              (self._backend_field, '=', self.backend_record.id)]
         )
         if not bindings:
+            if unwrap:
+                return getattr(self.model.browse(), self._openerp_field)
             return self.model.browse()
         bindings.ensure_one()
         if unwrap:

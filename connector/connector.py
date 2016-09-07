@@ -400,7 +400,7 @@ class Binder(ConnectorUnit):
     _openerp_field = 'openerp_id'  # override in sub-classes
     _sync_date_field = 'sync_date'  # override in sub-classes
 
-    def to_openerp(self, external_id, unwrap=False):
+    def to_odoo(self, external_id, unwrap=False):
         """ Give the OpenERP ID for an external ID
 
         :param external_id: external ID for which we want
@@ -421,6 +421,9 @@ class Binder(ConnectorUnit):
         if unwrap:
             bindings = getattr(bindings, self._openerp_field)
         return bindings
+
+    # 2016-10-25: compatible with old implementations
+    to_openerp = to_odoo
 
     def to_backend(self, binding_id, wrap=False):
         """ Give the external ID for an OpenERP binding ID

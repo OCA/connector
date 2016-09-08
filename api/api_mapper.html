@@ -5,7 +5,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Mapper &mdash; Connector  documentation</title>
+    <title>Mapper &#8212; Connector  documentation</title>
     
     <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -100,6 +100,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../project/contributors.html#financial-contributors">Financial Contributors</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../project/license.html">License</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../project/changes.html">Changes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../project/changes.html#future">Future (?)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../project/changes.html#id2">8.0.3.3.0 (2016-02-29)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../project/changes.html#id3">3.2.0 (2015-09-10)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../project/changes.html#id4">3.1.0 (2015-05-15)</a></li>
@@ -739,7 +740,7 @@ The values of the dict are a namedtuple containing:</p>
 
 <dl class="function">
 <dt id="connector.unit.mapper.backend_to_m2o">
-<code class="descclassname">connector.unit.mapper.</code><code class="descname">backend_to_m2o</code><span class="sig-paren">(</span><em>field</em>, <em>binding=None</em>, <em>with_inactive=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/unit/mapper.html#backend_to_m2o"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.unit.mapper.backend_to_m2o" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">connector.unit.mapper.</code><code class="descname">backend_to_m2o</code><span class="sig-paren">(</span><em>field</em>, <em>binding=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/unit/mapper.html#backend_to_m2o"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.unit.mapper.backend_to_m2o" title="Permalink to this definition">¶</a></dt>
 <dd><p>A modifier intended to be used on the <code class="docutils literal"><span class="pre">direct</span></code> mappings.</p>
 <p>For a field from a backend which is an ID, search the corresponding
 binding in OpenERP and returns its ID.</p>
@@ -759,7 +760,6 @@ in the <code class="docutils literal"><span class="pre">binding</span></code> ke
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>field</strong> &#8211; name of the source field in the record</li>
 <li><strong>binding</strong> &#8211; name of the binding model is the relation is not a binding</li>
-<li><strong>with_inactive</strong> &#8211; include the inactive records in OpenERP in the search</li>
 </ul>
 </td>
 </tr>
@@ -948,7 +948,7 @@ used only for the creation of the records.</p>
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.5.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.6.<br/>
     </p>
   </div>
 </footer>

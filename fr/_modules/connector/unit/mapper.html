@@ -5,7 +5,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>connector.unit.mapper &mdash; documentation Connector </title>
+    <title>connector.unit.mapper &#8212; documentation Connector </title>
     
     <link rel="stylesheet" href="../../../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
@@ -100,6 +100,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../project/contributors.html#financial-contributors">Contributeurs financiers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../project/license.html">Licence</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../project/changes.html">Changements</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../project/changes.html#future">Future (?)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../project/changes.html#id2">8.0.3.3.0 (2016-02-29)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../project/changes.html#id3">3.2.0 (2015-09-10)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../project/changes.html#id4">3.1.0 (2015-05-15)</a></li>
@@ -265,6 +266,7 @@
 <span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">namedtuple</span>
 <span class="kn">from</span> <span class="nn">contextlib</span> <span class="k">import</span> <span class="n">contextmanager</span>
 
+<span class="kn">from</span> <span class="nn">openerp</span> <span class="k">import</span> <span class="n">models</span>
 <span class="kn">from</span> <span class="nn">..connector</span> <span class="k">import</span> <span class="n">ConnectorUnit</span><span class="p">,</span> <span class="n">MetaConnectorUnit</span><span class="p">,</span> <span class="n">ConnectorEnvironment</span>
 <span class="kn">from</span> <span class="nn">..exception</span> <span class="k">import</span> <span class="n">MappingError</span><span class="p">,</span> <span class="n">NoConnectorUnitError</span>
 
@@ -424,7 +426,7 @@
     <span class="k">return</span> <span class="n">modifier</span></div>
 
 
-<div class="viewcode-block" id="backend_to_m2o"><a class="viewcode-back" href="../../../api/api_mapper.html#connector.unit.mapper.backend_to_m2o">[docs]</a><span class="k">def</span> <span class="nf">backend_to_m2o</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">binding</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">with_inactive</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="backend_to_m2o"><a class="viewcode-back" href="../../../api/api_mapper.html#connector.unit.mapper.backend_to_m2o">[docs]</a><span class="k">def</span> <span class="nf">backend_to_m2o</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">binding</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; A modifier intended to be used on the ``direct`` mappings.</span>
 
 <span class="sd">    For a field from a backend which is an ID, search the corresponding</span>
@@ -442,7 +444,6 @@
 
 <span class="sd">    :param field: name of the source field in the record</span>
 <span class="sd">    :param binding: name of the binding model is the relation is not a binding</span>
-<span class="sd">    :param with_inactive: include the inactive records in OpenERP in the search</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">modifier</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="n">to_attr</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">record</span><span class="p">[</span><span class="n">field</span><span class="p">]:</span>
@@ -457,17 +458,24 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">binding_model</span> <span class="o">=</span> <span class="n">binding</span>
         <span class="n">binder</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">binder_for</span><span class="p">(</span><span class="n">binding_model</span><span class="p">)</span>
-        <span class="c1"># if we want the ID of a normal record, not a binding,</span>
-        <span class="c1"># we ask the unwrapped id to the binder</span>
+        <span class="c1"># if we want the normal record, not a binding,</span>
+        <span class="c1"># we ask to the binder to unwrap the binding</span>
         <span class="n">unwrap</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">binding</span><span class="p">)</span>
         <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">change_context</span><span class="p">(</span><span class="n">active_test</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-            <span class="n">value</span> <span class="o">=</span> <span class="n">binder</span><span class="o">.</span><span class="n">to_openerp</span><span class="p">(</span><span class="n">rel_id</span><span class="p">,</span> <span class="n">unwrap</span><span class="o">=</span><span class="n">unwrap</span><span class="p">)</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">value</span><span class="p">:</span>
+            <span class="n">record</span> <span class="o">=</span> <span class="n">binder</span><span class="o">.</span><span class="n">to_openerp</span><span class="p">(</span><span class="n">rel_id</span><span class="p">,</span> <span class="n">unwrap</span><span class="o">=</span><span class="n">unwrap</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">record</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">MappingError</span><span class="p">(</span><span class="s2">&quot;Can not find an existing </span><span class="si">%s</span><span class="s2"> for external &quot;</span>
                                <span class="s2">&quot;record </span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2"> unwrapping&quot;</span> <span class="o">%</span>
                                <span class="p">(</span><span class="n">binding_model</span><span class="p">,</span> <span class="n">rel_id</span><span class="p">,</span>
                                 <span class="s1">&#39;with&#39;</span> <span class="k">if</span> <span class="n">unwrap</span> <span class="k">else</span> <span class="s1">&#39;without&#39;</span><span class="p">))</span>
-        <span class="k">return</span> <span class="n">value</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">record</span><span class="p">,</span> <span class="n">models</span><span class="o">.</span><span class="n">BaseModel</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">record</span><span class="o">.</span><span class="n">id</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+                <span class="s1">&#39;Binder for </span><span class="si">%s</span><span class="s1"> returned an id, &#39;</span>
+                <span class="s1">&#39;returning a record should be preferred.&#39;</span><span class="p">,</span> <span class="n">binding_model</span>
+            <span class="p">)</span>
+            <span class="k">return</span> <span class="n">record</span>
     <span class="k">return</span> <span class="n">modifier</span></div>
 
 
@@ -1221,7 +1229,7 @@
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.5.<br/>
+      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.6.<br/>
     </p>
   </div>
 </footer>

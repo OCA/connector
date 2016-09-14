@@ -416,7 +416,7 @@ class Binder(ConnectorUnit):
         :type binding_id: int
         """
         # Prevent False, None, or "", but not 0
-        assert (external_id or external_id == 0) and binding_id, (
+        assert (external_id or external_id is 0) and binding_id, (
             "external_id or binding_id missing, "
             "got: %s, %s" % (external_id, binding_id)
         )

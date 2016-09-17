@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: connector (9.0)\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-08-15 18:53+0000\n"
-"PO-Revision-Date: 2016-08-10 06:21+0000\n"
+"POT-Creation-Date: 2016-09-14 07:48+0000\n"
+"PO-Revision-Date: 2016-09-16 21:46+0000\n"
 "Last-Translator: Philippe Bach <opera_fr@yahoo.fr>\n"
 "Language-Team: French (http://www.transifex.com/oca/OCA-connector-9-0/language/fr/)\n"
 "MIME-Version: 1.0\n"
@@ -467,7 +467,7 @@ msgstr "Date du dernier message"
 #: model:ir.model.fields,field_description:connector.field_queue_job_function___last_update
 #: model:ir.model.fields,field_description:connector.field_queue_requeue_job___last_update
 msgid "Last Modified on"
-msgstr ""
+msgstr "Dernière modification le"
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_review_write_uid

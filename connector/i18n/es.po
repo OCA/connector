@@ -3,13 +3,17 @@
 # * connector
 # 
 # Translators:
+# Accounts-Payable - Alkemics, 2015
 # Alberto Garcia <alberto.garcia@factorlibre.com>, 2014
+# Chen-Do LU <clu@alkemics.com>, 2015
+# François Breysse <fb@alkemics.com>, 2015
+# Hotellook, 2014
 msgid ""
 msgstr ""
 "Project-Id-Version: connector (8.0)\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-08-21 14:26+0000\n"
-"PO-Revision-Date: 2015-06-17 07:37+0000\n"
+"POT-Creation-Date: 2016-09-08 05:51+0000\n"
+"PO-Revision-Date: 2016-09-16 21:45+0000\n"
 "Last-Translator: OCA Transbot <transbot@odoo-community.org>\n"
 "Language-Team: Spanish (http://www.transifex.com/oca/OCA-connector-8-0/language/es/)\n"
 "MIME-Version: 1.0\n"
@@ -91,19 +95,19 @@ msgid "Cancel"
 msgstr "Cancelar"
 
 #. module: connector
-#: code:addons/connector/queue/job.py:571
+#: code:addons/connector/queue/job.py:619
 #, python-format
 msgid "Canceled. Nothing to do."
 msgstr ""
 
 #. module: connector
-#: code:addons/connector/queue/model.py:456
+#: code:addons/connector/queue/model.py:457
 #, python-format
 msgid "Cannot change the root channel"
 msgstr ""
 
 #. module: connector
-#: code:addons/connector/queue/model.py:463
+#: code:addons/connector/queue/model.py:464
 #, python-format
 msgid "Cannot remove the root channel"
 msgstr ""
@@ -213,7 +217,7 @@ msgstr "Fecha de Creación"
 #: field:connector.config.settings,create_uid:0
 #: field:queue.job.channel,create_uid:0 field:queue.requeue.job,create_uid:0
 msgid "Created by"
-msgstr ""
+msgstr "Creado por"
 
 #. module: connector
 #: field:connector.checkpoint,create_date:0
@@ -221,7 +225,7 @@ msgstr ""
 #: field:connector.config.settings,create_date:0
 #: field:queue.job.channel,create_date:0 field:queue.requeue.job,create_date:0
 msgid "Created on"
-msgstr ""
+msgstr "Creado en"
 
 #. module: connector
 #: field:queue.job,retry:0
@@ -248,6 +252,18 @@ msgstr ""
 #: field:queue.job,name:0
 msgid "Description"
 msgstr "Descripción"
+
+#. module: connector
+#: field:connector.backend,display_name:0
+#: field:connector.checkpoint,display_name:0
+#: field:connector.checkpoint.review,display_name:0
+#: field:connector.config.settings,display_name:0
+#: field:external.binding,display_name:0 field:queue.job,display_name:0
+#: field:queue.job.channel,display_name:0
+#: field:queue.job.function,display_name:0
+#: field:queue.requeue.job,display_name:0 field:queue.worker,display_name:0
+msgid "Display Name"
+msgstr "Nombre mostrado"
 
 #. module: connector
 #: view:queue.job:connector.view_queue_job_search selection:queue.job,state:0
@@ -331,7 +347,7 @@ msgstr "Mantener el resumen de la Charla (número de mensajes, ...). Este resume
 #: field:queue.job.channel,id:0 field:queue.job.function,id:0
 #: field:queue.requeue.job,id:0 field:queue.worker,id:0
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #. module: connector
 #: help:connector.checkpoint,message_unread:0 help:queue.job,message_unread:0
@@ -368,6 +384,7 @@ msgstr ""
 
 #. module: connector
 #: view:queue.job:connector.view_queue_job_search
+#: field:queue.job,job_function_id:0
 msgid "Job Function"
 msgstr ""
 
@@ -386,11 +403,6 @@ msgstr ""
 #: model:mail.message.subtype,name:connector.mt_job_failed
 msgid "Job failed"
 msgstr "Trabajo fallido"
-
-#. module: connector
-#: field:queue.job,job_function_id:0
-msgid "Job function id"
-msgstr ""
 
 #. module: connector
 #: model:ir.actions.act_window,name:connector.action_queue_job
@@ -414,12 +426,24 @@ msgid "Last Message Date"
 msgstr ""
 
 #. module: connector
+#: field:connector.backend,__last_update:0
+#: field:connector.checkpoint,__last_update:0
+#: field:connector.checkpoint.review,__last_update:0
+#: field:connector.config.settings,__last_update:0
+#: field:external.binding,__last_update:0 field:queue.job,__last_update:0
+#: field:queue.job.channel,__last_update:0
+#: field:queue.job.function,__last_update:0
+#: field:queue.requeue.job,__last_update:0 field:queue.worker,__last_update:0
+msgid "Last Modified on"
+msgstr "Última modificación el"
+
+#. module: connector
 #: field:connector.checkpoint,write_uid:0
 #: field:connector.checkpoint.review,write_uid:0
 #: field:connector.config.settings,write_uid:0
 #: field:queue.job.channel,write_uid:0 field:queue.requeue.job,write_uid:0
 msgid "Last Updated by"
-msgstr ""
+msgstr "Última actualización por"
 
 #. module: connector
 #: field:connector.checkpoint,write_date:0
@@ -427,7 +451,7 @@ msgstr ""
 #: field:connector.config.settings,write_date:0
 #: field:queue.job.channel,write_date:0 field:queue.requeue.job,write_date:0
 msgid "Last Updated on"
-msgstr ""
+msgstr "Última actualización el"
 
 #. module: connector
 #: field:external.binding,sync_date:0
@@ -440,7 +464,7 @@ msgid "Manage multiple companies"
 msgstr "Administrar múltiples compañías"
 
 #. module: connector
-#: code:addons/connector/queue/model.py:140
+#: code:addons/connector/queue/model.py:141
 #, python-format
 msgid "Manually set to done by %s"
 msgstr ""
@@ -467,15 +491,15 @@ msgid "Model"
 msgstr "Modelo"
 
 #. module: connector
-#: model:ir.model,name:connector.model_ir_module_module
-msgid "Module"
-msgstr ""
-
-#. module: connector
 #: field:connector.backend,name:0 field:queue.job.channel,name:0
 #: field:queue.job.function,name:0
 msgid "Name"
 msgstr "Nombre"
+
+#. module: connector
+#: help:connector.checkpoint,name:0
+msgid "Name of the record to review"
+msgstr ""
 
 #. module: connector
 #: view:connector.checkpoint:connector.view_connector_checkpoint_search
@@ -484,7 +508,7 @@ msgid "Need Review"
 msgstr "Necesita Revisión"
 
 #. module: connector
-#: code:addons/connector/queue/model.py:116
+#: code:addons/connector/queue/model.py:117
 #, python-format
 msgid "No action available for this job"
 msgstr ""
@@ -505,7 +529,7 @@ msgid "Parent Channel"
 msgstr ""
 
 #. module: connector
-#: code:addons/connector/queue/model.py:448
+#: code:addons/connector/queue/model.py:449
 #, python-format
 msgid "Parent channel required."
 msgstr ""
@@ -541,9 +565,19 @@ msgid "Queue Worker"
 msgstr ""
 
 #. module: connector
+#: field:connector.checkpoint,record:0
+msgid "Record"
+msgstr ""
+
+#. module: connector
 #: field:connector.checkpoint,record_id:0
 msgid "Record ID"
 msgstr "ID de Registro"
+
+#. module: connector
+#: field:connector.checkpoint,name:0
+msgid "Record Name"
+msgstr ""
 
 #. module: connector
 #: view:queue.job:connector.view_queue_job_form
@@ -619,7 +653,7 @@ msgid "Share or embbed any screen of Odoo."
 msgstr ""
 
 #. module: connector
-#: code:addons/connector/queue/model.py:186
+#: code:addons/connector/queue/model.py:187
 #, python-format
 msgid ""
 "Something bad happened during the execution of the job. More details in the "
@@ -668,6 +702,11 @@ msgstr "Reintentos infinitos cuando está vacío"
 #: help:connector.checkpoint,backend_id:0
 msgid "The record has been imported from this backend"
 msgstr "El registro ha sido importado de esta área de administación"
+
+#. module: connector
+#: help:connector.checkpoint,record:0
+msgid "The record to review."
+msgstr ""
 
 #. module: connector
 #: view:connector.checkpoint.review:connector.view_connector_checkpoint_review

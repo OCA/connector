@@ -41,9 +41,6 @@ START_DELAY = 5
 # Here we monkey patch the Odoo server to start the job runner thread
 # in the main server process (and not in forked workers). This is
 # very easy to deploy as we don't need another startup script.
-# The drawback is that it is not possible to extend the Odoo
-# server command line arguments, so we resort to environment variables
-# to configure the runner (channels mostly).
 
 
 class ConnectorRunnerThread(Thread):
@@ -52,8 +49,7 @@ class ConnectorRunnerThread(Thread):
         Thread.__init__(self)
         self.daemon = True
         port = os.environ.get('ODOO_CONNECTOR_PORT') or config['xmlrpc_port']
-        channels = os.environ.get('ODOO_CONNECTOR_CHANNELS')
-        self.runner = ConnectorRunner(port or 8069, channels or 'root:1')
+        self.runner = ConnectorRunner(port or 8069)
 
     def run(self):
         # sleep a bit to let the workers start at ease

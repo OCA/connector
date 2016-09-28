@@ -122,6 +122,7 @@ from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
 import requests
 
 import openerp
+from openerp.tools import config
 
 from .channels import ChannelManager, PENDING, ENQUEUED, NOT_DONE
 
@@ -129,6 +130,24 @@ SELECT_TIMEOUT = 60
 ERROR_RECOVERY_DELAY = 5
 
 _logger = logging.getLogger(__name__)
+
+
+# Unfortunately, it is not possible to extend the Odoo
+# server command line arguments, so we resort to environment variables
+# to configure the runner (channels mostly).
+#
+# On the other hand, the odoo configuration file can be extended at will,
+# so we check it in addition to the environment variables.
+
+
+def _channels():
+    # environment takes precedence over config file if set.
+    # If set to "" will disable the runner.
+    env_channels = os.environ.get('ODOO_CONNECTOR_CHANNELS', None)
+    return (
+        env_channels if env_channels is not None
+        else config.misc.get("options-connector", {}).get("channels")
+    )
 
 
 def _async_http_get(port, db_name, job_uuid):

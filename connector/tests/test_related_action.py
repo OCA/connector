@@ -3,10 +3,10 @@
 import mock
 import unittest
 
-import openerp.tests.common as common
+import odoo.tests.common as common
 from ..connector import Binder
 from ..queue.job import (Job,
-                         OpenERPJobStorage,
+                         OdooJobStorage,
                          related_action)
 from ..session import ConnectorSession
 from ..related_action import unwrap_binding
@@ -163,7 +163,7 @@ class test_related_action_storage(common.TransactionCase):
     def test_store_related_action(self):
         """ Call the related action on the model """
         job = Job(func=task_wikipedia, args=('Discworld',))
-        storage = OpenERPJobStorage(self.session)
+        storage = OdooJobStorage(self.session)
         storage.store(job)
         stored_job = self.queue_job.search([('uuid', '=', job.uuid)])
         self.assertEqual(len(stored_job), 1)
@@ -176,7 +176,7 @@ class test_related_action_storage(common.TransactionCase):
     def test_unwrap_binding_not_exists(self):
         """ Call the related action on the model on non-existing record """
         job = Job(func=try_unwrap_binding, args=('res.users', 555))
-        storage = OpenERPJobStorage(self.session)
+        storage = OdooJobStorage(self.session)
         storage.store(job)
         stored_job = self.queue_job.search([('uuid', '=', job.uuid)])
         stored_job.unlink()

@@ -3,17 +3,17 @@
 import mock
 import unittest
 
-from openerp import api
-from openerp.modules.registry import RegistryManager
-from openerp.tests import common
-from openerp.addons.connector import connector
-from openerp.addons.connector.exception import RetryableJobError
-from openerp.addons.connector.connector import (
+from odoo import api
+from odoo.modules.registry import RegistryManager
+from odoo.tests import common
+from odoo.addons.connector import connector
+from odoo.addons.connector.exception import RetryableJobError
+from odoo.addons.connector.connector import (
     ConnectorEnvironment,
     ConnectorUnit,
     pg_try_advisory_lock,
 )
-from openerp.addons.connector.session import ConnectorSession
+from odoo.addons.connector.session import ConnectorSession
 
 
 def mock_connector_unit(env):
@@ -30,10 +30,10 @@ def mock_connector_unit(env):
 
 class ConnectorHelpers(unittest.TestCase):
 
-    def test_openerp_module_name(self):
-        name = connector._get_openerp_module_name('openerp.addons.sale')
+    def test_odoo_module_name(self):
+        name = connector._get_addon_name('odoo.addons.sale')
         self.assertEqual(name, 'sale')
-        name = connector._get_openerp_module_name('sale')
+        name = connector._get_addon_name('sale')
         self.assertEqual(name, 'sale')
 
 

@@ -85,13 +85,13 @@ class Synchronizer(ConnectorUnit):
 
 
 class Exporter(Synchronizer):
-    """ Synchronizer for exporting data from OpenERP to a backend """
+    """ Synchronizer for exporting data from Odoo to a backend """
 
     _base_mapper = ExportMapper
 
 
 class Importer(Synchronizer):
-    """ Synchronizer for importing data from a backend to OpenERP """
+    """ Synchronizer for importing data from a backend to Odoo """
 
     _base_mapper = ImportMapper
 

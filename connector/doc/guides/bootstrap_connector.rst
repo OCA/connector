@@ -163,7 +163,7 @@ It can be as follows (in ``connector_coffee/connector.py``)::
         )
         # fields.char because 0 is a valid coffee ID
         coffee_id = fields.Char(string='ID in the Coffee Machine',
-                                select=True)
+                                index=True)
 
 
 ***********

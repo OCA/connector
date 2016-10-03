@@ -16,7 +16,7 @@ Backends
 
 All start with the declaration of the :py:class:`~connector.backend.Backend`::
 
-  import openerp.addons.connector.backend as backend
+  import odoo.addons.connector.backend as backend
 
   magento = backend.Backend('magento')
   """ Generic Magento Backend """
@@ -40,11 +40,11 @@ solution::
 
   class MagentoAccountInvoice(models.Model):
       _name = 'magento.account.invoice'
-      _inherits = {'account.invoice': 'openerp_id'}
+      _inherits = {'account.invoice': 'odoo_id'}
       _description = 'Magento Invoice'
 
       backend_id = fields.Many2one(comodel_name='magento.backend', string='Magento Backend', required=True, ondelete='restrict')
-      openerp_id = fields.Many2one(comodel_name='account.invoice', string='Invoice', required=True, ondelete='cascade')
+      odoo_id = fields.Many2one(comodel_name='account.invoice', string='Invoice', required=True, ondelete='cascade')
       magento_id = fields.Char(string='ID on Magento')  # fields.char because 0 is a valid Magento ID
       sync_date = fields.Datetime(string='Last synchronization date')
       magento_order_id = fields.Many2one(comodel_name='magento.sale.order', string='Magento Sale Order', ondelete='set null')
@@ -56,7 +56,7 @@ Session
 
 The framework uses :py:class:`~connector.session.ConnectorSession`
 objects to store the ``cr``, ``uid`` and ``context`` in a
-:class:`openerp.api.Environment`.  So from a session, we can access to
+:class:`odoo.api.Environment`.  So from a session, we can access to
 the usual ``self.env`` (new API) or ``self.pool`` (old API).
 
 ******

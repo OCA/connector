@@ -44,13 +44,13 @@ class QueueJob(models.Model):
 
     uuid = fields.Char(string='UUID',
                        readonly=True,
-                       select=True,
+                       index=True,
                        required=True)
     user_id = fields.Many2one(comodel_name='res.users',
                               string='User ID',
                               required=True)
     company_id = fields.Many2one(comodel_name='res.company',
-                                 string='Company', select=True)
+                                 string='Company', index=True)
     name = fields.Char(string='Description', readonly=True)
     func_string = fields.Char(string='Task', readonly=True)
     func = fields.Binary(string='Pickled Function',
@@ -60,7 +60,7 @@ class QueueJob(models.Model):
                              string='State',
                              readonly=True,
                              required=True,
-                             select=True)
+                             index=True)
     priority = fields.Integer()
     exc_info = fields.Text(string='Exception Info', readonly=True)
     result = fields.Text(string='Result', readonly=True)
@@ -84,7 +84,7 @@ class QueueJob(models.Model):
                                       readonly=True,
                                       store=True)
     # for searching without JOIN on channels
-    channel = fields.Char(compute='_compute_channel', store=True, select=True)
+    channel = fields.Char(compute='_compute_channel', store=True, index=True)
 
     @api.one
     @api.depends('func_name', 'job_function_id.channel_id')
@@ -296,7 +296,7 @@ class JobFunction(models.Model):
     def _default_channel(self):
         return self.env.ref('connector.channel_root')
 
-    name = fields.Char(select=True)
+    name = fields.Char(index=True)
     channel_id = fields.Many2one(comodel_name='queue.job.channel',
                                  string='Channel',
                                  required=True,

@@ -27,7 +27,7 @@ As we want to synchronize Odoo with a coffee machine, we'll name
 our connector connector_coffee.
 
 First, we need to create the Odoo addons itself, editing the
-``connector_coffee/__openerp__.py`` manifest.
+``connector_coffee/__odoo__.py`` manifest.
 
 
 .. code-block:: python
@@ -79,7 +79,7 @@ and a backend per version.
 
 Put this in ``connector_coffee/backend.py``::
 
-    import openerp.addons.connector.backend as backend
+    import odoo.addons.connector.backend as backend
 
 
     coffee = backend.Backend('coffee')
@@ -96,7 +96,7 @@ We declared the backends, but we need a model to configure them.
 We create a model ``coffee.backend`` which is an ``_inherit`` of
 ``connector.backend``. In ``connector_coffee/coffee_model.py``::
 
-    from openerp import fields, models, api
+    from odoo import fields, models, api
 
 
     class CoffeeBackend(models.Model):
@@ -146,7 +146,7 @@ we may want to create an abstract model for them.
 
 It can be as follows (in ``connector_coffee/connector.py``)::
 
-    from openerp import models, fields
+    from odoo import models, fields
 
 
     class CoffeeBinding(models.AbstractModel):
@@ -154,7 +154,7 @@ It can be as follows (in ``connector_coffee/connector.py``)::
         _inherit = 'external.binding'
         _description = 'Coffee Binding (abstract)'
 
-        # 'openerp_id': openerp-side id must be declared in concrete model
+        # 'odoo_id': odoo-side id must be declared in concrete model
         backend_id = fields.Many2one(
             comodel_name='coffee.backend',
             string='Coffee Backend',
@@ -174,7 +174,7 @@ We'll often need to create a new environment to work with.
 I propose to create a helper method which build it for us (in
 ``connector_coffee/connector.py``::
 
-    from openerp.addons.connector.connector import Environment
+    from odoo.addons.connector.connector import Environment
 
 
     def get_environment(session, model_name, backend_id):
@@ -201,7 +201,7 @@ When new records are imported and need a review, :ref:`checkpoint` are
 created. I propose to create a helper too in
 ``connector_coffee/connector.py``::
 
-    from openerp.addons.connector.checkpoint import checkpoint
+    from odoo.addons.connector.checkpoint import checkpoint
 
 
     def add_checkpoint(session, model_name, record_id, backend_id):

@@ -2,9 +2,9 @@
 
 import unittest
 import mock
-import openerp.tests.common as common
+import odoo.tests.common as common
 
-from openerp.addons.connector.unit.mapper import (
+from odoo.addons.connector.unit.mapper import (
     Mapper,
     ImportMapper,
     ExportMapper,
@@ -20,9 +20,9 @@ from openerp.addons.connector.unit.mapper import (
     MapOptions,
     mapping)
 
-from openerp.addons.connector.backend import Backend
-from openerp.addons.connector.connector import ConnectorEnvironment
-from openerp.addons.connector.session import ConnectorSession
+from odoo.addons.connector.backend import Backend
+from odoo.addons.connector.connector import ConnectorEnvironment
+from odoo.addons.connector.session import ConnectorSession
 
 
 class test_mapper(unittest.TestCase):
@@ -571,11 +571,11 @@ class test_mapper_binding(common.TransactionCase):
 
         record = {'country': 10}
         ch = self.env.ref('base.ch')
-        self.country_binder.to_openerp.return_value = ch
+        self.country_binder.to_odoo.return_value = ch
         mapper = MyMapper(self.connector_env)
         map_record = mapper.map_record(record)
         self.assertEqual(map_record.values(), {'country_id': ch.id})
-        self.country_binder.to_openerp.assert_called_once_with(
+        self.country_binder.to_odoo.assert_called_once_with(
             10, unwrap=False)
 
     def test_mapping_record_children_no_map_child(self):

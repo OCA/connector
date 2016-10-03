@@ -20,7 +20,7 @@
 ##############################################################################
 
 from collections import Callable
-from .connector import get_openerp_module
+from .connector import get_odoo_module
 
 
 class Event(object):
@@ -121,7 +121,7 @@ class Event(object):
     def _consumers_for(self, session, model_name):
         is_installed = session.is_module_installed
         return (cons for cons in self._consumers.get(model_name, ())
-                if is_installed(get_openerp_module(cons)))
+                if is_installed(get_odoo_module(cons)))
 
     def fire(self, session, model_name, *args, **kwargs):
         """ Call each consumer subscribed on the event with the given

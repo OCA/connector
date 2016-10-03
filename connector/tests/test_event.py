@@ -2,9 +2,9 @@
 
 import mock
 
-import openerp.tests.common as common
-from openerp.addons.connector.event import Event
-from openerp.addons.connector.session import ConnectorSession
+import odoo.tests.common as common
+from odoo.addons.connector.event import Event
+from odoo.addons.connector.session import ConnectorSession
 
 
 class test_event(common.TransactionCase):

@@ -23,8 +23,8 @@ import logging
 import threading
 from contextlib import contextmanager
 
-import openerp
-from openerp.modules.registry import RegistryManager
+import odoo
+from odoo.modules.registry import RegistryManager
 
 from .connector import is_module_installed
 
@@ -45,7 +45,7 @@ class ConnectorSessionHandler(object):
 
     .. attribute:: context
 
-        The current OpenERP's context
+        The current Odoo's context
 
     Usage::
 
@@ -69,8 +69,8 @@ class ConnectorSessionHandler(object):
         * always closed at the end of the ``with`` context
         * it handles the registry signaling
         """
-        with openerp.api.Environment.manage():
-            db = openerp.sql_db.db_connect(self.db_name)
+        with odoo.api.Environment.manage():
+            db = odoo.sql_db.db_connect(self.db_name)
             session = ConnectorSession(db.cursor(),
                                        self.uid,
                                        context=self.context)
@@ -90,7 +90,7 @@ class ConnectorSessionHandler(object):
 
 
 class ConnectorSession(object):
-    """ Container for the OpenERP transactional stuff:
+    """ Container for the Odoo transactional stuff:
 
     .. attribute:: env
 
@@ -98,7 +98,7 @@ class ConnectorSession(object):
 
     .. attribute:: cr
 
-        The OpenERP Cursor
+        The Odoo Cursor
 
     .. attribute:: uid
 
@@ -110,17 +110,17 @@ class ConnectorSession(object):
 
     .. attribute:: context
 
-        The current OpenERP's context
+        The current Odoo's context
     """
 
     def __init__(self, cr, uid, context=None):
         if context is None:
             context = {}
-        self.env = openerp.api.Environment(cr, uid, context)
+        self.env = odoo.api.Environment(cr, uid, context)
 
     @classmethod
     def from_env(cls, env):
-        """ Return a ConnectorSession from :class:`openerp.api.Environment` """
+        """ Return a ConnectorSession from :class:`odoo.api.Environment` """
         return cls(env.cr, env.uid, context=env.context)
 
     @property
@@ -143,7 +143,7 @@ class ConnectorSession(object):
     def change_user(self, uid):
         """ Context Manager: create a new Env with the specified user
 
-        It generates a new :class:`openerp.api.Environment` used within
+        It generates a new :class:`odoo.api.Environment` used within
         the context manager, where the user is replaced by the specified
         one.  The original environment is restored at the closing of the
         context manager.
@@ -151,7 +151,7 @@ class ConnectorSession(object):
         .. warning:: only recordsets read within the context manager
                      will be attached to this environment. In many cases,
                      you will prefer to use
-                     :meth:`openerp.models.BaseModel.with_context`
+                     :meth:`odoo.models.BaseModel.with_context`
         """
         env = self.env
         self.env = env(user=uid)
@@ -162,7 +162,7 @@ class ConnectorSession(object):
     def change_context(self, *args, **kwargs):
         """ Context Manager: create a new Env with an updated context
 
-        It generates a new :class:`openerp.api.Environment` used within
+        It generates a new :class:`odoo.api.Environment` used within
         the context manager, where the context is extended with the
         arguments. The original environment is restored at the closing
         of the context manager.
@@ -182,7 +182,7 @@ class ConnectorSession(object):
         .. warning:: only recordsets read within the context manager
                      will be attached to this environment. In many cases,
                      you will prefer to use
-                     :meth:`openerp.models.BaseModel.with_context`
+                     :meth:`odoo.models.BaseModel.with_context`
         """
         context = dict(args[0] if args else self.context, **kwargs)
         env = self.env

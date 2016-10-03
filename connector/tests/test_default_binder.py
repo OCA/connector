@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 
 import mock
-from openerp.tests.common import TransactionCase
-from openerp.addons.connector.connector import ConnectorEnvironment
-from openerp.addons.connector.session import ConnectorSession
-from openerp.addons.connector.connector import Binder
-from openerp.addons.connector.backend import Backend
+from odoo.tests.common import TransactionCase
+from odoo.addons.connector.connector import ConnectorEnvironment
+from odoo.addons.connector.session import ConnectorSession
+from odoo.addons.connector.connector import Binder
+from odoo.addons.connector.backend import Backend
 
 
 class TestDefaultBinder(TransactionCase):
@@ -20,7 +20,7 @@ class TestDefaultBinder(TransactionCase):
             _external_field = 'ref'
             _sync_date_field = 'date'
             _backend_field = 'color'
-            _openerp_field = 'id'
+            _odoo_field = 'id'
 
         self.session = ConnectorSession(self.cr, self.uid)
         self.backend = Backend('dummy', version='1.0')
@@ -37,19 +37,19 @@ class TestDefaultBinder(TransactionCase):
         partner.write({'color': 1})
         # bind the main partner to external id = 0
         self.partner_binder.bind(0, partner.id)
-        # find the openerp partner bound to external partner 0
-        openerp_id = self.partner_binder.to_openerp(0)
-        self.assertEqual(openerp_id, partner.id)
-        openerp_id = self.partner_binder.to_openerp(0)
-        self.assertEqual(openerp_id.id, partner.id)
-        openerp_id = self.partner_binder.to_openerp(0, unwrap=True)
-        self.assertEqual(openerp_id, partner.id)
-        # find the external partner bound to openerp partner 1
+        # find the odoo partner bound to external partner 0
+        odoo_id = self.partner_binder.to_odoo(0)
+        self.assertEqual(odoo_id, partner.id)
+        odoo_id = self.partner_binder.to_odoo(0)
+        self.assertEqual(odoo_id.id, partner.id)
+        odoo_id = self.partner_binder.to_odoo(0, unwrap=True)
+        self.assertEqual(odoo_id, partner.id)
+        # find the external partner bound to odoo partner 1
         external_id = self.partner_binder.to_backend(partner.id)
         self.assertEqual(external_id, '0')
         external_id = self.partner_binder.to_backend(partner.id, wrap=True)
         self.assertEqual(external_id, '0')
-        # unwrap model should be None since we set 'id' as the _openerp_field
+        # unwrap model should be None since we set 'id' as the _odoo_field
         self.assertEqual(self.partner_binder.unwrap_model(), None)
         # unwrapping the binding should give the same binding
         self.assertEqual(self.partner_binder.unwrap_binding(1), 1)

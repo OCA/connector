@@ -19,7 +19,7 @@
 #
 ##############################################################################
 
-from openerp import models, fields, api
+from odoo import models, fields, api
 from . import backend
 
 
@@ -51,11 +51,11 @@ class ConnectorBackend(models.AbstractModel):
 class ExternalBinding(models.AbstractModel):
     """ An abstract model for bindings to external records.
 
-    An external binding is a binding between a backend and OpenERP.  For
+    An external binding is a binding between a backend and Odoo.  For
     example, for a partner, it could be ``magento.res.partner`` or for a
     product, ``magento.product``.
 
-    The final model, will be an ``_inherits`` of the OpenERP model and
+    The final model, will be an ``_inherits`` of the Odoo model and
     will ``_inherit`` this model.
 
     It will have a relation to the record (via ``_inherits``) and to the
@@ -66,7 +66,7 @@ class ExternalBinding(models.AbstractModel):
 
     It needs to implements at least these fields:
 
-    openerp_id
+    odoo_id
 
         The many2one to the record it links (used by ``_inherits``).
 
@@ -94,9 +94,9 @@ class ExternalBinding(models.AbstractModel):
         class MagentoResPartnerCategory(models.Model):
             _name = 'magento.res.partner.category'
 
-            _inherits = {'res.partner.category': 'openerp_id'}
+            _inherits = {'res.partner.category': 'odoo_id'}
 
-            openerp_id = fields.Many2one(comodel_name='res.partner.category',
+            odoo_id = fields.Many2one(comodel_name='res.partner.category',
                                           string='Partner Category',
                                           required=True,
                                           ondelete='cascade')

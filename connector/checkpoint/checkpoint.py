@@ -29,7 +29,7 @@ they are imported, the user have to configure things like the supplier,
 so they appears in this list.
 """
 
-from openerp import models, fields, api, _
+from odoo import models, fields, api, _
 
 
 class ConnectorCheckpoint(models.Model):

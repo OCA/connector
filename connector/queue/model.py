@@ -22,11 +22,11 @@
 import logging
 from datetime import datetime, timedelta
 
-from openerp import models, fields, api, exceptions, _
+from odoo import models, fields, api, exceptions, _
 
-from .job import STATES, DONE, PENDING, OpenERPJobStorage, JOB_REGISTRY
+from .job import STATES, DONE, PENDING, OdooJobStorage, JOB_REGISTRY
 from ..session import ConnectorSession
-from ..connector import get_openerp_module, is_module_installed
+from ..connector import get_odoo_module, is_module_installed
 
 _logger = logging.getLogger(__name__)
 
@@ -101,7 +101,7 @@ class QueueJob(models.Model):
         session = ConnectorSession(self.env.cr,
                                    self.env.uid,
                                    context=self.env.context)
-        storage = OpenERPJobStorage(session)
+        storage = OdooJobStorage(session)
         job = storage.load(self.uuid)
         action = job.related_action(session)
         if action is None:
@@ -116,7 +116,7 @@ class QueueJob(models.Model):
         session = ConnectorSession(self.env.cr,
                                    self.env.uid,
                                    context=self.env.context)
-        storage = OpenERPJobStorage(session)
+        storage = OdooJobStorage(session)
         for job in self:
             job = storage.load(job.uuid)
             if state == DONE:
@@ -332,7 +332,7 @@ class JobFunction(models.Model):
     @api.model
     def _register_jobs(self):
         for func in JOB_REGISTRY:
-            if not is_module_installed(self.env, get_openerp_module(func)):
+            if not is_module_installed(self.env, get_odoo_module(func)):
                 continue
             func_name = '%s.%s' % (func.__module__, func.__name__)
             if not self.search_count([('name', '=', func_name)]):

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
+<odoo>
     <data noupdate="1">
 
         <!-- Connector-related subtypes for messaging / Chatter -->
@@ -31,4 +31,4 @@
         </record>
 
     </data>
-</openerp>
+</odoo>

@@ -1,10 +1,10 @@
-# Translation of OpenERP Server.
+# Translation of Odoo Server.
 # This file contains the translation of the following modules:
 #	* connector
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenERP Server 7.0\n"
+"Project-Id-Version: Odoo 10.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-01 13:36+0000\n"
 "PO-Revision-Date: 2013-05-01 13:36+0000\n"
@@ -116,7 +116,7 @@ msgstr ""
 
 #. module: connector
 #: help:connector.config.settings,module_portal_anonymous:0
-msgid "Enable the public part of openerp, openerp becomes a public website."
+msgid "Enable the public part of odoo, odoo becomes a public website."
 msgstr ""
 
 #. module: connector
@@ -370,7 +370,7 @@ msgstr ""
 
 #. module: connector
 #: help:connector.config.settings,module_share:0
-msgid "Share or embbed any screen of openerp."
+msgid "Share or embbed any screen of odoo."
 msgstr ""
 
 #. module: connector
@@ -486,7 +486,7 @@ msgstr ""
 
 #. module: connector
 #: help:connector.config.settings,alias_domain:0
-msgid "If you have setup a catch-all email domain redirected to the OpenERP server, enter the domain name here."
+msgid "If you have setup a catch-all email domain redirected to the Odoo server, enter the domain name here."
 msgstr ""
 
 #. module: connector

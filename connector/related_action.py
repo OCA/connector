@@ -27,7 +27,7 @@ When called on a job, they will return an action to the client.
 
 """
 
-from openerp.tools.translate import _
+from odoo import _
 from .connector import ConnectorEnvironment, Binder
 
 

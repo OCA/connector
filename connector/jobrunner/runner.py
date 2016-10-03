@@ -64,7 +64,7 @@ How to use it?
   start immediately and in parallel.
 
 * Tip: to enable debug logging for the connector, use
-  ``--log-handler=openerp.addons.connector:DEBUG``
+  ``--log-handler=odoo.addons.connector:DEBUG``
 
 Caveat
 ------
@@ -109,7 +109,7 @@ import psycopg2
 from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
 import requests
 
-import openerp
+import odoo
 
 from .channels import ChannelManager, PENDING, ENQUEUED, NOT_DONE
 
@@ -125,7 +125,7 @@ def _datetime_to_epoch(dt):
     return (dt - datetime.datetime(1970, 1, 1)).total_seconds()
 
 
-def _openerp_now():
+def _odoo_now():
     dt = datetime.datetime.utcnow()
     return _datetime_to_epoch(dt)
 
@@ -134,7 +134,7 @@ def _async_http_get(port, db_name, job_uuid):
     # Method to set failed job (due to timeout, etc) as pending,
     # to avoid keeping it as enqueued.
     def set_job_pending():
-        connection_info = openerp.sql_db.connection_info_for(db_name)[1]
+        connection_info = odoo.sql_db.connection_info_for(db_name)[1]
         conn = psycopg2.connect(**connection_info)
         conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
         with closing(conn.cursor()) as cr:
@@ -168,7 +168,7 @@ class Database(object):
 
     def __init__(self, db_name):
         self.db_name = db_name
-        connection_info = openerp.sql_db.connection_info_for(db_name)[1]
+        connection_info = odoo.sql_db.connection_info_for(db_name)[1]
         self.conn = psycopg2.connect(**connection_info)
         self.conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
         self.has_connector = self._has_connector()
@@ -252,10 +252,10 @@ class ConnectorRunner(object):
         self._stop_pipe = os.pipe()
 
     def get_db_names(self):
-        if openerp.tools.config['db_name']:
-            db_names = openerp.tools.config['db_name'].split(',')
+        if odoo.tools.config['db_name']:
+            db_names = odoo.tools.config['db_name'].split(',')
         else:
-            db_names = openerp.service.db.exp_list(True)
+            db_names = odoo.service.db.exp_list(True)
         return db_names
 
     def close_databases(self, remove_jobs=True):
@@ -281,7 +281,7 @@ class ConnectorRunner(object):
                 _logger.info('connector runner ready for db %s', db_name)
 
     def run_jobs(self):
-        now = _openerp_now()
+        now = _odoo_now()
         for job in self.channel_manager.get_jobs_to_run(now):
             if self._stop:
                 break
@@ -320,7 +320,7 @@ class ConnectorRunner(object):
             # let's have a timeout anyway, just to be safe
             timeout = SELECT_TIMEOUT
         else:
-            timeout = wakeup_time - _openerp_now()
+            timeout = wakeup_time - _odoo_now()
         # wait for a notification or a timeout;
         # if timeout is negative (ie wakeup time in the past),
         # do not wait; this should rarely happen

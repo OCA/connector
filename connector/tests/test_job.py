@@ -5,12 +5,12 @@ import mock
 import unittest
 from datetime import datetime, timedelta
 
-from openerp import SUPERUSER_ID, exceptions
-import openerp.tests.common as common
-from openerp.addons.connector.queue.job import (
+from odoo import SUPERUSER_ID, exceptions
+import odoo.tests.common as common
+from odoo.addons.connector.queue.job import (
     Job,
     JobStorage,
-    OpenERPJobStorage,
+    OdooJobStorage,
     job,
     PENDING,
     ENQUEUED,
@@ -20,10 +20,10 @@ from openerp.addons.connector.queue.job import (
     _unpickle,
     RETRY_INTERVAL,
 )
-from openerp.addons.connector.session import (
+from odoo.addons.connector.session import (
     ConnectorSession,
 )
-from openerp.addons.connector.exception import (
+from odoo.addons.connector.exception import (
     FailedJobError,
     NoSuchJobError,
     NotReadableJobError,
@@ -102,7 +102,7 @@ class TestJobs(unittest.TestCase):
 
     def test_eta_integer(self):
         """ When an `eta` is an integer, it adds n seconds up to now """
-        datetime_path = 'openerp.addons.connector.queue.job.datetime'
+        datetime_path = 'odoo.addons.connector.queue.job.datetime'
         with mock.patch(datetime_path, autospec=True) as mock_datetime:
             mock_datetime.now.return_value = datetime(2015, 3, 15, 16, 41, 0)
             job_a = Job(func=task_a, eta=60)
@@ -110,7 +110,7 @@ class TestJobs(unittest.TestCase):
 
     def test_eta_timedelta(self):
         """ When an `eta` is a timedelta, it adds it up to now """
-        datetime_path = 'openerp.addons.connector.queue.job.datetime'
+        datetime_path = 'odoo.addons.connector.queue.job.datetime'
         with mock.patch(datetime_path, autospec=True) as mock_datetime:
             mock_datetime.now.return_value = datetime(2015, 3, 15, 16, 41, 0)
             delta = timedelta(hours=3)
@@ -170,7 +170,7 @@ class TestJobs(unittest.TestCase):
 
     def test_retry_pattern(self):
         """ When we specify a retry pattern, the eta must follow it"""
-        datetime_path = 'openerp.addons.connector.queue.job.datetime'
+        datetime_path = 'odoo.addons.connector.queue.job.datetime'
         test_pattern = {
             1:  60,
             2: 180,
@@ -252,7 +252,7 @@ class TestJobs(unittest.TestCase):
 
     def test_set_enqueued(self):
         job_a = Job(func=task_a)
-        datetime_path = 'openerp.addons.connector.queue.job.datetime'
+        datetime_path = 'odoo.addons.connector.queue.job.datetime'
         with mock.patch(datetime_path, autospec=True) as mock_datetime:
             mock_datetime.now.return_value = datetime(2015, 3, 15, 16, 41, 0)
             job_a.set_enqueued()
@@ -264,7 +264,7 @@ class TestJobs(unittest.TestCase):
 
     def test_set_started(self):
         job_a = Job(func=task_a)
-        datetime_path = 'openerp.addons.connector.queue.job.datetime'
+        datetime_path = 'odoo.addons.connector.queue.job.datetime'
         with mock.patch(datetime_path, autospec=True) as mock_datetime:
             mock_datetime.now.return_value = datetime(2015, 3, 15, 16, 41, 0)
             job_a.set_started()
@@ -275,7 +275,7 @@ class TestJobs(unittest.TestCase):
 
     def test_set_done(self):
         job_a = Job(func=task_a)
-        datetime_path = 'openerp.addons.connector.queue.job.datetime'
+        datetime_path = 'odoo.addons.connector.queue.job.datetime'
         with mock.patch(datetime_path, autospec=True) as mock_datetime:
             mock_datetime.now.return_value = datetime(2015, 3, 15, 16, 41, 0)
             job_a.set_done(result='test')
@@ -294,7 +294,7 @@ class TestJobs(unittest.TestCase):
 
     def test_postpone(self):
         job_a = Job(func=task_a)
-        datetime_path = 'openerp.addons.connector.queue.job.datetime'
+        datetime_path = 'odoo.addons.connector.queue.job.datetime'
         with mock.patch(datetime_path, autospec=True) as mock_datetime:
             mock_datetime.now.return_value = datetime(2015, 3, 15, 16, 41, 0)
             job_a.postpone(result='test', seconds=60)
@@ -350,7 +350,7 @@ class TestJobStorage(common.TransactionCase):
 
     def test_store(self):
         test_job = Job(func=task_a)
-        storage = OpenERPJobStorage(self.session)
+        storage = OdooJobStorage(self.session)
         storage.store(test_job)
         stored = self.queue_job.search([('uuid', '=', test_job.uuid)])
         self.assertEqual(len(stored), 1)
@@ -366,7 +366,7 @@ class TestJobStorage(common.TransactionCase):
                        description="My description")
         test_job.user_id = 1
         test_job.company_id = self.env.ref("base.main_company").id
-        storage = OpenERPJobStorage(self.session)
+        storage = OdooJobStorage(self.session)
         storage.store(test_job)
         job_read = storage.load(test_job.uuid)
         self.assertEqual(test_job.uuid, job_read.uuid)
@@ -414,7 +414,7 @@ class TestJobStorage(common.TransactionCase):
                        model_name='res.users',
                        args=('o', 'k'),
                        kwargs={'c': '!'})
-        storage = OpenERPJobStorage(self.session)
+        storage = OdooJobStorage(self.session)
         storage.store(test_job)
         stored = self.queue_job.search([('uuid', '=', test_job.uuid)])
         stored.unlink()
@@ -429,7 +429,7 @@ class TestJobStorage(common.TransactionCase):
                        priority=15,
                        description=u"My dé^Wdescription")
         test_job.user_id = 1
-        storage = OpenERPJobStorage(self.session)
+        storage = OdooJobStorage(self.session)
         storage.store(test_job)
         job_read = storage.load(test_job.uuid)
         self.assertEqual(test_job.args, job_read.args)
@@ -447,7 +447,7 @@ class TestJobStorage(common.TransactionCase):
                        priority=15,
                        description="My dé^Wdescription")
         test_job.user_id = 1
-        storage = OpenERPJobStorage(self.session)
+        storage = OdooJobStorage(self.session)
         storage.store(test_job)
         job_read = storage.load(test_job.uuid)
         self.assertEqual(test_job.args, job_read.args)
@@ -490,7 +490,7 @@ class TestJobModel(common.TransactionCase):
 
     def _create_job(self):
         test_job = Job(func=task_a)
-        storage = OpenERPJobStorage(self.session)
+        storage = OdooJobStorage(self.session)
         storage.store(test_job)
         stored = storage.db_record_from_uuid(test_job.uuid)
         self.assertEqual(len(stored), 1)
@@ -728,8 +728,8 @@ class TestJobChannels(common.TransactionCase):
         job(task_a)
         job(task_b)
         self.function_model._register_jobs()
-        path_a = 'openerp.addons.connector.tests.test_job.task_a'
-        path_b = 'openerp.addons.connector.tests.test_job.task_b'
+        path_a = 'odoo.addons.connector.tests.test_job.task_a'
+        path_b = 'odoo.addons.connector.tests.test_job.task_b'
         self.assertTrue(self.function_model.search([('name', '=', path_a)]))
         self.assertTrue(self.function_model.search([('name', '=', path_b)]))
 
@@ -741,7 +741,7 @@ class TestJobChannels(common.TransactionCase):
         self.assertEquals(job_func.channel, 'root')
 
         test_job = Job(func=task_a)
-        storage = OpenERPJobStorage(self.session)
+        storage = OdooJobStorage(self.session)
         storage.store(test_job)
         stored = self.job_model.search([('uuid', '=', test_job.uuid)])
         self.assertEquals(stored.channel, 'root')
@@ -752,7 +752,7 @@ class TestJobChannels(common.TransactionCase):
         job_func.channel_id = channel
 
         test_job = Job(func=task_a)
-        storage = OpenERPJobStorage(self.session)
+        storage = OdooJobStorage(self.session)
         storage.store(test_job)
         stored = self.job_model.search([('uuid', '=', test_job.uuid)])
         self.assertEquals(stored.channel, 'root.sub')

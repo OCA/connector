@@ -29,7 +29,7 @@ if os.environ.get('TRAVIS_BUILD_DIR') and os.environ.get('VERSION'):
     odoo_root = os.path.join(os.environ['HOME'], odoo_folder)
     sphinxodoo_root_path = os.path.abspath(odoo_root)
     sphinxodoo_addons_path = [
-        os.path.abspath(os.path.join(odoo_root, 'openerp', 'addons')),
+        os.path.abspath(os.path.join(odoo_root, 'odoo', 'addons')),
         os.path.abspath(os.path.join(odoo_root, 'addons')),
         os.path.abspath(os.environ['TRAVIS_BUILD_DIR']),
     ]
@@ -42,7 +42,7 @@ if os.environ.get('TRAVIS_BUILD_DIR') and os.environ.get('VERSION'):
 else:
     # build from a buildout
     odoo_root = '../../../odoo'
-    sys.path.append(os.path.abspath(os.path.join(odoo_root, 'openerp')))
+    sys.path.append(os.path.abspath(os.path.join(odoo_root, 'odoo')))
     sys.path.append(os.path.abspath(os.path.join(odoo_root, 'addons')))
     sys.path.append(os.path.abspath('../..'))
 
@@ -319,7 +319,7 @@ texinfo_documents = [
 # Example configuration for intersphinx: refer to the Python standard library.
 intersphinx_mapping = {
     'http://docs.python.org/': None,
-    'openerpweb': ('https://www.odoo.com/documentation/8.0/', None),
-    'openerpdev': ('https://www.odoo.com/documentation/8.0/', None),
+    'odooweb': ('https://www.odoo.com/documentation/10.0/', None),
+    'odoodev': ('https://www.odoo.com/documentation/10.0/', None),
     'connectormagento': ('http://www.odoo-magento-connector.com', None),
 }

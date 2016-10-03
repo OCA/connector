@@ -89,7 +89,7 @@ The same using a `buildout
     $ python bootstrap.py
     $ bin/buildout
     $ createdb connectordb
-    $ bin/start_openerp -d connectordb --stop-after-init
+    $ bin/start_odoo -d connectordb --stop-after-init
     $ cd connector/connector/doc/
     $ ../../../bin/sphinx-build -d connectordb -- -b gettext ./ _build/locale/
     $ ../../../bin/sphinx-intl -d connectordb -- update -l fr -p _build/locale/

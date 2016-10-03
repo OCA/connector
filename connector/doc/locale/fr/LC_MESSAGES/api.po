@@ -294,8 +294,8 @@ msgstr "Modèles du backend"
 #: connector.backend_model.ConnectorBackend:1
 #: ../../../backend_model.pydocstring of
 #: connector.backend_model.ExternalBinding:1
-msgid "Bases: :class:`openerp.models.AbstractModel`"
-msgstr "Bases : :class:`openerp.models.AbstractModel`"
+msgid "Bases: :class:`odoo.models.AbstractModel`"
+msgstr "Bases : :class:`odoo.models.AbstractModel`"
 
 #: ../../../backend_model.pydocstring of
 #: connector.backend_model.ConnectorBackend:1
@@ -406,21 +406,21 @@ msgstr "Un modèle abstrait pour une liaison à des enregistrements externes"
 #: ../../../backend_model.pydocstring of
 #: connector.backend_model.ExternalBinding:3
 msgid ""
-"An external binding is a binding between a backend and OpenERP.  For "
+"An external binding is a binding between a backend and Odoo.  For "
 "example, for a partner, it could be ``magento.res.partner`` or for a "
 "product, ``magento.product``."
 msgstr ""
-"Un binding externe est une liaison entre un backend et OpenERP. Par exemple,"
+"Un binding externe est une liaison entre un backend et Odoo. Par exemple,"
 " pour un `partner`, cela peut être ``magento.res.partner`` ou pour un "
 "article, ``magento.product``."
 
 #: ../../../backend_model.pydocstring of
 #: connector.backend_model.ExternalBinding:7
 msgid ""
-"The final model, will be an ``_inherits`` of the OpenERP model and will "
+"The final model, will be an ``_inherits`` of the Odoo model and will "
 "``_inherit`` this model."
 msgstr ""
-"Le modèle final sera un ``_inherits`` du modèle OpenERP et va ``_inherit`` "
+"Le modèle final sera un ``_inherits`` du modèle Odoo et va ``_inherit`` "
 "ce modèle."
 
 #: ../../../backend_model.pydocstring of
@@ -447,8 +447,8 @@ msgstr "Il nécessite d'implémenter au moins ces champs :"
 
 #: ../../../backend_model.pydocstring of
 #: connector.backend_model.ExternalBinding:18
-msgid "openerp_id"
-msgstr "openerp_id"
+msgid "odoo_id"
+msgstr "odoo_id"
 
 #: ../../../backend_model.pydocstring of
 #: connector.backend_model.ExternalBinding:20
@@ -601,27 +601,27 @@ msgid "The Binder should be implemented in the connectors."
 msgstr "Le Binder devrait être implémenté dans les connecteurs."
 
 #: ../../../connector.pydocstring of connector.connector.Binder.bind:1
-msgid "Create the link between an external ID and an OpenERP ID"
-msgstr "Crée le lien entre un ID externe et un ID OpenERP"
+msgid "Create the link between an external ID and an Odoo ID"
+msgstr "Crée le lien entre un ID externe et un ID Odoo"
 
 #: ../../../connector.pydocstring of connector.connector.Binder.bind:3
 msgid "external id to bind"
 msgstr "ID externe à lier"
 
 #: ../../../connector.pydocstring of connector.connector.Binder.bind:4
-msgid "OpenERP ID to bind"
-msgstr "ID OpenERP à lier"
+msgid "Odoo ID to bind"
+msgstr "ID Odoo à lier"
 
 #: ../../../connector.pydocstring of connector.connector.Binder.to_backend:1
 msgid ""
-"Give the external ID for an OpenERP binding ID (ID in a model magento.*)"
+"Give the external ID for an Odoo binding ID (ID in a model magento.*)"
 msgstr ""
-"Donne l'ID externe pour un ID de liaison OpenERP (ID dans un modèle "
+"Donne l'ID externe pour un ID de liaison Odoo (ID dans un modèle "
 "magento.*)"
 
 #: ../../../connector.pydocstring of connector.connector.Binder.to_backend:4
-msgid "OpenERP binding ID for which we want the backend id"
-msgstr "ID de liaison OpenERP pour lequel on veut l'ID du backend"
+msgid "Odoo binding ID for which we want the backend id"
+msgstr "ID de liaison Odoo pour lequel on veut l'ID du backend"
 
 #: ../../../connector.pydocstring of connector.connector.Binder.to_backend:5
 msgid ""
@@ -637,23 +637,23 @@ msgstr ""
 msgid "external ID of the record"
 msgstr "ID externe de l'enregistrement"
 
-#: ../../../connector.pydocstring of connector.connector.Binder.to_openerp:1
-msgid "Give the OpenERP ID for an external ID"
-msgstr "Donne l'ID OpenERP pour un ID externe"
+#: ../../../connector.pydocstring of connector.connector.Binder.to_odoo:1
+msgid "Give the Odoo ID for an external ID"
+msgstr "Donne l'ID Odoo pour un ID externe"
 
-#: ../../../connector.pydocstring of connector.connector.Binder.to_openerp:3
-msgid "external ID for which we want the OpenERP ID"
-msgstr "ID externe pour lequel on veut l'ID OpenERP"
+#: ../../../connector.pydocstring of connector.connector.Binder.to_odoo:3
+msgid "external ID for which we want the Odoo ID"
+msgstr "ID externe pour lequel on veut l'ID Odoo"
 
-#: ../../../connector.pydocstring of connector.connector.Binder.to_openerp:5
-msgid "if True, returns the openerp_id else return the id of the binding"
-msgstr "si Vrai, renvoie l'openerp_id, sinon renvoie l'ID de la liaison"
+#: ../../../connector.pydocstring of connector.connector.Binder.to_odoo:5
+msgid "if True, returns the odoo_id else return the id of the binding"
+msgstr "si Vrai, renvoie l'odoo_id, sinon renvoie l'ID de la liaison"
 
-#: ../../../connector.pydocstring of connector.connector.Binder.to_openerp:7
+#: ../../../connector.pydocstring of connector.connector.Binder.to_odoo:7
 msgid "if True, returns a recordset"
 msgstr "si Vrai, renvoie un `recordset`"
 
-#: ../../../connector.pydocstring of connector.connector.Binder.to_openerp:8
+#: ../../../connector.pydocstring of connector.connector.Binder.to_odoo:8
 msgid ""
 "a record ID, depending on the value of unwrap, or None if the external_id is"
 " not mapped"
@@ -724,16 +724,16 @@ msgstr ""
 #: ../../../connector.pydocstring of
 #: connector.connector.ConnectorEnvironment:18
 msgid ""
-"Current session we are working in. It contains the OpenERP cr, uid and "
+"Current session we are working in. It contains the Odoo cr, uid and "
 "context."
 msgstr ""
 "Session en cours sur laquelle on travaille. Elle contient les ``cr``, "
-"``uid`` et ``context`` d'OpenERP."
+"``uid`` et ``context`` d'Odoo."
 
 #: ../../../connector.pydocstring of
 #: connector.connector.ConnectorEnvironment:23
-msgid "Name of the OpenERP model to work with."
-msgstr "Nom du modèle OpenERP avec lequel travailler."
+msgid "Name of the Odoo model to work with."
+msgstr "Nom du modèle Odoo avec lequel travailler."
 
 #: ../../../connector.pydocstring of
 #: connector.connector.ConnectorEnvironment.get_connector_unit:1
@@ -813,8 +813,8 @@ msgid "Returns an new instance of the correct ``Binder`` for a model"
 msgstr "Renvoie une nouvelle instance du bon ``Binder`` pour un modèle"
 
 #: ../../../connector.pydocstring of connector.connector.ConnectorUnit.env:1
-msgid "Returns the openerp.api.environment"
-msgstr "Renvoie le openerp.api.environment"
+msgid "Returns the odoo.api.environment"
+msgstr "Renvoie le odoo.api.environment"
 
 #: ../../../connector.pydocstring of
 #: connector.connector.ConnectorUnit.get_binder_for_model:4
@@ -834,10 +834,10 @@ msgstr "Présent pour une question de compatibilité."
 #: ../../../connector.pydocstring of
 #: connector.connector.ConnectorUnit.localcontext:3
 msgid ""
-":func:`openerp.tools.translate._` searches for this attribute in the classes"
+":func:`odoo.tools.translate._` searches for this attribute in the classes"
 " do be able to translate the strings."
 msgstr ""
-":func:`openerp.tools.translate._` recherche cet attribut dans les classes "
+":func:`odoo.tools.translate._` recherche cet attribut dans les classes "
 "pour être capable de traduire les chaînes."
 
 #: ../../../connector.pydocstring of
@@ -895,12 +895,12 @@ msgstr "Metaclass pour ConnectorUnit."
 
 #: ../../../connector.pydocstring of connector.connector.MetaConnectorUnit:3
 msgid ""
-"Keeps a ``_module`` attribute on the classes, the same way OpenERP does it "
+"Keeps a ``_module`` attribute on the classes, the same way Odoo does it "
 "for the Model classes. It is then used to filter them according to the state"
 " of the module (installed or not)."
 msgstr ""
 "Conserve un attribut ``_module`` sur les classes, de la même façon "
-"qu'OpenERP pour les classes de modèles. Il est utilisé ensuite pour les "
+"qu'Odoo pour les classes de modèles. Il est utilisé ensuite pour les "
 "filtrer en fonction de l'état du module (installé ou non)."
 
 #: ../../../connector.pydocstring of
@@ -921,15 +921,15 @@ msgstr ""
 "Utilisé dans :meth:`~connector.connector.ConnectorUnit.match` lorsqu'on "
 "recherche la bonne ``ConnectorUnit`` pour un modèle."
 
-#: ../../../connector.pydocstring of connector.connector.get_openerp_module:1
+#: ../../../connector.pydocstring of connector.connector.get_odoo_module:1
 msgid ""
-"For a top level function or class, returns the name of the OpenERP module "
+"For a top level function or class, returns the name of the Odoo module "
 "where it lives."
 msgstr ""
 "Pour une fonction ou classe de niveau supérieur, renvoie le nom du module "
-"OpenERP où elle réside."
+"Odoo où elle réside."
 
-#: ../../../connector.pydocstring of connector.connector.get_openerp_module:4
+#: ../../../connector.pydocstring of connector.connector.get_odoo_module:4
 msgid ""
 "So we will be able to filter them according to the modules installation "
 "state."
@@ -1205,10 +1205,10 @@ msgstr "Mappeurs"
 #: ../../../unit/mapper.pydocstring of connector.unit.mapper:4
 msgid ""
 "Mappers are the ConnectorUnit classes responsible to transform external "
-"records into OpenERP records and conversely."
+"records into Odoo records and conversely."
 msgstr ""
 "Les Mappeurs sont les classes ConnectorUnit responsables de la "
-"transformation d'un enregistrement externe vers un enregistrement OpenERP et"
+"transformation d'un enregistrement externe vers un enregistrement Odoo et"
 " vice versa."
 
 #: ../../../unit/mapper.pydocstring of connector.unit.mapper.ExportMapChild:1
@@ -1230,9 +1230,9 @@ msgid ":py:class:`Mapper` for exports."
 msgstr ":py:class:`Mapper` pour les exports."
 
 #: ../../../unit/mapper.pydocstring of connector.unit.mapper.ExportMapper:3
-msgid "Transform a record from OpenERP to a backend record"
+msgid "Transform a record from Odoo to a backend record"
 msgstr ""
-"Transforme un enregistrement depuis OpenERP vers un enregistrement du "
+"Transforme un enregistrement depuis Odoo vers un enregistrement du "
 "backend"
 
 #: ../../../unit/mapper.pydocstring of connector.unit.mapper.ImportMapChild:1
@@ -1251,11 +1251,11 @@ msgstr "Formate les valeurs des items mappés depuis les Mappeurs enfants."
 #: ../../../unit/mapper.pydocstring of
 #: connector.unit.mapper.MapChild.format_items:3
 msgid ""
-"It can be overridden for instance to add the OpenERP relationships commands "
+"It can be overridden for instance to add the Odoo relationships commands "
 "``(6, 0, [IDs])``, ..."
 msgstr ""
 "Il peut être surchargé par exemple pour ajouter les commandes de relation "
-"d'OpenERP ``(6, 0, [IDs])``, ..."
+"d'Odoo ``(6, 0, [IDs])``, ..."
 
 #: ../../../unit/mapper.pydocstring of
 #: connector.unit.mapper.ImportMapChild.format_items:6
@@ -1280,10 +1280,10 @@ msgid ":py:class:`Mapper` for imports."
 msgstr ":py:class:`Mapper` pour les imports."
 
 #: ../../../unit/mapper.pydocstring of connector.unit.mapper.ImportMapper:3
-msgid "Transform a record from a backend to an OpenERP record"
+msgid "Transform a record from a backend to an Odoo record"
 msgstr ""
 "Transforme un enregistrement depuis un backend vers un enregistrement "
-"OpenERP"
+"Odoo"
 
 #: ../../../unit/mapper.pydocstring of connector.unit.mapper.MapChild:1
 msgid "MapChild is responsible to convert items."
@@ -1329,10 +1329,10 @@ msgstr ""
 
 #: ../../../unit/mapper.pydocstring of connector.unit.mapper.MapChild:26
 msgid ""
-"Format the output values to the format expected by OpenERP or the backend "
+"Format the output values to the format expected by Odoo or the backend "
 "(as seen above with ``(0, 0, {values})``"
 msgstr ""
-"Formater les valeurs de sortie vers le format attendu par OpenERP ou par le "
+"Formater les valeurs de sortie vers le format attendu par Odoo ou par le "
 "backend (comme vu ci-dessus avec ``(0, 0, {values})``"
 
 #: ../../../unit/mapper.pydocstring of connector.unit.mapper.MapChild:29
@@ -1593,10 +1593,10 @@ msgstr ""
 
 #: ../../../unit/mapper.pydocstring of connector.unit.mapper.Mapper:1
 msgid ""
-"A Mapper translates an external record to an OpenERP record and conversely. "
+"A Mapper translates an external record to an Odoo record and conversely. "
 "The output of a Mapper is a ``dict``."
 msgstr ""
-"Un Mappeur convertit un enregistrement externe en enregistrement OpenERP et "
+"Un Mappeur convertit un enregistrement externe en enregistrement Odoo et "
 "vice versa. La sortie d'un Traducteur est un ``dict``."
 
 #: ../../../unit/mapper.pydocstring of connector.unit.mapper.Mapper:4
@@ -1690,10 +1690,10 @@ msgstr ""
 #: ../../../unit/mapper.pydocstring of connector.unit.mapper.Mapper:84
 msgid ""
 "It allows to create the sales order and all its lines with the same call to "
-":py:meth:`openerp.models.BaseModel.create()`."
+":py:meth:`odoo.models.BaseModel.create()`."
 msgstr ""
 "Il permet de créer des commandes et toutes ses lignes dans le même appel à "
-":py:meth:`openerp.models.BaseModel.create()`."
+":py:meth:`odoo.models.BaseModel.create()`."
 
 #: ../../../unit/mapper.pydocstring of connector.unit.mapper.Mapper:87
 msgid ""
@@ -1801,10 +1801,10 @@ msgstr "Un modificateur destiné à être utilisé sur les mapping ``directs``"
 #: ../../../unit/mapper.pydocstring of connector.unit.mapper.backend_to_m2o:3
 msgid ""
 "For a field from a backend which is an ID, search the corresponding binding "
-"in OpenERP and returns its ID."
+"in Odoo and returns its ID."
 msgstr ""
 "Pour un champ d'un backend qui est un ID, recherche le binding correspondant"
-" dans OpenERP et renvoie son ID."
+" dans Odoo et renvoie son ID."
 
 #: ../../../unit/mapper.pydocstring of connector.unit.mapper.backend_to_m2o:6
 #: ../../../unit/mapper.pydocstring of connector.unit.mapper.m2o_to_backend:5
@@ -1830,8 +1830,8 @@ msgid "name of the binding model is the relation is not a binding"
 msgstr "nom du modèle de liaison si la relation n'est pas une liaison"
 
 #: ../../../unit/mapper.pydocstring of connector.unit.mapper.backend_to_m2o:18
-msgid "include the inactive records in OpenERP in the search"
-msgstr "inclut les enregistrements inactifs d'OpenERP dans la recherche"
+msgid "include the inactive records in Odoo in the search"
+msgstr "inclut les enregistrements inactifs d'Odoo dans la recherche"
 
 #: ../../../unit/mapper.pydocstring of connector.unit.mapper.changed_by:1
 #: ../../../unit/mapper.pydocstring of connector.unit.mapper.only_create:1
@@ -1840,11 +1840,11 @@ msgstr "Décorateur pour les méthodes de mapping (:py:func:`mapping`)"
 
 #: ../../../unit/mapper.pydocstring of connector.unit.mapper.changed_by:3
 msgid ""
-"When fields are modified in OpenERP, we want to export only the modified "
+"When fields are modified in Odoo, we want to export only the modified "
 "fields. Using this decorator, we can specify which fields updates should "
 "trigger which mapping method."
 msgstr ""
-"Lorsque des champs sont modifié dans OpenERP, nous ne devrions exporter que "
+"Lorsque des champs sont modifié dans Odoo, nous ne devrions exporter que "
 "les champs modifiés. En utilisant ce décorateur, nous pouvons préciser "
 "quelles modifications de champs doivent déclencher quelle méthode de "
 "mapping."
@@ -1982,8 +1982,8 @@ msgid "The python function itself."
 msgstr "La fonction Python elle-même."
 
 #: ../../../queue/job.pydocstring of connector.queue.job.Job:53
-msgid "OpenERP model on which the job will run."
-msgstr "Modèle OpenERP pour lequel le job va fonctionner."
+msgid "Odoo model on which the job will run."
+msgstr "Modèle Odoo pour lequel le job va fonctionner."
 
 #: ../../../queue/job.pydocstring of connector.queue.job.Job:57
 msgid "Priority of the job, 0 being the higher priority."
@@ -2015,8 +2015,8 @@ msgstr ""
 "Informations sur l'`Exception` (`traceback') ayant causé l'échec du job"
 
 #: ../../../queue/job.pydocstring of connector.queue.job.Job:85
-msgid "OpenERP user id which created the job"
-msgstr "Id de l'utilisateur OpenERP qui a créé le job"
+msgid "Odoo user id which created the job"
+msgstr "Id de l'utilisateur Odoo qui a créé le job"
 
 #: ../../../queue/job.pydocstring of connector.queue.job.Job:89
 msgid ""
@@ -2060,7 +2060,7 @@ msgstr "Interface pour le stockage des jobs"
 
 #: ../../../queue/job.pydocstring of connector.queue.job.JobStorage.exists:1
 #: ../../../queue/job.pydocstring of
-#: connector.queue.job.OpenERPJobStorage.exists:1
+#: connector.queue.job.OdooJobStorage.exists:1
 msgid "Returns if a job still exists in the storage."
 msgstr "Indique si un job existe encore dans l'espace de stockage."
 
@@ -2072,23 +2072,23 @@ msgstr "Lit les donnés du job dans l'espace de stockage"
 msgid "Store a job"
 msgstr "Stocke un job"
 
-#: ../../../queue/job.pydocstring of connector.queue.job.OpenERPJobStorage:1
+#: ../../../queue/job.pydocstring of connector.queue.job.OdooJobStorage:1
 msgid "Bases: :class:`connector.queue.job.JobStorage`"
 msgstr "Bases : :class:`connector.queue.job.JobStorage`"
 
-#: ../../../queue/job.pydocstring of connector.queue.job.OpenERPJobStorage:1
-msgid "Store a job on OpenERP"
-msgstr "Stocke un job dans OpenERP"
+#: ../../../queue/job.pydocstring of connector.queue.job.OdooJobStorage:1
+msgid "Store a job on Odoo"
+msgstr "Stocke un job dans Odoo"
 
 #: ../../../queue/job.pydocstring of
-#: connector.queue.job.OpenERPJobStorage.enqueue:1
+#: connector.queue.job.OdooJobStorage.enqueue:1
 #: ../../../queue/job.pydocstring of
-#: connector.queue.job.OpenERPJobStorage.enqueue_resolve_args:1
+#: connector.queue.job.OdooJobStorage.enqueue_resolve_args:1
 msgid "Create a Job and enqueue it in the queue. Return the job uuid."
 msgstr "Crée un job et le met en queue. Renvoie le UUID du job."
 
 #: ../../../queue/job.pydocstring of
-#: connector.queue.job.OpenERPJobStorage.enqueue:3
+#: connector.queue.job.OdooJobStorage.enqueue:3
 msgid ""
 "This expects the arguments specific to the job to be already extracted from "
 "the ones to pass to the job function."
@@ -2097,12 +2097,12 @@ msgstr ""
 "ceux à passer à la fonction du job."
 
 #: ../../../queue/job.pydocstring of
-#: connector.queue.job.OpenERPJobStorage.load:1
+#: connector.queue.job.OdooJobStorage.load:1
 msgid "Read a job from the Database"
 msgstr "Lit un job depuis la base de données"
 
 #: ../../../queue/job.pydocstring of
-#: connector.queue.job.OpenERPJobStorage.store:1
+#: connector.queue.job.OdooJobStorage.store:1
 msgid "Store the Job"
 msgstr "Stocke le job"
 
@@ -2117,12 +2117,12 @@ msgstr "Ajoute un attribut ``delay`` sur la fonction décorée."
 #: ../../../queue/job.pydocstring of connector.queue.job.job:5
 msgid ""
 "When ``delay`` is called, the function is transformed to a job and stored in"
-" the OpenERP queue.job model. The arguments and keyword arguments given in "
+" the Odoo queue.job model. The arguments and keyword arguments given in "
 "``delay`` will be the arguments used by the decorated function when it is "
 "executed."
 msgstr ""
 "Quand ``delay`` est appelée, la fonction est transformée en job et stockée "
-"dans le modèle OpenERP queue.job. Les arguments positionnels et nommés "
+"dans le modèle Odoo queue.job. Les arguments positionnels et nommés "
 "transmis à ``delay`` seront les arguments utilisés par la fonction décorée "
 "lorsqu'elle sera exécutée."
 
@@ -2131,9 +2131,9 @@ msgid "The ``delay()`` function of a job takes the following arguments:"
 msgstr "La fonction ``delay()`` d'un job reçoit les arguments suivants :"
 
 #: ../../../queue/job.pydocstring of connector.queue.job.job:13
-msgid "Current :py:class:`~openerp.addons.connector.session.ConnectorSession`"
+msgid "Current :py:class:`~odoo.addons.connector.session.ConnectorSession`"
 msgstr ""
-":py:class:`~openerp.addons.connector.session.ConnectorSession` en cours"
+":py:class:`~odoo.addons.connector.session.ConnectorSession` en cours"
 
 #: ../../../queue/job.pydocstring of connector.queue.job.job:16
 msgid "name of the model on which the job has something to do"
@@ -2216,11 +2216,11 @@ msgstr "Attache une *action connexe* à un job"
 
 #: ../../../queue/job.pydocstring of connector.queue.job.related_action:3
 msgid ""
-"A *Related Action* will appear as a button on the OpenERP view. The button "
+"A *Related Action* will appear as a button on the Odoo view. The button "
 "will execute the action, usually it will open the form view of the record "
 "related to the job."
 msgstr ""
-"Un *action connexe* apparaîtra comme un bouton dans la vue OpenERP. Le "
+"Un *action connexe* apparaîtra comme un bouton dans la vue Odoo. Le "
 "bouton exécutera l'action, habituellement une ouverture de formulaire de "
 "l'enregistrement lié au job."
 
@@ -2371,8 +2371,8 @@ msgstr "Modèles"
 
 #: ../../../queue/model.pydocstring of connector.queue.model.QueueJob:1
 #: ../../../queue/model.pydocstring of connector.queue.model.QueueWorker:1
-msgid "Bases: :class:`openerp.models.Model`"
-msgstr "Bases : :class:`openerp.models.Model`"
+msgid "Bases: :class:`odoo.models.Model`"
+msgstr "Bases : :class:`odoo.models.Model`"
 
 #: ../../../queue/model.pydocstring of connector.queue.model.QueueJob:1
 msgid "Job status and result"
@@ -2557,11 +2557,11 @@ msgstr "Chaque opération est atomique."
 #: connector.queue.model.QueueWorker.assign_then_enqueue:6
 msgid ""
 "commit transaction ``cr.commit()`` is called, so please always call this "
-"method in your own transaction, not in the main OpenERP's transaction"
+"method in your own transaction, not in the main Odoo's transaction"
 msgstr ""
 "valide la transaction. ``cr.commit()`` est appelé, donc veuillez appeler "
 "cette méthode dans vos propres transactions, pas dans la transaction "
-"principale d'OpenERP"
+"principale d'Odoo"
 
 #: ../../../queue/model.pydocstring of
 #: connector.queue.model.QueueWorker.enqueue_jobs:1
@@ -2601,8 +2601,8 @@ msgstr ""
 "les cas des champs `related` ou des extensions de champs."
 
 #: ../../../queue/model.pydocstring of connector.queue.model.RequeueJob:1
-msgid "Bases: :class:`openerp.models.TransientModel`"
-msgstr "Bases : :class:`openerp.models.TransientModel`"
+msgid "Bases: :class:`odoo.models.TransientModel`"
+msgstr "Bases : :class:`odoo.models.TransientModel`"
 
 #: ../../../queue/model.pydocstring of
 #: connector.queue.model.RequeueJob.job_ids:1
@@ -2651,16 +2651,16 @@ msgid "Session"
 msgstr "Session"
 
 #: ../../../session.pydocstring of connector.session.ConnectorSession:1
-msgid "Container for the OpenERP transactional stuff:"
-msgstr "Conteneur pour les choses transactionnelles d'OpenERP :"
+msgid "Container for the Odoo transactional stuff:"
+msgstr "Conteneur pour les choses transactionnelles d'Odoo :"
 
 #: ../../../session.pydocstring of connector.session.ConnectorSession:5
 msgid "The Environment"
 msgstr "L'Environnement"
 
 #: ../../../session.pydocstring of connector.session.ConnectorSession:9
-msgid "The OpenERP Cursor"
-msgstr "Le curseur d'OpenERP"
+msgid "The Odoo Cursor"
+msgstr "Le curseur d'Odoo"
 
 #: ../../../session.pydocstring of connector.session.ConnectorSession:13
 #: ../../../session.pydocstring of
@@ -2675,12 +2675,12 @@ msgstr "Le registre des modèles"
 #: ../../../session.pydocstring of connector.session.ConnectorSession:21
 #: ../../../session.pydocstring of
 #: connector.session.ConnectorSessionHandler:14
-msgid "The current OpenERP's context"
-msgstr "Le `context` actuel d'OpenERP"
+msgid "The current Odoo's context"
+msgstr "Le `context` actuel d'Odoo"
 
 #: ../../../session.pydocstring of connector.session.ConnectorSession.browse:1
-msgid "Shortcut to :py:class:`openerp.models.BaseModel.browse`"
-msgstr "Raccourci vers :py:class:`openerp.models.BaseModel.browse`"
+msgid "Shortcut to :py:class:`odoo.models.BaseModel.browse`"
+msgstr "Raccourci vers :py:class:`odoo.models.BaseModel.browse`"
 
 #: ../../../session.pydocstring of
 #: connector.session.ConnectorSession.change_context:1
@@ -2690,11 +2690,11 @@ msgstr "`Context Manager` : crée un nouvel Env avec un `context` mis à jour"
 #: ../../../session.pydocstring of
 #: connector.session.ConnectorSession.change_context:3
 msgid ""
-"It generates a new :class:`openerp.api.Environment` used within the context "
+"It generates a new :class:`odoo.api.Environment` used within the context "
 "manager, where the context is extended with the arguments. The original "
 "environment is restored at the closing of the context manager."
 msgstr ""
-"Génère un nouvel :class:`openerp.api.Environment` utilisé à l'intérieur du "
+"Génère un nouvel :class:`odoo.api.Environment` utilisé à l'intérieur du "
 "`context manager`, où le `context` est enrichi avec les arguments. "
 "L'environnement original est restauré à la fermeture du `context manager`."
 
@@ -2716,11 +2716,11 @@ msgstr ""
 msgid ""
 "only recordsets read within the context manager will be attached to this "
 "environment. In many cases, you will prefer to use "
-":meth:`openerp.models.BaseModel.with_context`"
+":meth:`odoo.models.BaseModel.with_context`"
 msgstr ""
 "seuls les `recordset` lus à l'intérieur du `context manager` seront attachés"
 " à cet environnement. Dans beaucoup de cas, vous préférerez utiliser "
-":meth:`openerp.models.BaseModel.with_context`"
+":meth:`odoo.models.BaseModel.with_context`"
 
 #: ../../../session.pydocstring of
 #: connector.session.ConnectorSession.change_user:1
@@ -2730,11 +2730,11 @@ msgstr "`Context Manager` : crée un nouvel Env avec l'utilisateur spécifié"
 #: ../../../session.pydocstring of
 #: connector.session.ConnectorSession.change_user:3
 msgid ""
-"It generates a new :class:`openerp.api.Environment` used within the context "
+"It generates a new :class:`odoo.api.Environment` used within the context "
 "manager, where the user is replaced by the specified one.  The original "
 "environment is restored at the closing of the context manager."
 msgstr ""
-"Ceci génère un nouvel :class:`openerp.api.Environment` utilisé à l'intérieur"
+"Ceci génère un nouvel :class:`odoo.api.Environment` utilisé à l'intérieur"
 " du `context manager`, où l'utilisateur est remplacé par celui spécifié.  "
 "L'environnement original est restaré à la fermeture du `context manager`."
 
@@ -2747,8 +2747,8 @@ msgid "Commit the cursor"
 msgstr "Valide la transaction"
 
 #: ../../../session.pydocstring of connector.session.ConnectorSession.create:1
-msgid "Shortcut to :py:class:`openerp.models.BaseModel.create`"
-msgstr "Raccourci pour :py:class:`openerp.models.BaseModel.create`"
+msgid "Shortcut to :py:class:`odoo.models.BaseModel.create`"
+msgstr "Raccourci pour :py:class:`odoo.models.BaseModel.create`"
 
 #: ../../../session.pydocstring of
 #: connector.session.ConnectorSession.is_module_installed:1
@@ -2769,8 +2769,8 @@ msgstr ""
 "``nom_module.installed`` est chargé dans le registre."
 
 #: ../../../session.pydocstring of connector.session.ConnectorSession.read:1
-msgid "Shortcut to :py:class:`openerp.models.BaseModel.read`"
-msgstr "Raccourci pour :py:class:`openerp.models.BaseModel.read`"
+msgid "Shortcut to :py:class:`odoo.models.BaseModel.read`"
+msgstr "Raccourci pour :py:class:`odoo.models.BaseModel.read`"
 
 #: ../../../session.pydocstring of
 #: connector.session.ConnectorSession.rollback:1
@@ -2778,12 +2778,12 @@ msgid "Rollback the cursor"
 msgstr "Annule la transaction"
 
 #: ../../../session.pydocstring of connector.session.ConnectorSession.search:1
-msgid "Shortcut to :py:class:`openerp.models.BaseModel.search`"
-msgstr "Raccourci pour :py:class:`openerp.models.BaseModel.search`"
+msgid "Shortcut to :py:class:`odoo.models.BaseModel.search`"
+msgstr "Raccourci pour :py:class:`odoo.models.BaseModel.search`"
 
 #: ../../../session.pydocstring of connector.session.ConnectorSession.write:1
-msgid "Shortcut to :py:class:`openerp.models.BaseModel.write`"
-msgstr "Raccourci pour :py:class:`openerp.models.BaseModel.write`"
+msgid "Shortcut to :py:class:`odoo.models.BaseModel.write`"
+msgstr "Raccourci pour :py:class:`odoo.models.BaseModel.write`"
 
 #: ../../../session.pydocstring of connector.session.ConnectorSessionHandler:1
 msgid ""
@@ -2846,13 +2846,13 @@ msgstr "Synchroniseur pour effacer un enregistrement du backend"
 
 #: ../../../unit/synchronizer.pydocstring of
 #: connector.unit.synchronizer.Exporter:1
-msgid "Synchronizer for exporting data from OpenERP to a backend"
-msgstr "Synchroniseur pour exporter des donnés d'OpenERP vers un backend"
+msgid "Synchronizer for exporting data from Odoo to a backend"
+msgstr "Synchroniseur pour exporter des donnés d'Odoo vers un backend"
 
 #: ../../../unit/synchronizer.pydocstring of
 #: connector.unit.synchronizer.Importer:1
-msgid "Synchronizer for importing data from a backend to OpenERP"
-msgstr "Synchroniseur pour importer des données d'un backend vers OpenERP"
+msgid "Synchronizer for importing data from a backend to Odoo"
+msgstr "Synchroniseur pour importer des données d'un backend vers Odoo"
 
 #: ../../../unit/synchronizer.pydocstring of
 #: connector.unit.synchronizer.Synchronizer:1

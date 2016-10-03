@@ -18,23 +18,23 @@ threaded in the same process.
 When Odoo is launched with multiple processes using the option
 ``--workers``, the jobs workers are not independant processes, however,
 you have to launch them separately with the script
-``openerp-connector-worker`` located in the connector module.
+``odoo-connector-worker`` located in the connector module.
 
 It takes the same arguments and configuration file than the Odoo
 server.
 
 .. important:: The Python path must contain the path to the Odoo
-               server when ``openerp-connector-worker`` is launched.
+               server when ``odoo-connector-worker`` is launched.
 
 Example::
 
-    $ PYTHONPATH=/path/to/server connector/openerp-connector-worker --config /path/to/configfile \
+    $ PYTHONPATH=/path/to/server connector/odoo-connector-worker --config /path/to/configfile \
       --workers=2 --logfile=/path/to/logfile
 
 The 'Enqueue Jobs' scheduled action is useless when multiprocessing is
 used.
 
-.. note:: The ``openerp-connector-worker`` should not be launched
+.. note:: The ``odoo-connector-worker`` should not be launched
           alongside Odoo when the latter does not run in multiprocess
           mode, because the interprocess signaling would not be done.
 

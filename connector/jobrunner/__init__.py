@@ -28,8 +28,8 @@ import os
 from threading import Thread
 import time
 
-from openerp.service import server
-from openerp.tools import config
+from odoo.service import server
+from odoo.tools import config
 
 from .runner import ConnectorRunner
 

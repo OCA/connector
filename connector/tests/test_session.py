@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-import openerp.tests.common as common
-import openerp.modules.registry as registry
-from openerp.addons.connector.session import (
+import odoo.tests.common as common
+import odoo.modules.registry as registry
+from odoo.addons.connector.session import (
     ConnectorSession,
     ConnectorSessionHandler)
 
@@ -89,7 +89,7 @@ class test_connector_session(common.TransactionCase):
         original_env = self.session.env
         new_uid = self.env.ref('base.user_demo').id
         with self.session.change_user(new_uid):
-            # a new openerp.api.Environment is generated with the user
+            # a new odoo.api.Environment is generated with the user
             self.assertNotEqual(self.session.env, original_env)
             self.assertEqual(self.session.uid, new_uid)
         self.assertEqual(self.session.env, original_env)
@@ -97,13 +97,9 @@ class test_connector_session(common.TransactionCase):
 
     def test_model_with_transaction(self):
         """ Use a method on a model from the pool """
-        res_users = self.registry('res.users').search_count(self.cr,
-                                                            self.uid,
-                                                            [])
-        sess_res_users_obj = self.session.pool.get('res.users')
-        sess_res_users = sess_res_users_obj.search_count(self.cr,
-                                                         self.uid,
-                                                         [])
+        user_model = self.env['res.users']
+        res_users = user_model.search_count([])
+        sess_res_users = user_model.search_count([])
         self.assertEqual(sess_res_users, res_users)
 
     def test_new_model_with_transaction(self):
@@ -131,7 +127,7 @@ class test_connector_session(common.TransactionCase):
 
     def test_change_context_uninitialized(self):
         """ Change the context on a session not initialized with a context """
-        session = ConnectorSession(self.cr, self.uid)
+        session = ConnectorSession.from_env(self.env)
         test_key = 'test_key'
         with session.change_context({test_key: 'value'}):
             self.assertEqual(session.context.get('test_key'), 'value')

@@ -31,7 +31,7 @@ def mock_job_delay_to_direct(job_path):
 
     job_path is the python path as string, such as::
 
-      'openerp.addons.magentoerpconnect.stock_picking.export_picking_done'
+      'odoo.addons.magentoerpconnect.stock_picking.export_picking_done'
 
     This is a context manager, all the calls made to the job function in
     job_path inside the context manager will be executed synchronously.

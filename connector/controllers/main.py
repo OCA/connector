@@ -4,12 +4,12 @@ from cStringIO import StringIO
 
 from psycopg2 import OperationalError
 
-import openerp
-from openerp import _, http, tools
-from openerp.service.model import PG_CONCURRENCY_ERRORS_TO_RETRY
+import odoo
+from odoo import _, http, tools
+from odoo.service.model import PG_CONCURRENCY_ERRORS_TO_RETRY
 
 from ..session import ConnectorSessionHandler
-from ..queue.job import (OpenERPJobStorage,
+from ..queue.job import (OdooJobStorage,
                          ENQUEUED)
 from ..exception import (NoSuchJobError,
                          NotReadableJobError,
@@ -28,7 +28,7 @@ PG_RETRY = 5  # seconds
 
 class RunJobController(http.Controller):
 
-    job_storage_class = OpenERPJobStorage
+    job_storage_class = OdooJobStorage
 
     def _load_job(self, session, job_uuid):
         """ Reload a job from the backend """
@@ -71,8 +71,7 @@ class RunJobController(http.Controller):
     @http.route('/connector/runjob', type='http', auth='none')
     def runjob(self, db, job_uuid, **kw):
 
-        session_hdl = ConnectorSessionHandler(db,
-                                              openerp.SUPERUSER_ID)
+        session_hdl = ConnectorSessionHandler(db, odoo.SUPERUSER_ID)
 
         def retry_postpone(job, message, seconds=None):
             with session_hdl.session() as session:

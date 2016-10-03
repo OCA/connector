@@ -25,7 +25,7 @@ Mappers
 =======
 
 Mappers are the ConnectorUnit classes responsible to transform
-external records into OpenERP records and conversely.
+external records into Odoo records and conversely.
 
 """
 
@@ -33,7 +33,7 @@ import logging
 from collections import namedtuple
 from contextlib import contextmanager
 
-from openerp import models
+from odoo import models
 from ..connector import ConnectorUnit, MetaConnectorUnit, ConnectorEnvironment
 from ..exception import MappingError, NoConnectorUnitError
 
@@ -59,7 +59,7 @@ def mapping(func):
 def changed_by(*args):
     """ Decorator for the mapping methods (:py:func:`mapping`)
 
-    When fields are modified in OpenERP, we want to export only the
+    When fields are modified in Odoo, we want to export only the
     modified fields. Using this decorator, we can specify which fields
     updates should trigger which mapping method.
 
@@ -197,7 +197,7 @@ def backend_to_m2o(field, binding=None):
     """ A modifier intended to be used on the ``direct`` mappings.
 
     For a field from a backend which is an ID, search the corresponding
-    binding in OpenERP and returns its ID.
+    binding in Odoo and returns its ID.
 
     When the field's relation is not a binding (i.e. it does not point to
     something like ``magento.*``), the binding model needs to be provided
@@ -229,7 +229,7 @@ def backend_to_m2o(field, binding=None):
         # we ask to the binder to unwrap the binding
         unwrap = bool(binding)
         with self.session.change_context(active_test=False):
-            record = binder.to_openerp(rel_id, unwrap=unwrap)
+            record = binder.to_odoo(rel_id, unwrap=unwrap)
         if not record:
             raise MappingError("Can not find an existing %s for external "
                                "record %s %s unwrapping" %
@@ -392,7 +392,7 @@ class MapChild(ConnectorUnit):
     * Possibly filter out some lines (can be done by inheriting
       :py:meth:`skip_item`)
     * Convert the items' records using the found :py:class:`Mapper`
-    * Format the output values to the format expected by OpenERP or the
+    * Format the output values to the format expected by Odoo or the
       backend (as seen above with ``(0, 0, {values})``
 
     A MapChild can be extended like any other
@@ -471,7 +471,7 @@ class MapChild(ConnectorUnit):
     def format_items(self, items_values):
         """ Format the values of the items mapped from the child Mappers.
 
-        It can be overridden for instance to add the OpenERP
+        It can be overridden for instance to add the Odoo
         relationships commands ``(6, 0, [IDs])``, ...
 
         As instance, it can be modified to handle update of existing
@@ -495,7 +495,7 @@ class ImportMapChild(MapChild):
     def format_items(self, items_values):
         """ Format the values of the items mapped from the child Mappers.
 
-        It can be overridden for instance to add the OpenERP
+        It can be overridden for instance to add the Odoo
         relationships commands ``(6, 0, [IDs])``, ...
 
         As instance, it can be modified to handle update of existing
@@ -518,7 +518,7 @@ class ExportMapChild(MapChild):
 
 
 class Mapper(ConnectorUnit):
-    """ A Mapper translates an external record to an OpenERP record and
+    """ A Mapper translates an external record to an Odoo record and
     conversely. The output of a Mapper is a ``dict``.
 
     3 types of mappings are supported:
@@ -604,7 +604,7 @@ class Mapper(ConnectorUnit):
             children = [('items', 'line_ids', 'model.name')]
 
         It allows to create the sales order and all its lines with the
-        same call to :py:meth:`openerp.models.BaseModel.create()`.
+        same call to :py:meth:`odoo.models.BaseModel.create()`.
 
         When using ``children`` for items of a record, we need to create
         a :py:class:`Mapper` for the model of the items, and optionally a
@@ -622,7 +622,7 @@ class Mapper(ConnectorUnit):
 
     __metaclass__ = MetaMapper
 
-    # name of the OpenERP model, to be defined in concrete classes
+    # name of the Odoo model, to be defined in concrete classes
     _model_name = None
 
     direct = []  # direct conversion of a field to another (from_attr, to_attr)
@@ -793,7 +793,7 @@ class Mapper(ConnectorUnit):
 class ImportMapper(Mapper):
     """ :py:class:`Mapper` for imports.
 
-    Transform a record from a backend to an OpenERP record
+    Transform a record from a backend to an Odoo record
 
     """
 
@@ -829,7 +829,7 @@ class ImportMapper(Mapper):
 class ExportMapper(Mapper):
     """ :py:class:`Mapper` for exports.
 
-    Transform a record from OpenERP to a backend record
+    Transform a record from Odoo to a backend record
 
     """
 

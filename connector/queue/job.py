@@ -28,7 +28,7 @@ from datetime import datetime, timedelta, MINYEAR
 from cPickle import dumps, UnpicklingError, Unpickler
 from cStringIO import StringIO
 
-import openerp
+import odoo
 
 from ..exception import (NotReadableJobError,
                          NoSuchJobError,
@@ -83,7 +83,7 @@ def _unpickle(pickled):
     """ Unpickles a string and catch all types of errors it can throw,
     to raise only NotReadableJobError in case of error.
 
-    OpenERP stores the text fields as 'utf-8', so we specify the encoding.
+    Odoo stores the text fields as 'utf-8', so we specify the encoding.
 
     `loads()` may raises many types of exceptions (AttributeError,
     IndexError, TypeError, KeyError, ...). They are all catched and
@@ -129,13 +129,13 @@ class JobStorage(object):
         raise NotImplementedError
 
 
-class OpenERPJobStorage(JobStorage):
-    """ Store a job on OpenERP """
+class OdooJobStorage(JobStorage):
+    """ Store a job on Odoo """
 
     _job_model_name = 'queue.job'
 
     def __init__(self, session):
-        super(OpenERPJobStorage, self).__init__()
+        super(OdooJobStorage, self).__init__()
         self.session = session
         self.job_model = self.session.env[self._job_model_name]
         assert self.job_model is not None, (
@@ -210,7 +210,7 @@ class OpenERPJobStorage(JobStorage):
                 'func_name': job_.func_name,
                 }
 
-        dt_to_string = openerp.fields.Datetime.to_string
+        dt_to_string = odoo.fields.Datetime.to_string
         if job_.date_enqueued:
             vals['date_enqueued'] = dt_to_string(job_.date_enqueued)
         if job_.date_started:
@@ -250,7 +250,7 @@ class OpenERPJobStorage(JobStorage):
 
         (func_name, args, kwargs) = func
 
-        dt_from_string = openerp.fields.Datetime.from_string
+        dt_from_string = odoo.fields.Datetime.from_string
         eta = None
         if stored.eta:
             eta = dt_from_string(stored.eta)
@@ -332,7 +332,7 @@ class Job(object):
 
     .. attribute:: model_name
 
-        OpenERP model on which the job will run.
+        Odoo model on which the job will run.
 
     .. attribute:: priority
 
@@ -364,7 +364,7 @@ class Job(object):
 
     .. attribute:: user_id
 
-        OpenERP user id which created the job
+        Odoo user id which created the job
 
     .. attribute:: eta
 
@@ -630,7 +630,7 @@ def job(func=None, default_channel='root', retry_pattern=None):
     Add a ``delay`` attribute on the decorated function.
 
     When ``delay`` is called, the function is transformed to a job and
-    stored in the OpenERP queue.job model. The arguments and keyword
+    stored in the Odoo queue.job model. The arguments and keyword
     arguments given in ``delay`` will be the arguments used by the
     decorated function when it is executed.
 
@@ -640,7 +640,7 @@ def job(func=None, default_channel='root', retry_pattern=None):
     The ``delay()`` function of a job takes the following arguments:
 
     session
-      Current :py:class:`~openerp.addons.connector.session.ConnectorSession`
+      Current :py:class:`~odoo.addons.connector.session.ConnectorSession`
 
     model_name
       name of the model on which the job has something to do
@@ -712,7 +712,7 @@ def job(func=None, default_channel='root', retry_pattern=None):
 
     def delay(session, model_name, *args, **kwargs):
         """Enqueue the function. Return the uuid of the created job."""
-        return OpenERPJobStorage(session).enqueue_resolve_args(
+        return OdooJobStorage(session).enqueue_resolve_args(
             func,
             model_name=model_name,
             *args,
@@ -733,7 +733,7 @@ def job(func=None, default_channel='root', retry_pattern=None):
 def related_action(action=lambda session, job: None, **kwargs):
     """ Attach a *Related Action* to a job.
 
-    A *Related Action* will appear as a button on the OpenERP view.
+    A *Related Action* will appear as a button on the Odoo view.
     The button will execute the action, usually it will open the
     form view of the record related to the job.
 

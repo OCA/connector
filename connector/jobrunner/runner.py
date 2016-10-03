@@ -59,6 +59,9 @@ How to use it?
   [options-connector]
   channels = root:4
 
+* Or alternatively, set ``channels = root:4`` in the ``[options-connector]``
+  section of the odoo configuration file.
+
 * Start Odoo with ``--load=web,web_kanban,connector``
   and ``--workers`` greater than 1. [2]_
 

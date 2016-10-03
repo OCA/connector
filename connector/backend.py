@@ -75,7 +75,7 @@ def get_backend(service, version=None):
 # Represents an entry for a class in a ``Backend`` registry.
 _ConnectorUnitEntry = namedtuple('_ConnectorUnitEntry',
                                  ['cls',
-                                  'openerp_module',
+                                  'odoo_module',
                                   'replaced_by'])
 
 
@@ -240,7 +240,7 @@ class Backend(object):
                 # It happens when the entries in 'replaced_by' are
                 # in modules not installed.
                 if not replacings:
-                    if (session.is_module_installed(entry.openerp_module) and
+                    if (session.is_module_installed(entry.odoo_module) and
                             issubclass(entry.cls, base_class) and
                             entry.cls.match(session, model_name)):
                         candidates.add(entry.cls)
@@ -294,7 +294,7 @@ class Backend(object):
                                  (cls, replacing))
 
         entry = _ConnectorUnitEntry(cls=cls,
-                                    openerp_module=cls._openerp_module_,
+                                    odoo_module=cls._module,
                                     replaced_by=[])
         if replacing is not None:
             if replacing is cls:
@@ -335,7 +335,7 @@ class Backend(object):
                 _model_name = 'a.model'
                 # other stuff
 
-        This is useful when working on an OpenERP module which should
+        This is useful when working on an Odoo module which should
         alter the original behavior of a connector for an existing backend.
 
         :param cls: the ConnectorUnit class class to register

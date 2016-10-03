@@ -2,8 +2,8 @@
 
 import mock
 
-import openerp.tests.common as common
-from openerp.addons.connector.event import (
+import odoo.tests.common as common
+from odoo.addons.connector.event import (
     on_record_create,
     on_record_write,
     on_record_unlink

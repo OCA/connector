@@ -105,7 +105,7 @@ class ConnectorCheckpoint(models.Model):
         readonly=True,
         required=True,
         help="The record has been imported from this backend",
-        select=True,
+        index=True,
     )
     state = fields.Selection(
         selection=[('need_review', 'Need Review'),

@@ -56,6 +56,9 @@ How to use it?
   - ``ODOO_CONNECTOR_CHANNELS=root:4`` (or any other channels configuration)
   - optional if ``xmlrpc_port`` is not set: ``ODOO_CONNECTOR_PORT=8069``
 
+* Or alternatively, set ``channels = root:4`` in the ``[options-connector]``
+  section of the odoo configuration file.
+
 * Start Odoo with ``--load=web,web_kanban,connector``
   and ``--workers`` greater than 1. [2]_
 

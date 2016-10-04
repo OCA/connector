@@ -117,22 +117,21 @@ class ConnectorUnit(object):
     def __init__(self, connector_env):
         """
 
-        :param connector_env: current environment (backend, session, ...)
+        :param connector_env: current environment (backend, env, ...)
         :type connector_env: :class:`connector.connector.ConnectorEnvironment`
         """
         super(ConnectorUnit, self).__init__()
         self.connector_env = connector_env
         self.backend = self.connector_env.backend
         self.backend_record = self.connector_env.backend_record
-        self.session = self.connector_env.session
 
     @classmethod
-    def match(cls, session, model):
+    def match(cls, env, model):
         """ Returns True if the current class correspond to the
         searched model.
 
-        :param session: current session
-        :type session: :py:class:`connector.session.ConnectorSession`
+        :param env: odoo Environment
+        :type env: :py:class:`odoo.api.Environment`
         :param model: model to match
         :type model: str or :py:class:`odoo.models.Model`
         """
@@ -147,7 +146,7 @@ class ConnectorUnit(object):
     @property
     def env(self):
         """ Returns the odoo.api.environment """
-        return self.session.env
+        return self.connector_env.env
 
     @property
     def model(self):
@@ -162,7 +161,7 @@ class ConnectorUnit(object):
 
         There is no reason to use this attribute for other purposes.
         """
-        return self.session.context
+        return self.env.context
 
     def unit_for(self, connector_unit_class, model=None):
         """ According to the current
@@ -189,7 +188,7 @@ class ConnectorUnit(object):
         else:
             env = self.connector_env.create_environment(
                 self.backend_record,
-                self.session, model,
+                self.env, model,
                 connector_env=self.connector_env)
 
         return env.get_connector_unit(connector_unit_class)
@@ -251,9 +250,9 @@ class ConnectorEnvironment(object):
         from the model ``connector.backend`` and have at least a
         ``type`` and a ``version``.
 
-    .. attribute:: session
+    .. attribute:: env
 
-        Current session we are working in. It contains the Odoo Environment
+        Current odoo Environment we are working in.
 
     .. attribute:: model_name
 
@@ -268,33 +267,25 @@ class ConnectorEnvironment(object):
 
     _propagate_kwargs = []
 
-    def __init__(self, backend_record, session, model_name):
+    def __init__(self, backend_record, env, model_name):
         """
 
         :param backend_record: browse record of the backend
         :type backend_record: :py:class:`odoo.models.Model`
-        :param session: current session (cr, uid, context)
-        :type session: :py:class:`connector.session.ConnectorSession`
+        :param env: current env (cr, uid, context)
+        :type env: :py:class:`odoo.api.Environment`
         :param model_name: name of the model
         :type model_name: str
         """
         self.backend_record = backend_record
         backend = backend_record.get_backend()
         self.backend = backend
-        self.session = session
+        self.env = env
         self.model_name = model_name
 
     @property
     def model(self):
         return self.env[self.model_name]
-
-    @property
-    def pool(self):
-        return self.session.pool
-
-    @property
-    def env(self):
-        return self.session.env
 
     def get_connector_unit(self, base_class):
         """ Searches and returns an instance of the
@@ -306,18 +297,18 @@ class ConnectorEnvironment(object):
         :param base_class: ``ConnectorUnit`` to search (class or subclass)
         :type base_class: :py:class:`connector.connector.ConnectorUnit`
         """
-        return self.backend.get_class(base_class, self.session,
+        return self.backend.get_class(base_class, self.env,
                                       self.model_name)(self)
 
     @classmethod
-    def create_environment(cls, backend_record, session, model,
+    def create_environment(cls, backend_record, env, model,
                            connector_env=None):
         """ Create a new environment ConnectorEnvironment.
 
         :param backend_record: browse record of the backend
         :type backend_record: :py:class:`odoo.models.Model`
-        :param session: current session (cr, uid, context)
-        :type session: :py:class:`connector.session.ConnectorSession`
+        :param env: current env (cr, uid, context)
+        :type env: :py:class:`odoo.api.Environment`
         :param model_name: name of the model
         :type model_name: str
         :param connector_env: an existing environment from which the kwargs
@@ -330,9 +321,9 @@ class ConnectorEnvironment(object):
             kwargs = {key: getattr(connector_env, key)
                       for key in connector_env._propagate_kwargs}
         if kwargs:
-            return cls(backend_record, session, model, **kwargs)
+            return cls(backend_record, env, model, **kwargs)
         else:
-            return cls(backend_record, session, model)
+            return cls(backend_record, env, model)
 
 
 class Binder(ConnectorUnit):

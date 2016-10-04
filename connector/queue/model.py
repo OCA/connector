@@ -25,7 +25,6 @@ from datetime import datetime, timedelta
 from odoo import models, fields, api, exceptions, _
 
 from .job import STATES, DONE, PENDING, OdooJobStorage, JOB_REGISTRY
-from ..session import ConnectorSession
 from ..connector import get_odoo_module, is_module_installed
 
 _logger = logging.getLogger(__name__)
@@ -99,12 +98,9 @@ class QueueJob(models.Model):
     def open_related_action(self):
         """ Open the related action associated to the job """
         self.ensure_one()
-        session = ConnectorSession(self.env.cr,
-                                   self.env.uid,
-                                   context=self.env.context)
-        storage = OdooJobStorage(session)
+        storage = OdooJobStorage(self.env)
         job = storage.load(self.uuid)
-        action = job.related_action(session)
+        action = job.related_action(self.env)
         if action is None:
             raise exceptions.Warning(_('No action available for this job'))
         return action
@@ -114,10 +110,7 @@ class QueueJob(models.Model):
         """ Change the state of the `Job` object itself so it
         will change the other fields (date, result, ...)
         """
-        session = ConnectorSession(self.env.cr,
-                                   self.env.uid,
-                                   context=self.env.context)
-        storage = OdooJobStorage(session)
+        storage = OdooJobStorage(self.env)
         for job in self:
             job = storage.load(job.uuid)
             if state == DONE:

@@ -129,15 +129,16 @@ class JobStorage(object):
         raise NotImplementedError
 
 
+# TODO: merge with Job?
 class OdooJobStorage(JobStorage):
     """ Store a job on Odoo """
 
     _job_model_name = 'queue.job'
 
-    def __init__(self, session):
+    def __init__(self, env):
         super(OdooJobStorage, self).__init__()
-        self.session = session
-        self.job_model = self.session.env[self._job_model_name]
+        self.env = env
+        self.job_model = self.env[self._job_model_name]
         assert self.job_model is not None, (
             "Model %s not found" % self._job_model_name)
 
@@ -149,14 +150,14 @@ class OdooJobStorage(JobStorage):
         from the ones to pass to the job function.
 
         """
-        new_job = Job(func=func, model_name=model_name, args=args,
+        new_job = Job(self.env, func=func, model_name=model_name, args=args,
                       kwargs=kwargs, priority=priority, eta=eta,
                       max_retries=max_retries, description=description)
-        new_job.user_id = self.session.uid
-        if 'company_id' in self.session.context:
-            company_id = self.session.context['company_id']
+        new_job.user_id = self.env.uid
+        if 'company_id' in self.env.context:
+            company_id = self.env.context['company_id']
         else:
-            company_model = self.session.env['res.company']
+            company_model = self.env['res.company']
             company_model = company_model.sudo(new_job.user_id)
             company_id = company_model._company_default_get(
                 object='queue.job',
@@ -200,7 +201,7 @@ class OdooJobStorage(JobStorage):
                 'retry': job_.retry,
                 'max_retries': job_.max_retries,
                 'exc_info': job_.exc_info,
-                'user_id': job_.user_id or self.session.uid,
+                'user_id': job_.user_id or self.env.uid,
                 'company_id': job_.company_id,
                 'result': unicode(job_.result) if job_.result else False,
                 'date_enqueued': False,
@@ -255,7 +256,7 @@ class OdooJobStorage(JobStorage):
         if stored.eta:
             eta = dt_from_string(stored.eta)
 
-        job_ = Job(func=func_name, args=args, kwargs=kwargs,
+        job_ = Job(self.env, func=func_name, args=args, kwargs=kwargs,
                    priority=stored.priority, eta=eta, job_uuid=stored.uuid,
                    description=stored.name)
 
@@ -373,7 +374,7 @@ class Job(object):
 
     """
 
-    def __init__(self, func=None, model_name=None,
+    def __init__(self, env, func=None, model_name=None,
                  args=None, kwargs=None, priority=None,
                  eta=None, job_uuid=None, max_retries=None,
                  description=None):
@@ -398,6 +399,8 @@ class Job(object):
             the job state to 'failed'. A value of 0 means infinite retries.
         :param description: human description of the job. If None, description
             is computed from the function doc or name
+        :param env: Odoo Environment
+        :type env: :class:`odoo.api.Environment`
         """
         if args is None:
             args = ()
@@ -407,6 +410,8 @@ class Job(object):
 
         assert isinstance(kwargs, dict), "%s: kwargs are not a dict" % kwargs
         assert func is not None, "func is required"
+
+        self.env = env
 
         self.state = PENDING
 
@@ -418,11 +423,15 @@ class Job(object):
 
         self._uuid = job_uuid
 
+        self.model_name = model_name
         self.func_name = None
         if func:
             if inspect.ismethod(func):
-                raise NotImplementedError('Jobs on instances methods are '
-                                          'not supported')
+                if not isinstance(func.im_class, odoo.models.MetaModel):
+                    raise NotImplementedError('Jobs on instances methods are '
+                                              'not supported')
+                self.model_name = func.im_class._name
+                self.func_name = func.im_func.func_name
             elif inspect.isfunction(func):
                 self.func_name = '%s.%s' % (func.__module__, func.__name__)
             elif isinstance(func, basestring):
@@ -430,7 +439,6 @@ class Job(object):
             else:
                 raise TypeError('%s is not a valid function for a job' % func)
 
-        self.model_name = model_name
         # the model name is by convention the second argument of the job
         if self.model_name:
             args = tuple([self.model_name] + list(args))
@@ -464,36 +472,32 @@ class Job(object):
         return cmp((self_eta, self.priority, self.date_created),
                    (other_eta, other.priority, other.date_created))
 
-    def perform(self, session):
+    def perform(self):
         """ Execute the job.
 
         The job is executed with the user which has initiated it.
-
-        :param session: session to execute the job
-        :type session: ConnectorSession
         """
-        with session.change_user(self.user_id):
-            self.retry += 1
-            try:
-                with session.change_context({'job_uuid': self._uuid}):
-                    self.result = self.func(session, *self.args, **self.kwargs)
-            except RetryableJobError as err:
-                if err.ignore_retry:
-                    self.retry -= 1
-                    raise
-                elif not self.max_retries:  # infinite retries
-                    raise
-                elif self.retry >= self.max_retries:
-                    type_, value, traceback = sys.exc_info()
-                    # change the exception type but keep the original
-                    # traceback and message:
-                    # http://blog.ianbicking.org/2007/09/12/
-                    # re-raising-exceptions/
-                    new_exc = FailedJobError("Max. retries (%d) reached: %s" %
-                                             (self.max_retries, value or type_)
-                                             )
-                    raise new_exc.__class__, new_exc, traceback
+        env = self.env(user=self.user_id, context={'job_uuid': self._uuid})
+        self.retry += 1
+        try:
+            # TODO: what about jobs actually using 'session'?
+            self.result = self.func(env, *self.args, **self.kwargs)
+        except RetryableJobError as err:
+            if err.ignore_retry:
+                self.retry -= 1
                 raise
+            elif not self.max_retries:  # infinite retries
+                raise
+            elif self.retry >= self.max_retries:
+                type_, value, traceback = sys.exc_info()
+                # change the exception type but keep the original
+                # traceback and message:
+                # http://blog.ianbicking.org/2007/09/12/re-raising-exceptions/
+                new_exc = FailedJobError("Max. retries (%d) reached: %s" %
+                                         (self.max_retries, value or type_)
+                                         )
+                raise new_exc.__class__, new_exc, traceback
+            raise
         return self.result
 
     @property
@@ -524,11 +528,14 @@ class Job(object):
         func_name = self.func_name
         if func_name is None:
             return None
-
-        module_name, func_name = func_name.rsplit('.', 1)
-        __import__(module_name)
-        module = sys.modules[module_name]
-        return getattr(module, func_name)
+        if '.' in func_name:
+            module_name, func_name = func_name.rsplit('.', 1)
+            __import__(module_name)
+            module = sys.modules[module_name]
+            return getattr(module, func_name)
+        else:
+            # FIXME
+            return getattr(self.env[self.model_name], func_name)
 
     @property
     def eta(self):
@@ -603,13 +610,18 @@ class Job(object):
         if result is not None:
             self.result = result
 
-    def related_action(self, session):
+    def related_action(self, env):
         if not hasattr(self.func, 'related_action'):
             return None
-        return self.func.related_action(session, self)
+        return self.func.related_action(env, self)
 
 
 JOB_REGISTRY = set()
+
+
+def _is_model_method(func):
+    return (inspect.ismethod(func) and
+            isinstance(func.im_class, odoo.models.MetaModel))
 
 
 def job(func=None, default_channel='root', retry_pattern=None):
@@ -711,27 +723,47 @@ def job(func=None, default_channel='root', retry_pattern=None):
         return functools.partial(job, default_channel=default_channel,
                                  retry_pattern=retry_pattern)
 
-    def delay(session, model_name, *args, **kwargs):
+    def delay_with_env(env, model_name, *args, **kwargs):
         """Enqueue the function. Return the uuid of the created job."""
-        return OdooJobStorage(session).enqueue_resolve_args(
+        return OdooJobStorage(env).enqueue_resolve_args(
             func,
             model_name=model_name,
             *args,
             **kwargs)
 
+    def delay_from_model(*args, **kwargs):
+        """Enqueue the function. Return the uuid of the created job."""
+        # Get caller's frame so we can find the current 'env'.
+        # This is a costly operation, see if we want to change the API
+        # to avoid that.
+        frame = sys._getframe(1)
+        env = frame.f_locals['self'].env
+        return OdooJobStorage(env).enqueue_resolve_args(
+            func,
+            model_name=func.im_class._name,
+            *args,
+            **kwargs)
+
     assert default_channel == 'root' or default_channel.startswith('root.'), (
         "The channel path must start by 'root'")
-    func.default_channel = default_channel
     assert retry_pattern is None or isinstance(retry_pattern, dict), (
         "retry_pattern must be a dict"
     )
-    func.retry_pattern = retry_pattern
-    func.delay = delay
+    if _is_model_method(func):
+        # attach on the inner function of the InstanceMethod
+        inner_func = func.__func__
+        delay_func = delay_from_model
+    else:
+        inner_func = func
+        delay_func = delay_with_env
+    inner_func.delay = delay_func
+    inner_func.retry_pattern = retry_pattern
+    inner_func.default_channel = default_channel
     JOB_REGISTRY.add(func)
     return func
 
 
-def related_action(action=lambda session, job: None, **kwargs):
+def related_action(action=lambda env, job: None, **kwargs):
     """ Attach a *Related Action* to a job.
 
     A *Related Action* will appear as a button on the Odoo view.
@@ -740,13 +772,13 @@ def related_action(action=lambda session, job: None, **kwargs):
 
     The ``action`` must be a callable that responds to arguments::
 
-        session, job, **kwargs
+        env, job, **kwargs
 
     Example usage:
 
     .. code-block:: python
 
-        def related_action_partner(session, job):
+        def related_action_partner(env, job):
             model = job.args[0]
             partner_id = job.args[1]
             # eventually get the real ID if partner_id is a binding ID
@@ -762,28 +794,34 @@ def related_action(action=lambda session, job: None, **kwargs):
 
         @job
         @related_action(action=related_action_partner)
-        def export_partner(session, model_name, partner_id):
+        def export_partner(env, model_name, partner_id):
             # ...
 
     The kwargs are transmitted to the action:
 
     .. code-block:: python
 
-        def related_action_product(session, job, extra_arg=1):
+        def related_action_product(env, job, extra_arg=1):
             assert extra_arg == 2
             model = job.args[0]
             product_id = job.args[1]
 
         @job
         @related_action(action=related_action_product, extra_arg=2)
-        def export_product(session, model_name, product_id):
+        def export_product(env, model_name, product_id):
             # ...
 
     """
     def decorate(func):
         if kwargs:
-            func.related_action = functools.partial(action, **kwargs)
+            action_func = functools.partial(action, **kwargs)
         else:
-            func.related_action = action
+            action_func = action
+        if _is_model_method(func):
+            # attach on the inner function of the InstanceMethod
+            inner_func = func.__func__
+        else:
+            inner_func = func
+        inner_func.related_action = action_func
         return func
     return decorate

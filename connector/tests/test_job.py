@@ -9,8 +9,6 @@ from odoo import SUPERUSER_ID, exceptions
 import odoo.tests.common as common
 from odoo.addons.connector.queue.job import (
     Job,
-    JobStorage,
-    OdooJobStorage,
     job,
     PENDING,
     ENQUEUED,
@@ -328,14 +326,6 @@ class TestJobs(unittest.TestCase):
         with self.assertRaises(NotReadableJobError):
             self.assertEqual(_unpickle('cucumber'))
 
-    def test_not_implemented_job_storage(self):
-        storage = JobStorage()
-        job_a = mock.Mock()
-        with self.assertRaises(NotImplementedError):
-            storage.store(job_a)
-            storage.load(job_a)
-            storage.exists(job_a)
-
 
 class TestJobStorage(common.TransactionCase):
     """ Test storage of jobs """
@@ -346,8 +336,7 @@ class TestJobStorage(common.TransactionCase):
 
     def test_store(self):
         test_job = Job(self.env, func=task_a)
-        storage = OdooJobStorage(self.env)
-        storage.store(test_job)
+        test_job.store()
         stored = self.queue_job.search([('uuid', '=', test_job.uuid)])
         self.assertEqual(len(stored), 1)
 
@@ -363,9 +352,8 @@ class TestJobStorage(common.TransactionCase):
                        description="My description")
         test_job.user_id = 1
         test_job.company_id = self.env.ref("base.main_company").id
-        storage = OdooJobStorage(self.env)
-        storage.store(test_job)
-        job_read = storage.load(test_job.uuid)
+        test_job.store()
+        job_read = Job.load(self.env, test_job.uuid)
         self.assertEqual(test_job.uuid, job_read.uuid)
         self.assertEqual(test_job.model_name, job_read.model_name)
         self.assertEqual(test_job.func, job_read.func)
@@ -396,9 +384,9 @@ class TestJobStorage(common.TransactionCase):
         job_read.date_enqueued = test_date
         job_read.date_started = test_date
         job_read.date_done = test_date
-        storage.store(job_read)
+        job_read.store()
 
-        job_read = storage.load(test_job.uuid)
+        job_read = Job.load(self.env, test_job.uuid)
         self.assertAlmostEqual(job_read.date_started, test_date,
                                delta=delta)
         self.assertAlmostEqual(job_read.date_enqueued, test_date,
@@ -412,12 +400,11 @@ class TestJobStorage(common.TransactionCase):
                        model_name='res.users',
                        args=('o', 'k'),
                        kwargs={'c': '!'})
-        storage = OdooJobStorage(self.env)
-        storage.store(test_job)
+        test_job.store()
         stored = self.queue_job.search([('uuid', '=', test_job.uuid)])
         stored.unlink()
         with self.assertRaises(NoSuchJobError):
-            storage.load(test_job.uuid)
+            Job.load(self.env, test_job.uuid)
 
     def test_unicode(self):
         test_job = Job(self.env,
@@ -428,9 +415,8 @@ class TestJobStorage(common.TransactionCase):
                        priority=15,
                        description=u"My dé^Wdescription")
         test_job.user_id = 1
-        storage = OdooJobStorage(self.env)
-        storage.store(test_job)
-        job_read = storage.load(test_job.uuid)
+        test_job.store()
+        job_read = Job.load(self.env, test_job.uuid)
         self.assertEqual(test_job.args, job_read.args)
         self.assertEqual(job_read.args, ('res.users', u'öô¿‽', u'ñě'))
         self.assertEqual(test_job.kwargs, job_read.kwargs)
@@ -447,9 +433,8 @@ class TestJobStorage(common.TransactionCase):
                        priority=15,
                        description="My dé^Wdescription")
         test_job.user_id = 1
-        storage = OdooJobStorage(self.env)
-        storage.store(test_job)
-        job_read = storage.load(test_job.uuid)
+        test_job.store()
+        job_read = Job.load(self.env, test_job.uuid)
         self.assertEqual(test_job.args, job_read.args)
         self.assertEqual(job_read.args, ('res.users', 'öô¿‽', 'ñě'))
         self.assertEqual(test_job.kwargs, job_read.kwargs)
@@ -505,9 +490,8 @@ class TestJobModel(common.TransactionCase):
 
     def _create_job(self):
         test_job = Job(self.env, func=task_a)
-        storage = OdooJobStorage(self.env)
-        storage.store(test_job)
-        stored = storage.db_record_from_uuid(test_job.uuid)
+        test_job.store()
+        stored = Job.db_record_from_uuid(self.env, test_job.uuid)
         self.assertEqual(len(stored), 1)
         return stored
 
@@ -756,8 +740,7 @@ class TestJobChannels(common.TransactionCase):
         self.assertEquals(job_func.channel, 'root')
 
         test_job = Job(self.env, func=task_a)
-        storage = OdooJobStorage(self.env)
-        storage.store(test_job)
+        test_job.store()
         stored = self.job_model.search([('uuid', '=', test_job.uuid)])
         self.assertEquals(stored.channel, 'root')
 
@@ -767,8 +750,7 @@ class TestJobChannels(common.TransactionCase):
         job_func.channel_id = channel
 
         test_job = Job(self.env, func=task_a)
-        storage = OdooJobStorage(self.env)
-        storage.store(test_job)
+        test_job.store()
         stored = self.job_model.search([('uuid', '=', test_job.uuid)])
         self.assertEquals(stored.channel, 'root.sub')
 

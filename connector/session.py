@@ -26,7 +26,7 @@ from contextlib import contextmanager
 import odoo
 from odoo.modules.registry import RegistryManager
 
-from .connector import is_module_installed
+from odoo.addons.queue_job.utils import is_module_installed
 
 _logger = logging.getLogger(__name__)
 

@@ -8,27 +8,26 @@ from ..connector import Binder
 from ..queue.job import (Job,
                          OdooJobStorage,
                          related_action)
-from ..session import ConnectorSession
 from ..related_action import unwrap_binding
 
 
-def task_no_related(session, model_name):
+def task_no_related(env, model_name):
     pass
 
 
-def task_related_none(session, model_name):
+def task_related_none(env, model_name):
     pass
 
 
-def task_related_return(session, model_name):
+def task_related_return(env, model_name):
     pass
 
 
-def task_related_return_kwargs(session, model_name):
+def task_related_return_kwargs(env, model_name):
     pass
 
 
-def open_url(session, job, url=None):
+def open_url(env, job, url=None):
     subject = job.args[0]
     return {
         'type': 'ir.actions.act_url',
@@ -38,12 +37,12 @@ def open_url(session, job, url=None):
 
 
 @related_action(action=open_url, url='https://en.wikipedia.org/wiki/{subject}')
-def task_wikipedia(session, subject):
+def task_wikipedia(env, subject):
     pass
 
 
 @related_action(action=unwrap_binding)
-def try_unwrap_binding(session, model_name, binding_id):
+def try_unwrap_binding(env, model_name, binding_id):
     pass
 
 
@@ -52,36 +51,37 @@ class test_related_action(unittest.TestCase):
 
     def setUp(self):
         super(test_related_action, self).setUp()
-        self.session = mock.MagicMock()
+        self.env = mock.MagicMock()
 
     def test_no_related_action(self):
         """ Job without related action """
-        job = Job(func=task_no_related)
-        self.assertIsNone(job.related_action(self.session))
+        job = Job(self.env, func=task_no_related)
+        self.assertIsNone(job.related_action(self.env))
 
     def test_return_none(self):
         """ Job with related action returning None """
         # default action returns None
-        job = Job(func=related_action()(task_related_none))
-        self.assertIsNone(job.related_action(self.session))
+        job = Job(self.env, func=related_action()(task_related_none))
+        self.assertIsNone(job.related_action(self.env))
 
     def test_return(self):
         """ Job with related action check if action returns correctly """
-        def action(session, job):
-            return session, job
-        job = Job(func=related_action(action=action)(task_related_return))
-        act_session, act_job = job.related_action(self.session)
-        self.assertEqual(act_session, self.session)
+        def action(env, job):
+            return env, job
+        job = Job(self.env,
+                  func=related_action(action=action)(task_related_return))
+        act_env, act_job = job.related_action(self.env)
+        self.assertEqual(act_env, self.env)
         self.assertEqual(act_job, job)
 
     def test_kwargs(self):
         """ Job with related action check if action propagates kwargs """
-        def action(session, job, a=1, b=2):
+        def action(env, job, a=1, b=2):
             return a, b
         task = task_related_return_kwargs
         job_func = related_action(action=action, b=4)(task)
-        job = Job(func=job_func)
-        self.assertEqual(job.related_action(self.session), (1, 4))
+        job = Job(self.env, func=job_func)
+        self.assertEqual(job.related_action(self.env), (1, 4))
 
     def test_unwrap_binding(self):
         """ Call the unwrap binding related action """
@@ -94,8 +94,8 @@ class test_related_action(unittest.TestCase):
             def unwrap_model(self):
                 return 'res.users'
 
-        job = Job(func=try_unwrap_binding, args=('res.users', 555))
-        session = mock.MagicMock(name='session')
+        job = Job(self.env, func=try_unwrap_binding, args=('res.users', 555))
+        env = mock.MagicMock(name='env')
         backend_record = mock.Mock(name='backend_record')
         backend = mock.Mock(name='backend')
         browse_record = mock.Mock(name='browse_record')
@@ -104,9 +104,9 @@ class test_related_action(unittest.TestCase):
         browse_record.exists.return_value = True
         browse_record.backend_id = backend_record
         recordset = mock.Mock(name='recordset')
-        session.env.__getitem__.return_value = recordset
+        env.__getitem__.return_value = recordset
         recordset.browse.return_value = browse_record
-        action = unwrap_binding(session, job)
+        action = unwrap_binding(env, job)
         expected = {
             'name': mock.ANY,
             'type': 'ir.actions.act_window',
@@ -128,8 +128,8 @@ class test_related_action(unittest.TestCase):
             def unwrap_model(self):
                 raise ValueError('Not an inherits')
 
-        job = Job(func=try_unwrap_binding, args=('res.users', 555))
-        session = mock.MagicMock(name='session')
+        job = Job(self.env, func=try_unwrap_binding, args=('res.users', 555))
+        env = mock.MagicMock(name='env')
         backend_record = mock.Mock(name='backend_record')
         backend = mock.Mock(name='backend')
         browse_record = mock.Mock(name='browse_record')
@@ -138,9 +138,9 @@ class test_related_action(unittest.TestCase):
         browse_record.exists.return_value = True
         browse_record.backend_id = backend_record
         recordset = mock.Mock(name='recordset')
-        session.env.__getitem__.return_value = recordset
+        env.__getitem__.return_value = recordset
         recordset.browse.return_value = browse_record
-        action = unwrap_binding(session, job)
+        action = unwrap_binding(env, job)
         expected = {
             'name': mock.ANY,
             'type': 'ir.actions.act_window',
@@ -157,13 +157,12 @@ class test_related_action_storage(common.TransactionCase):
 
     def setUp(self):
         super(test_related_action_storage, self).setUp()
-        self.session = ConnectorSession(self.cr, self.uid)
         self.queue_job = self.env['queue.job']
 
     def test_store_related_action(self):
         """ Call the related action on the model """
-        job = Job(func=task_wikipedia, args=('Discworld',))
-        storage = OdooJobStorage(self.session)
+        job = Job(self.env, func=task_wikipedia, args=('Discworld',))
+        storage = OdooJobStorage(self.env)
         storage.store(job)
         stored_job = self.queue_job.search([('uuid', '=', job.uuid)])
         self.assertEqual(len(stored_job), 1)
@@ -175,10 +174,27 @@ class test_related_action_storage(common.TransactionCase):
 
     def test_unwrap_binding_not_exists(self):
         """ Call the related action on the model on non-existing record """
-        job = Job(func=try_unwrap_binding, args=('res.users', 555))
-        storage = OdooJobStorage(self.session)
+        job = Job(self.env, func=try_unwrap_binding, args=('res.users', 555))
+        storage = OdooJobStorage(self.env)
         storage.store(job)
         stored_job = self.queue_job.search([('uuid', '=', job.uuid)])
         stored_job.unlink()
         self.assertFalse(stored_job.exists())
-        self.assertEquals(unwrap_binding(self.session, job), None)
+        self.assertEquals(unwrap_binding(self.env, job), None)
+
+    def test_related_action_model_method(self):
+        """ Related action on model method """
+        # try:
+        related_action(action=task_related_return)(
+            self.env['res.users'].preference_save
+        )
+        self.assertEquals(
+            self.env['res.users'].preference_save.related_action,
+            task_related_return
+        )
+        # TODO
+        # finally:
+        #     method = self.env['res.users'].preference_save
+        #     if hasattr(method.__func__.related_action):
+        #         import pdb; pdb.set_trace()
+        #         del method.__func__.related_action

@@ -307,7 +307,7 @@ class Binder(ConnectorUnit):
     _sync_date_field = 'sync_date'  # override in sub-classes
 
     def to_odoo(self, external_id, unwrap=False):
-        """ Give the ODoo ID for an external ID
+        """ Give the Odoo ID for an external ID
 
         :param external_id: external ID for which we want
                             the Odoo ID

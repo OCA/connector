@@ -8,8 +8,7 @@ import odoo
 from odoo import _, http, tools
 from odoo.service.model import PG_CONCURRENCY_ERRORS_TO_RETRY
 
-from ..queue.job import (OdooJobStorage,
-                         ENQUEUED)
+from ..queue.job import Job, ENQUEUED
 from ..exception import (NoSuchJobError,
                          NotReadableJobError,
                          RetryableJobError,
@@ -23,12 +22,10 @@ PG_RETRY = 5  # seconds
 
 class RunJobController(http.Controller):
 
-    job_storage_class = OdooJobStorage
-
     def _load_job(self, env, job_uuid):
         """ Reload a job from the backend """
         try:
-            job = self.job_storage_class(env).load(job_uuid)
+            job = Job.load(env, job_uuid)
         except NoSuchJobError:
             # just skip it
             job = None
@@ -53,13 +50,13 @@ class RunJobController(http.Controller):
         #       update queue_job set=state=started
         #       where state=enqueid and id=
         job.set_started()
-        self.job_storage_class(env).store(job)
+        job.store()
         http.request.env.commit()
 
         _logger.debug('%s started', job)
         job.perform(env)
         job.set_done()
-        self.job_storage_class(env).store(job)
+        job.store()
         http.request.env.commit()
         _logger.debug('%s done', job)
 
@@ -71,7 +68,7 @@ class RunJobController(http.Controller):
         def retry_postpone(job, message, seconds=None):
             job.postpone(result=message, seconds=seconds)
             job.set_pending(reset_retry=False)
-            self.job_storage_class(env).store(job)
+            job.store()
             env.cr.commit()
 
         job = self._load_job(env, job_uuid)
@@ -98,7 +95,7 @@ class RunJobController(http.Controller):
             else:
                 msg = _('Job interrupted and set to Done: nothing to do.')
             job.set_done(msg)
-            self.job_storage_class(env).store(job)
+            job.store()
             env.cr.commit()
 
         except RetryableJobError as err:
@@ -112,7 +109,7 @@ class RunJobController(http.Controller):
             _logger.error(buff.getvalue())
 
             job.set_failed(exc_info=buff.getvalue())
-            self.job_storage_class(env).store(job)
+            job.store()
             env.cr.commit()
             raise
 

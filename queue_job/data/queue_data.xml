@@ -2,7 +2,7 @@
 <odoo>
     <data noupdate="1">
 
-        <!-- Connector-related subtypes for messaging / Chatter -->
+        <!-- Queue-job-related subtypes for messaging / Chatter -->
         <record id="mt_job_failed" model="mail.message.subtype">
             <field name="name">Job failed</field>
             <field name="res_model">queue.job</field>
@@ -10,7 +10,7 @@
         </record>
 
         <record id="ir_cron_autovacuum_queue_jobs" model="ir.cron">
-            <field name="name">AutoVacuum Queue Jobs</field>
+            <field name="name">AutoVacuum Job Queue</field>
             <field eval="True" name="active"/>
             <field name="user_id" ref="base.user_root"/>
             <field name="interval_number">1</field>

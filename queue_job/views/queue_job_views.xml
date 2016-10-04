@@ -13,13 +13,13 @@
                         class="oe_highlight"
                         string="Requeue Job"
                         type="object"
-                        groups="connector.group_connector_manager"/>
+                        groups="queue_job.group_queue_job_manager"/>
                     <button name="button_done"
                         states="pending,enqueued,failed"
                         class="oe_highlight"
                         string="Set to 'Done'"
                         type="object"
-                        groups="connector.group_connector_manager"/>
+                        groups="queue_job.group_queue_job_manager"/>
                     <button name="open_related_action"
                         string="Related"
                         type="object"
@@ -269,5 +269,28 @@
         <field name="context">{}</field>
         <field name="view_id" ref="view_queue_job_function_tree"/>
     </record>
+
+    <menuitem id="menu_queue_job_root"
+        name="Job Queue"
+        groups="group_queue_job_manager"/>
+
+    <menuitem id="menu_queue"
+        name="Queue"
+        parent="menu_queue_job_root"/>
+
+    <menuitem id="menu_queue_job"
+        action="action_queue_job"
+        sequence="10"
+        parent="menu_queue"/>
+
+    <menuitem id="menu_queue_job_channel"
+        action="action_queue_job_channel"
+        sequence="12"
+        parent="menu_queue"/>
+
+    <menuitem id="menu_queue_job_function"
+        action="action_queue_job_function"
+        sequence="14"
+        parent="menu_queue"/>
 
 </odoo>

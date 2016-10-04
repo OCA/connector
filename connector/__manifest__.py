@@ -26,15 +26,14 @@
  'website': 'http://odoo-connector.com',
  'license': 'AGPL-3',
  'category': 'Generic Modules',
- 'depends': ['mail'
+ 'depends': ['mail',
+             'queue_job',
              ],
  'external_dependencies': {'python': ['requests'
                                       ],
                            },
  'data': ['security/connector_security.xml',
           'security/ir.model.access.csv',
-          'queue/model_view.xml',
-          'queue/queue_data.xml',
           'checkpoint/checkpoint_view.xml',
           'connector_menu.xml',
           'setting_view.xml',

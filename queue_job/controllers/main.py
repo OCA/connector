@@ -8,7 +8,7 @@ import odoo
 from odoo import _, http, tools
 from odoo.service.model import PG_CONCURRENCY_ERRORS_TO_RETRY
 
-from ..queue.job import Job, ENQUEUED
+from ..job import Job, ENQUEUED
 from ..exception import (NoSuchJobError,
                          NotReadableJobError,
                          RetryableJobError,
@@ -61,6 +61,12 @@ class RunJobController(http.Controller):
         _logger.debug('%s done', job)
 
     @http.route('/connector/runjob', type='http', auth='none')
+    def old_runjob(self, db, job_uuid, **kw):
+        _logger.warning('/connector/runjob is deprecated, the new route is'
+                        '/queue_job/runjob')
+        return self.runjob(db, job_uuid, **kw)
+
+    @http.route('/queue_job/runjob', type='http', auth='none')
     def runjob(self, db, job_uuid, **kw):
 
         env = http.request.env(user=odoo.SUPERUSER_ID)

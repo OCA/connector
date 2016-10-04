@@ -1,24 +1,24 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
 #
-#     This file is part of connector, an Odoo module.
+#     This file is part of queue_job, an Odoo module.
 #
 #     Author: Stéphane Bidoul <stephane.bidoul@acsone.eu>
 #     Copyright (c) 2015 ACSONE SA/NV (<http://acsone.eu>)
 #
-#     connector is free software: you can redistribute it and/or
+#     queue_job is free software: you can redistribute it and/or
 #     modify it under the terms of the GNU Affero General Public License
 #     as published by the Free Software Foundation, either version 3 of
 #     the License, or (at your option) any later version.
 #
-#     connector is distributed in the hope that it will be useful,
+#     queue_job is distributed in the hope that it will be useful,
 #     but WITHOUT ANY WARRANTY; without even the implied warranty of
 #     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #     GNU Affero General Public License for more details.
 #
 #     You should have received a copy of the
 #     GNU Affero General Public License
-#     along with connector.
+#     along with queue_job.
 #     If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
@@ -28,7 +28,7 @@ import logging
 from weakref import WeakValueDictionary
 
 from ..exception import ChannelNotFound
-from ..queue.job import PENDING, ENQUEUED, STARTED, FAILED, DONE
+from ..job import PENDING, ENQUEUED, STARTED, FAILED, DONE
 NOT_DONE = (PENDING, ENQUEUED, STARTED, FAILED)
 
 _logger = logging.getLogger(__name__)
@@ -317,7 +317,7 @@ class ChannelQueue(object):
 class Channel(object):
     """A channel for jobs, with a maximum capacity.
 
-    When jobs are created by connector modules, they may be associated
+    When jobs are created by queue_job modules, they may be associated
     to a job channel. Jobs with no channel are inserted into the root channel.
 
     Job channels are joined in a hierarchy down to the root channel.
@@ -480,7 +480,8 @@ class Channel(object):
 
         :param now: the current datetime in seconds
 
-        :return: iterator of :py:class:`connector.jobrunner.ChannelJob`
+        :return: iterator of
+                 :class:`odoo.addons.queue_job.jobrunner.ChannelJob`
         """
         # enqueue jobs of children channels
         for child in self.children.values():

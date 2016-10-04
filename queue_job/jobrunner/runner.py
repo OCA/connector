@@ -2,24 +2,24 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
 #
-#     This file is part of connector, an Odoo module.
+#     This file is part of queue_job, an Odoo module.
 #
 #     Author: Stéphane Bidoul <stephane.bidoul@acsone.eu>
 #     Copyright (c) 2015 ACSONE SA/NV (<http://acsone.eu>)
 #
-#     connector is free software: you can redistribute it and/or
+#     queue_job is free software: you can redistribute it and/or
 #     modify it under the terms of the GNU Affero General Public License
 #     as published by the Free Software Foundation, either version 3 of
 #     the License, or (at your option) any later version.
 #
-#     connector is distributed in the hope that it will be useful,
+#     queue_job is distributed in the hope that it will be useful,
 #     but WITHOUT ANY WARRANTY; without even the implied warranty of
 #     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #     GNU Affero General Public License for more details.
 #
 #     You should have received a copy of the
 #     GNU Affero General Public License
-#     along with connector.
+#     along with queue_job.
 #     If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
@@ -38,7 +38,7 @@ How does it work?
 * It maintains an in-memory priority queue of jobs that
   is populated from the queue_job tables in all databases.
 * It does not run jobs itself, but asks Odoo to run them through an
-  anonymous ``/connector/runjob`` HTTP request. [1]_
+  anonymous ``/queue_job/runjob`` HTTP request. [1]_
 
 How to use it?
 --------------
@@ -48,28 +48,28 @@ How to use it?
   - ``ODOO_CONNECTOR_CHANNELS=root:4`` (or any other channels configuration)
   - optional if ``xmlrpc_port`` is not set: ``ODOO_CONNECTOR_PORT=8069``
 
-* Start Odoo with ``--load=web,web_kanban,connector``
+* Start Odoo with ``--load=web,web_kanban,queue_job``
   and ``--workers`` greater than 1. [2]_
 
 * Confirm the runner is starting correctly by checking the odoo log file:
 
 .. code-block:: none
 
-  ...INFO...connector.jobrunner.runner: starting
-  ...INFO...connector.jobrunner.runner: initializing database connections
-  ...INFO...connector.jobrunner.runner: connector runner ready for db <dbname>
-  ...INFO...connector.jobrunner.runner: database connections ready
+  ...INFO...queue_job.jobrunner.runner: starting
+  ...INFO...queue_job.jobrunner.runner: initializing database connections
+  ...INFO...queue_job.jobrunner.runner: queue job runner ready for db <dbname>
+  ...INFO...queue_job.jobrunner.runner: database connections ready
 
 * Create jobs (eg using base_import_async) and observe they
   start immediately and in parallel.
 
-* Tip: to enable debug logging for the connector, use
-  ``--log-handler=odoo.addons.connector:DEBUG``
+* Tip: to enable debug logging for the queue job, use
+  ``--log-handler=odoo.addons.queue_job:DEBUG``
 
 Caveat
 ------
 
-* After creating a new database or installing connector on an
+* After creating a new database or installing queue_job on an
   existing database, Odoo must be restarted for the runner to detect it.
 
 * When Odoo shuts down normally, it waits for running jobs to finish.
@@ -148,7 +148,7 @@ def _async_http_get(port, db_name, job_uuid):
     #       if this was python3 I would be doing this with
     #       asyncio, aiohttp and aiopg
     def urlopen():
-        url = ('http://localhost:%s/connector/runjob?db=%s&job_uuid=%s' %
+        url = ('http://localhost:%s/queue_job/runjob?db=%s&job_uuid=%s' %
                (port, db_name, job_uuid))
         try:
             # we are not interested in the result, so we set a short timeout
@@ -171,8 +171,8 @@ class Database(object):
         connection_info = odoo.sql_db.connection_info_for(db_name)[1]
         self.conn = psycopg2.connect(**connection_info)
         self.conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
-        self.has_connector = self._has_connector()
-        if self.has_connector:
+        self.has_queue_job = self._has_queue_job()
+        if self.has_queue_job:
             self._initialize()
 
     def close(self):
@@ -182,12 +182,12 @@ class Database(object):
             pass
         self.conn = None
 
-    def _has_connector(self):
+    def _has_queue_job(self):
         with closing(self.conn.cursor()) as cr:
             try:
                 cr.execute("SELECT 1 FROM ir_module_module "
                            "WHERE name=%s AND state=%s",
-                           ('connector', 'installed'))
+                           ('queue_job', 'installed'))
             except psycopg2.ProgrammingError as err:
                 if unicode(err).startswith('relation "ir_module_module" '
                                            'does not exist'):
@@ -207,10 +207,10 @@ class Database(object):
                 BEGIN
                     IF TG_OP = 'DELETE' THEN
                         IF OLD.state != 'done' THEN
-                            PERFORM pg_notify('connector', OLD.uuid);
+                            PERFORM pg_notify('queue_job', OLD.uuid);
                         END IF;
                     ELSE
-                        PERFORM pg_notify('connector', NEW.uuid);
+                        PERFORM pg_notify('queue_job', NEW.uuid);
                     END IF;
                     RETURN NULL;
                 END;
@@ -221,7 +221,7 @@ class Database(object):
                     ON queue_job
                     FOR EACH ROW EXECUTE PROCEDURE queue_job_notify();
             """)
-            cr.execute("LISTEN connector")
+            cr.execute("LISTEN queue_job")
 
     def select_jobs(self, where, args):
         query = ("SELECT channel, uuid, id as seq, date_created, "
@@ -241,7 +241,7 @@ class Database(object):
                        (ENQUEUED, uuid))
 
 
-class ConnectorRunner(object):
+class QueueJobRunner(object):
 
     def __init__(self, port=8069, channel_config_string='root:1'):
         self.port = port
@@ -272,13 +272,13 @@ class ConnectorRunner(object):
     def initialize_databases(self):
         for db_name in self.get_db_names():
             db = Database(db_name)
-            if not db.has_connector:
-                _logger.debug('connector is not installed for db %s', db_name)
+            if not db.has_queue_job:
+                _logger.debug('queue_job is not installed for db %s', db_name)
             else:
                 self.db_by_name[db_name] = db
                 for job_data in db.select_jobs('state in %s', (NOT_DONE,)):
                     self.channel_manager.notify(db_name, *job_data)
-                _logger.info('connector runner ready for db %s', db_name)
+                _logger.info('queue job runner ready for db %s', db_name)
 
     def run_jobs(self):
         now = _odoo_now()
@@ -347,7 +347,7 @@ class ConnectorRunner(object):
             try:
                 _logger.info("initializing database connections")
                 # TODO: how to detect new databases or databases
-                #       on which connector is installed after server start?
+                #       on which queue_job is installed after server start?
                 self.initialize_databases()
                 _logger.info("database connections ready")
                 # inner loop does the normal processing

@@ -24,8 +24,8 @@ from datetime import datetime, timedelta
 
 from odoo import models, fields, api, exceptions, _
 
-from .job import STATES, DONE, PENDING, Job, JOB_REGISTRY
-from ..connector import get_odoo_module, is_module_installed
+from ..job import STATES, DONE, PENDING, Job, JOB_REGISTRY
+from ..utils import get_odoo_module, is_module_installed
 
 _logger = logging.getLogger(__name__)
 
@@ -141,13 +141,13 @@ class QueueJob(models.Model):
                 msg = job._message_failed_job()
                 if msg:
                     job.message_post(body=msg,
-                                     subtype='connector.mt_job_failed')
+                                     subtype='queue_job.mt_job_failed')
         return res
 
     @api.multi
     def _subscribe_users(self):
-        """ Subscribe all users having the 'Connector Manager' group """
-        group = self.env.ref('connector.group_connector_manager')
+        """ Subscribe all users having the 'Queue Job Manager' group """
+        group = self.env.ref('queue_job.group_queue_job_manager')
         if not group:
             return
         companies = self.mapped('company_id')
@@ -288,7 +288,7 @@ class JobFunction(models.Model):
 
     @api.model
     def _default_channel(self):
-        return self.env.ref('connector.channel_root')
+        return self.env.ref('queue_job.channel_root')
 
     name = fields.Char(index=True)
     channel_id = fields.Many2one(comodel_name='queue.job.channel',

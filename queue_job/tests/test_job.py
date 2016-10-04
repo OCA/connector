@@ -7,7 +7,7 @@ from datetime import datetime, timedelta
 
 from odoo import SUPERUSER_ID, exceptions
 import odoo.tests.common as common
-from odoo.addons.connector.queue.job import (
+from odoo.addons.queue_job.job import (
     Job,
     job,
     PENDING,
@@ -18,7 +18,7 @@ from odoo.addons.connector.queue.job import (
     _unpickle,
     RETRY_INTERVAL,
 )
-from odoo.addons.connector.exception import (
+from odoo.addons.queue_job.exception import (
     FailedJobError,
     NoSuchJobError,
     NotReadableJobError,
@@ -97,7 +97,7 @@ class TestJobs(unittest.TestCase):
 
     def test_eta_integer(self):
         """ When an `eta` is an integer, it adds n seconds up to now """
-        datetime_path = 'odoo.addons.connector.queue.job.datetime'
+        datetime_path = 'odoo.addons.queue_job.job.datetime'
         with mock.patch(datetime_path, autospec=True) as mock_datetime:
             mock_datetime.now.return_value = datetime(2015, 3, 15, 16, 41, 0)
             job_a = Job(self.env, func=task_a, eta=60)
@@ -105,7 +105,7 @@ class TestJobs(unittest.TestCase):
 
     def test_eta_timedelta(self):
         """ When an `eta` is a timedelta, it adds it up to now """
-        datetime_path = 'odoo.addons.connector.queue.job.datetime'
+        datetime_path = 'odoo.addons.queue_job.job.datetime'
         with mock.patch(datetime_path, autospec=True) as mock_datetime:
             mock_datetime.now.return_value = datetime(2015, 3, 15, 16, 41, 0)
             delta = timedelta(hours=3)
@@ -165,7 +165,7 @@ class TestJobs(unittest.TestCase):
 
     def test_retry_pattern(self):
         """ When we specify a retry pattern, the eta must follow it"""
-        datetime_path = 'odoo.addons.connector.queue.job.datetime'
+        datetime_path = 'odoo.addons.queue_job.job.datetime'
         test_pattern = {
             1:  60,
             2: 180,
@@ -247,7 +247,7 @@ class TestJobs(unittest.TestCase):
 
     def test_set_enqueued(self):
         job_a = Job(self.env, func=task_a)
-        datetime_path = 'odoo.addons.connector.queue.job.datetime'
+        datetime_path = 'odoo.addons.queue_job.job.datetime'
         with mock.patch(datetime_path, autospec=True) as mock_datetime:
             mock_datetime.now.return_value = datetime(2015, 3, 15, 16, 41, 0)
             job_a.set_enqueued()
@@ -259,7 +259,7 @@ class TestJobs(unittest.TestCase):
 
     def test_set_started(self):
         job_a = Job(self.env, func=task_a)
-        datetime_path = 'odoo.addons.connector.queue.job.datetime'
+        datetime_path = 'odoo.addons.queue_job.job.datetime'
         with mock.patch(datetime_path, autospec=True) as mock_datetime:
             mock_datetime.now.return_value = datetime(2015, 3, 15, 16, 41, 0)
             job_a.set_started()
@@ -270,7 +270,7 @@ class TestJobs(unittest.TestCase):
 
     def test_set_done(self):
         job_a = Job(self.env, func=task_a)
-        datetime_path = 'odoo.addons.connector.queue.job.datetime'
+        datetime_path = 'odoo.addons.queue_job.job.datetime'
         with mock.patch(datetime_path, autospec=True) as mock_datetime:
             mock_datetime.now.return_value = datetime(2015, 3, 15, 16, 41, 0)
             job_a.set_done(result='test')
@@ -289,7 +289,7 @@ class TestJobs(unittest.TestCase):
 
     def test_postpone(self):
         job_a = Job(self.env, func=task_a)
-        datetime_path = 'odoo.addons.connector.queue.job.datetime'
+        datetime_path = 'odoo.addons.queue_job.job.datetime'
         with mock.patch(datetime_path, autospec=True) as mock_datetime:
             mock_datetime.now.return_value = datetime(2015, 3, 15, 16, 41, 0)
             job_a.postpone(result='test', seconds=60)
@@ -530,7 +530,7 @@ class TestJobModel(common.TransactionCase):
     def test_follower_when_write_fail(self):
         """Check that inactive users doesn't are not followers even if
         they are linked to an active partner"""
-        group = self.env.ref('connector.group_connector_manager')
+        group = self.env.ref('queue_job.group_queue_job_manager')
         vals = {'name': 'xx',
                 'login': 'xx',
                 'groups_id': [(6, 0, [group.id])],
@@ -575,7 +575,7 @@ class TestJobStorageMultiCompany(common.TransactionCase):
     def setUp(self):
         super(TestJobStorageMultiCompany, self).setUp()
         self.queue_job = self.env['queue.job']
-        grp_connector_manager = self.ref("connector.group_connector_manager")
+        grp_queue_job_manager = self.ref("queue_job.group_queue_job_manager")
         User = self.env['res.users']
         Company = self.env['res.company']
         Partner = self.env['res.partner']
@@ -596,7 +596,7 @@ class TestJobStorageMultiCompany(common.TransactionCase):
              "company_ids": [(4, self.other_company_a.id)],
              "login": "my_login a",
              "name": "my user",
-             "groups_id": [(4, grp_connector_manager)]
+             "groups_id": [(4, grp_queue_job_manager)]
              })
         self.other_partner_b = Partner.create(
             {"name": "My Company b",
@@ -615,7 +615,7 @@ class TestJobStorageMultiCompany(common.TransactionCase):
              "company_ids": [(4, self.other_company_b.id)],
              "login": "my_login_b",
              "name": "my user 1",
-             "groups_id": [(4, grp_connector_manager)]
+             "groups_id": [(4, grp_queue_job_manager)]
              })
 
     def _create_job(self, env):
@@ -658,14 +658,14 @@ class TestJobStorageMultiCompany(common.TransactionCase):
 
     def test_job_subscription(self):
         # if the job is created without company_id, all members of
-        # connector.group_connector_manager must be followers
+        # queue_job.group_queue_job_manager must be followers
         User = self.env['res.users']
         no_company_context = dict(self.env.context, company_id=None)
         no_company_env = self.env(context=no_company_context)
         stored = self._create_job(no_company_env)
         stored._subscribe_users()
         users = User.search(
-            [('groups_id', '=', self.ref('connector.group_connector_manager'))]
+            [('groups_id', '=', self.ref('queue_job.group_queue_job_manager'))]
         )
         self.assertEqual(len(stored.message_follower_ids), len(users))
         expected_partners = [u.partner_id for u in users]
@@ -701,7 +701,7 @@ class TestJobChannels(common.TransactionCase):
         self.function_model = self.env['queue.job.function']
         self.channel_model = self.env['queue.job.channel']
         self.job_model = self.env['queue.job']
-        self.root_channel = self.env.ref('connector.channel_root')
+        self.root_channel = self.env.ref('queue_job.channel_root')
 
     def test_channel_complete_name(self):
         channel = self.channel_model.create({'name': 'number',
@@ -727,8 +727,8 @@ class TestJobChannels(common.TransactionCase):
         job(task_a)
         job(task_b)
         self.function_model._register_jobs()
-        path_a = 'odoo.addons.connector.tests.test_job.task_a'
-        path_b = 'odoo.addons.connector.tests.test_job.task_b'
+        path_a = 'odoo.addons.queue_job.tests.test_job.task_a'
+        path_b = 'odoo.addons.queue_job.tests.test_job.task_b'
         self.assertTrue(self.function_model.search([('name', '=', path_a)]))
         self.assertTrue(self.function_model.search([('name', '=', path_b)]))
 

@@ -30,10 +30,10 @@ from cStringIO import StringIO
 
 import odoo
 
-from ..exception import (NotReadableJobError,
-                         NoSuchJobError,
-                         FailedJobError,
-                         RetryableJobError)
+from .exception import (NotReadableJobError,
+                        NoSuchJobError,
+                        FailedJobError,
+                        RetryableJobError)
 
 PENDING = 'pending'
 ENQUEUED = 'enqueued'
@@ -622,8 +622,8 @@ def job(func=None, default_channel='root', retry_pattern=None):
 
     The ``delay()`` function of a job takes the following arguments:
 
-    session
-      Current :py:class:`~odoo.addons.connector.session.ConnectorSession`
+    env
+      Current :py:class:`~odoo.api.Environment`
 
     model_name
       name of the model on which the job has something to do

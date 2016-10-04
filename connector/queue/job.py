@@ -113,177 +113,6 @@ def _unpickle(pickled):
     return unpickled
 
 
-class JobStorage(object):
-    """ Interface for the storage of jobs """
-
-    def store(self, job_):
-        """ Store a job """
-        raise NotImplementedError
-
-    def load(self, job_uuid):
-        """ Read the job's data from the storage """
-        raise NotImplementedError
-
-    def exists(self, job_uuid):
-        """Returns if a job still exists in the storage."""
-        raise NotImplementedError
-
-
-# TODO: merge with Job?
-class OdooJobStorage(JobStorage):
-    """ Store a job on Odoo """
-
-    _job_model_name = 'queue.job'
-
-    def __init__(self, env):
-        super(OdooJobStorage, self).__init__()
-        self.env = env
-        self.job_model = self.env[self._job_model_name]
-        assert self.job_model is not None, (
-            "Model %s not found" % self._job_model_name)
-
-    def enqueue(self, func, model_name=None, args=None, kwargs=None,
-                priority=None, eta=None, max_retries=None, description=None):
-        """Create a Job and enqueue it in the queue. Return the job uuid.
-
-        This expects the arguments specific to the job to be already extracted
-        from the ones to pass to the job function.
-
-        """
-        new_job = Job(self.env, func=func, model_name=model_name, args=args,
-                      kwargs=kwargs, priority=priority, eta=eta,
-                      max_retries=max_retries, description=description)
-        new_job.user_id = self.env.uid
-        if 'company_id' in self.env.context:
-            company_id = self.env.context['company_id']
-        else:
-            company_model = self.env['res.company']
-            company_model = company_model.sudo(new_job.user_id)
-            company_id = company_model._company_default_get(
-                object='queue.job',
-                field='company_id').id
-        new_job.company_id = company_id
-        self.store(new_job)
-        return new_job.uuid
-
-    def enqueue_resolve_args(self, func, *args, **kwargs):
-        """Create a Job and enqueue it in the queue. Return the job uuid."""
-        priority = kwargs.pop('priority', None)
-        eta = kwargs.pop('eta', None)
-        model_name = kwargs.pop('model_name', None)
-        max_retries = kwargs.pop('max_retries', None)
-        description = kwargs.pop('description', None)
-
-        return self.enqueue(func, model_name=model_name,
-                            args=args, kwargs=kwargs,
-                            priority=priority,
-                            max_retries=max_retries,
-                            eta=eta,
-                            description=description)
-
-    def exists(self, job_uuid):
-        """Returns if a job still exists in the storage."""
-        return bool(self.db_record_from_uuid(job_uuid))
-
-    def db_record_from_uuid(self, job_uuid):
-        model = self.job_model.sudo()
-        record = model.search([('uuid', '=', job_uuid)], limit=1)
-        if record:
-            return record.with_env(self.job_model.env)
-
-    def db_record(self, job_):
-        return self.db_record_from_uuid(job_.uuid)
-
-    def store(self, job_):
-        """ Store the Job """
-        vals = {'state': job_.state,
-                'priority': job_.priority,
-                'retry': job_.retry,
-                'max_retries': job_.max_retries,
-                'exc_info': job_.exc_info,
-                'user_id': job_.user_id or self.env.uid,
-                'company_id': job_.company_id,
-                'result': unicode(job_.result) if job_.result else False,
-                'date_enqueued': False,
-                'date_started': False,
-                'date_done': False,
-                'eta': False,
-                'func_name': job_.func_name,
-                }
-
-        dt_to_string = odoo.fields.Datetime.to_string
-        if job_.date_enqueued:
-            vals['date_enqueued'] = dt_to_string(job_.date_enqueued)
-        if job_.date_started:
-            vals['date_started'] = dt_to_string(job_.date_started)
-        if job_.date_done:
-            vals['date_done'] = dt_to_string(job_.date_done)
-        if job_.eta:
-            vals['eta'] = dt_to_string(job_.eta)
-
-        db_record = self.db_record(job_)
-        if db_record:
-            db_record.write(vals)
-        else:
-            date_created = dt_to_string(job_.date_created)
-            vals.update({'uuid': job_.uuid,
-                         'name': job_.description,
-                         'func_string': job_.func_string,
-                         'date_created': date_created,
-                         'model_name': (job_.model_name if job_.model_name
-                                        else False),
-                         })
-
-            vals['func'] = dumps((job_.func_name,
-                                  job_.args,
-                                  job_.kwargs))
-
-            self.job_model.sudo().create(vals)
-
-    def load(self, job_uuid):
-        """ Read a job from the Database"""
-        stored = self.db_record_from_uuid(job_uuid)
-        if not stored:
-            raise NoSuchJobError(
-                'Job %s does no longer exist in the storage.' % job_uuid)
-
-        func = _unpickle(stored.func)
-
-        (func_name, args, kwargs) = func
-
-        dt_from_string = odoo.fields.Datetime.from_string
-        eta = None
-        if stored.eta:
-            eta = dt_from_string(stored.eta)
-
-        job_ = Job(self.env, func=func_name, args=args, kwargs=kwargs,
-                   priority=stored.priority, eta=eta, job_uuid=stored.uuid,
-                   description=stored.name)
-
-        if stored.date_created:
-            job_.date_created = dt_from_string(stored.date_created)
-
-        if stored.date_enqueued:
-            job_.date_enqueued = dt_from_string(stored.date_enqueued)
-
-        if stored.date_started:
-            job_.date_started = dt_from_string(stored.date_started)
-
-        if stored.date_done:
-            job_.date_done = dt_from_string(stored.date_done)
-
-        job_.state = stored.state
-        job_.result = stored.result if stored.result else None
-        job_.exc_info = stored.exc_info if stored.exc_info else None
-        job_.user_id = stored.user_id.id if stored.user_id else None
-        job_.model_name = stored.model_name if stored.model_name else None
-        job_.retry = stored.retry
-        job_.max_retries = stored.max_retries
-        if stored.company_id:
-            job_.company_id = stored.company_id.id
-        return job_
-
-
 class Job(object):
     """ A Job is a task to execute.
 
@@ -374,6 +203,97 @@ class Job(object):
 
     """
 
+    @classmethod
+    def load(cls, env, job_uuid):
+        """ Read a job from the Database"""
+        stored = cls.db_record_from_uuid(env, job_uuid)
+        if not stored:
+            raise NoSuchJobError(
+                'Job %s does no longer exist in the storage.' % job_uuid)
+
+        func = _unpickle(stored.func)
+
+        (func_name, args, kwargs) = func
+
+        dt_from_string = odoo.fields.Datetime.from_string
+        eta = None
+        if stored.eta:
+            eta = dt_from_string(stored.eta)
+
+        job_ = cls(env, func=func_name, args=args, kwargs=kwargs,
+                   priority=stored.priority, eta=eta, job_uuid=stored.uuid,
+                   description=stored.name)
+
+        if stored.date_created:
+            job_.date_created = dt_from_string(stored.date_created)
+
+        if stored.date_enqueued:
+            job_.date_enqueued = dt_from_string(stored.date_enqueued)
+
+        if stored.date_started:
+            job_.date_started = dt_from_string(stored.date_started)
+
+        if stored.date_done:
+            job_.date_done = dt_from_string(stored.date_done)
+
+        job_.state = stored.state
+        job_.result = stored.result if stored.result else None
+        job_.exc_info = stored.exc_info if stored.exc_info else None
+        job_.user_id = stored.user_id.id if stored.user_id else None
+        job_.model_name = stored.model_name if stored.model_name else None
+        job_.retry = stored.retry
+        job_.max_retries = stored.max_retries
+        if stored.company_id:
+            job_.company_id = stored.company_id.id
+        return job_
+
+    @classmethod
+    def enqueue(cls, env, func, model_name=None, args=None, kwargs=None,
+                priority=None, eta=None, max_retries=None, description=None):
+        """Create a Job and enqueue it in the queue. Return the job uuid.
+
+        This expects the arguments specific to the job to be already extracted
+        from the ones to pass to the job function.
+
+        """
+        new_job = cls(env, func=func, model_name=model_name, args=args,
+                      kwargs=kwargs, priority=priority, eta=eta,
+                      max_retries=max_retries, description=description)
+        new_job.user_id = env.uid
+        if 'company_id' in env.context:
+            company_id = env.context['company_id']
+        else:
+            company_model = env['res.company']
+            company_model = company_model.sudo(new_job.user_id)
+            company_id = company_model._company_default_get(
+                object='queue.job',
+                field='company_id').id
+        new_job.company_id = company_id
+        new_job.store()
+        return new_job.uuid
+
+    @classmethod
+    def enqueue_resolve_args(self, env, func, *args, **kwargs):
+        """Create a Job and enqueue it in the queue. Return the job uuid."""
+        priority = kwargs.pop('priority', None)
+        eta = kwargs.pop('eta', None)
+        model_name = kwargs.pop('model_name', None)
+        max_retries = kwargs.pop('max_retries', None)
+        description = kwargs.pop('description', None)
+
+        return self.enqueue(env, func, model_name=model_name,
+                            args=args, kwargs=kwargs,
+                            priority=priority,
+                            max_retries=max_retries,
+                            eta=eta,
+                            description=description)
+
+    @staticmethod
+    def db_record_from_uuid(env, job_uuid):
+        model = env['queue.job'].sudo()
+        record = model.search([('uuid', '=', job_uuid)], limit=1)
+        return record.with_env(env)
+
     def __init__(self, env, func=None, model_name=None,
                  args=None, kwargs=None, priority=None,
                  eta=None, job_uuid=None, max_retries=None,
@@ -412,6 +332,7 @@ class Job(object):
         assert func is not None, "func is required"
 
         self.env = env
+        self.job_model = self.env['queue.job']
 
         self.state = PENDING
 
@@ -499,6 +420,55 @@ class Job(object):
                 raise new_exc.__class__, new_exc, traceback
             raise
         return self.result
+
+    def store(self):
+        """ Store the Job """
+        vals = {'state': self.state,
+                'priority': self.priority,
+                'retry': self.retry,
+                'max_retries': self.max_retries,
+                'exc_info': self.exc_info,
+                'user_id': self.user_id or self.env.uid,
+                'company_id': self.company_id,
+                'result': unicode(self.result) if self.result else False,
+                'date_enqueued': False,
+                'date_started': False,
+                'date_done': False,
+                'eta': False,
+                'func_name': self.func_name,
+                }
+
+        dt_to_string = odoo.fields.Datetime.to_string
+        if self.date_enqueued:
+            vals['date_enqueued'] = dt_to_string(self.date_enqueued)
+        if self.date_started:
+            vals['date_started'] = dt_to_string(self.date_started)
+        if self.date_done:
+            vals['date_done'] = dt_to_string(self.date_done)
+        if self.eta:
+            vals['eta'] = dt_to_string(self.eta)
+
+        db_record = self.db_record()
+        if db_record:
+            db_record.write(vals)
+        else:
+            date_created = dt_to_string(self.date_created)
+            vals.update({'uuid': self.uuid,
+                         'name': self.description,
+                         'func_string': self.func_string,
+                         'date_created': date_created,
+                         'model_name': (self.model_name if self.model_name
+                                        else False),
+                         })
+
+            vals['func'] = dumps((self.func_name,
+                                  self.args,
+                                  self.kwargs))
+
+            self.job_model.sudo().create(vals)
+
+    def db_record(self):
+        return self.db_record_from_uuid(self.env, self.uuid)
 
     @property
     def func_string(self):
@@ -725,11 +695,13 @@ def job(func=None, default_channel='root', retry_pattern=None):
 
     def delay_with_env(env, model_name, *args, **kwargs):
         """Enqueue the function. Return the uuid of the created job."""
-        return OdooJobStorage(env).enqueue_resolve_args(
+        return Job.enqueue_resolve_args(
+            env,
             func,
             model_name=model_name,
             *args,
-            **kwargs)
+            **kwargs
+        )
 
     def delay_from_model(*args, **kwargs):
         """Enqueue the function. Return the uuid of the created job."""
@@ -738,11 +710,13 @@ def job(func=None, default_channel='root', retry_pattern=None):
         # to avoid that.
         frame = sys._getframe(1)
         env = frame.f_locals['self'].env
-        return OdooJobStorage(env).enqueue_resolve_args(
+        return Job.enqueue_resolve_args(
+            env,
             func,
             model_name=func.im_class._name,
             *args,
-            **kwargs)
+            **kwargs
+        )
 
     assert default_channel == 'root' or default_channel.startswith('root.'), (
         "The channel path must start by 'root'")

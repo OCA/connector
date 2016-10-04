@@ -55,15 +55,6 @@ A connectors developer is mostly interested by:
 
 
 *******
-Session
-*******
-
-A :py:class:`~connector.session.ConnectorSession` is a container for the usual
-``cr``, ``uid``, ``context`` used in Odoo. Now, it contains the Odoo
-``Environment`` as ``self.env``.
-We use them accross the connectors.
-
-*******
 Backend
 *******
 
@@ -101,7 +92,7 @@ is the scope from which we will do synchronizations.
 It contains a :py:class:`~connector.backend.Backend`,
 a record of a concrete subclass of the model
 :py:class:`~connector.backend_model.connector_backend`,
-a :py:class:`~connector.session.Session`
+a :py:class:`odoo.api.Environment`
 and the name of the model to work with.
 
 A connectors developer is mostly interested by:

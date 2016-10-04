@@ -13,17 +13,14 @@ from odoo.addons.connector.connector import (
     ConnectorUnit,
     pg_try_advisory_lock,
 )
-from odoo.addons.connector.session import ConnectorSession
 
 
 def mock_connector_unit(env):
-    session = ConnectorSession(env.cr, env.uid,
-                               context=env.context)
     backend_record = mock.Mock(name='BackendRecord')
     backend = mock.Mock(name='Backend')
     backend_record.get_backend.return_value = backend
     connector_env = connector.ConnectorEnvironment(backend_record,
-                                                   session,
+                                                   env,
                                                    'res.users')
     return ConnectorUnit(connector_env)
 
@@ -65,10 +62,10 @@ class TestConnectorUnit(unittest.TestCase):
         class ModelUnit(ConnectorUnit):
             _model_name = 'res.users'
 
-        session = mock.Mock(name='Session')
+        env = mock.Mock(name='Environment')
 
-        self.assertTrue(ModelUnit.match(session, 'res.users'))
-        self.assertFalse(ModelUnit.match(session, 'res.partner'))
+        self.assertTrue(ModelUnit.match(env, 'res.users'))
+        self.assertFalse(ModelUnit.match(env, 'res.partner'))
 
     def test_unit_for(self):
 
@@ -78,14 +75,14 @@ class TestConnectorUnit(unittest.TestCase):
         class ModelBinder(ConnectorUnit):
             _model_name = 'res.users'
 
-        session = mock.MagicMock(name='Session')
+        env = mock.MagicMock(name='Environment')
         backend_record = mock.Mock(name='BackendRecord')
         backend = mock.Mock(name='Backend')
         backend_record.get_backend.return_value = backend
         # backend.get_class() is tested in test_backend.py
         backend.get_class.return_value = ModelUnit
         connector_env = connector.ConnectorEnvironment(backend_record,
-                                                       session,
+                                                       env,
                                                        'res.users')
         unit = ConnectorUnit(connector_env)
         # returns an instance of ModelUnit with the same connector_env
@@ -107,14 +104,14 @@ class TestConnectorUnit(unittest.TestCase):
         class ModelBinder(ConnectorUnit):
             _model_name = 'res.partner'
 
-        session = mock.MagicMock(name='Session')
+        env = mock.MagicMock(name='Environment')
         backend_record = mock.Mock(name='BackendRecord')
         backend = mock.Mock(name='Backend')
         backend_record.get_backend.return_value = backend
         # backend.get_class() is tested in test_backend.py
         backend.get_class.return_value = ModelUnit
         connector_env = connector.ConnectorEnvironment(backend_record,
-                                                       session,
+                                                       env,
                                                        'res.users')
         unit = ConnectorUnit(connector_env)
         # returns an instance of ModelUnit with a new connector_env
@@ -149,14 +146,14 @@ class TestConnectorUnitTransaction(common.TransactionCase):
 class TestConnectorEnvironment(unittest.TestCase):
 
     def test_create_environment_no_connector_env(self):
-        session = mock.MagicMock(name='Session')
+        env = mock.MagicMock(name='Environment')
         backend_record = mock.Mock(name='BackendRecord')
         backend = mock.Mock(name='Backend')
         backend_record.get_backend.return_value = backend
         model = 'res.user'
 
         connector_env = ConnectorEnvironment.create_environment(
-            backend_record, session, model
+            backend_record, env, model
         )
 
         self.assertEqual(type(connector_env), ConnectorEnvironment)
@@ -166,23 +163,23 @@ class TestConnectorEnvironment(unittest.TestCase):
         class MyConnectorEnvironment(ConnectorEnvironment):
             _propagate_kwargs = ['api']
 
-            def __init__(self, backend_record, session, model_name, api=None):
+            def __init__(self, backend_record, env, model_name, api=None):
                 super(MyConnectorEnvironment, self).__init__(backend_record,
-                                                             session,
+                                                             env,
                                                              model_name)
                 self.api = api
 
-        session = mock.MagicMock(name='Session')
+        env = mock.MagicMock(name='Environment')
         backend_record = mock.Mock(name='BackendRecord')
         backend = mock.Mock(name='Backend')
         backend_record.get_backend.return_value = backend
         model = 'res.user'
         api = object()
 
-        cust_env = MyConnectorEnvironment(backend_record, session, model,
+        cust_env = MyConnectorEnvironment(backend_record, env, model,
                                           api=api)
 
-        new_env = cust_env.create_environment(backend_record, session, model,
+        new_env = cust_env.create_environment(backend_record, env, model,
                                               connector_env=cust_env)
 
         self.assertEqual(type(new_env), MyConnectorEnvironment)

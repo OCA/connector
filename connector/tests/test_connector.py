@@ -25,15 +25,6 @@ def mock_connector_unit(env):
     return ConnectorUnit(connector_env)
 
 
-class ConnectorHelpers(unittest.TestCase):
-
-    def test_odoo_module_name(self):
-        name = connector._get_addon_name('odoo.addons.sale')
-        self.assertEqual(name, 'sale')
-        name = connector._get_addon_name('sale')
-        self.assertEqual(name, 'sale')
-
-
 class TestConnectorUnit(unittest.TestCase):
     """ Test Connector Unit """
 

@@ -401,7 +401,6 @@ class Job(object):
         env = self.env(user=self.user_id, context={'job_uuid': self._uuid})
         self.retry += 1
         try:
-            # TODO: what about jobs actually using 'session'?
             self.result = self.func(env, *self.args, **self.kwargs)
         except RetryableJobError as err:
             if err.ignore_retry:
@@ -651,23 +650,23 @@ def job(func=None, default_channel='root', retry_pattern=None):
     .. code-block:: python
 
         @job
-        def export_one_thing(session, model_name, one_thing):
+        def export_one_thing(env, model_name, one_thing):
             # work
             # export one_thing
 
-        export_one_thing(session, 'a.model', the_thing_to_export)
+        export_one_thing(env, 'a.model', the_thing_to_export)
         # => normal and synchronous function call
 
-        export_one_thing.delay(session, 'a.model', the_thing_to_export)
+        export_one_thing.delay(env, 'a.model', the_thing_to_export)
         # => the job will be executed as soon as possible
 
-        export_one_thing.delay(session, 'a.model', the_thing_to_export,
+        export_one_thing.delay(env, 'a.model', the_thing_to_export,
                                priority=30, eta=60*60*5)
         # => the job will be executed with a low priority and not before a
         # delay of 5 hours from now
 
         @job(default_channel='root.subchannel')
-        def export_one_thing(session, model_name, one_thing):
+        def export_one_thing(env, model_name, one_thing):
             # work
             # export one_thing
 
@@ -675,14 +674,14 @@ def job(func=None, default_channel='root', retry_pattern=None):
                             5: 20 * 60,
                             10: 30 * 60,
                             15: 12 * 60 * 60})
-        def retryable_example(session):
+        def retryable_example(env):
             # 5 first retries postponed 10 minutes later
             # retries 5 to 10 postponed 20 minutes later
             # retries 10 to 15 postponed 30 minutes later
             # all subsequent retries postponed 12 hours later
             raise RetryableJobError('Must be retried later')
 
-        retryable_example.delay(session)
+        retryable_example.delay(env)
 
 
     See also: :py:func:`related_action` a related action can be attached

@@ -124,7 +124,6 @@ API Reference
    :maxdepth: 1
 
    api/api_connector.rst
-   api/api_session.rst
    api/api_backend.rst
    api/api_event.rst
    api/api_binder.rst

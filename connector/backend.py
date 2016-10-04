@@ -21,6 +21,7 @@
 from functools import partial
 from collections import namedtuple
 from .exception import NoConnectorUnitError
+from .connector import is_module_installed
 
 __all__ = ['Backend']
 
@@ -156,9 +157,9 @@ class Backend(object):
 
     Here, the :py:meth:`~get_class` called on ``magento1700`` would return::
 
-        magento1700.get_class(Synchronizer, session, 'res.partner')
+        magento1700.get_class(Synchronizer, env, 'res.partner')
         # => Synchronizer1700
-        magento1700.get_class(Mapper, session, 'res.partner')
+        magento1700.get_class(Mapper, env, 'res.partner')
         # => Mapper
 
     This is the vertical extension mechanism, it says that each child version
@@ -226,7 +227,7 @@ class Backend(object):
             return '<Backend \'%s\', \'%s\'>' % (self.service, self.version)
         return '<Backend \'%s\'>' % self.service
 
-    def _get_classes(self, base_class, session, model_name):
+    def _get_classes(self, base_class, env, model_name):
         def follow_replacing(entries):
             candidates = set()
             for entry in entries:
@@ -240,38 +241,37 @@ class Backend(object):
                 # It happens when the entries in 'replaced_by' are
                 # in modules not installed.
                 if not replacings:
-                    if (session.is_module_installed(entry.odoo_module) and
+                    if (is_module_installed(env, entry.odoo_module) and
                             issubclass(entry.cls, base_class) and
-                            entry.cls.match(session, model_name)):
+                            entry.cls.match(env, model_name)):
                         candidates.add(entry.cls)
             return candidates
         matching_classes = follow_replacing(self._class_entries)
         if not matching_classes and self.parent:
             matching_classes = self.parent._get_classes(base_class,
-                                                        session, model_name)
+                                                        env, model_name)
         return matching_classes
 
-    def get_class(self, base_class, session, model_name):
+    def get_class(self, base_class, env, model_name):
         """ Find a matching subclass of ``base_class`` in the registered
         classes.
 
         :param base_class: class (and its subclass) to search in the registry
         :type base_class: :py:class:`connector.connector.MetaConnectorUnit`
-        :param session: current session
-        :type session: :py:class:`connector.session.ConnectorSession`
+        :param env: current env
+        :type env: :py:class:`odoo.api.EnvironmentError`
         """
-        matching_classes = self._get_classes(base_class, session,
+        matching_classes = self._get_classes(base_class, env,
                                              model_name)
         if not matching_classes:
             raise NoConnectorUnitError('No matching class found for %s '
-                                       'with session: %s, '
                                        'model name: %s' %
-                                       (base_class, session, model_name))
+                                       (base_class, model_name))
 
         assert len(matching_classes) == 1, (
             'Several classes found for %s '
-            'with session %s, model name: %s. Found: %s' %
-            (base_class, session, model_name, matching_classes))
+            'with model name: %s. Found: %s' %
+            (base_class, model_name, matching_classes))
         return matching_classes.pop()
 
     def register_class(self, cls, replacing=None):

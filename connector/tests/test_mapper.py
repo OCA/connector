@@ -22,7 +22,6 @@ from odoo.addons.connector.unit.mapper import (
 
 from odoo.addons.connector.backend import Backend
 from odoo.addons.connector.connector import ConnectorEnvironment
-from odoo.addons.connector.session import ConnectorSession
 
 
 class test_mapper(unittest.TestCase):
@@ -508,13 +507,12 @@ class test_mapper_recordsets(common.TransactionCase):
 
     def setUp(self):
         super(test_mapper_recordsets, self).setUp()
-        self.session = ConnectorSession(self.cr, self.uid)
         self.backend = mock.Mock(wraps=Backend('x', version='y'),
                                  name='backend')
         backend_record = mock.Mock()
         backend_record.get_backend.return_value = self.backend
         self.connector_env = ConnectorEnvironment(
-            backend_record, self.session, 'res.partner')
+            backend_record, self.env, 'res.partner')
 
     def test_mapping_modifier_follow_m2o_relations(self):
         """ Map with the follow_m2o_relations modifier """
@@ -536,13 +534,12 @@ class test_mapper_binding(common.TransactionCase):
 
     def setUp(self):
         super(test_mapper_binding, self).setUp()
-        self.session = ConnectorSession(self.cr, self.uid)
         self.backend = mock.Mock(wraps=Backend('x', version='y'),
                                  name='backend')
         backend_record = mock.Mock()
         backend_record.get_backend.return_value = self.backend
         self.connector_env = ConnectorEnvironment(
-            backend_record, self.session, 'res.partner')
+            backend_record, self.env, 'res.partner')
         self.country_binder = mock.Mock(name='country_binder')
         self.country_binder.return_value = self.country_binder
         self.backend.get_class.return_value = self.country_binder
@@ -607,7 +604,7 @@ class test_mapper_binding(common.TransactionCase):
 
         backend_record = mock.Mock()
         backend_record.get_backend.side_effect = lambda *a: backend
-        env = ConnectorEnvironment(backend_record, self.session,
+        env = ConnectorEnvironment(backend_record, self.env,
                                    'res.currency')
 
         record = {'name': 'SO1',
@@ -670,7 +667,7 @@ class test_mapper_binding(common.TransactionCase):
 
         backend_record = mock.Mock()
         backend_record.get_backend.side_effect = lambda *a: backend
-        env = ConnectorEnvironment(backend_record, self.session,
+        env = ConnectorEnvironment(backend_record, self.env,
                                    'res.currency')
 
         record = {'name': 'SO1',

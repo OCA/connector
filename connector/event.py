@@ -20,7 +20,7 @@
 ##############################################################################
 
 from collections import Callable
-from .connector import get_odoo_module, is_module_installed
+from odoo.addons.queue_job.utils import get_odoo_module, is_module_installed
 
 
 class Event(object):
@@ -120,7 +120,7 @@ class Event(object):
 
     def _consumers_for(self, env, model_name):
         return (cons for cons in self._consumers.get(model_name, ())
-                if is_module_installed(get_odoo_module(cons)))
+                if is_module_installed(env, get_odoo_module(cons)))
 
     def fire(self, env, model_name, *args, **kwargs):
         """ Call each consumer subscribed on the event with the given

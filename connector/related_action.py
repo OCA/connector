@@ -31,7 +31,7 @@ from odoo import _
 from .connector import ConnectorEnvironment, Binder
 
 
-def unwrap_binding(session, job, id_pos=2, binder_class=Binder):
+def unwrap_binding(env, job, id_pos=2, binder_class=Binder):
     """ Open a form view with the unwrapped record.
 
     For instance, for a job on a ``magento.product.product``,
@@ -42,7 +42,7 @@ def unwrap_binding(session, job, id_pos=2, binder_class=Binder):
     :param binder_class: base class to search for the binder
     """
     binding_model = job.args[0]
-    # shift one to the left because session is not in job.args
+    # shift one to the left because env is not in job.args
     binding_id = job.args[id_pos - 1]
     action = {
         'name': _('Related Record'),
@@ -51,11 +51,11 @@ def unwrap_binding(session, job, id_pos=2, binder_class=Binder):
         'view_mode': 'form',
     }
     # try to get an unwrapped record
-    binding = session.env[binding_model].browse(binding_id)
+    binding = env[binding_model].browse(binding_id)
     if not binding.exists():
         # it has been deleted
         return None
-    env = ConnectorEnvironment(binding.backend_id, session, binding_model)
+    env = ConnectorEnvironment(binding.backend_id, env, binding_model)
     binder = env.get_connector_unit(binder_class)
     try:
         model = binder.unwrap_model()

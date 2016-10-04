@@ -31,7 +31,6 @@ Fire the common events:
 """
 
 from odoo import api, models
-from .session import ConnectorSession
 from .event import (on_record_create,
                     on_record_write,
                     on_record_unlink)
@@ -47,18 +46,16 @@ class Base(models.AbstractModel):
     def create(self, vals):
         record = super(Base, self).create(vals)
         if is_module_installed(self.env, 'connector'):
-            session = ConnectorSession.from_env(self.env)
-            on_record_create.fire(session, self._name, record.id, vals)
+            on_record_create.fire(self.env, self._name, record.id, vals)
         return record
 
     @api.multi
     def write(self, vals):
         result = super(Base, self).write(vals)
         if is_module_installed(self.env, 'connector'):
-            session = ConnectorSession.from_env(self.env)
-            if on_record_write.has_consumer_for(session, self._name):
+            if on_record_write.has_consumer_for(self.env, self._name):
                 for record_id in self.ids:
-                    on_record_write.fire(session, self._name,
+                    on_record_write.fire(self.env, self._name,
                                          record_id, vals)
         return result
 
@@ -66,8 +63,7 @@ class Base(models.AbstractModel):
     def unlink(self):
         result = super(Base, self).unlink()
         if is_module_installed(self.env, 'connector'):
-            session = ConnectorSession.from_env(self.env)
-            if on_record_unlink.has_consumer_for(session, self._name):
+            if on_record_unlink.has_consumer_for(self.env, self._name):
                 for record_id in self.ids:
-                    on_record_unlink.fire(session, self._name, record_id)
+                    on_record_unlink.fire(self.env, self._name, record_id)
         return result

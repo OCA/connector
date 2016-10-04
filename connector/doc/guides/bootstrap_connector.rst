@@ -177,17 +177,15 @@ I propose to create a helper method which build it for us (in
     from odoo.addons.connector.connector import Environment
 
 
-    def get_environment(session, model_name, backend_id):
+    def get_environment(env, model_name, backend_id):
         """ Create an environment to work with. """
-        backend_record = session.env['coffee.backend'].browse(backend_id)
-        env = Environment(backend_record, session, model_name)
+        backend_record = env['coffee.backend'].browse(backend_id)
         lang = backend_record.default_lang_id
         lang_code = lang.code if lang else 'en_US'
-        if lang_code == session.context.get('lang'):
-            return env
-        else:
-            with env.session.change_context(lang=lang_code):
-                return env
+        if lang_code != env.context.get('lang'):
+            lang_context = dict(context, lang=lang_code)
+            env = env(context=lang_context)
+        return Environment(backend_record, env, model_name)
 
 Note that the part regarding the language definition is totally
 optional but I left it as an example.
@@ -204,8 +202,8 @@ created. I propose to create a helper too in
     from odoo.addons.connector.checkpoint import checkpoint
 
 
-    def add_checkpoint(session, model_name, record_id, backend_id):
-        return checkpoint.add_checkpoint(session, model_name, record_id,
+    def add_checkpoint(env, model_name, record_id, backend_id):
+        return checkpoint.add_checkpoint(env, model_name, record_id,
                                          'coffee.backend', backend_id)
 
 *********************

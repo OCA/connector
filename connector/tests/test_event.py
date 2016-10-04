@@ -91,8 +91,7 @@ class test_event(common.TransactionCase):
             recipient.set_message(message)
         recipient = Recipient()
         # an event is fired on a model name
-        env = mock.Mock()
-        self.event.fire(env, 'res.users', recipient, 'success')
+        self.event.fire(self.env, 'res.users', recipient, 'success')
         self.assertEquals(recipient.message, 'success')
 
     def test_fire_several_consumers(self):
@@ -116,8 +115,7 @@ class test_event(common.TransactionCase):
             recipient2.set_message(message)
 
         # an event is fired on a model name
-        env = mock.Mock()
-        self.event.fire(env, 'res.users', 'success')
+        self.event.fire(self.env, 'res.users', 'success')
         self.assertEquals(recipient.message, 'success')
         self.assertEquals(recipient2.message, 'success')
 

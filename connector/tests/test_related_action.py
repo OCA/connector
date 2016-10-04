@@ -5,9 +5,7 @@ import unittest
 
 import odoo.tests.common as common
 from ..connector import Binder
-from ..queue.job import (Job,
-                         OdooJobStorage,
-                         related_action)
+from ..queue.job import Job, related_action
 from ..related_action import unwrap_binding
 
 
@@ -162,8 +160,7 @@ class test_related_action_storage(common.TransactionCase):
     def test_store_related_action(self):
         """ Call the related action on the model """
         job = Job(self.env, func=task_wikipedia, args=('Discworld',))
-        storage = OdooJobStorage(self.env)
-        storage.store(job)
+        job.store()
         stored_job = self.queue_job.search([('uuid', '=', job.uuid)])
         self.assertEqual(len(stored_job), 1)
         expected = {'type': 'ir.actions.act_url',
@@ -175,8 +172,7 @@ class test_related_action_storage(common.TransactionCase):
     def test_unwrap_binding_not_exists(self):
         """ Call the related action on the model on non-existing record """
         job = Job(self.env, func=try_unwrap_binding, args=('res.users', 555))
-        storage = OdooJobStorage(self.env)
-        storage.store(job)
+        job.store()
         stored_job = self.queue_job.search([('uuid', '=', job.uuid)])
         stored_job.unlink()
         self.assertFalse(stored_job.exists())

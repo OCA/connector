@@ -24,7 +24,7 @@ from datetime import datetime, timedelta
 
 from odoo import models, fields, api, exceptions, _
 
-from .job import STATES, DONE, PENDING, OdooJobStorage, JOB_REGISTRY
+from .job import STATES, DONE, PENDING, Job, JOB_REGISTRY
 from ..connector import get_odoo_module, is_module_installed
 
 _logger = logging.getLogger(__name__)
@@ -98,8 +98,7 @@ class QueueJob(models.Model):
     def open_related_action(self):
         """ Open the related action associated to the job """
         self.ensure_one()
-        storage = OdooJobStorage(self.env)
-        job = storage.load(self.uuid)
+        job = Job.load(self.env, self.uuid)
         action = job.related_action(self.env)
         if action is None:
             raise exceptions.Warning(_('No action available for this job'))
@@ -110,16 +109,15 @@ class QueueJob(models.Model):
         """ Change the state of the `Job` object itself so it
         will change the other fields (date, result, ...)
         """
-        storage = OdooJobStorage(self.env)
         for job in self:
-            job = storage.load(job.uuid)
+            job = Job.load(job.env, job.uuid)
             if state == DONE:
                 job.set_done(result=result)
             elif state == PENDING:
                 job.set_pending(result=result)
             else:
                 raise ValueError('State not supported: %s' % state)
-            storage.store(job)
+            job.store()
 
     @api.multi
     def button_done(self):

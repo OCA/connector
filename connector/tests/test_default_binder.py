@@ -3,7 +3,6 @@
 import mock
 from odoo.tests.common import TransactionCase
 from odoo.addons.connector.connector import ConnectorEnvironment
-from odoo.addons.connector.session import ConnectorSession
 from odoo.addons.connector.connector import Binder
 from odoo.addons.connector.backend import Backend
 
@@ -22,13 +21,12 @@ class TestDefaultBinder(TransactionCase):
             _backend_field = 'color'
             _odoo_field = 'id'
 
-        self.session = ConnectorSession(self.cr, self.uid)
         self.backend = Backend('dummy', version='1.0')
         backend_record = mock.Mock()
         backend_record.id = 1
         backend_record.get_backend.return_value = self.backend
         self.connector_env = ConnectorEnvironment(
-            backend_record, self.session, 'res.partner')
+            backend_record, self.env, 'res.partner')
         self.partner_binder = PartnerBinder(self.connector_env)
 
     def test_default_binder(self):

@@ -20,9 +20,6 @@ from odoo.addons.connector.queue.job import (
     _unpickle,
     RETRY_INTERVAL,
 )
-from odoo.addons.connector.session import (
-    ConnectorSession,
-)
 from odoo.addons.connector.exception import (
     FailedJobError,
     NoSuchJobError,
@@ -31,37 +28,37 @@ from odoo.addons.connector.exception import (
 )
 
 
-def task_b(session, model_name):
+def task_b(env, model_name):
     pass
 
 
-def task_a(session, model_name):
+def task_a(env, model_name):
     """ Task description
     """
 
 
-def dummy_task(session):
+def dummy_task(env):
     return 'ok'
 
 
-def dummy_task_args(session, model_name, a, b, c=None):
+def dummy_task_args(env, model_name, a, b, c=None):
     return a + b + c
 
 
-def dummy_task_context(session):
-    return session.env.context
+def dummy_task_context(env):
+    return env.context
 
 
-def retryable_error_task(session):
+def retryable_error_task(env):
     raise RetryableJobError('Must be retried later')
 
 
-def pickle_forbidden_function(session):
+def pickle_forbidden_function(env):
     pass
 
 
 @job
-def pickle_allowed_function(session):
+def pickle_allowed_function(env):
     pass
 
 
@@ -69,20 +66,20 @@ class TestJobs(unittest.TestCase):
     """ Test Job """
 
     def setUp(self):
-        self.session = mock.MagicMock()
+        self.env = mock.MagicMock()
 
     def test_new_job(self):
         """
         Create a job
         """
-        test_job = Job(func=task_a)
+        test_job = Job(self.env, func=task_a)
         self.assertEqual(test_job.func, task_a)
 
     def test_priority(self):
         """ The lower the priority number, the higher
         the priority is"""
-        job_a = Job(func=task_a, priority=10)
-        job_b = Job(func=task_b, priority=5)
+        job_a = Job(self.env, func=task_a, priority=10)
+        job_b = Job(self.env, func=task_b, priority=5)
         self.assertGreater(job_a, job_b)
 
     def test_compare_eta(self):
@@ -90,14 +87,14 @@ class TestJobs(unittest.TestCase):
         be executed after a job without one.
         """
         date = datetime.now() + timedelta(hours=3)
-        job_a = Job(func=task_a, priority=10, eta=date)
-        job_b = Job(func=task_b, priority=10)
+        job_a = Job(self.env, func=task_a, priority=10, eta=date)
+        job_b = Job(self.env, func=task_b, priority=10)
         self.assertGreater(job_a, job_b)
 
     def test_eta(self):
         """ When an `eta` is datetime, it uses it """
         now = datetime.now()
-        job_a = Job(func=task_a, eta=now)
+        job_a = Job(self.env, func=task_a, eta=now)
         self.assertEqual(job_a.eta, now)
 
     def test_eta_integer(self):
@@ -105,7 +102,7 @@ class TestJobs(unittest.TestCase):
         datetime_path = 'odoo.addons.connector.queue.job.datetime'
         with mock.patch(datetime_path, autospec=True) as mock_datetime:
             mock_datetime.now.return_value = datetime(2015, 3, 15, 16, 41, 0)
-            job_a = Job(func=task_a, eta=60)
+            job_a = Job(self.env, func=task_a, eta=60)
             self.assertEqual(job_a.eta, datetime(2015, 3, 15, 16, 42, 0))
 
     def test_eta_timedelta(self):
@@ -114,20 +111,20 @@ class TestJobs(unittest.TestCase):
         with mock.patch(datetime_path, autospec=True) as mock_datetime:
             mock_datetime.now.return_value = datetime(2015, 3, 15, 16, 41, 0)
             delta = timedelta(hours=3)
-            job_a = Job(func=task_a, eta=delta)
+            job_a = Job(self.env, func=task_a, eta=delta)
             self.assertEqual(job_a.eta, datetime(2015, 3, 15, 19, 41, 0))
 
     def test_perform(self):
-        test_job = Job(func=dummy_task)
-        result = test_job.perform(self.session)
+        test_job = Job(self.env, func=dummy_task)
+        result = test_job.perform()
         self.assertEqual(result, 'ok')
 
     def test_perform_args(self):
-        test_job = Job(func=dummy_task_args,
+        test_job = Job(self.env, func=dummy_task_args,
                        model_name='res.users',
                        args=('o', 'k'),
                        kwargs={'c': '!'})
-        result = test_job.perform(self.session)
+        result = test_job.perform()
         self.assertEqual(result, 'ok!')
 
     def test_description(self):
@@ -136,36 +133,36 @@ class TestJobs(unittest.TestCase):
         """
         # if a doctstring is defined for the function
         # it's used as description
-        job_a = Job(func=task_a)
+        job_a = Job(self.env, func=task_a)
         self.assertEqual(job_a.description, task_a.__doc__)
         # if no docstring, the description is computed
-        job_b = Job(func=task_b)
+        job_b = Job(self.env, func=task_b)
         self.assertEqual(job_b.description, "Function task_b")
         # case when we explicitly specify the description
         description = "My description"
-        job_a = Job(func=task_a, description=description)
+        job_a = Job(self.env, func=task_a, description=description)
         self.assertEqual(job_a.description, description)
 
     def test_retryable_error(self):
-        test_job = Job(func=retryable_error_task,
+        test_job = Job(self.env, func=retryable_error_task,
                        max_retries=3)
         self.assertEqual(test_job.retry, 0)
         with self.assertRaises(RetryableJobError):
-            test_job.perform(self.session)
+            test_job.perform()
         self.assertEqual(test_job.retry, 1)
         with self.assertRaises(RetryableJobError):
-            test_job.perform(self.session)
+            test_job.perform()
         self.assertEqual(test_job.retry, 2)
         with self.assertRaises(FailedJobError):
-            test_job.perform(self.session)
+            test_job.perform()
         self.assertEqual(test_job.retry, 3)
 
     def test_infinite_retryable_error(self):
-        test_job = Job(func=retryable_error_task,
+        test_job = Job(self.env, func=retryable_error_task,
                        max_retries=0)
         self.assertEqual(test_job.retry, 0)
         with self.assertRaises(RetryableJobError):
-            test_job.perform(self.session)
+            test_job.perform()
         self.assertEqual(test_job.retry, 1)
 
     def test_retry_pattern(self):
@@ -180,26 +177,26 @@ class TestJobs(unittest.TestCase):
         job(retryable_error_task, retry_pattern=test_pattern)
         with mock.patch(datetime_path, autospec=True) as mock_datetime:
             mock_datetime.now.return_value = datetime(2015, 6, 1, 15, 10, 0)
-            test_job = Job(func=retryable_error_task,
+            test_job = Job(self.env, func=retryable_error_task,
                            max_retries=0)
             test_job.retry += 1
-            test_job.postpone(self.session)
+            test_job.postpone(self.env)
             self.assertEqual(test_job.retry, 1)
             self.assertEqual(test_job.eta, datetime(2015, 6, 1, 15, 11, 0))
             test_job.retry += 1
-            test_job.postpone(self.session)
+            test_job.postpone(self.env)
             self.assertEqual(test_job.retry, 2)
             self.assertEqual(test_job.eta, datetime(2015, 6, 1, 15, 13, 0))
             test_job.retry += 1
-            test_job.postpone(self.session)
+            test_job.postpone(self.env)
             self.assertEqual(test_job.retry, 3)
             self.assertEqual(test_job.eta, datetime(2015, 6, 1, 15, 10, 10))
             test_job.retry += 1
-            test_job.postpone(self.session)
+            test_job.postpone(self.env)
             self.assertEqual(test_job.retry, 4)
             self.assertEqual(test_job.eta, datetime(2015, 6, 1, 15, 10, 10))
             test_job.retry += 1
-            test_job.postpone(self.session)
+            test_job.postpone(self.env)
             self.assertEqual(test_job.retry, 5)
             self.assertEqual(test_job.eta, datetime(2015, 6, 1, 15, 15, 00))
 
@@ -209,7 +206,7 @@ class TestJobs(unittest.TestCase):
             3: 180,
         }
         job(retryable_error_task, retry_pattern=test_pattern)
-        test_job = Job(func=retryable_error_task,
+        test_job = Job(self.env, func=retryable_error_task,
                        max_retries=0)
         test_job.retry += 1
         self.assertEqual(test_job.retry, 1)
@@ -224,25 +221,25 @@ class TestJobs(unittest.TestCase):
         self.assertEqual(test_job.retry, 4)
         self.assertEqual(test_job._get_retry_seconds(), 180)
 
-    def test_on_method(self):
+    def test_on_instance_method(self):
 
         class A(object):
             def method(self):
                 pass
 
         with self.assertRaises(NotImplementedError):
-            Job(A.method)
+            Job(self.env, A.method)
 
     def test_invalid_function(self):
         with self.assertRaises(TypeError):
-            Job(1)
+            Job(self.env, 1)
 
     def test_compare_apple_and_orange(self):
         with self.assertRaises(TypeError):
-            Job(func=task_a) != 1
+            Job(self.env, func=task_a) != 1
 
     def test_set_pending(self):
-        job_a = Job(func=task_a)
+        job_a = Job(self.env, func=task_a)
         job_a.set_pending(result='test')
         self.assertEquals(job_a.state, PENDING)
         self.assertFalse(job_a.date_enqueued)
@@ -251,7 +248,7 @@ class TestJobs(unittest.TestCase):
         self.assertEquals(job_a.result, 'test')
 
     def test_set_enqueued(self):
-        job_a = Job(func=task_a)
+        job_a = Job(self.env, func=task_a)
         datetime_path = 'odoo.addons.connector.queue.job.datetime'
         with mock.patch(datetime_path, autospec=True) as mock_datetime:
             mock_datetime.now.return_value = datetime(2015, 3, 15, 16, 41, 0)
@@ -263,7 +260,7 @@ class TestJobs(unittest.TestCase):
         self.assertFalse(job_a.date_started)
 
     def test_set_started(self):
-        job_a = Job(func=task_a)
+        job_a = Job(self.env, func=task_a)
         datetime_path = 'odoo.addons.connector.queue.job.datetime'
         with mock.patch(datetime_path, autospec=True) as mock_datetime:
             mock_datetime.now.return_value = datetime(2015, 3, 15, 16, 41, 0)
@@ -274,7 +271,7 @@ class TestJobs(unittest.TestCase):
                           datetime(2015, 3, 15, 16, 41, 0))
 
     def test_set_done(self):
-        job_a = Job(func=task_a)
+        job_a = Job(self.env, func=task_a)
         datetime_path = 'odoo.addons.connector.queue.job.datetime'
         with mock.patch(datetime_path, autospec=True) as mock_datetime:
             mock_datetime.now.return_value = datetime(2015, 3, 15, 16, 41, 0)
@@ -287,13 +284,13 @@ class TestJobs(unittest.TestCase):
         self.assertFalse(job_a.exc_info)
 
     def test_set_failed(self):
-        job_a = Job(func=task_a)
+        job_a = Job(self.env, func=task_a)
         job_a.set_failed(exc_info='failed test')
         self.assertEquals(job_a.state, FAILED)
         self.assertEquals(job_a.exc_info, 'failed test')
 
     def test_postpone(self):
-        job_a = Job(func=task_a)
+        job_a = Job(self.env, func=task_a)
         datetime_path = 'odoo.addons.connector.queue.job.datetime'
         with mock.patch(datetime_path, autospec=True) as mock_datetime:
             mock_datetime.now.return_value = datetime(2015, 3, 15, 16, 41, 0)
@@ -345,19 +342,19 @@ class TestJobStorage(common.TransactionCase):
 
     def setUp(self):
         super(TestJobStorage, self).setUp()
-        self.session = ConnectorSession(self.cr, self.uid)
         self.queue_job = self.env['queue.job']
 
     def test_store(self):
-        test_job = Job(func=task_a)
-        storage = OdooJobStorage(self.session)
+        test_job = Job(self.env, func=task_a)
+        storage = OdooJobStorage(self.env)
         storage.store(test_job)
         stored = self.queue_job.search([('uuid', '=', test_job.uuid)])
         self.assertEqual(len(stored), 1)
 
     def test_read(self):
         eta = datetime.now() + timedelta(hours=5)
-        test_job = Job(func=dummy_task_args,
+        test_job = Job(self.env,
+                       func=dummy_task_args,
                        model_name='res.users',
                        args=('o', 'k'),
                        kwargs={'c': '!'},
@@ -366,7 +363,7 @@ class TestJobStorage(common.TransactionCase):
                        description="My description")
         test_job.user_id = 1
         test_job.company_id = self.env.ref("base.main_company").id
-        storage = OdooJobStorage(self.session)
+        storage = OdooJobStorage(self.env)
         storage.store(test_job)
         job_read = storage.load(test_job.uuid)
         self.assertEqual(test_job.uuid, job_read.uuid)
@@ -410,11 +407,12 @@ class TestJobStorage(common.TransactionCase):
                                delta=delta)
 
     def test_job_unlinked(self):
-        test_job = Job(func=dummy_task_args,
+        test_job = Job(self.env,
+                       func=dummy_task_args,
                        model_name='res.users',
                        args=('o', 'k'),
                        kwargs={'c': '!'})
-        storage = OdooJobStorage(self.session)
+        storage = OdooJobStorage(self.env)
         storage.store(test_job)
         stored = self.queue_job.search([('uuid', '=', test_job.uuid)])
         stored.unlink()
@@ -422,14 +420,15 @@ class TestJobStorage(common.TransactionCase):
             storage.load(test_job.uuid)
 
     def test_unicode(self):
-        test_job = Job(func=dummy_task_args,
+        test_job = Job(self.env,
+                       func=dummy_task_args,
                        model_name='res.users',
                        args=(u'öô¿‽', u'ñě'),
                        kwargs={'c': u'ßø'},
                        priority=15,
                        description=u"My dé^Wdescription")
         test_job.user_id = 1
-        storage = OdooJobStorage(self.session)
+        storage = OdooJobStorage(self.env)
         storage.store(test_job)
         job_read = storage.load(test_job.uuid)
         self.assertEqual(test_job.args, job_read.args)
@@ -440,14 +439,15 @@ class TestJobStorage(common.TransactionCase):
         self.assertEqual(job_read.description, u"My dé^Wdescription")
 
     def test_accented_bytestring(self):
-        test_job = Job(func=dummy_task_args,
+        test_job = Job(self.env,
+                       func=dummy_task_args,
                        model_name='res.users',
                        args=('öô¿‽', 'ñě'),
                        kwargs={'c': 'ßø'},
                        priority=15,
                        description="My dé^Wdescription")
         test_job.user_id = 1
-        storage = OdooJobStorage(self.session)
+        storage = OdooJobStorage(self.env)
         storage.store(test_job)
         job_read = storage.load(test_job.uuid)
         self.assertEqual(test_job.args, job_read.args)
@@ -464,7 +464,7 @@ class TestJobStorage(common.TransactionCase):
     def test_job_delay(self):
         self.cr.execute('delete from queue_job')
         job(task_a)
-        job_uuid = task_a.delay(self.session, 'res.users')
+        job_uuid = task_a.delay(self.env, 'res.users')
         stored = self.queue_job.search([])
         self.assertEqual(len(stored), 1)
         self.assertEqual(
@@ -472,25 +472,40 @@ class TestJobStorage(common.TransactionCase):
             job_uuid,
             'Incorrect returned Job UUID')
 
+    def test_job_delay_model_method(self):
+        self.cr.execute('delete from queue_job')
+        # try:
+        job(self.env['res.users'].preference_save)
+        self.env['res.users'].preference_save.delay()
+        # TODO
+        # finally:
+        #     if hasattr(self.env['res.users'].preference_save.__func__.delay):
+        #         import pdb; pdb.set_trace()
+        #         del self.env['res.users'].preference_save.__func__.delay
+
     def test_job_delay_args(self):
         self.cr.execute('delete from queue_job')
         job(dummy_task_args)
-        task_a.delay(self.session, 'res.users', 'o', 'k', c='!')
+        task_a.delay(self.env, 'res.users', 'o', 'k', c='!')
         stored = self.queue_job.search([])
         self.assertEqual(len(stored), 1)
+
+    def test_on_model_method(self):
+        job_ = Job(self.env, func=self.env['res.users'].browse)
+        self.assertEquals(job_.model_name, 'res.users')
+        self.assertEquals(job_.func_name, 'browse')
 
 
 class TestJobModel(common.TransactionCase):
 
     def setUp(self):
         super(TestJobModel, self).setUp()
-        self.session = ConnectorSession(self.cr, self.uid)
         self.queue_job = self.env['queue.job']
         self.user = self.env['res.users']
 
     def _create_job(self):
-        test_job = Job(func=task_a)
-        storage = OdooJobStorage(self.session)
+        test_job = Job(self.env, func=task_a)
+        storage = OdooJobStorage(self.env)
         storage.store(test_job)
         stored = storage.db_record_from_uuid(test_job.uuid)
         self.assertEqual(len(stored), 1)
@@ -563,8 +578,8 @@ class TestJobModel(common.TransactionCase):
         self.assertEqual(stored.state, PENDING)
 
     def test_context_uuid(self):
-        test_job = Job(func=dummy_task_context)
-        result = test_job.perform(self.session)
+        test_job = Job(self.env, func=dummy_task_context)
+        result = test_job.perform()
         key_present = 'job_uuid' in result
         self.assertTrue(key_present)
         self.assertEqual(result['job_uuid'], test_job._uuid)
@@ -575,7 +590,6 @@ class TestJobStorageMultiCompany(common.TransactionCase):
 
     def setUp(self):
         super(TestJobStorageMultiCompany, self).setUp()
-        self.session = ConnectorSession(self.cr, self.uid, context={})
         self.queue_job = self.env['queue.job']
         grp_connector_manager = self.ref("connector.group_connector_manager")
         User = self.env['res.users']
@@ -620,50 +634,51 @@ class TestJobStorageMultiCompany(common.TransactionCase):
              "groups_id": [(4, grp_connector_manager)]
              })
 
-    def _create_job(self):
+    def _create_job(self, env):
         self.cr.execute('delete from queue_job')
         job(task_a)
-        task_a.delay(self.session, 'res.users')
+        task_a.delay(env, 'res.users')
         stored = self.queue_job.search([])
         self.assertEqual(len(stored), 1)
         return stored
 
     def test_job_default_company_id(self):
         """the default company is the one from the current user_id"""
-        stored = self._create_job()
+        stored = self._create_job(self.env)
         self.assertEqual(stored.company_id.id,
                          self.ref("base.main_company"),
                          'Incorrect default company_id')
-        with self.session.change_user(self.other_user_b.id):
-            stored = self._create_job()
-            self.assertEqual(stored.company_id.id,
-                             self.other_company_b.id,
-                             'Incorrect default company_id')
+        env = self.env(user=self.other_user_b.id)
+        stored = self._create_job(env)
+        self.assertEqual(stored.company_id.id,
+                         self.other_company_b.id,
+                         'Incorrect default company_id')
 
     def test_job_no_company_id(self):
         """ if we put an empty company_id in the context
-         jobs are created without company_id"""
-        with self.session.change_context({'company_id': None}):
-            stored = self._create_job()
-            self.assertFalse(stored.company_id,
-                             ' Company_id should be empty')
+         jobs are created without company_id
+        """
+        env = self.env(context={'company_id': None})
+        stored = self._create_job(env)
+        self.assertFalse(stored.company_id,
+                         'Company_id should be empty')
 
     def test_job_specific_company_id(self):
         """If a company_id specified in the context
         it's used by default for the job creation"""
-        s = self.session
-        with s.change_context({'company_id': self.other_company_a.id}):
-            stored = self._create_job()
-            self.assertEqual(stored.company_id.id,
-                             self.other_company_a.id,
-                             'Incorrect company_id')
+        env = self.env(context={'company_id': self.other_company_a.id})
+        stored = self._create_job(env)
+        self.assertEqual(stored.company_id.id,
+                         self.other_company_a.id,
+                         'Incorrect company_id')
 
     def test_job_subscription(self):
         # if the job is created without company_id, all members of
         # connector.group_connector_manager must be followers
         User = self.env['res.users']
-        with self.session.change_context(company_id=None):
-            stored = self._create_job()
+        no_company_context = dict(self.env.context, company_id=None)
+        no_company_env = self.env(context=no_company_context)
+        stored = self._create_job(no_company_env)
         stored._subscribe_users()
         users = User.search(
             [('groups_id', '=', self.ref('connector.group_connector_manager'))]
@@ -678,9 +693,10 @@ class TestJobStorageMultiCompany(common.TransactionCase):
         self.assertIn(self.other_partner_b.id, followers_id)
         # jobs created for a specific company_id are followed only by
         # company's members
-        s = self.session
-        with s.change_context(company_id=self.other_company_a.id):
-            stored = self._create_job()
+        company_a_context = dict(self.env.context,
+                                 company_id=self.other_company_a.id)
+        company_a_env = self.env(context=company_a_context)
+        stored = self._create_job(company_a_env)
         stored.sudo(self.other_user_a.id)._subscribe_users()
         # 2 because admin + self.other_partner_a
         self.assertEqual(len(stored.message_follower_ids), 2)
@@ -702,7 +718,6 @@ class TestJobChannels(common.TransactionCase):
         self.channel_model = self.env['queue.job.channel']
         self.job_model = self.env['queue.job']
         self.root_channel = self.env.ref('connector.channel_root')
-        self.session = ConnectorSession(self.cr, self.uid, context={})
 
     def test_channel_complete_name(self):
         channel = self.channel_model.create({'name': 'number',
@@ -740,8 +755,8 @@ class TestJobChannels(common.TransactionCase):
         job_func = self.function_model.search([('name', '=', path_a)])
         self.assertEquals(job_func.channel, 'root')
 
-        test_job = Job(func=task_a)
-        storage = OdooJobStorage(self.session)
+        test_job = Job(self.env, func=task_a)
+        storage = OdooJobStorage(self.env)
         storage.store(test_job)
         stored = self.job_model.search([('uuid', '=', test_job.uuid)])
         self.assertEquals(stored.channel, 'root')
@@ -751,8 +766,8 @@ class TestJobChannels(common.TransactionCase):
                                              })
         job_func.channel_id = channel
 
-        test_job = Job(func=task_a)
-        storage = OdooJobStorage(self.session)
+        test_job = Job(self.env, func=task_a)
+        storage = OdooJobStorage(self.env)
         storage.store(test_job)
         stored = self.job_model.search([('uuid', '=', test_job.uuid)])
         self.assertEquals(stored.channel, 'root.sub')

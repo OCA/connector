@@ -228,8 +228,7 @@ def backend_to_m2o(field, binding=None):
         # if we want the normal record, not a binding,
         # we ask to the binder to unwrap the binding
         unwrap = bool(binding)
-        with self.session.change_context(active_test=False):
-            record = binder.to_odoo(rel_id, unwrap=unwrap)
+        record = binder.to_odoo(rel_id, unwrap=unwrap)
         if not record:
             raise MappingError("Can not find an existing %s for external "
                                "record %s %s unwrapping" %
@@ -635,7 +634,7 @@ class Mapper(ConnectorUnit):
     def __init__(self, connector_env):
         """
 
-        :param connector_env: current environment (backend, session, ...)
+        :param connector_env: current environment (backend, env, ...)
         :type connector_env: :py:class:`connector.connector.Environment`
         """
         super(Mapper, self).__init__(connector_env)
@@ -669,7 +668,7 @@ class Mapper(ConnectorUnit):
             # does not force developers to use a MapChild ->
             # will use the default one if not explicitely defined
             env = ConnectorEnvironment(self.backend_record,
-                                       self.session,
+                                       self.env,
                                        model_name)
             mapper_child = self._map_child_class(env)
         return mapper_child

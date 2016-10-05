@@ -45,6 +45,7 @@ from ..exception import (NoSuchJobError,
                          RetryableJobError,
                          FailedJobError,
                          NothingToDoJob)
+from ..jobrunner import _channels
 
 _logger = logging.getLogger(__name__)
 
@@ -345,12 +346,12 @@ def start_service():
     watcher.start()
 
 # We have to launch the Jobs Workers only if:
-# 0. The alternative connector runner is not enabled
+# 0. The alternative connector runner is not enabled (i.e. no ``_channels()``)
 # 1. OpenERP is used in standalone mode (monoprocess)
 # 2. Or it is used in multiprocess (with option ``--workers``)
 #    but the current process is a Connector Worker
 #    (launched with the ``openerp-connector-worker`` script).
-if not os.environ.get('ODOO_CONNECTOR_CHANNELS'):
+if not _channels():
     if (not getattr(openerp, 'multi_process', False) or
             getattr(openerp, 'worker_connector', False)):
         start_service()

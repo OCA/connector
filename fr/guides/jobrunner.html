@@ -29,6 +29,8 @@
     <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
     <script type="text/javascript" src="../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Recherche" href="../search.html" />
     <link rel="top" title="documentation Connector " href="../index.html" />
     <link rel="next" title="Use the connector with multiprocessing workers" href="multiprocessing.html" />
     <link rel="prev" title="Amorcer la création un nouveau connecteur" href="bootstrap_connector.html" />
@@ -285,6 +287,8 @@ anonymous <code class="docutils literal"><span class="pre">/connector/runjob</sp
 <li>optional if <code class="docutils literal"><span class="pre">xmlrpc_port</span></code> is not set: <code class="docutils literal"><span class="pre">ODOO_CONNECTOR_PORT=8069</span></code></li>
 </ul>
 </li>
+<li>Or alternatively, set <code class="docutils literal"><span class="pre">channels</span> <span class="pre">=</span> <span class="pre">root:4</span></code> in the <code class="docutils literal"><span class="pre">[options-connector]</span></code>
+section of the odoo configuration file.</li>
 <li>Start Odoo with <code class="docutils literal"><span class="pre">--load=web,web_kanban,connector</span></code>
 and <code class="docutils literal"><span class="pre">--workers</span></code> greater than 1. <a class="footnote-reference" href="#id4" id="id2">[2]</a></li>
 <li>Confirm the runner is starting correctly by checking the odoo log file:</li>
@@ -392,17 +396,32 @@ without risking to overflow the system.</p>
 <p>The <code class="docutils literal"><span class="pre">ODOO_CONNECTOR_CHANNELS</span></code> environment variable must be
 set before starting Odoo in order to enable the job runner
 and configure the capacity of the channels.</p>
+<p>Alternatively, set the channel configuration in the Odoo configuration file:</p>
+<div class="highlight-cfg"><div class="highlight"><pre><span></span><span class="k">[options-connector]</span>
+<span class="na">channels</span> <span class="o">=</span> <span class="s">root:4</span>
+</pre></div>
+</div>
+<p>If the channel configuration is present in both the environment variable and
+the configuration file, the environment variable takes precedence.</p>
 <p>The general syntax is <code class="docutils literal"><span class="pre">channel(.subchannel)*(:capacity(:key(=value)?)*)?,...</span></code>.</p>
 <p>Intermediate subchannels which are not configured explicitly are autocreated
 with an unlimited capacity (except the root channel which if not configured gets
 a default capacity of 1).</p>
-<p>Example <code class="docutils literal"><span class="pre">ODOO_CONNECTOR_CHANNELS</span></code>:</p>
+<p>Example values for <code class="docutils literal"><span class="pre">ODOO_CONNECTOR_CHANNELS</span></code> or <code class="docutils literal"><span class="pre">options-connector:channels</span></code>:</p>
 <ul class="simple">
 <li><code class="docutils literal"><span class="pre">root:4</span></code>: allow up to 4 concurrent jobs in the root channel.</li>
 <li><code class="docutils literal"><span class="pre">root:4,root.sub:2</span></code>: allow up to 4 concurrent jobs in the root channel and
 up to 2 concurrent jobs in the channel named <code class="docutils literal"><span class="pre">root.sub</span></code>.</li>
 <li><code class="docutils literal"><span class="pre">sub:2</span></code>: the same.</li>
 </ul>
+<p>It&#8217;s also possible to separate channel entries with line breaks, which is more
+readable in the configuration file:</p>
+<div class="highlight-cfg"><div class="highlight"><pre><span></span><span class="k">[options-connector]</span>
+<span class="na">channels</span> <span class="o">=</span><span class="s"></span>
+<span class="s">    root:4</span>
+<span class="s">    sub:2</span>
+</pre></div>
+</div>
 </div>
 </div>
 
@@ -426,7 +445,7 @@ up to 2 concurrent jobs in the channel named <code class="docutils literal"><spa
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.6.<br/>
+      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.8.<br/>
     </p>
   </div>
 </footer>

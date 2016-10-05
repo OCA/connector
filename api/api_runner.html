@@ -28,6 +28,8 @@
     <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
     <script type="text/javascript" src="../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
     <link rel="top" title="Connector  documentation" href="../index.html" />
     <link rel="prev" title="Channels" href="api_channels.html" />
 
@@ -279,6 +281,8 @@ anonymous <code class="docutils literal"><span class="pre">/connector/runjob</sp
 <li>optional if <code class="docutils literal"><span class="pre">xmlrpc_port</span></code> is not set: <code class="docutils literal"><span class="pre">ODOO_CONNECTOR_PORT=8069</span></code></li>
 </ul>
 </li>
+<li>Or alternatively, set <code class="docutils literal"><span class="pre">channels</span> <span class="pre">=</span> <span class="pre">root:4</span></code> in the <code class="docutils literal"><span class="pre">[options-connector]</span></code>
+section of the odoo configuration file.</li>
 <li>Start Odoo with <code class="docutils literal"><span class="pre">--load=web,web_kanban,connector</span></code>
 and <code class="docutils literal"><span class="pre">--workers</span></code> greater than 1. <a class="footnote-reference" href="#id4" id="id2">[2]</a></li>
 <li>Confirm the runner is starting correctly by checking the odoo log file:</li>
@@ -424,7 +428,7 @@ of running Odoo is obviously not for production purposes.</td></tr>
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.6.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.8.<br/>
     </p>
   </div>
 </footer>

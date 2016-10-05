@@ -28,6 +28,8 @@
     <script type="text/javascript" src="../../../_static/js/jquery-fix.js"></script>
     <script type="text/javascript" src="../../../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../../../_static/bootstrap-sphinx.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
     <link rel="top" title="Connector  documentation" href="../../../index.html" />
     <link rel="up" title="Module code" href="../../index.html" />
 
@@ -277,6 +279,7 @@
                          <span class="n">RetryableJobError</span><span class="p">,</span>
                          <span class="n">FailedJobError</span><span class="p">,</span>
                          <span class="n">NothingToDoJob</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">..jobrunner</span> <span class="k">import</span> <span class="n">_channels</span>
 
 <span class="n">_logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">__name__</span><span class="p">)</span>
 
@@ -577,12 +580,12 @@
     <span class="n">watcher</span><span class="o">.</span><span class="n">start</span><span class="p">()</span></div>
 
 <span class="c1"># We have to launch the Jobs Workers only if:</span>
-<span class="c1"># 0. The alternative connector runner is not enabled</span>
+<span class="c1"># 0. The alternative connector runner is not enabled (i.e. no ``_channels()``)</span>
 <span class="c1"># 1. OpenERP is used in standalone mode (monoprocess)</span>
 <span class="c1"># 2. Or it is used in multiprocess (with option ``--workers``)</span>
 <span class="c1">#    but the current process is a Connector Worker</span>
 <span class="c1">#    (launched with the ``openerp-connector-worker`` script).</span>
-<span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;ODOO_CONNECTOR_CHANNELS&#39;</span><span class="p">):</span>
+<span class="k">if</span> <span class="ow">not</span> <span class="n">_channels</span><span class="p">():</span>
     <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">openerp</span><span class="p">,</span> <span class="s1">&#39;multi_process&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span> <span class="ow">or</span>
             <span class="nb">getattr</span><span class="p">(</span><span class="n">openerp</span><span class="p">,</span> <span class="s1">&#39;worker_connector&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)):</span>
         <span class="n">start_service</span><span class="p">()</span>
@@ -603,7 +606,7 @@
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.6.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.8.<br/>
     </p>
   </div>
 </footer>

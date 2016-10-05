@@ -29,6 +29,8 @@
     <script type="text/javascript" src="../../../_static/js/jquery-fix.js"></script>
     <script type="text/javascript" src="../../../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../../../_static/bootstrap-sphinx.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Recherche" href="../../../search.html" />
     <link rel="top" title="documentation Connector " href="../../../index.html" />
     <link rel="up" title="Code du module" href="../../index.html" />
 
@@ -289,6 +291,9 @@
 <span class="sd">  - ``ODOO_CONNECTOR_CHANNELS=root:4`` (or any other channels configuration)</span>
 <span class="sd">  - optional if ``xmlrpc_port`` is not set: ``ODOO_CONNECTOR_PORT=8069``</span>
 
+<span class="sd">* Or alternatively, set ``channels = root:4`` in the ``[options-connector]``</span>
+<span class="sd">  section of the odoo configuration file.</span>
+
 <span class="sd">* Start Odoo with ``--load=web,web_kanban,connector``</span>
 <span class="sd">  and ``--workers`` greater than 1. [2]_</span>
 
@@ -355,6 +360,7 @@
 <span class="kn">import</span> <span class="nn">requests</span>
 
 <span class="kn">import</span> <span class="nn">openerp</span>
+<span class="kn">from</span> <span class="nn">openerp.tools</span> <span class="k">import</span> <span class="n">config</span>
 
 <span class="kn">from</span> <span class="nn">.channels</span> <span class="k">import</span> <span class="n">ChannelManager</span><span class="p">,</span> <span class="n">PENDING</span><span class="p">,</span> <span class="n">ENQUEUED</span><span class="p">,</span> <span class="n">NOT_DONE</span>
 
@@ -362,6 +368,24 @@
 <span class="n">ERROR_RECOVERY_DELAY</span> <span class="o">=</span> <span class="mi">5</span>
 
 <span class="n">_logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">__name__</span><span class="p">)</span>
+
+
+<span class="c1"># Unfortunately, it is not possible to extend the Odoo</span>
+<span class="c1"># server command line arguments, so we resort to environment variables</span>
+<span class="c1"># to configure the runner (channels mostly).</span>
+<span class="c1">#</span>
+<span class="c1"># On the other hand, the odoo configuration file can be extended at will,</span>
+<span class="c1"># so we check it in addition to the environment variables.</span>
+
+
+<span class="k">def</span> <span class="nf">_channels</span><span class="p">():</span>
+    <span class="c1"># environment takes precedence over config file if set.</span>
+    <span class="c1"># If set to &quot;&quot; will disable the runner.</span>
+    <span class="n">env_channels</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;ODOO_CONNECTOR_CHANNELS&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="n">env_channels</span> <span class="k">if</span> <span class="n">env_channels</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="k">else</span> <span class="n">config</span><span class="o">.</span><span class="n">misc</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;options-connector&quot;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;channels&quot;</span><span class="p">)</span>
+    <span class="p">)</span>
 
 
 <span class="k">def</span> <span class="nf">_async_http_get</span><span class="p">(</span><span class="n">port</span><span class="p">,</span> <span class="n">db_name</span><span class="p">,</span> <span class="n">job_uuid</span><span class="p">):</span>
@@ -608,7 +632,7 @@
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.6.<br/>
+      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.8.<br/>
     </p>
   </div>
 </footer>

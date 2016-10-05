@@ -29,6 +29,8 @@
     <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
     <script type="text/javascript" src="../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Recherche" href="../search.html" />
     <link rel="top" title="documentation Connector " href="../index.html" />
     <link rel="next" title="Backend" href="api_backend.html" />
     <link rel="prev" title="Connecteur" href="api_connector.html" />
@@ -247,50 +249,47 @@
 <dl class="class">
 <dt id="connector.session.ConnectorSession">
 <em class="property">class </em><code class="descclassname">connector.session.</code><code class="descname">ConnectorSession</code><span class="sig-paren">(</span><em>cr</em>, <em>uid</em>, <em>context=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/session.html#ConnectorSession"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.session.ConnectorSession" title="Lien permanent vers cette définition">¶</a></dt>
-<dd></dd></dl>
-
-<p>Bases : <a class="reference external" href="https://docs.python.org/2/library/functions.html#object" title="(disponible dans Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
-<blockquote>
-<div><p>Conteneur pour les choses transactionnelles d&#8217;OpenERP :</p>
+<dd><p>Bases : <a class="reference external" href="https://docs.python.org/2/library/functions.html#object" title="(disponible dans Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<p>Conteneur pour les choses transactionnelles d&#8217;OpenERP :</p>
 <dl class="attribute">
-<dt id="connector.session.env">
-<code class="descclassname">connector.session.</code><code class="descname">env</code><a class="headerlink" href="#connector.session.env" title="Lien permanent vers cette définition">¶</a></dt>
+<dt id="connector.session.ConnectorSession.env">
+<code class="descname">env</code><a class="headerlink" href="#connector.session.ConnectorSession.env" title="Lien permanent vers cette définition">¶</a></dt>
 <dd><p>L&#8217;Environnement</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="connector.session.cr">
-<code class="descclassname">connector.session.</code><code class="descname">cr</code><a class="headerlink" href="#connector.session.cr" title="Lien permanent vers cette définition">¶</a></dt>
+<dt id="connector.session.ConnectorSession.cr">
+<code class="descname">cr</code><a class="headerlink" href="#connector.session.ConnectorSession.cr" title="Lien permanent vers cette définition">¶</a></dt>
 <dd><p>Le curseur d&#8217;OpenERP</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="connector.session.uid">
-<code class="descclassname">connector.session.</code><code class="descname">uid</code><a class="headerlink" href="#connector.session.uid" title="Lien permanent vers cette définition">¶</a></dt>
+<dt id="connector.session.ConnectorSession.uid">
+<code class="descname">uid</code><a class="headerlink" href="#connector.session.ConnectorSession.uid" title="Lien permanent vers cette définition">¶</a></dt>
 <dd><p>L&#8217;ID de l&#8217;utilisateur (entier)</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="connector.session.pool">
-<code class="descclassname">connector.session.</code><code class="descname">pool</code><a class="headerlink" href="#connector.session.pool" title="Lien permanent vers cette définition">¶</a></dt>
+<dt id="connector.session.ConnectorSession.pool">
+<code class="descname">pool</code><a class="headerlink" href="#connector.session.ConnectorSession.pool" title="Lien permanent vers cette définition">¶</a></dt>
 <dd><p>Le registre des modèles</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="connector.session.context">
-<code class="descclassname">connector.session.</code><code class="descname">context</code><a class="headerlink" href="#connector.session.context" title="Lien permanent vers cette définition">¶</a></dt>
+<dt id="connector.session.ConnectorSession.context">
+<code class="descname">context</code><a class="headerlink" href="#connector.session.ConnectorSession.context" title="Lien permanent vers cette définition">¶</a></dt>
 <dd><p>Le <cite>context</cite> actuel d&#8217;OpenERP</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="connector.session.ConnectorSession.browse">
-<code class="descclassname">ConnectorSession.</code><code class="descname">browse</code><span class="sig-paren">(</span><em>model</em>, <em>ids</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/session.html#ConnectorSession.browse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.session.ConnectorSession.browse" title="Lien permanent vers cette définition">¶</a></dt>
+<code class="descname">browse</code><span class="sig-paren">(</span><em>model</em>, <em>ids</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/session.html#ConnectorSession.browse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.session.ConnectorSession.browse" title="Lien permanent vers cette définition">¶</a></dt>
 <dd><p>Raccourci vers <code class="xref py py-class docutils literal"><span class="pre">openerp.models.BaseModel.browse</span></code></p>
 </dd></dl>
 
 <dl class="method">
 <dt id="connector.session.ConnectorSession.change_context">
-<code class="descclassname">ConnectorSession.</code><code class="descname">change_context</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwds</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/session.html#ConnectorSession.change_context"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.session.ConnectorSession.change_context" title="Lien permanent vers cette définition">¶</a></dt>
+<code class="descname">change_context</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwds</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/session.html#ConnectorSession.change_context"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.session.ConnectorSession.change_context" title="Lien permanent vers cette définition">¶</a></dt>
 <dd><p><cite>Context Manager</cite> : crée un nouvel Env avec un <cite>context</cite> mis à jour</p>
 <p>Génère un nouvel <code class="xref py py-class docutils literal"><span class="pre">openerp.api.Environment</span></code> utilisé à l&#8217;intérieur du <cite>context manager</cite>, où le <cite>context</cite> est enrichi avec les arguments. L&#8217;environnement original est restauré à la fermeture du <cite>context manager</cite>.</p>
 <p>Le <cite>context</cite> enrichi est soit le <code class="docutils literal"><span class="pre">context</span></code> fourni, dans lequel les <code class="docutils literal"><span class="pre">overrides</span></code> sont fusionnés, ou le <cite>context</cite> <em>actuel</em> dans lequel  les <code class="docutils literal"><span class="pre">overrides</span></code> sont fusionné, càd</p>
@@ -309,7 +308,7 @@
 
 <dl class="method">
 <dt id="connector.session.ConnectorSession.change_user">
-<code class="descclassname">ConnectorSession.</code><code class="descname">change_user</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwds</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/session.html#ConnectorSession.change_user"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.session.ConnectorSession.change_user" title="Lien permanent vers cette définition">¶</a></dt>
+<code class="descname">change_user</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwds</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/session.html#ConnectorSession.change_user"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.session.ConnectorSession.change_user" title="Lien permanent vers cette définition">¶</a></dt>
 <dd><p><cite>Context Manager</cite> : crée un nouvel Env avec l&#8217;utilisateur spécifié</p>
 <p>Ceci génère un nouvel <code class="xref py py-class docutils literal"><span class="pre">openerp.api.Environment</span></code> utilisé à l&#8217;intérieur du <cite>context manager</cite>, où l&#8217;utilisateur est remplacé par celui spécifié.  L&#8217;environnement original est restaré à la fermeture du <cite>context manager</cite>.</p>
 <div class="admonition warning">
@@ -320,108 +319,106 @@
 
 <dl class="method">
 <dt id="connector.session.ConnectorSession.close">
-<code class="descclassname">ConnectorSession.</code><code class="descname">close</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/session.html#ConnectorSession.close"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.session.ConnectorSession.close" title="Lien permanent vers cette définition">¶</a></dt>
+<code class="descname">close</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/session.html#ConnectorSession.close"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.session.ConnectorSession.close" title="Lien permanent vers cette définition">¶</a></dt>
 <dd><p>Ferme le curseur</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="connector.session.ConnectorSession.commit">
-<code class="descclassname">ConnectorSession.</code><code class="descname">commit</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/session.html#ConnectorSession.commit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.session.ConnectorSession.commit" title="Lien permanent vers cette définition">¶</a></dt>
+<code class="descname">commit</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/session.html#ConnectorSession.commit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.session.ConnectorSession.commit" title="Lien permanent vers cette définition">¶</a></dt>
 <dd><p>Valide la transaction</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="connector.session.ConnectorSession.context">
-<code class="descclassname">ConnectorSession.</code><code class="descname">context</code><a class="headerlink" href="#connector.session.ConnectorSession.context" title="Lien permanent vers cette définition">¶</a></dt>
+<dt>
+<code class="descname">context</code></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
-<dt id="connector.session.ConnectorSession.cr">
-<code class="descclassname">ConnectorSession.</code><code class="descname">cr</code><a class="headerlink" href="#connector.session.ConnectorSession.cr" title="Lien permanent vers cette définition">¶</a></dt>
+<dt>
+<code class="descname">cr</code></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="connector.session.ConnectorSession.create">
-<code class="descclassname">ConnectorSession.</code><code class="descname">create</code><span class="sig-paren">(</span><em>model</em>, <em>values</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/session.html#ConnectorSession.create"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.session.ConnectorSession.create" title="Lien permanent vers cette définition">¶</a></dt>
+<code class="descname">create</code><span class="sig-paren">(</span><em>model</em>, <em>values</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/session.html#ConnectorSession.create"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.session.ConnectorSession.create" title="Lien permanent vers cette définition">¶</a></dt>
 <dd><p>Raccourci pour <code class="xref py py-class docutils literal"><span class="pre">openerp.models.BaseModel.create</span></code></p>
 </dd></dl>
 
 <dl class="classmethod">
 <dt id="connector.session.ConnectorSession.from_env">
-<em class="property">classmethod </em><code class="descclassname">ConnectorSession.</code><code class="descname">from_env</code><span class="sig-paren">(</span><em>env</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/session.html#ConnectorSession.from_env"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.session.ConnectorSession.from_env" title="Lien permanent vers cette définition">¶</a></dt>
+<em class="property">classmethod </em><code class="descname">from_env</code><span class="sig-paren">(</span><em>env</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/session.html#ConnectorSession.from_env"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.session.ConnectorSession.from_env" title="Lien permanent vers cette définition">¶</a></dt>
 <dd><p>Return a ConnectorSession from <code class="xref py py-class docutils literal"><span class="pre">openerp.api.Environment</span></code></p>
 </dd></dl>
 
 <dl class="method">
 <dt id="connector.session.ConnectorSession.is_module_installed">
-<code class="descclassname">ConnectorSession.</code><code class="descname">is_module_installed</code><span class="sig-paren">(</span><em>module_name</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/session.html#ConnectorSession.is_module_installed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.session.ConnectorSession.is_module_installed" title="Lien permanent vers cette définition">¶</a></dt>
+<code class="descname">is_module_installed</code><span class="sig-paren">(</span><em>module_name</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/session.html#ConnectorSession.is_module_installed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.session.ConnectorSession.is_module_installed" title="Lien permanent vers cette définition">¶</a></dt>
 <dd><p>Indique si un module est installé ou non dans la base de données en cours.</p>
 <p>Utilise une convention établie pour les modules connecteurs : pour savoir si un module est installé, il regarde si un modèle (abstrait) avec le nom <code class="docutils literal"><span class="pre">nom_module.installed</span></code> est chargé dans le registre.</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="connector.session.ConnectorSession.pool">
-<code class="descclassname">ConnectorSession.</code><code class="descname">pool</code><a class="headerlink" href="#connector.session.ConnectorSession.pool" title="Lien permanent vers cette définition">¶</a></dt>
+<dt>
+<code class="descname">pool</code></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="connector.session.ConnectorSession.read">
-<code class="descclassname">ConnectorSession.</code><code class="descname">read</code><span class="sig-paren">(</span><em>model</em>, <em>ids</em>, <em>fields</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/session.html#ConnectorSession.read"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.session.ConnectorSession.read" title="Lien permanent vers cette définition">¶</a></dt>
+<code class="descname">read</code><span class="sig-paren">(</span><em>model</em>, <em>ids</em>, <em>fields</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/session.html#ConnectorSession.read"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.session.ConnectorSession.read" title="Lien permanent vers cette définition">¶</a></dt>
 <dd><p>Raccourci pour <code class="xref py py-class docutils literal"><span class="pre">openerp.models.BaseModel.read</span></code></p>
 </dd></dl>
 
 <dl class="method">
 <dt id="connector.session.ConnectorSession.rollback">
-<code class="descclassname">ConnectorSession.</code><code class="descname">rollback</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/session.html#ConnectorSession.rollback"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.session.ConnectorSession.rollback" title="Lien permanent vers cette définition">¶</a></dt>
+<code class="descname">rollback</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/session.html#ConnectorSession.rollback"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.session.ConnectorSession.rollback" title="Lien permanent vers cette définition">¶</a></dt>
 <dd><p>Annule la transaction</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="connector.session.ConnectorSession.search">
-<code class="descclassname">ConnectorSession.</code><code class="descname">search</code><span class="sig-paren">(</span><em>model</em>, <em>domain</em>, <em>limit=None</em>, <em>offset=0</em>, <em>order=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/session.html#ConnectorSession.search"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.session.ConnectorSession.search" title="Lien permanent vers cette définition">¶</a></dt>
+<code class="descname">search</code><span class="sig-paren">(</span><em>model</em>, <em>domain</em>, <em>limit=None</em>, <em>offset=0</em>, <em>order=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/session.html#ConnectorSession.search"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.session.ConnectorSession.search" title="Lien permanent vers cette définition">¶</a></dt>
 <dd><p>Raccourci pour <code class="xref py py-class docutils literal"><span class="pre">openerp.models.BaseModel.search</span></code></p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="connector.session.ConnectorSession.uid">
-<code class="descclassname">ConnectorSession.</code><code class="descname">uid</code><a class="headerlink" href="#connector.session.ConnectorSession.uid" title="Lien permanent vers cette définition">¶</a></dt>
+<dt>
+<code class="descname">uid</code></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="connector.session.ConnectorSession.unlink">
-<code class="descclassname">ConnectorSession.</code><code class="descname">unlink</code><span class="sig-paren">(</span><em>model</em>, <em>ids</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/session.html#ConnectorSession.unlink"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.session.ConnectorSession.unlink" title="Lien permanent vers cette définition">¶</a></dt>
+<code class="descname">unlink</code><span class="sig-paren">(</span><em>model</em>, <em>ids</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/session.html#ConnectorSession.unlink"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.session.ConnectorSession.unlink" title="Lien permanent vers cette définition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="connector.session.ConnectorSession.write">
-<code class="descclassname">ConnectorSession.</code><code class="descname">write</code><span class="sig-paren">(</span><em>model</em>, <em>ids</em>, <em>values</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/session.html#ConnectorSession.write"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.session.ConnectorSession.write" title="Lien permanent vers cette définition">¶</a></dt>
+<code class="descname">write</code><span class="sig-paren">(</span><em>model</em>, <em>ids</em>, <em>values</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/session.html#ConnectorSession.write"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.session.ConnectorSession.write" title="Lien permanent vers cette définition">¶</a></dt>
 <dd><p>Raccourci pour <code class="xref py py-class docutils literal"><span class="pre">openerp.models.BaseModel.write</span></code></p>
 </dd></dl>
 
-</div></blockquote>
+</dd></dl>
+
 <dl class="class">
 <dt id="connector.session.ConnectorSessionHandler">
 <em class="property">class </em><code class="descclassname">connector.session.</code><code class="descname">ConnectorSessionHandler</code><span class="sig-paren">(</span><em>db_name</em>, <em>uid</em>, <em>context=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/session.html#ConnectorSessionHandler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.session.ConnectorSessionHandler" title="Lien permanent vers cette définition">¶</a></dt>
-<dd></dd></dl>
-
-<p>Bases : <a class="reference external" href="https://docs.python.org/2/library/functions.html#object" title="(disponible dans Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
-<blockquote>
-<div><p>Permet de créer une nouvelle instance de <a class="reference internal" href="#connector.session.ConnectorSession" title="connector.session.ConnectorSession"><code class="xref py py-class docutils literal"><span class="pre">ConnectorSession</span></code></a> pour une base de données.</p>
+<dd><p>Bases : <a class="reference external" href="https://docs.python.org/2/library/functions.html#object" title="(disponible dans Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<p>Permet de créer une nouvelle instance de <a class="reference internal" href="#connector.session.ConnectorSession" title="connector.session.ConnectorSession"><code class="xref py py-class docutils literal"><span class="pre">ConnectorSession</span></code></a> pour une base de données.</p>
 <dl class="attribute">
-<dt id="connector.session.db_name">
-<code class="descclassname">connector.session.</code><code class="descname">db_name</code><a class="headerlink" href="#connector.session.db_name" title="Lien permanent vers cette définition">¶</a></dt>
+<dt id="connector.session.ConnectorSessionHandler.db_name">
+<code class="descname">db_name</code><a class="headerlink" href="#connector.session.ConnectorSessionHandler.db_name" title="Lien permanent vers cette définition">¶</a></dt>
 <dd><p>Le nom de la base de données sur laquelle on travaille</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt>
-<code class="descclassname">connector.session.</code><code class="descname">uid</code></dt>
+<dt id="connector.session.ConnectorSessionHandler.uid">
+<code class="descname">uid</code><a class="headerlink" href="#connector.session.ConnectorSessionHandler.uid" title="Lien permanent vers cette définition">¶</a></dt>
 <dd><p>L&#8217;ID de l&#8217;utilisateur (entier)</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt>
-<code class="descclassname">connector.session.</code><code class="descname">context</code></dt>
+<dt id="connector.session.ConnectorSessionHandler.context">
+<code class="descname">context</code><a class="headerlink" href="#connector.session.ConnectorSessionHandler.context" title="Lien permanent vers cette définition">¶</a></dt>
 <dd><p>Le <cite>context</cite> actuel d&#8217;OpenERP</p>
 </dd></dl>
 
@@ -433,7 +430,7 @@
 </div>
 <dl class="method">
 <dt id="connector.session.ConnectorSessionHandler.session">
-<code class="descclassname">ConnectorSessionHandler.</code><code class="descname">session</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwds</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/session.html#ConnectorSessionHandler.session"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.session.ConnectorSessionHandler.session" title="Lien permanent vers cette définition">¶</a></dt>
+<code class="descname">session</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwds</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/session.html#ConnectorSessionHandler.session"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.session.ConnectorSessionHandler.session" title="Lien permanent vers cette définition">¶</a></dt>
 <dd><p><cite>Context Manager</cite> : démarre une nouvelle session et s&#8217;assure que le curseur de la session est :</p>
 <ul class="simple">
 <li><p class="first">annulé en cas d&#8217;erreur</p>
@@ -447,7 +444,8 @@
 </ul>
 </dd></dl>
 
-</div></blockquote>
+</dd></dl>
+
 </div>
 
 
@@ -470,7 +468,7 @@
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.6.<br/>
+      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.8.<br/>
     </p>
   </div>
 </footer>

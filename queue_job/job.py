@@ -1,23 +1,6 @@
 # -*- coding: utf-8 -*-
-##############################################################################
-#
-#    Author: Guewen Baconnier
-#    Copyright 2013 Camptocamp SA
-#
-#    This program is free software: you can redistribute it and/or modify
-#    it under the terms of the GNU Affero General Public License as
-#    published by the Free Software Foundation, either version 3 of the
-#    License, or (at your option) any later version.
-#
-#    This program is distributed in the hope that it will be useful,
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU Affero General Public License for more details.
-#
-#    You should have received a copy of the GNU Affero General Public License
-#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#
-##############################################################################
+# Copyright 2013-2016 Camptocamp
+# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html)
 
 import inspect
 import functools
@@ -25,8 +8,6 @@ import logging
 import uuid
 import sys
 from datetime import datetime, timedelta, MINYEAR
-from cPickle import dumps, UnpicklingError, Unpickler
-from cStringIO import StringIO
 
 import odoo
 
@@ -54,63 +35,65 @@ RETRY_INTERVAL = 10 * 60  # seconds
 _logger = logging.getLogger(__name__)
 
 
-_UNPICKLE_WHITELIST = set()
+class DelayableRecordset(object):
+    """ Allow to delay a method for a recordset
 
+    Usage::
 
-def whitelist_unpickle_global(fn_or_class):
-    """ Allow a function or class to be used in jobs
+        delayable = DelayableRecordset(recordset, priority=20)
+        delayable.method(args, kwargs)
 
-    By default, the only types allowed to be used in job arguments are:
+    ``method`` must be a method of the recordset's Model, decorated with
+    :func:`~odoo.addons.queue_job.job.job`.
 
-    * the builtins: str/unicode, int/long, float, bool, tuple, list, dict, None
-    * the pre-registered: datetime.datetime datetime.timedelta
+    The method call will be processed asynchronously in the job queue, with
+    the passed arguments.
 
-    If you need to use an argument in a job which is not in this whitelist,
-    you can add it by using::
-
-        whitelist_unpickle_global(fn_or_class_to_register)
 
     """
-    _UNPICKLE_WHITELIST.add(fn_or_class)
 
+    def __init__(self, recordset, priority=None, eta=None,
+                 max_retries=None, description=None):
+        self.recordset = recordset
+        self.priority = priority
+        self.eta = eta
+        self.max_retries = max_retries
+        self.description = description
 
-# register common types that might be used in job arguments
-whitelist_unpickle_global(datetime)
-whitelist_unpickle_global(timedelta)
-
-
-def _unpickle(pickled):
-    """ Unpickles a string and catch all types of errors it can throw,
-    to raise only NotReadableJobError in case of error.
-
-    Odoo stores the text fields as 'utf-8', so we specify the encoding.
-
-    `loads()` may raises many types of exceptions (AttributeError,
-    IndexError, TypeError, KeyError, ...). They are all catched and
-    raised as `NotReadableJobError`).
-
-    Pickle could be exploited by an attacker who would write a value in a job
-    that would run arbitrary code when unpickled. This is why we set a custom
-    ``find_global`` method on the ``Unpickler``, only jobs and a whitelist of
-    classes/functions are allowed to be unpickled (plus the builtins types).
-    """
-    def restricted_find_global(mod_name, fn_name):
-        __import__(mod_name)
-        mod = sys.modules[mod_name]
-        fn = getattr(mod, fn_name)
-        if not (fn in JOB_REGISTRY or fn in _UNPICKLE_WHITELIST):
-            raise UnpicklingError(
-                '{}.{} is not allowed in jobs'.format(mod_name, fn_name)
+    def __getattr__(self, name):
+        if name in self.recordset:
+            raise AttributeError(
+                'only methods can be delayed (%s called on %s)' %
+                (name, self.recordset)
             )
-        return fn
+        recordset_method = getattr(self.recordset, name)
+        if not getattr(recordset_method, 'delayable', None):
+            raise AttributeError(
+                'method %s on %s is not allowed to be delayed, '
+                'it should be decorated with odoo.addons.queue_job.job.job' %
+                (name, self.recordset)
+            )
 
-    unpickler = Unpickler(StringIO(pickled))
-    unpickler.find_global = restricted_find_global
-    try:
-        unpickled = unpickler.load()
-    except (StandardError, UnpicklingError):
-        raise NotReadableJobError('Could not unpickle.', pickled)
-    return unpickled
+        def delay(*args, **kwargs):
+            return Job.enqueue(recordset_method,
+                               args=args,
+                               kwargs=kwargs,
+                               priority=self.priority,
+                               max_retries=self.max_retries,
+                               eta=self.eta,
+                               description=self.description)
+        return delay
+
+    def __str__(self):
+        return "DelayableRecordset(%s%s)" % (
+            self.recordset._name,
+            getattr(self.recordset, '_ids', "")
+        )
+
+    def __unicode__(self):
+        return unicode(str(self))
+
+    __repr__ = __str__
 
 
 class Job(object):
@@ -135,10 +118,6 @@ class Job(object):
         The maximum number of retries allowed before the job is
         considered as failed.
 
-    .. attribute:: func_name
-
-        Name of the function (in the form module.function_name).
-
     .. attribute:: args
 
         Arguments passed to the function when executed.
@@ -146,11 +125,6 @@ class Job(object):
     .. attribute:: kwargs
 
         Keyword arguments passed to the function when executed.
-
-    .. attribute:: func_string
-
-        Full string representing the function to be executed,
-        ie. module.function(args, kwargs)
 
     .. attribute:: description
 
@@ -201,6 +175,10 @@ class Job(object):
         Estimated Time of Arrival of the job. It will not be executed
         before this date/time.
 
+    .. attribute:: recordset
+
+        Model recordset when we are on a delayed Model method
+
     """
 
     @classmethod
@@ -211,16 +189,20 @@ class Job(object):
             raise NoSuchJobError(
                 'Job %s does no longer exist in the storage.' % job_uuid)
 
-        func = _unpickle(stored.func)
+        args = stored.args
+        kwargs = stored.kwargs
+        method_name = stored.method_name
 
-        (func_name, args, kwargs) = func
+        model = env[stored.model_name]
+        recordset = model.browse(stored.record_ids)
+        method = getattr(recordset, method_name)
 
         dt_from_string = odoo.fields.Datetime.from_string
         eta = None
         if stored.eta:
             eta = dt_from_string(stored.eta)
 
-        job_ = cls(env, func=func_name, args=args, kwargs=kwargs,
+        job_ = cls(method, args=args, kwargs=kwargs,
                    priority=stored.priority, eta=eta, job_uuid=stored.uuid,
                    description=stored.name)
 
@@ -248,7 +230,7 @@ class Job(object):
         return job_
 
     @classmethod
-    def enqueue(cls, env, func, model_name=None, args=None, kwargs=None,
+    def enqueue(cls, func, args=None, kwargs=None,
                 priority=None, eta=None, max_retries=None, description=None):
         """Create a Job and enqueue it in the queue. Return the job uuid.
 
@@ -256,37 +238,11 @@ class Job(object):
         from the ones to pass to the job function.
 
         """
-        new_job = cls(env, func=func, model_name=model_name, args=args,
+        new_job = cls(func=func, args=args,
                       kwargs=kwargs, priority=priority, eta=eta,
                       max_retries=max_retries, description=description)
-        new_job.user_id = env.uid
-        if 'company_id' in env.context:
-            company_id = env.context['company_id']
-        else:
-            company_model = env['res.company']
-            company_model = company_model.sudo(new_job.user_id)
-            company_id = company_model._company_default_get(
-                object='queue.job',
-                field='company_id').id
-        new_job.company_id = company_id
         new_job.store()
-        return new_job.uuid
-
-    @classmethod
-    def enqueue_resolve_args(self, env, func, *args, **kwargs):
-        """Create a Job and enqueue it in the queue. Return the job uuid."""
-        priority = kwargs.pop('priority', None)
-        eta = kwargs.pop('eta', None)
-        model_name = kwargs.pop('model_name', None)
-        max_retries = kwargs.pop('max_retries', None)
-        description = kwargs.pop('description', None)
-
-        return self.enqueue(env, func, model_name=model_name,
-                            args=args, kwargs=kwargs,
-                            priority=priority,
-                            max_retries=max_retries,
-                            eta=eta,
-                            description=description)
+        return new_job
 
     @staticmethod
     def db_record_from_uuid(env, job_uuid):
@@ -294,7 +250,7 @@ class Job(object):
         record = model.search([('uuid', '=', job_uuid)], limit=1)
         return record.with_env(env)
 
-    def __init__(self, env, func=None, model_name=None,
+    def __init__(self, func,
                  args=None, kwargs=None, priority=None,
                  eta=None, job_uuid=None, max_retries=None,
                  description=None):
@@ -302,8 +258,6 @@ class Job(object):
 
         :param func: function to execute
         :type func: function
-        :param model_name: name of the model targetted by the job
-        :type model_name: str
         :param args: arguments for func
         :type args: tuple
         :param kwargs: keyworkd arguments for func
@@ -324,12 +278,23 @@ class Job(object):
         """
         if args is None:
             args = ()
+        if isinstance(args, list):
+            args = tuple(args)
         assert isinstance(args, tuple), "%s: args are not a tuple" % args
         if kwargs is None:
             kwargs = {}
 
         assert isinstance(kwargs, dict), "%s: kwargs are not a dict" % kwargs
-        assert func is not None, "func is required"
+
+        if (not inspect.ismethod(func) or
+                not isinstance(func.im_class, odoo.models.MetaModel)):
+            raise TypeError("Job accepts only methods of Models")
+
+        recordset = func.im_self
+        env = recordset.env
+        self.model_name = func.im_class._name
+        self.method_name = func.im_func.func_name
+        self.recordset = recordset
 
         self.env = env
         self.job_model = self.env['queue.job']
@@ -344,25 +309,6 @@ class Job(object):
 
         self._uuid = job_uuid
 
-        self.model_name = model_name
-        self.func_name = None
-        if func:
-            if inspect.ismethod(func):
-                if not isinstance(func.im_class, odoo.models.MetaModel):
-                    raise NotImplementedError('Jobs on instances methods are '
-                                              'not supported')
-                self.model_name = func.im_class._name
-                self.func_name = func.im_func.func_name
-            elif inspect.isfunction(func):
-                self.func_name = '%s.%s' % (func.__module__, func.__name__)
-            elif isinstance(func, basestring):
-                self.func_name = func
-            else:
-                raise TypeError('%s is not a valid function for a job' % func)
-
-        # the model name is by convention the second argument of the job
-        if self.model_name:
-            args = tuple([self.model_name] + list(args))
         self.args = args
         self.kwargs = kwargs
 
@@ -372,6 +318,7 @@ class Job(object):
 
         self.date_created = datetime.now()
         self._description = description
+
         self.date_enqueued = None
         self.date_started = None
         self.date_done = None
@@ -379,29 +326,28 @@ class Job(object):
         self.result = None
         self.exc_info = None
 
-        self.user_id = None
-        self.company_id = None
+        self.user_id = env.uid
+        if 'company_id' in env.context:
+            company_id = env.context['company_id']
+        else:
+            company_model = env['res.company']
+            company_model = company_model.sudo(self.user_id)
+            company_id = company_model._company_default_get(
+                object='queue.job',
+                field='company_id'
+            ).id
+        self.company_id = company_id
         self._eta = None
         self.eta = eta
-
-    def __cmp__(self, other):
-        if not isinstance(other, Job):
-            raise TypeError("Job.__cmp__(self, other) requires other to be "
-                            "a 'Job', not a '%s'" % type(other))
-        self_eta = self.eta or datetime(MINYEAR, 1, 1)
-        other_eta = other.eta or datetime(MINYEAR, 1, 1)
-        return cmp((self_eta, self.priority, self.date_created),
-                   (other_eta, other.priority, other.date_created))
 
     def perform(self):
         """ Execute the job.
 
         The job is executed with the user which has initiated it.
         """
-        env = self.env(user=self.user_id, context={'job_uuid': self._uuid})
         self.retry += 1
         try:
-            self.result = self.func(env, *self.args, **self.kwargs)
+            self.result = self.func(*tuple(self.args), **self.kwargs)
         except RetryableJobError as err:
             if err.ignore_retry:
                 self.retry -= 1
@@ -434,7 +380,12 @@ class Job(object):
                 'date_started': False,
                 'date_done': False,
                 'eta': False,
-                'func_name': self.func_name,
+                'model_name': self.model_name,
+                'method_name': self.method_name,
+                'record_ids': self.recordset.ids,
+                # TODO: use custom serializer for recordsets
+                'args': self.args,
+                'kwargs': self.kwargs,
                 }
 
         dt_to_string = odoo.fields.Datetime.to_string
@@ -454,15 +405,8 @@ class Job(object):
             date_created = dt_to_string(self.date_created)
             vals.update({'uuid': self.uuid,
                          'name': self.description,
-                         'func_string': self.func_string,
                          'date_created': date_created,
-                         'model_name': (self.model_name if self.model_name
-                                        else False),
                          })
-
-            vals['func'] = dumps((self.func_name,
-                                  self.args,
-                                  self.kwargs))
 
             self.job_model.sudo().create(vals)
 
@@ -470,20 +414,19 @@ class Job(object):
         return self.db_record_from_uuid(self.env, self.uuid)
 
     @property
-    def func_string(self):
-        if self.func_name is None:
-            return None
-        args = [repr(arg) for arg in self.args]
-        kwargs = ['%s=%r' % (key, val) for key, val
-                  in self.kwargs.iteritems()]
-        return '%s(%s)' % (self.func_name, ', '.join(args + kwargs))
+    def func(self):
+        recordset = self.recordset.with_context(job_uuid=self.uuid)
+        recordset = recordset.sudo(self.user_id)
+        return getattr(recordset, self.method_name)
 
     @property
     def description(self):
-        descr = (self._description or
-                 self.func.__doc__ or
-                 'Function %s' % self.func.__name__)
-        return descr
+        if self._description:
+            return self._description
+        elif self.func.__doc__:
+            return self.func.__doc__.splitlines()[0].strip()
+        else:
+            return '%s.%s' % (self.model_name, self.func.__name__)
 
     @property
     def uuid(self):
@@ -491,20 +434,6 @@ class Job(object):
         if self._uuid is None:
             self._uuid = unicode(uuid.uuid4())
         return self._uuid
-
-    @property
-    def func(self):
-        func_name = self.func_name
-        if func_name is None:
-            return None
-        if '.' in func_name:
-            module_name, func_name = func_name.rsplit('.', 1)
-            __import__(module_name)
-            module = sys.modules[module_name]
-            return getattr(module, func_name)
-        else:
-            # FIXME
-            return getattr(self.env[self.model_name], func_name)
 
     @property
     def eta(self):
@@ -629,7 +558,7 @@ def job(func=None, default_channel='root', retry_pattern=None):
 
     *args and **kargs
      Arguments and keyword arguments which will be given to the called
-     function once the job is executed. They should be ``pickle-able``.
+     function once the job is executed.
 
      There are 5 special and reserved keyword arguments that you can use:
 
@@ -649,24 +578,25 @@ def job(func=None, default_channel='root', retry_pattern=None):
 
     .. code-block:: python
 
+        @api.multi
         @job
-        def export_one_thing(env, model_name, one_thing):
+        def export_one_thing(self, one_thing):
             # work
             # export one_thing
 
-        export_one_thing(env, 'a.model', the_thing_to_export)
+        env['a.model'].export_one_thing(the_thing_to_export)
         # => normal and synchronous function call
 
-        export_one_thing.delay(env, 'a.model', the_thing_to_export)
+        env['a.model'].with_delay().export_one_thing(the_thing_to_export)
         # => the job will be executed as soon as possible
 
-        export_one_thing.delay(env, 'a.model', the_thing_to_export,
-                               priority=30, eta=60*60*5)
+        delayable = env['a.model'].with_delay(priority=30, eta=60*60*5)
+        delayable.export_one_thing(the_thing_to_export)
         # => the job will be executed with a low priority and not before a
         # delay of 5 hours from now
 
         @job(default_channel='root.subchannel')
-        def export_one_thing(env, model_name, one_thing):
+        def export_one_thing(one_thing):
             # work
             # export one_thing
 
@@ -674,14 +604,14 @@ def job(func=None, default_channel='root', retry_pattern=None):
                             5: 20 * 60,
                             10: 30 * 60,
                             15: 12 * 60 * 60})
-        def retryable_example(env):
+        def retryable_example():
             # 5 first retries postponed 10 minutes later
             # retries 5 to 10 postponed 20 minutes later
             # retries 10 to 15 postponed 30 minutes later
             # all subsequent retries postponed 12 hours later
             raise RetryableJobError('Must be retried later')
 
-        retryable_example.delay(env)
+        env['a.model'].with_delay().retryable_example()
 
 
     See also: :py:func:`related_action` a related action can be attached
@@ -692,43 +622,25 @@ def job(func=None, default_channel='root', retry_pattern=None):
         return functools.partial(job, default_channel=default_channel,
                                  retry_pattern=retry_pattern)
 
-    def delay_with_env(env, model_name, *args, **kwargs):
-        """Enqueue the function. Return the uuid of the created job."""
-        return Job.enqueue_resolve_args(
-            env,
-            func,
-            model_name=model_name,
-            *args,
-            **kwargs
-        )
-
     def delay_from_model(*args, **kwargs):
-        """Enqueue the function. Return the uuid of the created job."""
-        # Get caller's frame so we can find the current 'env'.
-        # This is a costly operation, see if we want to change the API
-        # to avoid that.
-        frame = sys._getframe(1)
-        env = frame.f_locals['self'].env
-        return Job.enqueue_resolve_args(
-            env,
-            func,
-            model_name=func.im_class._name,
-            *args,
-            **kwargs
-        )
+        raise AttributeError(
+            "method.delay() can no longer be used, the general form is "
+            "env['res.users'].with_delay().method()"
+            )
 
     assert default_channel == 'root' or default_channel.startswith('root.'), (
         "The channel path must start by 'root'")
     assert retry_pattern is None or isinstance(retry_pattern, dict), (
         "retry_pattern must be a dict"
     )
-    if _is_model_method(func):
-        # attach on the inner function of the InstanceMethod
-        inner_func = func.__func__
-        delay_func = delay_from_model
-    else:
-        inner_func = func
-        delay_func = delay_with_env
+
+    if not _is_model_method(func):
+        raise TypeError('@job can only be used on methods of Models')
+
+    inner_func = func.__func__
+    delay_func = delay_from_model
+
+    inner_func.delayable = True
     inner_func.delay = delay_func
     inner_func.retry_pattern = retry_pattern
     inner_func.default_channel = default_channel
@@ -736,6 +648,7 @@ def job(func=None, default_channel='root', retry_pattern=None):
     return func
 
 
+# TODO: move on models
 def related_action(action=lambda env, job: None, **kwargs):
     """ Attach a *Related Action* to a job.
 
@@ -767,7 +680,7 @@ def related_action(action=lambda env, job: None, **kwargs):
 
         @job
         @related_action(action=related_action_partner)
-        def export_partner(env, model_name, partner_id):
+        def export_partner(env, partner_id):
             # ...
 
     The kwargs are transmitted to the action:
@@ -781,7 +694,7 @@ def related_action(action=lambda env, job: None, **kwargs):
 
         @job
         @related_action(action=related_action_product, extra_arg=2)
-        def export_product(env, model_name, product_id):
+        def export_product(env, product_id):
             # ...
 
     """
@@ -790,11 +703,11 @@ def related_action(action=lambda env, job: None, **kwargs):
             action_func = functools.partial(action, **kwargs)
         else:
             action_func = action
-        if _is_model_method(func):
-            # attach on the inner function of the InstanceMethod
-            inner_func = func.__func__
-        else:
-            inner_func = func
+
+        if not _is_model_method(func):
+            raise ValueError('@job can only be used on methods of Models')
+
+        inner_func = func.__func__
         inner_func.related_action = action_func
         return func
     return decorate

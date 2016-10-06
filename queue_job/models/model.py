@@ -26,8 +26,13 @@ from odoo import models, fields, api, exceptions, _
 
 from ..job import STATES, DONE, PENDING, Job, JOB_REGISTRY
 from ..utils import get_odoo_module, is_module_installed
+from ..exception import RetryableJobError
 
 _logger = logging.getLogger(__name__)
+
+
+def channel_func_name(method):
+    return '<%s>.%s' % (method.im_class._name, method.__name__)
 
 
 class QueueJob(models.Model):
@@ -51,10 +56,16 @@ class QueueJob(models.Model):
     company_id = fields.Many2one(comodel_name='res.company',
                                  string='Company', index=True)
     name = fields.Char(string='Description', readonly=True)
-    func_string = fields.Char(string='Task', readonly=True)
-    func = fields.Binary(string='Pickled Function',
-                         readonly=True,
-                         required=True)
+
+    model_name = fields.Char(string='Model', readonly=True)
+    method_name = fields.Char(readonly=True)
+    record_ids = fields.Serialized(readonly=True)
+    # TODO use a custom Serialized field that (de)serialize recordsets
+    args = fields.Serialized(readonly=True)
+    kwargs = fields.Serialized(readonly=True)
+    func_string = fields.Char(string='Task', compute='_compute_func_string',
+                              readonly=True, store=True)
+
     state = fields.Selection(STATES,
                              string='State',
                              readonly=True,
@@ -63,12 +74,13 @@ class QueueJob(models.Model):
     priority = fields.Integer()
     exc_info = fields.Text(string='Exception Info', readonly=True)
     result = fields.Text(string='Result', readonly=True)
+
     date_created = fields.Datetime(string='Created Date', readonly=True)
     date_started = fields.Datetime(string='Start Date', readonly=True)
     date_enqueued = fields.Datetime(string='Enqueue Time', readonly=True)
     date_done = fields.Datetime(string='Date Done', readonly=True)
+
     eta = fields.Datetime(string='Execute only after')
-    model_name = fields.Char(string='Model', readonly=True)
     retry = fields.Integer(string='Current try')
     max_retries = fields.Integer(
         string='Max. retries',
@@ -76,7 +88,9 @@ class QueueJob(models.Model):
              "max. retries.\n"
              "Retries are infinite when empty.",
     )
-    func_name = fields.Char(readonly=True)
+    channel_method_name = fields.Char(readonly=True,
+                                      compute='_compute_channel',
+                                      store=True)
     job_function_id = fields.Many2one(comodel_name='queue.job.function',
                                       compute='_compute_channel',
                                       string='Job Function',
@@ -86,13 +100,31 @@ class QueueJob(models.Model):
     channel = fields.Char(compute='_compute_channel', store=True, index=True)
 
     @api.multi
-    @api.depends('func_name', 'job_function_id.channel_id')
+    @api.depends('model_name', 'method_name', 'job_function_id.channel_id')
     def _compute_channel(self):
         for record in self:
+            model = self.env[record.model_name]
+            method = getattr(model, record.method_name)
+            channel_method_name = channel_func_name(method)
             func_model = self.env['queue.job.function']
-            function = func_model.search([('name', '=', record.func_name)])
+            function = func_model.search([('name', '=', channel_method_name)])
+            record.channel_method_name = channel_method_name
             record.job_function_id = function
             record.channel = record.job_function_id.channel
+
+    @api.multi
+    @api.depends('model_name', 'method_name', 'record_ids', 'args', 'kwargs')
+    def _compute_func_string(self):
+        for record in self:
+            record_ids = record.record_ids
+            model = repr(self.env[record.model_name].browse(record_ids))
+            args = [repr(arg) for arg in record.args]
+            kwargs = ['%s=%r' % (key, val) for key, val
+                      in record.kwargs.iteritems()]
+            all_args = ', '.join(args + kwargs)
+            record.func_string = (
+                "%s.%s(%s)" % (model, record.method_name, all_args)
+            )
 
     @api.multi
     def open_related_action(self):
@@ -189,6 +221,18 @@ class QueueJob(models.Model):
         )
         jobs.unlink()
         return True
+
+    @api.multi
+    def testing_method(self, *args, **kwargs):
+        """ Method used for tests
+
+        Return always the arguments and keyword arguments received
+        """
+        if kwargs.get('raise_retry'):
+            raise RetryableJobError('Must be retried later')
+        if kwargs.get('return_context'):
+            return self.env.context
+        return (args, kwargs)
 
 
 class RequeueJob(models.TransientModel):
@@ -328,7 +372,7 @@ class JobFunction(models.Model):
         for func in JOB_REGISTRY:
             if not is_module_installed(self.env, get_odoo_module(func)):
                 continue
-            func_name = '%s.%s' % (func.__module__, func.__name__)
+            func_name = channel_func_name(func)
             if not self.search_count([('name', '=', func_name)]):
                 channel = self._find_or_create_channel(func.default_channel)
                 self.create({'name': func_name, 'channel_id': channel.id})

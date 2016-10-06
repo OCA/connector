@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import cPickle
 import mock
-import unittest
 from datetime import datetime, timedelta
 
 from odoo import SUPERUSER_ID, exceptions
@@ -15,84 +13,50 @@ from odoo.addons.queue_job.job import (
     DONE,
     STARTED,
     FAILED,
-    _unpickle,
     RETRY_INTERVAL,
 )
 from odoo.addons.queue_job.exception import (
     FailedJobError,
     NoSuchJobError,
-    NotReadableJobError,
     RetryableJobError,
 )
+from .common import jobify, start_jobify, stop_jobify
 
 
-def task_b(env, model_name):
+def task_b(env):
     pass
 
 
-def task_a(env, model_name):
+def task_a(env):
     """ Task description
     """
 
 
-def dummy_task(env):
-    return 'ok'
-
-
-def dummy_task_args(env, model_name, a, b, c=None):
-    return a + b + c
-
-
-def dummy_task_context(env):
-    return env.context
-
-
-def retryable_error_task(env):
-    raise RetryableJobError('Must be retried later')
-
-
-def pickle_forbidden_function(env):
-    pass
-
-
-@job
-def pickle_allowed_function(env):
-    pass
-
-
-class TestJobs(unittest.TestCase):
+class TestJobsOnTestingMethod(common.TransactionCase):
     """ Test Job """
 
     def setUp(self):
-        self.env = mock.MagicMock()
+        super(TestJobsOnTestingMethod, self).setUp()
+        self.queue_job = self.env['queue.job']
+        self.method = self.queue_job.testing_method
+        start_jobify(self.method)
+
+    def tearDown(self):
+        super(TestJobsOnTestingMethod, self).tearDown()
+        stop_jobify(self.method)
 
     def test_new_job(self):
         """
         Create a job
         """
-        test_job = Job(self.env, func=task_a)
-        self.assertEqual(test_job.func, task_a)
-
-    def test_priority(self):
-        """ The lower the priority number, the higher
-        the priority is"""
-        job_a = Job(self.env, func=task_a, priority=10)
-        job_b = Job(self.env, func=task_b, priority=5)
-        self.assertGreater(job_a, job_b)
-
-    def test_compare_eta(self):
-        """ When an `eta` datetime is defined, it should
-        be executed after a job without one.
-        """
-        date = datetime.now() + timedelta(hours=3)
-        job_a = Job(self.env, func=task_a, priority=10, eta=date)
-        job_b = Job(self.env, func=task_b, priority=10)
-        self.assertGreater(job_a, job_b)
+        test_job = Job(self.method)
+        self.assertEqual(test_job.func, self.method)
 
     def test_eta(self):
         """ When an `eta` is datetime, it uses it """
         now = datetime.now()
-        job_a = Job(self.env, func=task_a, eta=now)
+        method = self.env['res.users'].mapped
+        job_a = Job(method, eta=now)
         self.assertEqual(job_a.eta, now)
 
     def test_eta_integer(self):
@@ -100,7 +64,7 @@ class TestJobs(unittest.TestCase):
         datetime_path = 'odoo.addons.queue_job.job.datetime'
         with mock.patch(datetime_path, autospec=True) as mock_datetime:
             mock_datetime.now.return_value = datetime(2015, 3, 15, 16, 41, 0)
-            job_a = Job(self.env, func=task_a, eta=60)
+            job_a = Job(self.method, eta=60)
             self.assertEqual(job_a.eta, datetime(2015, 3, 15, 16, 42, 0))
 
     def test_eta_timedelta(self):
@@ -109,21 +73,15 @@ class TestJobs(unittest.TestCase):
         with mock.patch(datetime_path, autospec=True) as mock_datetime:
             mock_datetime.now.return_value = datetime(2015, 3, 15, 16, 41, 0)
             delta = timedelta(hours=3)
-            job_a = Job(self.env, func=task_a, eta=delta)
+            job_a = Job(self.method, eta=delta)
             self.assertEqual(job_a.eta, datetime(2015, 3, 15, 19, 41, 0))
 
-    def test_perform(self):
-        test_job = Job(self.env, func=dummy_task)
-        result = test_job.perform()
-        self.assertEqual(result, 'ok')
-
     def test_perform_args(self):
-        test_job = Job(self.env, func=dummy_task_args,
-                       model_name='res.users',
+        test_job = Job(self.method,
                        args=('o', 'k'),
                        kwargs={'c': '!'})
         result = test_job.perform()
-        self.assertEqual(result, 'ok!')
+        self.assertEqual(result, (('o', 'k'), {'c': '!'}))
 
     def test_description(self):
         """ If no description is given to the job, it
@@ -131,18 +89,20 @@ class TestJobs(unittest.TestCase):
         """
         # if a doctstring is defined for the function
         # it's used as description
-        job_a = Job(self.env, func=task_a)
-        self.assertEqual(job_a.description, task_a.__doc__)
+        job_a = Job(self.method)
+        self.assertEqual(job_a.description, "Method used for tests")
         # if no docstring, the description is computed
-        job_b = Job(self.env, func=task_b)
-        self.assertEqual(job_b.description, "Function task_b")
+        with jobify(self.env['queue.job'].requeue):
+            job_b = Job(self.env['queue.job'].requeue)
+            self.assertEqual(job_b.description, "queue.job.requeue")
         # case when we explicitly specify the description
         description = "My description"
-        job_a = Job(self.env, func=task_a, description=description)
+        job_a = Job(self.method, description=description)
         self.assertEqual(job_a.description, description)
 
     def test_retryable_error(self):
-        test_job = Job(self.env, func=retryable_error_task,
+        test_job = Job(self.method,
+                       kwargs={'raise_retry': True},
                        max_retries=3)
         self.assertEqual(test_job.retry, 0)
         with self.assertRaises(RetryableJobError):
@@ -156,68 +116,13 @@ class TestJobs(unittest.TestCase):
         self.assertEqual(test_job.retry, 3)
 
     def test_infinite_retryable_error(self):
-        test_job = Job(self.env, func=retryable_error_task,
+        test_job = Job(self.method,
+                       kwargs={'raise_retry': True},
                        max_retries=0)
         self.assertEqual(test_job.retry, 0)
         with self.assertRaises(RetryableJobError):
             test_job.perform()
         self.assertEqual(test_job.retry, 1)
-
-    def test_retry_pattern(self):
-        """ When we specify a retry pattern, the eta must follow it"""
-        datetime_path = 'odoo.addons.queue_job.job.datetime'
-        test_pattern = {
-            1:  60,
-            2: 180,
-            3:  10,
-            5: 300,
-        }
-        job(retryable_error_task, retry_pattern=test_pattern)
-        with mock.patch(datetime_path, autospec=True) as mock_datetime:
-            mock_datetime.now.return_value = datetime(2015, 6, 1, 15, 10, 0)
-            test_job = Job(self.env, func=retryable_error_task,
-                           max_retries=0)
-            test_job.retry += 1
-            test_job.postpone(self.env)
-            self.assertEqual(test_job.retry, 1)
-            self.assertEqual(test_job.eta, datetime(2015, 6, 1, 15, 11, 0))
-            test_job.retry += 1
-            test_job.postpone(self.env)
-            self.assertEqual(test_job.retry, 2)
-            self.assertEqual(test_job.eta, datetime(2015, 6, 1, 15, 13, 0))
-            test_job.retry += 1
-            test_job.postpone(self.env)
-            self.assertEqual(test_job.retry, 3)
-            self.assertEqual(test_job.eta, datetime(2015, 6, 1, 15, 10, 10))
-            test_job.retry += 1
-            test_job.postpone(self.env)
-            self.assertEqual(test_job.retry, 4)
-            self.assertEqual(test_job.eta, datetime(2015, 6, 1, 15, 10, 10))
-            test_job.retry += 1
-            test_job.postpone(self.env)
-            self.assertEqual(test_job.retry, 5)
-            self.assertEqual(test_job.eta, datetime(2015, 6, 1, 15, 15, 00))
-
-    def test_retry_pattern_no_zero(self):
-        """ When we specify a retry pattern without 0, uses RETRY_INTERVAL"""
-        test_pattern = {
-            3: 180,
-        }
-        job(retryable_error_task, retry_pattern=test_pattern)
-        test_job = Job(self.env, func=retryable_error_task,
-                       max_retries=0)
-        test_job.retry += 1
-        self.assertEqual(test_job.retry, 1)
-        self.assertEqual(test_job._get_retry_seconds(), RETRY_INTERVAL)
-        test_job.retry += 1
-        self.assertEqual(test_job.retry, 2)
-        self.assertEqual(test_job._get_retry_seconds(), RETRY_INTERVAL)
-        test_job.retry += 1
-        self.assertEqual(test_job.retry, 3)
-        self.assertEqual(test_job._get_retry_seconds(), 180)
-        test_job.retry += 1
-        self.assertEqual(test_job.retry, 4)
-        self.assertEqual(test_job._get_retry_seconds(), 180)
 
     def test_on_instance_method(self):
 
@@ -225,19 +130,15 @@ class TestJobs(unittest.TestCase):
             def method(self):
                 pass
 
-        with self.assertRaises(NotImplementedError):
-            Job(self.env, A.method)
+        with self.assertRaises(TypeError):
+            Job(A.method)
 
     def test_invalid_function(self):
         with self.assertRaises(TypeError):
-            Job(self.env, 1)
-
-    def test_compare_apple_and_orange(self):
-        with self.assertRaises(TypeError):
-            Job(self.env, func=task_a) != 1
+            Job(1)
 
     def test_set_pending(self):
-        job_a = Job(self.env, func=task_a)
+        job_a = Job(self.method)
         job_a.set_pending(result='test')
         self.assertEquals(job_a.state, PENDING)
         self.assertFalse(job_a.date_enqueued)
@@ -246,7 +147,7 @@ class TestJobs(unittest.TestCase):
         self.assertEquals(job_a.result, 'test')
 
     def test_set_enqueued(self):
-        job_a = Job(self.env, func=task_a)
+        job_a = Job(self.method)
         datetime_path = 'odoo.addons.queue_job.job.datetime'
         with mock.patch(datetime_path, autospec=True) as mock_datetime:
             mock_datetime.now.return_value = datetime(2015, 3, 15, 16, 41, 0)
@@ -258,7 +159,7 @@ class TestJobs(unittest.TestCase):
         self.assertFalse(job_a.date_started)
 
     def test_set_started(self):
-        job_a = Job(self.env, func=task_a)
+        job_a = Job(self.method)
         datetime_path = 'odoo.addons.queue_job.job.datetime'
         with mock.patch(datetime_path, autospec=True) as mock_datetime:
             mock_datetime.now.return_value = datetime(2015, 3, 15, 16, 41, 0)
@@ -269,7 +170,7 @@ class TestJobs(unittest.TestCase):
                           datetime(2015, 3, 15, 16, 41, 0))
 
     def test_set_done(self):
-        job_a = Job(self.env, func=task_a)
+        job_a = Job(self.method)
         datetime_path = 'odoo.addons.queue_job.job.datetime'
         with mock.patch(datetime_path, autospec=True) as mock_datetime:
             mock_datetime.now.return_value = datetime(2015, 3, 15, 16, 41, 0)
@@ -282,13 +183,13 @@ class TestJobs(unittest.TestCase):
         self.assertFalse(job_a.exc_info)
 
     def test_set_failed(self):
-        job_a = Job(self.env, func=task_a)
+        job_a = Job(self.method)
         job_a.set_failed(exc_info='failed test')
         self.assertEquals(job_a.state, FAILED)
         self.assertEquals(job_a.exc_info, 'failed test')
 
     def test_postpone(self):
-        job_a = Job(self.env, func=task_a)
+        job_a = Job(self.method)
         datetime_path = 'odoo.addons.queue_job.job.datetime'
         with mock.patch(datetime_path, autospec=True) as mock_datetime:
             mock_datetime.now.return_value = datetime(2015, 3, 15, 16, 41, 0)
@@ -298,53 +199,15 @@ class TestJobs(unittest.TestCase):
         self.assertEquals(job_a.result, 'test')
         self.assertFalse(job_a.exc_info)
 
-    def test_unpickle(self):
-        pickle = ("S'a small cucumber preserved in vinegar, "
-                  "brine, or a similar solution.'\np0\n.")
-        self.assertEqual(_unpickle(pickle),
-                         'a small cucumber preserved in vinegar, '
-                         'brine, or a similar solution.')
-
-    def test_unpickle_unsafe(self):
-        """ unpickling function not decorated by @job is forbidden """
-        pickled = cPickle.dumps(pickle_forbidden_function)
-        with self.assertRaises(NotReadableJobError):
-            _unpickle(pickled)
-
-    def test_unpickle_safe(self):
-        """ unpickling function decorated by @job is allowed """
-        pickled = cPickle.dumps(pickle_allowed_function)
-        self.assertEqual(_unpickle(pickled), pickle_allowed_function)
-
-    def test_unpickle_whitelist(self):
-        """ unpickling function/class that is in the whitelist is allowed """
-        arg = datetime(2016, 2, 10)
-        pickled = cPickle.dumps(arg)
-        self.assertEqual(_unpickle(pickled), arg)
-
-    def test_unpickle_not_readable(self):
-        with self.assertRaises(NotReadableJobError):
-            self.assertEqual(_unpickle('cucumber'))
-
-
-class TestJobStorage(common.TransactionCase):
-    """ Test storage of jobs """
-
-    def setUp(self):
-        super(TestJobStorage, self).setUp()
-        self.queue_job = self.env['queue.job']
-
     def test_store(self):
-        test_job = Job(self.env, func=task_a)
+        test_job = Job(self.method)
         test_job.store()
         stored = self.queue_job.search([('uuid', '=', test_job.uuid)])
         self.assertEqual(len(stored), 1)
 
     def test_read(self):
         eta = datetime.now() + timedelta(hours=5)
-        test_job = Job(self.env,
-                       func=dummy_task_args,
-                       model_name='res.users',
+        test_job = Job(self.method,
                        args=('o', 'k'),
                        kwargs={'c': '!'},
                        priority=15,
@@ -359,8 +222,7 @@ class TestJobStorage(common.TransactionCase):
         self.assertEqual(test_job.func, job_read.func)
         self.assertEqual(test_job.args, job_read.args)
         self.assertEqual(test_job.kwargs, job_read.kwargs)
-        self.assertEqual(test_job.func_name, job_read.func_name)
-        self.assertEqual(test_job.func_string, job_read.func_string)
+        self.assertEqual(test_job.method_name, job_read.method_name)
         self.assertEqual(test_job.description, job_read.description)
         self.assertEqual(test_job.state, job_read.state)
         self.assertEqual(test_job.priority, job_read.priority)
@@ -395,9 +257,7 @@ class TestJobStorage(common.TransactionCase):
                                delta=delta)
 
     def test_job_unlinked(self):
-        test_job = Job(self.env,
-                       func=dummy_task_args,
-                       model_name='res.users',
+        test_job = Job(self.method,
                        args=('o', 'k'),
                        kwargs={'c': '!'})
         test_job.store()
@@ -407,9 +267,7 @@ class TestJobStorage(common.TransactionCase):
             Job.load(self.env, test_job.uuid)
 
     def test_unicode(self):
-        test_job = Job(self.env,
-                       func=dummy_task_args,
-                       model_name='res.users',
+        test_job = Job(self.method,
                        args=(u'öô¿‽', u'ñě'),
                        kwargs={'c': u'ßø'},
                        priority=15,
@@ -418,16 +276,14 @@ class TestJobStorage(common.TransactionCase):
         test_job.store()
         job_read = Job.load(self.env, test_job.uuid)
         self.assertEqual(test_job.args, job_read.args)
-        self.assertEqual(job_read.args, ('res.users', u'öô¿‽', u'ñě'))
+        self.assertEqual(job_read.args, (u'öô¿‽', u'ñě'))
         self.assertEqual(test_job.kwargs, job_read.kwargs)
         self.assertEqual(job_read.kwargs, {'c': u'ßø'})
         self.assertEqual(test_job.description, job_read.description)
         self.assertEqual(job_read.description, u"My dé^Wdescription")
 
     def test_accented_bytestring(self):
-        test_job = Job(self.env,
-                       func=dummy_task_args,
-                       model_name='res.users',
+        test_job = Job(self.method,
                        args=('öô¿‽', 'ñě'),
                        kwargs={'c': 'ßø'},
                        priority=15,
@@ -435,50 +291,119 @@ class TestJobStorage(common.TransactionCase):
         test_job.user_id = 1
         test_job.store()
         job_read = Job.load(self.env, test_job.uuid)
-        self.assertEqual(test_job.args, job_read.args)
-        self.assertEqual(job_read.args, ('res.users', 'öô¿‽', 'ñě'))
-        self.assertEqual(test_job.kwargs, job_read.kwargs)
-        self.assertEqual(job_read.kwargs, {'c': 'ßø'})
-        # the job's description has been created as bytestring but is
-        # decoded to utf8 by the ORM so make them comparable
-        self.assertEqual(test_job.description,
-                         job_read.description.encode('utf8'))
+        # the job's args and description have been created as bytestring but
+        # are decoded to utf8 by the ORM so make them comparable
+        self.assertEqual(job_read.args, ('öô¿‽'.decode('utf8'),
+                                         'ñě'.decode('utf8')))
+        self.assertEqual(job_read.kwargs, {'c': 'ßø'.decode('utf8')})
         self.assertEqual(job_read.description,
                          "My dé^Wdescription".decode('utf8'))
 
     def test_job_delay(self):
         self.cr.execute('delete from queue_job')
-        job(task_a)
-        job_uuid = task_a.delay(self.env, 'res.users')
+        job_ = self.env['queue.job'].with_delay().testing_method()
         stored = self.queue_job.search([])
         self.assertEqual(len(stored), 1)
         self.assertEqual(
             stored.uuid,
-            job_uuid,
+            job_.uuid,
             'Incorrect returned Job UUID')
 
     def test_job_delay_model_method(self):
         self.cr.execute('delete from queue_job')
-        # try:
-        job(self.env['res.users'].preference_save)
-        self.env['res.users'].preference_save.delay()
-        # TODO
-        # finally:
-        #     if hasattr(self.env['res.users'].preference_save.__func__.delay):
-        #         import pdb; pdb.set_trace()
-        #         del self.env['res.users'].preference_save.__func__.delay
+        delayable = self.env['queue.job'].with_delay()
+        job_instance = delayable.testing_method('a', k=1)
+        self.assertTrue(job_instance)
+        result = job_instance.perform()
+        self.assertEquals(
+            result,
+            (('a',), {'k': 1})
+        )
 
-    def test_job_delay_args(self):
+
+class TestJobsOthers(common.TransactionCase):
+    """ Test jobs on other methods or with different job configuration """
+
+    def test_retry_pattern(self):
+        """ When we specify a retry pattern, the eta must follow it"""
+        datetime_path = 'odoo.addons.queue_job.job.datetime'
+        test_pattern = {
+            1:  60,
+            2: 180,
+            3:  10,
+            5: 300,
+        }
+        method = self.env['queue.job'].testing_method
+        with jobify(method, retry_pattern=test_pattern):
+            with mock.patch(datetime_path, autospec=True) as mock_datetime:
+                mock_datetime.now.return_value = datetime(
+                        2015, 6, 1, 15, 10, 0)
+                test_job = Job(method, max_retries=0)
+                test_job.retry += 1
+                test_job.postpone(self.env)
+                self.assertEqual(test_job.retry, 1)
+                self.assertEqual(test_job.eta,
+                                 datetime(2015, 6, 1, 15, 11, 0))
+                test_job.retry += 1
+                test_job.postpone(self.env)
+                self.assertEqual(test_job.retry, 2)
+                self.assertEqual(test_job.eta,
+                                 datetime(2015, 6, 1, 15, 13, 0))
+                test_job.retry += 1
+                test_job.postpone(self.env)
+                self.assertEqual(test_job.retry, 3)
+                self.assertEqual(test_job.eta,
+                                 datetime(2015, 6, 1, 15, 10, 10))
+                test_job.retry += 1
+                test_job.postpone(self.env)
+                self.assertEqual(test_job.retry, 4)
+                self.assertEqual(test_job.eta,
+                                 datetime(2015, 6, 1, 15, 10, 10))
+                test_job.retry += 1
+                test_job.postpone(self.env)
+                self.assertEqual(test_job.retry, 5)
+                self.assertEqual(test_job.eta,
+                                 datetime(2015, 6, 1, 15, 15, 00))
+
+    def test_retry_pattern_no_zero(self):
+        """ When we specify a retry pattern without 0, uses RETRY_INTERVAL"""
+        test_pattern = {
+            3: 180,
+        }
+        method = self.env['queue.job'].testing_method
+        with jobify(method, retry_pattern=test_pattern):
+            test_job = Job(method, max_retries=0)
+            test_job.retry += 1
+            self.assertEqual(test_job.retry, 1)
+            self.assertEqual(test_job._get_retry_seconds(), RETRY_INTERVAL)
+            test_job.retry += 1
+            self.assertEqual(test_job.retry, 2)
+            self.assertEqual(test_job._get_retry_seconds(), RETRY_INTERVAL)
+            test_job.retry += 1
+            self.assertEqual(test_job.retry, 3)
+            self.assertEqual(test_job._get_retry_seconds(), 180)
+            test_job.retry += 1
+            self.assertEqual(test_job.retry, 4)
+            self.assertEqual(test_job._get_retry_seconds(), 180)
+
+    def test_job_delay_model_method_multi(self):
         self.cr.execute('delete from queue_job')
-        job(dummy_task_args)
-        task_a.delay(self.env, 'res.users', 'o', 'k', c='!')
-        stored = self.queue_job.search([])
-        self.assertEqual(len(stored), 1)
+        partner1 = self.env['res.partner'].create({'name': 'test1'})
+        partner2 = self.env['res.partner'].create({'name': 'test2'})
+        partners = partner1 + partner2
+        with jobify(self.env['res.partner'].mapped):
+            job_instance = partners.with_delay().mapped('name')
+            self.assertTrue(job_instance)
+            self.assertEquals(job_instance.args, ('name',))
+            self.assertEquals(job_instance.recordset, partners)
+            self.assertEquals(job_instance.model_name, 'res.partner')
+            self.assertEquals(job_instance.method_name, 'mapped')
+            self.assertEquals(['test1', 'test2'], job_instance.perform())
 
     def test_on_model_method(self):
-        job_ = Job(self.env, func=self.env['res.users'].browse)
-        self.assertEquals(job_.model_name, 'res.users')
-        self.assertEquals(job_.func_name, 'browse')
+        job_ = Job(self.env['res.partner'].browse)
+        self.assertEquals(job_.model_name, 'res.partner')
+        self.assertEquals(job_.method_name, 'browse')
 
 
 class TestJobModel(common.TransactionCase):
@@ -487,9 +412,15 @@ class TestJobModel(common.TransactionCase):
         super(TestJobModel, self).setUp()
         self.queue_job = self.env['queue.job']
         self.user = self.env['res.users']
+        self.method = self.env['queue.job'].testing_method
+        start_jobify(self.method)
+
+    def tearDown(self):
+        super(TestJobModel, self).tearDown()
+        stop_jobify(self.method)
 
     def _create_job(self):
-        test_job = Job(self.env, func=task_a)
+        test_job = Job(self.method)
         test_job.store()
         stored = Job.db_record_from_uuid(self.env, test_job.uuid)
         self.assertEqual(len(stored), 1)
@@ -562,7 +493,8 @@ class TestJobModel(common.TransactionCase):
         self.assertEqual(stored.state, PENDING)
 
     def test_context_uuid(self):
-        test_job = Job(self.env, func=dummy_task_context)
+        delayable = self.env['queue.job'].with_delay()
+        test_job = delayable.testing_method(return_context=True)
         result = test_job.perform()
         key_present = 'job_uuid' in result
         self.assertTrue(key_present)
@@ -617,11 +549,16 @@ class TestJobStorageMultiCompany(common.TransactionCase):
              "name": "my user 1",
              "groups_id": [(4, grp_queue_job_manager)]
              })
+        self.method = self.env['queue.job'].testing_method
+        start_jobify(self.method)
+
+    def tearDown(self):
+        super(TestJobStorageMultiCompany, self).tearDown()
+        stop_jobify(self.method)
 
     def _create_job(self, env):
         self.cr.execute('delete from queue_job')
-        job(task_a)
-        task_a.delay(env, 'res.users')
+        env['queue.job'].with_delay().testing_method()
         stored = self.queue_job.search([])
         self.assertEqual(len(stored), 1)
         return stored
@@ -724,51 +661,57 @@ class TestJobChannels(common.TransactionCase):
             self.root_channel.name = 'leaf'
 
     def test_register_jobs(self):
-        job(task_a)
-        job(task_b)
-        self.function_model._register_jobs()
-        path_a = 'odoo.addons.queue_job.tests.test_job.task_a'
-        path_b = 'odoo.addons.queue_job.tests.test_job.task_b'
-        self.assertTrue(self.function_model.search([('name', '=', path_a)]))
-        self.assertTrue(self.function_model.search([('name', '=', path_b)]))
+        with jobify(self.env['queue.job'].testing_method):
+            with jobify(self.env['queue.job'].requeue):
+                self.function_model._register_jobs()
+                path_a = '<queue.job>.testing_method'
+                path_b = '<queue.job>.requeue'
+                self.assertTrue(
+                    self.function_model.search([('name', '=', path_a)])
+                )
+                self.assertTrue(
+                    self.function_model.search([('name', '=', path_b)])
+                )
 
     def test_channel_on_job(self):
-        job(task_a)
-        self.function_model._register_jobs()
-        path_a = '%s.%s' % (task_a.__module__, task_a.__name__)
-        job_func = self.function_model.search([('name', '=', path_a)])
-        self.assertEquals(job_func.channel, 'root')
+        method = self.env['queue.job'].testing_method
+        with jobify(method):
+            self.function_model._register_jobs()
+            path_a = '<%s>.%s' % (method.im_class._name, method.__name__)
+            job_func = self.function_model.search([('name', '=', path_a)])
+            self.assertEquals(job_func.channel, 'root')
 
-        test_job = Job(self.env, func=task_a)
-        test_job.store()
-        stored = self.job_model.search([('uuid', '=', test_job.uuid)])
-        self.assertEquals(stored.channel, 'root')
+            test_job = Job(method)
+            test_job.store()
+            stored = self.job_model.search([('uuid', '=', test_job.uuid)])
+            self.assertEquals(stored.channel, 'root')
 
-        channel = self.channel_model.create({'name': 'sub',
-                                             'parent_id': self.root_channel.id,
-                                             })
-        job_func.channel_id = channel
+            channel = self.channel_model.create(
+                {'name': 'sub', 'parent_id': self.root_channel.id}
+            )
+            job_func.channel_id = channel
 
-        test_job = Job(self.env, func=task_a)
-        test_job.store()
-        stored = self.job_model.search([('uuid', '=', test_job.uuid)])
-        self.assertEquals(stored.channel, 'root.sub')
+            test_job = Job(method)
+            test_job.store()
+            stored = self.job_model.search([('uuid', '=', test_job.uuid)])
+            self.assertEquals(stored.channel, 'root.sub')
 
     def test_default_channel(self):
         self.function_model.search([]).unlink()
-        job(task_a, default_channel='root.sub.subsub')
-        self.assertEquals(task_a.default_channel, 'root.sub.subsub')
+        method = self.env['queue.job'].testing_method
+        with jobify(method, default_channel='root.sub.subsub'):
+            self.assertEquals(method.default_channel, 'root.sub.subsub')
 
-        self.function_model._register_jobs()
+            self.function_model._register_jobs()
 
-        path_a = '%s.%s' % (task_a.__module__, task_a.__name__)
-        job_func = self.function_model.search([('name', '=', path_a)])
+            path_a = '<%s>.%s' % (method.im_class._name, method.__name__)
+            job_func = self.function_model.search([('name', '=', path_a)])
 
-        self.assertEquals(job_func.channel, 'root.sub.subsub')
-        channel = job_func.channel_id
-        self.assertEquals(channel.name, 'subsub')
-        self.assertEquals(channel.parent_id.name, 'sub')
-        self.assertEquals(channel.parent_id.parent_id.name, 'root')
+            self.assertEquals(job_func.channel, 'root.sub.subsub')
+            channel = job_func.channel_id
+            self.assertEquals(channel.name, 'subsub')
+            self.assertEquals(channel.parent_id.name, 'sub')
+            self.assertEquals(channel.parent_id.parent_id.name, 'root')
 
     def test_job_decorator(self):
         """ Test the job decorator """

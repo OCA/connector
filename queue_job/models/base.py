@@ -27,11 +27,12 @@ class Base(models.AbstractModel):
 
 
         :param priority: Priority of the job, 0 being the higher priority.
+                         Default is 10.
         :param eta: Estimated Time of Arrival of the job. It will not be
                     executed before this date/time.
         :param max_retries: maximum number of retries before giving up and set
                             the job state to 'failed'. A value of 0 means
-                            infinite retries.
+                            infinite retries.  Default is 5.
         :param description: human description of the job. If None, description
                             is computed from the function doc or name
         :return: instance of a DelayableRecordset

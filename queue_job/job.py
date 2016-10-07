@@ -507,10 +507,16 @@ class Job(object):
         if result is not None:
             self.result = result
 
-    def related_action(self, env):
+    def related_action(self):
         if not hasattr(self.func, 'related_action'):
             return None
-        return self.func.related_action(env, self)
+        if not self.func.related_action:
+            return None
+        if not isinstance(self.func.related_action, basestring):
+            raise ValueError('related_action must be the name of the '
+                             'method on queue.job as string')
+        action = getattr(self.db_record(), self.func.related_action)
+        return action(**self.func.kwargs)
 
 
 JOB_REGISTRY = set()
@@ -537,51 +543,36 @@ def job(func=None, default_channel='root', retry_pattern=None):
                           :const:`RETRY_INTERVAL` seconds.
     :type retry_pattern: dict(retry_count,retry_eta_seconds)
 
-    Add a ``delay`` attribute on the decorated function.
+    Indicates that a method of a Model can be delayed in the Job Queue.
 
-    When ``delay`` is called, the function is transformed to a job and
-    stored in the Odoo queue.job model. The arguments and keyword
-    arguments given in ``delay`` will be the arguments used by the
-    decorated function when it is executed.
+    When a method has the ``@job`` decorator, its calls can then be delayed
+    with::
+
+        recordset.with_delay(priority=10).the_method(args, **kwargs)
+
+    Where ``the_method`` is the method decorated with ``@job``. Its arguments
+    and keyword arguments will be kept in the Job Queue for its asynchronous
+    execution.
+
+    ``default_channel`` indicates in which channel the job must be executed
 
     ``retry_pattern`` is a dict where keys are the count of retries and the
     values are the delay to postpone a job.
-
-    The ``delay()`` function of a job takes the following arguments:
-
-    env
-      Current :py:class:`~odoo.api.Environment`
-
-    model_name
-      name of the model on which the job has something to do
-
-    *args and **kargs
-     Arguments and keyword arguments which will be given to the called
-     function once the job is executed.
-
-     There are 5 special and reserved keyword arguments that you can use:
-
-     * priority: priority of the job, the smaller is the higher priority.
-                 Default is 10.
-     * max_retries: maximum number of retries before giving up and set
-                    the job state to 'failed'. A value of 0 means
-                    infinite retries. Default is 5.
-     * eta: the job can be executed only after this datetime
-            (or now + timedelta if a timedelta or integer is given)
-     * description : a human description of the job,
-                     intended to discriminate job instances
-                     (Default is the func.__doc__ or
-                      'Function %s' % func.__name__)
 
     Example:
 
     .. code-block:: python
 
-        @api.multi
-        @job
-        def export_one_thing(self, one_thing):
-            # work
-            # export one_thing
+        class ProductProduct(models.Model):
+            _inherit = 'product.product'
+
+            @api.multi
+            @job
+            def export_one_thing(self, one_thing):
+                # work
+                # export one_thing
+
+        # [...]
 
         env['a.model'].export_one_thing(the_thing_to_export)
         # => normal and synchronous function call
@@ -647,67 +638,77 @@ def job(func=None, default_channel='root', retry_pattern=None):
     return func
 
 
-# TODO: move on models
-def related_action(action=lambda env, job: None, **kwargs):
+def related_action(action=None, **kwargs):
     """ Attach a *Related Action* to a job.
 
     A *Related Action* will appear as a button on the Odoo view.
     The button will execute the action, usually it will open the
     form view of the record related to the job.
 
-    The ``action`` must be a callable that responds to arguments::
-
-        env, job, **kwargs
+    The ``action`` must be a method on the `queue.job` model.
 
     Example usage:
 
     .. code-block:: python
 
-        def related_action_partner(env, job):
-            model = job.args[0]
-            partner_id = job.args[1]
-            # eventually get the real ID if partner_id is a binding ID
-            action = {
-                'name': _("Partner"),
-                'type': 'ir.actions.act_window',
-                'res_model': model,
-                'view_type': 'form',
-                'view_mode': 'form',
-                'res_id': partner_id,
-            }
-            return action
+        class QueueJob(models.Model):
+            _inherit = 'queue.job'
 
-        @job
-        @related_action(action=related_action_partner)
-        def export_partner(env, partner_id):
-            # ...
+            @api.multi
+            def related_action_partner(self):
+                self.ensure_one()
+                model = self.model_name
+                partner = self.env[model].browse(self.record_ids)
+                # possibly get the real ID if partner_id is a binding ID
+                action = {
+                    'name': _("Partner"),
+                    'type': 'ir.actions.act_window',
+                    'res_model': model,
+                    'view_type': 'form',
+                    'view_mode': 'form',
+                    'res_id': partner.id,
+                }
+                return action
+
+        class ResPartner(models.Model):
+            _inherit = 'res.partner'
+
+            @api.multi
+            @job
+            @related_action(action='related_action_partner')
+            def export_partner(self):
+                # ...
 
     The kwargs are transmitted to the action:
 
     .. code-block:: python
 
-        def related_action_product(env, job, extra_arg=1):
-            assert extra_arg == 2
-            model = job.args[0]
-            product_id = job.args[1]
+        class QueueJob(models.Model):
+            _inherit = 'queue.job'
 
-        @job
-        @related_action(action=related_action_product, extra_arg=2)
-        def export_product(env, product_id):
-            # ...
+            @api.multi
+            def related_action_product(self, extra_arg=1):
+                assert extra_arg == 2
+                model = self.model_name
+                ...
+
+        class ProductProduct(models.Model):
+            _inherit = 'product.product'
+
+            @api.multi
+            @job
+            @related_action(action='related_action_product', extra_arg=2)
+            def export_product(self):
+                # ...
 
     """
     def decorate(func):
-        if kwargs:
-            action_func = functools.partial(action, **kwargs)
-        else:
-            action_func = action
-
         if not _is_model_method(func):
             raise ValueError('@related_action can only be used on methods of '
                              'Models')
 
         inner_func = func.__func__
-        inner_func.related_action = action_func
+        inner_func.related_action = action
+        inner_func.kwargs = kwargs
         return func
     return decorate

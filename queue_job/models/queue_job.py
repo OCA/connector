@@ -131,7 +131,7 @@ class QueueJob(models.Model):
         """ Open the related action associated to the job """
         self.ensure_one()
         job = Job.load(self.env, self.uuid)
-        action = job.related_action(self.env)
+        action = job.related_action()
         if action is None:
             raise exceptions.Warning(_('No action available for this job'))
         return action
@@ -232,7 +232,18 @@ class QueueJob(models.Model):
             raise RetryableJobError('Must be retried later')
         if kwargs.get('return_context'):
             return self.env.context
-        return (args, kwargs)
+        return args, kwargs
+
+    @api.multi
+    def testing_related_method(self, **kwargs):
+        if 'url' in kwargs:
+            subject = self.args[0]
+            return {
+                'type': 'ir.actions.act_url',
+                'target': 'new',
+                'url': kwargs['url'].format(subject=subject),
+            }
+        return self, kwargs
 
 
 class RequeueJob(models.TransientModel):

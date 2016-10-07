@@ -27,6 +27,7 @@ from odoo import models, fields, api, exceptions, _
 from ..job import STATES, DONE, PENDING, Job, JOB_REGISTRY
 from ..utils import get_odoo_module, is_module_installed
 from ..exception import RetryableJobError
+from ..fields import JobSerialized
 
 _logger = logging.getLogger(__name__)
 
@@ -60,9 +61,8 @@ class QueueJob(models.Model):
     model_name = fields.Char(string='Model', readonly=True)
     method_name = fields.Char(readonly=True)
     record_ids = fields.Serialized(readonly=True)
-    # TODO use a custom Serialized field that (de)serialize recordsets
-    args = fields.Serialized(readonly=True)
-    kwargs = fields.Serialized(readonly=True)
+    args = JobSerialized(readonly=True)
+    kwargs = JobSerialized(readonly=True)
     func_string = fields.Char(string='Task', compute='_compute_func_string',
                               readonly=True, store=True)
 

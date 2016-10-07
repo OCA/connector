@@ -7,12 +7,11 @@ import functools
 import logging
 import uuid
 import sys
-from datetime import datetime, timedelta, MINYEAR
+from datetime import datetime, timedelta
 
 import odoo
 
-from .exception import (NotReadableJobError,
-                        NoSuchJobError,
+from .exception import (NoSuchJobError,
                         FailedJobError,
                         RetryableJobError)
 
@@ -705,7 +704,8 @@ def related_action(action=lambda env, job: None, **kwargs):
             action_func = action
 
         if not _is_model_method(func):
-            raise ValueError('@job can only be used on methods of Models')
+            raise ValueError('@related_action can only be used on methods of '
+                             'Models')
 
         inner_func = func.__func__
         inner_func.related_action = action_func

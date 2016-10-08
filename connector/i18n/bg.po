@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: connector (8.0)\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-09-17 07:17+0000\n"
-"PO-Revision-Date: 2016-10-04 09:43+0000\n"
+"PO-Revision-Date: 2016-09-25 14:52+0000\n"
 "Last-Translator: OCA Transbot <transbot@odoo-community.org>\n"
-"Language-Team: Turkish (http://www.transifex.com/oca/OCA-connector-8-0/language/tr/)\n"
+"Language-Team: Bulgarian (http://www.transifex.com/oca/OCA-connector-8-0/language/bg/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Language: tr\n"
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"Language: bg\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #. module: connector
 #: model:ir.actions.act_window,help:connector.action_connector_checkpoint
@@ -45,7 +45,7 @@ msgstr ""
 #. module: connector
 #: field:queue.job,active:0
 msgid "Active"
-msgstr ""
+msgstr "Активен"
 
 #. module: connector
 #: field:connector.config.settings,alias_domain:0
@@ -70,7 +70,7 @@ msgstr ""
 #. module: connector
 #: view:connector.config.settings:connector.view_connector_config_settings
 msgid "Apply"
-msgstr ""
+msgstr "Приложи"
 
 #. module: connector
 #: field:connector.config.settings,module_google_drive:0
@@ -87,7 +87,7 @@ msgstr ""
 #: view:connector.config.settings:connector.view_connector_config_settings
 #: view:queue.requeue.job:connector.view_requeue_job
 msgid "Cancel"
-msgstr "Vazgeç"
+msgstr "Откажи"
 
 #. module: connector
 #: code:addons/connector/queue/job.py:619
@@ -151,7 +151,7 @@ msgstr ""
 #. module: connector
 #: field:queue.job,company_id:0
 msgid "Company"
-msgstr ""
+msgstr "Фирма"
 
 #. module: connector
 #: field:queue.job.channel,complete_name:0 field:queue.job.function,channel:0
@@ -168,7 +168,7 @@ msgstr ""
 #: model:ir.module.category,name:connector.module_category_connector
 #: model:ir.ui.menu,name:connector.menu_connector_config_settings
 msgid "Connector"
-msgstr ""
+msgstr "Конектор"
 
 #. module: connector
 #: model:ir.model,name:connector.model_connector_backend
@@ -199,12 +199,12 @@ msgstr ""
 #: model:ir.ui.menu,name:connector.menu_connector_root
 #: view:res.partner:connector.view_partner_connector_form
 msgid "Connectors"
-msgstr ""
+msgstr "Конектори"
 
 #. module: connector
 #: field:queue.job,date_created:0
 msgid "Created Date"
-msgstr ""
+msgstr "Създаден на"
 
 #. module: connector
 #: field:connector.checkpoint,create_uid:0
@@ -212,7 +212,7 @@ msgstr ""
 #: field:connector.config.settings,create_uid:0
 #: field:queue.job.channel,create_uid:0 field:queue.requeue.job,create_uid:0
 msgid "Created by"
-msgstr "Oluşturan"
+msgstr "Създадено от"
 
 #. module: connector
 #: field:connector.checkpoint,create_date:0
@@ -220,7 +220,7 @@ msgstr "Oluşturan"
 #: field:connector.config.settings,create_date:0
 #: field:queue.job.channel,create_date:0 field:queue.requeue.job,create_date:0
 msgid "Created on"
-msgstr "Oluşturuldu"
+msgstr "Създадено на"
 
 #. module: connector
 #: field:queue.job,retry:0
@@ -246,7 +246,7 @@ msgstr ""
 #. module: connector
 #: field:queue.job,name:0
 msgid "Description"
-msgstr "Açıklama"
+msgstr "Описание"
 
 #. module: connector
 #: field:connector.backend,display_name:0
@@ -320,7 +320,7 @@ msgstr ""
 #: view:queue.job:connector.view_queue_job_search
 #: view:queue.job.function:connector.view_queue_job_function_search
 msgid "Group By"
-msgstr "Grupla"
+msgstr ""
 
 #. module: connector
 #: view:connector.checkpoint:connector.view_connector_checkpoint_search
@@ -430,7 +430,7 @@ msgstr ""
 #: field:queue.job.function,__last_update:0
 #: field:queue.requeue.job,__last_update:0 field:queue.worker,__last_update:0
 msgid "Last Modified on"
-msgstr ""
+msgstr "Последно обновено на"
 
 #. module: connector
 #: field:connector.checkpoint,write_uid:0
@@ -438,7 +438,7 @@ msgstr ""
 #: field:connector.config.settings,write_uid:0
 #: field:queue.job.channel,write_uid:0 field:queue.requeue.job,write_uid:0
 msgid "Last Updated by"
-msgstr "Son güncelleyen"
+msgstr "Последно обновено от"
 
 #. module: connector
 #: field:connector.checkpoint,write_date:0
@@ -446,7 +446,7 @@ msgstr "Son güncelleyen"
 #: field:connector.config.settings,write_date:0
 #: field:queue.job.channel,write_date:0 field:queue.requeue.job,write_date:0
 msgid "Last Updated on"
-msgstr "Son güncelleme"
+msgstr "Последно обновено на"
 
 #. module: connector
 #: field:external.binding,sync_date:0
@@ -489,7 +489,7 @@ msgstr ""
 #: field:connector.backend,name:0 field:queue.job.channel,name:0
 #: field:queue.job.function,name:0
 msgid "Name"
-msgstr ""
+msgstr "Име"
 
 #. module: connector
 #: help:connector.checkpoint,name:0
@@ -780,7 +780,7 @@ msgstr ""
 #: view:connector.config.settings:connector.view_connector_config_settings
 #: view:queue.requeue.job:connector.view_requeue_job
 msgid "or"
-msgstr ""
+msgstr "или"
 
 #. module: connector
 #: view:connector.checkpoint:connector.view_connector_checkpoint_form

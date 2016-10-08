@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: connector (8.0)\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-08 05:51+0000\n"
-"PO-Revision-Date: 2016-09-16 21:45+0000\n"
+"POT-Creation-Date: 2016-09-17 07:17+0000\n"
+"PO-Revision-Date: 2016-10-04 09:43+0000\n"
 "Last-Translator: OCA Transbot <transbot@odoo-community.org>\n"
 "Language-Team: Spanish (http://www.transifex.com/oca/OCA-connector-8-0/language/es/)\n"
 "MIME-Version: 1.0\n"
@@ -325,7 +325,7 @@ msgstr "Dé a sus clientes acceso a sus documentos"
 #: view:queue.job:connector.view_queue_job_search
 #: view:queue.job.function:connector.view_queue_job_function_search
 msgid "Group By"
-msgstr ""
+msgstr "Agrupar por"
 
 #. module: connector
 #: view:connector.checkpoint:connector.view_connector_checkpoint_search

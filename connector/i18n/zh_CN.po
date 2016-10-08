@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: connector (9.0)\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-04 01:38+0000\n"
-"PO-Revision-Date: 2016-03-03 12:55+0000\n"
+"POT-Creation-Date: 2016-09-27 02:38+0000\n"
+"PO-Revision-Date: 2016-10-04 09:43+0000\n"
 "Last-Translator: OCA Transbot <transbot@odoo-community.org>\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/oca/OCA-connector-9-0/language/zh_CN/)\n"
 "MIME-Version: 1.0\n"
@@ -40,11 +40,6 @@ msgstr ""
 #: model:ir.model.fields,field_description:connector.field_connector_config_settings_module_portal
 msgid "Activate the customer portal"
 msgstr "激活来宾入口"
-
-#. module: connector
-#: model:ir.model.fields,field_description:connector.field_queue_job_active
-msgid "Active"
-msgstr "活跃"
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_config_settings_alias_domain
@@ -94,19 +89,13 @@ msgid "Cancel"
 msgstr "取消"
 
 #. module: connector
-#: code:addons/connector/queue/job.py:592
-#, python-format
-msgid "Canceled. Nothing to do."
-msgstr ""
-
-#. module: connector
-#: code:addons/connector/queue/model.py:274
+#: code:addons/connector/queue/model.py:272
 #, python-format
 msgid "Cannot change the root channel"
 msgstr ""
 
 #. module: connector
-#: code:addons/connector/queue/model.py:281
+#: code:addons/connector/queue/model.py:279
 #, python-format
 msgid "Cannot remove the root channel"
 msgstr ""
@@ -219,7 +208,7 @@ msgstr "创建日期"
 #: model:ir.model.fields,field_description:connector.field_queue_job_channel_create_uid
 #: model:ir.model.fields,field_description:connector.field_queue_requeue_job_create_uid
 msgid "Created by"
-msgstr ""
+msgstr "创建者"
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_create_date
@@ -228,7 +217,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:connector.field_queue_job_channel_create_date
 #: model:ir.model.fields,field_description:connector.field_queue_requeue_job_create_date
 msgid "Created on"
-msgstr ""
+msgstr "创建时间"
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_queue_job_retry
@@ -372,7 +361,7 @@ msgstr "分组依据是"
 #: model:ir.model.fields,field_description:connector.field_queue_job_id
 #: model:ir.model.fields,field_description:connector.field_queue_requeue_job_id
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #. module: connector
 #: model:ir.model.fields,help:connector.field_connector_checkpoint_message_unread
@@ -437,6 +426,12 @@ msgid "Job failed"
 msgstr "作业失败"
 
 #. module: connector
+#: code:addons/connector/controllers/main.py:105
+#, python-format
+msgid "Job interrupted and set to Done: nothing to do."
+msgstr ""
+
+#. module: connector
 #: model:ir.actions.act_window,name:connector.action_queue_job
 #: model:ir.model.fields,field_description:connector.field_queue_requeue_job_job_ids
 #: model:ir.ui.menu,name:connector.menu_queue_job
@@ -472,7 +467,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:connector.field_queue_job_channel_write_uid
 #: model:ir.model.fields,field_description:connector.field_queue_requeue_job_write_uid
 msgid "Last Updated by"
-msgstr ""
+msgstr "最后更新者"
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_review_write_date
@@ -481,7 +476,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:connector.field_queue_job_channel_write_date
 #: model:ir.model.fields,field_description:connector.field_queue_requeue_job_write_date
 msgid "Last Updated on"
-msgstr ""
+msgstr "上次更新日期"
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_external_binding_sync_date
@@ -499,7 +494,7 @@ msgid "Manage multiple companies"
 msgstr "管理多公司"
 
 #. module: connector
-#: code:addons/connector/queue/model.py:133
+#: code:addons/connector/queue/model.py:132
 #, python-format
 msgid "Manually set to done by %s"
 msgstr ""
@@ -541,7 +536,7 @@ msgid "Need Review"
 msgstr "需要审阅"
 
 #. module: connector
-#: code:addons/connector/queue/model.py:109
+#: code:addons/connector/queue/model.py:108
 #, python-format
 msgid "No action available for this job"
 msgstr ""
@@ -580,7 +575,7 @@ msgid "Parent Channel"
 msgstr ""
 
 #. module: connector
-#: code:addons/connector/queue/model.py:266
+#: code:addons/connector/queue/model.py:264
 #, python-format
 msgid "Parent channel required."
 msgstr ""
@@ -702,7 +697,7 @@ msgid ""
 msgstr ""
 
 #. module: connector
-#: code:addons/connector/queue/model.py:179
+#: code:addons/connector/queue/model.py:178
 #, python-format
 msgid ""
 "Something bad happened during the execution of the job. More details in the "

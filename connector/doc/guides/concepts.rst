@@ -206,8 +206,9 @@ coming from Magento.
 Checkpoint
 **********
 
-A checkpoint is a record in the model `connector.checkpoint` linked to a
-model and a record, the connectors can create a new one when the user
+A checkpoint is a record of the model `connector.checkpoint`.
+It can be linked to a model and a record or simply display a message.
+Custom connectors can create a new one when the user
 needs to review imported documents.
 
 

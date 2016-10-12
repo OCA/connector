@@ -197,6 +197,9 @@ optional but I left it as an example.
 Checkpoints
 ***********
 
+Record checkpoint
+-----------------
+
 When new records are imported and need a review, :ref:`checkpoint` are
 created. I propose to create a helper too in
 ``connector_coffee/connector.py``::
@@ -207,6 +210,23 @@ created. I propose to create a helper too in
     def add_checkpoint(session, model_name, record_id, backend_id):
         return checkpoint.add_checkpoint(session, model_name, record_id,
                                          'coffee.backend', backend_id)
+
+Message checkpoint
+------------------
+
+When you need to show a plain text message to a user
+(for instance: an import job did not succeeded),
+you can create a :ref:`checkpoint`. I propose to create a helper too in
+``connector_coffee/connector.py``::
+
+    from openerp.addons.connector.checkpoint import checkpoint
+
+
+    def add_checkpoint_message(session, backend_id, message):
+        return checkpoint.add_checkpoint_message(
+            session, 'coffee.backend', backend_id, message)
+
+
 
 *********************
 ConnectorUnit classes

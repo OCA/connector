@@ -29,7 +29,7 @@ they are imported, the user have to configure things like the supplier,
 so they appears in this list.
 """
 
-from openerp import models, fields, api, _
+from openerp import models, fields, api, exceptions, _
 
 
 class ConnectorCheckpoint(models.Model):
@@ -47,14 +47,17 @@ class ConnectorCheckpoint(models.Model):
 
     @api.depends('model_id', 'record_id')
     def _compute_record(self):
-        for check in self:
-            check.record = check.model_id.model + ',' + str(check.record_id)
+        for item in self:
+            item.record = item.model_id.model + ',' + str(item.record_id)
 
     @api.depends('model_id', 'record_id')
     def _compute_name(self):
-        for check in self:
-            model = self.env[check.model_id.model]
-            check.name = model.browse(check.record_id).display_name
+        for item in self:
+            if item.message:
+                item.name = item.message
+            else:
+                model = self.env[item.model_id.model]
+                item.name = model.browse(item.record_id).display_name
 
     @api.model
     def _search_record(self, operator, value):
@@ -93,11 +96,11 @@ class ConnectorCheckpoint(models.Model):
         readonly=True,
     )
     record_id = fields.Integer(string='Record ID',
-                               required=True,
+                               required=False,
                                readonly=True)
     model_id = fields.Many2one(comodel_name='ir.model',
                                string='Model',
-                               required=True,
+                               required=False,
                                readonly=True)
     backend_id = fields.Reference(
         string='Imported from',
@@ -115,6 +118,18 @@ class ConnectorCheckpoint(models.Model):
         readonly=True,
         default='need_review',
     )
+    message = fields.Char(
+        string='Message',
+        help="Review message",
+        readonly=True,
+        required=False,
+    )
+
+    _sql_constraints = [
+        ('required_fields',
+         "CHECK (record_id IS NOT NULL OR message IS NOT NULL)",
+         _("Provide relation to a record or a message!")),
+    ]
 
     @api.multi
     def reviewed(self):
@@ -133,7 +148,10 @@ class ConnectorCheckpoint(models.Model):
     def create(self, vals):
         record = super(ConnectorCheckpoint, self).create(vals)
         record._subscribe_users()
-        msg = _('A %s needs a review.') % record.model_id.name
+        if record.message:
+            msg = record.message
+        else:
+            msg = _('A %s needs a review.') % record.model_id.name
         record.message_post(body=msg, subtype='mail.mt_comment',)
         return record
 
@@ -149,6 +167,12 @@ class ConnectorCheckpoint(models.Model):
                             'backend_id': backend})
 
     @api.model
+    def create_from_message(self, backend_model_name, backend_id, message):
+        backend = backend_model_name + ',' + str(backend_id)
+        return self.create({'message': message,
+                            'backend_id': backend})
+
+    @api.model
     def _needaction_domain_get(self):
         """ Returns the domain to filter records that require an action
             :return: domain or False is no action
@@ -161,6 +185,12 @@ def add_checkpoint(session, model_name, record_id,
     checkpoint_model = session.env['connector.checkpoint']
     return checkpoint_model.create_from_name(model_name, record_id,
                                              backend_model_name, backend_id)
+
+
+def add_checkpoint_message(session, backend_model_name, backend_id, message):
+    checkpoint_model = session.env['connector.checkpoint']
+    return checkpoint_model.create_from_message(
+        backend_model_name, backend_id, message)
 
 
 class connector_checkpoint_review(models.TransientModel):

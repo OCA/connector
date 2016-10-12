@@ -214,8 +214,7 @@ created. I propose to create a helper too in
 Message checkpoint
 ------------------
 
-When you need to show a plain text message to a user
-(for instance: an import job did not succeeded),
+When you need to show a warning message to a user
 you can create a :ref:`checkpoint`. I propose to create a helper too in
 ``connector_coffee/connector.py``::
 
@@ -226,6 +225,11 @@ you can create a :ref:`checkpoint`. I propose to create a helper too in
         return checkpoint.add_checkpoint_message(
             session, 'coffee.backend', backend_id, message)
 
+A typical use case for this is:
+
+* you have a batch import of CSV file;
+* you don't want to break a whole batch job just because some line failed;
+* you want to notify the user with a nice warning message.
 
 
 *********************

@@ -48,6 +48,8 @@ class ConnectorCheckpoint(models.Model):
     @api.depends('model_id', 'record_id')
     def _compute_record(self):
         for item in self:
+            if not (item.model_id and item.record_id):
+                continue
             item.record = item.model_id.model + ',' + str(item.record_id)
 
     @api.depends('model_id', 'record_id')
@@ -128,7 +130,7 @@ class ConnectorCheckpoint(models.Model):
     _sql_constraints = [
         ('required_fields',
          "CHECK (record_id IS NOT NULL OR message IS NOT NULL)",
-         _("Provide relation to a record or a message!")),
+         _("Provide relation to a record or a message.")),
     ]
 
     @api.multi

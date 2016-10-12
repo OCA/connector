@@ -29,3 +29,4 @@ from . import test_mapper
 from . import test_related_action
 from . import test_runner_channels
 from . import test_runner_runner
+from . import test_checkpoint

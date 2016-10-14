@@ -159,14 +159,15 @@ class ConnectorCheckpoint(models.Model):
 
     @api.model
     def create_from_name(self, model_name, record_id,
-                         backend_model_name, backend_id):
+                         backend_model_name, backend_id, message=''):
         model_model = self.env['ir.model']
         model = model_model.search([('model', '=', model_name)], limit=1)
         assert model, "The model %s does not exist" % model_name
         backend = backend_model_name + ',' + str(backend_id)
         return self.create({'model_id': model.id,
                             'record_id': record_id,
-                            'backend_id': backend})
+                            'backend_id': backend,
+                            'message': message})
 
     @api.model
     def create_from_message(self, backend_model_name, backend_id, message):
@@ -183,10 +184,11 @@ class ConnectorCheckpoint(models.Model):
 
 
 def add_checkpoint(session, model_name, record_id,
-                   backend_model_name, backend_id):
+                   backend_model_name, backend_id, message=''):
     checkpoint_model = session.env['connector.checkpoint']
     return checkpoint_model.create_from_name(model_name, record_id,
-                                             backend_model_name, backend_id)
+                                             backend_model_name, backend_id,
+                                             message=message)
 
 
 def add_checkpoint_message(session, backend_model_name, backend_id, message):

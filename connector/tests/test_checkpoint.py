@@ -41,6 +41,14 @@ class TestCheckpoint(common.TransactionCase):
         self.assertEqual(ckpoint.backend_id.id, self.backend_record.id)
         self.assertTrue(ckpoint.message_follower_ids)
 
+        # we can also provide a message
+        msg = 'Check this out!'
+        ckpoint_with_msg = checkpoint.add_checkpoint(
+            self.session, 'res.partner', self.partner.id,
+            self.backend_record._name, self.backend_record.id,
+            message=msg)
+        self.assertEqual(ckpoint_with_msg.message, msg)
+
     def test_add_checkpoint_for_message(self):
         msg = 'Oops, something went wrong, check this!'
         ckpoint = checkpoint.add_checkpoint_message(

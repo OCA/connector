@@ -21,12 +21,12 @@
                     </header>
                     <sheet>
                         <h1>
-                            <field name="message" attrs="{'invisible': [('message', '=', False)]}" />
-                            <div attrs="{'invisible': [('message', '!=', False)]}">
+                            <div attrs="{'invisible': [('model_id', '!=', False)]}">
                                 Click on the <field name="model_id" class="oe_inline" options='{"no_open": 1}'/>
                                 to verify it:
                                 <field name="record"/>
                             </div>
+                            <field name="message"/>
                         </h1>
                         <group>
                             <field name="backend_id"/>

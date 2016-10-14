@@ -207,12 +207,13 @@ created. I propose to create a helper too in
     from openerp.addons.connector.checkpoint import checkpoint
 
 
-    def add_checkpoint(session, model_name, record_id, backend_id):
+    def add_checkpoint(session, model_name, record_id, backend_id, message=''):
         return checkpoint.add_checkpoint(session, model_name, record_id,
-                                         'coffee.backend', backend_id)
+                                         'coffee.backend', backend_id,
+                                         message=message)
 
-Message checkpoint
-------------------
+Message only checkpoint
+-----------------------
 
 When you need to show a warning message to a user
 you can create a :ref:`checkpoint`. I propose to create a helper too in

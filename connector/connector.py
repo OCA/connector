@@ -351,10 +351,13 @@ class Binder(ConnectorUnit):
     _model_name = None  # define in sub-classes
     _external_field = 'external_id'  # override in sub-classes
     _backend_field = 'backend_id'  # override in sub-classes
+    # TODO 2016-10-14: rename this to `odoo_id` for v10.
+    # For existing implementations you'll have to override
+    # `_openerp_field` according to your internal id field.
     _openerp_field = 'openerp_id'  # override in sub-classes
     _sync_date_field = 'sync_date'  # override in sub-classes
 
-    def to_openerp(self, external_id, unwrap=False):
+    def to_odoo(self, external_id, unwrap=False):
         """ Give the OpenERP ID for an external ID
 
         :param external_id: external ID for which we want
@@ -377,6 +380,9 @@ class Binder(ConnectorUnit):
         if unwrap:
             bindings = getattr(bindings, self._openerp_field)
         return bindings
+
+    # BBB 2016-10-14: compatible with old implementations
+    to_openerp = to_odoo
 
     def to_backend(self, binding_id, wrap=False):
         """ Give the external ID for an OpenERP binding ID

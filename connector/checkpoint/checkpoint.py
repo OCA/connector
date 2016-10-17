@@ -49,6 +49,7 @@ class ConnectorCheckpoint(models.Model):
     def _compute_record(self):
         for item in self:
             if not (item.model_id and item.record_id):
+                item.record = None
                 continue
             item.record = item.model_id.model + ',' + str(item.record_id)
 

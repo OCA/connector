@@ -47,14 +47,20 @@ class ConnectorCheckpoint(models.Model):
 
     @api.depends('model_id', 'record_id')
     def _compute_record(self):
-        for check in self:
-            check.record = check.model_id.model + ',' + str(check.record_id)
+        for item in self:
+            if not (item.model_id and item.record_id):
+                item.record = None
+                continue
+            item.record = item.model_id.model + ',' + str(item.record_id)
 
     @api.depends('model_id', 'record_id')
     def _compute_name(self):
-        for check in self:
-            model = self.env[check.model_id.model]
-            check.name = model.browse(check.record_id).display_name
+        for item in self:
+            if item.message:
+                item.name = item.message
+            else:
+                model = self.env[item.model_id.model]
+                item.name = model.browse(item.record_id).display_name
 
     @api.model
     def _search_record(self, operator, value):
@@ -93,11 +99,11 @@ class ConnectorCheckpoint(models.Model):
         readonly=True,
     )
     record_id = fields.Integer(string='Record ID',
-                               required=True,
+                               required=False,
                                readonly=True)
     model_id = fields.Many2one(comodel_name='ir.model',
                                string='Model',
-                               required=True,
+                               required=False,
                                readonly=True)
     backend_id = fields.Reference(
         string='Imported from',
@@ -115,6 +121,18 @@ class ConnectorCheckpoint(models.Model):
         readonly=True,
         default='need_review',
     )
+    message = fields.Char(
+        string='Message',
+        help="Review message",
+        readonly=True,
+        required=False,
+    )
+
+    _sql_constraints = [
+        ('required_fields',
+         "CHECK (record_id IS NOT NULL OR message IS NOT NULL)",
+         _("Provide relation to a record or a message.")),
+    ]
 
     @api.multi
     def reviewed(self):
@@ -133,19 +151,29 @@ class ConnectorCheckpoint(models.Model):
     def create(self, vals):
         record = super(ConnectorCheckpoint, self).create(vals)
         record._subscribe_users()
-        msg = _('A %s needs a review.') % record.model_id.name
+        if record.message:
+            msg = record.message
+        else:
+            msg = _('A %s needs a review.') % record.model_id.name
         record.message_post(body=msg, subtype='mail.mt_comment',)
         return record
 
     @api.model
     def create_from_name(self, model_name, record_id,
-                         backend_model_name, backend_id):
+                         backend_model_name, backend_id, message=''):
         model_model = self.env['ir.model']
         model = model_model.search([('model', '=', model_name)], limit=1)
         assert model, "The model %s does not exist" % model_name
         backend = backend_model_name + ',' + str(backend_id)
         return self.create({'model_id': model.id,
                             'record_id': record_id,
+                            'backend_id': backend,
+                            'message': message})
+
+    @api.model
+    def create_from_message(self, backend_model_name, backend_id, message):
+        backend = backend_model_name + ',' + str(backend_id)
+        return self.create({'message': message,
                             'backend_id': backend})
 
     @api.model
@@ -157,10 +185,17 @@ class ConnectorCheckpoint(models.Model):
 
 
 def add_checkpoint(session, model_name, record_id,
-                   backend_model_name, backend_id):
+                   backend_model_name, backend_id, message=''):
     checkpoint_model = session.env['connector.checkpoint']
     return checkpoint_model.create_from_name(model_name, record_id,
-                                             backend_model_name, backend_id)
+                                             backend_model_name, backend_id,
+                                             message=message)
+
+
+def add_checkpoint_message(session, backend_model_name, backend_id, message):
+    checkpoint_model = session.env['connector.checkpoint']
+    return checkpoint_model.create_from_message(
+        backend_model_name, backend_id, message)
 
 
 class connector_checkpoint_review(models.TransientModel):

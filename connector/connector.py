@@ -449,10 +449,10 @@ class Binder(ConnectorUnit):
         else:
             binding = self.model.browse(binding_id)
 
-        openerp_record = getattr(binding, self._openerp_field)
+        record = getattr(binding, self._openerp_field)
         if browse:
-            return openerp_record
-        return openerp_record.id
+            return record
+        return record.id
 
     def unwrap_model(self):
         """ For a binding model, gives the normal model.

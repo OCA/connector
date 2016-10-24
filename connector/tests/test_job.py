@@ -728,10 +728,19 @@ class TestJobChannels(common.TransactionCase):
         job(task_a)
         job(task_b)
         self.function_model._register_jobs()
-        path_a = 'openerp.addons.connector.tests.test_job.task_a'
-        path_b = 'openerp.addons.connector.tests.test_job.task_b'
-        self.assertTrue(self.function_model.search([('name', '=', path_a)]))
-        self.assertTrue(self.function_model.search([('name', '=', path_b)]))
+        path_a = 'connector.tests.test_job.task_a'
+        path_b = 'connector.tests.test_job.task_b'
+        # if you run tests with standard ``--test-enable`
+        # the path is exactly 'openerp.addons.connector.tests.test_job.task_a'
+        # BUT if you run them using nose test from anybox recipe
+        # you get different path, like '..connector.tests.test_job.task_a'
+        # So, let's use `like` to match them in both cases.
+        self.assertTrue(
+            self.function_model.search([('name', 'like', '%' + path_a)])
+        )
+        self.assertTrue(
+            self.function_model.search([('name', 'like', '%' + path_b)])
+        )
 
     def test_channel_on_job(self):
         job(task_a)

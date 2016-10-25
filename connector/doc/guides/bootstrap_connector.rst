@@ -201,30 +201,19 @@ Record checkpoint
 -----------------
 
 When new records are imported and need a review, :ref:`checkpoint` are
-created. I propose to create a helper too in
-``connector_coffee/connector.py``::
+created. You can add it like this::
 
-    from openerp.addons.connector.checkpoint import checkpoint
+    backend_record.add_checkpoint(
+        model='res.partner', record_id=1, message='VAT number can be missing')
 
-
-    def add_checkpoint(session, model_name, record_id, backend_id, message=''):
-        return checkpoint.add_checkpoint(session, model_name, record_id,
-                                         'coffee.backend', backend_id,
-                                         message=message)
 
 Message only checkpoint
 -----------------------
 
 When you need to show a warning message to a user
-you can create a :ref:`checkpoint`. I propose to create a helper too in
-``connector_coffee/connector.py``::
+you can create a :ref:`checkpoint`. You can add it like this::
 
-    from openerp.addons.connector.checkpoint import checkpoint
-
-
-    def add_checkpoint_message(session, backend_id, message):
-        return checkpoint.add_checkpoint_message(
-            session, 'coffee.backend', backend_id, message)
+    backend_record.add_checkpoint(message='VAT number can be missing')
 
 A typical use case for this is:
 

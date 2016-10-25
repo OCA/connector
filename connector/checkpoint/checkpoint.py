@@ -184,6 +184,8 @@ class ConnectorCheckpoint(models.Model):
         return [('state', '=', 'need_review')]
 
 
+# TODO: deprecate these since we can now add checkpoints
+# from the backend record itself.
 def add_checkpoint(session, model_name, record_id,
                    backend_model_name, backend_id, message=''):
     checkpoint_model = session.env['connector.checkpoint']

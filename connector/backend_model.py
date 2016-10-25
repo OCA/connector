@@ -21,6 +21,7 @@
 
 from openerp import models, fields, api
 from . import backend
+from . import checkpoint
 
 
 class ConnectorBackend(models.AbstractModel):
@@ -46,6 +47,20 @@ class ConnectorBackend(models.AbstractModel):
         if self._backend_type is None:
             raise ValueError('The backend %s has no _backend_type' % self)
         return backend.get_backend(self._backend_type, self.version)
+
+    @api.model
+    def add_checkpoint(self, model=None, record_id=None, message=''):
+        """Add a checkpoint for current backend."""
+        self.ensure_one()
+        cp_model = self.env['connector.checkpoint']
+        res = None
+        if record_id and model:
+            res = cp_model.create_from_name(
+                model, record_id, self._name, self.id, message=message)
+        elif message:
+            res = cp_model.create_from_message(
+                self._name, self.id, message=message)
+        return res
 
 
 class ExternalBinding(models.AbstractModel):

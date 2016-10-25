@@ -48,7 +48,7 @@ class ConnectorBackend(models.AbstractModel):
             raise ValueError('The backend %s has no _backend_type' % self)
         return backend.get_backend(self._backend_type, self.version)
 
-    @api.model
+    @api.multi
     def add_checkpoint(self, model=None, record_id=None, message=''):
         """Add a checkpoint for current backend."""
         self.ensure_one()

@@ -49,7 +49,7 @@ class ConnectorBackend(models.AbstractModel):
         return backend.get_backend(self._backend_type, self.version)
 
     @api.multi
-    def add_checkpoint(self, model=None, record_id=None, message=''):
+    def add_checkpoint(self, model=None, record_id=None, message=None):
         """Add a checkpoint for current backend."""
         self.ensure_one()
         cp_model = self.env['connector.checkpoint']

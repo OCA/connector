@@ -21,7 +21,6 @@
 
 from openerp import models, fields, api
 from . import backend
-from . import checkpoint
 
 
 class ConnectorBackend(models.AbstractModel):

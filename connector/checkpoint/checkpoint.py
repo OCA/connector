@@ -31,6 +31,9 @@ so they appears in this list.
 
 from openerp import models, fields, api, _
 
+import logging
+_logger = logging.getLogger(__name__)
+
 
 class ConnectorCheckpoint(models.Model):
     _name = 'connector.checkpoint'
@@ -184,10 +187,12 @@ class ConnectorCheckpoint(models.Model):
         return [('state', '=', 'need_review')]
 
 
-# TODO: deprecate these since we can now add checkpoints
-# from the backend record itself.
 def add_checkpoint(session, model_name, record_id,
                    backend_model_name, backend_id, message=''):
+    _logger.warn(
+        "`add_checkpoint` is deprecated. "
+        "Please, use `backend_record.add_checkpoint`"
+    )
     checkpoint_model = session.env['connector.checkpoint']
     return checkpoint_model.create_from_name(model_name, record_id,
                                              backend_model_name, backend_id,
@@ -195,6 +200,10 @@ def add_checkpoint(session, model_name, record_id,
 
 
 def add_checkpoint_message(session, backend_model_name, backend_id, message):
+    _logger.warn(
+        "`add_checkpoint_message` is deprecated. "
+        "Please, use `backend_record.add_checkpoint`"
+    )
     checkpoint_model = session.env['connector.checkpoint']
     return checkpoint_model.create_from_message(
         backend_model_name, backend_id, message)

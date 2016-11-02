@@ -19,13 +19,9 @@
 #
 ##############################################################################
 
-from . import test_session
-from . import test_event
-from . import test_job
 from . import test_backend
-from . import test_producer
 from . import test_connector
+from . import test_event
 from . import test_mapper
-from . import test_related_action
-from . import test_runner_channels
-from . import test_runner_runner
+from . import test_producer
+from . import test_related_action_binding

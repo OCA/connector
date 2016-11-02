@@ -1,16 +1,15 @@
+# -*- coding: utf-8 -*-
 import logging
 import traceback
 from cStringIO import StringIO
 
 from psycopg2 import OperationalError
 
-import openerp
-from openerp import _, http, tools
-from openerp.service.model import PG_CONCURRENCY_ERRORS_TO_RETRY
+import odoo
+from odoo import _, http, tools
+from odoo.service.model import PG_CONCURRENCY_ERRORS_TO_RETRY
 
-from ..session import ConnectorSessionHandler
-from ..queue.job import (OpenERPJobStorage,
-                         ENQUEUED)
+from ..job import Job, ENQUEUED
 from ..exception import (NoSuchJobError,
                          NotReadableJobError,
                          RetryableJobError,
@@ -22,18 +21,12 @@ _logger = logging.getLogger(__name__)
 PG_RETRY = 5  # seconds
 
 
-# TODO: perhaps the notion of ConnectionSession is less important
-#       now that we are running jobs inside a normal Odoo worker
-
-
 class RunJobController(http.Controller):
 
-    job_storage_class = OpenERPJobStorage
-
-    def _load_job(self, session, job_uuid):
+    def _load_job(self, env, job_uuid):
         """ Reload a job from the backend """
         try:
-            job = self.job_storage_class(session).load(job_uuid)
+            job = Job.load(env, job_uuid)
         except NoSuchJobError:
             # just skip it
             job = None
@@ -42,7 +35,7 @@ class RunJobController(http.Controller):
             raise
         return job
 
-    def _try_perform_job(self, session_hdl, job):
+    def _try_perform_job(self, env, job):
         """Try to perform the job."""
 
         # if the job has been manually set to DONE or PENDING,
@@ -54,40 +47,45 @@ class RunJobController(http.Controller):
                             job.uuid, job.state)
             return
 
-        with session_hdl.session() as session:
-            # TODO: set_started should be done atomically with
-            #       update queue_job set=state=started
-            #       where state=enqueid and id=
-            job.set_started()
-            self.job_storage_class(session).store(job)
+        # TODO: set_started should be done atomically with
+        #       update queue_job set=state=started
+        #       where state=enqueid and id=
+        job.set_started()
+        job.store()
+        http.request.env.commit()
 
         _logger.debug('%s started', job)
-        with session_hdl.session() as session:
-            job.perform(session)
-            job.set_done()
-            self.job_storage_class(session).store(job)
+        job.perform(env)
+        job.set_done()
+        job.store()
+        http.request.env.commit()
         _logger.debug('%s done', job)
 
     @http.route('/connector/runjob', type='http', auth='none')
+    def old_runjob(self, db, job_uuid, **kw):
+        _logger.warning('/connector/runjob is deprecated, the new route is'
+                        '/queue_job/runjob')
+        return self.runjob(db, job_uuid, **kw)
+
+    @http.route('/queue_job/runjob', type='http', auth='none')
     def runjob(self, db, job_uuid, **kw):
 
-        session_hdl = ConnectorSessionHandler(db,
-                                              openerp.SUPERUSER_ID)
+        env = http.request.env(user=odoo.SUPERUSER_ID)
 
         def retry_postpone(job, message, seconds=None):
-            with session_hdl.session() as session:
-                job.postpone(result=message, seconds=seconds)
-                job.set_pending(reset_retry=False)
-                self.job_storage_class(session).store(job)
+            job.postpone(result=message, seconds=seconds)
+            job.set_pending(reset_retry=False)
+            job.store()
+            env.cr.commit()
 
-        with session_hdl.session() as session:
-            job = self._load_job(session, job_uuid)
-            if job is None:
-                return ""
+        job = self._load_job(env, job_uuid)
+        if job is None:
+            return ""
+        env.cr.commit()
 
         try:
             try:
-                self._try_perform_job(session_hdl, job)
+                self._try_perform_job(env, job)
             except OperationalError as err:
                 # Automatically retry the typical transaction serialization
                 # errors
@@ -104,8 +102,8 @@ class RunJobController(http.Controller):
             else:
                 msg = _('Job interrupted and set to Done: nothing to do.')
             job.set_done(msg)
-            with session_hdl.session() as session:
-                self.job_storage_class(session).store(job)
+            job.store()
+            env.cr.commit()
 
         except RetryableJobError as err:
             # delay the job later, requeue
@@ -118,8 +116,8 @@ class RunJobController(http.Controller):
             _logger.error(buff.getvalue())
 
             job.set_failed(exc_info=buff.getvalue())
-            with session_hdl.session() as session:
-                self.job_storage_class(session).store(job)
+            job.store()
+            env.cr.commit()
             raise
 
         return ""

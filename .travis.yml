@@ -23,7 +23,7 @@ env:
   - TRANSIFEX="1" TRANSIFEX_USER='transbot@odoo-community.org'
   - DOCS="1"
   global:
-  - VERSION="9.0" TESTS="0" LINT_CHECK="0" TRANSIFEX="0" DOCS="0"
+  - VERSION="10.0" TESTS="0" LINT_CHECK="0" TRANSIFEX="0" DOCS="0"
     # travis for docs build
   - secure: "lazdZGpkqFTQiu44grYAqKcaGh0cVTBlrHcBxxs43K/OH4Uc2AjMBty83zKc0ZgzizrNOsfK3Z3UHLmTNI92Vi3PtgGzA9dUmiReGO6QcE9P31Geg4pN/1Fwosv6aSpG3hejJJ8ZYpMbEPJkZyjTVpdM2r1VEcqEvFQ2xR5bEUg="
     # transifex

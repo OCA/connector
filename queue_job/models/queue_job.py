@@ -22,13 +22,18 @@
 import logging
 from datetime import datetime, timedelta
 
-from openerp import models, fields, api, exceptions, _
+from odoo import models, fields, api, exceptions, _
 
-from .job import STATES, DONE, PENDING, OpenERPJobStorage, JOB_REGISTRY
-from ..session import ConnectorSession
-from ..connector import get_openerp_module, is_module_installed
+from ..job import STATES, DONE, PENDING, Job, JOB_REGISTRY
+from ..utils import get_odoo_module, is_module_installed
+from ..exception import RetryableJobError
+from ..fields import JobSerialized
 
 _logger = logging.getLogger(__name__)
+
+
+def channel_func_name(method):
+    return '<%s>.%s' % (method.im_class._name, method.__name__)
 
 
 class QueueJob(models.Model):
@@ -44,32 +49,38 @@ class QueueJob(models.Model):
 
     uuid = fields.Char(string='UUID',
                        readonly=True,
-                       select=True,
+                       index=True,
                        required=True)
     user_id = fields.Many2one(comodel_name='res.users',
                               string='User ID',
                               required=True)
     company_id = fields.Many2one(comodel_name='res.company',
-                                 string='Company', select=True)
+                                 string='Company', index=True)
     name = fields.Char(string='Description', readonly=True)
-    func_string = fields.Char(string='Task', readonly=True)
-    func = fields.Binary(string='Pickled Function',
-                         readonly=True,
-                         required=True)
+
+    model_name = fields.Char(string='Model', readonly=True)
+    method_name = fields.Char(readonly=True)
+    record_ids = fields.Serialized(readonly=True)
+    args = JobSerialized(readonly=True)
+    kwargs = JobSerialized(readonly=True)
+    func_string = fields.Char(string='Task', compute='_compute_func_string',
+                              readonly=True, store=True)
+
     state = fields.Selection(STATES,
                              string='State',
                              readonly=True,
                              required=True,
-                             select=True)
+                             index=True)
     priority = fields.Integer()
     exc_info = fields.Text(string='Exception Info', readonly=True)
     result = fields.Text(string='Result', readonly=True)
+
     date_created = fields.Datetime(string='Created Date', readonly=True)
     date_started = fields.Datetime(string='Start Date', readonly=True)
     date_enqueued = fields.Datetime(string='Enqueue Time', readonly=True)
     date_done = fields.Datetime(string='Date Done', readonly=True)
+
     eta = fields.Datetime(string='Execute only after')
-    model_name = fields.Char(string='Model', readonly=True)
     retry = fields.Integer(string='Current try')
     max_retries = fields.Integer(
         string='Max. retries',
@@ -77,33 +88,50 @@ class QueueJob(models.Model):
              "max. retries.\n"
              "Retries are infinite when empty.",
     )
-    func_name = fields.Char(readonly=True)
+    channel_method_name = fields.Char(readonly=True,
+                                      compute='_compute_channel',
+                                      store=True)
     job_function_id = fields.Many2one(comodel_name='queue.job.function',
                                       compute='_compute_channel',
                                       string='Job Function',
                                       readonly=True,
                                       store=True)
     # for searching without JOIN on channels
-    channel = fields.Char(compute='_compute_channel', store=True, select=True)
+    channel = fields.Char(compute='_compute_channel', store=True, index=True)
 
-    @api.one
-    @api.depends('func_name', 'job_function_id.channel_id')
+    @api.multi
+    @api.depends('model_name', 'method_name', 'job_function_id.channel_id')
     def _compute_channel(self):
-        func_model = self.env['queue.job.function']
-        function = func_model.search([('name', '=', self.func_name)])
-        self.job_function_id = function
-        self.channel = self.job_function_id.channel
+        for record in self:
+            model = self.env[record.model_name]
+            method = getattr(model, record.method_name)
+            channel_method_name = channel_func_name(method)
+            func_model = self.env['queue.job.function']
+            function = func_model.search([('name', '=', channel_method_name)])
+            record.channel_method_name = channel_method_name
+            record.job_function_id = function
+            record.channel = record.job_function_id.channel
+
+    @api.multi
+    @api.depends('model_name', 'method_name', 'record_ids', 'args', 'kwargs')
+    def _compute_func_string(self):
+        for record in self:
+            record_ids = record.record_ids
+            model = repr(self.env[record.model_name].browse(record_ids))
+            args = [repr(arg) for arg in record.args]
+            kwargs = ['%s=%r' % (key, val) for key, val
+                      in record.kwargs.iteritems()]
+            all_args = ', '.join(args + kwargs)
+            record.func_string = (
+                "%s.%s(%s)" % (model, record.method_name, all_args)
+            )
 
     @api.multi
     def open_related_action(self):
         """ Open the related action associated to the job """
         self.ensure_one()
-        session = ConnectorSession(self.env.cr,
-                                   self.env.uid,
-                                   context=self.env.context)
-        storage = OpenERPJobStorage(session)
-        job = storage.load(self.uuid)
-        action = job.related_action(session)
+        job = Job.load(self.env, self.uuid)
+        action = job.related_action()
         if action is None:
             raise exceptions.Warning(_('No action available for this job'))
         return action
@@ -113,19 +141,15 @@ class QueueJob(models.Model):
         """ Change the state of the `Job` object itself so it
         will change the other fields (date, result, ...)
         """
-        session = ConnectorSession(self.env.cr,
-                                   self.env.uid,
-                                   context=self.env.context)
-        storage = OpenERPJobStorage(session)
         for job in self:
-            job = storage.load(job.uuid)
+            job = Job.load(job.env, job.uuid)
             if state == DONE:
                 job.set_done(result=result)
             elif state == PENDING:
                 job.set_pending(result=result)
             else:
                 raise ValueError('State not supported: %s' % state)
-            storage.store(job)
+            job.store()
 
     @api.multi
     def button_done(self):
@@ -149,13 +173,13 @@ class QueueJob(models.Model):
                 msg = job._message_failed_job()
                 if msg:
                     job.message_post(body=msg,
-                                     subtype='connector.mt_job_failed')
+                                     subtype='queue_job.mt_job_failed')
         return res
 
     @api.multi
     def _subscribe_users(self):
-        """ Subscribe all users having the 'Connector Manager' group """
-        group = self.env.ref('connector.group_connector_manager')
+        """ Subscribe all users having the 'Queue Job Manager' group """
+        group = self.env.ref('queue_job.group_queue_job_manager')
         if not group:
             return
         companies = self.mapped('company_id')
@@ -197,6 +221,29 @@ class QueueJob(models.Model):
         )
         jobs.unlink()
         return True
+
+    @api.multi
+    def testing_method(self, *args, **kwargs):
+        """ Method used for tests
+
+        Return always the arguments and keyword arguments received
+        """
+        if kwargs.get('raise_retry'):
+            raise RetryableJobError('Must be retried later')
+        if kwargs.get('return_context'):
+            return self.env.context
+        return args, kwargs
+
+    @api.multi
+    def testing_related_method(self, **kwargs):
+        if 'url' in kwargs:
+            subject = self.args[0]
+            return {
+                'type': 'ir.actions.act_url',
+                'target': 'new',
+                'url': kwargs['url'].format(subject=subject),
+            }
+        return self, kwargs
 
 
 class RequeueJob(models.TransientModel):
@@ -245,23 +292,25 @@ class JobChannel(models.Model):
          'Channel complete name must be unique'),
     ]
 
-    @api.one
+    @api.multi
     @api.depends('name', 'parent_id', 'parent_id.name')
     def _compute_complete_name(self):
-        if not self.name:
-            return  # new record
-        channel = self
-        parts = [channel.name]
-        while channel.parent_id:
-            channel = channel.parent_id
-            parts.append(channel.name)
-        self.complete_name = '.'.join(reversed(parts))
+        for record in self:
+            if not record.name:
+                return  # new record
+            channel = record
+            parts = [channel.name]
+            while channel.parent_id:
+                channel = channel.parent_id
+                parts.append(channel.name)
+            record.complete_name = '.'.join(reversed(parts))
 
-    @api.one
+    @api.multi
     @api.constrains('parent_id', 'name')
     def parent_required(self):
-        if self.name != 'root' and not self.parent_id:
-            raise exceptions.ValidationError(_('Parent channel required.'))
+        for record in self:
+            if record.name != 'root' and not record.parent_id:
+                raise exceptions.ValidationError(_('Parent channel required.'))
 
     @api.multi
     def write(self, values):
@@ -294,9 +343,9 @@ class JobFunction(models.Model):
 
     @api.model
     def _default_channel(self):
-        return self.env.ref('connector.channel_root')
+        return self.env.ref('queue_job.channel_root')
 
-    name = fields.Char(select=True)
+    name = fields.Char(index=True)
     channel_id = fields.Many2one(comodel_name='queue.job.channel',
                                  string='Channel',
                                  required=True,
@@ -332,9 +381,9 @@ class JobFunction(models.Model):
     @api.model
     def _register_jobs(self):
         for func in JOB_REGISTRY:
-            if not is_module_installed(self.env, get_openerp_module(func)):
+            if not is_module_installed(self.env, get_odoo_module(func)):
                 continue
-            func_name = '%s.%s' % (func.__module__, func.__name__)
+            func_name = channel_func_name(func)
             if not self.search_count([('name', '=', func_name)]):
                 channel = self._find_or_create_channel(func.default_channel)
                 self.create({'name': func_name, 'channel_id': channel.id})

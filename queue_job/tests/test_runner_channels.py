@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import doctest
-from openerp.addons.connector.jobrunner import channels
+from odoo.addons.queue_job.jobrunner import channels
 
 
 def load_tests(loader, tests, ignore):

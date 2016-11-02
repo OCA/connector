@@ -9,7 +9,7 @@ from odoo import fields, models
 
 class JobSerialized(fields.Field):
     """ Serialized fields provide the storage for sparse fields. """
-    type = 'serialized'
+    type = 'job_serialized'
     column_type = ('text', 'text')
 
     def convert_to_column(self, value, record):
@@ -36,7 +36,7 @@ class JobEncoder(json.JSONEncoder):
 
 
 class JobDecoder(json.JSONDecoder):
-    """ Decode json to """
+    """ Decode json, recomposing recordsets """
 
     def __init__(self, *args, **kwargs):
         env = kwargs.pop('env')

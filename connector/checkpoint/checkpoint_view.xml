@@ -21,7 +21,7 @@
                     </header>
                     <sheet>
                         <h1>
-                            <div attrs="{'invisible': [('model_id', '!=', False)]}">
+                            <div attrs="{'invisible': [('model_id', '=', False)]}">
                                 Click on the <field name="model_id" class="oe_inline" options='{"no_open": 1}'/>
                                 to verify it:
                                 <field name="record"/>
@@ -48,6 +48,7 @@
                         delete="false" edit="false" version="7.0">
                     <field name="model_id"/>
                     <field name="record"/>
+                    <field name="message"/>
                     <field name="backend_id"/>
                     <field name="state"/>
                     <button name="reviewed"

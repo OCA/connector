@@ -59,3 +59,19 @@ class TestCheckpoint(common.TransactionCase):
         self.assertEqual(ckpoint.name, msg)
         self.assertEqual(ckpoint.backend_id.id, self.backend_record.id)
         self.assertTrue(ckpoint.message_follower_ids)
+
+    def test_add_checkpoint_from_backend(self):
+        backend_record = self.env['connector.backend'].new({'name': 'Test'})
+        # fake real id!
+        backend_record._ids = [99, ]
+        msg = "Yeah!"
+        ckpoint = backend_record.add_checkpoint(
+            model='res.partner', record_id=self.partner.id)
+        self.assertEqual(ckpoint.model_id.model, 'res.partner')
+        self.assertEqual(ckpoint.record_id, self.partner.id)
+        self.assertEqual(ckpoint.name, self.partner.display_name)
+        self.assertEqual(ckpoint.backend_id.id, 99)
+        self.assertTrue(ckpoint.message_follower_ids)
+
+        ckpoint = backend_record.add_checkpoint(message=msg)
+        self.assertEqual(ckpoint.message, msg)

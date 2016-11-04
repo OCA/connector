@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-import openerp.tests.common as common
-import openerp.modules.registry as registry
-from openerp.addons.connector.session import (
+import odoo.tests.common as common
+import odoo.modules.registry as registry
+from odoo.addons.connector.session import (
     ConnectorSession,
     ConnectorSessionHandler)
 
@@ -89,7 +89,7 @@ class test_connector_session(common.TransactionCase):
         original_env = self.session.env
         new_uid = self.env.ref('base.user_demo').id
         with self.session.change_user(new_uid):
-            # a new openerp.api.Environment is generated with the user
+            # a new odoo.api.Environment is generated with the user
             self.assertNotEqual(self.session.env, original_env)
             self.assertEqual(self.session.uid, new_uid)
         self.assertEqual(self.session.env, original_env)

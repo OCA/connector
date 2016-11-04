@@ -30,8 +30,8 @@ Fire the common events:
 
 """
 
-import openerp
-from openerp import models
+import odoo
+from odoo import models
 from .session import ConnectorSession
 from .event import (on_record_create,
                     on_record_write,
@@ -42,8 +42,8 @@ from .connector import is_module_installed
 create_original = models.BaseModel.create
 
 
-@openerp.api.model
-@openerp.api.returns('self', lambda value: value.id)
+@odoo.api.model
+@odoo.api.returns('self', lambda value: value.id)
 def create(self, vals):
     record_id = create_original(self, vals)
     if is_module_installed(self.env, 'connector'):
@@ -57,7 +57,7 @@ models.BaseModel.create = create
 write_original = models.BaseModel.write
 
 
-@openerp.api.multi
+@odoo.api.multi
 def write(self, vals):
     result = write_original(self, vals)
     if is_module_installed(self.env, 'connector'):
@@ -74,7 +74,7 @@ models.BaseModel.write = write
 unlink_original = models.BaseModel.unlink
 
 
-@openerp.api.multi
+@odoo.api.multi
 def unlink(self):
     if is_module_installed(self.env, 'connector'):
         session = ConnectorSession(self.env.cr, self.env.uid,

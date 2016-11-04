@@ -33,7 +33,7 @@ import logging
 from collections import namedtuple
 from contextlib import contextmanager
 
-from openerp import models
+from odoo import models
 from ..connector import ConnectorUnit, MetaConnectorUnit, ConnectorEnvironment
 from ..exception import MappingError, NoConnectorUnitError
 
@@ -229,7 +229,7 @@ def backend_to_m2o(field, binding=None):
         # we ask to the binder to unwrap the binding
         unwrap = bool(binding)
         with self.session.change_context(active_test=False):
-            record = binder.to_openerp(rel_id, unwrap=unwrap)
+            record = binder.to_odoo(rel_id, unwrap=unwrap)
         if not record:
             raise MappingError("Can not find an existing %s for external "
                                "record %s %s unwrapping" %
@@ -604,7 +604,7 @@ class Mapper(ConnectorUnit):
             children = [('items', 'line_ids', 'model.name')]
 
         It allows to create the sales order and all its lines with the
-        same call to :py:meth:`openerp.models.BaseModel.create()`.
+        same call to :py:meth:`odoo.models.BaseModel.create()`.
 
         When using ``children`` for items of a record, we need to create
         a :py:class:`Mapper` for the model of the items, and optionally a

@@ -19,7 +19,7 @@
 #
 ##############################################################################
 
-from openerp import models, fields, api
+from odoo import models, fields, api
 from . import backend
 
 
@@ -66,7 +66,7 @@ class ExternalBinding(models.AbstractModel):
 
     It needs to implements at least these fields:
 
-    openerp_id
+    odoo_id
 
         The many2one to the record it links (used by ``_inherits``).
 
@@ -94,9 +94,9 @@ class ExternalBinding(models.AbstractModel):
         class MagentoResPartnerCategory(models.Model):
             _name = 'magento.res.partner.category'
 
-            _inherits = {'res.partner.category': 'openerp_id'}
+            _inherits = {'res.partner.category': 'odoo_id'}
 
-            openerp_id = fields.Many2one(comodel_name='res.partner.category',
+            odoo_id = fields.Many2one(comodel_name='res.partner.category',
                                           string='Partner Category',
                                           required=True,
                                           ondelete='cascade')

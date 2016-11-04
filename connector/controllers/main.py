@@ -4,9 +4,9 @@ from cStringIO import StringIO
 
 from psycopg2 import OperationalError
 
-import openerp
-from openerp import _, http, tools
-from openerp.service.model import PG_CONCURRENCY_ERRORS_TO_RETRY
+import odoo
+from odoo import _, http, tools
+from odoo.service.model import PG_CONCURRENCY_ERRORS_TO_RETRY
 
 from ..session import ConnectorSessionHandler
 from ..queue.job import (OpenERPJobStorage,
@@ -72,7 +72,7 @@ class RunJobController(http.Controller):
     def runjob(self, db, job_uuid, **kw):
 
         session_hdl = ConnectorSessionHandler(db,
-                                              openerp.SUPERUSER_ID)
+                                              odoo.SUPERUSER_ID)
 
         def retry_postpone(job, message, seconds=None):
             with session_hdl.session() as session:

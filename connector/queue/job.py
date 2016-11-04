@@ -28,7 +28,7 @@ from datetime import datetime, timedelta, MINYEAR
 from cPickle import dumps, UnpicklingError, Unpickler
 from cStringIO import StringIO
 
-import openerp
+import odoo
 
 from ..exception import (NotReadableJobError,
                          NoSuchJobError,
@@ -210,7 +210,7 @@ class OpenERPJobStorage(JobStorage):
                 'func_name': job_.func_name,
                 }
 
-        dt_to_string = openerp.fields.Datetime.to_string
+        dt_to_string = odoo.fields.Datetime.to_string
         if job_.date_enqueued:
             vals['date_enqueued'] = dt_to_string(job_.date_enqueued)
         if job_.date_started:
@@ -250,7 +250,7 @@ class OpenERPJobStorage(JobStorage):
 
         (func_name, args, kwargs) = func
 
-        dt_from_string = openerp.fields.Datetime.from_string
+        dt_from_string = odoo.fields.Datetime.from_string
         eta = None
         if stored.eta:
             eta = dt_from_string(stored.eta)
@@ -640,7 +640,7 @@ def job(func=None, default_channel='root', retry_pattern=None):
     The ``delay()`` function of a job takes the following arguments:
 
     session
-      Current :py:class:`~openerp.addons.connector.session.ConnectorSession`
+      Current :py:class:`~odoo.addons.connector.session.ConnectorSession`
 
     model_name
       name of the model on which the job has something to do

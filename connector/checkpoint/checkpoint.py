@@ -29,7 +29,7 @@ they are imported, the user have to configure things like the supplier,
 so they appears in this list.
 """
 
-from openerp import models, fields, api, _
+from odoo import models, fields, api, _
 
 
 class ConnectorCheckpoint(models.Model):
@@ -105,7 +105,7 @@ class ConnectorCheckpoint(models.Model):
         readonly=True,
         required=True,
         help="The record has been imported from this backend",
-        select=True,
+        index=True,
     )
     state = fields.Selection(
         selection=[('need_review', 'Need Review'),

@@ -3,7 +3,7 @@
 import mock
 import unittest
 
-import openerp.tests.common as common
+import odoo.tests.common as common
 from ..connector import Binder
 from ..queue.job import (Job,
                          OpenERPJobStorage,

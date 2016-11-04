@@ -2,16 +2,16 @@
 
 import unittest
 
-import openerp.tests.common as common
-from openerp.addons.connector.backend import (Backend,
+import odoo.tests.common as common
+from odoo.addons.connector.backend import (Backend,
                                               get_backend,
                                               BACKENDS)
-from openerp.addons.connector.exception import NoConnectorUnitError
-from openerp.addons.connector.connector import (Binder,
+from odoo.addons.connector.exception import NoConnectorUnitError
+from odoo.addons.connector.connector import (Binder,
                                                 ConnectorUnit)
-from openerp.addons.connector.unit.mapper import ExportMapper
-from openerp.addons.connector.unit.backend_adapter import BackendAdapter
-from openerp.addons.connector.session import ConnectorSession
+from odoo.addons.connector.unit.mapper import ExportMapper
+from odoo.addons.connector.unit.backend_adapter import BackendAdapter
+from odoo.addons.connector.session import ConnectorSession
 
 
 class test_backend(unittest.TestCase):
@@ -141,7 +141,7 @@ class test_backend_register(common.TransactionCase):
 
         # trick the origin of the class, let it think
         # that it comes from the OpenERP module 'not installed module'
-        LambdaNoUnit._openerp_module_ = 'not installed module'
+        LambdaNoUnit._odoo_module_ = 'not installed module'
         self.backend(LambdaNoUnit)
 
         matching_cls = self.backend.get_class(LambdaUnit,
@@ -182,7 +182,7 @@ class test_backend_register(common.TransactionCase):
 
         # trick the origin of the class, let it think
         # that it comes from the OpenERP module 'not installed module'
-        LambdaNoUnit._openerp_module_ = 'not installed module'
+        LambdaNoUnit._odoo_module_ = 'not installed module'
         self.backend(LambdaNoUnit, replacing=LambdaYesUnit)
 
         matching_cls = self.backend.get_class(LambdaUnit,

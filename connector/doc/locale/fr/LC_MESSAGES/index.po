@@ -164,10 +164,10 @@ msgstr ""
 
 #: ../../index.rst:53
 msgid ""
-"`Odoo Multi Company <http://www.openerp.net.cn/new-intercompany-process-"
+"`Odoo Multi Company <http://www.odoo.net.cn/new-intercompany-process-"
 "module/>`_"
 msgstr ""
-"`Odoo Multi-sociétés <http://www.openerp.net.cn/new-intercompany-process-"
+"`Odoo Multi-sociétés <http://www.odoo.net.cn/new-intercompany-process-"
 "module/>`_"
 
 #: ../../index.rst:55
@@ -251,10 +251,10 @@ msgstr "Ticketing : connecteur Odoo Request Tracker, connecteur Odoo GLPI…"
 #~ "mais **adaptable** pour connecter OpenERP à tout type de service."
 
 #~ msgid ""
-#~ "`OpenERP Multi Company <http://www.openerp.net.cn/new-intercompany-"
+#~ "`OpenERP Multi Company <http://www.odoo.net.cn/new-intercompany-"
 #~ "process-module/>`_"
 #~ msgstr ""
-#~ "`OpenERP Multi-sociétés <http://www.openerp.net.cn/new-intercompany-"
+#~ "`OpenERP Multi-sociétés <http://www.odoo.net.cn/new-intercompany-"
 #~ "process-module/>`_"
 
 #~ msgid ""

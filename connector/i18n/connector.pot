@@ -116,7 +116,7 @@ msgstr ""
 
 #. module: connector
 #: help:connector.config.settings,module_portal_anonymous:0
-msgid "Enable the public part of openerp, openerp becomes a public website."
+msgid "Enable the public part of odoo, odoo becomes a public website."
 msgstr ""
 
 #. module: connector
@@ -370,7 +370,7 @@ msgstr ""
 
 #. module: connector
 #: help:connector.config.settings,module_share:0
-msgid "Share or embbed any screen of openerp."
+msgid "Share or embbed any screen of odoo."
 msgstr ""
 
 #. module: connector

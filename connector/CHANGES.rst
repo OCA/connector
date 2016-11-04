@@ -81,7 +81,7 @@ Future (?)
 
 /!\ Backwards incompatible changes inside.
 
-* Add ``openerp.api.Environment`` in ``Session``
+* Add ``odoo.api.Environment`` in ``Session``
   It is accessible in ``self.env`` in ``Session`` and all
   ``ConnectorUnit`` instances.
   Also in ``ConnectorUnit``, ``model`` returns the current (new api!) model:
@@ -120,14 +120,14 @@ Future (?)
 
   .. code-block:: python
 
-      binder.to_openerp(magento_id, browse=True)
+      binder.to_odoo(magento_id, browse=True)
 
 * Shorten ``ConnectorUnit.get_binder_for_model`` to
   ``ConnectorUnit.binder_for``
 * Shorten ``ConnectorUnit.get_connector_unit_for_model`` to
   ``ConnectorUnit.unit_for``
 * Renamed ``Environment`` to ``ConnectorEnvironment`` to avoid
-  confusion with ``openerp.api.Environment``
+  confusion with ``odoo.api.Environment``
 * Renamed the class attribute ``ConnectorUnit.model_name`` to
   ``ConnectorUnit.for_model_name``.
 * Added ``_base_binder``, ``_base_mapper``, ``_base_backend_adapter`` in
@@ -136,7 +136,7 @@ Future (?)
   methods
 * ``Session.change_context()`` now supports the same
   argument/keyword arguments semantics than
-  ``openerp.model.BaseModel.with_context()``.
+  ``odoo.model.BaseModel.with_context()``.
 * Renamed ``ExportSynchronizer`` to ``Exporter``
 * Renamed ``ImportSynchronizer`` to ``Importer``
 * Renamed ``DeleteSynchronizer`` to ``Deleter``
@@ -149,7 +149,7 @@ Future (?)
 
 * Job arguments can now contain unicode strings (thanks to Stéphane Bidoul) lp:1288187
 * List view of the jobs improved
-* Jobs now support multicompany (thanks to Laurent Mignon) https://lists.launchpad.net/openerp-connector-community/msg00253.html)
+* Jobs now support multicompany (thanks to Laurent Mignon) https://lists.launchpad.net/odoo-connector-community/msg00253.html)
 * An action can be assigned to a job.  The action is called with a button on the job and could be something like open a form view or an url.
 
 2.1.1 (2014-02-06)
@@ -174,14 +174,14 @@ Future (?)
   mappings' (details in the documentation of the Mapper class)
 * When a job a delayed, the job's UUID is returned by the delay() function
 * Refactoring of mappers. Much details here:
-  https://code.launchpad.net/~openerp-connector-core-editors/openerp-connector/7.0-connector-mapper-refactor/+merge/194485
+  https://code.launchpad.net/~odoo-connector-core-editors/odoo-connector/7.0-connector-mapper-refactor/+merge/194485
 
 2.0.1 (2013-09-12)
 ~~~~~~~~~~~~~~~~~~
 
 * Developers of addons do no longer need to create an AbstractModel with a _name 'name_of_the_module.installed',
   instead, they just have to call connector.connector.install_in_connector() lp:1196859
-* Added a script `openerp-connector-worker` to start processes for Jobs Workers when running OpenERP is multiprocessing
+* Added a script `odoo-connector-worker` to start processes for Jobs Workers when running OpenERP is multiprocessing
 * Fix: inheritance broken when an orm.Model inherit from an orm.AbstractModel. One effect was that the mail.thread features were no longer working (lp:1233355)
 * Fix: do no fail to start when OpenERP has access to a not-OpenERP database (lp:1233388)
 

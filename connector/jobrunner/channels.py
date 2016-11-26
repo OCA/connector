@@ -236,8 +236,10 @@ class ChannelJob(object):
 
 
 class ChannelQueue(object):
-    """A channel queue is a priority queue for jobs that returns
-    jobs with a past ETA first.
+    """A channel queue is a priority queue for jobs.
+
+    Jobs with an eta are set aside until their eta is past due, at
+    which point they start competing normally with other jobs.
 
     >>> q = ChannelQueue()
     >>> j1 = ChannelJob(None, None, 1,
@@ -277,6 +279,23 @@ class ChannelQueue(object):
     >>> q.get_wakeup_time()
     0
     >>> q.pop(now=13)
+
+    Observe that job with past eta still run after jobs with higher priority.
+
+    >>> j4 = ChannelJob(None, None, 4,
+    ...                 seq=0, date_created=4, priority=10, eta=20)
+    >>> j5 = ChannelJob(None, None, 5,
+    ...                 seq=0, date_created=5, priority=1, eta=None)
+    >>> q.add(j4)
+    >>> q.add(j5)
+    >>> q.get_wakeup_time()
+    20
+    >>> q.pop(21)
+    <ChannelJob 5>
+    >>> q.get_wakeup_time()
+    0
+    >>> q.pop(22)
+    <ChannelJob 4>
     """
 
     def __init__(self):
@@ -300,10 +319,11 @@ class ChannelQueue(object):
         self._queue.remove(job)
 
     def pop(self, now):
-        if len(self._eta_queue) and self._eta_queue[0].eta <= now:
-            return self._eta_queue.pop()
-        else:
-            return self._queue.pop()
+        while len(self._eta_queue) and self._eta_queue[0].eta <= now:
+            eta_job = self._eta_queue.pop()
+            eta_job.eta = None
+            self._queue.add(eta_job)
+        return self._queue.pop()
 
     def get_wakeup_time(self, wakeup_time=0):
         if len(self._eta_queue):

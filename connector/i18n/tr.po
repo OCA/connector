@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: connector (9.0)\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-27 02:38+0000\n"
-"PO-Revision-Date: 2016-10-04 09:43+0000\n"
+"POT-Creation-Date: 2016-11-09 14:34+0000\n"
+"PO-Revision-Date: 2016-11-25 14:57+0000\n"
 "Last-Translator: OCA Transbot <transbot@odoo-community.org>\n"
 "Language-Team: Turkish (http://www.transifex.com/oca/OCA-connector-9-0/language/tr/)\n"
 "MIME-Version: 1.0\n"
@@ -25,7 +25,7 @@ msgid ""
 msgstr ""
 
 #. module: connector
-#: code:addons/connector/checkpoint/checkpoint.py:136
+#: code:addons/connector/checkpoint/checkpoint.py:160
 #, python-format
 msgid "A %s needs a review."
 msgstr ""
@@ -238,7 +238,7 @@ msgstr ""
 #: model:ir.model.fields,help:connector.field_connector_checkpoint_message_last_post
 #: model:ir.model.fields,help:connector.field_queue_job_message_last_post
 msgid "Date of the last message posted on the record."
-msgstr ""
+msgstr "Kayıda eklenen son mesajın tarihi."
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_queue_job_name
@@ -315,7 +315,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_message_follower_ids
 #: model:ir.model.fields,field_description:connector.field_queue_job_message_follower_ids
 msgid "Followers"
-msgstr ""
+msgstr "Takipçiler"
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_message_channel_ids
@@ -348,7 +348,7 @@ msgstr "Grupla"
 #. module: connector
 #: model:ir.ui.view,arch_db:connector.view_connector_checkpoint_search
 msgid "Group By..."
-msgstr ""
+msgstr "Grupla..."
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_backend_id
@@ -367,7 +367,7 @@ msgstr "ID"
 #: model:ir.model.fields,help:connector.field_connector_checkpoint_message_unread
 #: model:ir.model.fields,help:connector.field_queue_job_message_unread
 msgid "If checked new messages require your attention."
-msgstr ""
+msgstr "Eğer işaretlenirse yeni mesajlar dikkatinizi ister."
 
 #. module: connector
 #: model:ir.model.fields,help:connector.field_connector_checkpoint_message_needaction
@@ -445,7 +445,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_message_last_post
 #: model:ir.model.fields,field_description:connector.field_queue_job_message_last_post
 msgid "Last Message Date"
-msgstr ""
+msgstr "Son mesaj tarihi"
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_backend___last_update
@@ -505,24 +505,29 @@ msgid "Max. retries"
 msgstr ""
 
 #. module: connector
+#: model:ir.model.fields,field_description:connector.field_connector_checkpoint_message
+msgid "Message"
+msgstr "İleti"
+
+#. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_message_ids
 #: model:ir.model.fields,field_description:connector.field_queue_job_message_ids
 msgid "Messages"
-msgstr ""
+msgstr "Mesajlar"
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_model_id
 #: model:ir.model.fields,field_description:connector.field_queue_job_model_name
 #: model:ir.ui.view,arch_db:connector.view_connector_checkpoint_search
 msgid "Model"
-msgstr ""
+msgstr "Alan"
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_backend_name
 #: model:ir.model.fields,field_description:connector.field_queue_job_channel_name
 #: model:ir.model.fields,field_description:connector.field_queue_job_function_name
 msgid "Name"
-msgstr ""
+msgstr "Adı"
 
 #. module: connector
 #: model:ir.model.fields,help:connector.field_connector_checkpoint_name
@@ -597,6 +602,13 @@ msgid "Priority"
 msgstr ""
 
 #. module: connector
+#: code:addons/connector/checkpoint/checkpoint.py:137
+#: sql_constraint:connector.checkpoint:0
+#, python-format
+msgid "Provide relation to a record or a message."
+msgstr ""
+
+#. module: connector
 #: model:ir.ui.menu,name:connector.menu_queue
 msgid "Queue"
 msgstr ""
@@ -661,6 +673,11 @@ msgid "Review Checkpoints"
 msgstr ""
 
 #. module: connector
+#: model:ir.model.fields,help:connector.field_connector_checkpoint_message
+msgid "Review message"
+msgstr ""
+
+#. module: connector
 #: selection:connector.checkpoint,state:0
 #: model:ir.ui.view,arch_db:connector.view_connector_checkpoint_form
 #: model:ir.ui.view,arch_db:connector.view_connector_checkpoint_search
@@ -719,7 +736,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:connector.field_queue_job_state
 #: model:ir.ui.view,arch_db:connector.view_queue_job_search
 msgid "State"
-msgstr ""
+msgstr "Durum"
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_state
@@ -802,7 +819,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_message_unread
 #: model:ir.model.fields,field_description:connector.field_queue_job_message_unread
 msgid "Unread Messages"
-msgstr ""
+msgstr "Okunmamış mesajlar"
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_message_unread_counter
@@ -851,7 +868,7 @@ msgstr ""
 #: model:ir.ui.view,arch_db:connector.view_connector_config_settings
 #: model:ir.ui.view,arch_db:connector.view_requeue_job
 msgid "or"
-msgstr ""
+msgstr "ya da"
 
 #. module: connector
 #: model:ir.ui.view,arch_db:connector.view_connector_checkpoint_form

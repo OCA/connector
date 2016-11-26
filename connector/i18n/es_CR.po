@@ -7,9 +7,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: connector (9.0)\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-14 07:48+0000\n"
-"PO-Revision-Date: 2016-03-03 12:55+0000\n"
-"Last-Translator: <>\n"
+"POT-Creation-Date: 2016-11-09 14:34+0000\n"
+"PO-Revision-Date: 2016-11-25 14:56+0000\n"
+"Last-Translator: OCA Transbot <transbot@odoo-community.org>\n"
 "Language-Team: Spanish (Costa Rica) (http://www.transifex.com/oca/OCA-connector-9-0/language/es_CR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -25,7 +25,7 @@ msgid ""
 msgstr ""
 
 #. module: connector
-#: code:addons/connector/checkpoint/checkpoint.py:136
+#: code:addons/connector/checkpoint/checkpoint.py:160
 #, python-format
 msgid "A %s needs a review."
 msgstr ""
@@ -39,11 +39,6 @@ msgstr ""
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_config_settings_module_portal
 msgid "Activate the customer portal"
-msgstr ""
-
-#. module: connector
-#: model:ir.model.fields,field_description:connector.field_queue_job_active
-msgid "Active"
 msgstr ""
 
 #. module: connector
@@ -94,19 +89,13 @@ msgid "Cancel"
 msgstr "Cancelar"
 
 #. module: connector
-#: code:addons/connector/queue/job.py:593
-#, python-format
-msgid "Canceled. Nothing to do."
-msgstr ""
-
-#. module: connector
-#: code:addons/connector/queue/model.py:274
+#: code:addons/connector/queue/model.py:272
 #, python-format
 msgid "Cannot change the root channel"
 msgstr ""
 
 #. module: connector
-#: code:addons/connector/queue/model.py:281
+#: code:addons/connector/queue/model.py:279
 #, python-format
 msgid "Cannot remove the root channel"
 msgstr ""
@@ -117,7 +106,7 @@ msgstr ""
 #: model:ir.ui.view,arch_db:connector.view_queue_job_function_search
 #: model:ir.ui.view,arch_db:connector.view_queue_job_search
 msgid "Channel"
-msgstr ""
+msgstr "Canal"
 
 #. module: connector
 #: sql_constraint:queue.job.channel:0
@@ -131,7 +120,7 @@ msgstr ""
 #: model:ir.ui.view,arch_db:connector.view_queue_job_channel_search
 #: model:ir.ui.view,arch_db:connector.view_queue_job_channel_tree
 msgid "Channels"
-msgstr ""
+msgstr "Canales"
 
 #. module: connector
 #: model:ir.ui.menu,name:connector.menu_checkpoint
@@ -228,7 +217,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:connector.field_queue_job_channel_create_date
 #: model:ir.model.fields,field_description:connector.field_queue_requeue_job_create_date
 msgid "Created on"
-msgstr ""
+msgstr "Creado en"
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_queue_job_retry
@@ -254,7 +243,7 @@ msgstr ""
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_queue_job_name
 msgid "Description"
-msgstr ""
+msgstr "Descripción"
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_backend_display_name
@@ -354,7 +343,7 @@ msgstr ""
 #: model:ir.ui.view,arch_db:connector.view_queue_job_function_search
 #: model:ir.ui.view,arch_db:connector.view_queue_job_search
 msgid "Group By"
-msgstr ""
+msgstr "Agrupar por"
 
 #. module: connector
 #: model:ir.ui.view,arch_db:connector.view_connector_checkpoint_search
@@ -372,7 +361,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:connector.field_queue_job_id
 #: model:ir.model.fields,field_description:connector.field_queue_requeue_job_id
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #. module: connector
 #: model:ir.model.fields,help:connector.field_connector_checkpoint_message_unread
@@ -434,6 +423,12 @@ msgstr ""
 #. module: connector
 #: model:mail.message.subtype,name:connector.mt_job_failed
 msgid "Job failed"
+msgstr ""
+
+#. module: connector
+#: code:addons/connector/controllers/main.py:105
+#, python-format
+msgid "Job interrupted and set to Done: nothing to do."
 msgstr ""
 
 #. module: connector
@@ -499,7 +494,7 @@ msgid "Manage multiple companies"
 msgstr ""
 
 #. module: connector
-#: code:addons/connector/queue/model.py:133
+#: code:addons/connector/queue/model.py:132
 #, python-format
 msgid "Manually set to done by %s"
 msgstr ""
@@ -510,10 +505,15 @@ msgid "Max. retries"
 msgstr ""
 
 #. module: connector
+#: model:ir.model.fields,field_description:connector.field_connector_checkpoint_message
+msgid "Message"
+msgstr ""
+
+#. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_message_ids
 #: model:ir.model.fields,field_description:connector.field_queue_job_message_ids
 msgid "Messages"
-msgstr ""
+msgstr "Mensajes"
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_model_id
@@ -527,7 +527,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:connector.field_queue_job_channel_name
 #: model:ir.model.fields,field_description:connector.field_queue_job_function_name
 msgid "Name"
-msgstr ""
+msgstr "Nombre"
 
 #. module: connector
 #: model:ir.model.fields,help:connector.field_connector_checkpoint_name
@@ -541,7 +541,7 @@ msgid "Need Review"
 msgstr ""
 
 #. module: connector
-#: code:addons/connector/queue/model.py:109
+#: code:addons/connector/queue/model.py:108
 #, python-format
 msgid "No action available for this job"
 msgstr ""
@@ -580,7 +580,7 @@ msgid "Parent Channel"
 msgstr ""
 
 #. module: connector
-#: code:addons/connector/queue/model.py:266
+#: code:addons/connector/queue/model.py:264
 #, python-format
 msgid "Parent channel required."
 msgstr ""
@@ -599,6 +599,13 @@ msgstr ""
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_queue_job_priority
 msgid "Priority"
+msgstr ""
+
+#. module: connector
+#: code:addons/connector/checkpoint/checkpoint.py:137
+#: sql_constraint:connector.checkpoint:0
+#, python-format
+msgid "Provide relation to a record or a message."
 msgstr ""
 
 #. module: connector
@@ -666,6 +673,11 @@ msgid "Review Checkpoints"
 msgstr ""
 
 #. module: connector
+#: model:ir.model.fields,help:connector.field_connector_checkpoint_message
+msgid "Review message"
+msgstr ""
+
+#. module: connector
 #: selection:connector.checkpoint,state:0
 #: model:ir.ui.view,arch_db:connector.view_connector_checkpoint_form
 #: model:ir.ui.view,arch_db:connector.view_connector_checkpoint_search
@@ -702,7 +714,7 @@ msgid ""
 msgstr ""
 
 #. module: connector
-#: code:addons/connector/queue/model.py:179
+#: code:addons/connector/queue/model.py:178
 #, python-format
 msgid ""
 "Something bad happened during the execution of the job. More details in the "

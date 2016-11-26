@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: connector (9.0)\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-27 02:38+0000\n"
-"PO-Revision-Date: 2016-10-04 09:42+0000\n"
+"POT-Creation-Date: 2016-11-09 14:34+0000\n"
+"PO-Revision-Date: 2016-11-25 14:55+0000\n"
 "Last-Translator: OCA Transbot <transbot@odoo-community.org>\n"
 "Language-Team: French (http://www.transifex.com/oca/OCA-connector-9-0/language/fr/)\n"
 "MIME-Version: 1.0\n"
@@ -29,7 +29,7 @@ msgid ""
 msgstr "<span class=\"oe_grey oe_inline\"> Si le maximum d'essais défini est 0, le nombre d'essais sera infini.</span>"
 
 #. module: connector
-#: code:addons/connector/checkpoint/checkpoint.py:136
+#: code:addons/connector/checkpoint/checkpoint.py:160
 #, python-format
 msgid "A %s needs a review."
 msgstr "Un %s a besoin d'un contrôle."
@@ -325,13 +325,13 @@ msgstr "Abonnés"
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_message_channel_ids
 #: model:ir.model.fields,field_description:connector.field_queue_job_message_channel_ids
 msgid "Followers (Channels)"
-msgstr ""
+msgstr "Abonnés (canaux)"
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_message_partner_ids
 #: model:ir.model.fields,field_description:connector.field_queue_job_message_partner_ids
 msgid "Followers (Partners)"
-msgstr ""
+msgstr "Abonnés (partenaires)"
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_queue_job_func_name
@@ -377,7 +377,7 @@ msgstr "Si coché, de nouveaux messages nécessitent votre attention."
 #: model:ir.model.fields,help:connector.field_connector_checkpoint_message_needaction
 #: model:ir.model.fields,help:connector.field_queue_job_message_needaction
 msgid "If checked, new messages require your attention."
-msgstr ""
+msgstr "Si coché, les nouveaux messages demanderont votre attention."
 
 #. module: connector
 #: model:ir.model.fields,help:connector.field_connector_config_settings_auth_signup_uninvited
@@ -400,7 +400,7 @@ msgstr "Importé depuis"
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_message_is_follower
 #: model:ir.model.fields,field_description:connector.field_queue_job_message_is_follower
 msgid "Is Follower"
-msgstr ""
+msgstr "Est abonné"
 
 #. module: connector
 #: model:ir.model,name:connector.model_queue_job_channel
@@ -509,6 +509,11 @@ msgid "Max. retries"
 msgstr "Nombre max. de tentatives"
 
 #. module: connector
+#: model:ir.model.fields,field_description:connector.field_connector_checkpoint_message
+msgid "Message"
+msgstr "Message"
+
+#. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_message_ids
 #: model:ir.model.fields,field_description:connector.field_queue_job_message_ids
 msgid "Messages"
@@ -554,19 +559,19 @@ msgstr "Pas d'enregistrement à contrôler."
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_message_needaction_counter
 #: model:ir.model.fields,field_description:connector.field_queue_job_message_needaction_counter
 msgid "Number of Actions"
-msgstr ""
+msgstr "Nombre d'actions"
 
 #. module: connector
 #: model:ir.model.fields,help:connector.field_connector_checkpoint_message_needaction_counter
 #: model:ir.model.fields,help:connector.field_queue_job_message_needaction_counter
 msgid "Number of messages which requires an action"
-msgstr ""
+msgstr "Nombre de messages exigeant une action"
 
 #. module: connector
 #: model:ir.model.fields,help:connector.field_connector_checkpoint_message_unread_counter
 #: model:ir.model.fields,help:connector.field_queue_job_message_unread_counter
 msgid "Number of unread messages"
-msgstr ""
+msgstr "Nombre de messages non-lus"
 
 #. module: connector
 #: model:ir.actions.client,name:connector.action_client_connector_menu
@@ -599,6 +604,13 @@ msgstr "Fonction sérialisée"
 #: model:ir.model.fields,field_description:connector.field_queue_job_priority
 msgid "Priority"
 msgstr "Priorité"
+
+#. module: connector
+#: code:addons/connector/checkpoint/checkpoint.py:137
+#: sql_constraint:connector.checkpoint:0
+#, python-format
+msgid "Provide relation to a record or a message."
+msgstr ""
 
 #. module: connector
 #: model:ir.ui.menu,name:connector.menu_queue
@@ -663,6 +675,11 @@ msgstr "Résultat"
 #: model:ir.ui.view,arch_db:connector.view_connector_checkpoint_review
 msgid "Review Checkpoints"
 msgstr "Contrôler"
+
+#. module: connector
+#: model:ir.model.fields,help:connector.field_connector_checkpoint_message
+msgid "Review message"
+msgstr ""
 
 #. module: connector
 #: selection:connector.checkpoint,state:0
@@ -812,7 +829,7 @@ msgstr "Messages non lus"
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_message_unread_counter
 #: model:ir.model.fields,field_description:connector.field_queue_job_message_unread_counter
 msgid "Unread Messages Counter"
-msgstr ""
+msgstr "Compteur de messages non-lus"
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_config_settings_module_auth_oauth

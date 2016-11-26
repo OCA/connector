@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: connector (9.0)\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-27 02:38+0000\n"
-"PO-Revision-Date: 2016-10-04 09:42+0000\n"
+"POT-Creation-Date: 2016-11-09 14:34+0000\n"
+"PO-Revision-Date: 2016-11-25 14:55+0000\n"
 "Last-Translator: OCA Transbot <transbot@odoo-community.org>\n"
 "Language-Team: German (http://www.transifex.com/oca/OCA-connector-9-0/language/de/)\n"
 "MIME-Version: 1.0\n"
@@ -27,7 +27,7 @@ msgid ""
 msgstr ""
 
 #. module: connector
-#: code:addons/connector/checkpoint/checkpoint.py:136
+#: code:addons/connector/checkpoint/checkpoint.py:160
 #, python-format
 msgid "A %s needs a review."
 msgstr "Ein %s erfordert Sichtung"
@@ -507,6 +507,11 @@ msgid "Max. retries"
 msgstr "Max. Wiederholungen"
 
 #. module: connector
+#: model:ir.model.fields,field_description:connector.field_connector_checkpoint_message
+msgid "Message"
+msgstr "Nachricht"
+
+#. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_message_ids
 #: model:ir.model.fields,field_description:connector.field_queue_job_message_ids
 msgid "Messages"
@@ -599,6 +604,13 @@ msgid "Priority"
 msgstr "Priorität"
 
 #. module: connector
+#: code:addons/connector/checkpoint/checkpoint.py:137
+#: sql_constraint:connector.checkpoint:0
+#, python-format
+msgid "Provide relation to a record or a message."
+msgstr ""
+
+#. module: connector
 #: model:ir.ui.menu,name:connector.menu_queue
 msgid "Queue"
 msgstr "Warteschlange"
@@ -661,6 +673,11 @@ msgstr "Ergebnis"
 #: model:ir.ui.view,arch_db:connector.view_connector_checkpoint_review
 msgid "Review Checkpoints"
 msgstr "Überprüfungs Checkpunkte"
+
+#. module: connector
+#: model:ir.model.fields,help:connector.field_connector_checkpoint_message
+msgid "Review message"
+msgstr ""
 
 #. module: connector
 #: selection:connector.checkpoint,state:0

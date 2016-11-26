@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: connector (9.0)\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-27 02:38+0000\n"
-"PO-Revision-Date: 2016-10-04 09:43+0000\n"
+"POT-Creation-Date: 2016-11-09 14:34+0000\n"
+"PO-Revision-Date: 2016-11-25 14:55+0000\n"
 "Last-Translator: OCA Transbot <transbot@odoo-community.org>\n"
 "Language-Team: Spanish (http://www.transifex.com/oca/OCA-connector-9-0/language/es/)\n"
 "MIME-Version: 1.0\n"
@@ -26,7 +26,7 @@ msgid ""
 msgstr ""
 
 #. module: connector
-#: code:addons/connector/checkpoint/checkpoint.py:136
+#: code:addons/connector/checkpoint/checkpoint.py:160
 #, python-format
 msgid "A %s needs a review."
 msgstr ""
@@ -35,7 +35,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_message_needaction
 #: model:ir.model.fields,field_description:connector.field_queue_job_message_needaction
 msgid "Action Needed"
-msgstr ""
+msgstr "Acción requerida"
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_config_settings_module_portal
@@ -146,7 +146,7 @@ msgstr "Hcer clic en"
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_queue_job_company_id
 msgid "Company"
-msgstr ""
+msgstr "Compañía"
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_queue_job_channel_complete_name
@@ -239,7 +239,7 @@ msgstr "Fecha de finalización"
 #: model:ir.model.fields,help:connector.field_connector_checkpoint_message_last_post
 #: model:ir.model.fields,help:connector.field_queue_job_message_last_post
 msgid "Date of the last message posted on the record."
-msgstr ""
+msgstr "Fecha del último mensaje publicado en el registro."
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_queue_job_name
@@ -322,13 +322,13 @@ msgstr "Seguidores"
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_message_channel_ids
 #: model:ir.model.fields,field_description:connector.field_queue_job_message_channel_ids
 msgid "Followers (Channels)"
-msgstr ""
+msgstr "Seguidores (canales)"
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_message_partner_ids
 #: model:ir.model.fields,field_description:connector.field_queue_job_message_partner_ids
 msgid "Followers (Partners)"
-msgstr ""
+msgstr "Seguidores (empresas)"
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_queue_job_func_name
@@ -446,7 +446,7 @@ msgstr "Trabajos"
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_message_last_post
 #: model:ir.model.fields,field_description:connector.field_queue_job_message_last_post
 msgid "Last Message Date"
-msgstr ""
+msgstr "Fecha del último mensaje"
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_backend___last_update
@@ -504,6 +504,11 @@ msgstr ""
 #: model:ir.model.fields,field_description:connector.field_queue_job_max_retries
 msgid "Max. retries"
 msgstr "Max. reintentos"
+
+#. module: connector
+#: model:ir.model.fields,field_description:connector.field_connector_checkpoint_message
+msgid "Message"
+msgstr "Mensaje"
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_message_ids
@@ -598,6 +603,13 @@ msgid "Priority"
 msgstr "Prioridad"
 
 #. module: connector
+#: code:addons/connector/checkpoint/checkpoint.py:137
+#: sql_constraint:connector.checkpoint:0
+#, python-format
+msgid "Provide relation to a record or a message."
+msgstr ""
+
+#. module: connector
 #: model:ir.ui.menu,name:connector.menu_queue
 msgid "Queue"
 msgstr "Cola"
@@ -660,6 +672,11 @@ msgstr "Resultado"
 #: model:ir.ui.view,arch_db:connector.view_connector_checkpoint_review
 msgid "Review Checkpoints"
 msgstr "Puntos de Control de Revisión"
+
+#. module: connector
+#: model:ir.model.fields,help:connector.field_connector_checkpoint_message
+msgid "Review message"
+msgstr ""
 
 #. module: connector
 #: selection:connector.checkpoint,state:0

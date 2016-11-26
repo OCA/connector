@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: connector (9.0)\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-27 02:38+0000\n"
-"PO-Revision-Date: 2016-10-04 09:43+0000\n"
+"POT-Creation-Date: 2016-11-09 14:34+0000\n"
+"PO-Revision-Date: 2016-11-25 14:56+0000\n"
 "Last-Translator: OCA Transbot <transbot@odoo-community.org>\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/oca/OCA-connector-9-0/language/zh_CN/)\n"
 "MIME-Version: 1.0\n"
@@ -25,7 +25,7 @@ msgid ""
 msgstr ""
 
 #. module: connector
-#: code:addons/connector/checkpoint/checkpoint.py:136
+#: code:addons/connector/checkpoint/checkpoint.py:160
 #, python-format
 msgid "A %s needs a review."
 msgstr ""
@@ -106,7 +106,7 @@ msgstr ""
 #: model:ir.ui.view,arch_db:connector.view_queue_job_function_search
 #: model:ir.ui.view,arch_db:connector.view_queue_job_search
 msgid "Channel"
-msgstr ""
+msgstr "渠道"
 
 #. module: connector
 #: sql_constraint:queue.job.channel:0
@@ -120,7 +120,7 @@ msgstr ""
 #: model:ir.ui.view,arch_db:connector.view_queue_job_channel_search
 #: model:ir.ui.view,arch_db:connector.view_queue_job_channel_tree
 msgid "Channels"
-msgstr ""
+msgstr "渠道"
 
 #. module: connector
 #: model:ir.ui.menu,name:connector.menu_checkpoint
@@ -238,7 +238,7 @@ msgstr "完成日期"
 #: model:ir.model.fields,help:connector.field_connector_checkpoint_message_last_post
 #: model:ir.model.fields,help:connector.field_queue_job_message_last_post
 msgid "Date of the last message posted on the record."
-msgstr ""
+msgstr "发布到记录上的最后消息的日期"
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_queue_job_name
@@ -256,7 +256,7 @@ msgstr "描述"
 #: model:ir.model.fields,field_description:connector.field_queue_job_function_display_name
 #: model:ir.model.fields,field_description:connector.field_queue_requeue_job_display_name
 msgid "Display Name"
-msgstr ""
+msgstr "显示名称"
 
 #. module: connector
 #: model:ir.ui.view,arch_db:connector.view_queue_job_search
@@ -343,7 +343,7 @@ msgstr "让你的顾客获取他们的文档"
 #: model:ir.ui.view,arch_db:connector.view_queue_job_function_search
 #: model:ir.ui.view,arch_db:connector.view_queue_job_search
 msgid "Group By"
-msgstr ""
+msgstr "分组"
 
 #. module: connector
 #: model:ir.ui.view,arch_db:connector.view_connector_checkpoint_search
@@ -445,7 +445,7 @@ msgstr "任务"
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_message_last_post
 #: model:ir.model.fields,field_description:connector.field_queue_job_message_last_post
 msgid "Last Message Date"
-msgstr ""
+msgstr "最后消息日期"
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_backend___last_update
@@ -458,7 +458,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:connector.field_queue_job_function___last_update
 #: model:ir.model.fields,field_description:connector.field_queue_requeue_job___last_update
 msgid "Last Modified on"
-msgstr ""
+msgstr "最后修改时间"
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_review_write_uid
@@ -503,6 +503,11 @@ msgstr ""
 #: model:ir.model.fields,field_description:connector.field_queue_job_max_retries
 msgid "Max. retries"
 msgstr "最大尝试数"
+
+#. module: connector
+#: model:ir.model.fields,field_description:connector.field_connector_checkpoint_message
+msgid "Message"
+msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_message_ids
@@ -597,6 +602,13 @@ msgid "Priority"
 msgstr "优先级"
 
 #. module: connector
+#: code:addons/connector/checkpoint/checkpoint.py:137
+#: sql_constraint:connector.checkpoint:0
+#, python-format
+msgid "Provide relation to a record or a message."
+msgstr ""
+
+#. module: connector
 #: model:ir.ui.menu,name:connector.menu_queue
 msgid "Queue"
 msgstr "队列任务"
@@ -624,7 +636,7 @@ msgstr ""
 #. module: connector
 #: model:ir.ui.view,arch_db:connector.view_queue_job_form
 msgid "Related"
-msgstr ""
+msgstr "建立联系"
 
 #. module: connector
 #: code:addons/connector/related_action.py:48
@@ -659,6 +671,11 @@ msgstr "结果"
 #: model:ir.ui.view,arch_db:connector.view_connector_checkpoint_review
 msgid "Review Checkpoints"
 msgstr "审查检查点"
+
+#. module: connector
+#: model:ir.model.fields,help:connector.field_connector_checkpoint_message
+msgid "Review message"
+msgstr ""
 
 #. module: connector
 #: selection:connector.checkpoint,state:0

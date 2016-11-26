@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: connector (9.0)\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-27 02:38+0000\n"
-"PO-Revision-Date: 2016-09-27 02:38+0000\n"
+"POT-Creation-Date: 2016-11-09 14:34+0000\n"
+"PO-Revision-Date: 2016-11-25 14:55+0000\n"
 "Last-Translator: OCA Transbot <transbot@odoo-community.org>\n"
 "Language-Team: Romanian (http://www.transifex.com/oca/OCA-connector-9-0/language/ro/)\n"
 "MIME-Version: 1.0\n"
@@ -26,7 +26,7 @@ msgid ""
 msgstr ""
 
 #. module: connector
-#: code:addons/connector/checkpoint/checkpoint.py:136
+#: code:addons/connector/checkpoint/checkpoint.py:160
 #, python-format
 msgid "A %s needs a review."
 msgstr ""
@@ -506,6 +506,11 @@ msgid "Max. retries"
 msgstr ""
 
 #. module: connector
+#: model:ir.model.fields,field_description:connector.field_connector_checkpoint_message
+msgid "Message"
+msgstr ""
+
+#. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_message_ids
 #: model:ir.model.fields,field_description:connector.field_queue_job_message_ids
 msgid "Messages"
@@ -598,6 +603,13 @@ msgid "Priority"
 msgstr ""
 
 #. module: connector
+#: code:addons/connector/checkpoint/checkpoint.py:137
+#: sql_constraint:connector.checkpoint:0
+#, python-format
+msgid "Provide relation to a record or a message."
+msgstr ""
+
+#. module: connector
 #: model:ir.ui.menu,name:connector.menu_queue
 msgid "Queue"
 msgstr ""
@@ -659,6 +671,11 @@ msgstr ""
 #: model:ir.actions.act_window,name:connector.action_connector_checkpoint_review
 #: model:ir.ui.view,arch_db:connector.view_connector_checkpoint_review
 msgid "Review Checkpoints"
+msgstr ""
+
+#. module: connector
+#: model:ir.model.fields,help:connector.field_connector_checkpoint_message
+msgid "Review message"
 msgstr ""
 
 #. module: connector
@@ -852,7 +869,7 @@ msgstr ""
 #: model:ir.ui.view,arch_db:connector.view_connector_config_settings
 #: model:ir.ui.view,arch_db:connector.view_requeue_job
 msgid "or"
-msgstr ""
+msgstr "sau"
 
 #. module: connector
 #: model:ir.ui.view,arch_db:connector.view_connector_checkpoint_form

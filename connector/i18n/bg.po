@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: connector (9.0)\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-27 02:38+0000\n"
-"PO-Revision-Date: 2016-09-27 02:38+0000\n"
+"POT-Creation-Date: 2016-11-09 14:34+0000\n"
+"PO-Revision-Date: 2016-11-25 14:57+0000\n"
 "Last-Translator: OCA Transbot <transbot@odoo-community.org>\n"
 "Language-Team: Bulgarian (http://www.transifex.com/oca/OCA-connector-9-0/language/bg/)\n"
 "MIME-Version: 1.0\n"
@@ -26,7 +26,7 @@ msgid ""
 msgstr ""
 
 #. module: connector
-#: code:addons/connector/checkpoint/checkpoint.py:136
+#: code:addons/connector/checkpoint/checkpoint.py:160
 #, python-format
 msgid "A %s needs a review."
 msgstr ""
@@ -107,7 +107,7 @@ msgstr ""
 #: model:ir.ui.view,arch_db:connector.view_queue_job_function_search
 #: model:ir.ui.view,arch_db:connector.view_queue_job_search
 msgid "Channel"
-msgstr ""
+msgstr "Канал"
 
 #. module: connector
 #: sql_constraint:queue.job.channel:0
@@ -239,7 +239,7 @@ msgstr ""
 #: model:ir.model.fields,help:connector.field_connector_checkpoint_message_last_post
 #: model:ir.model.fields,help:connector.field_queue_job_message_last_post
 msgid "Date of the last message posted on the record."
-msgstr ""
+msgstr "Дата на последното съобщение, публикувано на записа."
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_queue_job_name
@@ -257,13 +257,13 @@ msgstr "Описание"
 #: model:ir.model.fields,field_description:connector.field_queue_job_function_display_name
 #: model:ir.model.fields,field_description:connector.field_queue_requeue_job_display_name
 msgid "Display Name"
-msgstr ""
+msgstr "Име за Показване"
 
 #. module: connector
 #: model:ir.ui.view,arch_db:connector.view_queue_job_search
 #: selection:queue.job,state:0
 msgid "Done"
-msgstr ""
+msgstr "Готово"
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_config_settings_auth_signup_reset_password
@@ -316,7 +316,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_message_follower_ids
 #: model:ir.model.fields,field_description:connector.field_queue_job_message_follower_ids
 msgid "Followers"
-msgstr ""
+msgstr "Последователи"
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_message_channel_ids
@@ -344,7 +344,7 @@ msgstr ""
 #: model:ir.ui.view,arch_db:connector.view_queue_job_function_search
 #: model:ir.ui.view,arch_db:connector.view_queue_job_search
 msgid "Group By"
-msgstr ""
+msgstr "Групирай По"
 
 #. module: connector
 #: model:ir.ui.view,arch_db:connector.view_connector_checkpoint_search
@@ -368,7 +368,7 @@ msgstr "ID"
 #: model:ir.model.fields,help:connector.field_connector_checkpoint_message_unread
 #: model:ir.model.fields,help:connector.field_queue_job_message_unread
 msgid "If checked new messages require your attention."
-msgstr ""
+msgstr "Ако е отбелязано, новите съобщения ще изискват внимание."
 
 #. module: connector
 #: model:ir.model.fields,help:connector.field_connector_checkpoint_message_needaction
@@ -446,7 +446,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_message_last_post
 #: model:ir.model.fields,field_description:connector.field_queue_job_message_last_post
 msgid "Last Message Date"
-msgstr ""
+msgstr "Дата на последното съобщение"
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_backend___last_update
@@ -506,10 +506,15 @@ msgid "Max. retries"
 msgstr ""
 
 #. module: connector
+#: model:ir.model.fields,field_description:connector.field_connector_checkpoint_message
+msgid "Message"
+msgstr ""
+
+#. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_message_ids
 #: model:ir.model.fields,field_description:connector.field_queue_job_message_ids
 msgid "Messages"
-msgstr ""
+msgstr "Съобщения"
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_model_id
@@ -598,6 +603,13 @@ msgid "Priority"
 msgstr ""
 
 #. module: connector
+#: code:addons/connector/checkpoint/checkpoint.py:137
+#: sql_constraint:connector.checkpoint:0
+#, python-format
+msgid "Provide relation to a record or a message."
+msgstr ""
+
+#. module: connector
 #: model:ir.ui.menu,name:connector.menu_queue
 msgid "Queue"
 msgstr ""
@@ -659,6 +671,11 @@ msgstr ""
 #: model:ir.actions.act_window,name:connector.action_connector_checkpoint_review
 #: model:ir.ui.view,arch_db:connector.view_connector_checkpoint_review
 msgid "Review Checkpoints"
+msgstr ""
+
+#. module: connector
+#: model:ir.model.fields,help:connector.field_connector_checkpoint_message
+msgid "Review message"
 msgstr ""
 
 #. module: connector
@@ -803,7 +820,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_message_unread
 #: model:ir.model.fields,field_description:connector.field_queue_job_message_unread
 msgid "Unread Messages"
-msgstr ""
+msgstr "Непрочетени съобщения"
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_message_unread_counter

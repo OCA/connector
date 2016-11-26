@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: connector (8.0)\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-08 05:51+0000\n"
-"PO-Revision-Date: 2016-09-09 12:26+0000\n"
+"POT-Creation-Date: 2016-09-17 07:17+0000\n"
+"PO-Revision-Date: 2016-11-25 14:56+0000\n"
 "Last-Translator: OCA Transbot <transbot@odoo-community.org>\n"
 "Language-Team: Spanish (Costa Rica) (http://www.transifex.com/oca/OCA-connector-8-0/language/es_CR/)\n"
 "MIME-Version: 1.0\n"
@@ -112,7 +112,7 @@ msgstr ""
 #: view:queue.job.function:connector.view_queue_job_function_search
 #: field:queue.job.function,channel_id:0
 msgid "Channel"
-msgstr ""
+msgstr "Canal"
 
 #. module: connector
 #: sql_constraint:queue.job.channel:0
@@ -126,7 +126,7 @@ msgstr ""
 #: view:queue.job.channel:connector.view_queue_job_channel_search
 #: view:queue.job.channel:connector.view_queue_job_channel_tree
 msgid "Channels"
-msgstr ""
+msgstr "Canales"
 
 #. module: connector
 #: model:ir.ui.menu,name:connector.menu_checkpoint
@@ -220,7 +220,7 @@ msgstr ""
 #: field:connector.config.settings,create_date:0
 #: field:queue.job.channel,create_date:0 field:queue.requeue.job,create_date:0
 msgid "Created on"
-msgstr ""
+msgstr "Creado en"
 
 #. module: connector
 #: field:queue.job,retry:0
@@ -246,7 +246,7 @@ msgstr ""
 #. module: connector
 #: field:queue.job,name:0
 msgid "Description"
-msgstr ""
+msgstr "Descripción"
 
 #. module: connector
 #: field:connector.backend,display_name:0
@@ -320,7 +320,7 @@ msgstr ""
 #: view:queue.job:connector.view_queue_job_search
 #: view:queue.job.function:connector.view_queue_job_function_search
 msgid "Group By"
-msgstr ""
+msgstr "Agrupar por"
 
 #. module: connector
 #: view:connector.checkpoint:connector.view_connector_checkpoint_search
@@ -342,7 +342,7 @@ msgstr ""
 #: field:queue.job.channel,id:0 field:queue.job.function,id:0
 #: field:queue.requeue.job,id:0 field:queue.worker,id:0
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #. module: connector
 #: help:connector.checkpoint,message_unread:0 help:queue.job,message_unread:0
@@ -472,7 +472,7 @@ msgstr ""
 #. module: connector
 #: field:connector.checkpoint,message_ids:0 field:queue.job,message_ids:0
 msgid "Messages"
-msgstr ""
+msgstr "Mensajes"
 
 #. module: connector
 #: help:connector.checkpoint,message_ids:0 help:queue.job,message_ids:0
@@ -489,7 +489,7 @@ msgstr ""
 #: field:connector.backend,name:0 field:queue.job.channel,name:0
 #: field:queue.job.function,name:0
 msgid "Name"
-msgstr ""
+msgstr "Nombre"
 
 #. module: connector
 #: help:connector.checkpoint,name:0

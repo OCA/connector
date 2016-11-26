@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: connector (8.0)\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-09-17 07:17+0000\n"
-"PO-Revision-Date: 2016-10-05 06:35+0000\n"
+"PO-Revision-Date: 2016-11-25 14:57+0000\n"
 "Last-Translator: OCA Transbot <transbot@odoo-community.org>\n"
 "Language-Team: Croatian (http://www.transifex.com/oca/OCA-connector-8-0/language/hr/)\n"
 "MIME-Version: 1.0\n"
@@ -113,7 +113,7 @@ msgstr ""
 #: view:queue.job.function:connector.view_queue_job_function_search
 #: field:queue.job.function,channel_id:0
 msgid "Channel"
-msgstr ""
+msgstr "Kanal"
 
 #. module: connector
 #: sql_constraint:queue.job.channel:0
@@ -127,7 +127,7 @@ msgstr ""
 #: view:queue.job.channel:connector.view_queue_job_channel_search
 #: view:queue.job.channel:connector.view_queue_job_channel_tree
 msgid "Channels"
-msgstr ""
+msgstr "Kanali prodaje"
 
 #. module: connector
 #: model:ir.ui.menu,name:connector.menu_checkpoint
@@ -242,12 +242,12 @@ msgstr "Datum izvršenja"
 #: help:connector.checkpoint,message_last_post:0
 #: help:queue.job,message_last_post:0
 msgid "Date of the last message posted on the record."
-msgstr ""
+msgstr "Datum zadnjeg zapisa"
 
 #. module: connector
 #: field:queue.job,name:0
 msgid "Description"
-msgstr ""
+msgstr "Opis"
 
 #. module: connector
 #: field:connector.backend,display_name:0
@@ -264,7 +264,7 @@ msgstr "Naziv "
 #. module: connector
 #: view:queue.job:connector.view_queue_job_search selection:queue.job,state:0
 msgid "Done"
-msgstr ""
+msgstr "Izvršeno"
 
 #. module: connector
 #: field:queue.job,date_enqueued:0
@@ -305,7 +305,7 @@ msgstr ""
 #: field:connector.checkpoint,message_follower_ids:0
 #: field:queue.job,message_follower_ids:0
 msgid "Followers"
-msgstr ""
+msgstr "Pratitelji"
 
 #. module: connector
 #: field:queue.job,func_name:0
@@ -321,7 +321,7 @@ msgstr ""
 #: view:queue.job:connector.view_queue_job_search
 #: view:queue.job.function:connector.view_queue_job_function_search
 msgid "Group By"
-msgstr ""
+msgstr "Grupiraj po"
 
 #. module: connector
 #: view:connector.checkpoint:connector.view_connector_checkpoint_search
@@ -419,7 +419,7 @@ msgstr ""
 #: field:connector.checkpoint,message_last_post:0
 #: field:queue.job,message_last_post:0
 msgid "Last Message Date"
-msgstr ""
+msgstr "Datum zadnje poruke"
 
 #. module: connector
 #: field:connector.backend,__last_update:0
@@ -478,7 +478,7 @@ msgstr "Poruke"
 #. module: connector
 #: help:connector.checkpoint,message_ids:0 help:queue.job,message_ids:0
 msgid "Messages and communication history"
-msgstr ""
+msgstr "Poruke i povijest"
 
 #. module: connector
 #: view:connector.checkpoint:connector.view_connector_checkpoint_search
@@ -490,7 +490,7 @@ msgstr "Model"
 #: field:connector.backend,name:0 field:queue.job.channel,name:0
 #: field:queue.job.function,name:0
 msgid "Name"
-msgstr ""
+msgstr "Naziv"
 
 #. module: connector
 #: help:connector.checkpoint,name:0
@@ -533,7 +533,7 @@ msgstr ""
 #. module: connector
 #: view:queue.job:connector.view_queue_job_search selection:queue.job,state:0
 msgid "Pending"
-msgstr ""
+msgstr "U tijeku"
 
 #. module: connector
 #: field:queue.job,func:0
@@ -578,7 +578,7 @@ msgstr ""
 #. module: connector
 #: view:queue.job:connector.view_queue_job_form
 msgid "Related"
-msgstr ""
+msgstr "Povezano"
 
 #. module: connector
 #: code:addons/connector/related_action.py:48
@@ -669,7 +669,7 @@ msgstr ""
 #. module: connector
 #: view:queue.job:connector.view_queue_job_search field:queue.job,state:0
 msgid "State"
-msgstr ""
+msgstr "Status"
 
 #. module: connector
 #: field:connector.checkpoint,state:0

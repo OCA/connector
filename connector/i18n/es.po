@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: connector (8.0)\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-09-17 07:17+0000\n"
-"PO-Revision-Date: 2016-10-04 09:43+0000\n"
+"PO-Revision-Date: 2016-11-25 14:56+0000\n"
 "Last-Translator: OCA Transbot <transbot@odoo-community.org>\n"
 "Language-Team: Spanish (http://www.transifex.com/oca/OCA-connector-8-0/language/es/)\n"
 "MIME-Version: 1.0\n"
@@ -156,7 +156,7 @@ msgstr "Hcer clic en"
 #. module: connector
 #: field:queue.job,company_id:0
 msgid "Company"
-msgstr ""
+msgstr "Compañía"
 
 #. module: connector
 #: field:queue.job.channel,complete_name:0 field:queue.job.function,channel:0
@@ -246,7 +246,7 @@ msgstr "Fecha de finalización"
 #: help:connector.checkpoint,message_last_post:0
 #: help:queue.job,message_last_post:0
 msgid "Date of the last message posted on the record."
-msgstr ""
+msgstr "Fecha del último mensaje publicado en el registro."
 
 #. module: connector
 #: field:queue.job,name:0
@@ -423,7 +423,7 @@ msgstr "Última Comprobación Viva"
 #: field:connector.checkpoint,message_last_post:0
 #: field:queue.job,message_last_post:0
 msgid "Last Message Date"
-msgstr ""
+msgstr "Fecha del último mensaje"
 
 #. module: connector
 #: field:connector.backend,__last_update:0

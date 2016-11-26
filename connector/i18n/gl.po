@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: connector (8.0)\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-08 05:51+0000\n"
-"PO-Revision-Date: 2016-09-09 12:25+0000\n"
+"POT-Creation-Date: 2016-09-17 07:17+0000\n"
+"PO-Revision-Date: 2016-11-25 14:58+0000\n"
 "Last-Translator: OCA Transbot <transbot@odoo-community.org>\n"
 "Language-Team: Galician (http://www.transifex.com/oca/OCA-connector-8-0/language/gl/)\n"
 "MIME-Version: 1.0\n"
@@ -430,7 +430,7 @@ msgstr ""
 #: field:queue.job.function,__last_update:0
 #: field:queue.requeue.job,__last_update:0 field:queue.worker,__last_update:0
 msgid "Last Modified on"
-msgstr ""
+msgstr "Última modificación"
 
 #. module: connector
 #: field:connector.checkpoint,write_uid:0
@@ -780,7 +780,7 @@ msgstr ""
 #: view:connector.config.settings:connector.view_connector_config_settings
 #: view:queue.requeue.job:connector.view_requeue_job
 msgid "or"
-msgstr ""
+msgstr "ou"
 
 #. module: connector
 #: view:connector.checkpoint:connector.view_connector_checkpoint_form

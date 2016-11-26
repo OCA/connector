@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: connector (8.0)\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-08 05:51+0000\n"
-"PO-Revision-Date: 2016-09-09 12:27+0000\n"
+"POT-Creation-Date: 2016-09-17 07:17+0000\n"
+"PO-Revision-Date: 2016-11-25 14:58+0000\n"
 "Last-Translator: OCA Transbot <transbot@odoo-community.org>\n"
 "Language-Team: Portuguese (http://www.transifex.com/oca/OCA-connector-8-0/language/pt/)\n"
 "MIME-Version: 1.0\n"
@@ -258,7 +258,7 @@ msgstr ""
 #: field:queue.job.function,display_name:0
 #: field:queue.requeue.job,display_name:0 field:queue.worker,display_name:0
 msgid "Display Name"
-msgstr ""
+msgstr "Nome"
 
 #. module: connector
 #: view:queue.job:connector.view_queue_job_search selection:queue.job,state:0
@@ -320,7 +320,7 @@ msgstr ""
 #: view:queue.job:connector.view_queue_job_search
 #: view:queue.job.function:connector.view_queue_job_function_search
 msgid "Group By"
-msgstr ""
+msgstr "Agrupar por"
 
 #. module: connector
 #: view:connector.checkpoint:connector.view_connector_checkpoint_search
@@ -430,7 +430,7 @@ msgstr ""
 #: field:queue.job.function,__last_update:0
 #: field:queue.requeue.job,__last_update:0 field:queue.worker,__last_update:0
 msgid "Last Modified on"
-msgstr ""
+msgstr "Modificado a última vez por"
 
 #. module: connector
 #: field:connector.checkpoint,write_uid:0
@@ -483,13 +483,13 @@ msgstr ""
 #: view:connector.checkpoint:connector.view_connector_checkpoint_search
 #: field:connector.checkpoint,model_id:0 field:queue.job,model_name:0
 msgid "Model"
-msgstr ""
+msgstr "Modelo"
 
 #. module: connector
 #: field:connector.backend,name:0 field:queue.job.channel,name:0
 #: field:queue.job.function,name:0
 msgid "Name"
-msgstr ""
+msgstr "Nome"
 
 #. module: connector
 #: help:connector.checkpoint,name:0
@@ -780,7 +780,7 @@ msgstr ""
 #: view:connector.config.settings:connector.view_connector_config_settings
 #: view:queue.requeue.job:connector.view_requeue_job
 msgid "or"
-msgstr ""
+msgstr "ou"
 
 #. module: connector
 #: view:connector.checkpoint:connector.view_connector_checkpoint_form

@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: connector (8.0)\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-09-17 07:17+0000\n"
-"PO-Revision-Date: 2016-10-04 09:43+0000\n"
+"PO-Revision-Date: 2016-11-25 14:55+0000\n"
 "Last-Translator: OCA Transbot <transbot@odoo-community.org>\n"
 "Language-Team: Finnish (http://www.transifex.com/oca/OCA-connector-8-0/language/fi/)\n"
 "MIME-Version: 1.0\n"
@@ -87,7 +87,7 @@ msgstr ""
 #: view:connector.config.settings:connector.view_connector_config_settings
 #: view:queue.requeue.job:connector.view_requeue_job
 msgid "Cancel"
-msgstr ""
+msgstr "Peruuta"
 
 #. module: connector
 #: code:addons/connector/queue/job.py:619
@@ -241,7 +241,7 @@ msgstr ""
 #: help:connector.checkpoint,message_last_post:0
 #: help:queue.job,message_last_post:0
 msgid "Date of the last message posted on the record."
-msgstr ""
+msgstr "Viimeisimmän lähetetyn viestin päiväys."
 
 #. module: connector
 #: field:queue.job,name:0
@@ -304,7 +304,7 @@ msgstr ""
 #: field:connector.checkpoint,message_follower_ids:0
 #: field:queue.job,message_follower_ids:0
 msgid "Followers"
-msgstr ""
+msgstr "Seuraajat"
 
 #. module: connector
 #: field:queue.job,func_name:0
@@ -325,7 +325,7 @@ msgstr ""
 #. module: connector
 #: view:connector.checkpoint:connector.view_connector_checkpoint_search
 msgid "Group By..."
-msgstr ""
+msgstr "Ryhmittele..."
 
 #. module: connector
 #: help:connector.checkpoint,message_summary:0
@@ -347,7 +347,7 @@ msgstr "ID"
 #. module: connector
 #: help:connector.checkpoint,message_unread:0 help:queue.job,message_unread:0
 msgid "If checked new messages require your attention."
-msgstr ""
+msgstr "Jos valittuna, uudet viestit vaatii toimenpiteitä."
 
 #. module: connector
 #: view:queue.job:connector.view_queue_job_form
@@ -418,7 +418,7 @@ msgstr ""
 #: field:connector.checkpoint,message_last_post:0
 #: field:queue.job,message_last_post:0
 msgid "Last Message Date"
-msgstr ""
+msgstr "Viimeisimmän viestin päiväys"
 
 #. module: connector
 #: field:connector.backend,__last_update:0
@@ -472,7 +472,7 @@ msgstr ""
 #. module: connector
 #: field:connector.checkpoint,message_ids:0 field:queue.job,message_ids:0
 msgid "Messages"
-msgstr ""
+msgstr "Viestejä"
 
 #. module: connector
 #: help:connector.checkpoint,message_ids:0 help:queue.job,message_ids:0
@@ -483,13 +483,13 @@ msgstr ""
 #: view:connector.checkpoint:connector.view_connector_checkpoint_search
 #: field:connector.checkpoint,model_id:0 field:queue.job,model_name:0
 msgid "Model"
-msgstr ""
+msgstr "Mall"
 
 #. module: connector
 #: field:connector.backend,name:0 field:queue.job.channel,name:0
 #: field:queue.job.function,name:0
 msgid "Name"
-msgstr ""
+msgstr "Nimi"
 
 #. module: connector
 #: help:connector.checkpoint,name:0
@@ -673,7 +673,7 @@ msgstr "Tila"
 #. module: connector
 #: field:connector.checkpoint,state:0
 msgid "Status"
-msgstr ""
+msgstr "Tila"
 
 #. module: connector
 #: field:connector.checkpoint,message_summary:0
@@ -732,7 +732,7 @@ msgstr ""
 #: field:connector.checkpoint,message_unread:0
 #: field:queue.job,message_unread:0
 msgid "Unread Messages"
-msgstr ""
+msgstr "Lukemattomia viestejä"
 
 #. module: connector
 #: field:connector.config.settings,module_auth_oauth:0

@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: connector (8.0)\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-09-17 07:17+0000\n"
-"PO-Revision-Date: 2016-11-25 14:57+0000\n"
+"PO-Revision-Date: 2016-10-11 09:51+0000\n"
 "Last-Translator: OCA Transbot <transbot@odoo-community.org>\n"
-"Language-Team: Bulgarian (http://www.transifex.com/oca/OCA-connector-8-0/language/bg/)\n"
+"Language-Team: Hebrew (http://www.transifex.com/oca/OCA-connector-8-0/language/he/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Language: bg\n"
+"Language: he\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #. module: connector
@@ -45,7 +45,7 @@ msgstr ""
 #. module: connector
 #: field:queue.job,active:0
 msgid "Active"
-msgstr "Активен"
+msgstr ""
 
 #. module: connector
 #: field:connector.config.settings,alias_domain:0
@@ -70,7 +70,7 @@ msgstr ""
 #. module: connector
 #: view:connector.config.settings:connector.view_connector_config_settings
 msgid "Apply"
-msgstr "Приложи"
+msgstr ""
 
 #. module: connector
 #: field:connector.config.settings,module_google_drive:0
@@ -87,7 +87,7 @@ msgstr ""
 #: view:connector.config.settings:connector.view_connector_config_settings
 #: view:queue.requeue.job:connector.view_requeue_job
 msgid "Cancel"
-msgstr "Откажи"
+msgstr ""
 
 #. module: connector
 #: code:addons/connector/queue/job.py:619
@@ -112,7 +112,7 @@ msgstr ""
 #: view:queue.job.function:connector.view_queue_job_function_search
 #: field:queue.job.function,channel_id:0
 msgid "Channel"
-msgstr "Канал"
+msgstr "ערוץ"
 
 #. module: connector
 #: sql_constraint:queue.job.channel:0
@@ -126,7 +126,7 @@ msgstr ""
 #: view:queue.job.channel:connector.view_queue_job_channel_search
 #: view:queue.job.channel:connector.view_queue_job_channel_tree
 msgid "Channels"
-msgstr ""
+msgstr "ערוצים"
 
 #. module: connector
 #: model:ir.ui.menu,name:connector.menu_checkpoint
@@ -151,7 +151,7 @@ msgstr ""
 #. module: connector
 #: field:queue.job,company_id:0
 msgid "Company"
-msgstr "Фирма"
+msgstr ""
 
 #. module: connector
 #: field:queue.job.channel,complete_name:0 field:queue.job.function,channel:0
@@ -168,7 +168,7 @@ msgstr ""
 #: model:ir.module.category,name:connector.module_category_connector
 #: model:ir.ui.menu,name:connector.menu_connector_config_settings
 msgid "Connector"
-msgstr "Конектор"
+msgstr ""
 
 #. module: connector
 #: model:ir.model,name:connector.model_connector_backend
@@ -199,12 +199,12 @@ msgstr ""
 #: model:ir.ui.menu,name:connector.menu_connector_root
 #: view:res.partner:connector.view_partner_connector_form
 msgid "Connectors"
-msgstr "Конектори"
+msgstr ""
 
 #. module: connector
 #: field:queue.job,date_created:0
 msgid "Created Date"
-msgstr "Създаден на"
+msgstr ""
 
 #. module: connector
 #: field:connector.checkpoint,create_uid:0
@@ -212,7 +212,7 @@ msgstr "Създаден на"
 #: field:connector.config.settings,create_uid:0
 #: field:queue.job.channel,create_uid:0 field:queue.requeue.job,create_uid:0
 msgid "Created by"
-msgstr "Създадено от"
+msgstr "נוצר על ידי"
 
 #. module: connector
 #: field:connector.checkpoint,create_date:0
@@ -220,7 +220,7 @@ msgstr "Създадено от"
 #: field:connector.config.settings,create_date:0
 #: field:queue.job.channel,create_date:0 field:queue.requeue.job,create_date:0
 msgid "Created on"
-msgstr "Създадено на"
+msgstr "נוצר ב-"
 
 #. module: connector
 #: field:queue.job,retry:0
@@ -241,12 +241,12 @@ msgstr ""
 #: help:connector.checkpoint,message_last_post:0
 #: help:queue.job,message_last_post:0
 msgid "Date of the last message posted on the record."
-msgstr "Дата на последното съобщение, публикувано на записа."
+msgstr "תאריך הודעה אחרונה שפורסמה ברשומה."
 
 #. module: connector
 #: field:queue.job,name:0
 msgid "Description"
-msgstr "Описание"
+msgstr "תיאור"
 
 #. module: connector
 #: field:connector.backend,display_name:0
@@ -258,12 +258,12 @@ msgstr "Описание"
 #: field:queue.job.function,display_name:0
 #: field:queue.requeue.job,display_name:0 field:queue.worker,display_name:0
 msgid "Display Name"
-msgstr "Име за Показване"
+msgstr "השם המוצג"
 
 #. module: connector
 #: view:queue.job:connector.view_queue_job_search selection:queue.job,state:0
 msgid "Done"
-msgstr "Готово"
+msgstr ""
 
 #. module: connector
 #: field:queue.job,date_enqueued:0
@@ -304,7 +304,7 @@ msgstr ""
 #: field:connector.checkpoint,message_follower_ids:0
 #: field:queue.job,message_follower_ids:0
 msgid "Followers"
-msgstr "Последователи"
+msgstr "עוקבים"
 
 #. module: connector
 #: field:queue.job,func_name:0
@@ -320,7 +320,7 @@ msgstr ""
 #: view:queue.job:connector.view_queue_job_search
 #: view:queue.job.function:connector.view_queue_job_function_search
 msgid "Group By"
-msgstr "Групирай По"
+msgstr "קבץ לפי"
 
 #. module: connector
 #: view:connector.checkpoint:connector.view_connector_checkpoint_search
@@ -342,12 +342,12 @@ msgstr ""
 #: field:queue.job.channel,id:0 field:queue.job.function,id:0
 #: field:queue.requeue.job,id:0 field:queue.worker,id:0
 msgid "ID"
-msgstr "ID"
+msgstr "מזהה"
 
 #. module: connector
 #: help:connector.checkpoint,message_unread:0 help:queue.job,message_unread:0
 msgid "If checked new messages require your attention."
-msgstr "Ако е отбелязано, новите съобщения ще изискват внимание."
+msgstr "אם מסומן אז הודעה חדשה דורשת התייחסותכם."
 
 #. module: connector
 #: view:queue.job:connector.view_queue_job_form
@@ -418,7 +418,7 @@ msgstr ""
 #: field:connector.checkpoint,message_last_post:0
 #: field:queue.job,message_last_post:0
 msgid "Last Message Date"
-msgstr "Дата на последното съобщение"
+msgstr "תאריך הודעה אחרונה"
 
 #. module: connector
 #: field:connector.backend,__last_update:0
@@ -430,7 +430,7 @@ msgstr "Дата на последното съобщение"
 #: field:queue.job.function,__last_update:0
 #: field:queue.requeue.job,__last_update:0 field:queue.worker,__last_update:0
 msgid "Last Modified on"
-msgstr "Последно обновено на"
+msgstr "תאריך שינוי אחרון"
 
 #. module: connector
 #: field:connector.checkpoint,write_uid:0
@@ -438,7 +438,7 @@ msgstr "Последно обновено на"
 #: field:connector.config.settings,write_uid:0
 #: field:queue.job.channel,write_uid:0 field:queue.requeue.job,write_uid:0
 msgid "Last Updated by"
-msgstr "Последно обновено от"
+msgstr "עודכן לאחרונה על ידי"
 
 #. module: connector
 #: field:connector.checkpoint,write_date:0
@@ -446,7 +446,7 @@ msgstr "Последно обновено от"
 #: field:connector.config.settings,write_date:0
 #: field:queue.job.channel,write_date:0 field:queue.requeue.job,write_date:0
 msgid "Last Updated on"
-msgstr "Последно обновено на"
+msgstr "עודכן לאחרונה על"
 
 #. module: connector
 #: field:external.binding,sync_date:0
@@ -472,12 +472,12 @@ msgstr ""
 #. module: connector
 #: field:connector.checkpoint,message_ids:0 field:queue.job,message_ids:0
 msgid "Messages"
-msgstr "Съобщения"
+msgstr "הודעות"
 
 #. module: connector
 #: help:connector.checkpoint,message_ids:0 help:queue.job,message_ids:0
 msgid "Messages and communication history"
-msgstr "История на събщенията и комуникациите"
+msgstr "היסטוריית הודעות ותקשורת"
 
 #. module: connector
 #: view:connector.checkpoint:connector.view_connector_checkpoint_search
@@ -489,7 +489,7 @@ msgstr ""
 #: field:connector.backend,name:0 field:queue.job.channel,name:0
 #: field:queue.job.function,name:0
 msgid "Name"
-msgstr "Име"
+msgstr "שם"
 
 #. module: connector
 #: help:connector.checkpoint,name:0
@@ -732,7 +732,7 @@ msgstr ""
 #: field:connector.checkpoint,message_unread:0
 #: field:queue.job,message_unread:0
 msgid "Unread Messages"
-msgstr "Непрочетени съобщения"
+msgstr "הודעות שלא נקראו"
 
 #. module: connector
 #: field:connector.config.settings,module_auth_oauth:0
@@ -780,7 +780,7 @@ msgstr ""
 #: view:connector.config.settings:connector.view_connector_config_settings
 #: view:queue.requeue.job:connector.view_requeue_job
 msgid "or"
-msgstr "или"
+msgstr "או"
 
 #. module: connector
 #: view:connector.checkpoint:connector.view_connector_checkpoint_form

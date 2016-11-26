@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: connector (8.0)\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-09-17 07:17+0000\n"
-"PO-Revision-Date: 2016-10-04 09:43+0000\n"
+"PO-Revision-Date: 2016-11-25 14:57+0000\n"
 "Last-Translator: OCA Transbot <transbot@odoo-community.org>\n"
 "Language-Team: Italian (http://www.transifex.com/oca/OCA-connector-8-0/language/it/)\n"
 "MIME-Version: 1.0\n"
@@ -46,7 +46,7 @@ msgstr "Attiva il portale clienti"
 #. module: connector
 #: field:queue.job,active:0
 msgid "Active"
-msgstr ""
+msgstr "Attivo"
 
 #. module: connector
 #: field:connector.config.settings,alias_domain:0
@@ -242,7 +242,7 @@ msgstr "Data completamento"
 #: help:connector.checkpoint,message_last_post:0
 #: help:queue.job,message_last_post:0
 msgid "Date of the last message posted on the record."
-msgstr ""
+msgstr "Date of the last message posted on the record."
 
 #. module: connector
 #: field:queue.job,name:0
@@ -264,7 +264,7 @@ msgstr "Nome da visualizzare"
 #. module: connector
 #: view:queue.job:connector.view_queue_job_search selection:queue.job,state:0
 msgid "Done"
-msgstr ""
+msgstr "Completato"
 
 #. module: connector
 #: field:queue.job,date_enqueued:0
@@ -321,7 +321,7 @@ msgstr ""
 #: view:queue.job:connector.view_queue_job_search
 #: view:queue.job.function:connector.view_queue_job_function_search
 msgid "Group By"
-msgstr ""
+msgstr "Raggruppa per"
 
 #. module: connector
 #: view:connector.checkpoint:connector.view_connector_checkpoint_search
@@ -419,7 +419,7 @@ msgstr ""
 #: field:connector.checkpoint,message_last_post:0
 #: field:queue.job,message_last_post:0
 msgid "Last Message Date"
-msgstr ""
+msgstr "Last Message Date"
 
 #. module: connector
 #: field:connector.backend,__last_update:0
@@ -484,13 +484,13 @@ msgstr ""
 #: view:connector.checkpoint:connector.view_connector_checkpoint_search
 #: field:connector.checkpoint,model_id:0 field:queue.job,model_name:0
 msgid "Model"
-msgstr ""
+msgstr "Modello"
 
 #. module: connector
 #: field:connector.backend,name:0 field:queue.job.channel,name:0
 #: field:queue.job.function,name:0
 msgid "Name"
-msgstr ""
+msgstr "Nome"
 
 #. module: connector
 #: help:connector.checkpoint,name:0
@@ -674,13 +674,13 @@ msgstr "Stato"
 #. module: connector
 #: field:connector.checkpoint,state:0
 msgid "Status"
-msgstr ""
+msgstr "Stato"
 
 #. module: connector
 #: field:connector.checkpoint,message_summary:0
 #: field:queue.job,message_summary:0
 msgid "Summary"
-msgstr ""
+msgstr "Periodo Iva"
 
 #. module: connector
 #: field:queue.job,func_string:0

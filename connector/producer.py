@@ -51,6 +51,8 @@ def create(self, vals):
                                    context=self.env.context)
         on_record_create.fire(session, self._name, record_id.id, vals)
     return record_id
+
+
 models.BaseModel.create = create
 
 
@@ -68,6 +70,8 @@ def write(self, vals):
                 on_record_write.fire(session, self._name,
                                      record_id, vals)
     return result
+
+
 models.BaseModel.write = write
 
 
@@ -83,4 +87,6 @@ def unlink(self):
             for record_id in self.ids:
                 on_record_unlink.fire(session, self._name, record_id)
     return unlink_original(self)
+
+
 models.BaseModel.unlink = unlink

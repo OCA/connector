@@ -403,6 +403,7 @@ class Channel(object):
 
         * capacity
         * sequential
+        * throttle
         """
         assert self.fullname.endswith(config['name'])
         self.capacity = config.get('capacity', None)

@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: connector (8.0)\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-17 07:17+0000\n"
-"PO-Revision-Date: 2016-11-25 14:57+0000\n"
+"POT-Creation-Date: 2016-11-26 04:06+0000\n"
+"PO-Revision-Date: 2016-11-29 09:33+0000\n"
 "Last-Translator: OCA Transbot <transbot@odoo-community.org>\n"
 "Language-Team: Croatian (http://www.transifex.com/oca/OCA-connector-8-0/language/hr/)\n"
 "MIME-Version: 1.0\n"
@@ -46,7 +46,7 @@ msgstr ""
 #. module: connector
 #: field:queue.job,active:0
 msgid "Active"
-msgstr ""
+msgstr "Aktivno"
 
 #. module: connector
 #: field:connector.config.settings,alias_domain:0
@@ -152,7 +152,7 @@ msgstr ""
 #. module: connector
 #: field:queue.job,company_id:0
 msgid "Company"
-msgstr ""
+msgstr "Poduzeće"
 
 #. module: connector
 #: field:queue.job.channel,complete_name:0 field:queue.job.function,channel:0

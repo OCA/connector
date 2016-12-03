@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: connector (9.0)\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-11-09 14:34+0000\n"
-"PO-Revision-Date: 2016-11-25 14:57+0000\n"
+"POT-Creation-Date: 2016-11-26 04:10+0000\n"
+"PO-Revision-Date: 2016-12-01 10:10+0000\n"
 "Last-Translator: OCA Transbot <transbot@odoo-community.org>\n"
 "Language-Team: French (Switzerland) (http://www.transifex.com/oca/OCA-connector-9-0/language/fr_CH/)\n"
 "MIME-Version: 1.0\n"
@@ -256,7 +256,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:connector.field_queue_job_function_display_name
 #: model:ir.model.fields,field_description:connector.field_queue_requeue_job_display_name
 msgid "Display Name"
-msgstr ""
+msgstr "Nom affiché"
 
 #. module: connector
 #: model:ir.ui.view,arch_db:connector.view_queue_job_search
@@ -458,7 +458,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:connector.field_queue_job_function___last_update
 #: model:ir.model.fields,field_description:connector.field_queue_requeue_job___last_update
 msgid "Last Modified on"
-msgstr ""
+msgstr "Dernière modification le"
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_review_write_uid

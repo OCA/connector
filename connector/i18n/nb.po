@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: connector (8.0)\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-17 07:17+0000\n"
-"PO-Revision-Date: 2016-11-22 16:25+0000\n"
+"POT-Creation-Date: 2016-11-26 04:06+0000\n"
+"PO-Revision-Date: 2016-12-02 13:53+0000\n"
 "Last-Translator: OCA Transbot <transbot@odoo-community.org>\n"
 "Language-Team: Norwegian Bokmål (http://www.transifex.com/oca/OCA-connector-8-0/language/nb/)\n"
 "MIME-Version: 1.0\n"
@@ -45,7 +45,7 @@ msgstr ""
 #. module: connector
 #: field:queue.job,active:0
 msgid "Active"
-msgstr ""
+msgstr "Aktiv"
 
 #. module: connector
 #: field:connector.config.settings,alias_domain:0
@@ -325,7 +325,7 @@ msgstr "Grupper etter"
 #. module: connector
 #: view:connector.checkpoint:connector.view_connector_checkpoint_search
 msgid "Group By..."
-msgstr ""
+msgstr "Grupper etter ..."
 
 #. module: connector
 #: help:connector.checkpoint,message_summary:0

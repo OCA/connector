@@ -155,8 +155,7 @@ class QueueJob(models.Model):
         return res
 
     @api.multi
-    def _subscribe_users(self):
-        """ Subscribe all users having the 'Connector Manager' group """
+    def _get_subscribe_users_domain(self):
         group = self.env.ref('connector.group_connector_manager')
         if not group:
             return
@@ -164,6 +163,12 @@ class QueueJob(models.Model):
         domain = [('groups_id', '=', group.id)]
         if companies:
             domain.append(('company_id', 'child_of', companies.ids))
+        return domain
+
+    @api.multi
+    def _subscribe_users(self):
+        """ Subscribe all users having the 'Connector Manager' group """
+        domain = self._get_subscribe_users_domain()
         users = self.env['res.users'].search(domain)
         self.message_subscribe_users(user_ids=users.ids)
 

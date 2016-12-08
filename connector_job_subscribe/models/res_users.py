@@ -11,4 +11,5 @@ class ResUsers(models.Model):
                                    default=True,
 			           help='If this flag is checked and the'
                                         ' user is Connector Manager, he will'
-                                        ' receive job notifications.')
+                                        ' receive job notifications.',
+				   select=True)

@@ -8,4 +8,7 @@ class ResUsers(models.Model):
     _inherit = 'res.users'
 
     subscribe_job = fields.Boolean('Jobs Notifications',
-                                   default=True)
+                                   default=True,
+			           help='If this flag is checked and the'
+                                        ' user is Connector Manager, he will'
+                                        ' receive job notifications.')

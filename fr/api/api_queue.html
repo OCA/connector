@@ -18,7 +18,8 @@
         VERSION:     '',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
@@ -31,7 +32,6 @@
     <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Recherche" href="../search.html" />
-    <link rel="top" title="documentation Connector " href="../index.html" />
     <link rel="next" title="Exceptions" href="api_exception.html" />
     <link rel="prev" title="Adaptateur de backend" href="api_backend_adapter.html" />
 
@@ -93,7 +93,8 @@
      href="../index.html">Site <b class="caret"></b></a>
   <ul class="dropdown-menu globaltoc"
       role="menu"
-      aria-labelledby="dLabelGlobalToc"><ul>
+      aria-labelledby="dLabelGlobalToc"><p class="caption"><span class="caption-text">None</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../project/contribute.html">Contribuer</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../project/contribute.html#want-to-start-a-new-connector">Démarrer un nouveau connecteur</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../project/contribute.html#creating-or-maintaining-a-translation-of-this-doc">Créer ou maintenir une traduction de cette doc</a></li>
@@ -117,6 +118,7 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../project/roadmap.html">Roadmap</a></li>
 </ul>
+<p class="caption"><span class="caption-text">None</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../guides/code_overview.html">Survol du code</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../guides/code_overview.html#backends">Backends</a></li>
@@ -159,6 +161,7 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../guides/multiprocessing.html">Use the connector with multiprocessing workers</a></li>
 </ul>
+<p class="caption"><span class="caption-text">None</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="api_connector.html">Connecteur</a></li>
 <li class="toctree-l1"><a class="reference internal" href="api_session.html">Session</a></li>
@@ -561,7 +564,7 @@
 <li><strong>default_channel</strong> &#8211; the channel wherein the job will be assigned. This
 channel is set at the installation of the module
 and can be manually changed later using the views.</li>
-<li><strong>retry_pattern</strong> (<em>dict(retry_count,retry_eta_seconds)</em>) &#8211; The retry pattern to use for postponing a job.
+<li><strong>retry_pattern</strong> (<a class="reference external" href="https://docs.python.org/2/library/stdtypes.html#dict" title="(disponible dans Python v2.7)"><em>dict</em></a><em>(</em><em>retry_count</em><em>,</em><em>retry_eta_seconds</em><em>)</em><em></em>) &#8211; The retry pattern to use for postponing a job.
 If a job is postponed and there is no eta
 specified, the eta will be determined from the
 dict in retry_pattern. When no retry pattern
@@ -659,7 +662,7 @@ values are the delay to postpone a job.</p>
 
 <dl class="function">
 <dt id="connector.queue.job.related_action">
-<code class="descclassname">connector.queue.job.</code><code class="descname">related_action</code><span class="sig-paren">(</span><em>action=&lt;function &lt;lambda&gt; at 0x41d9ed8&gt;</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/queue/job.html#related_action"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.job.related_action" title="Lien permanent vers cette définition">¶</a></dt>
+<code class="descclassname">connector.queue.job.</code><code class="descname">related_action</code><span class="sig-paren">(</span><em>action=&lt;function &lt;lambda&gt; at 0x5df2050&gt;</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/queue/job.html#related_action"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.job.related_action" title="Lien permanent vers cette définition">¶</a></dt>
 <dd><p>Attache une <em>action connexe</em> à un job</p>
 <p>Un <em>action connexe</em> apparaîtra comme un bouton dans la vue OpenERP. Le bouton exécutera l&#8217;action, habituellement une ouverture de formulaire de l&#8217;enregistrement lié au job.</p>
 <p>L&#8217;<code class="docutils literal"><span class="pre">action</span></code> doit être un objet <cite>callable</cite> qui prends les arguments</p>
@@ -1557,14 +1560,14 @@ given, names are automatically generated from model names, provided
         <br/>
         
 <div id="sourcelink">
-  <a href="../_sources/api/api_queue.txt"
+  <a href="../_sources/api/api_queue.rst.txt"
      rel="nofollow">Source</a>
 </div>
       
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.<br/>
+      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.1.<br/>
     </p>
   </div>
 </footer>

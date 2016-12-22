@@ -379,6 +379,7 @@ class ConnectorEnvironment(object):
         else:
             return cls(backend_record, session, model)
 
+
 Environment = DeprecatedClass('Environment',
                               ConnectorEnvironment)
 

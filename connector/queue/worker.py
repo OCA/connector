@@ -345,6 +345,7 @@ def start_service():
     watcher.daemon = True
     watcher.start()
 
+
 # We have to launch the Jobs Workers only if:
 # 0. The alternative connector runner is not enabled (i.e. no ``_channels()``)
 # 1. OpenERP is used in standalone mode (monoprocess)

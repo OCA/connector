@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: connector (9.0)\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-12-17 00:58+0000\n"
-"PO-Revision-Date: 2016-12-23 08:32+0000\n"
+"POT-Creation-Date: 2016-12-24 00:47+0000\n"
+"PO-Revision-Date: 2016-12-30 18:54+0000\n"
 "Last-Translator: OCA Transbot <transbot@odoo-community.org>\n"
 "Language-Team: Turkish (http://www.transifex.com/oca/OCA-connector-9-0/language/tr/)\n"
 "MIME-Version: 1.0\n"
@@ -145,7 +145,7 @@ msgstr ""
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_queue_job_company_id
 msgid "Company"
-msgstr ""
+msgstr "Şirket"
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_queue_job_channel_complete_name
@@ -256,7 +256,7 @@ msgstr "Açıklama"
 #: model:ir.model.fields,field_description:connector.field_queue_job_function_display_name
 #: model:ir.model.fields,field_description:connector.field_queue_requeue_job_display_name
 msgid "Display Name"
-msgstr ""
+msgstr "Görünen İsim"
 
 #. module: connector
 #: model:ir.ui.view,arch_db:connector.view_queue_job_search
@@ -309,7 +309,7 @@ msgstr ""
 #: model:ir.ui.view,arch_db:connector.view_queue_job_search
 #: selection:queue.job,state:0
 msgid "Failed"
-msgstr ""
+msgstr "Başarısız"
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_message_follower_ids
@@ -458,7 +458,7 @@ msgstr "Son mesaj tarihi"
 #: model:ir.model.fields,field_description:connector.field_queue_job_function___last_update
 #: model:ir.model.fields,field_description:connector.field_queue_requeue_job___last_update
 msgid "Last Modified on"
-msgstr ""
+msgstr "Son değişiklik"
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_review_write_uid

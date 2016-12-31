@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: connector (9.0)\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-11-09 14:34+0000\n"
-"PO-Revision-Date: 2016-11-25 14:55+0000\n"
+"POT-Creation-Date: 2016-12-24 00:47+0000\n"
+"PO-Revision-Date: 2016-12-27 12:10+0000\n"
 "Last-Translator: OCA Transbot <transbot@odoo-community.org>\n"
 "Language-Team: Spanish (http://www.transifex.com/oca/OCA-connector-9-0/language/es/)\n"
 "MIME-Version: 1.0\n"
@@ -374,7 +374,7 @@ msgstr "Si está marcado los nuevos mensajes requerirán su atención."
 #: model:ir.model.fields,help:connector.field_connector_checkpoint_message_needaction
 #: model:ir.model.fields,help:connector.field_queue_job_message_needaction
 msgid "If checked, new messages require your attention."
-msgstr ""
+msgstr "Si está marcado, hay nuevos mensajes que requieren su atención."
 
 #. module: connector
 #: model:ir.model.fields,help:connector.field_connector_config_settings_auth_signup_uninvited
@@ -397,7 +397,7 @@ msgstr "Importado de"
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_message_is_follower
 #: model:ir.model.fields,field_description:connector.field_queue_job_message_is_follower
 msgid "Is Follower"
-msgstr ""
+msgstr "Es un seguidor"
 
 #. module: connector
 #: model:ir.model,name:connector.model_queue_job_channel
@@ -556,19 +556,19 @@ msgstr ""
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_message_needaction_counter
 #: model:ir.model.fields,field_description:connector.field_queue_job_message_needaction_counter
 msgid "Number of Actions"
-msgstr ""
+msgstr "Número de acciones"
 
 #. module: connector
 #: model:ir.model.fields,help:connector.field_connector_checkpoint_message_needaction_counter
 #: model:ir.model.fields,help:connector.field_queue_job_message_needaction_counter
 msgid "Number of messages which requires an action"
-msgstr ""
+msgstr "Número de mensajes que requieren una acción"
 
 #. module: connector
 #: model:ir.model.fields,help:connector.field_connector_checkpoint_message_unread_counter
 #: model:ir.model.fields,help:connector.field_queue_job_message_unread_counter
 msgid "Number of unread messages"
-msgstr ""
+msgstr "Número de mensajes sin leer"
 
 #. module: connector
 #: model:ir.actions.client,name:connector.action_client_connector_menu
@@ -826,7 +826,7 @@ msgstr "Mensajes No Leídos"
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_message_unread_counter
 #: model:ir.model.fields,field_description:connector.field_queue_job_message_unread_counter
 msgid "Unread Messages Counter"
-msgstr ""
+msgstr "Contador de mensajes no leídos"
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_config_settings_module_auth_oauth

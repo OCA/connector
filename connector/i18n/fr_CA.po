@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: connector (9.0)\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-11-09 14:34+0000\n"
-"PO-Revision-Date: 2016-11-22 12:24+0000\n"
+"POT-Creation-Date: 2016-12-24 00:47+0000\n"
+"PO-Revision-Date: 2016-12-27 08:25+0000\n"
 "Last-Translator: OCA Transbot <transbot@odoo-community.org>\n"
 "Language-Team: French (Canada) (http://www.transifex.com/oca/OCA-connector-9-0/language/fr_CA/)\n"
 "MIME-Version: 1.0\n"
@@ -86,7 +86,7 @@ msgstr ""
 #: model:ir.ui.view,arch_db:connector.view_connector_config_settings
 #: model:ir.ui.view,arch_db:connector.view_requeue_job
 msgid "Cancel"
-msgstr ""
+msgstr "Annuler"
 
 #. module: connector
 #: code:addons/connector/queue/model.py:272
@@ -208,7 +208,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:connector.field_queue_job_channel_create_uid
 #: model:ir.model.fields,field_description:connector.field_queue_requeue_job_create_uid
 msgid "Created by"
-msgstr ""
+msgstr "Créé par"
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_create_date
@@ -217,7 +217,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:connector.field_queue_job_channel_create_date
 #: model:ir.model.fields,field_description:connector.field_queue_requeue_job_create_date
 msgid "Created on"
-msgstr ""
+msgstr "Créé le"
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_queue_job_retry
@@ -256,7 +256,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:connector.field_queue_job_function_display_name
 #: model:ir.model.fields,field_description:connector.field_queue_requeue_job_display_name
 msgid "Display Name"
-msgstr ""
+msgstr "Afficher le nom"
 
 #. module: connector
 #: model:ir.ui.view,arch_db:connector.view_queue_job_search
@@ -361,7 +361,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:connector.field_queue_job_id
 #: model:ir.model.fields,field_description:connector.field_queue_requeue_job_id
 msgid "ID"
-msgstr ""
+msgstr "Identifiant"
 
 #. module: connector
 #: model:ir.model.fields,help:connector.field_connector_checkpoint_message_unread
@@ -467,7 +467,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:connector.field_queue_job_channel_write_uid
 #: model:ir.model.fields,field_description:connector.field_queue_requeue_job_write_uid
 msgid "Last Updated by"
-msgstr ""
+msgstr "Dernière mise à jour par"
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_review_write_date
@@ -476,7 +476,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:connector.field_queue_job_channel_write_date
 #: model:ir.model.fields,field_description:connector.field_queue_requeue_job_write_date
 msgid "Last Updated on"
-msgstr ""
+msgstr "Dernière mise à jour le"
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_external_binding_sync_date

@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: connector (9.0)\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-12-24 00:47+0000\n"
-"PO-Revision-Date: 2016-12-27 08:25+0000\n"
+"PO-Revision-Date: 2016-12-27 08:22+0000\n"
 "Last-Translator: OCA Transbot <transbot@odoo-community.org>\n"
-"Language-Team: Hebrew (http://www.transifex.com/oca/OCA-connector-9-0/language/he/)\n"
+"Language-Team: Lithuanian (Lithuania) (http://www.transifex.com/oca/OCA-connector-9-0/language/lt_LT/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Language: he\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language: lt_LT\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
 #. module: connector
 #: model:ir.ui.view,arch_db:connector.view_queue_job_form
@@ -86,7 +86,7 @@ msgstr ""
 #: model:ir.ui.view,arch_db:connector.view_connector_config_settings
 #: model:ir.ui.view,arch_db:connector.view_requeue_job
 msgid "Cancel"
-msgstr "בטל"
+msgstr "Atšaukti"
 
 #. module: connector
 #: code:addons/connector/queue/model.py:272
@@ -106,7 +106,7 @@ msgstr ""
 #: model:ir.ui.view,arch_db:connector.view_queue_job_function_search
 #: model:ir.ui.view,arch_db:connector.view_queue_job_search
 msgid "Channel"
-msgstr "ערוץ"
+msgstr ""
 
 #. module: connector
 #: sql_constraint:queue.job.channel:0
@@ -120,7 +120,7 @@ msgstr ""
 #: model:ir.ui.view,arch_db:connector.view_queue_job_channel_search
 #: model:ir.ui.view,arch_db:connector.view_queue_job_channel_tree
 msgid "Channels"
-msgstr "ערוצים"
+msgstr ""
 
 #. module: connector
 #: model:ir.ui.menu,name:connector.menu_checkpoint
@@ -208,7 +208,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:connector.field_queue_job_channel_create_uid
 #: model:ir.model.fields,field_description:connector.field_queue_requeue_job_create_uid
 msgid "Created by"
-msgstr "נוצר על ידי"
+msgstr "Sukūrė"
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_create_date
@@ -217,7 +217,7 @@ msgstr "נוצר על ידי"
 #: model:ir.model.fields,field_description:connector.field_queue_job_channel_create_date
 #: model:ir.model.fields,field_description:connector.field_queue_requeue_job_create_date
 msgid "Created on"
-msgstr "נוצר ב-"
+msgstr "Sukurta"
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_queue_job_retry
@@ -238,12 +238,12 @@ msgstr ""
 #: model:ir.model.fields,help:connector.field_connector_checkpoint_message_last_post
 #: model:ir.model.fields,help:connector.field_queue_job_message_last_post
 msgid "Date of the last message posted on the record."
-msgstr "תאריך הודעה אחרונה שפורסמה ברשומה."
+msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_queue_job_name
 msgid "Description"
-msgstr "תיאור"
+msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_backend_display_name
@@ -256,7 +256,7 @@ msgstr "תיאור"
 #: model:ir.model.fields,field_description:connector.field_queue_job_function_display_name
 #: model:ir.model.fields,field_description:connector.field_queue_requeue_job_display_name
 msgid "Display Name"
-msgstr "השם המוצג"
+msgstr ""
 
 #. module: connector
 #: model:ir.ui.view,arch_db:connector.view_queue_job_search
@@ -315,7 +315,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_message_follower_ids
 #: model:ir.model.fields,field_description:connector.field_queue_job_message_follower_ids
 msgid "Followers"
-msgstr "עוקבים"
+msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_message_channel_ids
@@ -343,7 +343,7 @@ msgstr ""
 #: model:ir.ui.view,arch_db:connector.view_queue_job_function_search
 #: model:ir.ui.view,arch_db:connector.view_queue_job_search
 msgid "Group By"
-msgstr "קבץ לפי"
+msgstr ""
 
 #. module: connector
 #: model:ir.ui.view,arch_db:connector.view_connector_checkpoint_search
@@ -361,13 +361,13 @@ msgstr ""
 #: model:ir.model.fields,field_description:connector.field_queue_job_id
 #: model:ir.model.fields,field_description:connector.field_queue_requeue_job_id
 msgid "ID"
-msgstr "מזהה"
+msgstr "ID"
 
 #. module: connector
 #: model:ir.model.fields,help:connector.field_connector_checkpoint_message_unread
 #: model:ir.model.fields,help:connector.field_queue_job_message_unread
 msgid "If checked new messages require your attention."
-msgstr "אם מסומן אז הודעה חדשה דורשת התייחסותכם."
+msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,help:connector.field_connector_checkpoint_message_needaction
@@ -445,7 +445,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_message_last_post
 #: model:ir.model.fields,field_description:connector.field_queue_job_message_last_post
 msgid "Last Message Date"
-msgstr "תאריך הודעה אחרונה"
+msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_backend___last_update
@@ -458,7 +458,7 @@ msgstr "תאריך הודעה אחרונה"
 #: model:ir.model.fields,field_description:connector.field_queue_job_function___last_update
 #: model:ir.model.fields,field_description:connector.field_queue_requeue_job___last_update
 msgid "Last Modified on"
-msgstr "תאריך שינוי אחרון"
+msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_review_write_uid
@@ -467,7 +467,7 @@ msgstr "תאריך שינוי אחרון"
 #: model:ir.model.fields,field_description:connector.field_queue_job_channel_write_uid
 #: model:ir.model.fields,field_description:connector.field_queue_requeue_job_write_uid
 msgid "Last Updated by"
-msgstr "עודכן לאחרונה על ידי"
+msgstr "Paskutinį kartą atnaujino"
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_review_write_date
@@ -476,7 +476,7 @@ msgstr "עודכן לאחרונה על ידי"
 #: model:ir.model.fields,field_description:connector.field_queue_job_channel_write_date
 #: model:ir.model.fields,field_description:connector.field_queue_requeue_job_write_date
 msgid "Last Updated on"
-msgstr "עודכן לאחרונה על"
+msgstr "Paskutinį kartą atnaujinta"
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_external_binding_sync_date
@@ -513,7 +513,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_message_ids
 #: model:ir.model.fields,field_description:connector.field_queue_job_message_ids
 msgid "Messages"
-msgstr "הודעות"
+msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_model_id
@@ -527,7 +527,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:connector.field_queue_job_channel_name
 #: model:ir.model.fields,field_description:connector.field_queue_job_function_name
 msgid "Name"
-msgstr "שם"
+msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,help:connector.field_connector_checkpoint_name
@@ -819,7 +819,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_message_unread
 #: model:ir.model.fields,field_description:connector.field_queue_job_message_unread
 msgid "Unread Messages"
-msgstr "הודעות שלא נקראו"
+msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_message_unread_counter
@@ -868,7 +868,7 @@ msgstr ""
 #: model:ir.ui.view,arch_db:connector.view_connector_config_settings
 #: model:ir.ui.view,arch_db:connector.view_requeue_job
 msgid "or"
-msgstr "או"
+msgstr ""
 
 #. module: connector
 #: model:ir.ui.view,arch_db:connector.view_connector_checkpoint_form

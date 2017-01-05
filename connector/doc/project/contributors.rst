@@ -22,6 +22,7 @@ Here is the list of the funders, ordered by the amount of the contribution:
 
 * **Logic Supply**
 * **Debonix**
+* URSA Information Systems
 * Apertoso
 * OpenBIG
 * Smile

@@ -326,8 +326,8 @@ class Binder(ConnectorUnit):
     _odoo_field = 'odoo_id'  # override in sub-classes
     _sync_date_field = 'sync_date'  # override in sub-classes
 
-    def to_odoo(self, external_id, unwrap=False):
-        """ Give the Odoo ID for an external ID
+    def to_internal(self, external_id, unwrap=False):
+        """ Give the Odoo recordset for an external ID
 
         :param external_id: external ID for which we want
                             the Odoo ID
@@ -343,65 +343,62 @@ class Binder(ConnectorUnit):
         )
         if not bindings:
             if unwrap:
-                return getattr(self.model.browse(), self._odoo_field)
+                return self.model.browse()[self._odoo_field]
             return self.model.browse()
         bindings.ensure_one()
         if unwrap:
-            bindings = getattr(bindings, self._odoo_field)
+            bindings = bindings[self._odoo_field]
         return bindings
 
-    def to_backend(self, binding_id, wrap=False):
+    def to_external(self, binding, wrap=False):
         """ Give the external ID for an Odoo binding ID
 
-        :param binding_id: Odoo binding ID for which we want the backend id
-        :param wrap: if False, binding_id is the ID of the binding,
-                     if True, binding_id is the ID of the normal record, the
-                     method will search the corresponding binding and returns
-                     the backend id of the binding
+        :param binding: Odoo binding for which we want the external id
+        :param wrap: if True, binding is a normal record, the
+                     method will search the corresponding binding and return
+                     the external id of the binding
         :return: external ID of the record
         """
-        record = self.model.browse()
-        if isinstance(binding_id, models.BaseModel):
-            binding_id.ensure_one()
-            record = binding_id
-            binding_id = binding_id.id
+        if isinstance(binding, models.BaseModel):
+            binding.ensure_one()
+        else:
+            binding = self.model.browse(binding)
         if wrap:
             binding = self.model.with_context(active_test=False).search(
-                [(self._odoo_field, '=', binding_id),
+                [(self._odoo_field, '=', binding.id),
                  (self._backend_field, '=', self.backend_record.id),
                  ]
             )
             if not binding:
                 return None
             binding.ensure_one()
-            return getattr(binding, self._external_field)
-        if not record:
-            record = self.model.browse(binding_id)
-        assert record
-        return getattr(record, self._external_field)
+            return binding[self._external_field]
+        return binding[self._external_field]
 
-    def bind(self, external_id, binding_id):
+    def bind(self, external_id, binding):
         """ Create the link between an external ID and an Odoo ID
 
         :param external_id: external id to bind
-        :param binding_id: Odoo ID to bind
-        :type binding_id: int
+        :param binding: Odoo record to bind
+        :type binding: int
         """
         # Prevent False, None, or "", but not 0
-        assert (external_id or external_id is 0) and binding_id, (
-            "external_id or binding_id missing, "
-            "got: %s, %s" % (external_id, binding_id)
+        assert (external_id or external_id is 0) and binding, (
+            "external_id or binding missing, "
+            "got: %s, %s" % (external_id, binding)
         )
         # avoid to trigger the export when we modify the `external_id`
         now_fmt = fields.Datetime.now()
-        if not isinstance(binding_id, models.BaseModel):
-            binding_id = self.model.browse(binding_id)
-        binding_id.with_context(connector_no_export=True).write(
+        if isinstance(binding, models.BaseModel):
+            binding.ensure_one()
+        else:
+            binding = self.model.browse(binding)
+        binding.with_context(connector_no_export=True).write(
             {self._external_field: str(external_id),
              self._sync_date_field: now_fmt,
              })
 
-    def unwrap_binding(self, binding_id, browse=False):
+    def unwrap_binding(self, binding):
         """ For a binding record, gives the normal record.
 
         Example: when called with a ``magento.product.product`` id,
@@ -410,15 +407,12 @@ class Binder(ConnectorUnit):
         :param browse: when True, returns a browse_record instance
                        rather than an ID
         """
-        if isinstance(binding_id, models.BaseModel):
-            binding = binding_id
+        if isinstance(binding, models.BaseModel):
+            binding.ensure_one()
         else:
-            binding = self.model.browse(binding_id)
+            binding = self.model.browse(binding)
 
-        odoo_record = getattr(binding, self._odoo_field)
-        if browse:
-            return odoo_record
-        return odoo_record.id
+        return binding[self._odoo_field]
 
     def unwrap_model(self):
         """ For a binding model, gives the normal model.

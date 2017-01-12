@@ -115,7 +115,6 @@ Developer's guide
    guides/concepts.rst
    guides/bootstrap_connector.rst
    guides/jobrunner.rst
-   guides/multiprocessing.rst
 
 API Reference
 =============

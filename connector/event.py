@@ -3,7 +3,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html)
 
 from collections import Callable
-from odoo.addons.queue_job.utils import get_odoo_module, is_module_installed
+from .connector import get_odoo_module, is_module_installed
 
 
 class Event(object):

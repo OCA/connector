@@ -2,3 +2,4 @@
 from . import test_default_binder
 from . import test_related_action_binding
 from . import test_components
+from . import test_component_collection

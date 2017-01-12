@@ -5,3 +5,4 @@ from . import connector
 from . import producer
 from . import checkpoint
 from . import models
+from . import components

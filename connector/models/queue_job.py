@@ -36,7 +36,7 @@ class QueueJob(models.Model):
         }
         # try to get unwrapped records
         env = ConnectorEnvironment(
-            binding.backend_id, binding.env, binding._name
+            binding.backend_id, binding._name
         )
         binder = env.get_connector_unit(binder_class)
         try:

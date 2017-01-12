@@ -94,7 +94,7 @@ Backend Model
 We declared the backends, but we need a model to configure them.
 
 We create a model ``coffee.backend`` which is an ``_inherit`` of
-``connector.backend``. In ``connector_coffee/coffee_model.py``::
+``connector.backend``. In ``connector_coffee/models/coffee_binding.py``::
 
     from odoo import fields, models, api
 
@@ -144,7 +144,7 @@ Abstract Binding
 If we have many :ref:`binding`,
 we may want to create an abstract model for them.
 
-It can be as follows (in ``connector_coffee/connector.py``)::
+It can be as follows (in ``connector_coffee/models/coffee_binding.py``)::
 
     from odoo import models, fields
 
@@ -172,20 +172,20 @@ Environment
 
 We'll often need to create a new environment to work with.
 I propose to create a helper method which build it for us (in
-``connector_coffee/connector.py``::
+``connector_coffee/models/coffee_backend.py``::
 
+    from contextlib import contextmanager
     from odoo.addons.connector.connector import Environment
 
+    class CoffeeBackend(models.Model):
+        _name = 'coffee.backend'
+        # extend this existing model
 
-    def get_environment(env, model_name, backend_id):
-        """ Create an environment to work with. """
-        backend_record = env['coffee.backend'].browse(backend_id)
-        lang = backend_record.default_lang_id
-        lang_code = lang.code if lang else 'en_US'
-        if lang_code != env.context.get('lang'):
-            lang_context = dict(context, lang=lang_code)
-            env = env(context=lang_context)
-        return Environment(backend_record, env, model_name)
+      @contextmanager
+      @api.multi
+      def get_environment(self, model_name):
+          self.ensure_one()
+          yield ConnectorEnvironment(self, self.env, model_name)
 
 Note that the part regarding the language definition is totally
 optional but I left it as an example.
@@ -197,14 +197,18 @@ Checkpoints
 
 When new records are imported and need a review, :ref:`checkpoint` are
 created. I propose to create a helper too in
-``connector_coffee/connector.py``::
+``connector_coffee/models/coffee_backend.py``::
 
     from odoo.addons.connector.checkpoint import checkpoint
 
+    class CoffeeBackend(models.Model):
+        _name = 'coffee.backend'
+        # extend this existing model
 
-    def add_checkpoint(env, model_name, record_id, backend_id):
-        return checkpoint.add_checkpoint(env, model_name, record_id,
-                                         'coffee.backend', backend_id)
+      def add_checkpoint(self, model_name, record):
+          self.ensure_one()
+          return checkpoint.add_checkpoint(self.env, model_name, record.id,
+                                           'coffee.backend', self.id)
 
 *********************
 ConnectorUnit classes

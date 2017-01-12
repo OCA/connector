@@ -21,11 +21,27 @@ components = ComponentGlobalRegistry()
 
 
 class ComponentBuilder(models.AbstractModel):
+    """ Build the component classes
+
+    And register them in a global registry.
+    The classes are built using the same mechanism
+    than the Odoo one, meaning that a final class
+    that inherits from all the ``_inherit`` is created.
+    This class is kept in the ``components`` global
+    registry with the Components ``_name`` as keys.
+
+    This is an Odoo model so we can hook the build of the components at the end
+    of the registry loading with ``_register_hook``, after all modules are
+    loaded.
+
+    """
     _name = 'connector.component.builder'
     _description = 'Connector Component Builder'
 
     @api.model_cr
     def _register_hook(self):
+        components.clear()
+
         graph = odoo.modules.graph.Graph()
         graph.add_module(self.env.cr, 'base')
 

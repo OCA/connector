@@ -96,7 +96,7 @@ def none(field):
     Example::
 
         direct = [(none('source'), 'target'),
-                  (none(m2o_to_backend('rel_id'), 'rel_id')]
+                  (none(m2o_to_external('rel_id'), 'rel_id')]
 
     :param field: name of the source field in the record
     :param binding: True if the relation is a binding record
@@ -132,10 +132,10 @@ def convert(field, conv_type):
     return modifier
 
 
-def m2o_to_backend(field, binding=None):
+def m2o_to_external(field, binding=None):
     """ A modifier intended to be used on the ``direct`` mappings.
 
-    For a many2one, get the ID on the backend and returns it.
+    For a many2one, get the external ID and returns it.
 
     When the field's relation is not a binding (i.e. it does not point to
     something like ``magento.*``), the binding model needs to be provided
@@ -143,9 +143,9 @@ def m2o_to_backend(field, binding=None):
 
     Example::
 
-        direct = [(m2o_to_backend('country_id', binding='magento.res.country'),
-                   'country'),
-                  (m2o_to_backend('magento_country_id'), 'country')]
+        direct = [(m2o_to_external('country_id',
+                                   binding='magento.res.country'), 'country'),
+                  (m2o_to_external('magento_country_id'), 'country')]
 
     :param field: name of the source field in the record
     :param binding: name of the binding model is the relation is not a binding
@@ -166,7 +166,7 @@ def m2o_to_backend(field, binding=None):
         # if a relation is not a binding, we wrap the record in the
         # binding, we'll return the id of the binding
         wrap = bool(binding)
-        value = binder.to_backend(rel_id, wrap=wrap)
+        value = binder.to_external(rel_id, wrap=wrap)
         if not value:
             raise MappingError("Can not find an external id for record "
                                "%s in model %s %s wrapping" %
@@ -176,11 +176,11 @@ def m2o_to_backend(field, binding=None):
     return modifier
 
 
-def backend_to_m2o(field, binding=None):
+def external_to_m2o(field, binding=None):
     """ A modifier intended to be used on the ``direct`` mappings.
 
     For a field from a backend which is an ID, search the corresponding
-    binding in Odoo and returns its ID.
+    binding in Odoo and returns it.
 
     When the field's relation is not a binding (i.e. it does not point to
     something like ``magento.*``), the binding model needs to be provided
@@ -188,9 +188,9 @@ def backend_to_m2o(field, binding=None):
 
     Example::
 
-        direct = [(backend_to_m2o('country', binding='magento.res.country'),
+        direct = [(external_to_m2o('country', binding='magento.res.country'),
                    'country_id'),
-                  (backend_to_m2o('country'), 'magento_country_id')]
+                  (external_to_m2o('country'), 'magento_country_id')]
 
     :param field: name of the source field in the record
     :param binding: name of the binding model is the relation is not a binding
@@ -211,7 +211,7 @@ def backend_to_m2o(field, binding=None):
         # if we want the normal record, not a binding,
         # we ask to the binder to unwrap the binding
         unwrap = bool(binding)
-        record = binder.to_odoo(rel_id, unwrap=unwrap)
+        record = binder.to_internal(rel_id, unwrap=unwrap)
         if not record:
             raise MappingError("Can not find an existing %s for external "
                                "record %s %s unwrapping" %
@@ -555,8 +555,8 @@ class Mapper(ConnectorUnit):
         More examples of modifiers:
 
         * :py:func:`convert`
-        * :py:func:`m2o_to_backend`
-        * :py:func:`backend_to_m2o`
+        * :py:func:`m2o_to_external`
+        * :py:func:`external_to_m2o`
 
     Method Mappings
         A mapping method allows to execute arbitrary code and return one
@@ -797,11 +797,11 @@ class ImportMapper(Mapper):
 
         # Backward compatibility: when a field is a relation, and a modifier is
         # not used, we assume that the relation model is a binding.
-        # Use an explicit modifier backend_to_m2o in the 'direct' mappings to
+        # Use an explicit modifier external_to_m2o in the 'direct' mappings to
         # change that.
         field = self.model._fields[to_attr]
         if field.type == 'many2one':
-            mapping_func = backend_to_m2o(from_attr)
+            mapping_func = external_to_m2o(from_attr)
             value = mapping_func(self, record, to_attr)
         return value
 
@@ -833,11 +833,11 @@ class ExportMapper(Mapper):
 
         # Backward compatibility: when a field is a relation, and a modifier is
         # not used, we assume that the relation model is a binding.
-        # Use an explicit modifier m2o_to_backend  in the 'direct' mappings to
+        # Use an explicit modifier m2o_to_external  in the 'direct' mappings to
         # change that.
         field = self.model._fields[from_attr]
         if field.type == 'many2one':
-            mapping_func = m2o_to_backend(from_attr)
+            mapping_func = m2o_to_external(from_attr)
             value = mapping_func(self, record, to_attr)
         return value
 

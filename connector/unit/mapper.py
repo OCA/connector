@@ -650,9 +650,11 @@ class Mapper(ConnectorUnit):
         except NoConnectorUnitError:
             # does not force developers to use a MapChild ->
             # will use the default one if not explicitely defined
-            env = ConnectorEnvironment(self.backend_record,
-                                       self.env,
-                                       model_name)
+            env = ConnectorEnvironment.create_environment(
+                self.backend_record,
+                model_name,
+                self.connector_env
+            )
             mapper_child = self._map_child_class(env)
         return mapper_child
 

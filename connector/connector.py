@@ -170,8 +170,7 @@ class ConnectorUnit(object):
             env = self.connector_env
         else:
             env = self.connector_env.create_environment(
-                self.backend_record,
-                self.env, model,
+                self.backend_record, model,
                 connector_env=self.connector_env)
 
         return env.get_connector_unit(connector_unit_class)
@@ -233,10 +232,6 @@ class ConnectorEnvironment(object):
         from the model ``connector.backend`` and have at least a
         ``type`` and a ``version``.
 
-    .. attribute:: env
-
-        Current odoo Environment we are working in.
-
     .. attribute:: model_name
 
         Name of the Odoo model to work with.
@@ -250,7 +245,7 @@ class ConnectorEnvironment(object):
 
     _propagate_kwargs = []
 
-    def __init__(self, backend_record, env, model_name):
+    def __init__(self, backend_record, model_name):
         """
 
         :param backend_record: browse record of the backend
@@ -263,12 +258,15 @@ class ConnectorEnvironment(object):
         self.backend_record = backend_record
         backend = backend_record.get_backend()
         self.backend = backend
-        self.env = env
         self.model_name = model_name
 
     @property
     def model(self):
         return self.env[self.model_name]
+
+    @property
+    def env(self):
+        return self.backend_record.env
 
     def get_connector_unit(self, base_class):
         """ Searches and returns an instance of the
@@ -284,7 +282,7 @@ class ConnectorEnvironment(object):
                                       self.model_name)(self)
 
     @classmethod
-    def create_environment(cls, backend_record, env, model,
+    def create_environment(cls, backend_record, model,
                            connector_env=None):
         """ Create a new environment ConnectorEnvironment.
 
@@ -304,9 +302,9 @@ class ConnectorEnvironment(object):
             kwargs = {key: getattr(connector_env, key)
                       for key in connector_env._propagate_kwargs}
         if kwargs:
-            return cls(backend_record, env, model, **kwargs)
+            return cls(backend_record, model, **kwargs)
         else:
-            return cls(backend_record, env, model)
+            return cls(backend_record, model)
 
 
 class Binder(ConnectorUnit):

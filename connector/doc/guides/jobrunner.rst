@@ -5,17 +5,17 @@
 Configuring channels and the job runner
 #######################################
 
-.. automodule:: connector.jobrunner.runner
+.. automodule:: odoo.addons.queue_job.jobrunner.runner
 
 What is a channel?
 ------------------
 
-.. autoclass:: connector.jobrunner.channels.Channel
+.. autoclass:: odoo.addons.queue_job.jobrunner.runner.channels.Channel
 
 How to configure Channels?
 --------------------------
 
-The ``ODOO_CONNECTOR_CHANNELS`` environment variable must be
+The ``ODOO_QUEUE_JOB_CHANNELS`` environment variable must be
 set before starting Odoo in order to enable the job runner
 and configure the capacity of the channels.
 
@@ -28,7 +28,7 @@ a default capacity of 1).
 A delay in seconds between jobs can be set at the channel level with 
 the ``throttle`` key.
 
-Example ``ODOO_CONNECTOR_CHANNELS``:
+Example ``ODOO_QUEUE_JOB_CHANNELS``:
 
 * ``root:4``: allow up to 4 concurrent jobs in the root channel.
 * ``root:4,root.sub:2``: allow up to 4 concurrent jobs in the root channel and

@@ -513,8 +513,9 @@ class test_mapper_recordsets(common.TransactionCase):
                                  name='backend')
         backend_record = mock.Mock()
         backend_record.get_backend.return_value = self.backend
+        backend_record.env = self.env
         self.connector_env = ConnectorEnvironment(
-            backend_record, self.env, 'res.partner')
+            backend_record, 'res.partner')
 
     def test_mapping_modifier_follow_m2o_relations(self):
         """ Map with the follow_m2o_relations modifier """
@@ -540,8 +541,9 @@ class test_mapper_binding(common.TransactionCase):
                                  name='backend')
         backend_record = mock.Mock()
         backend_record.get_backend.return_value = self.backend
+        backend_record.env = self.env
         self.connector_env = ConnectorEnvironment(
-            backend_record, self.env, 'res.partner')
+            backend_record, 'res.partner')
         self.country_binder = mock.Mock(name='country_binder')
         self.country_binder.return_value = self.country_binder
         self.backend.get_class.return_value = self.country_binder
@@ -606,8 +608,8 @@ class test_mapper_binding(common.TransactionCase):
 
         backend_record = mock.Mock()
         backend_record.get_backend.side_effect = lambda *a: backend
-        env = ConnectorEnvironment(backend_record, self.env,
-                                   'res.currency')
+        backend_record.env = self.env
+        env = ConnectorEnvironment(backend_record, 'res.currency')
 
         record = {'name': 'SO1',
                   'lines': [{'name': '2013-11-07',
@@ -669,8 +671,8 @@ class test_mapper_binding(common.TransactionCase):
 
         backend_record = mock.Mock()
         backend_record.get_backend.side_effect = lambda *a: backend
-        env = ConnectorEnvironment(backend_record, self.env,
-                                   'res.currency')
+        backend_record.env = self.env
+        env = ConnectorEnvironment(backend_record, 'res.currency')
 
         record = {'name': 'SO1',
                   'lines': [{'name': '2013-11-07',

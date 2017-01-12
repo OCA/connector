@@ -16,8 +16,8 @@ from odoo.addons.connector.unit.mapper import (
     only_create,
     convert,
     follow_m2o_relations,
-    m2o_to_backend,
-    backend_to_m2o,
+    m2o_to_external,
+    external_to_m2o,
     none,
     MapOptions,
     mapping)
@@ -546,35 +546,35 @@ class test_mapper_binding(common.TransactionCase):
         self.country_binder.return_value = self.country_binder
         self.backend.get_class.return_value = self.country_binder
 
-    def test_mapping_m2o_to_backend(self):
-        """ Map a direct record with the m2o_to_backend modifier function """
+    def test_mapping_m2o_to_external(self):
+        """ Map a direct record with the m2o_to_external modifier function """
         class MyMapper(ImportMapper):
             _model_name = 'res.partner'
-            direct = [(m2o_to_backend('country_id'), 'country')]
+            direct = [(m2o_to_external('country_id'), 'country')]
 
         partner = self.env.ref('base.main_partner')
         partner.write({'country_id': self.env.ref('base.ch').id})
-        self.country_binder.to_backend.return_value = 10
+        self.country_binder.to_external.return_value = 10
 
         mapper = MyMapper(self.connector_env)
         map_record = mapper.map_record(partner)
         self.assertEqual(map_record.values(), {'country': 10})
-        self.country_binder.to_backend.assert_called_once_with(
+        self.country_binder.to_external.assert_called_once_with(
             partner.country_id.id, wrap=False)
 
     def test_mapping_backend_to_m2o(self):
         """ Map a direct record with the backend_to_m2o modifier function """
         class MyMapper(ImportMapper):
             _model_name = 'res.partner'
-            direct = [(backend_to_m2o('country'), 'country_id')]
+            direct = [(external_to_m2o('country'), 'country_id')]
 
         record = {'country': 10}
         ch = self.env.ref('base.ch')
-        self.country_binder.to_odoo.return_value = ch
+        self.country_binder.to_internal.return_value = ch
         mapper = MyMapper(self.connector_env)
         map_record = mapper.map_record(record)
         self.assertEqual(map_record.values(), {'country_id': ch.id})
-        self.country_binder.to_odoo.assert_called_once_with(
+        self.country_binder.to_internal.assert_called_once_with(
             10, unwrap=False)
 
     def test_mapping_record_children_no_map_child(self):

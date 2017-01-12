@@ -15,41 +15,50 @@ class TestDefaultBinder(TransactionCase):
     def setUp(self):
         super(TestDefaultBinder, self).setUp()
 
-        class PartnerBinder(Binder):
-            "we use already existing fields for the binding"
-            _model_name = 'res.partner'
-            _external_field = 'ref'
-            _sync_date_field = 'date'
-            _backend_field = 'color'
-            _odoo_field = 'id'
+        # Let's pretend that res.users is the binding model
+        # and res.partner is the record. We use this model
+        # because it is an _inherits, so we can fake a
+        # binding model without creating a new odoo addon
+        class PartnerUserBinder(Binder):
+            # we use already existing fields for the binding
+            _model_name = 'res.users'
+            _external_field = 'login'
+            _sync_date_field = 'write_date'
+            # pretend that company_id is our link to our
+            # backend model (we don't have any backend model
+            # so we fake it...)
+            _backend_field = 'company_id'
+            _odoo_field = 'partner_id'
 
         self.backend = Backend('dummy', version='1.0')
         backend_record = mock.Mock()
-        backend_record.id = 1
+        self.backend_id = 1
+        backend_record.id = self.backend_id
         backend_record.get_backend.return_value = self.backend
         self.connector_env = ConnectorEnvironment(
-            backend_record, self.env, 'res.partner')
-        self.partner_binder = PartnerBinder(self.connector_env)
+            backend_record, self.env, 'res.users')
+        self.binder = PartnerUserBinder(self.connector_env)
 
     def test_default_binder(self):
         """ Small scenario with the default binder """
-        partner = self.env.ref('base.main_partner')
-        partner.write({'color': 1})
-        # bind the main partner to external id = 0
-        self.partner_binder.bind(0, partner.id)
-        # find the odoo partner bound to external partner 0
-        odoo_id = self.partner_binder.to_odoo(0)
-        self.assertEqual(odoo_id, partner.id)
-        odoo_id = self.partner_binder.to_odoo(0)
-        self.assertEqual(odoo_id.id, partner.id)
-        odoo_id = self.partner_binder.to_odoo(0, unwrap=True)
-        self.assertEqual(odoo_id, partner.id)
+        user = self.env['res.users'].create(
+            {'login': 'test', 'name': 'Test', 'company_id': self.backend_id}
+        )
+        partner = user.partner_id
+        # bind the main partner to external id = 'test'
+        self.binder.bind('test', partner)
+        # find the odoo partner bound to external partner 'test'
+        binding = self.binder.to_internal('test')
+        self.assertEqual(binding, user)
+        binding = self.binder.to_internal('test')
+        self.assertEqual(binding, user)
+        record = self.binder.to_internal('test', unwrap=True)
+        self.assertEqual(record, partner)
         # find the external partner bound to odoo partner 1
-        external_id = self.partner_binder.to_backend(partner.id)
-        self.assertEqual(external_id, '0')
-        external_id = self.partner_binder.to_backend(partner.id, wrap=True)
-        self.assertEqual(external_id, '0')
-        # unwrap model should be None since we set 'id' as the _odoo_field
-        self.assertEqual(self.partner_binder.unwrap_model(), None)
+        external_id = self.binder.to_external(user)
+        self.assertEqual(external_id, 'test')
+        external_id = self.binder.to_external(partner, wrap=True)
+        self.assertEqual(external_id, 'test')
+        self.assertEqual(self.binder.unwrap_model(), 'res.partner')
         # unwrapping the binding should give the same binding
-        self.assertEqual(self.partner_binder.unwrap_binding(1), 1)
+        self.assertEqual(self.binder.unwrap_binding(user), partner)

@@ -5,7 +5,7 @@
 from functools import partial
 from collections import namedtuple
 from .exception import NoConnectorUnitError
-from odoo.addons.queue_job.utils import is_module_installed
+from .connector import is_module_installed
 
 __all__ = ['Backend']
 

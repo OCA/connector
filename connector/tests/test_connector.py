@@ -11,6 +11,8 @@ from odoo.tests import common
 from odoo.addons.connector import connector
 from odoo.addons.connector.exception import RetryableJobError
 from odoo.addons.connector.connector import (
+    is_module_installed,
+    get_odoo_module,
     ConnectorEnvironment,
     ConnectorUnit,
     pg_try_advisory_lock,
@@ -25,6 +27,22 @@ def mock_connector_unit(env):
                                                    env,
                                                    'res.users')
     return ConnectorUnit(connector_env)
+
+
+class TestModuleInstalledFunctions(common.TransactionCase):
+
+    def test_is_module_installed(self):
+        """ Test on an installed module """
+        self.assertTrue(is_module_installed(self.env, 'connector'))
+
+    def test_is_module_uninstalled(self):
+        """ Test on an installed module """
+        self.assertFalse(is_module_installed(self.env, 'lambda'))
+
+    def test_get_odoo_module(self):
+        """ Odoo module is found from a Python path """
+        self.assertEquals(get_odoo_module(TestModuleInstalledFunctions),
+                          'connector')
 
 
 class TestConnectorUnit(unittest.TestCase):

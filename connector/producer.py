@@ -17,7 +17,7 @@ from odoo import api, models
 from .event import (on_record_create,
                     on_record_write,
                     on_record_unlink)
-from odoo.addons.queue_job.utils import is_module_installed
+from .connector import is_module_installed
 
 
 class Base(models.AbstractModel):

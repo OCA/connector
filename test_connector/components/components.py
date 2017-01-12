@@ -5,6 +5,7 @@
 # TODO make API short paths
 # from odoo.addons.connector import Component
 from odoo.addons.connector.components.core import Component
+from odoo.addons.connector.components.collection import use
 
 
 class BaseComponent(Component):
@@ -26,6 +27,3 @@ class TestMapper(Component):
 
     def name(self):
         return 'test.mapper'
-
-    def test4(self):
-        return 'test4'

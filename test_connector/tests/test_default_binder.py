@@ -16,7 +16,7 @@ class TestDefaultBinder(TransactionCase):
             {'version': '1', 'name': 'Test'}
         )
         self.connector_env = ConnectorEnvironment(
-            self.backend_record, self.env, 'connector.test.binding'
+            self.backend_record, 'connector.test.binding'
         )
         self.binder = self.connector_env.get_connector_unit(Binder)
 

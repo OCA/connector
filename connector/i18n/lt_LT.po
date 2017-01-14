@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: connector (8.0)\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-01-07 01:20+0000\n"
-"PO-Revision-Date: 2017-01-13 09:26+0000\n"
+"PO-Revision-Date: 2017-01-11 15:35+0000\n"
 "Last-Translator: OCA Transbot <transbot@odoo-community.org>\n"
-"Language-Team: Portuguese (Portugal) (http://www.transifex.com/oca/OCA-connector-8-0/language/pt_PT/)\n"
+"Language-Team: Lithuanian (Lithuania) (http://www.transifex.com/oca/OCA-connector-8-0/language/lt_LT/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Language: pt_PT\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language: lt_LT\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
 #. module: connector
 #: model:ir.actions.act_window,help:connector.action_connector_checkpoint
@@ -45,7 +45,7 @@ msgstr ""
 #. module: connector
 #: field:queue.job,active:0
 msgid "Active"
-msgstr "Ativo"
+msgstr ""
 
 #. module: connector
 #: field:connector.config.settings,alias_domain:0
@@ -87,7 +87,7 @@ msgstr ""
 #: view:connector.config.settings:connector.view_connector_config_settings
 #: view:queue.requeue.job:connector.view_requeue_job
 msgid "Cancel"
-msgstr "Cancelar"
+msgstr "Atšaukti"
 
 #. module: connector
 #: code:addons/connector/queue/job.py:619
@@ -151,7 +151,7 @@ msgstr ""
 #. module: connector
 #: field:queue.job,company_id:0
 msgid "Company"
-msgstr "Empresa"
+msgstr ""
 
 #. module: connector
 #: field:queue.job.channel,complete_name:0 field:queue.job.function,channel:0
@@ -212,7 +212,7 @@ msgstr ""
 #: field:connector.config.settings,create_uid:0
 #: field:queue.job.channel,create_uid:0 field:queue.requeue.job,create_uid:0
 msgid "Created by"
-msgstr "Criado por"
+msgstr "Sukūrė"
 
 #. module: connector
 #: field:connector.checkpoint,create_date:0
@@ -220,7 +220,7 @@ msgstr "Criado por"
 #: field:connector.config.settings,create_date:0
 #: field:queue.job.channel,create_date:0 field:queue.requeue.job,create_date:0
 msgid "Created on"
-msgstr "Criado em"
+msgstr "Sukurta"
 
 #. module: connector
 #: field:queue.job,retry:0
@@ -241,12 +241,12 @@ msgstr ""
 #: help:connector.checkpoint,message_last_post:0
 #: help:queue.job,message_last_post:0
 msgid "Date of the last message posted on the record."
-msgstr "Data da última mensagem registada."
+msgstr ""
 
 #. module: connector
 #: field:queue.job,name:0
 msgid "Description"
-msgstr "Descrição"
+msgstr ""
 
 #. module: connector
 #: field:connector.backend,display_name:0
@@ -258,12 +258,12 @@ msgstr "Descrição"
 #: field:queue.job.function,display_name:0
 #: field:queue.requeue.job,display_name:0 field:queue.worker,display_name:0
 msgid "Display Name"
-msgstr "Nome a Apresentar"
+msgstr ""
 
 #. module: connector
 #: view:queue.job:connector.view_queue_job_search selection:queue.job,state:0
 msgid "Done"
-msgstr "Concluído"
+msgstr ""
 
 #. module: connector
 #: field:queue.job,date_enqueued:0
@@ -304,7 +304,7 @@ msgstr ""
 #: field:connector.checkpoint,message_follower_ids:0
 #: field:queue.job,message_follower_ids:0
 msgid "Followers"
-msgstr "Seguidores"
+msgstr ""
 
 #. module: connector
 #: field:queue.job,func_name:0
@@ -333,7 +333,7 @@ msgstr ""
 msgid ""
 "Holds the Chatter summary (number of messages, ...). This summary is "
 "directly in html format in order to be inserted in kanban views."
-msgstr "Contém o resumo do Chatter (número de mensagens, ...). Este resumo é formatado diretamente em html para poder ser inserido em vistas de kanban."
+msgstr ""
 
 #. module: connector
 #: field:connector.backend,id:0 field:connector.checkpoint,id:0
@@ -347,7 +347,7 @@ msgstr "ID"
 #. module: connector
 #: help:connector.checkpoint,message_unread:0 help:queue.job,message_unread:0
 msgid "If checked new messages require your attention."
-msgstr "Se assinalada, há novas mensagens a requerer a sua atenção."
+msgstr ""
 
 #. module: connector
 #: view:queue.job:connector.view_queue_job_form
@@ -370,7 +370,7 @@ msgstr ""
 #: field:connector.checkpoint,message_is_follower:0
 #: field:queue.job,message_is_follower:0
 msgid "Is a Follower"
-msgstr "É um Seguidor"
+msgstr ""
 
 #. module: connector
 #: model:ir.model,name:connector.model_queue_job_channel
@@ -418,7 +418,7 @@ msgstr ""
 #: field:connector.checkpoint,message_last_post:0
 #: field:queue.job,message_last_post:0
 msgid "Last Message Date"
-msgstr "Data da Última Mensagem"
+msgstr ""
 
 #. module: connector
 #: field:connector.backend,__last_update:0
@@ -430,7 +430,7 @@ msgstr "Data da Última Mensagem"
 #: field:queue.job.function,__last_update:0
 #: field:queue.requeue.job,__last_update:0 field:queue.worker,__last_update:0
 msgid "Last Modified on"
-msgstr "Última Modificação Em"
+msgstr ""
 
 #. module: connector
 #: field:connector.checkpoint,write_uid:0
@@ -438,7 +438,7 @@ msgstr "Última Modificação Em"
 #: field:connector.config.settings,write_uid:0
 #: field:queue.job.channel,write_uid:0 field:queue.requeue.job,write_uid:0
 msgid "Last Updated by"
-msgstr "Atualizado pela última vez por"
+msgstr "Paskutinį kartą atnaujino"
 
 #. module: connector
 #: field:connector.checkpoint,write_date:0
@@ -446,7 +446,7 @@ msgstr "Atualizado pela última vez por"
 #: field:connector.config.settings,write_date:0
 #: field:queue.job.channel,write_date:0 field:queue.requeue.job,write_date:0
 msgid "Last Updated on"
-msgstr "Atualizado pela última vez em"
+msgstr "Paskutinį kartą atnaujinta"
 
 #. module: connector
 #: field:external.binding,sync_date:0
@@ -472,24 +472,24 @@ msgstr ""
 #. module: connector
 #: field:connector.checkpoint,message_ids:0 field:queue.job,message_ids:0
 msgid "Messages"
-msgstr "Mensagens"
+msgstr ""
 
 #. module: connector
 #: help:connector.checkpoint,message_ids:0 help:queue.job,message_ids:0
 msgid "Messages and communication history"
-msgstr "História das mensagens e comunicações"
+msgstr ""
 
 #. module: connector
 #: view:connector.checkpoint:connector.view_connector_checkpoint_search
 #: field:connector.checkpoint,model_id:0 field:queue.job,model_name:0
 msgid "Model"
-msgstr "Modelo"
+msgstr ""
 
 #. module: connector
 #: field:connector.backend,name:0 field:queue.job.channel,name:0
 #: field:queue.job.function,name:0
 msgid "Name"
-msgstr "Nome"
+msgstr ""
 
 #. module: connector
 #: help:connector.checkpoint,name:0
@@ -532,7 +532,7 @@ msgstr ""
 #. module: connector
 #: view:queue.job:connector.view_queue_job_search selection:queue.job,state:0
 msgid "Pending"
-msgstr "Pendente"
+msgstr ""
 
 #. module: connector
 #: field:queue.job,func:0
@@ -673,18 +673,18 @@ msgstr ""
 #. module: connector
 #: field:connector.checkpoint,state:0
 msgid "Status"
-msgstr "Estado"
+msgstr ""
 
 #. module: connector
 #: field:connector.checkpoint,message_summary:0
 #: field:queue.job,message_summary:0
 msgid "Summary"
-msgstr "Resumo"
+msgstr ""
 
 #. module: connector
 #: field:queue.job,func_string:0
 msgid "Task"
-msgstr "Tarefa"
+msgstr ""
 
 #. module: connector
 #: help:queue.job,max_retries:0
@@ -732,7 +732,7 @@ msgstr ""
 #: field:connector.checkpoint,message_unread:0
 #: field:queue.job,message_unread:0
 msgid "Unread Messages"
-msgstr "Mensagens não lidas"
+msgstr ""
 
 #. module: connector
 #: field:connector.config.settings,module_auth_oauth:0
@@ -780,7 +780,7 @@ msgstr ""
 #: view:connector.config.settings:connector.view_connector_config_settings
 #: view:queue.requeue.job:connector.view_requeue_job
 msgid "or"
-msgstr "ou"
+msgstr ""
 
 #. module: connector
 #: view:connector.checkpoint:connector.view_connector_checkpoint_form

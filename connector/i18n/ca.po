@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: connector (8.0)\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-04-11 09:16+0000\n"
-"PO-Revision-Date: 2015-10-15 13:38+0000\n"
+"POT-Creation-Date: 2017-01-07 01:20+0000\n"
+"PO-Revision-Date: 2017-01-13 09:22+0000\n"
 "Last-Translator: OCA Transbot <transbot@odoo-community.org>\n"
 "Language-Team: Catalan (http://www.transifex.com/oca/OCA-connector-8-0/language/ca/)\n"
 "MIME-Version: 1.0\n"
@@ -251,6 +251,18 @@ msgid "Description"
 msgstr "Descripció"
 
 #. module: connector
+#: field:connector.backend,display_name:0
+#: field:connector.checkpoint,display_name:0
+#: field:connector.checkpoint.review,display_name:0
+#: field:connector.config.settings,display_name:0
+#: field:external.binding,display_name:0 field:queue.job,display_name:0
+#: field:queue.job.channel,display_name:0
+#: field:queue.job.function,display_name:0
+#: field:queue.requeue.job,display_name:0 field:queue.worker,display_name:0
+msgid "Display Name"
+msgstr "Veure el nom"
+
+#. module: connector
 #: view:queue.job:connector.view_queue_job_search selection:queue.job,state:0
 msgid "Done"
 msgstr "Fet"
@@ -411,6 +423,18 @@ msgid "Last Message Date"
 msgstr "Data darrer missatge"
 
 #. module: connector
+#: field:connector.backend,__last_update:0
+#: field:connector.checkpoint,__last_update:0
+#: field:connector.checkpoint.review,__last_update:0
+#: field:connector.config.settings,__last_update:0
+#: field:external.binding,__last_update:0 field:queue.job,__last_update:0
+#: field:queue.job.channel,__last_update:0
+#: field:queue.job.function,__last_update:0
+#: field:queue.requeue.job,__last_update:0 field:queue.worker,__last_update:0
+msgid "Last Modified on"
+msgstr "Darrera modificació el"
+
+#. module: connector
 #: field:connector.checkpoint,write_uid:0
 #: field:connector.checkpoint.review,write_uid:0
 #: field:connector.config.settings,write_uid:0
@@ -468,6 +492,11 @@ msgstr "Model"
 #: field:queue.job.function,name:0
 msgid "Name"
 msgstr "Nom"
+
+#. module: connector
+#: help:connector.checkpoint,name:0
+msgid "Name of the record to review"
+msgstr ""
 
 #. module: connector
 #: view:connector.checkpoint:connector.view_connector_checkpoint_search
@@ -533,9 +562,19 @@ msgid "Queue Worker"
 msgstr "Queue Worker"
 
 #. module: connector
+#: field:connector.checkpoint,record:0
+msgid "Record"
+msgstr ""
+
+#. module: connector
 #: field:connector.checkpoint,record_id:0
 msgid "Record ID"
 msgstr "ID Registre"
+
+#. module: connector
+#: field:connector.checkpoint,name:0
+msgid "Record Name"
+msgstr ""
 
 #. module: connector
 #: view:queue.job:connector.view_queue_job_form
@@ -660,6 +699,11 @@ msgstr "La tasca fallarà si el nombre de intents supera el màxim permès,\nEls
 #: help:connector.checkpoint,backend_id:0
 msgid "The record has been imported from this backend"
 msgstr "El registre ha estat importat des d'aquest backend"
+
+#. module: connector
+#: help:connector.checkpoint,record:0
+msgid "The record to review."
+msgstr ""
 
 #. module: connector
 #: view:connector.checkpoint.review:connector.view_connector_checkpoint_review

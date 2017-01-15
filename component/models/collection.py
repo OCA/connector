@@ -4,7 +4,7 @@
 
 
 from odoo import models, api
-from .core import WorkContext
+from ..core import WorkContext
 
 
 class Collection(models.AbstractModel):

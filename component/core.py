@@ -49,7 +49,7 @@ class WorkContext(object):
         self.model_name = model_name
         self.model = self.env[model_name]
         self._propagate_kwargs = []
-        for attr_name, value in kwargs.iteritems:
+        for attr_name, value in kwargs.iteritems():
             setattr(self, attr_name, value)
             self._propagate_kwargs.append(attr_name)
 
@@ -63,7 +63,7 @@ class WorkContext(object):
         return self.__class__(self.collection, model_name, **kwargs)
 
     def components(self, name=None, usage=None, model_name=None, multi=False):
-        all_components['base'](self).components(
+        return all_components['base'](self).components(
             name=name,
             usage=usage,
             model_name=model_name,
@@ -94,6 +94,16 @@ class MetaComponent(type):
 
         self._modules_components[self._module].append(self)
 
+    @property
+    def apply_on_models(self):
+        # None means all models
+        if self._apply_on is None:
+            return None
+        # always return a list, used for the lookup
+        elif isinstance(self._apply_on, basestring):
+            return [self._apply_on]
+        return self._apply_on
+
 
 class Component(object):
     __metaclass__ = MetaComponent
@@ -112,16 +122,6 @@ class Component(object):
     def __init__(self, work_context):
         super(Component, self).__init__()
         self.work = work_context
-
-    @property
-    def apply_on_models(self):
-        # None means all models
-        if self._apply_on is None:
-            return None
-        # always return a list, used for the lookup
-        elif isinstance(self._apply_on, basestring):
-            return [self._apply_on]
-        return self._apply_on
 
     @property
     def collection(self):
@@ -160,17 +160,24 @@ class Component(object):
             candidates.update(all_components.values())
 
         # filter out by model name
-        candidates = OrderedSet(c for c in candidates
-                                if c.apply_on_models is None
-                                or model_name in c.apply_on_models)
+        if model_name is not None:
+            candidates = OrderedSet(c for c in candidates
+                                    if c.apply_on_models is None
+                                    or model_name in c.apply_on_models)
 
-        if not multi and len(candidates) > 1:
-            # TODO which error type?
-            raise ValueError(
-                "Several components found for collection '%s', name '%s', "
-                "usage '%s', model_name '%s'. Found: %s" %
-                (collection_name, name, usage, model_name, candidates)
-            )
+        if not candidates:
+            # TODO: do we want to raise?
+            raise ValueError("No component found.")
+
+        if not multi:
+            if len(candidates) > 1:
+                # TODO which error type?
+                raise ValueError(
+                    "Several components found for collection '%s', name '%s', "
+                    "usage '%s', model_name '%s'. Found: %s" %
+                    (collection_name, name, usage, model_name, candidates)
+                )
+            return candidates.pop()
 
         return candidates
 

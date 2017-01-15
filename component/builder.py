@@ -28,6 +28,7 @@ class ComponentBuilder(models.AbstractModel):
     @api.model_cr
     def _register_hook(self):
         all_components.clear()
+        # TODO: reset the LRU cache of the component lookups
 
         graph = odoo.modules.graph.Graph()
         graph.add_module(self.env.cr, 'base')

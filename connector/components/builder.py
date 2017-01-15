@@ -4,20 +4,7 @@
 
 import odoo
 from odoo import api, models
-from .core import MetaComponent
-
-
-class ComponentGlobalRegistry(dict):
-    """ Store all the components by name
-
-    Allow to _inherit components.
-
-    Another registry allow to register components
-    on a particular backend and to find them back.
-
-    """
-
-components = ComponentGlobalRegistry()
+from .core import MetaComponent, all_components
 
 
 class ComponentBuilder(models.AbstractModel):
@@ -27,7 +14,7 @@ class ComponentBuilder(models.AbstractModel):
     The classes are built using the same mechanism
     than the Odoo one, meaning that a final class
     that inherits from all the ``_inherit`` is created.
-    This class is kept in the ``components`` global
+    This class is kept in the ``all_components`` global
     registry with the Components ``_name`` as keys.
 
     This is an Odoo model so we can hook the build of the components at the end
@@ -40,7 +27,7 @@ class ComponentBuilder(models.AbstractModel):
 
     @api.model_cr
     def _register_hook(self):
-        components.clear()
+        all_components.clear()
 
         graph = odoo.modules.graph.Graph()
         graph.add_module(self.env.cr, 'base')
@@ -55,8 +42,8 @@ class ComponentBuilder(models.AbstractModel):
         graph.add_modules(self.env.cr, module_list)
 
         for module in graph:
-            self.load_components(module.name, components)
+            self.load_components(module.name, all_components)
 
     def load_components(self, module, registry):
-        for component_class in MetaComponent.components[module]:
+        for component_class in MetaComponent._modules_components[module]:
             component_class._build_component(registry)

@@ -3,15 +3,70 @@
 # Copyright 2017 Odoo
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html)
 
-from collections import defaultdict
+from collections import defaultdict, OrderedDict
 
 from odoo.tools import OrderedSet, LastOrderedSet
 from ..connector import _get_addon_name
 
 
+class ComponentGlobalRegistry(OrderedDict):
+    """ Store all the components by name
+
+    Allow to _inherit components.
+
+    Another registry allow to register components on a
+    particular backend and to find them back.
+
+    This is an OrderedDict, because we want to keep the
+    registration order of the components, addons loaded first
+    have their components found first (when we look for a list
+    components using `multi`).
+
+    """
+
+all_components = ComponentGlobalRegistry()
+
+
+class WorkContext(object):
+
+    def __init__(self, collection, model_name, **kwargs):
+        self.collection = collection
+        self.model_name = model_name
+        self.model = self.env[model_name]
+        self._propagate_kwargs = []
+        for attr_name, value in kwargs.iteritems:
+            setattr(self, attr_name, value)
+            self._propagate_kwargs.append(attr_name)
+
+    @property
+    def env(self):
+        return self.collection.env
+
+    def work_on(self, model_name):
+        kwargs = {attr_name: getattr(self, attr_name)
+                  for attr_name in self._propagate_kwargs}
+        return self.__class__(self.collection, model_name, **kwargs)
+
+    def components(self, name=None, usage=None, model_name=None, multi=False):
+        all_components['base'](self).components(
+            name=name,
+            usage=usage,
+            model_name=model_name,
+            multi=multi,
+        )
+
+    def __str__(self):
+        return "WorkContext(%s,%s)" % (repr(self.collection), self.model_name)
+
+    def __unicode__(self):
+        return unicode(str(self))
+
+    __repr__ = __str__
+
+
 class MetaComponent(type):
 
-    components = defaultdict(list)
+    _modules_components = defaultdict(list)
 
     def __init__(self, name, bases, attrs):
         if not self._register:
@@ -22,7 +77,7 @@ class MetaComponent(type):
         if not hasattr(self, '_module'):
             self._module = _get_addon_name(self.__module__)
 
-        self.components[self._module].append(self)
+        self._modules_components[self._module].append(self)
 
 
 class Component(object):
@@ -33,8 +88,93 @@ class Component(object):
     _name = None
     _inherit = None
 
+    # name of the collection to subscribe in, abstract when None
+    _collection = None
+
     _apply_on = None  # None means any Model, can be a list ['res.users', ...]
     _usage = None  # component purpose, might be a list? ['import.mapper', ...]
+
+    def __init__(self, work_context):
+        super(Component, self).__init__()
+        self.work = work_context
+
+    @property
+    def apply_on_models(self):
+        # None means all models
+        if self._apply_on is None:
+            return None
+        # always return a list, used for the lookup
+        elif isinstance(self._apply_on, basestring):
+            return [self._apply_on]
+        return self._apply_on
+
+    @property
+    def collection(self):
+        return self.work.collection
+
+    @property
+    def env(self):
+        return self.collection.env
+
+    @property
+    def model(self):
+        return self.collection.model
+
+    # TODO use a LRU cache (repoze.lru, beware we must include the collection
+    # name in the cache but not 'self')
+    @staticmethod  # staticmethod in order to use a LRU cache on all args
+    def lookup(collection_name, name=None, usage=None, model_name=None,
+               multi=False):
+        # keep the order so addons loaded first have components used first
+        # in case of multi=True
+        candidates = OrderedSet()
+        if name is not None:
+            component = all_components.get(name)
+            if not component:
+                # TODO: which error type?
+                raise ValueError("No component with name '%s' found." % name)
+            candidates.add(component)
+
+        if usage is not None:
+            components = [c for c in all_components.itervalues()
+                          if c._usage == usage]
+            if components:
+                candidates.update(components)
+
+        if name is None and usage is None:
+            candidates.update(all_components.values())
+
+        # filter out by model name
+        candidates = OrderedSet(c for c in candidates
+                                if c.apply_on_models is None
+                                or model_name in c.apply_on_models)
+
+        if not multi and len(candidates) > 1:
+            # TODO which error type?
+            raise ValueError(
+                "Several components found for collection '%s', name '%s', "
+                "usage '%s', model_name '%s'. Found: %s" %
+                (collection_name, name, usage, model_name, candidates)
+            )
+
+        return candidates
+
+    def components(self, name=None, usage=None, model_name=None, multi=False):
+        return self.lookup(
+            self.collection._name,
+            name=name,
+            usage=usage,
+            model_name=model_name,
+            multi=multi,
+        )(self.work)
+
+    def __str__(self):
+        return "Component(%s)" % self._name
+
+    def __unicode__(self):
+        return unicode(str(self))
+
+    __repr__ = __str__
 
     #
     # Goal: try to apply inheritance at the instantiation level and
@@ -142,4 +282,4 @@ class Component(object):
     @classmethod
     def _build_component_attributes(cls, registry):
         """ Initialize base component attributes. """
-        # TODO: see if we concatenate models, purpose, ...
+        # TODO: see if we concatenate models, usage, ...

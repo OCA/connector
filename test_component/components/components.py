@@ -2,9 +2,7 @@
 # Copyright 2017 Camptocamp SA
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html)
 
-# TODO make API short paths
-# from odoo.addons.connector import Component
-from odoo.addons.connector.components.core import Component
+from odoo.addons.component.core import Component
 
 
 class BaseComponent(Component):
@@ -12,6 +10,7 @@ class BaseComponent(Component):
 
     def test_inherit_base(self):
         return 'test_inherit_base'
+
 
 class Mapper(Component):
     _name = 'mapper'
@@ -26,3 +25,8 @@ class TestMapper(Component):
 
     def name(self):
         return 'test.mapper'
+
+
+class TestUserComponent(Component):
+    _name = 'test.user.component'
+    _apply_on = ['res.users']

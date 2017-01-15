@@ -6,7 +6,22 @@
 from collections import defaultdict, OrderedDict
 
 from odoo.tools import OrderedSet, LastOrderedSet
-from ..connector import _get_addon_name
+
+
+# this is duplicated from odoo.models.MetaModel._get_addon_name() which we
+# unfortunately can't use because it's an instance method and should have been
+# a @staticmethod
+def _get_addon_name(full_name):
+    # The (OpenERP) module name can be in the ``odoo.addons`` namespace
+    # or not. For instance, module ``sale`` can be imported as
+    # ``odoo.addons.sale`` (the right way) or ``sale`` (for backward
+    # compatibility).
+    module_parts = full_name.split('.')
+    if len(module_parts) > 2 and module_parts[:2] == ['odoo', 'addons']:
+        addon_name = full_name.split('.')[2]
+    else:
+        addon_name = full_name.split('.')[0]
+    return addon_name
 
 
 class ComponentGlobalRegistry(OrderedDict):
@@ -15,7 +30,7 @@ class ComponentGlobalRegistry(OrderedDict):
     Allow to _inherit components.
 
     Another registry allow to register components on a
-    particular backend and to find them back.
+    particular collection and to find them back.
 
     This is an OrderedDict, because we want to keep the
     registration order of the components, addons loaded first

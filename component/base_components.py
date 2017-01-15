@@ -7,7 +7,3 @@ from .core import Component
 
 class BaseComponent(Component):
     _name = 'base'
-
-
-class Mapper(Component):
-    _name = 'mapper'

@@ -22,8 +22,8 @@ class ComponentBuilder(models.AbstractModel):
     loaded.
 
     """
-    _name = 'connector.component.builder'
-    _description = 'Connector Component Builder'
+    _name = 'component.builder'
+    _description = 'Component Builder'
 
     @api.model_cr
     def _register_hook(self):

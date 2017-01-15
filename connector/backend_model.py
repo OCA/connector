@@ -5,7 +5,6 @@
 
 from odoo import models, fields, api
 from . import backend
-from .components.collection import collection_registry
 
 
 class ConnectorBackend(models.AbstractModel):
@@ -21,14 +20,6 @@ class ConnectorBackend(models.AbstractModel):
     name = fields.Char(required=True)
     # replace by a selection in concrete models
     version = fields.Selection(selection=[], required=True)
-
-    def collection(self):
-        """ Return the component collection for this backend
-
-        The collection can then be used to search other components
-
-        """
-        return collection_registry.find(self._name, name='collection')
 
     @api.multi
     def get_backend(self):

@@ -2,63 +2,48 @@
 # Copyright 2017 Camptocamp SA
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html)
 
-# make a short api path
-# odoo.addons.connector.use
-def use(component_class, backend_name):
-    """ Register a component in this backend
 
-    Use as a decorator on a component, like
+from odoo import models, api
+from .core import WorkContext
 
-    ::
 
-        @use('my.backend')
-        class MyMapper(Component):
-            _name = 'my.mapper'
-            _inherit = 'mapper'
+class Collection(models.AbstractModel):
+    """ The model on which components are subscribed
+
+    It would be for instance the ``backend`` for the connectors.
+
+    Example::
+
+        class MagentoBackend(models.Model):
+            _name = 'magento.backend'  # name of the collection
+            _inherit = 'collection.base'
+
+
+        class MagentoSaleImporter(Component):
+            _name = 'magento.sale.importer'
+            _apply_on = 'magento.sale.order'
+            _collection = 'magento.backend'  # name of the collection
+
+            def run(self, magento_id):
+                mapper = self.components(name='magento.sale.importer.mapper')
+                extra_mappers = self.components(
+                    usage='magento.sale.importer.mapper',
+                    multi=True,
+                )
+                # ...
+
+        # use it:
+
+        backend = self.env['magento.backend'].browse(1)
+        work = backend.work_on('magento.sale.order')
+        importer = work.components(name='magento.sale.importer')
+        importer.run(1)
+
 
     """
-    assert component_class and backend_name
-    collection_registry.register(backend_name, component_class)
-    return component_class
+    _name = 'collection.base'
+    _description = 'Base Abstract Collection'
 
-
-class CollectionRegistry(object):
-
-    def __init__(self):
-        self._backends = {}
-
-    def register(self, backend_name, component):
-        if backend_name not in self._backends:
-            self._backends[backend_name] = BackendCollection()
-        self._backends[backend_name].add(component)
-
-    def find(self, backend_name, name=None, purpose=None, model_name=None,
-             multi=False):
-        if backend_name not in self._backends:
-            return None
-        return self._backends[backend_name].find(
-            name=name, purpose=purpose,
-            model_name=model_name,
-            multi=multi,
-        )
-
-
-class BackendCollection(object):
-
-    def __init__(self):
-        self._components = {}
-
-    def add(self, component):
-        self._components[component._name] = component
-
-    # TODO: add a LRU cache?
-    def find(self, name=None, purpose=None, model_name=None, multi=False):
-        # TODO: nice errors, complete find by purpose and model
-        return self._components[name]
-
-
-# TODO: handle uninstalled addons with components still in memory
-# one possibility would be to check if the component exist
-# in the global registry, which should not contain components
-# of uninstalled addons
-collection_registry = CollectionRegistry()
+    @api.multi
+    def work_on(self, model_name, **kwargs):
+        return WorkContext(self, model_name, **kwargs)

@@ -62,9 +62,11 @@ class WorkContext(object):
                   for attr_name in self._propagate_kwargs}
         return self.__class__(self.collection, model_name, **kwargs)
 
-    def components(self, name=None, usage=None, model_name=None, multi=False):
+    def component_by_name(self, name):
+        return all_components['base'](self).component_by_name(name)
+
+    def components(self, usage=None, model_name=None, multi=False):
         return all_components['base'](self).components(
-            name=name,
             usage=usage,
             model_name=model_name,
             multi=multi,
@@ -138,57 +140,69 @@ class Component(object):
     # TODO use a LRU cache (repoze.lru, beware we must include the collection
     # name in the cache but not 'self')
     @staticmethod  # staticmethod in order to use a LRU cache on all args
-    def lookup(collection_name, name=None, usage=None, model_name=None,
-               multi=False):
+    def lookup(collection_name, usage=None, model_name=None, multi=False):
+        # TODO: verify that ordering is kept
+
         # keep the order so addons loaded first have components used first
         # in case of multi=True
-        candidates = OrderedSet()
-        if name is not None:
-            component = all_components.get(name)
-            if not component:
-                # TODO: which error type?
-                raise ValueError("No component with name '%s' found." % name)
-            candidates.add(component)
+        collection_components = [
+            component for component in all_components.itervalues()
+            if component._collection == collection_name
+        ]
+        candidates = []
 
         if usage is not None:
-            components = [c for c in all_components.itervalues()
-                          if c._usage == usage]
+            components = [component for component in collection_components
+                          if component._usage == usage]
             if components:
-                candidates.update(components)
-
-        if name is None and usage is None:
-            candidates.update(all_components.values())
+                candidates = components
+        else:
+            candidates = collection_components.values()
 
         # filter out by model name
-        if model_name is not None:
-            candidates = OrderedSet(c for c in candidates
-                                    if c.apply_on_models is None
-                                    or model_name in c.apply_on_models)
+        candidates = [c for c in candidates
+                      if c.apply_on_models is None
+                      or model_name in c.apply_on_models]
 
         if not candidates:
             # TODO: do we want to raise?
-            raise ValueError("No component found.")
+            raise ValueError(
+                "No component found for collection '%s', "
+                "usage '%s', model_name '%s'." %
+                (collection_name, usage, model_name)
+            )
 
         if not multi:
             if len(candidates) > 1:
                 # TODO which error type?
                 raise ValueError(
-                    "Several components found for collection '%s', name '%s', "
-                    "usage '%s', model_name '%s'. Found: %s" %
-                    (collection_name, name, usage, model_name, candidates)
+                    "Several components found for collection '%s', "
+                    "usage '%s', model_name '%s'. Found: %r" %
+                    (collection_name, usage, model_name, candidates)
                 )
             return candidates.pop()
 
         return candidates
 
-    def components(self, name=None, usage=None, model_name=None, multi=False):
-        return self.lookup(
+    def component_by_name(self, name):
+        component = all_components.get(name)
+        if not component:
+            # TODO: which error type?
+            raise ValueError("No component with name '%s' found." % name)
+        return component
+
+    def components(self, usage=None, model_name=None, multi=False):
+        component_class = self.lookup(
             self.collection._name,
-            name=name,
             usage=usage,
-            model_name=model_name,
+            model_name=model_name or self.work.model_name,
             multi=multi,
-        )(self.work)
+        )
+        if model_name is None or model_name == self.work.model_name:
+            work_context = self.work
+        else:
+            work_context = self.work.work_on(model_name)
+        return component_class(work_context)
 
     def __str__(self):
         return "Component(%s)" % self._name

@@ -19,14 +19,18 @@ class Mapper(Component):
         return 'test_inherit_component'
 
 
-class TestMapper(Component):
+class ImportTestMapper(Component):
     _name = 'test.mapper'
     _inherit = 'mapper'
+    _usage = 'import.mapper'
+    _collection = 'test.component.collection'
 
     def name(self):
         return 'test.mapper'
 
 
-class TestUserComponent(Component):
+class UserTestComponent(Component):
     _name = 'test.user.component'
     _apply_on = ['res.users']
+    _usage = 'test1'
+    _collection = 'test.component.collection'

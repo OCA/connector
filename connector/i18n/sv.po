@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: connector (8.0)\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-12-22 14:19+0000\n"
-"PO-Revision-Date: 2016-12-22 14:08+0000\n"
+"POT-Creation-Date: 2017-01-07 01:20+0000\n"
+"PO-Revision-Date: 2017-01-19 20:16+0000\n"
 "Last-Translator: OCA Transbot <transbot@odoo-community.org>\n"
 "Language-Team: Swedish (http://www.transifex.com/oca/OCA-connector-8-0/language/sv/)\n"
 "MIME-Version: 1.0\n"
@@ -151,7 +151,7 @@ msgstr ""
 #. module: connector
 #: field:queue.job,company_id:0
 msgid "Company"
-msgstr ""
+msgstr "Företag"
 
 #. module: connector
 #: field:queue.job.channel,complete_name:0 field:queue.job.function,channel:0
@@ -325,7 +325,7 @@ msgstr "Gruppera efter"
 #. module: connector
 #: view:connector.checkpoint:connector.view_connector_checkpoint_search
 msgid "Group By..."
-msgstr ""
+msgstr "Gruppera efter..."
 
 #. module: connector
 #: help:connector.checkpoint,message_summary:0
@@ -532,7 +532,7 @@ msgstr ""
 #. module: connector
 #: view:queue.job:connector.view_queue_job_search selection:queue.job,state:0
 msgid "Pending"
-msgstr ""
+msgstr "Pågående"
 
 #. module: connector
 #: field:queue.job,func:0
@@ -542,7 +542,7 @@ msgstr ""
 #. module: connector
 #: field:queue.job,priority:0
 msgid "Priority"
-msgstr ""
+msgstr "Prioritet"
 
 #. module: connector
 #: model:ir.ui.menu,name:connector.menu_queue

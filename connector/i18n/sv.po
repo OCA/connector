@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: connector (9.0)\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-12-17 00:58+0000\n"
-"PO-Revision-Date: 2016-12-22 14:08+0000\n"
+"POT-Creation-Date: 2017-01-07 01:21+0000\n"
+"PO-Revision-Date: 2017-01-19 20:16+0000\n"
 "Last-Translator: OCA Transbot <transbot@odoo-community.org>\n"
 "Language-Team: Swedish (http://www.transifex.com/oca/OCA-connector-9-0/language/sv/)\n"
 "MIME-Version: 1.0\n"
@@ -145,7 +145,7 @@ msgstr ""
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_queue_job_company_id
 msgid "Company"
-msgstr ""
+msgstr "Företag"
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_queue_job_channel_complete_name
@@ -348,7 +348,7 @@ msgstr "Gruppera efter"
 #. module: connector
 #: model:ir.ui.view,arch_db:connector.view_connector_checkpoint_search
 msgid "Group By..."
-msgstr ""
+msgstr "Gruppera efter..."
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_backend_id
@@ -589,7 +589,7 @@ msgstr ""
 #: model:ir.ui.view,arch_db:connector.view_queue_job_search
 #: selection:queue.job,state:0
 msgid "Pending"
-msgstr ""
+msgstr "Pågående"
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_queue_job_func
@@ -599,7 +599,7 @@ msgstr ""
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_queue_job_priority
 msgid "Priority"
-msgstr ""
+msgstr "Prioritet"
 
 #. module: connector
 #: code:addons/connector/checkpoint/checkpoint.py:137

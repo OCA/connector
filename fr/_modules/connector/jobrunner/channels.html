@@ -91,8 +91,7 @@
      href="../../../index.html">Site <b class="caret"></b></a>
   <ul class="dropdown-menu globaltoc"
       role="menu"
-      aria-labelledby="dLabelGlobalToc"><p class="caption"><span class="caption-text">None</span></p>
-<ul>
+      aria-labelledby="dLabelGlobalToc"><ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../project/contribute.html">Contribuer</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../project/contribute.html#want-to-start-a-new-connector">Démarrer un nouveau connecteur</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../project/contribute.html#creating-or-maintaining-a-translation-of-this-doc">Créer ou maintenir une traduction de cette doc</a></li>
@@ -116,7 +115,6 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../project/roadmap.html">Roadmap</a></li>
 </ul>
-<p class="caption"><span class="caption-text">None</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../guides/code_overview.html">Survol du code</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../guides/code_overview.html#backends">Backends</a></li>
@@ -159,7 +157,6 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../guides/multiprocessing.html">Use the connector with multiprocessing workers</a></li>
 </ul>
-<p class="caption"><span class="caption-text">None</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../api/api_connector.html">Connecteur</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../api/api_session.html">Session</a></li>
@@ -268,7 +265,7 @@
 <span class="kn">from</span> <span class="nn">..queue.job</span> <span class="k">import</span> <span class="n">PENDING</span><span class="p">,</span> <span class="n">ENQUEUED</span><span class="p">,</span> <span class="n">STARTED</span><span class="p">,</span> <span class="n">FAILED</span><span class="p">,</span> <span class="n">DONE</span>
 <span class="n">NOT_DONE</span> <span class="o">=</span> <span class="p">(</span><span class="n">PENDING</span><span class="p">,</span> <span class="n">ENQUEUED</span><span class="p">,</span> <span class="n">STARTED</span><span class="p">,</span> <span class="n">FAILED</span><span class="p">)</span>
 
-<span class="n">_logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">__name__</span><span class="p">)</span>
+<span class="n">_logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="PriorityQueue"><a class="viewcode-back" href="../../../api/api_channels.html#connector.jobrunner.channels.PriorityQueue">[docs]</a><span class="k">class</span> <span class="nc">PriorityQueue</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -606,7 +603,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">children</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">subchannel_name</span><span class="p">)</span></div>
 
     <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">capacity</span> <span class="o">=</span> <span class="s1">u&#39;∞&#39;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">capacity</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">capacity</span><span class="p">)</span>
+        <span class="n">capacity</span> <span class="o">=</span> <span class="sa">u</span><span class="s1">&#39;∞&#39;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">capacity</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">capacity</span><span class="p">)</span>
         <span class="k">return</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">(C:</span><span class="si">%s</span><span class="s2">,Q:</span><span class="si">%d</span><span class="s2">,R:</span><span class="si">%d</span><span class="s2">,F:</span><span class="si">%d</span><span class="s2">)&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fullname</span><span class="p">,</span>
                                             <span class="n">capacity</span><span class="p">,</span>
                                             <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_queue</span><span class="p">),</span>
@@ -778,7 +775,7 @@
         <span class="k">return</span> <span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">s</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">sep</span><span class="p">,</span> <span class="n">maxsplit</span><span class="p">)]</span></div>
 
     <span class="nd">@classmethod</span>
-<div class="viewcode-block" id="ChannelManager.parse_simple_config"><a class="viewcode-back" href="../../../api/api_channels.html#connector.jobrunner.channels.ChannelManager.parse_simple_config">[docs]</a>    <span class="k">def</span> <span class="nf">parse_simple_config</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">config_string</span><span class="p">):</span>
+<div class="viewcode-block" id="ChannelManager.parse_simple_config"><a class="viewcode-back" href="../../../api/api_channels.html#connector.jobrunner.channels.ChannelManager.parse_simple_config">[docs]</a>    <span class="k">def</span> <span class="nf">parse_simple_config</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">config_string</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Parse a simple channels configuration string.</span>
 
 <span class="sd">        The general form is as follow:</span>
@@ -832,12 +829,12 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">res</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">config_string</span> <span class="o">=</span> <span class="n">config_string</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;,&quot;</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">channel_config_string</span> <span class="ow">in</span> <span class="n">cls</span><span class="o">.</span><span class="n">split_strip</span><span class="p">(</span><span class="n">config_string</span><span class="p">,</span> <span class="s1">&#39;,&#39;</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">channel_config_string</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">split_strip</span><span class="p">(</span><span class="n">config_string</span><span class="p">,</span> <span class="s1">&#39;,&#39;</span><span class="p">):</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">channel_config_string</span><span class="p">:</span>
                 <span class="c1"># ignore empty entries (commented lines, trailing commas)</span>
                 <span class="k">continue</span>
             <span class="n">config</span> <span class="o">=</span> <span class="p">{}</span>
-            <span class="n">config_items</span> <span class="o">=</span> <span class="n">cls</span><span class="o">.</span><span class="n">split_strip</span><span class="p">(</span><span class="n">channel_config_string</span><span class="p">,</span> <span class="s1">&#39;:&#39;</span><span class="p">)</span>
+            <span class="n">config_items</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">split_strip</span><span class="p">(</span><span class="n">channel_config_string</span><span class="p">,</span> <span class="s1">&#39;:&#39;</span><span class="p">)</span>
             <span class="n">name</span> <span class="o">=</span> <span class="n">config_items</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">name</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Invalid channel config </span><span class="si">%s</span><span class="s1">: &#39;</span>
@@ -852,7 +849,7 @@
                                      <span class="s1">&#39;invalid capacity </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span>
                                      <span class="p">(</span><span class="n">config_string</span><span class="p">,</span> <span class="n">capacity</span><span class="p">))</span>
                 <span class="k">for</span> <span class="n">config_item</span> <span class="ow">in</span> <span class="n">config_items</span><span class="p">[</span><span class="mi">2</span><span class="p">:]:</span>
-                    <span class="n">kv</span> <span class="o">=</span> <span class="n">cls</span><span class="o">.</span><span class="n">split_strip</span><span class="p">(</span><span class="n">config_item</span><span class="p">,</span> <span class="s1">&#39;=&#39;</span><span class="p">)</span>
+                    <span class="n">kv</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">split_strip</span><span class="p">(</span><span class="n">config_item</span><span class="p">,</span> <span class="s1">&#39;=&#39;</span><span class="p">)</span>
                     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">kv</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
                         <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="n">kv</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="kc">True</span>
                     <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">kv</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
@@ -1033,7 +1030,7 @@
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.1.<br/>
+      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.2.<br/>
     </p>
   </div>
 </footer>

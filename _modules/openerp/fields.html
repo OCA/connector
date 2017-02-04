@@ -272,7 +272,7 @@
 <span class="n">DATETIME_LENGTH</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="n">DATETIME_FORMAT</span><span class="p">))</span>
 <span class="n">EMPTY_DICT</span> <span class="o">=</span> <span class="n">frozendict</span><span class="p">()</span>
 
-<span class="n">_logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">__name__</span><span class="p">)</span>
+<span class="n">_logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 <span class="k">class</span> <span class="nc">SpecialValue</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Encapsulates a value in the cache in place of a normal value. &quot;&quot;&quot;</span>
@@ -307,14 +307,14 @@
                 <span class="n">target</span><span class="o">.</span><span class="n">_cache</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
 
 
-<span class="k">def</span> <span class="nf">resolve_all_mro</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">resolve_all_mro</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Return the (successively overridden) values of attribute ``name`` in ``cls``</span>
 <span class="sd">        in mro order, or inverse mro order if ``reverse`` is true.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">klasses</span> <span class="o">=</span> <span class="nb">reversed</span><span class="p">(</span><span class="n">cls</span><span class="o">.</span><span class="n">__mro__</span><span class="p">)</span> <span class="k">if</span> <span class="n">reverse</span> <span class="k">else</span> <span class="n">cls</span><span class="o">.</span><span class="n">__mro__</span>
+    <span class="n">klasses</span> <span class="o">=</span> <span class="nb">reversed</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="vm">__mro__</span><span class="p">)</span> <span class="k">if</span> <span class="n">reverse</span> <span class="k">else</span> <span class="bp">cls</span><span class="o">.</span><span class="vm">__mro__</span>
     <span class="k">for</span> <span class="n">klass</span> <span class="ow">in</span> <span class="n">klasses</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">klass</span><span class="o">.</span><span class="n">__dict__</span><span class="p">:</span>
-            <span class="k">yield</span> <span class="n">klass</span><span class="o">.</span><span class="n">__dict__</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">klass</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">:</span>
+            <span class="k">yield</span> <span class="n">klass</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
 
 
 <span class="k">class</span> <span class="nc">MetaField</span><span class="p">(</span><span class="nb">type</span><span class="p">):</span>
@@ -334,24 +334,24 @@
 
         <span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;__slots__&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">slots</span><span class="p">)</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="n">base_slots</span><span class="p">)</span>
         <span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;_slots&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">slots</span>
-        <span class="k">return</span> <span class="nb">type</span><span class="o">.</span><span class="n">__new__</span><span class="p">(</span><span class="n">meta</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">attrs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">type</span><span class="o">.</span><span class="fm">__new__</span><span class="p">(</span><span class="n">meta</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">attrs</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">attrs</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">MetaField</span><span class="p">,</span> <span class="n">cls</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">attrs</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">cls</span><span class="o">.</span><span class="n">type</span> <span class="ow">and</span> <span class="n">cls</span><span class="o">.</span><span class="n">type</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">MetaField</span><span class="o">.</span><span class="n">by_type</span><span class="p">:</span>
-            <span class="n">MetaField</span><span class="o">.</span><span class="n">by_type</span><span class="p">[</span><span class="n">cls</span><span class="o">.</span><span class="n">type</span><span class="p">]</span> <span class="o">=</span> <span class="n">cls</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">attrs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">MetaField</span><span class="p">,</span> <span class="bp">cls</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">attrs</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">type</span> <span class="ow">and</span> <span class="bp">cls</span><span class="o">.</span><span class="n">type</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">MetaField</span><span class="o">.</span><span class="n">by_type</span><span class="p">:</span>
+            <span class="n">MetaField</span><span class="o">.</span><span class="n">by_type</span><span class="p">[</span><span class="bp">cls</span><span class="o">.</span><span class="n">type</span><span class="p">]</span> <span class="o">=</span> <span class="bp">cls</span>
 
         <span class="c1"># compute class attributes to avoid calling dir() on fields</span>
-        <span class="n">cls</span><span class="o">.</span><span class="n">column_attrs</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="n">cls</span><span class="o">.</span><span class="n">related_attrs</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="n">cls</span><span class="o">.</span><span class="n">description_attrs</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">attr</span> <span class="ow">in</span> <span class="nb">dir</span><span class="p">(</span><span class="n">cls</span><span class="p">):</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">column_attrs</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">related_attrs</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">description_attrs</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">attr</span> <span class="ow">in</span> <span class="nb">dir</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
             <span class="k">if</span> <span class="n">attr</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;_column_&#39;</span><span class="p">):</span>
-                <span class="n">cls</span><span class="o">.</span><span class="n">column_attrs</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">attr</span><span class="p">[</span><span class="mi">8</span><span class="p">:],</span> <span class="n">attr</span><span class="p">))</span>
+                <span class="bp">cls</span><span class="o">.</span><span class="n">column_attrs</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">attr</span><span class="p">[</span><span class="mi">8</span><span class="p">:],</span> <span class="n">attr</span><span class="p">))</span>
             <span class="k">elif</span> <span class="n">attr</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;_related_&#39;</span><span class="p">):</span>
-                <span class="n">cls</span><span class="o">.</span><span class="n">related_attrs</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">attr</span><span class="p">[</span><span class="mi">9</span><span class="p">:],</span> <span class="n">attr</span><span class="p">))</span>
+                <span class="bp">cls</span><span class="o">.</span><span class="n">related_attrs</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">attr</span><span class="p">[</span><span class="mi">9</span><span class="p">:],</span> <span class="n">attr</span><span class="p">))</span>
             <span class="k">elif</span> <span class="n">attr</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;_description_&#39;</span><span class="p">):</span>
-                <span class="n">cls</span><span class="o">.</span><span class="n">description_attrs</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">attr</span><span class="p">[</span><span class="mi">13</span><span class="p">:],</span> <span class="n">attr</span><span class="p">))</span>
+                <span class="bp">cls</span><span class="o">.</span><span class="n">description_attrs</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">attr</span><span class="p">[</span><span class="mi">13</span><span class="p">:],</span> <span class="n">attr</span><span class="p">))</span>
 
 
 <span class="k">class</span> <span class="nc">Field</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -579,7 +579,7 @@
     <span class="k">def</span> <span class="nf">__setattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Set slot or non-slot field attribute. &quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="nb">object</span><span class="o">.</span><span class="n">__setattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+            <span class="nb">object</span><span class="o">.</span><span class="fm">__setattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_attrs</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_attrs</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
@@ -597,18 +597,18 @@
         <span class="sd">&quot;&quot;&quot; Return a field of the same type as ``self``, with its own parameters. &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">set_class_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">set_class_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Assign the model class and field name of ``self``. &quot;&quot;&quot;</span>
         <span class="n">self_attrs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_attrs</span>
         <span class="k">for</span> <span class="n">attr</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_slots</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
             <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">model_name</span> <span class="o">=</span> <span class="n">cls</span><span class="o">.</span><span class="n">_name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model_name</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_name</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
 
         <span class="c1"># determine all inherited field attributes</span>
         <span class="n">attrs</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">resolve_all_mro</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">resolve_all_mro</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)):</span>
                 <span class="n">attrs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">field</span><span class="o">.</span><span class="n">_attrs</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
@@ -638,9 +638,9 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">string</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">,</span> <span class="s1">&#39; &#39;</span><span class="p">)</span><span class="o">.</span><span class="n">capitalize</span><span class="p">()</span>
 
         <span class="c1"># determine self.default and cls._defaults in a consistent way</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_determine_default</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_determine_default</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">_determine_default</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_determine_default</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Retrieve the default value for ``self`` in the hierarchy of ``cls``, and</span>
 <span class="sd">            determine ``self.default`` and ``cls._defaults`` accordingly.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -648,9 +648,9 @@
 
         <span class="c1"># traverse the class hierarchy upwards, and take the first field</span>
         <span class="c1"># definition with a default or _defaults for self</span>
-        <span class="k">for</span> <span class="n">klass</span> <span class="ow">in</span> <span class="n">cls</span><span class="o">.</span><span class="n">__mro__</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">klass</span><span class="o">.</span><span class="n">__dict__</span><span class="p">:</span>
-                <span class="n">field</span> <span class="o">=</span> <span class="n">klass</span><span class="o">.</span><span class="n">__dict__</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">klass</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="vm">__mro__</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">klass</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">:</span>
+                <span class="n">field</span> <span class="o">=</span> <span class="n">klass</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
                 <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)):</span>
                     <span class="c1"># klass contains another value overridden by self</span>
                     <span class="k">return</span>
@@ -661,15 +661,15 @@
                     <span class="k">if</span> <span class="n">callable</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
                         <span class="kn">from</span> <span class="nn">openerp</span> <span class="k">import</span> <span class="n">api</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">default</span> <span class="o">=</span> <span class="n">value</span>
-                        <span class="n">cls</span><span class="o">.</span><span class="n">_defaults</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">model</span><span class="p">(</span>
+                        <span class="bp">cls</span><span class="o">.</span><span class="n">_defaults</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">model</span><span class="p">(</span>
                             <span class="k">lambda</span> <span class="n">recs</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">convert_to_write</span><span class="p">(</span><span class="n">value</span><span class="p">(</span><span class="n">recs</span><span class="p">))</span>
                         <span class="p">)</span>
                     <span class="k">else</span><span class="p">:</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">default</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">recs</span><span class="p">:</span> <span class="n">value</span>
-                        <span class="n">cls</span><span class="o">.</span><span class="n">_defaults</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+                        <span class="bp">cls</span><span class="o">.</span><span class="n">_defaults</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
                     <span class="k">return</span>
 
-            <span class="n">defaults</span> <span class="o">=</span> <span class="n">klass</span><span class="o">.</span><span class="n">__dict__</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;_defaults&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{}</span>
+            <span class="n">defaults</span> <span class="o">=</span> <span class="n">klass</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;_defaults&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{}</span>
             <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">defaults</span><span class="p">:</span>
                 <span class="c1"># take the value from _defaults, and adapt it for self.default</span>
                 <span class="n">value</span> <span class="o">=</span> <span class="n">defaults</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
@@ -680,7 +680,7 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">default</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">recs</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">convert_to_cache</span><span class="p">(</span>
                     <span class="n">func</span><span class="p">(</span><span class="n">recs</span><span class="p">),</span> <span class="n">recs</span><span class="p">,</span> <span class="n">validate</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                 <span class="p">)</span>
-                <span class="n">cls</span><span class="o">.</span><span class="n">_defaults</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+                <span class="bp">cls</span><span class="o">.</span><span class="n">_defaults</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
                 <span class="k">return</span>
 
     <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -1313,7 +1313,7 @@
     <span class="p">}</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">string</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">digits</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">Float</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">string</span><span class="o">=</span><span class="n">string</span><span class="p">,</span> <span class="n">_digits</span><span class="o">=</span><span class="n">digits</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Float</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">string</span><span class="o">=</span><span class="n">string</span><span class="p">,</span> <span class="n">_digits</span><span class="o">=</span><span class="n">digits</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">digits</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -1590,7 +1590,7 @@
         <span class="k">if</span> <span class="n">callable</span><span class="p">(</span><span class="n">selection</span><span class="p">):</span>
             <span class="kn">from</span> <span class="nn">openerp</span> <span class="k">import</span> <span class="n">api</span>
             <span class="n">selection</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">expected</span><span class="p">(</span><span class="n">api</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="n">selection</span><span class="p">)</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">Selection</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">selection</span><span class="o">=</span><span class="n">selection</span><span class="p">,</span> <span class="n">string</span><span class="o">=</span><span class="n">string</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Selection</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">selection</span><span class="o">=</span><span class="n">selection</span><span class="p">,</span> <span class="n">string</span><span class="o">=</span><span class="n">string</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_setup_regular</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">env</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">Selection</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">_setup_regular</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
@@ -1602,10 +1602,10 @@
         <span class="n">field</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">related_field</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">selection</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">model</span><span class="p">:</span> <span class="n">field</span><span class="o">.</span><span class="n">_description_selection</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">env</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">set_class_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">Selection</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">set_class_name</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">set_class_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Selection</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">set_class_name</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
         <span class="c1"># determine selection (applying &#39;selection_add&#39; extensions)</span>
-        <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">resolve_all_mro</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">resolve_all_mro</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)):</span>
                 <span class="c1"># We cannot use field.selection or field.selection_add here</span>
                 <span class="c1"># because those attributes are overridden by ``set_class_name``.</span>
@@ -1790,13 +1790,13 @@
     <span class="p">}</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">comodel_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">string</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">Many2one</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">comodel_name</span><span class="o">=</span><span class="n">comodel_name</span><span class="p">,</span> <span class="n">string</span><span class="o">=</span><span class="n">string</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Many2one</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">comodel_name</span><span class="o">=</span><span class="n">comodel_name</span><span class="p">,</span> <span class="n">string</span><span class="o">=</span><span class="n">string</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">set_class_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">Many2one</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">set_class_name</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">set_class_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Many2one</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">set_class_name</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
         <span class="c1"># determine self.delegate</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">delegate</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">delegate</span> <span class="o">=</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">cls</span><span class="o">.</span><span class="n">_inherits</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">delegate</span> <span class="o">=</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_inherits</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
 
     <span class="n">_column_ondelete</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">attrgetter</span><span class="p">(</span><span class="s1">&#39;ondelete&#39;</span><span class="p">))</span>
     <span class="n">_column_auto_join</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">attrgetter</span><span class="p">(</span><span class="s1">&#39;auto_join&#39;</span><span class="p">))</span>
@@ -2009,7 +2009,7 @@
     <span class="p">}</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">comodel_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">inverse_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">string</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">One2many</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">One2many</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
             <span class="n">comodel_name</span><span class="o">=</span><span class="n">comodel_name</span><span class="p">,</span>
             <span class="n">inverse_name</span><span class="o">=</span><span class="n">inverse_name</span><span class="p">,</span>
             <span class="n">string</span><span class="o">=</span><span class="n">string</span><span class="p">,</span>
@@ -2077,7 +2077,7 @@
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">comodel_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">relation</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">column1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">column2</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                  <span class="n">string</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">Many2many</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Many2many</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
             <span class="n">comodel_name</span><span class="o">=</span><span class="n">comodel_name</span><span class="p">,</span>
             <span class="n">relation</span><span class="o">=</span><span class="n">relation</span><span class="p">,</span>
             <span class="n">column1</span><span class="o">=</span><span class="n">column1</span><span class="p">,</span>
@@ -2166,7 +2166,7 @@
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.1.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.2.<br/>
     </p>
   </div>
 </footer>

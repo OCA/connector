@@ -91,8 +91,7 @@
      href="../../../index.html">Site <b class="caret"></b></a>
   <ul class="dropdown-menu globaltoc"
       role="menu"
-      aria-labelledby="dLabelGlobalToc"><p class="caption"><span class="caption-text">None</span></p>
-<ul>
+      aria-labelledby="dLabelGlobalToc"><ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../project/contribute.html">Contribuer</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../project/contribute.html#want-to-start-a-new-connector">Démarrer un nouveau connecteur</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../project/contribute.html#creating-or-maintaining-a-translation-of-this-doc">Créer ou maintenir une traduction de cette doc</a></li>
@@ -116,7 +115,6 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../project/roadmap.html">Roadmap</a></li>
 </ul>
-<p class="caption"><span class="caption-text">None</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../guides/code_overview.html">Survol du code</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../guides/code_overview.html#backends">Backends</a></li>
@@ -159,7 +157,6 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../guides/multiprocessing.html">Use the connector with multiprocessing workers</a></li>
 </ul>
-<p class="caption"><span class="caption-text">None</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../api/api_connector.html">Connecteur</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../api/api_session.html">Session</a></li>
@@ -274,7 +271,7 @@
 <span class="kn">from</span> <span class="nn">..connector</span> <span class="k">import</span> <span class="n">ConnectorUnit</span><span class="p">,</span> <span class="n">MetaConnectorUnit</span><span class="p">,</span> <span class="n">ConnectorEnvironment</span>
 <span class="kn">from</span> <span class="nn">..exception</span> <span class="k">import</span> <span class="n">MappingError</span><span class="p">,</span> <span class="n">NoConnectorUnitError</span>
 
-<span class="n">_logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">__name__</span><span class="p">)</span>
+<span class="n">_logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="mapping"><a class="viewcode-back" href="../../../api/api_mapper.html#connector.unit.mapper.mapping">[docs]</a><span class="k">def</span> <span class="nf">mapping</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
@@ -522,21 +519,21 @@
         <span class="k">if</span> <span class="n">attrs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;_map_methods&#39;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;_map_methods&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
 
-        <span class="n">cls</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">MetaMapper</span><span class="p">,</span> <span class="n">meta</span><span class="p">)</span><span class="o">.</span><span class="n">__new__</span><span class="p">(</span><span class="n">meta</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">attrs</span><span class="p">)</span>
+        <span class="bp">cls</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">MetaMapper</span><span class="p">,</span> <span class="n">meta</span><span class="p">)</span><span class="o">.</span><span class="fm">__new__</span><span class="p">(</span><span class="n">meta</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">attrs</span><span class="p">)</span>
 
         <span class="c1"># When a class has several bases: ``class Mapper(Base1, Base2):``</span>
         <span class="k">for</span> <span class="n">base</span> <span class="ow">in</span> <span class="n">bases</span><span class="p">:</span>
             <span class="c1"># Merge the _map_methods of the bases</span>
             <span class="n">base_map_methods</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="s1">&#39;_map_methods&#39;</span><span class="p">,</span> <span class="p">{})</span>
             <span class="k">for</span> <span class="n">attr_name</span><span class="p">,</span> <span class="n">definition</span> <span class="ow">in</span> <span class="n">base_map_methods</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
-                <span class="k">if</span> <span class="n">cls</span><span class="o">.</span><span class="n">_map_methods</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">attr_name</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                    <span class="n">cls</span><span class="o">.</span><span class="n">_map_methods</span><span class="p">[</span><span class="n">attr_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">definition</span>
+                <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_map_methods</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">attr_name</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="bp">cls</span><span class="o">.</span><span class="n">_map_methods</span><span class="p">[</span><span class="n">attr_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">definition</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="c1"># Update the existing @changed_by with the content</span>
                     <span class="c1"># of each base (it is mutated in place).</span>
                     <span class="c1"># @only_create keeps the value defined in the first</span>
                     <span class="c1"># base.</span>
-                    <span class="n">mapping_changed_by</span> <span class="o">=</span> <span class="n">cls</span><span class="o">.</span><span class="n">_map_methods</span><span class="p">[</span><span class="n">attr_name</span><span class="p">]</span><span class="o">.</span><span class="n">changed_by</span>
+                    <span class="n">mapping_changed_by</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_map_methods</span><span class="p">[</span><span class="n">attr_name</span><span class="p">]</span><span class="o">.</span><span class="n">changed_by</span>
                     <span class="n">mapping_changed_by</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">definition</span><span class="o">.</span><span class="n">changed_by</span><span class="p">)</span>
 
         <span class="c1"># Update the _map_methods from the @mapping methods in attrs,</span>
@@ -549,17 +546,17 @@
                 <span class="n">mapping_changed_by</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">attr</span><span class="p">,</span> <span class="s1">&#39;changed_by&#39;</span><span class="p">,</span> <span class="p">()))</span>
                 <span class="c1"># If already existing, it has been defined in a super</span>
                 <span class="c1"># class, extend the @changed_by set</span>
-                <span class="k">if</span> <span class="n">cls</span><span class="o">.</span><span class="n">_map_methods</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">attr_name</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                    <span class="n">definition</span> <span class="o">=</span> <span class="n">cls</span><span class="o">.</span><span class="n">_map_methods</span><span class="p">[</span><span class="n">attr_name</span><span class="p">]</span>
+                <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_map_methods</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">attr_name</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">definition</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_map_methods</span><span class="p">[</span><span class="n">attr_name</span><span class="p">]</span>
                     <span class="n">mapping_changed_by</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">definition</span><span class="o">.</span><span class="n">changed_by</span><span class="p">)</span>
 
                 <span class="c1"># keep the last choice for only_create</span>
                 <span class="n">definition</span> <span class="o">=</span> <span class="n">MappingDefinition</span><span class="p">(</span><span class="n">mapping_changed_by</span><span class="p">,</span>
                                                <span class="n">has_only_create</span><span class="p">)</span>
-                <span class="n">cls</span><span class="o">.</span><span class="n">_map_methods</span><span class="p">[</span><span class="n">attr_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">definition</span>
-        <span class="k">return</span> <span class="n">cls</span>
+                <span class="bp">cls</span><span class="o">.</span><span class="n">_map_methods</span><span class="p">[</span><span class="n">attr_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">definition</span>
+        <span class="k">return</span> <span class="bp">cls</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">attrs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">attrs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Build a ``_changed_by_fields`` list of synchronized fields with mapper.</span>
 <span class="sd">        It takes in account the ``direct`` fields and the fields declared in</span>
@@ -568,15 +565,15 @@
         <span class="n">changed_by_fields</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">attrs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;direct&#39;</span><span class="p">):</span>
             <span class="k">for</span> <span class="n">from_attr</span><span class="p">,</span> <span class="n">__</span> <span class="ow">in</span> <span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;direct&#39;</span><span class="p">]:</span>
-                <span class="n">attr_name</span> <span class="o">=</span> <span class="n">cls</span><span class="o">.</span><span class="n">_direct_source_field_name</span><span class="p">(</span><span class="n">from_attr</span><span class="p">)</span>
+                <span class="n">attr_name</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_direct_source_field_name</span><span class="p">(</span><span class="n">from_attr</span><span class="p">)</span>
                 <span class="n">changed_by_fields</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">attr_name</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">method_name</span><span class="p">,</span> <span class="n">method_def</span> <span class="ow">in</span> <span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;_map_methods&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
             <span class="n">changed_by_fields</span> <span class="o">|=</span> <span class="n">method_def</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">for</span> <span class="n">base</span> <span class="ow">in</span> <span class="n">bases</span><span class="p">:</span>
             <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="s1">&#39;_changed_by_fields&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">base</span><span class="o">.</span><span class="n">_changed_by_fields</span><span class="p">:</span>
                 <span class="n">changed_by_fields</span> <span class="o">|=</span> <span class="n">base</span><span class="o">.</span><span class="n">_changed_by_fields</span>
-        <span class="n">cls</span><span class="o">.</span><span class="n">_changed_by_fields</span> <span class="o">=</span> <span class="n">changed_by_fields</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">MetaMapper</span><span class="p">,</span> <span class="n">cls</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">attrs</span><span class="p">)</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">_changed_by_fields</span> <span class="o">=</span> <span class="n">changed_by_fields</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">MetaMapper</span><span class="p">,</span> <span class="bp">cls</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">attrs</span><span class="p">)</span>
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">_direct_source_field_name</span><span class="p">(</span><span class="n">mapping_attr</span><span class="p">):</span>
@@ -875,7 +872,7 @@
 <span class="sd">        :param connector_env: current environment (backend, session, ...)</span>
 <span class="sd">        :type connector_env: :py:class:`connector.connector.Environment`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">Mapper</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">connector_env</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Mapper</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">connector_env</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_options</span> <span class="o">=</span> <span class="kc">None</span>
 
     <span class="k">def</span> <span class="nf">_map_direct</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="n">from_attr</span><span class="p">,</span> <span class="n">to_attr</span><span class="p">):</span>
@@ -1207,7 +1204,7 @@
 
     <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">MapOptions</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__getitem__</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+            <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">MapOptions</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__getitem__</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">None</span>
 
@@ -1233,7 +1230,7 @@
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.1.<br/>
+      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.2.<br/>
     </p>
   </div>
 </footer>

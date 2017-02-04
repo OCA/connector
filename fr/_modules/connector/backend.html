@@ -91,8 +91,7 @@
      href="../../index.html">Site <b class="caret"></b></a>
   <ul class="dropdown-menu globaltoc"
       role="menu"
-      aria-labelledby="dLabelGlobalToc"><p class="caption"><span class="caption-text">None</span></p>
-<ul>
+      aria-labelledby="dLabelGlobalToc"><ul>
 <li class="toctree-l1"><a class="reference internal" href="../../project/contribute.html">Contribuer</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../project/contribute.html#want-to-start-a-new-connector">Démarrer un nouveau connecteur</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../project/contribute.html#creating-or-maintaining-a-translation-of-this-doc">Créer ou maintenir une traduction de cette doc</a></li>
@@ -116,7 +115,6 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../project/roadmap.html">Roadmap</a></li>
 </ul>
-<p class="caption"><span class="caption-text">None</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../guides/code_overview.html">Survol du code</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../guides/code_overview.html#backends">Backends</a></li>
@@ -159,7 +157,6 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../guides/multiprocessing.html">Use the connector with multiprocessing workers</a></li>
 </ul>
-<p class="caption"><span class="caption-text">None</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../api/api_connector.html">Connecteur</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../api/api_session.html">Session</a></li>
@@ -511,7 +508,7 @@
             <span class="p">(</span><span class="n">base_class</span><span class="p">,</span> <span class="n">session</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">matching_classes</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">matching_classes</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="Backend.register_class"><a class="viewcode-back" href="../../api/api_backend.html#connector.backend.Backend.register_class">[docs]</a>    <span class="k">def</span> <span class="nf">register_class</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cls</span><span class="p">,</span> <span class="n">replacing</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="Backend.register_class"><a class="viewcode-back" href="../../api/api_backend.html#connector.backend.Backend.register_class">[docs]</a>    <span class="k">def</span> <span class="nf">register_class</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">cls</span><span class="p">,</span> <span class="n">replacing</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Register a class in the backend.</span>
 
 <span class="sd">        :param cls: the ConnectorUnit class class to register</span>
@@ -528,13 +525,13 @@
                     <span class="k">break</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">found</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1"> replaces an unregistered class: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span>
-                                 <span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">replacing</span><span class="p">))</span>
+                                 <span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">replacing</span><span class="p">))</span>
 
-        <span class="n">entry</span> <span class="o">=</span> <span class="n">_ConnectorUnitEntry</span><span class="p">(</span><span class="n">cls</span><span class="o">=</span><span class="n">cls</span><span class="p">,</span>
-                                    <span class="n">openerp_module</span><span class="o">=</span><span class="n">cls</span><span class="o">.</span><span class="n">_openerp_module_</span><span class="p">,</span>
+        <span class="n">entry</span> <span class="o">=</span> <span class="n">_ConnectorUnitEntry</span><span class="p">(</span><span class="bp">cls</span><span class="o">=</span><span class="bp">cls</span><span class="p">,</span>
+                                    <span class="n">openerp_module</span><span class="o">=</span><span class="bp">cls</span><span class="o">.</span><span class="n">_openerp_module_</span><span class="p">,</span>
                                     <span class="n">replaced_by</span><span class="o">=</span><span class="p">[])</span>
         <span class="k">if</span> <span class="n">replacing</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">replacing</span> <span class="ow">is</span> <span class="n">cls</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">replacing</span> <span class="ow">is</span> <span class="bp">cls</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%r</span><span class="s1"> cannot replace itself&#39;</span> <span class="o">%</span> <span class="n">replacing</span><span class="p">)</span>
             <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">replacing</span><span class="p">,</span> <span class="s1">&#39;__iter__&#39;</span><span class="p">):</span>
                 <span class="k">for</span> <span class="n">replacing_cls</span> <span class="ow">in</span> <span class="n">replacing</span><span class="p">:</span>
@@ -543,7 +540,7 @@
                 <span class="n">register_replace</span><span class="p">(</span><span class="n">replacing</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_class_entries</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">entry</span><span class="p">)</span></div>
 
-    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cls</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">replacing</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">replacing</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Backend decorator</span>
 
 <span class="sd">        For a backend ``magento`` declared like this::</span>
@@ -580,12 +577,12 @@
 <span class="sd">        :param replacing: optional, the ConnectorUnit class to replace</span>
 <span class="sd">        :type replacing: :py:class:`connector.connector.MetaConnectorUnit`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">cls</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">cls</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">partial</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">replacing</span><span class="o">=</span><span class="n">replacing</span><span class="p">)</span>
 
         <span class="k">def</span> <span class="nf">with_subscribe</span><span class="p">():</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">register_class</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">replacing</span><span class="o">=</span><span class="n">replacing</span><span class="p">)</span>
-            <span class="k">return</span> <span class="n">cls</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">register_class</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">replacing</span><span class="o">=</span><span class="n">replacing</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">cls</span>
 
         <span class="k">return</span> <span class="n">with_subscribe</span><span class="p">()</span></div>
 </pre></div>
@@ -605,7 +602,7 @@
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.1.<br/>
+      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.2.<br/>
     </p>
   </div>
 </footer>

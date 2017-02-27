@@ -14,13 +14,16 @@ class ConnectorBackend(models.AbstractModel):
     modules.
     """
     _name = 'connector.backend'
+    _inherit = ['collection.base']
     _description = 'Connector Backend'
     _backend_type = None
 
+    # XXX those 2 fields are not strictly necessary now
     name = fields.Char(required=True)
     # replace by a selection in concrete models
     version = fields.Selection(selection=[], required=True)
 
+    # XXX deprecate: only used for the old unit system
     @api.multi
     def get_backend(self):
         """ For a record of backend, returns the appropriate instance
@@ -67,7 +70,7 @@ class ExternalBinding(models.AbstractModel):
         Last date of synchronization
 
 
-    The definition of the relations in ``_columns`` is to be done in the
+    The definition of the field relations is to be done in the
     concrete classes because the relations themselves do not exist in
     this addon.
 
@@ -89,7 +92,7 @@ class ExternalBinding(models.AbstractModel):
                 string='Magento Backend',
                 required=True,
                 ondelete='restrict')
-            magento_id = fields.Char(string='ID on Magento')
+            external_id = fields.Char(string='ID on Magento')
             tax_class_id = fields.Integer(string='Tax Class ID')
 
             _sql_constraints = [
@@ -104,3 +107,4 @@ class ExternalBinding(models.AbstractModel):
 
     sync_date = fields.Datetime(string='Last synchronization date')
     # add other fields in concrete models
+    # XXX we could add a default 'external_id'

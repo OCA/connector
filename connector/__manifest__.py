@@ -11,6 +11,7 @@
  'category': 'Generic Modules',
  'depends': ['mail',
              'queue_job',
+             'components',
              ],
  'data': ['security/connector_security.xml',
           'security/ir.model.access.csv',

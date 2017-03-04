@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: connector (9.0)\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-12-24 00:47+0000\n"
-"PO-Revision-Date: 2016-12-27 08:23+0000\n"
+"POT-Creation-Date: 2017-02-25 01:28+0000\n"
+"PO-Revision-Date: 2017-03-02 22:14+0000\n"
 "Last-Translator: OCA Transbot <transbot@odoo-community.org>\n"
 "Language-Team: Croatian (Croatia) (http://www.transifex.com/oca/OCA-connector-9-0/language/hr_HR/)\n"
 "MIME-Version: 1.0\n"
@@ -747,7 +747,7 @@ msgstr ""
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_queue_job_func_string
 msgid "Task"
-msgstr ""
+msgstr "Zadatak"
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_config_settings_auth_signup_template_user_id

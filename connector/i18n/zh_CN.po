@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: connector (9.0)\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-01-21 01:35+0000\n"
-"PO-Revision-Date: 2017-02-01 15:02+0000\n"
+"POT-Creation-Date: 2017-02-25 01:28+0000\n"
+"PO-Revision-Date: 2017-03-03 07:09+0000\n"
 "Last-Translator: OCA Transbot <transbot@odoo-community.org>\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/oca/OCA-connector-9-0/language/zh_CN/)\n"
 "MIME-Version: 1.0\n"
@@ -145,7 +145,7 @@ msgstr "单击"
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_queue_job_company_id
 msgid "Company"
-msgstr ""
+msgstr "公司"
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_queue_job_channel_complete_name

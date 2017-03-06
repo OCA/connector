@@ -140,6 +140,21 @@
             <field name="search_view_id" ref="view_queue_job_search"/>
         </record>
 
+        <record id="action_button_done_queue_job" model="ir.actions.server">
+            <field name="name">Set to 'Done'</field>
+            <field name="model_id" ref="model_queue_job"/>
+            <field name="state">code</field>
+            <field name="code"><![CDATA[
+self.button_done(cr, uid, context['active_ids'], context=context)
+]]></field>
+        </record>
+
+        <record model="ir.values" id="button_done_queue_job">
+            <field name="name">Set to 'Done'</field>
+            <field name="key2">client_action_multi</field>
+            <field name="value" eval="'ir.actions.server,%d'%action_button_done_queue_job"/>
+            <field name="model">queue.job</field>
+        </record>
 
         <record id="view_requeue_job" model="ir.ui.view">
             <field name="name">Requeue Jobs</field>

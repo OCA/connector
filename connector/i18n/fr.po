@@ -878,3 +878,9 @@ msgstr "ou"
 #: model:ir.ui.view,arch_db:connector.view_connector_checkpoint_form
 msgid "to verify it:"
 msgstr "pour le vérifier:"
+
+#. module: connector
+#: model:ir.actions.server,name:connector.action_button_done_queue_job
+#: model:ir.ui.view,arch_db:connector.view_queue_job_form
+msgid "Set to 'Done'"
+msgstr "Mettre en \"Terminé\""

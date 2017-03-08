@@ -23,7 +23,7 @@ import hashlib
 import logging
 import struct
 
-from openerp import models, fields
+from openerp import models, fields, tools
 
 from .exception import RetryableJobError
 
@@ -369,7 +369,7 @@ class Binder(ConnectorUnit):
         :rtype: recordset
         """
         bindings = self.model.with_context(active_test=False).search(
-            [(self._external_field, '=', str(external_id)),
+            [(self._external_field, '=', tools.ustr(external_id)),
              (self._backend_field, '=', self.backend_record.id)]
         )
         if not bindings:
@@ -428,7 +428,7 @@ class Binder(ConnectorUnit):
         if not isinstance(binding_id, models.BaseModel):
             binding_id = self.model.browse(binding_id)
         binding_id.with_context(connector_no_export=True).write(
-            {self._external_field: str(external_id),
+            {self._external_field: tools.ustr(external_id),
              self._sync_date_field: now_fmt,
              })
 

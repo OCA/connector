@@ -24,7 +24,8 @@ from datetime import datetime, timedelta
 
 from openerp import models, fields, api, exceptions, _
 
-from .job import STATES, DONE, PENDING, OpenERPJobStorage, JOB_REGISTRY
+from .job import STATES, DONE, PENDING, ENQUEUED, FAILED, \
+    OpenERPJobStorage, JOB_REGISTRY
 from ..session import ConnectorSession
 from ..connector import get_openerp_module, is_module_installed
 
@@ -130,7 +131,8 @@ class QueueJob(models.Model):
     @api.multi
     def button_done(self):
         result = _('Manually set to done by %s') % self.env.user.name
-        self._change_job_state(DONE, result=result)
+        self.filtered(lambda job: job.state in [PENDING, ENQUEUED, FAILED]).\
+            _change_job_state(DONE, result=result)
         return True
 
     @api.multi

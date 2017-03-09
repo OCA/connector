@@ -51,7 +51,6 @@ Connectors based on the framework
 * `Magento Connector <http://www.odoo-magento-connector.com>`_
 * `Prestashop Connector <https://github.com/OCA/connector-prestashop>`_
 * `solerp (Solr Connector) <https://github.com/akretion/solerp>`_
-* `Odoo Multi Company <http://www.odoo.net.cn/new-intercompany-process-module/>`_
 * `CMIS <https://github.com/OCA/connector-cmis>`_
 * `Odoo Asynchronous import module <https://github.com/OCA/connector-interfaces/tree/8.0/base_import_async>`_
 * `Salesforce Connector <https://github.com/OCA/connector-salesforce>`_

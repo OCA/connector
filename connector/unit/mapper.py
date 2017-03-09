@@ -1,23 +1,6 @@
 # -*- coding: utf-8 -*-
-##############################################################################
-#
-#    Author: Guewen Baconnier
-#    Copyright 2013 Camptocamp SA
-#
-#    This program is free software: you can redistribute it and/or modify
-#    it under the terms of the GNU Affero General Public License as
-#    published by the Free Software Foundation, either version 3 of the
-#    License, or (at your option) any later version.
-#
-#    This program is distributed in the hope that it will be useful,
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU Affero General Public License for more details.
-#
-#    You should have received a copy of the GNU Affero General Public License
-#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#
-##############################################################################
+# Copyright 2013-2017 Camptocamp SA
+# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html)
 
 """
 
@@ -25,7 +8,7 @@ Mappers
 =======
 
 Mappers are the ConnectorUnit classes responsible to transform
-external records into OpenERP records and conversely.
+external records into Odoo records and conversely.
 
 """
 
@@ -33,7 +16,7 @@ import logging
 from collections import namedtuple
 from contextlib import contextmanager
 
-from openerp import models
+from odoo import models
 from ..connector import ConnectorUnit, MetaConnectorUnit, ConnectorEnvironment
 from ..exception import MappingError, NoConnectorUnitError
 
@@ -59,7 +42,7 @@ def mapping(func):
 def changed_by(*args):
     """ Decorator for the mapping methods (:py:func:`mapping`)
 
-    When fields are modified in OpenERP, we want to export only the
+    When fields are modified in Odoo, we want to export only the
     modified fields. Using this decorator, we can specify which fields
     updates should trigger which mapping method.
 
@@ -113,7 +96,7 @@ def none(field):
     Example::
 
         direct = [(none('source'), 'target'),
-                  (none(m2o_to_backend('rel_id'), 'rel_id')]
+                  (none(m2o_to_external('rel_id'), 'rel_id')]
 
     :param field: name of the source field in the record
     :param binding: True if the relation is a binding record
@@ -149,10 +132,10 @@ def convert(field, conv_type):
     return modifier
 
 
-def m2o_to_backend(field, binding=None):
+def m2o_to_external(field, binding=None):
     """ A modifier intended to be used on the ``direct`` mappings.
 
-    For a many2one, get the ID on the backend and returns it.
+    For a many2one, get the external ID and returns it.
 
     When the field's relation is not a binding (i.e. it does not point to
     something like ``magento.*``), the binding model needs to be provided
@@ -160,9 +143,9 @@ def m2o_to_backend(field, binding=None):
 
     Example::
 
-        direct = [(m2o_to_backend('country_id', binding='magento.res.country'),
-                   'country'),
-                  (m2o_to_backend('magento_country_id'), 'country')]
+        direct = [(m2o_to_external('country_id',
+                                   binding='magento.res.country'), 'country'),
+                  (m2o_to_external('magento_country_id'), 'country')]
 
     :param field: name of the source field in the record
     :param binding: name of the binding model is the relation is not a binding
@@ -183,7 +166,7 @@ def m2o_to_backend(field, binding=None):
         # if a relation is not a binding, we wrap the record in the
         # binding, we'll return the id of the binding
         wrap = bool(binding)
-        value = binder.to_backend(rel_id, wrap=wrap)
+        value = binder.to_external(rel_id, wrap=wrap)
         if not value:
             raise MappingError("Can not find an external id for record "
                                "%s in model %s %s wrapping" %
@@ -193,11 +176,11 @@ def m2o_to_backend(field, binding=None):
     return modifier
 
 
-def backend_to_m2o(field, binding=None):
+def external_to_m2o(field, binding=None):
     """ A modifier intended to be used on the ``direct`` mappings.
 
     For a field from a backend which is an ID, search the corresponding
-    binding in OpenERP and returns its ID.
+    binding in Odoo and returns it.
 
     When the field's relation is not a binding (i.e. it does not point to
     something like ``magento.*``), the binding model needs to be provided
@@ -205,9 +188,9 @@ def backend_to_m2o(field, binding=None):
 
     Example::
 
-        direct = [(backend_to_m2o('country', binding='magento.res.country'),
+        direct = [(external_to_m2o('country', binding='magento.res.country'),
                    'country_id'),
-                  (backend_to_m2o('country'), 'magento_country_id')]
+                  (external_to_m2o('country'), 'magento_country_id')]
 
     :param field: name of the source field in the record
     :param binding: name of the binding model is the relation is not a binding
@@ -228,8 +211,7 @@ def backend_to_m2o(field, binding=None):
         # if we want the normal record, not a binding,
         # we ask to the binder to unwrap the binding
         unwrap = bool(binding)
-        with self.session.change_context(active_test=False):
-            record = binder.to_openerp(rel_id, unwrap=unwrap)
+        record = binder.to_internal(rel_id, unwrap=unwrap)
         if not record:
             raise MappingError("Can not find an existing %s for external "
                                "record %s %s unwrapping" %
@@ -392,7 +374,7 @@ class MapChild(ConnectorUnit):
     * Possibly filter out some lines (can be done by inheriting
       :py:meth:`skip_item`)
     * Convert the items' records using the found :py:class:`Mapper`
-    * Format the output values to the format expected by OpenERP or the
+    * Format the output values to the format expected by Odoo or the
       backend (as seen above with ``(0, 0, {values})``
 
     A MapChild can be extended like any other
@@ -471,7 +453,7 @@ class MapChild(ConnectorUnit):
     def format_items(self, items_values):
         """ Format the values of the items mapped from the child Mappers.
 
-        It can be overridden for instance to add the OpenERP
+        It can be overridden for instance to add the Odoo
         relationships commands ``(6, 0, [IDs])``, ...
 
         As instance, it can be modified to handle update of existing
@@ -495,7 +477,7 @@ class ImportMapChild(MapChild):
     def format_items(self, items_values):
         """ Format the values of the items mapped from the child Mappers.
 
-        It can be overridden for instance to add the OpenERP
+        It can be overridden for instance to add the Odoo
         relationships commands ``(6, 0, [IDs])``, ...
 
         As instance, it can be modified to handle update of existing
@@ -518,7 +500,7 @@ class ExportMapChild(MapChild):
 
 
 class Mapper(ConnectorUnit):
-    """ A Mapper translates an external record to an OpenERP record and
+    """ A Mapper translates an external record to an Odoo record and
     conversely. The output of a Mapper is a ``dict``.
 
     3 types of mappings are supported:
@@ -573,8 +555,8 @@ class Mapper(ConnectorUnit):
         More examples of modifiers:
 
         * :py:func:`convert`
-        * :py:func:`m2o_to_backend`
-        * :py:func:`backend_to_m2o`
+        * :py:func:`m2o_to_external`
+        * :py:func:`external_to_m2o`
 
     Method Mappings
         A mapping method allows to execute arbitrary code and return one
@@ -604,7 +586,7 @@ class Mapper(ConnectorUnit):
             children = [('items', 'line_ids', 'model.name')]
 
         It allows to create the sales order and all its lines with the
-        same call to :py:meth:`openerp.models.BaseModel.create()`.
+        same call to :py:meth:`odoo.models.BaseModel.create()`.
 
         When using ``children`` for items of a record, we need to create
         a :py:class:`Mapper` for the model of the items, and optionally a
@@ -622,7 +604,7 @@ class Mapper(ConnectorUnit):
 
     __metaclass__ = MetaMapper
 
-    # name of the OpenERP model, to be defined in concrete classes
+    # name of the Odoo model, to be defined in concrete classes
     _model_name = None
 
     direct = []  # direct conversion of a field to another (from_attr, to_attr)
@@ -635,7 +617,7 @@ class Mapper(ConnectorUnit):
     def __init__(self, connector_env):
         """
 
-        :param connector_env: current environment (backend, session, ...)
+        :param connector_env: current environment (backend, env, ...)
         :type connector_env: :py:class:`connector.connector.Environment`
         """
         super(Mapper, self).__init__(connector_env)
@@ -668,9 +650,11 @@ class Mapper(ConnectorUnit):
         except NoConnectorUnitError:
             # does not force developers to use a MapChild ->
             # will use the default one if not explicitely defined
-            env = ConnectorEnvironment(self.backend_record,
-                                       self.session,
-                                       model_name)
+            env = ConnectorEnvironment.create_environment(
+                self.backend_record,
+                model_name,
+                self.connector_env
+            )
             mapper_child = self._map_child_class(env)
         return mapper_child
 
@@ -793,7 +777,7 @@ class Mapper(ConnectorUnit):
 class ImportMapper(Mapper):
     """ :py:class:`Mapper` for imports.
 
-    Transform a record from a backend to an OpenERP record
+    Transform a record from a backend to an Odoo record
 
     """
 
@@ -817,11 +801,11 @@ class ImportMapper(Mapper):
 
         # Backward compatibility: when a field is a relation, and a modifier is
         # not used, we assume that the relation model is a binding.
-        # Use an explicit modifier backend_to_m2o in the 'direct' mappings to
+        # Use an explicit modifier external_to_m2o in the 'direct' mappings to
         # change that.
         field = self.model._fields[to_attr]
         if field.type == 'many2one':
-            mapping_func = backend_to_m2o(from_attr)
+            mapping_func = external_to_m2o(from_attr)
             value = mapping_func(self, record, to_attr)
         return value
 
@@ -829,7 +813,7 @@ class ImportMapper(Mapper):
 class ExportMapper(Mapper):
     """ :py:class:`Mapper` for exports.
 
-    Transform a record from OpenERP to a backend record
+    Transform a record from Odoo to a backend record
 
     """
 
@@ -853,11 +837,11 @@ class ExportMapper(Mapper):
 
         # Backward compatibility: when a field is a relation, and a modifier is
         # not used, we assume that the relation model is a binding.
-        # Use an explicit modifier m2o_to_backend  in the 'direct' mappings to
+        # Use an explicit modifier m2o_to_external  in the 'direct' mappings to
         # change that.
         field = self.model._fields[from_attr]
         if field.type == 'many2one':
-            mapping_func = m2o_to_backend(from_attr)
+            mapping_func = m2o_to_external(from_attr)
             value = mapping_func(self, record, to_attr)
         return value
 

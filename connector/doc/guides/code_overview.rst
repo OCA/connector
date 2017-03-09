@@ -16,7 +16,7 @@ Backends
 
 All start with the declaration of the :py:class:`~connector.backend.Backend`::
 
-  import openerp.addons.connector.backend as backend
+  import odoo.addons.connector.backend as backend
 
   magento = backend.Backend('magento')
   """ Generic Magento Backend """
@@ -40,24 +40,15 @@ solution::
 
   class MagentoAccountInvoice(models.Model):
       _name = 'magento.account.invoice'
-      _inherits = {'account.invoice': 'openerp_id'}
+      _inherits = {'account.invoice': 'odoo_id'}
       _description = 'Magento Invoice'
 
       backend_id = fields.Many2one(comodel_name='magento.backend', string='Magento Backend', required=True, ondelete='restrict')
-      openerp_id = fields.Many2one(comodel_name='account.invoice', string='Invoice', required=True, ondelete='cascade')
+      odoo_id = fields.Many2one(comodel_name='account.invoice', string='Invoice', required=True, ondelete='cascade')
       magento_id = fields.Char(string='ID on Magento')  # fields.char because 0 is a valid Magento ID
       sync_date = fields.Datetime(string='Last synchronization date')
       magento_order_id = fields.Many2one(comodel_name='magento.sale.order', string='Magento Sale Order', ondelete='set null')
       # we can also store additional data related to the Magento Invoice
-
-*******
-Session
-*******
-
-The framework uses :py:class:`~connector.session.ConnectorSession`
-objects to store the ``cr``, ``uid`` and ``context`` in a
-:class:`openerp.api.Environment`.  So from a session, we can access to
-the usual ``self.env`` (new API) or ``self.pool`` (old API).
 
 ******
 Events
@@ -75,11 +66,11 @@ job to export it to Magento, so we subscribe a new consumer on
 :py:meth:`~connector.event.on_record_create`::
 
   @on_record_create(model_names='magento.account.invoice')
-  def delay_export_account_invoice(session, model_name, record_id):
+  def delay_export_account_invoice(env, model_name, record_id):
       """
       Delay the job to export the magento invoice.
       """
-      export_invoice.delay(session, model_name, record_id)
+      export_invoice.delay(env, model_name, record_id)
 
 On the last line, you can notice an ``export_invoice.delay``. We'll
 discuss about that in Jobs_
@@ -96,11 +87,11 @@ be posted in the queue of jobs using a ``delay()`` function
 and will be run as soon as possible::
 
   @job
-  def export_invoice(session, model_name, record_id):
+  def export_invoice(env, model_name, record_id):
       """ Export a validated or paid invoice. """
-      invoice = session.env[model_name].browse(record_id)
+      invoice = env[model_name].browse(record_id)
       backend_id = invoice.backend_id.id
-      env = get_environment(session, model_name, backend_id)
+      env = get_environment(env, model_name, backend_id)
       invoice_exporter = env.get_connector_unit(MagentoInvoiceSynchronizer)
       return invoice_exporter.run(record_id)
 
@@ -108,7 +99,7 @@ There is a few things happening there:
 
 * We find the backend on which we'll export the invoice.
 * We build an :py:class:`~connector.connector.Environment` with the
-  current :py:class:`~connector.session.ConnectorSession`,
+  current :py:class:`odoo.api.Environment`,
   the model we work with and the target backend.
 * We get the :py:class:`~connector.connector.ConnectorUnit` responsible
   for the work using

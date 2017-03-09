@@ -1,17 +1,18 @@
 # -*- coding: utf-8 -*-
+# Copyright 2013-2017 Camptocamp SA
+# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html)
 
 import unittest
 
-import openerp.tests.common as common
-from openerp.addons.connector.backend import (Backend,
-                                              get_backend,
-                                              BACKENDS)
-from openerp.addons.connector.exception import NoConnectorUnitError
-from openerp.addons.connector.connector import (Binder,
-                                                ConnectorUnit)
-from openerp.addons.connector.unit.mapper import ExportMapper
-from openerp.addons.connector.unit.backend_adapter import BackendAdapter
-from openerp.addons.connector.session import ConnectorSession
+import odoo.tests.common as common
+from odoo.addons.connector.backend import (Backend,
+                                           get_backend,
+                                           BACKENDS)
+from odoo.addons.connector.exception import NoConnectorUnitError
+from odoo.addons.connector.connector import (Binder,
+                                             ConnectorUnit)
+from odoo.addons.connector.unit.mapper import ExportMapper
+from odoo.addons.connector.unit.backend_adapter import BackendAdapter
 
 
 class test_backend(unittest.TestCase):
@@ -81,8 +82,6 @@ class test_backend_register(common.TransactionCase):
         self.version = '1.14'
         self.parent = Backend(self.service)
         self.backend = Backend(parent=self.parent, version=self.version)
-        self.session = ConnectorSession(self.cr,
-                                        self.uid)
 
     def tearDown(self):
         super(test_backend_register, self).tearDown()
@@ -95,7 +94,7 @@ class test_backend_register(common.TransactionCase):
 
         self.backend.register_class(BenderBinder)
         ref = self.backend.get_class(Binder,
-                                     self.session,
+                                     self.env,
                                      'res.users')
         self.assertEqual(ref, BenderBinder)
 
@@ -105,7 +104,7 @@ class test_backend_register(common.TransactionCase):
             _model_name = 'res.users'
 
         ref = self.backend.get_class(ExportMapper,
-                                     self.session,
+                                     self.env,
                                      'res.users')
         self.assertEqual(ref, ZoidbergMapper)
 
@@ -116,7 +115,7 @@ class test_backend_register(common.TransactionCase):
             _model_name = 'res.users'
 
         ref = self.backend.get_class(Binder,
-                                     self.session,
+                                     self.env,
                                      'res.users')
         self.assertEqual(ref, FryBinder)
 
@@ -124,7 +123,7 @@ class test_backend_register(common.TransactionCase):
         """ Error when asking for a class and none is found"""
         with self.assertRaises(NoConnectorUnitError):
             self.backend.get_class(BackendAdapter,
-                                   self.session,
+                                   self.env,
                                    'res.users')
 
     def test_get_class_installed_module(self):
@@ -140,12 +139,12 @@ class test_backend_register(common.TransactionCase):
             _model_name = 'res.users'
 
         # trick the origin of the class, let it think
-        # that it comes from the OpenERP module 'not installed module'
-        LambdaNoUnit._openerp_module_ = 'not installed module'
+        # that it comes from the odoo module 'not installed module'
+        LambdaNoUnit._module = 'not installed module'
         self.backend(LambdaNoUnit)
 
         matching_cls = self.backend.get_class(LambdaUnit,
-                                              self.session,
+                                              self.env,
                                               'res.users')
         self.assertEqual(matching_cls, LambdaYesUnit)
 
@@ -163,7 +162,7 @@ class test_backend_register(common.TransactionCase):
             _model_name = 'res.users'
 
         matching_cls = self.backend.get_class(LambdaUnit,
-                                              self.session,
+                                              self.env,
                                               'res.users')
         self.assertEqual(matching_cls, LambdaYesUnit)
 
@@ -181,12 +180,12 @@ class test_backend_register(common.TransactionCase):
             _model_name = 'res.users'
 
         # trick the origin of the class, let it think
-        # that it comes from the OpenERP module 'not installed module'
-        LambdaNoUnit._openerp_module_ = 'not installed module'
+        # that it comes from the Odoo module 'not installed module'
+        LambdaNoUnit._module = 'not installed module'
         self.backend(LambdaNoUnit, replacing=LambdaYesUnit)
 
         matching_cls = self.backend.get_class(LambdaUnit,
-                                              self.session,
+                                              self.env,
                                               'res.users')
         self.assertEqual(matching_cls, LambdaYesUnit)
 
@@ -208,7 +207,7 @@ class test_backend_register(common.TransactionCase):
             _model_name = 'res.users'
 
         matching_cls = self.backend.get_class(LambdaUnit,
-                                              self.session,
+                                              self.env,
                                               'res.users')
         self.assertEqual(matching_cls, LambdaYesUnit)
 

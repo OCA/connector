@@ -1,25 +1,8 @@
 # -*- coding: utf-8 -*-
-##############################################################################
-#
-#    Author: Guewen Baconnier
-#    Copyright 2013 Camptocamp SA
-#
-#    This program is free software: you can redistribute it and/or modify
-#    it under the terms of the GNU Affero General Public License as
-#    published by the Free Software Foundation, either version 3 of the
-#    License, or (at your option) any later version.
-#
-#    This program is distributed in the hope that it will be useful,
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU Affero General Public License for more details.
-#
-#    You should have received a copy of the GNU Affero General Public License
-#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#
-##############################################################################
+# Copyright 2013-2017 Camptocamp SA
+# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html)
 
-from openerp import models, fields, api
+from odoo import models, fields, api
 from . import backend
 
 
@@ -51,11 +34,11 @@ class ConnectorBackend(models.AbstractModel):
 class ExternalBinding(models.AbstractModel):
     """ An abstract model for bindings to external records.
 
-    An external binding is a binding between a backend and OpenERP.  For
+    An external binding is a binding between a backend and Odoo.  For
     example, for a partner, it could be ``magento.res.partner`` or for a
     product, ``magento.product``.
 
-    The final model, will be an ``_inherits`` of the OpenERP model and
+    The final model, will be an ``_inherits`` of the Odoo model and
     will ``_inherit`` this model.
 
     It will have a relation to the record (via ``_inherits``) and to the
@@ -66,7 +49,7 @@ class ExternalBinding(models.AbstractModel):
 
     It needs to implements at least these fields:
 
-    openerp_id
+    odoo_id
 
         The many2one to the record it links (used by ``_inherits``).
 
@@ -94,9 +77,9 @@ class ExternalBinding(models.AbstractModel):
         class MagentoResPartnerCategory(models.Model):
             _name = 'magento.res.partner.category'
 
-            _inherits = {'res.partner.category': 'openerp_id'}
+            _inherits = {'res.partner.category': 'odoo_id'}
 
-            openerp_id = fields.Many2one(comodel_name='res.partner.category',
+            odoo_id = fields.Many2one(comodel_name='res.partner.category',
                                           string='Partner Category',
                                           required=True,
                                           ondelete='cascade')

@@ -1,40 +1,48 @@
 # -*- coding: utf-8 -*-
+# Copyright 2013-2017 Camptocamp SA
+# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html)
 
 import mock
 import unittest
 
-from openerp import api
-from openerp.modules.registry import RegistryManager
-from openerp.tests import common
-from openerp.addons.connector import connector
-from openerp.addons.connector.exception import RetryableJobError
-from openerp.addons.connector.connector import (
+from odoo import api
+from odoo.modules.registry import RegistryManager
+from odoo.tests import common
+from odoo.addons.connector import connector
+from odoo.addons.connector.exception import RetryableJobError
+from odoo.addons.connector.connector import (
+    is_module_installed,
+    get_odoo_module,
     ConnectorEnvironment,
     ConnectorUnit,
     pg_try_advisory_lock,
 )
-from openerp.addons.connector.session import ConnectorSession
 
 
 def mock_connector_unit(env):
-    session = ConnectorSession(env.cr, env.uid,
-                               context=env.context)
     backend_record = mock.Mock(name='BackendRecord')
+    backend_record.env = env
     backend = mock.Mock(name='Backend')
     backend_record.get_backend.return_value = backend
     connector_env = connector.ConnectorEnvironment(backend_record,
-                                                   session,
                                                    'res.users')
     return ConnectorUnit(connector_env)
 
 
-class ConnectorHelpers(unittest.TestCase):
+class TestModuleInstalledFunctions(common.TransactionCase):
 
-    def test_openerp_module_name(self):
-        name = connector._get_openerp_module_name('openerp.addons.sale')
-        self.assertEqual(name, 'sale')
-        name = connector._get_openerp_module_name('sale')
-        self.assertEqual(name, 'sale')
+    def test_is_module_installed(self):
+        """ Test on an installed module """
+        self.assertTrue(is_module_installed(self.env, 'connector'))
+
+    def test_is_module_uninstalled(self):
+        """ Test on an installed module """
+        self.assertFalse(is_module_installed(self.env, 'lambda'))
+
+    def test_get_odoo_module(self):
+        """ Odoo module is found from a Python path """
+        self.assertEquals(get_odoo_module(TestModuleInstalledFunctions),
+                          'connector')
 
 
 class TestConnectorUnit(unittest.TestCase):
@@ -65,10 +73,10 @@ class TestConnectorUnit(unittest.TestCase):
         class ModelUnit(ConnectorUnit):
             _model_name = 'res.users'
 
-        session = mock.Mock(name='Session')
+        env = mock.Mock(name='Environment')
 
-        self.assertTrue(ModelUnit.match(session, 'res.users'))
-        self.assertFalse(ModelUnit.match(session, 'res.partner'))
+        self.assertTrue(ModelUnit.match(env, 'res.users'))
+        self.assertFalse(ModelUnit.match(env, 'res.partner'))
 
     def test_unit_for(self):
 
@@ -78,14 +86,13 @@ class TestConnectorUnit(unittest.TestCase):
         class ModelBinder(ConnectorUnit):
             _model_name = 'res.users'
 
-        session = mock.MagicMock(name='Session')
         backend_record = mock.Mock(name='BackendRecord')
         backend = mock.Mock(name='Backend')
         backend_record.get_backend.return_value = backend
+        backend_record.env = mock.MagicMock(name='Environment')
         # backend.get_class() is tested in test_backend.py
         backend.get_class.return_value = ModelUnit
         connector_env = connector.ConnectorEnvironment(backend_record,
-                                                       session,
                                                        'res.users')
         unit = ConnectorUnit(connector_env)
         # returns an instance of ModelUnit with the same connector_env
@@ -107,14 +114,13 @@ class TestConnectorUnit(unittest.TestCase):
         class ModelBinder(ConnectorUnit):
             _model_name = 'res.partner'
 
-        session = mock.MagicMock(name='Session')
         backend_record = mock.Mock(name='BackendRecord')
         backend = mock.Mock(name='Backend')
         backend_record.get_backend.return_value = backend
+        backend_record.env = mock.MagicMock(name='Environment')
         # backend.get_class() is tested in test_backend.py
         backend.get_class.return_value = ModelUnit
         connector_env = connector.ConnectorEnvironment(backend_record,
-                                                       session,
                                                        'res.users')
         unit = ConnectorUnit(connector_env)
         # returns an instance of ModelUnit with a new connector_env
@@ -149,14 +155,14 @@ class TestConnectorUnitTransaction(common.TransactionCase):
 class TestConnectorEnvironment(unittest.TestCase):
 
     def test_create_environment_no_connector_env(self):
-        session = mock.MagicMock(name='Session')
         backend_record = mock.Mock(name='BackendRecord')
         backend = mock.Mock(name='Backend')
         backend_record.get_backend.return_value = backend
+        backend_record.env = mock.MagicMock(name='Environment')
         model = 'res.user'
 
         connector_env = ConnectorEnvironment.create_environment(
-            backend_record, session, model
+            backend_record, model
         )
 
         self.assertEqual(type(connector_env), ConnectorEnvironment)
@@ -166,23 +172,21 @@ class TestConnectorEnvironment(unittest.TestCase):
         class MyConnectorEnvironment(ConnectorEnvironment):
             _propagate_kwargs = ['api']
 
-            def __init__(self, backend_record, session, model_name, api=None):
+            def __init__(self, backend_record, model_name, api=None):
                 super(MyConnectorEnvironment, self).__init__(backend_record,
-                                                             session,
                                                              model_name)
                 self.api = api
 
-        session = mock.MagicMock(name='Session')
         backend_record = mock.Mock(name='BackendRecord')
         backend = mock.Mock(name='Backend')
         backend_record.get_backend.return_value = backend
+        backend_record.env = mock.MagicMock(name='Environment')
         model = 'res.user'
-        api = object()
 
-        cust_env = MyConnectorEnvironment(backend_record, session, model,
+        cust_env = MyConnectorEnvironment(backend_record, model,
                                           api=api)
 
-        new_env = cust_env.create_environment(backend_record, session, model,
+        new_env = cust_env.create_environment(backend_record, model,
                                               connector_env=cust_env)
 
         self.assertEqual(type(new_env), MyConnectorEnvironment)

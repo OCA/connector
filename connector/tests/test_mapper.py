@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
+# Copyright 2013-2017 Camptocamp SA
+# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html)
 
 import unittest
 import mock
-import openerp.tests.common as common
+import odoo.tests.common as common
 
-from openerp.addons.connector.unit.mapper import (
+from odoo.addons.connector.unit.mapper import (
     Mapper,
     ImportMapper,
     ExportMapper,
@@ -14,15 +16,14 @@ from openerp.addons.connector.unit.mapper import (
     only_create,
     convert,
     follow_m2o_relations,
-    m2o_to_backend,
-    backend_to_m2o,
+    m2o_to_external,
+    external_to_m2o,
     none,
     MapOptions,
     mapping)
 
-from openerp.addons.connector.backend import Backend
-from openerp.addons.connector.connector import ConnectorEnvironment
-from openerp.addons.connector.session import ConnectorSession
+from odoo.addons.connector.backend import Backend
+from odoo.addons.connector.connector import ConnectorEnvironment
 
 
 class test_mapper(unittest.TestCase):
@@ -508,13 +509,13 @@ class test_mapper_recordsets(common.TransactionCase):
 
     def setUp(self):
         super(test_mapper_recordsets, self).setUp()
-        self.session = ConnectorSession(self.cr, self.uid)
         self.backend = mock.Mock(wraps=Backend('x', version='y'),
                                  name='backend')
         backend_record = mock.Mock()
         backend_record.get_backend.return_value = self.backend
+        backend_record.env = self.env
         self.connector_env = ConnectorEnvironment(
-            backend_record, self.session, 'res.partner')
+            backend_record, 'res.partner')
 
     def test_mapping_modifier_follow_m2o_relations(self):
         """ Map with the follow_m2o_relations modifier """
@@ -536,46 +537,46 @@ class test_mapper_binding(common.TransactionCase):
 
     def setUp(self):
         super(test_mapper_binding, self).setUp()
-        self.session = ConnectorSession(self.cr, self.uid)
         self.backend = mock.Mock(wraps=Backend('x', version='y'),
                                  name='backend')
         backend_record = mock.Mock()
         backend_record.get_backend.return_value = self.backend
+        backend_record.env = self.env
         self.connector_env = ConnectorEnvironment(
-            backend_record, self.session, 'res.partner')
+            backend_record, 'res.partner')
         self.country_binder = mock.Mock(name='country_binder')
         self.country_binder.return_value = self.country_binder
         self.backend.get_class.return_value = self.country_binder
 
-    def test_mapping_m2o_to_backend(self):
-        """ Map a direct record with the m2o_to_backend modifier function """
+    def test_mapping_m2o_to_external(self):
+        """ Map a direct record with the m2o_to_external modifier function """
         class MyMapper(ImportMapper):
             _model_name = 'res.partner'
-            direct = [(m2o_to_backend('country_id'), 'country')]
+            direct = [(m2o_to_external('country_id'), 'country')]
 
         partner = self.env.ref('base.main_partner')
         partner.write({'country_id': self.env.ref('base.ch').id})
-        self.country_binder.to_backend.return_value = 10
+        self.country_binder.to_external.return_value = 10
 
         mapper = MyMapper(self.connector_env)
         map_record = mapper.map_record(partner)
         self.assertEqual(map_record.values(), {'country': 10})
-        self.country_binder.to_backend.assert_called_once_with(
+        self.country_binder.to_external.assert_called_once_with(
             partner.country_id.id, wrap=False)
 
     def test_mapping_backend_to_m2o(self):
         """ Map a direct record with the backend_to_m2o modifier function """
         class MyMapper(ImportMapper):
             _model_name = 'res.partner'
-            direct = [(backend_to_m2o('country'), 'country_id')]
+            direct = [(external_to_m2o('country'), 'country_id')]
 
         record = {'country': 10}
         ch = self.env.ref('base.ch')
-        self.country_binder.to_openerp.return_value = ch
+        self.country_binder.to_internal.return_value = ch
         mapper = MyMapper(self.connector_env)
         map_record = mapper.map_record(record)
         self.assertEqual(map_record.values(), {'country_id': ch.id})
-        self.country_binder.to_openerp.assert_called_once_with(
+        self.country_binder.to_internal.assert_called_once_with(
             10, unwrap=False)
 
     def test_mapping_record_children_no_map_child(self):
@@ -607,8 +608,8 @@ class test_mapper_binding(common.TransactionCase):
 
         backend_record = mock.Mock()
         backend_record.get_backend.side_effect = lambda *a: backend
-        env = ConnectorEnvironment(backend_record, self.session,
-                                   'res.currency')
+        backend_record.env = self.env
+        env = ConnectorEnvironment(backend_record, 'res.currency')
 
         record = {'name': 'SO1',
                   'lines': [{'name': '2013-11-07',
@@ -670,8 +671,8 @@ class test_mapper_binding(common.TransactionCase):
 
         backend_record = mock.Mock()
         backend_record.get_backend.side_effect = lambda *a: backend
-        env = ConnectorEnvironment(backend_record, self.session,
-                                   'res.currency')
+        backend_record.env = self.env
+        env = ConnectorEnvironment(backend_record, 'res.currency')
 
         record = {'name': 'SO1',
                   'lines': [{'name': '2013-11-07',

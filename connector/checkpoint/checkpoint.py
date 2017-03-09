@@ -1,23 +1,6 @@
 # -*- coding: utf-8 -*-
-##############################################################################
-#
-#    Author: Guewen Baconnier
-#    Copyright 2013 Camptocamp SA
-#
-#    This program is free software: you can redistribute it and/or modify
-#    it under the terms of the GNU Affero General Public License as
-#    published by the Free Software Foundation, either version 3 of the
-#    License, or (at your option) any later version.
-#
-#    This program is distributed in the hope that it will be useful,
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU Affero General Public License for more details.
-#
-#    You should have received a copy of the GNU Affero General Public License
-#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#
-##############################################################################
+# Copyright 2013-2017 Camptocamp SA
+# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html)
 
 """
 The checkpoint is a model containing records to be reviewed by the end
@@ -29,7 +12,7 @@ they are imported, the user have to configure things like the supplier,
 so they appears in this list.
 """
 
-from openerp import models, fields, api, _
+from odoo import models, fields, api, _
 
 
 class ConnectorCheckpoint(models.Model):
@@ -105,7 +88,7 @@ class ConnectorCheckpoint(models.Model):
         readonly=True,
         required=True,
         help="The record has been imported from this backend",
-        select=True,
+        index=True,
     )
     state = fields.Selection(
         selection=[('need_review', 'Need Review'),
@@ -156,9 +139,9 @@ class ConnectorCheckpoint(models.Model):
         return [('state', '=', 'need_review')]
 
 
-def add_checkpoint(session, model_name, record_id,
+def add_checkpoint(env, model_name, record_id,
                    backend_model_name, backend_id):
-    checkpoint_model = session.env['connector.checkpoint']
+    checkpoint_model = env['connector.checkpoint']
     return checkpoint_model.create_from_name(model_name, record_id,
                                              backend_model_name, backend_id)
 

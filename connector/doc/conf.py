@@ -25,26 +25,46 @@ sys.path.append(os.path.abspath('_themes'))
 
 if os.environ.get('TRAVIS_BUILD_DIR') and os.environ.get('VERSION'):
     # build from travis
-    odoo_folder = 'odoo-' + os.environ.get('VERSION')
-    odoo_root = os.path.join(os.environ['HOME'], odoo_folder)
-    sphinxodoo_root_path = os.path.abspath(odoo_root)
-    sphinxodoo_addons_path = [
-        os.path.abspath(os.path.join(odoo_root, 'openerp', 'addons')),
-        os.path.abspath(os.path.join(odoo_root, 'addons')),
-        os.path.abspath(os.environ['TRAVIS_BUILD_DIR']),
-    ]
+    repos_home = os.environ['HOME']
+    deps_path = os.path.join(repos_home, 'dependencies')
+    odoo_folder = 'odoo-10.0'
+    odoo_root = os.path.join(repos_home, odoo_folder)
     build_path = os.environ['TRAVIS_BUILD_DIR']
-    addons = [x for x in os.listdir(build_path)
-              if not x.startswith('.') and
-              os.path.isdir(os.path.join(build_path, x))]
-    sphinxodoo_addons = addons
-    sys.path.append(os.environ['TRAVIS_BUILD_DIR'])
 else:
     # build from a buildout
-    odoo_root = '../../../odoo'
-    sys.path.append(os.path.abspath(os.path.join(odoo_root, 'openerp')))
-    sys.path.append(os.path.abspath(os.path.join(odoo_root, 'addons')))
-    sys.path.append(os.path.abspath('../..'))
+    odoo_root = os.path.abspath('../../../odoo')
+    deps_path = os.path.abspath('../../..')
+    build_path = os.path.abspath('../..')
+
+addons_paths = []
+
+
+def add_path(*paths):
+    addons_paths.append(
+        os.path.join(*paths)
+    )
+
+
+add_path(odoo_root, 'odoo', 'addons')
+add_path(odoo_root, 'addons')
+add_path(build_path)
+
+deps_repos = [repo for repo in os.listdir(deps_path)
+              if os.path.isdir(os.path.join(deps_path, repo)) and
+              not repo.startswith('.')]
+
+for repo in deps_repos:
+    add_path(deps_path, repo)
+
+addons = [x for x in os.listdir(build_path)
+          if not x.startswith(('.', '__')) and
+          os.path.isdir(os.path.join(build_path, x))]
+
+# sphinxodoo.ext.autodoc variables
+sphinxodoo_root_path = odoo_root
+sphinxodoo_addons = addons
+sphinxodoo_addons_path = addons_paths
+sys.path.append(build_path)
 
 
 # -- General configuration -----------------------------------------------
@@ -319,7 +339,7 @@ texinfo_documents = [
 # Example configuration for intersphinx: refer to the Python standard library.
 intersphinx_mapping = {
     'http://docs.python.org/': None,
-    'openerpweb': ('https://www.odoo.com/documentation/8.0/', None),
-    'openerpdev': ('https://www.odoo.com/documentation/8.0/', None),
+    'odooweb': ('https://www.odoo.com/documentation/10.0/', None),
+    'odoodev': ('https://www.odoo.com/documentation/10.0/', None),
     'connectormagento': ('http://www.odoo-magento-connector.com', None),
 }

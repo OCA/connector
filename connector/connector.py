@@ -1,52 +1,32 @@
 # -*- coding: utf-8 -*-
-##############################################################################
-#
-#    Author: Guewen Baconnier
-#    Copyright 2012 Camptocamp SA
-#
-#    This program is free software: you can redistribute it and/or modify
-#    it under the terms of the GNU Affero General Public License as
-#    published by the Free Software Foundation, either version 3 of the
-#    License, or (at your option) any later version.
-#
-#    This program is distributed in the hope that it will be useful,
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU Affero General Public License for more details.
-#
-#    You should have received a copy of the GNU Affero General Public License
-#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#
-##############################################################################
+# Copyright 2013-2017 Camptocamp SA
+# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html)
 
 import hashlib
 import logging
 import struct
 
-from openerp import models, fields
+from odoo import models, fields, tools
 
 from .exception import RetryableJobError
 
 _logger = logging.getLogger(__name__)
 
 
-def _get_openerp_module_name(module_path):
-    """ Extract the name of the OpenERP module from the path of the
-    Python module.
-
-    Taken from OpenERP server: ``openerp.models.MetaModel``
-
-    The (OpenERP) module name can be in the ``openerp.addons`` namespace
-    or not. For instance module ``sale`` can be imported as
-    ``openerp.addons.sale`` (the good way) or ``sale`` (for backward
-    compatibility).
-    """
-    module_parts = module_path.split('.')
-    if len(module_parts) > 2 and module_parts[:2] == ['openerp', 'addons']:
-        module_name = module_parts[2]
+# this is duplicated from odoo.models.MetaModel._get_addon_name() which we
+# unfortunately can't use because it's an instance method and should have been
+# a @staticmethod
+def _get_addon_name(full_name):
+    # The (OpenERP) module name can be in the ``odoo.addons`` namespace
+    # or not. For instance, module ``sale`` can be imported as
+    # ``odoo.addons.sale`` (the right way) or ``sale`` (for backward
+    # compatibility).
+    module_parts = full_name.split('.')
+    if len(module_parts) > 2 and module_parts[:2] == ['odoo', 'addons']:
+        addon_name = full_name.split('.')[2]
     else:
-        module_name = module_parts[0]
-    return module_name
+        addon_name = full_name.split('.')[0]
+    return addon_name
 
 
 def is_module_installed(env, module_name):
@@ -59,20 +39,22 @@ def is_module_installed(env, module_name):
     return module_name in env.registry._init_modules
 
 
-def get_openerp_module(cls_or_func):
+def get_odoo_module(cls_or_func):
     """ For a top level function or class, returns the
-    name of the OpenERP module where it lives.
+    name of the Odoo module where it lives.
 
     So we will be able to filter them according to the modules
     installation state.
     """
-    return _get_openerp_module_name(cls_or_func.__module__)
+    # _get_addon_name is an instance method in MetaModel but it should
+    # be a @staticmethod... so we pass `None` as the instance
+    return _get_addon_name(cls_or_func.__module__)
 
 
 class MetaConnectorUnit(type):
     """ Metaclass for ConnectorUnit.
 
-    Keeps a ``_module`` attribute on the classes, the same way OpenERP does
+    Keeps a ``_module`` attribute on the classes, the same way Odoo does
     it for the Model classes. It is then used to filter them according to
     the state of the module (installed or not).
     """
@@ -95,7 +77,7 @@ class MetaConnectorUnit(type):
 
     def __init__(cls, name, bases, attrs):
         super(MetaConnectorUnit, cls).__init__(name, bases, attrs)
-        cls._openerp_module_ = get_openerp_module(cls)
+        cls._module = get_odoo_module(cls)
 
 
 class ConnectorUnit(object):
@@ -118,24 +100,23 @@ class ConnectorUnit(object):
     def __init__(self, connector_env):
         """
 
-        :param connector_env: current environment (backend, session, ...)
+        :param connector_env: current environment (backend, env, ...)
         :type connector_env: :class:`connector.connector.ConnectorEnvironment`
         """
         super(ConnectorUnit, self).__init__()
         self.connector_env = connector_env
         self.backend = self.connector_env.backend
         self.backend_record = self.connector_env.backend_record
-        self.session = self.connector_env.session
 
     @classmethod
-    def match(cls, session, model):
+    def match(cls, env, model):
         """ Returns True if the current class correspond to the
         searched model.
 
-        :param session: current session
-        :type session: :py:class:`connector.session.ConnectorSession`
+        :param env: odoo Environment
+        :type env: :py:class:`odoo.api.Environment`
         :param model: model to match
-        :type model: str or :py:class:`openerp.models.Model`
+        :type model: str or :py:class:`odoo.models.Model`
         """
         # filter out the ConnectorUnit from modules
         # not installed in the current DB
@@ -147,8 +128,8 @@ class ConnectorUnit(object):
 
     @property
     def env(self):
-        """ Returns the openerp.api.environment """
-        return self.session.env
+        """ Returns the odoo.api.environment """
+        return self.connector_env.env
 
     @property
     def model(self):
@@ -158,12 +139,12 @@ class ConnectorUnit(object):
     def localcontext(self):
         """ It is there for compatibility.
 
-        :func:`openerp.tools.translate._` searches for this attribute
+        :func:`odoo.tools.translate._` searches for this attribute
         in the classes do be able to translate the strings.
 
         There is no reason to use this attribute for other purposes.
         """
-        return self.session.context
+        return self.env.context
 
     def unit_for(self, connector_unit_class, model=None):
         """ According to the current
@@ -189,8 +170,7 @@ class ConnectorUnit(object):
             env = self.connector_env
         else:
             env = self.connector_env.create_environment(
-                self.backend_record,
-                self.session, model,
+                self.backend_record, model,
                 connector_env=self.connector_env)
 
         return env.get_connector_unit(connector_unit_class)
@@ -219,7 +199,7 @@ class ConnectorUnit(object):
             )
             self.advisory_lock_or_retry(lock_name, retry_seconds=2)
 
-        See :func:``openerp.addons.connector.connector.pg_try_advisory_lock``
+        See :func:``odoo.addons.connector.connector.pg_try_advisory_lock``
         for details.
 
         :param lock: The lock name. Can be anything convertible to a
@@ -252,14 +232,9 @@ class ConnectorEnvironment(object):
         from the model ``connector.backend`` and have at least a
         ``type`` and a ``version``.
 
-    .. attribute:: session
-
-        Current session we are working in. It contains the OpenERP
-        cr, uid and context.
-
     .. attribute:: model_name
 
-        Name of the OpenERP model to work with.
+        Name of the Odoo model to work with.
 
     .. attribute:: _propagate_kwargs
 
@@ -270,20 +245,19 @@ class ConnectorEnvironment(object):
 
     _propagate_kwargs = []
 
-    def __init__(self, backend_record, session, model_name):
+    def __init__(self, backend_record, model_name):
         """
 
         :param backend_record: browse record of the backend
-        :type backend_record: :py:class:`openerp.models.Model`
-        :param session: current session (cr, uid, context)
-        :type session: :py:class:`connector.session.ConnectorSession`
+        :type backend_record: :py:class:`odoo.models.Model`
+        :param env: current env (cr, uid, context)
+        :type env: :py:class:`odoo.api.Environment`
         :param model_name: name of the model
         :type model_name: str
         """
         self.backend_record = backend_record
         backend = backend_record.get_backend()
         self.backend = backend
-        self.session = session
         self.model_name = model_name
 
     @property
@@ -291,12 +265,8 @@ class ConnectorEnvironment(object):
         return self.env[self.model_name]
 
     @property
-    def pool(self):
-        return self.session.pool
-
-    @property
     def env(self):
-        return self.session.env
+        return self.backend_record.env
 
     def get_connector_unit(self, base_class):
         """ Searches and returns an instance of the
@@ -308,18 +278,18 @@ class ConnectorEnvironment(object):
         :param base_class: ``ConnectorUnit`` to search (class or subclass)
         :type base_class: :py:class:`connector.connector.ConnectorUnit`
         """
-        return self.backend.get_class(base_class, self.session,
+        return self.backend.get_class(base_class, self.env,
                                       self.model_name)(self)
 
     @classmethod
-    def create_environment(cls, backend_record, session, model,
+    def create_environment(cls, backend_record, model,
                            connector_env=None):
         """ Create a new environment ConnectorEnvironment.
 
         :param backend_record: browse record of the backend
-        :type backend_record: :py:class:`openerp.models.Model`
-        :param session: current session (cr, uid, context)
-        :type session: :py:class:`connector.session.ConnectorSession`
+        :type backend_record: :py:class:`odoo.models.Model`
+        :param env: current env (cr, uid, context)
+        :type env: :py:class:`odoo.api.Environment`
         :param model_name: name of the model
         :type model_name: str
         :param connector_env: an existing environment from which the kwargs
@@ -332,9 +302,9 @@ class ConnectorEnvironment(object):
             kwargs = {key: getattr(connector_env, key)
                       for key in connector_env._propagate_kwargs}
         if kwargs:
-            return cls(backend_record, session, model, **kwargs)
+            return cls(backend_record, model, **kwargs)
         else:
-            return cls(backend_record, session, model)
+            return cls(backend_record, model)
 
 
 class Binder(ConnectorUnit):
@@ -351,14 +321,14 @@ class Binder(ConnectorUnit):
     _model_name = None  # define in sub-classes
     _external_field = 'external_id'  # override in sub-classes
     _backend_field = 'backend_id'  # override in sub-classes
-    _openerp_field = 'openerp_id'  # override in sub-classes
+    _odoo_field = 'odoo_id'  # override in sub-classes
     _sync_date_field = 'sync_date'  # override in sub-classes
 
-    def to_openerp(self, external_id, unwrap=False):
-        """ Give the OpenERP ID for an external ID
+    def to_internal(self, external_id, unwrap=False):
+        """ Give the Odoo recordset for an external ID
 
         :param external_id: external ID for which we want
-                            the OpenERP ID
+                            the Odoo ID
         :param unwrap: if True, returns the normal record
                        else return the binding record
         :return: a recordset, depending on the value of unwrap,
@@ -366,70 +336,67 @@ class Binder(ConnectorUnit):
         :rtype: recordset
         """
         bindings = self.model.with_context(active_test=False).search(
-            [(self._external_field, '=', str(external_id)),
+            [(self._external_field, '=', tools.ustr(external_id)),
              (self._backend_field, '=', self.backend_record.id)]
         )
         if not bindings:
             if unwrap:
-                return getattr(self.model.browse(), self._openerp_field)
+                return self.model.browse()[self._odoo_field]
             return self.model.browse()
         bindings.ensure_one()
         if unwrap:
-            bindings = getattr(bindings, self._openerp_field)
+            bindings = bindings[self._odoo_field]
         return bindings
 
-    def to_backend(self, binding_id, wrap=False):
-        """ Give the external ID for an OpenERP binding ID
+    def to_external(self, binding, wrap=False):
+        """ Give the external ID for an Odoo binding ID
 
-        :param binding_id: OpenERP binding ID for which we want the backend id
-        :param wrap: if False, binding_id is the ID of the binding,
-                     if True, binding_id is the ID of the normal record, the
-                     method will search the corresponding binding and returns
-                     the backend id of the binding
+        :param binding: Odoo binding for which we want the external id
+        :param wrap: if True, binding is a normal record, the
+                     method will search the corresponding binding and return
+                     the external id of the binding
         :return: external ID of the record
         """
-        record = self.model.browse()
-        if isinstance(binding_id, models.BaseModel):
-            binding_id.ensure_one()
-            record = binding_id
-            binding_id = binding_id.id
+        if isinstance(binding, models.BaseModel):
+            binding.ensure_one()
+        else:
+            binding = self.model.browse(binding)
         if wrap:
             binding = self.model.with_context(active_test=False).search(
-                [(self._openerp_field, '=', binding_id),
+                [(self._odoo_field, '=', binding.id),
                  (self._backend_field, '=', self.backend_record.id),
                  ]
             )
             if not binding:
                 return None
             binding.ensure_one()
-            return getattr(binding, self._external_field)
-        if not record:
-            record = self.model.browse(binding_id)
-        assert record
-        return getattr(record, self._external_field)
+            return binding[self._external_field]
+        return binding[self._external_field]
 
-    def bind(self, external_id, binding_id):
-        """ Create the link between an external ID and an OpenERP ID
+    def bind(self, external_id, binding):
+        """ Create the link between an external ID and an Odoo ID
 
         :param external_id: external id to bind
-        :param binding_id: OpenERP ID to bind
-        :type binding_id: int
+        :param binding: Odoo record to bind
+        :type binding: int
         """
         # Prevent False, None, or "", but not 0
-        assert (external_id or external_id is 0) and binding_id, (
-            "external_id or binding_id missing, "
-            "got: %s, %s" % (external_id, binding_id)
+        assert (external_id or external_id is 0) and binding, (
+            "external_id or binding missing, "
+            "got: %s, %s" % (external_id, binding)
         )
         # avoid to trigger the export when we modify the `external_id`
         now_fmt = fields.Datetime.now()
-        if not isinstance(binding_id, models.BaseModel):
-            binding_id = self.model.browse(binding_id)
-        binding_id.with_context(connector_no_export=True).write(
-            {self._external_field: str(external_id),
+        if isinstance(binding, models.BaseModel):
+            binding.ensure_one()
+        else:
+            binding = self.model.browse(binding)
+        binding.with_context(connector_no_export=True).write(
+            {self._external_field: tools.ustr(external_id),
              self._sync_date_field: now_fmt,
              })
 
-    def unwrap_binding(self, binding_id, browse=False):
+    def unwrap_binding(self, binding):
         """ For a binding record, gives the normal record.
 
         Example: when called with a ``magento.product.product`` id,
@@ -438,15 +405,12 @@ class Binder(ConnectorUnit):
         :param browse: when True, returns a browse_record instance
                        rather than an ID
         """
-        if isinstance(binding_id, models.BaseModel):
-            binding = binding_id
+        if isinstance(binding, models.BaseModel):
+            binding.ensure_one()
         else:
-            binding = self.model.browse(binding_id)
+            binding = self.model.browse(binding)
 
-        openerp_record = getattr(binding, self._openerp_field)
-        if browse:
-            return openerp_record
-        return openerp_record.id
+        return binding[self._odoo_field]
 
     def unwrap_model(self):
         """ For a binding model, gives the normal model.
@@ -455,11 +419,11 @@ class Binder(ConnectorUnit):
         it will return ``product.product``.
         """
         try:
-            column = self.model._fields[self._openerp_field]
+            column = self.model._fields[self._odoo_field]
         except KeyError:
             raise ValueError(
                 'Cannot unwrap model %s, because it has no %s fields'
-                % (self.model._name, self._openerp_field))
+                % (self.model._name, self._odoo_field))
         return column.comodel_name
 
 

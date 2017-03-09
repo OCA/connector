@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
+# Copyright 2013-2017 Camptocamp SA
+# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html)
 
 import mock
 
-import openerp.tests.common as common
-from openerp.addons.connector.event import Event
-from openerp.addons.connector.session import ConnectorSession
+import odoo.tests.common as common
+from odoo.addons.connector.event import Event
 
 
 class test_event(common.TransactionCase):
@@ -12,11 +13,9 @@ class test_event(common.TransactionCase):
 
     def setUp(self):
         super(test_event, self).setUp()
-        self.consumer1 = lambda session, model_name: None
-        self.consumer2 = lambda session, model_name: None
+        self.consumer1 = lambda env, model_name: None
+        self.consumer2 = lambda env, model_name: None
         self.event = Event()
-        self.session = ConnectorSession(self.cr,
-                                        self.uid)
 
     def test_subscribe(self):
         self.event.subscribe(self.consumer1)
@@ -64,11 +63,11 @@ class test_event(common.TransactionCase):
 
     def test_replacing_decorator(self):
         @self.event
-        def consumer1(session, model_name):
+        def consumer1(env, model_name):
             pass
 
         @self.event(replacing=consumer1)
-        def consumer2(session, model_name):
+        def consumer2(env, model_name):
             pass
         self.assertNotIn(consumer1, self.event._consumers[None])
         self.assertIn(consumer2, self.event._consumers[None])
@@ -90,12 +89,11 @@ class test_event(common.TransactionCase):
                 self.message = message
 
         @self.event
-        def set_message(session, model_name, recipient, message):
+        def set_message(env, model_name, recipient, message):
             recipient.set_message(message)
         recipient = Recipient()
         # an event is fired on a model name
-        session = mock.Mock()
-        self.event.fire(session, 'res.users', recipient, 'success')
+        self.event.fire(self.env, 'res.users', recipient, 'success')
         self.assertEquals(recipient.message, 'success')
 
     def test_fire_several_consumers(self):
@@ -111,41 +109,40 @@ class test_event(common.TransactionCase):
         recipient2 = Recipient()
 
         @self.event
-        def set_message(session, model_name, message):
+        def set_message(env, model_name, message):
             recipient.set_message(message)
 
         @self.event
-        def set_message2(session, model_name, message):
+        def set_message2(env, model_name, message):
             recipient2.set_message(message)
 
         # an event is fired on a model name
-        session = mock.Mock()
-        self.event.fire(session, 'res.users', 'success')
+        self.event.fire(self.env, 'res.users', 'success')
         self.assertEquals(recipient.message, 'success')
         self.assertEquals(recipient2.message, 'success')
 
     def test_has_consumer_for(self):
         @self.event(model_names=['product.product'])
-        def consumer1(session, model_name):
+        def consumer1(env, model_name):
             pass
-        self.assertTrue(self.event.has_consumer_for(self.session,
+        self.assertTrue(self.event.has_consumer_for(self.env,
                                                     'product.product'))
-        self.assertFalse(self.event.has_consumer_for(self.session,
+        self.assertFalse(self.event.has_consumer_for(self.env,
                                                      'res.partner'))
 
     def test_has_consumer_for_global(self):
         @self.event
-        def consumer1(session, model_name):
+        def consumer1(env, model_name):
             pass
-        self.assertTrue(self.event.has_consumer_for(self.session,
+        self.assertTrue(self.event.has_consumer_for(self.env,
                                                     'product.product'))
-        self.assertTrue(self.event.has_consumer_for(self.session,
+        self.assertTrue(self.event.has_consumer_for(self.env,
                                                     'res.partner'))
 
     def test_consumer_uninstalled_module(self):
         """A consumer in a uninstalled module should not be fired"""
         @self.event
-        def consumer1(session, model_name):
+        def consumer1(env, model_name):
             pass
         # devious way to test it: the __module__ of a mock is 'mock'
         # and we use __module__ to know the module of the event
@@ -153,4 +150,4 @@ class test_event(common.TransactionCase):
         func = mock.Mock()
         func.side_effect = Exception('Should not be called')
         self.event(func)
-        self.event.fire(self.session, 'res.users')
+        self.event.fire(self.env, 'res.users')

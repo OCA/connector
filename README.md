@@ -16,11 +16,17 @@ Documentation:
 http://www.odoo-connector.com
 
 [//]: # (addons)
+Available addons
+----------------
+addon | version | summary
+--- | --- | ---
+[connector](connector/) | 10.0.1.0.0 | Connector
+[test_connector](test_connector/) | 10.0.1.0.0 | Automated tests for Connector, do not install.
+
 Unported addons
 ---------------
 addon | version | summary
 --- | --- | ---
-[connector](connector/) | 9.0.1.0.3 (unported) | Connector
 [connector_base_product](connector_base_product/) | 9.0.1.0.0 (unported) | Connector Base Product
 
 [//]: # (end addons)

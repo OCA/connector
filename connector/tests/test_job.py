@@ -509,11 +509,16 @@ class TestJobModel(common.TransactionCase):
             stored._change_job_state(STARTED)
 
     def test_button_done(self):
-        stored = self._create_job()
-        stored.button_done()
-        self.assertEqual(stored.state, DONE)
-        self.assertEqual(stored.result,
+        stored_1 = self._create_job()
+        stored_2 = self._create_job()
+        # set stored_2 job to started
+        stored_2.state = STARTED
+        stored_jobs = stored_1 + stored_2
+        stored_jobs.button_done()
+        self.assertEqual(stored_1.state, DONE)
+        self.assertEqual(stored_1.result,
                          'Manually set to done by %s' % self.env.user.name)
+        self.assertEqual(stored_2.state, STARTED)
 
     def test_requeue(self):
         stored = self._create_job()

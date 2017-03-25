@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: connector (8.0)\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-17 07:17+0000\n"
-"PO-Revision-Date: 2016-10-04 09:43+0000\n"
+"POT-Creation-Date: 2017-03-11 01:37+0000\n"
+"PO-Revision-Date: 2017-03-19 12:09+0000\n"
 "Last-Translator: OCA Transbot <transbot@odoo-community.org>\n"
 "Language-Team: German (http://www.transifex.com/oca/OCA-connector-8-0/language/de/)\n"
 "MIME-Version: 1.0\n"
@@ -565,7 +565,7 @@ msgstr "Warteschlangenarbeiter"
 #. module: connector
 #: field:connector.checkpoint,record:0
 msgid "Record"
-msgstr ""
+msgstr "Datensatz"
 
 #. module: connector
 #: field:connector.checkpoint,record_id:0

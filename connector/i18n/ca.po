@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: connector (8.0)\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-01-07 01:20+0000\n"
-"PO-Revision-Date: 2017-01-13 09:22+0000\n"
+"POT-Creation-Date: 2017-03-11 01:37+0000\n"
+"PO-Revision-Date: 2017-03-24 09:00+0000\n"
 "Last-Translator: OCA Transbot <transbot@odoo-community.org>\n"
 "Language-Team: Catalan (http://www.transifex.com/oca/OCA-connector-8-0/language/ca/)\n"
 "MIME-Version: 1.0\n"
@@ -496,7 +496,7 @@ msgstr "Nom"
 #. module: connector
 #: help:connector.checkpoint,name:0
 msgid "Name of the record to review"
-msgstr ""
+msgstr "Nom del registre a revisar "
 
 #. module: connector
 #: view:connector.checkpoint:connector.view_connector_checkpoint_search
@@ -564,7 +564,7 @@ msgstr "Queue Worker"
 #. module: connector
 #: field:connector.checkpoint,record:0
 msgid "Record"
-msgstr ""
+msgstr "Registre"
 
 #. module: connector
 #: field:connector.checkpoint,record_id:0
@@ -574,7 +574,7 @@ msgstr "ID Registre"
 #. module: connector
 #: field:connector.checkpoint,name:0
 msgid "Record Name"
-msgstr ""
+msgstr "Nom del Registre "
 
 #. module: connector
 #: view:queue.job:connector.view_queue_job_form
@@ -703,7 +703,7 @@ msgstr "El registre ha estat importat des d'aquest backend"
 #. module: connector
 #: help:connector.checkpoint,record:0
 msgid "The record to review."
-msgstr ""
+msgstr "El registre per revisar. "
 
 #. module: connector
 #: view:connector.checkpoint.review:connector.view_connector_checkpoint_review

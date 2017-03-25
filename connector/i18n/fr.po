@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: connector (9.0)\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-11-09 14:34+0000\n"
-"PO-Revision-Date: 2016-11-25 14:55+0000\n"
+"POT-Creation-Date: 2017-03-23 06:52+0000\n"
+"PO-Revision-Date: 2017-03-19 11:30+0000\n"
 "Last-Translator: OCA Transbot <transbot@odoo-community.org>\n"
 "Language-Team: French (http://www.transifex.com/oca/OCA-connector-9-0/language/fr/)\n"
 "MIME-Version: 1.0\n"
@@ -93,13 +93,13 @@ msgid "Cancel"
 msgstr "Annuler"
 
 #. module: connector
-#: code:addons/connector/queue/model.py:272
+#: code:addons/connector/queue/model.py:274
 #, python-format
 msgid "Cannot change the root channel"
 msgstr "Impossible de changer le canal racine"
 
 #. module: connector
-#: code:addons/connector/queue/model.py:279
+#: code:addons/connector/queue/model.py:281
 #, python-format
 msgid "Cannot remove the root channel"
 msgstr "Impossible de supprimer le canal racine"
@@ -498,7 +498,7 @@ msgid "Manage multiple companies"
 msgstr "Gérer plusieurs sociétés"
 
 #. module: connector
-#: code:addons/connector/queue/model.py:132
+#: code:addons/connector/queue/model.py:133
 #, python-format
 msgid "Manually set to done by %s"
 msgstr "Défini manuellement comme terminé par %s"
@@ -545,7 +545,7 @@ msgid "Need Review"
 msgstr "Nécessite un contrôle"
 
 #. module: connector
-#: code:addons/connector/queue/model.py:108
+#: code:addons/connector/queue/model.py:109
 #, python-format
 msgid "No action available for this job"
 msgstr "Pas d'action disponible pour ce job"
@@ -584,7 +584,7 @@ msgid "Parent Channel"
 msgstr "Canal parent"
 
 #. module: connector
-#: code:addons/connector/queue/model.py:264
+#: code:addons/connector/queue/model.py:266
 #, python-format
 msgid "Parent channel required."
 msgstr "Canal parent requis"
@@ -695,6 +695,7 @@ msgid "Set as reviewed"
 msgstr "Passer en contrôlé"
 
 #. module: connector
+#: model:ir.actions.server,name:connector.action_button_done_queue_job
 #: model:ir.ui.view,arch_db:connector.view_queue_job_form
 msgid "Set to 'Done'"
 msgstr "Mettre en \"Terminé\""
@@ -718,7 +719,7 @@ msgid ""
 msgstr ""
 
 #. module: connector
-#: code:addons/connector/queue/model.py:178
+#: code:addons/connector/queue/model.py:180
 #, python-format
 msgid ""
 "Something bad happened during the execution of the job. More details in the "
@@ -878,9 +879,3 @@ msgstr "ou"
 #: model:ir.ui.view,arch_db:connector.view_connector_checkpoint_form
 msgid "to verify it:"
 msgstr "pour le vérifier:"
-
-#. module: connector
-#: model:ir.actions.server,name:connector.action_button_done_queue_job
-#: model:ir.ui.view,arch_db:connector.view_queue_job_form
-msgid "Set to 'Done'"
-msgstr "Mettre en \"Terminé\""

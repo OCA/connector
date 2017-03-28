@@ -24,6 +24,7 @@ addon | version | summary
 [connector](connector/) | 10.0.1.0.0 | Connector
 [test_connector](test_connector/) | 10.0.1.0.0 | Automated tests for Connector, do not install.
 
+
 Unported addons
 ---------------
 addon | version | summary

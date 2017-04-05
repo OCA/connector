@@ -23,6 +23,7 @@ addon | version | summary
 --- | --- | ---
 [connector](connector/) | 9.0.1.0.3 | Connector
 [connector_base_product](connector_base_product/) | 9.0.1.0.0 | Connector Base Product
+[connector_job_subscribe](connector_job_subscribe/) | 9.0.1.0.0 | Connector
 
 [//]: # (end addons)
 

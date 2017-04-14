@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <template id="recordset_report" name="Import Recordset Report">
+    <t t-call="web.layout">
+      <t t-set="body_classname" t-value="importer_recordset_report" />
+
+      <h1>Report for <span t-translation="off" t-field="recordset.name" /></h1>
+      <div class="report-wrapper">
+        <t t-raw="report" />
+      </div>
+    </t>
+  </template>
+
+</odoo>

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <!-- backend  -->
+    <record id="view_import_backend_form" model="ir.ui.view">
+      <field name="model">import.backend</field>
+      <field name="arch" type="xml">
+        <form string="Import Backend">
+          <sheet>
+            <h1>Import</h1>
+            <group col="4" string="Configuration">
+                <field name="name" />
+                <field name="version" />
+                <field name="cron_mode" />
+                <field name="enable_user_mode" />
+            </group>
+            <group col="4" string="Cron"
+                   attrs="{'invisible':[('cron_mode','=',False)]}">
+                <field name="cron_start_date" />
+                <field name="cron_interval_number" />
+                <field name="cron_interval_type" />
+                <field name="cron_id" />
+            </group>
+
+            <group col="4" name="actions">
+              <group col="2" name="run" string="Run">
+                <button name="run_all"
+                        type="object"
+                        class="oe_highlight"
+                        string="Import all"
+                        attrs="{'invisible': [('job_running','=',True)]}"
+                        />
+              </group>
+              <group col="2" name="debug" string="Debug">
+                <field name="debug_mode" />
+                <field name="job_running" invisible="1"/>
+                <div attrs="{'invisible': [('job_running','=',False)]}">
+                  <strong>JOBS RUNNING</strong>
+                  <p style="color:red">
+                    WARNING: one or more jobs are scheduled for a recorset or a record. <br />
+                    You will not be able to run the import again or to delete this backend<br />
+                    until you complete the jobs.
+                  </p>
+                </div>
+                <button name="complete_jobs"
+                      type="object"
+                      class="oe_highlight"
+                      string="Make all related jobs completed"
+                      attrs="{'invisible': [('job_running','=',False)]}"
+                      />
+              </group>
+            </group>
+            <notebook>
+            <page string="Recordsets">
+              <field name="recordset_ids" nolabel="1">
+                <tree>
+                  <field name="sequence" widget="handle" />
+                  <field name="name" readonly="1" />
+                  <field name="create_date" readonly="1" />
+                  <field name="import_type_id" />
+                  <field name="override_existing" string="Override existing"/>
+                  <field name="job_state" />
+                  <field name="jobs_global_state" />
+                  <button name="run_import"
+                      type="object"
+                      class="oe_highlight"
+                      string="Import"/>
+                </tree>
+              </field>
+            </page>
+            <page string="Notes">
+              <field name="notes" nolabel="1" />
+            </page>
+          </notebook>
+          </sheet>
+        </form>
+      </field>
+    </record>
+
+    <record id="view_import_backend_tree" model="ir.ui.view">
+      <field name="model">import.backend</field>
+      <field name="arch" type="xml">
+        <tree string="import Backends">
+          <field name="name"/>
+          <field name="version"/>
+        </tree>
+      </field>
+    </record>
+
+    <record id="action_import_backend" model="ir.actions.act_window">
+      <field name="name">Import Backends</field>
+      <field name="res_model">import.backend</field>
+      <field name="view_type">form</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+</odoo>

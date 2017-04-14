@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- recordset  -->
+    <record id="view_import_recordset_form" model="ir.ui.view">
+      <field name="model">import.recordset</field>
+      <field name="arch" type="xml">
+        <form string="Import recordset">
+            <h1>Import recordset</h1>
+            <group col="4" string="Configuration">
+                <field name="name" readonly="1" />
+                <field name="import_type_id" options="{'no_create': True}" />
+                <field name="override_existing" />
+            </group>
+            <group col="4" string="Source (CSV)">
+              <field name="chunk_size" />
+              <field name="csv_file" filename="csv_filename"
+                     attrs="{'required':[('csv_path','=',False)]}" />
+              <field name="csv_filename" />
+              <field name="csv_path"
+                     attrs="{'required':[('csv_file','=',False)], 'invisible':[('csv_file','!=',False)]}" />
+              <field name="csv_delimiter" />
+            </group>
+            <group col="4" string="Job info" attrs="{'invisible': [('job_id', '=', False)]}">
+              <field name="job_id" />
+              <field name="job_state" />
+              <field name="jobs_global_state" />
+            </group>
+            <group name="buttons">
+                <button name="run_import"
+                    type="object"
+                    class="oe_highlight"
+                    string="Import"/>
+            </group>
+            <notebook>
+              <page string="Report">
+                <field name="report_html" readonly="1" nolabel="1" />
+              </page>
+              <page string="Raw Status">
+                <field name="jsondata" readonly="1" nolabel="1" />
+              </page>
+              <page string="Records">
+                <field name="record_ids" nolabel="1">
+                  <tree>
+                    <field name="date" />
+                    <field name="job_id" />
+                    <field name="job_state" />
+                  </tree>
+                </field>
+              </page>
+            </notebook>
+        </form>
+      </field>
+    </record>
+
+    <record id="view_import_recordset_tree" model="ir.ui.view">
+      <field name="model">import.recordset</field>
+      <field name="arch" type="xml">
+        <tree string="import recordset">
+          <field name="name"/>
+          <field name="import_type_id" string="Type"/>
+          <field name="override_existing" />
+          <field name="create_date"/>
+          <field name="job_state" />
+        </tree>
+      </field>
+    </record>
+</odoo>

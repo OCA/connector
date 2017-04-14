@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <menuitem id="menu_import_root"
+                  parent="connector.menu_connector_root"
+                  name="Import"
+                  sequence="10"
+                  groups="connector.group_connector_manager"
+                  />
+
+        <menuitem id="menu_import_backend"
+                  name="Import Backends"
+                  parent="menu_import_root"
+                  action="action_import_backend"
+                  />
+
+        <!-- <menuitem
+            name="Connector import"
+            id="menu_connector_import_root"
+            groups="connector_importer.connector_importer_user"
+            sequence="999"
+            parent="base.menu_purchase_root"
+            />
+
+        <menuitem name="Import products"
+            id="menu_wizard_import_products"
+            parent="menu_connector_import_root"
+            action="action_wizard_import_products"
+            groups="connector_importer.connector_importer_user"
+            />
+
+        <menuitem name="Scheduled imports"
+            id="menu_scheduled_imports"
+            parent="menu_connector_import_root"
+            action="action_import_recordset_user"
+            groups="connector_importer.connector_importer_user"
+            /> -->
+
+    </data>
+</openerp>

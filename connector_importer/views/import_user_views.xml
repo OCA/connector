@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+
+        <!-- recordset  -->
+        <record id="view_import_recordset_form_user" model="ir.ui.view">
+          <field name="model">import.recordset</field>
+          <field name="priority" eval="99"/>
+          <field name="arch" type="xml">
+            <form string="Import recordset" create="false" edit="false">
+              <sheet>
+                <h1><field name="name" readonly="1" /></h1>
+                <group col="2" name="info">
+                  <field name="csv_filename" />
+                  <field name="csv_file" filename="csv_filename" />
+                  <field name="job_id" invisible="1" />
+                  <field name="jobs_global_state" attrs="{'invisible': [('job_id', '=', False)]}" />
+                </group>
+                <group col="4" name="Report" attrs="{'invisible': [('jobs_global_state', '!=', 'done')]}">
+                  <field name="report_html" readonly="1" colspan="4" nolabel="1" />
+                </group>
+              </sheet>
+            </form>
+          </field>
+        </record>
+
+        <record id="view_import_recordset_tree_user" model="ir.ui.view">
+          <field name="model">import.recordset</field>
+          <field name="priority" eval="99"/>
+          <field name="arch" type="xml">
+            <tree string="import recordset">
+              <field name="name"/>
+              <field name="create_date"/>
+              <field name="jobs_global_state" />
+            </tree>
+          </field>
+        </record>
+
+
+        <record id="action_import_recordset_user" model="ir.actions.act_window">
+          <field name="name">Scheduled imports</field>
+          <field name="res_model">import.recordset</field>
+          <field name="view_type">form</field>
+          <field name="view_mode">tree,form</field>
+          <field name="view_ids"
+                   eval="[(5, 0, 0),
+                          (0, 0, {'view_mode': 'tree', 'view_id': ref('view_import_recordset_tree_user')}),
+                          (0, 0, {'view_mode': 'form', 'view_id': ref('view_import_recordset_form_user')}),
+                         ]"/>
+          <field name="domain">[('backend_id.enable_user_mode', '=', True)]</field>
+        </record>
+
+    </data>
+</openerp>

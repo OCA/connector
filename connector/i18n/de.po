@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: connector (8.0)\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-03-11 01:37+0000\n"
-"PO-Revision-Date: 2017-03-19 12:09+0000\n"
+"POT-Creation-Date: 2017-04-05 02:47+0000\n"
+"PO-Revision-Date: 2017-04-19 11:44+0000\n"
 "Last-Translator: OCA Transbot <transbot@odoo-community.org>\n"
 "Language-Team: German (http://www.transifex.com/oca/OCA-connector-8-0/language/de/)\n"
 "MIME-Version: 1.0\n"
@@ -99,13 +99,13 @@ msgid "Canceled. Nothing to do."
 msgstr "Storniert. Nicht zu tun."
 
 #. module: connector
-#: code:addons/connector/queue/model.py:457
+#: code:addons/connector/queue/model.py:462
 #, python-format
 msgid "Cannot change the root channel"
 msgstr "Kann den Hauptkanal nicht ändern"
 
 #. module: connector
-#: code:addons/connector/queue/model.py:464
+#: code:addons/connector/queue/model.py:469
 #, python-format
 msgid "Cannot remove the root channel"
 msgstr "Kann den Hauptkanal nicht entfernen"
@@ -527,7 +527,7 @@ msgid "Parent Channel"
 msgstr "Übergeordneter Kanal"
 
 #. module: connector
-#: code:addons/connector/queue/model.py:449
+#: code:addons/connector/queue/model.py:454
 #, python-format
 msgid "Parent channel required."
 msgstr "Übergeordneter Kanal erforderlich."
@@ -651,7 +651,7 @@ msgid "Share or embbed any screen of Odoo."
 msgstr "Teilen oder Einbetten eines jeden Bildschirms von Odoo."
 
 #. module: connector
-#: code:addons/connector/queue/model.py:187
+#: code:addons/connector/queue/model.py:192
 #, python-format
 msgid ""
 "Something bad happened during the execution of the job. More details in the "

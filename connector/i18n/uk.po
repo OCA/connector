@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: connector (9.0)\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-12-24 00:47+0000\n"
-"PO-Revision-Date: 2016-12-27 08:26+0000\n"
+"POT-Creation-Date: 2017-04-05 00:42+0000\n"
+"PO-Revision-Date: 2017-04-27 13:40+0000\n"
 "Last-Translator: OCA Transbot <transbot@odoo-community.org>\n"
 "Language-Team: Ukrainian (http://www.transifex.com/oca/OCA-connector-9-0/language/uk/)\n"
 "MIME-Version: 1.0\n"
@@ -89,13 +89,13 @@ msgid "Cancel"
 msgstr "Скасувати"
 
 #. module: connector
-#: code:addons/connector/queue/model.py:272
+#: code:addons/connector/queue/model.py:279
 #, python-format
 msgid "Cannot change the root channel"
 msgstr ""
 
 #. module: connector
-#: code:addons/connector/queue/model.py:279
+#: code:addons/connector/queue/model.py:286
 #, python-format
 msgid "Cannot remove the root channel"
 msgstr ""
@@ -494,7 +494,7 @@ msgid "Manage multiple companies"
 msgstr ""
 
 #. module: connector
-#: code:addons/connector/queue/model.py:132
+#: code:addons/connector/queue/model.py:133
 #, python-format
 msgid "Manually set to done by %s"
 msgstr ""
@@ -541,7 +541,7 @@ msgid "Need Review"
 msgstr ""
 
 #. module: connector
-#: code:addons/connector/queue/model.py:108
+#: code:addons/connector/queue/model.py:109
 #, python-format
 msgid "No action available for this job"
 msgstr ""
@@ -580,7 +580,7 @@ msgid "Parent Channel"
 msgstr ""
 
 #. module: connector
-#: code:addons/connector/queue/model.py:264
+#: code:addons/connector/queue/model.py:271
 #, python-format
 msgid "Parent channel required."
 msgstr ""
@@ -691,6 +691,7 @@ msgid "Set as reviewed"
 msgstr ""
 
 #. module: connector
+#: model:ir.actions.server,name:connector.action_button_done_queue_job
 #: model:ir.ui.view,arch_db:connector.view_queue_job_form
 msgid "Set to 'Done'"
 msgstr ""
@@ -714,7 +715,7 @@ msgid ""
 msgstr ""
 
 #. module: connector
-#: code:addons/connector/queue/model.py:178
+#: code:addons/connector/queue/model.py:185
 #, python-format
 msgid ""
 "Something bad happened during the execution of the job. More details in the "
@@ -746,7 +747,7 @@ msgstr ""
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_queue_job_func_string
 msgid "Task"
-msgstr ""
+msgstr "Завдання"
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_config_settings_auth_signup_template_user_id

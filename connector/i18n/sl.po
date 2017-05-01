@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: connector (9.0)\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-03-23 06:52+0000\n"
-"PO-Revision-Date: 2017-03-19 11:30+0000\n"
+"POT-Creation-Date: 2017-04-05 00:42+0000\n"
+"PO-Revision-Date: 2017-04-25 10:43+0000\n"
 "Last-Translator: OCA Transbot <transbot@odoo-community.org>\n"
 "Language-Team: Slovenian (http://www.transifex.com/oca/OCA-connector-9-0/language/sl/)\n"
 "MIME-Version: 1.0\n"
@@ -90,13 +90,13 @@ msgid "Cancel"
 msgstr "Preklic"
 
 #. module: connector
-#: code:addons/connector/queue/model.py:274
+#: code:addons/connector/queue/model.py:279
 #, python-format
 msgid "Cannot change the root channel"
 msgstr "Korenskega kanala ni mogoče spreminjati"
 
 #. module: connector
-#: code:addons/connector/queue/model.py:281
+#: code:addons/connector/queue/model.py:286
 #, python-format
 msgid "Cannot remove the root channel"
 msgstr "Korenskega kanala ni mogoče odstraniti"
@@ -581,7 +581,7 @@ msgid "Parent Channel"
 msgstr "Nadrejeni kanal"
 
 #. module: connector
-#: code:addons/connector/queue/model.py:266
+#: code:addons/connector/queue/model.py:271
 #, python-format
 msgid "Parent channel required."
 msgstr "Zahteva se nadrejeni kanal."
@@ -716,7 +716,7 @@ msgid ""
 msgstr ""
 
 #. module: connector
-#: code:addons/connector/queue/model.py:180
+#: code:addons/connector/queue/model.py:185
 #, python-format
 msgid ""
 "Something bad happened during the execution of the job. More details in the "

@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: connector (9.0)\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-03-23 06:52+0000\n"
-"PO-Revision-Date: 2017-03-13 12:49+0000\n"
+"POT-Creation-Date: 2017-04-05 00:42+0000\n"
+"PO-Revision-Date: 2017-04-25 10:41+0000\n"
 "Last-Translator: OCA Transbot <transbot@odoo-community.org>\n"
 "Language-Team: Dutch (http://www.transifex.com/oca/OCA-connector-9-0/language/nl/)\n"
 "MIME-Version: 1.0\n"
@@ -90,13 +90,13 @@ msgid "Cancel"
 msgstr "Annuleer"
 
 #. module: connector
-#: code:addons/connector/queue/model.py:274
+#: code:addons/connector/queue/model.py:279
 #, python-format
 msgid "Cannot change the root channel"
 msgstr ""
 
 #. module: connector
-#: code:addons/connector/queue/model.py:281
+#: code:addons/connector/queue/model.py:286
 #, python-format
 msgid "Cannot remove the root channel"
 msgstr ""
@@ -146,7 +146,7 @@ msgstr "Klik op de"
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_queue_job_company_id
 msgid "Company"
-msgstr ""
+msgstr "Bedrijf"
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_queue_job_channel_complete_name
@@ -581,7 +581,7 @@ msgid "Parent Channel"
 msgstr ""
 
 #. module: connector
-#: code:addons/connector/queue/model.py:266
+#: code:addons/connector/queue/model.py:271
 #, python-format
 msgid "Parent channel required."
 msgstr ""
@@ -716,7 +716,7 @@ msgid ""
 msgstr ""
 
 #. module: connector
-#: code:addons/connector/queue/model.py:180
+#: code:addons/connector/queue/model.py:185
 #, python-format
 msgid ""
 "Something bad happened during the execution of the job. More details in the "

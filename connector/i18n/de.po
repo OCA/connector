@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: connector (9.0)\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-03-23 06:52+0000\n"
-"PO-Revision-Date: 2017-03-19 12:09+0000\n"
+"POT-Creation-Date: 2017-04-05 00:42+0000\n"
+"PO-Revision-Date: 2017-04-19 11:44+0000\n"
 "Last-Translator: OCA Transbot <transbot@odoo-community.org>\n"
 "Language-Team: German (http://www.transifex.com/oca/OCA-connector-9-0/language/de/)\n"
 "MIME-Version: 1.0\n"
@@ -91,13 +91,13 @@ msgid "Cancel"
 msgstr "Abbrechen"
 
 #. module: connector
-#: code:addons/connector/queue/model.py:274
+#: code:addons/connector/queue/model.py:279
 #, python-format
 msgid "Cannot change the root channel"
 msgstr "Kann den Hauptkanal nicht ändern"
 
 #. module: connector
-#: code:addons/connector/queue/model.py:281
+#: code:addons/connector/queue/model.py:286
 #, python-format
 msgid "Cannot remove the root channel"
 msgstr "Kann den Hauptkanal nicht entfernen"
@@ -582,7 +582,7 @@ msgid "Parent Channel"
 msgstr "Übergeordneter Kanal"
 
 #. module: connector
-#: code:addons/connector/queue/model.py:266
+#: code:addons/connector/queue/model.py:271
 #, python-format
 msgid "Parent channel required."
 msgstr "Übergeordneter Kanal erforderlich."
@@ -717,7 +717,7 @@ msgid ""
 msgstr "Nutzen Sie die gleichen Geschäftspartner in allen Unternehmen Ihrer Instanz.\n* Angewählt: Partner sind in allen Unternehmen sichtbar, selbst wenn für den Partner ein Unternhemn festgelegt ist.\n* Nicht gewählt: Jedes Unternehmen sieht nur eigene Partner (bei denen das Partnerunternehmen festgelegt ist). Partner ohne Unternehmensbezug sind für alle Unternehmen sichtbar."
 
 #. module: connector
-#: code:addons/connector/queue/model.py:180
+#: code:addons/connector/queue/model.py:185
 #, python-format
 msgid ""
 "Something bad happened during the execution of the job. More details in the "

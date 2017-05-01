@@ -4,14 +4,14 @@
 # 
 # Translators:
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2014
-# llum.birque@gmail.com <llum.birque@gmail.com>, 2015
+# llum.birque@gmail.com <inactive+Quim@transifex.com>, 2015
 # Marc Tormo i Bochaca <mtbochaca@gmail.com>, 2017
 msgid ""
 msgstr ""
 "Project-Id-Version: connector (9.0)\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-03-23 06:52+0000\n"
-"PO-Revision-Date: 2017-03-24 09:00+0000\n"
+"POT-Creation-Date: 2017-04-05 00:42+0000\n"
+"PO-Revision-Date: 2017-04-25 10:39+0000\n"
 "Last-Translator: Marc Tormo i Bochaca <mtbochaca@gmail.com>\n"
 "Language-Team: Catalan (http://www.transifex.com/oca/OCA-connector-9-0/language/ca/)\n"
 "MIME-Version: 1.0\n"
@@ -92,13 +92,13 @@ msgid "Cancel"
 msgstr "Cancel·lar"
 
 #. module: connector
-#: code:addons/connector/queue/model.py:274
+#: code:addons/connector/queue/model.py:279
 #, python-format
 msgid "Cannot change the root channel"
 msgstr "El Canal principal no es pot modificar"
 
 #. module: connector
-#: code:addons/connector/queue/model.py:281
+#: code:addons/connector/queue/model.py:286
 #, python-format
 msgid "Cannot remove the root channel"
 msgstr "El canal principal no es pot esborrar"
@@ -583,7 +583,7 @@ msgid "Parent Channel"
 msgstr "Canal Pare"
 
 #. module: connector
-#: code:addons/connector/queue/model.py:266
+#: code:addons/connector/queue/model.py:271
 #, python-format
 msgid "Parent channel required."
 msgstr "Cal indicar Canal Pare"
@@ -718,7 +718,7 @@ msgid ""
 msgstr "Compartir les vostres empreses cap a totes les companyies definides en la vostra instància.\n* Marcat: Les empreses són visibles per totes les companyies, fins i tot si una companyia està definida a l'empresa.\n* Desmarcat: Cada companyia només pot veure les seves empreses (empreses on la companyia està definida). Les empreses no relacionades amb una companyia seran visibles per totes les companyies. "
 
 #. module: connector
-#: code:addons/connector/queue/model.py:180
+#: code:addons/connector/queue/model.py:185
 #, python-format
 msgid ""
 "Something bad happened during the execution of the job. More details in the "

@@ -235,9 +235,6 @@ class ConnectorRunner(object):
                 db_names = services['db'].exp_list(True)
             else:
                 db_names = []
-        dbfilter = openerp.tools.config['dbfilter']
-        if dbfilter:
-            db_names = [d for d in db_names if re.match(dbfilter, d)]
         return db_names
 
     def initialize_databases(self):

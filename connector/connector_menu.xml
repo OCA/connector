@@ -3,6 +3,7 @@
     <data noupdate="0">
         <menuitem id="menu_connector_root"
             name="Connectors"
+            web_icon="connector,static/description/icon.png"
             groups="group_connector_manager"/>
 
         <menuitem id="menu_connector"

@@ -5,8 +5,7 @@
     The licence is in the file __openerp__.py
 -->
 
-<openerp>
-<data>
+<odoo>
 
 <!--This is a product inherited form that will be dynamically populated-->
 <record id="product_normal_form_view" model="ir.ui.view">
@@ -39,5 +38,4 @@
 
 
 
-</data>
-</openerp>
+</odoo>

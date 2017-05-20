@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: connector (9.0)\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-04-05 00:42+0000\n"
-"PO-Revision-Date: 2017-04-25 10:40+0000\n"
+"POT-Creation-Date: 2017-05-01 16:11+0000\n"
+"PO-Revision-Date: 2017-05-13 18:19+0000\n"
 "Last-Translator: OCA Transbot <transbot@odoo-community.org>\n"
 "Language-Team: Croatian (http://www.transifex.com/oca/OCA-connector-9-0/language/hr/)\n"
 "MIME-Version: 1.0\n"
@@ -600,7 +600,7 @@ msgstr ""
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_queue_job_priority
 msgid "Priority"
-msgstr ""
+msgstr "Prioritet"
 
 #. module: connector
 #: code:addons/connector/checkpoint/checkpoint.py:137

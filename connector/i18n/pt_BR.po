@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: connector (9.0)\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-04-05 00:42+0000\n"
-"PO-Revision-Date: 2017-04-25 22:47+0000\n"
+"POT-Creation-Date: 2017-05-01 16:11+0000\n"
+"PO-Revision-Date: 2017-05-18 19:18+0000\n"
 "Last-Translator: OCA Transbot <transbot@odoo-community.org>\n"
 "Language-Team: Portuguese (Brazil) (http://www.transifex.com/oca/OCA-connector-9-0/language/pt_BR/)\n"
 "MIME-Version: 1.0\n"
@@ -533,7 +533,7 @@ msgstr "Nome"
 #. module: connector
 #: model:ir.model.fields,help:connector.field_connector_checkpoint_name
 msgid "Name of the record to review"
-msgstr ""
+msgstr "Nome do registro a ser revisado"
 
 #. module: connector
 #: selection:connector.checkpoint,state:0
@@ -622,7 +622,7 @@ msgstr "Fila de tarefas"
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_record
 msgid "Record"
-msgstr ""
+msgstr "Registro"
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_record_id
@@ -632,7 +632,7 @@ msgstr "ID do registro"
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_name
 msgid "Record Name"
-msgstr ""
+msgstr "Nome de Registro"
 
 #. module: connector
 #: model:ir.ui.view,arch_db:connector.view_queue_job_form
@@ -778,7 +778,7 @@ msgstr "O registro foi importado deste backend"
 #. module: connector
 #: model:ir.model.fields,help:connector.field_connector_checkpoint_record
 msgid "The record to review."
-msgstr ""
+msgstr "O registro a ser revisado."
 
 #. module: connector
 #: model:ir.ui.view,arch_db:connector.view_connector_checkpoint_review

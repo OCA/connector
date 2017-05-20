@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+  <data noupdate="1">
+
+<!-- TODO: move to example module -->
+    <!-- <record id="import_type1" model="import.type">
+        <field name="name">Product Importer</field>
+        <field name="key">product_importer</field>
+<field name="settings">
+product.template:dotted.path.to.importer
+product.product:dotted.path.to.importer
+product.supplierinfo:dotted.path.to.importer
+</field>
+    </record> -->
+
+  </data>
+</openerp>

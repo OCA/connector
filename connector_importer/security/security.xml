@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data noupdate="0">
+
+    <record id="connector_importer_user" model="res.groups">
+        <field name="name">Connector product importer user</field>
+        <field name="implied_ids" eval="[(4, ref('base.user_root')), (4, ref('base.group_no_one'))]"/>
+    </record>
+
+</data>
+</openerp>

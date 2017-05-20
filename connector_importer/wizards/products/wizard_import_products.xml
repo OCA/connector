@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+  <data>
+
+    <!-- TODO: we should extend base wizard form -->
+    <record id="wizard_import_products_form" model="ir.ui.view">
+      <field name="name">wiz.connector.import.products</field>
+      <field name="model">wiz.connector.import.products</field>
+      <field name="arch" type="xml">
+        <form string="Import products">
+          <sheet>
+            <group col="2" name="files">
+              <field name="backend_id" select="1" options="{'no_create': True}"/>
+              <field name="default" filename="default_filename"/>
+              <field name="default_filename"/>
+            </group>
+            <footer>
+              <button
+                icon="gtk-cancel"
+                special="cancel"
+                string="Cancel"
+                />
+              <button icon="gtk-ok"
+                name="import_data"
+                string="Import"
+                type="object"
+                />
+            </footer>
+          </sheet>
+        </form>
+      </field>
+    </record>
+
+    <record id="action_wizard_import_products" model="ir.actions.act_window">
+        <field name="name">Import products</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">wiz.connector.import.products</field>
+        <field name="view_mode">form</field>
+        <field name="view_type">form</field>
+        <field name="view_id" ref="wizard_import_products_form"/>
+        <field name="target">new</field>
+    </record>
+
+  </data>
+</openerp>

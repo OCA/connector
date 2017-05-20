@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+  <data>
+
+    <record id="wizard_import_base" model="ir.ui.view">
+        <field name="name">wiz.connector.import.base</field>
+        <field name="model">wiz.connector.import.base</field>
+        <field name="arch" type="xml">
+            <form string="Import Files">
+                <button
+                  icon="terp-dialog-close"
+                  special="cancel"
+                  string="Close"
+                  colspan="1"
+                  />
+              </form>
+        </field>
+    </record>
+
+  </data>
+</openerp>

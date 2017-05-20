@@ -1,16 +1,13 @@
 <!DOCTYPE html>
 
-
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
     <title>Connector &#8212; Connector  documentation</title>
     
-    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/bootswatch-3.3.6/united/bootstrap.min.css" type="text/css" />
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
@@ -50,7 +47,7 @@
 </script>
 
   </head>
-  <body role="document">
+  <body>
 
   <div id="navbar" class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -264,8 +261,8 @@ the models they are binding.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>external_id</strong> &#8211; external id to bind</li>
-<li><strong>binding_id</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; OpenERP ID to bind</li>
+<li><strong>external_id</strong> – external id to bind</li>
+<li><strong>binding_id</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) – OpenERP ID to bind</li>
 </ul>
 </td>
 </tr>
@@ -282,8 +279,8 @@ the models they are binding.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>binding_id</strong> &#8211; OpenERP binding ID for which we want the backend id</li>
-<li><strong>wrap</strong> &#8211; if False, binding_id is the ID of the binding,
+<li><strong>binding_id</strong> – OpenERP binding ID for which we want the backend id</li>
+<li><strong>wrap</strong> – if False, binding_id is the ID of the binding,
 if True, binding_id is the ID of the normal record, the
 method will search the corresponding binding and returns
 the backend id of the binding</li>
@@ -306,9 +303,9 @@ the backend id of the binding</li>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>external_id</strong> &#8211; external ID for which we want
+<li><strong>external_id</strong> – external ID for which we want
 the OpenERP ID</li>
-<li><strong>unwrap</strong> &#8211; if True, returns the normal record
+<li><strong>unwrap</strong> – if True, returns the normal record
 else return the binding record</li>
 </ul>
 </td>
@@ -334,7 +331,7 @@ it will return the corresponding <code class="docutils literal"><span class="pre
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>browse</strong> &#8211; when True, returns a browse_record instance
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>browse</strong> – when True, returns a browse_record instance
 rather than an ID</td>
 </tr>
 </tbody>
@@ -402,10 +399,10 @@ when a new connector environment is instantiated.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>backend_record</strong> (<a class="reference external" href="https://www.odoo.com/documentation/8.0/reference/orm.html#openerp.models.Model" title="(in odoo v8.0)"><code class="xref py py-class docutils literal"><span class="pre">openerp.models.Model</span></code></a>) &#8211; browse record of the backend</li>
-<li><strong>session</strong> (<a class="reference internal" href="api_session.html#connector.session.ConnectorSession" title="connector.session.ConnectorSession"><code class="xref py py-class docutils literal"><span class="pre">connector.session.ConnectorSession</span></code></a>) &#8211; current session (cr, uid, context)</li>
-<li><strong>model_name</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; name of the model</li>
-<li><strong>connector_env</strong> (<a class="reference internal" href="#connector.connector.ConnectorEnvironment" title="connector.connector.ConnectorEnvironment"><code class="xref py py-class docutils literal"><span class="pre">connector.connector.ConnectorEnvironment</span></code></a>) &#8211; an existing environment from which the kwargs
+<li><strong>backend_record</strong> (<a class="reference external" href="https://www.odoo.com/documentation/8.0/reference/orm.html#openerp.models.Model" title="(in odoo v8.0)"><code class="xref py py-class docutils literal"><span class="pre">openerp.models.Model</span></code></a>) – browse record of the backend</li>
+<li><strong>session</strong> (<a class="reference internal" href="api_session.html#connector.session.ConnectorSession" title="connector.session.ConnectorSession"><code class="xref py py-class docutils literal"><span class="pre">connector.session.ConnectorSession</span></code></a>) – current session (cr, uid, context)</li>
+<li><strong>model_name</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – name of the model</li>
+<li><strong>connector_env</strong> (<a class="reference internal" href="#connector.connector.ConnectorEnvironment" title="connector.connector.ConnectorEnvironment"><code class="xref py py-class docutils literal"><span class="pre">connector.connector.ConnectorEnvironment</span></code></a>) – an existing environment from which the kwargs
 will be propagated to the new one</li>
 </ul>
 </td>
@@ -430,7 +427,7 @@ model and being a class or subclass of <code class="docutils literal"><span clas
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>base_class</strong> (<a class="reference internal" href="#connector.connector.ConnectorUnit" title="connector.connector.ConnectorUnit"><code class="xref py py-class docutils literal"><span class="pre">connector.connector.ConnectorUnit</span></code></a>) &#8211; <code class="docutils literal"><span class="pre">ConnectorUnit</span></code> to search (class or subclass)</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>base_class</strong> (<a class="reference internal" href="#connector.connector.ConnectorUnit" title="connector.connector.ConnectorUnit"><code class="xref py py-class docutils literal"><span class="pre">connector.connector.ConnectorUnit</span></code></a>) – <code class="docutils literal"><span class="pre">ConnectorUnit</span></code> to search (class or subclass)</td>
 </tr>
 </tbody>
 </table>
@@ -450,7 +447,7 @@ model and being a class or subclass of <code class="docutils literal"><span clas
 <dt id="connector.connector.ConnectorEnvironment.set_lang">
 <code class="descname">set_lang</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwds</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/connector.html#ConnectorEnvironment.set_lang"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.connector.ConnectorEnvironment.set_lang" title="Permalink to this definition">¶</a></dt>
 <dd><p>Change the working language in the environment.</p>
-<p>It changes the <code class="docutils literal"><span class="pre">lang</span></code> key in the session&#8217;s context.</p>
+<p>It changes the <code class="docutils literal"><span class="pre">lang</span></code> key in the session’s context.</p>
 </dd></dl>
 
 </dd></dl>
@@ -496,12 +493,12 @@ for details.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>lock</strong> &#8211; The lock name. Can be anything convertible to a
+<li><strong>lock</strong> – The lock name. Can be anything convertible to a
 string.  It needs to represent what should not be synchronized
 concurrently, usually the string will contain at least: the
 action, the backend type, the backend id, the model name, the
 external id</li>
-<li><strong>retry_seconds</strong> &#8211; number of seconds after which a job should
+<li><strong>retry_seconds</strong> – number of seconds after which a job should
 be retried when the lock cannot be acquired.</li>
 </ul>
 </td>
@@ -561,8 +558,8 @@ searched model.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>session</strong> (<a class="reference internal" href="api_session.html#connector.session.ConnectorSession" title="connector.session.ConnectorSession"><code class="xref py py-class docutils literal"><span class="pre">connector.session.ConnectorSession</span></code></a>) &#8211; current session</li>
-<li><strong>model</strong> (str or <a class="reference external" href="https://www.odoo.com/documentation/8.0/reference/orm.html#openerp.models.Model" title="(in odoo v8.0)"><code class="xref py py-class docutils literal"><span class="pre">openerp.models.Model</span></code></a>) &#8211; model to match</li>
+<li><strong>session</strong> (<a class="reference internal" href="api_session.html#connector.session.ConnectorSession" title="connector.session.ConnectorSession"><code class="xref py py-class docutils literal"><span class="pre">connector.session.ConnectorSession</span></code></a>) – current session</li>
+<li><strong>model</strong> (str or <a class="reference external" href="https://www.odoo.com/documentation/8.0/reference/orm.html#openerp.models.Model" title="(in odoo v8.0)"><code class="xref py py-class docutils literal"><span class="pre">openerp.models.Model</span></code></a>) – model to match</li>
 </ul>
 </td>
 </tr>
@@ -592,9 +589,9 @@ the same class as in <cite>self.connector_env</cite> which must be
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>connector_unit_class</strong> (<code class="xref py py-class docutils literal"><span class="pre">connector.</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">connector.ConnectorUnit</span></code>) &#8211; <code class="docutils literal"><span class="pre">ConnectorUnit</span></code> to search
+<li><strong>connector_unit_class</strong> (<code class="xref py py-class docutils literal"><span class="pre">connector.</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">connector.ConnectorUnit</span></code>) – <code class="docutils literal"><span class="pre">ConnectorUnit</span></code> to search
 (class or subclass)</li>
-<li><strong>model</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; to give if the <code class="docutils literal"><span class="pre">ConnectorUnit</span></code> is for another
+<li><strong>model</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – to give if the <code class="docutils literal"><span class="pre">ConnectorUnit</span></code> is for another
 model than the current one</li>
 </ul>
 </td>
@@ -651,7 +648,7 @@ installation state.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>module_name</strong> &#8211; name of the addon</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>module_name</strong> – name of the addon</td>
 </tr>
 </tbody>
 </table>
@@ -666,7 +663,7 @@ if it could be obtained or not. An acquired lock is released at the
 end of the transaction.</p>
 <p>A typical use is to acquire a lock at the beginning of an importer
 to prevent 2 jobs to do the same import at the same time. Since the
-record doesn&#8217;t exist yet, we can&#8217;t put a lock on a record, so we put
+record doesn’t exist yet, we can’t put a lock on a record, so we put
 an advisory lock.</p>
 <dl class="docutils">
 <dt>Example:</dt>
@@ -691,7 +688,7 @@ for category X so we have duplicated records.  With this lock:</p>
 <li>Job 1 import category X as a dependency, it acquires a lock for
 this category</li>
 <li>Job 2 import category X as a dependency, try to acquire a lock
-but can&#8217;t, Job 2 is retried later, and when it is retried, it
+but can’t, Job 2 is retried later, and when it is retried, it
 sees the category X created by Job 1.</li>
 </ul>
 </div></blockquote>
@@ -716,8 +713,8 @@ sees the category X created by Job 1.</li>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>env</strong> &#8211; the Odoo Environment</li>
-<li><strong>lock</strong> &#8211; The lock name. Can be anything convertible to a
+<li><strong>env</strong> – the Odoo Environment</li>
+<li><strong>lock</strong> – The lock name. Can be anything convertible to a
 string.  It needs to represents what should not be synchronized
 concurrently so usually the string will contain at least: the
 action, the backend type, the backend id, the model name, the
@@ -752,7 +749,7 @@ external id</li>
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.5.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.1.<br/>
     </p>
   </div>
 </footer>

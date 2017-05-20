@@ -1,16 +1,13 @@
 <!DOCTYPE html>
 
-
 <html xmlns="http://www.w3.org/1999/xhtml" lang="fr">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
     <title>Exceptions &#8212; documentation Connector </title>
     
-    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/bootswatch-3.3.6/united/bootstrap.min.css" type="text/css" />
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
@@ -51,7 +48,7 @@
 </script>
 
   </head>
-  <body role="document">
+  <body>
 
   <div id="navbar" class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -271,7 +268,7 @@
 <dt id="connector.exception.IDMissingInBackend">
 <em class="property">exception </em><code class="descclassname">connector.exception.</code><code class="descname">IDMissingInBackend</code><a class="reference internal" href="../_modules/connector/exception.html#IDMissingInBackend"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.exception.IDMissingInBackend" title="Lien permanent vers cette définition">¶</a></dt>
 <dd><p>Bases : <a class="reference internal" href="#connector.exception.JobError" title="connector.exception.JobError"><code class="xref py py-class docutils literal"><span class="pre">connector.exception.JobError</span></code></a></p>
-<p>L&#8217;ID n&#8217;existe pas dans le backend</p>
+<p>L’ID n’existe pas dans le backend</p>
 </dd></dl>
 
 <dl class="exception">
@@ -306,14 +303,14 @@
 <dt id="connector.exception.NetworkRetryableError">
 <em class="property">exception </em><code class="descclassname">connector.exception.</code><code class="descname">NetworkRetryableError</code><span class="sig-paren">(</span><em>msg</em>, <em>seconds=None</em>, <em>ignore_retry=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/exception.html#NetworkRetryableError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.exception.NetworkRetryableError" title="Lien permanent vers cette définition">¶</a></dt>
 <dd><p>Bases : <a class="reference internal" href="#connector.exception.RetryableJobError" title="connector.exception.RetryableJobError"><code class="xref py py-class docutils literal"><span class="pre">connector.exception.RetryableJobError</span></code></a></p>
-<p>Une erreur de réseau a causé l&#8217;échec du job, il peut être réessayé plus tard.</p>
+<p>Une erreur de réseau a causé l’échec du job, il peut être réessayé plus tard.</p>
 </dd></dl>
 
 <dl class="exception">
 <dt id="connector.exception.NoConnectorUnitError">
 <em class="property">exception </em><code class="descclassname">connector.exception.</code><code class="descname">NoConnectorUnitError</code><a class="reference internal" href="../_modules/connector/exception.html#NoConnectorUnitError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.exception.NoConnectorUnitError" title="Lien permanent vers cette définition">¶</a></dt>
 <dd><p>Bases : <a class="reference internal" href="#connector.exception.ConnectorException" title="connector.exception.ConnectorException"><code class="xref py py-class docutils literal"><span class="pre">connector.exception.ConnectorException</span></code></a></p>
-<p>Aucune ConnectorUnit n&#8217;a été trouvé</p>
+<p>Aucune ConnectorUnit n’a été trouvé</p>
 </dd></dl>
 
 <dl class="exception">
@@ -327,21 +324,21 @@
 <dt id="connector.exception.NoSuchJobError">
 <em class="property">exception </em><code class="descclassname">connector.exception.</code><code class="descname">NoSuchJobError</code><a class="reference internal" href="../_modules/connector/exception.html#NoSuchJobError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.exception.NoSuchJobError" title="Lien permanent vers cette définition">¶</a></dt>
 <dd><p>Bases : <a class="reference internal" href="#connector.exception.JobError" title="connector.exception.JobError"><code class="xref py py-class docutils literal"><span class="pre">connector.exception.JobError</span></code></a></p>
-<p>Le job n&#8217;existe pas.</p>
+<p>Le job n’existe pas.</p>
 </dd></dl>
 
 <dl class="exception">
 <dt id="connector.exception.NotReadableJobError">
 <em class="property">exception </em><code class="descclassname">connector.exception.</code><code class="descname">NotReadableJobError</code><a class="reference internal" href="../_modules/connector/exception.html#NotReadableJobError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.exception.NotReadableJobError" title="Lien permanent vers cette définition">¶</a></dt>
 <dd><p>Bases : <a class="reference internal" href="#connector.exception.JobError" title="connector.exception.JobError"><code class="xref py py-class docutils literal"><span class="pre">connector.exception.JobError</span></code></a></p>
-<p>Le job ne peut pas être lu depuis l&#8217;espace de stockage.</p>
+<p>Le job ne peut pas être lu depuis l’espace de stockage.</p>
 </dd></dl>
 
 <dl class="exception">
 <dt id="connector.exception.NothingToDoJob">
 <em class="property">exception </em><code class="descclassname">connector.exception.</code><code class="descname">NothingToDoJob</code><a class="reference internal" href="../_modules/connector/exception.html#NothingToDoJob"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.exception.NothingToDoJob" title="Lien permanent vers cette définition">¶</a></dt>
 <dd><p>Bases : <a class="reference internal" href="#connector.exception.JobError" title="connector.exception.JobError"><code class="xref py py-class docutils literal"><span class="pre">connector.exception.JobError</span></code></a></p>
-<p>Le job n&#8217;a rien à faire.</p>
+<p>Le job n’a rien à faire.</p>
 </dd></dl>
 
 <dl class="exception">
@@ -378,7 +375,7 @@ is defined.</p>
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.5.<br/>
+      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.1.<br/>
     </p>
   </div>
 </footer>

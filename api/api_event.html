@@ -1,16 +1,13 @@
 <!DOCTYPE html>
 
-
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
     <title>Event &#8212; Connector  documentation</title>
     
-    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/bootswatch-3.3.6/united/bootstrap.min.css" type="text/css" />
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
@@ -50,7 +47,7 @@
 </script>
 
   </head>
-  <body role="document">
+  <body>
 
   <div id="navbar" class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -312,12 +309,12 @@ which are subscribed on the same model</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>session</strong> (<code class="xref py py-class docutils literal"><span class="pre">connector.session.Session</span></code>) &#8211; current session</li>
-<li><strong>model_name</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; name of the model</li>
-<li><strong>args</strong> &#8211; arguments propagated to the consumer
+<li><strong>session</strong> (<code class="xref py py-class docutils literal"><span class="pre">connector.session.Session</span></code>) – current session</li>
+<li><strong>model_name</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – name of the model</li>
+<li><strong>args</strong> – arguments propagated to the consumer
 The second argument of <cite>args</cite> is the model name.
 The first argument is the session.</li>
-<li><strong>kwargs</strong> &#8211; keyword arguments propagated to the consumer</li>
+<li><strong>kwargs</strong> – keyword arguments propagated to the consumer</li>
 </ul>
 </td>
 </tr>
@@ -341,10 +338,10 @@ for the model.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>consumer</strong> &#8211; the function to register on the event</li>
-<li><strong>model_names</strong> &#8211; the consumer will be active only on these models,
+<li><strong>consumer</strong> – the function to register on the event</li>
+<li><strong>model_names</strong> – the consumer will be active only on these models,
 active on all models if <code class="docutils literal"><span class="pre">None</span></code></li>
-<li><strong>replacing</strong> &#8211; the function beeing replaced by this new one.</li>
+<li><strong>replacing</strong> – the function beeing replaced by this new one.</li>
 </ul>
 </td>
 </tr>
@@ -361,8 +358,8 @@ active on all models if <code class="docutils literal"><span class="pre">None</s
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>consumer</strong> &#8211; the function to unsubscribe</li>
-<li><strong>model_names</strong> &#8211; remove only for these models or remove a
+<li><strong>consumer</strong> – the function to unsubscribe</li>
+<li><strong>model_names</strong> – remove only for these models or remove a
 consumer which is active on all models if <code class="docutils literal"><span class="pre">None</span></code>.</li>
 </ul>
 </td>
@@ -375,7 +372,7 @@ consumer which is active on all models if <code class="docutils literal"><span c
 
 <dl class="data">
 <dt id="connector.event.on_record_create">
-<code class="descclassname">connector.event.</code><code class="descname">on_record_create</code><em class="property"> = &lt;connector.event.Event object at 0x5f49850&gt;</em><a class="headerlink" href="#connector.event.on_record_create" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">connector.event.</code><code class="descname">on_record_create</code><em class="property"> = &lt;connector.event.Event object at 0x591be10&gt;</em><a class="headerlink" href="#connector.event.on_record_create" title="Permalink to this definition">¶</a></dt>
 <dd><p><code class="docutils literal"><span class="pre">on_record_create</span></code> is fired when one record has been created.</p>
 <p>Listeners should take the following arguments:</p>
 <blockquote>
@@ -383,14 +380,14 @@ consumer which is active on all models if <code class="docutils literal"><span c
 <li>session: <a class="reference internal" href="api_session.html#connector.session.ConnectorSession" title="connector.session.ConnectorSession"><code class="xref py py-class docutils literal"><span class="pre">ConnectorSession</span></code></a> object</li>
 <li>model_name: name of the model</li>
 <li>record_id: id of the created record</li>
-<li>vals:  field values updated, e.g {&#8216;field_name&#8217;: field_value, ...}</li>
+<li>vals:  field values updated, e.g {‘field_name’: field_value, …}</li>
 </ul>
 </div></blockquote>
 </dd></dl>
 
 <dl class="data">
 <dt id="connector.event.on_record_unlink">
-<code class="descclassname">connector.event.</code><code class="descname">on_record_unlink</code><em class="property"> = &lt;connector.event.Event object at 0x5f49890&gt;</em><a class="headerlink" href="#connector.event.on_record_unlink" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">connector.event.</code><code class="descname">on_record_unlink</code><em class="property"> = &lt;connector.event.Event object at 0x591be50&gt;</em><a class="headerlink" href="#connector.event.on_record_unlink" title="Permalink to this definition">¶</a></dt>
 <dd><p><code class="docutils literal"><span class="pre">on_record_unlink</span></code> is fired when one record has been deleted.</p>
 <p>Listeners should take the following arguments:</p>
 <blockquote>
@@ -404,7 +401,7 @@ consumer which is active on all models if <code class="docutils literal"><span c
 
 <dl class="data">
 <dt id="connector.event.on_record_write">
-<code class="descclassname">connector.event.</code><code class="descname">on_record_write</code><em class="property"> = &lt;connector.event.Event object at 0x5f497d0&gt;</em><a class="headerlink" href="#connector.event.on_record_write" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">connector.event.</code><code class="descname">on_record_write</code><em class="property"> = &lt;connector.event.Event object at 0x591bd90&gt;</em><a class="headerlink" href="#connector.event.on_record_write" title="Permalink to this definition">¶</a></dt>
 <dd><p><code class="docutils literal"><span class="pre">on_record_write</span></code> is fired when one record has been updated.</p>
 <p>Listeners should take the following arguments:</p>
 <blockquote>
@@ -412,7 +409,7 @@ consumer which is active on all models if <code class="docutils literal"><span c
 <li>session: <a class="reference internal" href="api_session.html#connector.session.ConnectorSession" title="connector.session.ConnectorSession"><code class="xref py py-class docutils literal"><span class="pre">ConnectorSession</span></code></a> object</li>
 <li>model_name: name of the model</li>
 <li>record_id: id of the record</li>
-<li>vals:  field values of the new record, e.g {&#8216;field_name&#8217;: field_value, ...}</li>
+<li>vals:  field values of the new record, e.g {‘field_name’: field_value, …}</li>
 </ul>
 </div></blockquote>
 </dd></dl>
@@ -439,7 +436,7 @@ consumer which is active on all models if <code class="docutils literal"><span c
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.5.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.1.<br/>
     </p>
   </div>
 </footer>

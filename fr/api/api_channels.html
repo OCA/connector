@@ -1,16 +1,13 @@
 <!DOCTYPE html>
 
-
 <html xmlns="http://www.w3.org/1999/xhtml" lang="fr">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
     <title>Channels &#8212; documentation Connector </title>
     
-    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/bootswatch-3.3.6/united/bootstrap.min.css" type="text/css" />
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
@@ -51,7 +48,7 @@
 </script>
 
   </head>
-  <body role="document">
+  <body>
 
   <div id="navbar" class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -281,7 +278,7 @@ Channel A. Channel A has a capacity of 4, all in use (passed down to the
 root channel), and 12 jobs enqueued. Channel B has a capacity of 1,
 none in use. This means that whenever a new job comes in channel B,
 there will be available room for it to run in the root channel.</p>
-<p>Note that from the point of view of a channel, &#8216;running&#8217; means enqueued
+<p>Note that from the point of view of a channel, “running” means enqueued
 in the downstream channel. Only jobs marked running in the root channel
 are actually sent to Odoo for execution.</p>
 <p>Should a downstream channel have less capacity than its upstream channels,
@@ -319,7 +316,7 @@ channels, then yielding jobs from the channel queue until
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><strong>now</strong> &#8211; the current datetime using a type that is comparable to
+<tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><strong>now</strong> – the current datetime using a type that is comparable to
 jobs eta attribute</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Retourne:</th><td class="field-body">iterator of <code class="xref py py-class docutils literal"><span class="pre">connector.jobrunner.ChannelJob</span></code></td>
@@ -451,7 +448,7 @@ equal as they are different instances</p>
 <li>get jobs to run</li>
 </ul>
 <p>Here is how the runner will use it.</p>
-<p>Let&#8217;s create a channel manager and configure it.</p>
+<p>Let’s create a channel manager and configure it.</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pprint</span> <span class="k">import</span> <span class="n">pprint</span> <span class="k">as</span> <span class="n">pp</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cm</span> <span class="o">=</span> <span class="n">ChannelManager</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cm</span><span class="o">.</span><span class="n">simple_configure</span><span class="p">(</span><span class="s1">&#39;root:4,A:4,B:1&#39;</span><span class="p">)</span>
@@ -491,7 +488,7 @@ higher priority job in channel B, because channel B has a capacity of 1.</p>
 <span class="go">[&lt;ChannelJob B2&gt;]</span>
 </pre></div>
 </div>
-<p>Let&#8217;s say A1 is done and A6 gets a higher priority. A6 will run next.</p>
+<p>Let’s say A1 is done and A6 gets a higher priority. A6 will run next.</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cm</span><span class="o">.</span><span class="n">notify</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="s1">&#39;A1&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;done&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cm</span><span class="o">.</span><span class="n">notify</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="s1">&#39;A6&#39;</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;pending&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pp</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">cm</span><span class="o">.</span><span class="n">get_jobs_to_run</span><span class="p">(</span><span class="n">now</span><span class="o">=</span><span class="mi">100</span><span class="p">)))</span>
@@ -567,7 +564,7 @@ when not configured explicity).</p>
 <em class="property">classmethod </em><code class="descname">parse_simple_config</code><span class="sig-paren">(</span><em>config_string</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/jobrunner/channels.html#ChannelManager.parse_simple_config"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.jobrunner.channels.ChannelManager.parse_simple_config" title="Lien permanent vers cette définition">¶</a></dt>
 <dd><p>Parse a simple channels configuration string.</p>
 <p>The general form is as follow:
-channel(.subchannel)*(:capacity(:key(=value)?)*)? [, ...]</p>
+channel(.subchannel)*(:capacity(:key(=value)?)*)? [, …]</p>
 <p>If capacity is absent, it defaults to 1.
 If a key is present without value, it gets True as value.
 When declaring subchannels, the root channel may be omitted
@@ -600,8 +597,8 @@ config file.</p>
 <span class="go"> {&#39;capacity&#39;: 1, &#39;k&#39;: &#39;va lue&#39;, &#39;name&#39;: &#39;foo bar&#39;}]</span>
 </pre></div>
 </div>
-<p>It&#8217;s also possible to replace commas with line breaks, which is more
-readable if you&#8217;re taking the channel configuration from a ConfigParser
+<p>It’s also possible to replace commas with line breaks, which is more
+readable if you’re taking the channel configuration from a ConfigParser
 file.</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pp</span><span class="p">(</span><span class="n">ChannelManager</span><span class="o">.</span><span class="n">parse_simple_config</span><span class="p">(</span><span class="s1">&#39;&#39;&#39;</span>
 <span class="gp">... </span><span class="s1">    root : 4</span>
@@ -751,7 +748,7 @@ Popping an empty queue returns None.</p>
 <dl class="class">
 <dt id="connector.jobrunner.channels.SafeSet">
 <em class="property">class </em><code class="descclassname">connector.jobrunner.channels.</code><code class="descname">SafeSet</code><a class="reference internal" href="../_modules/connector/jobrunner/channels.html#SafeSet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.jobrunner.channels.SafeSet" title="Lien permanent vers cette définition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/2/library/stdtypes.html#set" title="(disponible dans Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">set</span></code></a></p>
+<dd><p>Bases : <a class="reference external" href="https://docs.python.org/2/library/stdtypes.html#set" title="(disponible dans Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">set</span></code></a></p>
 <p>A set that does not raise KeyError when removing non-existent items.</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">SafeSet</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
@@ -789,7 +786,7 @@ Popping an empty queue returns None.</p>
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.5.<br/>
+      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.1.<br/>
     </p>
   </div>
 </footer>

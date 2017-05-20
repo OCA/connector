@@ -1,16 +1,13 @@
 <!DOCTYPE html>
 
-
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
     <title>connector.session &#8212; Connector  documentation</title>
     
-    <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/bootswatch-3.3.6/united/bootstrap.min.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
@@ -48,7 +45,7 @@
 </script>
 
   </head>
-  <body role="document">
+  <body>
 
   <div id="navbar" class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -293,8 +290,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">uid</span> <span class="o">=</span> <span class="n">uid</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">context</span> <span class="o">=</span> <span class="p">{}</span> <span class="k">if</span> <span class="n">context</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">context</span>
 
-    <span class="nd">@contextmanager</span>
-<div class="viewcode-block" id="ConnectorSessionHandler.session"><a class="viewcode-back" href="../../api/api_session.html#connector.session.ConnectorSessionHandler.session">[docs]</a>    <span class="k">def</span> <span class="nf">session</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ConnectorSessionHandler.session"><a class="viewcode-back" href="../../api/api_session.html#connector.session.ConnectorSessionHandler.session">[docs]</a>    <span class="nd">@contextmanager</span>
+    <span class="k">def</span> <span class="nf">session</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Context Manager: start a new session and ensure that the</span>
 <span class="sd">        session&#39;s cursor is:</span>
 
@@ -352,8 +349,8 @@
             <span class="n">context</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">env</span> <span class="o">=</span> <span class="n">openerp</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">Environment</span><span class="p">(</span><span class="n">cr</span><span class="p">,</span> <span class="n">uid</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span>
 
-    <span class="nd">@classmethod</span>
-<div class="viewcode-block" id="ConnectorSession.from_env"><a class="viewcode-back" href="../../api/api_session.html#connector.session.ConnectorSession.from_env">[docs]</a>    <span class="k">def</span> <span class="nf">from_env</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">env</span><span class="p">):</span>
+<div class="viewcode-block" id="ConnectorSession.from_env"><a class="viewcode-back" href="../../api/api_session.html#connector.session.ConnectorSession.from_env">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_env</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">env</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Return a ConnectorSession from :class:`openerp.api.Environment` &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">cr</span><span class="p">,</span> <span class="n">env</span><span class="o">.</span><span class="n">uid</span><span class="p">,</span> <span class="n">context</span><span class="o">=</span><span class="n">env</span><span class="o">.</span><span class="n">context</span><span class="p">)</span></div>
 
@@ -373,8 +370,8 @@
     <span class="k">def</span> <span class="nf">pool</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">registry</span>
 
-    <span class="nd">@contextmanager</span>
-<div class="viewcode-block" id="ConnectorSession.change_user"><a class="viewcode-back" href="../../api/api_session.html#connector.session.ConnectorSession.change_user">[docs]</a>    <span class="k">def</span> <span class="nf">change_user</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">uid</span><span class="p">):</span>
+<div class="viewcode-block" id="ConnectorSession.change_user"><a class="viewcode-back" href="../../api/api_session.html#connector.session.ConnectorSession.change_user">[docs]</a>    <span class="nd">@contextmanager</span>
+    <span class="k">def</span> <span class="nf">change_user</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">uid</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Context Manager: create a new Env with the specified user</span>
 
 <span class="sd">        It generates a new :class:`openerp.api.Environment` used within</span>
@@ -392,8 +389,8 @@
         <span class="k">yield</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">env</span> <span class="o">=</span> <span class="n">env</span></div>
 
-    <span class="nd">@contextmanager</span>
-<div class="viewcode-block" id="ConnectorSession.change_context"><a class="viewcode-back" href="../../api/api_session.html#connector.session.ConnectorSession.change_context">[docs]</a>    <span class="k">def</span> <span class="nf">change_context</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="ConnectorSession.change_context"><a class="viewcode-back" href="../../api/api_session.html#connector.session.ConnectorSession.change_context">[docs]</a>    <span class="nd">@contextmanager</span>
+    <span class="k">def</span> <span class="nf">change_context</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Context Manager: create a new Env with an updated context</span>
 
 <span class="sd">        It generates a new :class:`openerp.api.Environment` used within</span>
@@ -514,7 +511,7 @@
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.5.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.1.<br/>
     </p>
   </div>
 </footer>

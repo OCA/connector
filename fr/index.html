@@ -1,16 +1,13 @@
 <!DOCTYPE html>
 
-
 <html xmlns="http://www.w3.org/1999/xhtml" lang="fr">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
     <title>Odoo Connector &#8212; documentation Connector </title>
     
-    <link rel="stylesheet" href="_static/basic.css" type="text/css" />
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="_static/bootswatch-3.3.6/united/bootstrap.min.css" type="text/css" />
     <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
@@ -50,7 +47,7 @@
 </script>
 
   </head>
-  <body role="document">
+  <body>
 
   <div id="navbar" class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -208,7 +205,7 @@
 <li><a class="reference internal" href="#top-financial-contributors">Principaux contributeurs financiers</a></li>
 <li><a class="reference internal" href="#project">Projet</a></li>
 <li><a class="reference internal" href="#developer-s-guide">Guide du développeur</a><ul>
-<li><a class="reference internal" href="#api-reference">Référence de l&#8217;API</a></li>
+<li><a class="reference internal" href="#api-reference">Référence de l’API</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#indices-and-tables">Index et tables</a></li>
@@ -255,24 +252,19 @@
   <div class="section" id="odoo-connector">
 <h1>Odoo Connector<a class="headerlink" href="#odoo-connector" title="Lien permanent vers ce titre">¶</a></h1>
 <p><cite>Odoo Connector</cite> est un puissant framework de développement de connecteur bi-directionnel entre <a class="reference external" href="http://www.odoo.com">Odoo</a> (ERP Open Source) et tout autre logiciel ou service.</p>
-<p>Ce module Odoo a un cœur modulaire et générique, capable d&#8217;être lui-même étendu grâce à des modules additionnels, pour ajouter des nouvelles fonctions ou des personnalisations.</p>
+<p>Ce module Odoo a un cœur modulaire et générique, capable d’être lui-même étendu grâce à des modules additionnels, pour ajouter des nouvelles fonctions ou des personnalisations.</p>
 <p>The development of Odoo Connector has been started by <a class="reference external" href="http://www.camptocamp.com">Camptocamp</a> and is now
 maintained by <a class="reference external" href="http://www.camptocamp.com">Camptocamp</a>, <a class="reference external" href="http://www.akretion.com">Akretion</a>, <a class="reference external" href="http://www.acsone.eu">Acsone</a> and several <a class="reference internal" href="project/contributors.html#contributors"><span class="std std-ref">Contributeurs</span></a>.</p>
-<p><em>Subscribe to the</em> <a class="reference external" href="https://odoo-community.org/groups">project&#8217;s mailing list (name: Connectors)</a></p>
+<p><em>Subscribe to the</em> <a class="reference external" href="https://odoo-community.org/groups">project’s mailing list (name: Connectors)</a></p>
 <p><em>Découvrez comment</em> <a class="reference internal" href="project/contribute.html#contribute"><span class="std std-ref">Contribuer</span></a></p>
 <div class="section" id="core-features">
 <h2>Fonctionnalités de base<a class="headerlink" href="#core-features" title="Lien permanent vers ce titre">¶</a></h2>
 <ul class="simple">
-<li><p class="first"><strong>100% Open Source</strong> (<a class="reference external" href="http://www.gnu.org/licenses/agpl-3.0.html">AGPL version 3</a>): la totalité du <a class="reference external" href="https://github.com/OCA/connector">code source est disponible sur GitHub</a></p>
-</li>
-<li><p class="first">Pas uniquement conçu pour connecter Odoo à des backend e-commerce, mais <strong>adaptable</strong> pour connecter Odoo à tout type de service.</p>
-</li>
-<li><p class="first"><strong>Robuste pour des volumétries importantes</strong> et <strong>faciler à surveiller</strong> grâce à la <a class="reference internal" href="guides/concepts.html#jobs-queue"><span class="std std-ref">Queue de jobs</span></a>.</p>
-</li>
-<li><p class="first">Un ensemble flexible de blocs de construction : il n&#8217;oblige pas à respecter une implémentation particulière mais laisse le choix final au développeur sur la manière d&#8217;utiliser les composants.</p>
-</li>
-<li><p class="first">Voir le <a class="reference internal" href="guides/code_overview.html#code-overview"><span class="std std-ref">Survol du code</span></a> et les exemples de code</p>
-</li>
+<li><strong>100% Open Source</strong> (<a class="reference external" href="http://www.gnu.org/licenses/agpl-3.0.html">AGPL version 3</a>): la totalité du <a class="reference external" href="https://github.com/OCA/connector">code source est disponible sur GitHub</a></li>
+<li>Pas uniquement conçu pour connecter Odoo à des backend e-commerce, mais <strong>adaptable</strong> pour connecter Odoo à tout type de service.</li>
+<li><strong>Robuste pour des volumétries importantes</strong> et <strong>faciler à surveiller</strong> grâce à la <a class="reference internal" href="guides/concepts.html#jobs-queue"><span class="std std-ref">Queue de jobs</span></a>.</li>
+<li>Un ensemble flexible de blocs de construction : il n’oblige pas à respecter une implémentation particulière mais laisse le choix final au développeur sur la manière d’utiliser les composants.</li>
+<li>Voir le <a class="reference internal" href="guides/code_overview.html#code-overview"><span class="std std-ref">Survol du code</span></a> et les exemples de code</li>
 </ul>
 </div>
 <div class="section" id="last-minute-information-regarding-odoo-9">
@@ -284,35 +276,21 @@ maintained by <a class="reference external" href="http://www.camptocamp.com">Cam
 <div class="section" id="connectors-based-on-the-framework">
 <h2>Connecteurs basés sur le framework<a class="headerlink" href="#connectors-based-on-the-framework" title="Lien permanent vers ce titre">¶</a></h2>
 <ul class="simple">
-<li><p class="first"><a class="reference external" href="http://www.odoo-magento-connector.com">Connecteur Magento</a></p>
-</li>
-<li><p class="first"><a class="reference external" href="https://github.com/OCA/connector-prestashop">Connecteur Prestashop</a></p>
-</li>
-<li><p class="first"><a class="reference external" href="https://github.com/akretion/solerp">solerp (Connecteur Solr)</a></p>
-</li>
-<li><p class="first"><a class="reference external" href="http://www.openerp.net.cn/new-intercompany-process-module/">Odoo Multi-sociétés</a></p>
-</li>
-<li><p class="first"><a class="reference external" href="https://github.com/OCA/connector-cmis">Connecteur CMIS</a></p>
-</li>
-<li><p class="first"><a class="reference external" href="https://github.com/OCA/connector-interfaces/tree/8.0/base_import_async">Module Odoo d&#8217;import asynchrone</a></p>
-</li>
-<li><p class="first"><a class="reference external" href="https://github.com/OCA/connector-salesforce">Connecteur Salesforce</a></p>
-</li>
-<li><p class="first"><a class="reference external" href="https://github.com/akretion/connector-google-spreadsheet">Connecteur Google Spreadsheet</a></p>
-</li>
+<li><a class="reference external" href="http://www.odoo-magento-connector.com">Connecteur Magento</a></li>
+<li><a class="reference external" href="https://github.com/OCA/connector-prestashop">Connecteur Prestashop</a></li>
+<li><a class="reference external" href="https://github.com/akretion/solerp">solerp (Connecteur Solr)</a></li>
+<li><a class="reference external" href="http://www.openerp.net.cn/new-intercompany-process-module/">Odoo Multi-sociétés</a></li>
+<li><a class="reference external" href="https://github.com/OCA/connector-cmis">Connecteur CMIS</a></li>
+<li><a class="reference external" href="https://github.com/OCA/connector-interfaces/tree/8.0/base_import_async">Module Odoo d’import asynchrone</a></li>
+<li><a class="reference external" href="https://github.com/OCA/connector-salesforce">Connecteur Salesforce</a></li>
+<li><a class="reference external" href="https://github.com/akretion/connector-google-spreadsheet">Connecteur Google Spreadsheet</a></li>
 <li><a class="reference external" href="https://github.com/OCA/connector-woocommerce">WooCommerce Connector</a></li>
-<li><p class="first">Développez facilement et rapidement votre propre connecteur basé sur ce puissant framework et ajoutez votre projet sur cette page ! Exemples :</p>
-<ul>
-<li><p class="first">E-Commerce : connecteur Odoo OsCommerce, connecteur Odoo Drupal Commerce, connecteur Odoo Spree, connecteur Odoo Ebay, connecteur Odoo Amazon…</p>
-</li>
-<li><p class="first">CMS : connecteur Odoo Wordpress…</p>
-</li>
-<li><p class="first">CRM : connecteur Odoo SugarCRM, connecteur Odoo Zabbix…</p>
-</li>
-<li><p class="first">Gestion de projets : connecteur Odoo Redmine…</p>
-</li>
-<li><p class="first">Ticketing : connecteur Odoo Request Tracker, connecteur Odoo GLPI…</p>
-</li>
+<li>Développez facilement et rapidement votre propre connecteur basé sur ce puissant framework et ajoutez votre projet sur cette page ! Exemples :<ul>
+<li>E-Commerce : connecteur Odoo OsCommerce, connecteur Odoo Drupal Commerce, connecteur Odoo Spree, connecteur Odoo Ebay, connecteur Odoo Amazon…</li>
+<li>CMS : connecteur Odoo Wordpress…</li>
+<li>CRM : connecteur Odoo SugarCRM, connecteur Odoo Zabbix…</li>
+<li>Gestion de projets : connecteur Odoo Redmine…</li>
+<li>Ticketing : connecteur Odoo Request Tracker, connecteur Odoo GLPI…</li>
 </ul>
 </li>
 </ul>
@@ -391,7 +369,7 @@ maintained by <a class="reference external" href="http://www.camptocamp.com">Cam
 </ul>
 </div>
 <div class="section" id="api-reference">
-<h3>Référence de l&#8217;API<a class="headerlink" href="#api-reference" title="Lien permanent vers ce titre">¶</a></h3>
+<h3>Référence de l’API<a class="headerlink" href="#api-reference" title="Lien permanent vers ce titre">¶</a></h3>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="api/api_connector.html">Connecteur</a></li>
@@ -441,7 +419,7 @@ maintained by <a class="reference external" href="http://www.camptocamp.com">Cam
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.5.<br/>
+      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.1.<br/>
     </p>
   </div>
 </footer>

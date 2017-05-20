@@ -1,16 +1,13 @@
 <!DOCTYPE html>
 
-
 <html xmlns="http://www.w3.org/1999/xhtml" lang="fr">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
     <title>Configuring channels and the job runner &#8212; documentation Connector </title>
     
-    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/bootswatch-3.3.6/united/bootstrap.min.css" type="text/css" />
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
@@ -51,7 +48,7 @@
 </script>
 
   </head>
-  <body role="document">
+  <body>
 
   <div id="navbar" class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -300,7 +297,7 @@ and <code class="docutils literal"><span class="pre">--workers</span></code> gre
 </pre></div>
 </div>
 <ul class="simple">
-<li>Disable the &#8220;Enqueue Jobs&#8221; cron.</li>
+<li>Disable the «&nbsp;Enqueue Jobs&nbsp;» cron.</li>
 <li>Do NOT start openerp-connector-worker.</li>
 <li>Create jobs (eg using base_import_async) and observe they
 start immediately and in parallel.</li>
@@ -378,7 +375,7 @@ Channel A. Channel A has a capacity of 4, all in use (passed down to the
 root channel), and 12 jobs enqueued. Channel B has a capacity of 1,
 none in use. This means that whenever a new job comes in channel B,
 there will be available room for it to run in the root channel.</p>
-<p>Note that from the point of view of a channel, &#8216;running&#8217; means enqueued
+<p>Note that from the point of view of a channel, “running” means enqueued
 in the downstream channel. Only jobs marked running in the root channel
 are actually sent to Odoo for execution.</p>
 <p>Should a downstream channel have less capacity than its upstream channels,
@@ -414,7 +411,7 @@ a default capacity of 1).</p>
 up to 2 concurrent jobs in the channel named <code class="docutils literal"><span class="pre">root.sub</span></code>.</li>
 <li><code class="docutils literal"><span class="pre">sub:2</span></code>: the same.</li>
 </ul>
-<p>It&#8217;s also possible to separate channel entries with line breaks, which is more
+<p>It’s also possible to separate channel entries with line breaks, which is more
 readable in the configuration file:</p>
 <div class="highlight-cfg"><div class="highlight"><pre><span></span><span class="k">[options-connector]</span>
 <span class="na">channels</span> <span class="o">=</span><span class="s"></span>
@@ -445,7 +442,7 @@ readable in the configuration file:</p>
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.5.<br/>
+      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.1.<br/>
     </p>
   </div>
 </footer>

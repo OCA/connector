@@ -1,16 +1,13 @@
 <!DOCTYPE html>
 
-
 <html xmlns="http://www.w3.org/1999/xhtml" lang="fr">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
     <title>Amorcer la création un nouveau connecteur &#8212; documentation Connector </title>
     
-    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/bootswatch-3.3.6/united/bootstrap.min.css" type="text/css" />
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
@@ -51,7 +48,7 @@
 </script>
 
   </head>
-  <body role="document">
+  <body>
 
   <div id="navbar" class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -255,20 +252,18 @@
       
   <div class="section" id="boostrapping-a-connector">
 <span id="bootstrap-connector"></span><h1>Amorcer la création un nouveau connecteur<a class="headerlink" href="#boostrapping-a-connector" title="Lien permanent vers ce titre">¶</a></h1>
-<p>Nous allons voir les étapes pour amorcer la création d&#8217;un nouveau connecteur</p>
-<p>À côté de ça, vous devriez utiliser les connecteurs existants pour avoir des exemples réels d&#8217;implémentation:</p>
+<p>Nous allons voir les étapes pour amorcer la création d’un nouveau connecteur</p>
+<p>À côté de ça, vous devriez utiliser les connecteurs existants pour avoir des exemples réels d’implémentation:</p>
 <ul class="simple">
-<li><p class="first"><a class="reference external" href="https://github.com/OCA/connector-magento">Connecteur Odoo Magento</a></p>
-</li>
-<li><p class="first"><a class="reference external" href="https://github.com/OCA/connector-prestashop">Connecteur Odoo Prestashop</a></p>
-</li>
+<li><a class="reference external" href="https://github.com/OCA/connector-magento">Connecteur Odoo Magento</a></li>
+<li><a class="reference external" href="https://github.com/OCA/connector-prestashop">Connecteur Odoo Prestashop</a></li>
 </ul>
 <p>Du code boilerplate est nécessaire, donc ce document va vous guider à travers différentes étapes. Consultez également les <a class="reference internal" href="../project/contribute.html#naming-convention"><span class="std std-ref">Conventions de nommage</span></a>.</p>
 <p>Pour cet exemple nous allons imaginer que nous devons synchroniser Odoo avec une machine à café.</p>
 <div class="section" id="odoo-manifest">
 <h2>Odoo Manifest<a class="headerlink" href="#odoo-manifest" title="Lien permanent vers ce titre">¶</a></h2>
 <p>Comme nous voulons synchroniser Odoo avec une machine à café, nous allons nommer notre connecteur connector_coffee</p>
-<p>Tout d&#8217;abord, nous devons créer le module Odoo lui-même, en modifiant le fichier <code class="docutils literal"><span class="pre">connector_coffee/__openerp__.py</span></code>.</p>
+<p>Tout d’abord, nous devons créer le module Odoo lui-même, en modifiant le fichier <code class="docutils literal"><span class="pre">connector_coffee/__openerp__.py</span></code>.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span> <span class="c1"># -*- coding: utf-8 -*-</span>
  <span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;Coffee Connector&#39;</span><span class="p">,</span>
   <span class="s1">&#39;version&#39;</span><span class="p">:</span> <span class="s1">&#39;1.0.0&#39;</span><span class="p">,</span>
@@ -295,10 +290,8 @@
 </div>
 <p>Il y a 2 points à noter :</p>
 <ul class="simple">
-<li><p class="first">Il dépend de <code class="docutils literal"><span class="pre">connector</span></code>.</p>
-</li>
-<li><p class="first">La catégorie du module doit être <code class="docutils literal"><span class="pre">Connector</span></code>.</p>
-</li>
+<li>Il dépend de <code class="docutils literal"><span class="pre">connector</span></code>.</li>
+<li>La catégorie du module doit être <code class="docutils literal"><span class="pre">Connector</span></code>.</li>
 </ul>
 <p>Bien sûr, nous devons aussi créer le fichier <code class="docutils literal"><span class="pre">__init__.py</span></code> où nous plaçons les imports de nos modules Python.</p>
 </div>
@@ -311,7 +304,7 @@
 <li>Coffee 2900</li>
 </ul>
 </div></blockquote>
-<p>Donc nous allons déclarer un backend <cite>coffee</cite>, l&#8217;entité générique, et un backend différent par version.</p>
+<p>Donc nous allons déclarer un backend <cite>coffee</cite>, l’entité générique, et un backend différent par version.</p>
 <p>Placez ceci dans <code class="docutils literal"><span class="pre">connector_coffee/backend.py</span></code>:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">openerp.addons.connector.backend</span> <span class="k">as</span> <span class="nn">backend</span>
 
@@ -324,7 +317,7 @@
 </div>
 <div class="section" id="backend-model">
 <h2>Modèle du backend<a class="headerlink" href="#backend-model" title="Lien permanent vers ce titre">¶</a></h2>
-<p>Nous avons déclaré les backends, mais nous avons besoin d&#8217;un modèle pour les configurer.</p>
+<p>Nous avons déclaré les backends, mais nous avons besoin d’un modèle pour les configurer.</p>
 <p>Nous créons un modèle <code class="docutils literal"><span class="pre">coffee.backend</span></code> qui est un <code class="docutils literal"><span class="pre">_inherit</span></code> de <code class="docutils literal"><span class="pre">connector.backend</span></code>. Dans <code class="docutils literal"><span class="pre">connector_coffee/coffee_model.py</span></code>:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">openerp</span> <span class="k">import</span> <span class="n">fields</span><span class="p">,</span> <span class="n">models</span><span class="p">,</span> <span class="n">api</span>
 
@@ -361,12 +354,9 @@
 </div>
 <p>Notes :</p>
 <ul class="simple">
-<li><p class="first">Le <code class="docutils literal"><span class="pre">_backend_type</span></code> doit être le même que le nom du backend dans <a class="reference internal" href="#declare-the-backends">Déclaration des backends</a>.</p>
-</li>
-<li><p class="first">les versions doivent être les mêmes que celles déclarées dans <a class="reference internal" href="#declare-the-backends">Déclaration des backends</a>.</p>
-</li>
-<li><p class="first">Nous pouvons ajouter dans ce modèle autant de champs que nous voulons pour configurer notre connexion ou configuration en rapport avec le backend.</p>
-</li>
+<li>Le <code class="docutils literal"><span class="pre">_backend_type</span></code> doit être le même que le nom du backend dans <a class="reference internal" href="#declare-the-backends">Déclaration des backends</a>.</li>
+<li>les versions doivent être les mêmes que celles déclarées dans <a class="reference internal" href="#declare-the-backends">Déclaration des backends</a>.</li>
+<li>Nous pouvons ajouter dans ce modèle autant de champs que nous voulons pour configurer notre connexion ou configuration en rapport avec le backend.</li>
 </ul>
 </div>
 <div class="section" id="abstract-binding">
@@ -413,7 +403,7 @@
             <span class="k">return</span> <span class="n">env</span>
 </pre></div>
 </div>
-<p>Remarquez que la partie qui concerne la définition du langage est complètement optionnelle mais elle est conservée pour l&#8217;exemple.</p>
+<p>Remarquez que la partie qui concerne la définition du langage est complètement optionnelle mais elle est conservée pour l’exemple.</p>
 </div>
 <div class="section" id="checkpoints">
 <h2>Points de contrôle<a class="headerlink" href="#checkpoints" title="Lien permanent vers ce titre">¶</a></h2>
@@ -454,7 +444,7 @@
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.5.<br/>
+      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.1.<br/>
     </p>
   </div>
 </footer>

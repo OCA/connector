@@ -1,16 +1,13 @@
 <!DOCTYPE html>
 
-
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
     <title>Contribute &#8212; Connector  documentation</title>
     
-    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/bootswatch-3.3.6/united/bootstrap.min.css" type="text/css" />
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
@@ -50,7 +47,7 @@
 </script>
 
   </head>
-  <body role="document">
+  <body>
 
   <div id="navbar" class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -258,9 +255,9 @@
 <li>merge proposals</li>
 <li>ideas</li>
 <li>translations</li>
-<li>...</li>
+<li>…</li>
 </ul>
-<p>Have a look on the <a class="reference external" href="http://odoo-magento-connector.com/project/contribute.html#contribute" title="(in Odoo Magento Connector v)"><span class="xref std std-ref">Magento Connector Developer&#8217;s Guide</span></a> which is more complete, most of the
+<p>Have a look on the <a class="reference external" href="http://odoo-magento-connector.com/project/contribute.html#contribute" title="(in Odoo Magento Connector v)"><span class="xref std std-ref">Magento Connector Developer’s Guide</span></a> which is more complete, most of the
 information is the same.</p>
 <p>The GitHub project is: <a class="reference external" href="https://github.com/OCA/connector">https://github.com/OCA/connector</a></p>
 <div class="section" id="want-to-start-a-new-connector">
@@ -270,7 +267,7 @@ a sane approach is to read this documentation, especially
 <a class="reference internal" href="../guides/concepts.html#concepts"><span class="std std-ref">Connector Concepts</span></a> and <a class="reference internal" href="../guides/bootstrap_connector.html#bootstrap-connector"><span class="std std-ref">Boostrapping a connector</span></a>.</p>
 <p>Then, my personal advice is to look at the existing connectors (<a class="reference external" href="https://github.com/OCA/connector-magento">Odoo
 Magento Connector</a>, <a class="reference external" href="https://github.com/OCA/connector-prestashop">Odoo Prestashop Connector</a>). You will also probably
-need to dive a bit in the framework&#8217;s code.</p>
+need to dive a bit in the framework’s code.</p>
 <p>If the connector belongs to the e-commerce domain, you may want to reuse the pieces
 of the <a class="reference external" href="https://github.com/OCA/connector-ecommerce">E-Commerce Connector</a> module.</p>
 <div class="section" id="naming-conventions">
@@ -303,7 +300,7 @@ to sphinx-intl (until merged) to support <em>fuzzy</em> translations</li>
 <li><code class="docutils literal"><span class="pre">cd</span> <span class="pre">connector/doc</span></code></li>
 <li>rebuild the gettext .pot source catalogs: <code class="docutils literal"><span class="pre">make</span> <span class="pre">gettext</span></code></li>
 <li>update the .po translation files from the latest .pot files (here for
-language &#8216;fr&#8217;): <code class="docutils literal"><span class="pre">sphinx-intl</span> <span class="pre">update</span> <span class="pre">-l</span> <span class="pre">fr</span> <span class="pre">-p</span> <span class="pre">_build/locale</span></code></li>
+language ‘fr’): <code class="docutils literal"><span class="pre">sphinx-intl</span> <span class="pre">update</span> <span class="pre">-l</span> <span class="pre">fr</span> <span class="pre">-p</span> <span class="pre">_build/locale</span></code></li>
 <li>create or edit the translation in the .po files: <code class="docutils literal"><span class="pre">poedit</span>
 <span class="pre">locale/fr/LC_MESSAGES/*.po</span></code></li>
 <li>compile the .po files into .mo files: <code class="docutils literal"><span class="pre">sphinx-intl</span> <span class="pre">build</span></code></li>
@@ -350,7 +347,7 @@ $ ../../../bin/sphinx-build -d connectordb -- -D language=fr -b html ./ _build/h
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.5.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.1.<br/>
     </p>
   </div>
 </footer>

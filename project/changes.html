@@ -1,16 +1,13 @@
 <!DOCTYPE html>
 
-
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
     <title>Changes &#8212; Connector  documentation</title>
     
-    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/bootswatch-3.3.6/united/bootstrap.min.css" type="text/css" />
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
@@ -50,7 +47,7 @@
 </script>
 
   </head>
-  <body role="document">
+  <body>
 
   <div id="navbar" class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -268,31 +265,31 @@
 <ul class="simple">
 <li>Allow to define seconds when raising a RetryableJobError (<a class="reference external" href="https://github.com/OCA/connector/pull/124">https://github.com/OCA/connector/pull/124</a>)</li>
 <li>Allow to ignore the retry counter when raising a RetryableJobError (<a class="reference external" href="https://github.com/OCA/connector/pull/124">https://github.com/OCA/connector/pull/124</a>)</li>
-<li>Add &#8216;mock_job_delay_to_direct&#8217; to ease tests on jobs (<a class="reference external" href="https://github.com/OCA/connector/pull/123">https://github.com/OCA/connector/pull/123</a>)</li>
+<li>Add ‘mock_job_delay_to_direct’ to ease tests on jobs (<a class="reference external" href="https://github.com/OCA/connector/pull/123">https://github.com/OCA/connector/pull/123</a>)</li>
 <li>Add helper function to acquire Posgres advisory locks (<a class="reference external" href="https://github.com/OCA/connector/pull/138">https://github.com/OCA/connector/pull/138</a>, <a class="reference external" href="https://github.com/OCA/connector/pull/139">https://github.com/OCA/connector/pull/139</a>)</li>
-<li>Improvement of &#8216;is_module_installed&#8217; which now uses the registry instead of db + cache (<a class="reference external" href="https://github.com/OCA/connector/pull/130">https://github.com/OCA/connector/pull/130</a>)</li>
+<li>Improvement of ‘is_module_installed’ which now uses the registry instead of db + cache (<a class="reference external" href="https://github.com/OCA/connector/pull/130">https://github.com/OCA/connector/pull/130</a>)</li>
 <li>Security: Prevent to unpickle globals which are not jobs or whitelisted types (<a class="reference external" href="https://github.com/OCA/connector/pull/170">https://github.com/OCA/connector/pull/170</a>)</li>
 <li>Fix: Manage non-ascii Postgres errors (<a class="reference external" href="https://github.com/OCA/connector/pull/167">https://github.com/OCA/connector/pull/167</a>)</li>
 <li>Fix: ignore dbfilter containing %d or %h (<a class="reference external" href="https://github.com/OCA/connector/pull/166">https://github.com/OCA/connector/pull/166</a>)</li>
-<li>Fix: correctly obtain the list of database with odoo is started with &#8211;no-database-list (<a class="reference external" href="https://github.com/OCA/connector/pull/164">https://github.com/OCA/connector/pull/164</a>)</li>
-<li>Fix: Set job back to &#8216;pending&#8217; in case of exception (<a class="reference external" href="https://github.com/OCA/connector/pull/150">https://github.com/OCA/connector/pull/150</a>, <a class="reference external" href="https://github.com/OCA/connector/pull/151">https://github.com/OCA/connector/pull/151</a>, <a class="reference external" href="https://github.com/OCA/connector/pull/152">https://github.com/OCA/connector/pull/152</a>, <a class="reference external" href="https://github.com/OCA/connector/pull/155">https://github.com/OCA/connector/pull/155</a>)</li>
+<li>Fix: correctly obtain the list of database with odoo is started with –no-database-list (<a class="reference external" href="https://github.com/OCA/connector/pull/164">https://github.com/OCA/connector/pull/164</a>)</li>
+<li>Fix: Set job back to ‘pending’ in case of exception (<a class="reference external" href="https://github.com/OCA/connector/pull/150">https://github.com/OCA/connector/pull/150</a>, <a class="reference external" href="https://github.com/OCA/connector/pull/151">https://github.com/OCA/connector/pull/151</a>, <a class="reference external" href="https://github.com/OCA/connector/pull/152">https://github.com/OCA/connector/pull/152</a>, <a class="reference external" href="https://github.com/OCA/connector/pull/155">https://github.com/OCA/connector/pull/155</a>)</li>
 <li>Fix: Clear environment caches and recomputations upon failures (<a class="reference external" href="https://github.com/OCA/connector/pull/131">https://github.com/OCA/connector/pull/131</a>)</li>
 <li>Fix: when a job fails, inactive users are no longer added to its followers (<a class="reference external" href="https://github.com/OCA/connector/pull/137">https://github.com/OCA/connector/pull/137</a>)</li>
 <li>Fix: Set job to failed after non-retryable OperationalError (<a class="reference external" href="https://github.com/OCA/connector/pull/132">https://github.com/OCA/connector/pull/132</a>)</li>
-<li>Fix: wrong model in connector_base_product&#8217;s views (<a class="reference external" href="https://github.com/OCA/connector/pull/119">https://github.com/OCA/connector/pull/119</a>)</li>
+<li>Fix: wrong model in connector_base_product’s views (<a class="reference external" href="https://github.com/OCA/connector/pull/119">https://github.com/OCA/connector/pull/119</a>)</li>
 <li>Various documentation improvements</li>
 </ul>
 </div>
 <div class="section" id="id3">
 <h2>3.2.0 (2015-09-10)<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li>method &#8216;install_in_connector&#8217; is now deprecated (<a class="reference external" href="https://github.com/OCA/connector/pull/74">https://github.com/OCA/connector/pull/74</a>)</li>
+<li>method ‘install_in_connector’ is now deprecated (<a class="reference external" href="https://github.com/OCA/connector/pull/74">https://github.com/OCA/connector/pull/74</a>)</li>
 <li>Add a retry pattern for jobs (<a class="reference external" href="https://github.com/OCA/connector/pull/75">https://github.com/OCA/connector/pull/75</a>, <a class="reference external" href="https://github.com/OCA/connector/pull/92">https://github.com/OCA/connector/pull/92</a>)</li>
 <li>Use custom connector environments and instantiate them with needed attributes (<a class="reference external" href="https://github.com/OCA/connector/pull/108">https://github.com/OCA/connector/pull/108</a>)</li>
 <li>A new default implementation for the binder (<a class="reference external" href="https://github.com/OCA/connector/pull/76">https://github.com/OCA/connector/pull/76</a>)</li>
 <li>Translations are now automatically synchronized from Transifex</li>
 <li>Mapper: add modifier to follow m2o relations with dot notation (<a class="reference external" href="https://github.com/OCA/connector/pull/94">https://github.com/OCA/connector/pull/94</a>)</li>
-<li>Mapper: add &#8216;changed_by_fields&#8217; which indicates which source fields will output data (<a class="reference external" href="https://github.com/OCA/connector/pull/73">https://github.com/OCA/connector/pull/73</a>)</li>
+<li>Mapper: add ‘changed_by_fields’ which indicates which source fields will output data (<a class="reference external" href="https://github.com/OCA/connector/pull/73">https://github.com/OCA/connector/pull/73</a>)</li>
 <li>Allow to assign a default channel on &#64;job functions (<a class="reference external" href="https://github.com/OCA/connector/pull/71">https://github.com/OCA/connector/pull/71</a>)</li>
 <li>Fix: connector-runner: manages retryable errors (<a class="reference external" href="https://github.com/OCA/connector/pull/87">https://github.com/OCA/connector/pull/87</a>)</li>
 <li>Fix: connector-runner: logging error when a capacity is None (<a class="reference external" href="https://github.com/OCA/connector/pull/98">https://github.com/OCA/connector/pull/98</a>)</li>
@@ -406,17 +403,17 @@ restrained by the accesses of the user. (lp:1276182)</li>
 <div class="section" id="warning-breaks-compatibility">
 <h2>2.1.0 (2014-01-15 - warning: breaks compatibility)<a class="headerlink" href="#warning-breaks-compatibility" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li>Add a new optional keyword argument &#8216;description&#8217; to the delay() function of a
+<li>Add a new optional keyword argument ‘description’ to the delay() function of a
 job.  If given, the description is used as name of the queue.job record stored
 in OpenERP and displayed in the list of jobs.</li>
 <li>Fix: assignment of jobs to workers respect the priority of the jobs (lp:1252681)</li>
-<li>Pass a new parameter to listeners of &#8216;on_record_create&#8217; ( vals:  field values
-of the new record, e.g {&#8216;field_name&#8217;: field_value, ...})</li>
-<li>Replace the list of updated fields passed to listeners of &#8216;on_record_write&#8217;
-by a dictionary of updated field values e.g {&#8216;field_name&#8217;: field_value, ...}</li>
-<li>Add the possibility to use &#8216;Modifiers&#8217; functions in the &#8216;direct
-mappings&#8217; (details in the documentation of the Mapper class)</li>
-<li>When a job a delayed, the job&#8217;s UUID is returned by the delay() function</li>
+<li>Pass a new parameter to listeners of ‘on_record_create’ ( vals:  field values
+of the new record, e.g {‘field_name’: field_value, …})</li>
+<li>Replace the list of updated fields passed to listeners of ‘on_record_write’
+by a dictionary of updated field values e.g {‘field_name’: field_value, …}</li>
+<li>Add the possibility to use ‘Modifiers’ functions in the ‘direct
+mappings’ (details in the documentation of the Mapper class)</li>
+<li>When a job a delayed, the job’s UUID is returned by the delay() function</li>
 <li>Refactoring of mappers. Much details here:
 <a class="reference external" href="https://code.launchpad.net/~openerp-connector-core-editors/openerp-connector/7.0-connector-mapper-refactor/+merge/194485">https://code.launchpad.net/~openerp-connector-core-editors/openerp-connector/7.0-connector-mapper-refactor/+merge/194485</a></li>
 </ul>
@@ -424,7 +421,7 @@ mappings&#8217; (details in the documentation of the Mapper class)</li>
 <div class="section" id="id8">
 <h2>2.0.1 (2013-09-12)<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li>Developers of addons do no longer need to create an AbstractModel with a _name &#8216;name_of_the_module.installed&#8217;,
+<li>Developers of addons do no longer need to create an AbstractModel with a _name ‘name_of_the_module.installed’,
 instead, they just have to call connector.connector.install_in_connector() lp:1196859</li>
 <li>Added a script <cite>openerp-connector-worker</cite> to start processes for Jobs Workers when running OpenERP is multiprocessing</li>
 <li>Fix: inheritance broken when an orm.Model inherit from an orm.AbstractModel. One effect was that the mail.thread features were no longer working (lp:1233355)</li>
@@ -459,7 +456,7 @@ instead, they just have to call connector.connector.install_in_connector() lp:11
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.5.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.1.<br/>
     </p>
   </div>
 </footer>

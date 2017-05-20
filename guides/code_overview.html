@@ -1,16 +1,13 @@
 <!DOCTYPE html>
 
-
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
     <title>Code Overview &#8212; Connector  documentation</title>
     
-    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/bootswatch-3.3.6/united/bootstrap.min.css" type="text/css" />
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
@@ -50,7 +47,7 @@
 </script>
 
   </head>
-  <body role="document">
+  <body>
 
   <div id="navbar" class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -254,8 +251,8 @@
   <div class="section" id="code-overview">
 <span id="id1"></span><h1>Code Overview<a class="headerlink" href="#code-overview" title="Permalink to this headline">¶</a></h1>
 <p>Here is an overview of some of the concepts in the framework.</p>
-<p>As an example, we&#8217;ll see the steps for exporting an invoice to Magento.
-The steps won&#8217;t show all the steps, but a simplified excerpt of a real
+<p>As an example, we’ll see the steps for exporting an invoice to Magento.
+The steps won’t show all the steps, but a simplified excerpt of a real
 use case exposing the main ideas.</p>
 <div class="section" id="backends">
 <h2>Backends<a class="headerlink" href="#backends" title="Permalink to this headline">¶</a></h2>
@@ -303,7 +300,7 @@ the usual <code class="docutils literal"><span class="pre">self.env</span></code
 </div>
 <div class="section" id="events">
 <h2>Events<a class="headerlink" href="#events" title="Permalink to this headline">¶</a></h2>
-<p>We can create <a class="reference internal" href="../api/api_event.html#connector.event.Event" title="connector.event.Event"><code class="xref py py-class docutils literal"><span class="pre">Event</span></code></a> on which we&#8217;ll be able
+<p>We can create <a class="reference internal" href="../api/api_event.html#connector.event.Event" title="connector.event.Event"><code class="xref py py-class docutils literal"><span class="pre">Event</span></code></a> on which we’ll be able
 to subscribe consumers.  The connector already integrates the most
 generic ones:
 <a class="reference internal" href="../api/api_event.html#connector.event.on_record_create" title="connector.event.on_record_create"><code class="xref py py-meth docutils literal"><span class="pre">on_record_create()</span></code></a>,
@@ -320,7 +317,7 @@ job to export it to Magento, so we subscribe a new consumer on
     <span class="n">export_invoice</span><span class="o">.</span><span class="n">delay</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">record_id</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>On the last line, you can notice an <code class="docutils literal"><span class="pre">export_invoice.delay</span></code>. We&#8217;ll
+<p>On the last line, you can notice an <code class="docutils literal"><span class="pre">export_invoice.delay</span></code>. We’ll
 discuss about that in <a class="reference internal" href="#jobs">Jobs</a></p>
 </div>
 <div class="section" id="jobs">
@@ -342,7 +339,7 @@ and will be run as soon as possible:</p>
 </div>
 <p>There is a few things happening there:</p>
 <ul class="simple">
-<li>We find the backend on which we&#8217;ll export the invoice.</li>
+<li>We find the backend on which we’ll export the invoice.</li>
 <li>We build an <code class="xref py py-class docutils literal"><span class="pre">Environment</span></code> with the
 current <a class="reference internal" href="../api/api_session.html#connector.session.ConnectorSession" title="connector.session.ConnectorSession"><code class="xref py py-class docutils literal"><span class="pre">ConnectorSession</span></code></a>,
 the model we work with and the target backend.</li>
@@ -435,7 +432,7 @@ specific ones).</div></blockquote>
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.5.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.1.<br/>
     </p>
   </div>
 </footer>

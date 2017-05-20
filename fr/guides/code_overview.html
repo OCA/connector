@@ -1,16 +1,13 @@
 <!DOCTYPE html>
 
-
 <html xmlns="http://www.w3.org/1999/xhtml" lang="fr">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
     <title>Survol du code &#8212; documentation Connector </title>
     
-    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/bootswatch-3.3.6/united/bootstrap.min.css" type="text/css" />
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
@@ -51,7 +48,7 @@
 </script>
 
   </head>
-  <body role="document">
+  <body>
 
   <div id="navbar" class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -255,7 +252,7 @@
   <div class="section" id="code-overview">
 <span id="id1"></span><h1>Survol du code<a class="headerlink" href="#code-overview" title="Lien permanent vers ce titre">¶</a></h1>
 <p>Voici un survol de certains concepts du framework.</p>
-<p>Comme exemple, nous allons voir les étapes pour exporter une facture vers Magento. Ce n&#8217;est pas un exemple complet mais un aperçu d&#8217;un cas réel pour exposer les idée principales.</p>
+<p>Comme exemple, nous allons voir les étapes pour exporter une facture vers Magento. Ce n’est pas un exemple complet mais un aperçu d’un cas réel pour exposer les idée principales.</p>
 <div class="section" id="backends">
 <h2>Backends<a class="headerlink" href="#backends" title="Lien permanent vers ce titre">¶</a></h2>
 <p>Tout commence par une déclaration du <a class="reference internal" href="../api/api_backend.html#connector.backend.Backend" title="connector.backend.Backend"><code class="xref py py-class docutils literal"><span class="pre">Backend</span></code></a>:</p>
@@ -272,7 +269,7 @@
 </div>
 <div class="section" id="bindings">
 <h2>Bindings (Liaisons)<a class="headerlink" href="#bindings" title="Lien permanent vers ce titre">¶</a></h2>
-<p>Un <code class="docutils literal"><span class="pre">binding</span></code> est ce qui permet de lier un enregistrement Odoo et un enregistrement externe. Il n&#8217;y a pas d&#8217;obligation pour l&#8217;implémentation des <code class="docutils literal"><span class="pre">liaisons</span></code>. Les techniques les plus évidentes sont: stocker les ID externes dans le même modèle (<code class="docutils literal"><span class="pre">account.invoice</span></code>), dans un modèle de liaison ou dans un modèle de laison qui <code class="docutils literal"><span class="pre">_inherits</span></code> <code class="docutils literal"><span class="pre">account.invoice</span></code>. Ici nous choisissons la dernière solution</p>
+<p>Un <code class="docutils literal"><span class="pre">binding</span></code> est ce qui permet de lier un enregistrement Odoo et un enregistrement externe. Il n’y a pas d’obligation pour l’implémentation des <code class="docutils literal"><span class="pre">liaisons</span></code>. Les techniques les plus évidentes sont: stocker les ID externes dans le même modèle (<code class="docutils literal"><span class="pre">account.invoice</span></code>), dans un modèle de liaison ou dans un modèle de laison qui <code class="docutils literal"><span class="pre">_inherits</span></code> <code class="docutils literal"><span class="pre">account.invoice</span></code>. Ici nous choisissons la dernière solution</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">MagentoAccountInvoice</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
     <span class="n">_name</span> <span class="o">=</span> <span class="s1">&#39;magento.account.invoice&#39;</span>
     <span class="n">_inherits</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;account.invoice&#39;</span><span class="p">:</span> <span class="s1">&#39;openerp_id&#39;</span><span class="p">}</span>
@@ -293,8 +290,8 @@
 </div>
 <div class="section" id="events">
 <h2>Événements<a class="headerlink" href="#events" title="Lien permanent vers ce titre">¶</a></h2>
-<p>Nous pouvons créer un <a class="reference internal" href="../api/api_event.html#connector.event.Event" title="connector.event.Event"><code class="xref py py-class docutils literal"><span class="pre">Event</span></code></a> sur lequel nous pouvons abonner des consommateurs. Le connecteur fournit d&#8217;origine les plus génériques: <a class="reference internal" href="../api/api_event.html#connector.event.on_record_create" title="connector.event.on_record_create"><code class="xref py py-meth docutils literal"><span class="pre">on_record_create()</span></code></a>, <a class="reference internal" href="../api/api_event.html#connector.event.on_record_write" title="connector.event.on_record_write"><code class="xref py py-meth docutils literal"><span class="pre">on_record_write()</span></code></a>, <a class="reference internal" href="../api/api_event.html#connector.event.on_record_unlink" title="connector.event.on_record_unlink"><code class="xref py py-meth docutils literal"><span class="pre">on_record_unlink()</span></code></a></p>
-<p>À la création d&#8217;un enregistrement <code class="docutils literal"><span class="pre">magento.account.invoice</span></code>, nous voulons lancer un job déporté pour l&#8217;exporter vers Magento, donc nous abonnons un nouveau consommateur à l&#8217;événement <a class="reference internal" href="../api/api_event.html#connector.event.on_record_create" title="connector.event.on_record_create"><code class="xref py py-meth docutils literal"><span class="pre">on_record_create()</span></code></a>:</p>
+<p>Nous pouvons créer un <a class="reference internal" href="../api/api_event.html#connector.event.Event" title="connector.event.Event"><code class="xref py py-class docutils literal"><span class="pre">Event</span></code></a> sur lequel nous pouvons abonner des consommateurs. Le connecteur fournit d’origine les plus génériques: <a class="reference internal" href="../api/api_event.html#connector.event.on_record_create" title="connector.event.on_record_create"><code class="xref py py-meth docutils literal"><span class="pre">on_record_create()</span></code></a>, <a class="reference internal" href="../api/api_event.html#connector.event.on_record_write" title="connector.event.on_record_write"><code class="xref py py-meth docutils literal"><span class="pre">on_record_write()</span></code></a>, <a class="reference internal" href="../api/api_event.html#connector.event.on_record_unlink" title="connector.event.on_record_unlink"><code class="xref py py-meth docutils literal"><span class="pre">on_record_unlink()</span></code></a></p>
+<p>À la création d’un enregistrement <code class="docutils literal"><span class="pre">magento.account.invoice</span></code>, nous voulons lancer un job déporté pour l’exporter vers Magento, donc nous abonnons un nouveau consommateur à l’événement <a class="reference internal" href="../api/api_event.html#connector.event.on_record_create" title="connector.event.on_record_create"><code class="xref py py-meth docutils literal"><span class="pre">on_record_create()</span></code></a>:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="nd">@on_record_create</span><span class="p">(</span><span class="n">model_names</span><span class="o">=</span><span class="s1">&#39;magento.account.invoice&#39;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">delay_export_account_invoice</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">record_id</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -308,7 +305,7 @@
 <div class="section" id="jobs">
 <h2>Jobs<a class="headerlink" href="#jobs" title="Lien permanent vers ce titre">¶</a></h2>
 <p>Un <a class="reference internal" href="../api/api_queue.html#connector.queue.job.Job" title="connector.queue.job.Job"><code class="xref py py-class docutils literal"><span class="pre">Job</span></code></a> est une tâche à exécuter plus tard. Dans le cas présent: créer une facture dans Magento.</p>
-<p>N&#8217;importe quelle fonction décorée avec <a class="reference internal" href="../api/api_queue.html#connector.queue.job.job" title="connector.queue.job.job"><code class="xref py py-meth docutils literal"><span class="pre">job()</span></code></a> peut être envoyée dans la queue de jobs en utilisant la fonction <code class="docutils literal"><span class="pre">delay()</span></code> et sera lancée aussi tôt que possible</p>
+<p>N’importe quelle fonction décorée avec <a class="reference internal" href="../api/api_queue.html#connector.queue.job.job" title="connector.queue.job.job"><code class="xref py py-meth docutils literal"><span class="pre">job()</span></code></a> peut être envoyée dans la queue de jobs en utilisant la fonction <code class="docutils literal"><span class="pre">delay()</span></code> et sera lancée aussi tôt que possible</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="nd">@job</span>
 <span class="k">def</span> <span class="nf">export_invoice</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">record_id</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Export a validated or paid invoice. &quot;&quot;&quot;</span>
@@ -321,34 +318,28 @@
 </div>
 <p>Voici les choses qui se passent à ce moment :</p>
 <ul class="simple">
-<li><p class="first">Nous trouvons le backend vers lequel exporter la facture.</p>
-</li>
-<li><p class="first">Nous construisons un <code class="xref py py-class docutils literal"><span class="pre">Environment</span></code> avec la <a class="reference internal" href="../api/api_session.html#connector.session.ConnectorSession" title="connector.session.ConnectorSession"><code class="xref py py-class docutils literal"><span class="pre">ConnectorSession</span></code></a> actuelle, le modèle avec lequel on travaille et le backend cible.</p>
-</li>
-<li><p class="first">Nous récupérons la <a class="reference internal" href="../api/api_connector.html#connector.connector.ConnectorUnit" title="connector.connector.ConnectorUnit"><code class="xref py py-class docutils literal"><span class="pre">ConnectorUnit</span></code></a> responsable du travail grâce à <code class="xref py py-meth docutils literal"><span class="pre">get_connector_unit()</span></code> (en fonction de la version du backend et du modèle) et nous appelons sa méthode <code class="docutils literal"><span class="pre">run()</span></code>.</p>
-</li>
+<li>Nous trouvons le backend vers lequel exporter la facture.</li>
+<li>Nous construisons un <code class="xref py py-class docutils literal"><span class="pre">Environment</span></code> avec la <a class="reference internal" href="../api/api_session.html#connector.session.ConnectorSession" title="connector.session.ConnectorSession"><code class="xref py py-class docutils literal"><span class="pre">ConnectorSession</span></code></a> actuelle, le modèle avec lequel on travaille et le backend cible.</li>
+<li>Nous récupérons la <a class="reference internal" href="../api/api_connector.html#connector.connector.ConnectorUnit" title="connector.connector.ConnectorUnit"><code class="xref py py-class docutils literal"><span class="pre">ConnectorUnit</span></code></a> responsable du travail grâce à <code class="xref py py-meth docutils literal"><span class="pre">get_connector_unit()</span></code> (en fonction de la version du backend et du modèle) et nous appelons sa méthode <code class="docutils literal"><span class="pre">run()</span></code>.</li>
 </ul>
 </div>
 <div class="section" id="connectorunit">
 <h2>ConnectorUnit<a class="headerlink" href="#connectorunit" title="Lien permanent vers ce titre">¶</a></h2>
-<p>Voici toutes les classes qui sont responsables d&#8217;un travail particulier. Les principaux types de <a class="reference internal" href="../api/api_connector.html#connector.connector.ConnectorUnit" title="connector.connector.ConnectorUnit"><code class="xref py py-class docutils literal"><span class="pre">ConnectorUnit</span></code></a> sont (l&#8217;implémentation de ces classes fait partie des connecteurs):</p>
+<p>Voici toutes les classes qui sont responsables d’un travail particulier. Les principaux types de <a class="reference internal" href="../api/api_connector.html#connector.connector.ConnectorUnit" title="connector.connector.ConnectorUnit"><code class="xref py py-class docutils literal"><span class="pre">ConnectorUnit</span></code></a> sont (l’implémentation de ces classes fait partie des connecteurs):</p>
 <p><a class="reference internal" href="../api/api_connector.html#connector.connector.Binder" title="connector.connector.Binder"><code class="xref py py-class docutils literal"><span class="pre">Binder</span></code></a></p>
 <blockquote>
 <div>The <code class="docutils literal"><span class="pre">binders</span></code> give the external ID or Odoo ID from respectively an
 Odoo ID or an external ID. A default implementation is available.</div></blockquote>
 <p><a class="reference internal" href="../api/api_mapper.html#connector.unit.mapper.Mapper" title="connector.unit.mapper.Mapper"><code class="xref py py-class docutils literal"><span class="pre">Mapper</span></code></a></p>
 <blockquote>
-<div><p>Les <code class="docutils literal"><span class="pre">mappeurs</span></code> transforment un enregistrement externe en enregistrement Odoo ou l&#8217;inverse.</p>
-</div></blockquote>
+<div>Les <code class="docutils literal"><span class="pre">mappeurs</span></code> transforment un enregistrement externe en enregistrement Odoo ou l’inverse.</div></blockquote>
 <p><a class="reference internal" href="../api/api_backend_adapter.html#connector.unit.backend_adapter.BackendAdapter" title="connector.unit.backend_adapter.BackendAdapter"><code class="xref py py-class docutils literal"><span class="pre">BackendAdapter</span></code></a></p>
 <blockquote>
-<div><p>Les <code class="docutils literal"><span class="pre">adaptateurs</span></code> implémentent le dialogue avec les API du <code class="docutils literal"><span class="pre">backend</span></code>. Elles adaptent habituellement leurs APIs à une interface commune (CRUD).</p>
-</div></blockquote>
+<div>Les <code class="docutils literal"><span class="pre">adaptateurs</span></code> implémentent le dialogue avec les API du <code class="docutils literal"><span class="pre">backend</span></code>. Elles adaptent habituellement leurs APIs à une interface commune (CRUD).</div></blockquote>
 <p><a class="reference internal" href="../api/api_synchronizer.html#connector.unit.synchronizer.Synchronizer" title="connector.unit.synchronizer.Synchronizer"><code class="xref py py-class docutils literal"><span class="pre">Synchronizer</span></code></a></p>
 <blockquote>
-<div><p>Les <code class="docutils literal"><span class="pre">synchroniseurs</span></code> sont la partie principale d&#8217;une synchronisation. Ils définissent le flux de synchronisation et utilisent les <a class="reference internal" href="../api/api_connector.html#connector.connector.ConnectorUnit" title="connector.connector.ConnectorUnit"><code class="xref py py-class docutils literal"><span class="pre">ConnectorUnit</span></code></a> (ceux ci-dessus ou des spécifiques).</p>
-</div></blockquote>
-<p>Pour l&#8217;export de la facture, nous avons juste besoin d&#8217;un <code class="docutils literal"><span class="pre">adaptateur</span></code> et d&#8217;un <code class="docutils literal"><span class="pre">synchroniseur</span></code> (l&#8217;implémentation réelle est plus complexe):</p>
+<div>Les <code class="docutils literal"><span class="pre">synchroniseurs</span></code> sont la partie principale d’une synchronisation. Ils définissent le flux de synchronisation et utilisent les <a class="reference internal" href="../api/api_connector.html#connector.connector.ConnectorUnit" title="connector.connector.ConnectorUnit"><code class="xref py py-class docutils literal"><span class="pre">ConnectorUnit</span></code></a> (ceux ci-dessus ou des spécifiques).</div></blockquote>
+<p>Pour l’export de la facture, nous avons juste besoin d’un <code class="docutils literal"><span class="pre">adaptateur</span></code> et d’un <code class="docutils literal"><span class="pre">synchroniseur</span></code> (l’implémentation réelle est plus complexe):</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="nd">@magento</span>
 <span class="k">class</span> <span class="nc">AccountInvoiceAdapter</span><span class="p">(</span><span class="n">GenericAdapter</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Backend Adapter for the Magento Invoice &quot;&quot;&quot;</span>
@@ -406,7 +397,7 @@ Odoo ID or an external ID. A default implementation is available.</div></blockqu
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.5.<br/>
+      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.1.<br/>
     </p>
   </div>
 </footer>

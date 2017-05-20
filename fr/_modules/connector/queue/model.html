@@ -1,16 +1,13 @@
 <!DOCTYPE html>
 
-
 <html xmlns="http://www.w3.org/1999/xhtml" lang="fr">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
     <title>connector.queue.model &#8212; documentation Connector </title>
     
-    <link rel="stylesheet" href="../../../_static/basic.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/bootswatch-3.3.6/united/bootstrap.min.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
@@ -49,7 +46,7 @@
 </script>
 
   </head>
-  <body role="document">
+  <body>
 
   <div id="navbar" class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -337,8 +334,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">job_function_id</span> <span class="o">=</span> <span class="n">function</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">channel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">job_function_id</span><span class="o">.</span><span class="n">channel</span>
 
-    <span class="nd">@api</span><span class="o">.</span><span class="n">multi</span>
-<div class="viewcode-block" id="QueueJob.open_related_action"><a class="viewcode-back" href="../../../api/api_queue.html#connector.queue.model.QueueJob.open_related_action">[docs]</a>    <span class="k">def</span> <span class="nf">open_related_action</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="QueueJob.open_related_action"><a class="viewcode-back" href="../../../api/api_queue.html#connector.queue.model.QueueJob.open_related_action">[docs]</a>    <span class="nd">@api</span><span class="o">.</span><span class="n">multi</span>
+    <span class="k">def</span> <span class="nf">open_related_action</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Open the related action associated to the job &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ensure_one</span><span class="p">()</span>
         <span class="n">session</span> <span class="o">=</span> <span class="n">ConnectorSession</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">cr</span><span class="p">,</span>
@@ -370,19 +367,19 @@
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;State not supported: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">state</span><span class="p">)</span>
             <span class="n">storage</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="n">job</span><span class="p">)</span>
 
-    <span class="nd">@api</span><span class="o">.</span><span class="n">multi</span>
-<div class="viewcode-block" id="QueueJob.button_done"><a class="viewcode-back" href="../../../api/api_queue.html#connector.queue.model.QueueJob.button_done">[docs]</a>    <span class="k">def</span> <span class="nf">button_done</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="QueueJob.button_done"><a class="viewcode-back" href="../../../api/api_queue.html#connector.queue.model.QueueJob.button_done">[docs]</a>    <span class="nd">@api</span><span class="o">.</span><span class="n">multi</span>
+    <span class="k">def</span> <span class="nf">button_done</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">result</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span><span class="s1">&#39;Manually set to done by </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">)</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">name</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_change_job_state</span><span class="p">(</span><span class="n">DONE</span><span class="p">,</span> <span class="n">result</span><span class="o">=</span><span class="n">result</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">True</span></div>
 
-    <span class="nd">@api</span><span class="o">.</span><span class="n">multi</span>
-<div class="viewcode-block" id="QueueJob.requeue"><a class="viewcode-back" href="../../../api/api_queue.html#connector.queue.model.QueueJob.requeue">[docs]</a>    <span class="k">def</span> <span class="nf">requeue</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="QueueJob.requeue"><a class="viewcode-back" href="../../../api/api_queue.html#connector.queue.model.QueueJob.requeue">[docs]</a>    <span class="nd">@api</span><span class="o">.</span><span class="n">multi</span>
+    <span class="k">def</span> <span class="nf">requeue</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_change_job_state</span><span class="p">(</span><span class="n">PENDING</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">True</span></div>
 
-    <span class="nd">@api</span><span class="o">.</span><span class="n">multi</span>
-<div class="viewcode-block" id="QueueJob.write"><a class="viewcode-back" href="../../../api/api_queue.html#connector.queue.model.QueueJob.write">[docs]</a>    <span class="k">def</span> <span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vals</span><span class="p">):</span>
+<div class="viewcode-block" id="QueueJob.write"><a class="viewcode-back" href="../../../api/api_queue.html#connector.queue.model.QueueJob.write">[docs]</a>    <span class="nd">@api</span><span class="o">.</span><span class="n">multi</span>
+    <span class="k">def</span> <span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vals</span><span class="p">):</span>
         <span class="n">res</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">QueueJob</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">vals</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">vals</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;state&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;failed&#39;</span><span class="p">:</span>
             <span class="c1"># subscribe the users now to avoid to subscribe them</span>
@@ -433,8 +430,8 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="p">[(</span><span class="s1">&#39;state&#39;</span><span class="p">,</span> <span class="s1">&#39;=&#39;</span><span class="p">,</span> <span class="s1">&#39;failed&#39;</span><span class="p">)]</span>
 
-    <span class="nd">@api</span><span class="o">.</span><span class="n">model</span>
-<div class="viewcode-block" id="QueueJob.autovacuum"><a class="viewcode-back" href="../../../api/api_queue.html#connector.queue.model.QueueJob.autovacuum">[docs]</a>    <span class="k">def</span> <span class="nf">autovacuum</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="QueueJob.autovacuum"><a class="viewcode-back" href="../../../api/api_queue.html#connector.queue.model.QueueJob.autovacuum">[docs]</a>    <span class="nd">@api</span><span class="o">.</span><span class="n">model</span>
+    <span class="k">def</span> <span class="nf">autovacuum</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Delete all jobs (active or not) done since more than</span>
 <span class="sd">        ``_removal_interval`` days.</span>
 
@@ -506,8 +503,8 @@
                                    <span class="s2">&quot;of 1&quot;</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="n">workers</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">workers</span>
 
-    <span class="nd">@api</span><span class="o">.</span><span class="n">model</span>
-<div class="viewcode-block" id="QueueWorker.assign_then_enqueue"><a class="viewcode-back" href="../../../api/api_queue.html#connector.queue.model.QueueWorker.assign_then_enqueue">[docs]</a>    <span class="k">def</span> <span class="nf">assign_then_enqueue</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">max_jobs</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="QueueWorker.assign_then_enqueue"><a class="viewcode-back" href="../../../api/api_queue.html#connector.queue.model.QueueWorker.assign_then_enqueue">[docs]</a>    <span class="nd">@api</span><span class="o">.</span><span class="n">model</span>
+    <span class="k">def</span> <span class="nf">assign_then_enqueue</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">max_jobs</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Assign all the jobs not already assigned to a worker.</span>
 <span class="sd">        Then enqueue all the jobs having a worker but not enqueued.</span>
 
@@ -527,8 +524,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">cr</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
         <span class="k">return</span> <span class="kc">True</span></div>
 
-    <span class="nd">@api</span><span class="o">.</span><span class="n">model</span>
-<div class="viewcode-block" id="QueueWorker.assign_jobs"><a class="viewcode-back" href="../../../api/api_queue.html#connector.queue.model.QueueWorker.assign_jobs">[docs]</a>    <span class="k">def</span> <span class="nf">assign_jobs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">max_jobs</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="QueueWorker.assign_jobs"><a class="viewcode-back" href="../../../api/api_queue.html#connector.queue.model.QueueWorker.assign_jobs">[docs]</a>    <span class="nd">@api</span><span class="o">.</span><span class="n">model</span>
+    <span class="k">def</span> <span class="nf">assign_jobs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">max_jobs</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Assign ``n`` jobs to the worker of the current process</span>
 
 <span class="sd">        ``n`` is ``max_jobs`` or unlimited if ``max_jobs`` is None</span>
@@ -543,8 +540,8 @@
             <span class="n">_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;No worker started for process </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">getpid</span><span class="p">())</span>
         <span class="k">return</span> <span class="kc">True</span></div>
 
-    <span class="nd">@api</span><span class="o">.</span><span class="n">model</span>
-<div class="viewcode-block" id="QueueWorker.enqueue_jobs"><a class="viewcode-back" href="../../../api/api_queue.html#connector.queue.model.QueueWorker.enqueue_jobs">[docs]</a>    <span class="k">def</span> <span class="nf">enqueue_jobs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="QueueWorker.enqueue_jobs"><a class="viewcode-back" href="../../../api/api_queue.html#connector.queue.model.QueueWorker.enqueue_jobs">[docs]</a>    <span class="nd">@api</span><span class="o">.</span><span class="n">model</span>
+    <span class="k">def</span> <span class="nf">enqueue_jobs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Enqueue all the jobs assigned to the worker of the current</span>
 <span class="sd">        process</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -640,8 +637,8 @@
                                <span class="n">string</span><span class="o">=</span><span class="s1">&#39;Jobs&#39;</span><span class="p">,</span>
                                <span class="n">default</span><span class="o">=</span><span class="n">_default_job_ids</span><span class="p">)</span>
 
-    <span class="nd">@api</span><span class="o">.</span><span class="n">multi</span>
-<div class="viewcode-block" id="RequeueJob.requeue"><a class="viewcode-back" href="../../../api/api_queue.html#connector.queue.model.RequeueJob.requeue">[docs]</a>    <span class="k">def</span> <span class="nf">requeue</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="RequeueJob.requeue"><a class="viewcode-back" href="../../../api/api_queue.html#connector.queue.model.RequeueJob.requeue">[docs]</a>    <span class="nd">@api</span><span class="o">.</span><span class="n">multi</span>
+    <span class="k">def</span> <span class="nf">requeue</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">jobs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">job_ids</span>
         <span class="n">jobs</span><span class="o">.</span><span class="n">requeue</span><span class="p">()</span>
         <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;ir.actions.act_window_close&#39;</span><span class="p">}</span></div></div>
@@ -681,14 +678,14 @@
             <span class="n">parts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">channel</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">complete_name</span> <span class="o">=</span> <span class="s1">&#39;.&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">reversed</span><span class="p">(</span><span class="n">parts</span><span class="p">))</span>
 
-    <span class="nd">@api</span><span class="o">.</span><span class="n">one</span>
+<div class="viewcode-block" id="JobChannel.parent_required"><a class="viewcode-back" href="../../../api/api_queue.html#connector.queue.model.JobChannel.parent_required">[docs]</a>    <span class="nd">@api</span><span class="o">.</span><span class="n">one</span>
     <span class="nd">@api</span><span class="o">.</span><span class="n">constrains</span><span class="p">(</span><span class="s1">&#39;parent_id&#39;</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span><span class="p">)</span>
-<div class="viewcode-block" id="JobChannel.parent_required"><a class="viewcode-back" href="../../../api/api_queue.html#connector.queue.model.JobChannel.parent_required">[docs]</a>    <span class="k">def</span> <span class="nf">parent_required</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">parent_required</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">!=</span> <span class="s1">&#39;root&#39;</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent_id</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">ValidationError</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;Parent channel required.&#39;</span><span class="p">))</span></div>
 
-    <span class="nd">@api</span><span class="o">.</span><span class="n">multi</span>
-<div class="viewcode-block" id="JobChannel.write"><a class="viewcode-back" href="../../../api/api_queue.html#connector.queue.model.JobChannel.write">[docs]</a>    <span class="k">def</span> <span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">values</span><span class="p">):</span>
+<div class="viewcode-block" id="JobChannel.write"><a class="viewcode-back" href="../../../api/api_queue.html#connector.queue.model.JobChannel.write">[docs]</a>    <span class="nd">@api</span><span class="o">.</span><span class="n">multi</span>
+    <span class="k">def</span> <span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">values</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">channel</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
             <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;install_mode&#39;</span><span class="p">)</span> <span class="ow">and</span>
                     <span class="n">channel</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;root&#39;</span> <span class="ow">and</span>
@@ -696,15 +693,15 @@
                 <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">Warning</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;Cannot change the root channel&#39;</span><span class="p">))</span>
         <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">JobChannel</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">values</span><span class="p">)</span></div>
 
-    <span class="nd">@api</span><span class="o">.</span><span class="n">multi</span>
-<div class="viewcode-block" id="JobChannel.unlink"><a class="viewcode-back" href="../../../api/api_queue.html#connector.queue.model.JobChannel.unlink">[docs]</a>    <span class="k">def</span> <span class="nf">unlink</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="JobChannel.unlink"><a class="viewcode-back" href="../../../api/api_queue.html#connector.queue.model.JobChannel.unlink">[docs]</a>    <span class="nd">@api</span><span class="o">.</span><span class="n">multi</span>
+    <span class="k">def</span> <span class="nf">unlink</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">channel</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">channel</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;root&#39;</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">Warning</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;Cannot remove the root channel&#39;</span><span class="p">))</span>
         <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">JobChannel</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">unlink</span><span class="p">()</span></div>
 
-    <span class="nd">@api</span><span class="o">.</span><span class="n">multi</span>
-<div class="viewcode-block" id="JobChannel.name_get"><a class="viewcode-back" href="../../../api/api_queue.html#connector.queue.model.JobChannel.name_get">[docs]</a>    <span class="k">def</span> <span class="nf">name_get</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="JobChannel.name_get"><a class="viewcode-back" href="../../../api/api_queue.html#connector.queue.model.JobChannel.name_get">[docs]</a>    <span class="nd">@api</span><span class="o">.</span><span class="n">multi</span>
+    <span class="k">def</span> <span class="nf">name_get</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">record</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
             <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">record</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">record</span><span class="o">.</span><span class="n">complete_name</span><span class="p">))</span>
@@ -784,7 +781,7 @@
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.5.<br/>
+      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.1.<br/>
     </p>
   </div>
 </footer>

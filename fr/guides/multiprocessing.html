@@ -1,16 +1,13 @@
 <!DOCTYPE html>
 
-
 <html xmlns="http://www.w3.org/1999/xhtml" lang="fr">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
     <title>Use the connector with multiprocessing workers &#8212; documentation Connector </title>
     
-    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/bootswatch-3.3.6/united/bootstrap.min.css" type="text/css" />
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
@@ -51,7 +48,7 @@
 </script>
 
   </head>
-  <body role="document">
+  <body>
 
   <div id="navbar" class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -256,7 +253,7 @@ work (sic) for you, in which case we will very much appreciate
 a github issue describing the problems you encountered.</p>
 </div>
 <p>Quand Odoo est lancé avec un seul processus, le worker de jobs fonctionne dans un thread.</p>
-<p>Quand Odoo est lancé en multi-processus grâce à l&#8217;option <code class="docutils literal"><span class="pre">--workers</span></code>, les workers de jobs ne sont pas des processus indépendants, mais vous devez les lancer séparément avec le script <code class="docutils literal"><span class="pre">openerp-connector-worker</span></code> situé dans le module <cite>connector</cite>.</p>
+<p>Quand Odoo est lancé en multi-processus grâce à l’option <code class="docutils literal"><span class="pre">--workers</span></code>, les workers de jobs ne sont pas des processus indépendants, mais vous devez les lancer séparément avec le script <code class="docutils literal"><span class="pre">openerp-connector-worker</span></code> situé dans le module <cite>connector</cite>.</p>
 <p>Il prend les mêmes arguments et fichier de configuration que le serveur Odoo.</p>
 <div class="admonition important">
 <p class="first admonition-title">Important</p>
@@ -267,7 +264,7 @@ a github issue describing the problems you encountered.</p>
   --workers=2 --logfile=/path/to/logfile
 </pre></div>
 </div>
-<p>L&#8217;action planifiée &#8216;Enqueue Jobs&#8217; est inutile en mode multi-processus.</p>
+<p>L’action planifiée “Enqueue Jobs” est inutile en mode multi-processus.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">Le script <code class="docutils literal"><span class="pre">openerp-connector-worker</span></code> ne doit pas être lancé avec Odoo quand ce dernier ne fonctionne pas en multi-processus, parce que les signaux inter-processus ne seraient pas transmis.</p>
@@ -298,7 +295,7 @@ a github issue describing the problems you encountered.</p>
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.5.<br/>
+      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.1.<br/>
     </p>
   </div>
 </footer>

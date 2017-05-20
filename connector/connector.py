@@ -423,6 +423,9 @@ class Binder(ConnectorUnit):
             bindings = getattr(bindings, self._openerp_field)
         return bindings
 
+    def to_odoo(self, external_id, unwrap=False):
+        return self.to_openerp(external_id, unwrap)
+
     def to_backend(self, binding_id, wrap=False):
         """ Give the external ID for an OpenERP binding ID
 

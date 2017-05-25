@@ -118,6 +118,8 @@
                         domain="[('state', '=', 'done')]"/>
                     <filter name="failed" string="Failed"
                         domain="[('state', '=', 'failed')]"/>
+                    <filter name="created_last_24h" string="Created Last 24h"
+                            domain="[('date_created','&gt;', (context_today() - datetime.timedelta(days=1)).strftime('%%Y-%%m-%%d') )]"/>
                     <group expand="0" string="Group By">
                         <filter string="Channel" context="{'group_by': 'channel'}" />
                         <filter string="Job Function" context="{'group_by': 'job_function_id'}" />

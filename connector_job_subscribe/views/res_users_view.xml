@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<openerp>
+<!-- Copyright 2016-2017 Cédric Pigeon
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo>
     <data noupdate="0">
         <record id="view_user_connector_form" model="ir.ui.view">
             <field name="name">res.user.connector.form</field>
@@ -17,4 +18,4 @@
             </field>
         </record>
     </data>
-</openerp>
+</odoo>

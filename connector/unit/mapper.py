@@ -143,7 +143,7 @@ def convert(field, conv_type):
     """
     def modifier(self, record, to_attr):
         value = record[field]
-        if not value:
+        if value is None:
             return False
         return conv_type(value)
     return modifier
@@ -559,7 +559,7 @@ class Mapper(ConnectorUnit):
                 (ex. str) before returning it'''
                 def modifier(self, record, to_attr):
                     value = record[field]
-                    if not value:
+                    if value is None:
                         return None
                     return conv_type(value)
                 return modifier
@@ -812,7 +812,7 @@ class ImportMapper(Mapper):
             return from_attr(self, record, to_attr)
 
         value = record.get(from_attr)
-        if not value:
+        if value is None:
             return False
 
         # Backward compatibility: when a field is a relation, and a modifier is
@@ -848,7 +848,7 @@ class ExportMapper(Mapper):
             return from_attr(self, record, to_attr)
 
         value = record[from_attr]
-        if not value:
+        if value is None:
             return False
 
         # Backward compatibility: when a field is a relation, and a modifier is

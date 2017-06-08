@@ -634,9 +634,6 @@ class Mapper(ConnectorUnit):
         """
         raise NotImplementedError
 
-    def _map_children(self, record, attr, model):
-        raise NotImplementedError
-
     @property
     def map_methods(self):
         """ Yield all the methods decorated with ``@mapping`` """

@@ -2,7 +2,7 @@
 
 
 #######################################
-Configuring channels and the job runner
+Configuring the job runner and channels
 #######################################
 
 .. automodule:: connector.jobrunner.runner
@@ -18,7 +18,7 @@ How to configure Channels?
 The ``ODOO_CONNECTOR_CHANNELS`` environment variable can be
 set before starting Odoo in order to adjust the capacity of the channels.
 
-Alternatively, set the channel configuration in the Odoo configuration file:
+Alternatively, set the channels configuration in the Odoo configuration file:
 
 .. code-block:: cfg
 

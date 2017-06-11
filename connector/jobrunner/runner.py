@@ -43,24 +43,25 @@ How does it work?
 How to use it?
 --------------
 
-* Optionally adjust your configuration through environment variables:
+* By default, the job runner will use Odoo's configuration:
 
-  - set ``ODOO_CONNECTOR_CHANNELS=root:4`` (or any other channels
-    configuration) if you don't want the default ``root:1``.
+  - connect to Odoo via port ``xmlrpc_port``, or ``8069`` if unset
+  - connect to the database via ``db_host`` and ``db_port``
 
-  - if ``xmlrpc-port`` is not set, you can set it for the jobrunner only with:
-    ``ODOO_CONNECTOR_PORT=8069``.
+* To adjust these values, you can either use environment variables:
 
-* Alternatively, configure the channels through the Odoo configuration
-  file, like:
+  - ``ODOO_CONNECTOR_PORT=9069``
+  - ``ODOO_CONNECTOR_JOBRUNNER_DB_HOST=127.0.2.1``
+  - ``ODOO_CONNECTOR_JOBRUNNER_DB_PORT=15432``
+
+* Or alternatively, you can add a ``[options-connector]`` section in Odoo's
+  configuration file, like this:
 
 .. code-block:: ini
 
   [options-connector]
-  channels = root:4
-
-* Or alternatively, set ``channels = root:4`` in the ``[options-connector]``
-  section of the odoo configuration file.
+  jobrunner_db_host = 127.0.2.1
+  jobrunner_db_port = 15432
 
 * Start Odoo with ``--load=web,web_kanban,connector``
   and ``--workers`` greater than 1. [2]_
@@ -161,11 +162,25 @@ def _openerp_now():
     return _datetime_to_epoch(dt)
 
 
+def _connection_info_for(db_name):
+    db_or_uri, connection_info = openerp.sql_db.connection_info_for(db_name)
+
+    for p in ('host', 'port'):
+        cfg = (os.environ.get('ODOO_CONNECTOR_JOBRUNNER_DB_%s' % p.upper()) or
+               config.misc
+               .get("options-connector", {}).get('jobrunner_db_' + p))
+
+        if cfg:
+            connection_info[p] = cfg
+
+    return connection_info
+
+
 def _async_http_get(port, db_name, job_uuid):
     # Method to set failed job (due to timeout, etc) as pending,
     # to avoid keeping it as enqueued.
     def set_job_pending():
-        connection_info = openerp.sql_db.connection_info_for(db_name)[1]
+        connection_info = _connection_info_for(db_name)
         conn = psycopg2.connect(**connection_info)
         conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
         with closing(conn.cursor()) as cr:
@@ -199,7 +214,7 @@ class Database(object):
 
     def __init__(self, db_name):
         self.db_name = db_name
-        connection_info = openerp.sql_db.connection_info_for(db_name)[1]
+        connection_info = _connection_info_for(db_name)
         self.conn = psycopg2.connect(**connection_info)
         self.conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
         self.has_connector = self._has_connector()

@@ -42,7 +42,16 @@ enable = os.environ.get('ODOO_CONNECTOR_CHANNELS')
 def run():
     # sleep a bit to let the workers start at ease
     time.sleep(START_DELAY)
+    scheme = os.environ.get('ODOO_CONNECTOR_SCHEME') or 'http'
+    host = os.environ.get('ODOO_CONNECTOR_HOST') or config['xmlrpc_interface']
     port = os.environ.get('ODOO_CONNECTOR_PORT') or config['xmlrpc_port']
+    user = os.environ.get('ODOO_CONNECTOR_HTTP_AUTH_USER')
+    password = os.environ.get('ODOO_CONNECTOR_HTTP_AUTH_PASSWORD')
     channels = os.environ.get('ODOO_CONNECTOR_CHANNELS')
-    runner = ConnectorRunner(port or 8069, channels or 'root:1')
+    runner = ConnectorRunner(scheme,
+                             host or 'localhost',
+                             port or 8069,
+                             user,
+                             password,
+                             channels or 'root:1')
     runner.run_forever()

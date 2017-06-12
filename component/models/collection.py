@@ -46,4 +46,5 @@ class Collection(models.AbstractModel):
 
     @api.multi
     def work_on(self, model_name, **kwargs):
+        self.ensure_one()
         return WorkContext(self, model_name, **kwargs)

@@ -5,7 +5,9 @@
 
 from collections import defaultdict, OrderedDict
 
+from odoo import models
 from odoo.tools import OrderedSet, LastOrderedSet
+from .exception import NoComponentError, SeveralComponentError
 
 
 # this is duplicated from odoo.models.MetaModel._get_addon_name() which we
@@ -38,6 +40,7 @@ class ComponentGlobalRegistry(OrderedDict):
     components using `multi`).
 
     """
+
 
 all_components = ComponentGlobalRegistry()
 
@@ -135,7 +138,7 @@ class Component(object):
 
     @property
     def model(self):
-        return self.collection.model
+        return self.work.model
 
     # TODO use a LRU cache (repoze.lru, beware we must include the collection
     # name in the cache but not 'self')
@@ -166,7 +169,7 @@ class Component(object):
 
         if not candidates:
             # TODO: do we want to raise?
-            raise ValueError(
+            raise NoComponentError(
                 "No component found for collection '%s', "
                 "usage '%s', model_name '%s'." %
                 (collection_name, usage, model_name)
@@ -175,7 +178,7 @@ class Component(object):
         if not multi:
             if len(candidates) > 1:
                 # TODO which error type?
-                raise ValueError(
+                raise SeveralComponentError(
                     "Several components found for collection '%s', "
                     "usage '%s', model_name '%s'. Found: %r" %
                     (collection_name, usage, model_name, candidates)
@@ -192,6 +195,8 @@ class Component(object):
         return component
 
     def components(self, usage=None, model_name=None, multi=False):
+        if isinstance(model_name, models.BaseModel):
+            model_name = model_name._name
         component_class = self.lookup(
             self.collection._name,
             usage=usage,

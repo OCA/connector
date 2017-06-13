@@ -189,12 +189,21 @@ class AbstractComponent(object):
 
         return candidates
 
-    def component_by_name(self, name):
-        component = all_components.get(name)
-        if not component:
+    def _component_class_by_name(self, name):
+        component_class = all_components.get(name)
+        if not component_class:
             # TODO: which error type?
             raise ValueError("No component with name '%s' found." % name)
-        return component
+        return component_class
+
+    def component_by_name(self, name, model_name=None):
+        if model_name is None or model_name == self.work.model_name:
+            work_context = self.work
+        else:
+            work_context = self.work.work_on(model_name)
+
+        component_class = self._component_class_by_name(name)
+        return component_class(work_context)
 
     def components(self, usage=None, model_name=None, multi=False):
         if isinstance(model_name, models.BaseModel):

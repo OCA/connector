@@ -10,10 +10,6 @@ from ..connector import pg_try_advisory_lock
 class BaseConnectorComponent(AbstractComponent):
 
     _name = 'base.connector'
-    _inherit = None
-    _collection = None
-    _apply_on = None
-    _usage = None
 
     @property
     def backend_record(self):

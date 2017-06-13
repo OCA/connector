@@ -437,7 +437,7 @@ class ImportMapChild(AbstractComponent):
     _usage = 'import.map.child'
 
     def _child_mapper(self):
-        return self.unit_for(ImportMapper)
+        return self.components(usage='import.mapper')
 
     def format_items(self, items_values):
         """ Format the values of the items mapped from the child Mappers.
@@ -465,7 +465,7 @@ class ExportMapChild(AbstractComponent):
     _usage = 'export.map.child'
 
     def _child_mapper(self):
-        return self.unit_for(ExportMapper)
+        return self.components(usage='export.mapper')
 
 
 class Mapper(AbstractComponent):

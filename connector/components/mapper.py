@@ -17,7 +17,7 @@ from collections import namedtuple
 from contextlib import contextmanager
 
 from odoo import models
-from odoo.addons.component.core import Component, MetaComponent
+from odoo.addons.component.core import AbstractComponent, MetaComponent
 from odoo.addons.component.exception import NoComponentError
 from ..exception import MappingError
 
@@ -307,7 +307,7 @@ class MetaMapper(MetaComponent):
         return cls
 
 
-class MapChild(Component):
+class MapChild(AbstractComponent):
     """ MapChild is responsible to convert items.
 
     Items are sub-records of a main record.
@@ -432,7 +432,7 @@ class MapChild(Component):
         return items_values
 
 
-class ImportMapChild(Component):
+class ImportMapChild(AbstractComponent):
     """ :py:class:`MapChild` for the Imports """
 
     _name = 'base.map.child.import'
@@ -462,7 +462,7 @@ class ImportMapChild(Component):
         return [(0, 0, values) for values in items_values]
 
 
-class ExportMapChild(MapChild):
+class ExportMapChild(AbstractComponent):
     """ :py:class:`MapChild` for the Exports """
 
     _name = 'base.map.child.export'
@@ -475,7 +475,7 @@ class ExportMapChild(MapChild):
         return self.unit_for(ExportMapper)
 
 
-class Mapper(Component):
+class Mapper(AbstractComponent):
     """ A Mapper translates an external record to an Odoo record and
     conversely. The output of a Mapper is a ``dict``.
 
@@ -788,7 +788,7 @@ class Mapper(Component):
         return values
 
 
-class ImportMapper(Component):
+class ImportMapper(AbstractComponent):
     """ :py:class:`Mapper` for imports.
 
     Transform a record from a backend to an Odoo record
@@ -831,7 +831,7 @@ class ImportMapper(Component):
         return value
 
 
-class ExportMapper(Component):
+class ExportMapper(AbstractComponent):
     """ :py:class:`Mapper` for exports.
 
     Transform a record from Odoo to a backend record

@@ -623,7 +623,10 @@ class Mapper(AbstractComponent):
                 "_map_child_fallback required")
             # does not force developers to use a MapChild ->
             # will use the default one if not explicitely defined
-            mapper_child = self.component_by_name(self._map_child_fallback)
+            mapper_child = self.component_by_name(
+                self._map_child_fallback,
+                model_name=model_name
+            )
         return mapper_child
 
     def _map_child(self, map_record, from_attr, to_attr, model_name):

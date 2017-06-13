@@ -2,10 +2,10 @@
 # Copyright 2013-2017 Camptocamp SA
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html)
 
-from odoo.addons.component.core import Component
+from odoo.addons.component.core import AbstractComponent
 
 
-class Synchronizer(Component):
+class Synchronizer(AbstractComponent):
     """ Base class for synchronizers """
 
     _name = 'base.synchronizer'
@@ -70,7 +70,7 @@ class Synchronizer(Component):
         return self._backend_adapter
 
 
-class Exporter(Component):
+class Exporter(AbstractComponent):
     """ Synchronizer for exporting data from Odoo to a backend """
 
     _name = 'base.exporter'
@@ -79,7 +79,7 @@ class Exporter(Component):
     _base_mapper_usage = 'export.mapper'
 
 
-class Importer(Component):
+class Importer(AbstractComponent):
     """ Synchronizer for importing data from a backend to Odoo """
 
     _name = 'base.importer'
@@ -88,7 +88,7 @@ class Importer(Component):
     _base_mapper_usage = 'import.mapper'
 
 
-class Deleter(Synchronizer):
+class Deleter(AbstractComponent):
     """ Synchronizer for deleting a record on the backend """
 
     _name = 'base.deleter'

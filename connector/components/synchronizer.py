@@ -10,8 +10,6 @@ class Synchronizer(AbstractComponent):
 
     _name = 'base.synchronizer'
     _inherit = 'base.connector'
-    _collection = None
-    _apply_on = None
     _usage = 'synchronizer'
 
     _base_mapper_usage = 'mapper'

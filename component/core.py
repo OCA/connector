@@ -151,7 +151,8 @@ class AbstractComponent(object):
         # in case of multi=True
         collection_components = [
             component for component in all_components.itervalues()
-            if component._collection == collection_name
+            if (component._collection == collection_name
+                or component._collection is None)
             and not component._abstract
         ]
         candidates = []

@@ -2,10 +2,10 @@
 # Copyright 2013-2017 Camptocamp SA
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html)
 
-from odoo.addons.component.core import Component
+from odoo.addons.component.core import AbstractComponent
 
 
-class BackendAdapter(Component):
+class BackendAdapter(AbstractComponent):
     """ Base Backend Adapter for the connectors """
 
     _name = 'base.backend.adapter'
@@ -15,7 +15,7 @@ class BackendAdapter(Component):
     _usage = 'backend.adapter'
 
 
-class CRUDAdapter(BackendAdapter):
+class CRUDAdapter(AbstractComponent):
     """ Base External Adapter specialized in the handling
     of records on external systems.
 

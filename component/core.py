@@ -110,22 +110,23 @@ class MetaComponent(type):
         return self._apply_on
 
 
-class Component(object):
+class AbstractComponent(object):
     __metaclass__ = MetaComponent
 
     _register = False
+    _abstract = True
 
     _name = None
     _inherit = None
 
-    # name of the collection to subscribe in, abstract when None
+    # name of the collection to subscribe in
     _collection = None
 
     _apply_on = None  # None means any Model, can be a list ['res.users', ...]
-    _usage = None  # component purpose, might be a list? ['import.mapper', ...]
+    _usage = None  # component purpose ('import.mapper', ...)
 
     def __init__(self, work_context):
-        super(Component, self).__init__()
+        super(AbstractComponent, self).__init__()
         self.work = work_context
 
     @property
@@ -151,6 +152,7 @@ class Component(object):
         collection_components = [
             component for component in all_components.itervalues()
             if component._collection == collection_name
+            and not component._abstract
         ]
         candidates = []
 
@@ -183,6 +185,7 @@ class Component(object):
                     "usage '%s', model_name '%s'. Found: %r" %
                     (collection_name, usage, model_name, candidates)
                 )
+            # TODO: always return a list here, use a 2 methods for multi/normal
             return candidates.pop()
 
         return candidates
@@ -289,7 +292,7 @@ class Component(object):
                                 name)
             ComponentClass = registry[name]
         else:
-            ComponentClass = type(name, (Component,), {
+            ComponentClass = type(name, (AbstractComponent,), {
                 '_name': name,
                 '_register': False,
                 # names of children component
@@ -324,3 +327,8 @@ class Component(object):
     def _build_component_attributes(cls, registry):
         """ Initialize base component attributes. """
         # TODO: see if we concatenate models, usage, ...
+
+
+class Component(AbstractComponent):
+    _register = False
+    _abstract = False

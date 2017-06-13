@@ -170,7 +170,6 @@ class AbstractComponent(object):
                       or model_name in c.apply_on_models]
 
         if not candidates:
-            # TODO: do we want to raise?
             raise NoComponentError(
                 "No component found for collection '%s', "
                 "usage '%s', model_name '%s'." %
@@ -179,7 +178,6 @@ class AbstractComponent(object):
 
         if not multi:
             if len(candidates) > 1:
-                # TODO which error type?
                 raise SeveralComponentError(
                     "Several components found for collection '%s', "
                     "usage '%s', model_name '%s'. Found: %r" %

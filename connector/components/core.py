@@ -2,12 +2,12 @@
 # Copyright 2017 Camptocamp SA
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html)
 
-from odoo.addons.component.core import Component
+from odoo.addons.component.core import AbstractComponent
 from odoo.addons.queue_job.exception import RetryableJobError
 from ..connector import pg_try_advisory_lock
 
 
-class BaseConnectorComponent(Component):
+class BaseConnectorComponent(AbstractComponent):
 
     _name = 'base.connector'
     _inherit = None

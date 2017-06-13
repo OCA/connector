@@ -19,8 +19,6 @@ class Binder(AbstractComponent):
 
     _name = 'base.binder'
     _inherit = 'base.connector'
-    _collection = None
-    _apply_on = None
     _usage = 'binder'
 
     _external_field = 'external_id'  # override in sub-classes

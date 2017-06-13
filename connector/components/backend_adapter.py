@@ -10,8 +10,6 @@ class BackendAdapter(AbstractComponent):
 
     _name = 'base.backend.adapter'
     _inherit = 'base.connector'
-    _collection = None
-    _apply_on = None
     _usage = 'backend.adapter'
 
 
@@ -25,8 +23,6 @@ class CRUDAdapter(AbstractComponent):
 
     _name = 'base.backend.adapter.crud'
     _inherit = 'base.backend.adapter'
-    _collection = None
-    _apply_on = None
     _usage = 'backend.adapter'
 
     def search(self, *args, **kwargs):

@@ -353,9 +353,6 @@ class MapChild(AbstractComponent):
 
     _name = 'base.map.child'
     _inherit = 'base.connector'
-    _collection = None
-    _apply_on = None
-    _usage = None
 
     def _child_mapper(self):
         raise NotImplementedError
@@ -437,8 +434,6 @@ class ImportMapChild(AbstractComponent):
 
     _name = 'base.map.child.import'
     _inherit = 'base.map.child'
-    _collection = None
-    _apply_on = None
     _usage = 'import.map.child'
 
     def _child_mapper(self):
@@ -467,8 +462,6 @@ class ExportMapChild(AbstractComponent):
 
     _name = 'base.map.child.export'
     _inherit = 'base.map.child'
-    _collection = None
-    _apply_on = None
     _usage = 'export.map.child'
 
     def _child_mapper(self):
@@ -581,9 +574,7 @@ class Mapper(AbstractComponent):
     __metaclass__ = MetaMapper
 
     _name = 'base.mapper'
-    _inherit = None
-    _collection = None
-    _apply_on = None
+    _inherit = 'base.connector'
     _usage = 'mapper'
 
     direct = []  # direct conversion of a field to another (from_attr, to_attr)
@@ -797,8 +788,6 @@ class ImportMapper(AbstractComponent):
 
     _name = 'base.import.mapper'
     _inherit = 'base.mapper'
-    _collection = None
-    _apply_on = None
     _usage = 'import.mapper'
 
     _map_child_usage = 'import.map.child'
@@ -840,8 +829,6 @@ class ExportMapper(AbstractComponent):
 
     _name = 'base.export.mapper'
     _inherit = 'base.mapper'
-    _collection = None
-    _apply_on = None
     _usage = 'export.mapper'
 
     _map_child_usage = 'export.map.child'

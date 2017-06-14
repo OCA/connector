@@ -8,6 +8,9 @@ from odoo.addons.test_component.components.components import UserTestComponent
 
 class TestComponentCollection(common.TransactionCase):
 
+    at_install = False
+    post_install = True
+
     def setUp(self):
         super(TestComponentCollection, self).setUp()
         self.collection = self.env['test.component.collection'].create(

@@ -286,8 +286,13 @@ class AbstractComponent(object):
         elif parents is None:
             parents = []
 
+        if cls._name in registry:
+            raise TypeError('Component %r (in class %r) already exists. '
+                            'Consider using _inherit instead of _name '
+                            'or using a different _name.' % (cls._name, cls))
+
         # determine the component's name
-        name = cls._name or (len(parents) == 1 and parents[0]) or cls.__name__
+        name = cls._name or (len(parents) == 1 and parents[0])
 
         # all components except 'base' implicitly inherit from 'base'
         if name != 'base':

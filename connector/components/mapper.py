@@ -17,7 +17,7 @@ from collections import namedtuple
 from contextlib import contextmanager
 
 from odoo import models
-from odoo.addons.component.core import AbstractComponent, MetaComponent
+from odoo.addons.component.core import AbstractComponent
 from odoo.addons.component.exception import NoComponentError
 from ..exception import MappingError
 
@@ -255,56 +255,6 @@ def follow_m2o_relations(field):
 MappingDefinition = namedtuple('MappingDefinition',
                                ['changed_by',
                                 'only_create'])
-
-
-class MetaMapper(MetaComponent):
-    """ Metaclass for Mapper
-
-    Build a ``_map_methods`` dict of mappings methods.
-    The keys of the dict are the method names.
-    The values of the dict are a namedtuple containing:
-    """
-
-    def __new__(meta, name, bases, attrs):
-        if attrs.get('_map_methods') is None:
-            attrs['_map_methods'] = {}
-
-        cls = super(MetaMapper, meta).__new__(meta, name, bases, attrs)
-
-        # When a class has several bases: ``class Mapper(Base1, Base2):``
-        for base in bases:
-            # Merge the _map_methods of the bases
-            base_map_methods = getattr(base, '_map_methods', {})
-            for attr_name, definition in base_map_methods.iteritems():
-                if cls._map_methods.get(attr_name) is None:
-                    cls._map_methods[attr_name] = definition
-                else:
-                    # Update the existing @changed_by with the content
-                    # of each base (it is mutated in place).
-                    # @only_create keeps the value defined in the first
-                    # base.
-                    mapping_changed_by = cls._map_methods[attr_name].changed_by
-                    mapping_changed_by.update(definition.changed_by)
-
-        # Update the _map_methods from the @mapping methods in attrs,
-        # respecting the class tree.
-        for attr_name, attr in attrs.iteritems():
-            is_mapping = getattr(attr, 'is_mapping', None)
-            if is_mapping:
-                has_only_create = getattr(attr, 'only_create', False)
-
-                mapping_changed_by = set(getattr(attr, 'changed_by', ()))
-                # If already existing, it has been defined in a super
-                # class, extend the @changed_by set
-                if cls._map_methods.get(attr_name) is not None:
-                    definition = cls._map_methods[attr_name]
-                    mapping_changed_by.update(definition.changed_by)
-
-                # keep the last choice for only_create
-                definition = MappingDefinition(mapping_changed_by,
-                                               has_only_create)
-                cls._map_methods[attr_name] = definition
-        return cls
 
 
 class MapChild(AbstractComponent):
@@ -571,8 +521,6 @@ class Mapper(AbstractComponent):
 
     """
 
-    __metaclass__ = MetaMapper
-
     _name = 'base.mapper'
     _inherit = 'base.connector'
     _usage = 'mapper'
@@ -584,6 +532,34 @@ class Mapper(AbstractComponent):
 
     _map_child_usage = None
     _map_child_fallback = None
+
+    @classmethod
+    def _build_mapper_component(cls):
+        map_methods = {}
+        for base in reversed(cls.__bases__):
+            for attr_name in dir(base):
+                attr = getattr(base, attr_name)
+                if not getattr(attr, 'is_mapping', None):
+                    continue
+                has_only_create = getattr(attr, 'only_create', False)
+                mapping_changed_by = set(getattr(attr, 'changed_by', ()))
+
+                # If already existing, it has been defined in an previous base,
+                # extend the @changed_by set
+                if map_methods.get(attr_name) is not None:
+                    definition = map_methods[attr_name]
+                    mapping_changed_by.update(definition.changed_by)
+
+                # keep the last choice for only_create
+                definition = MappingDefinition(mapping_changed_by,
+                                               has_only_create)
+                map_methods[attr_name] = definition
+        cls._map_methods = map_methods
+
+    @classmethod
+    def _complete_component_build(cls):
+        super(Mapper, cls)._complete_component_build()
+        cls._build_mapper_component()
 
     def __init__(self, connector_env):
         """

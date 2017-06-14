@@ -300,12 +300,13 @@ class AbstractComponent(object):
                                 name)
             ComponentClass = registry[name]
         else:
-            ComponentClass = type(name, (AbstractComponent,), {
-                '_name': name,
-                '_register': False,
-                # names of children component
-                '_inherit_children': OrderedSet(),
-            })
+            ComponentClass = type(
+                name, (AbstractComponent,),
+                {'_name': name,
+                 '_register': False,
+                 # names of children component
+                 '_inherit_children': OrderedSet()},
+            )
 
         # determine all the classes the component should inherit from
         bases = LastOrderedSet([cls])
@@ -324,17 +325,22 @@ class AbstractComponent(object):
                 parent_class._inherit_children.add(name)
         ComponentClass.__bases__ = tuple(bases)
 
-        # determine the attributes of the component's class
-        ComponentClass._build_component_attributes(registry)
+        ComponentClass._complete_component_build()
 
         registry[name] = ComponentClass
 
         return ComponentClass
 
     @classmethod
-    def _build_component_attributes(cls, registry):
-        """ Initialize base component attributes. """
-        # TODO: see if we concatenate models, usage, ...
+    def _complete_component_build(cls):
+        """ Complete build of the new component class
+
+        After the component has been built from its bases, this method is
+        called, and can be used to customize the class before it can be used.
+
+        Nothing is done in the base Component, but a Component can inherit
+        the method to add its own behavior.
+        """
 
 
 class Component(AbstractComponent):

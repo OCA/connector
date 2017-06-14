@@ -151,9 +151,9 @@ class AbstractComponent(object):
         # in case of multi=True
         collection_components = [
             component for component in all_components.itervalues()
-            if (component._collection == collection_name
-                or component._collection is None)
-            and not component._abstract
+            if (component._collection == collection_name or
+                component._collection is None) and
+            not component._abstract
         ]
         candidates = []
 
@@ -167,8 +167,8 @@ class AbstractComponent(object):
 
         # filter out by model name
         candidates = [c for c in candidates
-                      if c.apply_on_models is None
-                      or model_name in c.apply_on_models]
+                      if c.apply_on_models is None or
+                      model_name in c.apply_on_models]
 
         if not candidates:
             raise NoComponentError(
@@ -260,8 +260,9 @@ class AbstractComponent(object):
         #   class A3(Component):
         #       _inherit = 'a'
         #
-        # When a component is extended by '_inherit', its base classes are modified
-        # to include the current class and the other inherited component classes.
+        # When a component is extended by '_inherit', its base classes are
+        # modified to include the current class and the other inherited
+        # component classes.
         # Note that we actually inherit from other ``ComponentClass``, so that
         # extensions to an inherited component are immediately visible in the
         # current component class, like in the following example:

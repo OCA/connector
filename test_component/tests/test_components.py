@@ -8,13 +8,15 @@ from odoo.addons.component.core import all_components
 
 class TestComponentInheritance(common.TransactionCase):
 
+    at_install = False
+    post_install = True
+
     def setUp(self):
         super(TestComponentInheritance, self).setUp()
         self.collection = self.env['test.component.collection'].create(
             {'name': 'Test'}
         )
         self.work = self.collection.work_on('res.users')
-
 
     def test_inherit_base(self):
         component = all_components['base'](self.work)

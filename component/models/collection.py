@@ -28,7 +28,7 @@ class Collection(models.AbstractModel):
                 mapper = self.components(name='magento.sale.importer.mapper')
                 extra_mappers = self.components(
                     usage='magento.sale.importer.mapper',
-                    multi=True,
+                    many=True,
                 )
                 # ...
 

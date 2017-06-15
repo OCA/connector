@@ -19,7 +19,7 @@ class BaseConnectorComponent(AbstractComponent):
     def binder_for(self, model=None):
         """ Returns an new instance of the correct ``Binder`` for
         a model """
-        return self.components(usage='binder', model_name=model)
+        return self.component(usage='binder', model_name=model)
 
     def advisory_lock_or_retry(self, lock, retry_seconds=1):
         """ Acquire a Postgres transactional advisory lock or retry job

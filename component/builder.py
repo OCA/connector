@@ -11,15 +11,19 @@ class ComponentBuilder(models.AbstractModel):
     """ Build the component classes
 
     And register them in a global registry.
-    The classes are built using the same mechanism
-    than the Odoo one, meaning that a final class
-    that inherits from all the ``_inherit`` is created.
-    This class is kept in the ``all_components`` global
-    registry with the Components ``_name`` as keys.
 
-    This is an Odoo model so we can hook the build of the components at the end
-    of the registry loading with ``_register_hook``, after all modules are
-    loaded.
+    Every time an Odoo registry is built, the know components are cleared and
+    rebuilt as well.  The Component classes are built using the same mechanism
+    than Odoo's Models: a final class is created, taking every Components with
+    a ``_name`` and applying Components with an ``_inherits`` upon them.
+
+    The final Component classes are registered in global registry.
+
+    This class is an Odoo model, allowing us to hook the build of the
+    components at the end of the Odoo's registry loading, using
+    ``_register_hook``. This method is called after all modules are loaded, so
+    we are sure that we have all the components Classes and in the correct
+    order.
 
     """
     _name = 'component.builder'
@@ -27,9 +31,15 @@ class ComponentBuilder(models.AbstractModel):
 
     @api.model_cr
     def _register_hook(self):
+        # This method is called by Odoo when the registry is built,
+        # so in case the registry is rebuilt (cache invalidation, ...),
+        # we have to clear the components then rebuild them
         all_components.clear()
         # TODO: reset the LRU cache of the component lookups when implemented
 
+        # lookup all the installed (or about to be) addons and generate
+        # the graph, so we can load the components following the order
+        # of the addons' dependencies
         graph = odoo.modules.graph.Graph()
         graph.add_module(self.env.cr, 'base')
 
@@ -46,5 +56,16 @@ class ComponentBuilder(models.AbstractModel):
             self.load_components(module.name, all_components)
 
     def load_components(self, module, registry):
+        """ Build every component known by MetaComponent for an odoo module
+
+        The final component (composed by all the Component classes in this
+        module) will be pushed into the registry.
+
+        :param module: the name of the addon for which we want to load
+                       the components
+        :type module: str | unicode
+        :param registry: the registry in which we want to put the Component
+        :type registry: :py:class:`~component.core.ComponentGlobalRegistry`
+        """
         for component_class in MetaComponent._modules_components[module]:
             component_class._build_component(registry)

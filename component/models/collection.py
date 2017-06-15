@@ -25,19 +25,20 @@ class Collection(models.AbstractModel):
             _collection = 'magento.backend'  # name of the collection
 
             def run(self, magento_id):
-                mapper = self.component(name='magento.sale.importer.mapper')
-                extra_mappers = self.component(
-                    usage='magento.sale.importer.mapper',
-                    many=True,
+                mapper = self.component(usage='import.mapper')
+                extra_mappers = self.many_components(
+                    usage='import.mapper.extra',
                 )
                 # ...
 
-        # use it:
+    Use it::
 
         backend = self.env['magento.backend'].browse(1)
         work = backend.work_on('magento.sale.order')
-        importer = work.component(name='magento.sale.importer')
+        importer = work.component(usage='magento.sale.importer')
         importer.run(1)
+
+    See also: :class:`~component.core.WorkContext`
 
 
     """
@@ -46,5 +47,12 @@ class Collection(models.AbstractModel):
 
     @api.multi
     def work_on(self, model_name, **kwargs):
+        """ Entry-point for the components
+
+        Start a work using the components on the model.
+        Any keyword argument will be assigned to the work context.
+        See documentation of :class:`component.core.WorkContext`.
+
+        """
         self.ensure_one()
         return WorkContext(self, model_name, **kwargs)

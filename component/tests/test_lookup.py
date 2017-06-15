@@ -10,8 +10,24 @@ from .common import ComponentRegistryCase
 
 
 class TestLookup(ComponentRegistryCase):
+    """ Test the ComponentGlobalRegistry
+
+    Tests in this testsuite mainly do:
+
+    * Create new Components (classes inheriting from
+      :class:`component.core.Component` or
+      :class:`component.core.AbstractComponent`
+    * Call :meth:`component.core.Component._build_component` on them
+      in order to build the 'final class' composed from all the ``_inherit``
+      and push it in the components registry (``self.comp_registry`` here)
+    * Use the lookup method of the components registry and check
+      that we get the correct result
+
+    """
 
     def test_lookup_collection(self):
+        """ Lookup components of a collection """
+        # we register 2 components in foobar and one in other
         class Foo(Component):
             _name = 'foo'
             _collection = 'foobar'
@@ -26,6 +42,7 @@ class TestLookup(ComponentRegistryCase):
 
         self._build_components(Foo, Bar, Homer)
 
+        # we should no see the component in 'other'
         components = self.comp_registry.lookup('foobar')
         self.assertEqual(
             ['foo', 'bar'],
@@ -33,6 +50,7 @@ class TestLookup(ComponentRegistryCase):
         )
 
     def test_lookup_usage(self):
+        """ Lookup components by usage """
         class Foo(Component):
             _name = 'foo'
             _collection = 'foobar'
@@ -60,20 +78,26 @@ class TestLookup(ComponentRegistryCase):
         )
 
     def test_lookup_no_component(self):
+        """ No component """
+        # we just expect an empty list when no component match, the error
+        # handling is handled at an higher level
         self.assertEquals(
             [],
             self.comp_registry.lookup('something', usage='something')
         )
 
     def test_get_by_name(self):
+        """ Get component by name """
         class Foo(AbstractComponent):
             _name = 'foo'
             _collection = 'foobar'
 
         self._build_components(Foo)
+        # this is just a dict access
         self.assertEquals('foo', self.comp_registry['foo']._name)
 
     def test_lookup_abstract(self):
+        """ Do not include abstract components in lookup """
         class Foo(AbstractComponent):
             _name = 'foo'
             _collection = 'foobar'
@@ -87,6 +111,8 @@ class TestLookup(ComponentRegistryCase):
 
         comp_registry = self.comp_registry
 
+        # we should never have 'foo' in the returned components
+        # as it is abstract
         components = comp_registry.lookup('foobar', usage='speaker')
         self.assertEqual('bar', components[0]._name)
 
@@ -97,6 +123,7 @@ class TestLookup(ComponentRegistryCase):
         )
 
     def test_lookup_model_name(self):
+        """ Lookup with model names """
         class Foo(Component):
             _name = 'foo'
             _collection = 'foobar'

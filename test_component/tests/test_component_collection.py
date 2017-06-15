@@ -27,5 +27,5 @@ class TestComponentCollection(common.TransactionCase):
 
     def test_components_usage(self):
         work = self.collection.work_on('res.users')
-        component = work.components(usage='test1')
+        component = work.component(usage='test1')
         self.assertEquals(UserTestComponent._name, component._name)

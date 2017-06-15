@@ -6,10 +6,6 @@ from odoo.addons.component.core import (
     AbstractComponent,
     Component,
 )
-from odoo.addons.component.exception import (
-    NoComponentError,
-    SeveralComponentError,
-)
 from .common import ComponentRegistryCase
 
 
@@ -30,10 +26,7 @@ class TestLookup(ComponentRegistryCase):
 
         self._build_components(Foo, Bar, Homer)
 
-        with self.assertRaises(SeveralComponentError):
-            self.comp_registry.lookup('foobar')
-
-        components = self.comp_registry.lookup('foobar', many=True)
+        components = self.comp_registry.lookup('foobar')
         self.assertEqual(
             ['foo', 'bar'],
             [c._name for c in components]
@@ -57,23 +50,20 @@ class TestLookup(ComponentRegistryCase):
 
         self._build_components(Foo, Bar, Baz)
 
-        component = self.comp_registry.lookup('foobar', usage='listener')
-        self.assertEqual('baz', component._name)
+        components = self.comp_registry.lookup('foobar', usage='listener')
+        self.assertEqual('baz', components[0]._name)
 
-        with self.assertRaises(SeveralComponentError):
-            components = self.comp_registry.lookup('foobar', usage='speaker')
-
-        components = self.comp_registry.lookup(
-            'foobar', usage='speaker', many=True
-        )
+        components = self.comp_registry.lookup('foobar', usage='speaker')
         self.assertEqual(
             ['foo', 'bar'],
             [c._name for c in components]
         )
 
     def test_lookup_no_component(self):
-        with self.assertRaises(NoComponentError):
+        self.assertEquals(
+            [],
             self.comp_registry.lookup('something', usage='something')
+        )
 
     def test_get_by_name(self):
         class Foo(AbstractComponent):
@@ -97,10 +87,10 @@ class TestLookup(ComponentRegistryCase):
 
         comp_registry = self.comp_registry
 
-        component = comp_registry.lookup('foobar', usage='speaker')
-        self.assertEqual('bar', component._name)
+        components = comp_registry.lookup('foobar', usage='speaker')
+        self.assertEqual('bar', components[0]._name)
 
-        components = comp_registry.lookup('foobar', usage='speaker', many=True)
+        components = comp_registry.lookup('foobar', usage='speaker')
         self.assertEqual(
             ['bar'],
             [c._name for c in components]
@@ -130,17 +120,17 @@ class TestLookup(ComponentRegistryCase):
 
         self._build_components(Foo, Bar, Any)
 
-        component = self.comp_registry.lookup('foobar',
-                                              usage='speaker',
-                                              model_name='res.partner')
-        self.assertEqual('foo', component._name)
+        components = self.comp_registry.lookup('foobar',
+                                               usage='speaker',
+                                               model_name='res.partner')
+        self.assertEqual('foo', components[0]._name)
 
-        component = self.comp_registry.lookup('foobar',
-                                              usage='speaker',
-                                              model_name='res.users')
-        self.assertEqual('bar', component._name)
+        components = self.comp_registry.lookup('foobar',
+                                               usage='speaker',
+                                               model_name='res.users')
+        self.assertEqual('bar', components[0]._name)
 
-        component = self.comp_registry.lookup('foobar',
-                                              usage='listener',
-                                              model_name='res.users')
-        self.assertEqual('any', component._name)
+        components = self.comp_registry.lookup('foobar',
+                                               usage='listener',
+                                               model_name='res.users')
+        self.assertEqual('any', components[0]._name)

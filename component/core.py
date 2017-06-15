@@ -36,17 +36,14 @@ class ComponentGlobalRegistry(OrderedDict):
 
     This is an OrderedDict, because we want to keep the
     registration order of the components, addons loaded first
-    have their components found first (when we look for a list
-    components using `many`).
+    have their components found first.
 
     """
 
     # TODO use a LRU cache (repoze.lru?)
-    def lookup(self, collection_name, usage=None,
-               model_name=None, many=False):
+    def lookup(self, collection_name, usage=None, model_name=None):
 
         # keep the order so addons loaded first have components used first
-        # in case of many=True
         collection_components = [
             component for component in self.itervalues()
             if (component._collection == collection_name or
@@ -67,23 +64,6 @@ class ComponentGlobalRegistry(OrderedDict):
         candidates = [c for c in candidates
                       if c.apply_on_models is None or
                       model_name in c.apply_on_models]
-
-        if not candidates:
-            raise NoComponentError(
-                "No component found for collection '%s', "
-                "usage '%s', model_name '%s'." %
-                (collection_name, usage, model_name)
-            )
-
-        if not many:
-            if len(candidates) > 1:
-                raise SeveralComponentError(
-                    "Several components found for collection '%s', "
-                    "usage '%s', model_name '%s'. Found: %r" %
-                    (collection_name, usage, model_name, candidates)
-                )
-            # TODO: always return a list here, use a 2 methods for multi/normal
-            return candidates.pop()
 
         return candidates
 
@@ -119,11 +99,16 @@ class WorkContext(object):
     def component_by_name(self, name):
         return self.components_registry['base'](self).component_by_name(name)
 
-    def components(self, usage=None, model_name=None, many=False):
-        return self.components_registry['base'](self).components(
+    def component(self, usage=None, model_name=None):
+        return self.components_registry['base'](self).component(
             usage=usage,
             model_name=model_name,
-            many=many,
+        )
+
+    def many_components(self, usage=None, model_name=None):
+        return self.components_registry['base'](self).many_components(
+            usage=usage,
+            model_name=model_name,
         )
 
     def __str__(self):
@@ -207,7 +192,9 @@ class AbstractComponent(object):
             if len(component_class.apply_on_models) == 1:
                 hint_models = "'%s'" % (component_class.apply_on_models[0],)
             else:
-                hint_models = "<one of %r>" % (component_class.apply_on_models,)
+                hint_models = "<one of %r>" % (
+                    component_class.apply_on_models,
+                )
             raise NoComponentError(
                 "Component with name '%s' can't be used for model '%s'.\n"
                 "Hint: you might want to use: "
@@ -221,20 +208,51 @@ class AbstractComponent(object):
             work_context = self.work.work_on(model_name)
         return component_class(work_context)
 
-    def components(self, usage=None, model_name=None, many=False):
-        if isinstance(model_name, models.BaseModel):
-            model_name = model_name._name
-        component_class = self.work.components_registry.lookup(
+    def _lookup_components(self, usage=None, model_name=None):
+        component_classes = self.work.components_registry.lookup(
             self.collection._name,
             usage=usage,
             model_name=model_name or self.work.model_name,
-            many=many,
+        )
+        if not component_classes:
+            raise NoComponentError(
+                "No component found for collection '%s', "
+                "usage '%s', model_name '%s'." %
+                (self.collection._name, usage, model_name)
+            )
+
+        return component_classes
+
+    def component(self, usage=None, model_name=None):
+        if isinstance(model_name, models.BaseModel):
+            model_name = model_name._name
+        component_classes = self._lookup_components(
+            usage=usage, model_name=model_name
+        )
+        if len(component_classes) > 1:
+            raise SeveralComponentError(
+                "Several components found for collection '%s', "
+                "usage '%s', model_name '%s'. Found: %r" %
+                (self.collection._name, usage or '',
+                 model_name or '', component_classes)
+            )
+        if model_name is None or model_name == self.work.model_name:
+            work_context = self.work
+        else:
+            work_context = self.work.work_on(model_name)
+        return component_classes[0](work_context)
+
+    def many_components(self, usage=None, model_name=None):
+        if isinstance(model_name, models.BaseModel):
+            model_name = model_name._name
+        component_classes = self._lookup_components(
+            usage=usage, model_name=model_name
         )
         if model_name is None or model_name == self.work.model_name:
             work_context = self.work
         else:
             work_context = self.work.work_on(model_name)
-        return component_class(work_context)
+        return [comp(work_context) for comp in component_classes]
 
     def __str__(self):
         return "Component(%s)" % self._name

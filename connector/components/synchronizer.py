@@ -35,7 +35,7 @@ class Synchronizer(AbstractComponent):
         :rtype: :py:class:`connector.component.mapper.Mapper`
         """
         if self._mapper is None:
-            self._mapper = self.components(usage=self._base_mapper_usage)
+            self._mapper = self.component(usage=self._base_mapper_usage)
         return self._mapper
 
     @property
@@ -62,7 +62,7 @@ class Synchronizer(AbstractComponent):
         :rtype: :py:class:`connector.component.backend_adapter.BackendAdapter`
         """
         if self._backend_adapter is None:
-            self._backend_adapter = self.components(
+            self._backend_adapter = self.component(
                 usage=self._base_backend_adapter_usage
             )
         return self._backend_adapter

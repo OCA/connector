@@ -8,8 +8,23 @@ from .common import ComponentRegistryCase
 
 
 class TestBuildComponent(ComponentRegistryCase):
+    """ Test build of components
+
+    All the tests in this suite are based on the same principle with
+    variations:
+
+    * Create new Components (classes inheriting from
+      :class:`component.core.Component` or
+      :class:`component.core.AbstractComponent`
+    * Call :meth:`component.core.Component._build_component` on them
+      in order to build the 'final class' composed from all the ``_inherit``
+      and push it in the components registry (``self.comp_registry`` here)
+    * Assert that classes are built, registered, have correct ``__bases__``...
+
+    """
 
     def test_no_name(self):
+        """ Ensure that a component has a _name """
         class Component1(Component):
             pass
 
@@ -18,12 +33,15 @@ class TestBuildComponent(ComponentRegistryCase):
             Component1._build_component(self.comp_registry)
 
     def test_register(self):
+        """ Able to register components in components registry """
         class Component1(Component):
             _name = 'component1'
 
         class Component2(Component):
             _name = 'component2'
 
+        # build the 'final classes' for the components and check that we find
+        # them in the components registry
         Component1._build_component(self.comp_registry)
         Component2._build_component(self.comp_registry)
         self.assertEquals(
@@ -32,6 +50,7 @@ class TestBuildComponent(ComponentRegistryCase):
         )
 
     def test_inherit_bases(self):
+        """ Check __bases__ of Component with _inherit """
         class Component1(Component):
             _name = 'component1'
 
@@ -53,6 +72,7 @@ class TestBuildComponent(ComponentRegistryCase):
         )
 
     def test_prototype_inherit_bases(self):
+        """ Check __bases__ of Component with _inherit and different _name """
         class Component1(Component):
             _name = 'component1'
 
@@ -98,19 +118,24 @@ class TestBuildComponent(ComponentRegistryCase):
         )
 
     def test_custom_build(self):
+        """ Check that we can hook at the end of a Component build """
         class Component1(Component):
             _name = 'component1'
 
             @classmethod
             def _complete_component_build(cls):
+                # This method should be called after the Component
+                # is built, and before it is pushed in the registry
                 cls._build_done = True
 
         Component1._build_component(self.comp_registry)
+        # we inspect that our custom build has been executed
         self.assertTrue(
             self.comp_registry['component1']._build_done
         )
 
     def test_inherit_attrs(self):
+        """ Check attributes inheritance of Components with _inherit """
         class Component1(Component):
             _name = 'component1'
 
@@ -130,6 +155,9 @@ class TestBuildComponent(ComponentRegistryCase):
 
         Component1._build_component(self.comp_registry)
         Component2._build_component(self.comp_registry)
+        # we initialize the components, normally we should pass
+        # an instance of WorkContext, but we don't need a real one
+        # for this test
         component1 = self.comp_registry['component1'](mock.Mock())
         component2 = self.comp_registry['component2'](mock.Mock())
         self.assertEquals('ping', component1.msg)
@@ -138,6 +166,7 @@ class TestBuildComponent(ComponentRegistryCase):
         self.assertEquals('foo bar', component2.say())
 
     def test_duplicate_component(self):
+        """ Check that we can't have 2 components with the same name """
         class Component1(Component):
             _name = 'component1'
 
@@ -150,6 +179,7 @@ class TestBuildComponent(ComponentRegistryCase):
             Component2._build_component(self.comp_registry)
 
     def test_no_parent(self):
+        """ Ensure we can't _inherit a non-existent component """
         class Component1(Component):
             _name = 'component1'
             _inherit = 'component1'
@@ -159,6 +189,7 @@ class TestBuildComponent(ComponentRegistryCase):
             Component1._build_component(self.comp_registry)
 
     def test_no_parent2(self):
+        """ Ensure we can't _inherit by prototype a non-existent component """
         class Component1(Component):
             _name = 'component1'
 

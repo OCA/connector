@@ -25,8 +25,8 @@ class Collection(models.AbstractModel):
             _collection = 'magento.backend'  # name of the collection
 
             def run(self, magento_id):
-                mapper = self.components(name='magento.sale.importer.mapper')
-                extra_mappers = self.components(
+                mapper = self.component(name='magento.sale.importer.mapper')
+                extra_mappers = self.component(
                     usage='magento.sale.importer.mapper',
                     many=True,
                 )
@@ -36,7 +36,7 @@ class Collection(models.AbstractModel):
 
         backend = self.env['magento.backend'].browse(1)
         work = backend.work_on('magento.sale.order')
-        importer = work.components(name='magento.sale.importer')
+        importer = work.component(name='magento.sale.importer')
         importer.run(1)
 
 

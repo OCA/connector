@@ -37,9 +37,55 @@ class ComponentGlobalRegistry(OrderedDict):
     This is an OrderedDict, because we want to keep the
     registration order of the components, addons loaded first
     have their components found first (when we look for a list
-    components using `multi`).
+    components using `many`).
 
     """
+
+    # TODO use a LRU cache (repoze.lru?)
+    def lookup(self, collection_name, usage=None,
+               model_name=None, many=False):
+
+        # keep the order so addons loaded first have components used first
+        # in case of many=True
+        collection_components = [
+            component for component in self.itervalues()
+            if (component._collection == collection_name or
+                component._collection is None) and
+            not component._abstract
+        ]
+        candidates = []
+
+        if usage is not None:
+            components = [component for component in collection_components
+                          if component._usage == usage]
+            if components:
+                candidates = components
+        else:
+            candidates = collection_components
+
+        # filter out by model name
+        candidates = [c for c in candidates
+                      if c.apply_on_models is None or
+                      model_name in c.apply_on_models]
+
+        if not candidates:
+            raise NoComponentError(
+                "No component found for collection '%s', "
+                "usage '%s', model_name '%s'." %
+                (collection_name, usage, model_name)
+            )
+
+        if not many:
+            if len(candidates) > 1:
+                raise SeveralComponentError(
+                    "Several components found for collection '%s', "
+                    "usage '%s', model_name '%s'. Found: %r" %
+                    (collection_name, usage, model_name, candidates)
+                )
+            # TODO: always return a list here, use a 2 methods for multi/normal
+            return candidates.pop()
+
+        return candidates
 
 
 all_components = ComponentGlobalRegistry()
@@ -47,11 +93,16 @@ all_components = ComponentGlobalRegistry()
 
 class WorkContext(object):
 
-    def __init__(self, collection, model_name, **kwargs):
+    def __init__(self, collection, model_name,
+                 components_registry=None, **kwargs):
         self.collection = collection
         self.model_name = model_name
         self.model = self.env[model_name]
-        self._propagate_kwargs = []
+        if components_registry:
+            self.components_registry = components_registry
+        else:
+            self.components_registry = all_components
+        self._propagate_kwargs = ['components_registry']
         for attr_name, value in kwargs.iteritems():
             setattr(self, attr_name, value)
             self._propagate_kwargs.append(attr_name)
@@ -66,13 +117,13 @@ class WorkContext(object):
         return self.__class__(self.collection, model_name, **kwargs)
 
     def component_by_name(self, name):
-        return all_components['base'](self).component_by_name(name)
+        return self.components_registry['base'](self).component_by_name(name)
 
-    def components(self, usage=None, model_name=None, multi=False):
-        return all_components['base'](self).components(
+    def components(self, usage=None, model_name=None, many=False):
+        return self.components_registry['base'](self).components(
             usage=usage,
             model_name=model_name,
-            multi=multi,
+            many=many,
         )
 
     def __str__(self):
@@ -141,78 +192,43 @@ class AbstractComponent(object):
     def model(self):
         return self.work.model
 
-    # TODO use a LRU cache (repoze.lru, beware we must include the collection
-    # name in the cache but not 'self')
-    @staticmethod  # staticmethod in order to use a LRU cache on all args
-    def lookup(collection_name, usage=None, model_name=None, multi=False):
-        # TODO: verify that ordering is kept
-
-        # keep the order so addons loaded first have components used first
-        # in case of multi=True
-        collection_components = [
-            component for component in all_components.itervalues()
-            if (component._collection == collection_name or
-                component._collection is None) and
-            not component._abstract
-        ]
-        candidates = []
-
-        if usage is not None:
-            components = [component for component in collection_components
-                          if component._usage == usage]
-            if components:
-                candidates = components
-        else:
-            candidates = collection_components.values()
-
-        # filter out by model name
-        candidates = [c for c in candidates
-                      if c.apply_on_models is None or
-                      model_name in c.apply_on_models]
-
-        if not candidates:
-            raise NoComponentError(
-                "No component found for collection '%s', "
-                "usage '%s', model_name '%s'." %
-                (collection_name, usage, model_name)
-            )
-
-        if not multi:
-            if len(candidates) > 1:
-                raise SeveralComponentError(
-                    "Several components found for collection '%s', "
-                    "usage '%s', model_name '%s'. Found: %r" %
-                    (collection_name, usage, model_name, candidates)
-                )
-            # TODO: always return a list here, use a 2 methods for multi/normal
-            return candidates.pop()
-
-        return candidates
-
     def _component_class_by_name(self, name):
-        component_class = all_components.get(name)
+        components_registry = self.work.components_registry
+        component_class = components_registry.get(name)
         if not component_class:
-            # TODO: which error type?
-            raise ValueError("No component with name '%s' found." % name)
+            raise NoComponentError("No component with name '%s' found." % name)
         return component_class
 
     def component_by_name(self, name, model_name=None):
-        if model_name is None or model_name == self.work.model_name:
+        component_class = self._component_class_by_name(name)
+        work_model = model_name or self.work.model_name
+        if (component_class.apply_on_models and
+                work_model not in component_class.apply_on_models):
+            if len(component_class.apply_on_models) == 1:
+                hint_models = "'%s'" % (component_class.apply_on_models[0],)
+            else:
+                hint_models = "<one of %r>" % (component_class.apply_on_models,)
+            raise NoComponentError(
+                "Component with name '%s' can't be used for model '%s'.\n"
+                "Hint: you might want to use: "
+                "component_by_name('%s', model_name=%s)" %
+                (name, work_model, name, hint_models)
+            )
+
+        if work_model == self.work.model_name:
             work_context = self.work
         else:
             work_context = self.work.work_on(model_name)
-
-        component_class = self._component_class_by_name(name)
         return component_class(work_context)
 
-    def components(self, usage=None, model_name=None, multi=False):
+    def components(self, usage=None, model_name=None, many=False):
         if isinstance(model_name, models.BaseModel):
             model_name = model_name._name
-        component_class = self.lookup(
+        component_class = self.work.components_registry.lookup(
             self.collection._name,
             usage=usage,
             model_name=model_name or self.work.model_name,
-            multi=multi,
+            many=many,
         )
         if model_name is None or model_name == self.work.model_name:
             work_context = self.work
@@ -241,6 +257,9 @@ class AbstractComponent(object):
         This "registry" class carries inferred component metadata, and inherits
         (in the Python sense) from all classes that define the component, and
         possibly other registry classes.
+
+        The following code is roughly the same than the Odoo's one for
+        building Models.
 
         """
 
@@ -294,6 +313,9 @@ class AbstractComponent(object):
 
         # determine the component's name
         name = cls._name or (len(parents) == 1 and parents[0])
+
+        if not name:
+            raise TypeError('Component %r must have a _name' % cls)
 
         # all components except 'base' implicitly inherit from 'base'
         if name != 'base':

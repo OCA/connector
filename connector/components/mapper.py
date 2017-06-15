@@ -387,7 +387,7 @@ class ImportMapChild(AbstractComponent):
     _usage = 'import.map.child'
 
     def _child_mapper(self):
-        return self.components(usage='import.mapper')
+        return self.component(usage='import.mapper')
 
     def format_items(self, items_values):
         """ Format the values of the items mapped from the child Mappers.
@@ -415,7 +415,7 @@ class ExportMapChild(AbstractComponent):
     _usage = 'export.map.child'
 
     def _child_mapper(self):
-        return self.components(usage='export.mapper')
+        return self.component(usage='export.mapper')
 
 
 class Mapper(AbstractComponent):
@@ -592,8 +592,8 @@ class Mapper(AbstractComponent):
 
     def _get_map_child_component(self, model_name):
         try:
-            mapper_child = self.components(usage=self._map_child_usage,
-                                           model_name=model_name)
+            mapper_child = self.component(usage=self._map_child_usage,
+                                          model_name=model_name)
         except NoComponentError:
             assert self._map_child_fallback is not None, (
                 "_map_child_fallback required")

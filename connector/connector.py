@@ -12,6 +12,8 @@ from .exception import RetryableJobError
 
 _logger = logging.getLogger(__name__)
 
+# XXX most or all to remove in v11
+
 
 # this is duplicated from odoo.models.MetaModel._get_addon_name() which we
 # unfortunately can't use because it's an instance method and should have been

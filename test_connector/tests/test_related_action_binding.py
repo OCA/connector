@@ -27,7 +27,6 @@ class TestRelatedActionBinding(common.TransactionCase):
 
         job = binding.with_delay().job_related_action_unwrap()
         db_job = job.db_record()
-        db_job = db_job.with_context(test_connector_units=True)
         action = db_job.open_related_action()
         expected = {
             'name': mock.ANY,
@@ -48,7 +47,6 @@ class TestRelatedActionBinding(common.TransactionCase):
 
         job = binding.with_delay().job_related_action_unwrap()
         db_job = job.db_record()
-        db_job = db_job.with_context(test_connector_units=True)
         action = db_job.open_related_action()
         expected = {
             'name': mock.ANY,
@@ -70,7 +68,6 @@ class TestRelatedActionBinding(common.TransactionCase):
         job = binding.with_delay().job_related_action_unwrap()
 
         db_job = job.db_record()
-        db_job = db_job.with_context(test_connector_units=True)
 
         binding.unlink()
 

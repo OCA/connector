@@ -2,22 +2,21 @@
 # Copyright 2016 Camptocamp SA
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html)
 
-from odoo.addons.connector.connector import Binder
-from ..backend import test_backend
+from odoo.addons.component.core import Component
 
 
-@test_backend
-class ConnectorTestBinder(Binder):
-
-    _model_name = [
+class ConnectorTestBinder(Component):
+    _name = 'connector.test.binder'
+    _inherit = ['base.binder']
+    _apply_on = [
         'connector.test.binding',
     ]
 
 
-@test_backend
-class NoInheritsBinder(Binder):
-
-    _model_name = [
+class NoInheritsBinder(Component):
+    _name = 'connector.test.no.inherits.binder'
+    _inherit = ['base.binder']
+    _apply_on = [
         'no.inherits.binding',
     ]
 

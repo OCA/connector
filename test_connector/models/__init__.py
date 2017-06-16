@@ -1,3 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from . import test_models
+from . import models
+from . import deprecated_unit
+from . import components

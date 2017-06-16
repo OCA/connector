@@ -16,14 +16,16 @@ class ConnectorBackend(models.AbstractModel):
     _name = 'connector.backend'
     _inherit = ['collection.base']
     _description = 'Connector Backend'
+    # XXX _backend_type will be removed in Odoo 11.0
     _backend_type = None
 
-    # XXX those 2 fields are not strictly necessary now
+    # XXX those 2 fields will not strictly be necessary once we
+    # change to the new implementation (especially the version)
     name = fields.Char(required=True)
     # replace by a selection in concrete models
     version = fields.Selection(selection=[], required=True)
 
-    # XXX deprecate: only used for the old unit system
+    # XXX to remove in 11.0
     @api.multi
     def get_backend(self):
         """ For a record of backend, returns the appropriate instance
@@ -61,7 +63,7 @@ class ExternalBinding(models.AbstractModel):
 
         The many2one to the backend (for instance ``magento.backend``).
 
-    magento_id or prestashop_id or ...
+    external_id
 
         The ID on the backend.
 
@@ -84,9 +86,9 @@ class ExternalBinding(models.AbstractModel):
             _inherits = {'res.partner.category': 'odoo_id'}
 
             odoo_id = fields.Many2one(comodel_name='res.partner.category',
-                                          string='Partner Category',
-                                          required=True,
-                                          ondelete='cascade')
+                                      string='Partner Category',
+                                      required=True,
+                                      ondelete='cascade')
             backend_id = fields.Many2one(
                 comodel_name='magento.backend',
                 string='Magento Backend',

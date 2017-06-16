@@ -2,9 +2,7 @@
 # Copyright 2013-2017 Camptocamp SA
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html)
 
-import unittest
 import mock
-import odoo.tests.common as common
 from odoo.addons.component.core import Component, WorkContext
 from odoo.addons.component.tests.common import (
     ComponentRegistryCase,
@@ -12,7 +10,6 @@ from odoo.addons.component.tests.common import (
 )
 
 from odoo.addons.connector.components.core import BaseConnectorComponent
-from odoo.addons.connector.components.binder import Binder
 from odoo.addons.connector.components.mapper import (
     Mapper,
     ImportMapper,
@@ -572,7 +569,6 @@ class TestMapper(ComponentRegistryCase):
         self.assertEqual(map_record.values(for_create=True,
                                            fields=['field', 'name']), expected)
 
-
     def test_mapping_custom_option(self):
         """ Usage of custom options in mappings """
         class MyMapper(Component):
@@ -601,6 +597,7 @@ class TestMapper(ComponentRegistryCase):
         class MyMapper(Component):
             _name = 'my.mapper'
             _inherit = 'base.import.mapper'
+
             @mapping
             def any(self, record):
                 if self.options.custom is None:
@@ -722,7 +719,6 @@ class TestMapperBinding(TransactionComponentRegistryCase):
         Mapper._build_component(self.comp_registry)
         # 'base.import.mapper'
         ImportMapper._build_component(self.comp_registry)
-        # Binder._build_component(self.comp_registry)
 
         self.country_binder = mock.MagicMock(name='country_binder')
         self.country_binder.return_value = self.country_binder

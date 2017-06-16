@@ -535,25 +535,75 @@ class Mapper(AbstractComponent):
 
     @classmethod
     def _build_mapper_component(cls):
+        """ Build a Mapper component
+
+        When a Mapper component is built, we will look into every of its bases
+        and look for methods decorated by ``@mapping`` or ``@changed_by``.  We
+        keep the definitions in a ``_map_methods`` attribute for later use by
+        the Mapper instances.
+
+        The ``__bases__`` of a newly generated Component are 2 kinds:
+        * other dynamically generated components (below 'base' and
+          'fry.mapper')
+        * "real" Python classes that is applied on top of other layers (here
+          ThirdMapper)
+
+        ::
+
+            >>> cls.__bases__
+            (<class 'odoo.addons.connector.tests.test_mapper.ThirdMapper'>,
+             <class 'odoo.addons.component.core.fry.mapper'>,
+             <class 'odoo.addons.component.core.base'>)
+
+        This method traverse these bases, from the bottom to the top, and
+        merges the mapping definitions. It reuses the computed definitions
+        for the generated components (for which this code already ran), and
+        inspect the real classes to find mapping methods.
+
+        """
+
         map_methods = {}
         for base in reversed(cls.__bases__):
-            for attr_name in dir(base):
-                attr = getattr(base, attr_name)
-                if not getattr(attr, 'is_mapping', None):
-                    continue
-                has_only_create = getattr(attr, 'only_create', False)
-                mapping_changed_by = set(getattr(attr, 'changed_by', ()))
+            if hasattr(base, '_map_methods'):
+                # this is already a dynamically generated Component, so we can
+                # use it's existing mappings
+                base_map_methods = base._map_methods or {}
+                for attr_name, definition in base_map_methods.iteritems():
+                    if attr_name in map_methods:
+                        # Update the existing @changed_by with the content
+                        # of each base (it is mutated in place).
+                        mapping_changed_by = map_methods[attr_name].changed_by
+                        mapping_changed_by.update(definition.changed_by)
+                        # keep the last value for @only_create
+                        if definition.only_create:
+                            new_definition = MappingDefinition(
+                                mapping_changed_by,
+                                definition.only_create,
+                            )
+                            map_methods[attr_name] = new_definition
+                    else:
+                        map_methods[attr_name] = definition
+            else:
+                # this is a real class that needs to be applied upon
+                # the base Components
+                for attr_name in dir(base):
+                    attr = getattr(base, attr_name, None)
+                    if not getattr(attr, 'is_mapping', None):
+                        continue
+                    has_only_create = getattr(attr, 'only_create', False)
+                    mapping_changed_by = set(getattr(attr, 'changed_by', ()))
 
-                # If already existing, it has been defined in an previous base,
-                # extend the @changed_by set
-                if map_methods.get(attr_name) is not None:
-                    definition = map_methods[attr_name]
-                    mapping_changed_by.update(definition.changed_by)
+                    # if already existing, it has been defined in an previous
+                    # base, extend the @changed_by set
+                    if map_methods.get(attr_name) is not None:
+                        definition = map_methods[attr_name]
+                        mapping_changed_by.update(definition.changed_by)
 
-                # keep the last choice for only_create
-                definition = MappingDefinition(mapping_changed_by,
-                                               has_only_create)
-                map_methods[attr_name] = definition
+                    # keep the last choice for only_create
+                    definition = MappingDefinition(mapping_changed_by,
+                                                   has_only_create)
+                    map_methods[attr_name] = definition
+
         cls._map_methods = map_methods
 
     @classmethod
@@ -640,7 +690,7 @@ class Mapper(AbstractComponent):
         the decorator: ``changed_by``.
         """
         changed_by = set()
-        if self.get('direct'):
+        if getattr(self, 'direct', None):
             for from_attr, __ in self.direct:
                 fieldname = self._direct_source_field_name(from_attr)
                 changed_by.add(fieldname)

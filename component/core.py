@@ -507,7 +507,7 @@ class AbstractComponent(object):
         component_classes = self.work._components_registry.lookup(
             self.collection._name,
             usage=usage,
-            model_name=model_name or self.work.model_name,
+            model_name=model_name,
         )
 
         return component_classes
@@ -529,6 +529,7 @@ class AbstractComponent(object):
         """
         if isinstance(model_name, models.BaseModel):
             model_name = model_name._name
+        model_name = model_name or self.work.model_name
         component_classes = self._lookup_components(
             usage=usage, model_name=model_name
         )
@@ -545,7 +546,7 @@ class AbstractComponent(object):
                 (self.collection._name, usage or '',
                  model_name or '', component_classes)
             )
-        if model_name is None or model_name == self.work.model_name:
+        if model_name == self.work.model_name:
             work_context = self.work
         else:
             work_context = self.work.work_on(model_name)
@@ -564,10 +565,11 @@ class AbstractComponent(object):
         """
         if isinstance(model_name, models.BaseModel):
             model_name = model_name._name
+        model_name = model_name or self.work.model_name
         component_classes = self._lookup_components(
             usage=usage, model_name=model_name
         )
-        if model_name is None or model_name == self.work.model_name:
+        if model_name == self.work.model_name:
             work_context = self.work
         else:
             work_context = self.work.work_on(model_name)

@@ -2,17 +2,17 @@
 # Copyright 2017 Camptocamp SA
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html)
 
-from odoo.addons.component.core import Component
+from odoo.addons.component.core import AbstractComponent, Component
 
 
-class BaseComponent(Component):
+class BaseComponent(AbstractComponent):
     _inherit = 'base'
 
     def test_inherit_base(self):
         return 'test_inherit_base'
 
 
-class Mapper(Component):
+class Mapper(AbstractComponent):
     _name = 'mapper'
 
     def test_inherit_component(self):

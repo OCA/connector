@@ -9,13 +9,12 @@ from odoo import api
 from odoo.modules.registry import RegistryManager
 from odoo.tests import common
 from odoo.addons.connector import connector
-from odoo.addons.connector.exception import RetryableJobError
+from odoo.addons.queue_job.exception import RetryableJobError
 from odoo.addons.connector.connector import (
     is_module_installed,
     get_odoo_module,
     ConnectorEnvironment,
     ConnectorUnit,
-    pg_try_advisory_lock,
 )
 
 
@@ -207,19 +206,6 @@ class TestAdvisoryLock(common.TransactionCase):
             self.env2.reset()
             self.cr2.rollback()
             self.cr2.close()
-
-    def test_concurrent_lock(self):
-        """ 2 concurrent transactions cannot acquire the same lock """
-        lock = 'import_record({}, {}, {}, {})'.format(
-            'backend.name',
-            1,
-            'res.partner',
-            '999999',
-        )
-        acquired = pg_try_advisory_lock(self.env, lock)
-        self.assertTrue(acquired)
-        inner_acquired = pg_try_advisory_lock(self.env2, lock)
-        self.assertFalse(inner_acquired)
 
     def test_concurrent_import_lock(self):
         """ A 2nd concurrent transaction must retry """

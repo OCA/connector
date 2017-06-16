@@ -2,7 +2,7 @@
 # Copyright 2013-2017 Camptocamp SA
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html)
 
-# XXX to deprecate
+# XXX Will be removed in Odoo 11.0
 
 from functools import partial
 from collections import namedtuple

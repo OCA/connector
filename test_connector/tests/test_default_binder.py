@@ -3,25 +3,23 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html)
 
 from odoo.tests.common import TransactionCase
-from odoo.addons.connector.connector import ConnectorEnvironment, Binder
 
 
 class TestDefaultBinder(TransactionCase):
-    """ Test the default binder implementation"""
+    """ Test the default binder implementation using Components """
 
     def setUp(self):
         super(TestDefaultBinder, self).setUp()
 
-        backend_model = self.env['test.backend'].with_context(
-            test_connector_units=True
-        )
-        self.backend_record = backend_model.create(
+        # create our backend, in case of components,
+        # the version would not be required
+        self.backend_record = self.env['test.backend'].create(
             {'version': '1', 'name': 'Test'}
         )
-        self.connector_env = ConnectorEnvironment(
-            self.backend_record, 'connector.test.binding'
-        )
-        self.binder = self.connector_env.get_connector_unit(Binder)
+        # create a work context with the model we want to work with
+        self.work = self.backend_record.work_on('connector.test.binding')
+        # get our binder component (for the model in whe work context)
+        self.binder = self.work.component(usage='binder')
 
     def test_default_binder(self):
         """ Small scenario with the default binder """

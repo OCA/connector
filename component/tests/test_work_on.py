@@ -35,8 +35,8 @@ class TestWorkOn(common.TransactionCase):
         """ Check custom attributes and their propagation """
         registry = ComponentGlobalRegistry()
         work = WorkContext(
-            self.collection,
-            'res.partner',
+            model_name='res.partner',
+            collection=self.collection,
             # we can customize the lookup registry, but used mostly for tests
             components_registry=registry,
             # we can pass our own keyword args that will set as attributes

@@ -12,6 +12,7 @@
  'depends': ['mail',
              'queue_job',
              'component',
+             'component_event',
              ],
  'data': ['security/connector_security.xml',
           'security/ir.model.access.csv',

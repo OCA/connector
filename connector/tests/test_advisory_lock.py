@@ -63,7 +63,8 @@ class TestAdvisoryLock(TransactionComponentRegistryCase):
 
         backend = mock.MagicMock()
         backend.env = self.env
-        work = WorkContext(backend, 'res.partner')
+        work = WorkContext(model_name='res.partner',
+                           collection=backend)
         # we test the function through a Component instance
         component = self.comp_registry['base.connector'](work)
         # acquire the lock
@@ -73,7 +74,8 @@ class TestAdvisoryLock(TransactionComponentRegistryCase):
         # hence another PG transaction
         backend2 = mock.MagicMock()
         backend2.env = self.env2
-        work2 = WorkContext(backend2, 'res.partner')
+        work2 = WorkContext(model_name='res.partner',
+                            collection=backend2)
         component2 = self.comp_registry['base.connector'](work2)
         with self.assertRaises(RetryableJobError) as cm:
             component2.advisory_lock_or_retry(lock, retry_seconds=3)

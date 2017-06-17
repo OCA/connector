@@ -67,4 +67,4 @@ class Collection(models.AbstractModel):
 
         """
         self.ensure_one()
-        return WorkContext(self, model_name, **kwargs)
+        return WorkContext(model_name=model_name, collection=self, **kwargs)

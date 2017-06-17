@@ -36,12 +36,12 @@ Core Features
   developer on how to use the proposed pieces.
 * See a :ref:`code-overview` with examples of code
 
-.. _Odoo: http://www.odoo.com
-.. _Camptocamp: http://www.camptocamp.com
+.. _Odoo: https://www.odoo.com
+.. _Camptocamp: https://www.camptocamp.com
 .. _Akretion: http://www.akretion.com
-.. _Acsone: http://www.acsone.eu
+.. _Acsone: https://www.acsone.eu
 .. _`source code is available on GitHub`: https://github.com/OCA/connector
-.. _`AGPL version 3`: http://www.gnu.org/licenses/agpl-3.0.html
+.. _`AGPL version 3`: https://www.gnu.org/licenses/agpl-3.0.html
 .. _`project's mailing list (name: Connectors)`: https://odoo-community.org/groups
 
 *********************************
@@ -79,16 +79,7 @@ Overview
 Top financial contributors
 **************************
 
-.. image:: _static/img/LogicSupply_Orange_260x80_transparent.png
-   :alt: Logic Supply
-   :target: http://www.logicsupply.com
-
-.. image:: _static/img/logo-debonix.jpg
-   :alt: Debonix
-   :target: http://www.debonix.fr
-
-|
-*See all the project's* :ref:`financial-contributors`.
+:ref:`financial-contributors`.
 
 *******
 Project
@@ -121,17 +112,12 @@ API Reference
 .. toctree::
    :maxdepth: 1
 
-   api/api_connector.rst
+   api/api_components.rst
    api/api_backend.rst
    api/api_event.rst
-   api/api_binder.rst
-   api/api_mapper.rst
-   api/api_synchronizer.rst
-   api/api_backend_adapter.rst
    api/api_queue.rst
    api/api_exception.rst
    api/api_channels.rst
-   api/api_runner.rst
 
 ******************
 Indices and tables

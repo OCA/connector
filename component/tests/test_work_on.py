@@ -3,10 +3,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html)
 
 from odoo.tests import common
-from odoo.addons.component.core import (
-    WorkContext,
-    ComponentGlobalRegistry,
-)
+from odoo.addons.component.core import WorkContext, ComponentRegistry
 
 
 class TestWorkOn(common.TransactionCase):
@@ -33,7 +30,7 @@ class TestWorkOn(common.TransactionCase):
 
     def test_propagate_work_on(self):
         """ Check custom attributes and their propagation """
-        registry = ComponentGlobalRegistry()
+        registry = ComponentRegistry()
         work = WorkContext(
             model_name='res.partner',
             collection=self.collection,
@@ -42,7 +39,7 @@ class TestWorkOn(common.TransactionCase):
             # we can pass our own keyword args that will set as attributes
             test_keyword='value',
         )
-        self.assertIs(registry, work._components_registry)
+        self.assertIs(registry, work.components_registry)
         # check that our custom keyword is set as attribute
         self.assertEquals('value', work.test_keyword)
 
@@ -53,6 +50,6 @@ class TestWorkOn(common.TransactionCase):
         self.assertEquals(self.env, work2.env)
         self.assertEquals(self.collection, work2.collection)
         self.assertEquals('res.users', work2.model_name)
-        self.assertIs(registry, work2._components_registry)
+        self.assertIs(registry, work2.components_registry)
         # test_keyword has been propagated to the new WorkContext instance
         self.assertEquals('value', work2.test_keyword)

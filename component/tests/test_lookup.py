@@ -10,7 +10,7 @@ from .common import ComponentRegistryCase
 
 
 class TestLookup(ComponentRegistryCase):
-    """ Test the ComponentGlobalRegistry
+    """ Test the ComponentRegistry
 
     Tests in this testsuite mainly do:
 

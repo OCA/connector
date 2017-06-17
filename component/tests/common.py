@@ -6,7 +6,7 @@ import unittest2
 from odoo.tests import common
 from odoo.addons.component.core import (
     AbstractComponent,
-    ComponentGlobalRegistry,
+    ComponentRegistry,
     MetaComponent,
 )
 
@@ -22,7 +22,7 @@ class ComponentRegistryCase(unittest2.TestCase):
         MetaComponent._modules_components.clear()
 
         # it will be our temporary component registry for our test session
-        self.comp_registry = ComponentGlobalRegistry()
+        self.comp_registry = ComponentRegistry()
 
         # there's always an implicit dependency on a 'base' component
         # so we must register one

@@ -18,6 +18,9 @@ customizations.
 The development of Odoo Connector has been started by `Camptocamp`_ and is now
 maintained by `Camptocamp`_, `Akretion`_, `Acsone`_ and several :ref:`contributors`.
 
+It got a major overhaul in 2017 (Odoo 10.0). A :ref:`migration-guide` is
+available.
+
 *Subscribe to the* `project's mailing list (name: Connectors)`_
 
 *Learn how to* :ref:`contribute`
@@ -102,6 +105,7 @@ Developer's guide
    :maxdepth: 2
 
    guides/code_overview.rst
+   guides/migration_guide.rst
    guides/concepts.rst
    guides/bootstrap_connector.rst
    guides/jobrunner.rst

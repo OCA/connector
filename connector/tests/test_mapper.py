@@ -668,7 +668,8 @@ class TestMapperRecordsets(TransactionComponentRegistryCase):
         super(TestMapperRecordsets, self).setUp()
         backend_record = mock.Mock()
         backend_record.env = self.env
-        self.work = WorkContext(backend_record, 'res.partner',
+        self.work = WorkContext(model_name='res.partner',
+                                collection=backend_record,
                                 components_registry=self.comp_registry)
         # build and push in the component registry the base components we
         # inherit from in the tests
@@ -708,7 +709,8 @@ class TestMapperBinding(TransactionComponentRegistryCase):
         backend_record = mock.Mock()
         backend_record.env = self.env
         backend_record._name = 'my.collection'
-        self.work = WorkContext(backend_record, 'res.partner',
+        self.work = WorkContext(model_name='res.partner',
+                                collection=backend_record, 
                                 components_registry=self.comp_registry)
 
         # build and push in the component registry the base components we

@@ -2,6 +2,16 @@
 # Copyright 2013-2017 Camptocamp SA
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html)
 
+"""
+Binders
+=======
+
+Binders are components that know how to find the external ID for an
+Odoo ID, how to find the Odoo ID for an external ID and how to
+create the binding between them.
+
+"""
+
 from odoo import fields, models, tools
 from odoo.addons.component.core import AbstractComponent
 
@@ -15,6 +25,7 @@ class Binder(AbstractComponent):
 
     This implementation assumes that binding models are ``_inherits`` of
     the models they are binding.
+
     """
 
     _name = 'base.binder'

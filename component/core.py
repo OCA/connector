@@ -40,8 +40,23 @@ def _get_addon_name(full_name):
     return addon_name
 
 
-# FIXME: have a different registry per database
-class ComponentGlobalRegistry(OrderedDict):
+class ComponentDatabases(object):
+    """ Holds a registry of components for each database """
+
+    def __init__(self):
+        self._databases = {}
+
+    def get(self, key, default=None):
+        return self._databases.get(key, default=default)
+
+    def clear(self, dbname):
+        self._databases[dbname] = ComponentRegistry()
+
+    def __getitem__(self, key):
+        return self._databases[key]
+
+
+class ComponentRegistry(OrderedDict):
     """ Store all the components and allow to find them using criteria
 
     The key is the ``_name`` of the components.
@@ -107,9 +122,9 @@ class ComponentGlobalRegistry(OrderedDict):
         return list(candidates)
 
 
-# This is where we will keep all the generated classes of the Components
+# We will store a ComponentRegistry per database here,
 # it will be cleared and updated when the odoo's registry is rebuilt
-all_components = ComponentGlobalRegistry()
+_component_databases = ComponentDatabases()
 
 
 class WorkContext(object):
@@ -190,12 +205,13 @@ class WorkContext(object):
         self.model = self.env[model_name]
         # lookup components in an alternative registry, used by the tests
         if components_registry is not None:
-            self._components_registry = components_registry
+            self.components_registry = components_registry
         else:
-            self._components_registry = all_components
+            dbname = self.env.cr.dbname
+            self.components_registry = _component_databases[dbname]
         self._propagate_kwargs = [
             'collection',
-            '_components_registry',
+            'components_registry',
         ]
         for attr_name, value in kwargs.iteritems():
             setattr(self, attr_name, value)
@@ -225,7 +241,7 @@ class WorkContext(object):
         Entrypoint to get a component, then you will probably use
         meth:`~AbstractComponent.component_by_name`
         """
-        base = self._components_registry['base'](self)
+        base = self.components_registry['base'](self)
         return base.component_by_name(name, model_name=model_name)
 
     def component(self, usage=None, model_name=None):
@@ -235,7 +251,7 @@ class WorkContext(object):
         meth:`~AbstractComponent.component` or
         meth:`~AbstractComponent.many_components`
         """
-        return self._components_registry['base'](self).component(
+        return self.components_registry['base'](self).component(
             usage=usage,
             model_name=model_name,
         )
@@ -247,7 +263,7 @@ class WorkContext(object):
         meth:`~AbstractComponent.component` or
         meth:`~AbstractComponent.many_components`
         """
-        return self._components_registry['base'](self).many_components(
+        return self.components_registry['base'](self).many_components(
             usage=usage,
             model_name=model_name,
         )
@@ -482,7 +498,7 @@ class AbstractComponent(object):
         return self.work.model
 
     def _component_class_by_name(self, name):
-        components_registry = self.work._components_registry
+        components_registry = self.work.components_registry
         component_class = components_registry.get(name)
         if not component_class:
             raise NoComponentError("No component with name '%s' found." % name)
@@ -532,7 +548,7 @@ class AbstractComponent(object):
         return component_class(work_context)
 
     def _lookup_components(self, usage=None, model_name=None):
-        component_classes = self.work._components_registry.lookup(
+        component_classes = self.work.components_registry.lookup(
             self.collection._name,
             usage=usage,
             model_name=model_name,
@@ -544,7 +560,7 @@ class AbstractComponent(object):
         """ Find a component by usage and model for the current collection
 
         It searches a component using the rules of
-        :meth:`ComponentGlobalRegistry.lookup`. When a component is found,
+        :meth:`ComponentRegistry.lookup`. When a component is found,
         it initialize it with the current :class:`WorkContext` and returned.
 
         A :class:`odoo.addons.component.exception.SeveralComponentError` is
@@ -584,7 +600,7 @@ class AbstractComponent(object):
         """ Find many components by usage and model for the current collection
 
         It searches a component using the rules of
-        :meth:`ComponentGlobalRegistry.lookup`. When components are found, they
+        :meth:`ComponentRegistry.lookup`. When components are found, they
         initialized with the current :class:`WorkContext` and returned as a
         list.
 
@@ -624,7 +640,7 @@ class AbstractComponent(object):
         Component classes follow the ``_inherit`` chain.
 
         Once a Component class is created, it adds it in the Component Registry
-        (:class:`ComponentGlobalRegistry`), so it will be available for
+        (:class:`ComponentRegistry`), so it will be available for
         lookups.
 
         At the end of new class creation, a hook method

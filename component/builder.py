@@ -13,7 +13,7 @@ Build the components at the build of a registry.
 
 import odoo
 from odoo import api, models
-from .core import MetaComponent, all_components
+from .core import MetaComponent, _component_databases
 
 
 class ComponentBuilder(models.AbstractModel):
@@ -43,7 +43,7 @@ class ComponentBuilder(models.AbstractModel):
         # This method is called by Odoo when the registry is built,
         # so in case the registry is rebuilt (cache invalidation, ...),
         # we have to clear the components then rebuild them
-        all_components.clear()
+        _component_databases.clear(self.env.cr.dbname)
         # TODO: reset the LRU cache of the component lookups when implemented
 
         # lookup all the installed (or about to be) addons and generate
@@ -61,10 +61,11 @@ class ComponentBuilder(models.AbstractModel):
                        if name not in graph]
         graph.add_modules(self.env.cr, module_list)
 
+        components_registry = _component_databases[self.env.cr.dbname]
         for module in graph:
-            self.load_components(module.name, all_components)
+            self.load_components(module.name, components_registry)
 
-    def load_components(self, module, registry):
+    def load_components(self, module, components_registry):
         """ Build every component known by MetaComponent for an odoo module
 
         The final component (composed by all the Component classes in this
@@ -74,7 +75,7 @@ class ComponentBuilder(models.AbstractModel):
                        the components
         :type module: str | unicode
         :param registry: the registry in which we want to put the Component
-        :type registry: :py:class:`~.core.ComponentGlobalRegistry`
+        :type registry: :py:class:`~.core.ComponentRegistry`
         """
         for component_class in MetaComponent._modules_components[module]:
-            component_class._build_component(registry)
+            component_class._build_component(components_registry)

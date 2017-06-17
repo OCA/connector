@@ -10,45 +10,76 @@ As an example, we'll see the steps for exporting an invoice to Magento.
 The steps won't show all the steps, but a simplified excerpt of a real
 use case exposing the main ideas.
 
-********
-Backends
-********
+*************
+Backend Model
+*************
 
-All start with the declaration of the :py:class:`~connector.backend.Backend`::
+All start with the declaration of the Backend.
 
-  import odoo.addons.connector.backend as backend
+.. code-block:: python
 
-  magento = backend.Backend('magento')
-  """ Generic Magento Backend """
+    class MagentoBackend(models.Model):
+        _name = 'magento.backend'
+        _description = 'Magento Backend'
+        _inherit = 'connector.backend'
 
-  magento1700 = backend.Backend(parent=magento, version='1.7')
-  """ Magento Backend for version 1.7 """
+        location = fields.Char(string='Location')
+        username = fields.Char(string='Username')
+        password = fields.Char(string='Password')
 
-As you see, Magento is the parent of Magento 1.7. We can define a
-hierarchy of backends.
+In the Components dialect, we'll call it a Collection.
+
 
 ********
 Bindings
 ********
 
 The ``binding`` is the link between an Odoo record and an external
-record. There is no forced implementation for the ``bindings``. The most
-straightforward techniques are: storing the external ID in the same
-model (``account.invoice``), in a new link model or in a new link model
-which ``_inherits`` ``account.invoice``. Here we choose the latter
-solution::
+record. There is no forced implementation for the ``bindings``.
 
-  class MagentoAccountInvoice(models.Model):
-      _name = 'magento.account.invoice'
-      _inherits = {'account.invoice': 'odoo_id'}
-      _description = 'Magento Invoice'
+Usually, a binding model that ``_inherits`` the record to synchronize is
+created, in which we will store the id of the Backend, the id of the record
+and the external id.
 
-      backend_id = fields.Many2one(comodel_name='magento.backend', string='Magento Backend', required=True, ondelete='restrict')
-      odoo_id = fields.Many2one(comodel_name='account.invoice', string='Invoice', required=True, ondelete='cascade')
-      magento_id = fields.Char(string='ID on Magento')  # fields.char because 0 is a valid Magento ID
-      sync_date = fields.Datetime(string='Last synchronization date')
-      magento_order_id = fields.Many2one(comodel_name='magento.sale.order', string='Magento Sale Order', ondelete='set null')
-      # we can also store additional data related to the Magento Invoice
+You might also store the external id in the same model, but you would not be
+able to synchronize the same record with several backends (several instances
+of Magento for instance).
+
+In a real case, some of the fields below and the export_record method are
+inherited from an abstract binding.  But for clarity, all the required fields
+are shown
+
+.. code-block:: python
+
+    class MagentoAccountInvoice(models.Model):
+        _name = 'magento.account.invoice'
+        _inherits = {'account.invoice': 'odoo_id'}
+        _description = 'Magento Invoice'
+
+        backend_id = fields.Many2one(comodel_name='magento.backend', string='Magento Backend', required=True, ondelete='restrict')
+        odoo_id = fields.Many2one(comodel_name='account.invoice', string='Invoice', required=True, ondelete='cascade')
+        magento_id = fields.Char(string='ID on Magento')  # fields.char because 0 is a valid Magento ID
+        sync_date = fields.Datetime(string='Last synchronization date')
+        magento_order_id = fields.Many2one(comodel_name='magento.sale.order', string='Magento Sale Order', ondelete='set null')
+        # we can also store additional data related to the Magento Invoice
+
+        @job
+        @api.multi
+        def export_record(self):
+            """ Export a validated or paid invoice. """
+            self.ensure_one()
+            work = self.backend_id.work_on(self._name)
+            invoice_exporter = work.component(usage='record.exporter')
+            return invoice_exporter.run(self)
+
+
+The decorator ``@job`` means this method can be delayed in the jobs queue, so
+instead of being executed synchronously, it will be executed by a different
+worker as soon as possible.
+
+In the ``export_record`` job, you can have a first glance at the components
+system.
+
 
 ******
 Events
@@ -63,17 +94,18 @@ generic ones:
 
 When we create a ``magento.account.invoice`` record, we want to delay a
 job to export it to Magento, so we subscribe a new consumer on
-:py:meth:`~connector.event.on_record_create`::
+:py:meth:`~connector.event.on_record_create`:
+
+.. code-block:: python
 
   @on_record_create(model_names='magento.account.invoice')
   def delay_export_account_invoice(env, model_name, record_id):
-      """
-      Delay the job to export the magento invoice.
-      """
-      export_invoice.delay(env, model_name, record_id)
+      """ Delay the job to export the magento invoice.  """
+      env[model_name].browse(record_id).with_delay().export_invoice()
 
-On the last line, you can notice an ``export_invoice.delay``. We'll
-discuss about that in Jobs_
+When a ``magento.account.invoice`` is created, the event will be triggered,
+calling ``delay_export_account_invoice`` in turn.  There is a lot of things
+happening on the last line., we'll see that in the `Jobs`_ section.
 
 ****
 Jobs
@@ -82,94 +114,171 @@ Jobs
 A :py:class:`~connector.queue.job.Job` is a task to execute later.
 In that case: create the invoice on Magento.
 
-Any function decorated with :py:meth:`~connector.queue.job.job` can
-be posted in the queue of jobs using a ``delay()`` function
-and will be run as soon as possible::
+Any Model method decorated with :meth:`~odoo.addons.queue_job.job.job` can be
+posted in the queue of jobs.  Calling
+:meth:`~odoo.addons.queue_job.models.base.Base.with_delay` on a record or
+model returns a delayable version of the record/model. Any call on it will
+delay the called method instead of executing it (if the method is decorated by
+``@job``).
 
-  @job
-  def export_invoice(env, model_name, record_id):
-      """ Export a validated or paid invoice. """
-      invoice = env[model_name].browse(record_id)
-      backend_id = invoice.backend_id.id
-      env = get_environment(env, model_name, backend_id)
-      invoice_exporter = env.get_connector_unit(MagentoInvoiceSynchronizer)
-      return invoice_exporter.run(record_id)
+.. code-block:: python
 
-There is a few things happening there:
-
-* We find the backend on which we'll export the invoice.
-* We build an :py:class:`~connector.connector.Environment` with the
-  current :py:class:`odoo.api.Environment`,
-  the model we work with and the target backend.
-* We get the :py:class:`~connector.connector.ConnectorUnit` responsible
-  for the work using
-  :py:meth:`~connector.connector.Environment.get_connector_unit`
-  (according the backend version and the model)  and we call ``run()``
-  on it.
+    @job
+    @api.multi
+    def export_record(self):
+        """ Export a validated or paid invoice. """
+        self.ensure_one()
+        work = self.backend_id.work_on(self._name)
+        invoice_exporter = work.component(usage='record.exporter')
+        return invoice_exporter.run(self)
 
 
-*************
-ConnectorUnit
-*************
+The job above is invoked with:
 
-These are all classes which are responsible for a specific work.
-The main types of :py:class:`~connector.connector.ConnectorUnit` are
-(the implementation of theses classes belongs to the connectors):
+.. code-block:: python
 
-:py:class:`~connector.connector.Binder`
+    delayable = record.with_delay(priority=10)
+    delayable.export_record()
 
+Notes on the jobs:
+
+* The content of the method will be executed only when the Jobrunner takes it
+* ``self`` will be the record on which we delayed the job originally
+* The same method could have been invoked in a synchronous way with
+  ``record.export_record()``
+* ``with_delay()`` takes arguments for the job, like a priority or an ETA
+* if we had arguments passed to ``export_record``, they would have been passed
+  along when the job is executed
+
+Some explanations on what happens inside the job:
+
+* We are working on a binding record (``magento.account.invoice``).
+  It has a link to the Backend (``backend_id``).
+* From this backend, we obtain a
+  :class:`~odoo.addons.component.core.WorkContext`, which will be passed along
+  transversally in all the components we might use.  It indicates we are
+  working with the ``magento.account.invoice`` model.  *
+  :meth:`~odoo.addons.component.core.WorkContext.component` gives us a
+  component for the current collection, current model and the usage we ask it.
+  More details on the usage in `Components`_.
+
+
+**********
+Components
+**********
+
+Components are organized according to different usages.  The connector
+suggests 5 main kinds of Components. Each might have a few different usages.
+You can be as creative as you want when it comes to creating new ones though.
+
+One "usage" is responsible for a specific work, and alongside with the
+collection (the backend) and the model, the usage will be used to find the
+needed component for a task.
+
+Some of the Components have an implementation in the ``Connector`` addon, but
+some are empty shells that need to be implemented in the different connectors.
+
+The usual categories are:
+
+:py:class:`~connector.components.binder.Binder`
   The ``binders`` give the external ID or Odoo ID from respectively an
   Odoo ID or an external ID. A default implementation is available.
 
-:py:class:`~connector.unit.mapper.Mapper`
+  Most common usages:
 
+  * ``binder``
+
+:py:class:`~connector.components.mapper.Mapper`
   The ``mappers`` transform a external record into an Odoo record or
   conversely.
 
-:py:class:`~connector.unit.backend_adapter.BackendAdapter`
+  Most common usages:
 
-  The ``adapters`` implements the discussion with the ``backend's``
+  * ``import.mapper``
+  * ``export.mapper``
+
+:py:class:`~connector.components.backend_adapter.BackendAdapter`
+  The ``backend.adapters`` implements the discussion with the ``backend's``
   APIs. They usually adapt their APIs to a common interface (CRUD).
 
-:py:class:`~connector.unit.synchronizer.Synchronizer`
+  Most common usages:
 
-    The ``synchronizers`` are the main piece of a synchronization.  They
-    define the flow of a synchronization and use the other
-    :py:class:`~connector.connector.ConnectorUnit` (the ones above or
-    specific ones).
+  * ``backend.adapter``
 
-For the export of the invoice, we just need an ``adapter`` and a
-``synchronizer`` (the real implementation is more complete)::
+:py:class:`~connector.components.synchronizer.Synchronizer`
+  A ``synchronizer`` is the main piece of a synchronization.  It
+  orchestrates the flow of a synchronization and use the other
+  Components
 
-  @magento
-  class AccountInvoiceAdapter(GenericAdapter):
-      """ Backend Adapter for the Magento Invoice """
-      _model_name = 'magento.account.invoice'
-      _magento_model = 'sales_order_invoice'
+  Most common usages:
 
-      def create(self, order_increment_id, items, comment, email, include_comment):
-          """ Create a record on the external system """
-          return self._call('%s.create' % self._magento_model,
-                            [order_increment_id, items, comment,
-                            email, include_comment])
-  @magento
-  class MagentoInvoiceSynchronizer(Exporter):
-      """ Export invoices to Magento """
-      _model_name = ['magento.account.invoice']
+  * ``record.importer``
+  * ``record.exporter``
+  * ``batch.importer``
+  * ``batch.exporter``
 
-      def _export_invoice(self, magento_id, lines_info, mail_notification):
-          # use the ``backend adapter`` to create the invoice
-          return self.backend_adapter.create(magento_id, lines_info,
-                                            _("Invoice Created"),
-                                            mail_notification, False)
+For the export of the invoice, we need a ``backend.adapter`` and a
+``synchronizer`` (the real implementation is more complete):
 
-      def _get_lines_info(self, invoice):
-          [...]
+.. code-block:: python
 
-      def run(self, binding_id):
-          """ Run the job to export the validated/paid invoice """
-          invoice = self.model.browse(binding_id)
-          magento_order = invoice.magento_order_id
-          magento_id = self._export_invoice(magento_order.magento_id, lines_info, True)
-          # use the ``binder`` to write the external ID
-          self.binder.bind(magento_id, binding_id)
+    class AccountInvoiceAdapter(Component):
+        """ Backend Adapter for the Magento Invoice """
+        # used for inheritance
+        _name = 'magento.invoice.adapter'
+        _inherit = 'magento.adapter'
+
+        # used for the lookup of the component
+        _apply_on = 'magento.account.invoice'
+        _usage = 'backend.adapter'
+
+        # name of the method in the Magento API
+        _magento_model = 'sales_order_invoice'
+
+        def create(self, order_increment_id, items, comment, email, include_comment):
+            """ Create a record on the external system """
+            return self._call('%s.create' % self._magento_model,
+                              [order_increment_id, items, comment,
+                              email, include_comment])
+
+    class MagentoInvoiceExporter(Component):
+        """ Export invoices to Magento """
+        # used for inheritance
+        _name = 'magento.invoice.exporter'
+        _inherit = 'magento.exporter'
+
+        # used for the lookup of the component
+        # you can see this is what was used in
+        # work.component(usage='record.exporter')
+        _apply_on = 'magento.account.invoice'
+        _usage = 'record.exporter'
+
+        def _get_lines_info(self, binding):
+            # [...]
+
+        def run(self, binding):
+            """ Run the job to export the validated/paid invoice """
+            # get the binder for the sale, we need the Magento ID of it
+            sale_binder = self.component(
+                usage='binder',
+                model_name='magento.sale.order'
+            )
+            magento_order = binding.magento_order_id
+            # get the external ID of the sale order
+            sale_external_id = sale_binder.to_external(magento_order)
+
+            lines_info = self._get_lines_info(binding)
+
+            # find the Backend Adapter and create the invoice
+            backend_adapter = self.component(usage='backend.adapter')
+            backend_adapter.create(
+                sale_external_id, lines_info,
+                _("Invoice Created"),
+                mail_notification,
+                False,
+            )
+
+            # use the binder for this model to store the external ID in our
+            # binding
+            binder = self.component(usage='binder')
+            binder.bind(magento_id, binding)

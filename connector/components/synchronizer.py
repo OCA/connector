@@ -2,6 +2,19 @@
 # Copyright 2013-2017 Camptocamp SA
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html)
 
+"""
+
+Synchronizer
+============
+
+A synchronizer orchestrates a synchronization with a backend.  It can be a
+record's import or export, a deletion of something, or anything else.  For
+instance, it will use the mappings to convert the data between both systems,
+the backend adapters to read or write data on the backend and the binders to
+create the link between them.
+
+"""
+
 from odoo.addons.component.core import AbstractComponent
 
 
@@ -10,7 +23,6 @@ class Synchronizer(AbstractComponent):
 
     _name = 'base.synchronizer'
     _inherit = 'base.connector'
-    _usage = 'synchronizer'
 
     _base_mapper_usage = 'mapper'
     _base_backend_adapter_usage = 'backend.adapter'
@@ -32,7 +44,10 @@ class Synchronizer(AbstractComponent):
         The instanciation is delayed because some synchronisations do
         not need such an unit and the unit may not exist.
 
-        :rtype: :py:class:`connector.component.mapper.Mapper`
+        It looks for a Component with ``_usage`` being equal to
+        ``_base_mapper_usage``.
+
+        :rtype: :py:class:`odoo.addons.component.core.Component`
         """
         if self._mapper is None:
             self._mapper = self.component(usage=self._base_mapper_usage)
@@ -45,7 +60,7 @@ class Synchronizer(AbstractComponent):
         The instanciation is delayed because some synchronisations do
         not need such an unit and the unit may not exist.
 
-        :rtype: :py:class:`connector.component.binder.Binder`
+        :rtype: :py:class:`odoo.addons.component.core.Component`
         """
         if self._binder is None:
             self._binder = self.binder_for()
@@ -59,7 +74,10 @@ class Synchronizer(AbstractComponent):
         The instanciation is delayed because some synchronisations do
         not need such an unit and the unit may not exist.
 
-        :rtype: :py:class:`connector.component.backend_adapter.BackendAdapter`
+        It looks for a Component with ``_usage`` being equal to
+        ``_base_backend_adapter_usage``.
+
+        :rtype: :py:class:`odoo.addons.component.core.Component`
         """
         if self._backend_adapter is None:
             self._backend_adapter = self.component(

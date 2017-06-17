@@ -2,6 +2,15 @@
 # Copyright 2017 Camptocamp SA
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html)
 
+"""
+
+Components Builder
+==================
+
+Build the components at the build of a registry.
+
+"""
+
 import odoo
 from odoo import api, models
 from .core import MetaComponent, all_components
@@ -65,7 +74,7 @@ class ComponentBuilder(models.AbstractModel):
                        the components
         :type module: str | unicode
         :param registry: the registry in which we want to put the Component
-        :type registry: :py:class:`~component.core.ComponentGlobalRegistry`
+        :type registry: :py:class:`~.core.ComponentGlobalRegistry`
         """
         for component_class in MetaComponent._modules_components[module]:
             component_class._build_component(registry)

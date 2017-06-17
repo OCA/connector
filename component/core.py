@@ -17,11 +17,29 @@ The most common classes used publicly are:
 
 """
 
+import logging
+import operator
+
 from collections import defaultdict, OrderedDict
 
 from odoo import models
 from odoo.tools import OrderedSet, LastOrderedSet
 from .exception import NoComponentError, SeveralComponentError
+
+
+_logger = logging.getLogger(__name__)
+
+try:
+    from cachetools import LRUCache, cachedmethod
+except ImportError:
+    _logger.debug("Cannot import 'cachetools'.")
+
+
+# The Cache size represents the number of items, so the number
+# of components (include abstract components) we will keep in the LRU
+# cache. We would need stats to know what is the average but this is a bit
+# early.
+DEFAULT_CACHE_SIZE = 512
 
 
 # this is duplicated from odoo.models.MetaModel._get_addon_name() which we
@@ -40,23 +58,11 @@ def _get_addon_name(full_name):
     return addon_name
 
 
-class ComponentDatabases(object):
+class ComponentDatabases(dict):
     """ Holds a registry of components for each database """
 
-    def __init__(self):
-        self._databases = {}
 
-    def get(self, key, default=None):
-        return self._databases.get(key, default=default)
-
-    def clear(self, dbname):
-        self._databases[dbname] = ComponentRegistry()
-
-    def __getitem__(self, key):
-        return self._databases[key]
-
-
-class ComponentRegistry(OrderedDict):
+class ComponentRegistry(object):
     """ Store all the components and allow to find them using criteria
 
     The key is the ``_name`` of the components.
@@ -66,7 +72,26 @@ class ComponentRegistry(OrderedDict):
 
     """
 
-    # TODO use a LRU cache (repoze.lru?)
+    def __init__(self, cachesize=DEFAULT_CACHE_SIZE):
+        self._cache = LRUCache(maxsize=cachesize)
+        self._components = OrderedDict()
+
+    def __getitem__(self, key):
+        return self._components[key]
+
+    def __setitem__(self, key, value):
+        self._components[key] = value
+
+    def __contains__(self, key):
+        return key in self._components
+
+    def get(self, key, default=None):
+        return self._components.get(key, default)
+
+    def __iter__(self):
+        return iter(self._components)
+
+    @cachedmethod(operator.attrgetter('_cache'))
     def lookup(self, collection_name=None, usage=None, model_name=None):
         """ Find and return a list of components for a usage
 
@@ -99,7 +124,7 @@ class ComponentRegistry(OrderedDict):
 
         # keep the order so addons loaded first have components used first
         candidates = (
-            component for component in self.itervalues()
+            component for component in self._components.itervalues()
             if not component._abstract
         )
 

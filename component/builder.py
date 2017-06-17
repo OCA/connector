@@ -13,7 +13,12 @@ Build the components at the build of a registry.
 
 import odoo
 from odoo import api, models
-from .core import MetaComponent, _component_databases
+from .core import (
+    MetaComponent,
+    _component_databases,
+    ComponentRegistry,
+    DEFAULT_CACHE_SIZE,
+)
 
 
 class ComponentBuilder(models.AbstractModel):
@@ -38,13 +43,18 @@ class ComponentBuilder(models.AbstractModel):
     _name = 'component.builder'
     _description = 'Component Builder'
 
+    _components_registry_cache_size = DEFAULT_CACHE_SIZE
+
     @api.model_cr
     def _register_hook(self):
         # This method is called by Odoo when the registry is built,
         # so in case the registry is rebuilt (cache invalidation, ...),
-        # we have to clear the components then rebuild them
-        _component_databases.clear(self.env.cr.dbname)
-        # TODO: reset the LRU cache of the component lookups when implemented
+        # we have to to rebuild the components. We use a new
+        # registry so we have an empty cache and we'll add components in it.
+        components_registry = ComponentRegistry(
+            cachesize=self._components_registry_cache_size
+        )
+        _component_databases[self.env.cr.dbname] = components_registry
 
         # lookup all the installed (or about to be) addons and generate
         # the graph, so we can load the components following the order
@@ -61,7 +71,6 @@ class ComponentBuilder(models.AbstractModel):
                        if name not in graph]
         graph.add_modules(self.env.cr, module_list)
 
-        components_registry = _component_databases[self.env.cr.dbname]
         for module in graph:
             self.load_components(module.name, components_registry)
 

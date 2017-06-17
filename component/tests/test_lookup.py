@@ -161,3 +161,34 @@ class TestLookup(ComponentRegistryCase):
                                                usage='listener',
                                                model_name='res.users')
         self.assertEqual('any', components[0]._name)
+
+    def test_lookup_cache(self):
+        """ Lookup uses a cache """
+        class Foo(Component):
+            _name = 'foo'
+            _collection = 'foobar'
+
+        self._build_components(Foo)
+
+        components = self.comp_registry.lookup('foobar')
+        self.assertEqual(['foo'], [c._name for c in components])
+
+        # we add a new component
+        class Bar(Component):
+            _name = 'bar'
+            _collection = 'foobar'
+
+        self._build_components(Bar)
+
+        # As the lookups are cached, we should still see only foo,
+        # even if we added a new component.
+        # We do this for testing, but in a real use case, we can't
+        # add new Component classes on the fly, and when we install
+        # new addons, the registry is rebuilt and cache cleared.
+        components = self.comp_registry.lookup('foobar')
+        self.assertEqual(['foo'], [c._name for c in components])
+
+        self.comp_registry._cache.clear()
+        # now we should find them both as the cache has been cleared
+        components = self.comp_registry.lookup('foobar')
+        self.assertEqual(['foo', 'bar'], [c._name for c in components])

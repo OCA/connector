@@ -28,7 +28,7 @@ from .exception import NoComponentError, SeveralComponentError
 # unfortunately can't use because it's an instance method and should have been
 # a @staticmethod
 def _get_addon_name(full_name):
-    # The (OpenERP) module name can be in the ``odoo.addons`` namespace
+    # The (Odoo) module name can be in the ``odoo.addons`` namespace
     # or not. For instance, module ``sale`` can be imported as
     # ``odoo.addons.sale`` (the right way) or ``sale`` (for backward
     # compatibility).
@@ -40,6 +40,7 @@ def _get_addon_name(full_name):
     return addon_name
 
 
+# FIXME: have a different registry per database
 class ComponentGlobalRegistry(OrderedDict):
     """ Store all the components and allow to find them using criteria
 
@@ -51,14 +52,16 @@ class ComponentGlobalRegistry(OrderedDict):
     """
 
     # TODO use a LRU cache (repoze.lru?)
-    def lookup(self, collection_name, usage=None, model_name=None):
+    def lookup(self, collection_name=None, usage=None, model_name=None):
         """ Find and return a list of components for a usage
 
-        The collection name is required, however, if a component is not
-        registered in a particular collection (no ``_collection``), it might
-        will be returned (as far as the ``usage`` and ``model_name`` match).
-        This is useful to share generic components across different
-        collections.
+        If a component is not registered in a particular collection (no
+        ``_collection``), it might will be returned in any case (as far as
+        the ``usage`` and ``model_name`` match).  This is useful to share
+        generic components across different collections.
+
+        If no collection name is given, components from any collection
+        will be returned.
 
         Then, the components of a collection are filtered by usage and/or
         model. The ``_usage`` is mandatory on the components. When the
@@ -80,28 +83,28 @@ class ComponentGlobalRegistry(OrderedDict):
         """
 
         # keep the order so addons loaded first have components used first
-        collection_components = [
+        candidates = (
             component for component in self.itervalues()
-            if (component._collection == collection_name or
-                component._collection is None) and
-            not component._abstract
-        ]
-        candidates = []
+            if not component._abstract
+        )
+
+        if collection_name is not None:
+            candidates = (
+                component for component in candidates
+                if (component._collection == collection_name or
+                    component._collection is None)
+            )
 
         if usage is not None:
-            components = [component for component in collection_components
-                          if component._usage == usage]
-            if components:
-                candidates = components
-        else:
-            candidates = collection_components
+            candidates = (component for component in candidates
+                          if component._usage == usage)
 
-        # filter out by model name
-        candidates = [c for c in candidates
-                      if c.apply_on_models is None or
-                      model_name in c.apply_on_models]
+        if model_name is not None:
+            candidates = (c for c in candidates
+                          if c.apply_on_models is None or
+                          model_name in c.apply_on_models)
 
-        return candidates
+        return list(candidates)
 
 
 # This is where we will keep all the generated classes of the Components
@@ -119,18 +122,18 @@ class WorkContext(object):
 
     Including:
 
-    .. attribute:: collection
-
-        The collection we are working with. The collection is an Odoo
-        Model that inherit from 'collection.base'. The collection attribute
-        can be a record or an "empty" model.
-
     .. attribute:: model_name
 
         Name of the model we are working with. It means that any lookup for a
         component will be done for this model. It also provides a shortcut
         as a `model` attribute to use directly with the Odoo model from
         the components
+
+    .. attribute:: collection
+
+        The collection we are working with. The collection is an Odoo
+        Model that inherit from 'collection.base'. The collection attribute
+        can be a record or an "empty" model.
 
     .. attribute:: model
 
@@ -142,7 +145,7 @@ class WorkContext(object):
     ::
 
         collection = self.env['my.collection'].browse(1)
-        work = WorkContext(collection, 'res.partner')
+        work = WorkContext(model_name='res.partner', collection=collection)
         component = work.component(usage='record.importer')
 
     Usually you will use the shortcut available thanks to the
@@ -180,7 +183,7 @@ class WorkContext(object):
 
     """
 
-    def __init__(self, collection, model_name,
+    def __init__(self, model_name=None, collection=None,
                  components_registry=None, **kwargs):
         self.collection = collection
         self.model_name = model_name
@@ -190,7 +193,10 @@ class WorkContext(object):
             self._components_registry = components_registry
         else:
             self._components_registry = all_components
-        self._propagate_kwargs = ['_components_registry']
+        self._propagate_kwargs = [
+            'collection',
+            '_components_registry',
+        ]
         for attr_name, value in kwargs.iteritems():
             setattr(self, attr_name, value)
             self._propagate_kwargs.append(attr_name)
@@ -210,7 +216,8 @@ class WorkContext(object):
         """
         kwargs = {attr_name: getattr(self, attr_name)
                   for attr_name in self._propagate_kwargs}
-        return self.__class__(self.collection, model_name, **kwargs)
+        return self.__class__(model_name=model_name,
+                              **kwargs)
 
     def component_by_name(self, name, model_name=None):
         """ Return a component by its name
@@ -246,7 +253,7 @@ class WorkContext(object):
         )
 
     def __str__(self):
-        return "WorkContext(%s,%s)" % (repr(self.collection), self.model_name)
+        return "WorkContext(%s,%s)" % (self.model_name, repr(self.collection))
 
     def __unicode__(self):
         return unicode(str(self))

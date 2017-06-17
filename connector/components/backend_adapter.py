@@ -2,6 +2,17 @@
 # Copyright 2013-2017 Camptocamp SA
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html)
 
+"""
+
+Backend Adapter
+===============
+
+An external adapter has a common interface to speak with the backend.
+It translates the basic orders (search, read, write) to the protocol
+used by the backend.
+
+"""
+
 from odoo.addons.component.core import AbstractComponent
 
 
@@ -17,8 +28,9 @@ class CRUDAdapter(AbstractComponent):
     """ Base External Adapter specialized in the handling
     of records on external systems.
 
-    Subclasses can implement their own implementation for
-    the methods.
+    This is an empty shell, Components can inherit and implement their own
+    implementation for the methods.
+
     """
 
     _name = 'base.backend.adapter.crud'

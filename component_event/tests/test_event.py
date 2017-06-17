@@ -20,15 +20,20 @@ from odoo.addons.component_event.components.event import (
 class TestEventWorkContext(unittest2.TestCase):
     """ Test Events Components """
 
+    def setUp(self):
+        super(TestEventWorkContext, self).setUp()
+        self.env = mock.MagicMock(name='env')
+        self.record = mock.MagicMock(name='record')
+        self.components_registry = mock.MagicMock(name='ComponentRegistry')
+
     def test_env(self):
         """ WorkContext with env """
-        env = mock.MagicMock(name='env')
-        record = mock.MagicMock(name='record')
-        work = EventWorkContext(model_name='res.users', env=env,
-                                from_recordset=record)
-        self.assertEquals(env, work.env)
+        work = EventWorkContext(model_name='res.users', env=self.env,
+                                from_recordset=self.record,
+                                components_registry=self.components_registry)
+        self.assertEquals(self.env, work.env)
         self.assertEquals('res.users', work.model_name)
-        self.assertEquals(record, work.from_recordset)
+        self.assertEquals(self.record, work.from_recordset)
         with self.assertRaises(ValueError):
             work.collection
 
@@ -39,7 +44,8 @@ class TestEventWorkContext(unittest2.TestCase):
         collection.env = env
         record = mock.MagicMock(name='record')
         work = EventWorkContext(model_name='res.users', collection=collection,
-                                from_recordset=record)
+                                from_recordset=record,
+                                components_registry=self.components_registry)
         self.assertEquals(collection, work.collection)
         self.assertEquals(record, work.from_recordset)
         self.assertEquals(env, work.env)
@@ -52,24 +58,28 @@ class TestEventWorkContext(unittest2.TestCase):
         collection.env = env
         with self.assertRaises(ValueError):
             EventWorkContext(model_name='res.users', collection=collection,
-                             env=env)
+                             env=env,
+                             components_registry=self.components_registry)
 
     def test_missing(self):
         """ WorkContext with collection and env is forbidden """
         with self.assertRaises(ValueError):
-            EventWorkContext(model_name='res.users')
+            EventWorkContext(model_name='res.users',
+                             components_registry=self.components_registry)
 
     def test_env_work_on(self):
         """ WorkContext propagated through work_on """
         env = mock.MagicMock(name='env')
         record = mock.MagicMock(name='record')
         work = EventWorkContext(env=env, model_name='res.users',
-                                from_recordset=record)
+                                from_recordset=record,
+                                components_registry=self.components_registry)
         work2 = work.work_on('res.partner')
         self.assertEquals('EventWorkContext', work2.__class__.__name__)
         self.assertEquals(env, work2.env)
         self.assertEquals(record, work2.from_recordset)
         self.assertEquals('res.partner', work2.model_name)
+        self.assertEquals(self.components_registry, work2.components_registry)
         with self.assertRaises(ValueError):
             work.collection
 
@@ -80,13 +90,15 @@ class TestEventWorkContext(unittest2.TestCase):
         collection.env = env
         record = mock.MagicMock(name='record')
         work = EventWorkContext(collection=collection, model_name='res.users',
-                                from_recordset=record)
+                                from_recordset=record,
+                                components_registry=self.components_registry)
         work2 = work.work_on('res.partner')
         self.assertEquals('EventWorkContext', work2.__class__.__name__)
         self.assertEquals(collection, work2.collection)
         self.assertEquals(record, work2.from_recordset)
         self.assertEquals(env, work2.env)
         self.assertEquals('res.partner', work2.model_name)
+        self.assertEquals(self.components_registry, work2.components_registry)
 
 
 class TestEvent(ComponentRegistryCase):

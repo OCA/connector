@@ -21,7 +21,7 @@ class EventProducer(AbstractComponent):
         self._events = set()
 
     def collect_events(self, name):
-        component_classes = self.work._components_registry.lookup(
+        component_classes = self.work.components_registry.lookup(
             usage='event.listener',
             model_name=self.model._name,
         )
@@ -75,6 +75,16 @@ class EventListener(AbstractComponent):
     def recordset(self):
         """ Recordset that triggered the event """
         return getattr(self.work, 'from_recordset', None)
+
+    # TODO: error if we don't have the collection
+    def component_by_name(self, name, model_name=None):
+        raise NotImplementedError
+
+    def component(self, usage=None, model_name=None):
+        raise NotImplementedError
+
+    def many_components(self, usage=None, model_name=None):
+        raise NotImplementedError
 
 
 class RecordsEventListener(Component):

@@ -11,6 +11,9 @@
  'category': 'Generic Modules',
  'depends': ['base',
              ],
+ 'external_dependencies': {
+     'python': ['cachetools'],
+ },
  'data': [],
  'installable': True,
  }

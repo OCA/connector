@@ -3,6 +3,20 @@
 # Copyright 2017 Odoo
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html)
 
+"""
+
+Core
+====
+
+Core classes for the components.
+The most common classes used publicly are:
+
+* :class:`Component`
+* :class:`AbstractComponent`
+* :class:`WorkContext`
+
+"""
+
 from collections import defaultdict, OrderedDict
 
 from odoo import models
@@ -52,6 +66,11 @@ class ComponentGlobalRegistry(OrderedDict):
         and it will ignore the ``model_name`` argument.
 
         The abstract components are never returned.
+
+        This is a rather low-level function, usually you will use the
+        high-level :meth:`AbstractComponent.component`,
+        :meth:`AbstractComponent.many_components` or even
+        :meth:`AbstractComponent.component_by_name`.
 
         :param collection_name: the name of the collection the component is
                                 registered into.
@@ -104,7 +123,7 @@ class WorkContext(object):
 
         The collection we are working with. The collection is an Odoo
         Model that inherit from 'collection.base'. The collection attribute
-        can be an record or an "empty" model.
+        can be a record or an "empty" model.
 
     .. attribute:: model_name
 
@@ -145,7 +164,7 @@ class WorkContext(object):
         assert work.hello == 'world'
 
     When you need to work on a different model, a new work instance will be
-    created for you when you work with the higher lever API. This is what
+    created for you when you are using the high-level API. This is what
     happens under the hood:
 
     ::
@@ -156,8 +175,8 @@ class WorkContext(object):
         assert work.hello == 'world'
         work2 = work.work_on('res.users')
         # => spawn a new WorkContext with a copy of the attributes
-        assert work.model_name == 'res.users'
-        assert work.hello == 'world'
+        assert work2.model_name == 'res.users'
+        assert work2.hello == 'world'
 
     """
 
@@ -270,142 +289,143 @@ class MetaComponent(type):
 class AbstractComponent(object):
     """ Main Component Model
 
-    All components have a Python inheritance on this class or its companion
-    :class:`Component`.
+    All components have a Python inheritance either on
+    :class:`AbstractComponent` or either on :class:`Component`.
 
-    ``AbstractComponent`` will not appear in the lookups for components,
-    however they can be used as a base for other Components through inheritance
-    (using ``_inherit``).
+    Abstract Components will not be returned by lookups on components, however
+    they can be used as a base for other Components through inheritance (using
+    ``_inherit``).
 
-    The inheritance mechanism is like the Odoo's one for Models.  Every
-    component starts with a ``_name``.
+    Inheritance mechanism
+        The inheritance mechanism is like the Odoo's one for Models.  Each
+        component has a ``_name``. This is the absolute minimum in a Component
+        class.
 
-    ::
+        ::
 
-        class MyComponent(Component):
-            _name = 'my.component'
+            class MyComponent(Component):
+                _name = 'my.component'
 
-            def speak(self, message):
-                print message
+                def speak(self, message):
+                    print message
 
-    Every component implicitly inherit from the `base` component.
+        Every component implicitly inherit from the `'base'` component.
 
-    Then there are two close but distinct inheritance types, which look
-    familiar if you already know Odoo.  The first uses ``_inherit`` with an
-    existing name, the name of the component we want to extend.  With the
-    following example, ``my.component`` is now able to speak and to yell.
+        There are two close but distinct inheritance types, which look
+        familiar if you already know Odoo.  The first uses ``_inherit`` with
+        an existing name, the name of the component we want to extend.  With
+        the following example, ``my.component`` is now able to speak and to
+        yell.
 
-    ::
+        ::
 
-        class MyComponent(Component):  # name of the class does not matter
-            _inherit = 'my.component'
+            class MyComponent(Component):  # name of the class does not matter
+                _inherit = 'my.component'
 
-            def yell(self, message):
-                print message.upper()
+                def yell(self, message):
+                    print message.upper()
 
-    The second has a different ``_name``, it creates a new component, including
-    the behavior of the inherited component, but without modifying it. In the
-    following example, ``my.component`` is still able to speak and to yell
-    (brough by the previous inherit), but not to sing.  ``another.component``
-    is able to speak, to yell and to sing.
+        The second has a different ``_name``, it creates a new component,
+        including the behavior of the inherited component, but without
+        modifying it. In the following example, ``my.component`` is still able
+        to speak and to yell (brough by the previous inherit), but not to
+        sing.  ``another.component`` is able to speak, to yell and to sing.
 
-    ::
+        ::
 
-        class AnotherComponent(Component):
-            _name = 'another.component'
-            _inherit = 'my.component'
+            class AnotherComponent(Component):
+                _name = 'another.component'
+                _inherit = 'my.component'
 
-            def sing(self, message):
-                print message.upper()
+                def sing(self, message):
+                    print message.upper()
 
-    It is all for the inheritance.  The next topic is the registration / lookup
-    of components.
+    Registration and lookups
+        It is handled by 3 attributes on the class:
 
-    It is handled by 3 attributes on the class:
+        _collection
+            The name of the collection where we want to register the
+            component.  This is not strictly mandatory as a component can be
+            shared across several collections. But usually, you want to set a
+            collection to segregate the components for a domain.  A collection
+            can be for instance ``magento.backend``. It is also the name of a
+            model that inherits from ``collection.base``.  See also
+            :class:`~WorkContext` and
+            :class:`~odoo.addons.component.models.collection.Collection`.
 
-    .. attribute: _collection
+        _apply_on
+            List of names or name of the Odoo model(s) for which the component
+            can be used.  When not set, the component can be used on any model.
 
-        The name of the collection where we want to register the component.
-        This is not strictly mandatory as a component can be shared across
-        several collections. But usually, you want to set a collection
-        to reduce the odds of conflicts for the same usage/model.
-        A collection can be for instance ``magento.backend``. It is the name
-        of a model that inherits from ``collection.base``.
-        See also :class:`WorkContext`.
+        _usage
+           The collection and the model (``_apply_on``) will help to filter
+           the candidate components according to our working context (e.g. I'm
+           working on ``magento.backend`` with the model
+           ``magento.res.partner``).  The usage will define **what** kind of
+           task the component we are looking for serves to. For instance, it
+           might be ``record.importer``, ``export.mapper```... but you can be
+           as creative as you want.
 
-    .. attribute: _apply_on
+        Now, to get a component, you'll likely use
+        :meth:`WorkContext.component` when you start to work with components
+        in your flow, but then from within your components, you are more
+        likely to use one of:
 
-        List of names or name of the Odoo model(s) for which the component
-        can be used.  When not set, the component can be used on any model.
+        * :meth:`component`
+        * :meth:`many_components`
+        * :meth:`component_by_name` (more rarely though)
 
-    .. attribute: _usage
+        Declaration of some Components can look like::
 
-       The collection and the model (``_apply_on``) will help to filter the
-       candidate components according to our working context (e.g. I'm working
-       on ``magento.backend`` with the model ``magento.res.partner``).  The
-       usage will define **what** kind of task the component we are looking for
-       serves to. For instance, it might be ``record.importer``,
-       ``export.mapper```... but you can be as creative as you want.
-
-    Now, to get a component, you'll likely use :meth:`WorkContext.component`
-    when you start to work with components in your flow, but then from within
-    your components, you are more likely to use one of:
-
-    * :meth:`component`
-    * :meth:`many_components`
-    * :meth:`component_by_name` (more rarely though)
-
-    Declaration of some Components can look like::
-
-        class FooBar(models.Model):
-            _name = 'foo.bar.collection'
-            _inherit = 'collection.base'  # this inherit is required
-
-
-        class FooBarBase(AbstractComponent):
-            _name = 'foo.bar.base'
-            _collection = 'foo.bar.collection'  # name of the model above
+            class FooBar(models.Model):
+                _name = 'foo.bar.collection'
+                _inherit = 'collection.base'  # this inherit is required
 
 
-        class Foo(Component):
-            _name = 'foo'
-            _inherit = 'foo.bar.base'  # we will inherit the _collection
-            _apply_on = 'res.users'
-            _usage = 'speak'
-
-            def utter(self, message):
-                print message
+            class FooBarBase(AbstractComponent):
+                _name = 'foo.bar.base'
+                _collection = 'foo.bar.collection'  # name of the model above
 
 
-        class Bar(Component):
-            _name = 'bar'
-            _inherit = 'foo.bar.base'  # we will inherit the _collection
-            _apply_on = 'res.users'
-            _usage = 'yell'
+            class Foo(Component):
+                _name = 'foo'
+                _inherit = 'foo.bar.base'  # we will inherit the _collection
+                _apply_on = 'res.users'
+                _usage = 'speak'
 
-            def utter(self, message):
-                print message.upper() + '!!!'
-
-
-        class Vocalizer(Component):
-            _name = 'vocalizer'
-            _inherit = 'foo.bar.base'
-            _usage = 'vocalizer'
-            # can be used for any model
-
-            def vocalize(action, message):
-                self.component(usage=action).utter(message)
+                def utter(self, message):
+                    print message
 
 
-    And their usage::
+            class Bar(Component):
+                _name = 'bar'
+                _inherit = 'foo.bar.base'  # we will inherit the _collection
+                _apply_on = 'res.users'
+                _usage = 'yell'
 
-        >>> coll = self.env['foo.bar.collection'].browse(1)
-        >>> work = coll.work_on('res.users')
-        >>> vocalizer = work.component(usage='vocalizer')
-        >>> vocalizer.vocalize('speak', 'hello world')
-        hello world
-        >>> vocalizer.vocalize('yell', 'hello world')
-        HELLO WORLD!!!
+                def utter(self, message):
+                    print message.upper() + '!!!'
+
+
+            class Vocalizer(Component):
+                _name = 'vocalizer'
+                _inherit = 'foo.bar.base'
+                _usage = 'vocalizer'
+                # can be used for any model
+
+                def vocalize(action, message):
+                    self.component(usage=action).utter(message)
+
+
+        And their usage::
+
+            >>> coll = self.env['foo.bar.collection'].browse(1)
+            >>> work = coll.work_on('res.users')
+            >>> vocalizer = work.component(usage='vocalizer')
+            >>> vocalizer.vocalize('speak', 'hello world')
+            hello world
+            >>> vocalizer.vocalize('yell', 'hello world')
+            HELLO WORLD!!!
 
     Hints:
 
@@ -467,7 +487,8 @@ class AbstractComponent(object):
         If the component exists, an instance of it will be returned,
         initialized with the current :class:`WorkContext`.
 
-        A ``NoComponentError`` is raised if:
+        A :class:`odoo.addons.component.exception.NoComponentError` is raised
+        if:
 
         * no component with this name exists
         * the ``_apply_on`` of the found component does not match
@@ -519,12 +540,12 @@ class AbstractComponent(object):
         :meth:`ComponentGlobalRegistry.lookup`. When a component is found,
         it initialize it with the current :class:`WorkContext` and returned.
 
-        A :class:`component.exception.SeveralComponentError` is raised if
-        more than one component match for the provided
+        A :class:`odoo.addons.component.exception.SeveralComponentError` is
+        raised if more than one component match for the provided
         ``usage``/``model_name``.
 
-        A :class:`component.exception.NoComponentError` is raised if
-        no component is found for the provided ``usage``/``model_name``.
+        A :class:`odoo.addons.component.exception.NoComponentError` is raised
+        if no component is found for the provided ``usage``/``model_name``.
 
         """
         if isinstance(model_name, models.BaseModel):

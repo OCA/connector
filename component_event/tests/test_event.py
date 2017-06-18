@@ -12,7 +12,7 @@ from odoo.addons.component.tests.common import (
 from odoo.addons.component.core import Component
 from odoo.addons.component_event.core import EventWorkContext
 from odoo.addons.component_event.components.event import (
-    EventProducer,
+    EventCollecter,
     EventListener,
 )
 
@@ -108,18 +108,18 @@ class TestEvent(ComponentRegistryCase):
         super(TestEvent, self).setUp()
         # build and push in the component registry the base components we
         # inherit from in the tests
-        # 'base.event.producer'
-        EventProducer._build_component(self.comp_registry)
+        # 'base.event.collecter'
+        EventCollecter._build_component(self.comp_registry)
         # 'base.event.listener'
         EventListener._build_component(self.comp_registry)
 
-        # get the producer to fire the event
+        # get the collecter to notify the event
         # we don't mind about the collection and the model here,
         # the events we test are global
         env = mock.MagicMock()
         work = EventWorkContext(model_name='res.users', env=env,
                                 components_registry=self.comp_registry)
-        self.producer = self.comp_registry['base.event.producer'](work)
+        self.collecter = self.comp_registry['base.event.collecter'](work)
 
     def test_event(self):
         class MyEventListener(Component):
@@ -138,8 +138,8 @@ class TestEvent(ComponentRegistryCase):
         # modify this recipient to check it has been called
         recipient = []
 
-        # collect the event and fire it
-        self.producer.collect_events('on_record_create').fire(
+        # collect the event and notify it
+        self.collecter.collect_events('on_record_create').notify(
             recipient, something, fields=fields
         )
         self.assertEquals([('OK', something, fields)], recipient)
@@ -169,13 +169,137 @@ class TestEvent(ComponentRegistryCase):
         # modify this recipient to check it has been called
         recipient = []
 
-        # collect the event and fire them
-        events = self.producer.collect_events('on_record_create')
-        self.assertEquals(2, len(self.producer._events))
+        # collect the event and notify them
+        collected = self.collecter.collect_events('on_record_create')
+        self.assertEquals(2, len(collected.events))
 
-        events.fire(recipient, something, fields=fields)
+        collected.notify(recipient, something, fields=fields)
         self.assertEquals([('OK', something, fields),
                            ('OK', something, fields)], recipient)
+
+    def test_event_cache(self):
+        class MyEventListener(Component):
+            _name = 'my.event.listener'
+            _inherit = 'base.event.listener'
+
+            def on_record_create(self):
+                pass
+
+        MyEventListener._build_component(self.comp_registry)
+
+        # collect the event
+        collected = self.collecter.collect_events('on_record_create')
+        # CollectedEvents.events contains the collected events
+        self.assertEquals(1, len(collected.events))
+
+        # build and register a new listener
+        class MyOtherEventListener(Component):
+            _name = 'my.other.event.listener'
+            _inherit = 'base.event.listener'
+
+            def on_record_create(self):
+                pass
+
+        MyOtherEventListener._build_component(self.comp_registry)
+
+        # get a new collecter and check that we it finds the same
+        # events even if we built a new one: it means the cache works
+        env = mock.MagicMock()
+        work = EventWorkContext(model_name='res.users', env=env,
+                                components_registry=self.comp_registry)
+        collecter = self.comp_registry['base.event.collecter'](work)
+        collected = collecter.collect_events('on_record_create')
+        # CollectedEvents.events contains the collected events
+        self.assertEquals(1, len(collected.events))
+
+        # if we empty the cache, as it on the class, both collecters
+        # should now find the 2 events
+        collecter._cache.clear()
+        # CollectedEvents.events contains the collected events
+        self.assertEquals(
+            2,
+            len(collecter.collect_events('on_record_create').events)
+        )
+        self.assertEquals(
+            2,
+            len(self.collecter.collect_events('on_record_create').events)
+        )
+
+    def test_event_cache_collection(self):
+        class MyEventListener(Component):
+            _name = 'my.event.listener'
+            _inherit = 'base.event.listener'
+
+            def on_record_create(self):
+                pass
+
+        MyEventListener._build_component(self.comp_registry)
+
+        # collect the event
+        collected = self.collecter.collect_events('on_record_create')
+        # CollectedEvents.events contains the collected events
+        self.assertEquals(1, len(collected.events))
+
+        # build and register a new listener
+        class MyOtherEventListener(Component):
+            _name = 'my.other.event.listener'
+            _inherit = 'base.event.listener'
+            _collection = 'base.collection'
+
+            def on_record_create(self):
+                pass
+
+        MyOtherEventListener._build_component(self.comp_registry)
+
+        # get a new collecter and check that we it finds the same
+        # events even if we built a new one: it means the cache works
+        collection = mock.MagicMock(name='base.collection')
+        collection._name = 'base.collection'
+        collection.env = mock.MagicMock()
+        work = EventWorkContext(model_name='res.users', collection=collection,
+                                components_registry=self.comp_registry)
+        collecter = self.comp_registry['base.event.collecter'](work)
+        collected = collecter.collect_events('on_record_create')
+        # for a different collection, we should not have the same
+        # cache entry
+        self.assertEquals(2, len(collected.events))
+
+    def test_event_cache_model_name(self):
+        class MyEventListener(Component):
+            _name = 'my.event.listener'
+            _inherit = 'base.event.listener'
+
+            def on_record_create(self):
+                pass
+
+        MyEventListener._build_component(self.comp_registry)
+
+        # collect the event
+        collected = self.collecter.collect_events('on_record_create')
+        # CollectedEvents.events contains the collected events
+        self.assertEquals(1, len(collected.events))
+
+        # build and register a new listener
+        class MyOtherEventListener(Component):
+            _name = 'my.other.event.listener'
+            _inherit = 'base.event.listener'
+            _apply_on = ['res.country']
+
+            def on_record_create(self):
+                pass
+
+        MyOtherEventListener._build_component(self.comp_registry)
+
+        # get a new collecter and check that we it finds the same
+        # events even if we built a new one: it means the cache works
+        env = mock.MagicMock()
+        work = EventWorkContext(model_name='res.country', env=env,
+                                components_registry=self.comp_registry)
+        collecter = self.comp_registry['base.event.collecter'](work)
+        collected = collecter.collect_events('on_record_create')
+        # for a different collection, we should not have the same
+        # cache entry
+        self.assertEquals(2, len(collected.events))
 
 
 class TestEventRecordset(ComponentRegistryCase):
@@ -185,12 +309,12 @@ class TestEventRecordset(ComponentRegistryCase):
         super(TestEventRecordset, self).setUp()
         # build and push in the component registry the base components we
         # inherit from in the tests
-        # 'base.event.producer'
-        EventProducer._build_component(self.comp_registry)
+        # 'base.event.collecter'
+        EventCollecter._build_component(self.comp_registry)
         # 'base.event.listener'
         EventListener._build_component(self.comp_registry)
 
-        # get the producer to fire the event
+        # get the collecter to notify the event
         # we don't mind about the collection and the model here,
         # the events we test are global
         env = mock.MagicMock()
@@ -202,7 +326,7 @@ class TestEventRecordset(ComponentRegistryCase):
         work = EventWorkContext(model_name='res.users', env=env,
                                 from_recordset=self.recordset,
                                 components_registry=self.comp_registry)
-        self.producer = self.comp_registry['base.event.producer'](work)
+        self.collecter = self.comp_registry['base.event.collecter'](work)
 
     def test_event(self):
         class MyEventListener(Component):
@@ -214,8 +338,8 @@ class TestEventRecordset(ComponentRegistryCase):
 
         MyEventListener._build_component(self.comp_registry)
 
-        # collect the event and fire it
-        self.producer.collect_events('on_foo').fire('OK')
+        # collect the event and notify it
+        self.collecter.collect_events('on_foo').notify('OK')
         self.assertEquals('OK', self.recordset.msg)
 
 
@@ -226,8 +350,8 @@ class TestEventFromModel(TransactionComponentRegistryCase):
         super(TestEventFromModel, self).setUp()
         # build and push in the component registry the base components we
         # inherit from in the tests
-        # 'base.event.producer'
-        EventProducer._build_component(self.comp_registry)
+        # 'base.event.collecter'
+        EventCollecter._build_component(self.comp_registry)
         # 'base.event.listener'
         EventListener._build_component(self.comp_registry)
 
@@ -246,10 +370,10 @@ class TestEventFromModel(TransactionComponentRegistryCase):
         # this is for the sake of the test, letting it empty
         # will use the global registry.
         # In a real code it would look like:
-        # partner._event('on_foo').fire('bar')
+        # partner._event('on_foo').notify('bar')
         events = partner._event('on_foo',
                                 components_registry=self.comp_registry)
-        events.fire('bar')
+        events.notify('bar')
         self.assertEquals('bar', partner.name)
 
     def test_event_filter_on_model(self):
@@ -280,7 +404,7 @@ class TestEventFromModel(TransactionComponentRegistryCase):
 
         partner = self.env['res.partner'].create({'name': 'test'})
         partner._event('on_foo',
-                       components_registry=self.comp_registry).fire('bar')
+                       components_registry=self.comp_registry).notify('bar')
         self.assertEquals('bar', partner.name)
         self.assertEquals('bar', partner.ref)
 

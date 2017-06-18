@@ -23,5 +23,5 @@ class Base(models.AbstractModel):
                                     from_recordset=self,
                                     components_registry=components_registry)
 
-        producer = work.component_by_name('base.event.producer')
-        return producer.collect_events(name)
+        collecter = work.component_by_name('base.event.collecter')
+        return collecter.collect_events(name)

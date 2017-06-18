@@ -10,30 +10,70 @@ TODO
 
 """
 
+import logging
+import operator
+
 from odoo.addons.component.core import AbstractComponent, Component
 
+_logger = logging.getLogger(__name__)
 
-class EventProducer(AbstractComponent):
-    _name = 'base.event.producer'
+try:
+    from cachetools import LRUCache, cachedmethod, keys
+except ImportError:
+    _logger.debug("Cannot import 'cachetools'.")
+
+# Number of items we keep in LRU cache when we collect the events.
+# 1 item means: for an event name, return the event methods
+DEFAULT_EVENT_CACHE_SIZE = 128
+
+
+class CollectedEvents(object):
+
+    def __init__(self, events):
+        self.events = events
+
+    def notify(self, *args, **kwargs):
+        for event in self.events:
+            event(*args, **kwargs)
+
+
+class EventCollecter(AbstractComponent):
+    _name = 'base.event.collecter'
 
     def __init__(self, work):
-        super(EventProducer, self).__init__(work)
-        self._events = set()
+        super(EventCollecter, self).__init__(work)
 
-    def collect_events(self, name):
+    @classmethod
+    def _complete_component_build(cls):
+        super(EventCollecter, cls)._complete_component_build()
+        # the _cache being on the component class, which is
+        # dynamically rebuild when odoo registry is rebuild, we
+        # are sure that the result is always the same for a lookup
+        # until the next rebuild of odoo's registry
+        cls._cache = LRUCache(maxsize=DEFAULT_EVENT_CACHE_SIZE)
+
+    @cachedmethod(operator.attrgetter('_cache'),
+                  key=lambda self, name: keys.hashkey(
+                      self.work.collection._name if self.work._collection
+                      else None,
+                      self.work.model_name,
+                      name
+                  ))
+    def _collect_events(self, name):
+        events = set([])
         component_classes = self.work.components_registry.lookup(
             usage='event.listener',
-            model_name=self.model._name,
+            model_name=self.work.model_name,
         )
         for cls in component_classes:
             if cls.has_event(name):
                 component = cls(self.work)
-                self._events.add(getattr(component, name))
-        return self
+                events.add(getattr(component, name))
+        return events
 
-    def fire(self, *args, **kwargs):
-        for event in self._events:
-            event(*args, **kwargs)
+    def collect_events(self, name):
+        events = self._collect_events(name)
+        return CollectedEvents(events)
 
 
 class EventListener(AbstractComponent):
@@ -60,9 +100,6 @@ class EventListener(AbstractComponent):
         if not cls._abstract:
             for attr_name in dir(cls):
                 if attr_name.startswith('on_'):
-                    # possible future optimization: store all events in a
-                    # registry so we don't need to loop on event.listener
-                    # components
                     events.add(attr_name)
         cls._events = events
 

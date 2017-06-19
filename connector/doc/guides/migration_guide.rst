@@ -535,6 +535,81 @@ Links
 * :class:`odoo.addons.component.core.AbstractComponent`
 
 
+
+Entrypoint for working with components
+======================================
+
+Before
+------
+
+Previously, when you had to work with ``ConnectorUnit`` from a Model or from a job,
+depending of the Odoo version you to:
+
+.. code-block:: python
+
+    from odoo.addons.connector.connector import ConnectorEnvironment
+
+    # ...
+
+        backend_record = session.env['magento.backend'].browse(backend_id)
+        env = ConnectorEnvironment(backend_record, 'magento.res.partner')
+        importer = env.get_connector_unit(MagentoImporter)
+        importer.run(magento_id, force=force)
+
+Or:
+
+.. code-block:: python
+
+    from odoo.addons.connector.connector import ConnectorEnvironment
+    from odoo.addons.connector.session import ConnectorSession
+
+    #...
+
+        backend_record = session.env['magento.backend'].browse(backend_id)
+        session = ConnectorSession.from_env(self.env)
+        env = ConnectorEnvironment(backend_record, session, 'magento.res.partner')
+        importer = env.get_connector_unit(MagentoImporter)
+        importer.run(external_id, force=force)
+
+Which was commonly abstracted in a helper function such as:
+
+
+.. code-block:: python
+
+    def get_environment(session, model_name, backend_id):
+        """ Create an environment to work with.  """
+        backend_record = session.env['magento.backend'].browse(backend_id)
+        env = ConnectorEnvironment(backend_record, session, 'magento.res.partner')
+        lang = backend_record.default_lang_id
+        lang_code = lang.code if lang else 'en_US'
+        if lang_code == session.context.get('lang'):
+            return env
+        else:
+            with env.session.change_context(lang=lang_code):
+                return env
+
+After
+-----
+
+.. code-block:: python
+
+    # ...
+        backend_record = self.env['magento.backend'].browse(backend_id)
+        work = backend_record.work_on('magento.res.partner')
+        importer = work.component(usage='record.importer')
+        importer.run(external_id, force=force)
+
+Observations
+------------
+
+* And when you are already in a Component, refer to `Find a component`_
+
+Links
+-----
+
+* :class:`~odoo.addons.component.core.WorkContext`
+
+
 Find a component
 ================
 
@@ -801,3 +876,10 @@ Links
 -----
 
 * :ref:`api-component`
+
+
+Various hints
+=============
+
+* The components and the jobs know how to work with Model instances,
+  so prefer them over ids in parameters.

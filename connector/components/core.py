@@ -12,6 +12,56 @@ the ``_inherit`` of your own components.  This is not a
 requirement.  It is already inherited by every component
 provided by the Connector.
 
+Components are organized according to different usages.  The connector suggests
+5 main kinds of Components. Each might have a few different usages.  You can be
+as creative as you want when it comes to creating new ones though.
+
+One "usage" is responsible for a specific work, and alongside with the
+collection (the backend) and the model, the usage will be used to find the
+needed component for a task.
+
+Some of the Components have an implementation in the ``Connector`` addon, but
+some are empty shells that need to be implemented in the different connectors.
+
+The usual categories are:
+
+:py:class:`~connector.components.binder.Binder`
+  The ``binders`` give the external ID or Odoo ID from respectively an
+  Odoo ID or an external ID. A default implementation is available.
+
+  Most common usages:
+
+  * ``binder``
+
+:py:class:`~connector.components.mapper.Mapper`
+  The ``mappers`` transform a external record into an Odoo record or
+  conversely.
+
+  Most common usages:
+
+  * ``import.mapper``
+  * ``export.mapper``
+
+:py:class:`~connector.components.backend_adapter.BackendAdapter`
+  The ``backend.adapters`` implements the discussion with the ``backend's``
+  APIs. They usually adapt their APIs to a common interface (CRUD).
+
+  Most common usages:
+
+  * ``backend.adapter``
+
+:py:class:`~connector.components.synchronizer.Synchronizer`
+  A ``synchronizer`` is the main piece of a synchronization.  It
+  orchestrates the flow of a synchronization and use the other
+  Components
+
+  Most common usages:
+
+  * ``record.importer``
+  * ``record.exporter``
+  * ``batch.importer``
+  * ``batch.exporter``
+
 
 """
 

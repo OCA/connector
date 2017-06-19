@@ -19,16 +19,10 @@ pointers to more concrete 'how-to' or small tutorials.
 Events
 ******
 
+Reference: :ref:`api-event`
+
 Events are hooks in Odoo on which we can plug some actions. They are
 based on an Observer pattern.
-
-The basic idea is to declare an :py:class:`~connector.event.Event`, for
-instance :py:class:`~connector.event.on_record_create`.
-Then each connector has the ability to subscribe one or many function on it.
-
-The creation of a record should fire
-:py:class:`~connector.event.on_record_create`,
-which will trigger all the subscribed functions.
 
 The same event can be shared across several connectors, easing their
 implementation.
@@ -38,17 +32,15 @@ common to e-commerce.
 
 A connectors developer is mostly interested by:
 
-* register a new function on an event (see :py:class:`connector.event.Event`)
-* unregister a function from an event (see :py:meth:`connector.event.Event.unsubscribe`)
-* replace a consumer function by another one (see :py:class:`connector.event.Event`)
-* filter the events by model, so a subscribed function will be triggered
-  only if the event happens on a registered model
+* adding and listening to events (see :ref:`api-event`)
 
 .. _jobs-queue:
 
 **********
 Jobs Queue
 **********
+
+Reference: :ref:`api-queue`
 
 This feature is part of a standalone addon, but is a prerequisite for
 the connector framework.
@@ -63,6 +55,8 @@ A connectors developer is mostly interested by:
 *******
 Backend
 *******
+
+Reference: :ref:`api-backend-model`
 
 The Backend Model is what represents the external service / system we
 synchronize with. The name on the backend indicates what is the collection the
@@ -81,6 +75,8 @@ used as entrypoint for the component system.  This method returns a
 WorkContext
 ***********
 
+Reference: :class:`~odoo.addons.component.core.WorkContext`
+
 A :class:`~odoo.addons.component.core.WorkContext` is the work environment or
 context that will be passed transversally through all the components. This is
 also the entrypoint to the component system.
@@ -92,6 +88,8 @@ A connectors developer is mostly interested by:
 *********
 Component
 *********
+
+Reference: :ref:`api-component`
 
 :py:class:`~odoo.addons.component.core.Component` are pluggable classes used
 for the synchronizations with the external systems (or anything!)
@@ -211,6 +209,8 @@ available and can be inherited if needed.
 ********
 Bindings
 ********
+
+Reference: :ref:`api-binding-model`
 
 A binding represents the link of a record between Odoo and a backend.
 

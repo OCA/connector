@@ -233,7 +233,16 @@ class WorkContext(object):
             self.components_registry = components_registry
         else:
             dbname = self.env.cr.dbname
-            self.components_registry = _component_databases[dbname]
+            try:
+                self.components_registry = _component_databases[dbname]
+            except KeyError:
+                _logger.error(
+                    'No component registry for database %s. '
+                    'Probably because the Odoo registry has not been built '
+                    'yet. Try reporting your call later.\n'
+                    'If you are in a test, activate post_install.'
+                )
+                raise
         self._propagate_kwargs = [
             'collection',
             'model_name',

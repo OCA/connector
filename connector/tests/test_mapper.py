@@ -664,6 +664,9 @@ class TestMapper(ComponentRegistryCase):
 class TestMapperRecordsets(TransactionComponentRegistryCase):
     """ Test mapper with "real" records instead of mocks """
 
+    at_install = False
+    post_install = True
+
     def setUp(self):
         super(TestMapperRecordsets, self).setUp()
         backend_record = mock.Mock()
@@ -703,6 +706,9 @@ class TestMapperRecordsets(TransactionComponentRegistryCase):
 class TestMapperBinding(TransactionComponentRegistryCase):
     """ Test Mapper with Bindings"""
 
+    at_install = False
+    post_install = True
+
     def setUp(self):
         super(TestMapperBinding, self).setUp()
 
@@ -710,7 +716,7 @@ class TestMapperBinding(TransactionComponentRegistryCase):
         backend_record.env = self.env
         backend_record._name = 'my.collection'
         self.work = WorkContext(model_name='res.partner',
-                                collection=backend_record, 
+                                collection=backend_record,
                                 components_registry=self.comp_registry)
 
         # build and push in the component registry the base components we

@@ -61,8 +61,8 @@ First, we need to create the Odoo addons itself, editing the
 Nothing special but 2 things to note:
 
 * It depends from ``connector``. ``connector`` itself depends from
-  ``queue_job`` and ``component``. ``queue_job`` is in the `OCA/queue`_
-  repository.
+  ``queue_job``, ``component`` and ``component_event``. ``queue_job`` is in the
+  `OCA/queue`_ repository.
 * The module category should be ``Connector``.
 
 Of course, we also need to create the ``__init__.py`` file where we will
@@ -74,6 +74,8 @@ put the imports of our python modules.
 *************
 Backend Model
 *************
+
+Reference: :ref:`api-backend-model`
 
 We need to create a Backend representing the external service.  Every record we
 synchronize will be linked with a record of ``coffee.backend``.  This backend
@@ -102,6 +104,8 @@ Notes:
 ****************
 Abstract Binding
 ****************
+
+Reference: :ref:`api-binding-model`
 
 In order to share common features between all the bindings (see
 :ref:`binding`), create an abstract binding model.
@@ -135,6 +139,8 @@ Notes:
 **********
 Components
 **********
+
+Reference: :ref:`api-component`
 
 We'll probably need to create synchronizers, mappers, backend adapters,
 binders and maybe our own kind of components.

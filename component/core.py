@@ -277,7 +277,7 @@ class WorkContext(object):
         If the component exists, an instance of it will be returned,
         initialized with the current :class:`WorkContext`.
 
-        A :class:`odoo.addons.component.exception.NoComponentError` is raised
+        A :exc:`odoo.addons.component.exception.NoComponentError` is raised
         if:
 
         * no component with this name exists
@@ -337,11 +337,11 @@ class WorkContext(object):
         :meth:`ComponentRegistry.lookup`. When a component is found,
         it initialize it with the current :class:`WorkContext` and returned.
 
-        A :class:`odoo.addons.component.exception.SeveralComponentError` is
+        A :exc:`odoo.addons.component.exception.SeveralComponentError` is
         raised if more than one component match for the provided
         ``usage``/``model_name``.
 
-        A :class:`odoo.addons.component.exception.NoComponentError` is raised
+        A :exc:`odoo.addons.component.exception.NoComponentError` is raised
         if no component is found for the provided ``usage``/``model_name``.
 
         """
@@ -583,7 +583,7 @@ class AbstractComponent(object):
       :meth:`many_components` which will return all components for a usage
       with a matching or a not set ``_apply_on``.
     * It is advised to namespace the names of the components (e.g.
-    ``magento.xxx``) to prevent conflicts between addons.
+      ``magento.xxx``) to prevent conflicts between addons.
 
     """
     __metaclass__ = MetaComponent

@@ -17,6 +17,9 @@ from odoo.addons.component.core import WorkContext
 
 class TestAdvisoryLock(TransactionComponentRegistryCase):
 
+    at_install = False
+    post_install = True
+
     def setUp(self):
         super(TestAdvisoryLock, self).setUp()
         self.registry2 = RegistryManager.get(common.get_db_name())

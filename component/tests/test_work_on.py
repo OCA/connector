@@ -14,6 +14,9 @@ class TestWorkOn(common.TransactionCase):
 
     """
 
+    at_install = False
+    post_install = False
+
     def setUp(self):
         super(TestWorkOn, self).setUp()
         self.collection = self.env['collection.base']

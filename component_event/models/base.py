@@ -12,6 +12,7 @@ Extend the 'base' Odoo Model to add Events related features.
 """
 
 from odoo import api, models
+from ..components.event import CollectedEvents
 from ..core import EventWorkContext
 
 
@@ -61,6 +62,9 @@ class Base(models.AbstractModel):
 
 
         """
+        if not self.env.registry.ready:
+            # no event should be triggered before the registry has been loaded
+            return CollectedEvents([])
         model_name = self._name
         if collection is not None:
             work = EventWorkContext(collection=collection,

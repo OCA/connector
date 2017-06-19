@@ -33,7 +33,7 @@ class TestEventWorkContext(unittest2.TestCase):
         self.assertEquals(self.env, work.env)
         self.assertEquals('res.users', work.model_name)
         with self.assertRaises(ValueError):
-            work.collection
+            work.collection  # noqa
 
     def test_collection(self):
         """ WorkContext with collection """
@@ -75,7 +75,7 @@ class TestEventWorkContext(unittest2.TestCase):
         self.assertEquals('res.partner', work2.model_name)
         self.assertEquals(self.components_registry, work2.components_registry)
         with self.assertRaises(ValueError):
-            work.collection
+            work.collection  # noqa
 
     def test_collection_work_on(self):
         """ WorkContext propagated through work_on """
@@ -313,6 +313,9 @@ class TestEvent(ComponentRegistryCase):
 
 class TestEventFromModel(TransactionComponentRegistryCase):
     """ Test Events Components from Models """
+
+    at_install = False
+    post_install = True
 
     def setUp(self):
         super(TestEventFromModel, self).setUp()

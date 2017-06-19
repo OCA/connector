@@ -11,6 +11,9 @@ import odoo.tests.common as common
 class TestRelatedActionBinding(common.TransactionCase):
     """ Test Related Actions with Bindings """
 
+    at_install = False
+    post_install = True
+
     def setUp(self):
         super(TestRelatedActionBinding, self).setUp()
 

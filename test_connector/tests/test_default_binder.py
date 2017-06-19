@@ -8,6 +8,9 @@ from odoo.tests.common import TransactionCase
 class TestDefaultBinder(TransactionCase):
     """ Test the default binder implementation using Components """
 
+    at_install = False
+    post_install = True
+
     def setUp(self):
         super(TestDefaultBinder, self).setUp()
 

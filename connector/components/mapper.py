@@ -62,7 +62,7 @@ def changed_by(*args):
         def any(self, record):
             return {'output_field': record['input_field']}
 
-    :param *args: field names which trigger the mapping when modified
+    :param ``*args``: field names which trigger the mapping when modified
 
     """
     def register_mapping(func):
@@ -238,8 +238,8 @@ def follow_m2o_relations(field):
     Examples:
         Assuming model is ``product.product``::
 
-        direct = [
-            (follow_m2o_relations('product_tmpl_id.categ_id.name'), 'cat')]
+            direct = [
+                (follow_m2o_relations('product_tmpl_id.categ_id.name'), 'cat')]
 
     :param field: field "path", using dots for relations as usual in Odoo
     """
@@ -961,8 +961,8 @@ class MapRecord(object):
         :type for_create: boolean
         :param fields: filter on fields
         :type fields: list
-        :param **kwargs: custom options, they can later be used in the
-                         mapping methods
+        :param ``**kwargs``: custom options, they can later be used in the
+                             mapping methods
 
         """
         options = MapOptions(for_create=for_create, fields=fields, **kwargs)

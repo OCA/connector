@@ -39,7 +39,7 @@ class BaseConnectorComponent(AbstractComponent):
     def binder_for(self, model=None):
         """ Shortcut to get Binder for a model
 
-        Equivalent to: ``self.component(usage='binder', model_name='xxx')
+        Equivalent to: ``self.component(usage='binder', model_name='xxx')``
 
         """
         return self.component(usage='binder', model_name=model)
@@ -48,7 +48,7 @@ class BaseConnectorComponent(AbstractComponent):
         """ Acquire a Postgres transactional advisory lock or retry job
 
         When the lock cannot be acquired, it raises a
-        :class:`odoo.addons.queue_job.exception.RetryableJobError` so the job
+        :exc:`odoo.addons.queue_job.exception.RetryableJobError` so the job
         is retried after n ``retry_seconds``.
 
         Usage example:

@@ -1,17 +1,28 @@
 .. _migration-guide:
 
-#############################
-Migration Guide to Components
-#############################
+########################################
+Migration Guide to the new Connector API
+########################################
 
 During the year 2017, the connector evolved greatly.
 Two majors parts have been rewritten:
 
-* The Job Queue API
-* The ``ConnectorUnit`` API, which is the core of the composability of the
-  Connector. It has been replaced by a standalone addon called ``component``.
+* The Job Queue API (:ref:`api-queue`)
+* The Event API (:ref:`api-event`)
+* The ``ConnectorUnit`` API, which is the core of the composability
+  of the Connector. It has been replaced by a standalone addon
+  called ``component``. (:ref:`api-component`)
+
+The parts have been splitted in different addons:
+
+* ``queue_job`` in https://github.com/OCA/queue
+* ``component`` in the same repository
+* ``component_event`` in the same repository
+* ``connector`` uses the 3 addons and the parts specifics to the connectors
 
 This guide will show how to migrate from the old API to the new one.
+
+The previous API will stay until the migration to Odoo 11.0.
 
 **************
 Migrating Jobs
@@ -178,13 +189,615 @@ Links
 * :meth:`odoo.addons.queue_job.job.job`
 * :meth:`odoo.addons.queue_job.models.base.Base.with_delay`
 
+****************
+Migrating Events
+****************
+
+Events are now handled by the ``component_event`` addon.
+
+Triggering an event
+===================
+
+Before
+------
+
+First you had to create an :class:`~odoo.addons.connector.event.Event` instance:
+
+.. code-block:: python
+
+    on_record_create = Event()
+
+And then import and trigger it, passing a lot of arguments to it:
+
+.. code-block:: python
+
+    from odoo.addons.connector.event import on_record_create
+
+    class Base(models.AbstractModel):
+        """ The base model, which is implicitly inherited by all models. """
+        _inherit = 'base'
+
+        @api.model
+        def create(self, vals):
+            record = super(Base, self).create(vals)
+            on_record_create.fire(self.env, self._name, record.id, vals)
+            return record
+
+
+After
+-----
+
+.. code-block:: python
+
+    class Base(models.AbstractModel):
+        _inherit = 'base'
+
+        @api.model
+        def create(self, vals):
+            record = super(Base, self).create(vals)
+            self._event('on_record_create').notify(record, fields=vals.keys())
+            return record
+
+Observations
+------------
+
+* No more imports are needed for the invocation
+  Only the arguments you want to pass should be passed to
+  :meth:`odoo.addons.component_event.components.event.CollectedEvents.notify`.
+* The name of the event must start with ``'on_'``
+
+Links
+-----
+
+* :mod:`odoo.addons.component_event.components.event`
+
+
+Listening to an event
+=====================
+
+Before
+------
+
+.. code-block:: python
+
+    from odoo.addons.connector.event import on_record_create
+
+    @on_record_create
+    def delay_export(env, model_name, record_id, vals):
+        if session.context.get('connector_no_export'):
+            return
+        fields = vals.keys()
+        export_record.delay(session, model_name, record_id, fields=fields)
+
+After
+-----
+
+.. code-block:: python
+
+    from odoo.addons.component.core import Component
+
+    class MagentoListener(Component):
+        _name = 'magento.event.listener'
+        _inherit = 'base.event.listener'
+
+        def on_record_create(self, record, fields=None):
+            """ Called when a record is created """
+            if self.env.context.get('connector_no_export'):
+                return
+            record.with_delay().export_record(fields=fields)
+
+Observations
+------------
+
+* The listeners are now components
+* The name of the method is the same than the one notified in the previous
+  section
+* A listener Component might container several listener methods
+* It must inherit from ``'base.event.listener'``, or one of its descendants.
+
+Links
+-----
+
+* :mod:`odoo.addons.component_event.components.event`
+
+
+Listening to an event only for some Models
+==========================================
+
+Before
+------
+
+.. code-block:: python
+
+    from odoo.addons.connector.event import on_record_create
+
+    @on_record_create(model_names=['magento.address', 'magento.res.partner'])
+    def delay_export(env, model_name, record_id, vals):
+        if session.context.get('connector_no_export'):
+            return
+        fields = vals.keys()
+        export_record.delay(session, model_name, record_id, fields=fields)
+
+After
+-----
+
+.. code-block:: python
+
+    from odoo.addons.component.core import Component
+
+    class MagentoListener(Component):
+        _name = 'magento.event.listener'
+        _inherit = 'base.event.listener'
+        _apply_on = ['magento.address', 'magento.res.partner']
+
+        def on_record_create(self, record, fields=None):
+            """ Called when a record is created """
+            if self.env.context.get('connector_no_export'):
+                return
+            record.with_delay().export_record(fields=fields)
+
+Observations
+------------
+
+* Same than previous example but we added ``_apply_on`` on the Component.
+
+Links
+-----
+
+* :mod:`odoo.addons.component_event.components.event`
+
+
 ********************
 Migrating Components
 ********************
 
-* backend version: no longer a dispatch at class level; do at method level
-* inheritance, all AbstractComponent, Component, _name, _inherit
-* set _collection
-* replace unit_for
-* create a base component
-* no hesitation to create a dedicated ``_usage`` such as ``'tracking.exporter``
+Backends
+========
+
+Before
+------
+
+You could have several versions for a backend:
+
+.. code-block:: python
+
+    magento = backend.Backend('magento')
+    """ Generic Magento Backend """
+
+    magento1700 = backend.Backend(parent=magento, version='1.7')
+    """ Magento Backend for version 1.7 """
+
+    magento1900 = backend.Backend(parent=magento, version='1.9')
+    """ Magento Backend for version 1.9 """
+
+
+
+It was linked with a Backend model such as:
+
+.. code-block:: python
+
+    class MagentoBackend(models.Model):
+        _name = 'magento.backend'
+        _description = 'Magento Backend'
+        _inherit = 'connector.backend'
+
+        _backend_type = 'magento'
+
+        @api.model
+        def select_versions(self):
+            """ Available versions in the backend.
+            Can be inherited to add custom versions.  Using this method
+            to add a version from an ``_inherit`` does not constrain
+            to redefine the ``version`` field in the ``_inherit`` model.
+            """
+            return [('1.7', '1.7+')]
+
+        version = fields.Selection(selection='select_versions', required=True)
+
+
+
+After
+-----
+
+All the :class:`backend.Backend` instances must be deleted.
+
+And the ``_backend_type`` must be removed from the Backend model.
+
+.. code-block:: python
+
+    class MagentoBackend(models.Model):
+        _name = 'magento.backend'
+        _description = 'Magento Backend'
+        _inherit = 'connector.backend'
+
+        @api.model
+        def select_versions(self):
+            """ Available versions in the backend.
+            Can be inherited to add custom versions.  Using this method
+            to add a version from an ``_inherit`` does not constrain
+            to redefine the ``version`` field in the ``_inherit`` model.
+            """
+            return [('1.7', '1.7+')]
+
+        version = fields.Selection(selection='select_versions', required=True)
+
+
+Observations
+------------
+
+* The version is now optional in the Backend Models.
+* Backend Models are based on Component's Collections:
+  :class:`odoo.addons.component.models.collection.Collection`
+
+Links
+-----
+
+* :ref:`api-component`
+* :class:`odoo.addons.component.models.collection.Collection`
+
+
+Inheritance
+===========
+
+Before
+------
+
+You could inherit a ``ConnectorUnit`` by creating a custom Backend
+version and decorating your class with it
+
+.. code-block:: python
+
+    magento_custom = backend.Backend(parent=magento1700, version='custom')
+    """ Custom Magento Backend """
+
+
+.. code-block:: python
+
+    # base one
+    @magento
+    class MagentoPartnerAdapter(GenericAdapter):
+        # ...
+
+    # other file...
+
+    from .backend import magento_custom
+
+    # custom one
+    @magento_custom
+    class MyPartnerAdapter(MagentoPartnerAdapter):
+        # ...
+
+        def do_something(self):
+            # do it this way
+
+You could also replace an existing class, this is mentionned in `Replace or
+unregister a component`_.
+
+
+After
+-----
+
+For an existing component:
+
+.. code-block:: python
+
+    from odoo.addons.component.core import Component
+
+    class MagentoPartnerAdapter(Component):
+        _name = 'magento.partner.adapter'
+        _inherit = 'magento.adapter'
+
+        def do_something(self):
+            # do it this way
+
+You can extend it:
+
+.. code-block:: python
+
+    from odoo.addons.component.core import Component
+
+    class MyPartnerAdapter(Component):
+        _inherit = 'magento.partner.adapter'
+
+        def do_something(self):
+            # do it this way
+
+Or create a new different component with the existing one as base:
+
+.. code-block:: python
+
+    from odoo.addons.component.core import Component
+
+    class MyPartnerAdapter(Component):
+        _name = 'my.magento.partner.adapter'
+        _inherit = 'magento.partner.adapter'
+
+        def do_something(self):
+            # do it this way
+
+
+Observations
+------------
+
+* The inheritance is similar to the Odoo's one (without ``_inherits``.
+* All components have a Python inheritance on
+  :class:`~odoo.addons.component.core.AbstractComponent` or
+  :class:`~odoo.addons.component.core.Component`
+* The names are global (as in Odoo), so you should prefix them with a namespace
+* The name of the classes has no effect
+* As in Odoo Models, a Component can ``_inherit`` from a list of Components
+* All components implicitly inherits from a ``'base'`` component
+
+Links
+-----
+
+* :ref:`api-component`
+* :class:`odoo.addons.component.core.AbstractComponent`
+
+
+Find a component
+================
+
+Before
+------
+
+To find a ``ConnectorUnit``, you had to ask for given class or subclass:
+
+.. code-block:: python
+
+    # our ConnectorUnit to find
+    @magento
+    class MagentoPartnerAdapter(GenericAdapter):
+        _model_name = ['magent.res.partner']
+
+    # other file...
+
+    def run(self, record):
+        backend_adapter = self.unit_for(GenericAdapter)
+
+It was searched for the current model and the current backend.
+
+After
+-----
+
+For an existing component:
+
+.. code-block:: python
+
+    from odoo.addons.component.core import Component
+
+    class MagentoPartnerAdapter(Component):
+        _name = 'magento.partner.adapter'
+        _inherit = 'magento.adapter'
+
+        _usage = 'backend.adapter'
+        _collection = 'magento.backend'
+        _apply_on = ['res.partner']
+
+    # other file...
+
+    def run(self, record):
+        backend_adapter = self.component(usage='backend.adapter')
+
+
+
+Observations
+------------
+
+* The model is compared with the ``_apply_on`` attribute
+* The Backend is compared with the ``_collection`` attribute, it must
+  have the same name than the Backend Model.
+* The ``_usage`` indicates what the purpose of the component is, and
+  allow to find the correct one for our task. It allow more dynamic
+  usages than the previous usage of a class.
+* Usually, the ``_usage`` and the ``_collection`` will be ``_inherit`` 'ed from
+  a component (here from ``'magento.adapter``), so they won't need to be
+  repeated in all Components.
+* A good idea is to have a base abstract Component for the Collection, then
+  an abstract Component for every usage::
+
+    class BaseMagentoConnectorComponent(AbstractComponent):
+
+        _name = 'base.magento.connector'
+        _inherit = 'base.connector'
+        _collection = 'magento.backend'
+
+    class MagentoBaseExporter(AbstractComponent):
+        """ Base exporter for Magento """
+
+        _name = 'magento.base.exporter'
+        _inherit = ['base.exporter', 'base.magento.connector']
+        _usage = 'record.exporter'
+
+    class MagentoImportMapper(AbstractComponent):
+        _name = 'magento.import.mapper'
+        _inherit = ['base.magento.connector', 'base.import.mapper']
+        _usage = 'import.mapper'
+
+    # ...
+
+* The main usages are:
+  * import.mapper
+  * export.mapper
+  * backend.adapter
+  * importer
+  * exporter
+  * binder
+  * event.listener
+* But for the importer and exporter, I recommend to use more precise ones in
+  the connectors: record.importer, record.exporter, batch.importer,
+  batch.exporter
+* You are allowed to be creative with the ``_usage``, it's the key that will
+  allow you to find the right one component you need. (e.g. on
+  ``stock.picking`` you need to 1. export the record, 2. export the tracking.
+  Then use ``record.exporter`` and ``tracking.exporter``).
+* AbstractComponent will never be returned by a lookup
+
+
+Links
+-----
+
+* :ref:`api-component`
+* :class:`odoo.addons.component.core.AbstractComponent`
+
+
+Backend Versions
+================
+
+Before
+------
+
+You could have several versions for a backend:
+
+.. code-block:: python
+
+    magento = backend.Backend('magento')
+    """ Generic Magento Backend """
+
+    magento1700 = backend.Backend(parent=magento, version='1.7')
+    """ Magento Backend for version 1.7 """
+
+    magento1900 = backend.Backend(parent=magento, version='1.9')
+    """ Magento Backend for version 1.9 """
+
+
+And use them for a class-level dynamic dispatch
+
+.. code-block:: python
+
+    from odoo.addons.magentoerpconnect.backend import magento1700, magento1900
+
+    @magento1700
+    class PartnerAdapter1700(GenericAdapter):
+        # ...
+
+        def do_something(self):
+            # do it this way
+
+    @magento1900
+    class PartnerAdapter1900(GenericAdapter):
+        # ...
+
+        def do_something(self):
+            # do it that way
+
+
+After
+-----
+
+This feature has been removed, it introduced a lot of complexity (notably
+regarding inheritance) for few gain.  The version is now optional on the
+backends and the version dispatch, if needed, should be handled manually.
+
+In methods:
+
+.. code-block:: python
+
+    from odoo.addons.component.core import Component
+
+    class PartnerAdapter(Component):
+        # ...
+
+        def do_something(self):
+            if self.backend_record.version == '1.7':
+                # do it this way
+            else:
+                # do it that way
+
+Or with a factory:
+
+.. code-block:: python
+
+    from odoo.addons.component.core import Component
+
+    class PartnerAdapterFactory(Component):
+        # ...
+
+        def get_component(self, version):
+            if self.backend_record.version == '1.7':
+                return self.component(usage='backend.adapter.1.7')
+            else:
+                return self.component(usage='backend.adapter.1.9')
+
+Observations
+------------
+
+* None
+
+Links
+-----
+
+* :ref:`api-component`
+
+
+Replace or unregister a component
+=================================
+
+Before
+------
+
+You could replace a ``ConnectorUnit`` with the ``replace`` argument passed to
+the backend decorator:
+
+.. code-block:: python
+
+    @magento(replacing=product.ProductImportMapper)
+    class ProductImportMapper(product.ProductImportMapper):
+
+
+After
+-----
+
+First point: this should hardly be needed now, as you can inherit a component
+like Odoo Models.  Still, if you need to totally replace a component by
+another, let's say there is this component:
+
+.. code-block:: python
+
+    from odoo.addons.component.core import Component
+
+    class ProductImportMapper(Component):
+        _name = 'magento.product.import.mapper'
+        _inherit = 'magento.import.mapper'
+
+        _apply_on = ['magento.product.product']
+        # normally the following attrs are inherited from the _inherit
+        _usage = 'import.mapper'
+        _collection = 'magento.backend'
+
+
+Then you can remove the usage of the component: it will never be used:
+
+.. code-block:: python
+
+    from odoo.addons.component.core import Component
+
+    class ProductImportMapper(Component):
+        _inherit = 'magento.product.import.mapper'
+        _usage = None
+
+And create your own, that will be picked up instead of the base one:
+
+.. code-block:: python
+
+    from odoo.addons.component.core import Component
+
+    class MyProductImportMapper(Component):
+        _name = 'my.magento.product.import.mapper'
+        _inherit = 'magento.import.mapper'
+
+        _apply_on = ['magento.product.product']
+        # normally the following attrs are inherited from the _inherit
+        _usage = 'import.mapper'
+        _collection = 'magento.backend'
+
+
+Observations
+------------
+
+* None
+
+Links
+-----
+
+* :ref:`api-component`

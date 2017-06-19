@@ -236,6 +236,7 @@ class WorkContext(object):
             self.components_registry = _component_databases[dbname]
         self._propagate_kwargs = [
             'collection',
+            'model_name',
             'components_registry',
         ]
         for attr_name, value in kwargs.iteritems():
@@ -250,48 +251,147 @@ class WorkContext(object):
         """
         return self.collection.env
 
-    def work_on(self, model_name):
+    def work_on(self, model_name=None, collection=None):
         """ Create a new work context for another model keeping attributes
 
         Used when one need to lookup components for another model.
         """
         kwargs = {attr_name: getattr(self, attr_name)
                   for attr_name in self._propagate_kwargs}
-        return self.__class__(model_name=model_name,
-                              **kwargs)
+        if collection is not None:
+            kwargs['collection'] = collection
+        if model_name is not None:
+            kwargs['model_name'] = model_name
+        return self.__class__(**kwargs)
+
+    def _component_class_by_name(self, name):
+        components_registry = self.components_registry
+        component_class = components_registry.get(name)
+        if not component_class:
+            raise NoComponentError("No component with name '%s' found." % name)
+        return component_class
 
     def component_by_name(self, name, model_name=None):
         """ Return a component by its name
 
-        Entrypoint to get a component, then you will probably use
-        meth:`~AbstractComponent.component_by_name`
+        If the component exists, an instance of it will be returned,
+        initialized with the current :class:`WorkContext`.
+
+        A :class:`odoo.addons.component.exception.NoComponentError` is raised
+        if:
+
+        * no component with this name exists
+        * the ``_apply_on`` of the found component does not match
+          with the current working model
+
+        In the latter case, it can be an indication that you need to switch to
+        a different model, you can do so by providing the ``model_name``
+        argument.
+
         """
-        base = self.components_registry['base'](self)
-        return base.component_by_name(name, model_name=model_name)
+        if isinstance(model_name, models.BaseModel):
+            model_name = model_name._name
+        component_class = self._component_class_by_name(name)
+        work_model = model_name or self.model_name
+        if (component_class._collection and
+                self.collection._name != component_class._collection):
+            raise NoComponentError(
+                "Component with name '%s' can't be used for collection '%s'."
+                (name, self.collection._name)
+            )
+
+        if (component_class.apply_on_models and
+                work_model not in component_class.apply_on_models):
+            if len(component_class.apply_on_models) == 1:
+                hint_models = "'%s'" % (component_class.apply_on_models[0],)
+            else:
+                hint_models = "<one of %r>" % (
+                    component_class.apply_on_models,
+                )
+            raise NoComponentError(
+                "Component with name '%s' can't be used for model '%s'.\n"
+                "Hint: you might want to use: "
+                "component_by_name('%s', model_name=%s)" %
+                (name, work_model, name, hint_models)
+            )
+
+        if work_model == self.model_name:
+            work_context = self
+        else:
+            work_context = self.work_on(model_name)
+        return component_class(work_context)
+
+    def _lookup_components(self, usage=None, model_name=None):
+        component_classes = self.components_registry.lookup(
+            self.collection._name,
+            usage=usage,
+            model_name=model_name,
+        )
+
+        return component_classes
 
     def component(self, usage=None, model_name=None):
-        """ Return a component
+        """ Find a component by usage and model for the current collection
 
-        Entrypoint to get a component, then you will probably use
-        meth:`~AbstractComponent.component` or
-        meth:`~AbstractComponent.many_components`
+        It searches a component using the rules of
+        :meth:`ComponentRegistry.lookup`. When a component is found,
+        it initialize it with the current :class:`WorkContext` and returned.
+
+        A :class:`odoo.addons.component.exception.SeveralComponentError` is
+        raised if more than one component match for the provided
+        ``usage``/``model_name``.
+
+        A :class:`odoo.addons.component.exception.NoComponentError` is raised
+        if no component is found for the provided ``usage``/``model_name``.
+
         """
-        return self.components_registry['base'](self).component(
-            usage=usage,
-            model_name=model_name,
+        if isinstance(model_name, models.BaseModel):
+            model_name = model_name._name
+        model_name = model_name or self.model_name
+        component_classes = self._lookup_components(
+            usage=usage, model_name=model_name
         )
+        if not component_classes:
+            raise NoComponentError(
+                "No component found for collection '%s', "
+                "usage '%s', model_name '%s'." %
+                (self.collection._name, usage, model_name)
+            )
+        elif len(component_classes) > 1:
+            raise SeveralComponentError(
+                "Several components found for collection '%s', "
+                "usage '%s', model_name '%s'. Found: %r" %
+                (self.collection._name, usage or '',
+                 model_name or '', component_classes)
+            )
+        if model_name == self.model_name:
+            work_context = self
+        else:
+            work_context = self.work_on(model_name)
+        return component_classes[0](work_context)
 
     def many_components(self, usage=None, model_name=None):
-        """ Return several components
+        """ Find many components by usage and model for the current collection
 
-        Entrypoint to get a component, then you will probably use
-        meth:`~AbstractComponent.component` or
-        meth:`~AbstractComponent.many_components`
+        It searches a component using the rules of
+        :meth:`ComponentRegistry.lookup`. When components are found, they
+        initialized with the current :class:`WorkContext` and returned as a
+        list.
+
+        If no component is found, an empty list is returned.
+
         """
-        return self.components_registry['base'](self).many_components(
-            usage=usage,
-            model_name=model_name,
+        if isinstance(model_name, models.BaseModel):
+            model_name = model_name._name
+        model_name = model_name or self.model_name
+        component_classes = self._lookup_components(
+            usage=usage, model_name=model_name
         )
+        if model_name == self.model_name:
+            work_context = self
+        else:
+            work_context = self.work_on(model_name)
+        return [comp(work_context) for comp in component_classes]
 
     def __str__(self):
         return "WorkContext(%s,%s)" % (self.model_name, repr(self.collection))
@@ -522,127 +622,26 @@ class AbstractComponent(object):
         """ The model instance we are working with """
         return self.work.model
 
-    def _component_class_by_name(self, name):
-        components_registry = self.work.components_registry
-        component_class = components_registry.get(name)
-        if not component_class:
-            raise NoComponentError("No component with name '%s' found." % name)
-        return component_class
-
     def component_by_name(self, name, model_name=None):
         """ Return a component by its name
 
-        If the component exists, an instance of it will be returned,
-        initialized with the current :class:`WorkContext`.
-
-        A :class:`odoo.addons.component.exception.NoComponentError` is raised
-        if:
-
-        * no component with this name exists
-        * the ``_apply_on`` of the found component does not match
-          with the current working model
-
-        In the latter case, it can be an indication that you need to switch to
-        a different model, you can do so by providing the ``model_name``
-        argument.
-
+        Shortcut to meth:`~WorkContext.component_by_name`
         """
-        if isinstance(model_name, models.BaseModel):
-            model_name = model_name._name
-        component_class = self._component_class_by_name(name)
-        work_model = model_name or self.work.model_name
-        if (component_class.apply_on_models and
-                work_model not in component_class.apply_on_models):
-            if len(component_class.apply_on_models) == 1:
-                hint_models = "'%s'" % (component_class.apply_on_models[0],)
-            else:
-                hint_models = "<one of %r>" % (
-                    component_class.apply_on_models,
-                )
-            raise NoComponentError(
-                "Component with name '%s' can't be used for model '%s'.\n"
-                "Hint: you might want to use: "
-                "component_by_name('%s', model_name=%s)" %
-                (name, work_model, name, hint_models)
-            )
-
-        if work_model == self.work.model_name:
-            work_context = self.work
-        else:
-            work_context = self.work.work_on(model_name)
-        return component_class(work_context)
-
-    def _lookup_components(self, usage=None, model_name=None):
-        component_classes = self.work.components_registry.lookup(
-            self.collection._name,
-            usage=usage,
-            model_name=model_name,
-        )
-
-        return component_classes
+        return self.work.component_by_name(name, model_name=model_name)
 
     def component(self, usage=None, model_name=None):
-        """ Find a component by usage and model for the current collection
+        """ Return a component
 
-        It searches a component using the rules of
-        :meth:`ComponentRegistry.lookup`. When a component is found,
-        it initialize it with the current :class:`WorkContext` and returned.
-
-        A :class:`odoo.addons.component.exception.SeveralComponentError` is
-        raised if more than one component match for the provided
-        ``usage``/``model_name``.
-
-        A :class:`odoo.addons.component.exception.NoComponentError` is raised
-        if no component is found for the provided ``usage``/``model_name``.
-
+        Shortcut to meth:`~WorkContext.component`
         """
-        if isinstance(model_name, models.BaseModel):
-            model_name = model_name._name
-        model_name = model_name or self.work.model_name
-        component_classes = self._lookup_components(
-            usage=usage, model_name=model_name
-        )
-        if not component_classes:
-            raise NoComponentError(
-                "No component found for collection '%s', "
-                "usage '%s', model_name '%s'." %
-                (self.collection._name, usage, model_name)
-            )
-        elif len(component_classes) > 1:
-            raise SeveralComponentError(
-                "Several components found for collection '%s', "
-                "usage '%s', model_name '%s'. Found: %r" %
-                (self.collection._name, usage or '',
-                 model_name or '', component_classes)
-            )
-        if model_name == self.work.model_name:
-            work_context = self.work
-        else:
-            work_context = self.work.work_on(model_name)
-        return component_classes[0](work_context)
+        return self.work.component(usage=usage, model_name=model_name)
 
     def many_components(self, usage=None, model_name=None):
-        """ Find many components by usage and model for the current collection
+        """ Return several components
 
-        It searches a component using the rules of
-        :meth:`ComponentRegistry.lookup`. When components are found, they
-        initialized with the current :class:`WorkContext` and returned as a
-        list.
-
-        If no component is found, an empty list is returned.
-
+        Shortcut to meth:`~WorkContext.many_components`
         """
-        if isinstance(model_name, models.BaseModel):
-            model_name = model_name._name
-        model_name = model_name or self.work.model_name
-        component_classes = self._lookup_components(
-            usage=usage, model_name=model_name
-        )
-        if model_name == self.work.model_name:
-            work_context = self.work
-        else:
-            work_context = self.work.work_on(model_name)
-        return [comp(work_context) for comp in component_classes]
+        return self.work.many_components(usage=usage, model_name=model_name)
 
     def __str__(self):
         return "Component(%s)" % self._name

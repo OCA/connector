@@ -12,6 +12,40 @@ class ConnectorBackend(models.AbstractModel):
 
     The backends have to ``_inherit`` this model in the connectors
     modules.
+
+    The components articulates around a collection, which in the context of the
+    connectors is called a Backend.
+
+    It must be defined as a Model that inherits from ``'connector.backend'``.
+
+    Example with the Magento Connector::
+
+        # in magentoerpconnect/magento_model.py
+
+        class MagentoBackend(models.Model):
+            _name = 'magento.backend'
+            _description = 'Magento Backend'
+            _inherit = 'connector.backend'
+
+            # the version in not mandatory
+            @api.model
+            def _select_versions(self):
+                \"\"\" Available versions
+
+                Can be inherited to add custom versions.
+                \"\"\"
+                return [('1.7', 'Magento 1.7')]
+
+            version = fields.Selection(
+                selection='_select_versions',
+                string='Version',
+                required=True,
+            )
+            location = fields.Char(string='Location', required=True)
+            username = fields.Char(string='Username')
+            password = fields.Char(string='Password')
+
+
     """
     _name = 'connector.backend'
     _inherit = ['collection.base']
@@ -30,6 +64,10 @@ class ConnectorBackend(models.AbstractModel):
     def get_backend(self):
         """ For a record of backend, returns the appropriate instance
         of :py:class:`~connector.backend.Backend`.
+
+        Is part of the ``ConnectorUnit`` API.
+
+        Deprecated, due to removal in Odoo 11.0.
         """
         self.ensure_one()
         if self._backend_type is None:
@@ -56,19 +94,15 @@ class ExternalBinding(models.AbstractModel):
     It needs to implements at least these fields:
 
     odoo_id
-
         The many2one to the record it links (used by ``_inherits``).
 
     backend_id
-
         The many2one to the backend (for instance ``magento.backend``).
 
     external_id
-
         The ID on the backend.
 
     sync_date
-
         Last date of synchronization
 
 

@@ -29,11 +29,9 @@ class TestEventWorkContext(unittest2.TestCase):
     def test_env(self):
         """ WorkContext with env """
         work = EventWorkContext(model_name='res.users', env=self.env,
-                                from_recordset=self.record,
                                 components_registry=self.components_registry)
         self.assertEquals(self.env, work.env)
         self.assertEquals('res.users', work.model_name)
-        self.assertEquals(self.record, work.from_recordset)
         with self.assertRaises(ValueError):
             work.collection
 
@@ -42,12 +40,9 @@ class TestEventWorkContext(unittest2.TestCase):
         env = mock.MagicMock(name='env')
         collection = mock.MagicMock(name='collection')
         collection.env = env
-        record = mock.MagicMock(name='record')
         work = EventWorkContext(model_name='res.users', collection=collection,
-                                from_recordset=record,
                                 components_registry=self.components_registry)
         self.assertEquals(collection, work.collection)
-        self.assertEquals(record, work.from_recordset)
         self.assertEquals(env, work.env)
         self.assertEquals('res.users', work.model_name)
 
@@ -70,14 +65,13 @@ class TestEventWorkContext(unittest2.TestCase):
     def test_env_work_on(self):
         """ WorkContext propagated through work_on """
         env = mock.MagicMock(name='env')
-        record = mock.MagicMock(name='record')
+        collection = mock.MagicMock(name='collection')
+        collection.env = env
         work = EventWorkContext(env=env, model_name='res.users',
-                                from_recordset=record,
                                 components_registry=self.components_registry)
-        work2 = work.work_on('res.partner')
-        self.assertEquals('EventWorkContext', work2.__class__.__name__)
+        work2 = work.work_on(model_name='res.partner', collection=collection)
+        self.assertEquals('WorkContext', work2.__class__.__name__)
         self.assertEquals(env, work2.env)
-        self.assertEquals(record, work2.from_recordset)
         self.assertEquals('res.partner', work2.model_name)
         self.assertEquals(self.components_registry, work2.components_registry)
         with self.assertRaises(ValueError):
@@ -88,16 +82,30 @@ class TestEventWorkContext(unittest2.TestCase):
         env = mock.MagicMock(name='env')
         collection = mock.MagicMock(name='collection')
         collection.env = env
-        record = mock.MagicMock(name='record')
         work = EventWorkContext(collection=collection, model_name='res.users',
-                                from_recordset=record,
                                 components_registry=self.components_registry)
-        work2 = work.work_on('res.partner')
-        self.assertEquals('EventWorkContext', work2.__class__.__name__)
+        work2 = work.work_on(model_name='res.partner')
+        self.assertEquals('WorkContext', work2.__class__.__name__)
         self.assertEquals(collection, work2.collection)
-        self.assertEquals(record, work2.from_recordset)
         self.assertEquals(env, work2.env)
         self.assertEquals('res.partner', work2.model_name)
+        self.assertEquals(self.components_registry, work2.components_registry)
+
+    def test_collection_work_on_collection(self):
+        """ WorkContext collection changed with work_on """
+        env = mock.MagicMock(name='env')
+        collection = mock.MagicMock(name='collection')
+        collection.env = env
+        work = EventWorkContext(model_name='res.users', env=env,
+                                components_registry=self.components_registry)
+        work2 = work.work_on(collection=collection)
+        # when work_on is used inside an event component, we want
+        # to switch back to a normal WorkContext, because we don't
+        # need anymore the EventWorkContext
+        self.assertEquals('WorkContext', work2.__class__.__name__)
+        self.assertEquals(collection, work2.collection)
+        self.assertEquals(env, work2.env)
+        self.assertEquals('res.users', work2.model_name)
         self.assertEquals(self.components_registry, work2.components_registry)
 
 
@@ -215,6 +223,7 @@ class TestEvent(ComponentRegistryCase):
         # if we empty the cache, as it on the class, both collecters
         # should now find the 2 events
         collecter._cache.clear()
+        self.comp_registry._cache.clear()
         # CollectedEvents.events contains the collected events
         self.assertEquals(
             2,
@@ -302,47 +311,6 @@ class TestEvent(ComponentRegistryCase):
         self.assertEquals(2, len(collected.events))
 
 
-class TestEventRecordset(ComponentRegistryCase):
-    """ Test Events with Recordset """
-
-    def setUp(self):
-        super(TestEventRecordset, self).setUp()
-        # build and push in the component registry the base components we
-        # inherit from in the tests
-        # 'base.event.collecter'
-        EventCollecter._build_component(self.comp_registry)
-        # 'base.event.listener'
-        EventListener._build_component(self.comp_registry)
-
-        # get the collecter to notify the event
-        # we don't mind about the collection and the model here,
-        # the events we test are global
-        env = mock.MagicMock()
-        self.recordset = mock.MagicMock(name='recordset')
-        # when there is a 'from_recordset' in the WorkContext,
-        # the listener methods will be able to access to it from
-        # self.recordset. It is used when events are triggered from
-        # records using BaseModel._event
-        work = EventWorkContext(model_name='res.users', env=env,
-                                from_recordset=self.recordset,
-                                components_registry=self.comp_registry)
-        self.collecter = self.comp_registry['base.event.collecter'](work)
-
-    def test_event(self):
-        class MyEventListener(Component):
-            _name = 'my.event.listener'
-            _inherit = 'base.event.listener'
-
-            def on_foo(self, msg):
-                self.recordset.msg = msg
-
-        MyEventListener._build_component(self.comp_registry)
-
-        # collect the event and notify it
-        self.collecter.collect_events('on_foo').notify('OK')
-        self.assertEquals('OK', self.recordset.msg)
-
-
 class TestEventFromModel(TransactionComponentRegistryCase):
     """ Test Events Components from Models """
 
@@ -360,8 +328,8 @@ class TestEventFromModel(TransactionComponentRegistryCase):
             _name = 'my.event.listener'
             _inherit = 'base.event.listener'
 
-            def on_foo(self, name):
-                self.recordset.name = name
+            def on_foo(self, record, name):
+                record.name = name
 
         MyEventListener._build_component(self.comp_registry)
 
@@ -373,7 +341,7 @@ class TestEventFromModel(TransactionComponentRegistryCase):
         # partner._event('on_foo').notify('bar')
         events = partner._event('on_foo',
                                 components_registry=self.comp_registry)
-        events.notify('bar')
+        events.notify(partner, 'bar')
         self.assertEquals('bar', partner.name)
 
     def test_event_filter_on_model(self):
@@ -381,30 +349,66 @@ class TestEventFromModel(TransactionComponentRegistryCase):
             _name = 'global.event.listener'
             _inherit = 'base.event.listener'
 
-            def on_foo(self, name):
-                self.recordset.name = name
+            def on_foo(self, record, name):
+                record.name = name
 
         class PartnerListener(Component):
             _name = 'partner.event.listener'
             _inherit = 'base.event.listener'
             _apply_on = ['res.partner']
 
-            def on_foo(self, name):
-                self.recordset.ref = name
+            def on_foo(self, record, name):
+                record.ref = name
 
         class UserListener(Component):
             _name = 'user.event.listener'
             _inherit = 'base.event.listener'
             _apply_on = ['res.users']
 
-            def on_foo(self, name):
+            def on_foo(self, record, name):
                 assert False
 
         self._build_components(GlobalListener, PartnerListener, UserListener)
 
         partner = self.env['res.partner'].create({'name': 'test'})
-        partner._event('on_foo',
-                       components_registry=self.comp_registry).notify('bar')
+        partner._event(
+            'on_foo',
+            components_registry=self.comp_registry
+        ).notify(partner, 'bar')
         self.assertEquals('bar', partner.name)
         self.assertEquals('bar', partner.ref)
 
+    def test_event_filter_on_collection(self):
+        class GlobalListener(Component):
+            _name = 'global.event.listener'
+            _inherit = 'base.event.listener'
+
+            def on_foo(self, record, name):
+                record.name = name
+
+        class PartnerListener(Component):
+            _name = 'partner.event.listener'
+            _inherit = 'base.event.listener'
+            _collection = 'collection.base'
+
+            def on_foo(self, record, name):
+                record.ref = name
+
+        class UserListener(Component):
+            _name = 'user.event.listener'
+            _inherit = 'base.event.listener'
+            _collection = 'magento.backend'
+
+            def on_foo(self, record, name):
+                assert False
+
+        self._build_components(GlobalListener, PartnerListener, UserListener)
+
+        partner = self.env['res.partner'].create({'name': 'test'})
+        events = partner._event(
+            'on_foo', collection=self.env['collection.base'],
+            components_registry=self.comp_registry
+        )
+        events.notify(partner, 'bar')
+        self.assertEquals('bar', partner.name)
+        self.assertEquals('bar', partner.ref)

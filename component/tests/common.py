@@ -23,6 +23,11 @@ class ComponentRegistryCase(unittest2.TestCase):
 
         # it will be our temporary component registry for our test session
         self.comp_registry = ComponentRegistry()
+        # Fake that we are ready to work with the registry
+        # normally, it is set to True and the end of the build
+        # of the components. Here, we'll add components later in
+        # the components registry, but we don't mind for the tests.
+        self.comp_registry.ready = True
 
         # there's always an implicit dependency on a 'base' component
         # so we must register one

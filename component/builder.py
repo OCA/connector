@@ -74,6 +74,8 @@ class ComponentBuilder(models.AbstractModel):
         for module in graph:
             self.load_components(module.name, components_registry)
 
+        components_registry.ready = True
+
     def load_components(self, module, components_registry):
         """ Build every component known by MetaComponent for an odoo module
 

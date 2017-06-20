@@ -64,19 +64,6 @@ Here is how we would log something each time a record is created::
 
 Many listeners such as this one could be added for the same event.
 
-When implementing generic events, it is a good practice to create a
-base abstract component implementing empty methods for those
-events, such as::
-
-    class RecordsEventListener(AbstractComponent):
-        _name = 'records.event.listener'
-        _inherit = 'base.event.listener'
-
-        def on_record_create(self, record, fields=None):
-            \"\"\" Called when a record is created \"\"\"
-
-It can serve for inheritance and is a documentation of the event.
-
 
 Collection and models
 ---------------------

@@ -12,6 +12,7 @@ Extend the 'base' Odoo Model to add Events related features.
 """
 
 from odoo import api, models
+from odoo.addons.component.core import _component_databases
 from ..components.event import CollectedEvents
 from ..core import EventWorkContext
 
@@ -62,9 +63,21 @@ class Base(models.AbstractModel):
 
 
         """
-        if not self.env.registry.ready:
-            # no event should be triggered before the registry has been loaded
+        dbname = self.env.cr.dbname
+        comp_registry = (
+            components_registry or _component_databases.get(dbname)
+        )
+        if not comp_registry or not comp_registry.ready:
+            # No event should be triggered before the registry has been loaded
+            # This is a very special case, when the odoo registry is being
+            # built, it calls odoo.modules.loading.load_modules().
+            # This function might trigger events (by writing on records, ...).
+            # But at this point, the component registry is not guaranteed
+            # to be ready, and anyway we should probably not trigger events
+            # during the initialization. Hence we return an empty list of
+            # events, the 'notify' calls will do nothing.
             return CollectedEvents([])
+
         model_name = self._name
         if collection is not None:
             work = EventWorkContext(collection=collection,

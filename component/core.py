@@ -407,7 +407,7 @@ class WorkContext(object):
         return [comp(work_context) for comp in component_classes]
 
     def __str__(self):
-        return "WorkContext(%s,%s)" % (self.model_name, repr(self.collection))
+        return "WorkContext(%s, %s)" % (self.model_name, repr(self.collection))
 
     def __unicode__(self):
         return unicode(str(self))
@@ -628,7 +628,7 @@ class AbstractComponent(object):
     @property
     def env(self):
         """ Current Odoo environment, the one of the collection record """
-        return self.collection.env
+        return self.work.env
 
     @property
     def model(self):

@@ -70,11 +70,15 @@ class ComponentRegistry(object):
     This is an OrderedDict, because we want to keep the registration order of
     the components, addons loaded first have their components found first.
 
+    The :attr:`ready` attribute must be set to ``True`` when all the components
+    are loaded.
+
     """
 
     def __init__(self, cachesize=DEFAULT_CACHE_SIZE):
         self._cache = LRUCache(maxsize=cachesize)
         self._components = OrderedDict()
+        self.ready = False
 
     def __getitem__(self, key):
         return self._components[key]

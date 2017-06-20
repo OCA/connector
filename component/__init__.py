@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from . import core
 
-from . import base_components
+from . import components
 from . import builder
 from . import models

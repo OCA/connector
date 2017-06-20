@@ -5,7 +5,8 @@ Migration Guide to the new Connector API
 ########################################
 
 During the year 2017, the connector evolved greatly.
-Two majors parts have been rewritten:
+We can recognize three different aspect of the framework, they all have been
+rewritten:
 
 * The Job Queue API (:ref:`api-queue`)
 * The Event API (:ref:`api-event`)
@@ -13,7 +14,7 @@ Two majors parts have been rewritten:
   of the Connector. It has been replaced by a standalone addon
   called ``component``. (:ref:`api-component`)
 
-The parts have been splitted in different addons:
+The Connector has been splitted in different addons:
 
 * ``queue_job`` in https://github.com/OCA/queue
 * ``component`` in the same repository

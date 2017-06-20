@@ -33,6 +33,7 @@ class TestEventWorkContext(unittest2.TestCase):
         self.assertEquals(self.env, work.env)
         self.assertEquals('res.users', work.model_name)
         with self.assertRaises(ValueError):
+            # pylint: disable=W0104
             work.collection  # noqa
 
     def test_collection(self):
@@ -75,6 +76,7 @@ class TestEventWorkContext(unittest2.TestCase):
         self.assertEquals('res.partner', work2.model_name)
         self.assertEquals(self.components_registry, work2.components_registry)
         with self.assertRaises(ValueError):
+            # pylint: disable=W0104
             work.collection  # noqa
 
     def test_collection_work_on(self):

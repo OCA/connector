@@ -201,8 +201,8 @@ class EventCollecter(Component):
                       self.work.collection._name
                       if self.work._collection is not None else None,
                       self.work.model_name,
-                      name
-                  ))
+                      name)
+                  )
     def _collect_events(self, name):
         events = set([])
         collection_name = (self.work.collection._name

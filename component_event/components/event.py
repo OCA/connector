@@ -245,18 +245,3 @@ class EventListener(AbstractComponent):
     def _complete_component_build(cls):
         super(EventListener, cls)._complete_component_build()
         cls._build_event_listener_component()
-
-
-class RecordsEventListener(AbstractComponent):
-    """ Abstract Component with base events """
-    _name = 'records.event.listener'
-    _inherit = 'base.event.listener'
-
-    def on_record_create(self, record, fields=None):
-        """ Called when a record is created """
-
-    def on_record_write(self, record, fields=None):
-        """ Called when a record is modified """
-
-    def on_record_unlink(self, record):
-        """ Called when a record is deleted """

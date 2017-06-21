@@ -25,10 +25,9 @@ class Base(models.AbstractModel):
 
     It also notifies the following events:
 
-    * ``on_record_create``
-    * ``on_record_multi``
-    * ``on_record_unlink``
-
+    * ``on_record_create(self, record, fields=None)``
+    * ``on_record_write(self, record, fields=none)``
+    * ``on_record_unlink(self, record)``
 
     """
     _inherit = 'base'

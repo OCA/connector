@@ -4,6 +4,8 @@
         <field name="name">res.partner.connector.form</field>
         <field name="model">res.partner</field>
         <field name="inherit_id" ref="base.view_partner_form" />
+        <field name="groups_id"
+               eval="[(4, ref('connector.group_connector_manager'))]"/>
         <field name="arch" type="xml">
             <xpath expr="/form/sheet/notebook" position="inside">
                 <!-- change the invisible attribute to 0 when used

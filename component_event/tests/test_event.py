@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright 2013-2017 Camptocamp SA
+# Copyright 2017 Camptocamp SA
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html)
 
 import mock
@@ -14,6 +14,7 @@ from odoo.addons.component_event.core import EventWorkContext
 from odoo.addons.component_event.components.event import (
     EventCollecter,
     EventListener,
+    skip_if,
 )
 
 
@@ -311,6 +312,29 @@ class TestEvent(ComponentRegistryCase):
         # for a different collection, we should not have the same
         # cache entry
         self.assertEquals(2, len(collected.events))
+
+    def test_skip_if(self):
+        class MyEventListener(Component):
+            _name = 'my.event.listener'
+            _inherit = 'base.event.listener'
+
+            def on_record_create(self, msg):
+                assert True
+
+        class MyOtherEventListener(Component):
+            _name = 'my.other.event.listener'
+            _inherit = 'base.event.listener'
+
+            @skip_if(lambda self, msg: msg == 'foo')
+            def on_record_create(self, msg):
+                assert False
+
+        self._build_components(MyEventListener, MyOtherEventListener)
+
+        # collect the event and notify it
+        collected = self.collecter.collect_events('on_record_create')
+        self.assertEquals(2, len(collected.events))
+        collected.notify('foo')
 
 
 class TestEventFromModel(TransactionComponentRegistryCase):

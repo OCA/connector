@@ -100,11 +100,16 @@ will be executed::
     collection = self.env['magento.backend']
     self._event('on_foo_created', collection=collection).notify(record, vals)
 
+An event can be skipped based on a condition evaluated from the notified
+arguments. See :func:`skip_if`
+
 
 """
 
 import logging
 import operator
+
+from functools import wraps
 
 from odoo.addons.component.core import AbstractComponent, Component
 
@@ -119,6 +124,39 @@ except ImportError:
 # 1 item means: for an event name, model_name, collection, return
 # the event methods
 DEFAULT_EVENT_CACHE_SIZE = 512
+
+
+def skip_if(cond):
+    """ Decorator allowing to skip an event based on a condition
+
+    The condition is a python lambda expression, which takes the
+    same arguments than the event.
+
+    Example::
+
+        @skip_if(lambda self, *args, **kwargs:
+                 self.env.context.get('connector_no_export'))
+        def on_record_write(self, record, fields=None):
+            _logger('I'll delay a job, but only if we didn't disabled '
+                    ' the export with a context key')
+            record.with_delay().export_record()
+
+        @skip_if(lambda self, record, kind: kind == 'complete')
+        def on_record_write(self, record, kind):
+            _logger("I'll delay a job, but only if the kind is 'complete'")
+            record.with_delay().export_record()
+
+    """
+    def skip_if_decorator(func):
+        @wraps(func)
+        def func_wrapper(*args, **kwargs):
+            if cond(*args, **kwargs):
+                return
+            else:
+                return func(*args, **kwargs)
+
+        return func_wrapper
+    return skip_if_decorator
 
 
 class CollectedEvents(object):
@@ -164,11 +202,11 @@ class EventCollecter(Component):
     An event always starts with ``on_``.
 
     Note that the special
-    :class:`..core.EventWorkContext` class should be
+    :class:`odoo.addons.component_event.core.EventWorkContext` class should be
     used for this Component, because it can work
     without a collection.
 
-    It is used by :meth:`..models.base.Base._event`.
+    It is used by :meth:`odoo.addons.component_event.models.base.Base._event`.
 
     """
     _name = 'base.event.collecter'

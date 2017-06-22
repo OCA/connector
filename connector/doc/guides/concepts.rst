@@ -203,6 +203,19 @@ Odoo ID, how to find the Odoo ID for an external ID and how to
 create the binding between them. A default implementation is
 available and can be inherited if needed.
 
+Listeners
+=========
+
+The base class is
+:py:class:`connector.components.listener.ConnectorListener`.
+
+In your components, you probably want to inherit from:
+
+* ``_inherit = 'base.connector.listener'``
+
+This is where you will register your event listeners.
+See :mod:`addons.component_event.components.event`.
+
 
 .. _binding:
 

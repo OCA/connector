@@ -43,8 +43,8 @@ class QueueJob(models.Model):
             )
             binder = env.get_connector_unit(binder_class)
         else:  # new component API
-            work = binding.backend_id.work_on(binding._name)
-            binder = work.component(usage=component_usage)
+            with binding.backend_id.work_on(binding._name) as work:
+                binder = work.component(usage=component_usage)
         try:
             model = binder.unwrap_model()
             record = binder.unwrap_binding(binding)

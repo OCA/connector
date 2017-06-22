@@ -192,14 +192,13 @@ class WorkContext(object):
         work = WorkContext(model_name='res.partner', collection=collection)
         component = work.component(usage='record.importer')
 
-    Usually you will use the shortcut available thanks to the
-    `collection.base` Model:
+    Usually you will use the context manager on the ``collection.base`` Model:
 
     ::
 
         collection = self.env['my.collection'].browse(1)
-        work = collection.work_on('res.partner')
-        component = work.component(usage='record.importer')
+        with collection.work_on('res.partner') as work:
+            component = work.component(usage='record.importer')
 
     It supports any arbitrary keyword arguments that will become attributes of
     the instance, and be propagated throughout all the components.
@@ -207,8 +206,8 @@ class WorkContext(object):
     ::
 
         collection = self.env['my.collection'].browse(1)
-        work = collection.work_on('res.partner', hello='world')
-        assert work.hello == 'world'
+        with collection.work_on('res.partner', hello='world') as work:
+            assert work.hello == 'world'
 
     When you need to work on a different model, a new work instance will be
     created for you when you are using the high-level API. This is what
@@ -217,13 +216,13 @@ class WorkContext(object):
     ::
 
         collection = self.env['my.collection'].browse(1)
-        work = collection.work_on('res.partner', hello='world')
-        assert work.model_name == 'res.partner'
-        assert work.hello == 'world'
-        work2 = work.work_on('res.users')
-        # => spawn a new WorkContext with a copy of the attributes
-        assert work2.model_name == 'res.users'
-        assert work2.hello == 'world'
+        with collection.work_on('res.partner', hello='world') as work:
+            assert work.model_name == 'res.partner'
+            assert work.hello == 'world'
+            work2 = work.work_on('res.users')
+            # => spawn a new WorkContext with a copy of the attributes
+            assert work2.model_name == 'res.users'
+            assert work2.hello == 'world'
 
     """
 
@@ -581,11 +580,12 @@ class AbstractComponent(object):
         And their usage::
 
             >>> coll = self.env['foo.bar.collection'].browse(1)
-            >>> work = coll.work_on('res.users')
-            >>> vocalizer = work.component(usage='vocalizer')
-            >>> vocalizer.vocalize('speak', 'hello world')
+            >>> with coll.work_on('res.users') as work:
+            ...     vocalizer = work.component(usage='vocalizer')
+            ...     vocalizer.vocalize('speak', 'hello world')
+            ...
             hello world
-            >>> vocalizer.vocalize('yell', 'hello world')
+            ...     vocalizer.vocalize('yell', 'hello world')
             HELLO WORLD!!!
 
     Hints:

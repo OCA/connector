@@ -605,9 +605,9 @@ After
 
     # ...
         backend_record = self.env['magento.backend'].browse(backend_id)
-        work = backend_record.work_on('magento.res.partner')
-        importer = work.component(usage='record.importer')
-        importer.run(external_id, force=force)
+        with backend_record.work_on('magento.res.partner') as work:
+            importer = work.component(usage='record.importer')
+            importer.run(external_id, force=force)
 
 Observations
 ------------

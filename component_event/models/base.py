@@ -29,6 +29,8 @@ class Base(models.AbstractModel):
     * ``on_record_write(self, record, fields=none)``
     * ``on_record_unlink(self, record)``
 
+    ``on_record_unlink`` is notified just *before* the unlink is done.
+
     """
     _inherit = 'base'
 
@@ -105,7 +107,7 @@ class Base(models.AbstractModel):
 
     @api.multi
     def unlink(self):
-        result = super(Base, self).unlink()
         for record in self:
             self._event('on_record_unlink').notify(record)
+        result = super(Base, self).unlink()
         return result

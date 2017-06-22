@@ -16,21 +16,24 @@ class TestComponentInheritance(common.TransactionCase):
         self.collection = self.env['test.component.collection'].create(
             {'name': 'Test'}
         )
-        self.work = self.collection.work_on('res.users')
         dbname = self.env.cr.dbname
         self.components_registry = _component_databases[dbname]
 
     def test_inherit_base(self):
-        component = self.components_registry['base'](self.work)
-        self.assertEquals('test_inherit_base', component.test_inherit_base())
+        with self.collection.work_on('res.users') as work:
+            component = self.components_registry['base'](work)
+            self.assertEquals('test_inherit_base',
+                              component.test_inherit_base())
 
     def test_inherit_component(self):
-        component = self.components_registry['mapper'](self.work)
-        self.assertEquals('test_inherit_component',
-                          component.test_inherit_component())
+        with self.collection.work_on('res.users') as work:
+            component = self.components_registry['mapper'](work)
+            self.assertEquals('test_inherit_component',
+                              component.test_inherit_component())
 
     def test_inherit_prototype_component(self):
-        component = self.components_registry['test.mapper'](self.work)
-        self.assertEquals('test_inherit_component',
-                          component.test_inherit_component())
-        self.assertEquals('test.mapper', component.name())
+        with self.collection.work_on('res.users') as work:
+            component = self.components_registry['test.mapper'](work)
+            self.assertEquals('test_inherit_component',
+                              component.test_inherit_component())
+            self.assertEquals('test.mapper', component.name())

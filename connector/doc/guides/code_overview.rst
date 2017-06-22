@@ -88,12 +88,12 @@ events or jobs, for the sake of the example.
         password = fields.Char(string='Password')
 
         def import_partner(self, external_id):
-            work = self.work_on(model_name='magento.res.partner')
-            importer = work.component(usage='record.importer')
-            # returns an instance of PartnerImporter, which has been
-            # found with:the collection name (magento.backend, the model,
-            # and the usage).
-            importer.run(partner_id)
+            with self.work_on(model_name='magento.res.partner') as work:
+                importer = work.component(usage='record.importer')
+                # returns an instance of PartnerImporter, which has been
+                # found with:the collection name (magento.backend, the model,
+                # and the usage).
+                importer.run(partner_id)
 
     # the next 2 components are abstract and are used by inheritance
     # by the others

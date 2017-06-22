@@ -24,12 +24,12 @@ class TestWorkOn(common.TransactionCase):
     def test_collection_work_on(self):
         """ Create a new instance and test attributes access """
         collection_record = self.collection.new()
-        work = collection_record.work_on('res.partner')
-        self.assertEquals(collection_record, work.collection)
-        self.assertEquals('collection.base', work.collection._name)
-        self.assertEquals('res.partner', work.model_name)
-        self.assertEquals(self.env['res.partner'], work.model)
-        self.assertEquals(self.env, work.env)
+        with collection_record.work_on('res.partner') as work:
+            self.assertEquals(collection_record, work.collection)
+            self.assertEquals('collection.base', work.collection._name)
+            self.assertEquals('res.partner', work.model_name)
+            self.assertEquals(self.env['res.partner'], work.model)
+            self.assertEquals(self.env, work.env)
 
     def test_propagate_work_on(self):
         """ Check custom attributes and their propagation """

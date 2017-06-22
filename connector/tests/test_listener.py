@@ -1,0 +1,71 @@
+# -*- coding: utf-8 -*-
+# Copyright 2017 Camptocamp SA
+# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html)
+
+import mock
+
+from odoo.tools import frozendict
+from odoo.addons.component.tests.common import (
+    TransactionComponentRegistryCase,
+)
+from odoo.addons.component.core import Component
+from odoo.addons.component_event.core import EventWorkContext
+from odoo.addons.component_event.components.event import (
+    EventCollecter,
+    EventListener,
+    skip_if,
+)
+from odoo.addons.connector.components.core import BaseConnectorComponent
+from odoo.addons.connector.components.listener import ConnectorListener
+
+
+class TestEventListener(TransactionComponentRegistryCase):
+    """ Test Connecter Listener """
+
+    def setUp(self):
+        super(TestEventListener, self).setUp()
+        # build and push in the component registry the base components we
+        # inherit from in the tests
+        # 'base.event.collecter'
+        EventCollecter._build_component(self.comp_registry)
+        # 'base.event.listener'
+        EventListener._build_component(self.comp_registry)
+        # 'base.connector'
+        BaseConnectorComponent._build_component(self.comp_registry)
+        # 'base.connector.listener'
+        ConnectorListener._build_component(self.comp_registry)
+
+    def test_skip_if_no_connector_export(self):
+        class MyEventListener(Component):
+            _name = 'my.event.listener'
+            _inherit = 'base.event.listener'
+
+            def on_record_create(self, record, fields=None):
+                assert True
+
+        class MyOtherEventListener(Component):
+            _name = 'my.other.event.listener'
+            _inherit = 'base.connector.listener'
+
+            @skip_if(lambda self, record, fields=None:
+                     self.no_connector_export(record))
+            def on_record_create(self, record, fields=None):
+                assert False
+
+        self.env.context = frozendict(self.env.context,
+                                      no_connector_export=True)
+        work = EventWorkContext(model_name='res.users', env=self.env,
+                                components_registry=self.comp_registry)
+
+        # get the collecter to notify the event
+        # we don't mind about the collection and the model here,
+        # the events we test are global
+        self.collecter = self.comp_registry['base.event.collecter'](work)
+
+        self._build_components(MyEventListener, MyOtherEventListener)
+
+        # collect the event and notify it
+        record = mock.Mock(name='record')
+        collected = self.collecter.collect_events('on_record_create')
+        self.assertEquals(2, len(collected.events))
+        collected.notify(record)

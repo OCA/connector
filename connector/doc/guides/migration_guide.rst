@@ -270,22 +270,29 @@ Before
         fields = vals.keys()
         export_record.delay(session, model_name, record_id, fields=fields)
 
+    @on_something
+    def do_anything(env, model_name, record_id):
+      # ...
+
 After
 -----
 
 .. code-block:: python
 
     from odoo.addons.component.core import Component
+    from odoo.addons.component_event import skip_if
 
     class MagentoListener(Component):
         _name = 'magento.event.listener'
-        _inherit = 'base.event.listener'
+        _inherit = 'base.connector.listener'
 
+        @skip_if(lambda self, record, **kwargs: self.no_connector_export(record))
         def on_record_create(self, record, fields=None):
             """ Called when a record is created """
-            if self.env.context.get('connector_no_export'):
-                return
             record.with_delay().export_record(fields=fields)
+
+        def on_something(self, record):
+            # ...
 
 Observations
 ------------
@@ -295,6 +302,8 @@ Observations
   section
 * A listener Component might container several listener methods
 * It must inherit from ``'base.event.listener'``, or one of its descendants.
+* The check of the key ``connector_no_export`` in the context can
+  be replaced by the decorator :func:`odoo.addons.component_event.skip_if`
 
 Links
 -----
@@ -325,16 +334,16 @@ After
 .. code-block:: python
 
     from odoo.addons.component.core import Component
+    from odoo.addons.component_event import skip_if
 
     class MagentoListener(Component):
         _name = 'magento.event.listener'
         _inherit = 'base.event.listener'
         _apply_on = ['magento.address', 'magento.res.partner']
 
+        @skip_if(lambda self, record, **kwargs: self.no_connector_export(record))
         def on_record_create(self, record, fields=None):
             """ Called when a record is created """
-            if self.env.context.get('connector_no_export'):
-                return
             record.with_delay().export_record(fields=fields)
 
 Observations

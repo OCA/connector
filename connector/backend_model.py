@@ -55,9 +55,10 @@ class ConnectorBackend(models.AbstractModel):
 
     # XXX those 2 fields will not strictly be necessary once we
     # change to the new implementation (especially the version)
+    # they can be removed in Odoo 11.0
     name = fields.Char(required=True)
     # replace by a selection in concrete models
-    version = fields.Selection(selection=[], required=True)
+    version = fields.Selection(selection=[])
 
     # XXX to remove in 11.0
     @api.multi

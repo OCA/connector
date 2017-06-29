@@ -10,11 +10,9 @@ Components Builder
 Build the components at the build of a registry.
 
 """
-
 import odoo
 from odoo import api, models
 from .core import (
-    MetaComponent,
     _component_databases,
     ComponentRegistry,
     DEFAULT_CACHE_SIZE,
@@ -66,6 +64,7 @@ class ComponentBuilder(models.AbstractModel):
             "SELECT name "
             "FROM ir_module_module "
             "WHERE state IN ('installed', 'to upgrade', 'to update')"
+
         )
         module_list = [name for (name,) in self.env.cr.fetchall()
                        if name not in graph]
@@ -76,7 +75,7 @@ class ComponentBuilder(models.AbstractModel):
 
         components_registry.ready = True
 
-    def load_components(self, module, components_registry):
+    def load_components(self, module, components_registry=None):
         """ Build every component known by MetaComponent for an odoo module
 
         The final component (composed by all the Component classes in this
@@ -88,5 +87,7 @@ class ComponentBuilder(models.AbstractModel):
         :param registry: the registry in which we want to put the Component
         :type registry: :py:class:`~.core.ComponentRegistry`
         """
-        for component_class in MetaComponent._modules_components[module]:
-            component_class._build_component(components_registry)
+        components_registry = (
+            components_registry or
+            _component_databases[self.env.cr.dbname])
+        components_registry.load_components(module)

@@ -78,6 +78,7 @@ class ComponentRegistry(object):
     def __init__(self, cachesize=DEFAULT_CACHE_SIZE):
         self._cache = LRUCache(maxsize=cachesize)
         self._components = OrderedDict()
+        self._loaded_modules = set()
         self.ready = False
 
     def __getitem__(self, key):
@@ -94,6 +95,13 @@ class ComponentRegistry(object):
 
     def __iter__(self):
         return iter(self._components)
+
+    def load_components(self, module):
+        if module in self._loaded_modules:
+            return
+        for component_class in MetaComponent._modules_components[module]:
+            component_class._build_component(self)
+        self._loaded_modules.add(module)
 
     @cachedmethod(operator.attrgetter('_cache'))
     def lookup(self, collection_name=None, usage=None, model_name=None):

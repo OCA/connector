@@ -53,7 +53,9 @@ class ComponentBuilder(models.AbstractModel):
             cachesize=self._components_registry_cache_size
         )
         _component_databases[self.env.cr.dbname] = components_registry
+        self.build_registry(components_registry)
 
+    def build_registry(self, components_registry):
         # lookup all the installed (or about to be) addons and generate
         # the graph, so we can load the components following the order
         # of the addons' dependencies
@@ -71,7 +73,8 @@ class ComponentBuilder(models.AbstractModel):
         graph.add_modules(self.env.cr, module_list)
 
         for module in graph:
-            self.load_components(module.name, components_registry)
+            self.load_components(module.name,
+                                 components_registry=components_registry)
 
         components_registry.ready = True
 

@@ -34,8 +34,7 @@ class Base(models.AbstractModel):
     """
     _inherit = 'base'
 
-    def _event(self, name, model_name=None, collection=None,
-               components_registry=None):
+    def _event(self, name, collection=None, components_registry=None):
         """ Collect events for notifications
 
         Usage::
@@ -52,11 +51,9 @@ class Base(models.AbstractModel):
         See: :mod:`..components.event`
 
         :param name: name of the event, start with 'on_'
-        :type model_name: str | unicode
         :param collection: optional collection  to filter on, only
                            listeners with similar ``_collection`` will be
                            notified
-        :type model_name: :class:`odoo.models.BaseModel`
         :param components_registry: component registry for lookups,
                                     mainly used for tests
         :type components_registry:

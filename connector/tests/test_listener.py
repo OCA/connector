@@ -5,35 +5,14 @@
 import mock
 
 from odoo.tools import frozendict
-from odoo.addons.component.tests.common import (
-    TransactionComponentRegistryCase,
-)
 from odoo.addons.component.core import Component
 from odoo.addons.component_event.core import EventWorkContext
-from odoo.addons.component_event.components.event import (
-    EventCollecter,
-    EventListener,
-    skip_if,
-)
-from odoo.addons.connector.components.core import BaseConnectorComponent
-from odoo.addons.connector.components.listener import ConnectorListener
+from odoo.addons.component_event.components.event import skip_if
+from .common import ConnectorTransactionCase
 
 
-class TestEventListener(TransactionComponentRegistryCase):
+class TestEventListener(ConnectorTransactionCase):
     """ Test Connecter Listener """
-
-    def setUp(self):
-        super(TestEventListener, self).setUp()
-        # build and push in the component registry the base components we
-        # inherit from in the tests
-        # 'base.event.collecter'
-        EventCollecter._build_component(self.comp_registry)
-        # 'base.event.listener'
-        EventListener._build_component(self.comp_registry)
-        # 'base.connector'
-        BaseConnectorComponent._build_component(self.comp_registry)
-        # 'base.connector.listener'
-        ConnectorListener._build_component(self.comp_registry)
 
     def test_skip_if_no_connector_export(self):
         class MyEventListener(Component):

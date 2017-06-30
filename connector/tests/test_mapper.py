@@ -6,16 +6,9 @@ import mock
 from odoo.addons.component.core import Component, WorkContext
 from odoo.addons.component.tests.common import (
     ComponentRegistryCase,
-    TransactionComponentRegistryCase,
 )
 
-from odoo.addons.connector.components.core import BaseConnectorComponent
 from odoo.addons.connector.components.mapper import (
-    Mapper,
-    ImportMapper,
-    ExportMapper,
-    MapChild,
-    ImportMapChild,
     MappingDefinition,
     changed_by,
     only_create,
@@ -25,23 +18,17 @@ from odoo.addons.connector.components.mapper import (
     external_to_m2o,
     none,
     MapOptions,
-    mapping)
+    mapping,
+)
+from .common import ConnectorTransactionCase
 
 
 class TestMapper(ComponentRegistryCase):
 
     def setUp(self):
         super(TestMapper, self).setUp()
-        # build and push in the component registry the base components we
-        # inherit from in the tests
-        # 'base'
-        BaseConnectorComponent._build_component(self.comp_registry)
-        # 'base.mapper'
-        Mapper._build_component(self.comp_registry)
-        # 'base.import.mapper'
-        ImportMapper._build_component(self.comp_registry)
-        # 'base.export.mapper'
-        ExportMapper._build_component(self.comp_registry)
+        self.comp_registry.load_components('component_event')
+        self.comp_registry.load_components('connector')
 
     def test_mapping_decorator(self):
         class KifKrokerMapper(Component):
@@ -661,11 +648,8 @@ class TestMapper(ComponentRegistryCase):
             set(['street', 'in_t', 'in_f', 'name', 'city', 'email']))
 
 
-class TestMapperRecordsets(TransactionComponentRegistryCase):
+class TestMapperRecordsets(ConnectorTransactionCase):
     """ Test mapper with "real" records instead of mocks """
-
-    at_install = False
-    post_install = True
 
     def setUp(self):
         super(TestMapperRecordsets, self).setUp()
@@ -674,14 +658,6 @@ class TestMapperRecordsets(TransactionComponentRegistryCase):
         self.work = WorkContext(model_name='res.partner',
                                 collection=backend_record,
                                 components_registry=self.comp_registry)
-        # build and push in the component registry the base components we
-        # inherit from in the tests
-        # 'base'
-        BaseConnectorComponent._build_component(self.comp_registry)
-        # 'base.mapper'
-        Mapper._build_component(self.comp_registry)
-        # 'base.import.mapper'
-        ImportMapper._build_component(self.comp_registry)
 
     def test_mapping_modifier_follow_m2o_relations(self):
         """ Map with the follow_m2o_relations modifier """
@@ -703,11 +679,8 @@ class TestMapperRecordsets(TransactionComponentRegistryCase):
         self.assertEqual(map_record.values(for_create=True), expected)
 
 
-class TestMapperBinding(TransactionComponentRegistryCase):
+class TestMapperBinding(ConnectorTransactionCase):
     """ Test Mapper with Bindings"""
-
-    at_install = False
-    post_install = True
 
     def setUp(self):
         super(TestMapperBinding, self).setUp()
@@ -718,15 +691,6 @@ class TestMapperBinding(TransactionComponentRegistryCase):
         self.work = WorkContext(model_name='res.partner',
                                 collection=backend_record,
                                 components_registry=self.comp_registry)
-
-        # build and push in the component registry the base components we
-        # inherit from in the tests
-        # 'base'
-        BaseConnectorComponent._build_component(self.comp_registry)
-        # 'base.mapper'
-        Mapper._build_component(self.comp_registry)
-        # 'base.import.mapper'
-        ImportMapper._build_component(self.comp_registry)
 
         self.country_binder = mock.MagicMock(name='country_binder')
         self.country_binder.return_value = self.country_binder
@@ -783,8 +747,6 @@ class TestMapperBinding(TransactionComponentRegistryCase):
         """ Map a record with children, using default MapChild """
         # we need these components which make the 'link' between
         # the main mapper and the line mapper
-        MapChild._build_component(self.comp_registry)
-        ImportMapChild._build_component(self.comp_registry)
 
         class LineMapper(Component):
             _name = 'line.mapper'
@@ -841,8 +803,6 @@ class TestMapperBinding(TransactionComponentRegistryCase):
         """ Map a record with children, using defined MapChild """
         # we need these components which make the 'link' between
         # the main mapper and the line mapper
-        MapChild._build_component(self.comp_registry)
-        ImportMapChild._build_component(self.comp_registry)
 
         class LineMapper(Component):
             _name = 'line.mapper'

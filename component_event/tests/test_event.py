@@ -11,11 +11,7 @@ from odoo.addons.component.tests.common import (
 )
 from odoo.addons.component.core import Component
 from odoo.addons.component_event.core import EventWorkContext
-from odoo.addons.component_event.components.event import (
-    EventCollecter,
-    EventListener,
-    skip_if,
-)
+from odoo.addons.component_event.components.event import skip_if
 
 
 class TestEventWorkContext(unittest2.TestCase):
@@ -117,12 +113,7 @@ class TestEvent(ComponentRegistryCase):
 
     def setUp(self):
         super(TestEvent, self).setUp()
-        # build and push in the component registry the base components we
-        # inherit from in the tests
-        # 'base.event.collecter'
-        EventCollecter._build_component(self.comp_registry)
-        # 'base.event.listener'
-        EventListener._build_component(self.comp_registry)
+        self._load_module_components('component_event')
 
         # get the collecter to notify the event
         # we don't mind about the collection and the model here,
@@ -340,17 +331,9 @@ class TestEvent(ComponentRegistryCase):
 class TestEventFromModel(TransactionComponentRegistryCase):
     """ Test Events Components from Models """
 
-    at_install = False
-    post_install = True
-
     def setUp(self):
         super(TestEventFromModel, self).setUp()
-        # build and push in the component registry the base components we
-        # inherit from in the tests
-        # 'base.event.collecter'
-        EventCollecter._build_component(self.comp_registry)
-        # 'base.event.listener'
-        EventListener._build_component(self.comp_registry)
+        self._load_module_components('component_event')
 
     def test_event_from_model(self):
         class MyEventListener(Component):

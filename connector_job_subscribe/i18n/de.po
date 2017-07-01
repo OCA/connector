@@ -4,14 +4,13 @@
 # 
 # Translators:
 # OCA Transbot <transbot@odoo-community.org>, 2017
-# Renzo Meister <info@jamotion.ch>, 2017
 # Rudolf Schnapka <rs@techno-flex.de>, 2017
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 9.0c\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-04-05 00:42+0000\n"
-"PO-Revision-Date: 2017-04-05 00:42+0000\n"
+"POT-Creation-Date: 2017-06-24 00:51+0000\n"
+"PO-Revision-Date: 2017-06-24 00:51+0000\n"
 "Last-Translator: Rudolf Schnapka <rs@techno-flex.de>, 2017\n"
 "Language-Team: German (https://www.transifex.com/oca/teams/23907/de/)\n"
 "MIME-Version: 1.0\n"
@@ -31,6 +30,8 @@ msgid ""
 "If this flag is checked and the user is Connector Manager, he will receive "
 "job notifications."
 msgstr ""
+"Wenn dieses Kennzeichen gesetzt ist und der Benutzer ist Verbindungsmanager,"
+" dann wird er Job-Hinweise erhalten."
 
 #. module: connector_job_subscribe
 #: model:ir.model.fields,field_description:connector_job_subscribe.field_res_users_subscribe_job

@@ -2,20 +2,17 @@
 # Copyright 2017 Camptocamp SA
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html)
 
-from odoo.tests import common
 from odoo.addons.component.core import WorkContext, ComponentRegistry
+from .common import TransactionComponentCase
 
 
-class TestWorkOn(common.TransactionCase):
+class TestWorkOn(TransactionComponentCase):
     """ Test on WorkContext
 
     This model is mostly a container, so we check the access
     to the attributes and properties.
 
     """
-
-    at_install = False
-    post_install = False
 
     def setUp(self):
         super(TestWorkOn, self).setUp()

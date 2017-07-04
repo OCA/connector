@@ -8,10 +8,10 @@ from odoo.tools import frozendict
 from odoo.addons.component.core import Component
 from odoo.addons.component_event.core import EventWorkContext
 from odoo.addons.component_event.components.event import skip_if
-from .common import ConnectorTransactionCase
+from odoo.addons.component.tests.common import TransactionComponentRegistryCase
 
 
-class TestEventListener(ConnectorTransactionCase):
+class TestEventListener(TransactionComponentRegistryCase):
     """ Test Connecter Listener """
 
     def test_skip_if_no_connector_export(self):

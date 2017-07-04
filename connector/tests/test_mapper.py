@@ -6,6 +6,7 @@ import mock
 from odoo.addons.component.core import Component, WorkContext
 from odoo.addons.component.tests.common import (
     ComponentRegistryCase,
+    TransactionComponentRegistryCase,
 )
 
 from odoo.addons.connector.components.mapper import (
@@ -20,14 +21,12 @@ from odoo.addons.connector.components.mapper import (
     MapOptions,
     mapping,
 )
-from .common import ConnectorTransactionCase
 
 
 class TestMapper(ComponentRegistryCase):
 
     def setUp(self):
         super(TestMapper, self).setUp()
-        self.comp_registry.load_components('component_event')
         self.comp_registry.load_components('connector')
 
     def test_mapping_decorator(self):
@@ -648,11 +647,13 @@ class TestMapper(ComponentRegistryCase):
             set(['street', 'in_t', 'in_f', 'name', 'city', 'email']))
 
 
-class TestMapperRecordsets(ConnectorTransactionCase):
+class TestMapperRecordsets(TransactionComponentRegistryCase):
     """ Test mapper with "real" records instead of mocks """
 
     def setUp(self):
         super(TestMapperRecordsets, self).setUp()
+        self.comp_registry.load_components('connector')
+
         backend_record = mock.Mock()
         backend_record.env = self.env
         self.work = WorkContext(model_name='res.partner',
@@ -679,11 +680,12 @@ class TestMapperRecordsets(ConnectorTransactionCase):
         self.assertEqual(map_record.values(for_create=True), expected)
 
 
-class TestMapperBinding(ConnectorTransactionCase):
+class TestMapperBinding(TransactionComponentRegistryCase):
     """ Test Mapper with Bindings"""
 
     def setUp(self):
         super(TestMapperBinding, self).setUp()
+        self.comp_registry.load_components('connector')
 
         backend_record = mock.Mock()
         backend_record.env = self.env

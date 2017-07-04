@@ -2,14 +2,11 @@
 # Copyright 2013-2017 Camptocamp SA
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html)
 
-from odoo.tests import common
+from odoo.addons.component.tests.common import TransactionComponentCase
 from odoo.addons.test_component.components.components import UserTestComponent
 
 
-class TestComponentCollection(common.TransactionCase):
-
-    at_install = False
-    post_install = True
+class TestComponentCollection(TransactionComponentCase):
 
     def setUp(self):
         super(TestComponentCollection, self).setUp()

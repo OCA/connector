@@ -2,14 +2,11 @@
 # Copyright 2013-2017 Camptocamp SA
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html)
 
-from odoo.tests.common import TransactionCase
+from odoo.addons.component.tests.common import TransactionComponentCase
 
 
-class TestDefaultBinder(TransactionCase):
+class TestDefaultBinder(TransactionComponentCase):
     """ Test the default binder implementation using Components """
-
-    at_install = False
-    post_install = True
 
     def setUp(self):
         super(TestDefaultBinder, self).setUp()

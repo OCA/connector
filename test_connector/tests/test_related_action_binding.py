@@ -5,14 +5,11 @@
 import mock
 
 from odoo.exceptions import UserError
-import odoo.tests.common as common
+from odoo.addons.component.tests.common import TransactionComponentCase
 
 
-class TestRelatedActionBinding(common.TransactionCase):
+class TestRelatedActionBinding(TransactionComponentCase):
     """ Test Related Actions with Bindings """
-
-    at_install = False
-    post_install = True
 
     def setUp(self):
         super(TestRelatedActionBinding, self).setUp()

@@ -348,7 +348,7 @@ class WorkContext(object):
             model_name=model_name,
         )
 
-        return component_classes
+        return [cls for cls in component_classes if cls._component_match(self)]
 
     def component(self, usage=None, model_name=None):
         """ Find a component by usage and model for the current collection
@@ -627,6 +627,27 @@ class AbstractComponent(object):
     def __init__(self, work_context):
         super(AbstractComponent, self).__init__()
         self.work = work_context
+
+    @classmethod
+    def _component_match(cls, work):
+        """ Evaluated on candidate components
+
+        When a component lookup is done and candidate(s) have
+        been found for a usage, a final call is done on this method.
+        If the method return False, the candidate component is ignored.
+
+        It can be used for instance to dynamically choose a component
+        according to a value in the :class:`WorkContext`.
+
+        Beware, if the lookups from usage, model and collection are
+        cached, the calls to :meth:`_component_match` are executed
+        each time we get components. Heavy computation should be
+        avoided.
+
+        :param work: the :class:`WorkContext` we are working with
+
+        """
+        return True
 
     @property
     def collection(self):

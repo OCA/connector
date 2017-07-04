@@ -250,8 +250,7 @@ class WorkContext(object):
                 _logger.error(
                     'No component registry for database %s. '
                     'Probably because the Odoo registry has not been built '
-                    'yet. Try reporting your call later.\n'
-                    'If you are in a test, activate post_install.'
+                    'yet.'
                 )
                 raise
         self._propagate_kwargs = [

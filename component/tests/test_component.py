@@ -258,3 +258,30 @@ class TestComponent(TransactionComponentRegistryCase):
         with self.get_base() as base:
             comps = base.work.many_components(usage='for.test')
             self.assertEquals('component1', comps[0]._name)
+
+    def test_component_match(self):
+        """ Lookup with match method """
+        class Foo(Component):
+            _name = 'foo'
+            _collection = 'collection.base'
+            _usage = 'speaker'
+            _apply_on = ['res.partner']
+
+            @classmethod
+            def _component_match(cls, work):
+                return False
+
+        class Bar(Component):
+            _name = 'bar'
+            _collection = 'collection.base'
+            _usage = 'speaker'
+            _apply_on = ['res.partner']
+
+        self._build_components(Foo, Bar)
+
+        with self.get_base() as base:
+            # both components would we returned without the
+            # _component_match method
+            comp = base.component(usage='speaker',
+                                  model_name=self.env['res.partner'])
+            self.assertEquals('bar', comp._name)

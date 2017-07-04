@@ -49,13 +49,20 @@ class ComponentBuilder(models.AbstractModel):
         # so in case the registry is rebuilt (cache invalidation, ...),
         # we have to to rebuild the components. We use a new
         # registry so we have an empty cache and we'll add components in it.
+        components_registry = self._init_global_registry()
+        self.build_registry(components_registry)
+        components_registry.ready = True
+
+    def _init_global_registry(self):
         components_registry = ComponentRegistry(
             cachesize=self._components_registry_cache_size
         )
         _component_databases[self.env.cr.dbname] = components_registry
-        self.build_registry(components_registry)
+        return components_registry
 
-    def build_registry(self, components_registry):
+    def build_registry(self, components_registry, states=None):
+        if not states:
+            states = ('installed', 'to upgrade')
         # lookup all the installed (or about to be) addons and generate
         # the graph, so we can load the components following the order
         # of the addons' dependencies
@@ -65,7 +72,8 @@ class ComponentBuilder(models.AbstractModel):
         self.env.cr.execute(
             "SELECT name "
             "FROM ir_module_module "
-            "WHERE state IN ('installed', 'to upgrade', 'to update')"
+            "WHERE state IN %s",
+            (tuple(states),)
 
         )
         module_list = [name for (name,) in self.env.cr.fetchall()
@@ -75,8 +83,6 @@ class ComponentBuilder(models.AbstractModel):
         for module in graph:
             self.load_components(module.name,
                                  components_registry=components_registry)
-
-        components_registry.ready = True
 
     def load_components(self, module, components_registry=None):
         """ Build every component known by MetaComponent for an odoo module

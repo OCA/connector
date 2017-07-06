@@ -9,6 +9,7 @@ from odoo.addons.component.core import Component
 from odoo.addons.component_event.core import EventWorkContext
 from odoo.addons.component_event.components.event import skip_if
 from odoo.addons.component.tests.common import TransactionComponentRegistryCase
+from odoo.addons.connector import components
 
 
 class TestEventListener(TransactionComponentRegistryCase):
@@ -41,7 +42,9 @@ class TestEventListener(TransactionComponentRegistryCase):
         # the events we test are global
         self.collecter = self.comp_registry['base.event.collecter'](work)
 
-        self._build_components(MyEventListener, MyOtherEventListener)
+        self._build_components(components.core.BaseConnectorComponent,
+                               components.listener.ConnectorListener,
+                               MyEventListener, MyOtherEventListener)
 
         # collect the event and notify it
         record = mock.Mock(name='record')

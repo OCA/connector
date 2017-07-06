@@ -60,7 +60,8 @@ class ComponentBuilder(models.AbstractModel):
         _component_databases[self.env.cr.dbname] = components_registry
         return components_registry
 
-    def build_registry(self, components_registry, states=None):
+    def build_registry(self, components_registry, states=None,
+                       exclude_addons=None):
         if not states:
             states = ('installed', 'to upgrade')
         # lookup all the installed (or about to be) addons and generate
@@ -69,13 +70,17 @@ class ComponentBuilder(models.AbstractModel):
         graph = odoo.modules.graph.Graph()
         graph.add_module(self.env.cr, 'base')
 
-        self.env.cr.execute(
+        query = (
             "SELECT name "
             "FROM ir_module_module "
-            "WHERE state IN %s",
-            (tuple(states),)
-
+            "WHERE state IN %s "
         )
+        params = [tuple(states)]
+        if exclude_addons:
+            query += " AND name NOT IN %s "
+            params.append(tuple(exclude_addons))
+        self.env.cr.execute(query, params)
+
         module_list = [name for (name,) in self.env.cr.fetchall()
                        if name not in graph]
         graph.add_modules(self.env.cr, module_list)

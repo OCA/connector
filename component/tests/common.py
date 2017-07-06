@@ -37,6 +37,7 @@ class ComponentMixin(object):
             builder = env['component.builder']
             # build the components of every installed addons
             comp_registry = builder._init_global_registry()
+            cls._components_registry = comp_registry
             # ensure that we load only the components of the 'installed'
             # modules, not 'to install', which means we load only the
             # dependencies of the tested addons, not the siblings or
@@ -45,6 +46,15 @@ class ComponentMixin(object):
             # build the components of the current tested addon
             current_addon = _get_addon_name(cls.__module__)
             env['component.builder'].load_components(current_addon)
+
+    def setUp(self):
+        # should be ready only during tests, never during installation
+        # of addons
+        self._components_registry.ready = True
+
+        @self.addCleanup
+        def notready():
+            self._components_registry.ready = False
 
 
 class TransactionComponentCase(common.TransactionCase, ComponentMixin):
@@ -61,6 +71,12 @@ class TransactionComponentCase(common.TransactionCase, ComponentMixin):
         super(TransactionComponentCase, cls).setUpClass()
         cls.setUpComponent()
 
+    def setUp(self):
+        # resolve an inheritance issue (common.TransactionCase does not call
+        # super)
+        common.TransactionCase.setUp(self)
+        ComponentMixin.setUp(self)
+
 
 class SavepointComponentCase(common.SavepointCase, ComponentMixin):
     """ A SavepointCase that loads all the components
@@ -75,6 +91,12 @@ class SavepointComponentCase(common.SavepointCase, ComponentMixin):
     def setUpClass(cls):
         super(SavepointComponentCase, cls).setUpClass()
         cls.setUpComponent()
+
+    def setUp(self):
+        # resolve an inheritance issue (common.SavepointCase does not call
+        # super)
+        common.SavepointCase.setUp(self)
+        ComponentMixin.setUp(self)
 
 
 class ComponentRegistryCase(unittest2.TestCase):

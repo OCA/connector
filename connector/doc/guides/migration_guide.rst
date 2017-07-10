@@ -25,6 +25,11 @@ This guide will show how to migrate from the old API to the new one.
 
 The previous API will stay until the migration to Odoo 11.0.
 
+.. contents:: Sections:
+   :local:
+   :backlinks: top
+   :depth: 2
+
 **************
 Migrating Jobs
 **************

@@ -5,7 +5,7 @@ Connector
 =========
 
 This is a framework designed to build connectors with external systems,
-usually called `Backends` in the documentation.
+usually called ``Backends`` in the documentation.
 
 Documentation: http://odoo-connector.com
 

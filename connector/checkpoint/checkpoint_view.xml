@@ -98,9 +98,7 @@
         <field name="model">connector.checkpoint.review</field>
         <field name="arch" type="xml">
             <form string="Review Checkpoints">
-                <group string="The selected checkpoints will be set as reviewed.">
-                    <field name="checkpoint_ids" nolabel="1"/>
-                </group>
+                <group string="The selected checkpoints will be set as reviewed."/>
                 <footer>
                     <button name="review" string="Set as reviewed" type="object" class="oe_highlight"/>
                     or

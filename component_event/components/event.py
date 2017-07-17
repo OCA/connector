@@ -109,6 +109,7 @@ arguments. See :func:`skip_if`
 import logging
 import operator
 
+from collections import defaultdict
 from functools import wraps
 
 from odoo.addons.component.core import AbstractComponent, Component
@@ -229,7 +230,7 @@ class EventCollecter(Component):
                       name)
                   )
     def _collect_events(self, name):
-        events = set([])
+        events = defaultdict(set)
         collection_name = (self.work.collection._name
                            if self.work._collection is not None
                            else None)
@@ -240,6 +241,13 @@ class EventCollecter(Component):
         )
         for cls in component_classes:
             if cls.has_event(name):
+                events[cls].add(name)
+        return events
+
+    def _init_collected_events(self, class_events):
+        events = set()
+        for cls, names in class_events.iteritems():
+            for name in names:
                 component = cls(self.work)
                 events.add(getattr(component, name))
         return events
@@ -249,7 +257,7 @@ class EventCollecter(Component):
         if not name.startswith('on_'):
             raise ValueError("an event name always starts with 'on_'")
 
-        events = self._collect_events(name)
+        events = self._init_collected_events(self._collect_events(name))
         return CollectedEvents(events)
 
 

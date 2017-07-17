@@ -119,9 +119,9 @@ class TestEvent(ComponentRegistryCase):
         # we don't mind about the collection and the model here,
         # the events we test are global
         env = mock.MagicMock()
-        work = EventWorkContext(model_name='res.users', env=env,
-                                components_registry=self.comp_registry)
-        self.collecter = self.comp_registry['base.event.collecter'](work)
+        self.work = EventWorkContext(model_name='res.users', env=env,
+                                     components_registry=self.comp_registry)
+        self.collecter = self.comp_registry['base.event.collecter'](self.work)
 
     def test_event(self):
         class MyEventListener(Component):
@@ -193,6 +193,9 @@ class TestEvent(ComponentRegistryCase):
         collected = self.collecter.collect_events('on_record_create')
         # CollectedEvents.events contains the collected events
         self.assertEquals(1, len(collected.events))
+        event = list(collected.events)[0]
+        self.assertEquals(self.work, event.im_self.work)
+        self.assertEquals(self.work.env, event.im_self.work.env)
 
         # build and register a new listener
         class MyOtherEventListener(Component):
@@ -213,6 +216,9 @@ class TestEvent(ComponentRegistryCase):
         collected = collecter.collect_events('on_record_create')
         # CollectedEvents.events contains the collected events
         self.assertEquals(1, len(collected.events))
+        event = list(collected.events)[0]
+        self.assertEquals(work, event.im_self.work)
+        self.assertEquals(env, event.im_self.work.env)
 
         # if we empty the cache, as it on the class, both collecters
         # should now find the 2 events

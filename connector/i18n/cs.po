@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: connector (9.0)\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-04-05 00:42+0000\n"
-"PO-Revision-Date: 2017-04-25 10:39+0000\n"
+"POT-Creation-Date: 2017-07-01 01:41+0000\n"
+"PO-Revision-Date: 2017-08-11 11:55+0000\n"
 "Last-Translator: OCA Transbot <transbot@odoo-community.org>\n"
 "Language-Team: Czech (http://www.transifex.com/oca/OCA-connector-9-0/language/cs/)\n"
 "MIME-Version: 1.0\n"
@@ -199,6 +199,11 @@ msgstr ""
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_queue_job_date_created
 msgid "Created Date"
+msgstr ""
+
+#. module: connector
+#: model:ir.ui.view,arch_db:connector.view_queue_job_search
+msgid "Created Last 24h"
 msgstr ""
 
 #. module: connector
@@ -737,7 +742,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:connector.field_queue_job_state
 #: model:ir.ui.view,arch_db:connector.view_queue_job_search
 msgid "State"
-msgstr ""
+msgstr "Stav"
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_state

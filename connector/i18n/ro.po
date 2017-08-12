@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: connector (8.0)\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-04-05 02:47+0000\n"
-"PO-Revision-Date: 2017-04-25 10:42+0000\n"
+"POT-Creation-Date: 2017-07-01 01:36+0000\n"
+"PO-Revision-Date: 2017-08-11 11:57+0000\n"
 "Last-Translator: OCA Transbot <transbot@odoo-community.org>\n"
 "Language-Team: Romanian (http://www.transifex.com/oca/OCA-connector-8-0/language/ro/)\n"
 "MIME-Version: 1.0\n"
@@ -493,7 +493,7 @@ msgstr ""
 #: field:connector.backend,name:0 field:queue.job.channel,name:0
 #: field:queue.job.function,name:0
 msgid "Name"
-msgstr ""
+msgstr "Nume"
 
 #. module: connector
 #: help:connector.checkpoint,name:0
@@ -672,7 +672,7 @@ msgstr ""
 #. module: connector
 #: view:queue.job:connector.view_queue_job_search field:queue.job,state:0
 msgid "State"
-msgstr ""
+msgstr "Județ"
 
 #. module: connector
 #: field:connector.checkpoint,state:0

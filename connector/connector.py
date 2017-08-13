@@ -401,21 +401,25 @@ class Binder(ConnectorUnit):
     _openerp_field = 'openerp_id'  # override in sub-classes
     _sync_date_field = 'sync_date'  # override in sub-classes
 
-    def to_openerp(self, external_id, unwrap=False):
+    def to_openerp(self, external_id, unwrap=False, ignore_backend=False):
         """ Give the OpenERP ID for an external ID
 
         :param external_id: external ID for which we want
                             the OpenERP ID
         :param unwrap: if True, returns the normal record
                        else return the binding record
+        :param ignore_backend: if True, ignore the backend of the record and
+                               search only for external id
         :return: a recordset, depending on the value of unwrap,
                  or an empty recordset if the external_id is not mapped
         :rtype: recordset
         """
+        search_parameters = [(self._external_field, '=', str(external_id))]
+        if not ignore_backend:
+            search_parameters.append(
+                (self._backend_field, '=', self.backend_record.id), )
         bindings = self.model.with_context(active_test=False).search(
-            [(self._external_field, '=', str(external_id)),
-             (self._backend_field, '=', self.backend_record.id)]
-        )
+                search_parameters)
         if not bindings:
             return self.model.browse()
         bindings.ensure_one()
@@ -423,7 +427,7 @@ class Binder(ConnectorUnit):
             bindings = getattr(bindings, self._openerp_field)
         return bindings
 
-    def to_backend(self, binding_id, wrap=False):
+    def to_backend(self, binding_id, wrap=False, ignore_backend=False):
         """ Give the external ID for an OpenERP binding ID
 
         :param binding_id: OpenERP binding ID for which we want the backend id
@@ -431,6 +435,8 @@ class Binder(ConnectorUnit):
                      if True, binding_id is the ID of the normal record, the
                      method will search the corresponding binding and returns
                      the backend id of the binding
+        :param ignore_backend: if True, ignore the backend of the record and
+                               search only for OpenERP binding id
         :return: external ID of the record
         """
         record = self.model.browse()
@@ -439,11 +445,12 @@ class Binder(ConnectorUnit):
             record = binding_id
             binding_id = binding_id.id
         if wrap:
+            search_parameters = [(self._openerp_field, '=', binding_id)]
+            if not ignore_backend:
+                search_parameters.append(
+                    (self._backend_field, '=', self.backend_record.id), )
             binding = self.model.with_context(active_test=False).search(
-                [(self._openerp_field, '=', binding_id),
-                 (self._backend_field, '=', self.backend_record.id),
-                 ]
-            )
+                search_parameters)
             if not binding:
                 return None
             binding.ensure_one()

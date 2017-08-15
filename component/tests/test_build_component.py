@@ -225,3 +225,48 @@ class TestBuildComponent(ComponentRegistryCase):
              self.comp_registry['base']),
             self.comp_registry['component2'].__bases__
         )
+
+    def test_check_parent_component_over_abstract(self):
+        """ Component can inherit from AbstractComponent """
+        class Component1(AbstractComponent):
+            _name = 'component1'
+
+        class Component2(Component):
+            _name = 'component2'
+            _inherit = 'component1'
+
+        Component1._build_component(self.comp_registry)
+        Component2._build_component(self.comp_registry)
+        self.assertTrue(
+            self.comp_registry['component1']._abstract
+        )
+        self.assertFalse(
+            self.comp_registry['component2']._abstract
+        )
+
+    def test_check_parent_abstract_over_component(self):
+        """ Prevent AbstractComponent to inherit from Component """
+        class Component1(Component):
+            _name = 'component1'
+
+        class Component2(AbstractComponent):
+            _name = 'component2'
+            _inherit = 'component1'
+
+        Component1._build_component(self.comp_registry)
+        msg = '.*cannot inherit from the non-abstract.*'
+        with self.assertRaisesRegexp(TypeError, msg):
+            Component2._build_component(self.comp_registry)
+
+    def test_check_transform_abstract_to_component(self):
+        """ Prevent AbstractComponent to be transformed to Component """
+        class Component1(AbstractComponent):
+            _name = 'component1'
+
+        class Component1bis(Component):
+            _inherit = 'component1'
+
+        Component1._build_component(self.comp_registry)
+        msg = '.*transforms the abstract component.*into a non-abstract.*'
+        with self.assertRaisesRegexp(TypeError, msg):
+            Component1bis._build_component(self.comp_registry)

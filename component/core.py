@@ -782,6 +782,8 @@ class AbstractComponent(object):
                 raise TypeError("Component %r does not exist in registry." %
                                 name)
             ComponentClass = registry[name]
+            ComponentClass._build_component_check_base(cls)
+            check_parent = ComponentClass._build_component_check_parent
         else:
             ComponentClass = type(
                 name, (AbstractComponent,),
@@ -790,6 +792,7 @@ class AbstractComponent(object):
                  # names of children component
                  '_inherit_children': OrderedSet()},
             )
+            check_parent = cls._build_component_check_parent
 
         # determine all the classes the component should inherit from
         bases = LastOrderedSet([cls])
@@ -804,6 +807,7 @@ class AbstractComponent(object):
                 for base in parent_class.__bases__:
                     bases.add(base)
             else:
+                check_parent(cls, parent_class)
                 bases.add(parent_class)
                 parent_class._inherit_children.add(name)
         ComponentClass.__bases__ = tuple(bases)
@@ -813,6 +817,27 @@ class AbstractComponent(object):
         registry[name] = ComponentClass
 
         return ComponentClass
+
+    @classmethod
+    def _build_component_check_base(cls, extend_cls):
+        """ Check whether ``cls`` can be extended with ``extend_cls``. """
+        if cls._abstract and not extend_cls._abstract:
+            msg = ("%s transforms the abstract component %r into a "
+                   "non-abstract component. "
+                   "That class should either inherit from AbstractComponent, "
+                   "or set a different '_name'.")
+            raise TypeError(msg % (extend_cls, cls._name))
+
+    @classmethod
+    def _build_component_check_parent(component_class, cls, parent_class):
+        """ Check whether ``model_class`` can inherit from ``parent_class``.
+        """
+        if component_class._abstract and not parent_class._abstract:
+            msg = ("In %s, the abstract Component %r cannot inherit "
+                   "from the non-abstract Component %r.")
+            raise TypeError(
+                msg % (cls, component_class._name, parent_class._name)
+            )
 
     @classmethod
     def _complete_component_build(cls):

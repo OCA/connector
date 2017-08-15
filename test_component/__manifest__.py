@@ -4,10 +4,11 @@
 
 {'name': 'Components Tests',
  'summary': 'Automated tests for Components, do not install.',
+ 'description': 'Automated tests for Components, do not install.',
  'version': '10.0.1.0.0',
  'author': 'Camptocamp,Odoo Community Association (OCA)',
  'license': 'AGPL-3',
- 'category': 'Generic Modules',
+ 'category': 'Hidden',
  'depends': ['component',
              ],
  'website': 'https://www.camptocamp.com',

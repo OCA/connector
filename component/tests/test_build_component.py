@@ -3,7 +3,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html)
 
 import mock
-from odoo.addons.component.core import Component
+from odoo.addons.component.core import AbstractComponent, Component
 from .common import ComponentRegistryCase
 
 
@@ -201,3 +201,27 @@ class TestBuildComponent(ComponentRegistryCase):
         msg = 'Component.*inherits from non-existing component.*'
         with self.assertRaisesRegexp(TypeError, msg):
             Component2._build_component(self.comp_registry)
+
+    def test_add_inheritance(self):
+        """ Ensure we can add a new inheritance """
+        class Component1(Component):
+            _name = 'component1'
+
+        class Component2(Component):
+            _name = 'component2'
+
+        class Component2bis(Component):
+            _name = 'component2'
+            _inherit = ['component2', 'component1']
+
+        Component1._build_component(self.comp_registry)
+        Component2._build_component(self.comp_registry)
+        Component2bis._build_component(self.comp_registry)
+
+        self.assertEquals(
+            (Component2bis,
+             Component2,
+             self.comp_registry['component1'],
+             self.comp_registry['base']),
+            self.comp_registry['component2'].__bases__
+        )

@@ -749,7 +749,7 @@ class AbstractComponent(object):
         #                                         B2 ComponentA B1
         #   class B2(Component):                   \     |     /
         #       _name = 'b'                         \    |    /
-        #       _inherit = ['a', 'b']                \   |   /
+        #       _inherit = ['b', 'a']                \   |   /
         #                                            ComponentB
         #   class A2(Component):
         #       _inherit = 'a'
@@ -761,7 +761,7 @@ class AbstractComponent(object):
         elif parents is None:
             parents = []
 
-        if cls._name in registry:
+        if cls._name in registry and not parents:
             raise TypeError('Component %r (in class %r) already exists. '
                             'Consider using _inherit instead of _name '
                             'or using a different _name.' % (cls._name, cls))

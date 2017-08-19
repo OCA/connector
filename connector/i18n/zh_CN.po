@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: connector (9.0)\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-03-23 06:52+0000\n"
-"PO-Revision-Date: 2017-03-13 12:52+0000\n"
+"POT-Creation-Date: 2017-08-12 01:40+0000\n"
+"PO-Revision-Date: 2017-08-18 06:47+0000\n"
 "Last-Translator: OCA Transbot <transbot@odoo-community.org>\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/oca/OCA-connector-9-0/language/zh_CN/)\n"
 "MIME-Version: 1.0\n"
@@ -89,13 +89,13 @@ msgid "Cancel"
 msgstr "取消"
 
 #. module: connector
-#: code:addons/connector/queue/model.py:274
+#: code:addons/connector/queue/model.py:279
 #, python-format
 msgid "Cannot change the root channel"
 msgstr ""
 
 #. module: connector
-#: code:addons/connector/queue/model.py:281
+#: code:addons/connector/queue/model.py:286
 #, python-format
 msgid "Cannot remove the root channel"
 msgstr ""
@@ -200,6 +200,11 @@ msgstr "连接器"
 #: model:ir.model.fields,field_description:connector.field_queue_job_date_created
 msgid "Created Date"
 msgstr "创建日期"
+
+#. module: connector
+#: model:ir.ui.view,arch_db:connector.view_queue_job_search
+msgid "Created Last 24h"
+msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_create_uid
@@ -580,7 +585,7 @@ msgid "Parent Channel"
 msgstr ""
 
 #. module: connector
-#: code:addons/connector/queue/model.py:266
+#: code:addons/connector/queue/model.py:271
 #, python-format
 msgid "Parent channel required."
 msgstr ""
@@ -621,7 +626,7 @@ msgstr "队列中作业"
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_record
 msgid "Record"
-msgstr ""
+msgstr "记录"
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_record_id
@@ -631,7 +636,7 @@ msgstr "记录 ID"
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_name
 msgid "Record Name"
-msgstr ""
+msgstr "记录名"
 
 #. module: connector
 #: model:ir.ui.view,arch_db:connector.view_queue_job_form
@@ -715,7 +720,7 @@ msgid ""
 msgstr ""
 
 #. module: connector
-#: code:addons/connector/queue/model.py:180
+#: code:addons/connector/queue/model.py:185
 #, python-format
 msgid ""
 "Something bad happened during the execution of the job. More details in the "

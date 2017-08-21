@@ -80,20 +80,28 @@ class QueueJob(models.Model):
     )
     func_name = fields.Char(readonly=True)
     job_function_id = fields.Many2one(comodel_name='queue.job.function',
-                                      compute='_compute_channel',
+                                      compute='_compute_job_function',
                                       string='Job Function',
                                       readonly=True,
                                       store=True)
-    # for searching without JOIN on channels
-    channel = fields.Char(compute='_compute_channel', store=True, select=True)
+    channel = fields.Char(compute='_compute_channel',
+                          store=True,
+                          index=True)
+    forced_channel = fields.Char()
+
+    @api.multi
+    @api.depends('forced_channel', 'job_function_id.channel_id')
+    def _compute_channel(self):
+        for record in self:
+            record.channel = (record.forced_channel or
+                              record.job_function_id.channel)
 
     @api.one
     @api.depends('func_name', 'job_function_id.channel_id')
-    def _compute_channel(self):
+    def _compute_job_function(self):
         func_model = self.env['queue.job.function']
         function = func_model.search([('name', '=', self.func_name)])
         self.job_function_id = function
-        self.channel = self.job_function_id.channel
 
     @api.multi
     def open_related_action(self):

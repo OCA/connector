@@ -142,7 +142,8 @@ class OpenERPJobStorage(JobStorage):
             "Model %s not found" % self._job_model_name)
 
     def enqueue(self, func, model_name=None, args=None, kwargs=None,
-                priority=None, eta=None, max_retries=None, description=None):
+                priority=None, eta=None, max_retries=None, description=None,
+                channel=None):
         """Create a Job and enqueue it in the queue. Return the job uuid.
 
         This expects the arguments specific to the job to be already extracted
@@ -151,7 +152,8 @@ class OpenERPJobStorage(JobStorage):
         """
         new_job = Job(func=func, model_name=model_name, args=args,
                       kwargs=kwargs, priority=priority, eta=eta,
-                      max_retries=max_retries, description=description)
+                      max_retries=max_retries, description=description,
+                      channel=channel)
         new_job.user_id = self.session.uid
         if 'company_id' in self.session.context:
             company_id = self.session.context['company_id']
@@ -172,13 +174,15 @@ class OpenERPJobStorage(JobStorage):
         model_name = kwargs.pop('model_name', None)
         max_retries = kwargs.pop('max_retries', None)
         description = kwargs.pop('description', None)
+        channel = kwargs.pop('channel', None)
 
         return self.enqueue(func, model_name=model_name,
                             args=args, kwargs=kwargs,
                             priority=priority,
                             max_retries=max_retries,
                             eta=eta,
-                            description=description)
+                            description=description,
+                            channel=channel)
 
     def exists(self, job_uuid):
         """Returns if a job still exists in the storage."""
@@ -209,7 +213,6 @@ class OpenERPJobStorage(JobStorage):
                 'eta': False,
                 'func_name': job_.func_name,
                 }
-
         dt_to_string = openerp.fields.Datetime.to_string
         if job_.date_enqueued:
             vals['date_enqueued'] = dt_to_string(job_.date_enqueued)
@@ -232,7 +235,10 @@ class OpenERPJobStorage(JobStorage):
                          'model_name': (job_.model_name if job_.model_name
                                         else False),
                          })
-
+            # if the channel is not specified, lets the job_model compute
+            # the right one to use
+            if job_.channel:
+                vals.update({'forced_channel': job_.channel})
             vals['func'] = dumps((job_.func_name,
                                   job_.args,
                                   job_.kwargs))
@@ -257,7 +263,7 @@ class OpenERPJobStorage(JobStorage):
 
         job_ = Job(func=func_name, args=args, kwargs=kwargs,
                    priority=stored.priority, eta=eta, job_uuid=stored.uuid,
-                   description=stored.name)
+                   description=stored.name, channel=stored.channel)
 
         if stored.date_created:
             job_.date_created = dt_from_string(stored.date_created)
@@ -371,12 +377,19 @@ class Job(object):
         Estimated Time of Arrival of the job. It will not be executed
         before this date/time.
 
+
+    .. attribute:: channel
+
+        The complete name of the channel to use to process the job. If
+        provided it overrides the one defined on the job's function.
+
+
     """
 
     def __init__(self, func=None, model_name=None,
                  args=None, kwargs=None, priority=None,
                  eta=None, job_uuid=None, max_retries=None,
-                 description=None):
+                 description=None, channel=None):
         """ Create a Job
 
         :param func: function to execute
@@ -454,6 +467,7 @@ class Job(object):
         self.company_id = None
         self._eta = None
         self.eta = eta
+        self.channel = channel
 
     def __cmp__(self, other):
         if not isinstance(other, Job):
@@ -662,6 +676,8 @@ def job(func=None, default_channel='root', retry_pattern=None):
                      intended to discriminate job instances
                      (Default is the func.__doc__ or
                       'Function %s' % func.__name__)
+    * channel : The complete name of the channel to use to process the job. If
+                provided it overrides the one defined on the job's function.
 
     Example:
 

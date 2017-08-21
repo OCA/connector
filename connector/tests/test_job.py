@@ -479,6 +479,14 @@ class TestJobStorage(common.TransactionCase):
         stored = self.queue_job.search([])
         self.assertEqual(len(stored), 1)
 
+    def test_job_delay_override_channel(self):
+        self.cr.execute('delete from queue_job')
+        job(dummy_task_args)
+        task_a.delay(self.session, 'res.users', 'o', channel='root.sub.sub')
+        stored = self.queue_job.search([])
+        self.assertEqual(len(stored), 1)
+        self.assertEqual('root.sub.sub', stored.channel)
+
 
 class TestJobModel(common.TransactionCase):
 
@@ -770,6 +778,13 @@ class TestJobChannels(common.TransactionCase):
         storage.store(test_job)
         stored = self.job_model.search([('uuid', '=', test_job.uuid)])
         self.assertEquals(stored.channel, 'root.sub')
+
+        # it's also possible to override the channel
+        test_job = Job(func=task_a, channel='root.sub.sub.sub')
+        storage = OpenERPJobStorage(self.session)
+        storage.store(test_job)
+        stored = self.job_model.search([('uuid', '=', test_job.uuid)])
+        self.assertEquals(stored.channel, test_job.channel)
 
     def test_default_channel(self):
         self.function_model.search([]).unlink()

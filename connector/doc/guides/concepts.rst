@@ -19,15 +19,10 @@ pointers to more concrete 'how-to' or small tutorials.
 Events
 ******
 
+Reference: :ref:`api-event`
+
 Events are hooks in Odoo on which we can plug some actions. They are
 based on an Observer pattern.
-
-The basic idea is to declare an :py:class:`~connector.event.Event`, for
-instance :py:class:`~connector.event.on_record_create`.
-Then each connector has the ability to subscribe one or many function on it.
-The creation of a record should fire
-:py:class:`~connector.event.on_record_create`,
-which will trigger all the subscribed functions.
 
 The same event can be shared across several connectors, easing their
 implementation.
@@ -37,11 +32,7 @@ common to e-commerce.
 
 A connectors developer is mostly interested by:
 
-* register a new function on an event (see :py:class:`connector.event.Event`)
-* unregister a function from an event (see :py:meth:`connector.event.Event.unsubscribe`)
-* replace a consumer function by another one (see :py:class:`connector.event.Event`)
-* filter the events by model, so a subscribed function will be triggered
-  only if the event happens on a registered model
+* adding and listening to events (see :ref:`api-event`)
 
 .. _jobs-queue:
 
@@ -49,72 +40,80 @@ A connectors developer is mostly interested by:
 Jobs Queue
 **********
 
+Reference: :ref:`api-queue`
+
+This feature is part of a standalone addon, but is a prerequisite for
+the connector framework.
+
+The module is ``queue_job`` in https://github.com/OCA/queue.
+
 A connectors developer is mostly interested by:
 
-* Delay a job (see the decorator :py:func:`~connector.queue.job.job`)
+* Delay a job (see the decorator :py:func:`~odoo.addons.queue_job.job.job`)
 
 
 *******
 Backend
 *******
 
-A :py:class:`~connector.backend.Backend`
-is a reference to an external system or service.
+Reference: :ref:`api-backend-model`
 
-A backend is defined by a name and a version.
-For instance ``Magento 1.7``.
+The Backend Model is what represents the external service / system we
+synchronize with. The name on the backend indicates what is the collection the
+Components will be registered into. Put another way: every backend has its own
+collection of Components.
 
-A reference can have a parent. The instance ``Magento 1.7`` is the child
-of ``Magento``.
+It must use an ``_inherit`` on ``connector.backend``.
 
-:py:class:`~connector.connector.ConnectorUnit` classes are registered on
-the backends. Then, we are able to ask a registered class to a backend.
-If no class is found, it will search in its parent backend.
+``connector.backend`` inherits
+:class:`odoo.addons.component.models.collection.Collection` which has a
+:meth:`odoo.addons.component.models.collection.Collection.work_on` that will be
+used as entrypoint for the component system.  This method returns a
+:class:`~odoo.addons.component.core.WorkContext`
 
-It is always accompanied by a concrete subclass of the model
-:py:class:`~connector.backend_model.connector_backend`.
+***********
+WorkContext
+***********
+
+Reference: :class:`~odoo.addons.component.core.WorkContext`
+
+A :class:`~odoo.addons.component.core.WorkContext` is the work environment or
+context that will be passed transversally through all the components. This is
+also the entrypoint to the component system.
 
 A connectors developer is mostly interested by:
 
-* Declare the backends (see :py:class:`connector.backend.Backend`)
-* Register a ConnectorUnit on a backend (see :py:class:`connector.backend.Backend`)
-* Replace a ConnectorUnit on a backend (see :py:class:`connector.backend.Backend`)
-* Use a different ConnectorUnit for a different version of a backend (see :py:class:`connector.backend.Backend`)
+* Get a Component from a WorkContext (:py:meth:`~odoo.addons.component.core.WorkContext.component`)
 
+*********
+Component
+*********
 
-***********
-Environment
-***********
+Reference: :ref:`api-component`
 
-An :py:class:`~connector.connector.Environment`
-is the scope from which we will do synchronizations.
+:py:class:`~odoo.addons.component.core.Component` are pluggable classes used
+for the synchronizations with the external systems (or anything!)
 
-It contains a :py:class:`~connector.backend.Backend`,
-a record of a concrete subclass of the model
-:py:class:`~connector.backend_model.connector_backend`,
-a :py:class:`odoo.api.Environment`
-and the name of the model to work with.
+The Components system has been extracted in a standalone addon (``component``),
+which means it can really be used in a totally different way.
 
-A connectors developer is mostly interested by:
-
-* Get a connectorUnit from an environment (:py:meth:`connector.connector.ConnectorUnit.unit_for`,
-  :py:meth:`connector.connector.ConnectorUnit.binder_for`)
-
-*************
-ConnectorUnit
-*************
-
-:py:class:`~connector.connector.ConnectorUnit`
-are pluggable classes used for the synchronizations with the external
-systems.
-
-The connector defines some base classes, which you can find below.
-Note that you can define your own ConnectorUnits as well.
+The connector defines some base components, which you can find below.  Note
+that you can and are encouraged to define your own Components as well.
 
 Mappings
 ========
 
-The base class is :py:class:`connector.unit.mapper.Mapper`.
+The base class is :py:class:`connector.components.mapper.Mapper`.
+
+In your components, you probably want to inherit from:
+
+* ``_inherit = 'base.import.mapper'``
+* ``_inherit = 'base.export.mapper'``
+
+And the usages for the lookups are:
+
+* ``import.mapper``
+* ``export.mapper``
 
 A mapping translates an external record to an Odoo record and
 conversely.
@@ -134,24 +133,52 @@ submapping
     a sub-record (lines of a sale order) is converted using another
     Mapper
 
+See the documentation of the class for more details.
+
 Synchronizers
 =============
 
-The base class is :py:class:`connector.unit.synchronizer.Synchronizer`.
+The base class is :py:class:`connector.components.synchronizer.Synchronizer`.
 
-A synchronizer defines the flow of a synchronization with a backend.
-It can be a record's import or export, a deletion of something,
-or anything else.
-For instance, it will use the mappings
-to convert the data between both systems,
-the backend adapters to read or write data on the backend
-and the binders to create the link between them.
+In your components, you probably want to inherit from:
+
+* ``_inherit = 'base.importer'``
+* ``_inherit = 'base.exporter'``
+
+And the usages for the lookups are:
+
+* ``importer``
+* ``exporter``
+
+However, in your implementation, it is advised to use more refined usages such
+as:
+
+* ``record.importer``
+* ``record.exporter``
+* ``batch.importer``
+* ``batch.exporter``
+* ..
+
+A synchronizer orchestrates a synchronization with a backend.  It can be a
+record's import or export, a deletion of something, or anything else.  For
+instance, it will use the mappings to convert the data between both systems,
+the backend adapters to read or write data on the backend and the binders to
+create the link between them.
 
 Backend Adapters
 ================
 
 The base class is
-:py:class:`connector.unit.backend_adapter.BackendAdapter`.
+:py:class:`connector.components.backend_adapter.BackendAdapter`.
+
+In your components, you probably want to inherit from:
+
+* ``_inherit = 'base.backend.adapter'``
+* ``_inherit = 'base.backend.adapter.crud'``
+
+And the usages for the lookups are:
+
+* ``backend.adapter``
 
 An external adapter has a common interface to speak with the backend.
 It translates the basic orders (search, read, write) to the protocol
@@ -161,12 +188,33 @@ Binders
 =======
 
 The base class is
-:py:class:`connector.connector.Binder`.
+:py:class:`connector.components.binder.Binder`.
 
-Binders are classes which know how to find the external ID for an
+In your components, you probably want to inherit from:
+
+* ``_inherit = 'base.binder'``
+
+And the usages for the lookups are:
+
+* ``binder``
+
+Binders are components that know how to find the external ID for an
 Odoo ID, how to find the Odoo ID for an external ID and how to
 create the binding between them. A default implementation is
 available and can be inherited if needed.
+
+Listeners
+=========
+
+The base class is
+:py:class:`connector.components.listener.ConnectorListener`.
+
+In your components, you probably want to inherit from:
+
+* ``_inherit = 'base.connector.listener'``
+
+This is where you will register your event listeners.
+See :mod:`addons.component_event.components.event`.
 
 
 .. _binding:
@@ -175,7 +223,9 @@ available and can be inherited if needed.
 Bindings
 ********
 
-Here a binding means the link of a record between Odoo and a backend.
+Reference: :ref:`api-binding-model`
+
+A binding represents the link of a record between Odoo and a backend.
 
 The proposed implementation for the connectors widely use the
 `_inherits` capabilities.

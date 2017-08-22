@@ -1,3 +1,5 @@
+.. _api-queue:
+
 #####
 Queue
 #####
@@ -15,7 +17,12 @@ Job
 Models
 ******
 
-.. automodule:: odoo.addons.models.queue_job
+.. automodule:: odoo.addons.queue_job.models.base
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+.. automodule:: odoo.addons.queue_job.models.queue_job
    :members:
    :undoc-members:
    :show-inheritance:

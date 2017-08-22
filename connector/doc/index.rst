@@ -18,6 +18,9 @@ customizations.
 The development of Odoo Connector has been started by `Camptocamp`_ and is now
 maintained by `Camptocamp`_, `Akretion`_, `Acsone`_ and several :ref:`contributors`.
 
+It got a major overhaul in 2017 (Odoo 10.0). A :ref:`migration-guide` is
+available.
+
 *Subscribe to the* `project's mailing list (name: Connectors)`_
 
 *Learn how to* :ref:`contribute`
@@ -36,59 +39,39 @@ Core Features
   developer on how to use the proposed pieces.
 * See a :ref:`code-overview` with examples of code
 
-.. _Odoo: http://www.odoo.com
-.. _Camptocamp: http://www.camptocamp.com
+.. _Odoo: https://www.odoo.com
+.. _Camptocamp: https://www.camptocamp.com
 .. _Akretion: http://www.akretion.com
-.. _Acsone: http://www.acsone.eu
+.. _Acsone: https://www.acsone.eu
 .. _`source code is available on GitHub`: https://github.com/OCA/connector
-.. _`AGPL version 3`: http://www.gnu.org/licenses/agpl-3.0.html
+.. _`AGPL version 3`: https://www.gnu.org/licenses/agpl-3.0.html
 .. _`project's mailing list (name: Connectors)`: https://odoo-community.org/groups
 
-*********************************
-Connectors based on the framework
-*********************************
+*****************
+Developer's guide
+*****************
 
-* `Magento Connector <http://www.odoo-magento-connector.com>`_
-* `Prestashop Connector <https://github.com/OCA/connector-prestashop>`_
-* `solerp (Solr Connector) <https://github.com/akretion/solerp>`_
-* `CMIS <https://github.com/OCA/connector-cmis>`_
-* `Odoo Asynchronous import module <https://github.com/OCA/connector-interfaces/tree/8.0/base_import_async>`_
-* `Salesforce Connector <https://github.com/OCA/connector-salesforce>`_
-* `Google Spreadsheet Connector <https://github.com/akretion/connector-google-spreadsheet>`_
-* `WooCommerce Connector <https://github.com/OCA/connector-woocommerce>`_
-* Develop easily and rapidly your own connector based on this powerful
-  framework and list your project on this page! Examples:
+.. toctree::
+   :maxdepth: 2
 
-  * E-Commerce: Odoo OsCommerce connector, Odoo Drupal Commerce connector, Odoo Spree connector, Odoo Ebay connector, Odoo Amazon connector…
-  * CMS: Odoo Wordpress connector…
-  * CRM: Odoo SugarCRM connector, Odoo Zabbix connector…
-  * Project Management: Odoo Redmine connector…
-  * Ticketing: Odoo Request Tracker connector, Odoo GLPI connector…
+   guides/migration_guide.rst
+   guides/code_overview.rst
+   guides/concepts.rst
+   guides/bootstrap_connector.rst
+   guides/jobrunner.rst
 
-********
-Overview
-********
+API Reference
+=============
 
-.. raw:: html
+.. toctree::
+   :maxdepth: 1
 
-    <div style="margin-top:10px;">
-         <iframe src="http://www.slideshare.net/slideshow/embed_code/24048994?rel=0" width="427" height="356" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="border:1px solid #CCC;border-width:1px 1px 0;margin-bottom:5px" allowfullscreen> </iframe> <div style="margin-bottom:5px"> <strong> <a href="https://fr.slideshare.net/openobject/ecommerce-the-new-magento-open-erp-connector-a-generic-connector-to-any-apps-luc-maurer-guewen-baconnier-camptocamp" title="E-commerce: the new Magento - Odoo Connector: a generic connector to any apps. Luc Maurer &amp; Guewen Baconnier, Camptocamp" target="_blank">E-commerce: the new Magento - Odoo Connector: a generic connector to any apps. Luc Maurer &amp; Guewen Baconnier, Camptocamp (Odoo Days 2013)</a> </strong> from <strong><a href="http://www.slideshare.net/openobject" target="_blank">Odoo.tv</a></strong> </div>
-    </div>
-
-**************************
-Top financial contributors
-**************************
-
-.. image:: _static/img/LogicSupply_Orange_260x80_transparent.png
-   :alt: Logic Supply
-   :target: http://www.logicsupply.com
-
-.. image:: _static/img/logo-debonix.jpg
-   :alt: Debonix
-   :target: http://www.debonix.fr
-
-|
-*See all the project's* :ref:`financial-contributors`.
+   api/api_components.rst
+   api/api_backend.rst
+   api/api_event.rst
+   api/api_queue.rst
+   api/api_exception.rst
+   api/api_channels.rst
 
 *******
 Project
@@ -103,35 +86,35 @@ Project
    project/changes
    project/roadmap
 
-*****************
-Developer's guide
-*****************
+*********************************
+Connectors based on the framework
+*********************************
 
-.. toctree::
-   :maxdepth: 2
+* `Magento Connector <http://www.odoo-magento-connector.com>`_
+* `Prestashop Connector <https://github.com/OCA/connector-prestashop>`_
+* `Search Engine Connector <https://github.com/akretion/connector-search-engine>`_
+* `CMIS <https://github.com/OCA/connector-cmis>`_
+* `Odoo Asynchronous import module <https://github.com/OCA/connector-interfaces/tree/8.0/base_import_async>`_
+* `Salesforce Connector <https://github.com/OCA/connector-salesforce>`_
+* `JIRA Connector <https://github.com/camptocamp/connector-jira>`_
+* `Google Spreadsheet Connector <https://github.com/akretion/connector-google-spreadsheet>`_
+* `Connector Exchange <https://github.com/camptocamp/connector-exchange/tree/10.0>`_
+* Develop easily and rapidly your own connector based on this powerful
+  framework and list your project on this page! Examples:
 
-   guides/code_overview.rst
-   guides/concepts.rst
-   guides/bootstrap_connector.rst
-   guides/jobrunner.rst
+  * E-Commerce: Odoo OsCommerce connector, Odoo Drupal Commerce connector, Odoo Spree connector, Odoo Ebay connector, Odoo Amazon connector…
+  * CMS: Odoo Wordpress connector…
+  * CRM: Odoo SugarCRM connector, Odoo Zabbix connector…
+  * Project Management: Odoo Redmine connector…
+  * Ticketing: Odoo Request Tracker connector, Odoo GLPI connector…
 
-API Reference
-=============
 
-.. toctree::
-   :maxdepth: 1
+*****
+Talks
+*****
 
-   api/api_connector.rst
-   api/api_backend.rst
-   api/api_event.rst
-   api/api_binder.rst
-   api/api_mapper.rst
-   api/api_synchronizer.rst
-   api/api_backend_adapter.rst
-   api/api_queue.rst
-   api/api_exception.rst
-   api/api_channels.rst
-   api/api_runner.rst
+* `A jobs queue for processing tasks asynchronously. Leonardo Pistone & Guewen Baconnier (2015) <https://fr.slideshare.net/camptocamp/a-jobs-queue-for-processing-tasks-asynchronously>`_
+* `E-commerce: the new Magento - OpenERP Connector: a generic connector to any apps. Luc Maurer & Guewen Baconnier, Camptocamp (2013) <https://fr.slideshare.net/openobject/ecommerce-the-new-magento-open-erp-connector-a-generic-connector-to-any-apps-luc-maurer-guewen-baconnier-camptocamp>`_
 
 ******************
 Indices and tables

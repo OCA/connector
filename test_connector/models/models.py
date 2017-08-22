@@ -4,8 +4,6 @@
 
 from odoo import api, fields, models
 from odoo.addons.queue_job.job import job, related_action
-from odoo.addons.connector.connector import Binder
-from ..backend import test_backend
 
 
 class TestBackend(models.Model):
@@ -13,8 +11,19 @@ class TestBackend(models.Model):
     _name = 'test.backend'
     _inherit = ['connector.backend']
 
-    _backend_type = 'test_connector'
+    @property
+    def _backend_type(self):
+        # this is a hack for the tests:
+        # the related_action_unwrap_binding uses the
+        # _backend_type to know if we are using old
+        # ConnectorUnit or the new Components, because the _backend_type
+        # is used only by the ConnectorUnit system.
+        # As we want to test both, we pass this key in the ConnectorUnit
+        # tests context
+        if self.env.context.get('test_connector_units'):
+            return 'test_connector'
 
+    # useless for components
     version = fields.Selection(
         selection=[('1', '1')],
         string='Version',
@@ -56,14 +65,6 @@ class ConnectorTestBinding(models.Model):
         return self
 
 
-@test_backend
-class ConnectorTestBinder(Binder):
-
-    _model_name = [
-        'connector.test.binding',
-    ]
-
-
 class NoInheritsBinding(models.Model):
 
     _name = 'no.inherits.binding'
@@ -86,17 +87,3 @@ class NoInheritsBinding(models.Model):
     @api.multi
     def job_related_action_unwrap(self):
         return self
-
-
-@test_backend
-class NoInheritsBinder(Binder):
-
-    _model_name = [
-        'no.inherits.binding',
-    ]
-
-    def unwrap_binding(self, binding):
-        raise ValueError('Not an inherits')
-
-    def unwrap_model(self):
-        raise ValueError('Not an inherits')

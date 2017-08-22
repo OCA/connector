@@ -3,7 +3,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html)
 
 {'name': 'Connector',
- 'version': '10.0.1.0.0',
+ 'version': '10.0.2.0.0',
  'author': 'Camptocamp,Openerp Connector Core Editors,'
            'Odoo Community Association (OCA)',
  'website': 'http://odoo-connector.com',
@@ -11,6 +11,8 @@
  'category': 'Generic Modules',
  'depends': ['mail',
              'queue_job',
+             'component',
+             'component_event',
              ],
  'data': ['security/connector_security.xml',
           'security/ir.model.access.csv',

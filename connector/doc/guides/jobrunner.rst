@@ -7,10 +7,12 @@ Configuring channels and the job runner
 
 .. automodule:: odoo.addons.queue_job.jobrunner.runner
 
+
 What is a channel?
 ------------------
 
-.. autoclass:: odoo.addons.queue_job.jobrunner.runner.channels.Channel
+.. autoclass:: odoo.addons.queue_job.jobrunner.channels.Channel
+   :noindex:
 
 How to configure Channels?
 --------------------------

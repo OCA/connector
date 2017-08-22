@@ -31,8 +31,8 @@ if os.environ.get('TRAVIS_BUILD_DIR') and os.environ.get('VERSION'):
     odoo_root = os.path.join(repos_home, odoo_folder)
     build_path = os.environ['TRAVIS_BUILD_DIR']
 else:
-    # build from a buildout
-    odoo_root = os.path.abspath('../../../odoo')
+    # build from dev
+    odoo_root = os.path.abspath('../../../../src')
     deps_path = os.path.abspath('../../..')
     build_path = os.path.abspath('../..')
 
@@ -91,6 +91,9 @@ source_suffix = '.rst'
 
 # The master toctree document.
 master_doc = 'index'
+
+# autodoc options
+autodoc_member_order = 'bysource'
 
 # General information about the project.
 project = u'Connector'

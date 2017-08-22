@@ -4,172 +4,185 @@
 Code Overview
 #############
 
-Here is an overview of some of the concepts in the framework.
+Some simple code examples.
 
-As an example, we'll see the steps for exporting an invoice to Magento.
-The steps won't show all the steps, but a simplified excerpt of a real
-use case exposing the main ideas.
+***************************
+Trigger and listen an event
+***************************
 
-********
-Backends
-********
+.. code-block:: python
 
-All start with the declaration of the :py:class:`~connector.backend.Backend`::
+  class AccountInvoice(models.Model):
+      _inherit = 'account.invoice'
 
-  import odoo.addons.connector.backend as backend
-
-  magento = backend.Backend('magento')
-  """ Generic Magento Backend """
-
-  magento1700 = backend.Backend(parent=magento, version='1.7')
-  """ Magento Backend for version 1.7 """
-
-As you see, Magento is the parent of Magento 1.7. We can define a
-hierarchy of backends.
-
-********
-Bindings
-********
-
-The ``binding`` is the link between an Odoo record and an external
-record. There is no forced implementation for the ``bindings``. The most
-straightforward techniques are: storing the external ID in the same
-model (``account.invoice``), in a new link model or in a new link model
-which ``_inherits`` ``account.invoice``. Here we choose the latter
-solution::
-
-  class MagentoAccountInvoice(models.Model):
-      _name = 'magento.account.invoice'
-      _inherits = {'account.invoice': 'odoo_id'}
-      _description = 'Magento Invoice'
-
-      backend_id = fields.Many2one(comodel_name='magento.backend', string='Magento Backend', required=True, ondelete='restrict')
-      odoo_id = fields.Many2one(comodel_name='account.invoice', string='Invoice', required=True, ondelete='cascade')
-      magento_id = fields.Char(string='ID on Magento')  # fields.char because 0 is a valid Magento ID
-      sync_date = fields.Datetime(string='Last synchronization date')
-      magento_order_id = fields.Many2one(comodel_name='magento.sale.order', string='Magento Sale Order', ondelete='set null')
-      # we can also store additional data related to the Magento Invoice
-
-******
-Events
-******
-
-We can create :py:class:`~connector.event.Event` on which we'll be able
-to subscribe consumers.  The connector already integrates the most
-generic ones:
-:py:meth:`~connector.event.on_record_create`,
-:py:meth:`~connector.event.on_record_write`,
-:py:meth:`~connector.event.on_record_unlink`
-
-When we create a ``magento.account.invoice`` record, we want to delay a
-job to export it to Magento, so we subscribe a new consumer on
-:py:meth:`~connector.event.on_record_create`::
-
-  @on_record_create(model_names='magento.account.invoice')
-  def delay_export_account_invoice(env, model_name, record_id):
-      """
-      Delay the job to export the magento invoice.
-      """
-      export_invoice.delay(env, model_name, record_id)
-
-On the last line, you can notice an ``export_invoice.delay``. We'll
-discuss about that in Jobs_
-
-****
-Jobs
-****
-
-A :py:class:`~connector.queue.job.Job` is a task to execute later.
-In that case: create the invoice on Magento.
-
-Any function decorated with :py:meth:`~connector.queue.job.job` can
-be posted in the queue of jobs using a ``delay()`` function
-and will be run as soon as possible::
-
-  @job
-  def export_invoice(env, model_name, record_id):
-      """ Export a validated or paid invoice. """
-      invoice = env[model_name].browse(record_id)
-      backend_id = invoice.backend_id.id
-      env = get_environment(env, model_name, backend_id)
-      invoice_exporter = env.get_connector_unit(MagentoInvoiceSynchronizer)
-      return invoice_exporter.run(record_id)
-
-There is a few things happening there:
-
-* We find the backend on which we'll export the invoice.
-* We build an :py:class:`~connector.connector.Environment` with the
-  current :py:class:`odoo.api.Environment`,
-  the model we work with and the target backend.
-* We get the :py:class:`~connector.connector.ConnectorUnit` responsible
-  for the work using
-  :py:meth:`~connector.connector.Environment.get_connector_unit`
-  (according the backend version and the model)  and we call ``run()``
-  on it.
+      @api.multi
+      def action_invoice_paid(self):
+          res = super(AccountInvoice, self).action_invoice_paid()
+          for record in self:
+              self._event('on_invoice_paid').notify(record)
+          return res
 
 
-*************
-ConnectorUnit
-*************
 
-These are all classes which are responsible for a specific work.
-The main types of :py:class:`~connector.connector.ConnectorUnit` are
-(the implementation of theses classes belongs to the connectors):
+.. code-block:: python
 
-:py:class:`~connector.connector.Binder`
+    from odoo.addons.component.core import Component
 
-  The ``binders`` give the external ID or Odoo ID from respectively an
-  Odoo ID or an external ID. A default implementation is available.
 
-:py:class:`~connector.unit.mapper.Mapper`
+    class MyEventListener(Component):
+        _name = 'my.event.listener'
+        _inherit = 'base.event.listener'
 
-  The ``mappers`` transform a external record into an Odoo record or
-  conversely.
+        def on_invoice_paid(self, record):
+            _logger.info('invoice %s has been paid!', record.name)
 
-:py:class:`~connector.unit.backend_adapter.BackendAdapter`
+Ref: :ref:`api-event`
 
-  The ``adapters`` implements the discussion with the ``backend's``
-  APIs. They usually adapt their APIs to a common interface (CRUD).
 
-:py:class:`~connector.unit.synchronizer.Synchronizer`
+*************************
+Delay an Asynchronous Job
+*************************
 
-    The ``synchronizers`` are the main piece of a synchronization.  They
-    define the flow of a synchronization and use the other
-    :py:class:`~connector.connector.ConnectorUnit` (the ones above or
-    specific ones).
+.. code-block:: python
 
-For the export of the invoice, we just need an ``adapter`` and a
-``synchronizer`` (the real implementation is more complete)::
+    from odoo.addons.queue_job.job import job
 
-  @magento
-  class AccountInvoiceAdapter(GenericAdapter):
-      """ Backend Adapter for the Magento Invoice """
-      _model_name = 'magento.account.invoice'
-      _magento_model = 'sales_order_invoice'
 
-      def create(self, order_increment_id, items, comment, email, include_comment):
-          """ Create a record on the external system """
-          return self._call('%s.create' % self._magento_model,
-                            [order_increment_id, items, comment,
-                            email, include_comment])
-  @magento
-  class MagentoInvoiceSynchronizer(Exporter):
-      """ Export invoices to Magento """
-      _model_name = ['magento.account.invoice']
+    class AccountInvoice(models.Model):
+        _inherit = 'account.invoice'
 
-      def _export_invoice(self, magento_id, lines_info, mail_notification):
-          # use the ``backend adapter`` to create the invoice
-          return self.backend_adapter.create(magento_id, lines_info,
-                                            _("Invoice Created"),
-                                            mail_notification, False)
+        @job
+        @api.multi
+        def export_payment(self):
+            self.ensure_one()
+            _logger.info("I'm exporting the payment for %s", self.name)
 
-      def _get_lines_info(self, invoice):
-          [...]
+        @api.multi
+        def action_invoice_paid(self):
+            res = super(AccountInvoice, self).action_invoice_paid()
+            for record in self:
+                record.with_delay(priority=5).export_payment()
+            return res
 
-      def run(self, binding_id):
-          """ Run the job to export the validated/paid invoice """
-          invoice = self.model.browse(binding_id)
-          magento_order = invoice.magento_order_id
-          magento_id = self._export_invoice(magento_order.magento_id, lines_info, True)
-          # use the ``binder`` to write the external ID
-          self.binder.bind(magento_id, binding_id)
+Ref: :ref:`api-queue`
+
+********************
+Work with components
+********************
+
+This is a highly simplified version of a micro-connector, without using
+events or jobs, for the sake of the example.
+
+.. code-block:: python
+
+    from odoo.addons.component.core import AbstractComponent
+
+
+    class MagentoBackend(models.Model):
+        _name = 'magento.backend'
+        _description = 'Magento Backend'
+        _inherit = 'connector.backend'
+
+        location = fields.Char(string='Location', required=True)
+        username = fields.Char(string='Username')
+        password = fields.Char(string='Password')
+
+        def import_partner(self, external_id):
+            with self.work_on(model_name='magento.res.partner') as work:
+                importer = work.component(usage='record.importer')
+                # returns an instance of PartnerImporter, which has been
+                # found with:the collection name (magento.backend, the model,
+                # and the usage).
+                importer.run(partner_id)
+
+    # the next 2 components are abstract and are used by inheritance
+    # by the others
+    class BaseMagentoConnectorComponent(AbstractComponent):
+        # same inheritance than Odoo models
+        _name = 'base.magento.connector'
+        _inherit = 'base.connector'
+        # subscribe to:
+        _collection = 'magento.backend'
+        # the collection will be inherited to the components below,
+        # because they inherit from this component
+
+
+    class GenericAdapter(AbstractComponent):
+        # same inheritance than Odoo models
+        _name = 'magento.adapter'
+        _inherit = ['base.backend.adapter', 'base.magento.connector']
+        # usage is used for lookups of components
+        _usage = 'backend.adapter'
+
+        _magento_model = None
+
+        def _call(self, *args, **kwargs):
+            location = self.backend_record.location
+            # use client API
+
+        def read(self, fields=None):
+            """ Search records according to some criterias
+            and returns a list of ids
+
+            :rtype: list
+            """
+            return self._call('%s.info' % self._magento_model, fields)
+
+
+    # these are the components we need for our synchronization
+    class PartnerAdapter(Component):
+        _name = 'magento.partner.adapter'
+        _inherit = 'magento.adapter'
+        _apply_on = ['magento.res.partner']
+        _magento_model = 'customer'
+
+
+    class PartnerMapper(Component):
+        _name = 'magento.partner.import.mapper'
+        _inherit = 'magento.import.mapper'  # parent component omitted for brevity
+        _apply_on = ['magento.res.partner']
+        _usage = 'import.mapper'
+
+
+    class PartnerBinder(Component):
+        _name = 'magento.partner.binder'
+        _inherit = 'magento.binder'  # parent component omitted for brevity
+        _apply_on = ['magento.res.partner']
+        _usage = 'binder'
+
+
+    class PartnerImporter(Component):
+        _name = 'magento.partner.importer'
+        _inherit = 'magento.importer'  # parent component omitted for brevity
+        _apply_on = ['magento.res.partner']
+        _usage = 'record.importer'
+
+        def run(self, external_id):
+            # get the components we need for the sync
+
+            # this one knows how to speak to magento
+            backend_adapter = self.component(usage='backend.adapter')
+            # this one knows how to convert magento data to odoo data
+            mapper = self.component(usage='import.mapper')
+            # this one knows how to link magento/odoo records
+            binder = self.component(usage='binder')
+
+            # read external data from magento
+            external_data = backend_adapter.read(external_id)
+            # convert to odoo data
+            internal_data = mapper.map_record(external_data).values()
+            # find if the magento id already exists in odoo
+            binding = binder.to_internal(external_id)
+            if binding:
+                # if yes, we update it
+                binding.write(internal_data)
+            else:
+                # or we create it
+                binding = self.model.create(internal_data)
+            # finally, we bind both, so the next time we import
+            # the record, we'll update the same record instead of
+            # creating a new one
+            binder.bind(external_id, binding)
+
+
+Ref: :ref:`api-component`

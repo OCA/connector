@@ -87,58 +87,33 @@
   <ul class="dropdown-menu globaltoc"
       role="menu"
       aria-labelledby="dLabelGlobalToc"><ul>
-<li class="toctree-l1"><a class="reference internal" href="project/contribute.html">Contribuer</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="project/contribute.html#want-to-start-a-new-connector">Démarrer un nouveau connecteur</a></li>
-<li class="toctree-l2"><a class="reference internal" href="project/contribute.html#creating-or-maintaining-a-translation-of-this-doc">Créer ou maintenir une traduction de cette doc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guides/migration_guide.html">Migration Guide to the new Connector API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="guides/migration_guide.html#migrating-jobs">Migrating Jobs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/migration_guide.html#migrating-events">Migrating Events</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/migration_guide.html#migrating-components">Migrating Components</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="project/contributors.html">Contributeurs</a></li>
-<li class="toctree-l1"><a class="reference internal" href="project/contributors.html#financial-contributors">Contributeurs financiers</a></li>
-<li class="toctree-l1"><a class="reference internal" href="project/license.html">Licence</a></li>
-<li class="toctree-l1"><a class="reference internal" href="project/changes.html">Changements</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="project/changes.html#future">Future (?)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="project/changes.html#id2">8.0.3.3.0 (2016-02-29)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="project/changes.html#id3">3.2.0 (2015-09-10)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="project/changes.html#id4">3.1.0 (2015-05-15)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="project/changes.html#id5">3.0.0 (2015-04-01)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="project/changes.html#id6">2.2.0 (2014-05-26)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="project/changes.html#id7">2.1.1 (2014-02-06)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="project/changes.html#warning-breaks-compatibility">2.1.0 (2014-01-15 - attention : rupture de compatibilité)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="project/changes.html#id8">2.0.1 (2013-09-12)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="project/changes.html#id9">2.0.0</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="project/roadmap.html">Roadmap</a></li>
-</ul>
-<ul>
 <li class="toctree-l1"><a class="reference internal" href="guides/code_overview.html">Survol du code</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="guides/code_overview.html#backends">Backends</a></li>
-<li class="toctree-l2"><a class="reference internal" href="guides/code_overview.html#bindings">Bindings (Liaisons)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="guides/code_overview.html#session">Session</a></li>
-<li class="toctree-l2"><a class="reference internal" href="guides/code_overview.html#events">Événements</a></li>
-<li class="toctree-l2"><a class="reference internal" href="guides/code_overview.html#jobs">Jobs</a></li>
-<li class="toctree-l2"><a class="reference internal" href="guides/code_overview.html#connectorunit">ConnectorUnit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/code_overview.html#trigger-and-listen-an-event">Trigger and listen an event</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/code_overview.html#delay-an-asynchronous-job">Delay an Asynchronous Job</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/code_overview.html#work-with-components">Work with components</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="guides/concepts.html">Concepts du connecteur</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="guides/concepts.html#events">Événements</a></li>
 <li class="toctree-l2"><a class="reference internal" href="guides/concepts.html#jobs-queue">Queue de jobs</a></li>
-<li class="toctree-l2"><a class="reference internal" href="guides/concepts.html#session">Session</a></li>
 <li class="toctree-l2"><a class="reference internal" href="guides/concepts.html#backend">Backend</a></li>
-<li class="toctree-l2"><a class="reference internal" href="guides/concepts.html#environment">Environnement</a></li>
-<li class="toctree-l2"><a class="reference internal" href="guides/concepts.html#connectorunit">ConnectorUnit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/concepts.html#workcontext">WorkContext</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/concepts.html#component">Component</a></li>
 <li class="toctree-l2"><a class="reference internal" href="guides/concepts.html#bindings">Bindings (Liaisons)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="guides/concepts.html#checkpoint">Point de contrôle</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="guides/bootstrap_connector.html">Amorcer la création un nouveau connecteur</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="guides/bootstrap_connector.html#odoo-manifest">Odoo Manifest</a></li>
-<li class="toctree-l2"><a class="reference internal" href="guides/bootstrap_connector.html#declare-the-backends">Déclaration des backends</a></li>
 <li class="toctree-l2"><a class="reference internal" href="guides/bootstrap_connector.html#backend-model">Modèle du backend</a></li>
 <li class="toctree-l2"><a class="reference internal" href="guides/bootstrap_connector.html#abstract-binding">Binding abstrait</a></li>
-<li class="toctree-l2"><a class="reference internal" href="guides/bootstrap_connector.html#environment">Environnement</a></li>
-<li class="toctree-l2"><a class="reference internal" href="guides/bootstrap_connector.html#checkpoints">Points de contrôle</a></li>
-<li class="toctree-l2"><a class="reference internal" href="guides/bootstrap_connector.html#connectorunit-classes">Classes ConnectorUnit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/bootstrap_connector.html#components">Components</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="guides/jobrunner.html">Configuring channels and the job runner</a><ul>
@@ -150,37 +125,60 @@
 <li class="toctree-l2"><a class="reference internal" href="guides/jobrunner.html#how-to-configure-channels">How to configure Channels?</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="guides/multiprocessing.html">Use the connector with multiprocessing workers</a></li>
 </ul>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="api/api_connector.html">Connecteur</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api/api_session.html">Session</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api/api_backend.html">Backend</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api/api_backend.html#module-connector.backend_model">Modèles du backend</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api/api_event.html">Événement</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api/api_binder.html">Binder (Liant)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api/api_mapper.html">Mappeur</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="api/api_mapper.html#mappers">Mappeurs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/api_components.html">Components</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/api_components.html#module-connector.components.core">Core Components</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/api_components.html#module-connector.components.binder">Connector Components</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/api_components.html#module-odoo.addons.component.models.collection">Components Collection Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/api_components.html#module-odoo.addons.component.exception">Components Exceptions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/api_components.html#components-internals">Components Internals</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="api/api_synchronizer.html">Synchroniseur</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api/api_backend_adapter.html">Adaptateur de backend</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/api_backend.html">Modèles</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/api_backend.html#backend-model">Backend Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/api_backend.html#binding-model">Binding Model</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api/api_event.html">Events</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/api_event.html#module-odoo.addons.component_event.components.event">Components</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/api_event.html#module-odoo.addons.component_event.models.base">Odoo Models Extensions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/api_event.html#module-odoo.addons.component_event.core">Internals</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="api/api_queue.html">Queue</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="api/api_queue.html#module-connector.queue.job">Job</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api/api_queue.html#module-connector.queue.worker">Worker</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api/api_queue.html#id5">Queue</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api/api_queue.html#module-connector.queue.model">Modèles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/api_queue.html#module-odoo.addons.queue_job.job">Job</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/api_queue.html#module-odoo.addons.queue_job.models.base">Modèles</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="api/api_exception.html">Exceptions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="api/api_channels.html">Channels</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api/api_runner.html">Job Runner</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="api/api_runner.html#what-is-the-job-runner">What is the job runner?</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api/api_runner.html#how-does-it-work">How does it work?</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api/api_runner.html#how-to-use-it">How to use it?</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api/api_runner.html#caveat">Caveat</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="project/contribute.html">Contribuer</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="project/contribute.html#want-to-start-a-new-connector">Démarrer un nouveau connecteur</a></li>
+<li class="toctree-l2"><a class="reference internal" href="project/contribute.html#creating-or-maintaining-a-translation-of-this-doc">Créer ou maintenir une traduction de cette doc</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="project/contributors.html">Contributeurs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="project/contributors.html#financial-contributors">Contributeurs financiers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="project/license.html">Licence</a></li>
+<li class="toctree-l1"><a class="reference internal" href="project/changes.html">Changements</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="project/changes.html#future">Future (?)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="project/changes.html#id2">9.0.1.0.2 (2016-03-03)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="project/changes.html#id3">9.0.1.0.1 (2016-03-03)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="project/changes.html#id4">8.0.3.3.0 (2016-02-29)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="project/changes.html#id5">3.2.0 (2015-09-10)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="project/changes.html#id6">3.1.0 (2015-05-15)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="project/changes.html#id7">3.0.0 (2015-04-01)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="project/changes.html#id8">2.2.0 (2014-05-26)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="project/changes.html#id9">2.1.1 (2014-02-06)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="project/changes.html#warning-breaks-compatibility">2.1.0 (2014-01-15 - attention : rupture de compatibilité)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="project/changes.html#id10">2.0.1 (2013-09-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="project/changes.html#id11">2.0.0</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="project/roadmap.html">Roadmap</a></li>
 </ul>
 </ul>
 </li>
@@ -259,35 +257,231 @@
 <h2 id="_">_</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/api_connector.html#connector.connector.ConnectorEnvironment._propagate_kwargs">_propagate_kwargs (attribut connector.connector.ConnectorEnvironment)</a>
+      <li><a href="api/api_components.html#connector.components.mapper.Mapper._apply">_apply() (méthode connector.components.mapper.Mapper)</a>
 </li>
+      <li><a href="api/api_components.html#connector.components.mapper.Mapper._apply_with_options">_apply_with_options() (méthode connector.components.mapper.Mapper)</a>
+</li>
+      <li><a href="api/api_components.html#connector.components.mapper.MappingDefinition._asdict">_asdict() (méthode connector.components.mapper.MappingDefinition)</a>
+</li>
+      <li><a href="api/api_components.html#connector.components.binder.Binder._backend_field">_backend_field (attribut connector.components.binder.Binder)</a>
+</li>
+      <li><a href="api/api_components.html#connector.components.synchronizer.Synchronizer._base_backend_adapter_usage">_base_backend_adapter_usage (attribut connector.components.synchronizer.Synchronizer)</a>
+</li>
+      <li><a href="api/api_components.html#connector.components.synchronizer.Exporter._base_mapper_usage">_base_mapper_usage (attribut connector.components.synchronizer.Exporter)</a>
+
+      <ul>
+        <li><a href="api/api_components.html#connector.components.synchronizer.Importer._base_mapper_usage">(attribut connector.components.synchronizer.Importer)</a>
+</li>
+        <li><a href="api/api_components.html#connector.components.synchronizer.Synchronizer._base_mapper_usage">(attribut connector.components.synchronizer.Synchronizer)</a>
+</li>
+      </ul></li>
+      <li><a href="api/api_components.html#connector.components.mapper.Mapper._build_mapper_component">_build_mapper_component() (méthode de la classe connector.components.mapper.Mapper)</a>
+</li>
+      <li><a href="api/api_components.html#connector.components.mapper.ExportMapChild._child_mapper">_child_mapper() (méthode connector.components.mapper.ExportMapChild)</a>
+
+      <ul>
+        <li><a href="api/api_components.html#connector.components.mapper.ImportMapChild._child_mapper">(méthode connector.components.mapper.ImportMapChild)</a>
+</li>
+        <li><a href="api/api_components.html#connector.components.mapper.MapChild._child_mapper">(méthode connector.components.mapper.MapChild)</a>
+</li>
+      </ul></li>
+      <li><a href="api/api_components.html#connector.components.mapper.Mapper._complete_component_build">_complete_component_build() (méthode de la classe connector.components.mapper.Mapper)</a>
+</li>
+      <li><a href="api/api_components.html#connector.components.mapper.Mapper._direct_source_field_name">_direct_source_field_name() (méthode connector.components.mapper.Mapper)</a>
+</li>
+      <li><a href="api/api_components.html#connector.components.binder.Binder._external_field">_external_field (attribut connector.components.binder.Binder)</a>
+</li>
+      <li><a href="api/api_components.html#connector.components.mapper.MappingDefinition._fields">_fields (attribut connector.components.mapper.MappingDefinition)</a>
+</li>
+      <li><a href="api/api_components.html#connector.components.mapper.Mapper._get_map_child_component">_get_map_child_component() (méthode connector.components.mapper.Mapper)</a>
+</li>
+      <li><a href="api/api_components.html#connector.components.backend_adapter.BackendAdapter._inherit">_inherit (attribut connector.components.backend_adapter.BackendAdapter)</a>
+
+      <ul>
+        <li><a href="api/api_components.html#connector.components.backend_adapter.CRUDAdapter._inherit">(attribut connector.components.backend_adapter.CRUDAdapter)</a>
+</li>
+        <li><a href="api/api_components.html#connector.components.binder.Binder._inherit">(attribut connector.components.binder.Binder)</a>
+</li>
+        <li><a href="api/api_components.html#connector.components.listener.ConnectorListener._inherit">(attribut connector.components.listener.ConnectorListener)</a>
+</li>
+        <li><a href="api/api_components.html#connector.components.mapper.ExportMapChild._inherit">(attribut connector.components.mapper.ExportMapChild)</a>
+</li>
+        <li><a href="api/api_components.html#connector.components.mapper.ExportMapper._inherit">(attribut connector.components.mapper.ExportMapper)</a>
+</li>
+        <li><a href="api/api_components.html#connector.components.mapper.ImportMapChild._inherit">(attribut connector.components.mapper.ImportMapChild)</a>
+</li>
+        <li><a href="api/api_components.html#connector.components.mapper.ImportMapper._inherit">(attribut connector.components.mapper.ImportMapper)</a>
+</li>
+        <li><a href="api/api_components.html#connector.components.mapper.MapChild._inherit">(attribut connector.components.mapper.MapChild)</a>
+</li>
+        <li><a href="api/api_components.html#connector.components.mapper.Mapper._inherit">(attribut connector.components.mapper.Mapper)</a>
+</li>
+        <li><a href="api/api_components.html#connector.components.synchronizer.Deleter._inherit">(attribut connector.components.synchronizer.Deleter)</a>
+</li>
+        <li><a href="api/api_components.html#connector.components.synchronizer.Exporter._inherit">(attribut connector.components.synchronizer.Exporter)</a>
+</li>
+        <li><a href="api/api_components.html#connector.components.synchronizer.Importer._inherit">(attribut connector.components.synchronizer.Importer)</a>
+</li>
+        <li><a href="api/api_components.html#connector.components.synchronizer.Synchronizer._inherit">(attribut connector.components.synchronizer.Synchronizer)</a>
+</li>
+      </ul></li>
+      <li><a href="api/api_components.html#connector.components.mapper.MappingDefinition._make">_make() (méthode de la classe connector.components.mapper.MappingDefinition)</a>
+</li>
+      <li><a href="api/api_components.html#connector.components.mapper.Mapper._map_child">_map_child() (méthode connector.components.mapper.Mapper)</a>
+</li>
+      <li><a href="api/api_components.html#connector.components.mapper.ExportMapper._map_child_fallback">_map_child_fallback (attribut connector.components.mapper.ExportMapper)</a>
+
+      <ul>
+        <li><a href="api/api_components.html#connector.components.mapper.ImportMapper._map_child_fallback">(attribut connector.components.mapper.ImportMapper)</a>
+</li>
+        <li><a href="api/api_components.html#connector.components.mapper.Mapper._map_child_fallback">(attribut connector.components.mapper.Mapper)</a>
+</li>
+      </ul></li>
+      <li><a href="api/api_components.html#connector.components.mapper.ExportMapper._map_child_usage">_map_child_usage (attribut connector.components.mapper.ExportMapper)</a>
+
+      <ul>
+        <li><a href="api/api_components.html#connector.components.mapper.ImportMapper._map_child_usage">(attribut connector.components.mapper.ImportMapper)</a>
+</li>
+        <li><a href="api/api_components.html#connector.components.mapper.Mapper._map_child_usage">(attribut connector.components.mapper.Mapper)</a>
+</li>
+      </ul></li>
+      <li><a href="api/api_components.html#connector.components.mapper.Mapper._map_children">_map_children() (méthode connector.components.mapper.Mapper)</a>
+</li>
+      <li><a href="api/api_components.html#connector.components.mapper.ExportMapper._map_direct">_map_direct() (méthode connector.components.mapper.ExportMapper)</a>
+
+      <ul>
+        <li><a href="api/api_components.html#connector.components.mapper.ImportMapper._map_direct">(méthode connector.components.mapper.ImportMapper)</a>
+</li>
+        <li><a href="api/api_components.html#connector.components.mapper.Mapper._map_direct">(méthode connector.components.mapper.Mapper)</a>
+</li>
+      </ul></li>
+      <li><a href="api/api_components.html#connector.components.mapper.Mapper._map_methods">_map_methods (attribut connector.components.mapper.Mapper)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/api_components.html#connector.components.mapper.Mapper._mapping_options">_mapping_options() (méthode connector.components.mapper.Mapper)</a>
+</li>
+      <li><a href="api/api_components.html#connector.components.backend_adapter.BackendAdapter._module">_module (attribut connector.components.backend_adapter.BackendAdapter)</a>
+
+      <ul>
+        <li><a href="api/api_components.html#connector.components.backend_adapter.CRUDAdapter._module">(attribut connector.components.backend_adapter.CRUDAdapter)</a>
+</li>
+        <li><a href="api/api_components.html#connector.components.binder.Binder._module">(attribut connector.components.binder.Binder)</a>
+</li>
+        <li><a href="api/api_components.html#connector.components.core.BaseConnectorComponent._module">(attribut connector.components.core.BaseConnectorComponent)</a>
+</li>
+        <li><a href="api/api_components.html#connector.components.listener.ConnectorListener._module">(attribut connector.components.listener.ConnectorListener)</a>
+</li>
+        <li><a href="api/api_components.html#connector.components.mapper.ExportMapChild._module">(attribut connector.components.mapper.ExportMapChild)</a>
+</li>
+        <li><a href="api/api_components.html#connector.components.mapper.ExportMapper._module">(attribut connector.components.mapper.ExportMapper)</a>
+</li>
+        <li><a href="api/api_components.html#connector.components.mapper.ImportMapChild._module">(attribut connector.components.mapper.ImportMapChild)</a>
+</li>
+        <li><a href="api/api_components.html#connector.components.mapper.ImportMapper._module">(attribut connector.components.mapper.ImportMapper)</a>
+</li>
+        <li><a href="api/api_components.html#connector.components.mapper.MapChild._module">(attribut connector.components.mapper.MapChild)</a>
+</li>
+        <li><a href="api/api_components.html#connector.components.mapper.Mapper._module">(attribut connector.components.mapper.Mapper)</a>
+</li>
+        <li><a href="api/api_components.html#connector.components.synchronizer.Deleter._module">(attribut connector.components.synchronizer.Deleter)</a>
+</li>
+        <li><a href="api/api_components.html#connector.components.synchronizer.Exporter._module">(attribut connector.components.synchronizer.Exporter)</a>
+</li>
+        <li><a href="api/api_components.html#connector.components.synchronizer.Importer._module">(attribut connector.components.synchronizer.Importer)</a>
+</li>
+        <li><a href="api/api_components.html#connector.components.synchronizer.Synchronizer._module">(attribut connector.components.synchronizer.Synchronizer)</a>
+</li>
+      </ul></li>
+      <li><a href="api/api_components.html#connector.components.backend_adapter.BackendAdapter._name">_name (attribut connector.components.backend_adapter.BackendAdapter)</a>
+
+      <ul>
+        <li><a href="api/api_components.html#connector.components.backend_adapter.CRUDAdapter._name">(attribut connector.components.backend_adapter.CRUDAdapter)</a>
+</li>
+        <li><a href="api/api_components.html#connector.components.binder.Binder._name">(attribut connector.components.binder.Binder)</a>
+</li>
+        <li><a href="api/api_components.html#connector.components.core.BaseConnectorComponent._name">(attribut connector.components.core.BaseConnectorComponent)</a>
+</li>
+        <li><a href="api/api_components.html#connector.components.listener.ConnectorListener._name">(attribut connector.components.listener.ConnectorListener)</a>
+</li>
+        <li><a href="api/api_components.html#connector.components.mapper.ExportMapChild._name">(attribut connector.components.mapper.ExportMapChild)</a>
+</li>
+        <li><a href="api/api_components.html#connector.components.mapper.ExportMapper._name">(attribut connector.components.mapper.ExportMapper)</a>
+</li>
+        <li><a href="api/api_components.html#connector.components.mapper.ImportMapChild._name">(attribut connector.components.mapper.ImportMapChild)</a>
+</li>
+        <li><a href="api/api_components.html#connector.components.mapper.ImportMapper._name">(attribut connector.components.mapper.ImportMapper)</a>
+</li>
+        <li><a href="api/api_components.html#connector.components.mapper.MapChild._name">(attribut connector.components.mapper.MapChild)</a>
+</li>
+        <li><a href="api/api_components.html#connector.components.mapper.Mapper._name">(attribut connector.components.mapper.Mapper)</a>
+</li>
+        <li><a href="api/api_components.html#connector.components.synchronizer.Deleter._name">(attribut connector.components.synchronizer.Deleter)</a>
+</li>
+        <li><a href="api/api_components.html#connector.components.synchronizer.Exporter._name">(attribut connector.components.synchronizer.Exporter)</a>
+</li>
+        <li><a href="api/api_components.html#connector.components.synchronizer.Importer._name">(attribut connector.components.synchronizer.Importer)</a>
+</li>
+        <li><a href="api/api_components.html#connector.components.synchronizer.Synchronizer._name">(attribut connector.components.synchronizer.Synchronizer)</a>
+</li>
+      </ul></li>
+      <li><a href="api/api_components.html#connector.components.binder.Binder._odoo_field">_odoo_field (attribut connector.components.binder.Binder)</a>
+</li>
+      <li><a href="api/api_components.html#connector.components.mapper.MappingDefinition._replace">_replace() (méthode connector.components.mapper.MappingDefinition)</a>
+</li>
+      <li><a href="api/api_components.html#connector.components.binder.Binder._sync_date_field">_sync_date_field (attribut connector.components.binder.Binder)</a>
+</li>
+      <li><a href="api/api_components.html#connector.components.backend_adapter.BackendAdapter._usage">_usage (attribut connector.components.backend_adapter.BackendAdapter)</a>
+
+      <ul>
+        <li><a href="api/api_components.html#connector.components.backend_adapter.CRUDAdapter._usage">(attribut connector.components.backend_adapter.CRUDAdapter)</a>
+</li>
+        <li><a href="api/api_components.html#connector.components.binder.Binder._usage">(attribut connector.components.binder.Binder)</a>
+</li>
+        <li><a href="api/api_components.html#connector.components.mapper.ExportMapChild._usage">(attribut connector.components.mapper.ExportMapChild)</a>
+</li>
+        <li><a href="api/api_components.html#connector.components.mapper.ExportMapper._usage">(attribut connector.components.mapper.ExportMapper)</a>
+</li>
+        <li><a href="api/api_components.html#connector.components.mapper.ImportMapChild._usage">(attribut connector.components.mapper.ImportMapChild)</a>
+</li>
+        <li><a href="api/api_components.html#connector.components.mapper.ImportMapper._usage">(attribut connector.components.mapper.ImportMapper)</a>
+</li>
+        <li><a href="api/api_components.html#connector.components.mapper.Mapper._usage">(attribut connector.components.mapper.Mapper)</a>
+</li>
+        <li><a href="api/api_components.html#connector.components.synchronizer.Deleter._usage">(attribut connector.components.synchronizer.Deleter)</a>
+</li>
+        <li><a href="api/api_components.html#connector.components.synchronizer.Exporter._usage">(attribut connector.components.synchronizer.Exporter)</a>
+</li>
+        <li><a href="api/api_components.html#connector.components.synchronizer.Importer._usage">(attribut connector.components.synchronizer.Importer)</a>
+</li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
 <h2 id="A">A</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/api_queue.html#connector.queue.model.QueueJob.active">active (attribut connector.queue.model.QueueJob)</a>
+      <li><a href="api/api_components.html#odoo.addons.component.core.AbstractComponent">AbstractComponent (classe dans odoo.addons.component.core)</a>
 </li>
-      <li><a href="api/api_channels.html#connector.jobrunner.channels.ChannelQueue.add">add() (méthode connector.jobrunner.channels.ChannelQueue)</a>
+      <li><a href="api/api_channels.html#odoo.addons.queue_job.jobrunner.channels.ChannelQueue.add">add() (méthode odoo.addons.queue_job.jobrunner.channels.ChannelQueue)</a>
 
       <ul>
-        <li><a href="api/api_channels.html#connector.jobrunner.channels.PriorityQueue.add">(méthode connector.jobrunner.channels.PriorityQueue)</a>
+        <li><a href="api/api_channels.html#odoo.addons.queue_job.jobrunner.channels.PriorityQueue.add">(méthode odoo.addons.queue_job.jobrunner.channels.PriorityQueue)</a>
 </li>
       </ul></li>
-      <li><a href="api/api_connector.html#connector.connector.ConnectorUnit.advisory_lock_or_retry">advisory_lock_or_retry() (méthode connector.connector.ConnectorUnit)</a>
+      <li><a href="api/api_components.html#connector.components.core.BaseConnectorComponent.advisory_lock_or_retry">advisory_lock_or_retry() (méthode connector.components.core.BaseConnectorComponent)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/api_queue.html#connector.queue.job.Job.args">args (attribut connector.queue.job.Job)</a>
+      <li><a href="api/api_components.html#odoo.addons.component.core.MetaComponent.apply_on_models">apply_on_models (attribut odoo.addons.component.core.MetaComponent)</a>
 </li>
-      <li><a href="api/api_queue.html#connector.queue.model.QueueWorker.assign_jobs">assign_jobs() (méthode connector.queue.model.QueueWorker)</a>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.job.Job.args">args (attribut odoo.addons.queue_job.job.Job)</a>
+
+      <ul>
+        <li><a href="api/api_queue.html#odoo.addons.queue_job.models.queue_job.QueueJob.args">(attribut odoo.addons.queue_job.models.queue_job.QueueJob)</a>
 </li>
-      <li><a href="api/api_queue.html#connector.queue.model.QueueWorker.assign_then_enqueue">assign_then_enqueue() (méthode connector.queue.model.QueueWorker)</a>
-</li>
-      <li><a href="api/api_queue.html#connector.queue.model.QueueJob.autovacuum">autovacuum() (méthode connector.queue.model.QueueJob)</a>
-</li>
-      <li><a href="api/api_queue.html#connector.queue.worker.WorkerWatcher.available_db_names">available_db_names() (méthode statique connector.queue.worker.WorkerWatcher)</a>
+      </ul></li>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.models.queue_job.QueueJob.autovacuum">autovacuum() (méthode odoo.addons.queue_job.models.queue_job.QueueJob)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -295,31 +489,33 @@
 <h2 id="B">B</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/api_connector.html#connector.connector.ConnectorEnvironment.backend">backend (attribut connector.connector.ConnectorEnvironment)</a>
+      <li><a href="api/api_components.html#connector.components.synchronizer.Synchronizer.backend_adapter">backend_adapter (attribut connector.components.synchronizer.Synchronizer)</a>
 </li>
-      <li><a href="api/api_backend.html#connector.backend.Backend">Backend (classe dans connector.backend)</a>
+      <li><a href="api/api_components.html#connector.components.core.BaseConnectorComponent.backend_record">backend_record (attribut connector.components.core.BaseConnectorComponent)</a>
 </li>
-      <li><a href="api/api_synchronizer.html#connector.unit.synchronizer.Synchronizer.backend_adapter">backend_adapter (attribut connector.unit.synchronizer.Synchronizer)</a>
+      <li><a href="api/api_components.html#connector.components.backend_adapter.BackendAdapter">BackendAdapter (classe dans connector.components.backend_adapter)</a>
 </li>
-      <li><a href="api/api_connector.html#connector.connector.ConnectorEnvironment.backend_record">backend_record (attribut connector.connector.ConnectorEnvironment)</a>
+      <li><a href="api/api_event.html#odoo.addons.component_event.models.base.Base">Base (classe dans odoo.addons.component_event.models.base)</a>
+
+      <ul>
+        <li><a href="api/api_queue.html#odoo.addons.queue_job.models.base.Base">(classe dans odoo.addons.queue_job.models.base)</a>
 </li>
-      <li><a href="api/api_mapper.html#connector.unit.mapper.backend_to_m2o">backend_to_m2o() (dans le module connector.unit.mapper)</a>
-</li>
-      <li><a href="api/api_backend_adapter.html#connector.unit.backend_adapter.BackendAdapter">BackendAdapter (classe dans connector.unit.backend_adapter)</a>
+      </ul></li>
+      <li><a href="api/api_components.html#connector.components.core.BaseConnectorComponent">BaseConnectorComponent (classe dans connector.components.core)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/api_connector.html#connector.connector.Binder.bind">bind() (méthode connector.connector.Binder)</a>
+      <li><a href="api/api_components.html#connector.components.binder.Binder.bind">bind() (méthode connector.components.binder.Binder)</a>
 </li>
-      <li><a href="api/api_synchronizer.html#connector.unit.synchronizer.Synchronizer.binder">binder (attribut connector.unit.synchronizer.Synchronizer)</a>
+      <li><a href="api/api_components.html#connector.components.synchronizer.Synchronizer.binder">binder (attribut connector.components.synchronizer.Synchronizer)</a>
 </li>
-      <li><a href="api/api_connector.html#connector.connector.Binder">Binder (classe dans connector.connector)</a>
+      <li><a href="api/api_components.html#connector.components.binder.Binder">Binder (classe dans connector.components.binder)</a>
 </li>
-      <li><a href="api/api_connector.html#connector.connector.ConnectorUnit.binder_for">binder_for() (méthode connector.connector.ConnectorUnit)</a>
+      <li><a href="api/api_components.html#connector.components.core.BaseConnectorComponent.binder_for">binder_for() (méthode connector.components.core.BaseConnectorComponent)</a>
 </li>
-      <li><a href="api/api_session.html#connector.session.ConnectorSession.browse">browse() (méthode connector.session.ConnectorSession)</a>
+      <li><a href="api/api_components.html#odoo.addons.component.builder.ComponentBuilder.build_registry">build_registry() (méthode odoo.addons.component.builder.ComponentBuilder)</a>
 </li>
-      <li><a href="api/api_queue.html#connector.queue.model.QueueJob.button_done">button_done() (méthode connector.queue.model.QueueJob)</a>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.models.queue_job.QueueJob.button_done">button_done() (méthode odoo.addons.queue_job.models.queue_job.QueueJob)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -327,121 +523,113 @@
 <h2 id="C">C</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/api_queue.html#connector.queue.job.Job.cancel">cancel() (méthode connector.queue.job.Job)</a>
+      <li><a href="api/api_components.html#connector.components.mapper.MappingDefinition.changed_by">changed_by (attribut connector.components.mapper.MappingDefinition)</a>
 </li>
-      <li><a href="api/api_queue.html#connector.queue.job.Job.canceled">canceled (attribut connector.queue.job.Job)</a>
+      <li><a href="api/api_components.html#connector.components.mapper.changed_by">changed_by() (dans le module connector.components.mapper)</a>
 </li>
-      <li><a href="api/api_session.html#connector.session.ConnectorSession.change_context">change_context() (méthode connector.session.ConnectorSession)</a>
+      <li><a href="api/api_components.html#connector.components.mapper.Mapper.changed_by_fields">changed_by_fields() (méthode connector.components.mapper.Mapper)</a>
 </li>
-      <li><a href="api/api_session.html#connector.session.ConnectorSession.change_user">change_user() (méthode connector.session.ConnectorSession)</a>
-</li>
-      <li><a href="api/api_mapper.html#connector.unit.mapper.MappingDefinition.changed_by">changed_by (attribut connector.unit.mapper.MappingDefinition)</a>
-</li>
-      <li><a href="api/api_mapper.html#connector.unit.mapper.changed_by">changed_by() (dans le module connector.unit.mapper)</a>
-</li>
-      <li><a href="api/api_queue.html#connector.queue.model.JobFunction.channel">channel (attribut connector.queue.model.JobFunction)</a>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.models.queue_job.JobFunction.channel">channel (attribut odoo.addons.queue_job.models.queue_job.JobFunction)</a>
 
       <ul>
-        <li><a href="api/api_queue.html#connector.queue.model.QueueJob.channel">(attribut connector.queue.model.QueueJob)</a>
+        <li><a href="api/api_queue.html#odoo.addons.queue_job.models.queue_job.QueueJob.channel">(attribut odoo.addons.queue_job.models.queue_job.QueueJob)</a>
 </li>
       </ul></li>
-      <li><a href="api/api_channels.html#connector.jobrunner.channels.Channel">Channel (classe dans connector.jobrunner.channels)</a>, <a href="guides/jobrunner.html#connector.jobrunner.channels.Channel">[1]</a>
+      <li><a href="api/api_channels.html#odoo.addons.queue_job.jobrunner.channels.Channel">Channel (classe dans odoo.addons.queue_job.jobrunner.channels)</a>
 </li>
-      <li><a href="api/api_queue.html#connector.queue.model.JobFunction.channel_id">channel_id (attribut connector.queue.model.JobFunction)</a>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.models.queue_job.channel_func_name">channel_func_name() (dans le module odoo.addons.queue_job.models.queue_job)</a>
 </li>
-      <li><a href="api/api_channels.html#connector.jobrunner.channels.ChannelJob">ChannelJob (classe dans connector.jobrunner.channels)</a>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.models.queue_job.JobFunction.channel_id">channel_id (attribut odoo.addons.queue_job.models.queue_job.JobFunction)</a>
 </li>
-      <li><a href="api/api_channels.html#connector.jobrunner.channels.ChannelManager">ChannelManager (classe dans connector.jobrunner.channels)</a>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.models.queue_job.QueueJob.channel_method_name">channel_method_name (attribut odoo.addons.queue_job.models.queue_job.QueueJob)</a>
 </li>
-      <li><a href="api/api_exception.html#connector.exception.ChannelNotFound">ChannelNotFound</a>
+      <li><a href="api/api_channels.html#odoo.addons.queue_job.jobrunner.channels.ChannelJob">ChannelJob (classe dans odoo.addons.queue_job.jobrunner.channels)</a>
 </li>
-      <li><a href="api/api_channels.html#connector.jobrunner.channels.ChannelQueue">ChannelQueue (classe dans connector.jobrunner.channels)</a>
+      <li><a href="api/api_channels.html#odoo.addons.queue_job.jobrunner.channels.ChannelManager">ChannelManager (classe dans odoo.addons.queue_job.jobrunner.channels)</a>
 </li>
-      <li><a href="api/api_queue.html#connector.queue.worker.WorkerWatcher.check_alive">check_alive() (méthode connector.queue.worker.WorkerWatcher)</a>
+      <li><a href="api/api_channels.html#odoo.addons.queue_job.jobrunner.channels.ChannelQueue">ChannelQueue (classe dans odoo.addons.queue_job.jobrunner.channels)</a>
 </li>
-      <li><a href="api/api_mapper.html#connector.unit.mapper.Mapper.children">children (attribut connector.unit.mapper.Mapper)</a>
+      <li><a href="api/api_components.html#connector.components.mapper.Mapper.children">children (attribut connector.components.mapper.Mapper)</a>
 </li>
-      <li><a href="api/api_runner.html#connector.jobrunner.runner.Database.close">close() (méthode connector.jobrunner.runner.Database)</a>
+      <li><a href="api/api_channels.html#odoo.addons.queue_job.jobrunner.channels.ChannelJob.cmp_no_eta">cmp_no_eta() (méthode odoo.addons.queue_job.jobrunner.channels.ChannelJob)</a>
+</li>
+      <li><a href="api/api_event.html#odoo.addons.component_event.components.event.EventCollecter.collect_events">collect_events() (méthode odoo.addons.component_event.components.event.EventCollecter)</a>
+</li>
+      <li><a href="api/api_event.html#odoo.addons.component_event.components.event.CollectedEvents">CollectedEvents (classe dans odoo.addons.component_event.components.event)</a>
+</li>
+      <li><a href="api/api_components.html#odoo.addons.component.core.AbstractComponent.collection">collection (attribut odoo.addons.component.core.AbstractComponent)</a>
 
       <ul>
-        <li><a href="api/api_session.html#connector.session.ConnectorSession.close">(méthode connector.session.ConnectorSession)</a>
+        <li><a href="api/api_components.html#odoo.addons.component.core.WorkContext.collection">(attribut odoo.addons.component.core.WorkContext)</a>
+</li>
+        <li><a href="api/api_event.html#odoo.addons.component_event.core.EventWorkContext.collection">(attribut odoo.addons.component_event.core.EventWorkContext)</a>
 </li>
       </ul></li>
-      <li><a href="api/api_runner.html#connector.jobrunner.runner.ConnectorRunner.close_databases">close_databases() (méthode connector.jobrunner.runner.ConnectorRunner)</a>
+      <li><a href="api/api_components.html#odoo.addons.component.models.collection.Collection">Collection (classe dans odoo.addons.component.models.collection)</a>
 </li>
-      <li><a href="api/api_session.html#connector.session.ConnectorSession.commit">commit() (méthode connector.session.ConnectorSession)</a>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.models.queue_job.QueueJob.company_id">company_id (attribut odoo.addons.queue_job.models.queue_job.QueueJob)</a>
 </li>
-      <li><a href="api/api_queue.html#connector.queue.model.QueueJob.company_id">company_id (attribut connector.queue.model.QueueJob)</a>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.models.queue_job.JobChannel.complete_name">complete_name (attribut odoo.addons.queue_job.models.queue_job.JobChannel)</a>
 </li>
-      <li><a href="api/api_queue.html#connector.queue.model.JobChannel.complete_name">complete_name (attribut connector.queue.model.JobChannel)</a>
+      <li><a href="api/api_components.html#odoo.addons.component.core.Component">Component (classe dans odoo.addons.component.core)</a>
 </li>
-      <li><a href="api/api_channels.html#connector.jobrunner.channels.Channel.configure">configure() (méthode connector.jobrunner.channels.Channel)</a>
+      <li><a href="api/api_components.html#odoo.addons.component.core.AbstractComponent.component">component() (méthode odoo.addons.component.core.AbstractComponent)</a>
+
+      <ul>
+        <li><a href="api/api_components.html#odoo.addons.component.core.WorkContext.component">(méthode odoo.addons.component.core.WorkContext)</a>
 </li>
-      <li><a href="api/api_backend.html#module-connector.backend">connector.backend (module)</a>
+        <li><a href="api/api_event.html#odoo.addons.component_event.core.EventWorkContext.component">(méthode odoo.addons.component_event.core.EventWorkContext)</a>
 </li>
-      <li><a href="api/api_backend.html#module-connector.backend_model">connector.backend_model (module)</a>
-</li>
-      <li><a href="api/api_connector.html#module-connector.connector">connector.connector (module)</a>
-</li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/api_event.html#module-connector.event">connector.event (module)</a>
+      <li><a href="api/api_components.html#odoo.addons.component.core.AbstractComponent.component_by_name">component_by_name() (méthode odoo.addons.component.core.AbstractComponent)</a>
+
+      <ul>
+        <li><a href="api/api_components.html#odoo.addons.component.core.WorkContext.component_by_name">(méthode odoo.addons.component.core.WorkContext)</a>
+</li>
+        <li><a href="api/api_event.html#odoo.addons.component_event.core.EventWorkContext.component_by_name">(méthode odoo.addons.component_event.core.EventWorkContext)</a>
+</li>
+      </ul></li>
+      <li><a href="api/api_components.html#odoo.addons.component.builder.ComponentBuilder">ComponentBuilder (classe dans odoo.addons.component.builder)</a>
+</li>
+      <li><a href="api/api_components.html#odoo.addons.component.core.ComponentDatabases">ComponentDatabases (classe dans odoo.addons.component.core)</a>
+</li>
+      <li><a href="api/api_components.html#odoo.addons.component.exception.ComponentException">ComponentException</a>
+</li>
+      <li><a href="api/api_components.html#odoo.addons.component.core.ComponentRegistry">ComponentRegistry (classe dans odoo.addons.component.core)</a>
+</li>
+      <li><a href="api/api_channels.html#odoo.addons.queue_job.jobrunner.channels.Channel.configure">configure() (méthode odoo.addons.queue_job.jobrunner.channels.Channel)</a>
+</li>
+      <li><a href="api/api_components.html#module-connector.components.backend_adapter">connector.components.backend_adapter (module)</a>
+</li>
+      <li><a href="api/api_components.html#module-connector.components.binder">connector.components.binder (module)</a>
+</li>
+      <li><a href="api/api_components.html#module-connector.components.core">connector.components.core (module)</a>
+</li>
+      <li><a href="api/api_components.html#module-connector.components.listener">connector.components.listener (module)</a>
+</li>
+      <li><a href="api/api_components.html#module-connector.components.mapper">connector.components.mapper (module)</a>
+</li>
+      <li><a href="api/api_components.html#module-connector.components.synchronizer">connector.components.synchronizer (module)</a>
 </li>
       <li><a href="api/api_exception.html#module-connector.exception">connector.exception (module)</a>
 </li>
-      <li><a href="api/api_channels.html#module-connector.jobrunner.channels">connector.jobrunner.channels (module)</a>
-</li>
-      <li><a href="api/api_runner.html#module-connector.jobrunner.runner">connector.jobrunner.runner (module)</a>, <a href="guides/jobrunner.html#module-connector.jobrunner.runner">[1]</a>
-</li>
-      <li><a href="api/api_queue.html#module-connector.queue.job">connector.queue.job (module)</a>
-</li>
-      <li><a href="api/api_queue.html#module-connector.queue.model">connector.queue.model (module)</a>
-</li>
-      <li><a href="api/api_queue.html#module-connector.queue.queue">connector.queue.queue (module)</a>
-</li>
-      <li><a href="api/api_queue.html#module-connector.queue.worker">connector.queue.worker (module)</a>
-</li>
-      <li><a href="api/api_session.html#module-connector.session">connector.session (module)</a>
-</li>
-      <li><a href="api/api_backend_adapter.html#module-connector.unit.backend_adapter">connector.unit.backend_adapter (module)</a>
-</li>
-      <li><a href="api/api_mapper.html#module-connector.unit.mapper">connector.unit.mapper (module)</a>
-</li>
-      <li><a href="api/api_synchronizer.html#module-connector.unit.synchronizer">connector.unit.synchronizer (module)</a>
-</li>
       <li><a href="api/api_backend.html#connector.backend_model.ConnectorBackend">ConnectorBackend (classe dans connector.backend_model)</a>
-</li>
-      <li><a href="api/api_connector.html#connector.connector.ConnectorEnvironment">ConnectorEnvironment (classe dans connector.connector)</a>
 </li>
       <li><a href="api/api_exception.html#connector.exception.ConnectorException">ConnectorException</a>
 </li>
-      <li><a href="api/api_runner.html#connector.jobrunner.runner.ConnectorRunner">ConnectorRunner (classe dans connector.jobrunner.runner)</a>
+      <li><a href="api/api_components.html#connector.components.listener.ConnectorListener">ConnectorListener (classe dans connector.components.listener)</a>
 </li>
-      <li><a href="api/api_session.html#connector.session.ConnectorSession">ConnectorSession (classe dans connector.session)</a>
+      <li><a href="api/api_components.html#connector.components.mapper.convert">convert() (dans le module connector.components.mapper)</a>
 </li>
-      <li><a href="api/api_session.html#connector.session.ConnectorSessionHandler">ConnectorSessionHandler (classe dans connector.session)</a>
-</li>
-      <li><a href="api/api_connector.html#connector.connector.ConnectorUnit">ConnectorUnit (classe dans connector.connector)</a>
-</li>
-      <li><a href="api/api_session.html#connector.session.ConnectorSession.context">context (attribut connector.session.ConnectorSession)</a>, <a href="api/api_session.html#connector.session.ConnectorSession.context">[1]</a>
+      <li><a href="api/api_components.html#connector.components.backend_adapter.CRUDAdapter.create">create() (méthode connector.components.backend_adapter.CRUDAdapter)</a>
 
       <ul>
-        <li><a href="api/api_session.html#connector.session.ConnectorSessionHandler.context">(attribut connector.session.ConnectorSessionHandler)</a>
+        <li><a href="api/api_event.html#odoo.addons.component_event.models.base.Base.create">(méthode odoo.addons.component_event.models.base.Base)</a>
 </li>
       </ul></li>
-      <li><a href="api/api_mapper.html#connector.unit.mapper.convert">convert() (dans le module connector.unit.mapper)</a>
-</li>
-      <li><a href="api/api_session.html#connector.session.ConnectorSession.cr">cr (attribut connector.session.ConnectorSession)</a>, <a href="api/api_session.html#connector.session.ConnectorSession.cr">[1]</a>
-</li>
-      <li><a href="api/api_session.html#connector.session.ConnectorSession.create">create() (méthode connector.session.ConnectorSession)</a>
-
-      <ul>
-        <li><a href="api/api_backend_adapter.html#connector.unit.backend_adapter.CRUDAdapter.create">(méthode connector.unit.backend_adapter.CRUDAdapter)</a>
-</li>
-      </ul></li>
-      <li><a href="api/api_connector.html#connector.connector.ConnectorEnvironment.create_environment">create_environment() (méthode de la classe connector.connector.ConnectorEnvironment)</a>
-</li>
-      <li><a href="api/api_backend_adapter.html#connector.unit.backend_adapter.CRUDAdapter">CRUDAdapter (classe dans connector.unit.backend_adapter)</a>
+      <li><a href="api/api_components.html#connector.components.backend_adapter.CRUDAdapter">CRUDAdapter (classe dans connector.components.backend_adapter)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -449,55 +637,45 @@
 <h2 id="D">D</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/api_runner.html#connector.jobrunner.runner.Database">Database (classe dans connector.jobrunner.runner)</a>
-</li>
-      <li><a href="api/api_queue.html#connector.queue.model.QueueWorker.date_alive">date_alive (attribut connector.queue.model.QueueWorker)</a>
-</li>
-      <li><a href="api/api_queue.html#connector.queue.job.Job.date_created">date_created (attribut connector.queue.job.Job)</a>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.job.Job.date_created">date_created (attribut odoo.addons.queue_job.job.Job)</a>
 
       <ul>
-        <li><a href="api/api_queue.html#connector.queue.model.QueueJob.date_created">(attribut connector.queue.model.QueueJob)</a>
+        <li><a href="api/api_queue.html#odoo.addons.queue_job.models.queue_job.QueueJob.date_created">(attribut odoo.addons.queue_job.models.queue_job.QueueJob)</a>
 </li>
       </ul></li>
-      <li><a href="api/api_queue.html#connector.queue.job.Job.date_done">date_done (attribut connector.queue.job.Job)</a>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.job.Job.date_done">date_done (attribut odoo.addons.queue_job.job.Job)</a>
 
       <ul>
-        <li><a href="api/api_queue.html#connector.queue.model.QueueJob.date_done">(attribut connector.queue.model.QueueJob)</a>
+        <li><a href="api/api_queue.html#odoo.addons.queue_job.models.queue_job.QueueJob.date_done">(attribut odoo.addons.queue_job.models.queue_job.QueueJob)</a>
 </li>
       </ul></li>
-      <li><a href="api/api_queue.html#connector.queue.job.Job.date_enqueued">date_enqueued (attribut connector.queue.job.Job)</a>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.job.Job.date_enqueued">date_enqueued (attribut odoo.addons.queue_job.job.Job)</a>
 
       <ul>
-        <li><a href="api/api_queue.html#connector.queue.model.QueueJob.date_enqueued">(attribut connector.queue.model.QueueJob)</a>
+        <li><a href="api/api_queue.html#odoo.addons.queue_job.models.queue_job.QueueJob.date_enqueued">(attribut odoo.addons.queue_job.models.queue_job.QueueJob)</a>
 </li>
       </ul></li>
-      <li><a href="api/api_queue.html#connector.queue.model.QueueWorker.date_start">date_start (attribut connector.queue.model.QueueWorker)</a>
-</li>
-      <li><a href="api/api_queue.html#connector.queue.job.Job.date_started">date_started (attribut connector.queue.job.Job)</a>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.job.Job.date_started">date_started (attribut odoo.addons.queue_job.job.Job)</a>
 
       <ul>
-        <li><a href="api/api_queue.html#connector.queue.model.QueueJob.date_started">(attribut connector.queue.model.QueueJob)</a>
+        <li><a href="api/api_queue.html#odoo.addons.queue_job.models.queue_job.QueueJob.date_started">(attribut odoo.addons.queue_job.models.queue_job.QueueJob)</a>
 </li>
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/api_session.html#connector.session.ConnectorSessionHandler.db_name">db_name (attribut connector.session.ConnectorSessionHandler)</a>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.job.Job.db_record">db_record() (méthode odoo.addons.queue_job.job.Job)</a>
 </li>
-      <li><a href="api/api_queue.html#connector.queue.job.OpenERPJobStorage.db_record">db_record() (méthode connector.queue.job.OpenERPJobStorage)</a>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.job.Job.db_record_from_uuid">db_record_from_uuid() (méthode statique odoo.addons.queue_job.job.Job)</a>
 </li>
-      <li><a href="api/api_queue.html#connector.queue.job.OpenERPJobStorage.db_record_from_uuid">db_record_from_uuid() (méthode connector.queue.job.OpenERPJobStorage)</a>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.job.DelayableRecordset">DelayableRecordset (classe dans odoo.addons.queue_job.job)</a>
 </li>
-      <li><a href="api/api_backend_adapter.html#connector.unit.backend_adapter.CRUDAdapter.delete">delete() (méthode connector.unit.backend_adapter.CRUDAdapter)</a>
+      <li><a href="api/api_components.html#connector.components.backend_adapter.CRUDAdapter.delete">delete() (méthode connector.components.backend_adapter.CRUDAdapter)</a>
 </li>
-      <li><a href="api/api_synchronizer.html#connector.unit.synchronizer.Deleter">Deleter (classe dans connector.unit.synchronizer)</a>
+      <li><a href="api/api_components.html#connector.components.synchronizer.Deleter">Deleter (classe dans connector.components.synchronizer)</a>
 </li>
-      <li><a href="api/api_synchronizer.html#connector.unit.synchronizer.DeleteSynchronizer">DeleteSynchronizer (dans le module connector.unit.synchronizer)</a>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.job.Job.description">description (attribut odoo.addons.queue_job.job.Job)</a>, <a href="api/api_queue.html#odoo.addons.queue_job.job.Job.description">[1]</a>
 </li>
-      <li><a href="api/api_queue.html#connector.queue.queue.JobsQueue.dequeue">dequeue() (méthode connector.queue.queue.JobsQueue)</a>
-</li>
-      <li><a href="api/api_queue.html#connector.queue.job.Job.description">description (attribut connector.queue.job.Job)</a>, <a href="api/api_queue.html#connector.queue.job.Job.description">[1]</a>
-</li>
-      <li><a href="api/api_mapper.html#connector.unit.mapper.Mapper.direct">direct (attribut connector.unit.mapper.Mapper)</a>
+      <li><a href="api/api_components.html#connector.components.mapper.Mapper.direct">direct (attribut connector.components.mapper.Mapper)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -505,57 +683,43 @@
 <h2 id="E">E</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/api_queue.html#connector.queue.job.OpenERPJobStorage.enqueue">enqueue() (méthode connector.queue.job.OpenERPJobStorage)</a>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.job.Job.enqueue">enqueue() (méthode de la classe odoo.addons.queue_job.job.Job)</a>
+</li>
+      <li><a href="api/api_components.html#odoo.addons.component.core.AbstractComponent.env">env (attribut odoo.addons.component.core.AbstractComponent)</a>
 
       <ul>
-        <li><a href="api/api_queue.html#connector.queue.queue.JobsQueue.enqueue">(méthode connector.queue.queue.JobsQueue)</a>
+        <li><a href="api/api_components.html#odoo.addons.component.core.WorkContext.env">(attribut odoo.addons.component.core.WorkContext)</a>
+</li>
+        <li><a href="api/api_event.html#odoo.addons.component_event.core.EventWorkContext.env">(attribut odoo.addons.component_event.core.EventWorkContext)</a>
 </li>
       </ul></li>
-      <li><a href="api/api_queue.html#connector.queue.worker.Worker.enqueue_job_uuid">enqueue_job_uuid() (méthode connector.queue.worker.Worker)</a>
-</li>
-      <li><a href="api/api_queue.html#connector.queue.model.QueueWorker.enqueue_jobs">enqueue_jobs() (méthode connector.queue.model.QueueWorker)</a>
-</li>
-      <li><a href="api/api_queue.html#connector.queue.job.OpenERPJobStorage.enqueue_resolve_args">enqueue_resolve_args() (méthode connector.queue.job.OpenERPJobStorage)</a>
-</li>
-      <li><a href="api/api_connector.html#connector.connector.ConnectorEnvironment.env">env (attribut connector.connector.ConnectorEnvironment)</a>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.job.Job.eta">eta (attribut odoo.addons.queue_job.job.Job)</a>, <a href="api/api_queue.html#odoo.addons.queue_job.job.Job.eta">[1]</a>
 
       <ul>
-        <li><a href="api/api_connector.html#connector.connector.ConnectorUnit.env">(attribut connector.connector.ConnectorUnit)</a>
-</li>
-        <li><a href="api/api_session.html#connector.session.ConnectorSession.env">(attribut connector.session.ConnectorSession)</a>
+        <li><a href="api/api_queue.html#odoo.addons.queue_job.models.queue_job.QueueJob.eta">(attribut odoo.addons.queue_job.models.queue_job.QueueJob)</a>
 </li>
       </ul></li>
-      <li><a href="api/api_connector.html#connector.connector.ConnectorUnit.environment">environment (attribut connector.connector.ConnectorUnit)</a>
+      <li><a href="api/api_event.html#odoo.addons.component_event.components.event.EventCollecter">EventCollecter (classe dans odoo.addons.component_event.components.event)</a>
 </li>
-      <li><a href="api/api_queue.html#connector.queue.job.Job.eta">eta (attribut connector.queue.job.Job)</a>, <a href="api/api_queue.html#connector.queue.job.Job.eta">[1]</a>
-
-      <ul>
-        <li><a href="api/api_queue.html#connector.queue.model.QueueJob.eta">(attribut connector.queue.model.QueueJob)</a>
+      <li><a href="api/api_event.html#odoo.addons.component_event.components.event.EventListener">EventListener (classe dans odoo.addons.component_event.components.event)</a>
 </li>
-      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/api_event.html#connector.event.Event">Event (classe dans connector.event)</a>
+      <li><a href="api/api_event.html#odoo.addons.component_event.core.EventWorkContext">EventWorkContext (classe dans odoo.addons.component_event.core)</a>
 </li>
-      <li><a href="api/api_queue.html#connector.queue.job.Job.exc_info">exc_info (attribut connector.queue.job.Job)</a>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.job.Job.exc_info">exc_info (attribut odoo.addons.queue_job.job.Job)</a>
 
       <ul>
-        <li><a href="api/api_queue.html#connector.queue.model.QueueJob.exc_info">(attribut connector.queue.model.QueueJob)</a>
+        <li><a href="api/api_queue.html#odoo.addons.queue_job.models.queue_job.QueueJob.exc_info">(attribut odoo.addons.queue_job.models.queue_job.QueueJob)</a>
 </li>
       </ul></li>
-      <li><a href="api/api_queue.html#connector.queue.job.JobStorage.exists">exists() (méthode connector.queue.job.JobStorage)</a>
-
-      <ul>
-        <li><a href="api/api_queue.html#connector.queue.job.OpenERPJobStorage.exists">(méthode connector.queue.job.OpenERPJobStorage)</a>
+      <li><a href="api/api_components.html#connector.components.synchronizer.Exporter">Exporter (classe dans connector.components.synchronizer)</a>
 </li>
-      </ul></li>
-      <li><a href="api/api_synchronizer.html#connector.unit.synchronizer.Exporter">Exporter (classe dans connector.unit.synchronizer)</a>
+      <li><a href="api/api_components.html#connector.components.mapper.ExportMapChild">ExportMapChild (classe dans connector.components.mapper)</a>
 </li>
-      <li><a href="api/api_mapper.html#connector.unit.mapper.ExportMapChild">ExportMapChild (classe dans connector.unit.mapper)</a>
+      <li><a href="api/api_components.html#connector.components.mapper.ExportMapper">ExportMapper (classe dans connector.components.mapper)</a>
 </li>
-      <li><a href="api/api_mapper.html#connector.unit.mapper.ExportMapper">ExportMapper (classe dans connector.unit.mapper)</a>
-</li>
-      <li><a href="api/api_synchronizer.html#connector.unit.synchronizer.ExportSynchronizer">ExportSynchronizer (dans le module connector.unit.synchronizer)</a>
+      <li><a href="api/api_components.html#connector.components.mapper.external_to_m2o">external_to_m2o() (dans le module connector.components.mapper)</a>
 </li>
       <li><a href="api/api_backend.html#connector.backend_model.ExternalBinding">ExternalBinding (classe dans connector.backend_model)</a>
 </li>
@@ -565,91 +729,71 @@
 <h2 id="F">F</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/api_exception.html#connector.exception.FailedJobError">FailedJobError</a>
+      <li><a href="api/api_components.html#connector.components.mapper.Mapper.finalize">finalize() (méthode connector.components.mapper.Mapper)</a>
 </li>
-      <li><a href="api/api_mapper.html#connector.unit.mapper.Mapper.finalize">finalize() (méthode connector.unit.mapper.Mapper)</a>
+      <li><a href="api/api_components.html#connector.components.mapper.follow_m2o_relations">follow_m2o_relations() (dans le module connector.components.mapper)</a>
 </li>
-      <li><a href="api/api_event.html#connector.event.Event.fire">fire() (méthode connector.event.Event)</a>
-</li>
-      <li><a href="api/api_mapper.html#connector.unit.mapper.follow_m2o_relations">follow_m2o_relations() (dans le module connector.unit.mapper)</a>
-</li>
-      <li><a href="api/api_connector.html#connector.connector.MetaConnectorUnit.for_model_names">for_model_names (attribut connector.connector.MetaConnectorUnit)</a>
-</li>
-      <li><a href="api/api_mapper.html#connector.unit.mapper.ImportMapChild.format_items">format_items() (méthode connector.unit.mapper.ImportMapChild)</a>
+      <li><a href="api/api_components.html#connector.components.mapper.ImportMapChild.format_items">format_items() (méthode connector.components.mapper.ImportMapChild)</a>
 
       <ul>
-        <li><a href="api/api_mapper.html#connector.unit.mapper.MapChild.format_items">(méthode connector.unit.mapper.MapChild)</a>
+        <li><a href="api/api_components.html#connector.components.mapper.MapChild.format_items">(méthode connector.components.mapper.MapChild)</a>
 </li>
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/api_session.html#connector.session.ConnectorSession.from_env">from_env() (méthode de la classe connector.session.ConnectorSession)</a>
+      <li><a href="api/api_channels.html#odoo.addons.queue_job.jobrunner.channels.Channel.fullname">fullname (attribut odoo.addons.queue_job.jobrunner.channels.Channel)</a>
 </li>
-      <li><a href="api/api_channels.html#connector.jobrunner.channels.Channel.fullname">fullname (attribut connector.jobrunner.channels.Channel)</a>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.job.Job.func">func (attribut odoo.addons.queue_job.job.Job)</a>, <a href="api/api_queue.html#odoo.addons.queue_job.job.Job.func">[1]</a>
 </li>
-      <li><a href="api/api_queue.html#connector.queue.job.Job.func">func (attribut connector.queue.job.Job)</a>, <a href="api/api_queue.html#connector.queue.job.Job.func">[1]</a>
-
-      <ul>
-        <li><a href="api/api_queue.html#connector.queue.model.QueueJob.func">(attribut connector.queue.model.QueueJob)</a>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.models.queue_job.QueueJob.func_string">func_string (attribut odoo.addons.queue_job.models.queue_job.QueueJob)</a>
 </li>
-      </ul></li>
-      <li><a href="api/api_queue.html#connector.queue.job.Job.func_name">func_name (attribut connector.queue.job.Job)</a>
-
-      <ul>
-        <li><a href="api/api_queue.html#connector.queue.model.QueueJob.func_name">(attribut connector.queue.model.QueueJob)</a>
-</li>
-      </ul></li>
-      <li><a href="api/api_queue.html#connector.queue.job.Job.func_string">func_string (attribut connector.queue.job.Job)</a>, <a href="api/api_queue.html#connector.queue.job.Job.func_string">[1]</a>
-
-      <ul>
-        <li><a href="api/api_queue.html#connector.queue.model.QueueJob.func_string">(attribut connector.queue.model.QueueJob)</a>
-</li>
-      </ul></li>
   </ul></td>
 </tr></table>
 
 <h2 id="G">G</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/api_components.html#odoo.addons.component.core.ComponentRegistry.get">get() (méthode odoo.addons.component.core.ComponentRegistry)</a>
+</li>
       <li><a href="api/api_backend.html#connector.backend_model.ConnectorBackend.get_backend">get_backend() (méthode connector.backend_model.ConnectorBackend)</a>
 </li>
-      <li><a href="api/api_connector.html#connector.connector.ConnectorUnit.get_binder_for_model">get_binder_for_model() (méthode connector.connector.ConnectorUnit)</a>
+      <li><a href="api/api_channels.html#odoo.addons.queue_job.jobrunner.channels.ChannelManager.get_channel_by_name">get_channel_by_name() (méthode odoo.addons.queue_job.jobrunner.channels.ChannelManager)</a>
 </li>
-      <li><a href="api/api_channels.html#connector.jobrunner.channels.ChannelManager.get_channel_by_name">get_channel_by_name() (méthode connector.jobrunner.channels.ChannelManager)</a>
+      <li><a href="api/api_channels.html#odoo.addons.queue_job.jobrunner.channels.ChannelManager.get_channel_from_config">get_channel_from_config() (méthode odoo.addons.queue_job.jobrunner.channels.ChannelManager)</a>
 </li>
-      <li><a href="api/api_channels.html#connector.jobrunner.channels.ChannelManager.get_channel_from_config">get_channel_from_config() (méthode connector.jobrunner.channels.ChannelManager)</a>
+      <li><a href="api/api_components.html#connector.components.mapper.MapChild.get_item_values">get_item_values() (méthode connector.components.mapper.MapChild)</a>
 </li>
-      <li><a href="api/api_backend.html#connector.backend.Backend.get_class">get_class() (méthode connector.backend.Backend)</a>
-</li>
-      <li><a href="api/api_connector.html#connector.connector.ConnectorEnvironment.get_connector_unit">get_connector_unit() (méthode connector.connector.ConnectorEnvironment)</a>
-</li>
-      <li><a href="api/api_connector.html#connector.connector.ConnectorUnit.get_connector_unit_for_model">get_connector_unit_for_model() (méthode connector.connector.ConnectorUnit)</a>
+      <li><a href="api/api_components.html#connector.components.mapper.MapChild.get_items">get_items() (méthode connector.components.mapper.MapChild)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/api_runner.html#connector.jobrunner.runner.ConnectorRunner.get_db_names">get_db_names() (méthode connector.jobrunner.runner.ConnectorRunner)</a>
-</li>
-      <li><a href="api/api_mapper.html#connector.unit.mapper.MapChild.get_item_values">get_item_values() (méthode connector.unit.mapper.MapChild)</a>
-</li>
-      <li><a href="api/api_mapper.html#connector.unit.mapper.MapChild.get_items">get_items() (méthode connector.unit.mapper.MapChild)</a>
-</li>
-      <li><a href="api/api_channels.html#connector.jobrunner.channels.Channel.get_jobs_to_run">get_jobs_to_run() (méthode connector.jobrunner.channels.Channel)</a>
+      <li><a href="api/api_channels.html#odoo.addons.queue_job.jobrunner.channels.Channel.get_jobs_to_run">get_jobs_to_run() (méthode odoo.addons.queue_job.jobrunner.channels.Channel)</a>
 
       <ul>
-        <li><a href="api/api_channels.html#connector.jobrunner.channels.ChannelManager.get_jobs_to_run">(méthode connector.jobrunner.channels.ChannelManager)</a>
+        <li><a href="api/api_channels.html#odoo.addons.queue_job.jobrunner.channels.ChannelManager.get_jobs_to_run">(méthode odoo.addons.queue_job.jobrunner.channels.ChannelManager)</a>
 </li>
       </ul></li>
-      <li><a href="api/api_connector.html#connector.connector.get_openerp_module">get_openerp_module() (dans le module connector.connector)</a>
+      <li><a href="api/api_channels.html#odoo.addons.queue_job.jobrunner.channels.Channel.get_subchannel_by_name">get_subchannel_by_name() (méthode odoo.addons.queue_job.jobrunner.channels.Channel)</a>
 </li>
-      <li><a href="api/api_channels.html#connector.jobrunner.channels.Channel.get_subchannel_by_name">get_subchannel_by_name() (méthode connector.jobrunner.channels.Channel)</a>
+      <li><a href="api/api_channels.html#odoo.addons.queue_job.jobrunner.channels.Channel.get_wakeup_time">get_wakeup_time() (méthode odoo.addons.queue_job.jobrunner.channels.Channel)</a>
+
+      <ul>
+        <li><a href="api/api_channels.html#odoo.addons.queue_job.jobrunner.channels.ChannelManager.get_wakeup_time">(méthode odoo.addons.queue_job.jobrunner.channels.ChannelManager)</a>
 </li>
+        <li><a href="api/api_channels.html#odoo.addons.queue_job.jobrunner.channels.ChannelQueue.get_wakeup_time">(méthode odoo.addons.queue_job.jobrunner.channels.ChannelQueue)</a>
+</li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
 <h2 id="H">H</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/api_event.html#connector.event.Event.has_consumer_for">has_consumer_for() (méthode connector.event.Event)</a>
+      <li><a href="api/api_channels.html#odoo.addons.queue_job.jobrunner.channels.Channel.has_capacity">has_capacity() (méthode odoo.addons.queue_job.jobrunner.channels.Channel)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/api_event.html#odoo.addons.component_event.components.event.EventListener.has_event">has_event() (méthode de la classe odoo.addons.component_event.components.event.EventListener)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -659,61 +803,37 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/api_exception.html#connector.exception.IDMissingInBackend">IDMissingInBackend</a>
 </li>
-      <li><a href="api/api_synchronizer.html#connector.unit.synchronizer.Importer">Importer (classe dans connector.unit.synchronizer)</a>
-</li>
-      <li><a href="api/api_mapper.html#connector.unit.mapper.ImportMapChild">ImportMapChild (classe dans connector.unit.mapper)</a>
-</li>
-      <li><a href="api/api_mapper.html#connector.unit.mapper.ImportMapper">ImportMapper (classe dans connector.unit.mapper)</a>
-</li>
-      <li><a href="api/api_synchronizer.html#connector.unit.synchronizer.ImportSynchronizer">ImportSynchronizer (dans le module connector.unit.synchronizer)</a>
+      <li><a href="api/api_components.html#connector.components.synchronizer.Importer">Importer (classe dans connector.components.synchronizer)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/api_runner.html#connector.jobrunner.runner.ConnectorRunner.initialize_databases">initialize_databases() (méthode connector.jobrunner.runner.ConnectorRunner)</a>
+      <li><a href="api/api_components.html#connector.components.mapper.ImportMapChild">ImportMapChild (classe dans connector.components.mapper)</a>
 </li>
-      <li><a href="api/api_connector.html#connector.connector.install_in_connector">install_in_connector() (dans le module connector.connector)</a>
+      <li><a href="api/api_components.html#connector.components.mapper.ImportMapper">ImportMapper (classe dans connector.components.mapper)</a>
 </li>
       <li><a href="api/api_exception.html#connector.exception.InvalidDataError">InvalidDataError</a>
 </li>
-      <li><a href="api/api_connector.html#connector.connector.is_module_installed">is_module_installed() (dans le module connector.connector)</a>
-
-      <ul>
-        <li><a href="api/api_session.html#connector.session.ConnectorSession.is_module_installed">(méthode connector.session.ConnectorSession)</a>
-</li>
-      </ul></li>
   </ul></td>
 </tr></table>
 
 <h2 id="J">J</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/api_queue.html#connector.queue.job.Job">Job (classe dans connector.queue.job)</a>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.job.Job">Job (classe dans odoo.addons.queue_job.job)</a>
 </li>
-      <li><a href="api/api_queue.html#connector.queue.job.job">job() (dans le module connector.queue.job)</a>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.job.job">job() (dans le module odoo.addons.queue_job.job)</a>
 </li>
-      <li><a href="api/api_queue.html#connector.queue.model.QueueJob.job_function_id">job_function_id (attribut connector.queue.model.QueueJob)</a>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.models.queue_job.QueueJob.job_function_id">job_function_id (attribut odoo.addons.queue_job.models.queue_job.QueueJob)</a>
 </li>
-      <li><a href="api/api_queue.html#connector.queue.model.JobChannel.job_function_ids">job_function_ids (attribut connector.queue.model.JobChannel)</a>
-</li>
-      <li><a href="api/api_queue.html#connector.queue.model.QueueWorker.job_ids">job_ids (attribut connector.queue.model.QueueWorker)</a>
-
-      <ul>
-        <li><a href="api/api_queue.html#connector.queue.model.RequeueJob.job_ids">(attribut connector.queue.model.RequeueJob)</a>
-</li>
-      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/api_queue.html#connector.queue.worker.Worker.job_storage_class">job_storage_class (attribut connector.queue.worker.Worker)</a>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.models.queue_job.JobChannel.job_function_ids">job_function_ids (attribut odoo.addons.queue_job.models.queue_job.JobChannel)</a>
 </li>
-      <li><a href="api/api_queue.html#connector.queue.model.JobChannel">JobChannel (classe dans connector.queue.model)</a>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.models.queue_job.RequeueJob.job_ids">job_ids (attribut odoo.addons.queue_job.models.queue_job.RequeueJob)</a>
 </li>
-      <li><a href="api/api_exception.html#connector.exception.JobError">JobError</a>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.models.queue_job.JobChannel">JobChannel (classe dans odoo.addons.queue_job.models.queue_job)</a>
 </li>
-      <li><a href="api/api_queue.html#connector.queue.model.JobFunction">JobFunction (classe dans connector.queue.model)</a>
-</li>
-      <li><a href="api/api_queue.html#connector.queue.queue.JobsQueue">JobsQueue (classe dans connector.queue.queue)</a>
-</li>
-      <li><a href="api/api_queue.html#connector.queue.job.JobStorage">JobStorage (classe dans connector.queue.job)</a>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.models.queue_job.JobFunction">JobFunction (classe dans odoo.addons.queue_job.models.queue_job)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -721,23 +841,29 @@
 <h2 id="K">K</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/api_queue.html#connector.queue.job.Job.kwargs">kwargs (attribut connector.queue.job.Job)</a>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.job.Job.kwargs">kwargs (attribut odoo.addons.queue_job.job.Job)</a>
+
+      <ul>
+        <li><a href="api/api_queue.html#odoo.addons.queue_job.models.queue_job.QueueJob.kwargs">(attribut odoo.addons.queue_job.models.queue_job.QueueJob)</a>
 </li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
 <h2 id="L">L</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/api_queue.html#connector.queue.job.JobStorage.load">load() (méthode connector.queue.job.JobStorage)</a>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.job.Job.load">load() (méthode de la classe odoo.addons.queue_job.job.Job)</a>
+</li>
+      <li><a href="api/api_components.html#odoo.addons.component.builder.ComponentBuilder.load_components">load_components() (méthode odoo.addons.component.builder.ComponentBuilder)</a>
 
       <ul>
-        <li><a href="api/api_queue.html#connector.queue.job.OpenERPJobStorage.load">(méthode connector.queue.job.OpenERPJobStorage)</a>
+        <li><a href="api/api_components.html#odoo.addons.component.core.ComponentRegistry.load_components">(méthode odoo.addons.component.core.ComponentRegistry)</a>
 </li>
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/api_connector.html#connector.connector.ConnectorUnit.localcontext">localcontext (attribut connector.connector.ConnectorUnit)</a>
+      <li><a href="api/api_components.html#odoo.addons.component.core.ComponentRegistry.lookup">lookup() (méthode odoo.addons.component.core.ComponentRegistry)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -745,62 +871,62 @@
 <h2 id="M">M</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/api_mapper.html#connector.unit.mapper.m2o_to_backend">m2o_to_backend() (dans le module connector.unit.mapper)</a>
+      <li><a href="api/api_components.html#connector.components.mapper.m2o_to_external">m2o_to_external() (dans le module connector.components.mapper)</a>
 </li>
+      <li><a href="api/api_components.html#odoo.addons.component.core.AbstractComponent.many_components">many_components() (méthode odoo.addons.component.core.AbstractComponent)</a>
+
+      <ul>
+        <li><a href="api/api_components.html#odoo.addons.component.core.WorkContext.many_components">(méthode odoo.addons.component.core.WorkContext)</a>
+</li>
+        <li><a href="api/api_event.html#odoo.addons.component_event.core.EventWorkContext.many_components">(méthode odoo.addons.component_event.core.EventWorkContext)</a>
+</li>
+      </ul></li>
       <li><a href="api/api_exception.html#connector.exception.ManyIDSInBackend">ManyIDSInBackend</a>
 </li>
-      <li><a href="api/api_mapper.html#connector.unit.mapper.Mapper.map_methods">map_methods (attribut connector.unit.mapper.Mapper)</a>
+      <li><a href="api/api_components.html#connector.components.mapper.Mapper.map_methods">map_methods (attribut connector.components.mapper.Mapper)</a>
 </li>
-      <li><a href="api/api_mapper.html#connector.unit.mapper.Mapper.map_record">map_record() (méthode connector.unit.mapper.Mapper)</a>
+      <li><a href="api/api_components.html#connector.components.mapper.Mapper.map_record">map_record() (méthode connector.components.mapper.Mapper)</a>
 </li>
-      <li><a href="api/api_mapper.html#connector.unit.mapper.MapChild">MapChild (classe dans connector.unit.mapper)</a>
+      <li><a href="api/api_components.html#connector.components.mapper.MapChild">MapChild (classe dans connector.components.mapper)</a>
 </li>
-      <li><a href="api/api_mapper.html#connector.unit.mapper.MapOptions">MapOptions (classe dans connector.unit.mapper)</a>
+      <li><a href="api/api_components.html#connector.components.mapper.MapOptions">MapOptions (classe dans connector.components.mapper)</a>
 </li>
-      <li><a href="api/api_synchronizer.html#connector.unit.synchronizer.Synchronizer.mapper">mapper (attribut connector.unit.synchronizer.Synchronizer)</a>
+      <li><a href="api/api_components.html#connector.components.synchronizer.Synchronizer.mapper">mapper (attribut connector.components.synchronizer.Synchronizer)</a>
 </li>
-      <li><a href="api/api_mapper.html#connector.unit.mapper.Mapper">Mapper (classe dans connector.unit.mapper)</a>
+      <li><a href="api/api_components.html#connector.components.mapper.Mapper">Mapper (classe dans connector.components.mapper)</a>
 </li>
-      <li><a href="api/api_mapper.html#connector.unit.mapper.mapping">mapping() (dans le module connector.unit.mapper)</a>
-</li>
-      <li><a href="api/api_mapper.html#connector.unit.mapper.MappingDefinition">MappingDefinition (classe dans connector.unit.mapper)</a>
-</li>
-      <li><a href="api/api_exception.html#connector.exception.MappingError">MappingError</a>
-</li>
-      <li><a href="api/api_mapper.html#connector.unit.mapper.MapRecord">MapRecord (classe dans connector.unit.mapper)</a>
+      <li><a href="api/api_components.html#connector.components.mapper.mapping">mapping() (dans le module connector.components.mapper)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/api_backend.html#connector.backend.Backend.match">match() (méthode connector.backend.Backend)</a>
+      <li><a href="api/api_components.html#connector.components.mapper.MappingDefinition">MappingDefinition (classe dans connector.components.mapper)</a>
+</li>
+      <li><a href="api/api_exception.html#connector.exception.MappingError">MappingError</a>
+</li>
+      <li><a href="api/api_components.html#connector.components.mapper.MapRecord">MapRecord (classe dans connector.components.mapper)</a>
+</li>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.job.Job.max_retries">max_retries (attribut odoo.addons.queue_job.job.Job)</a>
 
       <ul>
-        <li><a href="api/api_connector.html#connector.connector.ConnectorUnit.match">(méthode de la classe connector.connector.ConnectorUnit)</a>
+        <li><a href="api/api_queue.html#odoo.addons.queue_job.models.queue_job.QueueJob.max_retries">(attribut odoo.addons.queue_job.models.queue_job.QueueJob)</a>
 </li>
       </ul></li>
-      <li><a href="api/api_queue.html#connector.queue.job.Job.max_retries">max_retries (attribut connector.queue.job.Job)</a>
+      <li><a href="api/api_components.html#odoo.addons.component.core.MetaComponent">MetaComponent (classe dans odoo.addons.component.core)</a>
+</li>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.models.queue_job.QueueJob.method_name">method_name (attribut odoo.addons.queue_job.models.queue_job.QueueJob)</a>
+</li>
+      <li><a href="api/api_components.html#odoo.addons.component.core.AbstractComponent.model">model (attribut odoo.addons.component.core.AbstractComponent)</a>
 
       <ul>
-        <li><a href="api/api_queue.html#connector.queue.model.QueueJob.max_retries">(attribut connector.queue.model.QueueJob)</a>
+        <li><a href="api/api_components.html#odoo.addons.component.core.WorkContext.model">(attribut odoo.addons.component.core.WorkContext)</a>
 </li>
       </ul></li>
-      <li><a href="api/api_connector.html#connector.connector.MetaConnectorUnit">MetaConnectorUnit (classe dans connector.connector)</a>
-</li>
-      <li><a href="api/api_mapper.html#connector.unit.mapper.MetaMapper">MetaMapper (classe dans connector.unit.mapper)</a>
-</li>
-      <li><a href="api/api_connector.html#connector.connector.ConnectorEnvironment.model">model (attribut connector.connector.ConnectorEnvironment)</a>
+      <li><a href="api/api_components.html#odoo.addons.component.core.WorkContext.model_name">model_name (attribut odoo.addons.component.core.WorkContext)</a>
 
       <ul>
-        <li><a href="api/api_connector.html#connector.connector.ConnectorUnit.model">(attribut connector.connector.ConnectorUnit)</a>
+        <li><a href="api/api_queue.html#odoo.addons.queue_job.job.Job.model_name">(attribut odoo.addons.queue_job.job.Job)</a>
 </li>
-      </ul></li>
-      <li><a href="api/api_connector.html#connector.connector.ConnectorEnvironment.model_name">model_name (attribut connector.connector.ConnectorEnvironment)</a>
-
-      <ul>
-        <li><a href="api/api_connector.html#connector.connector.MetaConnectorUnit.model_name">(attribut connector.connector.MetaConnectorUnit)</a>
-</li>
-        <li><a href="api/api_queue.html#connector.queue.job.Job.model_name">(attribut connector.queue.job.Job)</a>
-</li>
-        <li><a href="api/api_queue.html#connector.queue.model.QueueJob.model_name">(attribut connector.queue.model.QueueJob)</a>
+        <li><a href="api/api_queue.html#odoo.addons.queue_job.models.queue_job.QueueJob.model_name">(attribut odoo.addons.queue_job.models.queue_job.QueueJob)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -812,56 +938,74 @@
       <li><a href="api/api_backend.html#connector.backend_model.ConnectorBackend.name">name (attribut connector.backend_model.ConnectorBackend)</a>
 
       <ul>
-        <li><a href="api/api_queue.html#connector.queue.model.JobChannel.name">(attribut connector.queue.model.JobChannel)</a>
+        <li><a href="api/api_queue.html#odoo.addons.queue_job.models.queue_job.JobChannel.name">(attribut odoo.addons.queue_job.models.queue_job.JobChannel)</a>
 </li>
-        <li><a href="api/api_queue.html#connector.queue.model.JobFunction.name">(attribut connector.queue.model.JobFunction)</a>
+        <li><a href="api/api_queue.html#odoo.addons.queue_job.models.queue_job.JobFunction.name">(attribut odoo.addons.queue_job.models.queue_job.JobFunction)</a>
 </li>
-        <li><a href="api/api_queue.html#connector.queue.model.QueueJob.name">(attribut connector.queue.model.QueueJob)</a>
+        <li><a href="api/api_queue.html#odoo.addons.queue_job.models.queue_job.QueueJob.name">(attribut odoo.addons.queue_job.models.queue_job.QueueJob)</a>
 </li>
       </ul></li>
-      <li><a href="api/api_queue.html#connector.queue.model.JobChannel.name_get">name_get() (méthode connector.queue.model.JobChannel)</a>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.models.queue_job.JobChannel.name_get">name_get() (méthode odoo.addons.queue_job.models.queue_job.JobChannel)</a>
 </li>
       <li><a href="api/api_exception.html#connector.exception.NetworkRetryableError">NetworkRetryableError</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/api_components.html#connector.components.listener.ConnectorListener.no_connector_export">no_connector_export() (méthode connector.components.listener.ConnectorListener)</a>
+</li>
+      <li><a href="api/api_components.html#odoo.addons.component.exception.NoComponentError">NoComponentError</a>
+</li>
       <li><a href="api/api_exception.html#connector.exception.NoConnectorUnitError">NoConnectorUnitError</a>
 </li>
       <li><a href="api/api_exception.html#connector.exception.NoExternalId">NoExternalId</a>
 </li>
-      <li><a href="api/api_mapper.html#connector.unit.mapper.none">none() (dans le module connector.unit.mapper)</a>
+      <li><a href="api/api_components.html#connector.components.mapper.none">none() (dans le module connector.components.mapper)</a>
 </li>
-      <li><a href="api/api_exception.html#connector.exception.NoSuchJobError">NoSuchJobError</a>
+      <li><a href="api/api_event.html#odoo.addons.component_event.components.event.CollectedEvents.notify">notify() (méthode odoo.addons.component_event.components.event.CollectedEvents)</a>
+
+      <ul>
+        <li><a href="api/api_channels.html#odoo.addons.queue_job.jobrunner.channels.ChannelManager.notify">(méthode odoo.addons.queue_job.jobrunner.channels.ChannelManager)</a>
 </li>
-      <li><a href="api/api_exception.html#connector.exception.NothingToDoJob">NothingToDoJob</a>
-</li>
-      <li><a href="api/api_channels.html#connector.jobrunner.channels.ChannelManager.notify">notify() (méthode connector.jobrunner.channels.ChannelManager)</a>
-</li>
-      <li><a href="api/api_exception.html#connector.exception.NotReadableJobError">NotReadableJobError</a>
-</li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
 <h2 id="O">O</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/api_event.html#connector.event.on_record_create">on_record_create (dans le module connector.event)</a>
+      <li><a href="api/api_components.html#module-odoo.addons.component.builder">odoo.addons.component.builder (module)</a>
 </li>
-      <li><a href="api/api_event.html#connector.event.on_record_unlink">on_record_unlink (dans le module connector.event)</a>
+      <li><a href="api/api_components.html#module-odoo.addons.component.core">odoo.addons.component.core (module)</a>
 </li>
-      <li><a href="api/api_event.html#connector.event.on_record_write">on_record_write (dans le module connector.event)</a>
+      <li><a href="api/api_components.html#module-odoo.addons.component.exception">odoo.addons.component.exception (module)</a>
 </li>
-      <li><a href="api/api_mapper.html#connector.unit.mapper.MappingDefinition.only_create">only_create (attribut connector.unit.mapper.MappingDefinition)</a>
+      <li><a href="api/api_components.html#module-odoo.addons.component.models.collection">odoo.addons.component.models.collection (module)</a>
+</li>
+      <li><a href="api/api_event.html#module-odoo.addons.component_event.components.event">odoo.addons.component_event.components.event (module)</a>
+</li>
+      <li><a href="api/api_event.html#module-odoo.addons.component_event.core">odoo.addons.component_event.core (module)</a>
+</li>
+      <li><a href="api/api_event.html#module-odoo.addons.component_event.models.base">odoo.addons.component_event.models.base (module)</a>
+</li>
+      <li><a href="api/api_queue.html#module-odoo.addons.queue_job.job">odoo.addons.queue_job.job (module)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/api_mapper.html#connector.unit.mapper.only_create">only_create() (dans le module connector.unit.mapper)</a>
+      <li><a href="api/api_channels.html#module-odoo.addons.queue_job.jobrunner.channels">odoo.addons.queue_job.jobrunner.channels (module)</a>
 </li>
-      <li><a href="api/api_queue.html#connector.queue.model.QueueJob.open_related_action">open_related_action() (méthode connector.queue.model.QueueJob)</a>
+      <li><a href="guides/jobrunner.html#module-odoo.addons.queue_job.jobrunner.runner">odoo.addons.queue_job.jobrunner.runner (module)</a>
 </li>
-      <li><a href="api/api_queue.html#connector.queue.job.OpenERPJobStorage">OpenERPJobStorage (classe dans connector.queue.job)</a>
+      <li><a href="api/api_queue.html#module-odoo.addons.queue_job.models.base">odoo.addons.queue_job.models.base (module)</a>
 </li>
-      <li><a href="api/api_mapper.html#connector.unit.mapper.Mapper.options">options (attribut connector.unit.mapper.Mapper)</a>
+      <li><a href="api/api_queue.html#module-odoo.addons.queue_job.models.queue_job">odoo.addons.queue_job.models.queue_job (module)</a>
+</li>
+      <li><a href="api/api_components.html#connector.components.mapper.MappingDefinition.only_create">only_create (attribut connector.components.mapper.MappingDefinition)</a>
+</li>
+      <li><a href="api/api_components.html#connector.components.mapper.only_create">only_create() (dans le module connector.components.mapper)</a>
+</li>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.models.queue_job.QueueJob.open_related_action">open_related_action() (méthode odoo.addons.queue_job.models.queue_job.QueueJob)</a>
+</li>
+      <li><a href="api/api_components.html#connector.components.mapper.Mapper.options">options (attribut connector.components.mapper.Mapper)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -869,49 +1013,33 @@
 <h2 id="P">P</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/api_backend.html#connector.backend.Backend.parent">parent (attribut connector.backend.Backend)</a>
-
-      <ul>
-        <li><a href="api/api_mapper.html#connector.unit.mapper.MapRecord.parent">(attribut connector.unit.mapper.MapRecord)</a>
+      <li><a href="api/api_components.html#connector.components.mapper.MapRecord.parent">parent (attribut connector.components.mapper.MapRecord)</a>
 </li>
-      </ul></li>
-      <li><a href="api/api_queue.html#connector.queue.model.JobChannel.parent_id">parent_id (attribut connector.queue.model.JobChannel)</a>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.models.queue_job.JobChannel.parent_id">parent_id (attribut odoo.addons.queue_job.models.queue_job.JobChannel)</a>
 </li>
-      <li><a href="api/api_queue.html#connector.queue.model.JobChannel.parent_required">parent_required() (méthode connector.queue.model.JobChannel)</a>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.models.queue_job.JobChannel.parent_required">parent_required() (méthode odoo.addons.queue_job.models.queue_job.JobChannel)</a>
 </li>
-      <li><a href="api/api_channels.html#connector.jobrunner.channels.ChannelManager.parse_simple_config">parse_simple_config() (méthode de la classe connector.jobrunner.channels.ChannelManager)</a>
+      <li><a href="api/api_channels.html#odoo.addons.queue_job.jobrunner.channels.ChannelManager.parse_simple_config">parse_simple_config() (méthode de la classe odoo.addons.queue_job.jobrunner.channels.ChannelManager)</a>
 </li>
-      <li><a href="api/api_queue.html#connector.queue.job.Job.perform">perform() (méthode connector.queue.job.Job)</a>
-</li>
-      <li><a href="api/api_connector.html#connector.connector.pg_try_advisory_lock">pg_try_advisory_lock() (dans le module connector.connector)</a>
-</li>
-      <li><a href="api/api_queue.html#connector.queue.model.QueueWorker.pid">pid (attribut connector.queue.model.QueueWorker)</a>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.job.Job.perform">perform() (méthode odoo.addons.queue_job.job.Job)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/api_connector.html#connector.connector.ConnectorEnvironment.pool">pool (attribut connector.connector.ConnectorEnvironment)</a>
+      <li><a href="api/api_channels.html#odoo.addons.queue_job.jobrunner.channels.ChannelQueue.pop">pop() (méthode odoo.addons.queue_job.jobrunner.channels.ChannelQueue)</a>
 
       <ul>
-        <li><a href="api/api_session.html#connector.session.ConnectorSession.pool">(attribut connector.session.ConnectorSession)</a>, <a href="api/api_session.html#connector.session.ConnectorSession.pool">[1]</a>
+        <li><a href="api/api_channels.html#odoo.addons.queue_job.jobrunner.channels.PriorityQueue.pop">(méthode odoo.addons.queue_job.jobrunner.channels.PriorityQueue)</a>
 </li>
       </ul></li>
-      <li><a href="api/api_channels.html#connector.jobrunner.channels.ChannelQueue.pop">pop() (méthode connector.jobrunner.channels.ChannelQueue)</a>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.job.Job.postpone">postpone() (méthode odoo.addons.queue_job.job.Job)</a>
+</li>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.job.Job.priority">priority (attribut odoo.addons.queue_job.job.Job)</a>
 
       <ul>
-        <li><a href="api/api_channels.html#connector.jobrunner.channels.PriorityQueue.pop">(méthode connector.jobrunner.channels.PriorityQueue)</a>
+        <li><a href="api/api_queue.html#odoo.addons.queue_job.models.queue_job.QueueJob.priority">(attribut odoo.addons.queue_job.models.queue_job.QueueJob)</a>
 </li>
       </ul></li>
-      <li><a href="api/api_queue.html#connector.queue.job.Job.postpone">postpone() (méthode connector.queue.job.Job)</a>
-</li>
-      <li><a href="api/api_queue.html#connector.queue.job.Job.priority">priority (attribut connector.queue.job.Job)</a>
-
-      <ul>
-        <li><a href="api/api_queue.html#connector.queue.model.QueueJob.priority">(attribut connector.queue.model.QueueJob)</a>
-</li>
-      </ul></li>
-      <li><a href="api/api_channels.html#connector.jobrunner.channels.PriorityQueue">PriorityQueue (classe dans connector.jobrunner.channels)</a>
-</li>
-      <li><a href="api/api_runner.html#connector.jobrunner.runner.ConnectorRunner.process_notifications">process_notifications() (méthode connector.jobrunner.runner.ConnectorRunner)</a>
+      <li><a href="api/api_channels.html#odoo.addons.queue_job.jobrunner.channels.PriorityQueue">PriorityQueue (classe dans odoo.addons.queue_job.jobrunner.channels)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -919,13 +1047,7 @@
 <h2 id="Q">Q</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/api_queue.html#connector.queue.worker.Worker.queue_class">queue_class (attribut connector.queue.worker.Worker)</a>
-</li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/api_queue.html#connector.queue.model.QueueJob">QueueJob (classe dans connector.queue.model)</a>
-</li>
-      <li><a href="api/api_queue.html#connector.queue.model.QueueWorker">QueueWorker (classe dans connector.queue.model)</a>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.models.queue_job.QueueJob">QueueJob (classe dans odoo.addons.queue_job.models.queue_job)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -933,73 +1055,55 @@
 <h2 id="R">R</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/api_session.html#connector.session.ConnectorSession.read">read() (méthode connector.session.ConnectorSession)</a>
+      <li><a href="api/api_components.html#connector.components.backend_adapter.CRUDAdapter.read">read() (méthode connector.components.backend_adapter.CRUDAdapter)</a>
+</li>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.models.queue_job.QueueJob.record_ids">record_ids (attribut odoo.addons.queue_job.models.queue_job.QueueJob)</a>
+</li>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.job.Job.recordset">recordset (attribut odoo.addons.queue_job.job.Job)</a>
+</li>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.job.related_action">related_action() (dans le module odoo.addons.queue_job.job)</a>
 
       <ul>
-        <li><a href="api/api_backend_adapter.html#connector.unit.backend_adapter.CRUDAdapter.read">(méthode connector.unit.backend_adapter.CRUDAdapter)</a>
+        <li><a href="api/api_queue.html#odoo.addons.queue_job.job.Job.related_action">(méthode odoo.addons.queue_job.job.Job)</a>
 </li>
       </ul></li>
-      <li><a href="api/api_backend.html#connector.backend.Backend.register_class">register_class() (méthode connector.backend.Backend)</a>
-</li>
-      <li><a href="api/api_queue.html#connector.queue.job.related_action">related_action() (dans le module connector.queue.job)</a>
+      <li><a href="api/api_channels.html#odoo.addons.queue_job.jobrunner.channels.Channel.remove">remove() (méthode odoo.addons.queue_job.jobrunner.channels.Channel)</a>
 
       <ul>
-        <li><a href="api/api_queue.html#connector.queue.job.Job.related_action">(méthode connector.queue.job.Job)</a>
+        <li><a href="api/api_channels.html#odoo.addons.queue_job.jobrunner.channels.ChannelQueue.remove">(méthode odoo.addons.queue_job.jobrunner.channels.ChannelQueue)</a>
 </li>
-      </ul></li>
-      <li><a href="api/api_channels.html#connector.jobrunner.channels.Channel.remove">remove() (méthode connector.jobrunner.channels.Channel)</a>
-
-      <ul>
-        <li><a href="api/api_channels.html#connector.jobrunner.channels.ChannelQueue.remove">(méthode connector.jobrunner.channels.ChannelQueue)</a>
+        <li><a href="api/api_channels.html#odoo.addons.queue_job.jobrunner.channels.PriorityQueue.remove">(méthode odoo.addons.queue_job.jobrunner.channels.PriorityQueue)</a>
 </li>
-        <li><a href="api/api_channels.html#connector.jobrunner.channels.PriorityQueue.remove">(méthode connector.jobrunner.channels.PriorityQueue)</a>
-</li>
-        <li><a href="api/api_channels.html#connector.jobrunner.channels.SafeSet.remove">(méthode connector.jobrunner.channels.SafeSet)</a>
-</li>
-      </ul></li>
-      <li><a href="api/api_channels.html#connector.jobrunner.channels.ChannelManager.remove_db">remove_db() (méthode connector.jobrunner.channels.ChannelManager)</a>
-</li>
-      <li><a href="api/api_channels.html#connector.jobrunner.channels.ChannelManager.remove_job">remove_job() (méthode connector.jobrunner.channels.ChannelManager)</a>
-</li>
-      <li><a href="api/api_queue.html#connector.queue.model.QueueJob.requeue">requeue() (méthode connector.queue.model.QueueJob)</a>
-
-      <ul>
-        <li><a href="api/api_queue.html#connector.queue.model.RequeueJob.requeue">(méthode connector.queue.model.RequeueJob)</a>
+        <li><a href="api/api_channels.html#odoo.addons.queue_job.jobrunner.channels.SafeSet.remove">(méthode odoo.addons.queue_job.jobrunner.channels.SafeSet)</a>
 </li>
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/api_queue.html#connector.queue.model.RequeueJob">RequeueJob (classe dans connector.queue.model)</a>
+      <li><a href="api/api_channels.html#odoo.addons.queue_job.jobrunner.channels.ChannelManager.remove_db">remove_db() (méthode odoo.addons.queue_job.jobrunner.channels.ChannelManager)</a>
 </li>
-      <li><a href="api/api_queue.html#connector.queue.job.Job.result">result (attribut connector.queue.job.Job)</a>
+      <li><a href="api/api_channels.html#odoo.addons.queue_job.jobrunner.channels.ChannelManager.remove_job">remove_job() (méthode odoo.addons.queue_job.jobrunner.channels.ChannelManager)</a>
+</li>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.models.queue_job.QueueJob.requeue">requeue() (méthode odoo.addons.queue_job.models.queue_job.QueueJob)</a>
 
       <ul>
-        <li><a href="api/api_queue.html#connector.queue.model.QueueJob.result">(attribut connector.queue.model.QueueJob)</a>
+        <li><a href="api/api_queue.html#odoo.addons.queue_job.models.queue_job.RequeueJob.requeue">(méthode odoo.addons.queue_job.models.queue_job.RequeueJob)</a>
 </li>
       </ul></li>
-      <li><a href="api/api_queue.html#connector.queue.job.Job.retry">retry (attribut connector.queue.job.Job)</a>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.models.queue_job.RequeueJob">RequeueJob (classe dans odoo.addons.queue_job.models.queue_job)</a>
+</li>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.job.Job.result">result (attribut odoo.addons.queue_job.job.Job)</a>
 
       <ul>
-        <li><a href="api/api_queue.html#connector.queue.model.QueueJob.retry">(attribut connector.queue.model.QueueJob)</a>
+        <li><a href="api/api_queue.html#odoo.addons.queue_job.models.queue_job.QueueJob.result">(attribut odoo.addons.queue_job.models.queue_job.QueueJob)</a>
 </li>
       </ul></li>
-      <li><a href="api/api_exception.html#connector.exception.RetryableJobError">RetryableJobError</a>
-</li>
-      <li><a href="api/api_session.html#connector.session.ConnectorSession.rollback">rollback() (méthode connector.session.ConnectorSession)</a>
-</li>
-      <li><a href="api/api_runner.html#connector.jobrunner.runner.ConnectorRunner.run">run() (méthode connector.jobrunner.runner.ConnectorRunner)</a>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.job.Job.retry">retry (attribut odoo.addons.queue_job.job.Job)</a>
 
       <ul>
-        <li><a href="api/api_queue.html#connector.queue.worker.Worker.run">(méthode connector.queue.worker.Worker)</a>
-</li>
-        <li><a href="api/api_queue.html#connector.queue.worker.WorkerWatcher.run">(méthode connector.queue.worker.WorkerWatcher)</a>
-</li>
-        <li><a href="api/api_synchronizer.html#connector.unit.synchronizer.Synchronizer.run">(méthode connector.unit.synchronizer.Synchronizer)</a>
+        <li><a href="api/api_queue.html#odoo.addons.queue_job.models.queue_job.QueueJob.retry">(attribut odoo.addons.queue_job.models.queue_job.QueueJob)</a>
 </li>
       </ul></li>
-      <li><a href="api/api_queue.html#connector.queue.worker.Worker.run_job">run_job() (méthode connector.queue.worker.Worker)</a>
-</li>
-      <li><a href="api/api_runner.html#connector.jobrunner.runner.ConnectorRunner.run_jobs">run_jobs() (méthode connector.jobrunner.runner.ConnectorRunner)</a>
+      <li><a href="api/api_components.html#connector.components.synchronizer.Synchronizer.run">run() (méthode connector.components.synchronizer.Synchronizer)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -1007,83 +1111,63 @@
 <h2 id="S">S</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/api_channels.html#connector.jobrunner.channels.SafeSet">SafeSet (classe dans connector.jobrunner.channels)</a>
+      <li><a href="api/api_channels.html#odoo.addons.queue_job.jobrunner.channels.SafeSet">SafeSet (classe dans odoo.addons.queue_job.jobrunner.channels)</a>
 </li>
-      <li><a href="api/api_session.html#connector.session.ConnectorSession.search">search() (méthode connector.session.ConnectorSession)</a>
+      <li><a href="api/api_components.html#connector.components.backend_adapter.CRUDAdapter.search">search() (méthode connector.components.backend_adapter.CRUDAdapter)</a>
+</li>
+      <li><a href="api/api_components.html#connector.components.backend_adapter.CRUDAdapter.search_read">search_read() (méthode connector.components.backend_adapter.CRUDAdapter)</a>
+</li>
+      <li><a href="api/api_channels.html#odoo.addons.queue_job.jobrunner.channels.Channel.sequential">sequential (attribut odoo.addons.queue_job.jobrunner.channels.Channel)</a>
+</li>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.job.Job.set_done">set_done() (méthode odoo.addons.queue_job.job.Job)</a>
 
       <ul>
-        <li><a href="api/api_backend_adapter.html#connector.unit.backend_adapter.CRUDAdapter.search">(méthode connector.unit.backend_adapter.CRUDAdapter)</a>
+        <li><a href="api/api_channels.html#odoo.addons.queue_job.jobrunner.channels.Channel.set_done">(méthode odoo.addons.queue_job.jobrunner.channels.Channel)</a>
 </li>
       </ul></li>
-      <li><a href="api/api_backend_adapter.html#connector.unit.backend_adapter.CRUDAdapter.search_read">search_read() (méthode connector.unit.backend_adapter.CRUDAdapter)</a>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.job.Job.set_enqueued">set_enqueued() (méthode odoo.addons.queue_job.job.Job)</a>
 </li>
-      <li><a href="api/api_runner.html#connector.jobrunner.runner.Database.select_jobs">select_jobs() (méthode connector.jobrunner.runner.Database)</a>
-</li>
-      <li><a href="api/api_backend.html#connector.backend.Backend.service">service (attribut connector.backend.Backend)</a>, <a href="api/api_backend.html#connector.backend.Backend.service">[1]</a>
-</li>
-      <li><a href="api/api_connector.html#connector.connector.ConnectorEnvironment.session">session (attribut connector.connector.ConnectorEnvironment)</a>
-</li>
-      <li><a href="api/api_session.html#connector.session.ConnectorSessionHandler.session">session() (méthode connector.session.ConnectorSessionHandler)</a>
-</li>
-      <li><a href="api/api_channels.html#connector.jobrunner.channels.Channel.set_done">set_done() (méthode connector.jobrunner.channels.Channel)</a>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.job.Job.set_failed">set_failed() (méthode odoo.addons.queue_job.job.Job)</a>
 
       <ul>
-        <li><a href="api/api_queue.html#connector.queue.job.Job.set_done">(méthode connector.queue.job.Job)</a>
+        <li><a href="api/api_channels.html#odoo.addons.queue_job.jobrunner.channels.Channel.set_failed">(méthode odoo.addons.queue_job.jobrunner.channels.Channel)</a>
 </li>
       </ul></li>
-      <li><a href="api/api_queue.html#connector.queue.job.Job.set_enqueued">set_enqueued() (méthode connector.queue.job.Job)</a>
-</li>
-      <li><a href="api/api_channels.html#connector.jobrunner.channels.Channel.set_failed">set_failed() (méthode connector.jobrunner.channels.Channel)</a>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.job.Job.set_pending">set_pending() (méthode odoo.addons.queue_job.job.Job)</a>
 
       <ul>
-        <li><a href="api/api_queue.html#connector.queue.job.Job.set_failed">(méthode connector.queue.job.Job)</a>
+        <li><a href="api/api_channels.html#odoo.addons.queue_job.jobrunner.channels.Channel.set_pending">(méthode odoo.addons.queue_job.jobrunner.channels.Channel)</a>
 </li>
       </ul></li>
-      <li><a href="api/api_runner.html#connector.jobrunner.runner.Database.set_job_enqueued">set_job_enqueued() (méthode connector.jobrunner.runner.Database)</a>
+      <li><a href="api/api_channels.html#odoo.addons.queue_job.jobrunner.channels.Channel.set_running">set_running() (méthode odoo.addons.queue_job.jobrunner.channels.Channel)</a>
 </li>
-      <li><a href="api/api_connector.html#connector.connector.ConnectorEnvironment.set_lang">set_lang() (méthode connector.connector.ConnectorEnvironment)</a>
-</li>
-      <li><a href="api/api_channels.html#connector.jobrunner.channels.Channel.set_pending">set_pending() (méthode connector.jobrunner.channels.Channel)</a>
-
-      <ul>
-        <li><a href="api/api_queue.html#connector.queue.job.Job.set_pending">(méthode connector.queue.job.Job)</a>
-</li>
-      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/api_channels.html#connector.jobrunner.channels.Channel.set_running">set_running() (méthode connector.jobrunner.channels.Channel)</a>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.job.Job.set_started">set_started() (méthode odoo.addons.queue_job.job.Job)</a>
 </li>
-      <li><a href="api/api_queue.html#connector.queue.job.Job.set_started">set_started() (méthode connector.queue.job.Job)</a>
+      <li><a href="api/api_components.html#odoo.addons.component.exception.SeveralComponentError">SeveralComponentError</a>
 </li>
-      <li><a href="api/api_channels.html#connector.jobrunner.channels.ChannelManager.simple_configure">simple_configure() (méthode connector.jobrunner.channels.ChannelManager)</a>
+      <li><a href="api/api_channels.html#odoo.addons.queue_job.jobrunner.channels.ChannelManager.simple_configure">simple_configure() (méthode odoo.addons.queue_job.jobrunner.channels.ChannelManager)</a>
 </li>
-      <li><a href="api/api_mapper.html#connector.unit.mapper.MapChild.skip_item">skip_item() (méthode connector.unit.mapper.MapChild)</a>
+      <li><a href="api/api_event.html#odoo.addons.component_event.components.event.skip_if">skip_if() (dans le module odoo.addons.component_event.components.event)</a>
 </li>
-      <li><a href="api/api_mapper.html#connector.unit.mapper.MapRecord.source">source (attribut connector.unit.mapper.MapRecord)</a>
+      <li><a href="api/api_components.html#connector.components.mapper.MapChild.skip_item">skip_item() (méthode connector.components.mapper.MapChild)</a>
 </li>
-      <li><a href="api/api_channels.html#connector.jobrunner.channels.ChannelManager.split_strip">split_strip() (méthode statique connector.jobrunner.channels.ChannelManager)</a>
+      <li><a href="api/api_components.html#connector.components.mapper.MapRecord.source">source (attribut connector.components.mapper.MapRecord)</a>
 </li>
-      <li><a href="api/api_queue.html#connector.queue.worker.start_service">start_service() (dans le module connector.queue.worker)</a>
+      <li><a href="api/api_channels.html#odoo.addons.queue_job.jobrunner.channels.split_strip">split_strip() (dans le module odoo.addons.queue_job.jobrunner.channels)</a>
 </li>
-      <li><a href="api/api_queue.html#connector.queue.job.Job.state">state (attribut connector.queue.job.Job)</a>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.job.Job.state">state (attribut odoo.addons.queue_job.job.Job)</a>
 
       <ul>
-        <li><a href="api/api_queue.html#connector.queue.model.QueueJob.state">(attribut connector.queue.model.QueueJob)</a>
+        <li><a href="api/api_queue.html#odoo.addons.queue_job.models.queue_job.QueueJob.state">(attribut odoo.addons.queue_job.models.queue_job.QueueJob)</a>
 </li>
       </ul></li>
-      <li><a href="api/api_runner.html#connector.jobrunner.runner.ConnectorRunner.stop">stop() (méthode connector.jobrunner.runner.ConnectorRunner)</a>
-</li>
-      <li><a href="api/api_queue.html#connector.queue.job.JobStorage.store">store() (méthode connector.queue.job.JobStorage)</a>
-
-      <ul>
-        <li><a href="api/api_queue.html#connector.queue.job.OpenERPJobStorage.store">(méthode connector.queue.job.OpenERPJobStorage)</a>
-</li>
-      </ul></li>
-      <li><a href="api/api_event.html#connector.event.Event.subscribe">subscribe() (méthode connector.event.Event)</a>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.job.Job.store">store() (méthode odoo.addons.queue_job.job.Job)</a>
 </li>
       <li><a href="api/api_backend.html#connector.backend_model.ExternalBinding.sync_date">sync_date (attribut connector.backend_model.ExternalBinding)</a>
 </li>
-      <li><a href="api/api_synchronizer.html#connector.unit.synchronizer.Synchronizer">Synchronizer (classe dans connector.unit.synchronizer)</a>
+      <li><a href="api/api_components.html#connector.components.synchronizer.Synchronizer">Synchronizer (classe dans connector.components.synchronizer)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -1091,11 +1175,11 @@
 <h2 id="T">T</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/api_connector.html#connector.connector.Binder.to_backend">to_backend() (méthode connector.connector.Binder)</a>
+      <li><a href="api/api_components.html#connector.components.binder.Binder.to_external">to_external() (méthode connector.components.binder.Binder)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/api_connector.html#connector.connector.Binder.to_openerp">to_openerp() (méthode connector.connector.Binder)</a>
+      <li><a href="api/api_components.html#connector.components.binder.Binder.to_internal">to_internal() (méthode connector.components.binder.Binder)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -1103,42 +1187,30 @@
 <h2 id="U">U</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/api_session.html#connector.session.ConnectorSession.uid">uid (attribut connector.session.ConnectorSession)</a>, <a href="api/api_session.html#connector.session.ConnectorSession.uid">[1]</a>
+      <li><a href="api/api_event.html#odoo.addons.component_event.models.base.Base.unlink">unlink() (méthode odoo.addons.component_event.models.base.Base)</a>
 
       <ul>
-        <li><a href="api/api_session.html#connector.session.ConnectorSessionHandler.uid">(attribut connector.session.ConnectorSessionHandler)</a>
+        <li><a href="api/api_queue.html#odoo.addons.queue_job.models.queue_job.JobChannel.unlink">(méthode odoo.addons.queue_job.models.queue_job.JobChannel)</a>
 </li>
       </ul></li>
-      <li><a href="api/api_connector.html#connector.connector.ConnectorUnit.unit_for">unit_for() (méthode connector.connector.ConnectorUnit)</a>
+      <li><a href="api/api_components.html#connector.components.binder.Binder.unwrap_binding">unwrap_binding() (méthode connector.components.binder.Binder)</a>
 </li>
-      <li><a href="api/api_queue.html#connector.queue.model.JobChannel.unlink">unlink() (méthode connector.queue.model.JobChannel)</a>
-
-      <ul>
-        <li><a href="api/api_session.html#connector.session.ConnectorSession.unlink">(méthode connector.session.ConnectorSession)</a>
-</li>
-      </ul></li>
-      <li><a href="api/api_event.html#connector.event.Event.unsubscribe">unsubscribe() (méthode connector.event.Event)</a>
-</li>
-      <li><a href="api/api_connector.html#connector.connector.Binder.unwrap_binding">unwrap_binding() (méthode connector.connector.Binder)</a>
+      <li><a href="api/api_components.html#connector.components.binder.Binder.unwrap_model">unwrap_model() (méthode connector.components.binder.Binder)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/api_connector.html#connector.connector.Binder.unwrap_model">unwrap_model() (méthode connector.connector.Binder)</a>
+      <li><a href="api/api_components.html#connector.components.mapper.MapRecord.update">update() (méthode connector.components.mapper.MapRecord)</a>
 </li>
-      <li><a href="api/api_mapper.html#connector.unit.mapper.MapRecord.update">update() (méthode connector.unit.mapper.MapRecord)</a>
-</li>
-      <li><a href="api/api_queue.html#connector.queue.job.Job.user_id">user_id (attribut connector.queue.job.Job)</a>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.job.Job.user_id">user_id (attribut odoo.addons.queue_job.job.Job)</a>
 
       <ul>
-        <li><a href="api/api_queue.html#connector.queue.model.QueueJob.user_id">(attribut connector.queue.model.QueueJob)</a>
+        <li><a href="api/api_queue.html#odoo.addons.queue_job.models.queue_job.QueueJob.user_id">(attribut odoo.addons.queue_job.models.queue_job.QueueJob)</a>
 </li>
       </ul></li>
-      <li><a href="api/api_queue.html#connector.queue.job.Job.uuid">uuid (attribut connector.queue.job.Job)</a>, <a href="api/api_queue.html#connector.queue.job.Job.uuid">[1]</a>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.job.Job.uuid">uuid (attribut odoo.addons.queue_job.job.Job)</a>, <a href="api/api_queue.html#odoo.addons.queue_job.job.Job.uuid">[1]</a>
 
       <ul>
-        <li><a href="api/api_queue.html#connector.queue.model.QueueJob.uuid">(attribut connector.queue.model.QueueJob)</a>
-</li>
-        <li><a href="api/api_queue.html#connector.queue.model.QueueWorker.uuid">(attribut connector.queue.model.QueueWorker)</a>
+        <li><a href="api/api_queue.html#odoo.addons.queue_job.models.queue_job.QueueJob.uuid">(attribut odoo.addons.queue_job.models.queue_job.QueueJob)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -1147,50 +1219,40 @@
 <h2 id="V">V</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/api_mapper.html#connector.unit.mapper.MapRecord.values">values() (méthode connector.unit.mapper.MapRecord)</a>
+      <li><a href="api/api_components.html#connector.components.mapper.MapRecord.values">values() (méthode connector.components.mapper.MapRecord)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/api_backend.html#connector.backend.Backend.version">version (attribut connector.backend.Backend)</a>
-
-      <ul>
-        <li><a href="api/api_backend.html#connector.backend_model.ConnectorBackend.version">(attribut connector.backend_model.ConnectorBackend)</a>
+      <li><a href="api/api_backend.html#connector.backend_model.ConnectorBackend.version">version (attribut connector.backend_model.ConnectorBackend)</a>
 </li>
-      </ul></li>
   </ul></td>
 </tr></table>
 
 <h2 id="W">W</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/api_runner.html#connector.jobrunner.runner.ConnectorRunner.wait_notification">wait_notification() (méthode connector.jobrunner.runner.ConnectorRunner)</a>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.models.base.Base.with_delay">with_delay() (méthode odoo.addons.queue_job.models.base.Base)</a>
 </li>
-      <li><a href="api/api_queue.html#connector.queue.job.whitelist_unpickle_global">whitelist_unpickle_global() (dans le module connector.queue.job)</a>
-</li>
-      <li><a href="api/api_queue.html#connector.queue.worker.Worker">Worker (classe dans connector.queue.worker)</a>
-</li>
-      <li><a href="api/api_queue.html#connector.queue.worker.WorkerWatcher.worker_for_db">worker_for_db() (méthode connector.queue.worker.WorkerWatcher)</a>
-</li>
-      <li><a href="api/api_queue.html#connector.queue.model.QueueJob.worker_id">worker_id (attribut connector.queue.model.QueueJob)</a>
-</li>
-      <li><a href="api/api_queue.html#connector.queue.worker.WorkerWatcher.worker_lost">worker_lost() (méthode connector.queue.worker.WorkerWatcher)</a>
-</li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/api_queue.html#connector.queue.model.QueueWorker.worker_timeout">worker_timeout (attribut connector.queue.model.QueueWorker)</a>
-</li>
-      <li><a href="api/api_queue.html#connector.queue.job.Job.worker_uuid">worker_uuid (attribut connector.queue.job.Job)</a>
-</li>
-      <li><a href="api/api_queue.html#connector.queue.worker.WorkerWatcher">WorkerWatcher (classe dans connector.queue.worker)</a>
-</li>
-      <li><a href="api/api_queue.html#connector.queue.model.JobChannel.write">write() (méthode connector.queue.model.JobChannel)</a>
+      <li><a href="api/api_components.html#odoo.addons.component.core.WorkContext.work_on">work_on() (méthode odoo.addons.component.core.WorkContext)</a>
 
       <ul>
-        <li><a href="api/api_queue.html#connector.queue.model.QueueJob.write">(méthode connector.queue.model.QueueJob)</a>
+        <li><a href="api/api_components.html#odoo.addons.component.models.collection.Collection.work_on">(méthode odoo.addons.component.models.collection.Collection)</a>
 </li>
-        <li><a href="api/api_session.html#connector.session.ConnectorSession.write">(méthode connector.session.ConnectorSession)</a>
+        <li><a href="api/api_event.html#odoo.addons.component_event.core.EventWorkContext.work_on">(méthode odoo.addons.component_event.core.EventWorkContext)</a>
 </li>
-        <li><a href="api/api_backend_adapter.html#connector.unit.backend_adapter.CRUDAdapter.write">(méthode connector.unit.backend_adapter.CRUDAdapter)</a>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/api_components.html#odoo.addons.component.core.WorkContext">WorkContext (classe dans odoo.addons.component.core)</a>
+</li>
+      <li><a href="api/api_components.html#connector.components.backend_adapter.CRUDAdapter.write">write() (méthode connector.components.backend_adapter.CRUDAdapter)</a>
+
+      <ul>
+        <li><a href="api/api_event.html#odoo.addons.component_event.models.base.Base.write">(méthode odoo.addons.component_event.models.base.Base)</a>
+</li>
+        <li><a href="api/api_queue.html#odoo.addons.queue_job.models.queue_job.JobChannel.write">(méthode odoo.addons.queue_job.models.queue_job.JobChannel)</a>
+</li>
+        <li><a href="api/api_queue.html#odoo.addons.queue_job.models.queue_job.QueueJob.write">(méthode odoo.addons.queue_job.models.queue_job.QueueJob)</a>
 </li>
       </ul></li>
   </ul></td>

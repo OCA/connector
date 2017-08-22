@@ -25,7 +25,7 @@
     <script type="text/javascript" src="_static/bootstrap-sphinx.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Contribute" href="project/contribute.html" />
+    <link rel="next" title="Migration Guide to the new Connector API" href="guides/migration_guide.html" />
 
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
@@ -86,58 +86,33 @@
   <ul class="dropdown-menu globaltoc"
       role="menu"
       aria-labelledby="dLabelGlobalToc"><ul>
-<li class="toctree-l1"><a class="reference internal" href="project/contribute.html">Contribute</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="project/contribute.html#want-to-start-a-new-connector">Want to start a new connector</a></li>
-<li class="toctree-l2"><a class="reference internal" href="project/contribute.html#creating-or-maintaining-a-translation-of-this-doc">Creating or maintaining a translation of this doc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guides/migration_guide.html">Migration Guide to the new Connector API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="guides/migration_guide.html#migrating-jobs">Migrating Jobs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/migration_guide.html#migrating-events">Migrating Events</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/migration_guide.html#migrating-components">Migrating Components</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="project/contributors.html">Contributors</a></li>
-<li class="toctree-l1"><a class="reference internal" href="project/contributors.html#financial-contributors">Financial Contributors</a></li>
-<li class="toctree-l1"><a class="reference internal" href="project/license.html">License</a></li>
-<li class="toctree-l1"><a class="reference internal" href="project/changes.html">Changes</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="project/changes.html#future">Future (?)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="project/changes.html#id2">8.0.3.3.0 (2016-02-29)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="project/changes.html#id3">3.2.0 (2015-09-10)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="project/changes.html#id4">3.1.0 (2015-05-15)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="project/changes.html#id5">3.0.0 (2015-04-01)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="project/changes.html#id6">2.2.0 (2014-05-26)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="project/changes.html#id7">2.1.1 (2014-02-06)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="project/changes.html#warning-breaks-compatibility">2.1.0 (2014-01-15 - warning: breaks compatibility)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="project/changes.html#id8">2.0.1 (2013-09-12)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="project/changes.html#id9">2.0.0</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="project/roadmap.html">Roadmap</a></li>
-</ul>
-<ul>
 <li class="toctree-l1"><a class="reference internal" href="guides/code_overview.html">Code Overview</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="guides/code_overview.html#backends">Backends</a></li>
-<li class="toctree-l2"><a class="reference internal" href="guides/code_overview.html#bindings">Bindings</a></li>
-<li class="toctree-l2"><a class="reference internal" href="guides/code_overview.html#session">Session</a></li>
-<li class="toctree-l2"><a class="reference internal" href="guides/code_overview.html#events">Events</a></li>
-<li class="toctree-l2"><a class="reference internal" href="guides/code_overview.html#jobs">Jobs</a></li>
-<li class="toctree-l2"><a class="reference internal" href="guides/code_overview.html#connectorunit">ConnectorUnit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/code_overview.html#trigger-and-listen-an-event">Trigger and listen an event</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/code_overview.html#delay-an-asynchronous-job">Delay an Asynchronous Job</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/code_overview.html#work-with-components">Work with components</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="guides/concepts.html">Connector Concepts</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="guides/concepts.html#events">Events</a></li>
 <li class="toctree-l2"><a class="reference internal" href="guides/concepts.html#jobs-queue">Jobs Queue</a></li>
-<li class="toctree-l2"><a class="reference internal" href="guides/concepts.html#session">Session</a></li>
 <li class="toctree-l2"><a class="reference internal" href="guides/concepts.html#backend">Backend</a></li>
-<li class="toctree-l2"><a class="reference internal" href="guides/concepts.html#environment">Environment</a></li>
-<li class="toctree-l2"><a class="reference internal" href="guides/concepts.html#connectorunit">ConnectorUnit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/concepts.html#workcontext">WorkContext</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/concepts.html#component">Component</a></li>
 <li class="toctree-l2"><a class="reference internal" href="guides/concepts.html#bindings">Bindings</a></li>
 <li class="toctree-l2"><a class="reference internal" href="guides/concepts.html#checkpoint">Checkpoint</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="guides/bootstrap_connector.html">Boostrapping a connector</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="guides/bootstrap_connector.html#odoo-manifest">Odoo Manifest</a></li>
-<li class="toctree-l2"><a class="reference internal" href="guides/bootstrap_connector.html#declare-the-backends">Declare the backends</a></li>
 <li class="toctree-l2"><a class="reference internal" href="guides/bootstrap_connector.html#backend-model">Backend Model</a></li>
 <li class="toctree-l2"><a class="reference internal" href="guides/bootstrap_connector.html#abstract-binding">Abstract Binding</a></li>
-<li class="toctree-l2"><a class="reference internal" href="guides/bootstrap_connector.html#environment">Environment</a></li>
-<li class="toctree-l2"><a class="reference internal" href="guides/bootstrap_connector.html#checkpoints">Checkpoints</a></li>
-<li class="toctree-l2"><a class="reference internal" href="guides/bootstrap_connector.html#connectorunit-classes">ConnectorUnit classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/bootstrap_connector.html#components">Components</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="guides/jobrunner.html">Configuring channels and the job runner</a><ul>
@@ -149,37 +124,60 @@
 <li class="toctree-l2"><a class="reference internal" href="guides/jobrunner.html#how-to-configure-channels">How to configure Channels?</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="guides/multiprocessing.html">Use the connector with multiprocessing workers</a></li>
 </ul>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="api/api_connector.html">Connector</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api/api_session.html">Session</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api/api_backend.html">Backend</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api/api_backend.html#module-connector.backend_model">Backend Models</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api/api_event.html">Event</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api/api_binder.html">Binder</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api/api_mapper.html">Mapper</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="api/api_mapper.html#mappers">Mappers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/api_components.html">Components</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/api_components.html#module-connector.components.core">Core Components</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/api_components.html#module-connector.components.binder">Connector Components</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/api_components.html#module-odoo.addons.component.models.collection">Components Collection Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/api_components.html#module-odoo.addons.component.exception">Components Exceptions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/api_components.html#components-internals">Components Internals</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="api/api_synchronizer.html">Synchronizer</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api/api_backend_adapter.html">Backend Adapter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/api_backend.html">Models</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/api_backend.html#backend-model">Backend Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/api_backend.html#binding-model">Binding Model</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api/api_event.html">Events</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/api_event.html#module-odoo.addons.component_event.components.event">Components</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/api_event.html#module-odoo.addons.component_event.models.base">Odoo Models Extensions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/api_event.html#module-odoo.addons.component_event.core">Internals</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="api/api_queue.html">Queue</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="api/api_queue.html#module-connector.queue.job">Job</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api/api_queue.html#module-connector.queue.worker">Worker</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api/api_queue.html#id5">Queue</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api/api_queue.html#module-connector.queue.model">Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/api_queue.html#module-odoo.addons.queue_job.job">Job</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/api_queue.html#module-odoo.addons.queue_job.models.base">Models</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="api/api_exception.html">Exceptions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="api/api_channels.html">Channels</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api/api_runner.html">Job Runner</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="api/api_runner.html#what-is-the-job-runner">What is the job runner?</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api/api_runner.html#how-does-it-work">How does it work?</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api/api_runner.html#how-to-use-it">How to use it?</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api/api_runner.html#caveat">Caveat</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="project/contribute.html">Contribute</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="project/contribute.html#want-to-start-a-new-connector">Want to start a new connector</a></li>
+<li class="toctree-l2"><a class="reference internal" href="project/contribute.html#creating-or-maintaining-a-translation-of-this-doc">Creating or maintaining a translation of this doc</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="project/contributors.html">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="project/contributors.html#financial-contributors">Financial Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="project/license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="project/changes.html">Changes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="project/changes.html#future">Future (?)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="project/changes.html#id2">9.0.1.0.2 (2016-03-03)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="project/changes.html#id3">9.0.1.0.1 (2016-03-03)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="project/changes.html#id4">8.0.3.3.0 (2016-02-29)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="project/changes.html#id5">3.2.0 (2015-09-10)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="project/changes.html#id6">3.1.0 (2015-05-15)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="project/changes.html#id7">3.0.0 (2015-04-01)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="project/changes.html#id8">2.2.0 (2014-05-26)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="project/changes.html#id9">2.1.1 (2014-02-06)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="project/changes.html#warning-breaks-compatibility">2.1.0 (2014-01-15 - warning: breaks compatibility)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="project/changes.html#id10">2.0.1 (2013-09-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="project/changes.html#id11">2.0.0</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="project/roadmap.html">Roadmap</a></li>
 </ul>
 </ul>
 </li>
@@ -195,15 +193,13 @@
       aria-labelledby="dLabelLocalToc"><ul>
 <li><a class="reference internal" href="#">Odoo Connector</a><ul>
 <li><a class="reference internal" href="#core-features">Core Features</a></li>
-<li><a class="reference internal" href="#last-minute-information-regarding-odoo-9">Last minute information regarding Odoo 9</a></li>
-<li><a class="reference internal" href="#connectors-based-on-the-framework">Connectors based on the framework</a></li>
-<li><a class="reference internal" href="#overview">Overview</a></li>
-<li><a class="reference internal" href="#top-financial-contributors">Top financial contributors</a></li>
-<li><a class="reference internal" href="#project">Project</a></li>
 <li><a class="reference internal" href="#developer-s-guide">Developer’s guide</a><ul>
 <li><a class="reference internal" href="#api-reference">API Reference</a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#project">Project</a></li>
+<li><a class="reference internal" href="#connectors-based-on-the-framework">Connectors based on the framework</a></li>
+<li><a class="reference internal" href="#talks">Talks</a></li>
 <li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
 </ul>
 </li>
@@ -217,7 +213,7 @@
               
                 
   <li>
-    <a href="project/contribute.html" title="Next Chapter: Contribute"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Contribute &raquo;</span>
+    <a href="guides/migration_guide.html" title="Next Chapter: Migration Guide to the new Connector API"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Migration Gui... &raquo;</span>
     </a>
   </li>
               
@@ -248,19 +244,21 @@
   <div class="section" id="odoo-connector">
 <h1>Odoo Connector<a class="headerlink" href="#odoo-connector" title="Permalink to this headline">¶</a></h1>
 <p>Odoo Connector is a powerful framework to develop any kind of
-bi-directional connector between <a class="reference external" href="http://www.odoo.com">Odoo</a> (Open Source ERP) and any other
+bi-directional connector between <a class="reference external" href="https://www.odoo.com">Odoo</a> (Open Source ERP) and any other
 software or service.</p>
 <p>This Odoo add-on has a modular and generic core, with the
 ability to be extended with additional modules for new features or
 customizations.</p>
-<p>The development of Odoo Connector has been started by <a class="reference external" href="http://www.camptocamp.com">Camptocamp</a> and is now
-maintained by <a class="reference external" href="http://www.camptocamp.com">Camptocamp</a>, <a class="reference external" href="http://www.akretion.com">Akretion</a>, <a class="reference external" href="http://www.acsone.eu">Acsone</a> and several <a class="reference internal" href="project/contributors.html#contributors"><span class="std std-ref">Contributors</span></a>.</p>
+<p>The development of Odoo Connector has been started by <a class="reference external" href="https://www.camptocamp.com">Camptocamp</a> and is now
+maintained by <a class="reference external" href="https://www.camptocamp.com">Camptocamp</a>, <a class="reference external" href="http://www.akretion.com">Akretion</a>, <a class="reference external" href="https://www.acsone.eu">Acsone</a> and several <a class="reference internal" href="project/contributors.html#contributors"><span class="std std-ref">Contributors</span></a>.</p>
+<p>It got a major overhaul in 2017 (Odoo 10.0). A <a class="reference internal" href="guides/migration_guide.html#migration-guide"><span class="std std-ref">Migration Guide to the new Connector API</span></a> is
+available.</p>
 <p><em>Subscribe to the</em> <a class="reference external" href="https://odoo-community.org/groups">project’s mailing list (name: Connectors)</a></p>
 <p><em>Learn how to</em> <a class="reference internal" href="project/contribute.html#contribute"><span class="std std-ref">Contribute</span></a></p>
 <div class="section" id="core-features">
 <h2>Core Features<a class="headerlink" href="#core-features" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li><strong>100% Open Source</strong> (<a class="reference external" href="http://www.gnu.org/licenses/agpl-3.0.html">AGPL version 3</a>): the full <a class="reference external" href="https://github.com/OCA/connector">source code is available
+<li><strong>100% Open Source</strong> (<a class="reference external" href="https://www.gnu.org/licenses/agpl-3.0.html">AGPL version 3</a>): the full <a class="reference external" href="https://github.com/OCA/connector">source code is available
 on GitHub</a></li>
 <li>Not only designed to connect Odoo with e-commerce backends,
 rather it is <strong>adaptable</strong> to connect Odoo with any type of service.</li>
@@ -271,48 +269,63 @@ developer on how to use the proposed pieces.</li>
 <li>See a <a class="reference internal" href="guides/code_overview.html#code-overview"><span class="std std-ref">Code Overview</span></a> with examples of code</li>
 </ul>
 </div>
-<div class="section" id="last-minute-information-regarding-odoo-9">
-<h2>Last minute information regarding Odoo 9<a class="headerlink" href="#last-minute-information-regarding-odoo-9" title="Permalink to this headline">¶</a></h2>
-<ul class="simple">
-<li>A crowdfunding campaign is currently running to finance the migration of this connector to make it compatible with Odoo 9. <strong>Be part of this project now!</strong> <a class="reference external" href="https://www.indiegogo.com/projects/odoo-connector-odoo-magento-connector-for-odoo-9#/">More info here</a></li>
+<div class="section" id="developer-s-guide">
+<h2>Developer’s guide<a class="headerlink" href="#developer-s-guide" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="guides/migration_guide.html">Migration Guide to the new Connector API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="guides/migration_guide.html#migrating-jobs">Migrating Jobs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/migration_guide.html#migrating-events">Migrating Events</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/migration_guide.html#migrating-components">Migrating Components</a></li>
 </ul>
-</div>
-<div class="section" id="connectors-based-on-the-framework">
-<h2>Connectors based on the framework<a class="headerlink" href="#connectors-based-on-the-framework" title="Permalink to this headline">¶</a></h2>
-<ul class="simple">
-<li><a class="reference external" href="http://www.odoo-magento-connector.com">Magento Connector</a></li>
-<li><a class="reference external" href="https://github.com/OCA/connector-prestashop">Prestashop Connector</a></li>
-<li><a class="reference external" href="https://github.com/akretion/solerp">solerp (Solr Connector)</a></li>
-<li><a class="reference external" href="http://www.openerp.net.cn/new-intercompany-process-module/">Odoo Multi Company</a></li>
-<li><a class="reference external" href="https://github.com/OCA/connector-cmis">CMIS</a></li>
-<li><a class="reference external" href="https://github.com/OCA/connector-interfaces/tree/8.0/base_import_async">Odoo Asynchronous import module</a></li>
-<li><a class="reference external" href="https://github.com/OCA/connector-salesforce">Salesforce Connector</a></li>
-<li><a class="reference external" href="https://github.com/akretion/connector-google-spreadsheet">Google Spreadsheet Connector</a></li>
-<li><a class="reference external" href="https://github.com/OCA/connector-woocommerce">WooCommerce Connector</a></li>
-<li>Develop easily and rapidly your own connector based on this powerful
-framework and list your project on this page! Examples:<ul>
-<li>E-Commerce: Odoo OsCommerce connector, Odoo Drupal Commerce connector, Odoo Spree connector, Odoo Ebay connector, Odoo Amazon connector…</li>
-<li>CMS: Odoo Wordpress connector…</li>
-<li>CRM: Odoo SugarCRM connector, Odoo Zabbix connector…</li>
-<li>Project Management: Odoo Redmine connector…</li>
-<li>Ticketing: Odoo Request Tracker connector, Odoo GLPI connector…</li>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="guides/code_overview.html">Code Overview</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="guides/code_overview.html#trigger-and-listen-an-event">Trigger and listen an event</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/code_overview.html#delay-an-asynchronous-job">Delay an Asynchronous Job</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/code_overview.html#work-with-components">Work with components</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="guides/concepts.html">Connector Concepts</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="guides/concepts.html#events">Events</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/concepts.html#jobs-queue">Jobs Queue</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/concepts.html#backend">Backend</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/concepts.html#workcontext">WorkContext</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/concepts.html#component">Component</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/concepts.html#bindings">Bindings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/concepts.html#checkpoint">Checkpoint</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="guides/bootstrap_connector.html">Boostrapping a connector</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="guides/bootstrap_connector.html#odoo-manifest">Odoo Manifest</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/bootstrap_connector.html#backend-model">Backend Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/bootstrap_connector.html#abstract-binding">Abstract Binding</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/bootstrap_connector.html#components">Components</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="guides/jobrunner.html">Configuring channels and the job runner</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="guides/jobrunner.html#what-is-the-job-runner">What is the job runner?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/jobrunner.html#how-does-it-work">How does it work?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/jobrunner.html#how-to-use-it">How to use it?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/jobrunner.html#caveat">Caveat</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/jobrunner.html#what-is-a-channel">What is a channel?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/jobrunner.html#how-to-configure-channels">How to configure Channels?</a></li>
 </ul>
 </li>
 </ul>
 </div>
-<div class="section" id="overview">
-<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
-<div style="margin-top:10px;">
-     <iframe src="http://www.slideshare.net/slideshow/embed_code/24048994?rel=0" width="427" height="356" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="border:1px solid #CCC;border-width:1px 1px 0;margin-bottom:5px" allowfullscreen> </iframe> <div style="margin-bottom:5px"> <strong> <a href="https://fr.slideshare.net/openobject/ecommerce-the-new-magento-open-erp-connector-a-generic-connector-to-any-apps-luc-maurer-guewen-baconnier-camptocamp" title="E-commerce: the new Magento - Odoo Connector: a generic connector to any apps. Luc Maurer &amp; Guewen Baconnier, Camptocamp" target="_blank">E-commerce: the new Magento - Odoo Connector: a generic connector to any apps. Luc Maurer &amp; Guewen Baconnier, Camptocamp (OpenERP Days 2013)</a> </strong> from <strong><a href="http://www.slideshare.net/openobject" target="_blank">OpenERP.tv</a></strong> </div>
-</div></div>
-<div class="section" id="top-financial-contributors">
-<h2>Top financial contributors<a class="headerlink" href="#top-financial-contributors" title="Permalink to this headline">¶</a></h2>
-<a class="reference external image-reference" href="http://www.logicsupply.com"><img alt="Logic Supply" src="_images/LogicSupply_Orange_260x80_transparent.png" /></a>
-<a class="reference external image-reference" href="http://www.debonix.fr"><img alt="Debonix" src="_images/logo-debonix.jpg" /></a>
-<div class="line-block">
-<div class="line"><br /></div>
+<div class="section" id="api-reference">
+<h3>API Reference<a class="headerlink" href="#api-reference" title="Permalink to this headline">¶</a></h3>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api/api_components.html">Components</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/api_backend.html">Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/api_event.html">Events</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/api_queue.html">Queue</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/api_exception.html">Exceptions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/api_channels.html">Channels</a></li>
+</ul>
 </div>
-<p><em>See all the project’s</em> <a class="reference internal" href="project/contributors.html#financial-contributors"><span class="std std-ref">Financial Contributors</span></a>.</p>
+</div>
 </div>
 <div class="section" id="project">
 <h2>Project<a class="headerlink" href="#project" title="Permalink to this headline">¶</a></h2>
@@ -327,72 +340,35 @@ framework and list your project on this page! Examples:<ul>
 </ul>
 </div>
 </div>
-<div class="section" id="developer-s-guide">
-<h2>Developer’s guide<a class="headerlink" href="#developer-s-guide" title="Permalink to this headline">¶</a></h2>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="guides/code_overview.html">Code Overview</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="guides/code_overview.html#backends">Backends</a></li>
-<li class="toctree-l2"><a class="reference internal" href="guides/code_overview.html#bindings">Bindings</a></li>
-<li class="toctree-l2"><a class="reference internal" href="guides/code_overview.html#session">Session</a></li>
-<li class="toctree-l2"><a class="reference internal" href="guides/code_overview.html#events">Events</a></li>
-<li class="toctree-l2"><a class="reference internal" href="guides/code_overview.html#jobs">Jobs</a></li>
-<li class="toctree-l2"><a class="reference internal" href="guides/code_overview.html#connectorunit">ConnectorUnit</a></li>
+<div class="section" id="connectors-based-on-the-framework">
+<h2>Connectors based on the framework<a class="headerlink" href="#connectors-based-on-the-framework" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference external" href="http://www.odoo-magento-connector.com">Magento Connector</a></li>
+<li><a class="reference external" href="https://github.com/OCA/connector-prestashop">Prestashop Connector</a></li>
+<li><a class="reference external" href="https://github.com/akretion/connector-search-engine">Search Engine Connector</a></li>
+<li><a class="reference external" href="https://github.com/OCA/connector-cmis">CMIS</a></li>
+<li><a class="reference external" href="https://github.com/OCA/connector-interfaces/tree/8.0/base_import_async">Odoo Asynchronous import module</a></li>
+<li><a class="reference external" href="https://github.com/OCA/connector-salesforce">Salesforce Connector</a></li>
+<li><a class="reference external" href="https://github.com/camptocamp/connector-jira">JIRA Connector</a></li>
+<li><a class="reference external" href="https://github.com/akretion/connector-google-spreadsheet">Google Spreadsheet Connector</a></li>
+<li><a class="reference external" href="https://github.com/camptocamp/connector-exchange/tree/10.0">Connector Exchange</a></li>
+<li>Develop easily and rapidly your own connector based on this powerful
+framework and list your project on this page! Examples:<ul>
+<li>E-Commerce: Odoo OsCommerce connector, Odoo Drupal Commerce connector, Odoo Spree connector, Odoo Ebay connector, Odoo Amazon connector…</li>
+<li>CMS: Odoo Wordpress connector…</li>
+<li>CRM: Odoo SugarCRM connector, Odoo Zabbix connector…</li>
+<li>Project Management: Odoo Redmine connector…</li>
+<li>Ticketing: Odoo Request Tracker connector, Odoo GLPI connector…</li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="guides/concepts.html">Connector Concepts</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="guides/concepts.html#events">Events</a></li>
-<li class="toctree-l2"><a class="reference internal" href="guides/concepts.html#jobs-queue">Jobs Queue</a></li>
-<li class="toctree-l2"><a class="reference internal" href="guides/concepts.html#session">Session</a></li>
-<li class="toctree-l2"><a class="reference internal" href="guides/concepts.html#backend">Backend</a></li>
-<li class="toctree-l2"><a class="reference internal" href="guides/concepts.html#environment">Environment</a></li>
-<li class="toctree-l2"><a class="reference internal" href="guides/concepts.html#connectorunit">ConnectorUnit</a></li>
-<li class="toctree-l2"><a class="reference internal" href="guides/concepts.html#bindings">Bindings</a></li>
-<li class="toctree-l2"><a class="reference internal" href="guides/concepts.html#checkpoint">Checkpoint</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="guides/bootstrap_connector.html">Boostrapping a connector</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="guides/bootstrap_connector.html#odoo-manifest">Odoo Manifest</a></li>
-<li class="toctree-l2"><a class="reference internal" href="guides/bootstrap_connector.html#declare-the-backends">Declare the backends</a></li>
-<li class="toctree-l2"><a class="reference internal" href="guides/bootstrap_connector.html#backend-model">Backend Model</a></li>
-<li class="toctree-l2"><a class="reference internal" href="guides/bootstrap_connector.html#abstract-binding">Abstract Binding</a></li>
-<li class="toctree-l2"><a class="reference internal" href="guides/bootstrap_connector.html#environment">Environment</a></li>
-<li class="toctree-l2"><a class="reference internal" href="guides/bootstrap_connector.html#checkpoints">Checkpoints</a></li>
-<li class="toctree-l2"><a class="reference internal" href="guides/bootstrap_connector.html#connectorunit-classes">ConnectorUnit classes</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="guides/jobrunner.html">Configuring channels and the job runner</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="guides/jobrunner.html#what-is-the-job-runner">What is the job runner?</a></li>
-<li class="toctree-l2"><a class="reference internal" href="guides/jobrunner.html#how-does-it-work">How does it work?</a></li>
-<li class="toctree-l2"><a class="reference internal" href="guides/jobrunner.html#how-to-use-it">How to use it?</a></li>
-<li class="toctree-l2"><a class="reference internal" href="guides/jobrunner.html#caveat">Caveat</a></li>
-<li class="toctree-l2"><a class="reference internal" href="guides/jobrunner.html#what-is-a-channel">What is a channel?</a></li>
-<li class="toctree-l2"><a class="reference internal" href="guides/jobrunner.html#how-to-configure-channels">How to configure Channels?</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="guides/multiprocessing.html">Use the connector with multiprocessing workers</a></li>
 </ul>
 </div>
-<div class="section" id="api-reference">
-<h3>API Reference<a class="headerlink" href="#api-reference" title="Permalink to this headline">¶</a></h3>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="api/api_connector.html">Connector</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api/api_session.html">Session</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api/api_backend.html">Backend</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api/api_backend.html#module-connector.backend_model">Backend Models</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api/api_event.html">Event</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api/api_binder.html">Binder</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api/api_mapper.html">Mapper</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api/api_synchronizer.html">Synchronizer</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api/api_backend_adapter.html">Backend Adapter</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api/api_queue.html">Queue</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api/api_exception.html">Exceptions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api/api_channels.html">Channels</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api/api_runner.html">Job Runner</a></li>
+<div class="section" id="talks">
+<h2>Talks<a class="headerlink" href="#talks" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference external" href="https://fr.slideshare.net/camptocamp/a-jobs-queue-for-processing-tasks-asynchronously">A jobs queue for processing tasks asynchronously. Leonardo Pistone &amp; Guewen Baconnier (2015)</a></li>
+<li><a class="reference external" href="https://fr.slideshare.net/openobject/ecommerce-the-new-magento-open-erp-connector-a-generic-connector-to-any-apps-luc-maurer-guewen-baconnier-camptocamp">E-commerce: the new Magento - OpenERP Connector: a generic connector to any apps. Luc Maurer &amp; Guewen Baconnier, Camptocamp (2013)</a></li>
 </ul>
-</div>
-</div>
 </div>
 <div class="section" id="indices-and-tables">
 <h2>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h2>

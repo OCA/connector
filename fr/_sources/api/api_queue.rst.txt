@@ -1,3 +1,5 @@
+.. _api-queue:
+
 #####
 Queue
 #####
@@ -6,25 +8,7 @@ Queue
 Job
 ***
 
-.. automodule:: connector.queue.job
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-******
-Worker
-******
-
-.. automodule:: connector.queue.worker
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-*****
-Queue
-*****
-
-.. automodule:: connector.queue.queue
+.. automodule:: odoo.addons.queue_job.job
    :members:
    :undoc-members:
    :show-inheritance:
@@ -33,7 +17,12 @@ Queue
 Models
 ******
 
-.. automodule:: connector.queue.model
+.. automodule:: odoo.addons.queue_job.models.base
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+.. automodule:: odoo.addons.queue_job.models.queue_job
    :members:
    :undoc-members:
    :show-inheritance:

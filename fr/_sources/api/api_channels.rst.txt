@@ -7,7 +7,7 @@ scheduling mechanisms of the job runner.
 
 These classes are not intended for use by module developers.
 
-.. automodule:: connector.jobrunner.channels
+.. automodule:: odoo.addons.queue_job.jobrunner.channels
    :members:
    :undoc-members:
    :show-inheritance:

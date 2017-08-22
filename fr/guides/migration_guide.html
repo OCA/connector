@@ -1,0 +1,1208 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="fr">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Migration Guide to the new Connector API &#8212; documentation Connector </title>
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/translations.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Recherche" href="../search.html" />
+    <link rel="next" title="Survol du code" href="code_overview.html" />
+    <link rel="prev" title="Odoo Connector" href="../index.html" />
+
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-7628916-3', 'odoo-connector.com');
+  ga('send', 'pageview');
+</script>
+
+  </head>
+  <body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../index.html">
+          Odoo Connector</a>
+        <span class="navbar-text navbar-version pull-left"><b></b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+  <li class="dropdown">
+    <a role="button"
+       id="dLabelTranslations"
+       data-toggle="dropdown"
+       data-target="#"
+       href="#">Translations<b class="caret"></b></a>
+    <ul class="dropdown-menu"
+        role="menu"
+        aria-labelledby="dLabelTranslations">
+      <li><a class="reference" href="http://odoo-connector.com">English</a><li>
+      <li><a class="reference" href="http://odoo-connector.com/fr">French</a><li>
+    </ul>
+  </li>
+  
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Migration Guide to the new Connector API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#migrating-jobs">Migrating Jobs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#migrating-events">Migrating Events</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#migrating-components">Migrating Components</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="code_overview.html">Survol du code</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="code_overview.html#trigger-and-listen-an-event">Trigger and listen an event</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code_overview.html#delay-an-asynchronous-job">Delay an Asynchronous Job</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code_overview.html#work-with-components">Work with components</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="concepts.html">Concepts du connecteur</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="concepts.html#events">Événements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="concepts.html#jobs-queue">Queue de jobs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="concepts.html#backend">Backend</a></li>
+<li class="toctree-l2"><a class="reference internal" href="concepts.html#workcontext">WorkContext</a></li>
+<li class="toctree-l2"><a class="reference internal" href="concepts.html#component">Component</a></li>
+<li class="toctree-l2"><a class="reference internal" href="concepts.html#bindings">Bindings (Liaisons)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="concepts.html#checkpoint">Point de contrôle</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="bootstrap_connector.html">Amorcer la création un nouveau connecteur</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="bootstrap_connector.html#odoo-manifest">Odoo Manifest</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bootstrap_connector.html#backend-model">Modèle du backend</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bootstrap_connector.html#abstract-binding">Binding abstrait</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bootstrap_connector.html#components">Components</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="jobrunner.html">Configuring channels and the job runner</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="jobrunner.html#what-is-the-job-runner">What is the job runner?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jobrunner.html#how-does-it-work">How does it work?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jobrunner.html#how-to-use-it">How to use it?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jobrunner.html#caveat">Caveat</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jobrunner.html#what-is-a-channel">What is a channel?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jobrunner.html#how-to-configure-channels">How to configure Channels?</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/api_components.html">Components</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../api/api_components.html#module-connector.components.core">Core Components</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/api_components.html#module-connector.components.binder">Connector Components</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/api_components.html#module-odoo.addons.component.models.collection">Components Collection Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/api_components.html#module-odoo.addons.component.exception">Components Exceptions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/api_components.html#components-internals">Components Internals</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../api/api_backend.html">Modèles</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../api/api_backend.html#backend-model">Backend Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/api_backend.html#binding-model">Binding Model</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../api/api_event.html">Events</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../api/api_event.html#module-odoo.addons.component_event.components.event">Components</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/api_event.html#module-odoo.addons.component_event.models.base">Odoo Models Extensions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/api_event.html#module-odoo.addons.component_event.core">Internals</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../api/api_queue.html">Queue</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../api/api_queue.html#module-odoo.addons.queue_job.job">Job</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/api_queue.html#module-odoo.addons.queue_job.models.base">Modèles</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../api/api_exception.html">Exceptions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/api_channels.html">Channels</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../project/contribute.html">Contribuer</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../project/contribute.html#want-to-start-a-new-connector">Démarrer un nouveau connecteur</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../project/contribute.html#creating-or-maintaining-a-translation-of-this-doc">Créer ou maintenir une traduction de cette doc</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../project/contributors.html">Contributeurs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../project/contributors.html#financial-contributors">Contributeurs financiers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../project/license.html">Licence</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../project/changes.html">Changements</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../project/changes.html#future">Future (?)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../project/changes.html#id2">9.0.1.0.2 (2016-03-03)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../project/changes.html#id3">9.0.1.0.1 (2016-03-03)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../project/changes.html#id4">8.0.3.3.0 (2016-02-29)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../project/changes.html#id5">3.2.0 (2015-09-10)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../project/changes.html#id6">3.1.0 (2015-05-15)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../project/changes.html#id7">3.0.0 (2015-04-01)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../project/changes.html#id8">2.2.0 (2014-05-26)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../project/changes.html#id9">2.1.1 (2014-02-06)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../project/changes.html#warning-breaks-compatibility">2.1.0 (2014-01-15 - attention : rupture de compatibilité)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../project/changes.html#id10">2.0.1 (2013-09-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../project/changes.html#id11">2.0.0</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../project/roadmap.html">Roadmap</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">Migration Guide to the new Connector API</a><ul>
+<li><a class="reference internal" href="#migrating-jobs">Migrating Jobs</a><ul>
+<li><a class="reference internal" href="#declaration-of-a-job">Declaration of a job</a><ul>
+<li><a class="reference internal" href="#before">Before</a></li>
+<li><a class="reference internal" href="#after">After</a></li>
+<li><a class="reference internal" href="#observations">Observations</a></li>
+<li><a class="reference internal" href="#links">Links</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#invocation-of-a-job">Invocation of a job</a><ul>
+<li><a class="reference internal" href="#id1">Before</a></li>
+<li><a class="reference internal" href="#id2">After</a></li>
+<li><a class="reference internal" href="#id3">Observations</a></li>
+<li><a class="reference internal" href="#id4">Links</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#migrating-events">Migrating Events</a><ul>
+<li><a class="reference internal" href="#triggering-an-event">Triggering an event</a><ul>
+<li><a class="reference internal" href="#id5">Before</a></li>
+<li><a class="reference internal" href="#id6">After</a></li>
+<li><a class="reference internal" href="#id7">Observations</a></li>
+<li><a class="reference internal" href="#id8">Links</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#listening-to-an-event">Listening to an event</a><ul>
+<li><a class="reference internal" href="#id9">Before</a></li>
+<li><a class="reference internal" href="#id10">After</a></li>
+<li><a class="reference internal" href="#id11">Observations</a></li>
+<li><a class="reference internal" href="#id12">Links</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#listening-to-an-event-only-for-some-models">Listening to an event only for some Models</a><ul>
+<li><a class="reference internal" href="#id13">Before</a></li>
+<li><a class="reference internal" href="#id14">After</a></li>
+<li><a class="reference internal" href="#id15">Observations</a></li>
+<li><a class="reference internal" href="#id16">Links</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#migrating-components">Migrating Components</a><ul>
+<li><a class="reference internal" href="#backends">Backends</a><ul>
+<li><a class="reference internal" href="#id17">Before</a></li>
+<li><a class="reference internal" href="#id18">After</a></li>
+<li><a class="reference internal" href="#id19">Observations</a></li>
+<li><a class="reference internal" href="#id20">Links</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#inheritance">Inheritance</a><ul>
+<li><a class="reference internal" href="#id21">Before</a></li>
+<li><a class="reference internal" href="#id22">After</a></li>
+<li><a class="reference internal" href="#id23">Observations</a></li>
+<li><a class="reference internal" href="#id24">Links</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#entrypoint-for-working-with-components">Entrypoint for working with components</a><ul>
+<li><a class="reference internal" href="#id25">Before</a></li>
+<li><a class="reference internal" href="#id26">After</a></li>
+<li><a class="reference internal" href="#id27">Observations</a></li>
+<li><a class="reference internal" href="#id28">Links</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#find-a-component">Find a component</a><ul>
+<li><a class="reference internal" href="#id29">Before</a></li>
+<li><a class="reference internal" href="#id30">After</a></li>
+<li><a class="reference internal" href="#id31">Observations</a></li>
+<li><a class="reference internal" href="#id32">Links</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#backend-versions">Backend Versions</a><ul>
+<li><a class="reference internal" href="#id33">Before</a></li>
+<li><a class="reference internal" href="#id34">After</a></li>
+<li><a class="reference internal" href="#id35">Observations</a></li>
+<li><a class="reference internal" href="#id36">Links</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#replace-or-unregister-a-component">Replace or unregister a component</a><ul>
+<li><a class="reference internal" href="#id37">Before</a></li>
+<li><a class="reference internal" href="#id38">After</a></li>
+<li><a class="reference internal" href="#id39">Observations</a></li>
+<li><a class="reference internal" href="#id40">Links</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#various-hints">Various hints</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+            
+
+            
+              
+                
+  <li>
+    <a href="../index.html" title="Previous Chapter: Odoo Connector"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Odoo Connector</span>
+    </a>
+  </li>
+  <li>
+    <a href="code_overview.html" title="Next Chapter: Survol du code"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Survol du code &raquo;</span>
+    </a>
+  </li>
+              
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 content">
+      
+  <div class="section" id="migration-guide-to-the-new-connector-api">
+<span id="migration-guide"></span><h1>Migration Guide to the new Connector API<a class="headerlink" href="#migration-guide-to-the-new-connector-api" title="Lien permanent vers ce titre">¶</a></h1>
+<p>During the year 2017, the connector evolved greatly.
+We can recognize three different aspect of the framework, they all have been
+rewritten:</p>
+<ul class="simple">
+<li>The Job Queue API (<a class="reference internal" href="../api/api_queue.html#api-queue"><span class="std std-ref">Queue</span></a>)</li>
+<li>The Event API (<a class="reference internal" href="../api/api_event.html#api-event"><span class="std std-ref">Events</span></a>)</li>
+<li>The <code class="docutils literal"><span class="pre">ConnectorUnit</span></code> API, which is the core of the composability
+of the Connector. It has been replaced by a standalone addon
+called <code class="docutils literal"><span class="pre">component</span></code>. (<a class="reference internal" href="../api/api_components.html#api-component"><span class="std std-ref">Components</span></a>)</li>
+</ul>
+<p>The Connector has been splitted in different addons:</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">queue_job</span></code> in <a class="reference external" href="https://github.com/OCA/queue">https://github.com/OCA/queue</a></li>
+<li><code class="docutils literal"><span class="pre">component</span></code> in the same repository</li>
+<li><code class="docutils literal"><span class="pre">component_event</span></code> in the same repository</li>
+<li><code class="docutils literal"><span class="pre">connector</span></code> uses the 3 addons and the parts specifics to the connectors</li>
+</ul>
+<p>This guide will show how to migrate from the old API to the new one.</p>
+<p>The previous API will stay until the migration to Odoo 11.0.</p>
+<div class="contents local topic" id="sections">
+<p class="topic-title first">Sections:</p>
+<ul class="simple">
+<li><a class="reference internal" href="#migrating-jobs" id="id41">Migrating Jobs</a><ul>
+<li><a class="reference internal" href="#declaration-of-a-job" id="id42">Declaration of a job</a></li>
+<li><a class="reference internal" href="#invocation-of-a-job" id="id43">Invocation of a job</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#migrating-events" id="id44">Migrating Events</a><ul>
+<li><a class="reference internal" href="#triggering-an-event" id="id45">Triggering an event</a></li>
+<li><a class="reference internal" href="#listening-to-an-event" id="id46">Listening to an event</a></li>
+<li><a class="reference internal" href="#listening-to-an-event-only-for-some-models" id="id47">Listening to an event only for some Models</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#migrating-components" id="id48">Migrating Components</a><ul>
+<li><a class="reference internal" href="#backends" id="id49">Backends</a></li>
+<li><a class="reference internal" href="#inheritance" id="id50">Inheritance</a></li>
+<li><a class="reference internal" href="#entrypoint-for-working-with-components" id="id51">Entrypoint for working with components</a></li>
+<li><a class="reference internal" href="#find-a-component" id="id52">Find a component</a></li>
+<li><a class="reference internal" href="#backend-versions" id="id53">Backend Versions</a></li>
+<li><a class="reference internal" href="#replace-or-unregister-a-component" id="id54">Replace or unregister a component</a></li>
+<li><a class="reference internal" href="#various-hints" id="id55">Various hints</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="migrating-jobs">
+<h2><a class="toc-backref" href="#sections">Migrating Jobs</a><a class="headerlink" href="#migrating-jobs" title="Lien permanent vers ce titre">¶</a></h2>
+<p>Jobs are now more integrated within the Odoo API. They are no longer
+standalone functions but are applied on methods of Models.  Another change is
+that they have been extracted into their own addon, so obviously the Python
+paths change.</p>
+<div class="section" id="declaration-of-a-job">
+<h3><a class="toc-backref" href="#sections">Declaration of a job</a><a class="headerlink" href="#declaration-of-a-job" title="Lien permanent vers ce titre">¶</a></h3>
+<div class="section" id="before">
+<h4>Before<a class="headerlink" href="#before" title="Lien permanent vers ce titre">¶</a></h4>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">odoo.addons.connector.queue.job</span> <span class="kn">import</span> <span class="n">job</span><span class="p">,</span> <span class="n">related_action</span>
+<span class="kn">from</span> <span class="nn">..related_action</span> <span class="kn">import</span> <span class="n">unwrap_binding</span><span class="p">,</span> <span class="n">link</span>
+
+<span class="c1"># function at module-level</span>
+<span class="nd">@job</span><span class="p">(</span><span class="n">default_channel</span><span class="o">=</span><span class="s1">&#39;root.magento&#39;</span><span class="p">)</span>
+<span class="nd">@related_action</span><span class="p">(</span><span class="n">action</span><span class="o">=</span><span class="n">link</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">import_record</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">backend_id</span><span class="p">,</span> <span class="n">magento_id</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Import a record from Magento &quot;&quot;&quot;</span>
+    <span class="c1"># ...</span>
+
+<span class="nd">@job</span><span class="p">(</span><span class="n">default_channel</span><span class="o">=</span><span class="s1">&#39;root.magento&#39;</span><span class="p">)</span>
+<span class="nd">@related_action</span><span class="p">(</span><span class="n">action</span><span class="o">=</span><span class="n">unwrap_binding</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">export_record</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">binding_id</span><span class="p">,</span> <span class="n">fields</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Import a record from Magento &quot;&quot;&quot;</span>
+    <span class="c1"># ...</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="after">
+<h4>After<a class="headerlink" href="#after" title="Lien permanent vers ce titre">¶</a></h4>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">odoo.addons.queue_job.job</span> <span class="kn">import</span> <span class="n">job</span><span class="p">,</span> <span class="n">related_action</span>
+<span class="kn">from</span> <span class="nn">odoo</span> <span class="kn">import</span> <span class="n">api</span><span class="p">,</span> <span class="n">models</span>
+
+
+<span class="k">class</span> <span class="nc">MagentoBinding</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">AbstractModel</span><span class="p">):</span>
+    <span class="n">_name</span> <span class="o">=</span> <span class="s1">&#39;magento.binding&#39;</span>
+    <span class="n">_inherit</span> <span class="o">=</span> <span class="s1">&#39;external.binding&#39;</span>
+    <span class="n">_description</span> <span class="o">=</span> <span class="s1">&#39;Magento Binding (abstract)&#39;</span>
+
+    <span class="nd">@job</span><span class="p">(</span><span class="n">default_channel</span><span class="o">=</span><span class="s1">&#39;root.magento&#39;</span><span class="p">)</span>
+    <span class="nd">@related_action</span><span class="p">(</span><span class="n">action</span><span class="o">=</span><span class="s1">&#39;related_action_magento_link&#39;</span><span class="p">)</span>
+    <span class="nd">@api.model</span>
+    <span class="k">def</span> <span class="nf">import_record</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">backend</span><span class="p">,</span> <span class="n">external_id</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Import a Magento record &quot;&quot;&quot;</span>
+        <span class="n">backend</span><span class="o">.</span><span class="n">ensure_one</span><span class="p">()</span>
+        <span class="c1"># ...</span>
+
+    <span class="nd">@job</span><span class="p">(</span><span class="n">default_channel</span><span class="o">=</span><span class="s1">&#39;root.magento&#39;</span><span class="p">)</span>
+    <span class="nd">@related_action</span><span class="p">(</span><span class="n">action</span><span class="o">=</span><span class="s1">&#39;related_action_unwrap_binding&#39;</span><span class="p">)</span>
+    <span class="nd">@api.multi</span>
+    <span class="k">def</span> <span class="nf">export_record</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fields</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Export a record on Magento &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ensure_one</span><span class="p">()</span>
+        <span class="c1"># ...</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="observations">
+<h4>Observations<a class="headerlink" href="#observations" title="Lien permanent vers ce titre">¶</a></h4>
+<ul class="simple">
+<li>The job is declared on the generic abstract binding model from which all
+bindings inherit. This is not a requirement, but for this kind of job it is
+the perfect fit.</li>
+<li><code class="docutils literal"><span class="pre">session</span></code>, <code class="docutils literal"><span class="pre">model_name</span></code> and <code class="docutils literal"><span class="pre">binding_id</span></code> are no longer required as they
+are already known in <code class="docutils literal"><span class="pre">self</span></code>.  Jobs can be used as well on <code class="docutils literal"><span class="pre">&#64;api.multi</span></code> and
+<code class="docutils literal"><span class="pre">&#64;api.model</span></code>.</li>
+<li>Passing arguments as records is supported, in the new version of
+<code class="docutils literal"><span class="pre">import_record</span></code>, no need to browse on the backend if a record was passed</li>
+<li>The action of a related action is now the name of a method on the
+<code class="docutils literal"><span class="pre">queue.job</span></code> model.</li>
+<li>If you need to share a job between several models, put them in an
+AbstractModel and add an <code class="docutils literal"><span class="pre">_inherit</span></code> on the models.</li>
+</ul>
+</div>
+<div class="section" id="links">
+<h4>Links<a class="headerlink" href="#links" title="Lien permanent vers ce titre">¶</a></h4>
+<ul class="simple">
+<li><a class="reference internal" href="../api/api_queue.html#odoo.addons.queue_job.job.job" title="odoo.addons.queue_job.job.job"><code class="xref py py-meth docutils literal"><span class="pre">odoo.addons.queue_job.job.job()</span></code></a></li>
+<li><a class="reference internal" href="../api/api_queue.html#odoo.addons.queue_job.job.related_action" title="odoo.addons.queue_job.job.related_action"><code class="xref py py-meth docutils literal"><span class="pre">odoo.addons.queue_job.job.related_action()</span></code></a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="invocation-of-a-job">
+<h3><a class="toc-backref" href="#sections">Invocation of a job</a><a class="headerlink" href="#invocation-of-a-job" title="Lien permanent vers ce titre">¶</a></h3>
+<div class="section" id="id1">
+<h4>Before<a class="headerlink" href="#id1" title="Lien permanent vers ce titre">¶</a></h4>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">odoo.addons.connector.session</span> <span class="kn">import</span> <span class="n">ConnectorSession</span>
+<span class="kn">from</span> <span class="nn">.unit.export_synchronizer</span> <span class="kn">import</span> <span class="n">export_record</span>
+
+
+<span class="k">class</span> <span class="nc">MyBinding</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">_name</span> <span class="o">=</span> <span class="s1">&#39;my.binding&#39;</span>
+    <span class="n">_inherit</span> <span class="o">=</span> <span class="s1">&#39;magento.binding&#39;</span>
+
+    <span class="nd">@api.multi</span>
+    <span class="k">def</span> <span class="nf">button_trigger_export_sync</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">session</span> <span class="o">=</span> <span class="n">ConnectorSession</span><span class="o">.</span><span class="n">from_env</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="p">)</span>
+        <span class="n">export_record</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">binding</span><span class="o">.</span><span class="n">_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">fields</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">])</span>
+
+    <span class="nd">@api.multi</span>
+    <span class="k">def</span> <span class="nf">button_trigger_export_async</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">session</span> <span class="o">=</span> <span class="n">ConnectorSession</span><span class="o">.</span><span class="n">from_env</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="p">)</span>
+        <span class="n">export_record</span><span class="o">.</span><span class="n">delay</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+                            <span class="n">fields</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">],</span> <span class="n">priority</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id2">
+<h4>After<a class="headerlink" href="#id2" title="Lien permanent vers ce titre">¶</a></h4>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">MyBinding</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">_name</span> <span class="o">=</span> <span class="s1">&#39;my.binding&#39;</span>
+
+    <span class="nd">@api.multi</span>
+    <span class="k">def</span> <span class="nf">button_trigger_export_sync</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_record</span><span class="p">(</span><span class="n">fields</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">])</span>
+
+    <span class="nd">@api.multi</span>
+    <span class="k">def</span> <span class="nf">button_trigger_export_async</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">with_delay</span><span class="p">(</span><span class="n">priority</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span><span class="o">.</span><span class="n">export_record</span><span class="p">(</span><span class="n">fields</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id3">
+<h4>Observations<a class="headerlink" href="#id3" title="Lien permanent vers ce titre">¶</a></h4>
+<ul>
+<li><p class="first">No more imports are needed for the invocation</p>
+</li>
+<li><p class="first"><code class="docutils literal"><span class="pre">ConnectorSession</span></code> is now dead</p>
+</li>
+<li><p class="first">Arguments for the job (such as <code class="docutils literal"><span class="pre">priority</span></code>) are no longer mixed with the
+arguments passed to the method</p>
+</li>
+<li><p class="first">When the job is called on a «&nbsp;browse&nbsp;» record, the job will be executed
+on an instance of this record:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">binding</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="p">[</span><span class="s1">&#39;my.binding&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">browse</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">binding</span><span class="o">.</span><span class="n">button_trigger_export_async</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>In the execution of the job:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="nd">@job</span>
+<span class="k">def</span> <span class="nf">export_record</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fields</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="k">print</span> <span class="bp">self</span>
+    <span class="k">print</span> <span class="n">fields</span>
+<span class="c1"># =&gt;</span>
+<span class="c1"># my.binding,1</span>
+<span class="c1"># [&#39;name&#39;]</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</div>
+<div class="section" id="id4">
+<h4>Links<a class="headerlink" href="#id4" title="Lien permanent vers ce titre">¶</a></h4>
+<ul class="simple">
+<li><a class="reference internal" href="../api/api_queue.html#odoo.addons.queue_job.job.job" title="odoo.addons.queue_job.job.job"><code class="xref py py-meth docutils literal"><span class="pre">odoo.addons.queue_job.job.job()</span></code></a></li>
+<li><a class="reference internal" href="../api/api_queue.html#odoo.addons.queue_job.models.base.Base.with_delay" title="odoo.addons.queue_job.models.base.Base.with_delay"><code class="xref py py-meth docutils literal"><span class="pre">odoo.addons.queue_job.models.base.Base.with_delay()</span></code></a></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="section" id="migrating-events">
+<h2><a class="toc-backref" href="#sections">Migrating Events</a><a class="headerlink" href="#migrating-events" title="Lien permanent vers ce titre">¶</a></h2>
+<p>Events are now handled by the <code class="docutils literal"><span class="pre">component_event</span></code> addon.</p>
+<div class="section" id="triggering-an-event">
+<h3><a class="toc-backref" href="#sections">Triggering an event</a><a class="headerlink" href="#triggering-an-event" title="Lien permanent vers ce titre">¶</a></h3>
+<div class="section" id="id5">
+<h4>Before<a class="headerlink" href="#id5" title="Lien permanent vers ce titre">¶</a></h4>
+<p>First you had to create an <code class="xref py py-class docutils literal"><span class="pre">Event</span></code> instance:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">on_record_create</span> <span class="o">=</span> <span class="n">Event</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>And then import and trigger it, passing a lot of arguments to it:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">odoo.addons.connector.event</span> <span class="kn">import</span> <span class="n">on_record_create</span>
+
+<span class="k">class</span> <span class="nc">Base</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">AbstractModel</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; The base model, which is implicitly inherited by all models. &quot;&quot;&quot;</span>
+    <span class="n">_inherit</span> <span class="o">=</span> <span class="s1">&#39;base&#39;</span>
+
+    <span class="nd">@api.model</span>
+    <span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vals</span><span class="p">):</span>
+        <span class="n">record</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">Base</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">vals</span><span class="p">)</span>
+        <span class="n">on_record_create</span><span class="o">.</span><span class="n">fire</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="p">,</span> <span class="n">record</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">vals</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">record</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id6">
+<h4>After<a class="headerlink" href="#id6" title="Lien permanent vers ce titre">¶</a></h4>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Base</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">AbstractModel</span><span class="p">):</span>
+    <span class="n">_inherit</span> <span class="o">=</span> <span class="s1">&#39;base&#39;</span>
+
+    <span class="nd">@api.model</span>
+    <span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vals</span><span class="p">):</span>
+        <span class="n">record</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">Base</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">vals</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_event</span><span class="p">(</span><span class="s1">&#39;on_record_create&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">notify</span><span class="p">(</span><span class="n">record</span><span class="p">,</span> <span class="n">fields</span><span class="o">=</span><span class="n">vals</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="k">return</span> <span class="n">record</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id7">
+<h4>Observations<a class="headerlink" href="#id7" title="Lien permanent vers ce titre">¶</a></h4>
+<ul class="simple">
+<li>No more imports are needed for the invocation
+Only the arguments you want to pass should be passed to
+<a class="reference internal" href="../api/api_event.html#odoo.addons.component_event.components.event.CollectedEvents.notify" title="odoo.addons.component_event.components.event.CollectedEvents.notify"><code class="xref py py-meth docutils literal"><span class="pre">odoo.addons.component_event.components.event.CollectedEvents.notify()</span></code></a>.</li>
+<li>The name of the event must start with <code class="docutils literal"><span class="pre">'on_'</span></code></li>
+</ul>
+</div>
+<div class="section" id="id8">
+<h4>Links<a class="headerlink" href="#id8" title="Lien permanent vers ce titre">¶</a></h4>
+<ul class="simple">
+<li><a class="reference internal" href="../api/api_event.html#module-odoo.addons.component_event.components.event" title="odoo.addons.component_event.components.event"><code class="xref py py-mod docutils literal"><span class="pre">odoo.addons.component_event.components.event</span></code></a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="listening-to-an-event">
+<h3><a class="toc-backref" href="#sections">Listening to an event</a><a class="headerlink" href="#listening-to-an-event" title="Lien permanent vers ce titre">¶</a></h3>
+<div class="section" id="id9">
+<h4>Before<a class="headerlink" href="#id9" title="Lien permanent vers ce titre">¶</a></h4>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">odoo.addons.connector.event</span> <span class="kn">import</span> <span class="n">on_record_create</span>
+
+<span class="nd">@on_record_create</span>
+<span class="k">def</span> <span class="nf">delay_export</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">record_id</span><span class="p">,</span> <span class="n">vals</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">session</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;connector_no_export&#39;</span><span class="p">):</span>
+        <span class="k">return</span>
+    <span class="n">fields</span> <span class="o">=</span> <span class="n">vals</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+    <span class="n">export_record</span><span class="o">.</span><span class="n">delay</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">record_id</span><span class="p">,</span> <span class="n">fields</span><span class="o">=</span><span class="n">fields</span><span class="p">)</span>
+
+<span class="nd">@on_something</span>
+<span class="k">def</span> <span class="nf">do_anything</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">record_id</span><span class="p">):</span>
+  <span class="c1"># ...</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id10">
+<h4>After<a class="headerlink" href="#id10" title="Lien permanent vers ce titre">¶</a></h4>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">odoo.addons.component.core</span> <span class="kn">import</span> <span class="n">Component</span>
+<span class="kn">from</span> <span class="nn">odoo.addons.component_event</span> <span class="kn">import</span> <span class="n">skip_if</span>
+
+<span class="k">class</span> <span class="nc">MagentoListener</span><span class="p">(</span><span class="n">Component</span><span class="p">):</span>
+    <span class="n">_name</span> <span class="o">=</span> <span class="s1">&#39;magento.event.listener&#39;</span>
+    <span class="n">_inherit</span> <span class="o">=</span> <span class="s1">&#39;base.connector.listener&#39;</span>
+
+    <span class="nd">@skip_if</span><span class="p">(</span><span class="k">lambda</span> <span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">no_connector_export</span><span class="p">(</span><span class="n">record</span><span class="p">))</span>
+    <span class="k">def</span> <span class="nf">on_record_create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="n">fields</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Called when a record is created &quot;&quot;&quot;</span>
+        <span class="n">record</span><span class="o">.</span><span class="n">with_delay</span><span class="p">()</span><span class="o">.</span><span class="n">export_record</span><span class="p">(</span><span class="n">fields</span><span class="o">=</span><span class="n">fields</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">on_something</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">):</span>
+        <span class="c1"># ...</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id11">
+<h4>Observations<a class="headerlink" href="#id11" title="Lien permanent vers ce titre">¶</a></h4>
+<ul class="simple">
+<li>The listeners are now components</li>
+<li>The name of the method is the same than the one notified in the previous
+section</li>
+<li>A listener Component might container several listener methods</li>
+<li>It must inherit from <code class="docutils literal"><span class="pre">'base.event.listener'</span></code>, or one of its descendants.</li>
+<li>The check of the key <code class="docutils literal"><span class="pre">connector_no_export</span></code> in the context can
+be replaced by the decorator <code class="xref py py-func docutils literal"><span class="pre">odoo.addons.component_event.skip_if()</span></code></li>
+</ul>
+</div>
+<div class="section" id="id12">
+<h4>Links<a class="headerlink" href="#id12" title="Lien permanent vers ce titre">¶</a></h4>
+<ul class="simple">
+<li><a class="reference internal" href="../api/api_event.html#module-odoo.addons.component_event.components.event" title="odoo.addons.component_event.components.event"><code class="xref py py-mod docutils literal"><span class="pre">odoo.addons.component_event.components.event</span></code></a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="listening-to-an-event-only-for-some-models">
+<h3><a class="toc-backref" href="#sections">Listening to an event only for some Models</a><a class="headerlink" href="#listening-to-an-event-only-for-some-models" title="Lien permanent vers ce titre">¶</a></h3>
+<div class="section" id="id13">
+<h4>Before<a class="headerlink" href="#id13" title="Lien permanent vers ce titre">¶</a></h4>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">odoo.addons.connector.event</span> <span class="kn">import</span> <span class="n">on_record_create</span>
+
+<span class="nd">@on_record_create</span><span class="p">(</span><span class="n">model_names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;magento.address&#39;</span><span class="p">,</span> <span class="s1">&#39;magento.res.partner&#39;</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">delay_export</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">record_id</span><span class="p">,</span> <span class="n">vals</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">session</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;connector_no_export&#39;</span><span class="p">):</span>
+        <span class="k">return</span>
+    <span class="n">fields</span> <span class="o">=</span> <span class="n">vals</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+    <span class="n">export_record</span><span class="o">.</span><span class="n">delay</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">record_id</span><span class="p">,</span> <span class="n">fields</span><span class="o">=</span><span class="n">fields</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id14">
+<h4>After<a class="headerlink" href="#id14" title="Lien permanent vers ce titre">¶</a></h4>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">odoo.addons.component.core</span> <span class="kn">import</span> <span class="n">Component</span>
+<span class="kn">from</span> <span class="nn">odoo.addons.component_event</span> <span class="kn">import</span> <span class="n">skip_if</span>
+
+<span class="k">class</span> <span class="nc">MagentoListener</span><span class="p">(</span><span class="n">Component</span><span class="p">):</span>
+    <span class="n">_name</span> <span class="o">=</span> <span class="s1">&#39;magento.event.listener&#39;</span>
+    <span class="n">_inherit</span> <span class="o">=</span> <span class="s1">&#39;base.event.listener&#39;</span>
+    <span class="n">_apply_on</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;magento.address&#39;</span><span class="p">,</span> <span class="s1">&#39;magento.res.partner&#39;</span><span class="p">]</span>
+
+    <span class="nd">@skip_if</span><span class="p">(</span><span class="k">lambda</span> <span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">no_connector_export</span><span class="p">(</span><span class="n">record</span><span class="p">))</span>
+    <span class="k">def</span> <span class="nf">on_record_create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="n">fields</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Called when a record is created &quot;&quot;&quot;</span>
+        <span class="n">record</span><span class="o">.</span><span class="n">with_delay</span><span class="p">()</span><span class="o">.</span><span class="n">export_record</span><span class="p">(</span><span class="n">fields</span><span class="o">=</span><span class="n">fields</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id15">
+<h4>Observations<a class="headerlink" href="#id15" title="Lien permanent vers ce titre">¶</a></h4>
+<ul class="simple">
+<li>Same than previous example but we added <code class="docutils literal"><span class="pre">_apply_on</span></code> on the Component.</li>
+</ul>
+</div>
+<div class="section" id="id16">
+<h4>Links<a class="headerlink" href="#id16" title="Lien permanent vers ce titre">¶</a></h4>
+<ul class="simple">
+<li><a class="reference internal" href="../api/api_event.html#module-odoo.addons.component_event.components.event" title="odoo.addons.component_event.components.event"><code class="xref py py-mod docutils literal"><span class="pre">odoo.addons.component_event.components.event</span></code></a></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="section" id="migrating-components">
+<h2><a class="toc-backref" href="#sections">Migrating Components</a><a class="headerlink" href="#migrating-components" title="Lien permanent vers ce titre">¶</a></h2>
+<div class="section" id="backends">
+<h3><a class="toc-backref" href="#sections">Backends</a><a class="headerlink" href="#backends" title="Lien permanent vers ce titre">¶</a></h3>
+<div class="section" id="id17">
+<h4>Before<a class="headerlink" href="#id17" title="Lien permanent vers ce titre">¶</a></h4>
+<p>You could have several versions for a backend:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">magento</span> <span class="o">=</span> <span class="n">backend</span><span class="o">.</span><span class="n">Backend</span><span class="p">(</span><span class="s1">&#39;magento&#39;</span><span class="p">)</span>
+<span class="sd">&quot;&quot;&quot; Generic Magento Backend &quot;&quot;&quot;</span>
+
+<span class="n">magento1700</span> <span class="o">=</span> <span class="n">backend</span><span class="o">.</span><span class="n">Backend</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="n">magento</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s1">&#39;1.7&#39;</span><span class="p">)</span>
+<span class="sd">&quot;&quot;&quot; Magento Backend for version 1.7 &quot;&quot;&quot;</span>
+
+<span class="n">magento1900</span> <span class="o">=</span> <span class="n">backend</span><span class="o">.</span><span class="n">Backend</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="n">magento</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s1">&#39;1.9&#39;</span><span class="p">)</span>
+<span class="sd">&quot;&quot;&quot; Magento Backend for version 1.9 &quot;&quot;&quot;</span>
+</pre></div>
+</div>
+<p>It was linked with a Backend model such as:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">MagentoBackend</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">_name</span> <span class="o">=</span> <span class="s1">&#39;magento.backend&#39;</span>
+    <span class="n">_description</span> <span class="o">=</span> <span class="s1">&#39;Magento Backend&#39;</span>
+    <span class="n">_inherit</span> <span class="o">=</span> <span class="s1">&#39;connector.backend&#39;</span>
+
+    <span class="n">_backend_type</span> <span class="o">=</span> <span class="s1">&#39;magento&#39;</span>
+
+    <span class="nd">@api.model</span>
+    <span class="k">def</span> <span class="nf">select_versions</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Available versions in the backend.</span>
+<span class="sd">        Can be inherited to add custom versions.  Using this method</span>
+<span class="sd">        to add a version from an ``_inherit`` does not constrain</span>
+<span class="sd">        to redefine the ``version`` field in the ``_inherit`` model.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[(</span><span class="s1">&#39;1.7&#39;</span><span class="p">,</span> <span class="s1">&#39;1.7+&#39;</span><span class="p">)]</span>
+
+    <span class="n">version</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Selection</span><span class="p">(</span><span class="n">selection</span><span class="o">=</span><span class="s1">&#39;select_versions&#39;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id18">
+<h4>After<a class="headerlink" href="#id18" title="Lien permanent vers ce titre">¶</a></h4>
+<p>All the <code class="xref py py-class docutils literal"><span class="pre">backend.Backend</span></code> instances must be deleted.</p>
+<p>And the <code class="docutils literal"><span class="pre">_backend_type</span></code> must be removed from the Backend model.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">MagentoBackend</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">_name</span> <span class="o">=</span> <span class="s1">&#39;magento.backend&#39;</span>
+    <span class="n">_description</span> <span class="o">=</span> <span class="s1">&#39;Magento Backend&#39;</span>
+    <span class="n">_inherit</span> <span class="o">=</span> <span class="s1">&#39;connector.backend&#39;</span>
+
+    <span class="nd">@api.model</span>
+    <span class="k">def</span> <span class="nf">select_versions</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Available versions in the backend.</span>
+<span class="sd">        Can be inherited to add custom versions.  Using this method</span>
+<span class="sd">        to add a version from an ``_inherit`` does not constrain</span>
+<span class="sd">        to redefine the ``version`` field in the ``_inherit`` model.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[(</span><span class="s1">&#39;1.7&#39;</span><span class="p">,</span> <span class="s1">&#39;1.7+&#39;</span><span class="p">)]</span>
+
+    <span class="n">version</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Selection</span><span class="p">(</span><span class="n">selection</span><span class="o">=</span><span class="s1">&#39;select_versions&#39;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id19">
+<h4>Observations<a class="headerlink" href="#id19" title="Lien permanent vers ce titre">¶</a></h4>
+<ul class="simple">
+<li>The version is now optional in the Backend Models.</li>
+<li>Backend Models are based on Component’s Collections:
+<a class="reference internal" href="../api/api_components.html#odoo.addons.component.models.collection.Collection" title="odoo.addons.component.models.collection.Collection"><code class="xref py py-class docutils literal"><span class="pre">odoo.addons.component.models.collection.Collection</span></code></a></li>
+</ul>
+</div>
+<div class="section" id="id20">
+<h4>Links<a class="headerlink" href="#id20" title="Lien permanent vers ce titre">¶</a></h4>
+<ul class="simple">
+<li><a class="reference internal" href="../api/api_components.html#api-component"><span class="std std-ref">Components</span></a></li>
+<li><a class="reference internal" href="../api/api_components.html#odoo.addons.component.models.collection.Collection" title="odoo.addons.component.models.collection.Collection"><code class="xref py py-class docutils literal"><span class="pre">odoo.addons.component.models.collection.Collection</span></code></a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="inheritance">
+<h3><a class="toc-backref" href="#sections">Inheritance</a><a class="headerlink" href="#inheritance" title="Lien permanent vers ce titre">¶</a></h3>
+<div class="section" id="id21">
+<h4>Before<a class="headerlink" href="#id21" title="Lien permanent vers ce titre">¶</a></h4>
+<p>You could inherit a <code class="docutils literal"><span class="pre">ConnectorUnit</span></code> by creating a custom Backend
+version and decorating your class with it</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">magento_custom</span> <span class="o">=</span> <span class="n">backend</span><span class="o">.</span><span class="n">Backend</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="n">magento1700</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s1">&#39;custom&#39;</span><span class="p">)</span>
+<span class="sd">&quot;&quot;&quot; Custom Magento Backend &quot;&quot;&quot;</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1"># base one</span>
+<span class="nd">@magento</span>
+<span class="k">class</span> <span class="nc">MagentoPartnerAdapter</span><span class="p">(</span><span class="n">GenericAdapter</span><span class="p">):</span>
+    <span class="c1"># ...</span>
+
+<span class="c1"># other file...</span>
+
+<span class="kn">from</span> <span class="nn">.backend</span> <span class="kn">import</span> <span class="n">magento_custom</span>
+
+<span class="c1"># custom one</span>
+<span class="nd">@magento_custom</span>
+<span class="k">class</span> <span class="nc">MyPartnerAdapter</span><span class="p">(</span><span class="n">MagentoPartnerAdapter</span><span class="p">):</span>
+    <span class="c1"># ...</span>
+
+    <span class="k">def</span> <span class="nf">do_something</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># do it this way</span>
+</pre></div>
+</div>
+<p>You could also replace an existing class, this is mentionned in <a class="reference internal" href="#replace-or-unregister-a-component">Replace or
+unregister a component</a>.</p>
+</div>
+<div class="section" id="id22">
+<h4>After<a class="headerlink" href="#id22" title="Lien permanent vers ce titre">¶</a></h4>
+<p>For an existing component:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">odoo.addons.component.core</span> <span class="kn">import</span> <span class="n">Component</span>
+
+<span class="k">class</span> <span class="nc">MagentoPartnerAdapter</span><span class="p">(</span><span class="n">Component</span><span class="p">):</span>
+    <span class="n">_name</span> <span class="o">=</span> <span class="s1">&#39;magento.partner.adapter&#39;</span>
+    <span class="n">_inherit</span> <span class="o">=</span> <span class="s1">&#39;magento.adapter&#39;</span>
+
+    <span class="k">def</span> <span class="nf">do_something</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># do it this way</span>
+</pre></div>
+</div>
+<p>You can extend it:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">odoo.addons.component.core</span> <span class="kn">import</span> <span class="n">Component</span>
+
+<span class="k">class</span> <span class="nc">MyPartnerAdapter</span><span class="p">(</span><span class="n">Component</span><span class="p">):</span>
+    <span class="n">_inherit</span> <span class="o">=</span> <span class="s1">&#39;magento.partner.adapter&#39;</span>
+
+    <span class="k">def</span> <span class="nf">do_something</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># do it this way</span>
+</pre></div>
+</div>
+<p>Or create a new different component with the existing one as base:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">odoo.addons.component.core</span> <span class="kn">import</span> <span class="n">Component</span>
+
+<span class="k">class</span> <span class="nc">MyPartnerAdapter</span><span class="p">(</span><span class="n">Component</span><span class="p">):</span>
+    <span class="n">_name</span> <span class="o">=</span> <span class="s1">&#39;my.magento.partner.adapter&#39;</span>
+    <span class="n">_inherit</span> <span class="o">=</span> <span class="s1">&#39;magento.partner.adapter&#39;</span>
+
+    <span class="k">def</span> <span class="nf">do_something</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># do it this way</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id23">
+<h4>Observations<a class="headerlink" href="#id23" title="Lien permanent vers ce titre">¶</a></h4>
+<ul class="simple">
+<li>The inheritance is similar to the Odoo’s one (without <code class="docutils literal"><span class="pre">_inherits</span></code>.</li>
+<li>All components have a Python inheritance on
+<a class="reference internal" href="../api/api_components.html#odoo.addons.component.core.AbstractComponent" title="odoo.addons.component.core.AbstractComponent"><code class="xref py py-class docutils literal"><span class="pre">AbstractComponent</span></code></a> or
+<a class="reference internal" href="../api/api_components.html#odoo.addons.component.core.Component" title="odoo.addons.component.core.Component"><code class="xref py py-class docutils literal"><span class="pre">Component</span></code></a></li>
+<li>The names are global (as in Odoo), so you should prefix them with a namespace</li>
+<li>The name of the classes has no effect</li>
+<li>As in Odoo Models, a Component can <code class="docutils literal"><span class="pre">_inherit</span></code> from a list of Components</li>
+<li>All components implicitly inherits from a <code class="docutils literal"><span class="pre">'base'</span></code> component</li>
+</ul>
+</div>
+<div class="section" id="id24">
+<h4>Links<a class="headerlink" href="#id24" title="Lien permanent vers ce titre">¶</a></h4>
+<ul class="simple">
+<li><a class="reference internal" href="../api/api_components.html#api-component"><span class="std std-ref">Components</span></a></li>
+<li><a class="reference internal" href="../api/api_components.html#odoo.addons.component.core.AbstractComponent" title="odoo.addons.component.core.AbstractComponent"><code class="xref py py-class docutils literal"><span class="pre">odoo.addons.component.core.AbstractComponent</span></code></a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="entrypoint-for-working-with-components">
+<h3><a class="toc-backref" href="#sections">Entrypoint for working with components</a><a class="headerlink" href="#entrypoint-for-working-with-components" title="Lien permanent vers ce titre">¶</a></h3>
+<div class="section" id="id25">
+<h4>Before<a class="headerlink" href="#id25" title="Lien permanent vers ce titre">¶</a></h4>
+<p>Previously, when you had to work with <code class="docutils literal"><span class="pre">ConnectorUnit</span></code> from a Model or from a job,
+depending of the Odoo version you to:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">odoo.addons.connector.connector</span> <span class="kn">import</span> <span class="n">ConnectorEnvironment</span>
+
+<span class="c1"># ...</span>
+
+    <span class="n">backend_record</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">env</span><span class="p">[</span><span class="s1">&#39;magento.backend&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">browse</span><span class="p">(</span><span class="n">backend_id</span><span class="p">)</span>
+    <span class="n">env</span> <span class="o">=</span> <span class="n">ConnectorEnvironment</span><span class="p">(</span><span class="n">backend_record</span><span class="p">,</span> <span class="s1">&#39;magento.res.partner&#39;</span><span class="p">)</span>
+    <span class="n">importer</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">get_connector_unit</span><span class="p">(</span><span class="n">MagentoImporter</span><span class="p">)</span>
+    <span class="n">importer</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">magento_id</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="n">force</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Or:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">odoo.addons.connector.connector</span> <span class="kn">import</span> <span class="n">ConnectorEnvironment</span>
+<span class="kn">from</span> <span class="nn">odoo.addons.connector.session</span> <span class="kn">import</span> <span class="n">ConnectorSession</span>
+
+<span class="c1">#...</span>
+
+    <span class="n">backend_record</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">env</span><span class="p">[</span><span class="s1">&#39;magento.backend&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">browse</span><span class="p">(</span><span class="n">backend_id</span><span class="p">)</span>
+    <span class="n">session</span> <span class="o">=</span> <span class="n">ConnectorSession</span><span class="o">.</span><span class="n">from_env</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="p">)</span>
+    <span class="n">env</span> <span class="o">=</span> <span class="n">ConnectorEnvironment</span><span class="p">(</span><span class="n">backend_record</span><span class="p">,</span> <span class="n">session</span><span class="p">,</span> <span class="s1">&#39;magento.res.partner&#39;</span><span class="p">)</span>
+    <span class="n">importer</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">get_connector_unit</span><span class="p">(</span><span class="n">MagentoImporter</span><span class="p">)</span>
+    <span class="n">importer</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">external_id</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="n">force</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Which was commonly abstracted in a helper function such as:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">get_environment</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">backend_id</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Create an environment to work with.  &quot;&quot;&quot;</span>
+    <span class="n">backend_record</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">env</span><span class="p">[</span><span class="s1">&#39;magento.backend&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">browse</span><span class="p">(</span><span class="n">backend_id</span><span class="p">)</span>
+    <span class="n">env</span> <span class="o">=</span> <span class="n">ConnectorEnvironment</span><span class="p">(</span><span class="n">backend_record</span><span class="p">,</span> <span class="n">session</span><span class="p">,</span> <span class="s1">&#39;magento.res.partner&#39;</span><span class="p">)</span>
+    <span class="n">lang</span> <span class="o">=</span> <span class="n">backend_record</span><span class="o">.</span><span class="n">default_lang_id</span>
+    <span class="n">lang_code</span> <span class="o">=</span> <span class="n">lang</span><span class="o">.</span><span class="n">code</span> <span class="k">if</span> <span class="n">lang</span> <span class="k">else</span> <span class="s1">&#39;en_US&#39;</span>
+    <span class="k">if</span> <span class="n">lang_code</span> <span class="o">==</span> <span class="n">session</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;lang&#39;</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">env</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">with</span> <span class="n">env</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">change_context</span><span class="p">(</span><span class="n">lang</span><span class="o">=</span><span class="n">lang_code</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">env</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id26">
+<h4>After<a class="headerlink" href="#id26" title="Lien permanent vers ce titre">¶</a></h4>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1"># ...</span>
+    <span class="n">backend_record</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="p">[</span><span class="s1">&#39;magento.backend&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">browse</span><span class="p">(</span><span class="n">backend_id</span><span class="p">)</span>
+    <span class="k">with</span> <span class="n">backend_record</span><span class="o">.</span><span class="n">work_on</span><span class="p">(</span><span class="s1">&#39;magento.res.partner&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">work</span><span class="p">:</span>
+        <span class="n">importer</span> <span class="o">=</span> <span class="n">work</span><span class="o">.</span><span class="n">component</span><span class="p">(</span><span class="n">usage</span><span class="o">=</span><span class="s1">&#39;record.importer&#39;</span><span class="p">)</span>
+        <span class="n">importer</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">external_id</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="n">force</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id27">
+<h4>Observations<a class="headerlink" href="#id27" title="Lien permanent vers ce titre">¶</a></h4>
+<ul class="simple">
+<li>And when you are already in a Component, refer to <a class="reference internal" href="#find-a-component">Find a component</a></li>
+</ul>
+</div>
+<div class="section" id="id28">
+<h4>Links<a class="headerlink" href="#id28" title="Lien permanent vers ce titre">¶</a></h4>
+<ul class="simple">
+<li><a class="reference internal" href="../api/api_components.html#odoo.addons.component.core.WorkContext" title="odoo.addons.component.core.WorkContext"><code class="xref py py-class docutils literal"><span class="pre">WorkContext</span></code></a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="find-a-component">
+<h3><a class="toc-backref" href="#sections">Find a component</a><a class="headerlink" href="#find-a-component" title="Lien permanent vers ce titre">¶</a></h3>
+<div class="section" id="id29">
+<h4>Before<a class="headerlink" href="#id29" title="Lien permanent vers ce titre">¶</a></h4>
+<p>To find a <code class="docutils literal"><span class="pre">ConnectorUnit</span></code>, you had to ask for given class or subclass:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1"># our ConnectorUnit to find</span>
+<span class="nd">@magento</span>
+<span class="k">class</span> <span class="nc">MagentoPartnerAdapter</span><span class="p">(</span><span class="n">GenericAdapter</span><span class="p">):</span>
+    <span class="n">_model_name</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;magent.res.partner&#39;</span><span class="p">]</span>
+
+<span class="c1"># other file...</span>
+
+<span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">):</span>
+    <span class="n">backend_adapter</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">unit_for</span><span class="p">(</span><span class="n">GenericAdapter</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>It was searched for the current model and the current backend.</p>
+</div>
+<div class="section" id="id30">
+<h4>After<a class="headerlink" href="#id30" title="Lien permanent vers ce titre">¶</a></h4>
+<p>For an existing component:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">odoo.addons.component.core</span> <span class="kn">import</span> <span class="n">Component</span>
+
+<span class="k">class</span> <span class="nc">MagentoPartnerAdapter</span><span class="p">(</span><span class="n">Component</span><span class="p">):</span>
+    <span class="n">_name</span> <span class="o">=</span> <span class="s1">&#39;magento.partner.adapter&#39;</span>
+    <span class="n">_inherit</span> <span class="o">=</span> <span class="s1">&#39;magento.adapter&#39;</span>
+
+    <span class="n">_usage</span> <span class="o">=</span> <span class="s1">&#39;backend.adapter&#39;</span>
+    <span class="n">_collection</span> <span class="o">=</span> <span class="s1">&#39;magento.backend&#39;</span>
+    <span class="n">_apply_on</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;res.partner&#39;</span><span class="p">]</span>
+
+<span class="c1"># other file...</span>
+
+<span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">):</span>
+    <span class="n">backend_adapter</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">component</span><span class="p">(</span><span class="n">usage</span><span class="o">=</span><span class="s1">&#39;backend.adapter&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id31">
+<h4>Observations<a class="headerlink" href="#id31" title="Lien permanent vers ce titre">¶</a></h4>
+<ul>
+<li><p class="first">The model is compared with the <code class="docutils literal"><span class="pre">_apply_on</span></code> attribute</p>
+</li>
+<li><p class="first">The Backend is compared with the <code class="docutils literal"><span class="pre">_collection</span></code> attribute, it must
+have the same name than the Backend Model.</p>
+</li>
+<li><p class="first">The <code class="docutils literal"><span class="pre">_usage</span></code> indicates what the purpose of the component is, and
+allow to find the correct one for our task. It allow more dynamic
+usages than the previous usage of a class.</p>
+</li>
+<li><p class="first">Usually, the <code class="docutils literal"><span class="pre">_usage</span></code> and the <code class="docutils literal"><span class="pre">_collection</span></code> will be <code class="docutils literal"><span class="pre">_inherit</span></code> “ed from
+a component (here from <code class="docutils literal"><span class="pre">'magento.adapter</span></code>), so they won’t need to be
+repeated in all Components.</p>
+</li>
+<li><p class="first">A good idea is to have a base abstract Component for the Collection, then
+an abstract Component for every usage:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">BaseMagentoConnectorComponent</span><span class="p">(</span><span class="n">AbstractComponent</span><span class="p">):</span>
+
+    <span class="n">_name</span> <span class="o">=</span> <span class="s1">&#39;base.magento.connector&#39;</span>
+    <span class="n">_inherit</span> <span class="o">=</span> <span class="s1">&#39;base.connector&#39;</span>
+    <span class="n">_collection</span> <span class="o">=</span> <span class="s1">&#39;magento.backend&#39;</span>
+
+<span class="k">class</span> <span class="nc">MagentoBaseExporter</span><span class="p">(</span><span class="n">AbstractComponent</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Base exporter for Magento &quot;&quot;&quot;</span>
+
+    <span class="n">_name</span> <span class="o">=</span> <span class="s1">&#39;magento.base.exporter&#39;</span>
+    <span class="n">_inherit</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;base.exporter&#39;</span><span class="p">,</span> <span class="s1">&#39;base.magento.connector&#39;</span><span class="p">]</span>
+    <span class="n">_usage</span> <span class="o">=</span> <span class="s1">&#39;record.exporter&#39;</span>
+
+<span class="k">class</span> <span class="nc">MagentoImportMapper</span><span class="p">(</span><span class="n">AbstractComponent</span><span class="p">):</span>
+    <span class="n">_name</span> <span class="o">=</span> <span class="s1">&#39;magento.import.mapper&#39;</span>
+    <span class="n">_inherit</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;base.magento.connector&#39;</span><span class="p">,</span> <span class="s1">&#39;base.import.mapper&#39;</span><span class="p">]</span>
+    <span class="n">_usage</span> <span class="o">=</span> <span class="s1">&#39;import.mapper&#39;</span>
+
+<span class="c1"># ...</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">The main usages are:
+* import.mapper
+* export.mapper
+* backend.adapter
+* importer
+* exporter
+* binder
+* event.listener</p>
+</li>
+<li><p class="first">But for the importer and exporter, I recommend to use more precise ones in
+the connectors: record.importer, record.exporter, batch.importer,
+batch.exporter</p>
+</li>
+<li><p class="first">You are allowed to be creative with the <code class="docutils literal"><span class="pre">_usage</span></code>, it’s the key that will
+allow you to find the right one component you need. (e.g. on
+<code class="docutils literal"><span class="pre">stock.picking</span></code> you need to 1. export the record, 2. export the tracking.
+Then use <code class="docutils literal"><span class="pre">record.exporter</span></code> and <code class="docutils literal"><span class="pre">tracking.exporter</span></code>).</p>
+</li>
+<li><p class="first">AbstractComponent will never be returned by a lookup</p>
+</li>
+</ul>
+</div>
+<div class="section" id="id32">
+<h4>Links<a class="headerlink" href="#id32" title="Lien permanent vers ce titre">¶</a></h4>
+<ul class="simple">
+<li><a class="reference internal" href="../api/api_components.html#api-component"><span class="std std-ref">Components</span></a></li>
+<li><a class="reference internal" href="../api/api_components.html#odoo.addons.component.core.AbstractComponent" title="odoo.addons.component.core.AbstractComponent"><code class="xref py py-class docutils literal"><span class="pre">odoo.addons.component.core.AbstractComponent</span></code></a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="backend-versions">
+<h3><a class="toc-backref" href="#sections">Backend Versions</a><a class="headerlink" href="#backend-versions" title="Lien permanent vers ce titre">¶</a></h3>
+<div class="section" id="id33">
+<h4>Before<a class="headerlink" href="#id33" title="Lien permanent vers ce titre">¶</a></h4>
+<p>You could have several versions for a backend:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">magento</span> <span class="o">=</span> <span class="n">backend</span><span class="o">.</span><span class="n">Backend</span><span class="p">(</span><span class="s1">&#39;magento&#39;</span><span class="p">)</span>
+<span class="sd">&quot;&quot;&quot; Generic Magento Backend &quot;&quot;&quot;</span>
+
+<span class="n">magento1700</span> <span class="o">=</span> <span class="n">backend</span><span class="o">.</span><span class="n">Backend</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="n">magento</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s1">&#39;1.7&#39;</span><span class="p">)</span>
+<span class="sd">&quot;&quot;&quot; Magento Backend for version 1.7 &quot;&quot;&quot;</span>
+
+<span class="n">magento1900</span> <span class="o">=</span> <span class="n">backend</span><span class="o">.</span><span class="n">Backend</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="n">magento</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s1">&#39;1.9&#39;</span><span class="p">)</span>
+<span class="sd">&quot;&quot;&quot; Magento Backend for version 1.9 &quot;&quot;&quot;</span>
+</pre></div>
+</div>
+<p>And use them for a class-level dynamic dispatch</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">odoo.addons.magentoerpconnect.backend</span> <span class="kn">import</span> <span class="n">magento1700</span><span class="p">,</span> <span class="n">magento1900</span>
+
+<span class="nd">@magento1700</span>
+<span class="k">class</span> <span class="nc">PartnerAdapter1700</span><span class="p">(</span><span class="n">GenericAdapter</span><span class="p">):</span>
+    <span class="c1"># ...</span>
+
+    <span class="k">def</span> <span class="nf">do_something</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># do it this way</span>
+
+<span class="nd">@magento1900</span>
+<span class="k">class</span> <span class="nc">PartnerAdapter1900</span><span class="p">(</span><span class="n">GenericAdapter</span><span class="p">):</span>
+    <span class="c1"># ...</span>
+
+    <span class="k">def</span> <span class="nf">do_something</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># do it that way</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id34">
+<h4>After<a class="headerlink" href="#id34" title="Lien permanent vers ce titre">¶</a></h4>
+<p>This feature has been removed, it introduced a lot of complexity (notably
+regarding inheritance) for few gain.  The version is now optional on the
+backends and the version dispatch, if needed, should be handled manually.</p>
+<p>In methods:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">odoo.addons.component.core</span> <span class="kn">import</span> <span class="n">Component</span>
+
+<span class="k">class</span> <span class="nc">PartnerAdapter</span><span class="p">(</span><span class="n">Component</span><span class="p">):</span>
+    <span class="c1"># ...</span>
+
+    <span class="k">def</span> <span class="nf">do_something</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">backend_record</span><span class="o">.</span><span class="n">version</span> <span class="o">==</span> <span class="s1">&#39;1.7&#39;</span><span class="p">:</span>
+            <span class="c1"># do it this way</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># do it that way</span>
+</pre></div>
+</div>
+<p>Or with a factory:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">odoo.addons.component.core</span> <span class="kn">import</span> <span class="n">Component</span>
+
+<span class="k">class</span> <span class="nc">PartnerAdapterFactory</span><span class="p">(</span><span class="n">Component</span><span class="p">):</span>
+    <span class="c1"># ...</span>
+
+    <span class="k">def</span> <span class="nf">get_component</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">version</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">backend_record</span><span class="o">.</span><span class="n">version</span> <span class="o">==</span> <span class="s1">&#39;1.7&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">component</span><span class="p">(</span><span class="n">usage</span><span class="o">=</span><span class="s1">&#39;backend.adapter.1.7&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">component</span><span class="p">(</span><span class="n">usage</span><span class="o">=</span><span class="s1">&#39;backend.adapter.1.9&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id35">
+<h4>Observations<a class="headerlink" href="#id35" title="Lien permanent vers ce titre">¶</a></h4>
+<ul class="simple">
+<li>None</li>
+</ul>
+</div>
+<div class="section" id="id36">
+<h4>Links<a class="headerlink" href="#id36" title="Lien permanent vers ce titre">¶</a></h4>
+<ul class="simple">
+<li><a class="reference internal" href="../api/api_components.html#api-component"><span class="std std-ref">Components</span></a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="replace-or-unregister-a-component">
+<h3><a class="toc-backref" href="#sections">Replace or unregister a component</a><a class="headerlink" href="#replace-or-unregister-a-component" title="Lien permanent vers ce titre">¶</a></h3>
+<div class="section" id="id37">
+<h4>Before<a class="headerlink" href="#id37" title="Lien permanent vers ce titre">¶</a></h4>
+<p>You could replace a <code class="docutils literal"><span class="pre">ConnectorUnit</span></code> with the <code class="docutils literal"><span class="pre">replace</span></code> argument passed to
+the backend decorator:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="nd">@magento</span><span class="p">(</span><span class="n">replacing</span><span class="o">=</span><span class="n">product</span><span class="o">.</span><span class="n">ProductImportMapper</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">ProductImportMapper</span><span class="p">(</span><span class="n">product</span><span class="o">.</span><span class="n">ProductImportMapper</span><span class="p">):</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id38">
+<h4>After<a class="headerlink" href="#id38" title="Lien permanent vers ce titre">¶</a></h4>
+<p>First point: this should hardly be needed now, as you can inherit a component
+like Odoo Models.  Still, if you need to totally replace a component by
+another, let’s say there is this component:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">odoo.addons.component.core</span> <span class="kn">import</span> <span class="n">Component</span>
+
+<span class="k">class</span> <span class="nc">ProductImportMapper</span><span class="p">(</span><span class="n">Component</span><span class="p">):</span>
+    <span class="n">_name</span> <span class="o">=</span> <span class="s1">&#39;magento.product.import.mapper&#39;</span>
+    <span class="n">_inherit</span> <span class="o">=</span> <span class="s1">&#39;magento.import.mapper&#39;</span>
+
+    <span class="n">_apply_on</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;magento.product.product&#39;</span><span class="p">]</span>
+    <span class="c1"># normally the following attrs are inherited from the _inherit</span>
+    <span class="n">_usage</span> <span class="o">=</span> <span class="s1">&#39;import.mapper&#39;</span>
+    <span class="n">_collection</span> <span class="o">=</span> <span class="s1">&#39;magento.backend&#39;</span>
+</pre></div>
+</div>
+<p>Then you can remove the usage of the component: it will never be used:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">odoo.addons.component.core</span> <span class="kn">import</span> <span class="n">Component</span>
+
+<span class="k">class</span> <span class="nc">ProductImportMapper</span><span class="p">(</span><span class="n">Component</span><span class="p">):</span>
+    <span class="n">_inherit</span> <span class="o">=</span> <span class="s1">&#39;magento.product.import.mapper&#39;</span>
+    <span class="n">_usage</span> <span class="o">=</span> <span class="bp">None</span>
+</pre></div>
+</div>
+<p>And create your own, that will be picked up instead of the base one:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">odoo.addons.component.core</span> <span class="kn">import</span> <span class="n">Component</span>
+
+<span class="k">class</span> <span class="nc">MyProductImportMapper</span><span class="p">(</span><span class="n">Component</span><span class="p">):</span>
+    <span class="n">_name</span> <span class="o">=</span> <span class="s1">&#39;my.magento.product.import.mapper&#39;</span>
+    <span class="n">_inherit</span> <span class="o">=</span> <span class="s1">&#39;magento.import.mapper&#39;</span>
+
+    <span class="n">_apply_on</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;magento.product.product&#39;</span><span class="p">]</span>
+    <span class="c1"># normally the following attrs are inherited from the _inherit</span>
+    <span class="n">_usage</span> <span class="o">=</span> <span class="s1">&#39;import.mapper&#39;</span>
+    <span class="n">_collection</span> <span class="o">=</span> <span class="s1">&#39;magento.backend&#39;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id39">
+<h4>Observations<a class="headerlink" href="#id39" title="Lien permanent vers ce titre">¶</a></h4>
+<ul class="simple">
+<li>None</li>
+</ul>
+</div>
+<div class="section" id="id40">
+<h4>Links<a class="headerlink" href="#id40" title="Lien permanent vers ce titre">¶</a></h4>
+<ul class="simple">
+<li><a class="reference internal" href="../api/api_components.html#api-component"><span class="std std-ref">Components</span></a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="various-hints">
+<h3><a class="toc-backref" href="#sections">Various hints</a><a class="headerlink" href="#various-hints" title="Lien permanent vers ce titre">¶</a></h3>
+<ul class="simple">
+<li>The components and the jobs know how to work with Model instances,
+so prefer them over ids in parameters.</li>
+</ul>
+</div>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+        <br/>
+        
+<div id="sourcelink">
+  <a href="../_sources/guides/migration_guide.rst.txt"
+     rel="nofollow">Source</a>
+</div>
+      
+    </p>
+    <p>
+        &copy; Copyright 2013, Camptocamp SA.<br/>
+      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.3.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

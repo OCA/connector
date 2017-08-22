@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>odoo.addons.component_event.components.event &#8212; Connector  documentation</title>
+    <link rel="stylesheet" href="../../../../../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../../../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../../../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../../../../../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../../../../../_static/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../../../../_static/bootstrap-sphinx.js"></script>
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" />
+
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-7628916-3', 'odoo-connector.com');
+  ga('send', 'pageview');
+</script>
+
+  </head>
+  <body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../../../../index.html">
+          Odoo Connector</a>
+        <span class="navbar-text navbar-version pull-left"><b></b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+  <li class="dropdown">
+    <a role="button"
+       id="dLabelTranslations"
+       data-toggle="dropdown"
+       data-target="#"
+       href="#">Translations<b class="caret"></b></a>
+    <ul class="dropdown-menu"
+        role="menu"
+        aria-labelledby="dLabelTranslations">
+      <li><a class="reference" href="http://odoo-connector.com">English</a><li>
+      <li><a class="reference" href="http://odoo-connector.com/fr">French</a><li>
+    </ul>
+  </li>
+  
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../../../../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../guides/migration_guide.html">Migration Guide to the new Connector API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../guides/migration_guide.html#migrating-jobs">Migrating Jobs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../guides/migration_guide.html#migrating-events">Migrating Events</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../guides/migration_guide.html#migrating-components">Migrating Components</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../guides/code_overview.html">Code Overview</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../guides/code_overview.html#trigger-and-listen-an-event">Trigger and listen an event</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../guides/code_overview.html#delay-an-asynchronous-job">Delay an Asynchronous Job</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../guides/code_overview.html#work-with-components">Work with components</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../guides/concepts.html">Connector Concepts</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../guides/concepts.html#events">Events</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../guides/concepts.html#jobs-queue">Jobs Queue</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../guides/concepts.html#backend">Backend</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../guides/concepts.html#workcontext">WorkContext</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../guides/concepts.html#component">Component</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../guides/concepts.html#bindings">Bindings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../guides/concepts.html#checkpoint">Checkpoint</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../guides/bootstrap_connector.html">Boostrapping a connector</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../guides/bootstrap_connector.html#odoo-manifest">Odoo Manifest</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../guides/bootstrap_connector.html#backend-model">Backend Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../guides/bootstrap_connector.html#abstract-binding">Abstract Binding</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../guides/bootstrap_connector.html#components">Components</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../guides/jobrunner.html">Configuring channels and the job runner</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../guides/jobrunner.html#what-is-the-job-runner">What is the job runner?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../guides/jobrunner.html#how-does-it-work">How does it work?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../guides/jobrunner.html#how-to-use-it">How to use it?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../guides/jobrunner.html#caveat">Caveat</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../guides/jobrunner.html#what-is-a-channel">What is a channel?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../guides/jobrunner.html#how-to-configure-channels">How to configure Channels?</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../api/api_components.html">Components</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/api_components.html#module-connector.components.core">Core Components</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/api_components.html#module-connector.components.binder">Connector Components</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/api_components.html#module-odoo.addons.component.models.collection">Components Collection Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/api_components.html#module-odoo.addons.component.exception">Components Exceptions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/api_components.html#components-internals">Components Internals</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../api/api_backend.html">Models</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/api_backend.html#backend-model">Backend Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/api_backend.html#binding-model">Binding Model</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../api/api_event.html">Events</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/api_event.html#module-odoo.addons.component_event.components.event">Components</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/api_event.html#module-odoo.addons.component_event.models.base">Odoo Models Extensions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/api_event.html#module-odoo.addons.component_event.core">Internals</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../api/api_queue.html">Queue</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/api_queue.html#module-odoo.addons.queue_job.job">Job</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../api/api_queue.html#module-odoo.addons.queue_job.models.base">Models</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../api/api_exception.html">Exceptions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../api/api_channels.html">Channels</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../project/contribute.html">Contribute</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../project/contribute.html#want-to-start-a-new-connector">Want to start a new connector</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../project/contribute.html#creating-or-maintaining-a-translation-of-this-doc">Creating or maintaining a translation of this doc</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../project/contributors.html">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../project/contributors.html#financial-contributors">Financial Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../project/license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../project/changes.html">Changes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../project/changes.html#future">Future (?)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../project/changes.html#id2">9.0.1.0.2 (2016-03-03)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../project/changes.html#id3">9.0.1.0.1 (2016-03-03)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../project/changes.html#id4">8.0.3.3.0 (2016-02-29)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../project/changes.html#id5">3.2.0 (2015-09-10)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../project/changes.html#id6">3.1.0 (2015-05-15)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../project/changes.html#id7">3.0.0 (2015-04-01)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../project/changes.html#id8">2.2.0 (2014-05-26)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../project/changes.html#id9">2.1.1 (2014-02-06)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../project/changes.html#warning-breaks-compatibility">2.1.0 (2014-01-15 - warning: breaks compatibility)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../project/changes.html#id10">2.0.1 (2013-09-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../project/changes.html#id11">2.0.0</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../project/roadmap.html">Roadmap</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"></ul>
+</li>
+              
+            
+
+            
+              
+                
+              
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../../../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 content">
+      
+  <h1>Source code for odoo.addons.component_event.components.event</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1"># Copyright 2017 Camptocamp SA</span>
+<span class="c1"># License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html)</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Events</span>
+<span class="sd">======</span>
+
+<span class="sd">Events are a notification system.</span>
+
+<span class="sd">On one side, one or many listeners await for an event to happen. On</span>
+<span class="sd">the other side, when such event happen, a notification is sent to</span>
+<span class="sd">the listeners.</span>
+
+<span class="sd">An example of event is: &#39;when a record has been created&#39;.</span>
+
+<span class="sd">The event system allows to write the notification code in only one place, in</span>
+<span class="sd">one Odoo addon, and to write as many listeners as we want, in different places,</span>
+<span class="sd">different addons.</span>
+
+<span class="sd">We&#39;ll see below how the ``on_record_create`` is implemented.</span>
+
+<span class="sd">Notifier</span>
+<span class="sd">--------</span>
+
+<span class="sd">The first thing is to find where/when the notification should be sent.</span>
+<span class="sd">For the creation of a record, it is in :meth:`odoo.models.BaseModel.create`.</span>
+<span class="sd">We can inherit from the `&#39;base&#39;` model to add this line:</span>
+
+<span class="sd">::</span>
+
+<span class="sd">    class Base(models.AbstractModel):</span>
+<span class="sd">        _inherit = &#39;base&#39;</span>
+
+<span class="sd">        @api.model</span>
+<span class="sd">        def create(self, vals):</span>
+<span class="sd">            record = super(Base, self).create(vals)</span>
+<span class="sd">            self._event(&#39;on_record_create&#39;).notify(record, fields=vals.keys())</span>
+<span class="sd">            return record</span>
+
+<span class="sd">The :meth:`..models.base.Base._event` method has been added to the `&#39;base&#39;`</span>
+<span class="sd">model, so an event can be notified from any model. The</span>
+<span class="sd">:meth:`CollectedEvents.notify` method triggers the event and forward the</span>
+<span class="sd">arguments to the listeners.</span>
+
+<span class="sd">This should be done only once.</span>
+
+<span class="sd">Listeners</span>
+<span class="sd">---------</span>
+
+<span class="sd">Listeners are Components that respond to the event names.</span>
+<span class="sd">The components must have a ``_usage`` equals to ``&#39;event.listener&#39;``, but it</span>
+<span class="sd">doesn&#39;t to be set manually if the component inherits from</span>
+<span class="sd">``&#39;base.event.listener&#39;``</span>
+
+<span class="sd">Here is how we would log something each time a record is created::</span>
+
+<span class="sd">    class MyEventListener(Component):</span>
+<span class="sd">        _name = &#39;my.event.listener&#39;</span>
+<span class="sd">        _inherit = &#39;base.event.listener&#39;</span>
+
+<span class="sd">        def on_record_create(self, record, fields=None):</span>
+<span class="sd">            _logger.info(&quot;%r has been created&quot;, record)</span>
+
+<span class="sd">Many listeners such as this one could be added for the same event.</span>
+
+
+<span class="sd">Collection and models</span>
+<span class="sd">---------------------</span>
+
+<span class="sd">In the example above, the listeners is global. It will be executed for any</span>
+<span class="sd">model and collection. You can also restrict a listener to only a collection or</span>
+<span class="sd">model, using the ``_collection`` or ``_apply_on`` attributes.</span>
+
+<span class="sd">::</span>
+
+<span class="sd">    class MyEventListener(Component):</span>
+<span class="sd">        _name = &#39;my.event.listener&#39;</span>
+<span class="sd">        _inherit = &#39;base.event.listener&#39;</span>
+<span class="sd">        _collection = &#39;magento.backend&#39;</span>
+
+<span class="sd">        def on_record_create(self, record, fields=None):</span>
+<span class="sd">            _logger.info(&quot;%r has been created&quot;, record)</span>
+
+
+<span class="sd">    class MyModelEventListener(Component):</span>
+<span class="sd">        _name = &#39;my.event.listener&#39;</span>
+<span class="sd">        _inherit = &#39;base.event.listener&#39;</span>
+<span class="sd">        _apply_on = [&#39;res.users&#39;]</span>
+
+<span class="sd">        def on_record_create(self, record, fields=None):</span>
+<span class="sd">            _logger.info(&quot;%r has been created&quot;, record)</span>
+
+
+<span class="sd">If you want an event to be restricted to a collection, the</span>
+<span class="sd">notification must also precise the collection, otherwise all listeners</span>
+<span class="sd">will be executed::</span>
+
+
+<span class="sd">    collection = self.env[&#39;magento.backend&#39;]</span>
+<span class="sd">    self._event(&#39;on_foo_created&#39;, collection=collection).notify(record, vals)</span>
+
+<span class="sd">An event can be skipped based on a condition evaluated from the notified</span>
+<span class="sd">arguments. See :func:`skip_if`</span>
+
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">operator</span>
+
+<span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">defaultdict</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="k">import</span> <span class="n">wraps</span>
+
+<span class="kn">from</span> <span class="nn">odoo.addons.component.core</span> <span class="k">import</span> <span class="n">AbstractComponent</span><span class="p">,</span> <span class="n">Component</span>
+
+<span class="n">_logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">cachetools</span> <span class="k">import</span> <span class="n">LRUCache</span><span class="p">,</span> <span class="n">cachedmethod</span><span class="p">,</span> <span class="n">keys</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="n">_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Cannot import &#39;cachetools&#39;.&quot;</span><span class="p">)</span>
+
+<span class="c1"># Number of items we keep in LRU cache when we collect the events.</span>
+<span class="c1"># 1 item means: for an event name, model_name, collection, return</span>
+<span class="c1"># the event methods</span>
+<span class="n">DEFAULT_EVENT_CACHE_SIZE</span> <span class="o">=</span> <span class="mi">512</span>
+
+
+<div class="viewcode-block" id="skip_if"><a class="viewcode-back" href="../../../../../api/api_event.html#odoo.addons.component_event.components.event.skip_if">[docs]</a><span class="k">def</span> <span class="nf">skip_if</span><span class="p">(</span><span class="n">cond</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Decorator allowing to skip an event based on a condition</span>
+
+<span class="sd">    The condition is a python lambda expression, which takes the</span>
+<span class="sd">    same arguments than the event.</span>
+
+<span class="sd">    Example::</span>
+
+<span class="sd">        @skip_if(lambda self, *args, **kwargs:</span>
+<span class="sd">                 self.env.context.get(&#39;connector_no_export&#39;))</span>
+<span class="sd">        def on_record_write(self, record, fields=None):</span>
+<span class="sd">            _logger(&#39;I&#39;ll delay a job, but only if we didn&#39;t disabled &#39;</span>
+<span class="sd">                    &#39; the export with a context key&#39;)</span>
+<span class="sd">            record.with_delay().export_record()</span>
+
+<span class="sd">        @skip_if(lambda self, record, kind: kind == &#39;complete&#39;)</span>
+<span class="sd">        def on_record_write(self, record, kind):</span>
+<span class="sd">            _logger(&quot;I&#39;ll delay a job, but only if the kind is &#39;complete&#39;&quot;)</span>
+<span class="sd">            record.with_delay().export_record()</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">skip_if_decorator</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+        <span class="nd">@wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+        <span class="k">def</span> <span class="nf">func_wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">cond</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+                <span class="k">return</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">func_wrapper</span>
+    <span class="k">return</span> <span class="n">skip_if_decorator</span></div>
+
+
+<div class="viewcode-block" id="CollectedEvents"><a class="viewcode-back" href="../../../../../api/api_event.html#odoo.addons.component_event.components.event.CollectedEvents">[docs]</a><span class="k">class</span> <span class="nc">CollectedEvents</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Event methods ready to be notified</span>
+
+<span class="sd">    This is a rather internal class. An instance of this class</span>
+<span class="sd">    is prepared by the :class:`EventCollecter` when we need to notify</span>
+<span class="sd">    the listener that the event has been triggered.</span>
+
+<span class="sd">    :meth:`EventCollecter.collect_events` collects the events,</span>
+<span class="sd">    feed them to the instance, so we can use the :meth:`notify` method</span>
+<span class="sd">    that will forward the arguments and keyword arguments to the</span>
+<span class="sd">    listeners of the event.</span>
+<span class="sd">    ::</span>
+
+<span class="sd">        &gt;&gt;&gt; # collecter is an instance of CollectedEvents</span>
+<span class="sd">        &gt;&gt;&gt; collecter.collect_events(&#39;on_record_create&#39;).notify(something)</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">events</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">events</span> <span class="o">=</span> <span class="n">events</span>
+
+<div class="viewcode-block" id="CollectedEvents.notify"><a class="viewcode-back" href="../../../../../api/api_event.html#odoo.addons.component_event.components.event.CollectedEvents.notify">[docs]</a>    <span class="k">def</span> <span class="nf">notify</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Forward the arguments to every listeners of an event &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">event</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">events</span><span class="p">:</span>
+            <span class="n">event</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="EventCollecter"><a class="viewcode-back" href="../../../../../api/api_event.html#odoo.addons.component_event.components.event.EventCollecter">[docs]</a><span class="k">class</span> <span class="nc">EventCollecter</span><span class="p">(</span><span class="n">Component</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Component that collects the event from an event name</span>
+
+<span class="sd">    For doing so, it searches all the components that respond to the</span>
+<span class="sd">    ``event.listener`` ``_usage`` and having an event of the same</span>
+<span class="sd">    name.</span>
+
+<span class="sd">    Then it feeds the events to an instance of :class:`EventCollecter`</span>
+<span class="sd">    and return it to the caller.</span>
+
+<span class="sd">    It keeps the results in a cache, the Component is rebuilt when</span>
+<span class="sd">    the Odoo&#39;s registry is rebuilt, hence the cache is cleared as well.</span>
+
+<span class="sd">    An event always starts with ``on_``.</span>
+
+<span class="sd">    Note that the special</span>
+<span class="sd">    :class:`odoo.addons.component_event.core.EventWorkContext` class should be</span>
+<span class="sd">    used for this Component, because it can work</span>
+<span class="sd">    without a collection.</span>
+
+<span class="sd">    It is used by :meth:`odoo.addons.component_event.models.base.Base._event`.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">_name</span> <span class="o">=</span> <span class="s1">&#39;base.event.collecter&#39;</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">_complete_component_build</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Create a cache on the class when the component is built &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">EventCollecter</span><span class="p">,</span> <span class="bp">cls</span><span class="p">)</span><span class="o">.</span><span class="n">_complete_component_build</span><span class="p">()</span>
+        <span class="c1"># the _cache being on the component class, which is</span>
+        <span class="c1"># dynamically rebuild when odoo registry is rebuild, we</span>
+        <span class="c1"># are sure that the result is always the same for a lookup</span>
+        <span class="c1"># until the next rebuild of odoo&#39;s registry</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">_cache</span> <span class="o">=</span> <span class="n">LRUCache</span><span class="p">(</span><span class="n">maxsize</span><span class="o">=</span><span class="n">DEFAULT_EVENT_CACHE_SIZE</span><span class="p">)</span>
+
+    <span class="nd">@cachedmethod</span><span class="p">(</span><span class="n">operator</span><span class="o">.</span><span class="n">attrgetter</span><span class="p">(</span><span class="s1">&#39;_cache&#39;</span><span class="p">),</span>
+                  <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="n">keys</span><span class="o">.</span><span class="n">hashkey</span><span class="p">(</span>
+                      <span class="bp">self</span><span class="o">.</span><span class="n">work</span><span class="o">.</span><span class="n">collection</span><span class="o">.</span><span class="n">_name</span>
+                      <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">work</span><span class="o">.</span><span class="n">_collection</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+                      <span class="bp">self</span><span class="o">.</span><span class="n">work</span><span class="o">.</span><span class="n">model_name</span><span class="p">,</span>
+                      <span class="n">name</span><span class="p">)</span>
+                  <span class="p">)</span>
+    <span class="k">def</span> <span class="nf">_collect_events</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="n">events</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">set</span><span class="p">)</span>
+        <span class="n">collection_name</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">work</span><span class="o">.</span><span class="n">collection</span><span class="o">.</span><span class="n">_name</span>
+                           <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">work</span><span class="o">.</span><span class="n">_collection</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+                           <span class="k">else</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">component_classes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">work</span><span class="o">.</span><span class="n">components_registry</span><span class="o">.</span><span class="n">lookup</span><span class="p">(</span>
+            <span class="n">collection_name</span><span class="o">=</span><span class="n">collection_name</span><span class="p">,</span>
+            <span class="n">usage</span><span class="o">=</span><span class="s1">&#39;event.listener&#39;</span><span class="p">,</span>
+            <span class="n">model_name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">work</span><span class="o">.</span><span class="n">model_name</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">for</span> <span class="bp">cls</span> <span class="ow">in</span> <span class="n">component_classes</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">has_event</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+                <span class="n">events</span><span class="p">[</span><span class="bp">cls</span><span class="p">]</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">events</span>
+
+    <span class="k">def</span> <span class="nf">_init_collected_events</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">class_events</span><span class="p">):</span>
+        <span class="n">events</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="k">for</span> <span class="bp">cls</span><span class="p">,</span> <span class="n">names</span> <span class="ow">in</span> <span class="n">class_events</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">names</span><span class="p">:</span>
+                <span class="n">component</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">work</span><span class="p">)</span>
+                <span class="n">events</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">component</span><span class="p">,</span> <span class="n">name</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">events</span>
+
+<div class="viewcode-block" id="EventCollecter.collect_events"><a class="viewcode-back" href="../../../../../api/api_event.html#odoo.addons.component_event.components.event.EventCollecter.collect_events">[docs]</a>    <span class="k">def</span> <span class="nf">collect_events</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Collect the events of a given name &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;on_&#39;</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;an event name always starts with &#39;on_&#39;&quot;</span><span class="p">)</span>
+
+        <span class="n">events</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_init_collected_events</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_collect_events</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">CollectedEvents</span><span class="p">(</span><span class="n">events</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="EventListener"><a class="viewcode-back" href="../../../../../api/api_event.html#odoo.addons.component_event.components.event.EventListener">[docs]</a><span class="k">class</span> <span class="nc">EventListener</span><span class="p">(</span><span class="n">AbstractComponent</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Base Component for the Event listeners</span>
+
+<span class="sd">    Events must be methods starting with ``on_``.</span>
+
+<span class="sd">    Example: :class:`RecordsEventListener`</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">_name</span> <span class="o">=</span> <span class="s1">&#39;base.event.listener&#39;</span>
+    <span class="n">_usage</span> <span class="o">=</span> <span class="s1">&#39;event.listener&#39;</span>
+
+<div class="viewcode-block" id="EventListener.has_event"><a class="viewcode-back" href="../../../../../api/api_event.html#odoo.addons.component_event.components.event.EventListener.has_event">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">has_event</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Indicate if the class has an event of this name &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_events</span></div>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">_build_event_listener_component</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Make a list of events listeners for this class &quot;&quot;&quot;</span>
+        <span class="n">events</span> <span class="o">=</span> <span class="nb">set</span><span class="p">([])</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_abstract</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">attr_name</span> <span class="ow">in</span> <span class="nb">dir</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">attr_name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;on_&#39;</span><span class="p">):</span>
+                    <span class="n">events</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">attr_name</span><span class="p">)</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">_events</span> <span class="o">=</span> <span class="n">events</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">_complete_component_build</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">EventListener</span><span class="p">,</span> <span class="bp">cls</span><span class="p">)</span><span class="o">.</span><span class="n">_complete_component_build</span><span class="p">()</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">_build_event_listener_component</span><span class="p">()</span></div>
+</pre></div>
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+        <br/>
+        
+      
+    </p>
+    <p>
+        &copy; Copyright 2013, Camptocamp SA.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.3.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

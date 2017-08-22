@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="fr">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>connector.event &#8212; documentation Connector </title>
+    <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/translations.js"></script>
+    <script type="text/javascript" src="../../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../../_static/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../_static/bootstrap-sphinx.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Recherche" href="../../search.html" />
+
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-7628916-3', 'odoo-connector.com');
+  ga('send', 'pageview');
+</script>
+
+  </head>
+  <body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../index.html">
+          Odoo Connector</a>
+        <span class="navbar-text navbar-version pull-left"><b></b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+  <li class="dropdown">
+    <a role="button"
+       id="dLabelTranslations"
+       data-toggle="dropdown"
+       data-target="#"
+       href="#">Translations<b class="caret"></b></a>
+    <ul class="dropdown-menu"
+        role="menu"
+        aria-labelledby="dLabelTranslations">
+      <li><a class="reference" href="http://odoo-connector.com">English</a><li>
+      <li><a class="reference" href="http://odoo-connector.com/fr">French</a><li>
+    </ul>
+  </li>
+  
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../../project/contribute.html">Contribuer</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../project/contribute.html#want-to-start-a-new-connector">Démarrer un nouveau connecteur</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../project/contribute.html#creating-or-maintaining-a-translation-of-this-doc">Créer ou maintenir une traduction de cette doc</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../project/contributors.html">Contributeurs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../project/contributors.html#financial-contributors">Contributeurs financiers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../project/license.html">Licence</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../project/changes.html">Changements</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../project/changes.html#future">Future (?)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../project/changes.html#id2">9.0.1.0.2 (2016-03-03)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../project/changes.html#id3">9.0.1.0.1 (2016-03-03)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../project/changes.html#id4">8.0.3.3.0 (2016-02-29)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../project/changes.html#id5">3.2.0 (2015-09-10)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../project/changes.html#id6">3.1.0 (2015-05-15)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../project/changes.html#id7">3.0.0 (2015-04-01)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../project/changes.html#id8">2.2.0 (2014-05-26)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../project/changes.html#id9">2.1.1 (2014-02-06)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../project/changes.html#warning-breaks-compatibility">2.1.0 (2014-01-15 - attention : rupture de compatibilité)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../project/changes.html#id10">2.0.1 (2013-09-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../project/changes.html#id11">2.0.0</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../project/roadmap.html">Roadmap</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../guides/code_overview.html">Survol du code</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/code_overview.html#backends">Backends</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/code_overview.html#bindings">Bindings (Liaisons)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/code_overview.html#session">Session</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/code_overview.html#events">Événements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/code_overview.html#jobs">Jobs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/code_overview.html#connectorunit">ConnectorUnit</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../guides/concepts.html">Concepts du connecteur</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/concepts.html#events">Événements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/concepts.html#jobs-queue">Queue de jobs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/concepts.html#session">Session</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/concepts.html#backend">Backend</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/concepts.html#environment">Environnement</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/concepts.html#connectorunit">ConnectorUnit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/concepts.html#bindings">Bindings (Liaisons)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/concepts.html#checkpoint">Point de contrôle</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../guides/bootstrap_connector.html">Amorcer la création un nouveau connecteur</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/bootstrap_connector.html#odoo-manifest">Odoo Manifest</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/bootstrap_connector.html#declare-the-backends">Déclaration des backends</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/bootstrap_connector.html#backend-model">Modèle du backend</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/bootstrap_connector.html#abstract-binding">Binding abstrait</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/bootstrap_connector.html#environment">Environnement</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/bootstrap_connector.html#checkpoints">Points de contrôle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/bootstrap_connector.html#connectorunit-classes">Classes ConnectorUnit</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../guides/jobrunner.html">Configuring the job runner and channels</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/jobrunner.html#what-is-the-job-runner">What is the job runner?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/jobrunner.html#how-does-it-work">How does it work?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/jobrunner.html#how-to-use-it">How to use it?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/jobrunner.html#caveat">Caveat</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/jobrunner.html#what-is-a-channel">What is a channel?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/jobrunner.html#how-to-configure-channels">How to configure Channels?</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../guides/multiprocessing.html">Use the connector with multiprocessing workers</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api/api_connector.html">Connecteur</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/api_session.html">Session</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/api_backend.html">Backend</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/api_backend.html#module-connector.backend_model">Modèles du backend</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/api_event.html">Événement</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/api_binder.html">Binder (Liant)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/api_mapper.html">Mappeur</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../api/api_mapper.html#mappers">Mappeurs</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/api_synchronizer.html">Synchroniseur</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/api_backend_adapter.html">Adaptateur de backend</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/api_queue.html">Queue</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../api/api_queue.html#module-connector.queue.job">Job</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/api_queue.html#worker">Worker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/api_queue.html#id5">Queue</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/api_queue.html#module-connector.queue.model">Modèles</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/api_exception.html">Exceptions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/api_channels.html">Channels</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/api_runner.html">Job Runner</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../api/api_runner.html#what-is-the-job-runner">What is the job runner?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/api_runner.html#how-does-it-work">How does it work?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/api_runner.html#how-to-use-it">How to use it?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/api_runner.html#caveat">Caveat</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"></ul>
+</li>
+              
+            
+
+            
+              
+                
+              
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 content">
+      
+  <h1>Code source de connector.event</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1">##############################################################################</span>
+<span class="c1">#</span>
+<span class="c1">#    Author: Guewen Baconnier</span>
+<span class="c1">#    Copyright 2012-2013 Camptocamp SA</span>
+<span class="c1">#</span>
+<span class="c1">#    This program is free software: you can redistribute it and/or modify</span>
+<span class="c1">#    it under the terms of the GNU Affero General Public License as</span>
+<span class="c1">#    published by the Free Software Foundation, either version 3 of the</span>
+<span class="c1">#    License, or (at your option) any later version.</span>
+<span class="c1">#</span>
+<span class="c1">#    This program is distributed in the hope that it will be useful,</span>
+<span class="c1">#    but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c1">#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="c1">#    GNU Affero General Public License for more details.</span>
+<span class="c1">#</span>
+<span class="c1">#    You should have received a copy of the GNU Affero General Public License</span>
+<span class="c1">#    along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+<span class="c1">#</span>
+<span class="c1">##############################################################################</span>
+
+<span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">Callable</span>
+<span class="kn">from</span> <span class="nn">.connector</span> <span class="k">import</span> <span class="n">get_openerp_module</span>
+
+
+<div class="viewcode-block" id="Event"><a class="viewcode-back" href="../../api/api_event.html#connector.event.Event">[docs]</a><span class="k">class</span> <span class="nc">Event</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; An event contains consumers called when the event is fired.</span>
+
+<span class="sd">    The events are able to filter the consumers to execute by model name.</span>
+
+<span class="sd">    The usage of an event is to instantiate an `Event` object::</span>
+
+<span class="sd">        on_my_event = Event()</span>
+
+<span class="sd">    An event always have at least the 2 following arguments:</span>
+
+<span class="sd">    * session</span>
+<span class="sd">    * model_name</span>
+
+<span class="sd">    Then to subscribe one or more consumers, an event has a function::</span>
+
+<span class="sd">        def do_something(session, model_name, a, b):</span>
+<span class="sd">            print &quot;Event was fired with arguments: %s, %s&quot; % (a, b)</span>
+
+<span class="sd">        # active on all models</span>
+<span class="sd">        on_my_event.subscribe(do_something)</span>
+
+<span class="sd">        def do_something_product(session, model_name, a, b):</span>
+<span class="sd">            print (&quot;Event was fired on a product &quot;</span>
+<span class="sd">                   &quot;with arguments: %s, %s&quot; % (a, b))</span>
+
+<span class="sd">        # active only on product.product</span>
+<span class="sd">        on_my_event.subscribe(do_something_product,</span>
+<span class="sd">                              model_names=&#39;product.product&#39;)</span>
+
+<span class="sd">    We can also replace a consumer::</span>
+
+<span class="sd">        def do_something_product2(session, model_name, a, b):</span>
+<span class="sd">            print &quot;Consumer 2&quot;</span>
+<span class="sd">            print (&quot;Event was fired on a product &quot;</span>
+<span class="sd">                  &quot;with arguments: %s, %s&quot; % (a, b))</span>
+
+<span class="sd">        on_my_event.subscribe(do_something_product2,</span>
+<span class="sd">                              replacing=do_something_product)</span>
+
+<span class="sd">    Finally, we fire the event::</span>
+
+<span class="sd">        on_my_event.fire(session, &#39;res.users&#39;, &#39;value_a&#39;, &#39;value_b&#39;)</span>
+
+<span class="sd">    A consumer can be subscribed using a decorator::</span>
+
+<span class="sd">        @on_my_event</span>
+<span class="sd">        def do_other_thing(session, model_name, a, b):</span>
+<span class="sd">            print &#39;foo&#39;</span>
+
+<span class="sd">        @on_my_event(replacing=do_other_thing)</span>
+<span class="sd">        def print_bar(session, model_name, a, b):</span>
+<span class="sd">            print &#39;bar&#39;</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_consumers</span> <span class="o">=</span> <span class="p">{</span><span class="kc">None</span><span class="p">:</span> <span class="nb">set</span><span class="p">()}</span>
+
+<div class="viewcode-block" id="Event.subscribe"><a class="viewcode-back" href="../../api/api_event.html#connector.event.Event.subscribe">[docs]</a>    <span class="k">def</span> <span class="nf">subscribe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">consumer</span><span class="p">,</span> <span class="n">model_names</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">replacing</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Subscribe a consumer on the event</span>
+
+<span class="sd">        :param consumer: the function to register on the event</span>
+<span class="sd">        :param model_names: the consumer will be active only on these models,</span>
+<span class="sd">            active on all models if ``None``</span>
+<span class="sd">        :param replacing: the function beeing replaced by this new one.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">replacing</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">unsubscribe</span><span class="p">(</span><span class="n">replacing</span><span class="p">,</span> <span class="n">model_names</span><span class="o">=</span><span class="n">model_names</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">model_names</span><span class="p">,</span> <span class="s1">&#39;__iter__&#39;</span><span class="p">):</span>
+            <span class="n">model_names</span> <span class="o">=</span> <span class="p">[</span><span class="n">model_names</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">model_names</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_consumers</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="nb">set</span><span class="p">())</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">consumer</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Event.unsubscribe"><a class="viewcode-back" href="../../api/api_event.html#connector.event.Event.unsubscribe">[docs]</a>    <span class="k">def</span> <span class="nf">unsubscribe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">consumer</span><span class="p">,</span> <span class="n">model_names</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Remove a consumer from the event</span>
+
+<span class="sd">        :param consumer: the function to unsubscribe</span>
+<span class="sd">        :param model_names: remove only for these models or remove a</span>
+<span class="sd">            consumer which is active on all models if ``None``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">model_names</span><span class="p">,</span> <span class="s1">&#39;__iter__&#39;</span><span class="p">):</span>
+            <span class="n">model_names</span> <span class="o">=</span> <span class="p">[</span><span class="n">model_names</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">model_names</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_consumers</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_consumers</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">discard</span><span class="p">(</span><span class="n">consumer</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Event.has_consumer_for"><a class="viewcode-back" href="../../api/api_event.html#connector.event.Event.has_consumer_for">[docs]</a>    <span class="k">def</span> <span class="nf">has_consumer_for</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">session</span><span class="p">,</span> <span class="n">model_name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Return True if at least one consumer is registered</span>
+<span class="sd">        for the model.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_consumers_for</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="kc">None</span><span class="p">)):</span>
+            <span class="k">return</span> <span class="kc">True</span>  <span class="c1"># at least 1 global consumer exist</span>
+        <span class="k">return</span> <span class="nb">any</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_consumers_for</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">model_name</span><span class="p">))</span></div>
+
+    <span class="k">def</span> <span class="nf">_consumers_for</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">session</span><span class="p">,</span> <span class="n">model_name</span><span class="p">):</span>
+        <span class="n">is_installed</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">is_module_installed</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">cons</span> <span class="k">for</span> <span class="n">cons</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_consumers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">model_name</span><span class="p">,</span> <span class="p">())</span>
+                <span class="k">if</span> <span class="n">is_installed</span><span class="p">(</span><span class="n">get_openerp_module</span><span class="p">(</span><span class="n">cons</span><span class="p">)))</span>
+
+<div class="viewcode-block" id="Event.fire"><a class="viewcode-back" href="../../api/api_event.html#connector.event.Event.fire">[docs]</a>    <span class="k">def</span> <span class="nf">fire</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">session</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Call each consumer subscribed on the event with the given</span>
+<span class="sd">        arguments and keyword arguments.</span>
+
+<span class="sd">        All the consumers which were subscribed globally (no model name) or</span>
+<span class="sd">        which are subscribed on the same model</span>
+
+<span class="sd">        :param session: current session</span>
+<span class="sd">        :type session: :py:class:`connector.session.Session`</span>
+<span class="sd">        :param model_name: name of the model</span>
+<span class="sd">        :type model_name: str</span>
+<span class="sd">        :param args: arguments propagated to the consumer</span>
+<span class="sd">                     The second argument of `args` is the model name.</span>
+<span class="sd">                     The first argument is the session.</span>
+<span class="sd">        :param kwargs: keyword arguments propagated to the consumer</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model_name</span><span class="p">,</span> <span class="n">basestring</span><span class="p">),</span> <span class="p">(</span>
+            <span class="s2">&quot;Second argument must be the model name as string, &quot;</span>
+            <span class="s2">&quot;instead received: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">model_name</span><span class="p">)</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">([</span><span class="n">session</span><span class="p">,</span> <span class="n">model_name</span><span class="p">]</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">args</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">model_name</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">consumer</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_consumers_for</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+                <span class="n">consumer</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Event decorator</span>
+
+<span class="sd">        For an event ``on_event`` declared like this::</span>
+
+<span class="sd">            on_event = Event()</span>
+
+<span class="sd">        A consumer can be subscribed using::</span>
+
+<span class="sd">            @on_event</span>
+<span class="sd">            def do_things(arg1, arg2):</span>
+<span class="sd">                # work</span>
+
+<span class="sd">        And for consumers specific to models::</span>
+
+<span class="sd">            @on_event(model_names=[&#39;product.product&#39;, &#39;res.partner&#39;])</span>
+<span class="sd">            def do_things(arg1, arg2):</span>
+<span class="sd">                # work</span>
+
+<span class="sd">        The accepted arguments are those of :meth:`subscribe`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">def</span> <span class="nf">with_subscribe</span><span class="p">(</span><span class="o">**</span><span class="n">opts</span><span class="p">):</span>
+            <span class="k">def</span> <span class="nf">wrapped_func</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">subscribe</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="o">**</span><span class="n">opts</span><span class="p">)</span>
+                <span class="k">return</span> <span class="n">func</span>
+            <span class="k">return</span> <span class="n">wrapped_func</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">Callable</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">with_subscribe</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">with_subscribe</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+<span class="n">on_record_write</span> <span class="o">=</span> <span class="n">Event</span><span class="p">()</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">``on_record_write`` is fired when one record has been updated.</span>
+
+<span class="sd">Listeners should take the following arguments:</span>
+
+<span class="sd"> * session: :py:class:`~connector.session.ConnectorSession` object</span>
+<span class="sd"> * model_name: name of the model</span>
+<span class="sd"> * record_id: id of the record</span>
+<span class="sd"> * vals:  field values of the new record, e.g {&#39;field_name&#39;: field_value, ...}</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="n">on_record_create</span> <span class="o">=</span> <span class="n">Event</span><span class="p">()</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">``on_record_create`` is fired when one record has been created.</span>
+
+<span class="sd">Listeners should take the following arguments:</span>
+
+<span class="sd"> * session: :py:class:`~connector.session.ConnectorSession` object</span>
+<span class="sd"> * model_name: name of the model</span>
+<span class="sd"> * record_id: id of the created record</span>
+<span class="sd"> * vals:  field values updated, e.g {&#39;field_name&#39;: field_value, ...}</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="n">on_record_unlink</span> <span class="o">=</span> <span class="n">Event</span><span class="p">()</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">``on_record_unlink`` is fired when one record has been deleted.</span>
+
+<span class="sd">Listeners should take the following arguments:</span>
+
+<span class="sd"> * session: :py:class:`~connector.session.ConnectorSession` object</span>
+<span class="sd"> * model_name: name of the model</span>
+<span class="sd"> * record_id: id of the record</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+</pre></div>
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+        <br/>
+        
+      
+    </p>
+    <p>
+        &copy; Copyright 2013, Camptocamp SA.<br/>
+      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.3.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

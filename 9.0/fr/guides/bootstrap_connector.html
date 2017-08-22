@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="fr">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Amorcer la création un nouveau connecteur &#8212; documentation Connector </title>
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/translations.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Recherche" href="../search.html" />
+    <link rel="next" title="Configuring the job runner and channels" href="jobrunner.html" />
+    <link rel="prev" title="Concepts du connecteur" href="concepts.html" />
+
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-7628916-3', 'odoo-connector.com');
+  ga('send', 'pageview');
+</script>
+
+  </head>
+  <body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../index.html">
+          Odoo Connector</a>
+        <span class="navbar-text navbar-version pull-left"><b></b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+  <li class="dropdown">
+    <a role="button"
+       id="dLabelTranslations"
+       data-toggle="dropdown"
+       data-target="#"
+       href="#">Translations<b class="caret"></b></a>
+    <ul class="dropdown-menu"
+        role="menu"
+        aria-labelledby="dLabelTranslations">
+      <li><a class="reference" href="http://odoo-connector.com">English</a><li>
+      <li><a class="reference" href="http://odoo-connector.com/fr">French</a><li>
+    </ul>
+  </li>
+  
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../project/contribute.html">Contribuer</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../project/contribute.html#want-to-start-a-new-connector">Démarrer un nouveau connecteur</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../project/contribute.html#creating-or-maintaining-a-translation-of-this-doc">Créer ou maintenir une traduction de cette doc</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../project/contributors.html">Contributeurs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../project/contributors.html#financial-contributors">Contributeurs financiers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../project/license.html">Licence</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../project/changes.html">Changements</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../project/changes.html#future">Future (?)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../project/changes.html#id2">9.0.1.0.2 (2016-03-03)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../project/changes.html#id3">9.0.1.0.1 (2016-03-03)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../project/changes.html#id4">8.0.3.3.0 (2016-02-29)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../project/changes.html#id5">3.2.0 (2015-09-10)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../project/changes.html#id6">3.1.0 (2015-05-15)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../project/changes.html#id7">3.0.0 (2015-04-01)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../project/changes.html#id8">2.2.0 (2014-05-26)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../project/changes.html#id9">2.1.1 (2014-02-06)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../project/changes.html#warning-breaks-compatibility">2.1.0 (2014-01-15 - attention : rupture de compatibilité)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../project/changes.html#id10">2.0.1 (2013-09-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../project/changes.html#id11">2.0.0</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../project/roadmap.html">Roadmap</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="code_overview.html">Survol du code</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="code_overview.html#backends">Backends</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code_overview.html#bindings">Bindings (Liaisons)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code_overview.html#session">Session</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code_overview.html#events">Événements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code_overview.html#jobs">Jobs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code_overview.html#connectorunit">ConnectorUnit</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="concepts.html">Concepts du connecteur</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="concepts.html#events">Événements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="concepts.html#jobs-queue">Queue de jobs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="concepts.html#session">Session</a></li>
+<li class="toctree-l2"><a class="reference internal" href="concepts.html#backend">Backend</a></li>
+<li class="toctree-l2"><a class="reference internal" href="concepts.html#environment">Environnement</a></li>
+<li class="toctree-l2"><a class="reference internal" href="concepts.html#connectorunit">ConnectorUnit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="concepts.html#bindings">Bindings (Liaisons)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="concepts.html#checkpoint">Point de contrôle</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Amorcer la création un nouveau connecteur</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#odoo-manifest">Odoo Manifest</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#declare-the-backends">Déclaration des backends</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#backend-model">Modèle du backend</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#abstract-binding">Binding abstrait</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#environment">Environnement</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#checkpoints">Points de contrôle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#connectorunit-classes">Classes ConnectorUnit</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="jobrunner.html">Configuring the job runner and channels</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="jobrunner.html#what-is-the-job-runner">What is the job runner?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jobrunner.html#how-does-it-work">How does it work?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jobrunner.html#how-to-use-it">How to use it?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jobrunner.html#caveat">Caveat</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jobrunner.html#what-is-a-channel">What is a channel?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jobrunner.html#how-to-configure-channels">How to configure Channels?</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="multiprocessing.html">Use the connector with multiprocessing workers</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/api_connector.html">Connecteur</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/api_session.html">Session</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/api_backend.html">Backend</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/api_backend.html#module-connector.backend_model">Modèles du backend</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/api_event.html">Événement</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/api_binder.html">Binder (Liant)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/api_mapper.html">Mappeur</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../api/api_mapper.html#mappers">Mappeurs</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../api/api_synchronizer.html">Synchroniseur</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/api_backend_adapter.html">Adaptateur de backend</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/api_queue.html">Queue</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../api/api_queue.html#module-connector.queue.job">Job</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/api_queue.html#worker">Worker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/api_queue.html#id5">Queue</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/api_queue.html#module-connector.queue.model">Modèles</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../api/api_exception.html">Exceptions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/api_channels.html">Channels</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/api_runner.html">Job Runner</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../api/api_runner.html#what-is-the-job-runner">What is the job runner?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/api_runner.html#how-does-it-work">How does it work?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/api_runner.html#how-to-use-it">How to use it?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/api_runner.html#caveat">Caveat</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">Amorcer la création un nouveau connecteur</a><ul>
+<li><a class="reference internal" href="#odoo-manifest">Odoo Manifest</a></li>
+<li><a class="reference internal" href="#declare-the-backends">Déclaration des backends</a></li>
+<li><a class="reference internal" href="#backend-model">Modèle du backend</a></li>
+<li><a class="reference internal" href="#abstract-binding">Binding abstrait</a></li>
+<li><a class="reference internal" href="#environment">Environnement</a></li>
+<li><a class="reference internal" href="#checkpoints">Points de contrôle</a><ul>
+<li><a class="reference internal" href="#record-checkpoint">Record checkpoint</a></li>
+<li><a class="reference internal" href="#message-only-checkpoint">Message only checkpoint</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#connectorunit-classes">Classes ConnectorUnit</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+            
+
+            
+              
+                
+  <li>
+    <a href="concepts.html" title="Previous Chapter: Concepts du connecteur"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Concepts du conn...</span>
+    </a>
+  </li>
+  <li>
+    <a href="jobrunner.html" title="Next Chapter: Configuring the job runner and channels"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Configuring the ... &raquo;</span>
+    </a>
+  </li>
+              
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 content">
+      
+  <div class="section" id="boostrapping-a-connector">
+<span id="bootstrap-connector"></span><h1>Amorcer la création un nouveau connecteur<a class="headerlink" href="#boostrapping-a-connector" title="Lien permanent vers ce titre">¶</a></h1>
+<p>Nous allons voir les étapes pour amorcer la création d’un nouveau connecteur</p>
+<p>À côté de ça, vous devriez utiliser les connecteurs existants pour avoir des exemples réels d’implémentation:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://github.com/OCA/connector-magento">Connecteur Odoo Magento</a></li>
+<li><a class="reference external" href="https://github.com/OCA/connector-prestashop">Connecteur Odoo Prestashop</a></li>
+</ul>
+<p>Du code boilerplate est nécessaire, donc ce document va vous guider à travers différentes étapes. Consultez également les <a class="reference internal" href="../project/contribute.html#naming-convention"><span class="std std-ref">Conventions de nommage</span></a>.</p>
+<p>Pour cet exemple nous allons imaginer que nous devons synchroniser Odoo avec une machine à café.</p>
+<div class="section" id="odoo-manifest">
+<h2>Odoo Manifest<a class="headerlink" href="#odoo-manifest" title="Lien permanent vers ce titre">¶</a></h2>
+<p>Comme nous voulons synchroniser Odoo avec une machine à café, nous allons nommer notre connecteur connector_coffee</p>
+<p>Tout d’abord, nous devons créer le module Odoo lui-même, en modifiant le fichier <code class="docutils literal"><span class="pre">connector_coffee/__openerp__.py</span></code>.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span> <span class="c1"># -*- coding: utf-8 -*-</span>
+ <span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;Coffee Connector&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;version&#39;</span><span class="p">:</span> <span class="s1">&#39;1.0.0&#39;</span><span class="p">,</span>
+<span class="hll">  <span class="s1">&#39;category&#39;</span><span class="p">:</span> <span class="s1">&#39;Connector&#39;</span><span class="p">,</span>
+</span><span class="hll">  <span class="s1">&#39;depends&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;connector&#39;</span><span class="p">,</span>
+</span>              <span class="p">],</span>
+  <span class="s1">&#39;author&#39;</span><span class="p">:</span> <span class="s1">&#39;Myself&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;license&#39;</span><span class="p">:</span> <span class="s1">&#39;AGPL-3&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;description&#39;</span><span class="p">:</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2"> Coffee Connector</span>
+<span class="s2"> ================</span>
+
+<span class="s2"> Connect Odoo to my coffee machine.</span>
+
+<span class="s2"> Features:</span>
+
+<span class="s2"> * Poor a coffee when Odoo is busy for too long</span>
+<span class="s2"> &quot;&quot;&quot;</span><span class="p">,</span>
+  <span class="s1">&#39;data&#39;</span><span class="p">:</span> <span class="p">[],</span>
+  <span class="s1">&#39;installable&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+  <span class="s1">&#39;application&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+ <span class="p">}</span>
+</pre></div>
+</div>
+<p>Il y a 2 points à noter :</p>
+<ul class="simple">
+<li>Il dépend de <code class="docutils literal"><span class="pre">connector</span></code>.</li>
+<li>La catégorie du module doit être <code class="docutils literal"><span class="pre">Connector</span></code>.</li>
+</ul>
+<p>Bien sûr, nous devons aussi créer le fichier <code class="docutils literal"><span class="pre">__init__.py</span></code> où nous plaçons les imports de nos modules Python.</p>
+</div>
+<div class="section" id="declare-the-backends">
+<h2>Déclaration des backends<a class="headerlink" href="#declare-the-backends" title="Lien permanent vers ce titre">¶</a></h2>
+<p>Notre module est compatible avec les machines à café :</p>
+<blockquote>
+<div><ul class="simple">
+<li>Coffee 1900</li>
+<li>Coffee 2900</li>
+</ul>
+</div></blockquote>
+<p>Donc nous allons déclarer un backend <cite>coffee</cite>, l’entité générique, et un backend différent par version.</p>
+<p>Placez ceci dans <code class="docutils literal"><span class="pre">connector_coffee/backend.py</span></code>:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">openerp.addons.connector.backend</span> <span class="k">as</span> <span class="nn">backend</span>
+
+
+<span class="n">coffee</span> <span class="o">=</span> <span class="n">backend</span><span class="o">.</span><span class="n">Backend</span><span class="p">(</span><span class="s1">&#39;coffee&#39;</span><span class="p">)</span>
+<span class="n">coffee1900</span> <span class="o">=</span> <span class="n">backend</span><span class="o">.</span><span class="n">Backend</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="n">coffee</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s1">&#39;1900&#39;</span><span class="p">)</span>
+<span class="n">coffee2900</span> <span class="o">=</span> <span class="n">backend</span><span class="o">.</span><span class="n">Backend</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="n">coffee</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s1">&#39;2900&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="backend-model">
+<h2>Modèle du backend<a class="headerlink" href="#backend-model" title="Lien permanent vers ce titre">¶</a></h2>
+<p>Nous avons déclaré les backends, mais nous avons besoin d’un modèle pour les configurer.</p>
+<p>Nous créons un modèle <code class="docutils literal"><span class="pre">coffee.backend</span></code> qui est un <code class="docutils literal"><span class="pre">_inherit</span></code> de <code class="docutils literal"><span class="pre">connector.backend</span></code>. Dans <code class="docutils literal"><span class="pre">connector_coffee/coffee_model.py</span></code>:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">openerp</span> <span class="k">import</span> <span class="n">fields</span><span class="p">,</span> <span class="n">models</span><span class="p">,</span> <span class="n">api</span>
+
+
+<span class="k">class</span> <span class="nc">CoffeeBackend</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">_name</span> <span class="o">=</span> <span class="s1">&#39;coffee.backend&#39;</span>
+    <span class="n">_description</span> <span class="o">=</span> <span class="s1">&#39;Coffee Backend&#39;</span>
+    <span class="n">_inherit</span> <span class="o">=</span> <span class="s1">&#39;connector.backend&#39;</span>
+
+    <span class="n">_backend_type</span> <span class="o">=</span> <span class="s1">&#39;coffee&#39;</span>
+
+    <span class="nd">@api</span><span class="o">.</span><span class="n">model</span>
+    <span class="k">def</span> <span class="nf">_select_versions</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Available versions</span>
+
+<span class="sd">        Can be inherited to add custom versions.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[(</span><span class="s1">&#39;1900&#39;</span><span class="p">,</span> <span class="s1">&#39;Version 1900&#39;</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;2900&#39;</span><span class="p">,</span> <span class="s1">&#39;Version 2900&#39;</span><span class="p">)]</span>
+
+    <span class="n">version</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Selection</span><span class="p">(</span>
+        <span class="n">selection</span><span class="o">=</span><span class="s1">&#39;_select_versions&#39;</span><span class="p">,</span>
+        <span class="n">string</span><span class="o">=</span><span class="s1">&#39;Version&#39;</span><span class="p">,</span>
+        <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">location</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Char</span><span class="p">(</span><span class="n">string</span><span class="o">=</span><span class="s1">&#39;Location&#39;</span><span class="p">)</span>
+    <span class="n">username</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Char</span><span class="p">(</span><span class="n">string</span><span class="o">=</span><span class="s1">&#39;Username&#39;</span><span class="p">)</span>
+    <span class="n">password</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Char</span><span class="p">(</span><span class="n">string</span><span class="o">=</span><span class="s1">&#39;Password&#39;</span><span class="p">)</span>
+    <span class="n">default_lang_id</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Many2one</span><span class="p">(</span>
+        <span class="n">comodel_name</span><span class="o">=</span><span class="s1">&#39;res.lang&#39;</span><span class="p">,</span>
+        <span class="n">string</span><span class="o">=</span><span class="s1">&#39;Default Language&#39;</span><span class="p">,</span>
+    <span class="p">)</span>
+</pre></div>
+</div>
+<p>Notes :</p>
+<ul class="simple">
+<li>Le <code class="docutils literal"><span class="pre">_backend_type</span></code> doit être le même que le nom du backend dans <a class="reference internal" href="#declare-the-backends">Déclaration des backends</a>.</li>
+<li>les versions doivent être les mêmes que celles déclarées dans <a class="reference internal" href="#declare-the-backends">Déclaration des backends</a>.</li>
+<li>Nous pouvons ajouter dans ce modèle autant de champs que nous voulons pour configurer notre connexion ou configuration en rapport avec le backend.</li>
+</ul>
+</div>
+<div class="section" id="abstract-binding">
+<h2>Binding abstrait<a class="headerlink" href="#abstract-binding" title="Lien permanent vers ce titre">¶</a></h2>
+<p>Si nous avons de nombreux <a class="reference internal" href="concepts.html#binding"><span class="std std-ref">Bindings (Liaisons)</span></a>, nous pouvons créer un modèle abstrait pour eux.</p>
+<p>Cela peut être comme suit (dans <code class="docutils literal"><span class="pre">connector_coffee/connector.py</span></code>):</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">openerp</span> <span class="k">import</span> <span class="n">models</span><span class="p">,</span> <span class="n">fields</span>
+
+
+<span class="k">class</span> <span class="nc">CoffeeBinding</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">AbstractModel</span><span class="p">):</span>
+    <span class="n">_name</span> <span class="o">=</span> <span class="s1">&#39;coffee.binding&#39;</span>
+    <span class="n">_inherit</span> <span class="o">=</span> <span class="s1">&#39;external.binding&#39;</span>
+    <span class="n">_description</span> <span class="o">=</span> <span class="s1">&#39;Coffee Binding (abstract)&#39;</span>
+
+    <span class="c1"># &#39;openerp_id&#39;: openerp-side id must be declared in concrete model</span>
+    <span class="n">backend_id</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Many2one</span><span class="p">(</span>
+        <span class="n">comodel_name</span><span class="o">=</span><span class="s1">&#39;coffee.backend&#39;</span><span class="p">,</span>
+        <span class="n">string</span><span class="o">=</span><span class="s1">&#39;Coffee Backend&#39;</span><span class="p">,</span>
+        <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">ondelete</span><span class="o">=</span><span class="s1">&#39;restrict&#39;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="c1"># fields.char because 0 is a valid coffee ID</span>
+    <span class="n">coffee_id</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Char</span><span class="p">(</span><span class="n">string</span><span class="o">=</span><span class="s1">&#39;ID in the Coffee Machine&#39;</span><span class="p">,</span>
+                            <span class="n">select</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="environment">
+<h2>Environnement<a class="headerlink" href="#environment" title="Lien permanent vers ce titre">¶</a></h2>
+<p>Nous aurons souvent besoin de créer un nouvel environnement avec lequel travailler. Je propose de créer une méthode auxiliaire qui le construit (dans <code class="docutils literal"><span class="pre">connector_coffee/connector.py</span></code>:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">openerp.addons.connector.connector</span> <span class="k">import</span> <span class="n">Environment</span>
+
+
+<span class="k">def</span> <span class="nf">get_environment</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">backend_id</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Create an environment to work with. &quot;&quot;&quot;</span>
+    <span class="n">backend_record</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">env</span><span class="p">[</span><span class="s1">&#39;coffee.backend&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">browse</span><span class="p">(</span><span class="n">backend_id</span><span class="p">)</span>
+    <span class="n">env</span> <span class="o">=</span> <span class="n">Environment</span><span class="p">(</span><span class="n">backend_record</span><span class="p">,</span> <span class="n">session</span><span class="p">,</span> <span class="n">model_name</span><span class="p">)</span>
+    <span class="n">lang</span> <span class="o">=</span> <span class="n">backend_record</span><span class="o">.</span><span class="n">default_lang_id</span>
+    <span class="n">lang_code</span> <span class="o">=</span> <span class="n">lang</span><span class="o">.</span><span class="n">code</span> <span class="k">if</span> <span class="n">lang</span> <span class="k">else</span> <span class="s1">&#39;en_US&#39;</span>
+    <span class="k">if</span> <span class="n">lang_code</span> <span class="o">==</span> <span class="n">session</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;lang&#39;</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">env</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">with</span> <span class="n">env</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">change_context</span><span class="p">(</span><span class="n">lang</span><span class="o">=</span><span class="n">lang_code</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">env</span>
+</pre></div>
+</div>
+<p>Remarquez que la partie qui concerne la définition du langage est complètement optionnelle mais elle est conservée pour l’exemple.</p>
+</div>
+<div class="section" id="checkpoints">
+<h2>Points de contrôle<a class="headerlink" href="#checkpoints" title="Lien permanent vers ce titre">¶</a></h2>
+<div class="section" id="record-checkpoint">
+<h3>Record checkpoint<a class="headerlink" href="#record-checkpoint" title="Lien permanent vers ce titre">¶</a></h3>
+<p>When new records are imported and need a review, <a class="reference internal" href="concepts.html#checkpoint"><span class="std std-ref">Point de contrôle</span></a> are
+created. You can add it like this:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">backend_record</span><span class="o">.</span><span class="n">add_checkpoint</span><span class="p">(</span>
+    <span class="n">model</span><span class="o">=</span><span class="s1">&#39;res.partner&#39;</span><span class="p">,</span> <span class="n">record_id</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">message</span><span class="o">=</span><span class="s1">&#39;VAT number can be missing&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="message-only-checkpoint">
+<h3>Message only checkpoint<a class="headerlink" href="#message-only-checkpoint" title="Lien permanent vers ce titre">¶</a></h3>
+<p>When you need to show a warning message to a user
+you can create a <a class="reference internal" href="concepts.html#checkpoint"><span class="std std-ref">Point de contrôle</span></a>. You can add it like this:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">backend_record</span><span class="o">.</span><span class="n">add_checkpoint</span><span class="p">(</span><span class="n">message</span><span class="o">=</span><span class="s1">&#39;VAT number can be missing&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>A typical use case for this is:</p>
+<ul class="simple">
+<li>you have a batch import of CSV file;</li>
+<li>you don’t want to break a whole batch job just because some line failed;</li>
+<li>you want to notify the user with a nice warning message.</li>
+</ul>
+</div>
+</div>
+<div class="section" id="connectorunit-classes">
+<h2>Classes ConnectorUnit<a class="headerlink" href="#connectorunit-classes" title="Lien permanent vers ce titre">¶</a></h2>
+<p>Nous aurons probablement besoin de créer des synchroniseurs, des mappeurs, des adaptateurs de backend, des bindings, et peut-être nos propres types de classes ConnectorUnit</p>
+<p>Leur implémentation peut varier énormément. Jetez un œil aux projets <a class="reference external" href="https://github.com/OCA/connector-prestashop">Connecteur Odoo Magento</a> et <a class="reference external" href="https://github.com/OCA/connector-magento">Connecteur Odoo Prestashop</a>.</p>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+        <br/>
+        
+<div id="sourcelink">
+  <a href="../_sources/guides/bootstrap_connector.rst.txt"
+     rel="nofollow">Source</a>
+</div>
+      
+    </p>
+    <p>
+        &copy; Copyright 2013, Camptocamp SA.<br/>
+      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.3.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

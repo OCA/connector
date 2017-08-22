@@ -1,0 +1,1327 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="fr">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>connector.jobrunner.channels &#8212; documentation Connector </title>
+    <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/translations.js"></script>
+    <script type="text/javascript" src="../../../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../../../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../../../_static/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../../_static/bootstrap-sphinx.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Recherche" href="../../../search.html" />
+
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-7628916-3', 'odoo-connector.com');
+  ga('send', 'pageview');
+</script>
+
+  </head>
+  <body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../../index.html">
+          Odoo Connector</a>
+        <span class="navbar-text navbar-version pull-left"><b></b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+  <li class="dropdown">
+    <a role="button"
+       id="dLabelTranslations"
+       data-toggle="dropdown"
+       data-target="#"
+       href="#">Translations<b class="caret"></b></a>
+    <ul class="dropdown-menu"
+        role="menu"
+        aria-labelledby="dLabelTranslations">
+      <li><a class="reference" href="http://odoo-connector.com">English</a><li>
+      <li><a class="reference" href="http://odoo-connector.com/fr">French</a><li>
+    </ul>
+  </li>
+  
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../project/contribute.html">Contribuer</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../project/contribute.html#want-to-start-a-new-connector">Démarrer un nouveau connecteur</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../project/contribute.html#creating-or-maintaining-a-translation-of-this-doc">Créer ou maintenir une traduction de cette doc</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../project/contributors.html">Contributeurs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../project/contributors.html#financial-contributors">Contributeurs financiers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../project/license.html">Licence</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../project/changes.html">Changements</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../project/changes.html#future">Future (?)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../project/changes.html#id2">9.0.1.0.2 (2016-03-03)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../project/changes.html#id3">9.0.1.0.1 (2016-03-03)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../project/changes.html#id4">8.0.3.3.0 (2016-02-29)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../project/changes.html#id5">3.2.0 (2015-09-10)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../project/changes.html#id6">3.1.0 (2015-05-15)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../project/changes.html#id7">3.0.0 (2015-04-01)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../project/changes.html#id8">2.2.0 (2014-05-26)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../project/changes.html#id9">2.1.1 (2014-02-06)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../project/changes.html#warning-breaks-compatibility">2.1.0 (2014-01-15 - attention : rupture de compatibilité)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../project/changes.html#id10">2.0.1 (2013-09-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../project/changes.html#id11">2.0.0</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../project/roadmap.html">Roadmap</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../guides/code_overview.html">Survol du code</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/code_overview.html#backends">Backends</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/code_overview.html#bindings">Bindings (Liaisons)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/code_overview.html#session">Session</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/code_overview.html#events">Événements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/code_overview.html#jobs">Jobs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/code_overview.html#connectorunit">ConnectorUnit</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../guides/concepts.html">Concepts du connecteur</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/concepts.html#events">Événements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/concepts.html#jobs-queue">Queue de jobs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/concepts.html#session">Session</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/concepts.html#backend">Backend</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/concepts.html#environment">Environnement</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/concepts.html#connectorunit">ConnectorUnit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/concepts.html#bindings">Bindings (Liaisons)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/concepts.html#checkpoint">Point de contrôle</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../guides/bootstrap_connector.html">Amorcer la création un nouveau connecteur</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/bootstrap_connector.html#odoo-manifest">Odoo Manifest</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/bootstrap_connector.html#declare-the-backends">Déclaration des backends</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/bootstrap_connector.html#backend-model">Modèle du backend</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/bootstrap_connector.html#abstract-binding">Binding abstrait</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/bootstrap_connector.html#environment">Environnement</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/bootstrap_connector.html#checkpoints">Points de contrôle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/bootstrap_connector.html#connectorunit-classes">Classes ConnectorUnit</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../guides/jobrunner.html">Configuring the job runner and channels</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/jobrunner.html#what-is-the-job-runner">What is the job runner?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/jobrunner.html#how-does-it-work">How does it work?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/jobrunner.html#how-to-use-it">How to use it?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/jobrunner.html#caveat">Caveat</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/jobrunner.html#what-is-a-channel">What is a channel?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/jobrunner.html#how-to-configure-channels">How to configure Channels?</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../guides/multiprocessing.html">Use the connector with multiprocessing workers</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/api_connector.html">Connecteur</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/api_session.html">Session</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/api_backend.html">Backend</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/api_backend.html#module-connector.backend_model">Modèles du backend</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/api_event.html">Événement</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/api_binder.html">Binder (Liant)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/api_mapper.html">Mappeur</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/api_mapper.html#mappers">Mappeurs</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/api_synchronizer.html">Synchroniseur</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/api_backend_adapter.html">Adaptateur de backend</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/api_queue.html">Queue</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/api_queue.html#module-connector.queue.job">Job</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/api_queue.html#worker">Worker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/api_queue.html#id5">Queue</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/api_queue.html#module-connector.queue.model">Modèles</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/api_exception.html">Exceptions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/api_channels.html">Channels</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/api_runner.html">Job Runner</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/api_runner.html#what-is-the-job-runner">What is the job runner?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/api_runner.html#how-does-it-work">How does it work?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/api_runner.html#how-to-use-it">How to use it?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/api_runner.html#caveat">Caveat</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"></ul>
+</li>
+              
+            
+
+            
+              
+                
+              
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 content">
+      
+  <h1>Code source de connector.jobrunner.channels</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1">##############################################################################</span>
+<span class="c1">#</span>
+<span class="c1">#     This file is part of connector, an Odoo module.</span>
+<span class="c1">#</span>
+<span class="c1">#     Author: Stéphane Bidoul &lt;stephane.bidoul@acsone.eu&gt;</span>
+<span class="c1">#     Copyright (c) 2015 ACSONE SA/NV (&lt;http://acsone.eu&gt;)</span>
+<span class="c1">#</span>
+<span class="c1">#     connector is free software: you can redistribute it and/or</span>
+<span class="c1">#     modify it under the terms of the GNU Affero General Public License</span>
+<span class="c1">#     as published by the Free Software Foundation, either version 3 of</span>
+<span class="c1">#     the License, or (at your option) any later version.</span>
+<span class="c1">#</span>
+<span class="c1">#     connector is distributed in the hope that it will be useful,</span>
+<span class="c1">#     but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c1">#     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="c1">#     GNU Affero General Public License for more details.</span>
+<span class="c1">#</span>
+<span class="c1">#     You should have received a copy of the</span>
+<span class="c1">#     GNU Affero General Public License</span>
+<span class="c1">#     along with connector.</span>
+<span class="c1">#     If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+<span class="c1">#</span>
+<span class="c1">##############################################################################</span>
+
+<span class="kn">from</span> <span class="nn">heapq</span> <span class="k">import</span> <span class="n">heappush</span><span class="p">,</span> <span class="n">heappop</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">from</span> <span class="nn">weakref</span> <span class="k">import</span> <span class="n">WeakValueDictionary</span>
+
+<span class="kn">from</span> <span class="nn">..exception</span> <span class="k">import</span> <span class="n">ChannelNotFound</span>
+<span class="kn">from</span> <span class="nn">..queue.job</span> <span class="k">import</span> <span class="n">PENDING</span><span class="p">,</span> <span class="n">ENQUEUED</span><span class="p">,</span> <span class="n">STARTED</span><span class="p">,</span> <span class="n">FAILED</span><span class="p">,</span> <span class="n">DONE</span>
+<span class="n">NOT_DONE</span> <span class="o">=</span> <span class="p">(</span><span class="n">PENDING</span><span class="p">,</span> <span class="n">ENQUEUED</span><span class="p">,</span> <span class="n">STARTED</span><span class="p">,</span> <span class="n">FAILED</span><span class="p">)</span>
+
+<span class="n">_logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="PriorityQueue"><a class="viewcode-back" href="../../../api/api_channels.html#connector.jobrunner.channels.PriorityQueue">[docs]</a><span class="k">class</span> <span class="nc">PriorityQueue</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A priority queue that supports removing arbitrary objects.</span>
+
+<span class="sd">    Adding an object already in the queue is a no op.</span>
+<span class="sd">    Popping an empty queue returns None.</span>
+
+<span class="sd">    &gt;&gt;&gt; q = PriorityQueue()</span>
+<span class="sd">    &gt;&gt;&gt; q.add(2)</span>
+<span class="sd">    &gt;&gt;&gt; q.add(3)</span>
+<span class="sd">    &gt;&gt;&gt; q.add(3)</span>
+<span class="sd">    &gt;&gt;&gt; q.add(1)</span>
+<span class="sd">    &gt;&gt;&gt; q[0]</span>
+<span class="sd">    1</span>
+<span class="sd">    &gt;&gt;&gt; len(q)</span>
+<span class="sd">    3</span>
+<span class="sd">    &gt;&gt;&gt; q.pop()</span>
+<span class="sd">    1</span>
+<span class="sd">    &gt;&gt;&gt; q.remove(2)</span>
+<span class="sd">    &gt;&gt;&gt; len(q)</span>
+<span class="sd">    1</span>
+<span class="sd">    &gt;&gt;&gt; q[0]</span>
+<span class="sd">    3</span>
+<span class="sd">    &gt;&gt;&gt; q.pop()</span>
+<span class="sd">    3</span>
+<span class="sd">    &gt;&gt;&gt; q.pop()</span>
+<span class="sd">    &gt;&gt;&gt; q.add(2)</span>
+<span class="sd">    &gt;&gt;&gt; q.remove(2)</span>
+<span class="sd">    &gt;&gt;&gt; q.add(2)</span>
+<span class="sd">    &gt;&gt;&gt; q.pop()</span>
+<span class="sd">    2</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_heap</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_known</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>    <span class="c1"># all objects in the heap (including removed)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_removed</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>  <span class="c1"># all objects that have been removed</span>
+
+    <span class="k">def</span> <span class="nf">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_known</span><span class="p">)</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_removed</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">IndexError</span><span class="p">()</span>
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_heap</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">IndexError</span><span class="p">()</span>
+            <span class="n">o</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_heap</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">o</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_removed</span><span class="p">:</span>
+                <span class="n">o2</span> <span class="o">=</span> <span class="n">heappop</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_heap</span><span class="p">)</span>
+                <span class="k">assert</span> <span class="n">o2</span> <span class="o">==</span> <span class="n">o</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_removed</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">o</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_known</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">o</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">o</span>
+
+    <span class="k">def</span> <span class="nf">__contains__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">o</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">o</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_known</span> <span class="ow">and</span> <span class="n">o</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_removed</span>
+
+<div class="viewcode-block" id="PriorityQueue.add"><a class="viewcode-back" href="../../../api/api_channels.html#connector.jobrunner.channels.PriorityQueue.add">[docs]</a>    <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">o</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">o</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">o</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_removed</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_removed</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">o</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">o</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_known</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_known</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">o</span><span class="p">)</span>
+        <span class="n">heappush</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_heap</span><span class="p">,</span> <span class="n">o</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="PriorityQueue.remove"><a class="viewcode-back" href="../../../api/api_channels.html#connector.jobrunner.channels.PriorityQueue.remove">[docs]</a>    <span class="k">def</span> <span class="nf">remove</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">o</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">o</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">o</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_known</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="k">if</span> <span class="n">o</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_removed</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_removed</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">o</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="PriorityQueue.pop"><a class="viewcode-back" href="../../../api/api_channels.html#connector.jobrunner.channels.PriorityQueue.pop">[docs]</a>    <span class="k">def</span> <span class="nf">pop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">o</span> <span class="o">=</span> <span class="n">heappop</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_heap</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
+                <span class="c1"># queue is empty</span>
+                <span class="k">return</span> <span class="kc">None</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_known</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">o</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">o</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_removed</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_removed</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">o</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">o</span></div></div>
+
+
+<div class="viewcode-block" id="SafeSet"><a class="viewcode-back" href="../../../api/api_channels.html#connector.jobrunner.channels.SafeSet">[docs]</a><span class="k">class</span> <span class="nc">SafeSet</span><span class="p">(</span><span class="nb">set</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A set that does not raise KeyError when removing non-existent items.</span>
+
+<span class="sd">    &gt;&gt;&gt; s = SafeSet()</span>
+<span class="sd">    &gt;&gt;&gt; s.remove(1)</span>
+<span class="sd">    &gt;&gt;&gt; len(s)</span>
+<span class="sd">    0</span>
+<span class="sd">    &gt;&gt;&gt; s.remove(1)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="SafeSet.remove"><a class="viewcode-back" href="../../../api/api_channels.html#connector.jobrunner.channels.SafeSet.remove">[docs]</a>    <span class="k">def</span> <span class="nf">remove</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">o</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="nb">super</span><span class="p">(</span><span class="n">SafeSet</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">o</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="k">pass</span></div></div>
+
+
+<div class="viewcode-block" id="ChannelJob"><a class="viewcode-back" href="../../../api/api_channels.html#connector.jobrunner.channels.ChannelJob">[docs]</a><span class="k">class</span> <span class="nc">ChannelJob</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A channel job is attached to a channel and holds the properties of a</span>
+<span class="sd">    job that are necessary to prioritise them.</span>
+
+<span class="sd">    Channel jobs are comparable according to the following rules:</span>
+<span class="sd">        * jobs with an eta come before all other jobs</span>
+<span class="sd">        * then jobs with a smaller eta come first</span>
+<span class="sd">        * then jobs with a smaller priority come first</span>
+<span class="sd">        * then jobs with a smaller creation time come first</span>
+<span class="sd">        * then jobs with a smaller sequence come first</span>
+
+<span class="sd">    Here are some examples.</span>
+
+<span class="sd">    j1 comes before j2 before it has a smaller date_created</span>
+
+<span class="sd">    &gt;&gt;&gt; j1 = ChannelJob(None, None, 1,</span>
+<span class="sd">    ...                 seq=0, date_created=1, priority=9, eta=None)</span>
+<span class="sd">    &gt;&gt;&gt; j1</span>
+<span class="sd">    &lt;ChannelJob 1&gt;</span>
+<span class="sd">    &gt;&gt;&gt; j2 = ChannelJob(None, None, 2,</span>
+<span class="sd">    ...                 seq=0, date_created=2, priority=9, eta=None)</span>
+<span class="sd">    &gt;&gt;&gt; j1 &lt; j2</span>
+<span class="sd">    True</span>
+
+<span class="sd">    j3 comes first because it has lower priority,</span>
+<span class="sd">    despite having a creation date after j1 and j2</span>
+
+<span class="sd">    &gt;&gt;&gt; j3 = ChannelJob(None, None, 3,</span>
+<span class="sd">    ...                 seq=0, date_created=3, priority=2, eta=None)</span>
+<span class="sd">    &gt;&gt;&gt; j3 &lt; j1</span>
+<span class="sd">    True</span>
+
+<span class="sd">    j4 and j5 comes even before j3, because they have an eta</span>
+
+<span class="sd">    &gt;&gt;&gt; j4 = ChannelJob(None, None, 4,</span>
+<span class="sd">    ...                 seq=0, date_created=4, priority=9, eta=9)</span>
+<span class="sd">    &gt;&gt;&gt; j5 = ChannelJob(None, None, 5,</span>
+<span class="sd">    ...                 seq=0, date_created=5, priority=9, eta=9)</span>
+<span class="sd">    &gt;&gt;&gt; j4 &lt; j5 &lt; j3</span>
+<span class="sd">    True</span>
+
+<span class="sd">    j6 has same date_created and priority as j5 but a smaller eta</span>
+
+<span class="sd">    &gt;&gt;&gt; j6 = ChannelJob(None, None, 6,</span>
+<span class="sd">    ...                 seq=0, date_created=5, priority=9, eta=2)</span>
+<span class="sd">    &gt;&gt;&gt; j6 &lt; j4 &lt; j5</span>
+<span class="sd">    True</span>
+
+<span class="sd">    Here is the complete suite:</span>
+
+<span class="sd">    &gt;&gt;&gt; j6 &lt; j4 &lt; j5 &lt; j3 &lt; j1 &lt; j2</span>
+<span class="sd">    True</span>
+
+<span class="sd">    j0 has the same properties as j1 but they are not considered</span>
+<span class="sd">    equal as they are different instances</span>
+
+<span class="sd">    &gt;&gt;&gt; j0 = ChannelJob(None, None, 1,</span>
+<span class="sd">    ...                 seq=0, date_created=1, priority=9, eta=None)</span>
+<span class="sd">    &gt;&gt;&gt; j0 == j1</span>
+<span class="sd">    False</span>
+<span class="sd">    &gt;&gt;&gt; j0 == j0</span>
+<span class="sd">    True</span>
+
+<span class="sd">    Comparison excluding eta:</span>
+
+<span class="sd">    &gt;&gt;&gt; j1.cmp_no_eta(j2)</span>
+<span class="sd">    -1</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">db_name</span><span class="p">,</span> <span class="n">channel</span><span class="p">,</span> <span class="n">uuid</span><span class="p">,</span>
+                 <span class="n">seq</span><span class="p">,</span> <span class="n">date_created</span><span class="p">,</span> <span class="n">priority</span><span class="p">,</span> <span class="n">eta</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">db_name</span> <span class="o">=</span> <span class="n">db_name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">channel</span> <span class="o">=</span> <span class="n">channel</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">uuid</span> <span class="o">=</span> <span class="n">uuid</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">seq</span> <span class="o">=</span> <span class="n">seq</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">date_created</span> <span class="o">=</span> <span class="n">date_created</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">priority</span> <span class="o">=</span> <span class="n">priority</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">eta</span> <span class="o">=</span> <span class="n">eta</span>
+
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;&lt;ChannelJob </span><span class="si">%s</span><span class="s2">&gt;&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">uuid</span>
+
+    <span class="k">def</span> <span class="nf">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">id</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">==</span> <span class="nb">id</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__hash__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">id</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+<div class="viewcode-block" id="ChannelJob.cmp_no_eta"><a class="viewcode-back" href="../../../api/api_channels.html#connector.jobrunner.channels.ChannelJob.cmp_no_eta">[docs]</a>    <span class="k">def</span> <span class="nf">cmp_no_eta</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span><span class="nb">cmp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">priority</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">priority</span><span class="p">)</span> <span class="ow">or</span>
+                <span class="nb">cmp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">date_created</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">date_created</span><span class="p">)</span> <span class="ow">or</span>
+                <span class="nb">cmp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">seq</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">seq</span><span class="p">))</span></div>
+
+    <span class="k">def</span> <span class="nf">__cmp__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">eta</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">other</span><span class="o">.</span><span class="n">eta</span><span class="p">:</span>
+            <span class="k">return</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="k">elif</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">eta</span> <span class="ow">and</span> <span class="n">other</span><span class="o">.</span><span class="n">eta</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">(</span><span class="nb">cmp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">eta</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">eta</span><span class="p">)</span> <span class="ow">or</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">cmp_no_eta</span><span class="p">(</span><span class="n">other</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="ChannelQueue"><a class="viewcode-back" href="../../../api/api_channels.html#connector.jobrunner.channels.ChannelQueue">[docs]</a><span class="k">class</span> <span class="nc">ChannelQueue</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A channel queue is a priority queue for jobs.</span>
+
+<span class="sd">    Jobs with an eta are set aside until their eta is past due, at</span>
+<span class="sd">    which point they start competing normally with other jobs.</span>
+
+<span class="sd">    &gt;&gt;&gt; q = ChannelQueue()</span>
+<span class="sd">    &gt;&gt;&gt; j1 = ChannelJob(None, None, 1,</span>
+<span class="sd">    ...                 seq=0, date_created=1, priority=1, eta=10)</span>
+<span class="sd">    &gt;&gt;&gt; j2 = ChannelJob(None, None, 2,</span>
+<span class="sd">    ...                 seq=0, date_created=2, priority=1, eta=None)</span>
+<span class="sd">    &gt;&gt;&gt; j3 = ChannelJob(None, None, 3,</span>
+<span class="sd">    ...                 seq=0, date_created=3, priority=1, eta=None)</span>
+<span class="sd">    &gt;&gt;&gt; q.add(j1)</span>
+<span class="sd">    &gt;&gt;&gt; q.add(j2)</span>
+<span class="sd">    &gt;&gt;&gt; q.add(j3)</span>
+
+<span class="sd">    Wakeup time is the eta of job 1.</span>
+
+<span class="sd">    &gt;&gt;&gt; q.get_wakeup_time()</span>
+<span class="sd">    10</span>
+
+<span class="sd">    We have not reached the eta of job 1, so we get job 2.</span>
+
+<span class="sd">    &gt;&gt;&gt; q.pop(now=1)</span>
+<span class="sd">    &lt;ChannelJob 2&gt;</span>
+
+<span class="sd">    Wakeup time is still the eta of job 1, and we get job 1 when we are past</span>
+<span class="sd">    it&#39;s eta.</span>
+
+<span class="sd">    &gt;&gt;&gt; q.get_wakeup_time()</span>
+<span class="sd">    10</span>
+<span class="sd">    &gt;&gt;&gt; q.pop(now=11)</span>
+<span class="sd">    &lt;ChannelJob 1&gt;</span>
+
+<span class="sd">    Now there is no wakeup time anymore, because no job have an eta.</span>
+
+<span class="sd">    &gt;&gt;&gt; q.get_wakeup_time()</span>
+<span class="sd">    0</span>
+<span class="sd">    &gt;&gt;&gt; q.pop(now=12)</span>
+<span class="sd">    &lt;ChannelJob 3&gt;</span>
+<span class="sd">    &gt;&gt;&gt; q.get_wakeup_time()</span>
+<span class="sd">    0</span>
+<span class="sd">    &gt;&gt;&gt; q.pop(now=13)</span>
+
+<span class="sd">    Observe that job with past eta still run after jobs with higher priority.</span>
+
+<span class="sd">    &gt;&gt;&gt; j4 = ChannelJob(None, None, 4,</span>
+<span class="sd">    ...                 seq=0, date_created=4, priority=10, eta=20)</span>
+<span class="sd">    &gt;&gt;&gt; j5 = ChannelJob(None, None, 5,</span>
+<span class="sd">    ...                 seq=0, date_created=5, priority=1, eta=None)</span>
+<span class="sd">    &gt;&gt;&gt; q.add(j4)</span>
+<span class="sd">    &gt;&gt;&gt; q.add(j5)</span>
+<span class="sd">    &gt;&gt;&gt; q.get_wakeup_time()</span>
+<span class="sd">    20</span>
+<span class="sd">    &gt;&gt;&gt; q.pop(21)</span>
+<span class="sd">    &lt;ChannelJob 5&gt;</span>
+<span class="sd">    &gt;&gt;&gt; q.get_wakeup_time()</span>
+<span class="sd">    0</span>
+<span class="sd">    &gt;&gt;&gt; q.pop(22)</span>
+<span class="sd">    &lt;ChannelJob 4&gt;</span>
+
+<span class="sd">    Test a sequential queue.</span>
+
+<span class="sd">    &gt;&gt;&gt; sq = ChannelQueue(sequential=True)</span>
+<span class="sd">    &gt;&gt;&gt; j6 = ChannelJob(None, None, 6,</span>
+<span class="sd">    ...                 seq=0, date_created=6, priority=1, eta=None)</span>
+<span class="sd">    &gt;&gt;&gt; j7 = ChannelJob(None, None, 7,</span>
+<span class="sd">    ...                 seq=0, date_created=7, priority=1, eta=20)</span>
+<span class="sd">    &gt;&gt;&gt; j8 = ChannelJob(None, None, 8,</span>
+<span class="sd">    ...                 seq=0, date_created=8, priority=1, eta=None)</span>
+<span class="sd">    &gt;&gt;&gt; sq.add(j6)</span>
+<span class="sd">    &gt;&gt;&gt; sq.add(j7)</span>
+<span class="sd">    &gt;&gt;&gt; sq.add(j8)</span>
+<span class="sd">    &gt;&gt;&gt; sq.pop(10)</span>
+<span class="sd">    &lt;ChannelJob 6&gt;</span>
+<span class="sd">    &gt;&gt;&gt; sq.pop(15)</span>
+<span class="sd">    &gt;&gt;&gt; sq.pop(20)</span>
+<span class="sd">    &lt;ChannelJob 7&gt;</span>
+<span class="sd">    &gt;&gt;&gt; sq.pop(30)</span>
+<span class="sd">    &lt;ChannelJob 8&gt;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sequential</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_queue</span> <span class="o">=</span> <span class="n">PriorityQueue</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_eta_queue</span> <span class="o">=</span> <span class="n">PriorityQueue</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sequential</span> <span class="o">=</span> <span class="n">sequential</span>
+
+    <span class="k">def</span> <span class="nf">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_eta_queue</span><span class="p">)</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_queue</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__contains__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">o</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">o</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_eta_queue</span> <span class="ow">or</span> <span class="n">o</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_queue</span>
+
+<div class="viewcode-block" id="ChannelQueue.add"><a class="viewcode-back" href="../../../api/api_channels.html#connector.jobrunner.channels.ChannelQueue.add">[docs]</a>    <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">job</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">job</span><span class="o">.</span><span class="n">eta</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_eta_queue</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">job</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_queue</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">job</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ChannelQueue.remove"><a class="viewcode-back" href="../../../api/api_channels.html#connector.jobrunner.channels.ChannelQueue.remove">[docs]</a>    <span class="k">def</span> <span class="nf">remove</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">job</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_eta_queue</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">job</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_queue</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">job</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ChannelQueue.pop"><a class="viewcode-back" href="../../../api/api_channels.html#connector.jobrunner.channels.ChannelQueue.pop">[docs]</a>    <span class="k">def</span> <span class="nf">pop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">now</span><span class="p">):</span>
+        <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_eta_queue</span><span class="p">)</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_eta_queue</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">eta</span> <span class="o">&lt;=</span> <span class="n">now</span><span class="p">:</span>
+            <span class="n">eta_job</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_eta_queue</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+            <span class="n">eta_job</span><span class="o">.</span><span class="n">eta</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_queue</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">eta_job</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">sequential</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_eta_queue</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_queue</span><span class="p">):</span>
+            <span class="n">eta_job</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_eta_queue</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">job</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_queue</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">eta_job</span><span class="o">.</span><span class="n">cmp_no_eta</span><span class="p">(</span><span class="n">job</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="c1"># eta ignored, the job with eta has higher priority</span>
+                <span class="c1"># than the job without eta; since it&#39;s a sequential</span>
+                <span class="c1"># queue we wait until eta</span>
+                <span class="k">return</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_queue</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="ChannelQueue.get_wakeup_time"><a class="viewcode-back" href="../../../api/api_channels.html#connector.jobrunner.channels.ChannelQueue.get_wakeup_time">[docs]</a>    <span class="k">def</span> <span class="nf">get_wakeup_time</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wakeup_time</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_eta_queue</span><span class="p">):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">wakeup_time</span><span class="p">:</span>
+                <span class="n">wakeup_time</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_eta_queue</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">eta</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">wakeup_time</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">wakeup_time</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_eta_queue</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">eta</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">wakeup_time</span></div></div>
+
+
+<div class="viewcode-block" id="Channel"><a class="viewcode-back" href="../../../guides/jobrunner.html#connector.jobrunner.channels.Channel">[docs]</a><span class="k">class</span> <span class="nc">Channel</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A channel for jobs, with a maximum capacity.</span>
+
+<span class="sd">    When jobs are created by connector modules, they may be associated</span>
+<span class="sd">    to a job channel. Jobs with no channel are inserted into the root channel.</span>
+
+<span class="sd">    Job channels are joined in a hierarchy down to the root channel.</span>
+<span class="sd">    When a job channel has available capacity, jobs are dequeued, marked</span>
+<span class="sd">    as running in the channel and are inserted into the queue of the</span>
+<span class="sd">    parent channel where they wait for available capacity and so on.</span>
+
+<span class="sd">    Job channels can be visualized as water channels with a given flow</span>
+<span class="sd">    limit (= capacity). Channels are joined together in a downstream channel</span>
+<span class="sd">    and the flow limit of the downstream channel limits upstream channels.::</span>
+
+<span class="sd">        ---------------------+</span>
+<span class="sd">                             |</span>
+<span class="sd">                             |</span>
+<span class="sd">         Ch. A C:4,Q:12,R:4  +-----------------------</span>
+
+<span class="sd">        ---------------------+  Ch. root C:5,Q:0,R:4</span>
+<span class="sd">                             |</span>
+<span class="sd">        ---------------------+</span>
+<span class="sd">         Ch. B C:1,Q:0,R:0</span>
+<span class="sd">        ---------------------+-----------------------</span>
+
+<span class="sd">    The above diagram illustrates two channels joining in the root channel.</span>
+<span class="sd">    The root channel has a capacity of 5, and 4 running jobs coming from</span>
+<span class="sd">    Channel A. Channel A has a capacity of 4, all in use (passed down to the</span>
+<span class="sd">    root channel), and 12 jobs enqueued. Channel B has a capacity of 1,</span>
+<span class="sd">    none in use. This means that whenever a new job comes in channel B,</span>
+<span class="sd">    there will be available room for it to run in the root channel.</span>
+
+<span class="sd">    Note that from the point of view of a channel, &#39;running&#39; means enqueued</span>
+<span class="sd">    in the downstream channel. Only jobs marked running in the root channel</span>
+<span class="sd">    are actually sent to Odoo for execution.</span>
+
+<span class="sd">    Should a downstream channel have less capacity than its upstream channels,</span>
+<span class="sd">    jobs going downstream will be enqueued in the downstream channel,</span>
+<span class="sd">    and compete normally according to their properties (priority, etc).</span>
+
+<span class="sd">    Using this technique, it is possible to enforce sequence in a channel</span>
+<span class="sd">    with a capacity of 1. It is also possible to dedicate a channel with a</span>
+<span class="sd">    limited capacity for application-autocreated subchannels</span>
+<span class="sd">    without risking to overflow the system.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">capacity</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sequential</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                 <span class="n">throttle</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parent</span> <span class="o">=</span> <span class="n">parent</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">children</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">children</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_queue</span> <span class="o">=</span> <span class="n">ChannelQueue</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_running</span> <span class="o">=</span> <span class="n">SafeSet</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_failed</span> <span class="o">=</span> <span class="n">SafeSet</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pause_until</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># utc seconds since the epoch</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">capacity</span> <span class="o">=</span> <span class="n">capacity</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">throttle</span> <span class="o">=</span> <span class="n">throttle</span>  <span class="c1"># seconds</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sequential</span> <span class="o">=</span> <span class="n">sequential</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">sequential</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_queue</span><span class="o">.</span><span class="n">sequential</span>
+
+    <span class="nd">@sequential</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">sequential</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_queue</span><span class="o">.</span><span class="n">sequential</span> <span class="o">=</span> <span class="n">val</span>
+
+<div class="viewcode-block" id="Channel.configure"><a class="viewcode-back" href="../../../api/api_channels.html#connector.jobrunner.channels.Channel.configure">[docs]</a>    <span class="k">def</span> <span class="nf">configure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Configure a channel from a dictionary.</span>
+
+<span class="sd">        Supported keys are:</span>
+
+<span class="sd">        * capacity</span>
+<span class="sd">        * sequential</span>
+<span class="sd">        * throttle</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">fullname</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">capacity</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;capacity&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sequential</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;sequential&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">throttle</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;throttle&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">sequential</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">capacity</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;A sequential channel must have a capacity of 1&quot;</span><span class="p">)</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">fullname</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; The full name of the channel, in dot separated notation. &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">fullname</span> <span class="o">+</span> <span class="s1">&#39;.&#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
+
+<div class="viewcode-block" id="Channel.get_subchannel_by_name"><a class="viewcode-back" href="../../../api/api_channels.html#connector.jobrunner.channels.Channel.get_subchannel_by_name">[docs]</a>    <span class="k">def</span> <span class="nf">get_subchannel_by_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">subchannel_name</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">children</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">subchannel_name</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">capacity</span> <span class="o">=</span> <span class="sa">u</span><span class="s1">&#39;∞&#39;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">capacity</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">capacity</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">(C:</span><span class="si">%s</span><span class="s2">,Q:</span><span class="si">%d</span><span class="s2">,R:</span><span class="si">%d</span><span class="s2">,F:</span><span class="si">%d</span><span class="s2">)&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fullname</span><span class="p">,</span>
+                                            <span class="n">capacity</span><span class="p">,</span>
+                                            <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_queue</span><span class="p">),</span>
+                                            <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_running</span><span class="p">),</span>
+                                            <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_failed</span><span class="p">))</span>
+
+<div class="viewcode-block" id="Channel.remove"><a class="viewcode-back" href="../../../api/api_channels.html#connector.jobrunner.channels.Channel.remove">[docs]</a>    <span class="k">def</span> <span class="nf">remove</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">job</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Remove a job from the channel. &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_queue</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">job</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_running</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">job</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_failed</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">job</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">job</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Channel.set_done"><a class="viewcode-back" href="../../../api/api_channels.html#connector.jobrunner.channels.Channel.set_done">[docs]</a>    <span class="k">def</span> <span class="nf">set_done</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">job</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Mark a job as done.</span>
+
+<span class="sd">        This removes it from the channel queue.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">job</span><span class="p">)</span>
+        <span class="n">_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;job </span><span class="si">%s</span><span class="s2"> marked done in channel </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span>
+                      <span class="n">job</span><span class="o">.</span><span class="n">uuid</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Channel.set_pending"><a class="viewcode-back" href="../../../api/api_channels.html#connector.jobrunner.channels.Channel.set_pending">[docs]</a>    <span class="k">def</span> <span class="nf">set_pending</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">job</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Mark a job as pending.</span>
+
+<span class="sd">        This puts the job in the channel queue and remove it</span>
+<span class="sd">        from parent channels queues.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">job</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_queue</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_queue</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">job</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_running</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">job</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_failed</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">job</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">job</span><span class="p">)</span>
+            <span class="n">_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;job </span><span class="si">%s</span><span class="s2"> marked pending in channel </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span>
+                          <span class="n">job</span><span class="o">.</span><span class="n">uuid</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Channel.set_running"><a class="viewcode-back" href="../../../api/api_channels.html#connector.jobrunner.channels.Channel.set_running">[docs]</a>    <span class="k">def</span> <span class="nf">set_running</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">job</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Mark a job as running.</span>
+
+<span class="sd">        This also marks the job as running in parent channels.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">job</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_running</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_queue</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">job</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_running</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">job</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_failed</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">job</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">set_running</span><span class="p">(</span><span class="n">job</span><span class="p">)</span>
+            <span class="n">_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;job </span><span class="si">%s</span><span class="s2"> marked running in channel </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span>
+                          <span class="n">job</span><span class="o">.</span><span class="n">uuid</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Channel.set_failed"><a class="viewcode-back" href="../../../api/api_channels.html#connector.jobrunner.channels.Channel.set_failed">[docs]</a>    <span class="k">def</span> <span class="nf">set_failed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">job</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Mark the job as failed. &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">job</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_failed</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_queue</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">job</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_running</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">job</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_failed</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">job</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">job</span><span class="p">)</span>
+            <span class="n">_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;job </span><span class="si">%s</span><span class="s2"> marked failed in channel </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span>
+                          <span class="n">job</span><span class="o">.</span><span class="n">uuid</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Channel.has_capacity"><a class="viewcode-back" href="../../../api/api_channels.html#connector.jobrunner.channels.Channel.has_capacity">[docs]</a>    <span class="k">def</span> <span class="nf">has_capacity</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">sequential</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_failed</span><span class="p">:</span>
+            <span class="c1"># a sequential queue blocks on failed jobs</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">capacity</span><span class="p">:</span>
+            <span class="c1"># unlimited capacity</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_running</span><span class="p">)</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">capacity</span></div>
+
+<div class="viewcode-block" id="Channel.get_jobs_to_run"><a class="viewcode-back" href="../../../api/api_channels.html#connector.jobrunner.channels.Channel.get_jobs_to_run">[docs]</a>    <span class="k">def</span> <span class="nf">get_jobs_to_run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">now</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Get jobs that are ready to run in channel.</span>
+
+<span class="sd">        This works by enqueuing jobs that are ready to run in children</span>
+<span class="sd">        channels, then yielding jobs from the channel queue until</span>
+<span class="sd">        ``capacity`` jobs are marked running in the channel.</span>
+
+<span class="sd">        If the ``throttle`` option is set on the channel, then it yields</span>
+<span class="sd">        no job until at least throttle seconds have elapsed since the previous</span>
+<span class="sd">        yield.</span>
+
+<span class="sd">        :param now: the current datetime in seconds</span>
+
+<span class="sd">        :return: iterator of :py:class:`connector.jobrunner.ChannelJob`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># enqueue jobs of children channels</span>
+        <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">children</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">job</span> <span class="ow">in</span> <span class="n">child</span><span class="o">.</span><span class="n">get_jobs_to_run</span><span class="p">(</span><span class="n">now</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_queue</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">job</span><span class="p">)</span>
+        <span class="c1"># is this channel paused?</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">throttle</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pause_until</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">now</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pause_until</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">has_capacity</span><span class="p">():</span>
+                    <span class="n">_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;channel </span><span class="si">%s</span><span class="s2"> paused until </span><span class="si">%s</span><span class="s2"> because &quot;</span>
+                                  <span class="s2">&quot;of throttle delay between jobs&quot;</span><span class="p">,</span>
+                                  <span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pause_until</span><span class="p">)</span>
+                <span class="k">return</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># unpause, this is important to avoid perpetual wakeup</span>
+                <span class="c1"># while the channel is at full capacity</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_pause_until</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="n">_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;channel </span><span class="si">%s</span><span class="s2"> unpaused at </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="n">now</span><span class="p">)</span>
+        <span class="c1"># yield jobs that are ready to run, while we have capacity</span>
+        <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">has_capacity</span><span class="p">():</span>
+            <span class="n">job</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_queue</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">now</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">job</span><span class="p">:</span>
+                <span class="k">return</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_running</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">job</span><span class="p">)</span>
+            <span class="n">_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;job </span><span class="si">%s</span><span class="s2"> marked running in channel </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span>
+                          <span class="n">job</span><span class="o">.</span><span class="n">uuid</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+            <span class="k">yield</span> <span class="n">job</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">throttle</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_pause_until</span> <span class="o">=</span> <span class="n">now</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">throttle</span>
+                <span class="n">_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;pausing channel </span><span class="si">%s</span><span class="s2"> until </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span>
+                              <span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pause_until</span><span class="p">)</span>
+                <span class="k">return</span></div>
+
+<div class="viewcode-block" id="Channel.get_wakeup_time"><a class="viewcode-back" href="../../../api/api_channels.html#connector.jobrunner.channels.Channel.get_wakeup_time">[docs]</a>    <span class="k">def</span> <span class="nf">get_wakeup_time</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wakeup_time</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">has_capacity</span><span class="p">():</span>
+            <span class="c1"># this channel is full, do not request timed wakeup, as</span>
+            <span class="c1"># a notification will wakeup the runner when a job finishes</span>
+            <span class="k">return</span> <span class="n">wakeup_time</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pause_until</span><span class="p">:</span>
+            <span class="c1"># this channel is paused, request wakeup at the end of the pause</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">wakeup_time</span><span class="p">:</span>
+                <span class="n">wakeup_time</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pause_until</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">wakeup_time</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">wakeup_time</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pause_until</span><span class="p">)</span>
+            <span class="c1"># since this channel is paused, no need to look at the</span>
+            <span class="c1"># wakeup time of children nor eta jobs, as such jobs would not</span>
+            <span class="c1"># run anyway because they would end up in this paused channel</span>
+            <span class="k">return</span> <span class="n">wakeup_time</span>
+        <span class="n">wakeup_time</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_queue</span><span class="o">.</span><span class="n">get_wakeup_time</span><span class="p">(</span><span class="n">wakeup_time</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">children</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+            <span class="n">wakeup_time</span> <span class="o">=</span> <span class="n">child</span><span class="o">.</span><span class="n">get_wakeup_time</span><span class="p">(</span><span class="n">wakeup_time</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">wakeup_time</span></div></div>
+
+
+<div class="viewcode-block" id="ChannelManager"><a class="viewcode-back" href="../../../api/api_channels.html#connector.jobrunner.channels.ChannelManager">[docs]</a><span class="k">class</span> <span class="nc">ChannelManager</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; High level interface for channels</span>
+
+<span class="sd">    This class handles:</span>
+
+<span class="sd">    * configuration of channels</span>
+<span class="sd">    * high level api to create and remove jobs (notify, remove_job, remove_db)</span>
+<span class="sd">    * get jobs to run</span>
+
+<span class="sd">    Here is how the runner will use it.</span>
+
+<span class="sd">    Let&#39;s create a channel manager and configure it.</span>
+
+<span class="sd">    &gt;&gt;&gt; from pprint import pprint as pp</span>
+<span class="sd">    &gt;&gt;&gt; cm = ChannelManager()</span>
+<span class="sd">    &gt;&gt;&gt; cm.simple_configure(&#39;root:4,A:4,B:1&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; db = &#39;db&#39;</span>
+
+<span class="sd">    Add a few jobs in channel A with priority 10</span>
+
+<span class="sd">    &gt;&gt;&gt; cm.notify(db, &#39;A&#39;, &#39;A1&#39;, 1, 0, 10, None, &#39;pending&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; cm.notify(db, &#39;A&#39;, &#39;A2&#39;, 2, 0, 10, None, &#39;pending&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; cm.notify(db, &#39;A&#39;, &#39;A3&#39;, 3, 0, 10, None, &#39;pending&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; cm.notify(db, &#39;A&#39;, &#39;A4&#39;, 4, 0, 10, None, &#39;pending&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; cm.notify(db, &#39;A&#39;, &#39;A5&#39;, 5, 0, 10, None, &#39;pending&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; cm.notify(db, &#39;A&#39;, &#39;A6&#39;, 6, 0, 10, None, &#39;pending&#39;)</span>
+
+<span class="sd">    Add a few jobs in channel B with priority 5</span>
+
+<span class="sd">    &gt;&gt;&gt; cm.notify(db, &#39;B&#39;, &#39;B1&#39;, 1, 0, 5, None, &#39;pending&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; cm.notify(db, &#39;B&#39;, &#39;B2&#39;, 2, 0, 5, None, &#39;pending&#39;)</span>
+
+<span class="sd">    We must now run one job from queue B which has a capacity of 1</span>
+<span class="sd">    and 3 jobs from queue A so the root channel capacity of 4 is filled.</span>
+
+<span class="sd">    &gt;&gt;&gt; pp(list(cm.get_jobs_to_run(now=100)))</span>
+<span class="sd">    [&lt;ChannelJob B1&gt;, &lt;ChannelJob A1&gt;, &lt;ChannelJob A2&gt;, &lt;ChannelJob A3&gt;]</span>
+
+<span class="sd">    Job A2 is done. Next job to run is A5, even if we have</span>
+<span class="sd">    higher priority job in channel B, because channel B has a capacity of 1.</span>
+
+<span class="sd">    &gt;&gt;&gt; cm.notify(db, &#39;A&#39;, &#39;A2&#39;, 2, 0, 10, None, &#39;done&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; pp(list(cm.get_jobs_to_run(now=100)))</span>
+<span class="sd">    [&lt;ChannelJob A4&gt;]</span>
+
+<span class="sd">    Job B1 is done. Next job to run is B2 because it has higher priority.</span>
+
+<span class="sd">    &gt;&gt;&gt; cm.notify(db, &#39;B&#39;, &#39;B1&#39;, 1, 0, 5, None, &#39;done&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; pp(list(cm.get_jobs_to_run(now=100)))</span>
+<span class="sd">    [&lt;ChannelJob B2&gt;]</span>
+
+<span class="sd">    Let&#39;s say A1 is done and A6 gets a higher priority. A6 will run next.</span>
+
+<span class="sd">    &gt;&gt;&gt; cm.notify(db, &#39;A&#39;, &#39;A1&#39;, 1, 0, 10, None, &#39;done&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; cm.notify(db, &#39;A&#39;, &#39;A6&#39;, 6, 0, 5, None, &#39;pending&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; pp(list(cm.get_jobs_to_run(now=100)))</span>
+<span class="sd">    [&lt;ChannelJob A6&gt;]</span>
+
+<span class="sd">    Let&#39;s test the throttling mechanism. Configure a 2 seconds delay</span>
+<span class="sd">    on channel A, end enqueue two jobs.</span>
+
+<span class="sd">    &gt;&gt;&gt; cm = ChannelManager()</span>
+<span class="sd">    &gt;&gt;&gt; cm.simple_configure(&#39;root:4,A:4:throttle=2&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; cm.notify(db, &#39;A&#39;, &#39;A1&#39;, 1, 0, 10, None, &#39;pending&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; cm.notify(db, &#39;A&#39;, &#39;A2&#39;, 2, 0, 10, None, &#39;pending&#39;)</span>
+
+<span class="sd">    We have only one job to run, because of the throttle.</span>
+
+<span class="sd">    &gt;&gt;&gt; pp(list(cm.get_jobs_to_run(now=100)))</span>
+<span class="sd">    [&lt;ChannelJob A1&gt;]</span>
+<span class="sd">    &gt;&gt;&gt; cm.get_wakeup_time()</span>
+<span class="sd">    102</span>
+
+<span class="sd">    We have no job to run, because of the throttle.</span>
+
+<span class="sd">    &gt;&gt;&gt; pp(list(cm.get_jobs_to_run(now=101)))</span>
+<span class="sd">    []</span>
+<span class="sd">    &gt;&gt;&gt; cm.get_wakeup_time()</span>
+<span class="sd">    102</span>
+
+<span class="sd">    2 seconds later, we can run the other job (even though the first one</span>
+<span class="sd">    is still running, because we have enough capacity).</span>
+
+<span class="sd">    &gt;&gt;&gt; pp(list(cm.get_jobs_to_run(now=102)))</span>
+<span class="sd">    [&lt;ChannelJob A2&gt;]</span>
+<span class="sd">    &gt;&gt;&gt; cm.get_wakeup_time()</span>
+<span class="sd">    104</span>
+
+<span class="sd">    Let&#39;s test throttling in combination with a queue reaching full capacity.</span>
+
+<span class="sd">    &gt;&gt;&gt; cm = ChannelManager()</span>
+<span class="sd">    &gt;&gt;&gt; cm.simple_configure(&#39;root:4,T:2:throttle=2&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; cm.notify(db, &#39;T&#39;, &#39;T1&#39;, 1, 0, 10, None, &#39;pending&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; cm.notify(db, &#39;T&#39;, &#39;T2&#39;, 2, 0, 10, None, &#39;pending&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; cm.notify(db, &#39;T&#39;, &#39;T3&#39;, 3, 0, 10, None, &#39;pending&#39;)</span>
+
+<span class="sd">    &gt;&gt;&gt; pp(list(cm.get_jobs_to_run(now=100)))</span>
+<span class="sd">    [&lt;ChannelJob T1&gt;]</span>
+<span class="sd">    &gt;&gt;&gt; pp(list(cm.get_jobs_to_run(now=102)))</span>
+<span class="sd">    [&lt;ChannelJob T2&gt;]</span>
+
+<span class="sd">    Channel is now full, so no job to run even though throttling</span>
+<span class="sd">    delay is over.</span>
+
+<span class="sd">    &gt;&gt;&gt; pp(list(cm.get_jobs_to_run(now=103)))</span>
+<span class="sd">    []</span>
+<span class="sd">    &gt;&gt;&gt; cm.get_wakeup_time()  # no wakeup time, since queue is full</span>
+<span class="sd">    0</span>
+<span class="sd">    &gt;&gt;&gt; pp(list(cm.get_jobs_to_run(now=104)))</span>
+<span class="sd">    []</span>
+<span class="sd">    &gt;&gt;&gt; cm.get_wakeup_time()  # queue is still full</span>
+<span class="sd">    0</span>
+
+<span class="sd">    &gt;&gt;&gt; cm.notify(db, &#39;T&#39;, &#39;T1&#39;, 1, 0, 10, None, &#39;done&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; pp(list(cm.get_jobs_to_run(now=105)))</span>
+<span class="sd">    [&lt;ChannelJob T3&gt;]</span>
+<span class="sd">    &gt;&gt;&gt; cm.get_wakeup_time()  # queue is full</span>
+<span class="sd">    0</span>
+<span class="sd">    &gt;&gt;&gt; cm.notify(db, &#39;T&#39;, &#39;T2&#39;, 1, 0, 10, None, &#39;done&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; cm.get_wakeup_time()</span>
+<span class="sd">    107</span>
+
+<span class="sd">    Test wakeup time behaviour in presence of eta.</span>
+
+<span class="sd">    &gt;&gt;&gt; cm = ChannelManager()</span>
+<span class="sd">    &gt;&gt;&gt; cm.simple_configure(&#39;root:4,E:1&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; cm.notify(db, &#39;E&#39;, &#39;E1&#39;, 1, 0, 10, None, &#39;pending&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; cm.notify(db, &#39;E&#39;, &#39;E2&#39;, 2, 0, 10, None, &#39;pending&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; cm.notify(db, &#39;E&#39;, &#39;E3&#39;, 3, 0, 10, None, &#39;pending&#39;)</span>
+
+<span class="sd">    &gt;&gt;&gt; pp(list(cm.get_jobs_to_run(now=100)))</span>
+<span class="sd">    [&lt;ChannelJob E1&gt;]</span>
+<span class="sd">    &gt;&gt;&gt; pp(list(cm.get_jobs_to_run(now=101)))</span>
+<span class="sd">    []</span>
+<span class="sd">    &gt;&gt;&gt; cm.notify(db, &#39;E&#39;, &#39;E1&#39;, 1, 0, 10, 105, &#39;pending&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; cm.get_wakeup_time()  # wakeup at eta</span>
+<span class="sd">    105</span>
+<span class="sd">    &gt;&gt;&gt; pp(list(cm.get_jobs_to_run(now=102)))  # but there is capacity</span>
+<span class="sd">    [&lt;ChannelJob E2&gt;]</span>
+<span class="sd">    &gt;&gt;&gt; pp(list(cm.get_jobs_to_run(now=106)))  # no capacity anymore</span>
+<span class="sd">    []</span>
+<span class="sd">    &gt;&gt;&gt; cm.get_wakeup_time()  # no timed wakeup because no capacity</span>
+<span class="sd">    0</span>
+<span class="sd">    &gt;&gt;&gt; cm.notify(db, &#39;E&#39;, &#39;E2&#39;, 1, 0, 10, None, &#39;done&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; cm.get_wakeup_time()</span>
+<span class="sd">    105</span>
+<span class="sd">    &gt;&gt;&gt; pp(list(cm.get_jobs_to_run(now=107)))  # no capacity anymore</span>
+<span class="sd">    [&lt;ChannelJob E1&gt;]</span>
+<span class="sd">    &gt;&gt;&gt; cm.get_wakeup_time()</span>
+<span class="sd">    0</span>
+
+<span class="sd">    Test wakeup time behaviour in a sequential queue.</span>
+
+<span class="sd">    &gt;&gt;&gt; cm = ChannelManager()</span>
+<span class="sd">    &gt;&gt;&gt; cm.simple_configure(&#39;root:4,S:1:sequential&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; cm.notify(db, &#39;S&#39;, &#39;S1&#39;, 1, 0, 10, None, &#39;pending&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; cm.notify(db, &#39;S&#39;, &#39;S2&#39;, 2, 0, 10, None, &#39;pending&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; cm.notify(db, &#39;S&#39;, &#39;S3&#39;, 3, 0, 10, None, &#39;pending&#39;)</span>
+
+<span class="sd">    &gt;&gt;&gt; pp(list(cm.get_jobs_to_run(now=100)))</span>
+<span class="sd">    [&lt;ChannelJob S1&gt;]</span>
+<span class="sd">    &gt;&gt;&gt; cm.notify(db, &#39;S&#39;, &#39;S1&#39;, 1, 0, 10, None, &#39;failed&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; pp(list(cm.get_jobs_to_run(now=101)))</span>
+<span class="sd">    []</span>
+<span class="sd">    &gt;&gt;&gt; cm.notify(db, &#39;S&#39;, &#39;S2&#39;, 2, 0, 10, 105, &#39;pending&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; pp(list(cm.get_jobs_to_run(now=102)))</span>
+<span class="sd">    []</span>
+
+<span class="sd">    No wakeup time because due to eta, because the sequential queue</span>
+<span class="sd">    is waiting for a failed job.</span>
+
+<span class="sd">    &gt;&gt;&gt; cm.get_wakeup_time()</span>
+<span class="sd">    0</span>
+<span class="sd">    &gt;&gt;&gt; cm.notify(db, &#39;S&#39;, &#39;S1&#39;, 1, 0, 10, None, &#39;pending&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; cm.get_wakeup_time()</span>
+<span class="sd">    105</span>
+<span class="sd">    &gt;&gt;&gt; pp(list(cm.get_jobs_to_run(now=102)))</span>
+<span class="sd">    [&lt;ChannelJob S1&gt;]</span>
+<span class="sd">    &gt;&gt;&gt; pp(list(cm.get_jobs_to_run(now=103)))</span>
+<span class="sd">    []</span>
+<span class="sd">    &gt;&gt;&gt; cm.notify(db, &#39;S&#39;, &#39;S1&#39;, 1, 0, 10, None, &#39;done&#39;)</span>
+
+<span class="sd">    At this stage, we have S2 with an eta of 105 and since the</span>
+<span class="sd">    queue is sequential, we wait for it.</span>
+
+<span class="sd">    &gt;&gt;&gt; pp(list(cm.get_jobs_to_run(now=103)))</span>
+<span class="sd">    []</span>
+<span class="sd">    &gt;&gt;&gt; pp(list(cm.get_jobs_to_run(now=105)))</span>
+<span class="sd">    [&lt;ChannelJob S2&gt;]</span>
+<span class="sd">    &gt;&gt;&gt; cm.notify(db, &#39;S&#39;, &#39;S2&#39;, 2, 0, 10, 105, &#39;done&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; pp(list(cm.get_jobs_to_run(now=105)))</span>
+<span class="sd">    [&lt;ChannelJob S3&gt;]</span>
+<span class="sd">    &gt;&gt;&gt; cm.notify(db, &#39;S&#39;, &#39;S3&#39;, 3, 0, 10, None, &#39;done&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; pp(list(cm.get_jobs_to_run(now=105)))</span>
+<span class="sd">    []</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_jobs_by_uuid</span> <span class="o">=</span> <span class="n">WeakValueDictionary</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_root_channel</span> <span class="o">=</span> <span class="n">Channel</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;root&#39;</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">capacity</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_channels_by_name</span> <span class="o">=</span> <span class="n">WeakValueDictionary</span><span class="p">(</span><span class="n">root</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_root_channel</span><span class="p">)</span>
+
+<div class="viewcode-block" id="ChannelManager.split_strip"><a class="viewcode-back" href="../../../api/api_channels.html#connector.jobrunner.channels.ChannelManager.split_strip">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">split_strip</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">sep</span><span class="p">,</span> <span class="n">maxsplit</span><span class="o">=-</span><span class="mi">1</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Split string and strip each component.</span>
+
+<span class="sd">        &gt;&gt;&gt; ChannelManager.split_strip(&quot;foo: bar baz\\n: fred:&quot;, &quot;:&quot;)</span>
+<span class="sd">        [&#39;foo&#39;, &#39;bar baz&#39;, &#39;fred&#39;, &#39;&#39;]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">s</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">sep</span><span class="p">,</span> <span class="n">maxsplit</span><span class="p">)]</span></div>
+
+<div class="viewcode-block" id="ChannelManager.parse_simple_config"><a class="viewcode-back" href="../../../api/api_channels.html#connector.jobrunner.channels.ChannelManager.parse_simple_config">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">parse_simple_config</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">config_string</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Parse a simple channels configuration string.</span>
+
+<span class="sd">        The general form is as follow:</span>
+<span class="sd">        channel(.subchannel)*(:capacity(:key(=value)?)*)? [, ...]</span>
+
+<span class="sd">        If capacity is absent, it defaults to 1.</span>
+<span class="sd">        If a key is present without value, it gets True as value.</span>
+<span class="sd">        When declaring subchannels, the root channel may be omitted</span>
+<span class="sd">        (ie sub:4 is the same as root.sub:4).</span>
+
+<span class="sd">        Returns a list of channel configuration dictionaries.</span>
+
+<span class="sd">        &gt;&gt;&gt; from pprint import pprint as pp</span>
+<span class="sd">        &gt;&gt;&gt; pp(ChannelManager.parse_simple_config(&#39;root:4&#39;))</span>
+<span class="sd">        [{&#39;capacity&#39;: 4, &#39;name&#39;: &#39;root&#39;}]</span>
+<span class="sd">        &gt;&gt;&gt; pp(ChannelManager.parse_simple_config(&#39;root:4,root.sub:2&#39;))</span>
+<span class="sd">        [{&#39;capacity&#39;: 4, &#39;name&#39;: &#39;root&#39;}, {&#39;capacity&#39;: 2, &#39;name&#39;: &#39;root.sub&#39;}]</span>
+<span class="sd">        &gt;&gt;&gt; pp(ChannelManager.parse_simple_config(&#39;root:4,root.sub:2:&#39;</span>
+<span class="sd">        ...                                       &#39;sequential:k=v&#39;))</span>
+<span class="sd">        [{&#39;capacity&#39;: 4, &#39;name&#39;: &#39;root&#39;},</span>
+<span class="sd">         {&#39;capacity&#39;: 2, &#39;k&#39;: &#39;v&#39;, &#39;name&#39;: &#39;root.sub&#39;, &#39;sequential&#39;: True}]</span>
+<span class="sd">        &gt;&gt;&gt; pp(ChannelManager.parse_simple_config(&#39;root&#39;))</span>
+<span class="sd">        [{&#39;capacity&#39;: 1, &#39;name&#39;: &#39;root&#39;}]</span>
+<span class="sd">        &gt;&gt;&gt; pp(ChannelManager.parse_simple_config(&#39;sub:2&#39;))</span>
+<span class="sd">        [{&#39;capacity&#39;: 2, &#39;name&#39;: &#39;sub&#39;}]</span>
+
+<span class="sd">        It ignores whitespace around values, and drops empty entries which</span>
+<span class="sd">        would be generated by trailing commas, or commented lines on the Odoo</span>
+<span class="sd">        config file.</span>
+
+<span class="sd">        &gt;&gt;&gt; pp(ChannelManager.parse_simple_config(&#39;&#39;&#39;</span>
+<span class="sd">        ...     root : 4,</span>
+<span class="sd">        ...     ,</span>
+<span class="sd">        ...     foo bar:1: k=va lue,</span>
+<span class="sd">        ... &#39;&#39;&#39;))</span>
+<span class="sd">        [{&#39;capacity&#39;: 4, &#39;name&#39;: &#39;root&#39;},</span>
+<span class="sd">         {&#39;capacity&#39;: 1, &#39;k&#39;: &#39;va lue&#39;, &#39;name&#39;: &#39;foo bar&#39;}]</span>
+
+<span class="sd">        It&#39;s also possible to replace commas with line breaks, which is more</span>
+<span class="sd">        readable if you&#39;re taking the channel configuration from a ConfigParser</span>
+<span class="sd">        file.</span>
+
+<span class="sd">        &gt;&gt;&gt; pp(ChannelManager.parse_simple_config(&#39;&#39;&#39;</span>
+<span class="sd">        ...     root : 4</span>
+<span class="sd">        ...     foo bar:1: k=va lue</span>
+<span class="sd">        ...     baz</span>
+<span class="sd">        ... &#39;&#39;&#39;))</span>
+<span class="sd">        [{&#39;capacity&#39;: 4, &#39;name&#39;: &#39;root&#39;},</span>
+<span class="sd">         {&#39;capacity&#39;: 1, &#39;k&#39;: &#39;va lue&#39;, &#39;name&#39;: &#39;foo bar&#39;},</span>
+<span class="sd">         {&#39;capacity&#39;: 1, &#39;name&#39;: &#39;baz&#39;}]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">config_string</span> <span class="o">=</span> <span class="n">config_string</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;,&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">channel_config_string</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">split_strip</span><span class="p">(</span><span class="n">config_string</span><span class="p">,</span> <span class="s1">&#39;,&#39;</span><span class="p">):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">channel_config_string</span><span class="p">:</span>
+                <span class="c1"># ignore empty entries (commented lines, trailing commas)</span>
+                <span class="k">continue</span>
+            <span class="n">config</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="n">config_items</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">split_strip</span><span class="p">(</span><span class="n">channel_config_string</span><span class="p">,</span> <span class="s1">&#39;:&#39;</span><span class="p">)</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="n">config_items</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">name</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Invalid channel config </span><span class="si">%s</span><span class="s1">: &#39;</span>
+                                 <span class="s1">&#39;missing channel name&#39;</span> <span class="o">%</span> <span class="n">config_string</span><span class="p">)</span>
+            <span class="n">config</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">name</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">config_items</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">capacity</span> <span class="o">=</span> <span class="n">config_items</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">config</span><span class="p">[</span><span class="s1">&#39;capacity&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">capacity</span><span class="p">)</span>
+                <span class="k">except</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Invalid channel config </span><span class="si">%s</span><span class="s1">: &#39;</span>
+                                     <span class="s1">&#39;invalid capacity </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span>
+                                     <span class="p">(</span><span class="n">config_string</span><span class="p">,</span> <span class="n">capacity</span><span class="p">))</span>
+                <span class="k">for</span> <span class="n">config_item</span> <span class="ow">in</span> <span class="n">config_items</span><span class="p">[</span><span class="mi">2</span><span class="p">:]:</span>
+                    <span class="n">kv</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">split_strip</span><span class="p">(</span><span class="n">config_item</span><span class="p">,</span> <span class="s1">&#39;=&#39;</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">kv</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                        <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="n">kv</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="kc">True</span>
+                    <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">kv</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                        <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="n">kv</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Invalid channel config </span><span class="si">%s</span><span class="s1">: &#39;</span>
+                                         <span class="s1">&#39;incorrect config item </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span>
+                                         <span class="p">(</span><span class="n">config_string</span><span class="p">,</span> <span class="n">config_item</span><span class="p">))</span>
+                    <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">config</span><span class="p">:</span>
+                        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Invalid channel config </span><span class="si">%s</span><span class="s1">: &#39;</span>
+                                         <span class="s1">&#39;duplicate key </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span>
+                                         <span class="p">(</span><span class="n">config_string</span><span class="p">,</span> <span class="n">k</span><span class="p">))</span>
+                    <span class="n">config</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">config</span><span class="p">[</span><span class="s1">&#39;capacity&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">res</span></div>
+
+<div class="viewcode-block" id="ChannelManager.simple_configure"><a class="viewcode-back" href="../../../api/api_channels.html#connector.jobrunner.channels.ChannelManager.simple_configure">[docs]</a>    <span class="k">def</span> <span class="nf">simple_configure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config_string</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Configure the channel manager from a simple configuration string</span>
+
+<span class="sd">        &gt;&gt;&gt; cm = ChannelManager()</span>
+<span class="sd">        &gt;&gt;&gt; c = cm.get_channel_by_name(&#39;root&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; c.capacity</span>
+<span class="sd">        1</span>
+<span class="sd">        &gt;&gt;&gt; cm.simple_configure(&#39;root:4,autosub.sub:2,seq:1:sequential&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; cm.get_channel_by_name(&#39;root&#39;).capacity</span>
+<span class="sd">        4</span>
+<span class="sd">        &gt;&gt;&gt; cm.get_channel_by_name(&#39;root&#39;).sequential</span>
+<span class="sd">        False</span>
+<span class="sd">        &gt;&gt;&gt; cm.get_channel_by_name(&#39;root.autosub&#39;).capacity</span>
+<span class="sd">        &gt;&gt;&gt; cm.get_channel_by_name(&#39;root.autosub.sub&#39;).capacity</span>
+<span class="sd">        2</span>
+<span class="sd">        &gt;&gt;&gt; cm.get_channel_by_name(&#39;root.autosub.sub&#39;).sequential</span>
+<span class="sd">        False</span>
+<span class="sd">        &gt;&gt;&gt; cm.get_channel_by_name(&#39;autosub.sub&#39;).capacity</span>
+<span class="sd">        2</span>
+<span class="sd">        &gt;&gt;&gt; cm.get_channel_by_name(&#39;seq&#39;).capacity</span>
+<span class="sd">        1</span>
+<span class="sd">        &gt;&gt;&gt; cm.get_channel_by_name(&#39;seq&#39;).sequential</span>
+<span class="sd">        True</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">config</span> <span class="ow">in</span> <span class="n">ChannelManager</span><span class="o">.</span><span class="n">parse_simple_config</span><span class="p">(</span><span class="n">config_string</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">get_channel_from_config</span><span class="p">(</span><span class="n">config</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ChannelManager.get_channel_from_config"><a class="viewcode-back" href="../../../api/api_channels.html#connector.jobrunner.channels.ChannelManager.get_channel_from_config">[docs]</a>    <span class="k">def</span> <span class="nf">get_channel_from_config</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return a Channel object from a parsed configuration.</span>
+
+<span class="sd">        If the channel does not exist it is created.</span>
+<span class="sd">        The configuration is applied on the channel before returning it.</span>
+<span class="sd">        If some of the parent channels are missing when creating a subchannel,</span>
+<span class="sd">        the parent channels are auto created with an infinite capacity</span>
+<span class="sd">        (except for the root channel, which defaults to a capacity of 1</span>
+<span class="sd">        when not configured explicity).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">channel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_channel_by_name</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">],</span> <span class="n">autocreate</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">channel</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">channel</span></div>
+
+<div class="viewcode-block" id="ChannelManager.get_channel_by_name"><a class="viewcode-back" href="../../../api/api_channels.html#connector.jobrunner.channels.ChannelManager.get_channel_by_name">[docs]</a>    <span class="k">def</span> <span class="nf">get_channel_by_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">channel_name</span><span class="p">,</span> <span class="n">autocreate</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return a Channel object by its name.</span>
+
+<span class="sd">        If it does not exist and autocreate is True, it is created</span>
+<span class="sd">        with a default configuration and inserted in the Channels structure.</span>
+<span class="sd">        If autocreate is False and the channel does not exist, an exception</span>
+<span class="sd">        is raised.</span>
+
+<span class="sd">        &gt;&gt;&gt; cm = ChannelManager()</span>
+<span class="sd">        &gt;&gt;&gt; c = cm.get_channel_by_name(&#39;root&#39;, autocreate=False)</span>
+<span class="sd">        &gt;&gt;&gt; c.name</span>
+<span class="sd">        &#39;root&#39;</span>
+<span class="sd">        &gt;&gt;&gt; c.fullname</span>
+<span class="sd">        &#39;root&#39;</span>
+<span class="sd">        &gt;&gt;&gt; c = cm.get_channel_by_name(&#39;root.sub&#39;, autocreate=True)</span>
+<span class="sd">        &gt;&gt;&gt; c.name</span>
+<span class="sd">        &#39;sub&#39;</span>
+<span class="sd">        &gt;&gt;&gt; c.fullname</span>
+<span class="sd">        &#39;root.sub&#39;</span>
+<span class="sd">        &gt;&gt;&gt; c = cm.get_channel_by_name(&#39;sub&#39;, autocreate=True)</span>
+<span class="sd">        &gt;&gt;&gt; c.name</span>
+<span class="sd">        &#39;sub&#39;</span>
+<span class="sd">        &gt;&gt;&gt; c.fullname</span>
+<span class="sd">        &#39;root.sub&#39;</span>
+<span class="sd">        &gt;&gt;&gt; c = cm.get_channel_by_name(&#39;autosub.sub&#39;, autocreate=True)</span>
+<span class="sd">        &gt;&gt;&gt; c.name</span>
+<span class="sd">        &#39;sub&#39;</span>
+<span class="sd">        &gt;&gt;&gt; c.fullname</span>
+<span class="sd">        &#39;root.autosub.sub&#39;</span>
+<span class="sd">        &gt;&gt;&gt; c = cm.get_channel_by_name(None)</span>
+<span class="sd">        &gt;&gt;&gt; c.fullname</span>
+<span class="sd">        &#39;root&#39;</span>
+<span class="sd">        &gt;&gt;&gt; c = cm.get_channel_by_name(&#39;root.sub&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; c.fullname</span>
+<span class="sd">        &#39;root.sub&#39;</span>
+<span class="sd">        &gt;&gt;&gt; c = cm.get_channel_by_name(&#39;sub&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; c.fullname</span>
+<span class="sd">        &#39;root.sub&#39;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">channel_name</span> <span class="ow">or</span> <span class="n">channel_name</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">_root_channel</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_root_channel</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">channel_name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_root_channel</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s1">&#39;.&#39;</span><span class="p">):</span>
+            <span class="n">channel_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_root_channel</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s1">&#39;.&#39;</span> <span class="o">+</span> <span class="n">channel_name</span>
+        <span class="k">if</span> <span class="n">channel_name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_channels_by_name</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_channels_by_name</span><span class="p">[</span><span class="n">channel_name</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">autocreate</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">ChannelNotFound</span><span class="p">(</span><span class="s1">&#39;Channel </span><span class="si">%s</span><span class="s1"> not found&#39;</span> <span class="o">%</span> <span class="n">channel_name</span><span class="p">)</span>
+        <span class="n">parent</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_root_channel</span>
+        <span class="k">for</span> <span class="n">subchannel_name</span> <span class="ow">in</span> <span class="n">channel_name</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">:]:</span>
+            <span class="n">subchannel</span> <span class="o">=</span> <span class="n">parent</span><span class="o">.</span><span class="n">get_subchannel_by_name</span><span class="p">(</span><span class="n">subchannel_name</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">subchannel</span><span class="p">:</span>
+                <span class="n">subchannel</span> <span class="o">=</span> <span class="n">Channel</span><span class="p">(</span><span class="n">subchannel_name</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">capacity</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_channels_by_name</span><span class="p">[</span><span class="n">subchannel</span><span class="o">.</span><span class="n">fullname</span><span class="p">]</span> <span class="o">=</span> <span class="n">subchannel</span>
+            <span class="n">parent</span> <span class="o">=</span> <span class="n">subchannel</span>
+        <span class="k">return</span> <span class="n">parent</span></div>
+
+<div class="viewcode-block" id="ChannelManager.notify"><a class="viewcode-back" href="../../../api/api_channels.html#connector.jobrunner.channels.ChannelManager.notify">[docs]</a>    <span class="k">def</span> <span class="nf">notify</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">db_name</span><span class="p">,</span> <span class="n">channel_name</span><span class="p">,</span> <span class="n">uuid</span><span class="p">,</span>
+               <span class="n">seq</span><span class="p">,</span> <span class="n">date_created</span><span class="p">,</span> <span class="n">priority</span><span class="p">,</span> <span class="n">eta</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">channel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_channel_by_name</span><span class="p">(</span><span class="n">channel_name</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">ChannelNotFound</span><span class="p">:</span>
+            <span class="n">_logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;unknown channel </span><span class="si">%s</span><span class="s1">, &#39;</span>
+                            <span class="s1">&#39;using root channel for job </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span>
+                            <span class="n">channel_name</span><span class="p">,</span> <span class="n">uuid</span><span class="p">)</span>
+            <span class="n">channel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_root_channel</span>
+        <span class="n">job</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_jobs_by_uuid</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">uuid</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">job</span><span class="p">:</span>
+            <span class="c1"># db_name is invariant</span>
+            <span class="k">assert</span> <span class="n">job</span><span class="o">.</span><span class="n">db_name</span> <span class="o">==</span> <span class="n">db_name</span>
+            <span class="c1"># date_created is invariant</span>
+            <span class="k">assert</span> <span class="n">job</span><span class="o">.</span><span class="n">date_created</span> <span class="o">==</span> <span class="n">date_created</span>
+            <span class="c1"># if one of the job properties that influence</span>
+            <span class="c1"># scheduling order has changed, we remove the job</span>
+            <span class="c1"># from the queues and create a new job object</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">seq</span> <span class="o">!=</span> <span class="n">job</span><span class="o">.</span><span class="n">seq</span> <span class="ow">or</span>
+                    <span class="n">priority</span> <span class="o">!=</span> <span class="n">job</span><span class="o">.</span><span class="n">priority</span> <span class="ow">or</span>
+                    <span class="n">eta</span> <span class="o">!=</span> <span class="n">job</span><span class="o">.</span><span class="n">eta</span> <span class="ow">or</span>
+                    <span class="n">channel</span> <span class="o">!=</span> <span class="n">job</span><span class="o">.</span><span class="n">channel</span><span class="p">):</span>
+                <span class="n">_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;job </span><span class="si">%s</span><span class="s2"> properties changed, rescheduling it&quot;</span><span class="p">,</span>
+                              <span class="n">uuid</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">remove_job</span><span class="p">(</span><span class="n">uuid</span><span class="p">)</span>
+                <span class="n">job</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">job</span><span class="p">:</span>
+            <span class="n">job</span> <span class="o">=</span> <span class="n">ChannelJob</span><span class="p">(</span><span class="n">db_name</span><span class="p">,</span> <span class="n">channel</span><span class="p">,</span> <span class="n">uuid</span><span class="p">,</span>
+                             <span class="n">seq</span><span class="p">,</span> <span class="n">date_created</span><span class="p">,</span> <span class="n">priority</span><span class="p">,</span> <span class="n">eta</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_jobs_by_uuid</span><span class="p">[</span><span class="n">uuid</span><span class="p">]</span> <span class="o">=</span> <span class="n">job</span>
+        <span class="c1"># state transitions</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">state</span> <span class="ow">or</span> <span class="n">state</span> <span class="o">==</span> <span class="n">DONE</span><span class="p">:</span>
+            <span class="n">job</span><span class="o">.</span><span class="n">channel</span><span class="o">.</span><span class="n">set_done</span><span class="p">(</span><span class="n">job</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">state</span> <span class="o">==</span> <span class="n">PENDING</span><span class="p">:</span>
+            <span class="n">job</span><span class="o">.</span><span class="n">channel</span><span class="o">.</span><span class="n">set_pending</span><span class="p">(</span><span class="n">job</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">state</span> <span class="ow">in</span> <span class="p">(</span><span class="n">ENQUEUED</span><span class="p">,</span> <span class="n">STARTED</span><span class="p">):</span>
+            <span class="n">job</span><span class="o">.</span><span class="n">channel</span><span class="o">.</span><span class="n">set_running</span><span class="p">(</span><span class="n">job</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">state</span> <span class="o">==</span> <span class="n">FAILED</span><span class="p">:</span>
+            <span class="n">job</span><span class="o">.</span><span class="n">channel</span><span class="o">.</span><span class="n">set_failed</span><span class="p">(</span><span class="n">job</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">_logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;unexpected state </span><span class="si">%s</span><span class="s2"> for job </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">job</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ChannelManager.remove_job"><a class="viewcode-back" href="../../../api/api_channels.html#connector.jobrunner.channels.ChannelManager.remove_job">[docs]</a>    <span class="k">def</span> <span class="nf">remove_job</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">uuid</span><span class="p">):</span>
+        <span class="n">job</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_jobs_by_uuid</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">uuid</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">job</span><span class="p">:</span>
+            <span class="n">job</span><span class="o">.</span><span class="n">channel</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">job</span><span class="p">)</span>
+            <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_jobs_by_uuid</span><span class="p">[</span><span class="n">job</span><span class="o">.</span><span class="n">uuid</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="ChannelManager.remove_db"><a class="viewcode-back" href="../../../api/api_channels.html#connector.jobrunner.channels.ChannelManager.remove_db">[docs]</a>    <span class="k">def</span> <span class="nf">remove_db</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">db_name</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">job</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_jobs_by_uuid</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">job</span><span class="o">.</span><span class="n">db_name</span> <span class="o">==</span> <span class="n">db_name</span><span class="p">:</span>
+                <span class="n">job</span><span class="o">.</span><span class="n">channel</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">job</span><span class="p">)</span>
+                <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_jobs_by_uuid</span><span class="p">[</span><span class="n">job</span><span class="o">.</span><span class="n">uuid</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="ChannelManager.get_jobs_to_run"><a class="viewcode-back" href="../../../api/api_channels.html#connector.jobrunner.channels.ChannelManager.get_jobs_to_run">[docs]</a>    <span class="k">def</span> <span class="nf">get_jobs_to_run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">now</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_root_channel</span><span class="o">.</span><span class="n">get_jobs_to_run</span><span class="p">(</span><span class="n">now</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ChannelManager.get_wakeup_time"><a class="viewcode-back" href="../../../api/api_channels.html#connector.jobrunner.channels.ChannelManager.get_wakeup_time">[docs]</a>    <span class="k">def</span> <span class="nf">get_wakeup_time</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_root_channel</span><span class="o">.</span><span class="n">get_wakeup_time</span><span class="p">()</span></div></div>
+</pre></div>
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+        <br/>
+        
+      
+    </p>
+    <p>
+        &copy; Copyright 2013, Camptocamp SA.<br/>
+      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.3.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

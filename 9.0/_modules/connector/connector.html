@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>connector.connector &#8212; Connector  documentation</title>
+    <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../../_static/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../_static/bootstrap-sphinx.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-7628916-3', 'odoo-connector.com');
+  ga('send', 'pageview');
+</script>
+
+  </head>
+  <body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../index.html">
+          Odoo Connector</a>
+        <span class="navbar-text navbar-version pull-left"><b></b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+  <li class="dropdown">
+    <a role="button"
+       id="dLabelTranslations"
+       data-toggle="dropdown"
+       data-target="#"
+       href="#">Translations<b class="caret"></b></a>
+    <ul class="dropdown-menu"
+        role="menu"
+        aria-labelledby="dLabelTranslations">
+      <li><a class="reference" href="http://odoo-connector.com">English</a><li>
+      <li><a class="reference" href="http://odoo-connector.com/fr">French</a><li>
+    </ul>
+  </li>
+  
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../../project/contribute.html">Contribute</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../project/contribute.html#want-to-start-a-new-connector">Want to start a new connector</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../project/contribute.html#creating-or-maintaining-a-translation-of-this-doc">Creating or maintaining a translation of this doc</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../project/contributors.html">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../project/contributors.html#financial-contributors">Financial Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../project/license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../project/changes.html">Changes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../project/changes.html#future">Future (?)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../project/changes.html#id2">9.0.1.0.2 (2016-03-03)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../project/changes.html#id3">9.0.1.0.1 (2016-03-03)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../project/changes.html#id4">8.0.3.3.0 (2016-02-29)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../project/changes.html#id5">3.2.0 (2015-09-10)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../project/changes.html#id6">3.1.0 (2015-05-15)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../project/changes.html#id7">3.0.0 (2015-04-01)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../project/changes.html#id8">2.2.0 (2014-05-26)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../project/changes.html#id9">2.1.1 (2014-02-06)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../project/changes.html#warning-breaks-compatibility">2.1.0 (2014-01-15 - warning: breaks compatibility)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../project/changes.html#id10">2.0.1 (2013-09-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../project/changes.html#id11">2.0.0</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../project/roadmap.html">Roadmap</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../guides/code_overview.html">Code Overview</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/code_overview.html#backends">Backends</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/code_overview.html#bindings">Bindings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/code_overview.html#session">Session</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/code_overview.html#events">Events</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/code_overview.html#jobs">Jobs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/code_overview.html#connectorunit">ConnectorUnit</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../guides/concepts.html">Connector Concepts</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/concepts.html#events">Events</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/concepts.html#jobs-queue">Jobs Queue</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/concepts.html#session">Session</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/concepts.html#backend">Backend</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/concepts.html#environment">Environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/concepts.html#connectorunit">ConnectorUnit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/concepts.html#bindings">Bindings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/concepts.html#checkpoint">Checkpoint</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../guides/bootstrap_connector.html">Boostrapping a connector</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/bootstrap_connector.html#odoo-manifest">Odoo Manifest</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/bootstrap_connector.html#declare-the-backends">Declare the backends</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/bootstrap_connector.html#backend-model">Backend Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/bootstrap_connector.html#abstract-binding">Abstract Binding</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/bootstrap_connector.html#environment">Environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/bootstrap_connector.html#checkpoints">Checkpoints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/bootstrap_connector.html#connectorunit-classes">ConnectorUnit classes</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../guides/jobrunner.html">Configuring the job runner and channels</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/jobrunner.html#what-is-the-job-runner">What is the job runner?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/jobrunner.html#how-does-it-work">How does it work?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/jobrunner.html#how-to-use-it">How to use it?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/jobrunner.html#caveat">Caveat</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/jobrunner.html#what-is-a-channel">What is a channel?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guides/jobrunner.html#how-to-configure-channels">How to configure Channels?</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../guides/multiprocessing.html">Use the connector with multiprocessing workers</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api/api_connector.html">Connector</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/api_session.html">Session</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/api_backend.html">Backend</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/api_backend.html#module-connector.backend_model">Backend Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/api_event.html">Event</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/api_binder.html">Binder</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/api_mapper.html">Mapper</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../api/api_mapper.html#mappers">Mappers</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/api_synchronizer.html">Synchronizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/api_backend_adapter.html">Backend Adapter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/api_queue.html">Queue</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../api/api_queue.html#module-connector.queue.job">Job</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/api_queue.html#worker">Worker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/api_queue.html#id5">Queue</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/api_queue.html#module-connector.queue.model">Models</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/api_exception.html">Exceptions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/api_channels.html">Channels</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/api_runner.html">Job Runner</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../api/api_runner.html#what-is-the-job-runner">What is the job runner?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/api_runner.html#how-does-it-work">How does it work?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/api_runner.html#how-to-use-it">How to use it?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/api_runner.html#caveat">Caveat</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"></ul>
+</li>
+              
+            
+
+            
+              
+                
+              
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 content">
+      
+  <h1>Source code for connector.connector</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1">##############################################################################</span>
+<span class="c1">#</span>
+<span class="c1">#    Author: Guewen Baconnier</span>
+<span class="c1">#    Copyright 2012 Camptocamp SA</span>
+<span class="c1">#</span>
+<span class="c1">#    This program is free software: you can redistribute it and/or modify</span>
+<span class="c1">#    it under the terms of the GNU Affero General Public License as</span>
+<span class="c1">#    published by the Free Software Foundation, either version 3 of the</span>
+<span class="c1">#    License, or (at your option) any later version.</span>
+<span class="c1">#</span>
+<span class="c1">#    This program is distributed in the hope that it will be useful,</span>
+<span class="c1">#    but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c1">#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="c1">#    GNU Affero General Public License for more details.</span>
+<span class="c1">#</span>
+<span class="c1">#    You should have received a copy of the GNU Affero General Public License</span>
+<span class="c1">#    along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+<span class="c1">#</span>
+<span class="c1">##############################################################################</span>
+
+<span class="kn">import</span> <span class="nn">hashlib</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">struct</span>
+
+<span class="kn">from</span> <span class="nn">openerp</span> <span class="k">import</span> <span class="n">models</span><span class="p">,</span> <span class="n">fields</span><span class="p">,</span> <span class="n">tools</span>
+
+<span class="kn">from</span> <span class="nn">.exception</span> <span class="k">import</span> <span class="n">RetryableJobError</span>
+
+<span class="n">_logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_get_openerp_module_name</span><span class="p">(</span><span class="n">module_path</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Extract the name of the OpenERP module from the path of the</span>
+<span class="sd">    Python module.</span>
+
+<span class="sd">    Taken from OpenERP server: ``openerp.models.MetaModel``</span>
+
+<span class="sd">    The (OpenERP) module name can be in the ``openerp.addons`` namespace</span>
+<span class="sd">    or not. For instance module ``sale`` can be imported as</span>
+<span class="sd">    ``openerp.addons.sale`` (the good way) or ``sale`` (for backward</span>
+<span class="sd">    compatibility).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">module_parts</span> <span class="o">=</span> <span class="n">module_path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">module_parts</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span> <span class="ow">and</span> <span class="n">module_parts</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="p">[</span><span class="s1">&#39;openerp&#39;</span><span class="p">,</span> <span class="s1">&#39;addons&#39;</span><span class="p">]:</span>
+        <span class="n">module_name</span> <span class="o">=</span> <span class="n">module_parts</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">module_name</span> <span class="o">=</span> <span class="n">module_parts</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">module_name</span>
+
+
+<div class="viewcode-block" id="is_module_installed"><a class="viewcode-back" href="../../api/api_connector.html#connector.connector.is_module_installed">[docs]</a><span class="k">def</span> <span class="nf">is_module_installed</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">module_name</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Check if an Odoo addon is installed.</span>
+
+<span class="sd">    :param module_name: name of the addon</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># the registry maintains a set of fully loaded modules so we can</span>
+    <span class="c1"># lookup for our module there</span>
+    <span class="k">return</span> <span class="n">module_name</span> <span class="ow">in</span> <span class="n">env</span><span class="o">.</span><span class="n">registry</span><span class="o">.</span><span class="n">_init_modules</span></div>
+
+
+<div class="viewcode-block" id="get_openerp_module"><a class="viewcode-back" href="../../api/api_connector.html#connector.connector.get_openerp_module">[docs]</a><span class="k">def</span> <span class="nf">get_openerp_module</span><span class="p">(</span><span class="n">cls_or_func</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; For a top level function or class, returns the</span>
+<span class="sd">    name of the OpenERP module where it lives.</span>
+
+<span class="sd">    So we will be able to filter them according to the modules</span>
+<span class="sd">    installation state.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">_get_openerp_module_name</span><span class="p">(</span><span class="n">cls_or_func</span><span class="o">.</span><span class="vm">__module__</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="MetaConnectorUnit"><a class="viewcode-back" href="../../api/api_connector.html#connector.connector.MetaConnectorUnit">[docs]</a><span class="k">class</span> <span class="nc">MetaConnectorUnit</span><span class="p">(</span><span class="nb">type</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Metaclass for ConnectorUnit.</span>
+
+<span class="sd">    Keeps a ``_module`` attribute on the classes, the same way OpenERP does</span>
+<span class="sd">    it for the Model classes. It is then used to filter them according to</span>
+<span class="sd">    the state of the module (installed or not).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">for_model_names</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns the list of models on which a</span>
+<span class="sd">        :class:`~connector.connector.ConnectorUnit` is usable</span>
+
+<span class="sd">        It is used in :meth:`~connector.connector.ConnectorUnit.match` when</span>
+<span class="sd">        we search the correct ``ConnectorUnit`` for a model.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_model_name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;no _model_name for </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="bp">cls</span><span class="p">)</span>
+        <span class="n">model_name</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_model_name</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">model_name</span><span class="p">,</span> <span class="s1">&#39;__iter__&#39;</span><span class="p">):</span>
+            <span class="n">model_name</span> <span class="o">=</span> <span class="p">[</span><span class="n">model_name</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">model_name</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">attrs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">MetaConnectorUnit</span><span class="p">,</span> <span class="bp">cls</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">attrs</span><span class="p">)</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">_openerp_module_</span> <span class="o">=</span> <span class="n">get_openerp_module</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ConnectorUnit"><a class="viewcode-back" href="../../api/api_connector.html#connector.connector.ConnectorUnit">[docs]</a><span class="k">class</span> <span class="nc">ConnectorUnit</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Abstract class for each piece of the connector:</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        * :py:class:`connector.connector.Binder`</span>
+<span class="sd">        * :py:class:`connector.unit.mapper.Mapper`</span>
+<span class="sd">        * :py:class:`connector.unit.synchronizer.Synchronizer`</span>
+<span class="sd">        * :py:class:`connector.unit.backend_adapter.BackendAdapter`</span>
+
+<span class="sd">    Or basically any class intended to be registered in a</span>
+<span class="sd">    :py:class:`~connector.backend.Backend`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">__metaclass__</span> <span class="o">=</span> <span class="n">MetaConnectorUnit</span>
+
+    <span class="n">_model_name</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># to be defined in sub-classes</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">connector_env</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        :param connector_env: current environment (backend, session, ...)</span>
+<span class="sd">        :type connector_env: :class:`connector.connector.ConnectorEnvironment`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">ConnectorUnit</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">connector_env</span> <span class="o">=</span> <span class="n">connector_env</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">backend</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">connector_env</span><span class="o">.</span><span class="n">backend</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">backend_record</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">connector_env</span><span class="o">.</span><span class="n">backend_record</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">session</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">connector_env</span><span class="o">.</span><span class="n">session</span>
+
+<div class="viewcode-block" id="ConnectorUnit.match"><a class="viewcode-back" href="../../api/api_connector.html#connector.connector.ConnectorUnit.match">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">match</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">session</span><span class="p">,</span> <span class="n">model</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns True if the current class correspond to the</span>
+<span class="sd">        searched model.</span>
+
+<span class="sd">        :param session: current session</span>
+<span class="sd">        :type session: :py:class:`connector.session.ConnectorSession`</span>
+<span class="sd">        :param model: model to match</span>
+<span class="sd">        :type model: str or :py:class:`openerp.models.Model`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># filter out the ConnectorUnit from modules</span>
+        <span class="c1"># not installed in the current DB</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="s1">&#39;_name&#39;</span><span class="p">):</span>  <span class="c1"># Model instance</span>
+            <span class="n">model_name</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">_name</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">model_name</span> <span class="o">=</span> <span class="n">model</span>  <span class="c1"># str</span>
+        <span class="k">return</span> <span class="n">model_name</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">for_model_names</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">env</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns the openerp.api.environment &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">env</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">model</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">connector_env</span><span class="o">.</span><span class="n">model</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">localcontext</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; It is there for compatibility.</span>
+
+<span class="sd">        :func:`openerp.tools.translate._` searches for this attribute</span>
+<span class="sd">        in the classes do be able to translate the strings.</span>
+
+<span class="sd">        There is no reason to use this attribute for other purposes.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">context</span>
+
+<div class="viewcode-block" id="ConnectorUnit.unit_for"><a class="viewcode-back" href="../../api/api_connector.html#connector.connector.ConnectorUnit.unit_for">[docs]</a>    <span class="k">def</span> <span class="nf">unit_for</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">connector_unit_class</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; According to the current</span>
+<span class="sd">        :py:class:`~connector.connector.ConnectorEnvironment`,</span>
+<span class="sd">        search and returns an instance of the</span>
+<span class="sd">        :py:class:`~connector.connector.ConnectorUnit` for the current</span>
+<span class="sd">        model and being a class or subclass of ``connector_unit_class``.</span>
+
+<span class="sd">        If a different ``model`` is given, a new ConnectorEnvironment is built</span>
+<span class="sd">        for this model. The class used for creating the new environment is</span>
+<span class="sd">        the same class as in `self.connector_env` which must be</span>
+<span class="sd">        :py:class:`~connector.connector.ConnectorEnvironment` or a subclass.</span>
+
+<span class="sd">        :param connector_unit_class: ``ConnectorUnit`` to search</span>
+<span class="sd">                                     (class or subclass)</span>
+<span class="sd">        :type connector_unit_class: :py:class:`connector.\</span>
+<span class="sd">                                               connector.ConnectorUnit`</span>
+<span class="sd">        :param model: to give if the ``ConnectorUnit`` is for another</span>
+<span class="sd">                      model than the current one</span>
+<span class="sd">        :type model: str</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">model</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">model</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">_name</span><span class="p">:</span>
+            <span class="n">env</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">connector_env</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">env</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">connector_env</span><span class="o">.</span><span class="n">create_environment</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">backend_record</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span>
+                <span class="n">connector_env</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">connector_env</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">env</span><span class="o">.</span><span class="n">get_connector_unit</span><span class="p">(</span><span class="n">connector_unit_class</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ConnectorUnit.binder_for"><a class="viewcode-back" href="../../api/api_connector.html#connector.connector.ConnectorUnit.binder_for">[docs]</a>    <span class="k">def</span> <span class="nf">binder_for</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns an new instance of the correct ``Binder`` for</span>
+<span class="sd">        a model &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">unit_for</span><span class="p">(</span><span class="n">Binder</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ConnectorUnit.advisory_lock_or_retry"><a class="viewcode-back" href="../../api/api_connector.html#connector.connector.ConnectorUnit.advisory_lock_or_retry">[docs]</a>    <span class="k">def</span> <span class="nf">advisory_lock_or_retry</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lock</span><span class="p">,</span> <span class="n">retry_seconds</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Acquire a Postgres transactional advisory lock or retry job</span>
+
+<span class="sd">        When the lock cannot be acquired, it raises a</span>
+<span class="sd">        ``RetryableJobError`` so the job is retried after n</span>
+<span class="sd">        ``retry_seconds``.</span>
+
+<span class="sd">        Usage example:</span>
+
+<span class="sd">        ::</span>
+
+<span class="sd">            lock_name = &#39;import_record({}, {}, {}, {})&#39;.format(</span>
+<span class="sd">                self.backend_record._name,</span>
+<span class="sd">                self.backend_record.id,</span>
+<span class="sd">                self.model._name,</span>
+<span class="sd">                self.external_id,</span>
+<span class="sd">            )</span>
+<span class="sd">            self.advisory_lock_or_retry(lock_name, retry_seconds=2)</span>
+
+<span class="sd">        See :func:``openerp.addons.connector.connector.pg_try_advisory_lock``</span>
+<span class="sd">        for details.</span>
+
+<span class="sd">        :param lock: The lock name. Can be anything convertible to a</span>
+<span class="sd">           string.  It needs to represent what should not be synchronized</span>
+<span class="sd">           concurrently, usually the string will contain at least: the</span>
+<span class="sd">           action, the backend type, the backend id, the model name, the</span>
+<span class="sd">           external id</span>
+<span class="sd">        :param retry_seconds: number of seconds after which a job should</span>
+<span class="sd">           be retried when the lock cannot be acquired.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">pg_try_advisory_lock</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="p">,</span> <span class="n">lock</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="n">RetryableJobError</span><span class="p">(</span><span class="s1">&#39;Could not acquire advisory lock&#39;</span><span class="p">,</span>
+                                    <span class="n">seconds</span><span class="o">=</span><span class="n">retry_seconds</span><span class="p">,</span>
+                                    <span class="n">ignore_retry</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="ConnectorEnvironment"><a class="viewcode-back" href="../../api/api_connector.html#connector.connector.ConnectorEnvironment">[docs]</a><span class="k">class</span> <span class="nc">ConnectorEnvironment</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Environment used by the different units for the synchronization.</span>
+
+<span class="sd">    .. attribute:: backend</span>
+
+<span class="sd">        Current backend we are working with.</span>
+<span class="sd">        Obtained with ``backend_record.get_backend()``.</span>
+
+<span class="sd">        Instance of: :py:class:`connector.backend.Backend`</span>
+
+<span class="sd">    .. attribute:: backend_record</span>
+
+<span class="sd">        Browsable record of the backend. The backend is inherited</span>
+<span class="sd">        from the model ``connector.backend`` and have at least a</span>
+<span class="sd">        ``type`` and a ``version``.</span>
+
+<span class="sd">    .. attribute:: session</span>
+
+<span class="sd">        Current session we are working in. It contains the OpenERP</span>
+<span class="sd">        cr, uid and context.</span>
+
+<span class="sd">    .. attribute:: model_name</span>
+
+<span class="sd">        Name of the OpenERP model to work with.</span>
+
+<span class="sd">    .. attribute:: _propagate_kwargs</span>
+
+<span class="sd">        List of attributes that must be used by</span>
+<span class="sd">        :py:meth:`connector.connector.ConnectorEnvironment.create_environment`</span>
+<span class="sd">        when a new connector environment is instantiated.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">_propagate_kwargs</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">backend_record</span><span class="p">,</span> <span class="n">session</span><span class="p">,</span> <span class="n">model_name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        :param backend_record: browse record of the backend</span>
+<span class="sd">        :type backend_record: :py:class:`openerp.models.Model`</span>
+<span class="sd">        :param session: current session (cr, uid, context)</span>
+<span class="sd">        :type session: :py:class:`connector.session.ConnectorSession`</span>
+<span class="sd">        :param model_name: name of the model</span>
+<span class="sd">        :type model_name: str</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">backend_record</span> <span class="o">=</span> <span class="n">backend_record</span>
+        <span class="n">backend</span> <span class="o">=</span> <span class="n">backend_record</span><span class="o">.</span><span class="n">get_backend</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">backend</span> <span class="o">=</span> <span class="n">backend</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">session</span> <span class="o">=</span> <span class="n">session</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model_name</span> <span class="o">=</span> <span class="n">model_name</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">model</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">model_name</span><span class="p">]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">pool</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">pool</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">env</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">env</span>
+
+<div class="viewcode-block" id="ConnectorEnvironment.get_connector_unit"><a class="viewcode-back" href="../../api/api_connector.html#connector.connector.ConnectorEnvironment.get_connector_unit">[docs]</a>    <span class="k">def</span> <span class="nf">get_connector_unit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">base_class</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Searches and returns an instance of the</span>
+<span class="sd">        :py:class:`~connector.connector.ConnectorUnit` for the current</span>
+<span class="sd">        model and being a class or subclass of ``base_class``.</span>
+
+<span class="sd">        The returned instance is built with ``self`` for its environment.</span>
+
+<span class="sd">        :param base_class: ``ConnectorUnit`` to search (class or subclass)</span>
+<span class="sd">        :type base_class: :py:class:`connector.connector.ConnectorUnit`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">backend</span><span class="o">.</span><span class="n">get_class</span><span class="p">(</span><span class="n">base_class</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="p">,</span>
+                                      <span class="bp">self</span><span class="o">.</span><span class="n">model_name</span><span class="p">)(</span><span class="bp">self</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ConnectorEnvironment.create_environment"><a class="viewcode-back" href="../../api/api_connector.html#connector.connector.ConnectorEnvironment.create_environment">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">create_environment</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">backend_record</span><span class="p">,</span> <span class="n">session</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span>
+                           <span class="n">connector_env</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Create a new environment ConnectorEnvironment.</span>
+
+<span class="sd">        :param backend_record: browse record of the backend</span>
+<span class="sd">        :type backend_record: :py:class:`openerp.models.Model`</span>
+<span class="sd">        :param session: current session (cr, uid, context)</span>
+<span class="sd">        :type session: :py:class:`connector.session.ConnectorSession`</span>
+<span class="sd">        :param model_name: name of the model</span>
+<span class="sd">        :type model_name: str</span>
+<span class="sd">        :param connector_env: an existing environment from which the kwargs</span>
+<span class="sd">                              will be propagated to the new one</span>
+<span class="sd">        :type connector_env:</span>
+<span class="sd">            :py:class:`connector.connector.ConnectorEnvironment`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">if</span> <span class="n">connector_env</span><span class="p">:</span>
+            <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">connector_env</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
+                      <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">connector_env</span><span class="o">.</span><span class="n">_propagate_kwargs</span><span class="p">}</span>
+        <span class="k">if</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">backend_record</span><span class="p">,</span> <span class="n">session</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">backend_record</span><span class="p">,</span> <span class="n">session</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="Binder"><a class="viewcode-back" href="../../api/api_connector.html#connector.connector.Binder">[docs]</a><span class="k">class</span> <span class="nc">Binder</span><span class="p">(</span><span class="n">ConnectorUnit</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; For one record of a model, capable to find an external or</span>
+<span class="sd">    internal id, or create the binding (link) between them</span>
+
+<span class="sd">    This is a default implementation that can be inherited or reimplemented</span>
+<span class="sd">    in the connectors.</span>
+
+<span class="sd">    This implementation assumes that binding models are ``_inherits`` of</span>
+<span class="sd">    the models they are binding.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">_model_name</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># define in sub-classes</span>
+    <span class="n">_external_field</span> <span class="o">=</span> <span class="s1">&#39;external_id&#39;</span>  <span class="c1"># override in sub-classes</span>
+    <span class="n">_backend_field</span> <span class="o">=</span> <span class="s1">&#39;backend_id&#39;</span>  <span class="c1"># override in sub-classes</span>
+    <span class="c1"># TODO 2016-10-14: rename this to `odoo_id` for v10.</span>
+    <span class="c1"># For existing implementations you&#39;ll have to override</span>
+    <span class="c1"># `_openerp_field` according to your internal id field.</span>
+    <span class="n">_openerp_field</span> <span class="o">=</span> <span class="s1">&#39;openerp_id&#39;</span>  <span class="c1"># override in sub-classes</span>
+    <span class="n">_sync_date_field</span> <span class="o">=</span> <span class="s1">&#39;sync_date&#39;</span>  <span class="c1"># override in sub-classes</span>
+
+<div class="viewcode-block" id="Binder.to_openerp"><a class="viewcode-back" href="../../api/api_connector.html#connector.connector.Binder.to_openerp">[docs]</a>    <span class="k">def</span> <span class="nf">to_openerp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">external_id</span><span class="p">,</span> <span class="n">unwrap</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Give the OpenERP ID for an external ID</span>
+
+<span class="sd">        :param external_id: external ID for which we want</span>
+<span class="sd">                            the OpenERP ID</span>
+<span class="sd">        :param unwrap: if True, returns the normal record</span>
+<span class="sd">                       else return the binding record</span>
+<span class="sd">        :return: a recordset, depending on the value of unwrap,</span>
+<span class="sd">                 or an empty recordset if the external_id is not mapped</span>
+<span class="sd">        :rtype: recordset</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">bindings</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">with_context</span><span class="p">(</span><span class="n">active_test</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">search</span><span class="p">(</span>
+            <span class="p">[(</span><span class="bp">self</span><span class="o">.</span><span class="n">_external_field</span><span class="p">,</span> <span class="s1">&#39;=&#39;</span><span class="p">,</span> <span class="n">tools</span><span class="o">.</span><span class="n">ustr</span><span class="p">(</span><span class="n">external_id</span><span class="p">)),</span>
+             <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_backend_field</span><span class="p">,</span> <span class="s1">&#39;=&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">backend_record</span><span class="o">.</span><span class="n">id</span><span class="p">)]</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">bindings</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">unwrap</span><span class="p">:</span>
+                <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">browse</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">_openerp_field</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">browse</span><span class="p">()</span>
+        <span class="n">bindings</span><span class="o">.</span><span class="n">ensure_one</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">unwrap</span><span class="p">:</span>
+            <span class="n">bindings</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">bindings</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_openerp_field</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">bindings</span></div>
+
+<div class="viewcode-block" id="Binder.to_backend"><a class="viewcode-back" href="../../api/api_connector.html#connector.connector.Binder.to_backend">[docs]</a>    <span class="k">def</span> <span class="nf">to_backend</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">binding_id</span><span class="p">,</span> <span class="n">wrap</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Give the external ID for an OpenERP binding ID</span>
+
+<span class="sd">        :param binding_id: OpenERP binding ID for which we want the backend id</span>
+<span class="sd">        :param wrap: if False, binding_id is the ID of the binding,</span>
+<span class="sd">                     if True, binding_id is the ID of the normal record, the</span>
+<span class="sd">                     method will search the corresponding binding and returns</span>
+<span class="sd">                     the backend id of the binding</span>
+<span class="sd">        :return: external ID of the record</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">record</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">browse</span><span class="p">()</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">binding_id</span><span class="p">,</span> <span class="n">models</span><span class="o">.</span><span class="n">BaseModel</span><span class="p">):</span>
+            <span class="n">binding_id</span><span class="o">.</span><span class="n">ensure_one</span><span class="p">()</span>
+            <span class="n">record</span> <span class="o">=</span> <span class="n">binding_id</span>
+            <span class="n">binding_id</span> <span class="o">=</span> <span class="n">binding_id</span><span class="o">.</span><span class="n">id</span>
+        <span class="k">if</span> <span class="n">wrap</span><span class="p">:</span>
+            <span class="n">binding</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">with_context</span><span class="p">(</span><span class="n">active_test</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">search</span><span class="p">(</span>
+                <span class="p">[(</span><span class="bp">self</span><span class="o">.</span><span class="n">_openerp_field</span><span class="p">,</span> <span class="s1">&#39;=&#39;</span><span class="p">,</span> <span class="n">binding_id</span><span class="p">),</span>
+                 <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_backend_field</span><span class="p">,</span> <span class="s1">&#39;=&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">backend_record</span><span class="o">.</span><span class="n">id</span><span class="p">),</span>
+                 <span class="p">]</span>
+            <span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">binding</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">None</span>
+            <span class="n">binding</span><span class="o">.</span><span class="n">ensure_one</span><span class="p">()</span>
+            <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">binding</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_external_field</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">record</span><span class="p">:</span>
+            <span class="n">record</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">browse</span><span class="p">(</span><span class="n">binding_id</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">record</span>
+        <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">record</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_external_field</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Binder.bind"><a class="viewcode-back" href="../../api/api_connector.html#connector.connector.Binder.bind">[docs]</a>    <span class="k">def</span> <span class="nf">bind</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">external_id</span><span class="p">,</span> <span class="n">binding_id</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Create the link between an external ID and an OpenERP ID</span>
+
+<span class="sd">        :param external_id: external id to bind</span>
+<span class="sd">        :param binding_id: OpenERP ID to bind</span>
+<span class="sd">        :type binding_id: int</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Prevent False, None, or &quot;&quot;, but not 0</span>
+        <span class="k">assert</span> <span class="p">(</span><span class="n">external_id</span> <span class="ow">or</span> <span class="n">external_id</span> <span class="ow">is</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">and</span> <span class="n">binding_id</span><span class="p">,</span> <span class="p">(</span>
+            <span class="s2">&quot;external_id or binding_id missing, &quot;</span>
+            <span class="s2">&quot;got: </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">external_id</span><span class="p">,</span> <span class="n">binding_id</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="c1"># avoid to trigger the export when we modify the `external_id`</span>
+        <span class="n">now_fmt</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">binding_id</span><span class="p">,</span> <span class="n">models</span><span class="o">.</span><span class="n">BaseModel</span><span class="p">):</span>
+            <span class="n">binding_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">browse</span><span class="p">(</span><span class="n">binding_id</span><span class="p">)</span>
+        <span class="n">binding_id</span><span class="o">.</span><span class="n">with_context</span><span class="p">(</span><span class="n">connector_no_export</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
+            <span class="p">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_external_field</span><span class="p">:</span> <span class="n">tools</span><span class="o">.</span><span class="n">ustr</span><span class="p">(</span><span class="n">external_id</span><span class="p">),</span>
+             <span class="bp">self</span><span class="o">.</span><span class="n">_sync_date_field</span><span class="p">:</span> <span class="n">now_fmt</span><span class="p">,</span>
+             <span class="p">})</span></div>
+
+<div class="viewcode-block" id="Binder.unwrap_binding"><a class="viewcode-back" href="../../api/api_connector.html#connector.connector.Binder.unwrap_binding">[docs]</a>    <span class="k">def</span> <span class="nf">unwrap_binding</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">binding_id</span><span class="p">,</span> <span class="n">browse</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; For a binding record, gives the normal record.</span>
+
+<span class="sd">        Example: when called with a ``magento.product.product`` id,</span>
+<span class="sd">        it will return the corresponding ``product.product`` id.</span>
+
+<span class="sd">        :param browse: when True, returns a browse_record instance</span>
+<span class="sd">                       rather than an ID</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">binding_id</span><span class="p">,</span> <span class="n">models</span><span class="o">.</span><span class="n">BaseModel</span><span class="p">):</span>
+            <span class="n">binding</span> <span class="o">=</span> <span class="n">binding_id</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">binding</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">browse</span><span class="p">(</span><span class="n">binding_id</span><span class="p">)</span>
+
+        <span class="n">record</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">binding</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_openerp_field</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">browse</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">record</span>
+        <span class="k">return</span> <span class="n">record</span><span class="o">.</span><span class="n">id</span></div>
+
+<div class="viewcode-block" id="Binder.unwrap_model"><a class="viewcode-back" href="../../api/api_connector.html#connector.connector.Binder.unwrap_model">[docs]</a>    <span class="k">def</span> <span class="nf">unwrap_model</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; For a binding model, gives the normal model.</span>
+
+<span class="sd">        Example: when called on a binder for ``magento.product.product``,</span>
+<span class="sd">        it will return ``product.product``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">column</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">_fields</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_openerp_field</span><span class="p">]</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s1">&#39;Cannot unwrap model </span><span class="si">%s</span><span class="s1">, because it has no </span><span class="si">%s</span><span class="s1"> fields&#39;</span>
+                <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_openerp_field</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">column</span><span class="o">.</span><span class="n">comodel_name</span></div></div>
+
+
+<div class="viewcode-block" id="pg_try_advisory_lock"><a class="viewcode-back" href="../../api/api_connector.html#connector.connector.pg_try_advisory_lock">[docs]</a><span class="k">def</span> <span class="nf">pg_try_advisory_lock</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">lock</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Try to acquire a Postgres transactional advisory lock.</span>
+
+<span class="sd">    The function tries to acquire a lock, returns a boolean indicating</span>
+<span class="sd">    if it could be obtained or not. An acquired lock is released at the</span>
+<span class="sd">    end of the transaction.</span>
+
+<span class="sd">    A typical use is to acquire a lock at the beginning of an importer</span>
+<span class="sd">    to prevent 2 jobs to do the same import at the same time. Since the</span>
+<span class="sd">    record doesn&#39;t exist yet, we can&#39;t put a lock on a record, so we put</span>
+<span class="sd">    an advisory lock.</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">     - Job 1 imports Partner A</span>
+<span class="sd">     - Job 2 imports Partner B</span>
+<span class="sd">     - Partner A has a category X which happens not to exist yet</span>
+<span class="sd">     - Partner B has a category X which happens not to exist yet</span>
+<span class="sd">     - Job 1 import category X as a dependency</span>
+<span class="sd">     - Job 2 import category X as a dependency</span>
+
+<span class="sd">    Since both jobs are executed concurrently, they both create a record</span>
+<span class="sd">    for category X so we have duplicated records.  With this lock:</span>
+
+<span class="sd">     - Job 1 imports Partner A, it acquires a lock for this partner</span>
+<span class="sd">     - Job 2 imports Partner B, it acquires a lock for this partner</span>
+<span class="sd">     - Partner A has a category X which happens not to exist yet</span>
+<span class="sd">     - Partner B has a category X which happens not to exist yet</span>
+<span class="sd">     - Job 1 import category X as a dependency, it acquires a lock for</span>
+<span class="sd">       this category</span>
+<span class="sd">     - Job 2 import category X as a dependency, try to acquire a lock</span>
+<span class="sd">       but can&#39;t, Job 2 is retried later, and when it is retried, it</span>
+<span class="sd">       sees the category X created by Job 1.</span>
+
+<span class="sd">    The lock is acquired until the end of the transaction.</span>
+
+<span class="sd">    Usage example:</span>
+
+<span class="sd">    ::</span>
+
+<span class="sd">        lock_name = &#39;import_record({}, {}, {}, {})&#39;.format(</span>
+<span class="sd">            self.backend_record._name,</span>
+<span class="sd">            self.backend_record.id,</span>
+<span class="sd">            self.model._name,</span>
+<span class="sd">            self.external_id,</span>
+<span class="sd">        )</span>
+<span class="sd">        if pg_try_advisory_lock(lock_name):</span>
+<span class="sd">            # do sync</span>
+<span class="sd">        else:</span>
+<span class="sd">            raise RetryableJobError(&#39;Could not acquire advisory lock&#39;,</span>
+<span class="sd">                                    seconds=2,</span>
+<span class="sd">                                    ignore_retry=True)</span>
+
+<span class="sd">    :param env: the Odoo Environment</span>
+<span class="sd">    :param lock: The lock name. Can be anything convertible to a</span>
+<span class="sd">       string.  It needs to represents what should not be synchronized</span>
+<span class="sd">       concurrently so usually the string will contain at least: the</span>
+<span class="sd">       action, the backend type, the backend id, the model name, the</span>
+<span class="sd">       external id</span>
+<span class="sd">    :return True/False whether lock was acquired.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">hasher</span> <span class="o">=</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">sha1</span><span class="p">()</span>
+    <span class="n">hasher</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">lock</span><span class="p">))</span>
+    <span class="c1"># pg_lock accepts an int8 so we build an hash composed with</span>
+    <span class="c1"># contextual information and we throw away some bits</span>
+    <span class="n">int_lock</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s1">&#39;q&#39;</span><span class="p">,</span> <span class="n">hasher</span><span class="o">.</span><span class="n">digest</span><span class="p">()[:</span><span class="mi">8</span><span class="p">])</span>
+
+    <span class="n">env</span><span class="o">.</span><span class="n">cr</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s1">&#39;SELECT pg_try_advisory_xact_lock(</span><span class="si">%s</span><span class="s1">);&#39;</span><span class="p">,</span> <span class="p">(</span><span class="n">int_lock</span><span class="p">,))</span>
+    <span class="n">acquired</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">cr</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">acquired</span></div>
+</pre></div>
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+        <br/>
+        
+      
+    </p>
+    <p>
+        &copy; Copyright 2013, Camptocamp SA.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.3.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

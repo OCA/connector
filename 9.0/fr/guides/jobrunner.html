@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="fr">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Configuring the job runner and channels &#8212; documentation Connector </title>
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/translations.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Recherche" href="../search.html" />
+    <link rel="next" title="Use the connector with multiprocessing workers" href="multiprocessing.html" />
+    <link rel="prev" title="Amorcer la création un nouveau connecteur" href="bootstrap_connector.html" />
+
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-7628916-3', 'odoo-connector.com');
+  ga('send', 'pageview');
+</script>
+
+  </head>
+  <body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../index.html">
+          Odoo Connector</a>
+        <span class="navbar-text navbar-version pull-left"><b></b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+  <li class="dropdown">
+    <a role="button"
+       id="dLabelTranslations"
+       data-toggle="dropdown"
+       data-target="#"
+       href="#">Translations<b class="caret"></b></a>
+    <ul class="dropdown-menu"
+        role="menu"
+        aria-labelledby="dLabelTranslations">
+      <li><a class="reference" href="http://odoo-connector.com">English</a><li>
+      <li><a class="reference" href="http://odoo-connector.com/fr">French</a><li>
+    </ul>
+  </li>
+  
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../project/contribute.html">Contribuer</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../project/contribute.html#want-to-start-a-new-connector">Démarrer un nouveau connecteur</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../project/contribute.html#creating-or-maintaining-a-translation-of-this-doc">Créer ou maintenir une traduction de cette doc</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../project/contributors.html">Contributeurs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../project/contributors.html#financial-contributors">Contributeurs financiers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../project/license.html">Licence</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../project/changes.html">Changements</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../project/changes.html#future">Future (?)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../project/changes.html#id2">9.0.1.0.2 (2016-03-03)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../project/changes.html#id3">9.0.1.0.1 (2016-03-03)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../project/changes.html#id4">8.0.3.3.0 (2016-02-29)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../project/changes.html#id5">3.2.0 (2015-09-10)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../project/changes.html#id6">3.1.0 (2015-05-15)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../project/changes.html#id7">3.0.0 (2015-04-01)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../project/changes.html#id8">2.2.0 (2014-05-26)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../project/changes.html#id9">2.1.1 (2014-02-06)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../project/changes.html#warning-breaks-compatibility">2.1.0 (2014-01-15 - attention : rupture de compatibilité)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../project/changes.html#id10">2.0.1 (2013-09-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../project/changes.html#id11">2.0.0</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../project/roadmap.html">Roadmap</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="code_overview.html">Survol du code</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="code_overview.html#backends">Backends</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code_overview.html#bindings">Bindings (Liaisons)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code_overview.html#session">Session</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code_overview.html#events">Événements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code_overview.html#jobs">Jobs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code_overview.html#connectorunit">ConnectorUnit</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="concepts.html">Concepts du connecteur</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="concepts.html#events">Événements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="concepts.html#jobs-queue">Queue de jobs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="concepts.html#session">Session</a></li>
+<li class="toctree-l2"><a class="reference internal" href="concepts.html#backend">Backend</a></li>
+<li class="toctree-l2"><a class="reference internal" href="concepts.html#environment">Environnement</a></li>
+<li class="toctree-l2"><a class="reference internal" href="concepts.html#connectorunit">ConnectorUnit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="concepts.html#bindings">Bindings (Liaisons)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="concepts.html#checkpoint">Point de contrôle</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="bootstrap_connector.html">Amorcer la création un nouveau connecteur</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="bootstrap_connector.html#odoo-manifest">Odoo Manifest</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bootstrap_connector.html#declare-the-backends">Déclaration des backends</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bootstrap_connector.html#backend-model">Modèle du backend</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bootstrap_connector.html#abstract-binding">Binding abstrait</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bootstrap_connector.html#environment">Environnement</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bootstrap_connector.html#checkpoints">Points de contrôle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bootstrap_connector.html#connectorunit-classes">Classes ConnectorUnit</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Configuring the job runner and channels</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#what-is-the-job-runner">What is the job runner?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#how-does-it-work">How does it work?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#how-to-use-it">How to use it?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#caveat">Caveat</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#what-is-a-channel">What is a channel?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#how-to-configure-channels">How to configure Channels?</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="multiprocessing.html">Use the connector with multiprocessing workers</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/api_connector.html">Connecteur</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/api_session.html">Session</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/api_backend.html">Backend</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/api_backend.html#module-connector.backend_model">Modèles du backend</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/api_event.html">Événement</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/api_binder.html">Binder (Liant)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/api_mapper.html">Mappeur</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../api/api_mapper.html#mappers">Mappeurs</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../api/api_synchronizer.html">Synchroniseur</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/api_backend_adapter.html">Adaptateur de backend</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/api_queue.html">Queue</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../api/api_queue.html#module-connector.queue.job">Job</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/api_queue.html#worker">Worker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/api_queue.html#id5">Queue</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/api_queue.html#module-connector.queue.model">Modèles</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../api/api_exception.html">Exceptions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/api_channels.html">Channels</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/api_runner.html">Job Runner</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../api/api_runner.html#what-is-the-job-runner">What is the job runner?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/api_runner.html#how-does-it-work">How does it work?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/api_runner.html#how-to-use-it">How to use it?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/api_runner.html#caveat">Caveat</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">Configuring the job runner and channels</a><ul>
+<li><a class="reference internal" href="#what-is-the-job-runner">What is the job runner?</a></li>
+<li><a class="reference internal" href="#how-does-it-work">How does it work?</a></li>
+<li><a class="reference internal" href="#how-to-use-it">How to use it?</a></li>
+<li><a class="reference internal" href="#caveat">Caveat</a></li>
+<li><a class="reference internal" href="#what-is-a-channel">What is a channel?</a></li>
+<li><a class="reference internal" href="#how-to-configure-channels">How to configure Channels?</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+            
+
+            
+              
+                
+  <li>
+    <a href="bootstrap_connector.html" title="Previous Chapter: Amorcer la création un nouveau connecteur"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Amorcer la créat...</span>
+    </a>
+  </li>
+  <li>
+    <a href="multiprocessing.html" title="Next Chapter: Use the connector with multiprocessing workers"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Use the connecto... &raquo;</span>
+    </a>
+  </li>
+              
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 content">
+      
+  <div class="section" id="module-connector.jobrunner.runner">
+<span id="configuring-the-job-runner-and-channels"></span><span id="jobrunner"></span><h1>Configuring the job runner and channels<a class="headerlink" href="#module-connector.jobrunner.runner" title="Lien permanent vers ce titre">¶</a></h1>
+<div class="section" id="what-is-the-job-runner">
+<h2>What is the job runner?<a class="headerlink" href="#what-is-the-job-runner" title="Lien permanent vers ce titre">¶</a></h2>
+<p>The job runner is the main process managing the dispatch of delayed jobs to
+available Odoo workers</p>
+</div>
+<div class="section" id="how-does-it-work">
+<h2>How does it work?<a class="headerlink" href="#how-does-it-work" title="Lien permanent vers ce titre">¶</a></h2>
+<ul class="simple">
+<li>It starts as a thread in the Odoo main process</li>
+<li>It receives postgres NOTIFY messages each time jobs are
+added or updated in the queue_job table.</li>
+<li>It maintains an in-memory priority queue of jobs that
+is populated from the queue_job tables in all databases.</li>
+<li>It does not run jobs itself, but asks Odoo to run them through an
+anonymous <code class="docutils literal"><span class="pre">/connector/runjob</span></code> HTTP request. <a class="footnote-reference" href="#id3" id="id1">[1]</a></li>
+</ul>
+</div>
+<div class="section" id="how-to-use-it">
+<h2>How to use it?<a class="headerlink" href="#how-to-use-it" title="Lien permanent vers ce titre">¶</a></h2>
+<ul class="simple">
+<li>By default, the job runner will use Odoo’s configuration:<ul>
+<li>connect to Odoo via port <code class="docutils literal"><span class="pre">xmlrpc_port</span></code>, or <code class="docutils literal"><span class="pre">8069</span></code> if unset</li>
+<li>connect to the database via <code class="docutils literal"><span class="pre">db_host</span></code> and <code class="docutils literal"><span class="pre">db_port</span></code></li>
+</ul>
+</li>
+<li>To adjust these values, you can either use environment variables:<ul>
+<li><code class="docutils literal"><span class="pre">ODOO_CONNECTOR_PORT=9069</span></code></li>
+<li><code class="docutils literal"><span class="pre">ODOO_CONNECTOR_JOBRUNNER_DB_HOST=127.0.2.1</span></code></li>
+<li><code class="docutils literal"><span class="pre">ODOO_CONNECTOR_JOBRUNNER_DB_PORT=15432</span></code></li>
+</ul>
+</li>
+<li>Or alternatively, you can add a <code class="docutils literal"><span class="pre">[options-connector]</span></code> section in Odoo’s
+configuration file, like this:</li>
+</ul>
+<div class="highlight-ini"><div class="highlight"><pre><span></span><span class="k">[options-connector]</span>
+<span class="na">jobrunner_db_host</span> <span class="o">=</span> <span class="s">127.0.2.1</span>
+<span class="na">jobrunner_db_port</span> <span class="o">=</span> <span class="s">15432</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li>Start Odoo with <code class="docutils literal"><span class="pre">--load=web,web_kanban,connector</span></code>
+and <code class="docutils literal"><span class="pre">--workers</span></code> greater than 1. <a class="footnote-reference" href="#id4" id="id2">[2]</a></li>
+<li>Confirm the runner is starting correctly by checking the odoo log file:</li>
+</ul>
+<div class="highlight-none"><div class="highlight"><pre><span></span>...INFO...connector.jobrunner.runner: starting
+...INFO...connector.jobrunner.runner: initializing database connections
+...INFO...connector.jobrunner.runner: connector runner ready for db &lt;dbname&gt;
+...INFO...connector.jobrunner.runner: database connections ready
+</pre></div>
+</div>
+<ul class="simple">
+<li>Create jobs (eg using base_import_async) and observe they
+start immediately and in parallel.</li>
+<li>Tip: to enable debug logging for the connector, use
+<code class="docutils literal"><span class="pre">--log-handler=openerp.addons.connector:DEBUG</span></code></li>
+</ul>
+</div>
+<div class="section" id="caveat">
+<h2>Caveat<a class="headerlink" href="#caveat" title="Lien permanent vers ce titre">¶</a></h2>
+<ul class="simple">
+<li>After creating a new database or installing connector on an
+existing database, Odoo must be restarted for the runner to detect it.</li>
+<li>When Odoo shuts down normally, it waits for running jobs to finish.
+However, when the Odoo server crashes or is otherwise force-stopped,
+running jobs are interrupted while the runner has no chance to know
+they have been aborted. In such situations, jobs may remain in
+<code class="docutils literal"><span class="pre">started</span></code> or <code class="docutils literal"><span class="pre">enqueued</span></code> state after the Odoo server is halted.
+Since the runner has no way to know if they are actually running or
+not, and does not know for sure if it is safe to restart the jobs,
+it does not attempt to restart them automatically. Such stale jobs
+therefore fill the running queue and prevent other jobs to start.
+You must therefore requeue them manually, either from the Jobs view,
+or by running the following SQL statement <em>before starting Odoo</em>:</li>
+</ul>
+<div class="highlight-sql"><div class="highlight"><pre><span></span><span class="k">update</span> <span class="n">queue_job</span> <span class="k">set</span> <span class="k">state</span><span class="o">=</span><span class="s1">&#39;pending&#39;</span> <span class="k">where</span> <span class="k">state</span> <span class="k">in</span> <span class="p">(</span><span class="s1">&#39;started&#39;</span><span class="p">,</span> <span class="s1">&#39;enqueued&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Footnotes</p>
+<table class="docutils footnote" frame="void" id="id3" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td>From a security standpoint, it is safe to have an anonymous HTTP
+request because this request only accepts to run jobs that are
+enqueued.</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id4" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id2">[2]</a></td><td>It works with the threaded Odoo server too, although this way
+of running Odoo is obviously not for production purposes.</td></tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="what-is-a-channel">
+<h2>What is a channel?<a class="headerlink" href="#what-is-a-channel" title="Lien permanent vers ce titre">¶</a></h2>
+<dl class="class">
+<dt id="connector.jobrunner.channels.Channel">
+<em class="property">class </em><code class="descclassname">connector.jobrunner.channels.</code><code class="descname">Channel</code><span class="sig-paren">(</span><em>name</em>, <em>parent</em>, <em>capacity=None</em>, <em>sequential=False</em>, <em>throttle=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/jobrunner/channels.html#Channel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.jobrunner.channels.Channel" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>A channel for jobs, with a maximum capacity.</p>
+<p>When jobs are created by connector modules, they may be associated
+to a job channel. Jobs with no channel are inserted into the root channel.</p>
+<p>Job channels are joined in a hierarchy down to the root channel.
+When a job channel has available capacity, jobs are dequeued, marked
+as running in the channel and are inserted into the queue of the
+parent channel where they wait for available capacity and so on.</p>
+<p>Job channels can be visualized as water channels with a given flow
+limit (= capacity). Channels are joined together in a downstream channel
+and the flow limit of the downstream channel limits upstream channels.:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">---------------------+</span>
+                     <span class="o">|</span>
+                     <span class="o">|</span>
+ <span class="n">Ch</span><span class="o">.</span> <span class="n">A</span> <span class="n">C</span><span class="p">:</span><span class="mi">4</span><span class="p">,</span><span class="n">Q</span><span class="p">:</span><span class="mi">12</span><span class="p">,</span><span class="n">R</span><span class="p">:</span><span class="mi">4</span>  <span class="o">+-----------------------</span>
+
+<span class="o">---------------------+</span>  <span class="n">Ch</span><span class="o">.</span> <span class="n">root</span> <span class="n">C</span><span class="p">:</span><span class="mi">5</span><span class="p">,</span><span class="n">Q</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span><span class="n">R</span><span class="p">:</span><span class="mi">4</span>
+                     <span class="o">|</span>
+<span class="o">---------------------+</span>
+ <span class="n">Ch</span><span class="o">.</span> <span class="n">B</span> <span class="n">C</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="n">Q</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span><span class="n">R</span><span class="p">:</span><span class="mi">0</span>
+<span class="o">---------------------+-----------------------</span>
+</pre></div>
+</div>
+<p>The above diagram illustrates two channels joining in the root channel.
+The root channel has a capacity of 5, and 4 running jobs coming from
+Channel A. Channel A has a capacity of 4, all in use (passed down to the
+root channel), and 12 jobs enqueued. Channel B has a capacity of 1,
+none in use. This means that whenever a new job comes in channel B,
+there will be available room for it to run in the root channel.</p>
+<p>Note that from the point of view of a channel, “running” means enqueued
+in the downstream channel. Only jobs marked running in the root channel
+are actually sent to Odoo for execution.</p>
+<p>Should a downstream channel have less capacity than its upstream channels,
+jobs going downstream will be enqueued in the downstream channel,
+and compete normally according to their properties (priority, etc).</p>
+<p>Using this technique, it is possible to enforce sequence in a channel
+with a capacity of 1. It is also possible to dedicate a channel with a
+limited capacity for application-autocreated subchannels
+without risking to overflow the system.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="how-to-configure-channels">
+<h2>How to configure Channels?<a class="headerlink" href="#how-to-configure-channels" title="Lien permanent vers ce titre">¶</a></h2>
+<p>The <code class="docutils literal"><span class="pre">ODOO_CONNECTOR_CHANNELS</span></code> environment variable can be
+set before starting Odoo in order to adjust the capacity of the channels.</p>
+<p>Alternatively, set the channels configuration in the Odoo configuration file:</p>
+<div class="highlight-cfg"><div class="highlight"><pre><span></span><span class="k">[options-connector]</span>
+<span class="na">channels</span> <span class="o">=</span> <span class="s">root:4</span>
+</pre></div>
+</div>
+<p>If neither of the above methods is used, the default configuration of <code class="docutils literal"><span class="pre">root:1</span></code>
+is adopted by default.</p>
+<p>If the channel configuration is present in both the environment variable and
+the configuration file, the environment variable takes precedence.</p>
+<p>The general syntax is <code class="docutils literal"><span class="pre">channel(.subchannel)*(:capacity(:key(=value)?)*)?,...</span></code>.</p>
+<p>Intermediate subchannels which are not configured explicitly are autocreated
+with an unlimited capacity (except the root channel which if not configured gets
+a default capacity of 1).</p>
+<p>A delay in seconds between jobs can be set at the channel level with
+the <code class="docutils literal"><span class="pre">throttle</span></code> key.</p>
+<p>Example values for <code class="docutils literal"><span class="pre">ODOO_CONNECTOR_CHANNELS</span></code> or <code class="docutils literal"><span class="pre">options-connector:channels</span></code>:</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">root:4</span></code>: allow up to 4 concurrent jobs in the root channel.</li>
+<li><code class="docutils literal"><span class="pre">root:4,root.sub:2</span></code>: allow up to 4 concurrent jobs in the root channel and
+up to 2 concurrent jobs in the channel named <code class="docutils literal"><span class="pre">root.sub</span></code>.</li>
+<li><code class="docutils literal"><span class="pre">sub:2</span></code>: the same.</li>
+<li><code class="docutils literal"><span class="pre">root:4:throttle=2</span></code>: wait at least 2 seconds before starting the next job</li>
+</ul>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+        <br/>
+        
+<div id="sourcelink">
+  <a href="../_sources/guides/jobrunner.rst.txt"
+     rel="nofollow">Source</a>
+</div>
+      
+    </p>
+    <p>
+        &copy; Copyright 2013, Camptocamp SA.<br/>
+      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.3.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

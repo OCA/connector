@@ -73,8 +73,21 @@
     <ul class="dropdown-menu"
         role="menu"
         aria-labelledby="dLabelTranslations">
-      <li><a class="reference" href="http://odoo-connector.com">English</a><li>
-      <li><a class="reference" href="http://odoo-connector.com/fr">French</a><li>
+      <li><a class="reference" href="http://odoo-connector.com/8.0">English</a><li>
+      <li><a class="reference" href="http://odoo-connector.com/8.0/fr">French</a><li>
+    </ul>
+  </li>
+  <li class="dropdown">
+    <a role="button"
+       id="dLabelVersions"
+       data-toggle="dropdown"
+       data-target="#"
+       href="#">Version<b class="caret"></b></a>
+    <ul class="dropdown-menu"
+        role="menu"
+        aria-labelledby="dLabeVersions">
+      <li><a class="reference" href="http://odoo-connector.com/9.0">9.0</a><li>
+      <li><a class="reference" href="http://odoo-connector.com/">10.0</a><li>
     </ul>
   </li>
   
@@ -369,7 +382,7 @@ consumer which is active on all models if <code class="docutils literal"><span c
 
 <dl class="data">
 <dt id="connector.event.on_record_create">
-<code class="descclassname">connector.event.</code><code class="descname">on_record_create</code><em class="property"> = &lt;connector.event.Event object at 0x50ab590&gt;</em><a class="headerlink" href="#connector.event.on_record_create" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">connector.event.</code><code class="descname">on_record_create</code><em class="property"> = &lt;connector.event.Event object at 0x5cf35d0&gt;</em><a class="headerlink" href="#connector.event.on_record_create" title="Permalink to this definition">¶</a></dt>
 <dd><p><code class="docutils literal"><span class="pre">on_record_create</span></code> is fired when one record has been created.</p>
 <p>Listeners should take the following arguments:</p>
 <blockquote>
@@ -384,7 +397,7 @@ consumer which is active on all models if <code class="docutils literal"><span c
 
 <dl class="data">
 <dt id="connector.event.on_record_unlink">
-<code class="descclassname">connector.event.</code><code class="descname">on_record_unlink</code><em class="property"> = &lt;connector.event.Event object at 0x50ab5d0&gt;</em><a class="headerlink" href="#connector.event.on_record_unlink" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">connector.event.</code><code class="descname">on_record_unlink</code><em class="property"> = &lt;connector.event.Event object at 0x5cf3610&gt;</em><a class="headerlink" href="#connector.event.on_record_unlink" title="Permalink to this definition">¶</a></dt>
 <dd><p><code class="docutils literal"><span class="pre">on_record_unlink</span></code> is fired when one record has been deleted.</p>
 <p>Listeners should take the following arguments:</p>
 <blockquote>
@@ -398,7 +411,7 @@ consumer which is active on all models if <code class="docutils literal"><span c
 
 <dl class="data">
 <dt id="connector.event.on_record_write">
-<code class="descclassname">connector.event.</code><code class="descname">on_record_write</code><em class="property"> = &lt;connector.event.Event object at 0x50ab510&gt;</em><a class="headerlink" href="#connector.event.on_record_write" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">connector.event.</code><code class="descname">on_record_write</code><em class="property"> = &lt;connector.event.Event object at 0x5cf3550&gt;</em><a class="headerlink" href="#connector.event.on_record_write" title="Permalink to this definition">¶</a></dt>
 <dd><p><code class="docutils literal"><span class="pre">on_record_write</span></code> is fired when one record has been updated.</p>
 <p>Listeners should take the following arguments:</p>
 <blockquote>

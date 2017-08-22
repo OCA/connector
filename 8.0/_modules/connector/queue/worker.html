@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>connector.queue.worker &#8212; Connector  documentation</title>
+    <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../../../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../../../_static/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../../_static/bootstrap-sphinx.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-7628916-3', 'odoo-connector.com');
+  ga('send', 'pageview');
+</script>
+
+  </head>
+  <body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../../index.html">
+          Odoo Connector</a>
+        <span class="navbar-text navbar-version pull-left"><b></b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+  <li class="dropdown">
+    <a role="button"
+       id="dLabelTranslations"
+       data-toggle="dropdown"
+       data-target="#"
+       href="#">Translations<b class="caret"></b></a>
+    <ul class="dropdown-menu"
+        role="menu"
+        aria-labelledby="dLabelTranslations">
+      <li><a class="reference" href="http://odoo-connector.com">English</a><li>
+      <li><a class="reference" href="http://odoo-connector.com/fr">French</a><li>
+    </ul>
+  </li>
+  
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../project/contribute.html">Contribute</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../project/contribute.html#want-to-start-a-new-connector">Want to start a new connector</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../project/contribute.html#creating-or-maintaining-a-translation-of-this-doc">Creating or maintaining a translation of this doc</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../project/contributors.html">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../project/contributors.html#financial-contributors">Financial Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../project/license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../project/changes.html">Changes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../project/changes.html#future">Future (?)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../project/changes.html#id2">8.0.3.3.0 (2016-02-29)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../project/changes.html#id3">3.2.0 (2015-09-10)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../project/changes.html#id4">3.1.0 (2015-05-15)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../project/changes.html#id5">3.0.0 (2015-04-01)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../project/changes.html#id6">2.2.0 (2014-05-26)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../project/changes.html#id7">2.1.1 (2014-02-06)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../project/changes.html#warning-breaks-compatibility">2.1.0 (2014-01-15 - warning: breaks compatibility)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../project/changes.html#id8">2.0.1 (2013-09-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../project/changes.html#id9">2.0.0</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../project/roadmap.html">Roadmap</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../guides/code_overview.html">Code Overview</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/code_overview.html#backends">Backends</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/code_overview.html#bindings">Bindings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/code_overview.html#session">Session</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/code_overview.html#events">Events</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/code_overview.html#jobs">Jobs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/code_overview.html#connectorunit">ConnectorUnit</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../guides/concepts.html">Connector Concepts</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/concepts.html#events">Events</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/concepts.html#jobs-queue">Jobs Queue</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/concepts.html#session">Session</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/concepts.html#backend">Backend</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/concepts.html#environment">Environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/concepts.html#connectorunit">ConnectorUnit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/concepts.html#bindings">Bindings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/concepts.html#checkpoint">Checkpoint</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../guides/bootstrap_connector.html">Boostrapping a connector</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/bootstrap_connector.html#odoo-manifest">Odoo Manifest</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/bootstrap_connector.html#declare-the-backends">Declare the backends</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/bootstrap_connector.html#backend-model">Backend Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/bootstrap_connector.html#abstract-binding">Abstract Binding</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/bootstrap_connector.html#environment">Environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/bootstrap_connector.html#checkpoints">Checkpoints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/bootstrap_connector.html#connectorunit-classes">ConnectorUnit classes</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../guides/jobrunner.html">Configuring channels and the job runner</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/jobrunner.html#what-is-the-job-runner">What is the job runner?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/jobrunner.html#how-does-it-work">How does it work?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/jobrunner.html#how-to-use-it">How to use it?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/jobrunner.html#caveat">Caveat</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/jobrunner.html#what-is-a-channel">What is a channel?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/jobrunner.html#how-to-configure-channels">How to configure Channels?</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../guides/multiprocessing.html">Use the connector with multiprocessing workers</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/api_connector.html">Connector</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/api_session.html">Session</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/api_backend.html">Backend</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/api_backend.html#module-connector.backend_model">Backend Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/api_event.html">Event</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/api_binder.html">Binder</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/api_mapper.html">Mapper</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/api_mapper.html#mappers">Mappers</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/api_synchronizer.html">Synchronizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/api_backend_adapter.html">Backend Adapter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/api_queue.html">Queue</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/api_queue.html#module-connector.queue.job">Job</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/api_queue.html#module-connector.queue.worker">Worker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/api_queue.html#id5">Queue</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/api_queue.html#module-connector.queue.model">Models</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/api_exception.html">Exceptions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/api_channels.html">Channels</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/api_runner.html">Job Runner</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/api_runner.html#what-is-the-job-runner">What is the job runner?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/api_runner.html#how-does-it-work">How does it work?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/api_runner.html#how-to-use-it">How to use it?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/api_runner.html#caveat">Caveat</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"></ul>
+</li>
+              
+            
+
+            
+              
+                
+              
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 content">
+      
+  <h1>Source code for connector.queue.worker</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1">##############################################################################</span>
+<span class="c1">#</span>
+<span class="c1">#    Author: Guewen Baconnier</span>
+<span class="c1">#    Copyright 2013 Camptocamp SA</span>
+<span class="c1">#</span>
+<span class="c1">#    This program is free software: you can redistribute it and/or modify</span>
+<span class="c1">#    it under the terms of the GNU Affero General Public License as</span>
+<span class="c1">#    published by the Free Software Foundation, either version 3 of the</span>
+<span class="c1">#    License, or (at your option) any later version.</span>
+<span class="c1">#</span>
+<span class="c1">#    This program is distributed in the hope that it will be useful,</span>
+<span class="c1">#    but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c1">#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="c1">#    GNU Affero General Public License for more details.</span>
+<span class="c1">#</span>
+<span class="c1">#    You should have received a copy of the GNU Affero General Public License</span>
+<span class="c1">#    along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+<span class="c1">#</span>
+<span class="c1">##############################################################################</span>
+
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">threading</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">traceback</span>
+<span class="kn">import</span> <span class="nn">uuid</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="k">import</span> <span class="n">datetime</span>
+<span class="kn">from</span> <span class="nn">StringIO</span> <span class="k">import</span> <span class="n">StringIO</span>
+
+<span class="kn">from</span> <span class="nn">psycopg2</span> <span class="k">import</span> <span class="n">OperationalError</span><span class="p">,</span> <span class="n">ProgrammingError</span>
+
+<span class="kn">import</span> <span class="nn">openerp</span>
+<span class="kn">from</span> <span class="nn">openerp.service.model</span> <span class="k">import</span> <span class="n">PG_CONCURRENCY_ERRORS_TO_RETRY</span>
+<span class="kn">from</span> <span class="nn">openerp.service</span> <span class="k">import</span> <span class="n">db</span>
+<span class="kn">from</span> <span class="nn">openerp.tools</span> <span class="k">import</span> <span class="n">config</span>
+<span class="kn">from</span> <span class="nn">.queue</span> <span class="k">import</span> <span class="n">JobsQueue</span>
+<span class="kn">from</span> <span class="nn">..session</span> <span class="k">import</span> <span class="n">ConnectorSessionHandler</span>
+<span class="kn">from</span> <span class="nn">.job</span> <span class="k">import</span> <span class="p">(</span><span class="n">OpenERPJobStorage</span><span class="p">,</span>
+                  <span class="n">PENDING</span><span class="p">,</span>
+                  <span class="n">DONE</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">..exception</span> <span class="k">import</span> <span class="p">(</span><span class="n">NoSuchJobError</span><span class="p">,</span>
+                         <span class="n">NotReadableJobError</span><span class="p">,</span>
+                         <span class="n">RetryableJobError</span><span class="p">,</span>
+                         <span class="n">FailedJobError</span><span class="p">,</span>
+                         <span class="n">NothingToDoJob</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">..jobrunner</span> <span class="k">import</span> <span class="n">_channels</span>
+
+<span class="n">_logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+<span class="n">WAIT_CHECK_WORKER_ALIVE</span> <span class="o">=</span> <span class="mi">30</span>  <span class="c1"># seconds</span>
+<span class="n">WAIT_WHEN_ONLY_AFTER_JOBS</span> <span class="o">=</span> <span class="mi">10</span>  <span class="c1"># seconds</span>
+<span class="n">WORKER_TIMEOUT</span> <span class="o">=</span> <span class="mi">5</span> <span class="o">*</span> <span class="mi">60</span>  <span class="c1"># seconds</span>
+<span class="n">PG_RETRY</span> <span class="o">=</span> <span class="mi">5</span>  <span class="c1"># seconds</span>
+
+
+<div class="viewcode-block" id="Worker"><a class="viewcode-back" href="../../../api/api_queue.html#connector.queue.worker.Worker">[docs]</a><span class="k">class</span> <span class="nc">Worker</span><span class="p">(</span><span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Post and retrieve jobs from the queue, execute them&quot;&quot;&quot;</span>
+
+    <span class="n">queue_class</span> <span class="o">=</span> <span class="n">JobsQueue</span>
+    <span class="n">job_storage_class</span> <span class="o">=</span> <span class="n">OpenERPJobStorage</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">db_name</span><span class="p">,</span> <span class="n">watcher_</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Worker</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">queue</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">queue_class</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">db_name</span> <span class="o">=</span> <span class="n">db_name</span>
+        <span class="n">threading</span><span class="o">.</span><span class="n">current_thread</span><span class="p">()</span><span class="o">.</span><span class="n">dbname</span> <span class="o">=</span> <span class="n">db_name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">uuid</span> <span class="o">=</span> <span class="n">unicode</span><span class="p">(</span><span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">watcher</span> <span class="o">=</span> <span class="n">watcher_</span>
+
+<div class="viewcode-block" id="Worker.run_job"><a class="viewcode-back" href="../../../api/api_queue.html#connector.queue.worker.Worker.run_job">[docs]</a>    <span class="k">def</span> <span class="nf">run_job</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">job</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Execute a job &quot;&quot;&quot;</span>
+        <span class="k">def</span> <span class="nf">retry_postpone</span><span class="p">(</span><span class="n">job</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">seconds</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+            <span class="k">with</span> <span class="n">session_hdl</span><span class="o">.</span><span class="n">session</span><span class="p">()</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
+                <span class="n">job</span><span class="o">.</span><span class="n">postpone</span><span class="p">(</span><span class="n">result</span><span class="o">=</span><span class="n">message</span><span class="p">,</span> <span class="n">seconds</span><span class="o">=</span><span class="n">seconds</span><span class="p">)</span>
+                <span class="n">job</span><span class="o">.</span><span class="n">set_enqueued</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">job_storage_class</span><span class="p">(</span><span class="n">session</span><span class="p">)</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="n">job</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">queue</span><span class="o">.</span><span class="n">enqueue</span><span class="p">(</span><span class="n">job</span><span class="p">)</span>
+
+        <span class="n">session_hdl</span> <span class="o">=</span> <span class="n">ConnectorSessionHandler</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">db_name</span><span class="p">,</span>
+                                              <span class="n">openerp</span><span class="o">.</span><span class="n">SUPERUSER_ID</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">with</span> <span class="n">session_hdl</span><span class="o">.</span><span class="n">session</span><span class="p">()</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
+                <span class="n">job</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_load_job</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">job</span><span class="o">.</span><span class="n">uuid</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">job</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="k">return</span>
+
+            <span class="c1"># if the job has been manually set to DONE or PENDING</span>
+            <span class="c1"># before its execution, stop</span>
+            <span class="k">if</span> <span class="n">job</span><span class="o">.</span><span class="n">state</span> <span class="ow">in</span> <span class="p">(</span><span class="n">DONE</span><span class="p">,</span> <span class="n">PENDING</span><span class="p">):</span>
+                <span class="k">return</span>
+
+            <span class="c1"># the job has been enqueued in this worker but has likely be</span>
+            <span class="c1"># modified in the database since its enqueue</span>
+            <span class="k">if</span> <span class="n">job</span><span class="o">.</span><span class="n">worker_uuid</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">uuid</span><span class="p">:</span>
+                <span class="c1"># put the job in pending so it can be requeued</span>
+                <span class="n">_logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;Job </span><span class="si">%s</span><span class="s1"> was enqueued in worker </span><span class="si">%s</span><span class="s1"> but &#39;</span>
+                              <span class="s1">&#39;was linked to worker </span><span class="si">%s</span><span class="s1">. Reset to pending.&#39;</span><span class="p">,</span>
+                              <span class="n">job</span><span class="o">.</span><span class="n">uuid</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">uuid</span><span class="p">,</span> <span class="n">job</span><span class="o">.</span><span class="n">worker_uuid</span><span class="p">)</span>
+                <span class="k">with</span> <span class="n">session_hdl</span><span class="o">.</span><span class="n">session</span><span class="p">()</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
+                    <span class="n">job</span><span class="o">.</span><span class="n">set_pending</span><span class="p">()</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">job_storage_class</span><span class="p">(</span><span class="n">session</span><span class="p">)</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="n">job</span><span class="p">)</span>
+                <span class="k">return</span>
+
+            <span class="k">if</span> <span class="n">job</span><span class="o">.</span><span class="n">eta</span> <span class="ow">and</span> <span class="n">job</span><span class="o">.</span><span class="n">eta</span> <span class="o">&gt;</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">():</span>
+                <span class="c1"># The queue is sorted by &#39;eta&#39; date first</span>
+                <span class="c1"># so if we dequeued a job expected to be run in</span>
+                <span class="c1"># the future, we have no jobs to do right now!</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">queue</span><span class="o">.</span><span class="n">enqueue</span><span class="p">(</span><span class="n">job</span><span class="p">)</span>
+                <span class="c1"># Wait some time just to avoid to loop over</span>
+                <span class="c1"># the same &#39;future&#39; jobs</span>
+                <span class="n">_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Wait </span><span class="si">%s</span><span class="s1"> seconds because the delayed &#39;</span>
+                              <span class="s1">&#39;jobs have been reached&#39;</span><span class="p">,</span>
+                              <span class="n">WAIT_WHEN_ONLY_AFTER_JOBS</span><span class="p">)</span>
+                <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">WAIT_WHEN_ONLY_AFTER_JOBS</span><span class="p">)</span>
+                <span class="k">return</span>
+
+            <span class="k">with</span> <span class="n">session_hdl</span><span class="o">.</span><span class="n">session</span><span class="p">()</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
+                <span class="n">job</span><span class="o">.</span><span class="n">set_started</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">job_storage_class</span><span class="p">(</span><span class="n">session</span><span class="p">)</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="n">job</span><span class="p">)</span>
+
+            <span class="n">_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1"> started&#39;</span><span class="p">,</span> <span class="n">job</span><span class="p">)</span>
+            <span class="k">with</span> <span class="n">session_hdl</span><span class="o">.</span><span class="n">session</span><span class="p">()</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
+                <span class="n">job</span><span class="o">.</span><span class="n">perform</span><span class="p">(</span><span class="n">session</span><span class="p">)</span>
+                <span class="n">job</span><span class="o">.</span><span class="n">set_done</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">job_storage_class</span><span class="p">(</span><span class="n">session</span><span class="p">)</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="n">job</span><span class="p">)</span>
+            <span class="n">_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1"> done&#39;</span><span class="p">,</span> <span class="n">job</span><span class="p">)</span>
+
+        <span class="k">except</span> <span class="n">NothingToDoJob</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">unicode</span><span class="p">(</span><span class="n">err</span><span class="p">):</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="n">unicode</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="n">job</span><span class="o">.</span><span class="n">cancel</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+            <span class="k">with</span> <span class="n">session_hdl</span><span class="o">.</span><span class="n">session</span><span class="p">()</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">job_storage_class</span><span class="p">(</span><span class="n">session</span><span class="p">)</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="n">job</span><span class="p">)</span>
+
+        <span class="k">except</span> <span class="n">RetryableJobError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+            <span class="c1"># delay the job later, requeue</span>
+            <span class="n">retry_postpone</span><span class="p">(</span><span class="n">job</span><span class="p">,</span> <span class="n">unicode</span><span class="p">(</span><span class="n">err</span><span class="p">),</span> <span class="n">seconds</span><span class="o">=</span><span class="n">err</span><span class="o">.</span><span class="n">seconds</span><span class="p">)</span>
+            <span class="n">_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1"> postponed&#39;</span><span class="p">,</span> <span class="n">job</span><span class="p">)</span>
+
+        <span class="k">except</span> <span class="n">OperationalError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+            <span class="c1"># Automatically retry the typical transaction serialization errors</span>
+            <span class="k">if</span> <span class="n">err</span><span class="o">.</span><span class="n">pgcode</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">PG_CONCURRENCY_ERRORS_TO_RETRY</span><span class="p">:</span>
+                <span class="k">raise</span>
+            <span class="n">retry_postpone</span><span class="p">(</span><span class="n">job</span><span class="p">,</span> <span class="n">unicode</span><span class="p">(</span><span class="n">err</span><span class="p">),</span> <span class="n">seconds</span><span class="o">=</span><span class="n">PG_RETRY</span><span class="p">)</span>
+            <span class="n">_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1"> OperationalError, postponed&#39;</span><span class="p">,</span> <span class="n">job</span><span class="p">)</span>
+
+        <span class="k">except</span> <span class="p">(</span><span class="n">FailedJobError</span><span class="p">,</span> <span class="ne">Exception</span><span class="p">):</span>
+            <span class="n">buff</span> <span class="o">=</span> <span class="n">StringIO</span><span class="p">()</span>
+            <span class="n">traceback</span><span class="o">.</span><span class="n">print_exc</span><span class="p">(</span><span class="n">file</span><span class="o">=</span><span class="n">buff</span><span class="p">)</span>
+            <span class="n">_logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">buff</span><span class="o">.</span><span class="n">getvalue</span><span class="p">())</span>
+
+            <span class="n">job</span><span class="o">.</span><span class="n">set_failed</span><span class="p">(</span><span class="n">exc_info</span><span class="o">=</span><span class="n">buff</span><span class="o">.</span><span class="n">getvalue</span><span class="p">())</span>
+            <span class="k">with</span> <span class="n">session_hdl</span><span class="o">.</span><span class="n">session</span><span class="p">()</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">job_storage_class</span><span class="p">(</span><span class="n">session</span><span class="p">)</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="n">job</span><span class="p">)</span>
+            <span class="k">raise</span></div>
+
+    <span class="k">def</span> <span class="nf">_load_job</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">session</span><span class="p">,</span> <span class="n">job_uuid</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Reload a job from the backend &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">job</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">job_storage_class</span><span class="p">(</span><span class="n">session</span><span class="p">)</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">job_uuid</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">NoSuchJobError</span><span class="p">:</span>
+            <span class="c1"># just skip it</span>
+            <span class="n">job</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">except</span> <span class="n">NotReadableJobError</span><span class="p">:</span>
+            <span class="n">_logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s1">&#39;Could not read job: </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">job_uuid</span><span class="p">)</span>
+            <span class="k">raise</span>
+        <span class="k">return</span> <span class="n">job</span>
+
+<div class="viewcode-block" id="Worker.run"><a class="viewcode-back" href="../../../api/api_queue.html#connector.queue.worker.Worker.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Worker&#39;s main loop</span>
+
+<span class="sd">        Check if it still exists in the ``watcher``. When it does no</span>
+<span class="sd">        longer exist, it break the loop so the thread stops properly.</span>
+
+<span class="sd">        Wait for jobs and execute them sequentially.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">while</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="c1"># check if the worker has to exit (db destroyed, connector</span>
+            <span class="c1"># uninstalled)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">watcher</span><span class="o">.</span><span class="n">worker_lost</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+                <span class="k">break</span>
+            <span class="n">job</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">queue</span><span class="o">.</span><span class="n">dequeue</span><span class="p">()</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">run_job</span><span class="p">(</span><span class="n">job</span><span class="p">)</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="k">continue</span></div>
+
+<div class="viewcode-block" id="Worker.enqueue_job_uuid"><a class="viewcode-back" href="../../../api/api_queue.html#connector.queue.worker.Worker.enqueue_job_uuid">[docs]</a>    <span class="k">def</span> <span class="nf">enqueue_job_uuid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">job_uuid</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Enqueue a job:</span>
+
+<span class="sd">        It will be executed by the worker as soon as possible (according</span>
+<span class="sd">        to the job&#39;s priority</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">session_hdl</span> <span class="o">=</span> <span class="n">ConnectorSessionHandler</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">db_name</span><span class="p">,</span>
+                                              <span class="n">openerp</span><span class="o">.</span><span class="n">SUPERUSER_ID</span><span class="p">)</span>
+        <span class="k">with</span> <span class="n">session_hdl</span><span class="o">.</span><span class="n">session</span><span class="p">()</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
+            <span class="n">job</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_load_job</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">job_uuid</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">job</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="c1"># skip a deleted job</span>
+                <span class="k">return</span>
+            <span class="n">job</span><span class="o">.</span><span class="n">set_enqueued</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">job_storage_class</span><span class="p">(</span><span class="n">session</span><span class="p">)</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="n">job</span><span class="p">)</span>
+        <span class="c1"># the change of state should be commited before</span>
+        <span class="c1"># the enqueue otherwise we may have concurrent updates</span>
+        <span class="c1"># if the job is started directly</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">queue</span><span class="o">.</span><span class="n">enqueue</span><span class="p">(</span><span class="n">job</span><span class="p">)</span>
+        <span class="n">_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1"> enqueued in </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">job</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="WorkerWatcher"><a class="viewcode-back" href="../../../api/api_queue.html#connector.queue.worker.WorkerWatcher">[docs]</a><span class="k">class</span> <span class="nc">WorkerWatcher</span><span class="p">(</span><span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Keep a sight on the workers and signal their aliveness.</span>
+
+<span class="sd">    A `WorkerWatcher` is shared between databases, so only 1 instance is</span>
+<span class="sd">    necessary to check the aliveness of the workers for every database.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">WorkerWatcher</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_workers</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">def</span> <span class="nf">_new</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">db_name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Create a new worker for the database &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">db_name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_workers</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;Database </span><span class="si">%s</span><span class="s1"> already has a worker (</span><span class="si">%s</span><span class="s1">)&#39;</span> <span class="o">%</span>
+                            <span class="p">(</span><span class="n">db_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_workers</span><span class="p">[</span><span class="n">db_name</span><span class="p">]</span><span class="o">.</span><span class="n">uuid</span><span class="p">))</span>
+        <span class="n">worker</span> <span class="o">=</span> <span class="n">Worker</span><span class="p">(</span><span class="n">db_name</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_workers</span><span class="p">[</span><span class="n">db_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">worker</span>
+        <span class="n">worker</span><span class="o">.</span><span class="n">daemon</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">worker</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">db_name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Delete a worker associated with a database &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">db_name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_workers</span><span class="p">:</span>
+            <span class="c1"># the worker will exit (it checks ``worker_lost()``)</span>
+            <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_workers</span><span class="p">[</span><span class="n">db_name</span><span class="p">]</span>
+
+<div class="viewcode-block" id="WorkerWatcher.worker_for_db"><a class="viewcode-back" href="../../../api/api_queue.html#connector.queue.worker.WorkerWatcher.worker_for_db">[docs]</a>    <span class="k">def</span> <span class="nf">worker_for_db</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">db_name</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_workers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">db_name</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="WorkerWatcher.worker_lost"><a class="viewcode-back" href="../../../api/api_queue.html#connector.queue.worker.WorkerWatcher.worker_lost">[docs]</a>    <span class="k">def</span> <span class="nf">worker_lost</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">worker</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Indicate if a worker is no longer referenced by the watcher.</span>
+
+<span class="sd">        Used by the worker threads to know if they have to exit.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">worker</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_workers</span><span class="o">.</span><span class="n">itervalues</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="WorkerWatcher.available_db_names"><a class="viewcode-back" href="../../../api/api_queue.html#connector.queue.worker.WorkerWatcher.available_db_names">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">available_db_names</span><span class="p">():</span>
+        <span class="sd">&quot;&quot;&quot; Returns the databases for the server having</span>
+<span class="sd">        the connector module installed.</span>
+
+<span class="sd">        Available means that they can be used by a `Worker`.</span>
+
+<span class="sd">        :return: database names</span>
+<span class="sd">        :rtype: list</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;db_name&#39;</span><span class="p">]:</span>
+            <span class="n">db_names</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;db_name&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">db_names</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">exp_list</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">dbfilter</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;dbfilter&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">dbfilter</span> <span class="ow">and</span> <span class="s1">&#39;</span><span class="si">%d</span><span class="s1">&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dbfilter</span> <span class="ow">and</span> <span class="s1">&#39;%h&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dbfilter</span><span class="p">:</span>
+            <span class="n">db_names</span> <span class="o">=</span> <span class="p">[</span><span class="n">d</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">db_names</span> <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">dbfilter</span><span class="p">,</span> <span class="n">d</span><span class="p">)]</span>
+        <span class="n">available_db_names</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">db_name</span> <span class="ow">in</span> <span class="n">db_names</span><span class="p">:</span>
+            <span class="n">session_hdl</span> <span class="o">=</span> <span class="n">ConnectorSessionHandler</span><span class="p">(</span><span class="n">db_name</span><span class="p">,</span>
+                                                  <span class="n">openerp</span><span class="o">.</span><span class="n">SUPERUSER_ID</span><span class="p">)</span>
+            <span class="k">with</span> <span class="n">session_hdl</span><span class="o">.</span><span class="n">session</span><span class="p">()</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
+                <span class="n">cr</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">cr</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">cr</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;SELECT 1 FROM ir_module_module &quot;</span>
+                               <span class="s2">&quot;WHERE name = </span><span class="si">%s</span><span class="s2"> &quot;</span>
+                               <span class="s2">&quot;AND state = </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;connector&#39;</span><span class="p">,</span> <span class="s1">&#39;installed&#39;</span><span class="p">),</span>
+                               <span class="n">log_exceptions</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+                <span class="k">except</span> <span class="n">ProgrammingError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+                    <span class="n">no_db_error</span> <span class="o">=</span> <span class="s1">&#39;relation &quot;ir_module_module&quot; does not exist&#39;</span>
+                    <span class="k">if</span> <span class="n">unicode</span><span class="p">(</span><span class="n">err</span><span class="p">)</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">no_db_error</span><span class="p">):</span>
+                        <span class="n">_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Database </span><span class="si">%s</span><span class="s1"> is not an OpenERP database,&#39;</span>
+                                      <span class="s1">&#39; connector worker not started&#39;</span><span class="p">,</span> <span class="n">db_name</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="k">raise</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">cr</span><span class="o">.</span><span class="n">fetchone</span><span class="p">():</span>
+                        <span class="n">available_db_names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">db_name</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">available_db_names</span></div>
+
+    <span class="k">def</span> <span class="nf">_update_workers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Refresh the list of workers according to the available</span>
+<span class="sd">        databases and registries.</span>
+
+<span class="sd">        A new database can be available, so we need to create a new</span>
+<span class="sd">        `Worker` or a database could have been dropped, so we have to</span>
+<span class="sd">        discard the Worker.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">db_names</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">available_db_names</span><span class="p">()</span>
+        <span class="c1"># deleted db or connector uninstalled: remove the workers</span>
+        <span class="k">for</span> <span class="n">db_name</span> <span class="ow">in</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_workers</span><span class="p">)</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="n">db_names</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_delete</span><span class="p">(</span><span class="n">db_name</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">db_name</span> <span class="ow">in</span> <span class="n">db_names</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">db_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_workers</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_new</span><span class="p">(</span><span class="n">db_name</span><span class="p">)</span>
+
+<div class="viewcode-block" id="WorkerWatcher.run"><a class="viewcode-back" href="../../../api/api_queue.html#connector.queue.worker.WorkerWatcher.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; `WorkerWatcher`&#39;s main loop &quot;&quot;&quot;</span>
+        <span class="k">while</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_update_workers</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">db_name</span><span class="p">,</span> <span class="n">worker</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_workers</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">check_alive</span><span class="p">(</span><span class="n">db_name</span><span class="p">,</span> <span class="n">worker</span><span class="p">)</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">WAIT_CHECK_WORKER_ALIVE</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="WorkerWatcher.check_alive"><a class="viewcode-back" href="../../../api/api_queue.html#connector.queue.worker.WorkerWatcher.check_alive">[docs]</a>    <span class="k">def</span> <span class="nf">check_alive</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">db_name</span><span class="p">,</span> <span class="n">worker</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Check if the the worker is still alive and notify</span>
+<span class="sd">        its aliveness.</span>
+<span class="sd">        Check if the other workers are still alive, if they are</span>
+<span class="sd">        dead, remove them from the worker&#39;s pool.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">session_hdl</span> <span class="o">=</span> <span class="n">ConnectorSessionHandler</span><span class="p">(</span><span class="n">db_name</span><span class="p">,</span>
+                                              <span class="n">openerp</span><span class="o">.</span><span class="n">SUPERUSER_ID</span><span class="p">)</span>
+        <span class="k">with</span> <span class="n">session_hdl</span><span class="o">.</span><span class="n">session</span><span class="p">()</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">worker</span><span class="o">.</span><span class="n">is_alive</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_notify_alive</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">worker</span><span class="p">)</span>
+                <span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_purge_dead_workers</span><span class="p">(</span><span class="n">session</span><span class="p">)</span>
+            <span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span></div>
+
+    <span class="k">def</span> <span class="nf">_notify_alive</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">session</span><span class="p">,</span> <span class="n">worker</span><span class="p">):</span>
+        <span class="n">_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Worker </span><span class="si">%s</span><span class="s1"> is alive on process </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span>
+                      <span class="n">worker</span><span class="o">.</span><span class="n">uuid</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">getpid</span><span class="p">())</span>
+        <span class="n">session</span><span class="o">.</span><span class="n">env</span><span class="p">[</span><span class="s1">&#39;queue.worker&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">_notify_alive</span><span class="p">(</span><span class="n">worker</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_purge_dead_workers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">session</span><span class="p">):</span>
+        <span class="n">session</span><span class="o">.</span><span class="n">env</span><span class="p">[</span><span class="s1">&#39;queue.worker&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">_purge_dead_workers</span><span class="p">()</span></div>
+
+
+<span class="n">watcher</span> <span class="o">=</span> <span class="n">WorkerWatcher</span><span class="p">()</span>
+
+
+<div class="viewcode-block" id="start_service"><a class="viewcode-back" href="../../../api/api_queue.html#connector.queue.worker.start_service">[docs]</a><span class="k">def</span> <span class="nf">start_service</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot; Start the watcher &quot;&quot;&quot;</span>
+    <span class="n">watcher</span><span class="o">.</span><span class="n">daemon</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">watcher</span><span class="o">.</span><span class="n">start</span><span class="p">()</span></div>
+
+
+<span class="c1"># We have to launch the Jobs Workers only if:</span>
+<span class="c1"># 0. The alternative connector runner is not enabled (i.e. no ``_channels()``)</span>
+<span class="c1"># 1. OpenERP is used in standalone mode (monoprocess)</span>
+<span class="c1"># 2. Or it is used in multiprocess (with option ``--workers``)</span>
+<span class="c1">#    but the current process is a Connector Worker</span>
+<span class="c1">#    (launched with the ``openerp-connector-worker`` script).</span>
+<span class="k">if</span> <span class="ow">not</span> <span class="n">_channels</span><span class="p">():</span>
+    <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">openerp</span><span class="p">,</span> <span class="s1">&#39;multi_process&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span> <span class="ow">or</span>
+            <span class="nb">getattr</span><span class="p">(</span><span class="n">openerp</span><span class="p">,</span> <span class="s1">&#39;worker_connector&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)):</span>
+        <span class="n">start_service</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+        <br/>
+        
+      
+    </p>
+    <p>
+        &copy; Copyright 2013, Camptocamp SA.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.3.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

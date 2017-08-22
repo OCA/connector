@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Mapper &#8212; Connector  documentation</title>
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Synchronizer" href="api_synchronizer.html" />
+    <link rel="prev" title="Binder" href="api_binder.html" />
+
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-7628916-3', 'odoo-connector.com');
+  ga('send', 'pageview');
+</script>
+
+  </head>
+  <body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../index.html">
+          Odoo Connector</a>
+        <span class="navbar-text navbar-version pull-left"><b></b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+  <li class="dropdown">
+    <a role="button"
+       id="dLabelTranslations"
+       data-toggle="dropdown"
+       data-target="#"
+       href="#">Translations<b class="caret"></b></a>
+    <ul class="dropdown-menu"
+        role="menu"
+        aria-labelledby="dLabelTranslations">
+      <li><a class="reference" href="http://odoo-connector.com">English</a><li>
+      <li><a class="reference" href="http://odoo-connector.com/fr">French</a><li>
+    </ul>
+  </li>
+  
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../project/contribute.html">Contribute</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../project/contribute.html#want-to-start-a-new-connector">Want to start a new connector</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../project/contribute.html#creating-or-maintaining-a-translation-of-this-doc">Creating or maintaining a translation of this doc</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../project/contributors.html">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../project/contributors.html#financial-contributors">Financial Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../project/license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../project/changes.html">Changes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../project/changes.html#future">Future (?)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../project/changes.html#id2">8.0.3.3.0 (2016-02-29)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../project/changes.html#id3">3.2.0 (2015-09-10)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../project/changes.html#id4">3.1.0 (2015-05-15)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../project/changes.html#id5">3.0.0 (2015-04-01)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../project/changes.html#id6">2.2.0 (2014-05-26)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../project/changes.html#id7">2.1.1 (2014-02-06)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../project/changes.html#warning-breaks-compatibility">2.1.0 (2014-01-15 - warning: breaks compatibility)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../project/changes.html#id8">2.0.1 (2013-09-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../project/changes.html#id9">2.0.0</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../project/roadmap.html">Roadmap</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../guides/code_overview.html">Code Overview</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../guides/code_overview.html#backends">Backends</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/code_overview.html#bindings">Bindings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/code_overview.html#session">Session</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/code_overview.html#events">Events</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/code_overview.html#jobs">Jobs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/code_overview.html#connectorunit">ConnectorUnit</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/concepts.html">Connector Concepts</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../guides/concepts.html#events">Events</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/concepts.html#jobs-queue">Jobs Queue</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/concepts.html#session">Session</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/concepts.html#backend">Backend</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/concepts.html#environment">Environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/concepts.html#connectorunit">ConnectorUnit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/concepts.html#bindings">Bindings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/concepts.html#checkpoint">Checkpoint</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/bootstrap_connector.html">Boostrapping a connector</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../guides/bootstrap_connector.html#odoo-manifest">Odoo Manifest</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/bootstrap_connector.html#declare-the-backends">Declare the backends</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/bootstrap_connector.html#backend-model">Backend Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/bootstrap_connector.html#abstract-binding">Abstract Binding</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/bootstrap_connector.html#environment">Environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/bootstrap_connector.html#checkpoints">Checkpoints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/bootstrap_connector.html#connectorunit-classes">ConnectorUnit classes</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/jobrunner.html">Configuring channels and the job runner</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../guides/jobrunner.html#what-is-the-job-runner">What is the job runner?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/jobrunner.html#how-does-it-work">How does it work?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/jobrunner.html#how-to-use-it">How to use it?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/jobrunner.html#caveat">Caveat</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/jobrunner.html#what-is-a-channel">What is a channel?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/jobrunner.html#how-to-configure-channels">How to configure Channels?</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/multiprocessing.html">Use the connector with multiprocessing workers</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="api_connector.html">Connector</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_session.html">Session</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_backend.html">Backend</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_backend.html#module-connector.backend_model">Backend Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_event.html">Event</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_binder.html">Binder</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Mapper</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#mappers">Mappers</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api_synchronizer.html">Synchronizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_backend_adapter.html">Backend Adapter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_queue.html">Queue</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api_queue.html#module-connector.queue.job">Job</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_queue.html#module-connector.queue.worker">Worker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_queue.html#id5">Queue</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_queue.html#module-connector.queue.model">Models</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api_exception.html">Exceptions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_channels.html">Channels</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_runner.html">Job Runner</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api_runner.html#what-is-the-job-runner">What is the job runner?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_runner.html#how-does-it-work">How does it work?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_runner.html#how-to-use-it">How to use it?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_runner.html#caveat">Caveat</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">Mapper</a><ul>
+<li><a class="reference internal" href="#mappers">Mappers</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+            
+
+            
+              
+                
+  <li>
+    <a href="api_binder.html" title="Previous Chapter: Binder"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Binder</span>
+    </a>
+  </li>
+  <li>
+    <a href="api_synchronizer.html" title="Next Chapter: Synchronizer"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Synchronizer &raquo;</span>
+    </a>
+  </li>
+              
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 content">
+      
+  <div class="section" id="module-connector.unit.mapper">
+<span id="mapper"></span><h1>Mapper<a class="headerlink" href="#module-connector.unit.mapper" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="mappers">
+<h2>Mappers<a class="headerlink" href="#mappers" title="Permalink to this headline">¶</a></h2>
+<p>Mappers are the ConnectorUnit classes responsible to transform
+external records into OpenERP records and conversely.</p>
+<dl class="class">
+<dt id="connector.unit.mapper.ExportMapChild">
+<em class="property">class </em><code class="descclassname">connector.unit.mapper.</code><code class="descname">ExportMapChild</code><span class="sig-paren">(</span><em>connector_env</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/unit/mapper.html#ExportMapChild"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.unit.mapper.ExportMapChild" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#connector.unit.mapper.MapChild" title="connector.unit.mapper.MapChild"><code class="xref py py-class docutils literal"><span class="pre">connector.unit.mapper.MapChild</span></code></a></p>
+<p><a class="reference internal" href="#connector.unit.mapper.MapChild" title="connector.unit.mapper.MapChild"><code class="xref py py-class docutils literal"><span class="pre">MapChild</span></code></a> for the Exports</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="connector.unit.mapper.ExportMapper">
+<em class="property">class </em><code class="descclassname">connector.unit.mapper.</code><code class="descname">ExportMapper</code><span class="sig-paren">(</span><em>connector_env</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/unit/mapper.html#ExportMapper"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.unit.mapper.ExportMapper" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#connector.unit.mapper.Mapper" title="connector.unit.mapper.Mapper"><code class="xref py py-class docutils literal"><span class="pre">connector.unit.mapper.Mapper</span></code></a></p>
+<p><a class="reference internal" href="#connector.unit.mapper.Mapper" title="connector.unit.mapper.Mapper"><code class="xref py py-class docutils literal"><span class="pre">Mapper</span></code></a> for exports.</p>
+<p>Transform a record from OpenERP to a backend record</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="connector.unit.mapper.ImportMapChild">
+<em class="property">class </em><code class="descclassname">connector.unit.mapper.</code><code class="descname">ImportMapChild</code><span class="sig-paren">(</span><em>connector_env</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/unit/mapper.html#ImportMapChild"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.unit.mapper.ImportMapChild" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#connector.unit.mapper.MapChild" title="connector.unit.mapper.MapChild"><code class="xref py py-class docutils literal"><span class="pre">connector.unit.mapper.MapChild</span></code></a></p>
+<p><a class="reference internal" href="#connector.unit.mapper.MapChild" title="connector.unit.mapper.MapChild"><code class="xref py py-class docutils literal"><span class="pre">MapChild</span></code></a> for the Imports</p>
+<dl class="method">
+<dt id="connector.unit.mapper.ImportMapChild.format_items">
+<code class="descname">format_items</code><span class="sig-paren">(</span><em>items_values</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/unit/mapper.html#ImportMapChild.format_items"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.unit.mapper.ImportMapChild.format_items" title="Permalink to this definition">¶</a></dt>
+<dd><p>Format the values of the items mapped from the child Mappers.</p>
+<p>It can be overridden for instance to add the OpenERP
+relationships commands <code class="docutils literal"><span class="pre">(6,</span> <span class="pre">0,</span> <span class="pre">[IDs])</span></code>, …</p>
+<p>As instance, it can be modified to handle update of existing
+items: check if an ‘id’ has been defined by
+<code class="xref py py-meth docutils literal"><span class="pre">get_item_values()</span></code> then use the <code class="docutils literal"><span class="pre">(1,</span> <span class="pre">ID,</span> <span class="pre">{values}</span></code>)
+command</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>items_values</strong> (<em>list</em>) – list of values for the items to create</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="connector.unit.mapper.ImportMapper">
+<em class="property">class </em><code class="descclassname">connector.unit.mapper.</code><code class="descname">ImportMapper</code><span class="sig-paren">(</span><em>connector_env</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/unit/mapper.html#ImportMapper"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.unit.mapper.ImportMapper" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#connector.unit.mapper.Mapper" title="connector.unit.mapper.Mapper"><code class="xref py py-class docutils literal"><span class="pre">connector.unit.mapper.Mapper</span></code></a></p>
+<p><a class="reference internal" href="#connector.unit.mapper.Mapper" title="connector.unit.mapper.Mapper"><code class="xref py py-class docutils literal"><span class="pre">Mapper</span></code></a> for imports.</p>
+<p>Transform a record from a backend to an OpenERP record</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="connector.unit.mapper.MapChild">
+<em class="property">class </em><code class="descclassname">connector.unit.mapper.</code><code class="descname">MapChild</code><span class="sig-paren">(</span><em>connector_env</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/unit/mapper.html#MapChild"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.unit.mapper.MapChild" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="api_connector.html#connector.connector.ConnectorUnit" title="connector.connector.ConnectorUnit"><code class="xref py py-class docutils literal"><span class="pre">connector.connector.ConnectorUnit</span></code></a></p>
+<p>MapChild is responsible to convert items.</p>
+<p>Items are sub-records of a main record.
+In this example, the items are the records in <code class="docutils literal"><span class="pre">lines</span></code>:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">sales</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;SO10&#39;</span><span class="p">,</span>
+         <span class="s1">&#39;lines&#39;</span><span class="p">:</span> <span class="p">[{</span><span class="s1">&#39;product_id&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;quantity&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">},</span>
+                   <span class="p">{</span><span class="s1">&#39;product_id&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;quantity&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">}]}</span>
+</pre></div>
+</div>
+<p>A MapChild is always called from another <a class="reference internal" href="#connector.unit.mapper.Mapper" title="connector.unit.mapper.Mapper"><code class="xref py py-class docutils literal"><span class="pre">Mapper</span></code></a> which
+provides a <code class="docutils literal"><span class="pre">children</span></code> configuration.</p>
+<p>Considering the example above, the “main” <a class="reference internal" href="#connector.unit.mapper.Mapper" title="connector.unit.mapper.Mapper"><code class="xref py py-class docutils literal"><span class="pre">Mapper</span></code></a> would
+returns something as follows:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;SO10&#39;</span><span class="p">,</span>
+         <span class="s1">&#39;lines&#39;</span><span class="p">:</span> <span class="p">[(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;product_id&#39;</span><span class="p">:</span> <span class="mi">11</span><span class="p">,</span> <span class="s1">&#39;quantity&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">}),</span>
+                   <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;product_id&#39;</span><span class="p">:</span> <span class="mi">12</span><span class="p">,</span> <span class="s1">&#39;quantity&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">})]}</span>
+</pre></div>
+</div>
+<p>A MapChild is responsible to:</p>
+<ul class="simple">
+<li>Find the <a class="reference internal" href="#connector.unit.mapper.Mapper" title="connector.unit.mapper.Mapper"><code class="xref py py-class docutils literal"><span class="pre">Mapper</span></code></a> to convert the items</li>
+<li>Possibly filter out some lines (can be done by inheriting
+<a class="reference internal" href="#connector.unit.mapper.MapChild.skip_item" title="connector.unit.mapper.MapChild.skip_item"><code class="xref py py-meth docutils literal"><span class="pre">skip_item()</span></code></a>)</li>
+<li>Convert the items’ records using the found <a class="reference internal" href="#connector.unit.mapper.Mapper" title="connector.unit.mapper.Mapper"><code class="xref py py-class docutils literal"><span class="pre">Mapper</span></code></a></li>
+<li>Format the output values to the format expected by OpenERP or the
+backend (as seen above with <code class="docutils literal"><span class="pre">(0,</span> <span class="pre">0,</span> <span class="pre">{values})</span></code></li>
+</ul>
+<p>A MapChild can be extended like any other
+<a class="reference internal" href="api_connector.html#connector.connector.ConnectorUnit" title="connector.connector.ConnectorUnit"><code class="xref py py-class docutils literal"><span class="pre">ConnectorUnit</span></code></a>.
+However, it is not mandatory to explicitly create a MapChild for
+each children mapping, the default one will be used
+(<a class="reference internal" href="#connector.unit.mapper.ImportMapChild" title="connector.unit.mapper.ImportMapChild"><code class="xref py py-class docutils literal"><span class="pre">ImportMapChild</span></code></a> or <a class="reference internal" href="#connector.unit.mapper.ExportMapChild" title="connector.unit.mapper.ExportMapChild"><code class="xref py py-class docutils literal"><span class="pre">ExportMapChild</span></code></a>).</p>
+<p>The implementation by default does not take care of the updates: if
+I import a sales order 2 times, the lines will be duplicated. This
+is not a problem as long as an importation should only support the
+creation (typical for sales orders). It can be implemented on a
+case-by-case basis by inheriting <a class="reference internal" href="#connector.unit.mapper.MapChild.get_item_values" title="connector.unit.mapper.MapChild.get_item_values"><code class="xref py py-meth docutils literal"><span class="pre">get_item_values()</span></code></a> and
+<a class="reference internal" href="#connector.unit.mapper.MapChild.format_items" title="connector.unit.mapper.MapChild.format_items"><code class="xref py py-meth docutils literal"><span class="pre">format_items()</span></code></a>.</p>
+<dl class="method">
+<dt id="connector.unit.mapper.MapChild.format_items">
+<code class="descname">format_items</code><span class="sig-paren">(</span><em>items_values</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/unit/mapper.html#MapChild.format_items"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.unit.mapper.MapChild.format_items" title="Permalink to this definition">¶</a></dt>
+<dd><p>Format the values of the items mapped from the child Mappers.</p>
+<p>It can be overridden for instance to add the OpenERP
+relationships commands <code class="docutils literal"><span class="pre">(6,</span> <span class="pre">0,</span> <span class="pre">[IDs])</span></code>, …</p>
+<p>As instance, it can be modified to handle update of existing
+items: check if an ‘id’ has been defined by
+<a class="reference internal" href="#connector.unit.mapper.MapChild.get_item_values" title="connector.unit.mapper.MapChild.get_item_values"><code class="xref py py-meth docutils literal"><span class="pre">get_item_values()</span></code></a> then use the <code class="docutils literal"><span class="pre">(1,</span> <span class="pre">ID,</span> <span class="pre">{values}</span></code>)
+command</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>items_values</strong> (<em>list</em>) – mapped values for the items</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="connector.unit.mapper.MapChild.get_item_values">
+<code class="descname">get_item_values</code><span class="sig-paren">(</span><em>map_record</em>, <em>to_attr</em>, <em>options</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/unit/mapper.html#MapChild.get_item_values"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.unit.mapper.MapChild.get_item_values" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the raw values from the child Mappers for the items.</p>
+<p>It can be overridden for instance to:</p>
+<ul class="simple">
+<li>Change options</li>
+<li>Use a <a class="reference internal" href="api_connector.html#connector.connector.Binder" title="connector.connector.Binder"><code class="xref py py-class docutils literal"><span class="pre">Binder</span></code></a> to know if an
+item already exists to modify an existing item, rather than to
+add it</li>
+</ul>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>map_record</strong> (<a class="reference internal" href="#connector.unit.mapper.MapRecord" title="connector.unit.mapper.MapRecord"><code class="xref py py-class docutils literal"><span class="pre">MapRecord</span></code></a>) – record that we are converting</li>
+<li><strong>to_attr</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – destination field (can be used for introspecting
+the relation)</li>
+<li><strong>options</strong> – dict of options, herited from the main mapper</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="connector.unit.mapper.MapChild.get_items">
+<code class="descname">get_items</code><span class="sig-paren">(</span><em>items</em>, <em>parent</em>, <em>to_attr</em>, <em>options</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/unit/mapper.html#MapChild.get_items"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.unit.mapper.MapChild.get_items" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the formatted output values of items from a main record</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>items</strong> (<em>list</em>) – list of item records</li>
+<li><strong>parent</strong> – parent record</li>
+<li><strong>to_attr</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – destination field (can be used for introspecting
+the relation)</li>
+<li><strong>options</strong> – dict of options, herited from the main mapper</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">formatted output values for the item</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="connector.unit.mapper.MapChild.skip_item">
+<code class="descname">skip_item</code><span class="sig-paren">(</span><em>map_record</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/unit/mapper.html#MapChild.skip_item"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.unit.mapper.MapChild.skip_item" title="Permalink to this definition">¶</a></dt>
+<dd><p>Hook to implement in sub-classes when some child
+records should be skipped.</p>
+<p>The parent record is accessible in <code class="docutils literal"><span class="pre">map_record</span></code>.
+If it returns True, the current child record is skipped.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>map_record</strong> (<a class="reference internal" href="#connector.unit.mapper.MapRecord" title="connector.unit.mapper.MapRecord"><code class="xref py py-class docutils literal"><span class="pre">MapRecord</span></code></a>) – record that we are converting</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="connector.unit.mapper.MapOptions">
+<em class="property">class </em><code class="descclassname">connector.unit.mapper.</code><code class="descname">MapOptions</code><a class="reference internal" href="../_modules/connector/unit/mapper.html#MapOptions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.unit.mapper.MapOptions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/2/library/stdtypes.html#dict" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">dict</span></code></a></p>
+<p>Container for the options of mappings.</p>
+<p>Options can be accessed using attributes of the instance.  When an
+option is accessed and does not exist, it returns None.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="connector.unit.mapper.MapRecord">
+<em class="property">class </em><code class="descclassname">connector.unit.mapper.</code><code class="descname">MapRecord</code><span class="sig-paren">(</span><em>mapper</em>, <em>source</em>, <em>parent=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/unit/mapper.html#MapRecord"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.unit.mapper.MapRecord" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/2/library/functions.html#object" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<p>A record prepared to be converted using a <a class="reference internal" href="#connector.unit.mapper.Mapper" title="connector.unit.mapper.Mapper"><code class="xref py py-class docutils literal"><span class="pre">Mapper</span></code></a>.</p>
+<p>MapRecord instances are prepared by <a class="reference internal" href="#connector.unit.mapper.Mapper.map_record" title="connector.unit.mapper.Mapper.map_record"><code class="xref py py-meth docutils literal"><span class="pre">Mapper.map_record()</span></code></a>.</p>
+<p>Usage:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">mapper</span> <span class="o">=</span> <span class="n">SomeMapper</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
+<span class="n">map_record</span> <span class="o">=</span> <span class="n">mapper</span><span class="o">.</span><span class="n">map_record</span><span class="p">(</span><span class="n">record</span><span class="p">)</span>
+<span class="n">output_values</span> <span class="o">=</span> <span class="n">map_record</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>See <a class="reference internal" href="#connector.unit.mapper.MapRecord.values" title="connector.unit.mapper.MapRecord.values"><code class="xref py py-meth docutils literal"><span class="pre">values()</span></code></a> for more information on the available arguments.</p>
+<dl class="attribute">
+<dt id="connector.unit.mapper.MapRecord.parent">
+<code class="descname">parent</code><a class="headerlink" href="#connector.unit.mapper.MapRecord.parent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parent record if the current record is an item</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="connector.unit.mapper.MapRecord.source">
+<code class="descname">source</code><a class="headerlink" href="#connector.unit.mapper.MapRecord.source" title="Permalink to this definition">¶</a></dt>
+<dd><p>Source record to be converted</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="connector.unit.mapper.MapRecord.update">
+<code class="descname">update</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/unit/mapper.html#MapRecord.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.unit.mapper.MapRecord.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Force values to be applied after a mapping.</p>
+<p>Usage:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">mapper</span> <span class="o">=</span> <span class="n">SomeMapper</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
+<span class="n">map_record</span> <span class="o">=</span> <span class="n">mapper</span><span class="o">.</span><span class="n">map_record</span><span class="p">(</span><span class="n">record</span><span class="p">)</span>
+<span class="n">map_record</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">output_values</span> <span class="o">=</span> <span class="n">map_record</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+<span class="c1"># output_values will at least contain {&#39;a&#39;: 1}</span>
+</pre></div>
+</div>
+<p>The values assigned with <code class="docutils literal"><span class="pre">update()</span></code> are in any case applied,
+they have a greater priority than the mapping values.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="connector.unit.mapper.MapRecord.values">
+<code class="descname">values</code><span class="sig-paren">(</span><em>for_create=None</em>, <em>fields=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/unit/mapper.html#MapRecord.values"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.unit.mapper.MapRecord.values" title="Permalink to this definition">¶</a></dt>
+<dd><p>Build and returns the mapped values according to the options.</p>
+<p>Usage:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">mapper</span> <span class="o">=</span> <span class="n">SomeMapper</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
+<span class="n">map_record</span> <span class="o">=</span> <span class="n">mapper</span><span class="o">.</span><span class="n">map_record</span><span class="p">(</span><span class="n">record</span><span class="p">)</span>
+<span class="n">output_values</span> <span class="o">=</span> <span class="n">map_record</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+</pre></div>
+</div>
+<dl class="docutils">
+<dt>Creation of records</dt>
+<dd><p class="first">When using the option <code class="docutils literal"><span class="pre">for_create</span></code>, only the mappings decorated
+with <code class="docutils literal"><span class="pre">&#64;only_create</span></code> will be mapped.</p>
+<div class="last highlight-default"><div class="highlight"><pre><span></span><span class="n">output_values</span> <span class="o">=</span> <span class="n">map_record</span><span class="o">.</span><span class="n">values</span><span class="p">(</span><span class="n">for_create</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+<dt>Filter on fields</dt>
+<dd><p class="first">When using the <code class="docutils literal"><span class="pre">fields</span></code> argument, the mappings will be
+filtered using either the source key in <code class="docutils literal"><span class="pre">direct</span></code> arguments,
+either the <code class="docutils literal"><span class="pre">changed_by</span></code> arguments for the mapping methods.</p>
+<div class="last highlight-default"><div class="highlight"><pre><span></span><span class="n">output_values</span> <span class="o">=</span> <span class="n">map_record</span><span class="o">.</span><span class="n">values</span><span class="p">(</span><span class="n">fields</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;street&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+</dd>
+<dt>Custom options</dt>
+<dd><p class="first">Arbitrary key and values can be defined in the <code class="docutils literal"><span class="pre">kwargs</span></code>
+arguments.  They can later be used in the mapping methods
+using <code class="docutils literal"><span class="pre">self.options</span></code>.</p>
+<div class="last highlight-default"><div class="highlight"><pre><span></span><span class="n">output_values</span> <span class="o">=</span> <span class="n">map_record</span><span class="o">.</span><span class="n">values</span><span class="p">(</span><span class="n">tax_include</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>for_create</strong> (<em>boolean</em>) – specify if only the mappings for creation
+(<code class="docutils literal"><span class="pre">&#64;only_create</span></code>) should be mapped.</li>
+<li><strong>fields</strong> (<em>list</em>) – filter on fields</li>
+<li><strong>**kwargs</strong> – <p>custom options, they can later be used in the
+mapping methods</p>
+</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="connector.unit.mapper.Mapper">
+<em class="property">class </em><code class="descclassname">connector.unit.mapper.</code><code class="descname">Mapper</code><span class="sig-paren">(</span><em>connector_env</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/unit/mapper.html#Mapper"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.unit.mapper.Mapper" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="api_connector.html#connector.connector.ConnectorUnit" title="connector.connector.ConnectorUnit"><code class="xref py py-class docutils literal"><span class="pre">connector.connector.ConnectorUnit</span></code></a></p>
+<p>A Mapper translates an external record to an OpenERP record and
+conversely. The output of a Mapper is a <code class="docutils literal"><span class="pre">dict</span></code>.</p>
+<p>3 types of mappings are supported:</p>
+<dl class="docutils">
+<dt>Direct Mappings</dt>
+<dd><p class="first">Example:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">direct</span> <span class="o">=</span> <span class="p">[(</span><span class="s1">&#39;source&#39;</span><span class="p">,</span> <span class="s1">&#39;target&#39;</span><span class="p">)]</span>
+</pre></div>
+</div>
+<p>Here, the <code class="docutils literal"><span class="pre">source</span></code> field will be copied in the <code class="docutils literal"><span class="pre">target</span></code> field.</p>
+<p>A modifier can be used in the source item.
+The modifier will be applied to the source field before being
+copied in the target field.
+It should be a closure function respecting this idiom:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">a_function</span><span class="p">(</span><span class="n">field</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39; ``field`` is the name of the source field.</span>
+
+<span class="sd">        Naming the arg: ``field`` is required for the conversion&#39;&#39;&#39;</span>
+    <span class="k">def</span> <span class="nf">modifier</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="n">to_attr</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39; self is the current Mapper,</span>
+<span class="sd">            record is the current record to map,</span>
+<span class="sd">            to_attr is the target field&#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="n">record</span><span class="p">[</span><span class="n">field</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">modifier</span>
+</pre></div>
+</div>
+<p>And used like that:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">direct</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">(</span><span class="n">a_function</span><span class="p">(</span><span class="s1">&#39;source&#39;</span><span class="p">),</span> <span class="s1">&#39;target&#39;</span><span class="p">),</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p>A more concrete example of modifier:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">convert</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">conv_type</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39; Convert the source field to a defined ``conv_type``</span>
+<span class="sd">    (ex. str) before returning it&#39;&#39;&#39;</span>
+    <span class="k">def</span> <span class="nf">modifier</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="n">to_attr</span><span class="p">):</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="n">record</span><span class="p">[</span><span class="n">field</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">value</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="n">conv_type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">modifier</span>
+</pre></div>
+</div>
+<p>And used like that:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">direct</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">(</span><span class="n">convert</span><span class="p">(</span><span class="s1">&#39;myfield&#39;</span><span class="p">,</span> <span class="nb">float</span><span class="p">),</span> <span class="s1">&#39;target_field&#39;</span><span class="p">),</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p>More examples of modifiers:</p>
+<ul class="last simple">
+<li><a class="reference internal" href="#connector.unit.mapper.convert" title="connector.unit.mapper.convert"><code class="xref py py-func docutils literal"><span class="pre">convert()</span></code></a></li>
+<li><a class="reference internal" href="#connector.unit.mapper.m2o_to_backend" title="connector.unit.mapper.m2o_to_backend"><code class="xref py py-func docutils literal"><span class="pre">m2o_to_backend()</span></code></a></li>
+<li><a class="reference internal" href="#connector.unit.mapper.backend_to_m2o" title="connector.unit.mapper.backend_to_m2o"><code class="xref py py-func docutils literal"><span class="pre">backend_to_m2o()</span></code></a></li>
+</ul>
+</dd>
+<dt>Method Mappings</dt>
+<dd><p class="first">A mapping method allows to execute arbitrary code and return one
+or many fields:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="nd">@mapping</span>
+<span class="k">def</span> <span class="nf">compute_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">):</span>
+    <span class="c1"># compute some state, using the ``record`` or not</span>
+    <span class="n">state</span> <span class="o">=</span> <span class="s1">&#39;pending&#39;</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;state&#39;</span><span class="p">:</span> <span class="n">state</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>We can also specify that a mapping methods should be applied
+only when an object is created, and never applied on further
+updates:</p>
+<div class="last highlight-default"><div class="highlight"><pre><span></span><span class="nd">@only_create</span>
+<span class="nd">@mapping</span>
+<span class="k">def</span> <span class="nf">default_warehouse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">):</span>
+    <span class="c1"># get default warehouse</span>
+    <span class="n">warehouse_id</span> <span class="o">=</span> <span class="o">...</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;warehouse_id&#39;</span><span class="p">:</span> <span class="n">warehouse_id</span><span class="p">}</span>
+</pre></div>
+</div>
+</dd>
+<dt>Submappings</dt>
+<dd><p class="first">When a record contains sub-items, like the lines of a sales order,
+we can convert the children using another Mapper:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">children</span> <span class="o">=</span> <span class="p">[(</span><span class="s1">&#39;items&#39;</span><span class="p">,</span> <span class="s1">&#39;line_ids&#39;</span><span class="p">,</span> <span class="s1">&#39;model.name&#39;</span><span class="p">)]</span>
+</pre></div>
+</div>
+<p>It allows to create the sales order and all its lines with the
+same call to <code class="xref py py-meth docutils literal"><span class="pre">openerp.models.BaseModel.create()</span></code>.</p>
+<p class="last">When using <code class="docutils literal"><span class="pre">children</span></code> for items of a record, we need to create
+a <a class="reference internal" href="#connector.unit.mapper.Mapper" title="connector.unit.mapper.Mapper"><code class="xref py py-class docutils literal"><span class="pre">Mapper</span></code></a> for the model of the items, and optionally a
+<a class="reference internal" href="#connector.unit.mapper.MapChild" title="connector.unit.mapper.MapChild"><code class="xref py py-class docutils literal"><span class="pre">MapChild</span></code></a>.</p>
+</dd>
+</dl>
+<p>Usage of a Mapper:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">mapper</span> <span class="o">=</span> <span class="n">Mapper</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
+<span class="n">map_record</span> <span class="o">=</span> <span class="n">mapper</span><span class="o">.</span><span class="n">map_record</span><span class="p">(</span><span class="n">record</span><span class="p">)</span>
+<span class="n">values</span> <span class="o">=</span> <span class="n">map_record</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+<span class="n">values</span> <span class="o">=</span> <span class="n">map_record</span><span class="o">.</span><span class="n">values</span><span class="p">(</span><span class="n">only_create</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">values</span> <span class="o">=</span> <span class="n">map_record</span><span class="o">.</span><span class="n">values</span><span class="p">(</span><span class="n">fields</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;street&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+<dl class="attribute">
+<dt id="connector.unit.mapper.Mapper.children">
+<code class="descname">children</code><em class="property"> = []</em><a class="headerlink" href="#connector.unit.mapper.Mapper.children" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="connector.unit.mapper.Mapper.direct">
+<code class="descname">direct</code><em class="property"> = []</em><a class="headerlink" href="#connector.unit.mapper.Mapper.direct" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="connector.unit.mapper.Mapper.finalize">
+<code class="descname">finalize</code><span class="sig-paren">(</span><em>map_record</em>, <em>values</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/unit/mapper.html#Mapper.finalize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.unit.mapper.Mapper.finalize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called at the end of the mapping.</p>
+<p>Can be used to modify the values before returning them, as the
+<code class="docutils literal"><span class="pre">on_change</span></code>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>map_record</strong> (<a class="reference internal" href="#connector.unit.mapper.MapRecord" title="connector.unit.mapper.MapRecord"><code class="xref py py-class docutils literal"><span class="pre">MapRecord</span></code></a>) – source map_record</li>
+<li><strong>values</strong> – mapped values</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">mapped values</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/2/library/stdtypes.html#dict" title="(in Python v2.7)">dict</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="connector.unit.mapper.Mapper.map_methods">
+<code class="descname">map_methods</code><a class="headerlink" href="#connector.unit.mapper.Mapper.map_methods" title="Permalink to this definition">¶</a></dt>
+<dd><p>Yield all the methods decorated with <code class="docutils literal"><span class="pre">&#64;mapping</span></code></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="connector.unit.mapper.Mapper.map_record">
+<code class="descname">map_record</code><span class="sig-paren">(</span><em>record</em>, <em>parent=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/unit/mapper.html#Mapper.map_record"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.unit.mapper.Mapper.map_record" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a <a class="reference internal" href="#connector.unit.mapper.MapRecord" title="connector.unit.mapper.MapRecord"><code class="xref py py-class docutils literal"><span class="pre">MapRecord</span></code></a> with record, ready to be
+converted using the current Mapper.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>record</strong> – record to transform</li>
+<li><strong>parent</strong> – optional parent record, for items</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="connector.unit.mapper.Mapper.options">
+<code class="descname">options</code><a class="headerlink" href="#connector.unit.mapper.Mapper.options" title="Permalink to this definition">¶</a></dt>
+<dd><p>Options can be accessed in the mapping methods with
+<code class="docutils literal"><span class="pre">self.options</span></code>.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="connector.unit.mapper.MappingDefinition">
+<em class="property">class </em><code class="descclassname">connector.unit.mapper.</code><code class="descname">MappingDefinition</code><span class="sig-paren">(</span><em>changed_by</em>, <em>only_create</em><span class="sig-paren">)</span><a class="headerlink" href="#connector.unit.mapper.MappingDefinition" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">tuple</span></code></p>
+<dl class="attribute">
+<dt id="connector.unit.mapper.MappingDefinition.changed_by">
+<code class="descname">changed_by</code><a class="headerlink" href="#connector.unit.mapper.MappingDefinition.changed_by" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 0</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="connector.unit.mapper.MappingDefinition.only_create">
+<code class="descname">only_create</code><a class="headerlink" href="#connector.unit.mapper.MappingDefinition.only_create" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 1</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="connector.unit.mapper.MetaMapper">
+<em class="property">class </em><code class="descclassname">connector.unit.mapper.</code><code class="descname">MetaMapper</code><span class="sig-paren">(</span><em>name</em>, <em>bases</em>, <em>attrs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/unit/mapper.html#MetaMapper"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.unit.mapper.MetaMapper" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="api_connector.html#connector.connector.MetaConnectorUnit" title="connector.connector.MetaConnectorUnit"><code class="xref py py-class docutils literal"><span class="pre">connector.connector.MetaConnectorUnit</span></code></a></p>
+<p>Metaclass for Mapper</p>
+<p>Build a <code class="docutils literal"><span class="pre">_map_methods</span></code> dict of mappings methods.
+The keys of the dict are the method names.
+The values of the dict are a namedtuple containing:</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="connector.unit.mapper.backend_to_m2o">
+<code class="descclassname">connector.unit.mapper.</code><code class="descname">backend_to_m2o</code><span class="sig-paren">(</span><em>field</em>, <em>binding=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/unit/mapper.html#backend_to_m2o"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.unit.mapper.backend_to_m2o" title="Permalink to this definition">¶</a></dt>
+<dd><p>A modifier intended to be used on the <code class="docutils literal"><span class="pre">direct</span></code> mappings.</p>
+<p>For a field from a backend which is an ID, search the corresponding
+binding in OpenERP and returns its ID.</p>
+<p>When the field’s relation is not a binding (i.e. it does not point to
+something like <code class="docutils literal"><span class="pre">magento.*</span></code>), the binding model needs to be provided
+in the <code class="docutils literal"><span class="pre">binding</span></code> keyword argument.</p>
+<p>Example:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">direct</span> <span class="o">=</span> <span class="p">[(</span><span class="n">backend_to_m2o</span><span class="p">(</span><span class="s1">&#39;country&#39;</span><span class="p">,</span> <span class="n">binding</span><span class="o">=</span><span class="s1">&#39;magento.res.country&#39;</span><span class="p">),</span>
+           <span class="s1">&#39;country_id&#39;</span><span class="p">),</span>
+          <span class="p">(</span><span class="n">backend_to_m2o</span><span class="p">(</span><span class="s1">&#39;country&#39;</span><span class="p">),</span> <span class="s1">&#39;magento_country_id&#39;</span><span class="p">)]</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>field</strong> – name of the source field in the record</li>
+<li><strong>binding</strong> – name of the binding model is the relation is not a binding</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="connector.unit.mapper.changed_by">
+<code class="descclassname">connector.unit.mapper.</code><code class="descname">changed_by</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/unit/mapper.html#changed_by"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.unit.mapper.changed_by" title="Permalink to this definition">¶</a></dt>
+<dd><p>Decorator for the mapping methods (<a class="reference internal" href="#connector.unit.mapper.mapping" title="connector.unit.mapper.mapping"><code class="xref py py-func docutils literal"><span class="pre">mapping()</span></code></a>)</p>
+<p>When fields are modified in OpenERP, we want to export only the
+modified fields. Using this decorator, we can specify which fields
+updates should trigger which mapping method.</p>
+<p>If <code class="docutils literal"><span class="pre">changed_by</span></code> is empty, the mapping is always active.</p>
+<p>As far as possible, this decorator should be used for the exports,
+thus, when we do an update on only a small number of fields on a
+record, the size of the output record will be limited to only the
+fields really having to be exported.</p>
+<p>Usage:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="nd">@changed_by</span><span class="p">(</span><span class="s1">&#39;input_field&#39;</span><span class="p">)</span>
+<span class="nd">@mapping</span>
+<span class="k">def</span> <span class="nf">any</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">):</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;output_field&#39;</span><span class="p">:</span> <span class="n">record</span><span class="p">[</span><span class="s1">&#39;input_field&#39;</span><span class="p">]}</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>*args</strong> – <p>field names which trigger the mapping when modified</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="connector.unit.mapper.convert">
+<code class="descclassname">connector.unit.mapper.</code><code class="descname">convert</code><span class="sig-paren">(</span><em>field</em>, <em>conv_type</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/unit/mapper.html#convert"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.unit.mapper.convert" title="Permalink to this definition">¶</a></dt>
+<dd><p>A modifier intended to be used on the <code class="docutils literal"><span class="pre">direct</span></code> mappings.</p>
+<p>Convert a field’s value to a given type.</p>
+<p>Example:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">direct</span> <span class="o">=</span> <span class="p">[(</span><span class="n">convert</span><span class="p">(</span><span class="s1">&#39;source&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">),</span> <span class="s1">&#39;target&#39;</span><span class="p">)]</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>field</strong> – name of the source field in the record</li>
+<li><strong>binding</strong> – True if the relation is a binding record</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="connector.unit.mapper.follow_m2o_relations">
+<code class="descclassname">connector.unit.mapper.</code><code class="descname">follow_m2o_relations</code><span class="sig-paren">(</span><em>field</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/unit/mapper.html#follow_m2o_relations"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.unit.mapper.follow_m2o_relations" title="Permalink to this definition">¶</a></dt>
+<dd><p>A modifier intended to be used on <code class="docutils literal"><span class="pre">direct</span></code> mappings.</p>
+<p>‘Follows’ Many2one relations and return the final field value.</p>
+<dl class="docutils">
+<dt>Examples:</dt>
+<dd><p class="first">Assuming model is <code class="docutils literal"><span class="pre">product.product</span></code>:</p>
+<dl class="last docutils">
+<dt>direct = [</dt>
+<dd>(follow_m2o_relations(‘product_tmpl_id.categ_id.name’), ‘cat’)]</dd>
+</dl>
+</dd>
+</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>field</strong> – field “path”, using dots for relations as usual in Odoo</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="connector.unit.mapper.m2o_to_backend">
+<code class="descclassname">connector.unit.mapper.</code><code class="descname">m2o_to_backend</code><span class="sig-paren">(</span><em>field</em>, <em>binding=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/unit/mapper.html#m2o_to_backend"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.unit.mapper.m2o_to_backend" title="Permalink to this definition">¶</a></dt>
+<dd><p>A modifier intended to be used on the <code class="docutils literal"><span class="pre">direct</span></code> mappings.</p>
+<p>For a many2one, get the ID on the backend and returns it.</p>
+<p>When the field’s relation is not a binding (i.e. it does not point to
+something like <code class="docutils literal"><span class="pre">magento.*</span></code>), the binding model needs to be provided
+in the <code class="docutils literal"><span class="pre">binding</span></code> keyword argument.</p>
+<p>Example:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">direct</span> <span class="o">=</span> <span class="p">[(</span><span class="n">m2o_to_backend</span><span class="p">(</span><span class="s1">&#39;country_id&#39;</span><span class="p">,</span> <span class="n">binding</span><span class="o">=</span><span class="s1">&#39;magento.res.country&#39;</span><span class="p">),</span>
+           <span class="s1">&#39;country&#39;</span><span class="p">),</span>
+          <span class="p">(</span><span class="n">m2o_to_backend</span><span class="p">(</span><span class="s1">&#39;magento_country_id&#39;</span><span class="p">),</span> <span class="s1">&#39;country&#39;</span><span class="p">)]</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>field</strong> – name of the source field in the record</li>
+<li><strong>binding</strong> – name of the binding model is the relation is not a binding</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="connector.unit.mapper.mapping">
+<code class="descclassname">connector.unit.mapper.</code><code class="descname">mapping</code><span class="sig-paren">(</span><em>func</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/unit/mapper.html#mapping"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.unit.mapper.mapping" title="Permalink to this definition">¶</a></dt>
+<dd><p>Declare that a method is a mapping method.</p>
+<p>It is then used by the <a class="reference internal" href="#connector.unit.mapper.Mapper" title="connector.unit.mapper.Mapper"><code class="xref py py-class docutils literal"><span class="pre">Mapper</span></code></a> to convert the records.</p>
+<p>Usage:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="nd">@mapping</span>
+<span class="k">def</span> <span class="nf">any</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">):</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;output_field&#39;</span><span class="p">:</span> <span class="n">record</span><span class="p">[</span><span class="s1">&#39;input_field&#39;</span><span class="p">]}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="connector.unit.mapper.none">
+<code class="descclassname">connector.unit.mapper.</code><code class="descname">none</code><span class="sig-paren">(</span><em>field</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/unit/mapper.html#none"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.unit.mapper.none" title="Permalink to this definition">¶</a></dt>
+<dd><p>A modifier intended to be used on the <code class="docutils literal"><span class="pre">direct</span></code> mappings.</p>
+<p>Replace the False-ish values by None.
+It can be used in a pipeline of modifiers when .</p>
+<p>Example:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">direct</span> <span class="o">=</span> <span class="p">[(</span><span class="n">none</span><span class="p">(</span><span class="s1">&#39;source&#39;</span><span class="p">),</span> <span class="s1">&#39;target&#39;</span><span class="p">),</span>
+          <span class="p">(</span><span class="n">none</span><span class="p">(</span><span class="n">m2o_to_backend</span><span class="p">(</span><span class="s1">&#39;rel_id&#39;</span><span class="p">),</span> <span class="s1">&#39;rel_id&#39;</span><span class="p">)]</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>field</strong> – name of the source field in the record</li>
+<li><strong>binding</strong> – True if the relation is a binding record</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="connector.unit.mapper.only_create">
+<code class="descclassname">connector.unit.mapper.</code><code class="descname">only_create</code><span class="sig-paren">(</span><em>func</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/unit/mapper.html#only_create"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.unit.mapper.only_create" title="Permalink to this definition">¶</a></dt>
+<dd><p>Decorator for the mapping methods (<a class="reference internal" href="#connector.unit.mapper.mapping" title="connector.unit.mapper.mapping"><code class="xref py py-func docutils literal"><span class="pre">mapping()</span></code></a>)</p>
+<p>A mapping decorated with <code class="docutils literal"><span class="pre">only_create</span></code> means that it has to be
+used only for the creation of the records.</p>
+<p>Usage:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="nd">@only_create</span>
+<span class="nd">@mapping</span>
+<span class="k">def</span> <span class="nf">any</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">):</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;output_field&#39;</span><span class="p">:</span> <span class="n">record</span><span class="p">[</span><span class="s1">&#39;input_field&#39;</span><span class="p">]}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+        <br/>
+        
+<div id="sourcelink">
+  <a href="../_sources/api/api_mapper.rst.txt"
+     rel="nofollow">Source</a>
+</div>
+      
+    </p>
+    <p>
+        &copy; Copyright 2013, Camptocamp SA.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.3.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

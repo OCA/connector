@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="fr">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>connector.jobrunner.runner &#8212; documentation Connector </title>
+    <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/translations.js"></script>
+    <script type="text/javascript" src="../../../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../../../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../../../_static/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../../_static/bootstrap-sphinx.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Recherche" href="../../../search.html" />
+
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-7628916-3', 'odoo-connector.com');
+  ga('send', 'pageview');
+</script>
+
+  </head>
+  <body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../../index.html">
+          Odoo Connector</a>
+        <span class="navbar-text navbar-version pull-left"><b></b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+  <li class="dropdown">
+    <a role="button"
+       id="dLabelTranslations"
+       data-toggle="dropdown"
+       data-target="#"
+       href="#">Translations<b class="caret"></b></a>
+    <ul class="dropdown-menu"
+        role="menu"
+        aria-labelledby="dLabelTranslations">
+      <li><a class="reference" href="http://odoo-connector.com">English</a><li>
+      <li><a class="reference" href="http://odoo-connector.com/fr">French</a><li>
+    </ul>
+  </li>
+  
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../project/contribute.html">Contribuer</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../project/contribute.html#want-to-start-a-new-connector">Démarrer un nouveau connecteur</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../project/contribute.html#creating-or-maintaining-a-translation-of-this-doc">Créer ou maintenir une traduction de cette doc</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../project/contributors.html">Contributeurs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../project/contributors.html#financial-contributors">Contributeurs financiers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../project/license.html">Licence</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../project/changes.html">Changements</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../project/changes.html#future">Future (?)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../project/changes.html#id2">8.0.3.3.0 (2016-02-29)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../project/changes.html#id3">3.2.0 (2015-09-10)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../project/changes.html#id4">3.1.0 (2015-05-15)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../project/changes.html#id5">3.0.0 (2015-04-01)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../project/changes.html#id6">2.2.0 (2014-05-26)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../project/changes.html#id7">2.1.1 (2014-02-06)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../project/changes.html#warning-breaks-compatibility">2.1.0 (2014-01-15 - attention : rupture de compatibilité)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../project/changes.html#id8">2.0.1 (2013-09-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../project/changes.html#id9">2.0.0</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../project/roadmap.html">Roadmap</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../guides/code_overview.html">Survol du code</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/code_overview.html#backends">Backends</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/code_overview.html#bindings">Bindings (Liaisons)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/code_overview.html#session">Session</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/code_overview.html#events">Événements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/code_overview.html#jobs">Jobs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/code_overview.html#connectorunit">ConnectorUnit</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../guides/concepts.html">Concepts du connecteur</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/concepts.html#events">Événements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/concepts.html#jobs-queue">Queue de jobs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/concepts.html#session">Session</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/concepts.html#backend">Backend</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/concepts.html#environment">Environnement</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/concepts.html#connectorunit">ConnectorUnit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/concepts.html#bindings">Bindings (Liaisons)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/concepts.html#checkpoint">Point de contrôle</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../guides/bootstrap_connector.html">Amorcer la création un nouveau connecteur</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/bootstrap_connector.html#odoo-manifest">Odoo Manifest</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/bootstrap_connector.html#declare-the-backends">Déclaration des backends</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/bootstrap_connector.html#backend-model">Modèle du backend</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/bootstrap_connector.html#abstract-binding">Binding abstrait</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/bootstrap_connector.html#environment">Environnement</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/bootstrap_connector.html#checkpoints">Points de contrôle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/bootstrap_connector.html#connectorunit-classes">Classes ConnectorUnit</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../guides/jobrunner.html">Configuring channels and the job runner</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/jobrunner.html#what-is-the-job-runner">What is the job runner?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/jobrunner.html#how-does-it-work">How does it work?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/jobrunner.html#how-to-use-it">How to use it?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/jobrunner.html#caveat">Caveat</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/jobrunner.html#what-is-a-channel">What is a channel?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/jobrunner.html#how-to-configure-channels">How to configure Channels?</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../guides/multiprocessing.html">Use the connector with multiprocessing workers</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/api_connector.html">Connecteur</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/api_session.html">Session</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/api_backend.html">Backend</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/api_backend.html#module-connector.backend_model">Modèles du backend</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/api_event.html">Événement</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/api_binder.html">Binder (Liant)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/api_mapper.html">Mappeur</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/api_mapper.html#mappers">Mappeurs</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/api_synchronizer.html">Synchroniseur</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/api_backend_adapter.html">Adaptateur de backend</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/api_queue.html">Queue</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/api_queue.html#module-connector.queue.job">Job</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/api_queue.html#module-connector.queue.worker">Worker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/api_queue.html#id5">Queue</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/api_queue.html#module-connector.queue.model">Modèles</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/api_exception.html">Exceptions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/api_channels.html">Channels</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/api_runner.html">Job Runner</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/api_runner.html#what-is-the-job-runner">What is the job runner?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/api_runner.html#how-does-it-work">How does it work?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/api_runner.html#how-to-use-it">How to use it?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/api_runner.html#caveat">Caveat</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"></ul>
+</li>
+              
+            
+
+            
+              
+                
+              
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 content">
+      
+  <h1>Code source de connector.jobrunner.runner</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1">##############################################################################</span>
+<span class="c1">#</span>
+<span class="c1">#     This file is part of connector, an Odoo module.</span>
+<span class="c1">#</span>
+<span class="c1">#     Author: Stéphane Bidoul &lt;stephane.bidoul@acsone.eu&gt;</span>
+<span class="c1">#     Copyright (c) 2015 ACSONE SA/NV (&lt;http://acsone.eu&gt;)</span>
+<span class="c1">#</span>
+<span class="c1">#     connector is free software: you can redistribute it and/or</span>
+<span class="c1">#     modify it under the terms of the GNU Affero General Public License</span>
+<span class="c1">#     as published by the Free Software Foundation, either version 3 of</span>
+<span class="c1">#     the License, or (at your option) any later version.</span>
+<span class="c1">#</span>
+<span class="c1">#     connector is distributed in the hope that it will be useful,</span>
+<span class="c1">#     but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c1">#     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="c1">#     GNU Affero General Public License for more details.</span>
+<span class="c1">#</span>
+<span class="c1">#     You should have received a copy of the</span>
+<span class="c1">#     GNU Affero General Public License</span>
+<span class="c1">#     along with connector.</span>
+<span class="c1">#     If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+<span class="c1">#</span>
+<span class="c1">##############################################################################</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">What is the job runner?</span>
+<span class="sd">-----------------------</span>
+<span class="sd">This is an alternative to connector workers, with the goal</span>
+<span class="sd">of resolving issues due to the polling nature of workers:</span>
+
+<span class="sd">* jobs do not start immediately even if there is a free connector worker,</span>
+<span class="sd">* connector workers may starve while other workers have too many jobs enqueued,</span>
+<span class="sd">* connector workers require another startup script,</span>
+<span class="sd">  making deployment more difficult</span>
+
+<span class="sd">It is fully compatible with the connector mechanism and only</span>
+<span class="sd">replaces workers.</span>
+
+<span class="sd">How does it work?</span>
+<span class="sd">-----------------</span>
+
+<span class="sd">* It starts as a thread in the Odoo main process</span>
+<span class="sd">* It receives postgres NOTIFY messages each time jobs are</span>
+<span class="sd">  added or updated in the queue_job table.</span>
+<span class="sd">* It maintains an in-memory priority queue of jobs that</span>
+<span class="sd">  is populated from the queue_job tables in all databases.</span>
+<span class="sd">* It does not run jobs itself, but asks Odoo to run them through an</span>
+<span class="sd">  anonymous ``/connector/runjob`` HTTP request. [1]_</span>
+
+<span class="sd">How to use it?</span>
+<span class="sd">--------------</span>
+
+<span class="sd">* Set the following environment variables:</span>
+
+<span class="sd">  - ``ODOO_CONNECTOR_CHANNELS=root:4`` (or any other channels configuration)</span>
+<span class="sd">  - optional if ``xmlrpc_port`` is not set: ``ODOO_CONNECTOR_PORT=8069``</span>
+
+<span class="sd">* Or alternatively, set ``channels = root:4`` in the ``[options-connector]``</span>
+<span class="sd">  section of the odoo configuration file.</span>
+
+<span class="sd">* Start Odoo with ``--load=web,web_kanban,connector``</span>
+<span class="sd">  and ``--workers`` greater than 1. [2]_</span>
+
+<span class="sd">* Confirm the runner is starting correctly by checking the odoo log file:</span>
+
+<span class="sd">.. code-block:: none</span>
+
+<span class="sd">  ...INFO...connector.jobrunner.runner: starting</span>
+<span class="sd">  ...INFO...connector.jobrunner.runner: initializing database connections</span>
+<span class="sd">  ...INFO...connector.jobrunner.runner: connector runner ready for db &lt;dbname&gt;</span>
+<span class="sd">  ...INFO...connector.jobrunner.runner: database connections ready</span>
+
+<span class="sd">* Disable the &quot;Enqueue Jobs&quot; cron.</span>
+
+<span class="sd">* Do NOT start openerp-connector-worker.</span>
+
+<span class="sd">* Create jobs (eg using base_import_async) and observe they</span>
+<span class="sd">  start immediately and in parallel.</span>
+
+<span class="sd">* Tip: to enable debug logging for the connector, use</span>
+<span class="sd">  ``--log-handler=openerp.addons.connector:DEBUG``</span>
+
+<span class="sd">Caveat</span>
+<span class="sd">------</span>
+
+<span class="sd">* After creating a new database or installing connector on an</span>
+<span class="sd">  existing database, Odoo must be restarted for the runner to detect it.</span>
+
+<span class="sd">* When Odoo shuts down normally, it waits for running jobs to finish.</span>
+<span class="sd">  However, when the Odoo server crashes or is otherwise force-stopped,</span>
+<span class="sd">  running jobs are interrupted while the runner has no chance to know</span>
+<span class="sd">  they have been aborted. In such situations, jobs may remain in</span>
+<span class="sd">  ``started`` or ``enqueued`` state after the Odoo server is halted.</span>
+<span class="sd">  Since the runner has no way to know if they are actually running or</span>
+<span class="sd">  not, and does not know for sure if it is safe to restart the jobs,</span>
+<span class="sd">  it does not attempt to restart them automatically. Such stale jobs</span>
+<span class="sd">  therefore fill the running queue and prevent other jobs to start.</span>
+<span class="sd">  You must therefore requeue them manually, either from the Jobs view,</span>
+<span class="sd">  or by running the following SQL statement *before starting Odoo*:</span>
+
+<span class="sd">.. code-block:: sql</span>
+
+<span class="sd">  update queue_job set state=&#39;pending&#39; where state in (&#39;started&#39;, &#39;enqueued&#39;)</span>
+
+<span class="sd">.. rubric:: Footnotes</span>
+
+<span class="sd">.. [1] From a security standpoint, it is safe to have an anonymous HTTP</span>
+<span class="sd">       request because this request only accepts to run jobs that are</span>
+<span class="sd">       enqueued.</span>
+<span class="sd">.. [2] It works with the threaded Odoo server too, although this way</span>
+<span class="sd">       of running Odoo is obviously not for production purposes.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">contextlib</span> <span class="k">import</span> <span class="n">closing</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">select</span>
+<span class="kn">import</span> <span class="nn">threading</span>
+<span class="kn">import</span> <span class="nn">time</span>
+
+<span class="kn">import</span> <span class="nn">psycopg2</span>
+<span class="kn">from</span> <span class="nn">psycopg2.extensions</span> <span class="k">import</span> <span class="n">ISOLATION_LEVEL_AUTOCOMMIT</span>
+<span class="kn">import</span> <span class="nn">requests</span>
+
+<span class="kn">import</span> <span class="nn">openerp</span>
+<span class="kn">from</span> <span class="nn">openerp.tools</span> <span class="k">import</span> <span class="n">config</span>
+
+<span class="kn">from</span> <span class="nn">.channels</span> <span class="k">import</span> <span class="n">ChannelManager</span><span class="p">,</span> <span class="n">PENDING</span><span class="p">,</span> <span class="n">ENQUEUED</span><span class="p">,</span> <span class="n">NOT_DONE</span>
+
+<span class="n">SELECT_TIMEOUT</span> <span class="o">=</span> <span class="mi">60</span>
+<span class="n">ERROR_RECOVERY_DELAY</span> <span class="o">=</span> <span class="mi">5</span>
+
+<span class="n">_logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<span class="c1"># Unfortunately, it is not possible to extend the Odoo</span>
+<span class="c1"># server command line arguments, so we resort to environment variables</span>
+<span class="c1"># to configure the runner (channels mostly).</span>
+<span class="c1">#</span>
+<span class="c1"># On the other hand, the odoo configuration file can be extended at will,</span>
+<span class="c1"># so we check it in addition to the environment variables.</span>
+
+
+<span class="k">def</span> <span class="nf">_channels</span><span class="p">():</span>
+    <span class="c1"># environment takes precedence over config file if set.</span>
+    <span class="c1"># If set to &quot;&quot; will disable the runner.</span>
+    <span class="n">env_channels</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;ODOO_CONNECTOR_CHANNELS&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="n">env_channels</span> <span class="k">if</span> <span class="n">env_channels</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="k">else</span> <span class="n">config</span><span class="o">.</span><span class="n">misc</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;options-connector&quot;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;channels&quot;</span><span class="p">)</span>
+    <span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_async_http_get</span><span class="p">(</span><span class="n">port</span><span class="p">,</span> <span class="n">db_name</span><span class="p">,</span> <span class="n">job_uuid</span><span class="p">):</span>
+    <span class="c1"># Method to set failed job (due to timeout, etc) as pending,</span>
+    <span class="c1"># to avoid keeping it as enqueued.</span>
+    <span class="k">def</span> <span class="nf">set_job_pending</span><span class="p">():</span>
+        <span class="n">conn</span> <span class="o">=</span> <span class="n">psycopg2</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">openerp</span><span class="o">.</span><span class="n">sql_db</span><span class="o">.</span><span class="n">dsn</span><span class="p">(</span><span class="n">db_name</span><span class="p">)[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">conn</span><span class="o">.</span><span class="n">set_isolation_level</span><span class="p">(</span><span class="n">ISOLATION_LEVEL_AUTOCOMMIT</span><span class="p">)</span>
+        <span class="k">with</span> <span class="n">closing</span><span class="p">(</span><span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">())</span> <span class="k">as</span> <span class="n">cr</span><span class="p">:</span>
+            <span class="n">cr</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
+                <span class="s2">&quot;UPDATE queue_job SET state=</span><span class="si">%s</span><span class="s2">, &quot;</span>
+                <span class="s2">&quot;date_enqueued=NULL, date_started=NULL &quot;</span>
+                <span class="s2">&quot;WHERE uuid=</span><span class="si">%s</span><span class="s2"> and state=</span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">PENDING</span><span class="p">,</span> <span class="n">job_uuid</span><span class="p">,</span> <span class="n">ENQUEUED</span><span class="p">)</span>
+            <span class="p">)</span>
+
+    <span class="c1"># TODO: better way to HTTP GET asynchronously (grequest, ...)?</span>
+    <span class="c1">#       if this was python3 I would be doing this with</span>
+    <span class="c1">#       asyncio, aiohttp and aiopg</span>
+    <span class="k">def</span> <span class="nf">urlopen</span><span class="p">():</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;http://localhost:</span><span class="si">%s</span><span class="s1">/connector/runjob?db=</span><span class="si">%s</span><span class="s1">&amp;job_uuid=</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span>
+               <span class="p">(</span><span class="n">port</span><span class="p">,</span> <span class="n">db_name</span><span class="p">,</span> <span class="n">job_uuid</span><span class="p">))</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># we are not interested in the result, so we set a short timeout</span>
+            <span class="c1"># but not too short so we trap and log hard configuration errors</span>
+            <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">requests</span><span class="o">.</span><span class="n">Timeout</span><span class="p">:</span>
+            <span class="n">set_job_pending</span><span class="p">()</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">_logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s2">&quot;exception in GET </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">url</span><span class="p">)</span>
+            <span class="n">set_job_pending</span><span class="p">()</span>
+    <span class="n">thread</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">urlopen</span><span class="p">)</span>
+    <span class="n">thread</span><span class="o">.</span><span class="n">daemon</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">thread</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
+
+<div class="viewcode-block" id="Database"><a class="viewcode-back" href="../../../api/api_runner.html#connector.jobrunner.runner.Database">[docs]</a><span class="k">class</span> <span class="nc">Database</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">db_name</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">db_name</span> <span class="o">=</span> <span class="n">db_name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conn</span> <span class="o">=</span> <span class="n">psycopg2</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">openerp</span><span class="o">.</span><span class="n">sql_db</span><span class="o">.</span><span class="n">dsn</span><span class="p">(</span><span class="n">db_name</span><span class="p">)[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">set_isolation_level</span><span class="p">(</span><span class="n">ISOLATION_LEVEL_AUTOCOMMIT</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">has_connector</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_has_connector</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">has_connector</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">has_channel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_has_queue_job_column</span><span class="p">(</span><span class="s1">&#39;channel&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_initialize</span><span class="p">()</span>
+
+<div class="viewcode-block" id="Database.close"><a class="viewcode-back" href="../../../api/api_runner.html#connector.jobrunner.runner.Database.close">[docs]</a>    <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conn</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+    <span class="k">def</span> <span class="nf">_has_connector</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">with</span> <span class="n">closing</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">())</span> <span class="k">as</span> <span class="n">cr</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">cr</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;SELECT 1 FROM ir_module_module &quot;</span>
+                           <span class="s2">&quot;WHERE name=</span><span class="si">%s</span><span class="s2"> AND state=</span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span>
+                           <span class="p">(</span><span class="s1">&#39;connector&#39;</span><span class="p">,</span> <span class="s1">&#39;installed&#39;</span><span class="p">))</span>
+            <span class="k">except</span> <span class="n">psycopg2</span><span class="o">.</span><span class="n">ProgrammingError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">unicode</span><span class="p">(</span><span class="n">err</span><span class="p">)</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;relation &quot;ir_module_module&quot; &#39;</span>
+                                           <span class="s1">&#39;does not exist&#39;</span><span class="p">):</span>
+                    <span class="k">return</span> <span class="kc">False</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">raise</span>
+            <span class="k">return</span> <span class="n">cr</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_has_queue_job_column</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">column</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">has_connector</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">with</span> <span class="n">closing</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">())</span> <span class="k">as</span> <span class="n">cr</span><span class="p">:</span>
+            <span class="n">cr</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;SELECT 1 FROM information_schema.columns &quot;</span>
+                       <span class="s2">&quot;WHERE table_name=</span><span class="si">%s</span><span class="s2"> AND column_name=</span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span>
+                       <span class="p">(</span><span class="s1">&#39;queue_job&#39;</span><span class="p">,</span> <span class="n">column</span><span class="p">))</span>
+            <span class="k">return</span> <span class="n">cr</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_initialize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">with</span> <span class="n">closing</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">())</span> <span class="k">as</span> <span class="n">cr</span><span class="p">:</span>
+            <span class="c1"># this is the trigger that sends notifications when jobs change</span>
+            <span class="n">cr</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">                DROP TRIGGER IF EXISTS queue_job_notify ON queue_job;</span>
+
+<span class="s2">                CREATE OR REPLACE</span>
+<span class="s2">                    FUNCTION queue_job_notify() RETURNS trigger AS $$</span>
+<span class="s2">                BEGIN</span>
+<span class="s2">                    IF TG_OP = &#39;DELETE&#39; THEN</span>
+<span class="s2">                        IF OLD.state != &#39;done&#39; THEN</span>
+<span class="s2">                            PERFORM pg_notify(&#39;connector&#39;, OLD.uuid);</span>
+<span class="s2">                        END IF;</span>
+<span class="s2">                    ELSE</span>
+<span class="s2">                        PERFORM pg_notify(&#39;connector&#39;, NEW.uuid);</span>
+<span class="s2">                    END IF;</span>
+<span class="s2">                    RETURN NULL;</span>
+<span class="s2">                END;</span>
+<span class="s2">                $$ LANGUAGE plpgsql;</span>
+
+<span class="s2">                CREATE TRIGGER queue_job_notify</span>
+<span class="s2">                    AFTER INSERT OR UPDATE OR DELETE</span>
+<span class="s2">                    ON queue_job</span>
+<span class="s2">                    FOR EACH ROW EXECUTE PROCEDURE queue_job_notify();</span>
+<span class="s2">            &quot;&quot;&quot;</span><span class="p">)</span>
+            <span class="n">cr</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;LISTEN connector&quot;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Database.select_jobs"><a class="viewcode-back" href="../../../api/api_runner.html#connector.jobrunner.runner.Database.select_jobs">[docs]</a>    <span class="k">def</span> <span class="nf">select_jobs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">where</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
+        <span class="n">query</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;SELECT </span><span class="si">%s</span><span class="s2">, uuid, id as seq, date_created, &quot;</span>
+                 <span class="s2">&quot;priority, eta, state &quot;</span>
+                 <span class="s2">&quot;FROM queue_job WHERE </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span>
+                 <span class="p">(</span><span class="s1">&#39;channel&#39;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">has_channel</span> <span class="k">else</span> <span class="s1">&#39;NULL&#39;</span><span class="p">,</span>
+                  <span class="n">where</span><span class="p">))</span>
+        <span class="k">with</span> <span class="n">closing</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">())</span> <span class="k">as</span> <span class="n">cr</span><span class="p">:</span>
+            <span class="n">cr</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span>
+            <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">cr</span><span class="o">.</span><span class="n">fetchall</span><span class="p">())</span></div>
+
+<div class="viewcode-block" id="Database.set_job_enqueued"><a class="viewcode-back" href="../../../api/api_runner.html#connector.jobrunner.runner.Database.set_job_enqueued">[docs]</a>    <span class="k">def</span> <span class="nf">set_job_enqueued</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">uuid</span><span class="p">):</span>
+        <span class="k">with</span> <span class="n">closing</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">())</span> <span class="k">as</span> <span class="n">cr</span><span class="p">:</span>
+            <span class="n">cr</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;UPDATE queue_job SET state=</span><span class="si">%s</span><span class="s2">, &quot;</span>
+                       <span class="s2">&quot;date_enqueued=date_trunc(&#39;seconds&#39;, &quot;</span>
+                       <span class="s2">&quot;                         now() at time zone &#39;utc&#39;) &quot;</span>
+                       <span class="s2">&quot;WHERE uuid=</span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span>
+                       <span class="p">(</span><span class="n">ENQUEUED</span><span class="p">,</span> <span class="n">uuid</span><span class="p">))</span></div></div>
+
+
+<div class="viewcode-block" id="ConnectorRunner"><a class="viewcode-back" href="../../../api/api_runner.html#connector.jobrunner.runner.ConnectorRunner">[docs]</a><span class="k">class</span> <span class="nc">ConnectorRunner</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">8069</span><span class="p">,</span> <span class="n">channel_config_string</span><span class="o">=</span><span class="s1">&#39;root:1&#39;</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">port</span> <span class="o">=</span> <span class="n">port</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">channel_manager</span> <span class="o">=</span> <span class="n">ChannelManager</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">channel_manager</span><span class="o">.</span><span class="n">simple_configure</span><span class="p">(</span><span class="n">channel_config_string</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">db_by_name</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_stop</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_stop_pipe</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">pipe</span><span class="p">()</span>
+
+<div class="viewcode-block" id="ConnectorRunner.get_db_names"><a class="viewcode-back" href="../../../api/api_runner.html#connector.jobrunner.runner.ConnectorRunner.get_db_names">[docs]</a>    <span class="k">def</span> <span class="nf">get_db_names</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">openerp</span><span class="o">.</span><span class="n">tools</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;db_name&#39;</span><span class="p">]:</span>
+            <span class="n">db_names</span> <span class="o">=</span> <span class="n">openerp</span><span class="o">.</span><span class="n">tools</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;db_name&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">db_names</span> <span class="o">=</span> <span class="n">openerp</span><span class="o">.</span><span class="n">service</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">exp_list</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">dbfilter</span> <span class="o">=</span> <span class="n">openerp</span><span class="o">.</span><span class="n">tools</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;dbfilter&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">dbfilter</span> <span class="ow">and</span> <span class="s1">&#39;</span><span class="si">%d</span><span class="s1">&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dbfilter</span> <span class="ow">and</span> <span class="s1">&#39;%h&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dbfilter</span><span class="p">:</span>
+            <span class="n">db_names</span> <span class="o">=</span> <span class="p">[</span><span class="n">d</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">db_names</span> <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">dbfilter</span><span class="p">,</span> <span class="n">d</span><span class="p">)]</span>
+        <span class="k">return</span> <span class="n">db_names</span></div>
+
+<div class="viewcode-block" id="ConnectorRunner.close_databases"><a class="viewcode-back" href="../../../api/api_runner.html#connector.jobrunner.runner.ConnectorRunner.close_databases">[docs]</a>    <span class="k">def</span> <span class="nf">close_databases</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">remove_jobs</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">db_name</span><span class="p">,</span> <span class="n">db</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">db_by_name</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">remove_jobs</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">channel_manager</span><span class="o">.</span><span class="n">remove_db</span><span class="p">(</span><span class="n">db_name</span><span class="p">)</span>
+                <span class="n">db</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="n">_logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;error closing database </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span>
+                                <span class="n">db_name</span><span class="p">,</span> <span class="n">exc_info</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">db_by_name</span> <span class="o">=</span> <span class="p">{}</span></div>
+
+<div class="viewcode-block" id="ConnectorRunner.initialize_databases"><a class="viewcode-back" href="../../../api/api_runner.html#connector.jobrunner.runner.ConnectorRunner.initialize_databases">[docs]</a>    <span class="k">def</span> <span class="nf">initialize_databases</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">db_name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_db_names</span><span class="p">():</span>
+            <span class="n">db</span> <span class="o">=</span> <span class="n">Database</span><span class="p">(</span><span class="n">db_name</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">db</span><span class="o">.</span><span class="n">has_connector</span><span class="p">:</span>
+                <span class="n">_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;connector is not installed for db </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">db_name</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">db_by_name</span><span class="p">[</span><span class="n">db_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">db</span>
+                <span class="k">for</span> <span class="n">job_data</span> <span class="ow">in</span> <span class="n">db</span><span class="o">.</span><span class="n">select_jobs</span><span class="p">(</span><span class="s1">&#39;state in </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="p">(</span><span class="n">NOT_DONE</span><span class="p">,)):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">channel_manager</span><span class="o">.</span><span class="n">notify</span><span class="p">(</span><span class="n">db_name</span><span class="p">,</span> <span class="o">*</span><span class="n">job_data</span><span class="p">)</span>
+                <span class="n">_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;connector runner ready for db </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">db_name</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ConnectorRunner.run_jobs"><a class="viewcode-back" href="../../../api/api_runner.html#connector.jobrunner.runner.ConnectorRunner.run_jobs">[docs]</a>    <span class="k">def</span> <span class="nf">run_jobs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">now</span> <span class="o">=</span> <span class="n">openerp</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">Datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">job</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">channel_manager</span><span class="o">.</span><span class="n">get_jobs_to_run</span><span class="p">(</span><span class="n">now</span><span class="p">):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_stop</span><span class="p">:</span>
+                <span class="k">break</span>
+            <span class="n">_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;asking Odoo to run job </span><span class="si">%s</span><span class="s2"> on db </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span>
+                         <span class="n">job</span><span class="o">.</span><span class="n">uuid</span><span class="p">,</span> <span class="n">job</span><span class="o">.</span><span class="n">db_name</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">db_by_name</span><span class="p">[</span><span class="n">job</span><span class="o">.</span><span class="n">db_name</span><span class="p">]</span><span class="o">.</span><span class="n">set_job_enqueued</span><span class="p">(</span><span class="n">job</span><span class="o">.</span><span class="n">uuid</span><span class="p">)</span>
+            <span class="n">_async_http_get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">port</span><span class="p">,</span> <span class="n">job</span><span class="o">.</span><span class="n">db_name</span><span class="p">,</span> <span class="n">job</span><span class="o">.</span><span class="n">uuid</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ConnectorRunner.process_notifications"><a class="viewcode-back" href="../../../api/api_runner.html#connector.jobrunner.runner.ConnectorRunner.process_notifications">[docs]</a>    <span class="k">def</span> <span class="nf">process_notifications</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">db</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">db_by_name</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+            <span class="k">while</span> <span class="n">db</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">notifies</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_stop</span><span class="p">:</span>
+                    <span class="k">break</span>
+                <span class="n">notification</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">notifies</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+                <span class="n">uuid</span> <span class="o">=</span> <span class="n">notification</span><span class="o">.</span><span class="n">payload</span>
+                <span class="n">job_datas</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">select_jobs</span><span class="p">(</span><span class="s1">&#39;uuid = </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="p">(</span><span class="n">uuid</span><span class="p">,))</span>
+                <span class="k">if</span> <span class="n">job_datas</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">channel_manager</span><span class="o">.</span><span class="n">notify</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">db_name</span><span class="p">,</span> <span class="o">*</span><span class="n">job_datas</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">channel_manager</span><span class="o">.</span><span class="n">remove_job</span><span class="p">(</span><span class="n">uuid</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ConnectorRunner.wait_notification"><a class="viewcode-back" href="../../../api/api_runner.html#connector.jobrunner.runner.ConnectorRunner.wait_notification">[docs]</a>    <span class="k">def</span> <span class="nf">wait_notification</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">db</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">db_by_name</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">db</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">notifies</span><span class="p">:</span>
+                <span class="k">return</span>
+        <span class="c1"># wait for something to happen in the queue_job tables</span>
+        <span class="n">conns</span> <span class="o">=</span> <span class="p">[</span><span class="n">db</span><span class="o">.</span><span class="n">conn</span> <span class="k">for</span> <span class="n">db</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">db_by_name</span><span class="o">.</span><span class="n">values</span><span class="p">()]</span>
+        <span class="n">conns</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_stop_pipe</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">conns</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">select</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">conns</span><span class="p">,</span> <span class="p">[],</span> <span class="p">[],</span> <span class="n">SELECT_TIMEOUT</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">conns</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_stop</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">conn</span> <span class="ow">in</span> <span class="n">conns</span><span class="p">:</span>
+                <span class="n">conn</span><span class="o">.</span><span class="n">poll</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="ConnectorRunner.stop"><a class="viewcode-back" href="../../../api/api_runner.html#connector.jobrunner.runner.ConnectorRunner.stop">[docs]</a>    <span class="k">def</span> <span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;graceful stop requested&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_stop</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="c1"># wakeup the select() in wait_notification</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_stop_pipe</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s1">&#39;.&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ConnectorRunner.run"><a class="viewcode-back" href="../../../api/api_runner.html#connector.jobrunner.runner.ConnectorRunner.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;starting&quot;</span><span class="p">)</span>
+        <span class="k">while</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_stop</span><span class="p">:</span>
+            <span class="c1"># outer loop does exception recovery</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;initializing database connections&quot;</span><span class="p">)</span>
+                <span class="c1"># TODO: how to detect new databases or databases</span>
+                <span class="c1">#       on which connector is installed after server start?</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">initialize_databases</span><span class="p">()</span>
+                <span class="n">_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;database connections ready&quot;</span><span class="p">)</span>
+                <span class="c1"># inner loop does the normal processing</span>
+                <span class="k">while</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_stop</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">process_notifications</span><span class="p">()</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">run_jobs</span><span class="p">()</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">wait_notification</span><span class="p">()</span>
+            <span class="k">except</span> <span class="ne">KeyboardInterrupt</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="n">_logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s2">&quot;exception: sleeping </span><span class="si">%d</span><span class="s2">s and retrying&quot;</span><span class="p">,</span>
+                                  <span class="n">ERROR_RECOVERY_DELAY</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">close_databases</span><span class="p">()</span>
+                <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">ERROR_RECOVERY_DELAY</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">close_databases</span><span class="p">(</span><span class="n">remove_jobs</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;stopped&quot;</span><span class="p">)</span></div></div>
+</pre></div>
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+        <br/>
+        
+      
+    </p>
+    <p>
+        &copy; Copyright 2013, Camptocamp SA.<br/>
+      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.3.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

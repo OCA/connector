@@ -43,13 +43,8 @@ model, so an event can be notified from any model. The
 :meth:`CollectedEvents.notify` method triggers the event and forward the
 arguments to the listeners.
 
-The following events have been implemented into the `'base'` model:
-
-* `on_record_create` - Listener receives args `record, fields`
-* `on_record_write` - Listener receives args `record, fields`
-* `on_record_unlink` - Listener receives args `record`
-
-This should be done only once.
+This should be done only once. See :class:`..models.base.Base` for a list of
+events that are implemented in the `'base'` model.
 
 Listeners
 ---------

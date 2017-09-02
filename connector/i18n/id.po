@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: connector (8.0)\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-03-04 01:28+0000\n"
-"PO-Revision-Date: 2017-03-10 13:16+0000\n"
+"POT-Creation-Date: 2017-08-22 13:04+0000\n"
+"PO-Revision-Date: 2017-08-21 08:01+0000\n"
 "Last-Translator: OCA Transbot <transbot@odoo-community.org>\n"
 "Language-Team: Indonesian (http://www.transifex.com/oca/OCA-connector-8-0/language/id/)\n"
 "MIME-Version: 1.0\n"
@@ -45,7 +45,7 @@ msgstr ""
 #. module: connector
 #: field:queue.job,active:0
 msgid "Active"
-msgstr ""
+msgstr "Aktif"
 
 #. module: connector
 #: field:connector.config.settings,alias_domain:0
@@ -96,13 +96,13 @@ msgid "Canceled. Nothing to do."
 msgstr ""
 
 #. module: connector
-#: code:addons/connector/queue/model.py:457
+#: code:addons/connector/queue/model.py:462
 #, python-format
 msgid "Cannot change the root channel"
 msgstr ""
 
 #. module: connector
-#: code:addons/connector/queue/model.py:464
+#: code:addons/connector/queue/model.py:469
 #, python-format
 msgid "Cannot remove the root channel"
 msgstr ""
@@ -524,7 +524,7 @@ msgid "Parent Channel"
 msgstr ""
 
 #. module: connector
-#: code:addons/connector/queue/model.py:449
+#: code:addons/connector/queue/model.py:454
 #, python-format
 msgid "Parent channel required."
 msgstr ""
@@ -648,7 +648,7 @@ msgid "Share or embbed any screen of Odoo."
 msgstr ""
 
 #. module: connector
-#: code:addons/connector/queue/model.py:187
+#: code:addons/connector/queue/model.py:192
 #, python-format
 msgid ""
 "Something bad happened during the execution of the job. More details in the "

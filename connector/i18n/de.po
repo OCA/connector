@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: connector (9.0)\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-04-05 00:42+0000\n"
-"PO-Revision-Date: 2017-04-19 11:44+0000\n"
+"POT-Creation-Date: 2017-08-22 13:21+0000\n"
+"PO-Revision-Date: 2017-08-21 15:13+0000\n"
 "Last-Translator: OCA Transbot <transbot@odoo-community.org>\n"
 "Language-Team: German (http://www.transifex.com/oca/OCA-connector-9-0/language/de/)\n"
 "MIME-Version: 1.0\n"
@@ -91,13 +91,13 @@ msgid "Cancel"
 msgstr "Abbrechen"
 
 #. module: connector
-#: code:addons/connector/queue/model.py:279
+#: code:addons/connector/queue/model.py:287
 #, python-format
 msgid "Cannot change the root channel"
 msgstr "Kann den Hauptkanal nicht ändern"
 
 #. module: connector
-#: code:addons/connector/queue/model.py:286
+#: code:addons/connector/queue/model.py:294
 #, python-format
 msgid "Cannot remove the root channel"
 msgstr "Kann den Hauptkanal nicht entfernen"
@@ -202,6 +202,11 @@ msgstr "Connector"
 #: model:ir.model.fields,field_description:connector.field_queue_job_date_created
 msgid "Created Date"
 msgstr "Anlagedatum"
+
+#. module: connector
+#: model:ir.ui.view,arch_db:connector.view_queue_job_search
+msgid "Created Last 24h"
+msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_create_uid
@@ -330,6 +335,11 @@ msgstr "Follower (Kanäle)"
 #: model:ir.model.fields,field_description:connector.field_queue_job_message_partner_ids
 msgid "Followers (Partners)"
 msgstr "Follower (Partner)"
+
+#. module: connector
+#: model:ir.model.fields,field_description:connector.field_queue_job_forced_channel
+msgid "Forced channel"
+msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_queue_job_func_name
@@ -496,7 +506,7 @@ msgid "Manage multiple companies"
 msgstr "Multi-Company Verwaltung"
 
 #. module: connector
-#: code:addons/connector/queue/model.py:133
+#: code:addons/connector/queue/model.py:141
 #, python-format
 msgid "Manually set to done by %s"
 msgstr "Manuell auf erledigt gesetzt durch %s"
@@ -543,7 +553,7 @@ msgid "Need Review"
 msgstr "Benötigt Prüfung"
 
 #. module: connector
-#: code:addons/connector/queue/model.py:109
+#: code:addons/connector/queue/model.py:117
 #, python-format
 msgid "No action available for this job"
 msgstr "Kein Vorgang für diesen Job verfügbar"
@@ -582,7 +592,7 @@ msgid "Parent Channel"
 msgstr "Übergeordneter Kanal"
 
 #. module: connector
-#: code:addons/connector/queue/model.py:271
+#: code:addons/connector/queue/model.py:279
 #, python-format
 msgid "Parent channel required."
 msgstr "Übergeordneter Kanal erforderlich."
@@ -717,7 +727,7 @@ msgid ""
 msgstr "Nutzen Sie die gleichen Geschäftspartner in allen Unternehmen Ihrer Instanz.\n* Angewählt: Partner sind in allen Unternehmen sichtbar, selbst wenn für den Partner ein Unternhemn festgelegt ist.\n* Nicht gewählt: Jedes Unternehmen sieht nur eigene Partner (bei denen das Partnerunternehmen festgelegt ist). Partner ohne Unternehmensbezug sind für alle Unternehmen sichtbar."
 
 #. module: connector
-#: code:addons/connector/queue/model.py:185
+#: code:addons/connector/queue/model.py:193
 #, python-format
 msgid ""
 "Something bad happened during the execution of the job. More details in the "

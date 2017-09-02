@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: connector (9.0)\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-06-24 00:51+0000\n"
-"PO-Revision-Date: 2017-06-30 08:53+0000\n"
+"POT-Creation-Date: 2017-08-22 13:21+0000\n"
+"PO-Revision-Date: 2017-08-29 08:01+0000\n"
 "Last-Translator: OCA Transbot <transbot@odoo-community.org>\n"
 "Language-Team: Dutch (Netherlands) (http://www.transifex.com/oca/OCA-connector-9-0/language/nl_NL/)\n"
 "MIME-Version: 1.0\n"
@@ -86,16 +86,16 @@ msgstr ""
 #: model:ir.ui.view,arch_db:connector.view_connector_config_settings
 #: model:ir.ui.view,arch_db:connector.view_requeue_job
 msgid "Cancel"
-msgstr ""
+msgstr "Verwijderen"
 
 #. module: connector
-#: code:addons/connector/queue/model.py:279
+#: code:addons/connector/queue/model.py:287
 #, python-format
 msgid "Cannot change the root channel"
 msgstr ""
 
 #. module: connector
-#: code:addons/connector/queue/model.py:286
+#: code:addons/connector/queue/model.py:294
 #, python-format
 msgid "Cannot remove the root channel"
 msgstr ""
@@ -213,7 +213,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:connector.field_queue_job_channel_create_uid
 #: model:ir.model.fields,field_description:connector.field_queue_requeue_job_create_uid
 msgid "Created by"
-msgstr ""
+msgstr "Aangemaakt door"
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_create_date
@@ -222,7 +222,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:connector.field_queue_job_channel_create_date
 #: model:ir.model.fields,field_description:connector.field_queue_requeue_job_create_date
 msgid "Created on"
-msgstr ""
+msgstr "Aangemaakt op"
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_queue_job_retry
@@ -248,7 +248,7 @@ msgstr ""
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_queue_job_name
 msgid "Description"
-msgstr ""
+msgstr "Omschrijving"
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_backend_display_name
@@ -332,6 +332,11 @@ msgstr ""
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_message_partner_ids
 #: model:ir.model.fields,field_description:connector.field_queue_job_message_partner_ids
 msgid "Followers (Partners)"
+msgstr ""
+
+#. module: connector
+#: model:ir.model.fields,field_description:connector.field_queue_job_forced_channel
+msgid "Forced channel"
 msgstr ""
 
 #. module: connector
@@ -472,7 +477,7 @@ msgstr "Laatst gewijzigd op"
 #: model:ir.model.fields,field_description:connector.field_queue_job_channel_write_uid
 #: model:ir.model.fields,field_description:connector.field_queue_requeue_job_write_uid
 msgid "Last Updated by"
-msgstr ""
+msgstr "Laatst bijgewerkt door"
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_review_write_date
@@ -481,7 +486,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:connector.field_queue_job_channel_write_date
 #: model:ir.model.fields,field_description:connector.field_queue_requeue_job_write_date
 msgid "Last Updated on"
-msgstr ""
+msgstr "Laatst bijgewerkt op"
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_external_binding_sync_date
@@ -499,7 +504,7 @@ msgid "Manage multiple companies"
 msgstr ""
 
 #. module: connector
-#: code:addons/connector/queue/model.py:133
+#: code:addons/connector/queue/model.py:141
 #, python-format
 msgid "Manually set to done by %s"
 msgstr ""
@@ -546,7 +551,7 @@ msgid "Need Review"
 msgstr ""
 
 #. module: connector
-#: code:addons/connector/queue/model.py:109
+#: code:addons/connector/queue/model.py:117
 #, python-format
 msgid "No action available for this job"
 msgstr ""
@@ -585,7 +590,7 @@ msgid "Parent Channel"
 msgstr ""
 
 #. module: connector
-#: code:addons/connector/queue/model.py:271
+#: code:addons/connector/queue/model.py:279
 #, python-format
 msgid "Parent channel required."
 msgstr ""
@@ -720,7 +725,7 @@ msgid ""
 msgstr ""
 
 #. module: connector
-#: code:addons/connector/queue/model.py:185
+#: code:addons/connector/queue/model.py:193
 #, python-format
 msgid ""
 "Something bad happened during the execution of the job. More details in the "

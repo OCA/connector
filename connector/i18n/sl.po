@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: connector (9.0)\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-04-05 00:42+0000\n"
-"PO-Revision-Date: 2017-04-25 10:43+0000\n"
+"POT-Creation-Date: 2017-08-22 13:21+0000\n"
+"PO-Revision-Date: 2017-08-21 15:13+0000\n"
 "Last-Translator: OCA Transbot <transbot@odoo-community.org>\n"
 "Language-Team: Slovenian (http://www.transifex.com/oca/OCA-connector-9-0/language/sl/)\n"
 "MIME-Version: 1.0\n"
@@ -90,13 +90,13 @@ msgid "Cancel"
 msgstr "Preklic"
 
 #. module: connector
-#: code:addons/connector/queue/model.py:279
+#: code:addons/connector/queue/model.py:287
 #, python-format
 msgid "Cannot change the root channel"
 msgstr "Korenskega kanala ni mogoče spreminjati"
 
 #. module: connector
-#: code:addons/connector/queue/model.py:286
+#: code:addons/connector/queue/model.py:294
 #, python-format
 msgid "Cannot remove the root channel"
 msgstr "Korenskega kanala ni mogoče odstraniti"
@@ -201,6 +201,11 @@ msgstr "Konektorji"
 #: model:ir.model.fields,field_description:connector.field_queue_job_date_created
 msgid "Created Date"
 msgstr "Datum nastanka"
+
+#. module: connector
+#: model:ir.ui.view,arch_db:connector.view_queue_job_search
+msgid "Created Last 24h"
+msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_create_uid
@@ -328,6 +333,11 @@ msgstr ""
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_message_partner_ids
 #: model:ir.model.fields,field_description:connector.field_queue_job_message_partner_ids
 msgid "Followers (Partners)"
+msgstr ""
+
+#. module: connector
+#: model:ir.model.fields,field_description:connector.field_queue_job_forced_channel
+msgid "Forced channel"
 msgstr ""
 
 #. module: connector
@@ -495,7 +505,7 @@ msgid "Manage multiple companies"
 msgstr "Upravljanje več družb"
 
 #. module: connector
-#: code:addons/connector/queue/model.py:133
+#: code:addons/connector/queue/model.py:141
 #, python-format
 msgid "Manually set to done by %s"
 msgstr "Ročno nastavil kot opravljeno: %s"
@@ -542,7 +552,7 @@ msgid "Need Review"
 msgstr "Potrebna revizija"
 
 #. module: connector
-#: code:addons/connector/queue/model.py:109
+#: code:addons/connector/queue/model.py:117
 #, python-format
 msgid "No action available for this job"
 msgstr "Za to delo ni aktivnosti"
@@ -581,7 +591,7 @@ msgid "Parent Channel"
 msgstr "Nadrejeni kanal"
 
 #. module: connector
-#: code:addons/connector/queue/model.py:271
+#: code:addons/connector/queue/model.py:279
 #, python-format
 msgid "Parent channel required."
 msgstr "Zahteva se nadrejeni kanal."
@@ -716,7 +726,7 @@ msgid ""
 msgstr ""
 
 #. module: connector
-#: code:addons/connector/queue/model.py:185
+#: code:addons/connector/queue/model.py:193
 #, python-format
 msgid ""
 "Something bad happened during the execution of the job. More details in the "

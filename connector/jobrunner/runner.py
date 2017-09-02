@@ -133,6 +133,7 @@ SELECT_TIMEOUT = 60
 ERROR_RECOVERY_DELAY = 5
 
 _logger = logging.getLogger(__name__)
+REQUEST_TIMEOUT = int(os.environ.get('REQUEST_TIMEOUT', 1))
 
 
 # Unfortunately, it is not possible to extend the Odoo
@@ -175,7 +176,7 @@ def _async_http_get(port, db_name, job_uuid):
         try:
             # we are not interested in the result, so we set a short timeout
             # but not too short so we trap and log hard configuration errors
-            requests.get(url, timeout=1)
+            requests.get(url, timeout=REQUEST_TIMEOUT)
         except requests.Timeout:
             set_job_pending()
         except:

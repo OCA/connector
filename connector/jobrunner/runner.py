@@ -175,7 +175,12 @@ def _async_http_get(port, db_name, job_uuid):
         try:
             # we are not interested in the result, so we set a short timeout
             # but not too short so we trap and log hard configuration errors
-            requests.get(url, timeout=1)
+            response = requests.get(url, timeout=1)
+
+            # raise_for_status will result in either nothing, a Client Error
+            # for HTTP Response codes between 400 and 500 or a Server Error
+            # for codes between 500 and 600
+            response.raise_for_status()
         except requests.Timeout:
             set_job_pending()
         except:

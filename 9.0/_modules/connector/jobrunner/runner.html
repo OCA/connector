@@ -441,7 +441,12 @@
         <span class="k">try</span><span class="p">:</span>
             <span class="c1"># we are not interested in the result, so we set a short timeout</span>
             <span class="c1"># but not too short so we trap and log hard configuration errors</span>
-            <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+            <span class="c1"># raise_for_status will result in either nothing, a Client Error</span>
+            <span class="c1"># for HTTP Response codes between 400 and 500 or a Server Error</span>
+            <span class="c1"># for codes between 500 and 600</span>
+            <span class="n">response</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
         <span class="k">except</span> <span class="n">requests</span><span class="o">.</span><span class="n">Timeout</span><span class="p">:</span>
             <span class="n">set_job_pending</span><span class="p">()</span>
         <span class="k">except</span><span class="p">:</span>

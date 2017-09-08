@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: connector (8.0)\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-05-01 16:08+0000\n"
-"PO-Revision-Date: 2017-05-11 14:14+0000\n"
+"POT-Creation-Date: 2017-09-07 15:13+0000\n"
+"PO-Revision-Date: 2017-09-07 08:19+0000\n"
 "Last-Translator: Jarmo Kortetjärvi <jarmo.kortetjarvi@gmail.com>\n"
 "Language-Team: Finnish (http://www.transifex.com/oca/OCA-connector-8-0/language/fi/)\n"
 "MIME-Version: 1.0\n"
@@ -274,7 +274,7 @@ msgstr ""
 #. module: connector
 #: view:queue.job:connector.view_queue_job_search selection:queue.job,state:0
 msgid "Enqueued"
-msgstr ""
+msgstr "Jonossa"
 
 #. module: connector
 #: field:queue.job,exc_info:0

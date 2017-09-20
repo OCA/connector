@@ -338,7 +338,9 @@ class MapChild(AbstractComponent):
             map_record = mapper.map_record(item, parent=parent)
             if self.skip_item(map_record):
                 continue
-            mapped.append(self.get_item_values(map_record, to_attr, options))
+            item_values = self.get_item_values(map_record, to_attr, options)
+            if item_values:
+                mapped.append(item_values)
         return self.format_items(mapped)
 
     def get_item_values(self, map_record, to_attr, options):

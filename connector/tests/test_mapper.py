@@ -864,3 +864,63 @@ class TestMapperBinding(TransactionComponentRegistryCase):
                                           'test': .5})]
                     }
         self.assertEqual(map_record.values(for_create=True), expected)
+
+    def test_mapping_record_children_void(self):
+        """ Map a record with children, using defined MapChild """
+
+        class LineMapper(Component):
+            _name = 'line.mapper'
+            _inherit = 'base.import.mapper'
+            _apply_on = 'res.currency.rate'
+
+            @mapping
+            def price(self, record):
+                rate = record.get('rate')
+                if rate and rate < 40:
+                    return {'rate': record['rate'] * 2}
+
+        class SaleLineImportMapChild(Component):
+            _name = 'sale.line.mapper'
+            _inherit = 'base.map.child.import'
+            _apply_on = 'res.currency.rate'
+
+            def format_items(self, items_values):
+                return [('ABC', values) for values in items_values]
+
+        class ObjectMapper(Component):
+            _name = 'currency.mapper'
+            _inherit = 'base.import.mapper'
+            _apply_on = 'res.currency'
+
+            direct = [('name', 'name')]
+
+            children = [('lines', 'line_ids', 'res.currency.rate')]
+
+        self._build_components(
+            ObjectMapper,
+            SaleLineImportMapChild,
+            LineMapper
+        )
+
+        # Test with an excluded child record
+        record = {
+            'name': 'SO1',
+            'lines': [
+                {'rate': 10},
+                {'rate': 20},
+                {'rate': 30},
+                {'rate': 40},
+            ]
+        }
+        mapper = self.comp_registry['currency.mapper'](self.work)
+        map_record = mapper.map_record(record)
+
+        expected = {
+            'name': 'SO1',
+            'line_ids': [
+                ('ABC', {'rate': 20}),
+                ('ABC', {'rate': 40}),
+                ('ABC', {'rate': 60}),
+            ]
+        }
+        self.assertEqual(map_record.values(), expected)

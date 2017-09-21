@@ -48,8 +48,25 @@ class ConnectorRunnerThread(Thread):
     def __init__(self):
         Thread.__init__(self)
         self.daemon = True
-        port = os.environ.get('ODOO_CONNECTOR_PORT') or config['xmlrpc_port']
-        self.runner = ConnectorRunner(port or 8069)
+        scheme = (os.environ.get('ODOO_CONNECTOR_SCHEME') or
+                  config.misc.get("options-connector", {}).get('scheme'))
+        host = (os.environ.get('ODOO_CONNECTOR_HOST') or
+                config.misc.get("options-connector", {}).get('host') or
+                config['xmlrpc_interface'])
+        port = (os.environ.get('ODOO_CONNECTOR_PORT') or
+                config.misc.get("options-connector", {}).get('port') or
+                config['xmlrpc_port'])
+        user = (os.environ.get('ODOO_CONNECTOR_HTTP_AUTH_USER') or
+                config.misc.get("options-connector", {}).
+                get('http_auth_user'))
+        password = (os.environ.get('ODOO_CONNECTOR_HTTP_AUTH_PASSWORD') or
+                    config.misc.get("options-connector", {}).
+                    get('http_auth_password'))
+        self.runner = ConnectorRunner(scheme or 'http',
+                                      host or 'localhost',
+                                      port or 8069,
+                                      user,
+                                      password)
 
     def run(self):
         # sleep a bit to let the workers start at ease

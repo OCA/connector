@@ -278,22 +278,33 @@ anonymous <code class="docutils literal"><span class="pre">/connector/runjob</sp
 <h2>How to use it?<a class="headerlink" href="#how-to-use-it" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li>By default, the job runner will use Odoo’s configuration:<ul>
-<li>connect to Odoo via port <code class="docutils literal"><span class="pre">xmlrpc_port</span></code>, or <code class="docutils literal"><span class="pre">8069</span></code> if unset</li>
+<li>connect to Odoo via
+- host <code class="docutils literal"><span class="pre">xmlrpc_interface</span></code> or <code class="docutils literal"><span class="pre">localhost</span></code> if unset
+- port <code class="docutils literal"><span class="pre">xmlrpc_port</span></code>, or <code class="docutils literal"><span class="pre">8069</span></code> if unset</li>
 <li>connect to the database via <code class="docutils literal"><span class="pre">db_host</span></code> and <code class="docutils literal"><span class="pre">db_port</span></code></li>
 </ul>
 </li>
 <li>To adjust these values, you can either use environment variables:<ul>
-<li><code class="docutils literal"><span class="pre">ODOO_CONNECTOR_PORT=9069</span></code></li>
-<li><code class="docutils literal"><span class="pre">ODOO_CONNECTOR_JOBRUNNER_DB_HOST=127.0.2.1</span></code></li>
-<li><code class="docutils literal"><span class="pre">ODOO_CONNECTOR_JOBRUNNER_DB_PORT=15432</span></code></li>
+<li><code class="docutils literal"><span class="pre">ODOO_CONNECTOR_SCHEME=https</span></code></li>
+<li><code class="docutils literal"><span class="pre">ODOO_CONNECTOR_HOST=load-balancer</span></code></li>
+<li><code class="docutils literal"><span class="pre">ODOO_CONNECTOR_PORT=443</span></code></li>
+<li><code class="docutils literal"><span class="pre">ODOO_CONNECTOR_HTTP_AUTH_USER=connector</span></code></li>
+<li><code class="docutils literal"><span class="pre">ODOO_CONNECTOR_HTTP_AUTH_PASSWORD=s3cr3t</span></code></li>
+<li><code class="docutils literal"><span class="pre">ODOO_CONNECTOR_JOBRUNNER_DB_HOST=master-db</span></code></li>
+<li><code class="docutils literal"><span class="pre">ODOO_CONNECTOR_JOBRUNNER_DB_PORT=5432</span></code></li>
 </ul>
 </li>
 <li>Or alternatively, you can add a <code class="docutils literal"><span class="pre">[options-connector]</span></code> section in Odoo’s
 configuration file, like this:</li>
 </ul>
 <div class="highlight-ini"><div class="highlight"><pre><span></span><span class="k">[options-connector]</span>
-<span class="na">jobrunner_db_host</span> <span class="o">=</span> <span class="s">127.0.2.1</span>
-<span class="na">jobrunner_db_port</span> <span class="o">=</span> <span class="s">15432</span>
+<span class="na">scheme</span> <span class="o">=</span> <span class="s">https</span>
+<span class="na">host</span> <span class="o">=</span> <span class="s">load-balancer</span>
+<span class="na">port</span> <span class="o">=</span> <span class="s">443</span>
+<span class="na">http_auth_user</span> <span class="o">=</span> <span class="s">connector</span>
+<span class="na">http_auth_password</span> <span class="o">=</span> <span class="s">s3cr3t</span>
+<span class="na">jobrunner_db_host</span> <span class="o">=</span> <span class="s">master-db</span>
+<span class="na">jobrunner_db_port</span> <span class="o">=</span> <span class="s">5432</span>
 </pre></div>
 </div>
 <ul class="simple">
@@ -352,7 +363,7 @@ of running Odoo is obviously not for production purposes.</td></tr>
 </table>
 <dl class="class">
 <dt id="connector.jobrunner.runner.ConnectorRunner">
-<em class="property">class </em><code class="descclassname">connector.jobrunner.runner.</code><code class="descname">ConnectorRunner</code><span class="sig-paren">(</span><em>port=8069</em>, <em>channel_config_string=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/jobrunner/runner.html#ConnectorRunner"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.jobrunner.runner.ConnectorRunner" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">connector.jobrunner.runner.</code><code class="descname">ConnectorRunner</code><span class="sig-paren">(</span><em>scheme='http'</em>, <em>host='localhost'</em>, <em>port=8069</em>, <em>user=None</em>, <em>password=None</em>, <em>channel_config_string=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/jobrunner/runner.html#ConnectorRunner"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.jobrunner.runner.ConnectorRunner" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/2/library/functions.html#object" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
 <dl class="method">
 <dt id="connector.jobrunner.runner.ConnectorRunner.close_databases">

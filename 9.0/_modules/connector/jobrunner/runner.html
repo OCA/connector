@@ -287,14 +287,20 @@
 
 <span class="sd">* By default, the job runner will use Odoo&#39;s configuration:</span>
 
-<span class="sd">  - connect to Odoo via port ``xmlrpc_port``, or ``8069`` if unset</span>
+<span class="sd">  - connect to Odoo via</span>
+<span class="sd">    - host ``xmlrpc_interface`` or ``localhost`` if unset</span>
+<span class="sd">    - port ``xmlrpc_port``, or ``8069`` if unset</span>
 <span class="sd">  - connect to the database via ``db_host`` and ``db_port``</span>
 
 <span class="sd">* To adjust these values, you can either use environment variables:</span>
 
-<span class="sd">  - ``ODOO_CONNECTOR_PORT=9069``</span>
-<span class="sd">  - ``ODOO_CONNECTOR_JOBRUNNER_DB_HOST=127.0.2.1``</span>
-<span class="sd">  - ``ODOO_CONNECTOR_JOBRUNNER_DB_PORT=15432``</span>
+<span class="sd">  - ``ODOO_CONNECTOR_SCHEME=https``</span>
+<span class="sd">  - ``ODOO_CONNECTOR_HOST=load-balancer``</span>
+<span class="sd">  - ``ODOO_CONNECTOR_PORT=443``</span>
+<span class="sd">  - ``ODOO_CONNECTOR_HTTP_AUTH_USER=connector``</span>
+<span class="sd">  - ``ODOO_CONNECTOR_HTTP_AUTH_PASSWORD=s3cr3t``</span>
+<span class="sd">  - ``ODOO_CONNECTOR_JOBRUNNER_DB_HOST=master-db``</span>
+<span class="sd">  - ``ODOO_CONNECTOR_JOBRUNNER_DB_PORT=5432``</span>
 
 <span class="sd">* Or alternatively, you can add a ``[options-connector]`` section in Odoo&#39;s</span>
 <span class="sd">  configuration file, like this:</span>
@@ -302,8 +308,13 @@
 <span class="sd">.. code-block:: ini</span>
 
 <span class="sd">  [options-connector]</span>
-<span class="sd">  jobrunner_db_host = 127.0.2.1</span>
-<span class="sd">  jobrunner_db_port = 15432</span>
+<span class="sd">  scheme = https</span>
+<span class="sd">  host = load-balancer</span>
+<span class="sd">  port = 443</span>
+<span class="sd">  http_auth_user = connector</span>
+<span class="sd">  http_auth_password = s3cr3t</span>
+<span class="sd">  jobrunner_db_host = master-db</span>
+<span class="sd">  jobrunner_db_port = 5432</span>
 
 <span class="sd">* Start Odoo with ``--load=web,web_kanban,connector``</span>
 <span class="sd">  and ``--workers`` greater than 1. [2]_</span>
@@ -418,7 +429,7 @@
     <span class="k">return</span> <span class="n">connection_info</span>
 
 
-<span class="k">def</span> <span class="nf">_async_http_get</span><span class="p">(</span><span class="n">port</span><span class="p">,</span> <span class="n">db_name</span><span class="p">,</span> <span class="n">job_uuid</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">_async_http_get</span><span class="p">(</span><span class="n">scheme</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">port</span><span class="p">,</span> <span class="n">user</span><span class="p">,</span> <span class="n">password</span><span class="p">,</span> <span class="n">db_name</span><span class="p">,</span> <span class="n">job_uuid</span><span class="p">):</span>
     <span class="c1"># Method to set failed job (due to timeout, etc) as pending,</span>
     <span class="c1"># to avoid keeping it as enqueued.</span>
     <span class="k">def</span> <span class="nf">set_job_pending</span><span class="p">():</span>
@@ -436,12 +447,15 @@
     <span class="c1">#       if this was python3 I would be doing this with</span>
     <span class="c1">#       asyncio, aiohttp and aiopg</span>
     <span class="k">def</span> <span class="nf">urlopen</span><span class="p">():</span>
-        <span class="n">url</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;http://localhost:</span><span class="si">%s</span><span class="s1">/connector/runjob?db=</span><span class="si">%s</span><span class="s1">&amp;job_uuid=</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span>
-               <span class="p">(</span><span class="n">port</span><span class="p">,</span> <span class="n">db_name</span><span class="p">,</span> <span class="n">job_uuid</span><span class="p">))</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">://</span><span class="si">%s</span><span class="s1">:</span><span class="si">%s</span><span class="s1">/connector/runjob?db=</span><span class="si">%s</span><span class="s1">&amp;job_uuid=</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span>
+               <span class="p">(</span><span class="n">scheme</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">port</span><span class="p">,</span> <span class="n">db_name</span><span class="p">,</span> <span class="n">job_uuid</span><span class="p">))</span>
         <span class="k">try</span><span class="p">:</span>
+            <span class="n">auth</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="k">if</span> <span class="n">user</span><span class="p">:</span>
+                <span class="n">auth</span> <span class="o">=</span> <span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">password</span><span class="p">)</span>
             <span class="c1"># we are not interested in the result, so we set a short timeout</span>
             <span class="c1"># but not too short so we trap and log hard configuration errors</span>
-            <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">auth</span><span class="o">=</span><span class="n">auth</span><span class="p">)</span>
 
             <span class="c1"># raise_for_status will result in either nothing, a Client Error</span>
             <span class="c1"># for HTTP Response codes between 400 and 500 or a Server Error</span>
@@ -536,8 +550,18 @@
 
 <div class="viewcode-block" id="ConnectorRunner"><a class="viewcode-back" href="../../../api/api_runner.html#connector.jobrunner.runner.ConnectorRunner">[docs]</a><span class="k">class</span> <span class="nc">ConnectorRunner</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">8069</span><span class="p">,</span> <span class="n">channel_config_string</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                 <span class="n">scheme</span><span class="o">=</span><span class="s1">&#39;http&#39;</span><span class="p">,</span>
+                 <span class="n">host</span><span class="o">=</span><span class="s1">&#39;localhost&#39;</span><span class="p">,</span>
+                 <span class="n">port</span><span class="o">=</span><span class="mi">8069</span><span class="p">,</span>
+                 <span class="n">user</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">password</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">channel_config_string</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scheme</span> <span class="o">=</span> <span class="n">scheme</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">host</span> <span class="o">=</span> <span class="n">host</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">port</span> <span class="o">=</span> <span class="n">port</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">user</span> <span class="o">=</span> <span class="n">user</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">password</span> <span class="o">=</span> <span class="n">password</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">channel_manager</span> <span class="o">=</span> <span class="n">ChannelManager</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">channel_config_string</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">channel_config_string</span> <span class="o">=</span> <span class="n">_channels</span><span class="p">()</span>
@@ -583,7 +607,13 @@
             <span class="n">_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;asking Odoo to run job </span><span class="si">%s</span><span class="s2"> on db </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span>
                          <span class="n">job</span><span class="o">.</span><span class="n">uuid</span><span class="p">,</span> <span class="n">job</span><span class="o">.</span><span class="n">db_name</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">db_by_name</span><span class="p">[</span><span class="n">job</span><span class="o">.</span><span class="n">db_name</span><span class="p">]</span><span class="o">.</span><span class="n">set_job_enqueued</span><span class="p">(</span><span class="n">job</span><span class="o">.</span><span class="n">uuid</span><span class="p">)</span>
-            <span class="n">_async_http_get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">port</span><span class="p">,</span> <span class="n">job</span><span class="o">.</span><span class="n">db_name</span><span class="p">,</span> <span class="n">job</span><span class="o">.</span><span class="n">uuid</span><span class="p">)</span></div>
+            <span class="n">_async_http_get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">scheme</span><span class="p">,</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="p">,</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">port</span><span class="p">,</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">user</span><span class="p">,</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">password</span><span class="p">,</span>
+                            <span class="n">job</span><span class="o">.</span><span class="n">db_name</span><span class="p">,</span>
+                            <span class="n">job</span><span class="o">.</span><span class="n">uuid</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="ConnectorRunner.process_notifications"><a class="viewcode-back" href="../../../api/api_runner.html#connector.jobrunner.runner.ConnectorRunner.process_notifications">[docs]</a>    <span class="k">def</span> <span class="nf">process_notifications</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">db</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">db_by_name</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>

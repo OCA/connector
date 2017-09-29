@@ -577,7 +577,9 @@
             <span class="n">map_record</span> <span class="o">=</span> <span class="n">mapper</span><span class="o">.</span><span class="n">map_record</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="n">parent</span><span class="p">)</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">skip_item</span><span class="p">(</span><span class="n">map_record</span><span class="p">):</span>
                 <span class="k">continue</span>
-            <span class="n">mapped</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_item_values</span><span class="p">(</span><span class="n">map_record</span><span class="p">,</span> <span class="n">to_attr</span><span class="p">,</span> <span class="n">options</span><span class="p">))</span>
+            <span class="n">item_values</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_item_values</span><span class="p">(</span><span class="n">map_record</span><span class="p">,</span> <span class="n">to_attr</span><span class="p">,</span> <span class="n">options</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">item_values</span><span class="p">:</span>
+                <span class="n">mapped</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item_values</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">format_items</span><span class="p">(</span><span class="n">mapped</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="MapChild.get_item_values"><a class="viewcode-back" href="../../../api/api_components.html#connector.components.mapper.MapChild.get_item_values">[docs]</a>    <span class="k">def</span> <span class="nf">get_item_values</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">map_record</span><span class="p">,</span> <span class="n">to_attr</span><span class="p">,</span> <span class="n">options</span><span class="p">):</span>
@@ -1262,7 +1264,7 @@
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.3.<br/>
+      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.4.<br/>
     </p>
   </div>
 </footer>

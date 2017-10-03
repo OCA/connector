@@ -21,5 +21,5 @@ Add 'Connector' tab to product view
  'data': [
      'views/product_view.xml'
  ],
- 'installable': True,
+ 'installable': False,
  }

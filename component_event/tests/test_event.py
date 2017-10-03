@@ -3,7 +3,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html)
 
 import mock
-import unittest2
+import unittest
 
 from odoo.addons.component.tests.common import (
     ComponentRegistryCase,
@@ -14,7 +14,7 @@ from odoo.addons.component_event.core import EventWorkContext
 from odoo.addons.component_event.components.event import skip_if
 
 
-class TestEventWorkContext(unittest2.TestCase):
+class TestEventWorkContext(unittest.TestCase):
     """ Test Events Components """
 
     def setUp(self):
@@ -27,8 +27,8 @@ class TestEventWorkContext(unittest2.TestCase):
         """ WorkContext with env """
         work = EventWorkContext(model_name='res.users', env=self.env,
                                 components_registry=self.components_registry)
-        self.assertEquals(self.env, work.env)
-        self.assertEquals('res.users', work.model_name)
+        self.assertEqual(self.env, work.env)
+        self.assertEqual('res.users', work.model_name)
         with self.assertRaises(ValueError):
             # pylint: disable=W0104
             work.collection  # noqa
@@ -40,9 +40,9 @@ class TestEventWorkContext(unittest2.TestCase):
         collection.env = env
         work = EventWorkContext(model_name='res.users', collection=collection,
                                 components_registry=self.components_registry)
-        self.assertEquals(collection, work.collection)
-        self.assertEquals(env, work.env)
-        self.assertEquals('res.users', work.model_name)
+        self.assertEqual(collection, work.collection)
+        self.assertEqual(env, work.env)
+        self.assertEqual('res.users', work.model_name)
 
     def test_env_and_collection(self):
         """ WorkContext with collection and env is forbidden """
@@ -68,10 +68,10 @@ class TestEventWorkContext(unittest2.TestCase):
         work = EventWorkContext(env=env, model_name='res.users',
                                 components_registry=self.components_registry)
         work2 = work.work_on(model_name='res.partner', collection=collection)
-        self.assertEquals('WorkContext', work2.__class__.__name__)
-        self.assertEquals(env, work2.env)
-        self.assertEquals('res.partner', work2.model_name)
-        self.assertEquals(self.components_registry, work2.components_registry)
+        self.assertEqual('WorkContext', work2.__class__.__name__)
+        self.assertEqual(env, work2.env)
+        self.assertEqual('res.partner', work2.model_name)
+        self.assertEqual(self.components_registry, work2.components_registry)
         with self.assertRaises(ValueError):
             # pylint: disable=W0104
             work.collection  # noqa
@@ -84,11 +84,11 @@ class TestEventWorkContext(unittest2.TestCase):
         work = EventWorkContext(collection=collection, model_name='res.users',
                                 components_registry=self.components_registry)
         work2 = work.work_on(model_name='res.partner')
-        self.assertEquals('WorkContext', work2.__class__.__name__)
-        self.assertEquals(collection, work2.collection)
-        self.assertEquals(env, work2.env)
-        self.assertEquals('res.partner', work2.model_name)
-        self.assertEquals(self.components_registry, work2.components_registry)
+        self.assertEqual('WorkContext', work2.__class__.__name__)
+        self.assertEqual(collection, work2.collection)
+        self.assertEqual(env, work2.env)
+        self.assertEqual('res.partner', work2.model_name)
+        self.assertEqual(self.components_registry, work2.components_registry)
 
     def test_collection_work_on_collection(self):
         """ WorkContext collection changed with work_on """
@@ -101,11 +101,11 @@ class TestEventWorkContext(unittest2.TestCase):
         # when work_on is used inside an event component, we want
         # to switch back to a normal WorkContext, because we don't
         # need anymore the EventWorkContext
-        self.assertEquals('WorkContext', work2.__class__.__name__)
-        self.assertEquals(collection, work2.collection)
-        self.assertEquals(env, work2.env)
-        self.assertEquals('res.users', work2.model_name)
-        self.assertEquals(self.components_registry, work2.components_registry)
+        self.assertEqual('WorkContext', work2.__class__.__name__)
+        self.assertEqual(collection, work2.collection)
+        self.assertEqual(env, work2.env)
+        self.assertEqual('res.users', work2.model_name)
+        self.assertEqual(self.components_registry, work2.components_registry)
 
 
 class TestEvent(ComponentRegistryCase):
@@ -144,7 +144,7 @@ class TestEvent(ComponentRegistryCase):
         self.collecter.collect_events('on_record_create').notify(
             recipient, something, fields=fields
         )
-        self.assertEquals([('OK', something, fields)], recipient)
+        self.assertEqual([('OK', something, fields)], recipient)
 
     def test_collect_several(self):
         class MyEventListener(Component):
@@ -173,11 +173,11 @@ class TestEvent(ComponentRegistryCase):
 
         # collect the event and notify them
         collected = self.collecter.collect_events('on_record_create')
-        self.assertEquals(2, len(collected.events))
+        self.assertEqual(2, len(collected.events))
 
         collected.notify(recipient, something, fields=fields)
-        self.assertEquals([('OK', something, fields),
-                           ('OK', something, fields)], recipient)
+        self.assertEqual([('OK', something, fields),
+                          ('OK', something, fields)], recipient)
 
     def test_event_cache(self):
         class MyEventListener(Component):
@@ -192,10 +192,10 @@ class TestEvent(ComponentRegistryCase):
         # collect the event
         collected = self.collecter.collect_events('on_record_create')
         # CollectedEvents.events contains the collected events
-        self.assertEquals(1, len(collected.events))
+        self.assertEqual(1, len(collected.events))
         event = list(collected.events)[0]
-        self.assertEquals(self.work, event.im_self.work)
-        self.assertEquals(self.work.env, event.im_self.work.env)
+        self.assertEqual(self.work, event.__self__.work)
+        self.assertEqual(self.work.env, event.__self__.work.env)
 
         # build and register a new listener
         class MyOtherEventListener(Component):
@@ -215,21 +215,21 @@ class TestEvent(ComponentRegistryCase):
         collecter = self.comp_registry['base.event.collecter'](work)
         collected = collecter.collect_events('on_record_create')
         # CollectedEvents.events contains the collected events
-        self.assertEquals(1, len(collected.events))
+        self.assertEqual(1, len(collected.events))
         event = list(collected.events)[0]
-        self.assertEquals(work, event.im_self.work)
-        self.assertEquals(env, event.im_self.work.env)
+        self.assertEqual(work, event.__self__.work)
+        self.assertEqual(env, event.__self__.work.env)
 
         # if we empty the cache, as it on the class, both collecters
         # should now find the 2 events
         collecter._cache.clear()
         self.comp_registry._cache.clear()
         # CollectedEvents.events contains the collected events
-        self.assertEquals(
+        self.assertEqual(
             2,
             len(collecter.collect_events('on_record_create').events)
         )
-        self.assertEquals(
+        self.assertEqual(
             2,
             len(self.collecter.collect_events('on_record_create').events)
         )
@@ -247,7 +247,7 @@ class TestEvent(ComponentRegistryCase):
         # collect the event
         collected = self.collecter.collect_events('on_record_create')
         # CollectedEvents.events contains the collected events
-        self.assertEquals(1, len(collected.events))
+        self.assertEqual(1, len(collected.events))
 
         # build and register a new listener
         class MyOtherEventListener(Component):
@@ -271,7 +271,7 @@ class TestEvent(ComponentRegistryCase):
         collected = collecter.collect_events('on_record_create')
         # for a different collection, we should not have the same
         # cache entry
-        self.assertEquals(2, len(collected.events))
+        self.assertEqual(2, len(collected.events))
 
     def test_event_cache_model_name(self):
         class MyEventListener(Component):
@@ -286,7 +286,7 @@ class TestEvent(ComponentRegistryCase):
         # collect the event
         collected = self.collecter.collect_events('on_record_create')
         # CollectedEvents.events contains the collected events
-        self.assertEquals(1, len(collected.events))
+        self.assertEqual(1, len(collected.events))
 
         # build and register a new listener
         class MyOtherEventListener(Component):
@@ -308,7 +308,7 @@ class TestEvent(ComponentRegistryCase):
         collected = collecter.collect_events('on_record_create')
         # for a different collection, we should not have the same
         # cache entry
-        self.assertEquals(2, len(collected.events))
+        self.assertEqual(2, len(collected.events))
 
     def test_skip_if(self):
         class MyEventListener(Component):
@@ -330,7 +330,7 @@ class TestEvent(ComponentRegistryCase):
 
         # collect the event and notify it
         collected = self.collecter.collect_events('on_record_create')
-        self.assertEquals(2, len(collected.events))
+        self.assertEqual(2, len(collected.events))
         collected.notify('foo')
 
 
@@ -360,7 +360,7 @@ class TestEventFromModel(TransactionComponentRegistryCase):
         events = partner._event('on_foo',
                                 components_registry=self.comp_registry)
         events.notify(partner, 'bar')
-        self.assertEquals('bar', partner.name)
+        self.assertEqual('bar', partner.name)
 
     def test_event_filter_on_model(self):
         class GlobalListener(Component):
@@ -393,8 +393,8 @@ class TestEventFromModel(TransactionComponentRegistryCase):
             'on_foo',
             components_registry=self.comp_registry
         ).notify(partner, 'bar')
-        self.assertEquals('bar', partner.name)
-        self.assertEquals('bar', partner.ref)
+        self.assertEqual('bar', partner.name)
+        self.assertEqual('bar', partner.ref)
 
     def test_event_filter_on_collection(self):
         class GlobalListener(Component):
@@ -428,5 +428,5 @@ class TestEventFromModel(TransactionComponentRegistryCase):
             components_registry=self.comp_registry
         )
         events.notify(partner, 'bar')
-        self.assertEquals('bar', partner.name)
-        self.assertEquals('bar', partner.ref)
+        self.assertEqual('bar', partner.name)
+        self.assertEqual('bar', partner.ref)

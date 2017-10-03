@@ -121,7 +121,7 @@ class Event(object):
                      The first argument is the env.
         :param kwargs: keyword arguments propagated to the consumer
         """
-        assert isinstance(model_name, basestring), (
+        assert isinstance(model_name, str), (
             "Second argument must be the model name as string, "
             "instead received: %s" % model_name)
         args = tuple([env, model_name] + list(args))

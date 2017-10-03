@@ -15,5 +15,5 @@
      'python': ['cachetools'],
  },
  'data': [],
- 'installable': True,
+ 'installable': False,
  }

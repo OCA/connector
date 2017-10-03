@@ -19,7 +19,7 @@ class ConnectorCheckpoint(models.Model):
     _name = 'connector.checkpoint'
     _description = 'Connector Checkpoint'
 
-    _inherit = ['mail.thread', 'ir.needaction_mixin']
+    _inherit = ['mail.thread', 'mail.activity.mixin']
 
     @api.model
     def _reference_models(self):

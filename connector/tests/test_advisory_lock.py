@@ -72,4 +72,4 @@ class TestAdvisoryLock(TransactionComponentCase):
         component2 = work2.component_by_name('base.connector')
         with self.assertRaises(RetryableJobError) as cm:
             component2.advisory_lock_or_retry(lock, retry_seconds=3)
-            self.assertEquals(cm.exception.seconds, 3)
+            self.assertEqual(cm.exception.seconds, 3)

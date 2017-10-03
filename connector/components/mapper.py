@@ -20,6 +20,7 @@ from odoo import models
 from odoo.addons.component.core import AbstractComponent
 from odoo.addons.component.exception import NoComponentError
 from ..exception import MappingError
+import collections
 
 
 _logger = logging.getLogger(__name__)
@@ -104,7 +105,7 @@ def none(field):
     :param binding: True if the relation is a binding record
     """
     def modifier(self, record, to_attr):
-        if callable(field):
+        if isinstance(field, collections.Callable):
             result = field(self, record, to_attr)
         else:
             result = record[field]
@@ -571,7 +572,7 @@ class Mapper(AbstractComponent):
                 # this is already a dynamically generated Component, so we can
                 # use it's existing mappings
                 base_map_methods = base._map_methods or {}
-                for attr_name, definition in base_map_methods.iteritems():
+                for attr_name, definition in base_map_methods.items():
                     if attr_name in map_methods:
                         # Update the existing @changed_by with the content
                         # of each base (it is mutated in place).
@@ -635,7 +636,7 @@ class Mapper(AbstractComponent):
     @property
     def map_methods(self):
         """ Yield all the methods decorated with ``@mapping`` """
-        for meth, definition in self._map_methods.iteritems():
+        for meth, definition in self._map_methods.items():
             yield getattr(self, meth), definition
 
     def _get_map_child_component(self, model_name):
@@ -693,7 +694,7 @@ class Mapper(AbstractComponent):
                 fieldname = self._direct_source_field_name(from_attr)
                 changed_by.add(fieldname)
 
-        for method_name, method_def in self._map_methods.iteritems():
+        for method_name, method_def in self._map_methods.items():
             changed_by |= method_def.changed_by
         return changed_by
 
@@ -710,13 +711,13 @@ class Mapper(AbstractComponent):
 
         """
         fieldname = direct_entry
-        if callable(direct_entry):
+        if isinstance(direct_entry, collections.Callable):
             # Map the closure entries with variable names
-            cells = dict(zip(
-                direct_entry.func_code.co_freevars,
-                (c.cell_contents for c in direct_entry.func_closure)))
+            cells = dict(list(zip(
+                direct_entry.__code__.co_freevars,
+                (c.cell_contents for c in direct_entry.__closure__))))
             assert 'field' in cells, "Modifier without 'field' argument."
-            if callable(cells['field']):
+            if isinstance(cells['field'], collections.Callable):
                 fieldname = self._direct_source_field_name(cells['field'])
             else:
                 fieldname = cells['field']
@@ -763,7 +764,7 @@ class Mapper(AbstractComponent):
         for_create = self.options.for_create
         result = {}
         for from_attr, to_attr in self.direct:
-            if callable(from_attr):
+            if isinstance(from_attr, collections.Callable):
                 attr_name = self._direct_source_field_name(from_attr)
             else:
                 attr_name = from_attr
@@ -833,7 +834,7 @@ class ImportMapper(AbstractComponent):
         :param to_attr: name of the target attribute
         :type to_attr: str
         """
-        if callable(from_attr):
+        if isinstance(from_attr, collections.Callable):
             return from_attr(self, record, to_attr)
 
         value = record.get(from_attr)
@@ -874,7 +875,7 @@ class ExportMapper(AbstractComponent):
         :param to_attr: name of the target attribute
         :type to_attr: str
         """
-        if callable(from_attr):
+        if isinstance(from_attr, collections.Callable):
             return from_attr(self, record, to_attr)
 
         value = record[from_attr]

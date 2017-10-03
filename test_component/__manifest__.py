@@ -4,7 +4,6 @@
 
 {'name': 'Components Tests',
  'summary': 'Automated tests for Components, do not install.',
- 'description': 'Automated tests for Components, do not install.',
  'version': '11.0.1.0.0',
  'author': 'Camptocamp,Odoo Community Association (OCA)',
  'license': 'AGPL-3',

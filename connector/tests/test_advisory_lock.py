@@ -5,7 +5,7 @@
 import mock
 from odoo import api
 from odoo.tests import common
-from odoo.modules.registry import RegistryManager
+from odoo.modules.registry import Registry
 from odoo.addons.queue_job.exception import RetryableJobError
 from odoo.addons.connector.connector import pg_try_advisory_lock
 from odoo.addons.component.core import WorkContext
@@ -16,7 +16,7 @@ class TestAdvisoryLock(TransactionComponentCase):
 
     def setUp(self):
         super(TestAdvisoryLock, self).setUp()
-        self.registry2 = RegistryManager.get(common.get_db_name())
+        self.registry2 = Registry(common.get_db_name())
         self.cr2 = self.registry2.cursor()
         self.env2 = api.Environment(self.cr2, self.env.uid, {})
 

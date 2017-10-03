@@ -49,5 +49,5 @@ class TestEventListener(TransactionComponentRegistryCase):
         # collect the event and notify it
         record = mock.Mock(name='record')
         collected = self.collecter.collect_events('on_record_create')
-        self.assertEquals(2, len(collected.events))
+        self.assertEqual(2, len(collected.events))
         collected.notify(record)

@@ -26,6 +26,7 @@ from ..components.mapper import none, convert, m2o_to_external  # noqa
 from ..components.mapper import external_to_m2o, follow_m2o_relations  # noqa
 from ..components.mapper import MappingDefinition  # noqa
 from ..components.mapper import MapRecord, MapOptions  # noqa
+import collections
 
 _logger = logging.getLogger(__name__)
 
@@ -48,7 +49,7 @@ class MetaMapper(MetaConnectorUnit):
         for base in bases:
             # Merge the _map_methods of the bases
             base_map_methods = getattr(base, '_map_methods', {})
-            for attr_name, definition in base_map_methods.iteritems():
+            for attr_name, definition in base_map_methods.items():
                 if cls._map_methods.get(attr_name) is None:
                     cls._map_methods[attr_name] = definition
                 else:
@@ -61,7 +62,7 @@ class MetaMapper(MetaConnectorUnit):
 
         # Update the _map_methods from the @mapping methods in attrs,
         # respecting the class tree.
-        for attr_name, attr in attrs.iteritems():
+        for attr_name, attr in attrs.items():
             is_mapping = getattr(attr, 'is_mapping', None)
             if is_mapping:
                 has_only_create = getattr(attr, 'only_create', False)
@@ -90,7 +91,7 @@ class MetaMapper(MetaConnectorUnit):
             for from_attr, __ in attrs['direct']:
                 attr_name = cls._direct_source_field_name(from_attr)
                 changed_by_fields.add(attr_name)
-        for method_name, method_def in attrs['_map_methods'].iteritems():
+        for method_name, method_def in attrs['_map_methods'].items():
             changed_by_fields |= method_def[0]
         for base in bases:
             if hasattr(base, '_changed_by_fields') and base._changed_by_fields:
@@ -109,13 +110,13 @@ class MetaMapper(MetaConnectorUnit):
         """
         attr_name = mapping_attr
 
-        if callable(mapping_attr):
+        if isinstance(mapping_attr, collections.Callable):
             # Map the closure entries with variable names
-            cells = dict(zip(
-                mapping_attr.func_code.co_freevars,
-                (c.cell_contents for c in mapping_attr.func_closure)))
+            cells = dict(list(zip(
+                mapping_attr.__code__.co_freevars,
+                (c.cell_contents for c in mapping_attr.__closure__))))
             assert 'field' in cells, "Modifier without 'field' argument."
-            if callable(cells['field']):
+            if isinstance(cells['field'], collections.Callable):
                 attr_name = MetaMapper._direct_source_field_name(
                     cells['field'])
             else:
@@ -274,7 +275,7 @@ class ExportMapChild(MapChild):
         return self.unit_for(ExportMapper)
 
 
-class Mapper(ConnectorUnit):
+class Mapper(ConnectorUnit, metaclass=MetaMapper):
     """ A Mapper translates an external record to an Odoo record and
     conversely. The output of a Mapper is a ``dict``.
 
@@ -377,8 +378,6 @@ class Mapper(ConnectorUnit):
 
     """
 
-    __metaclass__ = MetaMapper
-
     # name of the Odoo model, to be defined in concrete classes
     _model_name = None
 
@@ -412,7 +411,7 @@ class Mapper(ConnectorUnit):
     @property
     def map_methods(self):
         """ Yield all the methods decorated with ``@mapping`` """
-        for meth, definition in self._map_methods.iteritems():
+        for meth, definition in self._map_methods.items():
             yield getattr(self, meth), definition
 
     def _get_map_child_unit(self, model_name):
@@ -499,7 +498,7 @@ class Mapper(ConnectorUnit):
         for_create = self.options.for_create
         result = {}
         for from_attr, to_attr in self.direct:
-            if callable(from_attr):
+            if isinstance(from_attr, collections.Callable):
                 attr_name = MetaMapper._direct_source_field_name(from_attr)
             else:
                 attr_name = from_attr
@@ -562,7 +561,7 @@ class ImportMapper(Mapper):
         :param to_attr: name of the target attribute
         :type to_attr: str
         """
-        if callable(from_attr):
+        if isinstance(from_attr, collections.Callable):
             return from_attr(self, record, to_attr)
 
         value = record.get(from_attr)
@@ -598,7 +597,7 @@ class ExportMapper(Mapper):
         :param to_attr: name of the target attribute
         :type to_attr: str
         """
-        if callable(from_attr):
+        if isinstance(from_attr, collections.Callable):
             return from_attr(self, record, to_attr)
 
         value = record[from_attr]

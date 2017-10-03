@@ -40,8 +40,8 @@ class TestModuleInstalledFunctions(common.TransactionCase):
 
     def test_get_odoo_module(self):
         """ Odoo module is found from a Python path """
-        self.assertEquals(get_odoo_module(TestModuleInstalledFunctions),
-                          'connector')
+        self.assertEqual(get_odoo_module(TestModuleInstalledFunctions),
+                         'connector')
 
 
 class TestConnectorUnit(unittest.TestCase):
@@ -220,4 +220,4 @@ class TestAdvisoryLock(common.TransactionCase):
         connector_unit2 = mock_connector_unit(self.env2)
         with self.assertRaises(RetryableJobError) as cm:
             connector_unit2.advisory_lock_or_retry(lock, retry_seconds=3)
-            self.assertEquals(cm.exception.seconds, 3)
+            self.assertEqual(cm.exception.seconds, 3)

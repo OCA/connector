@@ -69,8 +69,7 @@ def pg_try_advisory_lock(env, lock):
        external id
     :return True/False whether lock was acquired.
     """
-    hasher = hashlib.sha1()
-    hasher.update('{}'.format(lock))
+    hasher = hashlib.sha1(str(lock).encode())
     # pg_lock accepts an int8 so we build an hash composed with
     # contextual information and we throw away some bits
     int_lock = struct.unpack('q', hasher.digest()[:8])

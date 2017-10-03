@@ -36,7 +36,7 @@ class TestRelatedActionBinding(TransactionComponentCase):
             'res_id': binding.odoo_id.id,
             'res_model': 'connector.test.record',
         }
-        self.assertEquals(action, expected)
+        self.assertEqual(action, expected)
 
     def test_unwrap_binding_direct_binding(self):
         """ Call the unwrap binding related action """
@@ -56,7 +56,7 @@ class TestRelatedActionBinding(TransactionComponentCase):
             'res_id': binding.id,
             'res_model': 'no.inherits.binding',
         }
-        self.assertEquals(action, expected)
+        self.assertEqual(action, expected)
 
     def test_unwrap_binding_not_exists(self):
         """ Call the related action on the model on non-existing record """
@@ -71,6 +71,6 @@ class TestRelatedActionBinding(TransactionComponentCase):
 
         binding.unlink()
 
-        with self.assertRaisesRegexp(UserError,
-                                     'No action available for this job'):
+        with self.assertRaisesRegex(UserError,
+                                    'No action available for this job'):
             db_job.open_related_action()

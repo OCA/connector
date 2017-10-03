@@ -82,7 +82,7 @@ class MetaConnectorUnit(type):
         cls._module = get_odoo_module(cls)
 
 
-class ConnectorUnit(object):
+class ConnectorUnit(object, metaclass=MetaConnectorUnit):
     """Abstract class for each piece of the connector:
 
     Examples:
@@ -94,8 +94,6 @@ class ConnectorUnit(object):
     Or basically any class intended to be registered in a
     :py:class:`~connector.backend.Backend`.
     """
-
-    __metaclass__ = MetaConnectorUnit
 
     _model_name = None  # to be defined in sub-classes
 

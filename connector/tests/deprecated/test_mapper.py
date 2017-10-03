@@ -254,7 +254,7 @@ class test_mapper(unittest.TestCase):
         map_record = mapper.map_record(record)
         expected = {'out_name': 'Guewen',
                     'out_street': 'STREET'}
-        self.assertEqual(map_record.values(), expected)
+        self.assertEqual(list(map_record.values()), expected)
         self.assertEqual(map_record.values(for_create=True), expected)
 
     def test_mapping_record_on_create(self):
@@ -279,7 +279,7 @@ class test_mapper(unittest.TestCase):
         map_record = mapper.map_record(record)
         expected = {'out_name': 'Guewen',
                     'out_street': 'STREET'}
-        self.assertEqual(map_record.values(), expected)
+        self.assertEqual(list(map_record.values()), expected)
         expected = {'out_name': 'Guewen',
                     'out_street': 'STREET',
                     'out_city': 'city'}
@@ -310,7 +310,7 @@ class test_mapper(unittest.TestCase):
                     'out_street': 'STREET',
                     'out_city': 'forced',
                     'test': 1}
-        self.assertEqual(map_record.values(), expected)
+        self.assertEqual(list(map_record.values()), expected)
         expected = {'out_name': 'Guewen',
                     'out_street': 'STREET',
                     'out_city': 'forced',
@@ -335,7 +335,7 @@ class test_mapper(unittest.TestCase):
         map_record = mapper.map_record(record)
         expected = {'out_name': 'Guewen',
                     'test': 'abc'}
-        self.assertEqual(map_record.values(), expected)
+        self.assertEqual(list(map_record.values()), expected)
         expected = {'out_name': 'Guewen',
                     'test': 'abc'}
         self.assertEqual(map_record.values(for_create=True), expected)
@@ -385,7 +385,7 @@ class test_mapper(unittest.TestCase):
         mapper = MyMapper(env)
         map_record = mapper.map_record(record)
         expected = {'out_name': 'Guewen'}
-        self.assertEqual(map_record.values(), expected)
+        self.assertEqual(list(map_record.values()), expected)
         self.assertEqual(map_record.values(for_create=True), expected)
 
     def test_mapping_convert(self):
@@ -398,7 +398,7 @@ class test_mapper(unittest.TestCase):
         mapper = MyMapper(env)
         map_record = mapper.map_record(record)
         expected = {'out_name': 300}
-        self.assertEqual(map_record.values(), expected)
+        self.assertEqual(list(map_record.values()), expected)
         self.assertEqual(map_record.values(for_create=True), expected)
 
     def test_mapping_modifier_none(self):
@@ -412,7 +412,7 @@ class test_mapper(unittest.TestCase):
         mapper = MyMapper(env)
         map_record = mapper.map_record(record)
         expected = {'out_f': None, 'out_t': True}
-        self.assertEqual(map_record.values(), expected)
+        self.assertEqual(list(map_record.values()), expected)
         self.assertEqual(map_record.values(for_create=True), expected)
 
     def test_mapping_modifier_pipeline(self):
@@ -426,7 +426,7 @@ class test_mapper(unittest.TestCase):
         mapper = MyMapper(env)
         map_record = mapper.map_record(record)
         expected = {'out_f': None, 'out_t': True}
-        self.assertEqual(map_record.values(), expected)
+        self.assertEqual(list(map_record.values()), expected)
         self.assertEqual(map_record.values(for_create=True), expected)
 
     def test_mapping_custom_option(self):
@@ -463,7 +463,7 @@ class test_mapper(unittest.TestCase):
         mapper = MyMapper(env)
         map_record = mapper.map_record(record)
         expected = {'res': True}
-        self.assertEqual(map_record.values(), expected)
+        self.assertEqual(list(map_record.values()), expected)
 
     def test_map_options(self):
         """ Test MapOptions """
@@ -528,7 +528,7 @@ class test_mapper_recordsets(common.TransactionCase):
         mapper = MyMapper(self.connector_env)
         map_record = mapper.map_record(partner)
         expected = {'parent_name': 'Agrolait'}
-        self.assertEqual(map_record.values(), expected)
+        self.assertEqual(list(map_record.values()), expected)
         self.assertEqual(map_record.values(for_create=True), expected)
 
 
@@ -560,7 +560,7 @@ class test_mapper_binding(common.TransactionCase):
 
         mapper = MyMapper(self.connector_env)
         map_record = mapper.map_record(partner)
-        self.assertEqual(map_record.values(), {'country': 10})
+        self.assertEqual(list(map_record.values()), {'country': 10})
         self.country_binder.to_external.assert_called_once_with(
             partner.country_id.id, wrap=False)
 
@@ -575,7 +575,7 @@ class test_mapper_binding(common.TransactionCase):
         self.country_binder.to_internal.return_value = ch
         mapper = MyMapper(self.connector_env)
         map_record = mapper.map_record(record)
-        self.assertEqual(map_record.values(), {'country_id': ch.id})
+        self.assertEqual(list(map_record.values()), {'country_id': ch.id})
         self.country_binder.to_internal.assert_called_once_with(
             10, unwrap=False)
 
@@ -624,7 +624,7 @@ class test_mapper_binding(common.TransactionCase):
                                  (0, 0, {'name': '2013-11-08',
                                          'rate': 40})]
                     }
-        self.assertEqual(map_record.values(), expected)
+        self.assertEqual(list(map_record.values()), expected)
         expected = {'name': 'SO1',
                     'line_ids': [(0, 0, {'name': '2013-11-07',
                                          'rate': 20,
@@ -687,7 +687,7 @@ class test_mapper_binding(common.TransactionCase):
                                  ('ABC', {'name': '2013-11-08',
                                           'rate': 40})]
                     }
-        self.assertEqual(map_record.values(), expected)
+        self.assertEqual(list(map_record.values()), expected)
         expected = {'name': 'SO1',
                     'line_ids': [('ABC', {'name': '2013-11-07',
                                           'rate': 20,

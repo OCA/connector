@@ -81,7 +81,7 @@ class TestLookup(ComponentRegistryCase):
         """ No component """
         # we just expect an empty list when no component match, the error
         # handling is handled at an higher level
-        self.assertEquals(
+        self.assertEqual(
             [],
             self.comp_registry.lookup('something', usage='something')
         )
@@ -94,7 +94,7 @@ class TestLookup(ComponentRegistryCase):
 
         self._build_components(Foo)
         # this is just a dict access
-        self.assertEquals('foo', self.comp_registry['foo']._name)
+        self.assertEqual('foo', self.comp_registry['foo']._name)
 
     def test_lookup_abstract(self):
         """ Do not include abstract components in lookup """

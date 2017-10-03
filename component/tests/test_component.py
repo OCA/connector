@@ -73,10 +73,10 @@ class TestComponent(TransactionComponentRegistryCase):
             # as we are working on res.partner, we should get 'component1'
             comp = base.work.component(usage='for.test')
             # but this is not what we test here, we test the attributes:
-            self.assertEquals(self.collection_record, comp.collection)
-            self.assertEquals(base.work, comp.work)
-            self.assertEquals(self.env, comp.env)
-            self.assertEquals(self.env['res.partner'], comp.model)
+            self.assertEqual(self.collection_record, comp.collection)
+            self.assertEqual(base.work, comp.work)
+            self.assertEqual(self.env, comp.env)
+            self.assertEqual(self.env['res.partner'], comp.model)
 
     def test_component_get_by_name_same_model(self):
         """ Use component_by_name with current working model """
@@ -85,8 +85,8 @@ class TestComponent(TransactionComponentRegistryCase):
             # we work with res.partner, we should get 'component1'
             # this is ok because it's _apply_on contains res.partner
             comp = base.component_by_name('component1')
-            self.assertEquals('component1', comp._name)
-            self.assertEquals(self.env['res.partner'], comp.model)
+            self.assertEqual('component1', comp._name)
+            self.assertEqual(self.env['res.partner'], comp.model)
 
     def test_component_get_by_name_other_model(self):
         """ Use component_by_name with another model """
@@ -97,22 +97,22 @@ class TestComponent(TransactionComponentRegistryCase):
             comp = base.component_by_name(
                 'component2', model_name='res.users'
             )
-            self.assertEquals('component2', comp._name)
-            self.assertEquals(self.env['res.users'], comp.model)
+            self.assertEqual('component2', comp._name)
+            self.assertEqual(self.env['res.users'], comp.model)
             # what happens under the hood, is that a new WorkContext
             # has been created for this model, with all the other values
             # identical to the previous WorkContext (the one for res.partner)
             # We can check that with:
-            self.assertNotEquals(base.work, comp.work)
-            self.assertEquals('res.partner', base.work.model_name)
-            self.assertEquals('res.users', comp.work.model_name)
+            self.assertNotEqual(base.work, comp.work)
+            self.assertEqual('res.partner', base.work.model_name)
+            self.assertEqual('res.users', comp.work.model_name)
 
     def test_component_get_by_name_wrong_model(self):
         """ Use component_by_name with a model not in _apply_on """
         msg = ("Component with name 'component2' can't be used "
                "for model 'res.partner'.*")
         with self.get_base() as base:
-            with self.assertRaisesRegexp(NoComponentError, msg):
+            with self.assertRaisesRegex(NoComponentError, msg):
                 # we ask for the model 'component2' but we are working
                 # with res.partner, and it only accepts res.users
                 base.component_by_name('component2')
@@ -121,7 +121,7 @@ class TestComponent(TransactionComponentRegistryCase):
         """ Use component_by_name on a component that do not exist """
         msg = "No component with name 'foo' found."
         with self.get_base() as base:
-            with self.assertRaisesRegexp(NoComponentError, msg):
+            with self.assertRaisesRegex(NoComponentError, msg):
                 base.component_by_name('foo')
 
     def test_component_by_usage_same_model(self):
@@ -130,8 +130,8 @@ class TestComponent(TransactionComponentRegistryCase):
         # model being res.partner (the model in the current WorkContext)
         with self.get_base() as base:
             comp = base.component(usage='for.test')
-            self.assertEquals('component1', comp._name)
-            self.assertEquals(self.env['res.partner'], comp.model)
+            self.assertEqual('component1', comp._name)
+            self.assertEqual(self.env['res.partner'], comp.model)
 
     def test_component_by_usage_other_model(self):
         """ Use component(usage=...) on a different model (name) """
@@ -139,23 +139,23 @@ class TestComponent(TransactionComponentRegistryCase):
         # a different model (res.users)
         with self.get_base() as base:
             comp = base.component(usage='for.test', model_name='res.users')
-            self.assertEquals('component2', comp._name)
-            self.assertEquals(self.env['res.users'], comp.model)
+            self.assertEqual('component2', comp._name)
+            self.assertEqual(self.env['res.users'], comp.model)
             # what happens under the hood, is that a new WorkContext
             # has been created for this model, with all the other values
             # identical to the previous WorkContext (the one for res.partner)
             # We can check that with:
-            self.assertNotEquals(base.work, comp.work)
-            self.assertEquals('res.partner', base.work.model_name)
-            self.assertEquals('res.users', comp.work.model_name)
+            self.assertNotEqual(base.work, comp.work)
+            self.assertEqual('res.partner', base.work.model_name)
+            self.assertEqual('res.users', comp.work.model_name)
 
     def test_component_by_usage_other_model_env(self):
         """ Use component(usage=...) on a different model (instance) """
         with self.get_base() as base:
             comp = base.component(usage='for.test',
                                   model_name=self.env['res.users'])
-            self.assertEquals('component2', comp._name)
-            self.assertEquals(self.env['res.users'], comp.model)
+            self.assertEqual('component2', comp._name)
+            self.assertEqual(self.env['res.users'], comp.model)
 
     def test_component_error_several(self):
         """ Use component(usage=...) when more than one component match """
@@ -242,13 +242,13 @@ class TestComponent(TransactionComponentRegistryCase):
     def test_no_many_component(self):
         """ No component found for asked usage for many_components() """
         with self.get_base() as base:
-            self.assertEquals([], base.many_components(usage='foo'))
+            self.assertEqual([], base.many_components(usage='foo'))
 
     def test_work_on_component(self):
         """ Check WorkContext.component() (shortcut to Component.component) """
         with self.get_base() as base:
             comp = base.work.component(usage='for.test')
-            self.assertEquals('component1', comp._name)
+            self.assertEqual('component1', comp._name)
 
     def test_work_on_many_components(self):
         """ Check WorkContext.many_components()
@@ -257,7 +257,7 @@ class TestComponent(TransactionComponentRegistryCase):
         """
         with self.get_base() as base:
             comps = base.work.many_components(usage='for.test')
-            self.assertEquals('component1', comps[0]._name)
+            self.assertEqual('component1', comps[0]._name)
 
     def test_component_match(self):
         """ Lookup with match method """
@@ -284,4 +284,4 @@ class TestComponent(TransactionComponentRegistryCase):
             # _component_match method
             comp = base.component(usage='speaker',
                                   model_name=self.env['res.partner'])
-            self.assertEquals('bar', comp._name)
+            self.assertEqual('bar', comp._name)

@@ -136,7 +136,7 @@ class ComponentRegistry(object):
 
         # keep the order so addons loaded first have components used first
         candidates = (
-            component for component in self._components.itervalues()
+            component for component in self._components.values()
             if not component._abstract
         )
 
@@ -258,7 +258,7 @@ class WorkContext(object):
             'model_name',
             'components_registry',
         ]
-        for attr_name, value in kwargs.iteritems():
+        for attr_name, value in kwargs.items():
             setattr(self, attr_name, value)
             self._propagate_kwargs.append(attr_name)
 
@@ -415,9 +415,6 @@ class WorkContext(object):
     def __str__(self):
         return "WorkContext(%s, %s)" % (self.model_name, repr(self.collection))
 
-    def __unicode__(self):
-        return unicode(str(self))
-
     __repr__ = __str__
 
 
@@ -448,12 +445,12 @@ class MetaComponent(type):
         if self._apply_on is None:
             return None
         # always return a list, used for the lookup
-        elif isinstance(self._apply_on, basestring):
+        elif isinstance(self._apply_on, str):
             return [self._apply_on]
         return self._apply_on
 
 
-class AbstractComponent(object):
+class AbstractComponent(object, metaclass=MetaComponent):
     """ Main Component Model
 
     All components have a Python inheritance either on
@@ -606,7 +603,6 @@ class AbstractComponent(object):
       ``magento.xxx``) to prevent conflicts between addons.
 
     """
-    __metaclass__ = MetaComponent
 
     _register = False
     _abstract = True
@@ -687,9 +683,6 @@ class AbstractComponent(object):
     def __str__(self):
         return "Component(%s)" % self._name
 
-    def __unicode__(self):
-        return unicode(str(self))
-
     __repr__ = __str__
 
     @classmethod
@@ -756,7 +749,7 @@ class AbstractComponent(object):
 
         # determine inherited components
         parents = cls._inherit
-        if isinstance(parents, basestring):
+        if isinstance(parents, str):
             parents = [parents]
         elif parents is None:
             parents = []

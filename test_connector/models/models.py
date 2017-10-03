@@ -11,25 +11,6 @@ class TestBackend(models.Model):
     _name = 'test.backend'
     _inherit = ['connector.backend']
 
-    @property
-    def _backend_type(self):
-        # this is a hack for the tests:
-        # the related_action_unwrap_binding uses the
-        # _backend_type to know if we are using old
-        # ConnectorUnit or the new Components, because the _backend_type
-        # is used only by the ConnectorUnit system.
-        # As we want to test both, we pass this key in the ConnectorUnit
-        # tests context
-        if self.env.context.get('test_connector_units'):
-            return 'test_connector'
-
-    # useless for components
-    version = fields.Selection(
-        selection=[('1', '1')],
-        string='Version',
-        required=True,
-    )
-
 
 class ConnectorTestRecord(models.Model):
     _name = 'connector.test.record'

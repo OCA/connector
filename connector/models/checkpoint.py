@@ -146,7 +146,7 @@ def add_checkpoint(env, model_name, record_id,
                                              backend_model_name, backend_id)
 
 
-class connector_checkpoint_review(models.TransientModel):
+class ConnectorCheckpointReview(models.TransientModel):
     _name = 'connector.checkpoint.review'
     _description = 'Checkpoints Review'
 

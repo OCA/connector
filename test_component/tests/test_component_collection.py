@@ -20,9 +20,9 @@ class TestComponentCollection(TransactionComponentCase):
     def test_component_by_name(self):
         with self.collection.work_on('res.users') as work:
             component = work.component_by_name(name='test.user.component')
-            self.assertEquals(UserTestComponent._name, component._name)
+            self.assertEqual(UserTestComponent._name, component._name)
 
     def test_components_usage(self):
         with self.collection.work_on('res.users') as work:
             component = work.component(usage='test1')
-            self.assertEquals(UserTestComponent._name, component._name)
+            self.assertEqual(UserTestComponent._name, component._name)

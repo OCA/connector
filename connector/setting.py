@@ -9,4 +9,4 @@ class ConnectorConfigSettings(models.TransientModel):
 
     _name = 'connector.config.settings'
     _description = 'Connector Configuration'
-    _inherit = 'base.config.settings'
+    _inherit = 'res.config.settings'

@@ -16,18 +16,18 @@ class TestComponentInheritance(TransactionComponentCase):
     def test_inherit_base(self):
         with self.collection.work_on('res.users') as work:
             component = work.component_by_name('base')
-            self.assertEquals('test_inherit_base',
-                              component.test_inherit_base())
+            self.assertEqual('test_inherit_base',
+                             component.test_inherit_base())
 
     def test_inherit_component(self):
         with self.collection.work_on('res.users') as work:
             component = work.component_by_name('mapper')
-            self.assertEquals('test_inherit_component',
-                              component.test_inherit_component())
+            self.assertEqual('test_inherit_component',
+                             component.test_inherit_component())
 
     def test_inherit_prototype_component(self):
         with self.collection.work_on('res.users') as work:
             component = work.component_by_name('test.mapper')
-            self.assertEquals('test_inherit_component',
-                              component.test_inherit_component())
-            self.assertEquals('test.mapper', component.name())
+            self.assertEqual('test_inherit_component',
+                             component.test_inherit_component())
+            self.assertEqual('test.mapper', component.name())

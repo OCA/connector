@@ -66,8 +66,6 @@ This module triggers 3 events:
 Known issues / Roadmap
 ======================
 
-* ...
-
 Bug Tracker
 ===========
 

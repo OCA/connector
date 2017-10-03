@@ -94,7 +94,7 @@ class test_event(common.TransactionCase):
         recipient = Recipient()
         # an event is fired on a model name
         self.event.fire(self.env, 'res.users', recipient, 'success')
-        self.assertEquals(recipient.message, 'success')
+        self.assertEqual(recipient.message, 'success')
 
     def test_fire_several_consumers(self):
         """ Fire several consumers """
@@ -118,8 +118,8 @@ class test_event(common.TransactionCase):
 
         # an event is fired on a model name
         self.event.fire(self.env, 'res.users', 'success')
-        self.assertEquals(recipient.message, 'success')
-        self.assertEquals(recipient2.message, 'success')
+        self.assertEqual(recipient.message, 'success')
+        self.assertEqual(recipient2.message, 'success')
 
     def test_has_consumer_for(self):
         @self.event(model_names=['product.product'])

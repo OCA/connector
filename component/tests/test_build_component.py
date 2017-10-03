@@ -29,7 +29,7 @@ class TestBuildComponent(ComponentRegistryCase):
             pass
 
         msg = '.*must have a _name.*'
-        with self.assertRaisesRegexp(TypeError, msg):
+        with self.assertRaisesRegex(TypeError, msg):
             Component1._build_component(self.comp_registry)
 
     def test_register(self):
@@ -44,7 +44,7 @@ class TestBuildComponent(ComponentRegistryCase):
         # them in the components registry
         Component1._build_component(self.comp_registry)
         Component2._build_component(self.comp_registry)
-        self.assertEquals(
+        self.assertEqual(
             ['base', 'component1', 'component2'],
             list(self.comp_registry)
         )
@@ -63,7 +63,7 @@ class TestBuildComponent(ComponentRegistryCase):
         Component1._build_component(self.comp_registry)
         Component2._build_component(self.comp_registry)
         Component3._build_component(self.comp_registry)
-        self.assertEquals(
+        self.assertEqual(
             (Component3,
              Component2,
              Component1,
@@ -92,24 +92,24 @@ class TestBuildComponent(ComponentRegistryCase):
         Component2._build_component(self.comp_registry)
         Component3._build_component(self.comp_registry)
         Component4._build_component(self.comp_registry)
-        self.assertEquals(
+        self.assertEqual(
             (Component1,
              self.comp_registry['base']),
             self.comp_registry['component1'].__bases__
         )
-        self.assertEquals(
+        self.assertEqual(
             (Component2,
              self.comp_registry['component1'],
              self.comp_registry['base']),
             self.comp_registry['component2'].__bases__
         )
-        self.assertEquals(
+        self.assertEqual(
             (Component3,
              self.comp_registry['component1'],
              self.comp_registry['base']),
             self.comp_registry['component3'].__bases__
         )
-        self.assertEquals(
+        self.assertEqual(
             (Component4,
              self.comp_registry['component2'],
              self.comp_registry['component3'],
@@ -160,10 +160,10 @@ class TestBuildComponent(ComponentRegistryCase):
         # for this test
         component1 = self.comp_registry['component1'](mock.Mock())
         component2 = self.comp_registry['component2'](mock.Mock())
-        self.assertEquals('ping', component1.msg)
-        self.assertEquals('pong', component2.msg)
-        self.assertEquals('foo', component1.say())
-        self.assertEquals('foo bar', component2.say())
+        self.assertEqual('ping', component1.msg)
+        self.assertEqual('pong', component2.msg)
+        self.assertEqual('foo', component1.say())
+        self.assertEqual('foo bar', component2.say())
 
     def test_duplicate_component(self):
         """ Check that we can't have 2 components with the same name """
@@ -175,7 +175,7 @@ class TestBuildComponent(ComponentRegistryCase):
 
         Component1._build_component(self.comp_registry)
         msg = 'Component.*already exists.*'
-        with self.assertRaisesRegexp(TypeError, msg):
+        with self.assertRaisesRegex(TypeError, msg):
             Component2._build_component(self.comp_registry)
 
     def test_no_parent(self):
@@ -185,7 +185,7 @@ class TestBuildComponent(ComponentRegistryCase):
             _inherit = 'component1'
 
         msg = 'Component.*does not exist in registry.*'
-        with self.assertRaisesRegexp(TypeError, msg):
+        with self.assertRaisesRegex(TypeError, msg):
             Component1._build_component(self.comp_registry)
 
     def test_no_parent2(self):
@@ -199,7 +199,7 @@ class TestBuildComponent(ComponentRegistryCase):
 
         Component1._build_component(self.comp_registry)
         msg = 'Component.*inherits from non-existing component.*'
-        with self.assertRaisesRegexp(TypeError, msg):
+        with self.assertRaisesRegex(TypeError, msg):
             Component2._build_component(self.comp_registry)
 
     def test_add_inheritance(self):
@@ -218,7 +218,7 @@ class TestBuildComponent(ComponentRegistryCase):
         Component2._build_component(self.comp_registry)
         Component2bis._build_component(self.comp_registry)
 
-        self.assertEquals(
+        self.assertEqual(
             (Component2bis,
              Component2,
              self.comp_registry['component1'],
@@ -255,7 +255,7 @@ class TestBuildComponent(ComponentRegistryCase):
 
         Component1._build_component(self.comp_registry)
         msg = '.*cannot inherit from the non-abstract.*'
-        with self.assertRaisesRegexp(TypeError, msg):
+        with self.assertRaisesRegex(TypeError, msg):
             Component2._build_component(self.comp_registry)
 
     def test_check_transform_abstract_to_component(self):
@@ -268,5 +268,5 @@ class TestBuildComponent(ComponentRegistryCase):
 
         Component1._build_component(self.comp_registry)
         msg = '.*transforms the abstract component.*into a non-abstract.*'
-        with self.assertRaisesRegexp(TypeError, msg):
+        with self.assertRaisesRegex(TypeError, msg):
             Component1bis._build_component(self.comp_registry)

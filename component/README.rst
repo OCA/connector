@@ -51,8 +51,6 @@ component level)::
 Known issues / Roadmap
 ======================
 
-* ...
-
 Bug Tracker
 ===========
 

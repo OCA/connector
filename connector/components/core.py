@@ -67,7 +67,7 @@ The usual categories are:
 
 from odoo.addons.component.core import AbstractComponent
 from odoo.addons.queue_job.exception import RetryableJobError
-from ..connector import pg_try_advisory_lock
+from ..database import pg_try_advisory_lock
 
 
 class BaseConnectorComponent(AbstractComponent):

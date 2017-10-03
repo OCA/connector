@@ -7,7 +7,7 @@ from odoo import api
 from odoo.tests import common
 from odoo.modules.registry import Registry
 from odoo.addons.queue_job.exception import RetryableJobError
-from odoo.addons.connector.connector import pg_try_advisory_lock
+from odoo.addons.connector.database import pg_try_advisory_lock
 from odoo.addons.component.core import WorkContext
 from odoo.addons.component.tests.common import TransactionComponentCase
 

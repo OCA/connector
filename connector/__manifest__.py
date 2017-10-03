@@ -3,7 +3,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html)
 
 {'name': 'Connector',
- 'version': '10.0.2.0.0',
+ 'version': '11.0.1.0.0',
  'author': 'Camptocamp,Openerp Connector Core Editors,'
            'Odoo Community Association (OCA)',
  'website': 'http://odoo-connector.com',
@@ -21,5 +21,5 @@
           'setting_view.xml',
           'res_partner_view.xml',
           ],
- 'installable': False,
+ 'installable': True,
  }

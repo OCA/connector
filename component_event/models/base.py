@@ -91,13 +91,14 @@ class Base(models.AbstractModel):
     @api.model
     def create(self, vals):
         record = super(Base, self).create(vals)
-        self._event('on_record_create').notify(record, fields=vals.keys())
+        fields = list(vals.keys())
+        self._event('on_record_create').notify(record, fields=fields)
         return record
 
     @api.multi
     def write(self, vals):
         result = super(Base, self).write(vals)
-        fields = vals.keys()
+        fields = list(vals.keys())
         for record in self:
             self._event('on_record_write').notify(record, fields=fields)
         return result

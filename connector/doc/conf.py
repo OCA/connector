@@ -23,11 +23,44 @@ import sphinx_bootstrap_theme
 #sys.path.insert(0, os.path.abspath('.'))
 sys.path.append(os.path.abspath('_themes'))
 
+MANIFEST_FILES = [
+    '__manifest__.py',
+    '__odoo__.py',
+    '__openerp__.py',
+]
+
+
+def is_module(path):
+    """return False if the path doesn't contain an odoo module, and the full
+    path to the module manifest otherwise"""
+
+    if not os.path.isdir(path):
+        return False
+    files = os.listdir(path)
+    filtered = [x for x in files if x in (MANIFEST_FILES + ['__init__.py'])]
+    if len(filtered) == 2 and '__init__.py' in filtered:
+        return os.path.join(
+            path, next(x for x in filtered if x != '__init__.py'))
+    else:
+        return False
+
+
+def is_installable_module(path):
+    """return False if the path doesn't contain an installable odoo module,
+    and the full path to the module manifest otherwise"""
+    manifest_path = is_module(path)
+    if manifest_path:
+        manifest = ast.literal_eval(open(manifest_path).read())
+        if manifest.get('installable', True):
+            return manifest_path
+    return False
+
+
 if os.environ.get('TRAVIS_BUILD_DIR') and os.environ.get('VERSION'):
     # build from travis
     repos_home = os.environ['HOME']
     deps_path = os.path.join(repos_home, 'dependencies')
-    odoo_folder = 'odoo-10.0'
+    odoo_folder = 'odoo-11.0'
     odoo_root = os.path.join(repos_home, odoo_folder)
     build_path = os.environ['TRAVIS_BUILD_DIR']
 else:
@@ -37,7 +70,6 @@ else:
     build_path = os.path.abspath('../..')
 
 addons_paths = []
-
 
 def add_path(*paths):
     addons_paths.append(
@@ -58,7 +90,8 @@ for repo in deps_repos:
 
 addons = [x for x in os.listdir(build_path)
           if not x.startswith(('.', '__')) and
-          os.path.isdir(os.path.join(build_path, x))]
+          is_installable_module(x)]
+
 
 # sphinxodoo.ext.autodoc variables
 sphinxodoo_root_path = odoo_root

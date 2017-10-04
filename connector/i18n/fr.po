@@ -3,15 +3,14 @@
 # * connector
 # 
 # Translators:
-# OCA Transbot <transbot@odoo-community.org>, 2017
-# leemannd <denis.leemann@camptocamp.com>, 2017
+# OCA Transbot <transbot@odoo-community.org>, 2018
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 10.0\n"
+"Project-Id-Version: Odoo Server 11.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-06-14 20:10+0000\n"
-"PO-Revision-Date: 2017-06-14 20:10+0000\n"
-"Last-Translator: leemannd <denis.leemann@camptocamp.com>, 2017\n"
+"POT-Creation-Date: 2018-01-05 16:56+0000\n"
+"PO-Revision-Date: 2018-01-05 16:56+0000\n"
+"Last-Translator: OCA Transbot <transbot@odoo-community.org>, 2018\n"
 "Language-Team: French (https://www.transifex.com/oca/teams/23907/fr/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -20,7 +19,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #. module: connector
-#: code:addons/connector/checkpoint/checkpoint.py:119
+#: code:addons/connector/models/checkpoint.py:119
 #, python-format
 msgid "A %s needs a review."
 msgstr "Un %s a besoin d'un contrôle."
@@ -188,12 +187,6 @@ msgid "Model"
 msgstr "Modèle"
 
 #. module: connector
-#: model:ir.model.fields,field_description:connector.field_connector_backend_name
-#: model:ir.model.fields,field_description:connector.field_test_backend_name
-msgid "Name"
-msgstr "Nom"
-
-#. module: connector
 #: model:ir.model.fields,help:connector.field_connector_checkpoint_name
 msgid "Name of the record to review"
 msgstr "Nom de l'enregistrement à contrôler"
@@ -235,7 +228,7 @@ msgid "Record Name"
 msgstr "Nom d'enregistrement"
 
 #. module: connector
-#: code:addons/connector/models/queue_job.py:32
+#: code:addons/connector/models/queue_job.py:31
 #, python-format
 msgid "Related Record"
 msgstr "Enregistrement lié"
@@ -292,11 +285,6 @@ msgstr ""
 "Les points de contrôle sélectionnés vont être considérés comme contrôlés."
 
 #. module: connector
-#: model:ir.model.fields,field_description:connector.field_connector_backend_version
-msgid "Version"
-msgstr "Version"
-
-#. module: connector
 #: model:ir.actions.act_window,help:connector.action_connector_checkpoint
 msgid ""
 "When a connector imports new records which have\n"
@@ -304,11 +292,6 @@ msgid ""
 "                will appear in this list.  Once a record has been\n"
 "                checked, click on the 'Reviewed' button."
 msgstr ""
-
-#. module: connector
-#: model:ir.model,name:connector.model_base
-msgid "base"
-msgstr "base"
 
 #. module: connector
 #: model:ir.ui.view,arch_db:connector.view_connector_checkpoint_review

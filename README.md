@@ -17,6 +17,17 @@ http://www.odoo-connector.com
 
 [//]: # (addons)
 
+Unported addons
+---------------
+addon | version | summary
+--- | --- | ---
+[component](component/) | 10.0.1.0.0 (unported) | Components
+[component_event](component_event/) | 10.0.1.0.0 (unported) | Components Events
+[connector](connector/) | 10.0.2.0.0 (unported) | Connector
+[connector_base_product](connector_base_product/) | 10.0.1.0.0 (unported) | Connector Base Product
+[test_component](test_component/) | 10.0.1.0.0 (unported) | Automated tests for Components, do not install.
+[test_connector](test_connector/) | 10.0.1.0.0 (unported) | Automated tests for Connector, do not install.
+
 [//]: # (end addons)
 
 Translation Status

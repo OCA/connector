@@ -1,2 +1,2 @@
-cachetools==2.0.0
+cachetools>=2.0.1
 unittest2

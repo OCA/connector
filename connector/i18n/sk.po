@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: connector (9.0)\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-04-05 00:42+0000\n"
-"PO-Revision-Date: 2017-04-25 10:42+0000\n"
+"POT-Creation-Date: 2017-09-21 07:53+0000\n"
+"PO-Revision-Date: 2017-10-16 18:32+0000\n"
 "Last-Translator: OCA Transbot <transbot@odoo-community.org>\n"
 "Language-Team: Slovak (http://www.transifex.com/oca/OCA-connector-9-0/language/sk/)\n"
 "MIME-Version: 1.0\n"
@@ -89,13 +89,13 @@ msgid "Cancel"
 msgstr "Zrušiť"
 
 #. module: connector
-#: code:addons/connector/queue/model.py:279
+#: code:addons/connector/queue/model.py:287
 #, python-format
 msgid "Cannot change the root channel"
 msgstr ""
 
 #. module: connector
-#: code:addons/connector/queue/model.py:286
+#: code:addons/connector/queue/model.py:294
 #, python-format
 msgid "Cannot remove the root channel"
 msgstr ""
@@ -199,6 +199,11 @@ msgstr ""
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_queue_job_date_created
 msgid "Created Date"
+msgstr ""
+
+#. module: connector
+#: model:ir.ui.view,arch_db:connector.view_queue_job_search
+msgid "Created Last 24h"
 msgstr ""
 
 #. module: connector
@@ -327,6 +332,11 @@ msgstr ""
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_message_partner_ids
 #: model:ir.model.fields,field_description:connector.field_queue_job_message_partner_ids
 msgid "Followers (Partners)"
+msgstr ""
+
+#. module: connector
+#: model:ir.model.fields,field_description:connector.field_queue_job_forced_channel
+msgid "Forced channel"
 msgstr ""
 
 #. module: connector
@@ -494,7 +504,7 @@ msgid "Manage multiple companies"
 msgstr ""
 
 #. module: connector
-#: code:addons/connector/queue/model.py:133
+#: code:addons/connector/queue/model.py:141
 #, python-format
 msgid "Manually set to done by %s"
 msgstr ""
@@ -541,7 +551,7 @@ msgid "Need Review"
 msgstr ""
 
 #. module: connector
-#: code:addons/connector/queue/model.py:109
+#: code:addons/connector/queue/model.py:117
 #, python-format
 msgid "No action available for this job"
 msgstr ""
@@ -580,7 +590,7 @@ msgid "Parent Channel"
 msgstr ""
 
 #. module: connector
-#: code:addons/connector/queue/model.py:271
+#: code:addons/connector/queue/model.py:279
 #, python-format
 msgid "Parent channel required."
 msgstr ""
@@ -715,7 +725,7 @@ msgid ""
 msgstr ""
 
 #. module: connector
-#: code:addons/connector/queue/model.py:185
+#: code:addons/connector/queue/model.py:193
 #, python-format
 msgid ""
 "Something bad happened during the execution of the job. More details in the "
@@ -725,7 +735,7 @@ msgstr ""
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_queue_job_date_started
 msgid "Start Date"
-msgstr ""
+msgstr "Počiatočný dátum"
 
 #. module: connector
 #: model:ir.ui.view,arch_db:connector.view_queue_job_search
@@ -737,7 +747,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:connector.field_queue_job_state
 #: model:ir.ui.view,arch_db:connector.view_queue_job_search
 msgid "State"
-msgstr ""
+msgstr "Stav"
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_state

@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: connector (8.0)\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-04-05 02:47+0000\n"
-"PO-Revision-Date: 2017-04-25 10:42+0000\n"
+"POT-Creation-Date: 2017-09-08 23:14+0000\n"
+"PO-Revision-Date: 2017-10-16 18:32+0000\n"
 "Last-Translator: OCA Transbot <transbot@odoo-community.org>\n"
 "Language-Team: Slovak (http://www.transifex.com/oca/OCA-connector-8-0/language/sk/)\n"
 "MIME-Version: 1.0\n"
@@ -658,7 +658,7 @@ msgstr ""
 #. module: connector
 #: field:queue.job,date_started:0 field:queue.worker,date_start:0
 msgid "Start Date"
-msgstr ""
+msgstr "Počiatočný dátum"
 
 #. module: connector
 #: view:queue.job:connector.view_queue_job_search selection:queue.job,state:0
@@ -668,7 +668,7 @@ msgstr ""
 #. module: connector
 #: view:queue.job:connector.view_queue_job_search field:queue.job,state:0
 msgid "State"
-msgstr ""
+msgstr "Stav"
 
 #. module: connector
 #: field:connector.checkpoint,state:0

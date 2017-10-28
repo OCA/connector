@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: connector (8.0)\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-08-22 13:04+0000\n"
-"PO-Revision-Date: 2017-08-21 07:22+0000\n"
+"POT-Creation-Date: 2017-09-08 23:14+0000\n"
+"PO-Revision-Date: 2017-09-22 10:31+0000\n"
 "Last-Translator: OCA Transbot <transbot@odoo-community.org>\n"
 "Language-Team: Danish (Denmark) (http://www.transifex.com/oca/OCA-connector-8-0/language/da_DK/)\n"
 "MIME-Version: 1.0\n"
@@ -483,7 +483,7 @@ msgstr ""
 #: view:connector.checkpoint:connector.view_connector_checkpoint_search
 #: field:connector.checkpoint,model_id:0 field:queue.job,model_name:0
 msgid "Model"
-msgstr ""
+msgstr "Model"
 
 #. module: connector
 #: field:connector.backend,name:0 field:queue.job.channel,name:0

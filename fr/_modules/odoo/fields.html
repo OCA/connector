@@ -292,18 +292,29 @@
 
 <span class="k">def</span> <span class="nf">copy_cache</span><span class="p">(</span><span class="n">records</span><span class="p">,</span> <span class="n">env</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Recursively copy the cache of ``records`` to the environment ``env``. &quot;&quot;&quot;</span>
-    <span class="n">todo</span><span class="p">,</span> <span class="n">done</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">records</span><span class="p">),</span> <span class="nb">set</span><span class="p">()</span>
+    <span class="n">src</span> <span class="o">=</span> <span class="n">records</span><span class="o">.</span><span class="n">env</span>
+    <span class="n">todo</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">set</span><span class="p">)</span>             <span class="c1"># {model_name: ids}</span>
+    <span class="n">done</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">set</span><span class="p">)</span>             <span class="c1"># {model_name: ids}</span>
+    <span class="n">todo</span><span class="p">[</span><span class="n">records</span><span class="o">.</span><span class="n">_name</span><span class="p">]</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">records</span><span class="o">.</span><span class="n">_ids</span><span class="p">)</span>
     <span class="k">while</span> <span class="n">todo</span><span class="p">:</span>
-        <span class="n">record</span> <span class="o">=</span> <span class="n">todo</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
-        <span class="k">if</span> <span class="n">record</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">done</span><span class="p">:</span>
-            <span class="n">done</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">record</span><span class="p">)</span>
-            <span class="n">target</span> <span class="o">=</span> <span class="n">record</span><span class="o">.</span><span class="n">with_env</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
-            <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">record</span><span class="o">.</span><span class="n">_cache</span><span class="p">:</span>
-                <span class="n">field</span> <span class="o">=</span> <span class="n">record</span><span class="o">.</span><span class="n">_fields</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
-                <span class="n">value</span> <span class="o">=</span> <span class="n">record</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
-                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">BaseModel</span><span class="p">):</span>
-                    <span class="n">todo</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
-                <span class="n">target</span><span class="o">.</span><span class="n">_cache</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="o">.</span><span class="n">convert_to_cache</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">validate</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">model_name</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="n">todo</span><span class="p">))</span>
+        <span class="n">record_ids</span> <span class="o">=</span> <span class="n">todo</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">model_name</span><span class="p">)</span> <span class="o">-</span> <span class="n">done</span><span class="p">[</span><span class="n">model_name</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">record_ids</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="n">done</span><span class="p">[</span><span class="n">model_name</span><span class="p">]</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">record_ids</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">src</span><span class="p">[</span><span class="n">model_name</span><span class="p">]</span><span class="o">.</span><span class="n">_fields</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">src_cache</span> <span class="o">=</span> <span class="n">src</span><span class="o">.</span><span class="n">cache</span><span class="p">[</span><span class="n">field</span><span class="p">]</span>
+            <span class="n">dst_cache</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">cache</span><span class="p">[</span><span class="n">field</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">record_id</span> <span class="ow">in</span> <span class="n">record_ids</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">record_id</span> <span class="ow">in</span> <span class="n">src_cache</span><span class="p">:</span>
+                    <span class="c1"># copy the cached value as such</span>
+                    <span class="n">value</span> <span class="o">=</span> <span class="n">dst_cache</span><span class="p">[</span><span class="n">record_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">src_cache</span><span class="p">[</span><span class="n">record_id</span><span class="p">]</span>
+                    <span class="k">if</span> <span class="n">field</span><span class="o">.</span><span class="n">relational</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
+                        <span class="n">todo</span><span class="p">[</span><span class="n">field</span><span class="o">.</span><span class="n">comodel_name</span><span class="p">]</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">first</span><span class="p">(</span><span class="n">records</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Return the first record in ``records``, with the same prefetching. &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="nb">next</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="n">records</span><span class="p">))</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">records</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="k">else</span> <span class="n">records</span>
 
 
 <span class="k">def</span> <span class="nf">resolve_mro</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">predicate</span><span class="p">):</span>
@@ -811,12 +822,41 @@
         <span class="sd">&quot;&quot;&quot; Compute the related field ``self`` on ``records``. &quot;&quot;&quot;</span>
         <span class="c1"># when related_sudo, bypass access rights checks when reading values</span>
         <span class="n">others</span> <span class="o">=</span> <span class="n">records</span><span class="o">.</span><span class="n">sudo</span><span class="p">()</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">related_sudo</span> <span class="k">else</span> <span class="n">records</span>
-        <span class="k">for</span> <span class="n">record</span><span class="p">,</span> <span class="n">other</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">records</span><span class="p">,</span> <span class="n">others</span><span class="p">):</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="n">record</span><span class="o">.</span><span class="n">id</span> <span class="ow">and</span> <span class="n">record</span><span class="o">.</span><span class="n">env</span> <span class="o">!=</span> <span class="n">other</span><span class="o">.</span><span class="n">env</span><span class="p">:</span>
-                <span class="c1"># draft records: copy record&#39;s cache to other&#39;s cache first</span>
-                <span class="n">copy_cache</span><span class="p">(</span><span class="n">record</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">env</span><span class="p">)</span>
-            <span class="n">other</span><span class="p">,</span> <span class="n">field</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">traverse_related</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
-            <span class="n">record</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">other</span><span class="p">[</span><span class="n">field</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>
+        <span class="c1"># copy the cache of draft records into others&#39; cache</span>
+        <span class="k">if</span> <span class="n">records</span><span class="o">.</span><span class="n">env</span> <span class="o">!=</span> <span class="n">others</span><span class="o">.</span><span class="n">env</span><span class="p">:</span>
+            <span class="n">copy_cache</span><span class="p">(</span><span class="n">records</span> <span class="o">-</span> <span class="n">records</span><span class="o">.</span><span class="n">filtered</span><span class="p">(</span><span class="s1">&#39;id&#39;</span><span class="p">),</span> <span class="n">others</span><span class="o">.</span><span class="n">env</span><span class="p">)</span>
+        <span class="c1">#</span>
+        <span class="c1"># Traverse fields one by one for all records, in order to take advantage</span>
+        <span class="c1"># of prefetching for each field access. In order to clarify the impact</span>
+        <span class="c1"># of the algorithm, consider traversing &#39;foo.bar&#39; for records a1 and a2,</span>
+        <span class="c1"># where &#39;foo&#39; is already present in cache for a1, a2. Initially, both a1</span>
+        <span class="c1"># and a2 are marked for prefetching. As the commented code below shows,</span>
+        <span class="c1"># traversing all fields one record at a time will fetch &#39;bar&#39; one record</span>
+        <span class="c1"># at a time.</span>
+        <span class="c1">#</span>
+        <span class="c1">#       b1 = a1.foo         # mark b1 for prefetching</span>
+        <span class="c1">#       v1 = b1.bar         # fetch/compute bar for b1</span>
+        <span class="c1">#       b2 = a2.foo         # mark b2 for prefetching</span>
+        <span class="c1">#       v2 = b2.bar         # fetch/compute bar for b2</span>
+        <span class="c1">#</span>
+        <span class="c1"># On the other hand, traversing all records one field at a time ensures</span>
+        <span class="c1"># maximal prefetching for each field access.</span>
+        <span class="c1">#</span>
+        <span class="c1">#       b1 = a1.foo         # mark b1 for prefetching</span>
+        <span class="c1">#       b2 = a2.foo         # mark b2 for prefetching</span>
+        <span class="c1">#       v1 = b1.bar         # fetch/compute bar for b1, b2</span>
+        <span class="c1">#       v2 = b2.bar         # value already in cache</span>
+        <span class="c1">#</span>
+        <span class="c1"># This difference has a major impact on performance, in particular in</span>
+        <span class="c1"># the case where &#39;bar&#39; is a computed field that takes advantage of batch</span>
+        <span class="c1"># computation.</span>
+        <span class="c1">#</span>
+        <span class="n">values</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">others</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">related</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
+            <span class="n">values</span> <span class="o">=</span> <span class="p">[</span><span class="n">first</span><span class="p">(</span><span class="n">value</span><span class="p">[</span><span class="n">name</span><span class="p">])</span> <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">values</span><span class="p">]</span>
+        <span class="c1"># assign final values to records</span>
+        <span class="k">for</span> <span class="n">record</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">records</span><span class="p">,</span> <span class="n">values</span><span class="p">):</span>
+            <span class="n">record</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">related_field</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>
 
     <span class="k">def</span> <span class="nf">_inverse_related</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">records</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Inverse the related field ``self`` on ``records``. &quot;&quot;&quot;</span>
@@ -2439,14 +2479,13 @@
                 <span class="k">elif</span> <span class="n">act</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">6</span><span class="p">:</span>
                     <span class="n">record</span> <span class="o">=</span> <span class="n">records</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
                     <span class="n">comodel</span><span class="o">.</span><span class="n">browse</span><span class="p">(</span><span class="n">act</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span><span class="o">.</span><span class="n">write</span><span class="p">({</span><span class="n">inverse</span><span class="p">:</span> <span class="n">record</span><span class="o">.</span><span class="n">id</span><span class="p">})</span>
-                    <span class="n">query</span> <span class="o">=</span> <span class="s2">&quot;SELECT id FROM </span><span class="si">%s</span><span class="s2"> WHERE </span><span class="si">%s</span><span class="s2">=</span><span class="si">%%</span><span class="s2">s AND id &lt;&gt; ALL(</span><span class="si">%%</span><span class="s2">s)&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">comodel</span><span class="o">.</span><span class="n">_table</span><span class="p">,</span> <span class="n">inverse</span><span class="p">)</span>
-                    <span class="n">comodel</span><span class="o">.</span><span class="n">_cr</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="p">(</span><span class="n">record</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">act</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="ow">or</span> <span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
-                    <span class="n">lines</span> <span class="o">=</span> <span class="n">comodel</span><span class="o">.</span><span class="n">browse</span><span class="p">([</span><span class="n">row</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">comodel</span><span class="o">.</span><span class="n">_cr</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()])</span>
+                    <span class="n">domain</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">domain</span><span class="p">(</span><span class="n">records</span><span class="p">)</span> <span class="k">if</span> <span class="n">callable</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">domain</span><span class="p">)</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">domain</span>
+                    <span class="n">domain</span> <span class="o">=</span> <span class="n">domain</span> <span class="o">+</span> <span class="p">[(</span><span class="n">inverse</span><span class="p">,</span> <span class="s1">&#39;in&#39;</span><span class="p">,</span> <span class="n">records</span><span class="o">.</span><span class="n">ids</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;id&#39;</span><span class="p">,</span> <span class="s1">&#39;not in&#39;</span><span class="p">,</span> <span class="n">act</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="ow">or</span> <span class="p">[</span><span class="mi">0</span><span class="p">])]</span>
                     <span class="n">inverse_field</span> <span class="o">=</span> <span class="n">comodel</span><span class="o">.</span><span class="n">_fields</span><span class="p">[</span><span class="n">inverse</span><span class="p">]</span>
                     <span class="k">if</span> <span class="n">inverse_field</span><span class="o">.</span><span class="n">ondelete</span> <span class="o">==</span> <span class="s1">&#39;cascade&#39;</span><span class="p">:</span>
-                        <span class="n">lines</span><span class="o">.</span><span class="n">unlink</span><span class="p">()</span>
+                        <span class="n">comodel</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">domain</span><span class="p">)</span><span class="o">.</span><span class="n">unlink</span><span class="p">()</span>
                     <span class="k">else</span><span class="p">:</span>
-                        <span class="n">lines</span><span class="o">.</span><span class="n">write</span><span class="p">({</span><span class="n">inverse</span><span class="p">:</span> <span class="kc">False</span><span class="p">})</span>
+                        <span class="n">comodel</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">domain</span><span class="p">)</span><span class="o">.</span><span class="n">write</span><span class="p">({</span><span class="n">inverse</span><span class="p">:</span> <span class="kc">False</span><span class="p">})</span>
 
 
 <span class="k">class</span> <span class="nc">Many2many</span><span class="p">(</span><span class="n">_RelationalMulti</span><span class="p">):</span>
@@ -2700,7 +2739,7 @@
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.4.<br/>
+      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.5.<br/>
     </p>
   </div>
 </footer>

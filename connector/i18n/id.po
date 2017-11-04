@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: connector (8.0)\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-08-22 13:04+0000\n"
-"PO-Revision-Date: 2017-08-21 08:01+0000\n"
+"POT-Creation-Date: 2017-10-28 02:17+0000\n"
+"PO-Revision-Date: 2017-11-03 12:16+0000\n"
 "Last-Translator: OCA Transbot <transbot@odoo-community.org>\n"
 "Language-Team: Indonesian (http://www.transifex.com/oca/OCA-connector-8-0/language/id/)\n"
 "MIME-Version: 1.0\n"
@@ -333,7 +333,7 @@ msgstr ""
 msgid ""
 "Holds the Chatter summary (number of messages, ...). This summary is "
 "directly in html format in order to be inserted in kanban views."
-msgstr ""
+msgstr "Memegang ringkasan Chatter (jumlah pesan, ...). Ringkasan ini langsung dalam format html agar bisa dimasukkan dalam pandangan kanban."
 
 #. module: connector
 #: field:connector.backend,id:0 field:connector.checkpoint,id:0
@@ -370,7 +370,7 @@ msgstr ""
 #: field:connector.checkpoint,message_is_follower:0
 #: field:queue.job,message_is_follower:0
 msgid "Is a Follower"
-msgstr ""
+msgstr "Ini Adalah Pengikut"
 
 #. module: connector
 #: model:ir.model,name:connector.model_queue_job_channel
@@ -532,7 +532,7 @@ msgstr ""
 #. module: connector
 #: view:queue.job:connector.view_queue_job_search selection:queue.job,state:0
 msgid "Pending"
-msgstr ""
+msgstr "Ditunda"
 
 #. module: connector
 #: field:queue.job,func:0
@@ -668,7 +668,7 @@ msgstr ""
 #. module: connector
 #: view:queue.job:connector.view_queue_job_search field:queue.job,state:0
 msgid "State"
-msgstr ""
+msgstr "Bagian"
 
 #. module: connector
 #: field:connector.checkpoint,state:0
@@ -679,7 +679,7 @@ msgstr ""
 #: field:connector.checkpoint,message_summary:0
 #: field:queue.job,message_summary:0
 msgid "Summary"
-msgstr ""
+msgstr "Ringkasan"
 
 #. module: connector
 #: field:queue.job,func_string:0

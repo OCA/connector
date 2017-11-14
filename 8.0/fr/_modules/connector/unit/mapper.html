@@ -667,6 +667,16 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="kc">False</span></div>
 
+<div class="viewcode-block" id="MapChild.skip_add_item"><a class="viewcode-back" href="../../../api/api_mapper.html#connector.unit.mapper.MapChild.skip_add_item">[docs]</a>    <span class="k">def</span> <span class="nf">skip_add_item</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item_values</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Hook to implement in sub-classes when some child</span>
+<span class="sd">        records should be skipped according to its mapped values.</span>
+
+<span class="sd">        If it returns True, the current child record is skipped.</span>
+
+<span class="sd">        :param item_values: the mapped values for the child record</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="kc">False</span></div>
+
 <div class="viewcode-block" id="MapChild.get_items"><a class="viewcode-back" href="../../../api/api_mapper.html#connector.unit.mapper.MapChild.get_items">[docs]</a>    <span class="k">def</span> <span class="nf">get_items</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">items</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">to_attr</span><span class="p">,</span> <span class="n">options</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Returns the formatted output values of items from a main record</span>
 
@@ -686,7 +696,9 @@
             <span class="n">map_record</span> <span class="o">=</span> <span class="n">mapper</span><span class="o">.</span><span class="n">map_record</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="n">parent</span><span class="p">)</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">skip_item</span><span class="p">(</span><span class="n">map_record</span><span class="p">):</span>
                 <span class="k">continue</span>
-            <span class="n">mapped</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_item_values</span><span class="p">(</span><span class="n">map_record</span><span class="p">,</span> <span class="n">to_attr</span><span class="p">,</span> <span class="n">options</span><span class="p">))</span>
+            <span class="n">item_values</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_item_values</span><span class="p">(</span><span class="n">map_record</span><span class="p">,</span> <span class="n">to_attr</span><span class="p">,</span> <span class="n">options</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">skip_add_item</span><span class="p">(</span><span class="n">item_values</span><span class="p">):</span>
+                <span class="n">mapped</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item_values</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">format_items</span><span class="p">(</span><span class="n">mapped</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="MapChild.get_item_values"><a class="viewcode-back" href="../../../api/api_mapper.html#connector.unit.mapper.MapChild.get_item_values">[docs]</a>    <span class="k">def</span> <span class="nf">get_item_values</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">map_record</span><span class="p">,</span> <span class="n">to_attr</span><span class="p">,</span> <span class="n">options</span><span class="p">):</span>

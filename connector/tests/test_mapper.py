@@ -697,6 +697,69 @@ class test_mapper_binding(common.TransactionCase):
                     }
         self.assertEqual(map_record.values(for_create=True), expected)
 
+    def test_mapping_record_children_filters(self):
+        """ Map a record with children, using defined MapChild """
+
+        backend = Backend('backend', '42')
+
+        @backend
+        class LineMapper(ImportMapper):
+            _model_name = 'res.currency.rate'
+            direct = [('name', 'name')]
+
+            @mapping
+            def price(self, record):
+                return {'rate': record['rate'] * 2}
+
+        @backend
+        class SaleLineImportMapChild(ImportMapChild):
+            _model_name = 'res.currency.rate'
+
+            def format_items(self, items_values):
+                return [('ABC', values) for values in items_values]
+
+            def skip_item(self, map_record):
+                '''Filter by the values before the mapping'''
+                record = map_record.source
+                return (record['rate'] > 35)
+
+            def skip_add_item(self, item_values):
+                '''Filter by the values after the mapping'''
+                return (item_values['rate'] < 30)
+
+        @backend
+        class ObjectMapper(ImportMapper):
+            _model_name = 'res.currency'
+
+            direct = [('name', 'name')]
+
+            children = [('lines', 'line_ids', 'res.currency.rate')]
+
+        backend_record = mock.Mock()
+        backend_record.get_backend.side_effect = lambda *a: backend
+        env = ConnectorEnvironment(backend_record, self.session,
+                                   'res.currency')
+
+        record = {'name': 'SO1',
+                  'lines': [{'name': '2013-11-07',
+                             'rate': 10},
+                            {'name': '2013-11-08',
+                             'rate': 20},
+                            {'name': '2013-11-09',
+                             'rate': 30},
+                            {'name': '2013-11-10',
+                             'rate': 40}]
+                  }
+        mapper = ObjectMapper(env)
+        map_record = mapper.map_record(record)
+        expected = {'name': 'SO1',
+                    'line_ids': [('ABC', {'name': '2013-11-08',
+                                          'rate': 40}),
+                                 ('ABC', {'name': '2013-11-09',
+                                          'rate': 60})]
+                    }
+        self.assertEqual(map_record.values(), expected)
+
     def test_modifier_import_filter_field(self):
         """ A direct mapping with a modifier must still be considered
         from the list of fields

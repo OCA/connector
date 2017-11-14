@@ -426,6 +426,16 @@ class MapChild(ConnectorUnit):
         """
         return False
 
+    def skip_add_item(self, item_values):
+        """ Hook to implement in sub-classes when some child
+        records should be skipped according to its mapped values.
+
+        If it returns True, the current child record is skipped.
+
+        :param item_values: the mapped values for the child record
+        """
+        return False
+
     def get_items(self, items, parent, to_attr, options):
         """ Returns the formatted output values of items from a main record
 
@@ -445,7 +455,9 @@ class MapChild(ConnectorUnit):
             map_record = mapper.map_record(item, parent=parent)
             if self.skip_item(map_record):
                 continue
-            mapped.append(self.get_item_values(map_record, to_attr, options))
+            item_values = self.get_item_values(map_record, to_attr, options)
+            if not self.skip_add_item(item_values):
+                mapped.append(item_values)
         return self.format_items(mapped)
 
     def get_item_values(self, map_record, to_attr, options):

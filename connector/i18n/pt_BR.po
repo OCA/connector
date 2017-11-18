@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: connector (9.0)\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-08-22 13:21+0000\n"
-"PO-Revision-Date: 2017-08-21 15:13+0000\n"
+"POT-Creation-Date: 2017-11-04 02:26+0000\n"
+"PO-Revision-Date: 2017-11-14 00:47+0000\n"
 "Last-Translator: OCA Transbot <transbot@odoo-community.org>\n"
 "Language-Team: Portuguese (Brazil) (http://www.transifex.com/oca/OCA-connector-9-0/language/pt_BR/)\n"
 "MIME-Version: 1.0\n"
@@ -35,7 +35,7 @@ msgstr "Um %s necessita revisão"
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_message_needaction
 #: model:ir.model.fields,field_description:connector.field_queue_job_message_needaction
 msgid "Action Needed"
-msgstr ""
+msgstr "Ação Necessária"
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_config_settings_module_portal
@@ -327,13 +327,13 @@ msgstr "Seguidores"
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_message_channel_ids
 #: model:ir.model.fields,field_description:connector.field_queue_job_message_channel_ids
 msgid "Followers (Channels)"
-msgstr ""
+msgstr "Seguidores (Canais)"
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_message_partner_ids
 #: model:ir.model.fields,field_description:connector.field_queue_job_message_partner_ids
 msgid "Followers (Partners)"
-msgstr ""
+msgstr "Seguidores (Parceiros)"
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_queue_job_forced_channel
@@ -384,7 +384,7 @@ msgstr "Se novas mensagens checadas precisam de atenção"
 #: model:ir.model.fields,help:connector.field_connector_checkpoint_message_needaction
 #: model:ir.model.fields,help:connector.field_queue_job_message_needaction
 msgid "If checked, new messages require your attention."
-msgstr ""
+msgstr "Se marcado novas mensagens requerem sua atenção."
 
 #. module: connector
 #: model:ir.model.fields,help:connector.field_connector_config_settings_auth_signup_uninvited
@@ -566,19 +566,19 @@ msgstr ""
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_message_needaction_counter
 #: model:ir.model.fields,field_description:connector.field_queue_job_message_needaction_counter
 msgid "Number of Actions"
-msgstr ""
+msgstr "Número de Ações"
 
 #. module: connector
 #: model:ir.model.fields,help:connector.field_connector_checkpoint_message_needaction_counter
 #: model:ir.model.fields,help:connector.field_queue_job_message_needaction_counter
 msgid "Number of messages which requires an action"
-msgstr ""
+msgstr "Número de mensagens que exigem uma ação"
 
 #. module: connector
 #: model:ir.model.fields,help:connector.field_connector_checkpoint_message_unread_counter
 #: model:ir.model.fields,help:connector.field_queue_job_message_unread_counter
 msgid "Number of unread messages"
-msgstr ""
+msgstr "Número de mensagens não lidas"
 
 #. module: connector
 #: model:ir.actions.client,name:connector.action_client_connector_menu

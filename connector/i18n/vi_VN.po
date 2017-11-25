@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: connector (8.0)\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-07-01 01:36+0000\n"
-"PO-Revision-Date: 2017-08-11 11:56+0000\n"
+"POT-Creation-Date: 2017-11-18 02:11+0000\n"
+"PO-Revision-Date: 2017-11-23 23:27+0000\n"
 "Last-Translator: OCA Transbot <transbot@odoo-community.org>\n"
 "Language-Team: Vietnamese (Viet Nam) (http://www.transifex.com/oca/OCA-connector-8-0/language/vi_VN/)\n"
 "MIME-Version: 1.0\n"
@@ -45,7 +45,7 @@ msgstr ""
 #. module: connector
 #: field:queue.job,active:0
 msgid "Active"
-msgstr ""
+msgstr "Có hiệu lực"
 
 #. module: connector
 #: field:connector.config.settings,alias_domain:0
@@ -780,7 +780,7 @@ msgstr ""
 #: view:connector.config.settings:connector.view_connector_config_settings
 #: view:queue.requeue.job:connector.view_requeue_job
 msgid "or"
-msgstr ""
+msgstr "hoặc"
 
 #. module: connector
 #: view:connector.checkpoint:connector.view_connector_checkpoint_form

@@ -23,11 +23,44 @@ import sphinx_bootstrap_theme
 #sys.path.insert(0, os.path.abspath('.'))
 sys.path.append(os.path.abspath('_themes'))
 
+MANIFEST_FILES = [
+    '__manifest__.py',
+    '__odoo__.py',
+    '__openerp__.py',
+]
+
+
+def is_module(path):
+    """return False if the path doesn't contain an odoo module, and the full
+    path to the module manifest otherwise"""
+
+    if not os.path.isdir(path):
+        return False
+    files = os.listdir(path)
+    filtered = [x for x in files if x in (MANIFEST_FILES + ['__init__.py'])]
+    if len(filtered) == 2 and '__init__.py' in filtered:
+        return os.path.join(
+            path, next(x for x in filtered if x != '__init__.py'))
+    else:
+        return False
+
+
+def is_installable_module(path):
+    """return False if the path doesn't contain an installable odoo module,
+    and the full path to the module manifest otherwise"""
+    manifest_path = is_module(path)
+    if manifest_path:
+        manifest = ast.literal_eval(open(manifest_path).read())
+        if manifest.get('installable', True):
+            return manifest_path
+    return False
+
+
 if os.environ.get('TRAVIS_BUILD_DIR') and os.environ.get('VERSION'):
     # build from travis
     repos_home = os.environ['HOME']
     deps_path = os.path.join(repos_home, 'dependencies')
-    odoo_folder = 'odoo-10.0'
+    odoo_folder = 'odoo-11.0'
     odoo_root = os.path.join(repos_home, odoo_folder)
     build_path = os.environ['TRAVIS_BUILD_DIR']
 else:
@@ -37,7 +70,6 @@ else:
     build_path = os.path.abspath('../..')
 
 addons_paths = []
-
 
 def add_path(*paths):
     addons_paths.append(
@@ -58,7 +90,8 @@ for repo in deps_repos:
 
 addons = [x for x in os.listdir(build_path)
           if not x.startswith(('.', '__')) and
-          os.path.isdir(os.path.join(build_path, x))]
+          is_installable_module(x)]
+
 
 # sphinxodoo.ext.autodoc variables
 sphinxodoo_root_path = odoo_root
@@ -96,8 +129,8 @@ master_doc = 'index'
 autodoc_member_order = 'bysource'
 
 # General information about the project.
-project = u'Connector'
-copyright = u'2013, Camptocamp SA'
+project = 'Connector'
+copyright = '2013, Camptocamp SA'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -280,8 +313,8 @@ latex_elements = {
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
-    ('index', 'Connector.tex', u'Connector Documentation',
-     u'Camptocamp SA', 'manual'),
+    ('index', 'Connector.tex', 'Connector Documentation',
+     'Camptocamp SA', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
@@ -310,8 +343,8 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    ('index', 'connector', u'Connector Documentation',
-     [u'Camptocamp SA'], 1)
+    ('index', 'connector', 'Connector Documentation',
+     ['Camptocamp SA'], 1)
 ]
 
 # If true, show URL addresses after external links.
@@ -324,8 +357,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    ('index', 'Connector', u'Connector Documentation',
-     u'Camptocamp SA', 'Connector', 'Framework for Odoo Connectors.',
+    ('index', 'Connector', 'Connector Documentation',
+     'Camptocamp SA', 'Connector', 'Framework for Odoo Connectors.',
      'Miscellaneous'),
 ]
 

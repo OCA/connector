@@ -33,6 +33,7 @@ install:
   - pip install sphinx sphinx_bootstrap_theme sphinx-intl
     # install from sources because it includes a fix for Odoo 11.0 not released yet
   - pip install git+https://github.com/OCA/odoo-sphinx-autodoc.git
+  - if [ "$DOCS" = "1" ] ; then pip install -e ${HOME}/odoo-11.0; fi
 
 services:
   - postgresql

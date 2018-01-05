@@ -247,7 +247,7 @@ class EventCollecter(Component):
 
     def _init_collected_events(self, class_events):
         events = set()
-        for cls, names in class_events.iteritems():
+        for cls, names in class_events.items():
             for name in names:
                 component = cls(self.work)
                 events.add(getattr(component, name))

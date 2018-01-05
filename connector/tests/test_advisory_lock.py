@@ -5,9 +5,9 @@
 import mock
 from odoo import api
 from odoo.tests import common
-from odoo.modules.registry import RegistryManager
+from odoo.modules.registry import Registry
 from odoo.addons.queue_job.exception import RetryableJobError
-from odoo.addons.connector.connector import pg_try_advisory_lock
+from odoo.addons.connector.database import pg_try_advisory_lock
 from odoo.addons.component.core import WorkContext
 from odoo.addons.component.tests.common import TransactionComponentCase
 
@@ -16,7 +16,7 @@ class TestAdvisoryLock(TransactionComponentCase):
 
     def setUp(self):
         super(TestAdvisoryLock, self).setUp()
-        self.registry2 = RegistryManager.get(common.get_db_name())
+        self.registry2 = Registry(common.get_db_name())
         self.cr2 = self.registry2.cursor()
         self.env2 = api.Environment(self.cr2, self.env.uid, {})
 
@@ -72,4 +72,4 @@ class TestAdvisoryLock(TransactionComponentCase):
         component2 = work2.component_by_name('base.connector')
         with self.assertRaises(RetryableJobError) as cm:
             component2.advisory_lock_or_retry(lock, retry_seconds=3)
-            self.assertEquals(cm.exception.seconds, 3)
+            self.assertEqual(cm.exception.seconds, 3)

@@ -6,7 +6,7 @@ setuptools.setup(
     odoo_addons={
         'external_dependencies_override': {
             'python': {
-                'cachetools': 'cachetools>2.0.1',
+                'cachetools': 'cachetools>=2.0.1',
             }
         }
     }

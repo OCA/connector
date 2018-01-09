@@ -176,6 +176,29 @@ class TestComponent(TransactionComponentRegistryCase):
                 # component3 (because it has no _apply_on so apply in any case)
                 base.component(usage='for.test')
 
+    def test_component_specific_collection(self):
+        """ Use component(usage=...) when more than one component match but
+        only one for the specific collection"""
+        # we create a new Component with _usage 'for.test', without collection
+        # and no _apply_on
+        class Component3(Component):
+            _name = 'component3'
+            _usage = 'for.test'
+
+        Component3._build_component(self.comp_registry)
+
+        with self.get_base() as base:
+            # When a component has no _apply_on, it means it can be applied
+            # on *any* model. Here, the candidates components would be:
+            # component1 (because we are working with res.partner),
+            # component3 (because it has no _apply_on so apply in any case).
+            # When a component has no _collection, it means it can be applied
+            # on all model if no component is found for the current collection:
+            # component3 must be ignored since a component (component1) exists
+            # and is specificaly linked to the expected collection.
+            comp = base.component(usage='for.test')
+            self.assertEquals('component1', comp._name)
+
     def test_many_components(self):
         """ Use many_components(usage=...) on the same model """
         class Component3(Component):

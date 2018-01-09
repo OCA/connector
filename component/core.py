@@ -377,6 +377,12 @@ class WorkContext(object):
                 (self.collection._name, usage, model_name)
             )
         elif len(component_classes) > 1:
+            # If we have more than one component, try to find the one
+            # specificaly linked to the collection
+            component_classes = [
+                c for c in component_classes
+                if c._collection == self.collection._name]
+        if len(component_classes) != 1:
             raise SeveralComponentError(
                 "Several components found for collection '%s', "
                 "usage '%s', model_name '%s'. Found: %r" %

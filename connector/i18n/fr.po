@@ -4,13 +4,14 @@
 # 
 # Translators:
 # OCA Transbot <transbot@odoo-community.org>, 2018
+# Nicolas JEUDY <njeudy@panda-chi.io>, 2018
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 11.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-01-05 16:56+0000\n"
-"PO-Revision-Date: 2018-01-05 16:56+0000\n"
-"Last-Translator: OCA Transbot <transbot@odoo-community.org>, 2018\n"
+"POT-Creation-Date: 2018-02-01 01:48+0000\n"
+"PO-Revision-Date: 2018-02-01 01:48+0000\n"
+"Last-Translator: Nicolas JEUDY <njeudy@panda-chi.io>, 2018\n"
 "Language-Team: French (https://www.transifex.com/oca/teams/23907/fr/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -292,6 +293,9 @@ msgid ""
 "                will appear in this list.  Once a record has been\n"
 "                checked, click on the 'Reviewed' button."
 msgstr ""
+"Lorsqu'un connecteur importe de nouveaux enregistrements qui doivent être "
+"configurés ou révisés manuellement, ils apparaissent dans cette liste. Une "
+"fois qu'un enregistrement a été vérifié, cliquez sur le bouton \"Controlé\"."
 
 #. module: connector
 #: model:ir.ui.view,arch_db:connector.view_connector_checkpoint_review

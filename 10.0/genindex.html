@@ -1,0 +1,1296 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Index &#8212; Connector  documentation</title>
+    <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="_static/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="_static/bootstrap-sphinx.js"></script>
+    <link rel="index" title="Index" href="#" />
+    <link rel="search" title="Search" href="search.html" />
+
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-7628916-3', 'odoo-connector.com');
+  ga('send', 'pageview');
+</script>
+
+  </head>
+  <body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="index.html">
+          Odoo Connector</a>
+        <span class="navbar-text navbar-version pull-left"><b></b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+  <li class="dropdown">
+    <a role="button"
+       id="dLabelTranslations"
+       data-toggle="dropdown"
+       data-target="#"
+       href="#">Translations<b class="caret"></b></a>
+    <ul class="dropdown-menu"
+        role="menu"
+        aria-labelledby="dLabelTranslations">
+      <li><a class="reference" href="http://odoo-connector.com">English</a><li>
+      <li><a class="reference" href="http://odoo-connector.com/fr">French</a><li>
+    </ul>
+  </li>
+  <li class="dropdown">
+    <a role="button"
+       id="dLabelVersions"
+       data-toggle="dropdown"
+       data-target="#"
+       href="#">Version<b class="caret"></b></a>
+    <ul class="dropdown-menu"
+        role="menu"
+        aria-labelledby="dLabeVersions">
+      <li><a class="reference" href="http://odoo-connector.com/8.0">8.0</a><li>
+      <li><a class="reference" href="http://odoo-connector.com/9.0">9.0</a><li>
+      <li><a class="reference" href="http://odoo-connector.com">11.0</a><li>
+    </ul>
+  </li>
+  
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="guides/migration_guide.html">Migration Guide to the new Connector API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="guides/migration_guide.html#migrating-jobs">Migrating Jobs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/migration_guide.html#migrating-events">Migrating Events</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/migration_guide.html#migrating-components">Migrating Components</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="guides/code_overview.html">Code Overview</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="guides/code_overview.html#trigger-and-listen-an-event">Trigger and listen an event</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/code_overview.html#delay-an-asynchronous-job">Delay an Asynchronous Job</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/code_overview.html#work-with-components">Work with components</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="guides/concepts.html">Connector Concepts</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="guides/concepts.html#events">Events</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/concepts.html#jobs-queue">Jobs Queue</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/concepts.html#backend">Backend</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/concepts.html#workcontext">WorkContext</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/concepts.html#component">Component</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/concepts.html#bindings">Bindings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/concepts.html#checkpoint">Checkpoint</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="guides/bootstrap_connector.html">Boostrapping a connector</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="guides/bootstrap_connector.html#odoo-manifest">Odoo Manifest</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/bootstrap_connector.html#backend-model">Backend Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/bootstrap_connector.html#abstract-binding">Abstract Binding</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/bootstrap_connector.html#components">Components</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="guides/jobrunner.html">Configuring channels and the job runner</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="guides/jobrunner.html#what-is-the-job-runner">What is the job runner?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/jobrunner.html#how-does-it-work">How does it work?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/jobrunner.html#how-to-use-it">How to use it?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/jobrunner.html#caveat">Caveat</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/jobrunner.html#what-is-a-channel">What is a channel?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides/jobrunner.html#how-to-configure-channels">How to configure Channels?</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api/api_components.html">Components</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/api_components.html#module-connector.components.core">Core Components</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/api_components.html#module-connector.components.binder">Connector Components</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/api_components.html#module-odoo.addons.component.models.collection">Components Collection Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/api_components.html#module-odoo.addons.component.exception">Components Exceptions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/api_components.html#components-internals">Components Internals</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api/api_backend.html">Models</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/api_backend.html#backend-model">Backend Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/api_backend.html#binding-model">Binding Model</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api/api_event.html">Events</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/api_event.html#module-odoo.addons.component_event.components.event">Components</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/api_event.html#module-odoo.addons.component_event.models.base">Odoo Models Extensions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/api_event.html#module-odoo.addons.component_event.core">Internals</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api/api_queue.html">Queue</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/api_queue.html#module-odoo.addons.queue_job.job">Job</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/api_queue.html#module-odoo.addons.queue_job.models.base">Models</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api/api_exception.html">Exceptions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/api_channels.html">Channels</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="project/contribute.html">Contribute</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="project/contribute.html#want-to-start-a-new-connector">Want to start a new connector</a></li>
+<li class="toctree-l2"><a class="reference internal" href="project/contribute.html#creating-or-maintaining-a-translation-of-this-doc">Creating or maintaining a translation of this doc</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="project/contributors.html">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="project/contributors.html#financial-contributors">Financial Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="project/license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="project/changes.html">Changes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="project/changes.html#future">Future (?)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="project/changes.html#id2">9.0.1.0.2 (2016-03-03)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="project/changes.html#id3">9.0.1.0.1 (2016-03-03)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="project/changes.html#id4">8.0.3.3.0 (2016-02-29)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="project/changes.html#id5">3.2.0 (2015-09-10)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="project/changes.html#id6">3.1.0 (2015-05-15)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="project/changes.html#id7">3.0.0 (2015-04-01)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="project/changes.html#id8">2.2.0 (2014-05-26)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="project/changes.html#id9">2.1.1 (2014-02-06)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="project/changes.html#warning-breaks-compatibility">2.1.0 (2014-01-15 - warning: breaks compatibility)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="project/changes.html#id10">2.0.1 (2013-09-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="project/changes.html#id11">2.0.0</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="project/roadmap.html">Roadmap</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"></ul>
+</li>
+              
+            
+
+            
+              
+                
+              
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 content">
+      
+
+<h1 id="index">Index</h1>
+
+<div class="genindex-jumpbox">
+ <a href="#_"><strong>_</strong></a>
+ | <a href="#A"><strong>A</strong></a>
+ | <a href="#B"><strong>B</strong></a>
+ | <a href="#C"><strong>C</strong></a>
+ | <a href="#D"><strong>D</strong></a>
+ | <a href="#E"><strong>E</strong></a>
+ | <a href="#F"><strong>F</strong></a>
+ | <a href="#G"><strong>G</strong></a>
+ | <a href="#H"><strong>H</strong></a>
+ | <a href="#I"><strong>I</strong></a>
+ | <a href="#J"><strong>J</strong></a>
+ | <a href="#K"><strong>K</strong></a>
+ | <a href="#L"><strong>L</strong></a>
+ | <a href="#M"><strong>M</strong></a>
+ | <a href="#N"><strong>N</strong></a>
+ | <a href="#O"><strong>O</strong></a>
+ | <a href="#P"><strong>P</strong></a>
+ | <a href="#Q"><strong>Q</strong></a>
+ | <a href="#R"><strong>R</strong></a>
+ | <a href="#S"><strong>S</strong></a>
+ | <a href="#T"><strong>T</strong></a>
+ | <a href="#U"><strong>U</strong></a>
+ | <a href="#V"><strong>V</strong></a>
+ | <a href="#W"><strong>W</strong></a>
+ 
+</div>
+<h2 id="_">_</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/api_components.html#connector.components.mapper.Mapper._apply">_apply() (connector.components.mapper.Mapper method)</a>
+</li>
+      <li><a href="api/api_components.html#connector.components.mapper.Mapper._apply_with_options">_apply_with_options() (connector.components.mapper.Mapper method)</a>
+</li>
+      <li><a href="api/api_components.html#connector.components.mapper.MappingDefinition._asdict">_asdict() (connector.components.mapper.MappingDefinition method)</a>
+</li>
+      <li><a href="api/api_components.html#connector.components.binder.Binder._backend_field">_backend_field (connector.components.binder.Binder attribute)</a>
+</li>
+      <li><a href="api/api_components.html#connector.components.synchronizer.Synchronizer._base_backend_adapter_usage">_base_backend_adapter_usage (connector.components.synchronizer.Synchronizer attribute)</a>
+</li>
+      <li><a href="api/api_components.html#connector.components.synchronizer.Exporter._base_mapper_usage">_base_mapper_usage (connector.components.synchronizer.Exporter attribute)</a>
+
+      <ul>
+        <li><a href="api/api_components.html#connector.components.synchronizer.Importer._base_mapper_usage">(connector.components.synchronizer.Importer attribute)</a>
+</li>
+        <li><a href="api/api_components.html#connector.components.synchronizer.Synchronizer._base_mapper_usage">(connector.components.synchronizer.Synchronizer attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="api/api_components.html#connector.components.mapper.Mapper._build_mapper_component">_build_mapper_component() (connector.components.mapper.Mapper class method)</a>
+</li>
+      <li><a href="api/api_components.html#connector.components.mapper.ExportMapChild._child_mapper">_child_mapper() (connector.components.mapper.ExportMapChild method)</a>
+
+      <ul>
+        <li><a href="api/api_components.html#connector.components.mapper.ImportMapChild._child_mapper">(connector.components.mapper.ImportMapChild method)</a>
+</li>
+        <li><a href="api/api_components.html#connector.components.mapper.MapChild._child_mapper">(connector.components.mapper.MapChild method)</a>
+</li>
+      </ul></li>
+      <li><a href="api/api_components.html#connector.components.mapper.Mapper._complete_component_build">_complete_component_build() (connector.components.mapper.Mapper class method)</a>
+</li>
+      <li><a href="api/api_components.html#connector.components.mapper.Mapper._direct_source_field_name">_direct_source_field_name() (connector.components.mapper.Mapper method)</a>
+</li>
+      <li><a href="api/api_components.html#connector.components.binder.Binder._external_field">_external_field (connector.components.binder.Binder attribute)</a>
+</li>
+      <li><a href="api/api_components.html#connector.components.mapper.MappingDefinition._fields">_fields (connector.components.mapper.MappingDefinition attribute)</a>
+</li>
+      <li><a href="api/api_components.html#connector.components.mapper.Mapper._get_map_child_component">_get_map_child_component() (connector.components.mapper.Mapper method)</a>
+</li>
+      <li><a href="api/api_components.html#connector.components.backend_adapter.BackendAdapter._inherit">_inherit (connector.components.backend_adapter.BackendAdapter attribute)</a>
+
+      <ul>
+        <li><a href="api/api_components.html#connector.components.backend_adapter.CRUDAdapter._inherit">(connector.components.backend_adapter.CRUDAdapter attribute)</a>
+</li>
+        <li><a href="api/api_components.html#connector.components.binder.Binder._inherit">(connector.components.binder.Binder attribute)</a>
+</li>
+        <li><a href="api/api_components.html#connector.components.listener.ConnectorListener._inherit">(connector.components.listener.ConnectorListener attribute)</a>
+</li>
+        <li><a href="api/api_components.html#connector.components.mapper.ExportMapChild._inherit">(connector.components.mapper.ExportMapChild attribute)</a>
+</li>
+        <li><a href="api/api_components.html#connector.components.mapper.ExportMapper._inherit">(connector.components.mapper.ExportMapper attribute)</a>
+</li>
+        <li><a href="api/api_components.html#connector.components.mapper.ImportMapChild._inherit">(connector.components.mapper.ImportMapChild attribute)</a>
+</li>
+        <li><a href="api/api_components.html#connector.components.mapper.ImportMapper._inherit">(connector.components.mapper.ImportMapper attribute)</a>
+</li>
+        <li><a href="api/api_components.html#connector.components.mapper.MapChild._inherit">(connector.components.mapper.MapChild attribute)</a>
+</li>
+        <li><a href="api/api_components.html#connector.components.mapper.Mapper._inherit">(connector.components.mapper.Mapper attribute)</a>
+</li>
+        <li><a href="api/api_components.html#connector.components.synchronizer.Deleter._inherit">(connector.components.synchronizer.Deleter attribute)</a>
+</li>
+        <li><a href="api/api_components.html#connector.components.synchronizer.Exporter._inherit">(connector.components.synchronizer.Exporter attribute)</a>
+</li>
+        <li><a href="api/api_components.html#connector.components.synchronizer.Importer._inherit">(connector.components.synchronizer.Importer attribute)</a>
+</li>
+        <li><a href="api/api_components.html#connector.components.synchronizer.Synchronizer._inherit">(connector.components.synchronizer.Synchronizer attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="api/api_components.html#connector.components.mapper.MappingDefinition._make">_make() (connector.components.mapper.MappingDefinition class method)</a>
+</li>
+      <li><a href="api/api_components.html#connector.components.mapper.Mapper._map_child">_map_child() (connector.components.mapper.Mapper method)</a>
+</li>
+      <li><a href="api/api_components.html#connector.components.mapper.ExportMapper._map_child_fallback">_map_child_fallback (connector.components.mapper.ExportMapper attribute)</a>
+
+      <ul>
+        <li><a href="api/api_components.html#connector.components.mapper.ImportMapper._map_child_fallback">(connector.components.mapper.ImportMapper attribute)</a>
+</li>
+        <li><a href="api/api_components.html#connector.components.mapper.Mapper._map_child_fallback">(connector.components.mapper.Mapper attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="api/api_components.html#connector.components.mapper.ExportMapper._map_child_usage">_map_child_usage (connector.components.mapper.ExportMapper attribute)</a>
+
+      <ul>
+        <li><a href="api/api_components.html#connector.components.mapper.ImportMapper._map_child_usage">(connector.components.mapper.ImportMapper attribute)</a>
+</li>
+        <li><a href="api/api_components.html#connector.components.mapper.Mapper._map_child_usage">(connector.components.mapper.Mapper attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="api/api_components.html#connector.components.mapper.Mapper._map_children">_map_children() (connector.components.mapper.Mapper method)</a>
+</li>
+      <li><a href="api/api_components.html#connector.components.mapper.ExportMapper._map_direct">_map_direct() (connector.components.mapper.ExportMapper method)</a>
+
+      <ul>
+        <li><a href="api/api_components.html#connector.components.mapper.ImportMapper._map_direct">(connector.components.mapper.ImportMapper method)</a>
+</li>
+        <li><a href="api/api_components.html#connector.components.mapper.Mapper._map_direct">(connector.components.mapper.Mapper method)</a>
+</li>
+      </ul></li>
+      <li><a href="api/api_components.html#connector.components.mapper.Mapper._map_methods">_map_methods (connector.components.mapper.Mapper attribute)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/api_components.html#connector.components.mapper.Mapper._mapping_options">_mapping_options() (connector.components.mapper.Mapper method)</a>
+</li>
+      <li><a href="api/api_components.html#connector.components.backend_adapter.BackendAdapter._module">_module (connector.components.backend_adapter.BackendAdapter attribute)</a>
+
+      <ul>
+        <li><a href="api/api_components.html#connector.components.backend_adapter.CRUDAdapter._module">(connector.components.backend_adapter.CRUDAdapter attribute)</a>
+</li>
+        <li><a href="api/api_components.html#connector.components.binder.Binder._module">(connector.components.binder.Binder attribute)</a>
+</li>
+        <li><a href="api/api_components.html#connector.components.core.BaseConnectorComponent._module">(connector.components.core.BaseConnectorComponent attribute)</a>
+</li>
+        <li><a href="api/api_components.html#connector.components.listener.ConnectorListener._module">(connector.components.listener.ConnectorListener attribute)</a>
+</li>
+        <li><a href="api/api_components.html#connector.components.mapper.ExportMapChild._module">(connector.components.mapper.ExportMapChild attribute)</a>
+</li>
+        <li><a href="api/api_components.html#connector.components.mapper.ExportMapper._module">(connector.components.mapper.ExportMapper attribute)</a>
+</li>
+        <li><a href="api/api_components.html#connector.components.mapper.ImportMapChild._module">(connector.components.mapper.ImportMapChild attribute)</a>
+</li>
+        <li><a href="api/api_components.html#connector.components.mapper.ImportMapper._module">(connector.components.mapper.ImportMapper attribute)</a>
+</li>
+        <li><a href="api/api_components.html#connector.components.mapper.MapChild._module">(connector.components.mapper.MapChild attribute)</a>
+</li>
+        <li><a href="api/api_components.html#connector.components.mapper.Mapper._module">(connector.components.mapper.Mapper attribute)</a>
+</li>
+        <li><a href="api/api_components.html#connector.components.synchronizer.Deleter._module">(connector.components.synchronizer.Deleter attribute)</a>
+</li>
+        <li><a href="api/api_components.html#connector.components.synchronizer.Exporter._module">(connector.components.synchronizer.Exporter attribute)</a>
+</li>
+        <li><a href="api/api_components.html#connector.components.synchronizer.Importer._module">(connector.components.synchronizer.Importer attribute)</a>
+</li>
+        <li><a href="api/api_components.html#connector.components.synchronizer.Synchronizer._module">(connector.components.synchronizer.Synchronizer attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="api/api_components.html#connector.components.backend_adapter.BackendAdapter._name">_name (connector.components.backend_adapter.BackendAdapter attribute)</a>
+
+      <ul>
+        <li><a href="api/api_components.html#connector.components.backend_adapter.CRUDAdapter._name">(connector.components.backend_adapter.CRUDAdapter attribute)</a>
+</li>
+        <li><a href="api/api_components.html#connector.components.binder.Binder._name">(connector.components.binder.Binder attribute)</a>
+</li>
+        <li><a href="api/api_components.html#connector.components.core.BaseConnectorComponent._name">(connector.components.core.BaseConnectorComponent attribute)</a>
+</li>
+        <li><a href="api/api_components.html#connector.components.listener.ConnectorListener._name">(connector.components.listener.ConnectorListener attribute)</a>
+</li>
+        <li><a href="api/api_components.html#connector.components.mapper.ExportMapChild._name">(connector.components.mapper.ExportMapChild attribute)</a>
+</li>
+        <li><a href="api/api_components.html#connector.components.mapper.ExportMapper._name">(connector.components.mapper.ExportMapper attribute)</a>
+</li>
+        <li><a href="api/api_components.html#connector.components.mapper.ImportMapChild._name">(connector.components.mapper.ImportMapChild attribute)</a>
+</li>
+        <li><a href="api/api_components.html#connector.components.mapper.ImportMapper._name">(connector.components.mapper.ImportMapper attribute)</a>
+</li>
+        <li><a href="api/api_components.html#connector.components.mapper.MapChild._name">(connector.components.mapper.MapChild attribute)</a>
+</li>
+        <li><a href="api/api_components.html#connector.components.mapper.Mapper._name">(connector.components.mapper.Mapper attribute)</a>
+</li>
+        <li><a href="api/api_components.html#connector.components.synchronizer.Deleter._name">(connector.components.synchronizer.Deleter attribute)</a>
+</li>
+        <li><a href="api/api_components.html#connector.components.synchronizer.Exporter._name">(connector.components.synchronizer.Exporter attribute)</a>
+</li>
+        <li><a href="api/api_components.html#connector.components.synchronizer.Importer._name">(connector.components.synchronizer.Importer attribute)</a>
+</li>
+        <li><a href="api/api_components.html#connector.components.synchronizer.Synchronizer._name">(connector.components.synchronizer.Synchronizer attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="api/api_components.html#connector.components.binder.Binder._odoo_field">_odoo_field (connector.components.binder.Binder attribute)</a>
+</li>
+      <li><a href="api/api_components.html#connector.components.mapper.MappingDefinition._replace">_replace() (connector.components.mapper.MappingDefinition method)</a>
+</li>
+      <li><a href="api/api_components.html#connector.components.binder.Binder._sync_date_field">_sync_date_field (connector.components.binder.Binder attribute)</a>
+</li>
+      <li><a href="api/api_components.html#connector.components.backend_adapter.BackendAdapter._usage">_usage (connector.components.backend_adapter.BackendAdapter attribute)</a>
+
+      <ul>
+        <li><a href="api/api_components.html#connector.components.backend_adapter.CRUDAdapter._usage">(connector.components.backend_adapter.CRUDAdapter attribute)</a>
+</li>
+        <li><a href="api/api_components.html#connector.components.binder.Binder._usage">(connector.components.binder.Binder attribute)</a>
+</li>
+        <li><a href="api/api_components.html#connector.components.mapper.ExportMapChild._usage">(connector.components.mapper.ExportMapChild attribute)</a>
+</li>
+        <li><a href="api/api_components.html#connector.components.mapper.ExportMapper._usage">(connector.components.mapper.ExportMapper attribute)</a>
+</li>
+        <li><a href="api/api_components.html#connector.components.mapper.ImportMapChild._usage">(connector.components.mapper.ImportMapChild attribute)</a>
+</li>
+        <li><a href="api/api_components.html#connector.components.mapper.ImportMapper._usage">(connector.components.mapper.ImportMapper attribute)</a>
+</li>
+        <li><a href="api/api_components.html#connector.components.mapper.Mapper._usage">(connector.components.mapper.Mapper attribute)</a>
+</li>
+        <li><a href="api/api_components.html#connector.components.synchronizer.Deleter._usage">(connector.components.synchronizer.Deleter attribute)</a>
+</li>
+        <li><a href="api/api_components.html#connector.components.synchronizer.Exporter._usage">(connector.components.synchronizer.Exporter attribute)</a>
+</li>
+        <li><a href="api/api_components.html#connector.components.synchronizer.Importer._usage">(connector.components.synchronizer.Importer attribute)</a>
+</li>
+      </ul></li>
+  </ul></td>
+</tr></table>
+
+<h2 id="A">A</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/api_components.html#odoo.addons.component.core.AbstractComponent">AbstractComponent (class in odoo.addons.component.core)</a>
+</li>
+      <li><a href="api/api_channels.html#odoo.addons.queue_job.jobrunner.channels.ChannelQueue.add">add() (odoo.addons.queue_job.jobrunner.channels.ChannelQueue method)</a>
+
+      <ul>
+        <li><a href="api/api_channels.html#odoo.addons.queue_job.jobrunner.channels.PriorityQueue.add">(odoo.addons.queue_job.jobrunner.channels.PriorityQueue method)</a>
+</li>
+      </ul></li>
+      <li><a href="api/api_components.html#connector.components.core.BaseConnectorComponent.advisory_lock_or_retry">advisory_lock_or_retry() (connector.components.core.BaseConnectorComponent method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/api_components.html#odoo.addons.component.core.MetaComponent.apply_on_models">apply_on_models (odoo.addons.component.core.MetaComponent attribute)</a>
+</li>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.job.Job.args">args (odoo.addons.queue_job.job.Job attribute)</a>
+
+      <ul>
+        <li><a href="api/api_queue.html#odoo.addons.queue_job.models.queue_job.QueueJob.args">(odoo.addons.queue_job.models.queue_job.QueueJob attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.models.queue_job.QueueJob.autovacuum">autovacuum() (odoo.addons.queue_job.models.queue_job.QueueJob method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="B">B</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/api_components.html#connector.components.synchronizer.Synchronizer.backend_adapter">backend_adapter (connector.components.synchronizer.Synchronizer attribute)</a>
+</li>
+      <li><a href="api/api_components.html#connector.components.core.BaseConnectorComponent.backend_record">backend_record (connector.components.core.BaseConnectorComponent attribute)</a>
+</li>
+      <li><a href="api/api_components.html#connector.components.backend_adapter.BackendAdapter">BackendAdapter (class in connector.components.backend_adapter)</a>
+</li>
+      <li><a href="api/api_event.html#odoo.addons.component_event.models.base.Base">Base (class in odoo.addons.component_event.models.base)</a>
+
+      <ul>
+        <li><a href="api/api_queue.html#odoo.addons.queue_job.models.base.Base">(class in odoo.addons.queue_job.models.base)</a>
+</li>
+      </ul></li>
+      <li><a href="api/api_components.html#connector.components.core.BaseConnectorComponent">BaseConnectorComponent (class in connector.components.core)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/api_components.html#connector.components.binder.Binder.bind">bind() (connector.components.binder.Binder method)</a>
+</li>
+      <li><a href="api/api_components.html#connector.components.binder.Binder">Binder (class in connector.components.binder)</a>
+</li>
+      <li><a href="api/api_components.html#connector.components.synchronizer.Synchronizer.binder">binder (connector.components.synchronizer.Synchronizer attribute)</a>
+</li>
+      <li><a href="api/api_components.html#connector.components.core.BaseConnectorComponent.binder_for">binder_for() (connector.components.core.BaseConnectorComponent method)</a>
+</li>
+      <li><a href="api/api_components.html#odoo.addons.component.builder.ComponentBuilder.build_registry">build_registry() (odoo.addons.component.builder.ComponentBuilder method)</a>
+</li>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.models.queue_job.QueueJob.button_done">button_done() (odoo.addons.queue_job.models.queue_job.QueueJob method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="C">C</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/api_components.html#connector.components.mapper.MappingDefinition.changed_by">changed_by (connector.components.mapper.MappingDefinition attribute)</a>
+</li>
+      <li><a href="api/api_components.html#connector.components.mapper.changed_by">changed_by() (in module connector.components.mapper)</a>
+</li>
+      <li><a href="api/api_components.html#connector.components.mapper.Mapper.changed_by_fields">changed_by_fields() (connector.components.mapper.Mapper method)</a>
+</li>
+      <li><a href="api/api_channels.html#odoo.addons.queue_job.jobrunner.channels.Channel">Channel (class in odoo.addons.queue_job.jobrunner.channels)</a>
+</li>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.models.queue_job.JobFunction.channel">channel (odoo.addons.queue_job.models.queue_job.JobFunction attribute)</a>
+
+      <ul>
+        <li><a href="api/api_queue.html#odoo.addons.queue_job.models.queue_job.QueueJob.channel">(odoo.addons.queue_job.models.queue_job.QueueJob attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.models.queue_job.channel_func_name">channel_func_name() (in module odoo.addons.queue_job.models.queue_job)</a>
+</li>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.models.queue_job.JobFunction.channel_id">channel_id (odoo.addons.queue_job.models.queue_job.JobFunction attribute)</a>
+</li>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.models.queue_job.QueueJob.channel_method_name">channel_method_name (odoo.addons.queue_job.models.queue_job.QueueJob attribute)</a>
+</li>
+      <li><a href="api/api_channels.html#odoo.addons.queue_job.jobrunner.channels.ChannelJob">ChannelJob (class in odoo.addons.queue_job.jobrunner.channels)</a>
+</li>
+      <li><a href="api/api_channels.html#odoo.addons.queue_job.jobrunner.channels.ChannelManager">ChannelManager (class in odoo.addons.queue_job.jobrunner.channels)</a>
+</li>
+      <li><a href="api/api_channels.html#odoo.addons.queue_job.jobrunner.channels.ChannelQueue">ChannelQueue (class in odoo.addons.queue_job.jobrunner.channels)</a>
+</li>
+      <li><a href="api/api_components.html#connector.components.mapper.Mapper.children">children (connector.components.mapper.Mapper attribute)</a>
+</li>
+      <li><a href="api/api_channels.html#odoo.addons.queue_job.jobrunner.channels.ChannelJob.cmp_no_eta">cmp_no_eta() (odoo.addons.queue_job.jobrunner.channels.ChannelJob method)</a>
+</li>
+      <li><a href="api/api_event.html#odoo.addons.component_event.components.event.EventCollecter.collect_events">collect_events() (odoo.addons.component_event.components.event.EventCollecter method)</a>
+</li>
+      <li><a href="api/api_event.html#odoo.addons.component_event.components.event.CollectedEvents">CollectedEvents (class in odoo.addons.component_event.components.event)</a>
+</li>
+      <li><a href="api/api_components.html#odoo.addons.component.models.collection.Collection">Collection (class in odoo.addons.component.models.collection)</a>
+</li>
+      <li><a href="api/api_components.html#odoo.addons.component.core.AbstractComponent.collection">collection (odoo.addons.component.core.AbstractComponent attribute)</a>
+
+      <ul>
+        <li><a href="api/api_components.html#odoo.addons.component.core.WorkContext.collection">(odoo.addons.component.core.WorkContext attribute)</a>
+</li>
+        <li><a href="api/api_event.html#odoo.addons.component_event.core.EventWorkContext.collection">(odoo.addons.component_event.core.EventWorkContext attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.models.queue_job.QueueJob.company_id">company_id (odoo.addons.queue_job.models.queue_job.QueueJob attribute)</a>
+</li>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.models.queue_job.JobChannel.complete_name">complete_name (odoo.addons.queue_job.models.queue_job.JobChannel attribute)</a>
+</li>
+      <li><a href="api/api_components.html#odoo.addons.component.core.Component">Component (class in odoo.addons.component.core)</a>
+</li>
+      <li><a href="api/api_components.html#odoo.addons.component.core.AbstractComponent.component">component() (odoo.addons.component.core.AbstractComponent method)</a>
+
+      <ul>
+        <li><a href="api/api_components.html#odoo.addons.component.core.WorkContext.component">(odoo.addons.component.core.WorkContext method)</a>
+</li>
+        <li><a href="api/api_event.html#odoo.addons.component_event.core.EventWorkContext.component">(odoo.addons.component_event.core.EventWorkContext method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/api_components.html#odoo.addons.component.core.AbstractComponent.component_by_name">component_by_name() (odoo.addons.component.core.AbstractComponent method)</a>
+
+      <ul>
+        <li><a href="api/api_components.html#odoo.addons.component.core.WorkContext.component_by_name">(odoo.addons.component.core.WorkContext method)</a>
+</li>
+        <li><a href="api/api_event.html#odoo.addons.component_event.core.EventWorkContext.component_by_name">(odoo.addons.component_event.core.EventWorkContext method)</a>
+</li>
+      </ul></li>
+      <li><a href="api/api_components.html#odoo.addons.component.builder.ComponentBuilder">ComponentBuilder (class in odoo.addons.component.builder)</a>
+</li>
+      <li><a href="api/api_components.html#odoo.addons.component.core.ComponentDatabases">ComponentDatabases (class in odoo.addons.component.core)</a>
+</li>
+      <li><a href="api/api_components.html#odoo.addons.component.exception.ComponentException">ComponentException</a>
+</li>
+      <li><a href="api/api_components.html#odoo.addons.component.core.ComponentRegistry">ComponentRegistry (class in odoo.addons.component.core)</a>
+</li>
+      <li><a href="api/api_channels.html#odoo.addons.queue_job.jobrunner.channels.Channel.configure">configure() (odoo.addons.queue_job.jobrunner.channels.Channel method)</a>
+</li>
+      <li><a href="api/api_components.html#module-connector.components.backend_adapter">connector.components.backend_adapter (module)</a>
+</li>
+      <li><a href="api/api_components.html#module-connector.components.binder">connector.components.binder (module)</a>
+</li>
+      <li><a href="api/api_components.html#module-connector.components.core">connector.components.core (module)</a>
+</li>
+      <li><a href="api/api_components.html#module-connector.components.listener">connector.components.listener (module)</a>
+</li>
+      <li><a href="api/api_components.html#module-connector.components.mapper">connector.components.mapper (module)</a>
+</li>
+      <li><a href="api/api_components.html#module-connector.components.synchronizer">connector.components.synchronizer (module)</a>
+</li>
+      <li><a href="api/api_exception.html#module-connector.exception">connector.exception (module)</a>
+</li>
+      <li><a href="api/api_backend.html#connector.backend_model.ConnectorBackend">ConnectorBackend (class in connector.backend_model)</a>
+</li>
+      <li><a href="api/api_exception.html#connector.exception.ConnectorException">ConnectorException</a>
+</li>
+      <li><a href="api/api_components.html#connector.components.listener.ConnectorListener">ConnectorListener (class in connector.components.listener)</a>
+</li>
+      <li><a href="api/api_components.html#connector.components.mapper.convert">convert() (in module connector.components.mapper)</a>
+</li>
+      <li><a href="api/api_components.html#connector.components.backend_adapter.CRUDAdapter.create">create() (connector.components.backend_adapter.CRUDAdapter method)</a>
+
+      <ul>
+        <li><a href="api/api_event.html#odoo.addons.component_event.models.base.Base.create">(odoo.addons.component_event.models.base.Base method)</a>
+</li>
+      </ul></li>
+      <li><a href="api/api_components.html#connector.components.backend_adapter.CRUDAdapter">CRUDAdapter (class in connector.components.backend_adapter)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="D">D</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.job.Job.date_created">date_created (odoo.addons.queue_job.job.Job attribute)</a>
+
+      <ul>
+        <li><a href="api/api_queue.html#odoo.addons.queue_job.models.queue_job.QueueJob.date_created">(odoo.addons.queue_job.models.queue_job.QueueJob attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.job.Job.date_done">date_done (odoo.addons.queue_job.job.Job attribute)</a>
+
+      <ul>
+        <li><a href="api/api_queue.html#odoo.addons.queue_job.models.queue_job.QueueJob.date_done">(odoo.addons.queue_job.models.queue_job.QueueJob attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.job.Job.date_enqueued">date_enqueued (odoo.addons.queue_job.job.Job attribute)</a>
+
+      <ul>
+        <li><a href="api/api_queue.html#odoo.addons.queue_job.models.queue_job.QueueJob.date_enqueued">(odoo.addons.queue_job.models.queue_job.QueueJob attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.job.Job.date_started">date_started (odoo.addons.queue_job.job.Job attribute)</a>
+
+      <ul>
+        <li><a href="api/api_queue.html#odoo.addons.queue_job.models.queue_job.QueueJob.date_started">(odoo.addons.queue_job.models.queue_job.QueueJob attribute)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.job.Job.db_record">db_record() (odoo.addons.queue_job.job.Job method)</a>
+</li>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.job.Job.db_record_from_uuid">db_record_from_uuid() (odoo.addons.queue_job.job.Job static method)</a>
+</li>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.job.DelayableRecordset">DelayableRecordset (class in odoo.addons.queue_job.job)</a>
+</li>
+      <li><a href="api/api_components.html#connector.components.backend_adapter.CRUDAdapter.delete">delete() (connector.components.backend_adapter.CRUDAdapter method)</a>
+</li>
+      <li><a href="api/api_components.html#connector.components.synchronizer.Deleter">Deleter (class in connector.components.synchronizer)</a>
+</li>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.job.Job.description">description (odoo.addons.queue_job.job.Job attribute)</a>, <a href="api/api_queue.html#odoo.addons.queue_job.job.Job.description">[1]</a>
+</li>
+      <li><a href="api/api_components.html#connector.components.mapper.Mapper.direct">direct (connector.components.mapper.Mapper attribute)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="E">E</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.job.Job.enqueue">enqueue() (odoo.addons.queue_job.job.Job class method)</a>
+</li>
+      <li><a href="api/api_components.html#odoo.addons.component.core.AbstractComponent.env">env (odoo.addons.component.core.AbstractComponent attribute)</a>
+
+      <ul>
+        <li><a href="api/api_components.html#odoo.addons.component.core.WorkContext.env">(odoo.addons.component.core.WorkContext attribute)</a>
+</li>
+        <li><a href="api/api_event.html#odoo.addons.component_event.core.EventWorkContext.env">(odoo.addons.component_event.core.EventWorkContext attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.job.Job.eta">eta (odoo.addons.queue_job.job.Job attribute)</a>, <a href="api/api_queue.html#odoo.addons.queue_job.job.Job.eta">[1]</a>
+
+      <ul>
+        <li><a href="api/api_queue.html#odoo.addons.queue_job.models.queue_job.QueueJob.eta">(odoo.addons.queue_job.models.queue_job.QueueJob attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="api/api_event.html#odoo.addons.component_event.components.event.EventCollecter">EventCollecter (class in odoo.addons.component_event.components.event)</a>
+</li>
+      <li><a href="api/api_event.html#odoo.addons.component_event.components.event.EventListener">EventListener (class in odoo.addons.component_event.components.event)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/api_event.html#odoo.addons.component_event.core.EventWorkContext">EventWorkContext (class in odoo.addons.component_event.core)</a>
+</li>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.job.Job.exc_info">exc_info (odoo.addons.queue_job.job.Job attribute)</a>
+
+      <ul>
+        <li><a href="api/api_queue.html#odoo.addons.queue_job.models.queue_job.QueueJob.exc_info">(odoo.addons.queue_job.models.queue_job.QueueJob attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="api/api_components.html#connector.components.synchronizer.Exporter">Exporter (class in connector.components.synchronizer)</a>
+</li>
+      <li><a href="api/api_components.html#connector.components.mapper.ExportMapChild">ExportMapChild (class in connector.components.mapper)</a>
+</li>
+      <li><a href="api/api_components.html#connector.components.mapper.ExportMapper">ExportMapper (class in connector.components.mapper)</a>
+</li>
+      <li><a href="api/api_components.html#connector.components.mapper.external_to_m2o">external_to_m2o() (in module connector.components.mapper)</a>
+</li>
+      <li><a href="api/api_backend.html#connector.backend_model.ExternalBinding">ExternalBinding (class in connector.backend_model)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="F">F</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/api_components.html#connector.components.mapper.Mapper.finalize">finalize() (connector.components.mapper.Mapper method)</a>
+</li>
+      <li><a href="api/api_components.html#connector.components.mapper.follow_m2o_relations">follow_m2o_relations() (in module connector.components.mapper)</a>
+</li>
+      <li><a href="api/api_components.html#connector.components.mapper.ImportMapChild.format_items">format_items() (connector.components.mapper.ImportMapChild method)</a>
+
+      <ul>
+        <li><a href="api/api_components.html#connector.components.mapper.MapChild.format_items">(connector.components.mapper.MapChild method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/api_channels.html#odoo.addons.queue_job.jobrunner.channels.Channel.fullname">fullname (odoo.addons.queue_job.jobrunner.channels.Channel attribute)</a>
+</li>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.job.Job.func">func (odoo.addons.queue_job.job.Job attribute)</a>, <a href="api/api_queue.html#odoo.addons.queue_job.job.Job.func">[1]</a>
+</li>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.models.queue_job.QueueJob.func_string">func_string (odoo.addons.queue_job.models.queue_job.QueueJob attribute)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="G">G</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/api_components.html#odoo.addons.component.core.ComponentRegistry.get">get() (odoo.addons.component.core.ComponentRegistry method)</a>
+</li>
+      <li><a href="api/api_backend.html#connector.backend_model.ConnectorBackend.get_backend">get_backend() (connector.backend_model.ConnectorBackend method)</a>
+</li>
+      <li><a href="api/api_channels.html#odoo.addons.queue_job.jobrunner.channels.ChannelManager.get_channel_by_name">get_channel_by_name() (odoo.addons.queue_job.jobrunner.channels.ChannelManager method)</a>
+</li>
+      <li><a href="api/api_channels.html#odoo.addons.queue_job.jobrunner.channels.ChannelManager.get_channel_from_config">get_channel_from_config() (odoo.addons.queue_job.jobrunner.channels.ChannelManager method)</a>
+</li>
+      <li><a href="api/api_components.html#connector.components.mapper.MapChild.get_item_values">get_item_values() (connector.components.mapper.MapChild method)</a>
+</li>
+      <li><a href="api/api_components.html#connector.components.mapper.MapChild.get_items">get_items() (connector.components.mapper.MapChild method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/api_channels.html#odoo.addons.queue_job.jobrunner.channels.Channel.get_jobs_to_run">get_jobs_to_run() (odoo.addons.queue_job.jobrunner.channels.Channel method)</a>
+
+      <ul>
+        <li><a href="api/api_channels.html#odoo.addons.queue_job.jobrunner.channels.ChannelManager.get_jobs_to_run">(odoo.addons.queue_job.jobrunner.channels.ChannelManager method)</a>
+</li>
+      </ul></li>
+      <li><a href="api/api_channels.html#odoo.addons.queue_job.jobrunner.channels.Channel.get_subchannel_by_name">get_subchannel_by_name() (odoo.addons.queue_job.jobrunner.channels.Channel method)</a>
+</li>
+      <li><a href="api/api_channels.html#odoo.addons.queue_job.jobrunner.channels.Channel.get_wakeup_time">get_wakeup_time() (odoo.addons.queue_job.jobrunner.channels.Channel method)</a>
+
+      <ul>
+        <li><a href="api/api_channels.html#odoo.addons.queue_job.jobrunner.channels.ChannelManager.get_wakeup_time">(odoo.addons.queue_job.jobrunner.channels.ChannelManager method)</a>
+</li>
+        <li><a href="api/api_channels.html#odoo.addons.queue_job.jobrunner.channels.ChannelQueue.get_wakeup_time">(odoo.addons.queue_job.jobrunner.channels.ChannelQueue method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+</tr></table>
+
+<h2 id="H">H</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/api_channels.html#odoo.addons.queue_job.jobrunner.channels.Channel.has_capacity">has_capacity() (odoo.addons.queue_job.jobrunner.channels.Channel method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/api_event.html#odoo.addons.component_event.components.event.EventListener.has_event">has_event() (odoo.addons.component_event.components.event.EventListener class method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="I">I</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/api_exception.html#connector.exception.IDMissingInBackend">IDMissingInBackend</a>
+</li>
+      <li><a href="api/api_components.html#connector.components.synchronizer.Importer">Importer (class in connector.components.synchronizer)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/api_components.html#connector.components.mapper.ImportMapChild">ImportMapChild (class in connector.components.mapper)</a>
+</li>
+      <li><a href="api/api_components.html#connector.components.mapper.ImportMapper">ImportMapper (class in connector.components.mapper)</a>
+</li>
+      <li><a href="api/api_exception.html#connector.exception.InvalidDataError">InvalidDataError</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="J">J</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.job.Job">Job (class in odoo.addons.queue_job.job)</a>
+</li>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.job.job">job() (in module odoo.addons.queue_job.job)</a>
+</li>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.models.queue_job.QueueJob.job_function_id">job_function_id (odoo.addons.queue_job.models.queue_job.QueueJob attribute)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.models.queue_job.JobChannel.job_function_ids">job_function_ids (odoo.addons.queue_job.models.queue_job.JobChannel attribute)</a>
+</li>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.models.queue_job.RequeueJob.job_ids">job_ids (odoo.addons.queue_job.models.queue_job.RequeueJob attribute)</a>
+</li>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.models.queue_job.JobChannel">JobChannel (class in odoo.addons.queue_job.models.queue_job)</a>
+</li>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.models.queue_job.JobFunction">JobFunction (class in odoo.addons.queue_job.models.queue_job)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="K">K</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.job.Job.kwargs">kwargs (odoo.addons.queue_job.job.Job attribute)</a>
+
+      <ul>
+        <li><a href="api/api_queue.html#odoo.addons.queue_job.models.queue_job.QueueJob.kwargs">(odoo.addons.queue_job.models.queue_job.QueueJob attribute)</a>
+</li>
+      </ul></li>
+  </ul></td>
+</tr></table>
+
+<h2 id="L">L</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.job.Job.load">load() (odoo.addons.queue_job.job.Job class method)</a>
+</li>
+      <li><a href="api/api_components.html#odoo.addons.component.builder.ComponentBuilder.load_components">load_components() (odoo.addons.component.builder.ComponentBuilder method)</a>
+
+      <ul>
+        <li><a href="api/api_components.html#odoo.addons.component.core.ComponentRegistry.load_components">(odoo.addons.component.core.ComponentRegistry method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/api_components.html#odoo.addons.component.core.ComponentRegistry.lookup">lookup() (odoo.addons.component.core.ComponentRegistry method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="M">M</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/api_components.html#connector.components.mapper.m2o_to_external">m2o_to_external() (in module connector.components.mapper)</a>
+</li>
+      <li><a href="api/api_components.html#odoo.addons.component.core.AbstractComponent.many_components">many_components() (odoo.addons.component.core.AbstractComponent method)</a>
+
+      <ul>
+        <li><a href="api/api_components.html#odoo.addons.component.core.WorkContext.many_components">(odoo.addons.component.core.WorkContext method)</a>
+</li>
+        <li><a href="api/api_event.html#odoo.addons.component_event.core.EventWorkContext.many_components">(odoo.addons.component_event.core.EventWorkContext method)</a>
+</li>
+      </ul></li>
+      <li><a href="api/api_exception.html#connector.exception.ManyIDSInBackend">ManyIDSInBackend</a>
+</li>
+      <li><a href="api/api_components.html#connector.components.mapper.Mapper.map_methods">map_methods (connector.components.mapper.Mapper attribute)</a>
+</li>
+      <li><a href="api/api_components.html#connector.components.mapper.Mapper.map_record">map_record() (connector.components.mapper.Mapper method)</a>
+</li>
+      <li><a href="api/api_components.html#connector.components.mapper.MapChild">MapChild (class in connector.components.mapper)</a>
+</li>
+      <li><a href="api/api_components.html#connector.components.mapper.MapOptions">MapOptions (class in connector.components.mapper)</a>
+</li>
+      <li><a href="api/api_components.html#connector.components.mapper.Mapper">Mapper (class in connector.components.mapper)</a>
+</li>
+      <li><a href="api/api_components.html#connector.components.synchronizer.Synchronizer.mapper">mapper (connector.components.synchronizer.Synchronizer attribute)</a>
+</li>
+      <li><a href="api/api_components.html#connector.components.mapper.mapping">mapping() (in module connector.components.mapper)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/api_components.html#connector.components.mapper.MappingDefinition">MappingDefinition (class in connector.components.mapper)</a>
+</li>
+      <li><a href="api/api_exception.html#connector.exception.MappingError">MappingError</a>
+</li>
+      <li><a href="api/api_components.html#connector.components.mapper.MapRecord">MapRecord (class in connector.components.mapper)</a>
+</li>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.job.Job.max_retries">max_retries (odoo.addons.queue_job.job.Job attribute)</a>
+
+      <ul>
+        <li><a href="api/api_queue.html#odoo.addons.queue_job.models.queue_job.QueueJob.max_retries">(odoo.addons.queue_job.models.queue_job.QueueJob attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="api/api_components.html#odoo.addons.component.core.MetaComponent">MetaComponent (class in odoo.addons.component.core)</a>
+</li>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.models.queue_job.QueueJob.method_name">method_name (odoo.addons.queue_job.models.queue_job.QueueJob attribute)</a>
+</li>
+      <li><a href="api/api_components.html#odoo.addons.component.core.AbstractComponent.model">model (odoo.addons.component.core.AbstractComponent attribute)</a>
+
+      <ul>
+        <li><a href="api/api_components.html#odoo.addons.component.core.WorkContext.model">(odoo.addons.component.core.WorkContext attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="api/api_components.html#odoo.addons.component.core.WorkContext.model_name">model_name (odoo.addons.component.core.WorkContext attribute)</a>
+
+      <ul>
+        <li><a href="api/api_queue.html#odoo.addons.queue_job.job.Job.model_name">(odoo.addons.queue_job.job.Job attribute)</a>
+</li>
+        <li><a href="api/api_queue.html#odoo.addons.queue_job.models.queue_job.QueueJob.model_name">(odoo.addons.queue_job.models.queue_job.QueueJob attribute)</a>
+</li>
+      </ul></li>
+  </ul></td>
+</tr></table>
+
+<h2 id="N">N</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/api_backend.html#connector.backend_model.ConnectorBackend.name">name (connector.backend_model.ConnectorBackend attribute)</a>
+
+      <ul>
+        <li><a href="api/api_queue.html#odoo.addons.queue_job.models.queue_job.JobChannel.name">(odoo.addons.queue_job.models.queue_job.JobChannel attribute)</a>
+</li>
+        <li><a href="api/api_queue.html#odoo.addons.queue_job.models.queue_job.JobFunction.name">(odoo.addons.queue_job.models.queue_job.JobFunction attribute)</a>
+</li>
+        <li><a href="api/api_queue.html#odoo.addons.queue_job.models.queue_job.QueueJob.name">(odoo.addons.queue_job.models.queue_job.QueueJob attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.models.queue_job.JobChannel.name_get">name_get() (odoo.addons.queue_job.models.queue_job.JobChannel method)</a>
+</li>
+      <li><a href="api/api_exception.html#connector.exception.NetworkRetryableError">NetworkRetryableError</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/api_components.html#connector.components.listener.ConnectorListener.no_connector_export">no_connector_export() (connector.components.listener.ConnectorListener method)</a>
+</li>
+      <li><a href="api/api_components.html#odoo.addons.component.exception.NoComponentError">NoComponentError</a>
+</li>
+      <li><a href="api/api_exception.html#connector.exception.NoConnectorUnitError">NoConnectorUnitError</a>
+</li>
+      <li><a href="api/api_exception.html#connector.exception.NoExternalId">NoExternalId</a>
+</li>
+      <li><a href="api/api_components.html#connector.components.mapper.none">none() (in module connector.components.mapper)</a>
+</li>
+      <li><a href="api/api_event.html#odoo.addons.component_event.components.event.CollectedEvents.notify">notify() (odoo.addons.component_event.components.event.CollectedEvents method)</a>
+
+      <ul>
+        <li><a href="api/api_channels.html#odoo.addons.queue_job.jobrunner.channels.ChannelManager.notify">(odoo.addons.queue_job.jobrunner.channels.ChannelManager method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+</tr></table>
+
+<h2 id="O">O</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/api_components.html#module-odoo.addons.component.builder">odoo.addons.component.builder (module)</a>
+</li>
+      <li><a href="api/api_components.html#module-odoo.addons.component.core">odoo.addons.component.core (module)</a>
+</li>
+      <li><a href="api/api_components.html#module-odoo.addons.component.exception">odoo.addons.component.exception (module)</a>
+</li>
+      <li><a href="api/api_components.html#module-odoo.addons.component.models.collection">odoo.addons.component.models.collection (module)</a>
+</li>
+      <li><a href="api/api_event.html#module-odoo.addons.component_event.components.event">odoo.addons.component_event.components.event (module)</a>
+</li>
+      <li><a href="api/api_event.html#module-odoo.addons.component_event.core">odoo.addons.component_event.core (module)</a>
+</li>
+      <li><a href="api/api_event.html#module-odoo.addons.component_event.models.base">odoo.addons.component_event.models.base (module)</a>
+</li>
+      <li><a href="api/api_queue.html#module-odoo.addons.queue_job.job">odoo.addons.queue_job.job (module)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/api_channels.html#module-odoo.addons.queue_job.jobrunner.channels">odoo.addons.queue_job.jobrunner.channels (module)</a>
+</li>
+      <li><a href="guides/jobrunner.html#module-odoo.addons.queue_job.jobrunner.runner">odoo.addons.queue_job.jobrunner.runner (module)</a>
+</li>
+      <li><a href="api/api_queue.html#module-odoo.addons.queue_job.models.base">odoo.addons.queue_job.models.base (module)</a>
+</li>
+      <li><a href="api/api_queue.html#module-odoo.addons.queue_job.models.queue_job">odoo.addons.queue_job.models.queue_job (module)</a>
+</li>
+      <li><a href="api/api_components.html#connector.components.mapper.MappingDefinition.only_create">only_create (connector.components.mapper.MappingDefinition attribute)</a>
+</li>
+      <li><a href="api/api_components.html#connector.components.mapper.only_create">only_create() (in module connector.components.mapper)</a>
+</li>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.models.queue_job.QueueJob.open_related_action">open_related_action() (odoo.addons.queue_job.models.queue_job.QueueJob method)</a>
+</li>
+      <li><a href="api/api_components.html#connector.components.mapper.Mapper.options">options (connector.components.mapper.Mapper attribute)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="P">P</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/api_components.html#connector.components.mapper.MapRecord.parent">parent (connector.components.mapper.MapRecord attribute)</a>
+</li>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.models.queue_job.JobChannel.parent_id">parent_id (odoo.addons.queue_job.models.queue_job.JobChannel attribute)</a>
+</li>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.models.queue_job.JobChannel.parent_required">parent_required() (odoo.addons.queue_job.models.queue_job.JobChannel method)</a>
+</li>
+      <li><a href="api/api_channels.html#odoo.addons.queue_job.jobrunner.channels.ChannelManager.parse_simple_config">parse_simple_config() (odoo.addons.queue_job.jobrunner.channels.ChannelManager class method)</a>
+</li>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.job.Job.perform">perform() (odoo.addons.queue_job.job.Job method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/api_channels.html#odoo.addons.queue_job.jobrunner.channels.ChannelQueue.pop">pop() (odoo.addons.queue_job.jobrunner.channels.ChannelQueue method)</a>
+
+      <ul>
+        <li><a href="api/api_channels.html#odoo.addons.queue_job.jobrunner.channels.PriorityQueue.pop">(odoo.addons.queue_job.jobrunner.channels.PriorityQueue method)</a>
+</li>
+      </ul></li>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.job.Job.postpone">postpone() (odoo.addons.queue_job.job.Job method)</a>
+</li>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.job.Job.priority">priority (odoo.addons.queue_job.job.Job attribute)</a>
+
+      <ul>
+        <li><a href="api/api_queue.html#odoo.addons.queue_job.models.queue_job.QueueJob.priority">(odoo.addons.queue_job.models.queue_job.QueueJob attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="api/api_channels.html#odoo.addons.queue_job.jobrunner.channels.PriorityQueue">PriorityQueue (class in odoo.addons.queue_job.jobrunner.channels)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="Q">Q</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.models.queue_job.QueueJob">QueueJob (class in odoo.addons.queue_job.models.queue_job)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="R">R</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/api_components.html#connector.components.backend_adapter.CRUDAdapter.read">read() (connector.components.backend_adapter.CRUDAdapter method)</a>
+</li>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.models.queue_job.QueueJob.record_ids">record_ids (odoo.addons.queue_job.models.queue_job.QueueJob attribute)</a>
+</li>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.job.Job.recordset">recordset (odoo.addons.queue_job.job.Job attribute)</a>
+</li>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.job.related_action">related_action() (in module odoo.addons.queue_job.job)</a>
+
+      <ul>
+        <li><a href="api/api_queue.html#odoo.addons.queue_job.job.Job.related_action">(odoo.addons.queue_job.job.Job method)</a>
+</li>
+      </ul></li>
+      <li><a href="api/api_channels.html#odoo.addons.queue_job.jobrunner.channels.Channel.remove">remove() (odoo.addons.queue_job.jobrunner.channels.Channel method)</a>
+
+      <ul>
+        <li><a href="api/api_channels.html#odoo.addons.queue_job.jobrunner.channels.ChannelQueue.remove">(odoo.addons.queue_job.jobrunner.channels.ChannelQueue method)</a>
+</li>
+        <li><a href="api/api_channels.html#odoo.addons.queue_job.jobrunner.channels.PriorityQueue.remove">(odoo.addons.queue_job.jobrunner.channels.PriorityQueue method)</a>
+</li>
+        <li><a href="api/api_channels.html#odoo.addons.queue_job.jobrunner.channels.SafeSet.remove">(odoo.addons.queue_job.jobrunner.channels.SafeSet method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/api_channels.html#odoo.addons.queue_job.jobrunner.channels.ChannelManager.remove_db">remove_db() (odoo.addons.queue_job.jobrunner.channels.ChannelManager method)</a>
+</li>
+      <li><a href="api/api_channels.html#odoo.addons.queue_job.jobrunner.channels.ChannelManager.remove_job">remove_job() (odoo.addons.queue_job.jobrunner.channels.ChannelManager method)</a>
+</li>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.models.queue_job.QueueJob.requeue">requeue() (odoo.addons.queue_job.models.queue_job.QueueJob method)</a>
+
+      <ul>
+        <li><a href="api/api_queue.html#odoo.addons.queue_job.models.queue_job.RequeueJob.requeue">(odoo.addons.queue_job.models.queue_job.RequeueJob method)</a>
+</li>
+      </ul></li>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.models.queue_job.RequeueJob">RequeueJob (class in odoo.addons.queue_job.models.queue_job)</a>
+</li>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.job.Job.result">result (odoo.addons.queue_job.job.Job attribute)</a>
+
+      <ul>
+        <li><a href="api/api_queue.html#odoo.addons.queue_job.models.queue_job.QueueJob.result">(odoo.addons.queue_job.models.queue_job.QueueJob attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.job.Job.retry">retry (odoo.addons.queue_job.job.Job attribute)</a>
+
+      <ul>
+        <li><a href="api/api_queue.html#odoo.addons.queue_job.models.queue_job.QueueJob.retry">(odoo.addons.queue_job.models.queue_job.QueueJob attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="api/api_components.html#connector.components.synchronizer.Synchronizer.run">run() (connector.components.synchronizer.Synchronizer method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="S">S</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/api_channels.html#odoo.addons.queue_job.jobrunner.channels.SafeSet">SafeSet (class in odoo.addons.queue_job.jobrunner.channels)</a>
+</li>
+      <li><a href="api/api_components.html#connector.components.backend_adapter.CRUDAdapter.search">search() (connector.components.backend_adapter.CRUDAdapter method)</a>
+</li>
+      <li><a href="api/api_components.html#connector.components.backend_adapter.CRUDAdapter.search_read">search_read() (connector.components.backend_adapter.CRUDAdapter method)</a>
+</li>
+      <li><a href="api/api_channels.html#odoo.addons.queue_job.jobrunner.channels.Channel.sequential">sequential (odoo.addons.queue_job.jobrunner.channels.Channel attribute)</a>
+</li>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.job.Job.set_done">set_done() (odoo.addons.queue_job.job.Job method)</a>
+
+      <ul>
+        <li><a href="api/api_channels.html#odoo.addons.queue_job.jobrunner.channels.Channel.set_done">(odoo.addons.queue_job.jobrunner.channels.Channel method)</a>
+</li>
+      </ul></li>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.job.Job.set_enqueued">set_enqueued() (odoo.addons.queue_job.job.Job method)</a>
+</li>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.job.Job.set_failed">set_failed() (odoo.addons.queue_job.job.Job method)</a>
+
+      <ul>
+        <li><a href="api/api_channels.html#odoo.addons.queue_job.jobrunner.channels.Channel.set_failed">(odoo.addons.queue_job.jobrunner.channels.Channel method)</a>
+</li>
+      </ul></li>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.job.Job.set_pending">set_pending() (odoo.addons.queue_job.job.Job method)</a>
+
+      <ul>
+        <li><a href="api/api_channels.html#odoo.addons.queue_job.jobrunner.channels.Channel.set_pending">(odoo.addons.queue_job.jobrunner.channels.Channel method)</a>
+</li>
+      </ul></li>
+      <li><a href="api/api_channels.html#odoo.addons.queue_job.jobrunner.channels.Channel.set_running">set_running() (odoo.addons.queue_job.jobrunner.channels.Channel method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.job.Job.set_started">set_started() (odoo.addons.queue_job.job.Job method)</a>
+</li>
+      <li><a href="api/api_components.html#odoo.addons.component.exception.SeveralComponentError">SeveralComponentError</a>
+</li>
+      <li><a href="api/api_channels.html#odoo.addons.queue_job.jobrunner.channels.ChannelManager.simple_configure">simple_configure() (odoo.addons.queue_job.jobrunner.channels.ChannelManager method)</a>
+</li>
+      <li><a href="api/api_event.html#odoo.addons.component_event.components.event.skip_if">skip_if() (in module odoo.addons.component_event.components.event)</a>
+</li>
+      <li><a href="api/api_components.html#connector.components.mapper.MapChild.skip_item">skip_item() (connector.components.mapper.MapChild method)</a>
+</li>
+      <li><a href="api/api_components.html#connector.components.mapper.MapRecord.source">source (connector.components.mapper.MapRecord attribute)</a>
+</li>
+      <li><a href="api/api_channels.html#odoo.addons.queue_job.jobrunner.channels.split_strip">split_strip() (in module odoo.addons.queue_job.jobrunner.channels)</a>
+</li>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.job.Job.state">state (odoo.addons.queue_job.job.Job attribute)</a>
+
+      <ul>
+        <li><a href="api/api_queue.html#odoo.addons.queue_job.models.queue_job.QueueJob.state">(odoo.addons.queue_job.models.queue_job.QueueJob attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.job.Job.store">store() (odoo.addons.queue_job.job.Job method)</a>
+</li>
+      <li><a href="api/api_backend.html#connector.backend_model.ExternalBinding.sync_date">sync_date (connector.backend_model.ExternalBinding attribute)</a>
+</li>
+      <li><a href="api/api_components.html#connector.components.synchronizer.Synchronizer">Synchronizer (class in connector.components.synchronizer)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="T">T</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/api_components.html#connector.components.binder.Binder.to_external">to_external() (connector.components.binder.Binder method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/api_components.html#connector.components.binder.Binder.to_internal">to_internal() (connector.components.binder.Binder method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="U">U</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/api_event.html#odoo.addons.component_event.models.base.Base.unlink">unlink() (odoo.addons.component_event.models.base.Base method)</a>
+
+      <ul>
+        <li><a href="api/api_queue.html#odoo.addons.queue_job.models.queue_job.JobChannel.unlink">(odoo.addons.queue_job.models.queue_job.JobChannel method)</a>
+</li>
+      </ul></li>
+      <li><a href="api/api_components.html#connector.components.binder.Binder.unwrap_binding">unwrap_binding() (connector.components.binder.Binder method)</a>
+</li>
+      <li><a href="api/api_components.html#connector.components.binder.Binder.unwrap_model">unwrap_model() (connector.components.binder.Binder method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/api_components.html#connector.components.mapper.MapRecord.update">update() (connector.components.mapper.MapRecord method)</a>
+</li>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.job.Job.user_id">user_id (odoo.addons.queue_job.job.Job attribute)</a>
+
+      <ul>
+        <li><a href="api/api_queue.html#odoo.addons.queue_job.models.queue_job.QueueJob.user_id">(odoo.addons.queue_job.models.queue_job.QueueJob attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.job.Job.uuid">uuid (odoo.addons.queue_job.job.Job attribute)</a>, <a href="api/api_queue.html#odoo.addons.queue_job.job.Job.uuid">[1]</a>
+
+      <ul>
+        <li><a href="api/api_queue.html#odoo.addons.queue_job.models.queue_job.QueueJob.uuid">(odoo.addons.queue_job.models.queue_job.QueueJob attribute)</a>
+</li>
+      </ul></li>
+  </ul></td>
+</tr></table>
+
+<h2 id="V">V</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/api_components.html#connector.components.mapper.MapRecord.values">values() (connector.components.mapper.MapRecord method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/api_backend.html#connector.backend_model.ConnectorBackend.version">version (connector.backend_model.ConnectorBackend attribute)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="W">W</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.models.base.Base.with_delay">with_delay() (odoo.addons.queue_job.models.base.Base method)</a>
+</li>
+      <li><a href="api/api_components.html#odoo.addons.component.core.WorkContext.work_on">work_on() (odoo.addons.component.core.WorkContext method)</a>
+
+      <ul>
+        <li><a href="api/api_components.html#odoo.addons.component.models.collection.Collection.work_on">(odoo.addons.component.models.collection.Collection method)</a>
+</li>
+        <li><a href="api/api_event.html#odoo.addons.component_event.core.EventWorkContext.work_on">(odoo.addons.component_event.core.EventWorkContext method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/api_components.html#odoo.addons.component.core.WorkContext">WorkContext (class in odoo.addons.component.core)</a>
+</li>
+      <li><a href="api/api_components.html#connector.components.backend_adapter.CRUDAdapter.write">write() (connector.components.backend_adapter.CRUDAdapter method)</a>
+
+      <ul>
+        <li><a href="api/api_event.html#odoo.addons.component_event.models.base.Base.write">(odoo.addons.component_event.models.base.Base method)</a>
+</li>
+        <li><a href="api/api_queue.html#odoo.addons.queue_job.models.queue_job.JobChannel.write">(odoo.addons.queue_job.models.queue_job.JobChannel method)</a>
+</li>
+        <li><a href="api/api_queue.html#odoo.addons.queue_job.models.queue_job.QueueJob.write">(odoo.addons.queue_job.models.queue_job.QueueJob method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+</tr></table>
+
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+        <br/>
+        
+      
+    </p>
+    <p>
+        &copy; Copyright 2013, Camptocamp SA.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.6.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

@@ -1,0 +1,1355 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="fr">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Queue &#8212; documentation Connector </title>
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/translations.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Recherche" href="../search.html" />
+    <link rel="next" title="Exceptions" href="api_exception.html" />
+    <link rel="prev" title="Events" href="api_event.html" />
+
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-7628916-3', 'odoo-connector.com');
+  ga('send', 'pageview');
+</script>
+
+  </head>
+  <body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../index.html">
+          Odoo Connector</a>
+        <span class="navbar-text navbar-version pull-left"><b></b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+  <li class="dropdown">
+    <a role="button"
+       id="dLabelTranslations"
+       data-toggle="dropdown"
+       data-target="#"
+       href="#">Translations<b class="caret"></b></a>
+    <ul class="dropdown-menu"
+        role="menu"
+        aria-labelledby="dLabelTranslations">
+      <li><a class="reference" href="http://odoo-connector.com">English</a><li>
+      <li><a class="reference" href="http://odoo-connector.com/fr">French</a><li>
+    </ul>
+  </li>
+  <li class="dropdown">
+    <a role="button"
+       id="dLabelVersions"
+       data-toggle="dropdown"
+       data-target="#"
+       href="#">Version<b class="caret"></b></a>
+    <ul class="dropdown-menu"
+        role="menu"
+        aria-labelledby="dLabeVersions">
+      <li><a class="reference" href="http://odoo-connector.com/8.0">8.0</a><li>
+      <li><a class="reference" href="http://odoo-connector.com/9.0">9.0</a><li>
+      <li><a class="reference" href="http://odoo-connector.com">11.0</a><li>
+    </ul>
+  </li>
+  
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../guides/migration_guide.html">Migration Guide to the new Connector API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../guides/migration_guide.html#migrating-jobs">Migrating Jobs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/migration_guide.html#migrating-events">Migrating Events</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/migration_guide.html#migrating-components">Migrating Components</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/code_overview.html">Survol du code</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../guides/code_overview.html#trigger-and-listen-an-event">Trigger and listen an event</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/code_overview.html#delay-an-asynchronous-job">Delay an Asynchronous Job</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/code_overview.html#work-with-components">Work with components</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/concepts.html">Concepts du connecteur</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../guides/concepts.html#events">Événements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/concepts.html#jobs-queue">Queue de jobs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/concepts.html#backend">Backend</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/concepts.html#workcontext">WorkContext</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/concepts.html#component">Component</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/concepts.html#bindings">Bindings (Liaisons)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/concepts.html#checkpoint">Point de contrôle</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/bootstrap_connector.html">Amorcer la création un nouveau connecteur</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../guides/bootstrap_connector.html#odoo-manifest">Odoo Manifest</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/bootstrap_connector.html#backend-model">Modèle du backend</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/bootstrap_connector.html#abstract-binding">Binding abstrait</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/bootstrap_connector.html#components">Components</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/jobrunner.html">Configuring channels and the job runner</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../guides/jobrunner.html#what-is-the-job-runner">What is the job runner?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/jobrunner.html#how-does-it-work">How does it work?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/jobrunner.html#how-to-use-it">How to use it?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/jobrunner.html#caveat">Caveat</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/jobrunner.html#what-is-a-channel">What is a channel?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/jobrunner.html#how-to-configure-channels">How to configure Channels?</a></li>
+</ul>
+</li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="api_components.html">Components</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api_components.html#module-connector.components.core">Core Components</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_components.html#module-connector.components.binder">Connector Components</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_components.html#module-odoo.addons.component.models.collection">Components Collection Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_components.html#module-odoo.addons.component.exception">Components Exceptions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_components.html#components-internals">Components Internals</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api_backend.html">Modèles</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api_backend.html#backend-model">Backend Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_backend.html#binding-model">Binding Model</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api_event.html">Events</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api_event.html#module-odoo.addons.component_event.components.event">Components</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_event.html#module-odoo.addons.component_event.models.base">Odoo Models Extensions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_event.html#module-odoo.addons.component_event.core">Internals</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Queue</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#module-odoo.addons.queue_job.job">Job</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-odoo.addons.queue_job.models.base">Modèles</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api_exception.html">Exceptions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_channels.html">Channels</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../project/contribute.html">Contribuer</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../project/contribute.html#want-to-start-a-new-connector">Démarrer un nouveau connecteur</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../project/contribute.html#creating-or-maintaining-a-translation-of-this-doc">Créer ou maintenir une traduction de cette doc</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../project/contributors.html">Contributeurs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../project/contributors.html#financial-contributors">Contributeurs financiers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../project/license.html">Licence</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../project/changes.html">Changements</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../project/changes.html#future">Future (?)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../project/changes.html#id2">9.0.1.0.2 (2016-03-03)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../project/changes.html#id3">9.0.1.0.1 (2016-03-03)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../project/changes.html#id4">8.0.3.3.0 (2016-02-29)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../project/changes.html#id5">3.2.0 (2015-09-10)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../project/changes.html#id6">3.1.0 (2015-05-15)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../project/changes.html#id7">3.0.0 (2015-04-01)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../project/changes.html#id8">2.2.0 (2014-05-26)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../project/changes.html#id9">2.1.1 (2014-02-06)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../project/changes.html#warning-breaks-compatibility">2.1.0 (2014-01-15 - attention : rupture de compatibilité)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../project/changes.html#id10">2.0.1 (2013-09-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../project/changes.html#id11">2.0.0</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../project/roadmap.html">Roadmap</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">Queue</a><ul>
+<li><a class="reference internal" href="#module-odoo.addons.queue_job.job">Job</a></li>
+<li><a class="reference internal" href="#module-odoo.addons.queue_job.models.base">Modèles</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+            
+
+            
+              
+                
+  <li>
+    <a href="api_event.html" title="Previous Chapter: Events"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Events</span>
+    </a>
+  </li>
+  <li>
+    <a href="api_exception.html" title="Next Chapter: Exceptions"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Exceptions &raquo;</span>
+    </a>
+  </li>
+              
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 content">
+      
+  <div class="section" id="queue">
+<span id="api-queue"></span><h1>Queue<a class="headerlink" href="#queue" title="Lien permanent vers ce titre">¶</a></h1>
+<div class="section" id="module-odoo.addons.queue_job.job">
+<span id="job"></span><h2>Job<a class="headerlink" href="#module-odoo.addons.queue_job.job" title="Lien permanent vers ce titre">¶</a></h2>
+<dl class="class">
+<dt id="odoo.addons.queue_job.job.DelayableRecordset">
+<em class="property">class </em><code class="descclassname">odoo.addons.queue_job.job.</code><code class="descname">DelayableRecordset</code><span class="sig-paren">(</span><em>recordset</em>, <em>priority=None</em>, <em>eta=None</em>, <em>max_retries=None</em>, <em>description=None</em>, <em>channel=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/job.html#DelayableRecordset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.queue_job.job.DelayableRecordset" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Bases : <a class="reference external" href="https://docs.python.org/2/library/functions.html#object" title="(disponible dans Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<p>Allow to delay a method for a recordset</p>
+<p>Utilisation</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">delayable</span> <span class="o">=</span> <span class="n">DelayableRecordset</span><span class="p">(</span><span class="n">recordset</span><span class="p">,</span> <span class="n">priority</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+<span class="n">delayable</span><span class="o">.</span><span class="n">method</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal"><span class="pre">method</span></code> must be a method of the recordset’s Model, decorated with
+<a class="reference internal" href="#odoo.addons.queue_job.job.job" title="odoo.addons.queue_job.job.job"><code class="xref py py-func docutils literal"><span class="pre">job()</span></code></a>.</p>
+<p>The method call will be processed asynchronously in the job queue, with
+the passed arguments.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="odoo.addons.queue_job.job.Job">
+<em class="property">class </em><code class="descclassname">odoo.addons.queue_job.job.</code><code class="descname">Job</code><span class="sig-paren">(</span><em>func</em>, <em>args=None</em>, <em>kwargs=None</em>, <em>priority=None</em>, <em>eta=None</em>, <em>job_uuid=None</em>, <em>max_retries=None</em>, <em>description=None</em>, <em>channel=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/job.html#Job"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.queue_job.job.Job" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Bases : <a class="reference external" href="https://docs.python.org/2/library/functions.html#object" title="(disponible dans Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<p>Un job est une tâche à exécuter.</p>
+<dl class="attribute">
+<dt id="odoo.addons.queue_job.job.Job.uuid">
+<code class="descname">uuid</code><a class="headerlink" href="#odoo.addons.queue_job.job.Job.uuid" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Id (UUID) du job.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="odoo.addons.queue_job.job.Job.state">
+<code class="descname">state</code><a class="headerlink" href="#odoo.addons.queue_job.job.Job.state" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>État du job, peut être en attente, en queue, démarré, terminé, échoué. L’état initial est <cite>en attente</cite> et l’état final est <cite>terminé</cite>.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="odoo.addons.queue_job.job.Job.retry">
+<code class="descname">retry</code><a class="headerlink" href="#odoo.addons.queue_job.job.Job.retry" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>L’essai actuel, démarre à 0 et s’incrémente de 1 chaque fois que le job est exécuté.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="odoo.addons.queue_job.job.Job.max_retries">
+<code class="descname">max_retries</code><a class="headerlink" href="#odoo.addons.queue_job.job.Job.max_retries" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Le nombre maximum d’essais permis avant que le job soit considéré comme échoué.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="odoo.addons.queue_job.job.Job.args">
+<code class="descname">args</code><a class="headerlink" href="#odoo.addons.queue_job.job.Job.args" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Arguments transmis à la fonction pendant l’exécution.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="odoo.addons.queue_job.job.Job.kwargs">
+<code class="descname">kwargs</code><a class="headerlink" href="#odoo.addons.queue_job.job.Job.kwargs" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Arguments nommés transmis à la fonction pendant l’exécution.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="odoo.addons.queue_job.job.Job.description">
+<code class="descname">description</code><a class="headerlink" href="#odoo.addons.queue_job.job.Job.description" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Description du job à destination des utilisateurs.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="odoo.addons.queue_job.job.Job.func">
+<code class="descname">func</code><a class="headerlink" href="#odoo.addons.queue_job.job.Job.func" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>La fonction Python elle-même.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="odoo.addons.queue_job.job.Job.model_name">
+<code class="descname">model_name</code><a class="headerlink" href="#odoo.addons.queue_job.job.Job.model_name" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Modèle Odoo pour lequel le job va fonctionner.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="odoo.addons.queue_job.job.Job.priority">
+<code class="descname">priority</code><a class="headerlink" href="#odoo.addons.queue_job.job.Job.priority" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Priorité du job, 0 étant la plus haute priorité.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="odoo.addons.queue_job.job.Job.date_created">
+<code class="descname">date_created</code><a class="headerlink" href="#odoo.addons.queue_job.job.Job.date_created" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Date et heure de création du job.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="odoo.addons.queue_job.job.Job.date_enqueued">
+<code class="descname">date_enqueued</code><a class="headerlink" href="#odoo.addons.queue_job.job.Job.date_enqueued" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Date et heure de mise en queue du job.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="odoo.addons.queue_job.job.Job.date_started">
+<code class="descname">date_started</code><a class="headerlink" href="#odoo.addons.queue_job.job.Job.date_started" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Date et heure de démarrage du job.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="odoo.addons.queue_job.job.Job.date_done">
+<code class="descname">date_done</code><a class="headerlink" href="#odoo.addons.queue_job.job.Job.date_done" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Date et heure d’arrêt du job.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="odoo.addons.queue_job.job.Job.result">
+<code class="descname">result</code><a class="headerlink" href="#odoo.addons.queue_job.job.Job.result" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Une description du résultat (à destination des utilisateurs).</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="odoo.addons.queue_job.job.Job.exc_info">
+<code class="descname">exc_info</code><a class="headerlink" href="#odoo.addons.queue_job.job.Job.exc_info" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Informations sur l”<cite>Exception</cite> (<a href="#id1"><span class="problematic" id="id2">`</span></a>traceback”) ayant causé l’échec du job</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="odoo.addons.queue_job.job.Job.user_id">
+<code class="descname">user_id</code><a class="headerlink" href="#odoo.addons.queue_job.job.Job.user_id" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Id de l’utilisateur Odoo qui a créé le job</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="odoo.addons.queue_job.job.Job.eta">
+<code class="descname">eta</code><a class="headerlink" href="#odoo.addons.queue_job.job.Job.eta" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Heure estimée de lancement (ETA) du job. Il ne sera pas exécuté avant cette date/heure.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="odoo.addons.queue_job.job.Job.recordset">
+<code class="descname">recordset</code><a class="headerlink" href="#odoo.addons.queue_job.job.Job.recordset" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Model recordset when we are on a delayed Model method</p>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="odoo.addons.queue_job.job.Job.load">
+<em class="property">classmethod </em><code class="descname">load</code><span class="sig-paren">(</span><em>env</em>, <em>job_uuid</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/job.html#Job.load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.queue_job.job.Job.load" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Lit un job depuis la base de données</p>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="odoo.addons.queue_job.job.Job.enqueue">
+<em class="property">classmethod </em><code class="descname">enqueue</code><span class="sig-paren">(</span><em>func</em>, <em>args=None</em>, <em>kwargs=None</em>, <em>priority=None</em>, <em>eta=None</em>, <em>max_retries=None</em>, <em>description=None</em>, <em>channel=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/job.html#Job.enqueue"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.queue_job.job.Job.enqueue" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Crée un job et le met en queue. Renvoie le UUID du job.</p>
+<p>S’attend à ce que les arguments spécifiques au job soient déjà extraites de ceux à passer à la fonction du job.</p>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="odoo.addons.queue_job.job.Job.db_record_from_uuid">
+<em class="property">static </em><code class="descname">db_record_from_uuid</code><span class="sig-paren">(</span><em>env</em>, <em>job_uuid</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/job.html#Job.db_record_from_uuid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.queue_job.job.Job.db_record_from_uuid" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="odoo.addons.queue_job.job.Job.perform">
+<code class="descname">perform</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/job.html#Job.perform"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.queue_job.job.Job.perform" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Exécute le job.</p>
+<p>Le job est exécuté avec l’utilisateur qui l’a initié.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="odoo.addons.queue_job.job.Job.store">
+<code class="descname">store</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/job.html#Job.store"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.queue_job.job.Job.store" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Stocke le job</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="odoo.addons.queue_job.job.Job.db_record">
+<code class="descname">db_record</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/job.html#Job.db_record"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.queue_job.job.Job.db_record" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt>
+<code class="descname">func</code></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt>
+<code class="descname">description</code></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt>
+<code class="descname">uuid</code></dt>
+<dd><p>Id du job, c’est un UUID</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt>
+<code class="descname">eta</code></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="odoo.addons.queue_job.job.Job.set_pending">
+<code class="descname">set_pending</code><span class="sig-paren">(</span><em>result=None</em>, <em>reset_retry=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/job.html#Job.set_pending"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.queue_job.job.Job.set_pending" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="odoo.addons.queue_job.job.Job.set_enqueued">
+<code class="descname">set_enqueued</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/job.html#Job.set_enqueued"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.queue_job.job.Job.set_enqueued" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="odoo.addons.queue_job.job.Job.set_started">
+<code class="descname">set_started</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/job.html#Job.set_started"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.queue_job.job.Job.set_started" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="odoo.addons.queue_job.job.Job.set_done">
+<code class="descname">set_done</code><span class="sig-paren">(</span><em>result=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/job.html#Job.set_done"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.queue_job.job.Job.set_done" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="odoo.addons.queue_job.job.Job.set_failed">
+<code class="descname">set_failed</code><span class="sig-paren">(</span><em>exc_info=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/job.html#Job.set_failed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.queue_job.job.Job.set_failed" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="odoo.addons.queue_job.job.Job.postpone">
+<code class="descname">postpone</code><span class="sig-paren">(</span><em>result=None</em>, <em>seconds=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/job.html#Job.postpone"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.queue_job.job.Job.postpone" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Écrit un heure estimée de lancement dans <cite>n</cite> secondes. Utilisé quand une <cite>Exception</cite> non fatale souhaite relancer un job.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="odoo.addons.queue_job.job.Job.related_action">
+<code class="descname">related_action</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/job.html#Job.related_action"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.queue_job.job.Job.related_action" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="odoo.addons.queue_job.job.job">
+<code class="descclassname">odoo.addons.queue_job.job.</code><code class="descname">job</code><span class="sig-paren">(</span><em>func=None</em>, <em>default_channel='root'</em>, <em>retry_pattern=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/job.html#job"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.queue_job.job.job" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Décorateur pour les jobs.</p>
+<p>Optional argument:</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><ul class="first last simple">
+<li><strong>default_channel</strong> – the channel wherein the job will be assigned. This
+channel is set at the installation of the module
+and can be manually changed later using the views.</li>
+<li><strong>retry_pattern</strong> (<a class="reference external" href="https://docs.python.org/2/library/stdtypes.html#dict" title="(disponible dans Python v2.7)"><em>dict</em></a><em>(</em><em>retry_count</em><em>,</em><em>retry_eta_seconds</em><em>)</em>) – The retry pattern to use for postponing a job.
+If a job is postponed and there is no eta
+specified, the eta will be determined from the
+dict in retry_pattern. When no retry pattern
+is provided, jobs will be retried after
+<code class="xref py py-const docutils literal"><span class="pre">RETRY_INTERVAL</span></code> seconds.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Indicates that a method of a Model can be delayed in the Job Queue.</p>
+<p>When a method has the <code class="docutils literal"><span class="pre">&#64;job</span></code> decorator, its calls can then be delayed
+with:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">recordset</span><span class="o">.</span><span class="n">with_delay</span><span class="p">(</span><span class="n">priority</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span><span class="o">.</span><span class="n">the_method</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Where <code class="docutils literal"><span class="pre">the_method</span></code> is the method decorated with <code class="docutils literal"><span class="pre">&#64;job</span></code>. Its arguments
+and keyword arguments will be kept in the Job Queue for its asynchronous
+execution.</p>
+<p><code class="docutils literal"><span class="pre">default_channel</span></code> indicates in which channel the job must be executed</p>
+<p><code class="docutils literal"><span class="pre">retry_pattern</span></code> is a dict where keys are the count of retries and the
+values are the delay to postpone a job.</p>
+<p>Exemple :</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">ProductProduct</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">_inherit</span> <span class="o">=</span> <span class="s1">&#39;product.product&#39;</span>
+
+    <span class="nd">@api.multi</span>
+    <span class="nd">@job</span>
+    <span class="k">def</span> <span class="nf">export_one_thing</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">one_thing</span><span class="p">):</span>
+        <span class="c1"># work</span>
+        <span class="c1"># export one_thing</span>
+
+<span class="c1"># [...]</span>
+
+<span class="n">env</span><span class="p">[</span><span class="s1">&#39;a.model&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">export_one_thing</span><span class="p">(</span><span class="n">the_thing_to_export</span><span class="p">)</span>
+<span class="c1"># =&gt; normal and synchronous function call</span>
+
+<span class="n">env</span><span class="p">[</span><span class="s1">&#39;a.model&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">with_delay</span><span class="p">()</span><span class="o">.</span><span class="n">export_one_thing</span><span class="p">(</span><span class="n">the_thing_to_export</span><span class="p">)</span>
+<span class="c1"># =&gt; the job will be executed as soon as possible</span>
+
+<span class="n">delayable</span> <span class="o">=</span> <span class="n">env</span><span class="p">[</span><span class="s1">&#39;a.model&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">with_delay</span><span class="p">(</span><span class="n">priority</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">eta</span><span class="o">=</span><span class="mi">60</span><span class="o">*</span><span class="mi">60</span><span class="o">*</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">delayable</span><span class="o">.</span><span class="n">export_one_thing</span><span class="p">(</span><span class="n">the_thing_to_export</span><span class="p">)</span>
+<span class="c1"># =&gt; the job will be executed with a low priority and not before a</span>
+<span class="c1"># delay of 5 hours from now</span>
+
+<span class="nd">@job</span><span class="p">(</span><span class="n">default_channel</span><span class="o">=</span><span class="s1">&#39;root.subchannel&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">export_one_thing</span><span class="p">(</span><span class="n">one_thing</span><span class="p">):</span>
+    <span class="c1"># work</span>
+    <span class="c1"># export one_thing</span>
+
+<span class="nd">@job</span><span class="p">(</span><span class="n">retry_pattern</span><span class="o">=</span><span class="p">{</span><span class="mi">1</span><span class="p">:</span> <span class="mi">10</span> <span class="o">*</span> <span class="mi">60</span><span class="p">,</span>
+                    <span class="mi">5</span><span class="p">:</span> <span class="mi">20</span> <span class="o">*</span> <span class="mi">60</span><span class="p">,</span>
+                    <span class="mi">10</span><span class="p">:</span> <span class="mi">30</span> <span class="o">*</span> <span class="mi">60</span><span class="p">,</span>
+                    <span class="mi">15</span><span class="p">:</span> <span class="mi">12</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">60</span><span class="p">})</span>
+<span class="k">def</span> <span class="nf">retryable_example</span><span class="p">():</span>
+    <span class="c1"># 5 first retries postponed 10 minutes later</span>
+    <span class="c1"># retries 5 to 10 postponed 20 minutes later</span>
+    <span class="c1"># retries 10 to 15 postponed 30 minutes later</span>
+    <span class="c1"># all subsequent retries postponed 12 hours later</span>
+    <span class="k">raise</span> <span class="n">RetryableJobError</span><span class="p">(</span><span class="s1">&#39;Must be retried later&#39;</span><span class="p">)</span>
+
+<span class="n">env</span><span class="p">[</span><span class="s1">&#39;a.model&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">with_delay</span><span class="p">()</span><span class="o">.</span><span class="n">retryable_example</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Voir aussi : <a class="reference internal" href="#odoo.addons.queue_job.job.related_action" title="odoo.addons.queue_job.job.related_action"><code class="xref py py-func docutils literal"><span class="pre">related_action()</span></code></a> une action connexe peut être attachée à un job</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="odoo.addons.queue_job.job.related_action">
+<code class="descclassname">odoo.addons.queue_job.job.</code><code class="descname">related_action</code><span class="sig-paren">(</span><em>action=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/job.html#related_action"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.queue_job.job.related_action" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Attache une <em>action connexe</em> à un job</p>
+<p>Un <em>action connexe</em> apparaîtra comme un bouton dans la vue Odoo. Le bouton exécutera l’action, habituellement une ouverture de formulaire de l’enregistrement lié au job.</p>
+<p>The <code class="docutils literal"><span class="pre">action</span></code> must be a method on the <cite>queue.job</cite> model.</p>
+<p>Exemple d’utilisation :</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">QueueJob</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">_inherit</span> <span class="o">=</span> <span class="s1">&#39;queue.job&#39;</span>
+
+    <span class="nd">@api.multi</span>
+    <span class="k">def</span> <span class="nf">related_action_partner</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ensure_one</span><span class="p">()</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model_name</span>
+        <span class="n">partner</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="p">[</span><span class="n">model</span><span class="p">]</span><span class="o">.</span><span class="n">browse</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">record_ids</span><span class="p">)</span>
+        <span class="c1"># possibly get the real ID if partner_id is a binding ID</span>
+        <span class="n">action</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;Partner&quot;</span><span class="p">),</span>
+            <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;ir.actions.act_window&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;res_model&#39;</span><span class="p">:</span> <span class="n">model</span><span class="p">,</span>
+            <span class="s1">&#39;view_type&#39;</span><span class="p">:</span> <span class="s1">&#39;form&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;view_mode&#39;</span><span class="p">:</span> <span class="s1">&#39;form&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;res_id&#39;</span><span class="p">:</span> <span class="n">partner</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">action</span>
+
+<span class="k">class</span> <span class="nc">ResPartner</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">_inherit</span> <span class="o">=</span> <span class="s1">&#39;res.partner&#39;</span>
+
+    <span class="nd">@api.multi</span>
+    <span class="nd">@job</span>
+    <span class="nd">@related_action</span><span class="p">(</span><span class="n">action</span><span class="o">=</span><span class="s1">&#39;related_action_partner&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">export_partner</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># ...</span>
+</pre></div>
+</div>
+<p>Les <code class="docutils literal"><span class="pre">kwargs</span></code> sont transmis à l’action :</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">QueueJob</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">_inherit</span> <span class="o">=</span> <span class="s1">&#39;queue.job&#39;</span>
+
+    <span class="nd">@api.multi</span>
+    <span class="k">def</span> <span class="nf">related_action_product</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">extra_arg</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="k">assert</span> <span class="n">extra_arg</span> <span class="o">==</span> <span class="mi">2</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model_name</span>
+        <span class="o">...</span>
+
+<span class="k">class</span> <span class="nc">ProductProduct</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">_inherit</span> <span class="o">=</span> <span class="s1">&#39;product.product&#39;</span>
+
+    <span class="nd">@api.multi</span>
+    <span class="nd">@job</span>
+    <span class="nd">@related_action</span><span class="p">(</span><span class="n">action</span><span class="o">=</span><span class="s1">&#39;related_action_product&#39;</span><span class="p">,</span> <span class="n">extra_arg</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">export_product</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># ...</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="module-odoo.addons.queue_job.models.base">
+<span id="models"></span><h2>Modèles<a class="headerlink" href="#module-odoo.addons.queue_job.models.base" title="Lien permanent vers ce titre">¶</a></h2>
+<dl class="class">
+<dt id="odoo.addons.queue_job.models.base.Base">
+<em class="property">class </em><code class="descclassname">odoo.addons.queue_job.models.base.</code><code class="descname">Base</code><span class="sig-paren">(</span><em>pool</em>, <em>cr</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/models/base.html#Base"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.queue_job.models.base.Base" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Bases : <code class="xref py py-class docutils literal"><span class="pre">odoo.models.BaseModel</span></code></p>
+<p>The base model, which is implicitly inherited by all models.</p>
+<dl class="method">
+<dt id="odoo.addons.queue_job.models.base.Base.with_delay">
+<code class="descname">with_delay</code><span class="sig-paren">(</span><em>priority=None</em>, <em>eta=None</em>, <em>max_retries=None</em>, <em>description=None</em>, <em>channel=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/models/base.html#Base.with_delay"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.queue_job.models.base.Base.with_delay" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Return a <code class="docutils literal"><span class="pre">DelayableRecordset</span></code></p>
+<p>The returned instance allow to enqueue any method of the recordset’s
+Model which is decorated by <a class="reference internal" href="#odoo.addons.queue_job.job.job" title="odoo.addons.queue_job.job.job"><code class="xref py py-func docutils literal"><span class="pre">job()</span></code></a>.</p>
+<p>Utilisation</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="p">[</span><span class="s1">&#39;res.users&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">with_delay</span><span class="p">()</span><span class="o">.</span><span class="n">write</span><span class="p">({</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;test&#39;</span><span class="p">})</span>
+</pre></div>
+</div>
+<p>In the line above, in so far <code class="docutils literal"><span class="pre">write</span></code> is allowed to be delayed with
+<code class="docutils literal"><span class="pre">&#64;job</span></code>, the write will be executed in an asynchronous job.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><ul class="first simple">
+<li><strong>priority</strong> – Priority of the job, 0 being the higher priority.
+Default is 10.</li>
+<li><strong>eta</strong> – Heure estimée de lancement (ETA) du job. Il ne sera pas exécuté avant cette date/heure.</li>
+<li><strong>max_retries</strong> – maximum number of retries before giving up and set
+the job state to “failed”. A value of 0 means
+infinite retries.  Default is 5.</li>
+<li><strong>description</strong> – human description of the job. If None, description
+is computed from the function doc or name</li>
+<li><strong>channel</strong> – the complete name of the channel to use to process
+the function. If specified it overrides the one
+defined on the function</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Retourne:</th><td class="field-body"><p class="first">instance of a DelayableRecordset</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Type retourné:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#odoo.addons.queue_job.job.DelayableRecordset" title="odoo.addons.queue_job.job.DelayableRecordset"><code class="xref py py-class docutils literal"><span class="pre">odoo.addons.queue_job.job.DelayableRecordset</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<span class="target" id="module-odoo.addons.queue_job.models.queue_job"></span><dl class="function">
+<dt id="odoo.addons.queue_job.models.queue_job.channel_func_name">
+<code class="descclassname">odoo.addons.queue_job.models.queue_job.</code><code class="descname">channel_func_name</code><span class="sig-paren">(</span><em>method</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/models/queue_job.html#channel_func_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.queue_job.models.queue_job.channel_func_name" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="odoo.addons.queue_job.models.queue_job.QueueJob">
+<em class="property">class </em><code class="descclassname">odoo.addons.queue_job.models.queue_job.</code><code class="descname">QueueJob</code><span class="sig-paren">(</span><em>pool</em>, <em>cr</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/models/queue_job.html#QueueJob"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.queue_job.models.queue_job.QueueJob" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Bases : <a class="reference external" href="https://www.odoo.com/documentation/10.0/reference/orm.html#odoo.models.Model" title="(disponible dans odoo v10.0)"><code class="xref py py-class docutils literal"><span class="pre">odoo.models.Model</span></code></a></p>
+<p>État du job et résultat</p>
+<dl class="attribute">
+<dt id="odoo.addons.queue_job.models.queue_job.QueueJob.uuid">
+<code class="descname">uuid</code><a class="headerlink" href="#odoo.addons.queue_job.models.queue_job.QueueJob.uuid" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Basic string field, can be length-limited, usually displayed as a
+single-line string in clients.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><ul class="first last simple">
+<li><strong>size</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(disponible dans Python v2.7)"><em>int</em></a>) – la taille maximum des valeurs stockées dans ce champ</li>
+<li><strong>translate</strong> – enable the translation of the field’s values; use
+<code class="docutils literal"><span class="pre">translate=True</span></code> to translate field values as a whole; <code class="docutils literal"><span class="pre">translate</span></code>
+may also be a callable such that <code class="docutils literal"><span class="pre">translate(callback,</span> <span class="pre">value)</span></code>
+translates <code class="docutils literal"><span class="pre">value</span></code> by using <code class="docutils literal"><span class="pre">callback(term)</span></code> to retrieve the
+translation of terms.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="odoo.addons.queue_job.models.queue_job.QueueJob.user_id">
+<code class="descname">user_id</code><a class="headerlink" href="#odoo.addons.queue_job.models.queue_job.QueueJob.user_id" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>La valeur d’un tel champ est un <cite>recordset</cite> de taille 0 (pas d’enregistrement) ou 1 (enregistrement unique).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><ul class="first last simple">
+<li><strong>comodel_name</strong> – nom du modèle cible (chaîne de caractères)</li>
+<li><strong>domain</strong> – un <cite>domain</cite> optionnel à définir sur les valeurs candidates côté client (<cite>domain</cite> ou <cite>string</cite>)</li>
+<li><strong>context</strong> – un <cite>context</cite> optionnel à utiliser côté client à la prise en charge de ce champ (dictionnaire)</li>
+<li><strong>ondelete</strong> – quoi faire quand l’enregistrement en rapport est effacé ; les valeurs possibles sont : <code class="docutils literal"><span class="pre">'set</span> <span class="pre">null'</span></code>, <code class="docutils literal"><span class="pre">'restrict'</span></code>, <code class="docutils literal"><span class="pre">'cascade'</span></code></li>
+<li><strong>auto_join</strong> – si les JOINs sont générés lors de la recherche sur ce champ (booleen, par défaut <code class="docutils literal"><span class="pre">False</span></code>)</li>
+<li><strong>delegate</strong> – définir à <code class="docutils literal"><span class="pre">True</span></code> pour rendre les champs du modèle cible accessibles depuis le modèle en cours (correspond à <code class="docutils literal"><span class="pre">_inherits</span></code>)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>The attribute <code class="docutils literal"><span class="pre">comodel_name</span></code> is mandatory except in the case of related
+fields or field extensions.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="odoo.addons.queue_job.models.queue_job.QueueJob.company_id">
+<code class="descname">company_id</code><a class="headerlink" href="#odoo.addons.queue_job.models.queue_job.QueueJob.company_id" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>La valeur d’un tel champ est un <cite>recordset</cite> de taille 0 (pas d’enregistrement) ou 1 (enregistrement unique).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><ul class="first last simple">
+<li><strong>comodel_name</strong> – nom du modèle cible (chaîne de caractères)</li>
+<li><strong>domain</strong> – un <cite>domain</cite> optionnel à définir sur les valeurs candidates côté client (<cite>domain</cite> ou <cite>string</cite>)</li>
+<li><strong>context</strong> – un <cite>context</cite> optionnel à utiliser côté client à la prise en charge de ce champ (dictionnaire)</li>
+<li><strong>ondelete</strong> – quoi faire quand l’enregistrement en rapport est effacé ; les valeurs possibles sont : <code class="docutils literal"><span class="pre">'set</span> <span class="pre">null'</span></code>, <code class="docutils literal"><span class="pre">'restrict'</span></code>, <code class="docutils literal"><span class="pre">'cascade'</span></code></li>
+<li><strong>auto_join</strong> – si les JOINs sont générés lors de la recherche sur ce champ (booleen, par défaut <code class="docutils literal"><span class="pre">False</span></code>)</li>
+<li><strong>delegate</strong> – définir à <code class="docutils literal"><span class="pre">True</span></code> pour rendre les champs du modèle cible accessibles depuis le modèle en cours (correspond à <code class="docutils literal"><span class="pre">_inherits</span></code>)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>The attribute <code class="docutils literal"><span class="pre">comodel_name</span></code> is mandatory except in the case of related
+fields or field extensions.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="odoo.addons.queue_job.models.queue_job.QueueJob.name">
+<code class="descname">name</code><a class="headerlink" href="#odoo.addons.queue_job.models.queue_job.QueueJob.name" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Basic string field, can be length-limited, usually displayed as a
+single-line string in clients.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><ul class="first last simple">
+<li><strong>size</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(disponible dans Python v2.7)"><em>int</em></a>) – la taille maximum des valeurs stockées dans ce champ</li>
+<li><strong>translate</strong> – enable the translation of the field’s values; use
+<code class="docutils literal"><span class="pre">translate=True</span></code> to translate field values as a whole; <code class="docutils literal"><span class="pre">translate</span></code>
+may also be a callable such that <code class="docutils literal"><span class="pre">translate(callback,</span> <span class="pre">value)</span></code>
+translates <code class="docutils literal"><span class="pre">value</span></code> by using <code class="docutils literal"><span class="pre">callback(term)</span></code> to retrieve the
+translation of terms.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="odoo.addons.queue_job.models.queue_job.QueueJob.model_name">
+<code class="descname">model_name</code><a class="headerlink" href="#odoo.addons.queue_job.models.queue_job.QueueJob.model_name" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Basic string field, can be length-limited, usually displayed as a
+single-line string in clients.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><ul class="first last simple">
+<li><strong>size</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(disponible dans Python v2.7)"><em>int</em></a>) – la taille maximum des valeurs stockées dans ce champ</li>
+<li><strong>translate</strong> – enable the translation of the field’s values; use
+<code class="docutils literal"><span class="pre">translate=True</span></code> to translate field values as a whole; <code class="docutils literal"><span class="pre">translate</span></code>
+may also be a callable such that <code class="docutils literal"><span class="pre">translate(callback,</span> <span class="pre">value)</span></code>
+translates <code class="docutils literal"><span class="pre">value</span></code> by using <code class="docutils literal"><span class="pre">callback(term)</span></code> to retrieve the
+translation of terms.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="odoo.addons.queue_job.models.queue_job.QueueJob.method_name">
+<code class="descname">method_name</code><a class="headerlink" href="#odoo.addons.queue_job.models.queue_job.QueueJob.method_name" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Basic string field, can be length-limited, usually displayed as a
+single-line string in clients.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><ul class="first last simple">
+<li><strong>size</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(disponible dans Python v2.7)"><em>int</em></a>) – la taille maximum des valeurs stockées dans ce champ</li>
+<li><strong>translate</strong> – enable the translation of the field’s values; use
+<code class="docutils literal"><span class="pre">translate=True</span></code> to translate field values as a whole; <code class="docutils literal"><span class="pre">translate</span></code>
+may also be a callable such that <code class="docutils literal"><span class="pre">translate(callback,</span> <span class="pre">value)</span></code>
+translates <code class="docutils literal"><span class="pre">value</span></code> by using <code class="docutils literal"><span class="pre">callback(term)</span></code> to retrieve the
+translation of terms.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="odoo.addons.queue_job.models.queue_job.QueueJob.record_ids">
+<code class="descname">record_ids</code><a class="headerlink" href="#odoo.addons.queue_job.models.queue_job.QueueJob.record_ids" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Serialized fields provide the storage for sparse fields.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="odoo.addons.queue_job.models.queue_job.QueueJob.args">
+<code class="descname">args</code><a class="headerlink" href="#odoo.addons.queue_job.models.queue_job.QueueJob.args" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Serialized fields provide the storage for sparse fields.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="odoo.addons.queue_job.models.queue_job.QueueJob.kwargs">
+<code class="descname">kwargs</code><a class="headerlink" href="#odoo.addons.queue_job.models.queue_job.QueueJob.kwargs" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Serialized fields provide the storage for sparse fields.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="odoo.addons.queue_job.models.queue_job.QueueJob.func_string">
+<code class="descname">func_string</code><a class="headerlink" href="#odoo.addons.queue_job.models.queue_job.QueueJob.func_string" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Basic string field, can be length-limited, usually displayed as a
+single-line string in clients.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><ul class="first last simple">
+<li><strong>size</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(disponible dans Python v2.7)"><em>int</em></a>) – la taille maximum des valeurs stockées dans ce champ</li>
+<li><strong>translate</strong> – enable the translation of the field’s values; use
+<code class="docutils literal"><span class="pre">translate=True</span></code> to translate field values as a whole; <code class="docutils literal"><span class="pre">translate</span></code>
+may also be a callable such that <code class="docutils literal"><span class="pre">translate(callback,</span> <span class="pre">value)</span></code>
+translates <code class="docutils literal"><span class="pre">value</span></code> by using <code class="docutils literal"><span class="pre">callback(term)</span></code> to retrieve the
+translation of terms.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="odoo.addons.queue_job.models.queue_job.QueueJob.state">
+<code class="descname">state</code><a class="headerlink" href="#odoo.addons.queue_job.models.queue_job.QueueJob.state" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><ul class="first last simple">
+<li><strong>selection</strong> – specifies the possible values for this field.
+It is given as either a list of pairs (<code class="docutils literal"><span class="pre">value</span></code>, <code class="docutils literal"><span class="pre">string</span></code>), or a
+model method, or a method name.</li>
+<li><strong>selection_add</strong> – provides an extension of the selection in the case
+of an overridden field. It is a list of pairs (<code class="docutils literal"><span class="pre">value</span></code>, <code class="docutils literal"><span class="pre">string</span></code>).</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>The attribute <code class="docutils literal"><span class="pre">selection</span></code> is mandatory except in the case of
+<a class="reference external" href="https://www.odoo.com/documentation/10.0/reference/orm.html#field-related" title="(disponible dans odoo v10.0)"><span class="xref std std-ref">related fields</span></a> or <a class="reference external" href="https://www.odoo.com/documentation/10.0/reference/orm.html#field-incremental-definition" title="(disponible dans odoo v10.0)"><span class="xref std std-ref">field extensions</span></a>.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="odoo.addons.queue_job.models.queue_job.QueueJob.priority">
+<code class="descname">priority</code><a class="headerlink" href="#odoo.addons.queue_job.models.queue_job.QueueJob.priority" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="odoo.addons.queue_job.models.queue_job.QueueJob.exc_info">
+<code class="descname">exc_info</code><a class="headerlink" href="#odoo.addons.queue_job.models.queue_job.QueueJob.exc_info" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Très similaire à <code class="xref py py-class docutils literal"><span class="pre">Char</span></code> mais utilisé pour des contenus plus longs, sans taille spécifiée et généralement affiché dans une boite de texte multi-lignes.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><strong>translate</strong> – enable the translation of the field’s values; use
+<code class="docutils literal"><span class="pre">translate=True</span></code> to translate field values as a whole; <code class="docutils literal"><span class="pre">translate</span></code>
+may also be a callable such that <code class="docutils literal"><span class="pre">translate(callback,</span> <span class="pre">value)</span></code>
+translates <code class="docutils literal"><span class="pre">value</span></code> by using <code class="docutils literal"><span class="pre">callback(term)</span></code> to retrieve the
+translation of terms.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="odoo.addons.queue_job.models.queue_job.QueueJob.result">
+<code class="descname">result</code><a class="headerlink" href="#odoo.addons.queue_job.models.queue_job.QueueJob.result" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Très similaire à <code class="xref py py-class docutils literal"><span class="pre">Char</span></code> mais utilisé pour des contenus plus longs, sans taille spécifiée et généralement affiché dans une boite de texte multi-lignes.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><strong>translate</strong> – enable the translation of the field’s values; use
+<code class="docutils literal"><span class="pre">translate=True</span></code> to translate field values as a whole; <code class="docutils literal"><span class="pre">translate</span></code>
+may also be a callable such that <code class="docutils literal"><span class="pre">translate(callback,</span> <span class="pre">value)</span></code>
+translates <code class="docutils literal"><span class="pre">value</span></code> by using <code class="docutils literal"><span class="pre">callback(term)</span></code> to retrieve the
+translation of terms.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="odoo.addons.queue_job.models.queue_job.QueueJob.date_created">
+<code class="descname">date_created</code><a class="headerlink" href="#odoo.addons.queue_job.models.queue_job.QueueJob.date_created" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="odoo.addons.queue_job.models.queue_job.QueueJob.date_started">
+<code class="descname">date_started</code><a class="headerlink" href="#odoo.addons.queue_job.models.queue_job.QueueJob.date_started" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="odoo.addons.queue_job.models.queue_job.QueueJob.date_enqueued">
+<code class="descname">date_enqueued</code><a class="headerlink" href="#odoo.addons.queue_job.models.queue_job.QueueJob.date_enqueued" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="odoo.addons.queue_job.models.queue_job.QueueJob.date_done">
+<code class="descname">date_done</code><a class="headerlink" href="#odoo.addons.queue_job.models.queue_job.QueueJob.date_done" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="odoo.addons.queue_job.models.queue_job.QueueJob.eta">
+<code class="descname">eta</code><a class="headerlink" href="#odoo.addons.queue_job.models.queue_job.QueueJob.eta" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="odoo.addons.queue_job.models.queue_job.QueueJob.retry">
+<code class="descname">retry</code><a class="headerlink" href="#odoo.addons.queue_job.models.queue_job.QueueJob.retry" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="odoo.addons.queue_job.models.queue_job.QueueJob.max_retries">
+<code class="descname">max_retries</code><a class="headerlink" href="#odoo.addons.queue_job.models.queue_job.QueueJob.max_retries" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="odoo.addons.queue_job.models.queue_job.QueueJob.channel_method_name">
+<code class="descname">channel_method_name</code><a class="headerlink" href="#odoo.addons.queue_job.models.queue_job.QueueJob.channel_method_name" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Basic string field, can be length-limited, usually displayed as a
+single-line string in clients.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><ul class="first last simple">
+<li><strong>size</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(disponible dans Python v2.7)"><em>int</em></a>) – la taille maximum des valeurs stockées dans ce champ</li>
+<li><strong>translate</strong> – enable the translation of the field’s values; use
+<code class="docutils literal"><span class="pre">translate=True</span></code> to translate field values as a whole; <code class="docutils literal"><span class="pre">translate</span></code>
+may also be a callable such that <code class="docutils literal"><span class="pre">translate(callback,</span> <span class="pre">value)</span></code>
+translates <code class="docutils literal"><span class="pre">value</span></code> by using <code class="docutils literal"><span class="pre">callback(term)</span></code> to retrieve the
+translation of terms.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="odoo.addons.queue_job.models.queue_job.QueueJob.job_function_id">
+<code class="descname">job_function_id</code><a class="headerlink" href="#odoo.addons.queue_job.models.queue_job.QueueJob.job_function_id" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>La valeur d’un tel champ est un <cite>recordset</cite> de taille 0 (pas d’enregistrement) ou 1 (enregistrement unique).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><ul class="first last simple">
+<li><strong>comodel_name</strong> – nom du modèle cible (chaîne de caractères)</li>
+<li><strong>domain</strong> – un <cite>domain</cite> optionnel à définir sur les valeurs candidates côté client (<cite>domain</cite> ou <cite>string</cite>)</li>
+<li><strong>context</strong> – un <cite>context</cite> optionnel à utiliser côté client à la prise en charge de ce champ (dictionnaire)</li>
+<li><strong>ondelete</strong> – quoi faire quand l’enregistrement en rapport est effacé ; les valeurs possibles sont : <code class="docutils literal"><span class="pre">'set</span> <span class="pre">null'</span></code>, <code class="docutils literal"><span class="pre">'restrict'</span></code>, <code class="docutils literal"><span class="pre">'cascade'</span></code></li>
+<li><strong>auto_join</strong> – si les JOINs sont générés lors de la recherche sur ce champ (booleen, par défaut <code class="docutils literal"><span class="pre">False</span></code>)</li>
+<li><strong>delegate</strong> – définir à <code class="docutils literal"><span class="pre">True</span></code> pour rendre les champs du modèle cible accessibles depuis le modèle en cours (correspond à <code class="docutils literal"><span class="pre">_inherits</span></code>)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>The attribute <code class="docutils literal"><span class="pre">comodel_name</span></code> is mandatory except in the case of related
+fields or field extensions.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="odoo.addons.queue_job.models.queue_job.QueueJob.channel">
+<code class="descname">channel</code><a class="headerlink" href="#odoo.addons.queue_job.models.queue_job.QueueJob.channel" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Basic string field, can be length-limited, usually displayed as a
+single-line string in clients.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><ul class="first last simple">
+<li><strong>size</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(disponible dans Python v2.7)"><em>int</em></a>) – la taille maximum des valeurs stockées dans ce champ</li>
+<li><strong>translate</strong> – enable the translation of the field’s values; use
+<code class="docutils literal"><span class="pre">translate=True</span></code> to translate field values as a whole; <code class="docutils literal"><span class="pre">translate</span></code>
+may also be a callable such that <code class="docutils literal"><span class="pre">translate(callback,</span> <span class="pre">value)</span></code>
+translates <code class="docutils literal"><span class="pre">value</span></code> by using <code class="docutils literal"><span class="pre">callback(term)</span></code> to retrieve the
+translation of terms.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="odoo.addons.queue_job.models.queue_job.QueueJob.open_related_action">
+<code class="descname">open_related_action</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/models/queue_job.html#QueueJob.open_related_action"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.queue_job.models.queue_job.QueueJob.open_related_action" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Ouvre l’action associée au job</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="odoo.addons.queue_job.models.queue_job.QueueJob.button_done">
+<code class="descname">button_done</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/models/queue_job.html#QueueJob.button_done"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.queue_job.models.queue_job.QueueJob.button_done" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="odoo.addons.queue_job.models.queue_job.QueueJob.requeue">
+<code class="descname">requeue</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/models/queue_job.html#QueueJob.requeue"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.queue_job.models.queue_job.QueueJob.requeue" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="odoo.addons.queue_job.models.queue_job.QueueJob.write">
+<code class="descname">write</code><span class="sig-paren">(</span><em>vals</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/models/queue_job.html#QueueJob.write"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.queue_job.models.queue_job.QueueJob.write" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="odoo.addons.queue_job.models.queue_job.QueueJob.autovacuum">
+<code class="descname">autovacuum</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/models/queue_job.html#QueueJob.autovacuum"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.queue_job.models.queue_job.QueueJob.autovacuum" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Delete all jobs done since more than <code class="docutils literal"><span class="pre">_removal_interval</span></code> days.</p>
+<p>Appelé depuis une tâche planifiée (<cite>cron</cite>).</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="odoo.addons.queue_job.models.queue_job.RequeueJob">
+<em class="property">class </em><code class="descclassname">odoo.addons.queue_job.models.queue_job.</code><code class="descname">RequeueJob</code><span class="sig-paren">(</span><em>pool</em>, <em>cr</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/models/queue_job.html#RequeueJob"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.queue_job.models.queue_job.RequeueJob" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Bases : <code class="xref py py-class docutils literal"><span class="pre">odoo.models.TransientModel</span></code></p>
+<dl class="attribute">
+<dt id="odoo.addons.queue_job.models.queue_job.RequeueJob.job_ids">
+<code class="descname">job_ids</code><a class="headerlink" href="#odoo.addons.queue_job.models.queue_job.RequeueJob.job_ids" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Champ many2many ; la valeur d’un tel champ est un <cite>recordset</cite>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><strong>comodel_name</strong> – nom du modèle cible (chaîne de caractères)</td>
+</tr>
+</tbody>
+</table>
+<p>The attribute <code class="docutils literal"><span class="pre">comodel_name</span></code> is mandatory except in the case of related
+fields or field extensions.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><ul class="first last simple">
+<li><strong>relation</strong> – nom optionnel de la table qui stocke la relation dans la base de données (string)</li>
+<li><strong>column1</strong> – optional name of the column referring to «&nbsp;these&nbsp;» records
+in the table <code class="docutils literal"><span class="pre">relation</span></code> (string)</li>
+<li><strong>column2</strong> – optional name of the column referring to «&nbsp;those&nbsp;» records
+in the table <code class="docutils literal"><span class="pre">relation</span></code> (string)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>The attributes <code class="docutils literal"><span class="pre">relation</span></code>, <code class="docutils literal"><span class="pre">column1</span></code> and <code class="docutils literal"><span class="pre">column2</span></code> are optional. If not
+given, names are automatically generated from model names, provided
+<code class="docutils literal"><span class="pre">model_name</span></code> and <code class="docutils literal"><span class="pre">comodel_name</span></code> are different!</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><ul class="first last simple">
+<li><strong>domain</strong> – un <cite>domain</cite> optionnel à définir sur les valeurs candidates côté client (<cite>domain</cite> ou <cite>string</cite>)</li>
+<li><strong>context</strong> – un <cite>context</cite> optionnel à utiliser côté client à la prise en charge de ce champ (dictionnaire)</li>
+<li><strong>limit</strong> – limite optionnelle à utiliser à la lecture (entier)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="odoo.addons.queue_job.models.queue_job.RequeueJob.requeue">
+<code class="descname">requeue</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/models/queue_job.html#RequeueJob.requeue"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.queue_job.models.queue_job.RequeueJob.requeue" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="odoo.addons.queue_job.models.queue_job.JobChannel">
+<em class="property">class </em><code class="descclassname">odoo.addons.queue_job.models.queue_job.</code><code class="descname">JobChannel</code><span class="sig-paren">(</span><em>pool</em>, <em>cr</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/models/queue_job.html#JobChannel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.queue_job.models.queue_job.JobChannel" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Bases : <a class="reference external" href="https://www.odoo.com/documentation/10.0/reference/orm.html#odoo.models.Model" title="(disponible dans odoo v10.0)"><code class="xref py py-class docutils literal"><span class="pre">odoo.models.Model</span></code></a></p>
+<dl class="attribute">
+<dt id="odoo.addons.queue_job.models.queue_job.JobChannel.name">
+<code class="descname">name</code><a class="headerlink" href="#odoo.addons.queue_job.models.queue_job.JobChannel.name" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Basic string field, can be length-limited, usually displayed as a
+single-line string in clients.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><ul class="first last simple">
+<li><strong>size</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(disponible dans Python v2.7)"><em>int</em></a>) – la taille maximum des valeurs stockées dans ce champ</li>
+<li><strong>translate</strong> – enable the translation of the field’s values; use
+<code class="docutils literal"><span class="pre">translate=True</span></code> to translate field values as a whole; <code class="docutils literal"><span class="pre">translate</span></code>
+may also be a callable such that <code class="docutils literal"><span class="pre">translate(callback,</span> <span class="pre">value)</span></code>
+translates <code class="docutils literal"><span class="pre">value</span></code> by using <code class="docutils literal"><span class="pre">callback(term)</span></code> to retrieve the
+translation of terms.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="odoo.addons.queue_job.models.queue_job.JobChannel.complete_name">
+<code class="descname">complete_name</code><a class="headerlink" href="#odoo.addons.queue_job.models.queue_job.JobChannel.complete_name" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Basic string field, can be length-limited, usually displayed as a
+single-line string in clients.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><ul class="first last simple">
+<li><strong>size</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(disponible dans Python v2.7)"><em>int</em></a>) – la taille maximum des valeurs stockées dans ce champ</li>
+<li><strong>translate</strong> – enable the translation of the field’s values; use
+<code class="docutils literal"><span class="pre">translate=True</span></code> to translate field values as a whole; <code class="docutils literal"><span class="pre">translate</span></code>
+may also be a callable such that <code class="docutils literal"><span class="pre">translate(callback,</span> <span class="pre">value)</span></code>
+translates <code class="docutils literal"><span class="pre">value</span></code> by using <code class="docutils literal"><span class="pre">callback(term)</span></code> to retrieve the
+translation of terms.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="odoo.addons.queue_job.models.queue_job.JobChannel.parent_id">
+<code class="descname">parent_id</code><a class="headerlink" href="#odoo.addons.queue_job.models.queue_job.JobChannel.parent_id" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>La valeur d’un tel champ est un <cite>recordset</cite> de taille 0 (pas d’enregistrement) ou 1 (enregistrement unique).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><ul class="first last simple">
+<li><strong>comodel_name</strong> – nom du modèle cible (chaîne de caractères)</li>
+<li><strong>domain</strong> – un <cite>domain</cite> optionnel à définir sur les valeurs candidates côté client (<cite>domain</cite> ou <cite>string</cite>)</li>
+<li><strong>context</strong> – un <cite>context</cite> optionnel à utiliser côté client à la prise en charge de ce champ (dictionnaire)</li>
+<li><strong>ondelete</strong> – quoi faire quand l’enregistrement en rapport est effacé ; les valeurs possibles sont : <code class="docutils literal"><span class="pre">'set</span> <span class="pre">null'</span></code>, <code class="docutils literal"><span class="pre">'restrict'</span></code>, <code class="docutils literal"><span class="pre">'cascade'</span></code></li>
+<li><strong>auto_join</strong> – si les JOINs sont générés lors de la recherche sur ce champ (booleen, par défaut <code class="docutils literal"><span class="pre">False</span></code>)</li>
+<li><strong>delegate</strong> – définir à <code class="docutils literal"><span class="pre">True</span></code> pour rendre les champs du modèle cible accessibles depuis le modèle en cours (correspond à <code class="docutils literal"><span class="pre">_inherits</span></code>)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>The attribute <code class="docutils literal"><span class="pre">comodel_name</span></code> is mandatory except in the case of related
+fields or field extensions.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="odoo.addons.queue_job.models.queue_job.JobChannel.job_function_ids">
+<code class="descname">job_function_ids</code><a class="headerlink" href="#odoo.addons.queue_job.models.queue_job.JobChannel.job_function_ids" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>One2many field; the value of such a field is the recordset of all the
+records in <code class="docutils literal"><span class="pre">comodel_name</span></code> such that the field <code class="docutils literal"><span class="pre">inverse_name</span></code> is equal to
+the current record.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><ul class="first last simple">
+<li><strong>comodel_name</strong> – nom du modèle cible (chaîne de caractères)</li>
+<li><strong>inverse_name</strong> – name of the inverse <code class="docutils literal"><span class="pre">Many2one</span></code> field in
+<code class="docutils literal"><span class="pre">comodel_name</span></code> (string)</li>
+<li><strong>domain</strong> – un <cite>domain</cite> optionnel à définir sur les valeurs candidates côté client (<cite>domain</cite> ou <cite>string</cite>)</li>
+<li><strong>context</strong> – un <cite>context</cite> optionnel à utiliser côté client à la prise en charge de ce champ (dictionnaire)</li>
+<li><strong>auto_join</strong> – si les JOINs sont générés lors de la recherche sur ce champ (booleen, par défaut <code class="docutils literal"><span class="pre">False</span></code>)</li>
+<li><strong>limit</strong> – limite optionnelle à utiliser à la lecture (entier)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>The attributes <code class="docutils literal"><span class="pre">comodel_name</span></code> and <code class="docutils literal"><span class="pre">inverse_name</span></code> are mandatory except in
+the case of related fields or field extensions.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="odoo.addons.queue_job.models.queue_job.JobChannel.parent_required">
+<code class="descname">parent_required</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/models/queue_job.html#JobChannel.parent_required"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.queue_job.models.queue_job.JobChannel.parent_required" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="odoo.addons.queue_job.models.queue_job.JobChannel.write">
+<code class="descname">write</code><span class="sig-paren">(</span><em>values</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/models/queue_job.html#JobChannel.write"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.queue_job.models.queue_job.JobChannel.write" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="odoo.addons.queue_job.models.queue_job.JobChannel.unlink">
+<code class="descname">unlink</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/models/queue_job.html#JobChannel.unlink"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.queue_job.models.queue_job.JobChannel.unlink" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="odoo.addons.queue_job.models.queue_job.JobChannel.name_get">
+<code class="descname">name_get</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/models/queue_job.html#JobChannel.name_get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.queue_job.models.queue_job.JobChannel.name_get" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="odoo.addons.queue_job.models.queue_job.JobFunction">
+<em class="property">class </em><code class="descclassname">odoo.addons.queue_job.models.queue_job.</code><code class="descname">JobFunction</code><span class="sig-paren">(</span><em>pool</em>, <em>cr</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/models/queue_job.html#JobFunction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.queue_job.models.queue_job.JobFunction" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Bases : <a class="reference external" href="https://www.odoo.com/documentation/10.0/reference/orm.html#odoo.models.Model" title="(disponible dans odoo v10.0)"><code class="xref py py-class docutils literal"><span class="pre">odoo.models.Model</span></code></a></p>
+<dl class="attribute">
+<dt id="odoo.addons.queue_job.models.queue_job.JobFunction.name">
+<code class="descname">name</code><a class="headerlink" href="#odoo.addons.queue_job.models.queue_job.JobFunction.name" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Basic string field, can be length-limited, usually displayed as a
+single-line string in clients.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><ul class="first last simple">
+<li><strong>size</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(disponible dans Python v2.7)"><em>int</em></a>) – la taille maximum des valeurs stockées dans ce champ</li>
+<li><strong>translate</strong> – enable the translation of the field’s values; use
+<code class="docutils literal"><span class="pre">translate=True</span></code> to translate field values as a whole; <code class="docutils literal"><span class="pre">translate</span></code>
+may also be a callable such that <code class="docutils literal"><span class="pre">translate(callback,</span> <span class="pre">value)</span></code>
+translates <code class="docutils literal"><span class="pre">value</span></code> by using <code class="docutils literal"><span class="pre">callback(term)</span></code> to retrieve the
+translation of terms.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="odoo.addons.queue_job.models.queue_job.JobFunction.channel_id">
+<code class="descname">channel_id</code><a class="headerlink" href="#odoo.addons.queue_job.models.queue_job.JobFunction.channel_id" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>La valeur d’un tel champ est un <cite>recordset</cite> de taille 0 (pas d’enregistrement) ou 1 (enregistrement unique).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><ul class="first last simple">
+<li><strong>comodel_name</strong> – nom du modèle cible (chaîne de caractères)</li>
+<li><strong>domain</strong> – un <cite>domain</cite> optionnel à définir sur les valeurs candidates côté client (<cite>domain</cite> ou <cite>string</cite>)</li>
+<li><strong>context</strong> – un <cite>context</cite> optionnel à utiliser côté client à la prise en charge de ce champ (dictionnaire)</li>
+<li><strong>ondelete</strong> – quoi faire quand l’enregistrement en rapport est effacé ; les valeurs possibles sont : <code class="docutils literal"><span class="pre">'set</span> <span class="pre">null'</span></code>, <code class="docutils literal"><span class="pre">'restrict'</span></code>, <code class="docutils literal"><span class="pre">'cascade'</span></code></li>
+<li><strong>auto_join</strong> – si les JOINs sont générés lors de la recherche sur ce champ (booleen, par défaut <code class="docutils literal"><span class="pre">False</span></code>)</li>
+<li><strong>delegate</strong> – définir à <code class="docutils literal"><span class="pre">True</span></code> pour rendre les champs du modèle cible accessibles depuis le modèle en cours (correspond à <code class="docutils literal"><span class="pre">_inherits</span></code>)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>The attribute <code class="docutils literal"><span class="pre">comodel_name</span></code> is mandatory except in the case of related
+fields or field extensions.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="odoo.addons.queue_job.models.queue_job.JobFunction.channel">
+<code class="descname">channel</code><a class="headerlink" href="#odoo.addons.queue_job.models.queue_job.JobFunction.channel" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Basic string field, can be length-limited, usually displayed as a
+single-line string in clients.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><ul class="first last simple">
+<li><strong>size</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(disponible dans Python v2.7)"><em>int</em></a>) – la taille maximum des valeurs stockées dans ce champ</li>
+<li><strong>translate</strong> – enable the translation of the field’s values; use
+<code class="docutils literal"><span class="pre">translate=True</span></code> to translate field values as a whole; <code class="docutils literal"><span class="pre">translate</span></code>
+may also be a callable such that <code class="docutils literal"><span class="pre">translate(callback,</span> <span class="pre">value)</span></code>
+translates <code class="docutils literal"><span class="pre">value</span></code> by using <code class="docutils literal"><span class="pre">callback(term)</span></code> to retrieve the
+translation of terms.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+        <br/>
+        
+<div id="sourcelink">
+  <a href="../_sources/api/api_queue.rst.txt"
+     rel="nofollow">Source</a>
+</div>
+      
+    </p>
+    <p>
+        &copy; Copyright 2013, Camptocamp SA.<br/>
+      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.6.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

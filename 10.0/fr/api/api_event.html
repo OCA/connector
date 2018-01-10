@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="fr">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Events &#8212; documentation Connector </title>
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/translations.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Recherche" href="../search.html" />
+    <link rel="next" title="Queue" href="api_queue.html" />
+    <link rel="prev" title="Modèles" href="api_backend.html" />
+
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-7628916-3', 'odoo-connector.com');
+  ga('send', 'pageview');
+</script>
+
+  </head>
+  <body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../index.html">
+          Odoo Connector</a>
+        <span class="navbar-text navbar-version pull-left"><b></b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+  <li class="dropdown">
+    <a role="button"
+       id="dLabelTranslations"
+       data-toggle="dropdown"
+       data-target="#"
+       href="#">Translations<b class="caret"></b></a>
+    <ul class="dropdown-menu"
+        role="menu"
+        aria-labelledby="dLabelTranslations">
+      <li><a class="reference" href="http://odoo-connector.com">English</a><li>
+      <li><a class="reference" href="http://odoo-connector.com/fr">French</a><li>
+    </ul>
+  </li>
+  <li class="dropdown">
+    <a role="button"
+       id="dLabelVersions"
+       data-toggle="dropdown"
+       data-target="#"
+       href="#">Version<b class="caret"></b></a>
+    <ul class="dropdown-menu"
+        role="menu"
+        aria-labelledby="dLabeVersions">
+      <li><a class="reference" href="http://odoo-connector.com/8.0">8.0</a><li>
+      <li><a class="reference" href="http://odoo-connector.com/9.0">9.0</a><li>
+      <li><a class="reference" href="http://odoo-connector.com">11.0</a><li>
+    </ul>
+  </li>
+  
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../guides/migration_guide.html">Migration Guide to the new Connector API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../guides/migration_guide.html#migrating-jobs">Migrating Jobs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/migration_guide.html#migrating-events">Migrating Events</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/migration_guide.html#migrating-components">Migrating Components</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/code_overview.html">Survol du code</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../guides/code_overview.html#trigger-and-listen-an-event">Trigger and listen an event</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/code_overview.html#delay-an-asynchronous-job">Delay an Asynchronous Job</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/code_overview.html#work-with-components">Work with components</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/concepts.html">Concepts du connecteur</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../guides/concepts.html#events">Événements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/concepts.html#jobs-queue">Queue de jobs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/concepts.html#backend">Backend</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/concepts.html#workcontext">WorkContext</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/concepts.html#component">Component</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/concepts.html#bindings">Bindings (Liaisons)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/concepts.html#checkpoint">Point de contrôle</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/bootstrap_connector.html">Amorcer la création un nouveau connecteur</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../guides/bootstrap_connector.html#odoo-manifest">Odoo Manifest</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/bootstrap_connector.html#backend-model">Modèle du backend</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/bootstrap_connector.html#abstract-binding">Binding abstrait</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/bootstrap_connector.html#components">Components</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/jobrunner.html">Configuring channels and the job runner</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../guides/jobrunner.html#what-is-the-job-runner">What is the job runner?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/jobrunner.html#how-does-it-work">How does it work?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/jobrunner.html#how-to-use-it">How to use it?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/jobrunner.html#caveat">Caveat</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/jobrunner.html#what-is-a-channel">What is a channel?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides/jobrunner.html#how-to-configure-channels">How to configure Channels?</a></li>
+</ul>
+</li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="api_components.html">Components</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api_components.html#module-connector.components.core">Core Components</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_components.html#module-connector.components.binder">Connector Components</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_components.html#module-odoo.addons.component.models.collection">Components Collection Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_components.html#module-odoo.addons.component.exception">Components Exceptions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_components.html#components-internals">Components Internals</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api_backend.html">Modèles</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api_backend.html#backend-model">Backend Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_backend.html#binding-model">Binding Model</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Events</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#module-odoo.addons.component_event.components.event">Components</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-odoo.addons.component_event.models.base">Odoo Models Extensions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-odoo.addons.component_event.core">Internals</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api_queue.html">Queue</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api_queue.html#module-odoo.addons.queue_job.job">Job</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_queue.html#module-odoo.addons.queue_job.models.base">Modèles</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api_exception.html">Exceptions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_channels.html">Channels</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../project/contribute.html">Contribuer</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../project/contribute.html#want-to-start-a-new-connector">Démarrer un nouveau connecteur</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../project/contribute.html#creating-or-maintaining-a-translation-of-this-doc">Créer ou maintenir une traduction de cette doc</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../project/contributors.html">Contributeurs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../project/contributors.html#financial-contributors">Contributeurs financiers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../project/license.html">Licence</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../project/changes.html">Changements</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../project/changes.html#future">Future (?)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../project/changes.html#id2">9.0.1.0.2 (2016-03-03)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../project/changes.html#id3">9.0.1.0.1 (2016-03-03)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../project/changes.html#id4">8.0.3.3.0 (2016-02-29)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../project/changes.html#id5">3.2.0 (2015-09-10)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../project/changes.html#id6">3.1.0 (2015-05-15)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../project/changes.html#id7">3.0.0 (2015-04-01)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../project/changes.html#id8">2.2.0 (2014-05-26)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../project/changes.html#id9">2.1.1 (2014-02-06)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../project/changes.html#warning-breaks-compatibility">2.1.0 (2014-01-15 - attention : rupture de compatibilité)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../project/changes.html#id10">2.0.1 (2013-09-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../project/changes.html#id11">2.0.0</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../project/roadmap.html">Roadmap</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">Events</a><ul>
+<li><a class="reference internal" href="#module-odoo.addons.component_event.components.event">Components</a><ul>
+<li><a class="reference internal" href="#id1">Events</a><ul>
+<li><a class="reference internal" href="#notifier">Notifier</a></li>
+<li><a class="reference internal" href="#listeners">Listeners</a></li>
+<li><a class="reference internal" href="#collection-and-models">Collection and models</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-odoo.addons.component_event.models.base">Odoo Models Extensions</a><ul>
+<li><a class="reference internal" href="#base-model">Base Model</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-odoo.addons.component_event.core">Internals</a><ul>
+<li><a class="reference internal" href="#events-internals">Events Internals</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+            
+
+            
+              
+                
+  <li>
+    <a href="api_backend.html" title="Previous Chapter: Modèles"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Modèles</span>
+    </a>
+  </li>
+  <li>
+    <a href="api_queue.html" title="Next Chapter: Queue"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Queue &raquo;</span>
+    </a>
+  </li>
+              
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 content">
+      
+  <div class="section" id="events">
+<span id="api-event"></span><h1>Events<a class="headerlink" href="#events" title="Lien permanent vers ce titre">¶</a></h1>
+<p>Events is an implementation of an Observer pattern for Odoo.</p>
+<div class="section" id="module-odoo.addons.component_event.components.event">
+<span id="components"></span><h2>Components<a class="headerlink" href="#module-odoo.addons.component_event.components.event" title="Lien permanent vers ce titre">¶</a></h2>
+<div class="section" id="id1">
+<h3>Events<a class="headerlink" href="#id1" title="Lien permanent vers ce titre">¶</a></h3>
+<p>Events are a notification system.</p>
+<p>On one side, one or many listeners await for an event to happen. On
+the other side, when such event happen, a notification is sent to
+the listeners.</p>
+<p>An example of event is: “when a record has been created”.</p>
+<p>The event system allows to write the notification code in only one place, in
+one Odoo addon, and to write as many listeners as we want, in different places,
+different addons.</p>
+<p>We’ll see below how the <code class="docutils literal"><span class="pre">on_record_create</span></code> is implemented.</p>
+<div class="section" id="notifier">
+<h4>Notifier<a class="headerlink" href="#notifier" title="Lien permanent vers ce titre">¶</a></h4>
+<p>The first thing is to find where/when the notification should be sent.
+For the creation of a record, it is in <code class="xref py py-meth docutils literal"><span class="pre">odoo.models.BaseModel.create()</span></code>.
+We can inherit from the <cite>“base”</cite> model to add this line:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Base</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">AbstractModel</span><span class="p">):</span>
+    <span class="n">_inherit</span> <span class="o">=</span> <span class="s1">&#39;base&#39;</span>
+
+    <span class="nd">@api</span><span class="o">.</span><span class="n">model</span>
+    <span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vals</span><span class="p">):</span>
+        <span class="n">record</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">Base</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">vals</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_event</span><span class="p">(</span><span class="s1">&#39;on_record_create&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">notify</span><span class="p">(</span><span class="n">record</span><span class="p">,</span> <span class="n">fields</span><span class="o">=</span><span class="n">vals</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="k">return</span> <span class="n">record</span>
+</pre></div>
+</div>
+<p>The <code class="xref py py-meth docutils literal"><span class="pre">models.base.Base._event()</span></code> method has been added to the <cite>“base”</cite>
+model, so an event can be notified from any model. The
+<a class="reference internal" href="#odoo.addons.component_event.components.event.CollectedEvents.notify" title="odoo.addons.component_event.components.event.CollectedEvents.notify"><code class="xref py py-meth docutils literal"><span class="pre">CollectedEvents.notify()</span></code></a> method triggers the event and forward the
+arguments to the listeners.</p>
+<p>This should be done only once. See <code class="xref py py-class docutils literal"><span class="pre">models.base.Base</span></code> for a list of
+events that are implemented in the <cite>“base”</cite> model.</p>
+</div>
+<div class="section" id="listeners">
+<h4>Listeners<a class="headerlink" href="#listeners" title="Lien permanent vers ce titre">¶</a></h4>
+<p>Listeners are Components that respond to the event names.
+The components must have a <code class="docutils literal"><span class="pre">_usage</span></code> equals to <code class="docutils literal"><span class="pre">'event.listener'</span></code>, but it
+doesn’t to be set manually if the component inherits from
+<code class="docutils literal"><span class="pre">'base.event.listener'</span></code></p>
+<p>Here is how we would log something each time a record is created:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">MyEventListener</span><span class="p">(</span><span class="n">Component</span><span class="p">):</span>
+    <span class="n">_name</span> <span class="o">=</span> <span class="s1">&#39;my.event.listener&#39;</span>
+    <span class="n">_inherit</span> <span class="o">=</span> <span class="s1">&#39;base.event.listener&#39;</span>
+
+    <span class="k">def</span> <span class="nf">on_record_create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="n">fields</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="n">_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%r</span><span class="s2"> has been created&quot;</span><span class="p">,</span> <span class="n">record</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Many listeners such as this one could be added for the same event.</p>
+</div>
+<div class="section" id="collection-and-models">
+<h4>Collection and models<a class="headerlink" href="#collection-and-models" title="Lien permanent vers ce titre">¶</a></h4>
+<p>In the example above, the listeners is global. It will be executed for any
+model and collection. You can also restrict a listener to only a collection or
+model, using the <code class="docutils literal"><span class="pre">_collection</span></code> or <code class="docutils literal"><span class="pre">_apply_on</span></code> attributes.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">MyEventListener</span><span class="p">(</span><span class="n">Component</span><span class="p">):</span>
+    <span class="n">_name</span> <span class="o">=</span> <span class="s1">&#39;my.event.listener&#39;</span>
+    <span class="n">_inherit</span> <span class="o">=</span> <span class="s1">&#39;base.event.listener&#39;</span>
+    <span class="n">_collection</span> <span class="o">=</span> <span class="s1">&#39;magento.backend&#39;</span>
+
+    <span class="k">def</span> <span class="nf">on_record_create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="n">fields</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="n">_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%r</span><span class="s2"> has been created&quot;</span><span class="p">,</span> <span class="n">record</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">MyModelEventListener</span><span class="p">(</span><span class="n">Component</span><span class="p">):</span>
+    <span class="n">_name</span> <span class="o">=</span> <span class="s1">&#39;my.event.listener&#39;</span>
+    <span class="n">_inherit</span> <span class="o">=</span> <span class="s1">&#39;base.event.listener&#39;</span>
+    <span class="n">_apply_on</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;res.users&#39;</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">on_record_create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="n">fields</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="n">_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%r</span><span class="s2"> has been created&quot;</span><span class="p">,</span> <span class="n">record</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>If you want an event to be restricted to a collection, the
+notification must also precise the collection, otherwise all listeners
+will be executed:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">collection</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="p">[</span><span class="s1">&#39;magento.backend&#39;</span><span class="p">]</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">_event</span><span class="p">(</span><span class="s1">&#39;on_foo_created&#39;</span><span class="p">,</span> <span class="n">collection</span><span class="o">=</span><span class="n">collection</span><span class="p">)</span><span class="o">.</span><span class="n">notify</span><span class="p">(</span><span class="n">record</span><span class="p">,</span> <span class="n">vals</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>An event can be skipped based on a condition evaluated from the notified
+arguments. See <a class="reference internal" href="#odoo.addons.component_event.components.event.skip_if" title="odoo.addons.component_event.components.event.skip_if"><code class="xref py py-func docutils literal"><span class="pre">skip_if()</span></code></a></p>
+<dl class="function">
+<dt id="odoo.addons.component_event.components.event.skip_if">
+<code class="descclassname">odoo.addons.component_event.components.event.</code><code class="descname">skip_if</code><span class="sig-paren">(</span><em>cond</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/component_event/components/event.html#skip_if"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.component_event.components.event.skip_if" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Decorator allowing to skip an event based on a condition</p>
+<p>The condition is a python lambda expression, which takes the
+same arguments than the event.</p>
+<p>Exemples</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="nd">@skip_if</span><span class="p">(</span><span class="k">lambda</span> <span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span>
+         <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;connector_no_export&#39;</span><span class="p">))</span>
+<span class="k">def</span> <span class="nf">on_record_write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="n">fields</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="n">_logger</span><span class="p">(</span><span class="s1">&#39;I&#39;</span><span class="n">ll</span> <span class="n">delay</span> <span class="n">a</span> <span class="n">job</span><span class="p">,</span> <span class="n">but</span> <span class="n">only</span> <span class="k">if</span> <span class="n">we</span> <span class="n">didn</span><span class="s1">&#39;t disabled &#39;</span>
+            <span class="s1">&#39; the export with a context key&#39;</span><span class="p">)</span>
+    <span class="n">record</span><span class="o">.</span><span class="n">with_delay</span><span class="p">()</span><span class="o">.</span><span class="n">export_record</span><span class="p">()</span>
+
+<span class="nd">@skip_if</span><span class="p">(</span><span class="k">lambda</span> <span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="n">kind</span><span class="p">:</span> <span class="n">kind</span> <span class="o">==</span> <span class="s1">&#39;complete&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">on_record_write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="n">kind</span><span class="p">):</span>
+    <span class="n">_logger</span><span class="p">(</span><span class="s2">&quot;I&#39;ll delay a job, but only if the kind is &#39;complete&#39;&quot;</span><span class="p">)</span>
+    <span class="n">record</span><span class="o">.</span><span class="n">with_delay</span><span class="p">()</span><span class="o">.</span><span class="n">export_record</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="class">
+<dt id="odoo.addons.component_event.components.event.CollectedEvents">
+<em class="property">class </em><code class="descclassname">odoo.addons.component_event.components.event.</code><code class="descname">CollectedEvents</code><span class="sig-paren">(</span><em>events</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/component_event/components/event.html#CollectedEvents"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.component_event.components.event.CollectedEvents" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Bases : <a class="reference external" href="https://docs.python.org/2/library/functions.html#object" title="(disponible dans Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<p>Event methods ready to be notified</p>
+<p>This is a rather internal class. An instance of this class
+is prepared by the <a class="reference internal" href="#odoo.addons.component_event.components.event.EventCollecter" title="odoo.addons.component_event.components.event.EventCollecter"><code class="xref py py-class docutils literal"><span class="pre">EventCollecter</span></code></a> when we need to notify
+the listener that the event has been triggered.</p>
+<p><a class="reference internal" href="#odoo.addons.component_event.components.event.EventCollecter.collect_events" title="odoo.addons.component_event.components.event.EventCollecter.collect_events"><code class="xref py py-meth docutils literal"><span class="pre">EventCollecter.collect_events()</span></code></a> collects the events,
+feed them to the instance, so we can use the <a class="reference internal" href="#odoo.addons.component_event.components.event.CollectedEvents.notify" title="odoo.addons.component_event.components.event.CollectedEvents.notify"><code class="xref py py-meth docutils literal"><span class="pre">notify()</span></code></a> method
+that will forward the arguments and keyword arguments to the
+listeners of the event.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># collecter is an instance of CollectedEvents</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">collecter</span><span class="o">.</span><span class="n">collect_events</span><span class="p">(</span><span class="s1">&#39;on_record_create&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">notify</span><span class="p">(</span><span class="n">something</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="method">
+<dt id="odoo.addons.component_event.components.event.CollectedEvents.notify">
+<code class="descname">notify</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/component_event/components/event.html#CollectedEvents.notify"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.component_event.components.event.CollectedEvents.notify" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Forward the arguments to every listeners of an event</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="odoo.addons.component_event.components.event.EventCollecter">
+<em class="property">class </em><code class="descclassname">odoo.addons.component_event.components.event.</code><code class="descname">EventCollecter</code><span class="sig-paren">(</span><em>work_context</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/component_event/components/event.html#EventCollecter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.component_event.components.event.EventCollecter" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Bases : <a class="reference internal" href="api_components.html#odoo.addons.component.core.Component" title="odoo.addons.component.core.Component"><code class="xref py py-class docutils literal"><span class="pre">odoo.addons.component.core.Component</span></code></a></p>
+<p>Component that collects the event from an event name</p>
+<p>For doing so, it searches all the components that respond to the
+<code class="docutils literal"><span class="pre">event.listener</span></code> <code class="docutils literal"><span class="pre">_usage</span></code> and having an event of the same
+name.</p>
+<p>Then it feeds the events to an instance of <a class="reference internal" href="#odoo.addons.component_event.components.event.EventCollecter" title="odoo.addons.component_event.components.event.EventCollecter"><code class="xref py py-class docutils literal"><span class="pre">EventCollecter</span></code></a>
+and return it to the caller.</p>
+<p>It keeps the results in a cache, the Component is rebuilt when
+the Odoo’s registry is rebuilt, hence the cache is cleared as well.</p>
+<p>An event always starts with <code class="docutils literal"><span class="pre">on_</span></code>.</p>
+<p>Note that the special
+<a class="reference internal" href="#odoo.addons.component_event.core.EventWorkContext" title="odoo.addons.component_event.core.EventWorkContext"><code class="xref py py-class docutils literal"><span class="pre">odoo.addons.component_event.core.EventWorkContext</span></code></a> class should be
+used for this Component, because it can work
+without a collection.</p>
+<p>It is used by <code class="xref py py-meth docutils literal"><span class="pre">odoo.addons.component_event.models.base.Base._event()</span></code>.</p>
+<dl class="method">
+<dt id="odoo.addons.component_event.components.event.EventCollecter.collect_events">
+<code class="descname">collect_events</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/component_event/components/event.html#EventCollecter.collect_events"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.component_event.components.event.EventCollecter.collect_events" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Collect the events of a given name</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="odoo.addons.component_event.components.event.EventListener">
+<em class="property">class </em><code class="descclassname">odoo.addons.component_event.components.event.</code><code class="descname">EventListener</code><span class="sig-paren">(</span><em>work_context</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/component_event/components/event.html#EventListener"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.component_event.components.event.EventListener" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Bases : <a class="reference internal" href="api_components.html#odoo.addons.component.core.AbstractComponent" title="odoo.addons.component.core.AbstractComponent"><code class="xref py py-class docutils literal"><span class="pre">odoo.addons.component.core.AbstractComponent</span></code></a></p>
+<p>Base Component for the Event listeners</p>
+<p>Events must be methods starting with <code class="docutils literal"><span class="pre">on_</span></code>.</p>
+<p>Example: <code class="xref py py-class docutils literal"><span class="pre">RecordsEventListener</span></code></p>
+<dl class="classmethod">
+<dt id="odoo.addons.component_event.components.event.EventListener.has_event">
+<em class="property">classmethod </em><code class="descname">has_event</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/component_event/components/event.html#EventListener.has_event"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.component_event.components.event.EventListener.has_event" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Indicate if the class has an event of this name</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+</div>
+<div class="section" id="module-odoo.addons.component_event.models.base">
+<span id="odoo-models-extensions"></span><h2>Odoo Models Extensions<a class="headerlink" href="#module-odoo.addons.component_event.models.base" title="Lien permanent vers ce titre">¶</a></h2>
+<div class="section" id="base-model">
+<h3>Base Model<a class="headerlink" href="#base-model" title="Lien permanent vers ce titre">¶</a></h3>
+<p>Extend the “base” Odoo Model to add Events related features.</p>
+<dl class="class">
+<dt id="odoo.addons.component_event.models.base.Base">
+<em class="property">class </em><code class="descclassname">odoo.addons.component_event.models.base.</code><code class="descname">Base</code><span class="sig-paren">(</span><em>pool</em>, <em>cr</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/component_event/models/base.html#Base"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.component_event.models.base.Base" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Bases : <code class="xref py py-class docutils literal"><span class="pre">odoo.models.BaseModel</span></code></p>
+<p>The base model, which is implicitly inherited by all models.</p>
+<p>Add an <code class="xref py py-meth docutils literal"><span class="pre">_event()</span></code> method to all Models. This method allows to
+trigger events.</p>
+<p>It also notifies the following events:</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">on_record_create(self,</span> <span class="pre">record,</span> <span class="pre">fields=None)</span></code></li>
+<li><code class="docutils literal"><span class="pre">on_record_write(self,</span> <span class="pre">record,</span> <span class="pre">fields=none)</span></code></li>
+<li><code class="docutils literal"><span class="pre">on_record_unlink(self,</span> <span class="pre">record)</span></code></li>
+</ul>
+<p><code class="docutils literal"><span class="pre">on_record_unlink</span></code> is notified just <em>before</em> the unlink is done.</p>
+<dl class="method">
+<dt id="odoo.addons.component_event.models.base.Base.create">
+<code class="descname">create</code><span class="sig-paren">(</span><em>vals</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/component_event/models/base.html#Base.create"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.component_event.models.base.Base.create" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="odoo.addons.component_event.models.base.Base.write">
+<code class="descname">write</code><span class="sig-paren">(</span><em>vals</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/component_event/models/base.html#Base.write"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.component_event.models.base.Base.write" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="odoo.addons.component_event.models.base.Base.unlink">
+<code class="descname">unlink</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/component_event/models/base.html#Base.unlink"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.component_event.models.base.Base.unlink" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="module-odoo.addons.component_event.core">
+<span id="internals"></span><h2>Internals<a class="headerlink" href="#module-odoo.addons.component_event.core" title="Lien permanent vers ce titre">¶</a></h2>
+<div class="section" id="events-internals">
+<h3>Events Internals<a class="headerlink" href="#events-internals" title="Lien permanent vers ce titre">¶</a></h3>
+<p>Core classes for the events system.</p>
+<dl class="class">
+<dt id="odoo.addons.component_event.core.EventWorkContext">
+<em class="property">class </em><code class="descclassname">odoo.addons.component_event.core.</code><code class="descname">EventWorkContext</code><span class="sig-paren">(</span><em>model_name=None</em>, <em>collection=None</em>, <em>env=None</em>, <em>components_registry=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/component_event/core.html#EventWorkContext"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.component_event.core.EventWorkContext" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Bases : <a class="reference internal" href="api_components.html#odoo.addons.component.core.WorkContext" title="odoo.addons.component.core.WorkContext"><code class="xref py py-class docutils literal"><span class="pre">odoo.addons.component.core.WorkContext</span></code></a></p>
+<p>Work context used by the Events internals</p>
+<p>Should not be used outside of the events internals.
+The work context to use generally is
+<a class="reference internal" href="api_components.html#odoo.addons.component.core.WorkContext" title="odoo.addons.component.core.WorkContext"><code class="xref py py-class docutils literal"><span class="pre">odoo.addons.component.core.WorkContext</span></code></a> or your own
+subclass.</p>
+<p>The events are a special kind of components because they are
+not attached to any collection (they can but not the main use case).</p>
+<p>So the work context must not need to have a collection, but when
+it has no collection, it must at least have an “env”.</p>
+<p>When no collection is provided, the methods to get the Components
+cannot be used, but <a class="reference internal" href="#odoo.addons.component_event.core.EventWorkContext.work_on" title="odoo.addons.component_event.core.EventWorkContext.work_on"><code class="xref py py-meth docutils literal"><span class="pre">work_on()</span></code></a> can be used to switch back to
+a <a class="reference internal" href="api_components.html#odoo.addons.component.core.WorkContext" title="odoo.addons.component.core.WorkContext"><code class="xref py py-class docutils literal"><span class="pre">odoo.addons.component.core.WorkContext</span></code></a> with collection.
+This is needed when one want to get a component for a collection
+from inside an event listener.</p>
+<dl class="attribute">
+<dt id="odoo.addons.component_event.core.EventWorkContext.env">
+<code class="descname">env</code><a class="headerlink" href="#odoo.addons.component_event.core.EventWorkContext.env" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Return the current Odoo env</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="odoo.addons.component_event.core.EventWorkContext.collection">
+<code class="descname">collection</code><a class="headerlink" href="#odoo.addons.component_event.core.EventWorkContext.collection" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Return the current Odoo env</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="odoo.addons.component_event.core.EventWorkContext.work_on">
+<code class="descname">work_on</code><span class="sig-paren">(</span><em>model_name=None</em>, <em>collection=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/component_event/core.html#EventWorkContext.work_on"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.component_event.core.EventWorkContext.work_on" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Create a new work context for another model keeping attributes</p>
+<p>Used when one need to lookup components for another model.</p>
+<p>Used on an EventWorkContext, it switch back to a normal
+WorkContext. It means we are inside an event listener, and
+we want to get a component. We need to set a collection
+to be able to get components.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="odoo.addons.component_event.core.EventWorkContext.component_by_name">
+<code class="descname">component_by_name</code><span class="sig-paren">(</span><em>name</em>, <em>model_name=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/component_event/core.html#EventWorkContext.component_by_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.component_event.core.EventWorkContext.component_by_name" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="odoo.addons.component_event.core.EventWorkContext.component">
+<code class="descname">component</code><span class="sig-paren">(</span><em>usage=None</em>, <em>model_name=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/component_event/core.html#EventWorkContext.component"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.component_event.core.EventWorkContext.component" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="odoo.addons.component_event.core.EventWorkContext.many_components">
+<code class="descname">many_components</code><span class="sig-paren">(</span><em>usage=None</em>, <em>model_name=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/component_event/core.html#EventWorkContext.many_components"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.component_event.core.EventWorkContext.many_components" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+        <br/>
+        
+<div id="sourcelink">
+  <a href="../_sources/api/api_event.rst.txt"
+     rel="nofollow">Source</a>
+</div>
+      
+    </p>
+    <p>
+        &copy; Copyright 2013, Camptocamp SA.<br/>
+      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.6.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

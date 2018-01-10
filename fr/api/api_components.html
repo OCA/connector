@@ -89,6 +89,7 @@
         aria-labelledby="dLabeVersions">
       <li><a class="reference" href="http://odoo-connector.com/8.0">8.0</a><li>
       <li><a class="reference" href="http://odoo-connector.com/9.0">9.0</a><li>
+      <li><a class="reference" href="http://odoo-connector.com/10.0">10.0</a><li>
     </ul>
   </li>
   
@@ -740,7 +741,7 @@ binding in Odoo and returns it.</p>
 <dl class="method">
 <dt id="connector.components.mapper.MappingDefinition._asdict">
 <code class="descname">_asdict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#connector.components.mapper.MappingDefinition._asdict" title="Lien permanent vers cette définition">¶</a></dt>
-<dd><p>Return a new OrderedDict which maps field names to their values</p>
+<dd><p>Return a new OrderedDict which maps field names to their values.</p>
 </dd></dl>
 
 <dl class="attribute">
@@ -750,7 +751,7 @@ binding in Odoo and returns it.</p>
 
 <dl class="classmethod">
 <dt id="connector.components.mapper.MappingDefinition._make">
-<em class="property">classmethod </em><code class="descname">_make</code><span class="sig-paren">(</span><em>iterable</em>, <em>new=&lt;built-in method __new__ of type object at 0x908840&gt;</em>, <em>len=&lt;built-in function len&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#connector.components.mapper.MappingDefinition._make" title="Lien permanent vers cette définition">¶</a></dt>
+<em class="property">classmethod </em><code class="descname">_make</code><span class="sig-paren">(</span><em>iterable</em>, <em>new=&lt;built-in method __new__ of type object&gt;</em>, <em>len=&lt;built-in function len&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#connector.components.mapper.MappingDefinition._make" title="Lien permanent vers cette définition">¶</a></dt>
 <dd><p>Make a new MappingDefinition object from a sequence or iterable</p>
 </dd></dl>
 
@@ -759,6 +760,11 @@ binding in Odoo and returns it.</p>
 <code class="descname">_replace</code><span class="sig-paren">(</span><em>_self</em>, <em>**kwds</em><span class="sig-paren">)</span><a class="headerlink" href="#connector.components.mapper.MappingDefinition._replace" title="Lien permanent vers cette définition">¶</a></dt>
 <dd><p>Return a new MappingDefinition object replacing specified fields with new values</p>
 </dd></dl>
+
+<dl class="attribute">
+<dt id="connector.components.mapper.MappingDefinition._source">
+<code class="descname">_source</code><em class="property"> = &quot;from builtins import property as _property, tuple as _tuple\nfrom operator import itemgetter as _itemgetter\nfrom collections import OrderedDict\n\nclass MappingDefinition(tuple):\n    'MappingDefinition(changed_by, only_create)'\n\n    __slots__ = ()\n\n    _fields = ('changed_by', 'only_create')\n\n    def __new__(_cls, changed_by, only_create):\n        'Create new instance of MappingDefinition(changed_by, only_create)'\n        return _tuple.__new__(_cls, (changed_by, only_create))\n\n    &#64;classmethod\n    def _make(cls, iterable, new=tuple.__new__, len=len):\n        'Make a new MappingDefinition object from a sequence or iterable'\n        result = new(cls, iterable)\n        if len(result) != 2:\n            raise TypeError('Expected 2 arguments, got %d' % len(result))\n        return result\n\n    def _replace(_self, **kwds):\n        'Return a new MappingDefinition object replacing specified fields with new values'\n        result = _self._make(map(kwds.pop, ('changed_by', 'only_create'), _self))\n        if kwds:\n            raise ValueError('Got unexpected field names: %r' % list(kwds))\n        return result\n\n    def __repr__(self):\n        'Return a nicely formatted representation string'\n        return self.__class__.__name__ + '(changed_by=%r, only_create=%r)' % self\n\n    def _asdict(self):\n        'Return a new OrderedDict which maps field names to their values.'\n        return OrderedDict(zip(self._fields, self))\n\n    def __getnewargs__(self):\n        'Return self as a plain tuple.  Used by copy and pickle.'\n        return tuple(self)\n\n    changed_by = _property(_itemgetter(0), doc='Alias for field number 0')\n\n    only_create = _property(_itemgetter(1), doc='Alias for field number 1')\n\n&quot;</em><a class="headerlink" href="#connector.components.mapper.MappingDefinition._source" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="attribute">
 <dt id="connector.components.mapper.MappingDefinition.changed_by">
@@ -1193,7 +1199,7 @@ inspect the real classes to find mapping methods.</p>
 
 <dl class="method">
 <dt id="connector.components.mapper.Mapper._mapping_options">
-<code class="descname">_mapping_options</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwds</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/components/mapper.html#Mapper._mapping_options"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.components.mapper.Mapper._mapping_options" title="Lien permanent vers cette définition">¶</a></dt>
+<code class="descname">_mapping_options</code><span class="sig-paren">(</span><em>options</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/components/mapper.html#Mapper._mapping_options"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.components.mapper.Mapper._mapping_options" title="Lien permanent vers cette définition">¶</a></dt>
 <dd><p>Change the mapping options for the Mapper.</p>
 <p>Context Manager to use in order to alter the behavior
 of the mapping, when using <code class="docutils literal"><span class="pre">_apply</span></code> or <code class="docutils literal"><span class="pre">finalize</span></code>.</p>
@@ -1899,7 +1905,7 @@ to use in the <cite>_collection</cite> of the Components usable for the Backend.
 <p>See also: <a class="reference internal" href="#odoo.addons.component.core.WorkContext" title="odoo.addons.component.core.WorkContext"><code class="xref py py-class docutils literal"><span class="pre">odoo.addons.component.core.WorkContext</span></code></a></p>
 <dl class="method">
 <dt id="odoo.addons.component.models.collection.Collection.work_on">
-<code class="descname">work_on</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwds</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/component/models/collection.html#Collection.work_on"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.component.models.collection.Collection.work_on" title="Lien permanent vers cette définition">¶</a></dt>
+<code class="descname">work_on</code><span class="sig-paren">(</span><em>model_name</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/component/models/collection.html#Collection.work_on"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.component.models.collection.Collection.work_on" title="Lien permanent vers cette définition">¶</a></dt>
 <dd><p>Entry-point for the components, context manager</p>
 <p>Start a work using the components on the model.
 Any keyword argument will be assigned to the work context.
@@ -1940,7 +1946,7 @@ at the end of the work session, such as:</p>
 <dl class="exception">
 <dt id="odoo.addons.component.exception.ComponentException">
 <em class="property">exception </em><code class="descclassname">odoo.addons.component.exception.</code><code class="descname">ComponentException</code><a class="reference internal" href="../_modules/odoo/addons/component/exception.html#ComponentException"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.component.exception.ComponentException" title="Lien permanent vers cette définition">¶</a></dt>
-<dd><p>Bases : <a class="reference external" href="https://docs.python.org/2/library/exceptions.html#exceptions.Exception" title="(disponible dans Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">exceptions.Exception</span></code></a></p>
+<dd><p>Bases : <code class="xref py py-class docutils literal"><span class="pre">Exception</span></code></p>
 <p>Base Exception for the components</p>
 </dd></dl>
 
@@ -2000,7 +2006,7 @@ are loaded.</p>
 
 <dl class="method">
 <dt id="odoo.addons.component.core.ComponentRegistry.lookup">
-<code class="descname">lookup</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/component/core.html#ComponentRegistry.lookup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.component.core.ComponentRegistry.lookup" title="Lien permanent vers cette définition">¶</a></dt>
+<code class="descname">lookup</code><span class="sig-paren">(</span><em>collection_name=None</em>, <em>usage=None</em>, <em>model_name=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/component/core.html#ComponentRegistry.lookup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.component.core.ComponentRegistry.lookup" title="Lien permanent vers cette définition">¶</a></dt>
 <dd><p>Find and return a list of components for a usage</p>
 <p>If a component is not registered in a particular collection (no
 <code class="docutils literal"><span class="pre">_collection</span></code>), it might will be returned in any case (as far as
@@ -2443,7 +2449,7 @@ the components</li>
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.5.<br/>
+      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.6.<br/>
     </p>
   </div>
 </footer>

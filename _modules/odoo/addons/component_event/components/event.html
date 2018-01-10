@@ -86,6 +86,7 @@
         aria-labelledby="dLabeVersions">
       <li><a class="reference" href="http://odoo-connector.com/8.0">8.0</a><li>
       <li><a class="reference" href="http://odoo-connector.com/9.0">9.0</a><li>
+      <li><a class="reference" href="http://odoo-connector.com/10.0">10.0</a><li>
     </ul>
   </li>
   
@@ -485,7 +486,7 @@
 
     <span class="k">def</span> <span class="nf">_init_collected_events</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">class_events</span><span class="p">):</span>
         <span class="n">events</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
-        <span class="k">for</span> <span class="bp">cls</span><span class="p">,</span> <span class="n">names</span> <span class="ow">in</span> <span class="n">class_events</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
+        <span class="k">for</span> <span class="bp">cls</span><span class="p">,</span> <span class="n">names</span> <span class="ow">in</span> <span class="n">class_events</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">names</span><span class="p">:</span>
                 <span class="n">component</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">work</span><span class="p">)</span>
                 <span class="n">events</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">component</span><span class="p">,</span> <span class="n">name</span><span class="p">))</span>
@@ -547,7 +548,7 @@
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.5.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.6.<br/>
     </p>
   </div>
 </footer>

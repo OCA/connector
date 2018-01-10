@@ -86,6 +86,7 @@
         aria-labelledby="dLabeVersions">
       <li><a class="reference" href="http://odoo-connector.com/8.0">8.0</a><li>
       <li><a class="reference" href="http://odoo-connector.com/9.0">9.0</a><li>
+      <li><a class="reference" href="http://odoo-connector.com/10.0">10.0</a><li>
     </ul>
   </li>
   
@@ -329,13 +330,14 @@
 <div class="viewcode-block" id="Base.create"><a class="viewcode-back" href="../../../../../api/api_event.html#odoo.addons.component_event.models.base.Base.create">[docs]</a>    <span class="nd">@api</span><span class="o">.</span><span class="n">model</span>
     <span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vals</span><span class="p">):</span>
         <span class="n">record</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">Base</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">vals</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_event</span><span class="p">(</span><span class="s1">&#39;on_record_create&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">notify</span><span class="p">(</span><span class="n">record</span><span class="p">,</span> <span class="n">fields</span><span class="o">=</span><span class="n">vals</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="n">fields</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">vals</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_event</span><span class="p">(</span><span class="s1">&#39;on_record_create&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">notify</span><span class="p">(</span><span class="n">record</span><span class="p">,</span> <span class="n">fields</span><span class="o">=</span><span class="n">fields</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">record</span></div>
 
 <div class="viewcode-block" id="Base.write"><a class="viewcode-back" href="../../../../../api/api_event.html#odoo.addons.component_event.models.base.Base.write">[docs]</a>    <span class="nd">@api</span><span class="o">.</span><span class="n">multi</span>
     <span class="k">def</span> <span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vals</span><span class="p">):</span>
         <span class="n">result</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">Base</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">vals</span><span class="p">)</span>
-        <span class="n">fields</span> <span class="o">=</span> <span class="n">vals</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+        <span class="n">fields</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">vals</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
         <span class="k">for</span> <span class="n">record</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_event</span><span class="p">(</span><span class="s1">&#39;on_record_write&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">notify</span><span class="p">(</span><span class="n">record</span><span class="p">,</span> <span class="n">fields</span><span class="o">=</span><span class="n">fields</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">result</span></div>
@@ -363,7 +365,7 @@
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.5.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.6.<br/>
     </p>
   </div>
 </footer>

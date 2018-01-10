@@ -87,6 +87,7 @@
         aria-labelledby="dLabeVersions">
       <li><a class="reference" href="http://odoo-connector.com/8.0">8.0</a><li>
       <li><a class="reference" href="http://odoo-connector.com/9.0">9.0</a><li>
+      <li><a class="reference" href="http://odoo-connector.com/10.0">10.0</a><li>
     </ul>
   </li>
   
@@ -375,7 +376,7 @@
 
         <span class="c1"># keep the order so addons loaded first have components used first</span>
         <span class="n">candidates</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="n">component</span> <span class="k">for</span> <span class="n">component</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_components</span><span class="o">.</span><span class="n">itervalues</span><span class="p">()</span>
+            <span class="n">component</span> <span class="k">for</span> <span class="n">component</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_components</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">component</span><span class="o">.</span><span class="n">_abstract</span>
         <span class="p">)</span>
 
@@ -497,7 +498,7 @@
             <span class="s1">&#39;model_name&#39;</span><span class="p">,</span>
             <span class="s1">&#39;components_registry&#39;</span><span class="p">,</span>
         <span class="p">]</span>
-        <span class="k">for</span> <span class="n">attr_name</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
+        <span class="k">for</span> <span class="n">attr_name</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr_name</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_propagate_kwargs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">attr_name</span><span class="p">)</span>
 
@@ -654,9 +655,6 @@
     <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s2">&quot;WorkContext(</span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">)&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model_name</span><span class="p">,</span> <span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">collection</span><span class="p">))</span>
 
-    <span class="k">def</span> <span class="nf">__unicode__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">unicode</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span>
-
     <span class="fm">__repr__</span> <span class="o">=</span> <span class="fm">__str__</span></div>
 
 
@@ -687,12 +685,12 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_apply_on</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">None</span>
         <span class="c1"># always return a list, used for the lookup</span>
-        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_apply_on</span><span class="p">,</span> <span class="n">basestring</span><span class="p">):</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_apply_on</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
             <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_apply_on</span><span class="p">]</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_apply_on</span></div>
 
 
-<div class="viewcode-block" id="AbstractComponent"><a class="viewcode-back" href="../../../../api/api_components.html#odoo.addons.component.core.AbstractComponent">[docs]</a><span class="k">class</span> <span class="nc">AbstractComponent</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="AbstractComponent"><a class="viewcode-back" href="../../../../api/api_components.html#odoo.addons.component.core.AbstractComponent">[docs]</a><span class="k">class</span> <span class="nc">AbstractComponent</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="n">metaclass</span><span class="o">=</span><span class="n">MetaComponent</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Main Component Model</span>
 
 <span class="sd">    All components have a Python inheritance either on</span>
@@ -845,7 +843,6 @@
 <span class="sd">      ``magento.xxx``) to prevent conflicts between addons.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">__metaclass__</span> <span class="o">=</span> <span class="n">MetaComponent</span>
 
     <span class="n">_register</span> <span class="o">=</span> <span class="kc">False</span>
     <span class="n">_abstract</span> <span class="o">=</span> <span class="kc">True</span>
@@ -926,9 +923,6 @@
     <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s2">&quot;Component(</span><span class="si">%s</span><span class="s2">)&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">_name</span>
 
-    <span class="k">def</span> <span class="nf">__unicode__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">unicode</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span>
-
     <span class="fm">__repr__</span> <span class="o">=</span> <span class="fm">__str__</span>
 
     <span class="nd">@classmethod</span>
@@ -995,7 +989,7 @@
 
         <span class="c1"># determine inherited components</span>
         <span class="n">parents</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_inherit</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">parents</span><span class="p">,</span> <span class="n">basestring</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">parents</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
             <span class="n">parents</span> <span class="o">=</span> <span class="p">[</span><span class="n">parents</span><span class="p">]</span>
         <span class="k">elif</span> <span class="n">parents</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">parents</span> <span class="o">=</span> <span class="p">[]</span>
@@ -1118,7 +1112,7 @@
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.5.<br/>
+      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.6.<br/>
     </p>
   </div>
 </footer>

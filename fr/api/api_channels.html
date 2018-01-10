@@ -89,6 +89,7 @@
         aria-labelledby="dLabeVersions">
       <li><a class="reference" href="http://odoo-connector.com/8.0">8.0</a><li>
       <li><a class="reference" href="http://odoo-connector.com/9.0">9.0</a><li>
+      <li><a class="reference" href="http://odoo-connector.com/10.0">10.0</a><li>
     </ul>
   </li>
   
@@ -341,7 +342,7 @@ job that are necessary to prioritise them.</p>
 </dd>
 </dl>
 <p>Here are some examples.</p>
-<p>j1 comes before j2 before it has a smaller date_created</p>
+<p>j1 comes before j2 because it has an earlier date_created</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">j1</span> <span class="o">=</span> <span class="n">ChannelJob</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span>
 <span class="gp">... </span>                <span class="n">seq</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">date_created</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">priority</span><span class="o">=</span><span class="mi">9</span><span class="p">,</span> <span class="n">eta</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">j1</span>
@@ -392,13 +393,18 @@ equal as they are different instances</p>
 </pre></div>
 </div>
 <p>Comparison excluding eta:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">j1</span><span class="o">.</span><span class="n">cmp_no_eta</span><span class="p">(</span><span class="n">j2</span><span class="p">)</span>
-<span class="go">-1</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">j1</span><span class="o">.</span><span class="n">sorting_key_ignoring_eta</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">j2</span><span class="o">.</span><span class="n">sorting_key_ignoring_eta</span><span class="p">()</span>
+<span class="go">True</span>
 </pre></div>
 </div>
 <dl class="method">
-<dt id="odoo.addons.queue_job.jobrunner.channels.ChannelJob.cmp_no_eta">
-<code class="descname">cmp_no_eta</code><span class="sig-paren">(</span><em>other</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/jobrunner/channels.html#ChannelJob.cmp_no_eta"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.queue_job.jobrunner.channels.ChannelJob.cmp_no_eta" title="Lien permanent vers cette définition">¶</a></dt>
+<dt id="odoo.addons.queue_job.jobrunner.channels.ChannelJob.sorting_key">
+<code class="descname">sorting_key</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/jobrunner/channels.html#ChannelJob.sorting_key"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.queue_job.jobrunner.channels.ChannelJob.sorting_key" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="odoo.addons.queue_job.jobrunner.channels.ChannelJob.sorting_key_ignoring_eta">
+<code class="descname">sorting_key_ignoring_eta</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/jobrunner/channels.html#ChannelJob.sorting_key_ignoring_eta"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.queue_job.jobrunner.channels.ChannelJob.sorting_key_ignoring_eta" title="Lien permanent vers cette définition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -1042,7 +1048,7 @@ is raised.</p>
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.5.<br/>
+      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.6.<br/>
     </p>
   </div>
 </footer>

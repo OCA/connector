@@ -86,6 +86,7 @@
         aria-labelledby="dLabeVersions">
       <li><a class="reference" href="http://odoo-connector.com/8.0">8.0</a><li>
       <li><a class="reference" href="http://odoo-connector.com/9.0">9.0</a><li>
+      <li><a class="reference" href="http://odoo-connector.com/10.0">10.0</a><li>
     </ul>
   </li>
   
@@ -240,7 +241,7 @@
 <span class="c1"># Copyright (c) 2015-2016 ACSONE SA/NV (&lt;http://acsone.eu&gt;)</span>
 <span class="c1"># Copyright 2015-2016 Camptocamp SA</span>
 <span class="c1"># License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html)</span>
-
+<span class="kn">from</span> <span class="nn">functools</span> <span class="k">import</span> <span class="n">total_ordering</span>
 <span class="kn">from</span> <span class="nn">heapq</span> <span class="k">import</span> <span class="n">heappush</span><span class="p">,</span> <span class="n">heappop</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">from</span> <span class="nn">weakref</span> <span class="k">import</span> <span class="n">WeakValueDictionary</span>
@@ -358,7 +359,8 @@
             <span class="k">pass</span></div></div>
 
 
-<div class="viewcode-block" id="ChannelJob"><a class="viewcode-back" href="../../../../../api/api_channels.html#odoo.addons.queue_job.jobrunner.channels.ChannelJob">[docs]</a><span class="k">class</span> <span class="nc">ChannelJob</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="ChannelJob"><a class="viewcode-back" href="../../../../../api/api_channels.html#odoo.addons.queue_job.jobrunner.channels.ChannelJob">[docs]</a><span class="nd">@total_ordering</span>
+<span class="k">class</span> <span class="nc">ChannelJob</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;A channel job is attached to a channel and holds the properties of a</span>
 <span class="sd">    job that are necessary to prioritise them.</span>
 
@@ -371,7 +373,7 @@
 
 <span class="sd">    Here are some examples.</span>
 
-<span class="sd">    j1 comes before j2 before it has a smaller date_created</span>
+<span class="sd">    j1 comes before j2 because it has an earlier date_created</span>
 
 <span class="sd">    &gt;&gt;&gt; j1 = ChannelJob(None, None, 1,</span>
 <span class="sd">    ...                 seq=0, date_created=1, priority=9, eta=None)</span>
@@ -423,8 +425,9 @@
 
 <span class="sd">    Comparison excluding eta:</span>
 
-<span class="sd">    &gt;&gt;&gt; j1.cmp_no_eta(j2)</span>
-<span class="sd">    -1</span>
+<span class="sd">    &gt;&gt;&gt; j1.sorting_key_ignoring_eta() &lt; j2.sorting_key_ignoring_eta()</span>
+<span class="sd">    True</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">db_name</span><span class="p">,</span> <span class="n">channel</span><span class="p">,</span> <span class="n">uuid</span><span class="p">,</span>
@@ -446,19 +449,19 @@
     <span class="k">def</span> <span class="nf">__hash__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="nb">id</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
-<div class="viewcode-block" id="ChannelJob.cmp_no_eta"><a class="viewcode-back" href="../../../../../api/api_channels.html#odoo.addons.queue_job.jobrunner.channels.ChannelJob.cmp_no_eta">[docs]</a>    <span class="k">def</span> <span class="nf">cmp_no_eta</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
-        <span class="k">return</span> <span class="p">(</span><span class="nb">cmp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">priority</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">priority</span><span class="p">)</span> <span class="ow">or</span>
-                <span class="nb">cmp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">date_created</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">date_created</span><span class="p">)</span> <span class="ow">or</span>
-                <span class="nb">cmp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">seq</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">seq</span><span class="p">))</span></div>
+<div class="viewcode-block" id="ChannelJob.sorting_key"><a class="viewcode-back" href="../../../../../api/api_channels.html#odoo.addons.queue_job.jobrunner.channels.ChannelJob.sorting_key">[docs]</a>    <span class="k">def</span> <span class="nf">sorting_key</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">eta</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">priority</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">date_created</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">seq</span></div>
 
-    <span class="k">def</span> <span class="nf">__cmp__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+<div class="viewcode-block" id="ChannelJob.sorting_key_ignoring_eta"><a class="viewcode-back" href="../../../../../api/api_channels.html#odoo.addons.queue_job.jobrunner.channels.ChannelJob.sorting_key_ignoring_eta">[docs]</a>    <span class="k">def</span> <span class="nf">sorting_key_ignoring_eta</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">priority</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">date_created</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">seq</span></div>
+
+    <span class="k">def</span> <span class="nf">__lt__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">eta</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">other</span><span class="o">.</span><span class="n">eta</span><span class="p">:</span>
-            <span class="k">return</span> <span class="o">-</span><span class="mi">1</span>
+            <span class="k">return</span> <span class="kc">True</span>
         <span class="k">elif</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">eta</span> <span class="ow">and</span> <span class="n">other</span><span class="o">.</span><span class="n">eta</span><span class="p">:</span>
-            <span class="k">return</span> <span class="mi">1</span>
+            <span class="k">return</span> <span class="kc">False</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="p">(</span><span class="nb">cmp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">eta</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">eta</span><span class="p">)</span> <span class="ow">or</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">cmp_no_eta</span><span class="p">(</span><span class="n">other</span><span class="p">))</span></div>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">sorting_key</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">other</span><span class="o">.</span><span class="n">sorting_key</span><span class="p">()</span></div>
 
 
 <div class="viewcode-block" id="ChannelQueue"><a class="viewcode-back" href="../../../../../api/api_channels.html#odoo.addons.queue_job.jobrunner.channels.ChannelQueue">[docs]</a><span class="k">class</span> <span class="nc">ChannelQueue</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -573,7 +576,9 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">sequential</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_eta_queue</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_queue</span><span class="p">):</span>
             <span class="n">eta_job</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_eta_queue</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
             <span class="n">job</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_queue</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-            <span class="k">if</span> <span class="n">eta_job</span><span class="o">.</span><span class="n">cmp_no_eta</span><span class="p">(</span><span class="n">job</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">eta_job</span><span class="o">.</span><span class="n">sorting_key_ignoring_eta</span><span class="p">()</span> <span class="o">&lt;</span>
+                    <span class="n">job</span><span class="o">.</span><span class="n">sorting_key_ignoring_eta</span><span class="p">()):</span>
                 <span class="c1"># eta ignored, the job with eta has higher priority</span>
                 <span class="c1"># than the job without eta; since it&#39;s a sequential</span>
                 <span class="c1"># queue we wait until eta</span>
@@ -687,7 +692,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">children</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">subchannel_name</span><span class="p">)</span></div>
 
     <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">capacity</span> <span class="o">=</span> <span class="sa">u</span><span class="s1">&#39;∞&#39;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">capacity</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">capacity</span><span class="p">)</span>
+        <span class="n">capacity</span> <span class="o">=</span> <span class="s1">&#39;∞&#39;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">capacity</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">capacity</span><span class="p">)</span>
         <span class="k">return</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">(C:</span><span class="si">%s</span><span class="s2">,Q:</span><span class="si">%d</span><span class="s2">,R:</span><span class="si">%d</span><span class="s2">,F:</span><span class="si">%d</span><span class="s2">)&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fullname</span><span class="p">,</span>
                                             <span class="n">capacity</span><span class="p">,</span>
                                             <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_queue</span><span class="p">),</span>
@@ -1308,7 +1313,7 @@
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.5.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.6.<br/>
     </p>
   </div>
 </footer>

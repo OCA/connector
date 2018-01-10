@@ -2,7 +2,7 @@
 
 set -o errexit -o nounset
 
-if [ "$TRAVIS_BRANCH" = "10.0" ] && [ "$TRAVIS_PULL_REQUEST" = false ]; then
+if [ "$TRAVIS_BRANCH" = "11.0" ] && [ "$TRAVIS_PULL_REQUEST" = false ]; then
   cd "${TRAVIS_BUILD_DIR}"
   rev=$(git rev-parse --short HEAD)
 

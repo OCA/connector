@@ -16,13 +16,10 @@ if [ "$TRAVIS_BRANCH" = "10.0" ] && [ "$TRAVIS_PULL_REQUEST" = false ]; then
   git fetch upstream
   git checkout gh-pages
 
-  rsync -a "${HOME}/doc/" .
+  rm -rf "${TRAVIS_BRANCH}"
+  mv "${HOME}/doc" "${TRAVIS_BRANCH}"
 
-  echo "odoo-connector.com" > CNAME
-  touch .nojekyll
-
-  touch .
-  git add -A .
+  git add "${TRAVIS_BRANCH}"
   git commit -m"rebuild pages at ${rev} on branch ${TRAVIS_BRANCH}"
 
   git push -q upstream HEAD:gh-pages

@@ -617,6 +617,12 @@
                 <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">collection</span><span class="o">.</span><span class="n">_name</span><span class="p">,</span> <span class="n">usage</span><span class="p">,</span> <span class="n">model_name</span><span class="p">)</span>
             <span class="p">)</span>
         <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">component_classes</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="c1"># If we have more than one component, try to find the one</span>
+            <span class="c1"># specificaly linked to the collection</span>
+            <span class="n">component_classes</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">component_classes</span>
+                <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">_collection</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">collection</span><span class="o">.</span><span class="n">_name</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">component_classes</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">SeveralComponentError</span><span class="p">(</span>
                 <span class="s2">&quot;Several components found for collection &#39;</span><span class="si">%s</span><span class="s2">&#39;, &quot;</span>
                 <span class="s2">&quot;usage &#39;</span><span class="si">%s</span><span class="s2">&#39;, model_name &#39;</span><span class="si">%s</span><span class="s2">&#39;. Found: </span><span class="si">%r</span><span class="s2">&quot;</span> <span class="o">%</span>

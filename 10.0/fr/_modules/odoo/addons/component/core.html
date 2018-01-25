@@ -348,7 +348,7 @@
         <span class="sd">&quot;&quot;&quot; Find and return a list of components for a usage</span>
 
 <span class="sd">        If a component is not registered in a particular collection (no</span>
-<span class="sd">        ``_collection``), it might will be returned in any case (as far as</span>
+<span class="sd">        ``_collection``), it will be returned in any case (as far as</span>
 <span class="sd">        the ``usage`` and ``model_name`` match).  This is useful to share</span>
 <span class="sd">        generic components across different collections.</span>
 
@@ -596,6 +596,14 @@
 <span class="sd">        :meth:`ComponentRegistry.lookup`. When a component is found,</span>
 <span class="sd">        it initialize it with the current :class:`WorkContext` and returned.</span>
 
+<span class="sd">        A component with a ``_apply_on`` matching the asked ``model_name``</span>
+<span class="sd">        takes precedence over a generic component without ``_apply_on``.</span>
+<span class="sd">        A component with a ``_collection`` matching the current collection</span>
+<span class="sd">        takes precedence over a generic component without ``_collection``.</span>
+<span class="sd">        This behavior allows to define generic components across collections</span>
+<span class="sd">        and/or models and override them only for a particular collection and/or</span>
+<span class="sd">        model.</span>
+
 <span class="sd">        A :exc:`odoo.addons.component.exception.SeveralComponentError` is</span>
 <span class="sd">        raised if more than one component match for the provided</span>
 <span class="sd">        ``usage``/``model_name``.</span>
@@ -618,10 +626,16 @@
             <span class="p">)</span>
         <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">component_classes</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
             <span class="c1"># If we have more than one component, try to find the one</span>
-            <span class="c1"># specificaly linked to the collection</span>
+            <span class="c1"># specifically linked to the collection...</span>
             <span class="n">component_classes</span> <span class="o">=</span> <span class="p">[</span>
                 <span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">component_classes</span>
                 <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">_collection</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">collection</span><span class="o">.</span><span class="n">_name</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">component_classes</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="c1"># ... or try to find the one specifically linked to the model</span>
+            <span class="n">component_classes</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">component_classes</span>
+                <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">apply_on_models</span> <span class="ow">and</span> <span class="n">model_name</span> <span class="ow">in</span> <span class="n">c</span><span class="o">.</span><span class="n">apply_on_models</span>
+            <span class="p">]</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">component_classes</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">SeveralComponentError</span><span class="p">(</span>
                 <span class="s2">&quot;Several components found for collection &#39;</span><span class="si">%s</span><span class="s2">&#39;, &quot;</span>

@@ -158,9 +158,59 @@ class TestComponent(TransactionComponentRegistryCase):
             self.assertEqual(self.env['res.users'], comp.model)
 
     def test_component_error_several(self):
-        """ Use component(usage=...) when more than one component match """
+        """ Use component(usage=...) when more than one generic component match
+        """
+        # we create 1 new Component with _usage 'for.test', in the same
+        # collection and no _apply_on, and we remove the _apply_on of component
+        # 1 so they are generic components for a collection
+        class Component3(Component):
+            _name = 'component3'
+            _collection = 'collection.base'
+            _usage = 'for.test'
+
+        class Component1(Component):
+            _inherit = 'component1'
+            _collection = 'collection.base'
+            _usage = 'for.test'
+            _apply_on = None
+
+        Component3._build_component(self.comp_registry)
+        Component1._build_component(self.comp_registry)
+
+        with self.get_base() as base:
+            with self.assertRaises(SeveralComponentError):
+                # When a component has no _apply_on, it means it can be applied
+                # on *any* model. Here, the candidates components would be:
+                # component3 (because it has no _apply_on so apply in any case)
+                # component4 (for the same reason)
+                base.component(usage='for.test')
+
+    def test_component_error_several_same_model(self):
+        """ Use component(usage=...) when more than one component match a model
+        """
         # we create a new Component with _usage 'for.test', in the same
         # collection and no _apply_on
+        class Component3(Component):
+            _name = 'component3'
+            _collection = 'collection.base'
+            _usage = 'for.test'
+            _apply_on = ['res.partner']
+
+        Component3._build_component(self.comp_registry)
+
+        with self.get_base() as base:
+            with self.assertRaises(SeveralComponentError):
+                # Here, the candidates components would be:
+                # component1 (because we are working with res.partner),
+                # component3 (for the same reason)
+                base.component(usage='for.test')
+
+    def test_component_specific_model(self):
+        """ Use component(usage=...) when more than one component match but
+        only one for the specific model"""
+        # we create a new Component with _usage 'for.test', in the same
+        # collection and no _apply_on. This is a generic component for the
+        # collection
         class Component3(Component):
             _name = 'component3'
             _collection = 'collection.base'
@@ -169,12 +219,17 @@ class TestComponent(TransactionComponentRegistryCase):
         Component3._build_component(self.comp_registry)
 
         with self.get_base() as base:
-            with self.assertRaises(SeveralComponentError):
-                # When a component has no _apply_on, it means it can be applied
-                # on *any* model. Here, the candidates components would be:
-                # component1 (because we are working with res.partner),
-                # component3 (because it has no _apply_on so apply in any case)
-                base.component(usage='for.test')
+            # When a component has no _apply_on, it means it can be applied on
+            # *any* model. Here, the candidates components would be:
+            # component1 # (because we are working with res.partner),
+            # component3 (because it # has no _apply_on so apply in any case).
+            # When a component is specifically linked to a model with
+            # _apply_on, it takes precedence over a generic component. It
+            # allows to create a generic implementation (component3 here) and
+            # override it only for a given model. So in this case, the final
+            # component is component1.
+            comp = base.component(usage='for.test')
+            self.assertEquals('component1', comp._name)
 
     def test_component_specific_collection(self):
         """ Use component(usage=...) when more than one component match but
@@ -196,6 +251,35 @@ class TestComponent(TransactionComponentRegistryCase):
             # on all model if no component is found for the current collection:
             # component3 must be ignored since a component (component1) exists
             # and is specificaly linked to the expected collection.
+            comp = base.component(usage='for.test')
+            self.assertEquals('component1', comp._name)
+
+    def test_component_specific_collection_specific_model(self):
+        """ Use component(usage=...) when more than one component match but
+        only one for the specific model and collection"""
+        # we create a new Component with _usage 'for.test', without collection
+        # and no _apply_on. This is a component generic for all collections and
+        # models
+        class Component3(Component):
+            _name = 'component3'
+            _usage = 'for.test'
+
+        Component3._build_component(self.comp_registry)
+
+        with self.get_base() as base:
+            # When a component has no _apply_on, it means it can be applied on
+            # *any* model, no _collection, it can be applied on *any*
+            # collection.
+            # Here, the candidates components would be:
+            # component1 (because we are working with res.partner),
+            # component3 (because it has no _apply_on and no _collection so
+            # apply in any case).
+            # When a component is specifically linked to a model with
+            # _apply_on, it takes precedence over a generic component, the same
+            # happens for collection. It allows to create a generic
+            # implementation (component3 here) and override it only for a given
+            # collection and model. So in this case, the final component is
+            # component1.
             comp = base.component(usage='for.test')
             self.assertEquals('component1', comp._name)
 

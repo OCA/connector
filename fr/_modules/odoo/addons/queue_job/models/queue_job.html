@@ -87,6 +87,7 @@
         aria-labelledby="dLabeVersions">
       <li><a class="reference" href="http://odoo-connector.com/8.0">8.0</a><li>
       <li><a class="reference" href="http://odoo-connector.com/9.0">9.0</a><li>
+      <li><a class="reference" href="http://odoo-connector.com/10.0">10.0</a><li>
     </ul>
   </li>
   
@@ -245,6 +246,11 @@
 <span class="kn">from</span> <span class="nn">datetime</span> <span class="k">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">timedelta</span>
 
 <span class="kn">from</span> <span class="nn">odoo</span> <span class="k">import</span> <span class="n">models</span><span class="p">,</span> <span class="n">fields</span><span class="p">,</span> <span class="n">api</span><span class="p">,</span> <span class="n">exceptions</span><span class="p">,</span> <span class="n">_</span>
+<span class="c1"># Import `Serialized` field straight to avoid:</span>
+<span class="c1"># * remember to use --load=base_sparse_field...</span>
+<span class="c1"># * make pytest happy</span>
+<span class="c1"># * make everybody happy :</span>
+<span class="kn">from</span> <span class="nn">odoo.addons.base_sparse_field.models.fields</span> <span class="k">import</span> <span class="n">Serialized</span>
 
 <span class="kn">from</span> <span class="nn">..job</span> <span class="k">import</span> <span class="n">STATES</span><span class="p">,</span> <span class="n">DONE</span><span class="p">,</span> <span class="n">PENDING</span><span class="p">,</span> <span class="n">Job</span>
 <span class="kn">from</span> <span class="nn">..fields</span> <span class="k">import</span> <span class="n">JobSerialized</span>
@@ -253,14 +259,14 @@
 
 
 <div class="viewcode-block" id="channel_func_name"><a class="viewcode-back" href="../../../../../api/api_queue.html#odoo.addons.queue_job.models.queue_job.channel_func_name">[docs]</a><span class="k">def</span> <span class="nf">channel_func_name</span><span class="p">(</span><span class="n">method</span><span class="p">):</span>
-    <span class="k">return</span> <span class="s1">&#39;&lt;</span><span class="si">%s</span><span class="s1">&gt;.</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">method</span><span class="o">.</span><span class="n">im_class</span><span class="o">.</span><span class="n">_name</span><span class="p">,</span> <span class="n">method</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="s1">&#39;&lt;</span><span class="si">%s</span><span class="s1">&gt;.</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">method</span><span class="o">.</span><span class="vm">__self__</span><span class="o">.</span><span class="n">_name</span><span class="p">,</span> <span class="n">method</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="QueueJob"><a class="viewcode-back" href="../../../../../api/api_queue.html#odoo.addons.queue_job.models.queue_job.QueueJob">[docs]</a><span class="k">class</span> <span class="nc">QueueJob</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Job status and result &quot;&quot;&quot;</span>
     <span class="n">_name</span> <span class="o">=</span> <span class="s1">&#39;queue.job&#39;</span>
     <span class="n">_description</span> <span class="o">=</span> <span class="s1">&#39;Queue Job&#39;</span>
-    <span class="n">_inherit</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;mail.thread&#39;</span><span class="p">,</span> <span class="s1">&#39;ir.needaction_mixin&#39;</span><span class="p">]</span>
+    <span class="n">_inherit</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;mail.thread&#39;</span><span class="p">,</span> <span class="s1">&#39;mail.activity.mixin&#39;</span><span class="p">]</span>
     <span class="n">_log_access</span> <span class="o">=</span> <span class="kc">False</span>
 
     <span class="n">_order</span> <span class="o">=</span> <span class="s1">&#39;date_created DESC, date_done DESC&#39;</span>
@@ -280,7 +286,7 @@
 
     <span class="n">model_name</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Char</span><span class="p">(</span><span class="n">string</span><span class="o">=</span><span class="s1">&#39;Model&#39;</span><span class="p">,</span> <span class="n">readonly</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">method_name</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Char</span><span class="p">(</span><span class="n">readonly</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">record_ids</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Serialized</span><span class="p">(</span><span class="n">readonly</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">record_ids</span> <span class="o">=</span> <span class="n">Serialized</span><span class="p">(</span><span class="n">readonly</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">args</span> <span class="o">=</span> <span class="n">JobSerialized</span><span class="p">(</span><span class="n">readonly</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">kwargs</span> <span class="o">=</span> <span class="n">JobSerialized</span><span class="p">(</span><span class="n">readonly</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">func_string</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Char</span><span class="p">(</span><span class="n">string</span><span class="o">=</span><span class="s1">&#39;Task&#39;</span><span class="p">,</span> <span class="n">compute</span><span class="o">=</span><span class="s1">&#39;_compute_func_string&#39;</span><span class="p">,</span>
@@ -352,7 +358,7 @@
             <span class="n">model</span> <span class="o">=</span> <span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="p">[</span><span class="n">record</span><span class="o">.</span><span class="n">model_name</span><span class="p">]</span><span class="o">.</span><span class="n">browse</span><span class="p">(</span><span class="n">record_ids</span><span class="p">))</span>
             <span class="n">args</span> <span class="o">=</span> <span class="p">[</span><span class="nb">repr</span><span class="p">(</span><span class="n">arg</span><span class="p">)</span> <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">record</span><span class="o">.</span><span class="n">args</span><span class="p">]</span>
             <span class="n">kwargs</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">=</span><span class="si">%r</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">val</span><span class="p">)</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span>
-                      <span class="ow">in</span> <span class="n">record</span><span class="o">.</span><span class="n">kwargs</span><span class="o">.</span><span class="n">iteritems</span><span class="p">()]</span>
+                      <span class="ow">in</span> <span class="n">record</span><span class="o">.</span><span class="n">kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">()]</span>
             <span class="n">all_args</span> <span class="o">=</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">args</span> <span class="o">+</span> <span class="n">kwargs</span><span class="p">)</span>
             <span class="n">record</span><span class="o">.</span><span class="n">func_string</span> <span class="o">=</span> <span class="p">(</span>
                 <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">.</span><span class="si">%s</span><span class="s2">(</span><span class="si">%s</span><span class="s2">)&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">record</span><span class="o">.</span><span class="n">method_name</span><span class="p">,</span> <span class="n">all_args</span><span class="p">)</span>
@@ -611,7 +617,7 @@
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.5.<br/>
+      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.6.<br/>
     </p>
   </div>
 </footer>

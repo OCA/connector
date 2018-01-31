@@ -2077,7 +2077,7 @@ are loaded.</p>
 <code class="descname">lookup</code><span class="sig-paren">(</span><em>collection_name=None</em>, <em>usage=None</em>, <em>model_name=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/component/core.html#ComponentRegistry.lookup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.component.core.ComponentRegistry.lookup" title="Permalink to this definition">¶</a></dt>
 <dd><p>Find and return a list of components for a usage</p>
 <p>If a component is not registered in a particular collection (no
-<code class="docutils literal"><span class="pre">_collection</span></code>), it might will be returned in any case (as far as
+<code class="docutils literal"><span class="pre">_collection</span></code>), it will be returned in any case (as far as
 the <code class="docutils literal"><span class="pre">usage</span></code> and <code class="docutils literal"><span class="pre">model_name</span></code> match).  This is useful to share
 generic components across different collections.</p>
 <p>If no collection name is given, components from any collection
@@ -2214,6 +2214,13 @@ argument.</p>
 <p>It searches a component using the rules of
 <a class="reference internal" href="#odoo.addons.component.core.ComponentRegistry.lookup" title="odoo.addons.component.core.ComponentRegistry.lookup"><code class="xref py py-meth docutils literal"><span class="pre">ComponentRegistry.lookup()</span></code></a>. When a component is found,
 it initialize it with the current <a class="reference internal" href="#odoo.addons.component.core.WorkContext" title="odoo.addons.component.core.WorkContext"><code class="xref py py-class docutils literal"><span class="pre">WorkContext</span></code></a> and returned.</p>
+<p>A component with a <code class="docutils literal"><span class="pre">_apply_on</span></code> matching the asked <code class="docutils literal"><span class="pre">model_name</span></code>
+takes precedence over a generic component without <code class="docutils literal"><span class="pre">_apply_on</span></code>.
+A component with a <code class="docutils literal"><span class="pre">_collection</span></code> matching the current collection
+takes precedence over a generic component without <code class="docutils literal"><span class="pre">_collection</span></code>.
+This behavior allows to define generic components across collections
+and/or models and override them only for a particular collection and/or
+model.</p>
 <p>A <a class="reference internal" href="#odoo.addons.component.exception.SeveralComponentError" title="odoo.addons.component.exception.SeveralComponentError"><code class="xref py py-exc docutils literal"><span class="pre">odoo.addons.component.exception.SeveralComponentError</span></code></a> is
 raised if more than one component match for the provided
 <code class="docutils literal"><span class="pre">usage</span></code>/<code class="docutils literal"><span class="pre">model_name</span></code>.</p>

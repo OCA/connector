@@ -108,7 +108,7 @@ class ComponentRegistry(object):
         """ Find and return a list of components for a usage
 
         If a component is not registered in a particular collection (no
-        ``_collection``), it might will be returned in any case (as far as
+        ``_collection``), it will be returned in any case (as far as
         the ``usage`` and ``model_name`` match).  This is useful to share
         generic components across different collections.
 
@@ -356,6 +356,14 @@ class WorkContext(object):
         :meth:`ComponentRegistry.lookup`. When a component is found,
         it initialize it with the current :class:`WorkContext` and returned.
 
+        A component with a ``_apply_on`` matching the asked ``model_name``
+        takes precedence over a generic component without ``_apply_on``.
+        A component with a ``_collection`` matching the current collection
+        takes precedence over a generic component without ``_collection``.
+        This behavior allows to define generic components across collections
+        and/or models and override them only for a particular collection and/or
+        model.
+
         A :exc:`odoo.addons.component.exception.SeveralComponentError` is
         raised if more than one component match for the provided
         ``usage``/``model_name``.
@@ -377,6 +385,18 @@ class WorkContext(object):
                 (self.collection._name, usage, model_name)
             )
         elif len(component_classes) > 1:
+            # If we have more than one component, try to find the one
+            # specifically linked to the collection...
+            component_classes = [
+                c for c in component_classes
+                if c._collection == self.collection._name]
+        if len(component_classes) > 1:
+            # ... or try to find the one specifically linked to the model
+            component_classes = [
+                c for c in component_classes
+                if c.apply_on_models and model_name in c.apply_on_models
+            ]
+        if len(component_classes) != 1:
             raise SeveralComponentError(
                 "Several components found for collection '%s', "
                 "usage '%s', model_name '%s'. Found: %r" %

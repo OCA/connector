@@ -21,7 +21,7 @@ Available addons
 ----------------
 addon | version | summary
 --- | --- | ---
-[component](component/) | 11.0.1.0.0 | Components
+[component](component/) | 11.0.1.1.0 | Components
 [component_event](component_event/) | 11.0.1.0.0 | Components Events
 [connector](connector/) | 11.0.1.0.0 | Connector
 [connector_base_product](connector_base_product/) | 11.0.1.0.0 | Connector Base Product

@@ -4,13 +4,14 @@
 # 
 # Translators:
 # OCA Transbot <transbot@odoo-community.org>, 2018
+# Nicolas JEUDY <njeudy@panda-chi.io>, 2018
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 11.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-01-05 16:56+0000\n"
-"PO-Revision-Date: 2018-01-05 16:56+0000\n"
-"Last-Translator: OCA Transbot <transbot@odoo-community.org>, 2018\n"
+"POT-Creation-Date: 2018-02-01 01:48+0000\n"
+"PO-Revision-Date: 2018-02-01 01:48+0000\n"
+"Last-Translator: Nicolas JEUDY <njeudy@panda-chi.io>, 2018\n"
 "Language-Team: French (https://www.transifex.com/oca/teams/23907/fr/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -22,13 +23,13 @@ msgstr ""
 #: sql_constraint:connector.test.binding:0
 #: sql_constraint:no.inherits.binding:0
 msgid "A binding already exists for this record"
-msgstr ""
+msgstr "Une relation existe déjà pour cet enregistrement"
 
 #. module: test_connector
 #: model:ir.model.fields,field_description:test_connector.field_connector_test_binding_backend_id
 #: model:ir.model.fields,field_description:test_connector.field_no_inherits_binding_backend_id
 msgid "Backend"
-msgstr ""
+msgstr "Backend"
 
 #. module: test_connector
 #: model:ir.model.fields,field_description:test_connector.field_connector_test_binding_create_uid
@@ -66,7 +67,7 @@ msgstr "ID"
 #: model:ir.model.fields,field_description:test_connector.field_connector_test_binding_external_id
 #: model:ir.model.fields,field_description:test_connector.field_no_inherits_binding_external_id
 msgid "ID on External"
-msgstr ""
+msgstr "ID externe"
 
 #. module: test_connector
 #: model:ir.model.fields,field_description:test_connector.field_connector_test_binding___last_update
@@ -95,24 +96,24 @@ msgstr "Dernière mise à jour le"
 #. module: test_connector
 #: model:ir.model.fields,field_description:test_connector.field_connector_test_binding_odoo_id
 msgid "Test Record"
-msgstr ""
+msgstr "Enregistrement de test"
 
 #. module: test_connector
 #: model:ir.model,name:test_connector.model_connector_test_binding
 msgid "connector.test.binding"
-msgstr ""
+msgstr "connector.test.binding"
 
 #. module: test_connector
 #: model:ir.model,name:test_connector.model_connector_test_record
 msgid "connector.test.record"
-msgstr ""
+msgstr "connector.test.record"
 
 #. module: test_connector
 #: model:ir.model,name:test_connector.model_no_inherits_binding
 msgid "no.inherits.binding"
-msgstr ""
+msgstr "no.inherits.binding"
 
 #. module: test_connector
 #: model:ir.model,name:test_connector.model_test_backend
 msgid "test.backend"
-msgstr ""
+msgstr "test.backend"

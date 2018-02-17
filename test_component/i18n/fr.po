@@ -4,13 +4,14 @@
 # 
 # Translators:
 # OCA Transbot <transbot@odoo-community.org>, 2018
+# Nicolas JEUDY <njeudy@panda-chi.io>, 2018
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 11.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-01-05 16:56+0000\n"
-"PO-Revision-Date: 2018-01-05 16:56+0000\n"
-"Last-Translator: OCA Transbot <transbot@odoo-community.org>, 2018\n"
+"POT-Creation-Date: 2018-02-01 01:48+0000\n"
+"PO-Revision-Date: 2018-02-01 01:48+0000\n"
+"Last-Translator: Nicolas JEUDY <njeudy@panda-chi.io>, 2018\n"
 "Language-Team: French (https://www.transifex.com/oca/teams/23907/fr/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -56,9 +57,9 @@ msgstr "Dernière mise à jour le"
 #. module: test_component
 #: model:ir.model.fields,field_description:test_component.field_test_component_collection_name
 msgid "Name"
-msgstr ""
+msgstr "Nom"
 
 #. module: test_component
 #: model:ir.model,name:test_component.model_test_component_collection
 msgid "test.component.collection"
-msgstr ""
+msgstr "test.component.collection"

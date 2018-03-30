@@ -606,10 +606,10 @@ msgstr ""
 #: ../../guides/concepts.rst:112
 msgid ""
 "It is always accompanied by a concrete subclass of the model :py:class:"
-"`~connector.backend_model.connector_backend`."
+"`~connector.models.backend_model.connector_backend`."
 msgstr ""
 "Il est toujours accompagné d'une sous-classe concrète du modèle :py:class:"
-"`~connector.backend_model.connector_backend`."
+"`~connector.models.backend_model.connector_backend`."
 
 #: ../../guides/concepts.rst:117
 msgid "Declare the backends (see :py:class:`connector.backend.Backend`)"
@@ -650,12 +650,12 @@ msgstr ""
 #: ../../guides/concepts.rst:130
 msgid ""
 "It contains a :py:class:`~connector.backend.Backend`, a record of a concrete "
-"subclass of the model :py:class:`~connector.backend_model."
+"subclass of the model :py:class:`~connector.models.backend_model."
 "connector_backend`, a :py:class:`~connector.session.Session` and the name of "
 "the model to work with."
 msgstr ""
 "Il contient un :py:class:`~connector.backend.Backend`, un enregistrement "
-"d'une sous-classe concrète du modèle :py:class:`~connector.backend_model."
+"d'une sous-classe concrète du modèle :py:class:`~connector.models.backend_model."
 "connector_backend`, une :py:class:`~connector.session.Session` et le nom du "
 "modèle avec lequel travailler."
 

@@ -122,6 +122,8 @@ try:
 except ImportError:
     _logger.debug("Cannot import 'cachetools'.")
 
+__all__ = ['skip_if']
+
 # Number of items we keep in LRU cache when we collect the events.
 # 1 item means: for an event name, model_name, collection, return
 # the event methods

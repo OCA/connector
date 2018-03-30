@@ -30,7 +30,7 @@ msgid ""
 "Each connector will also create a ``connector.backend`` which allows the "
 "users to register their backends. For instance, the Magento connector has "
 "``magento.backend`` (``_inherit`` "
-":py:class:`connector.backend_model.connector_backend`).  This model contains"
+":py:class:`connector.models.backend_model.connector_backend`).  This model contains"
 " a ``version`` field which should have the same list of versions (with the "
 "exact same name) than the instances of "
 ":py:class:`~connector.backend.Backend`."
@@ -38,7 +38,7 @@ msgstr ""
 "Chaque connecteur va aussi créer un ``connector.backend`` qui permet aux "
 "utilisateurs d'inscrire leurs backends. Par exemple le connecteur Magento a "
 "un ``magento.backend`` (``_inherit`` "
-":py:class:`connector.backend_model.connector_backend`).  Ce modèle contient "
+":py:class:`connector.models.backend_model.connector_backend`).  Ce modèle contient "
 "un champ ``version`` qui doit avoir la même lists de versions (avec "
 "exactement le même nom) que les instances de "
 ":py:class:`~connector.backend.Backend`."
@@ -291,19 +291,19 @@ msgid "Backend Models"
 msgstr "Modèles du backend"
 
 #: ../../../backend_model.pydocstring of
-#: connector.backend_model.ConnectorBackend:1
+#: connector.models.backend_model.ConnectorBackend:1
 #: ../../../backend_model.pydocstring of
-#: connector.backend_model.ExternalBinding:1
+#: connector.models.backend_model.ExternalBinding:1
 msgid "Bases: :class:`odoo.models.AbstractModel`"
 msgstr "Bases : :class:`odoo.models.AbstractModel`"
 
 #: ../../../backend_model.pydocstring of
-#: connector.backend_model.ConnectorBackend:1
+#: connector.models.backend_model.ConnectorBackend:1
 msgid "An instance of an external backend to synchronize with."
 msgstr "Une instance d'un backend externe auquel se synchroniser"
 
 #: ../../../backend_model.pydocstring of
-#: connector.backend_model.ConnectorBackend:3
+#: connector.models.backend_model.ConnectorBackend:3
 msgid ""
 "The backends have to ``_inherit`` this model in the connectors modules."
 msgstr ""
@@ -311,7 +311,7 @@ msgstr ""
 "connecteurs."
 
 #: ../../../backend_model.pydocstring of
-#: connector.backend_model.ConnectorBackend.get_backend:1
+#: connector.models.backend_model.ConnectorBackend.get_backend:1
 msgid ""
 "For a record of backend, returns the appropriate instance of "
 ":py:class:`~connector.backend.Backend`."
@@ -320,7 +320,7 @@ msgstr ""
 ":py:class:`~connector.backend.Backend`."
 
 #: ../../../backend_model.pydocstring of
-#: connector.backend_model.ConnectorBackend.name:1
+#: connector.models.backend_model.ConnectorBackend.name:1
 #: ../../../queue/model.pydocstring of
 #: connector.queue.model.QueueJob.func_string:1
 #: ../../../queue/model.pydocstring of
@@ -338,7 +338,7 @@ msgstr ""
 "habituellement affiché comme ligne unique dans les clients"
 
 #: ../../../backend_model.pydocstring of
-#: connector.backend_model.ConnectorBackend.name:4
+#: connector.models.backend_model.ConnectorBackend.name:4
 #: ../../../queue/model.pydocstring of
 #: connector.queue.model.QueueJob.func_string:4
 #: ../../../queue/model.pydocstring of
@@ -352,7 +352,7 @@ msgid "the maximum size of values stored for that field"
 msgstr "la taille maximum des valeurs stockées dans ce champ"
 
 #: ../../../backend_model.pydocstring of
-#: connector.backend_model.ConnectorBackend.name:5
+#: connector.models.backend_model.ConnectorBackend.name:5
 #: ../../../queue/model.pydocstring of
 #: connector.queue.model.QueueJob.func_string:5
 #: ../../../queue/model.pydocstring of
@@ -366,7 +366,7 @@ msgid "whether the values of this field can be translated"
 msgstr "si les valeurs de ce champ peuvent être traduites"
 
 #: ../../../backend_model.pydocstring of
-#: connector.backend_model.ConnectorBackend.version:1
+#: connector.models.backend_model.ConnectorBackend.version:1
 #: ../../../queue/model.pydocstring of connector.queue.model.QueueJob.state:1
 msgid ""
 "specifies the possible values for this field. It is given as either a list "
@@ -377,7 +377,7 @@ msgstr ""
 " méthode."
 
 #: ../../../backend_model.pydocstring of
-#: connector.backend_model.ConnectorBackend.version:4
+#: connector.models.backend_model.ConnectorBackend.version:4
 #: ../../../queue/model.pydocstring of connector.queue.model.QueueJob.state:4
 msgid ""
 "provides an extension of the selection in the case of an overridden field. "
@@ -387,7 +387,7 @@ msgstr ""
 "C'est une liste de paires (`value`, `string`)."
 
 #: ../../../backend_model.pydocstring of
-#: connector.backend_model.ConnectorBackend.version:7
+#: connector.models.backend_model.ConnectorBackend.version:7
 #: ../../../queue/model.pydocstring of connector.queue.model.QueueJob.state:7
 msgid ""
 "The attribute `selection` is mandatory except in the case of :ref:`related "
@@ -399,12 +399,12 @@ msgstr ""
 "definition>`."
 
 #: ../../../backend_model.pydocstring of
-#: connector.backend_model.ExternalBinding:1
+#: connector.models.backend_model.ExternalBinding:1
 msgid "An abstract model for bindings to external records."
 msgstr "Un modèle abstrait pour une liaison à des enregistrements externes"
 
 #: ../../../backend_model.pydocstring of
-#: connector.backend_model.ExternalBinding:3
+#: connector.models.backend_model.ExternalBinding:3
 msgid ""
 "An external binding is a binding between a backend and Odoo.  For "
 "example, for a partner, it could be ``magento.res.partner`` or for a "
@@ -415,7 +415,7 @@ msgstr ""
 "article, ``magento.product``."
 
 #: ../../../backend_model.pydocstring of
-#: connector.backend_model.ExternalBinding:7
+#: connector.models.backend_model.ExternalBinding:7
 msgid ""
 "The final model, will be an ``_inherits`` of the Odoo model and will "
 "``_inherit`` this model."
@@ -424,7 +424,7 @@ msgstr ""
 "ce modèle."
 
 #: ../../../backend_model.pydocstring of
-#: connector.backend_model.ExternalBinding:10
+#: connector.models.backend_model.ExternalBinding:10
 msgid ""
 "It will have a relation to the record (via ``_inherits``) and to the "
 "concrete backend model (``magento.backend`` for instance)."
@@ -433,7 +433,7 @@ msgstr ""
 "modèle backend concret (par exemple ``magento.backend``)."
 
 #: ../../../backend_model.pydocstring of
-#: connector.backend_model.ExternalBinding:13
+#: connector.models.backend_model.ExternalBinding:13
 msgid ""
 "It will also contains all the data relative to the backend for the record."
 msgstr ""
@@ -441,52 +441,52 @@ msgstr ""
 "l'enregistrement."
 
 #: ../../../backend_model.pydocstring of
-#: connector.backend_model.ExternalBinding:16
+#: connector.models.backend_model.ExternalBinding:16
 msgid "It needs to implements at least these fields:"
 msgstr "Il nécessite d'implémenter au moins ces champs :"
 
 #: ../../../backend_model.pydocstring of
-#: connector.backend_model.ExternalBinding:18
+#: connector.models.backend_model.ExternalBinding:18
 msgid "odoo_id"
 msgstr "odoo_id"
 
 #: ../../../backend_model.pydocstring of
-#: connector.backend_model.ExternalBinding:20
+#: connector.models.backend_model.ExternalBinding:20
 msgid "The many2one to the record it links (used by ``_inherits``)."
 msgstr "Le many2one vers l'enregistrement lié (utilisé par ``_inherits``)."
 
 #: ../../../backend_model.pydocstring of
-#: connector.backend_model.ExternalBinding:22
+#: connector.models.backend_model.ExternalBinding:22
 msgid "backend_id"
 msgstr "backend_id"
 
 #: ../../../backend_model.pydocstring of
-#: connector.backend_model.ExternalBinding:24
+#: connector.models.backend_model.ExternalBinding:24
 msgid "The many2one to the backend (for instance ``magento.backend``)."
 msgstr "Le many2one vers le backend (par exemple ``magento.backend``)."
 
 #: ../../../backend_model.pydocstring of
-#: connector.backend_model.ExternalBinding:26
+#: connector.models.backend_model.ExternalBinding:26
 msgid "magento_id or prestashop_id or ..."
 msgstr "magento_id ou prestashop_id ou ..."
 
 #: ../../../backend_model.pydocstring of
-#: connector.backend_model.ExternalBinding:28
+#: connector.models.backend_model.ExternalBinding:28
 msgid "The ID on the backend."
 msgstr "L'ID sur le backend."
 
 #: ../../../backend_model.pydocstring of
-#: connector.backend_model.ExternalBinding:30
+#: connector.models.backend_model.ExternalBinding:30
 msgid "sync_date"
 msgstr "sync_date"
 
 #: ../../../backend_model.pydocstring of
-#: connector.backend_model.ExternalBinding:32
+#: connector.models.backend_model.ExternalBinding:32
 msgid "Last date of synchronization"
 msgstr "Dernière date de synchronisation"
 
 #: ../../../backend_model.pydocstring of
-#: connector.backend_model.ExternalBinding:35
+#: connector.models.backend_model.ExternalBinding:35
 msgid ""
 "The definition of the relations in ``_columns`` is to be done in the "
 "concrete classes because the relations themselves do not exist in this "
@@ -497,7 +497,7 @@ msgstr ""
 " module."
 
 #: ../../../backend_model.pydocstring of
-#: connector.backend_model.ExternalBinding:39
+#: connector.models.backend_model.ExternalBinding:39
 msgid ""
 "For example, for a ``res.partner.category`` from Magento, I would have (this"
 " is a consolidation of all the columns from the abstract models, in "

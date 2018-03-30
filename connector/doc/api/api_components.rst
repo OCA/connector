@@ -16,6 +16,7 @@ Core Components
 .. automodule:: connector.components.core
    :members:
    :undoc-members:
+   :exclude-members: _module
    :show-inheritance:
    :private-members:
 
@@ -27,31 +28,98 @@ Connector Components
 .. automodule:: connector.components.binder
    :members:
    :undoc-members:
+   :exclude-members: _module
    :show-inheritance:
    :private-members:
 
 .. automodule:: connector.components.mapper
    :members:
-   :undoc-members:
+   :member-order: groupwise
+   :exclude-members: MappingDefinition, Mapper, ImportMapper, ExportMapper, MapChild, ImportMapChild, ExportMapChild
    :show-inheritance:
-   :private-members:
+
+   .. autoclass:: Mapper
+      :members:
+      :show-inheritance:
+
+      .. autoattribute:: _name
+      .. autoattribute:: _inherit
+      .. autoattribute:: _usage
+
+   .. autoclass:: ImportMapper
+      :members:
+      :show-inheritance:
+
+      .. autoattribute:: _name
+      .. autoattribute:: _inherit
+      .. autoattribute:: _usage
+
+   .. autoclass:: ExportMapper
+      :members:
+      :show-inheritance:
+
+      .. autoattribute:: _name
+      .. autoattribute:: _inherit
+      .. autoattribute:: _usage
+
+   .. autoclass:: MapChild
+      :members:
+      :show-inheritance:
+
+      .. autoattribute:: _name
+      .. autoattribute:: _inherit
+      .. autoattribute:: _usage
+
+   .. autoclass:: ImportMapChild
+      :members:
+      :show-inheritance:
+
+      .. autoattribute:: _name
+      .. autoattribute:: _inherit
+      .. autoattribute:: _usage
+
+   .. autoclass:: ExportMapChild
+      :members:
+      :show-inheritance:
+
+      .. autoattribute:: _name
+      .. autoattribute:: _inherit
+      .. autoattribute:: _usage
+
 
 .. automodule:: connector.components.backend_adapter
    :members:
-   :undoc-members:
    :show-inheritance:
-   :private-members:
+   :exclude-members: BackendAdapter, CRUDAdapter
+
+   .. autoclass:: BackendAdapter
+      :members:
+      :show-inheritance:
+
+      .. autoattribute:: _name
+      .. autoattribute:: _inherit
+      .. autoattribute:: _usage
+
+   .. autoclass:: CRUDAdapter
+      :members:
+      :show-inheritance:
+
+      .. autoattribute:: _name
+      .. autoattribute:: _inherit
+      .. autoattribute:: _usage
 
 .. automodule:: connector.components.synchronizer
    :members:
    :undoc-members:
    :show-inheritance:
+   :exclude-members: _module
    :private-members:
 
 .. automodule:: connector.components.listener
    :members:
    :undoc-members:
    :show-inheritance:
+   :exclude-members: _module
    :private-members:
 
 

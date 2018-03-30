@@ -632,15 +632,19 @@ class AbstractComponent(object):
     _abstract = True
 
     # used for inheritance
-    _name = None
+    _name = None  #: Name of the component
+
+    #: Name or list of names of the component(s) to inherit from
     _inherit = None
 
-    # name of the collection to subscribe in
+    #: name of the collection to subscribe in
     _collection = None
 
-    # None means any Model, can be a list ['res.users', ...]
+    #: List of models on which the component can be applied.
+    #: None means any Model, can be a list ['res.users', ...]
     _apply_on = None
-    # component purpose ('import.mapper', ...)
+
+    #: Component purpose ('import.mapper', ...).
     _usage = None
 
     def __init__(self, work_context):

@@ -25,6 +25,14 @@ from ..exception import MappingError
 _logger = logging.getLogger(__name__)
 
 
+__all__ = [
+    'Mapper', 'ImportMapper', 'ExportMapper', 'mapping',
+    'changed_by', 'only_create', 'none', 'convert',
+    'm2o_to_external', 'external_to_m2o', 'follow_m2o_relations',
+    'MapRecord', 'MapChild', 'ImportMapChild', 'ExportMapChild',
+]
+
+
 def mapping(func):
     """ Decorator, declare that a method is a mapping method.
 

@@ -21,6 +21,4 @@ Binding Model
 *************
 
 .. autoclass:: connector.models.backend_model.ExternalBinding
-   :members:
-   :undoc-members:
    :show-inheritance:

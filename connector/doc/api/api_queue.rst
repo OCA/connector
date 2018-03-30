@@ -4,16 +4,6 @@
 Queue
 #####
 
-***
-Job
-***
-
-.. automodule:: odoo.addons.queue_job.job
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-******
 Models
 ******
 
@@ -23,6 +13,33 @@ Models
    :show-inheritance:
 
 .. automodule:: odoo.addons.queue_job.models.queue_job
-   :members:
-   :undoc-members:
-   :show-inheritance:
+
+   .. autoclass:: QueueJob
+
+     .. autoattribute:: _name
+     .. autoattribute:: _inherit
+
+***
+Job
+***
+
+.. automodule:: odoo.addons.queue_job.job
+
+   Decorators
+   ==========
+
+   .. autofunction:: job
+   .. autofunction:: related_action
+
+   Internals
+   =========
+
+   .. autoclass:: DelayableRecordset
+      :members:
+      :undoc-members:
+      :show-inheritance:
+
+   .. autoclass:: Job
+      :members:
+      :undoc-members:
+      :show-inheritance:

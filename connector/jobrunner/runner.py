@@ -373,10 +373,14 @@ class ConnectorRunner(object):
                     self.wait_notification()
             except KeyboardInterrupt:
                 self.stop()
-            except:
-                _logger.exception("exception: sleeping %ds and retrying",
-                                  ERROR_RECOVERY_DELAY)
-                self.close_databases()
-                time.sleep(ERROR_RECOVERY_DELAY)
+            except Exception as e:
+                # Interrupted system call, i.e. KeyboardInterrupt during select
+                if isinstance(e, select.error) and e[0] == 4:
+                    self.stop()
+                else:
+                    _logger.exception("exception: sleeping %ds and retrying",
+                                      ERROR_RECOVERY_DELAY)
+                    self.close_databases()
+                    time.sleep(ERROR_RECOVERY_DELAY)
         self.close_databases(remove_jobs=False)
         _logger.info("stopped")

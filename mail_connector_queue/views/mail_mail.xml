@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2018 ACSONE SA/NV
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+
+<openerp>
+<data>
+
+    <record model="ir.ui.view" id="mail_mail_form_view">
+        <field name="name">mail.mail.form (in mail_connector_queue)</field>
+        <field name="model">mail.mail</field>
+        <field name="inherit_id" ref="mail.view_mail_form"/>
+        <field name="arch" type="xml">
+            <field name="auto_delete" position="after">
+                <field name="priority"/>
+            </field>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="mail_mail_tree_view">
+        <field name="name">mail.mail.tree (in mail_connector_queue)</field>
+        <field name="model">mail.mail</field>
+        <field name="inherit_id" ref="mail.view_mail_tree"/>
+        <field name="arch" type="xml">
+            <field name="date" position="after">
+                <field name="priority"/>
+            </field>
+        </field>
+    </record>
+
+</data>
+</openerp>

@@ -8,10 +8,12 @@ from openerp.addons.connector.queue.job import job
 @job
 def send_mail(session, mail_id):
     mail = session.env['mail.mail'].browse(mail_id)
-    if mail.state == 'outgoing':
-        mail.send(auto_commit=True, raise_exception=True)
-    else:
+    if not mail.exists():
+        return "mail.mail record (id=%s) no longer exists" % mail_id
+    elif mail.state != 'outgoing':
         return "Not in Outgoing state, ignoring"
+    else:
+        mail.send(auto_commit=False, raise_exception=True)
 
 
 @on_record_create(model_names='mail.mail')

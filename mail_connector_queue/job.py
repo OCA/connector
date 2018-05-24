@@ -18,6 +18,8 @@ def send_mail(session, mail_id):
 
 @on_record_create(model_names='mail.mail')
 def mail_creation(session, model_name, record_id, vals):
+    if vals.get('state') != 'outgoing':
+        return
     kwargs = {}
     if 'priority' in vals:
         kwargs['priority'] = vals['priority']

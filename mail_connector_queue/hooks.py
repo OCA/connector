@@ -16,4 +16,4 @@ def post_init_hook(cr, registry):
 
 
 def uninstall_hook(cr, registry):
-    _set_mail_cron_state(cr, registry, active=False)
+    _set_mail_cron_state(cr, registry, active=True)

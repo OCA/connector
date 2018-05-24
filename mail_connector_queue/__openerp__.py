@@ -12,6 +12,7 @@
     'website': 'https://github.com/OCA/connector',
     'depends': [
         'connector',
+        'mail',
     ],
     'data': [
         'views/mail_mail.xml',

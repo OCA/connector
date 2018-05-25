@@ -213,6 +213,19 @@ class QueueJob(models.Model):
         jobs.unlink()
         return True
 
+    @api.multi
+    def unlink(self):
+        """
+        This override unlinks the messages (mail.message) linked to
+        deleted jobs.
+        """
+        queue_job_ids = self.ids
+        res = super(QueueJob, self).unlink()
+        self.env['mail.message'].search([
+            ('model', '=', self._name),
+            ('res_id', 'in', queue_job_ids)]).unlink()
+        return res
+
 
 class RequeueJob(models.TransientModel):
     _name = 'queue.requeue.job'

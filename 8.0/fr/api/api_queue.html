@@ -2,20 +2,12 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="fr">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Queue &#8212; documentation Connector </title>
+    <title>Queue &#8212; Documentation Connector </title>
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
-        VERSION:     '',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <script type="text/javascript" src="../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
@@ -44,8 +36,7 @@
   ga('send', 'pageview');
 </script>
 
-  </head>
-  <body>
+  </head><body>
 
   <div id="navbar" class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -265,7 +256,7 @@
 <dl class="class">
 <dt id="connector.queue.job.Job">
 <em class="property">class </em><code class="descclassname">connector.queue.job.</code><code class="descname">Job</code><span class="sig-paren">(</span><em>func=None</em>, <em>model_name=None</em>, <em>args=None</em>, <em>kwargs=None</em>, <em>priority=None</em>, <em>eta=None</em>, <em>job_uuid=None</em>, <em>max_retries=None</em>, <em>description=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/queue/job.html#Job"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.job.Job" title="Lien permanent vers cette définition">¶</a></dt>
-<dd><p>Bases : <a class="reference external" href="https://docs.python.org/2/library/functions.html#object" title="(disponible dans Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<dd><p>Bases : <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(disponible dans Python v3.6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Un job est une tâche à exécuter.</p>
 <dl class="attribute">
 <dt id="connector.queue.job.Job.uuid">
@@ -486,7 +477,7 @@
 <dl class="class">
 <dt id="connector.queue.job.JobStorage">
 <em class="property">class </em><code class="descclassname">connector.queue.job.</code><code class="descname">JobStorage</code><a class="reference internal" href="../_modules/connector/queue/job.html#JobStorage"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.job.JobStorage" title="Lien permanent vers cette définition">¶</a></dt>
-<dd><p>Bases : <a class="reference external" href="https://docs.python.org/2/library/functions.html#object" title="(disponible dans Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<dd><p>Bases : <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(disponible dans Python v3.6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Interface pour le stockage des jobs</p>
 <dl class="method">
 <dt id="connector.queue.job.JobStorage.exists">
@@ -511,7 +502,7 @@
 <dl class="class">
 <dt id="connector.queue.job.OpenERPJobStorage">
 <em class="property">class </em><code class="descclassname">connector.queue.job.</code><code class="descname">OpenERPJobStorage</code><span class="sig-paren">(</span><em>session</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/queue/job.html#OpenERPJobStorage"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.job.OpenERPJobStorage" title="Lien permanent vers cette définition">¶</a></dt>
-<dd><p>Bases : <a class="reference internal" href="#connector.queue.job.JobStorage" title="connector.queue.job.JobStorage"><code class="xref py py-class docutils literal"><span class="pre">connector.queue.job.JobStorage</span></code></a></p>
+<dd><p>Bases : <a class="reference internal" href="#connector.queue.job.JobStorage" title="connector.queue.job.JobStorage"><code class="xref py py-class docutils literal notranslate"><span class="pre">connector.queue.job.JobStorage</span></code></a></p>
 <p>Stocke un job dans OpenERP</p>
 <dl class="method">
 <dt id="connector.queue.job.OpenERPJobStorage.db_record">
@@ -569,25 +560,25 @@
 <li><strong>default_channel</strong> – the channel wherein the job will be assigned. This
 channel is set at the installation of the module
 and can be manually changed later using the views.</li>
-<li><strong>retry_pattern</strong> (<a class="reference external" href="https://docs.python.org/2/library/stdtypes.html#dict" title="(disponible dans Python v2.7)"><em>dict</em></a><em>(</em><em>retry_count</em><em>,</em><em>retry_eta_seconds</em><em>)</em>) – The retry pattern to use for postponing a job.
+<li><strong>retry_pattern</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(disponible dans Python v3.6)"><em>dict</em></a><em>(</em><em>retry_count</em><em>,</em><em>retry_eta_seconds</em><em>)</em>) – The retry pattern to use for postponing a job.
 If a job is postponed and there is no eta
 specified, the eta will be determined from the
 dict in retry_pattern. When no retry pattern
 is provided, jobs will be retried after
-<code class="xref py py-const docutils literal"><span class="pre">RETRY_INTERVAL</span></code> seconds.</li>
+<code class="xref py py-const docutils literal notranslate"><span class="pre">RETRY_INTERVAL</span></code> seconds.</li>
 </ul>
 </td>
 </tr>
 </tbody>
 </table>
-<p>Ajoute un attribut <code class="docutils literal"><span class="pre">delay</span></code> sur la fonction décorée.</p>
-<p>Quand <code class="docutils literal"><span class="pre">delay</span></code> est appelée, la fonction est transformée en job et stockée dans le modèle OpenERP queue.job. Les arguments positionnels et nommés transmis à <code class="docutils literal"><span class="pre">delay</span></code> seront les arguments utilisés par la fonction décorée lorsqu’elle sera exécutée.</p>
-<p><code class="docutils literal"><span class="pre">retry_pattern</span></code> is a dict where keys are the count of retries and the
+<p>Ajoute un attribut <code class="docutils literal notranslate"><span class="pre">delay</span></code> sur la fonction décorée.</p>
+<p>Quand <code class="docutils literal notranslate"><span class="pre">delay</span></code> est appelée, la fonction est transformée en job et stockée dans le modèle OpenERP queue.job. Les arguments positionnels et nommés transmis à <code class="docutils literal notranslate"><span class="pre">delay</span></code> seront les arguments utilisés par la fonction décorée lorsqu’elle sera exécutée.</p>
+<p><code class="docutils literal notranslate"><span class="pre">retry_pattern</span></code> is a dict where keys are the count of retries and the
 values are the delay to postpone a job.</p>
-<p>La fonction <code class="docutils literal"><span class="pre">delay()</span></code> d’un job reçoit les arguments suivants :</p>
+<p>La fonction <code class="docutils literal notranslate"><span class="pre">delay()</span></code> d’un job reçoit les arguments suivants :</p>
 <dl class="docutils">
 <dt>session</dt>
-<dd><code class="xref py py-class docutils literal"><span class="pre">ConnectorSession</span></code> en cours</dd>
+<dd><code class="xref py py-class docutils literal notranslate"><span class="pre">ConnectorSession</span></code> en cours</dd>
 <dt>model_name</dt>
 <dd>nom du modèle sur lequel le job a quelque chose à faire</dd>
 <dt><a href="#id1"><span class="problematic" id="id2">*</span></a>args et <a href="#id3"><span class="problematic" id="id4">**</span></a>kargs</dt>
@@ -625,7 +616,7 @@ values are the delay to postpone a job.</p>
 </dd>
 </dl>
 <p>Exemple :</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="nd">@job</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@job</span>
 <span class="k">def</span> <span class="nf">export_one_thing</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">one_thing</span><span class="p">):</span>
     <span class="c1"># work</span>
     <span class="c1"># export one_thing</span>
@@ -660,7 +651,7 @@ values are the delay to postpone a job.</p>
 <span class="n">retryable_example</span><span class="o">.</span><span class="n">delay</span><span class="p">(</span><span class="n">session</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Voir aussi : <a class="reference internal" href="#connector.queue.job.related_action" title="connector.queue.job.related_action"><code class="xref py py-func docutils literal"><span class="pre">related_action()</span></code></a> une action connexe peut être attachée à un job</p>
+<p>Voir aussi : <a class="reference internal" href="#connector.queue.job.related_action" title="connector.queue.job.related_action"><code class="xref py py-func docutils literal notranslate"><span class="pre">related_action()</span></code></a> une action connexe peut être attachée à un job</p>
 </dd></dl>
 
 <dl class="function">
@@ -668,12 +659,12 @@ values are the delay to postpone a job.</p>
 <code class="descclassname">connector.queue.job.</code><code class="descname">related_action</code><span class="sig-paren">(</span><em>action=&lt;function &lt;lambda&gt;&gt;</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/queue/job.html#related_action"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.job.related_action" title="Lien permanent vers cette définition">¶</a></dt>
 <dd><p>Attache une <em>action connexe</em> à un job</p>
 <p>Un <em>action connexe</em> apparaîtra comme un bouton dans la vue OpenERP. Le bouton exécutera l’action, habituellement une ouverture de formulaire de l’enregistrement lié au job.</p>
-<p>L”<code class="docutils literal"><span class="pre">action</span></code> doit être un objet <cite>callable</cite> qui prends les arguments</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">session</span><span class="p">,</span> <span class="n">job</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+<p>L”<code class="docutils literal notranslate"><span class="pre">action</span></code> doit être un objet <cite>callable</cite> qui prends les arguments</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">session</span><span class="p">,</span> <span class="n">job</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
 </pre></div>
 </div>
 <p>Exemple d’utilisation :</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">related_action_partner</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">job</span><span class="p">):</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">related_action_partner</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">job</span><span class="p">):</span>
     <span class="n">model</span> <span class="o">=</span> <span class="n">job</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">partner_id</span> <span class="o">=</span> <span class="n">job</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
     <span class="c1"># eventually get the real ID if partner_id is a binding ID</span>
@@ -693,8 +684,8 @@ values are the delay to postpone a job.</p>
     <span class="c1"># ...</span>
 </pre></div>
 </div>
-<p>Les <code class="docutils literal"><span class="pre">kwargs</span></code> sont transmis à l’action :</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">related_action_product</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">job</span><span class="p">,</span> <span class="n">extra_arg</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+<p>Les <code class="docutils literal notranslate"><span class="pre">kwargs</span></code> sont transmis à l’action :</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">related_action_product</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">job</span><span class="p">,</span> <span class="n">extra_arg</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
     <span class="k">assert</span> <span class="n">extra_arg</span> <span class="o">==</span> <span class="mi">2</span>
     <span class="n">model</span> <span class="o">=</span> <span class="n">job</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">product_id</span> <span class="o">=</span> <span class="n">job</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
@@ -718,7 +709,7 @@ values are the delay to postpone a job.</p>
 </ul>
 <p>If you need to use an argument in a job which is not in this whitelist,
 you can add it by using:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">whitelist_unpickle_global</span><span class="p">(</span><span class="n">fn_or_class_to_register</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">whitelist_unpickle_global</span><span class="p">(</span><span class="n">fn_or_class_to_register</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -729,7 +720,7 @@ you can add it by using:</p>
 <dl class="class">
 <dt id="connector.queue.worker.Worker">
 <em class="property">class </em><code class="descclassname">connector.queue.worker.</code><code class="descname">Worker</code><span class="sig-paren">(</span><em>db_name</em>, <em>watcher_</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/queue/worker.html#Worker"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.worker.Worker" title="Lien permanent vers cette définition">¶</a></dt>
-<dd><p>Bases : <a class="reference external" href="https://docs.python.org/2/library/threading.html#threading.Thread" title="(disponible dans Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">threading.Thread</span></code></a></p>
+<dd><p>Bases : <a class="reference external" href="https://docs.python.org/3/library/threading.html#threading.Thread" title="(disponible dans Python v3.6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">threading.Thread</span></code></a></p>
 <p>Poste et récupère des jobs de la queue, les exécute</p>
 <dl class="method">
 <dt id="connector.queue.worker.Worker.enqueue_job_uuid">
@@ -741,20 +732,20 @@ you can add it by using:</p>
 <dl class="attribute">
 <dt id="connector.queue.worker.Worker.job_storage_class">
 <code class="descname">job_storage_class</code><a class="headerlink" href="#connector.queue.worker.Worker.job_storage_class" title="Lien permanent vers cette définition">¶</a></dt>
-<dd><p>alias de <code class="xref py py-class docutils literal"><span class="pre">OpenERPJobStorage</span></code></p>
+<dd><p>alias de <a class="reference internal" href="#connector.queue.job.OpenERPJobStorage" title="connector.queue.job.OpenERPJobStorage"><code class="xref py py-class docutils literal notranslate"><span class="pre">connector.queue.job.OpenERPJobStorage</span></code></a></p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="connector.queue.worker.Worker.queue_class">
 <code class="descname">queue_class</code><a class="headerlink" href="#connector.queue.worker.Worker.queue_class" title="Lien permanent vers cette définition">¶</a></dt>
-<dd><p>alias de <code class="xref py py-class docutils literal"><span class="pre">JobsQueue</span></code></p>
+<dd><p>alias de <a class="reference internal" href="#connector.queue.queue.JobsQueue" title="connector.queue.queue.JobsQueue"><code class="xref py py-class docutils literal notranslate"><span class="pre">connector.queue.queue.JobsQueue</span></code></a></p>
 </dd></dl>
 
 <dl class="method">
 <dt id="connector.queue.worker.Worker.run">
 <code class="descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/queue/worker.html#Worker.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.worker.Worker.run" title="Lien permanent vers cette définition">¶</a></dt>
 <dd><p>Boucle principale du worker</p>
-<p>Vérifie s’il existe encore dans le <code class="docutils literal"><span class="pre">watcher</span></code>. Quand il n’existe plus, il sort de la boucle de façon que le <cite>thread</cite> s’arrête proprement.</p>
+<p>Vérifie s’il existe encore dans le <code class="docutils literal notranslate"><span class="pre">watcher</span></code>. Quand il n’existe plus, il sort de la boucle de façon que le <cite>thread</cite> s’arrête proprement.</p>
 <p>Attend les jobs et les exécute séquentiellement.</p>
 </dd></dl>
 
@@ -769,7 +760,7 @@ you can add it by using:</p>
 <dl class="class">
 <dt id="connector.queue.worker.WorkerWatcher">
 <em class="property">class </em><code class="descclassname">connector.queue.worker.</code><code class="descname">WorkerWatcher</code><a class="reference internal" href="../_modules/connector/queue/worker.html#WorkerWatcher"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.worker.WorkerWatcher" title="Lien permanent vers cette définition">¶</a></dt>
-<dd><p>Bases : <a class="reference external" href="https://docs.python.org/2/library/threading.html#threading.Thread" title="(disponible dans Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">threading.Thread</span></code></a></p>
+<dd><p>Bases : <a class="reference external" href="https://docs.python.org/3/library/threading.html#threading.Thread" title="(disponible dans Python v3.6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">threading.Thread</span></code></a></p>
 <p>Garde un œil sur les workers et signale leur changement d’état.</p>
 <p>Un <cite>WorkerWatcher</cite> est partagé entre plusieurs bases de données, donc seule une instance est nécessaire pour vérifier l’état des workers pour chaque base de données.</p>
 <dl class="staticmethod">
@@ -781,9 +772,9 @@ you can add it by using:</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Retourne:</th><td class="field-body">Noms des bases de données</td>
+<tr class="field-odd field"><th class="field-name">Renvoie:</th><td class="field-body">Noms des bases de données</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Type retourné:</th><td class="field-body">list</td>
+<tr class="field-even field"><th class="field-name">Type renvoyé:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(disponible dans Python v3.6)">list</a></td>
 </tr>
 </tbody>
 </table>
@@ -827,7 +818,7 @@ you can add it by using:</p>
 <span class="target" id="module-connector.queue.queue"></span><dl class="class">
 <dt id="connector.queue.queue.JobsQueue">
 <em class="property">class </em><code class="descclassname">connector.queue.queue.</code><code class="descname">JobsQueue</code><a class="reference internal" href="../_modules/connector/queue/queue.html#JobsQueue"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.queue.JobsQueue" title="Lien permanent vers cette définition">¶</a></dt>
-<dd><p>Bases : <a class="reference external" href="https://docs.python.org/2/library/functions.html#object" title="(disponible dans Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<dd><p>Bases : <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(disponible dans Python v3.6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Contient en mémoire les jobs dont l’exécution est planifiée.</p>
 <p>Les jobs sont triés, plus la priorité est importante, plus tôt les jobs sont dépilés de la queue.</p>
 <dl class="method">
@@ -849,7 +840,7 @@ you can add it by using:</p>
 <dl class="class">
 <dt id="connector.queue.model.JobChannel">
 <em class="property">class </em><code class="descclassname">connector.queue.model.</code><code class="descname">JobChannel</code><span class="sig-paren">(</span><em>pool</em>, <em>cr</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/queue/model.html#JobChannel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.model.JobChannel" title="Lien permanent vers cette définition">¶</a></dt>
-<dd><p>Bases : <a class="reference external" href="https://www.odoo.com/documentation/8.0/reference/orm.html#openerp.models.Model" title="(disponible dans odoo v8.0)"><code class="xref py py-class docutils literal"><span class="pre">openerp.models.Model</span></code></a></p>
+<dd><p>Bases : <a class="reference external" href="https://www.odoo.com/documentation/8.0/reference/orm.html#openerp.models.Model" title="(disponible dans odoo v8.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">openerp.models.Model</span></code></a></p>
 <dl class="attribute">
 <dt id="connector.queue.model.JobChannel.complete_name">
 <code class="descname">complete_name</code><a class="headerlink" href="#connector.queue.model.JobChannel.complete_name" title="Lien permanent vers cette définition">¶</a></dt>
@@ -859,8 +850,8 @@ you can add it by using:</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><ul class="first last simple">
-<li><strong>size</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(disponible dans Python v2.7)"><em>int</em></a>) – la taille maximum des valeurs stockées dans ce champ</li>
-<li><strong>translate</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#bool" title="(disponible dans Python v2.7)"><em>bool</em></a>) – si les valeurs de ce champ peuvent être traduites</li>
+<li><strong>size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(disponible dans Python v3.6)"><em>int</em></a>) – la taille maximum des valeurs stockées dans ce champ</li>
+<li><strong>translate</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(disponible dans Python v3.6)"><em>bool</em></a>) – si les valeurs de ce champ peuvent être traduites</li>
 </ul>
 </td>
 </tr>
@@ -872,7 +863,7 @@ you can add it by using:</p>
 <dt id="connector.queue.model.JobChannel.job_function_ids">
 <code class="descname">job_function_ids</code><a class="headerlink" href="#connector.queue.model.JobChannel.job_function_ids" title="Lien permanent vers cette définition">¶</a></dt>
 <dd><p>One2many field; the value of such a field is the recordset of all the
-records in <code class="docutils literal"><span class="pre">comodel_name</span></code> such that the field <code class="docutils literal"><span class="pre">inverse_name</span></code> is equal to
+records in <code class="docutils literal notranslate"><span class="pre">comodel_name</span></code> such that the field <code class="docutils literal notranslate"><span class="pre">inverse_name</span></code> is equal to
 the current record.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -880,18 +871,18 @@ the current record.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><ul class="first last simple">
 <li><strong>comodel_name</strong> – nom du modèle cible (chaîne de caractères)</li>
-<li><strong>inverse_name</strong> – name of the inverse <code class="docutils literal"><span class="pre">Many2one</span></code> field in
-<code class="docutils literal"><span class="pre">comodel_name</span></code> (string)</li>
+<li><strong>inverse_name</strong> – name of the inverse <code class="docutils literal notranslate"><span class="pre">Many2one</span></code> field in
+<code class="docutils literal notranslate"><span class="pre">comodel_name</span></code> (string)</li>
 <li><strong>domain</strong> – un <cite>domain</cite> optionnel à définir sur les valeurs candidates côté client (<cite>domain</cite> ou <cite>string</cite>)</li>
 <li><strong>context</strong> – un <cite>context</cite> optionnel à utiliser côté client à la prise en charge de ce champ (dictionnaire)</li>
-<li><strong>auto_join</strong> – si les JOINs sont générés lors de la recherche sur ce champ (booleen, par défaut <code class="docutils literal"><span class="pre">False</span></code>)</li>
+<li><strong>auto_join</strong> – si les JOINs sont générés lors de la recherche sur ce champ (booleen, par défaut <code class="docutils literal notranslate"><span class="pre">False</span></code>)</li>
 <li><strong>limit</strong> – limite optionnelle à utiliser à la lecture (entier)</li>
 </ul>
 </td>
 </tr>
 </tbody>
 </table>
-<p>The attributes <code class="docutils literal"><span class="pre">comodel_name</span></code> and <code class="docutils literal"><span class="pre">inverse_name</span></code> are mandatory except in
+<p>The attributes <code class="docutils literal notranslate"><span class="pre">comodel_name</span></code> and <code class="docutils literal notranslate"><span class="pre">inverse_name</span></code> are mandatory except in
 the case of related fields or field extensions.</p>
 </dd></dl>
 
@@ -904,8 +895,8 @@ the case of related fields or field extensions.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><ul class="first last simple">
-<li><strong>size</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(disponible dans Python v2.7)"><em>int</em></a>) – la taille maximum des valeurs stockées dans ce champ</li>
-<li><strong>translate</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#bool" title="(disponible dans Python v2.7)"><em>bool</em></a>) – si les valeurs de ce champ peuvent être traduites</li>
+<li><strong>size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(disponible dans Python v3.6)"><em>int</em></a>) – la taille maximum des valeurs stockées dans ce champ</li>
+<li><strong>translate</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(disponible dans Python v3.6)"><em>bool</em></a>) – si les valeurs de ce champ peuvent être traduites</li>
 </ul>
 </td>
 </tr>
@@ -915,8 +906,20 @@ the case of related fields or field extensions.</p>
 
 <dl class="method">
 <dt id="connector.queue.model.JobChannel.name_get">
-<code class="descname">name_get</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/queue/model.html#JobChannel.name_get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.model.JobChannel.name_get" title="Lien permanent vers cette définition">¶</a></dt>
-<dd></dd></dl>
+<code class="descname">name_get</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; [(id, name), ...]<a class="reference internal" href="../_modules/connector/queue/model.html#JobChannel.name_get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.model.JobChannel.name_get" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Returns a textual representation for the records in <code class="docutils literal notranslate"><span class="pre">self</span></code>.
+By default this is the value of the <code class="docutils literal notranslate"><span class="pre">display_name</span></code> field.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Renvoie:</th><td class="field-body">list of pairs <code class="docutils literal notranslate"><span class="pre">(id,</span> <span class="pre">text_repr)</span></code> for each records</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Type renvoyé:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(disponible dans Python v3.6)">list</a>(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(disponible dans Python v3.6)">tuple</a>)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="attribute">
 <dt id="connector.queue.model.JobChannel.parent_id">
@@ -930,15 +933,15 @@ the case of related fields or field extensions.</p>
 <li><strong>comodel_name</strong> – nom du modèle cible (chaîne de caractères)</li>
 <li><strong>domain</strong> – un <cite>domain</cite> optionnel à définir sur les valeurs candidates côté client (<cite>domain</cite> ou <cite>string</cite>)</li>
 <li><strong>context</strong> – un <cite>context</cite> optionnel à utiliser côté client à la prise en charge de ce champ (dictionnaire)</li>
-<li><strong>ondelete</strong> – quoi faire quand l’enregistrement en rapport est effacé ; les valeurs possibles sont : <code class="docutils literal"><span class="pre">'set</span> <span class="pre">null'</span></code>, <code class="docutils literal"><span class="pre">'restrict'</span></code>, <code class="docutils literal"><span class="pre">'cascade'</span></code></li>
-<li><strong>auto_join</strong> – si les JOINs sont générés lors de la recherche sur ce champ (booleen, par défaut <code class="docutils literal"><span class="pre">False</span></code>)</li>
-<li><strong>delegate</strong> – définir à <code class="docutils literal"><span class="pre">True</span></code> pour rendre les champs du modèle cible accessibles depuis le modèle en cours (correspond à <code class="docutils literal"><span class="pre">_inherits</span></code>)</li>
+<li><strong>ondelete</strong> – quoi faire quand l’enregistrement en rapport est effacé ; les valeurs possibles sont : <code class="docutils literal notranslate"><span class="pre">'set</span> <span class="pre">null'</span></code>, <code class="docutils literal notranslate"><span class="pre">'restrict'</span></code>, <code class="docutils literal notranslate"><span class="pre">'cascade'</span></code></li>
+<li><strong>auto_join</strong> – si les JOINs sont générés lors de la recherche sur ce champ (booleen, par défaut <code class="docutils literal notranslate"><span class="pre">False</span></code>)</li>
+<li><strong>delegate</strong> – définir à <code class="docutils literal notranslate"><span class="pre">True</span></code> pour rendre les champs du modèle cible accessibles depuis le modèle en cours (correspond à <code class="docutils literal notranslate"><span class="pre">_inherits</span></code>)</li>
 </ul>
 </td>
 </tr>
 </tbody>
 </table>
-<p>The attribute <code class="docutils literal"><span class="pre">comodel_name</span></code> is mandatory except in the case of related
+<p>The attribute <code class="docutils literal notranslate"><span class="pre">comodel_name</span></code> is mandatory except in the case of related
 fields or field extensions.</p>
 </dd></dl>
 
@@ -962,7 +965,7 @@ fields or field extensions.</p>
 <dl class="class">
 <dt id="connector.queue.model.JobFunction">
 <em class="property">class </em><code class="descclassname">connector.queue.model.</code><code class="descname">JobFunction</code><span class="sig-paren">(</span><em>pool</em>, <em>cr</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/queue/model.html#JobFunction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.model.JobFunction" title="Lien permanent vers cette définition">¶</a></dt>
-<dd><p>Bases : <a class="reference external" href="https://www.odoo.com/documentation/8.0/reference/orm.html#openerp.models.Model" title="(disponible dans odoo v8.0)"><code class="xref py py-class docutils literal"><span class="pre">openerp.models.Model</span></code></a></p>
+<dd><p>Bases : <a class="reference external" href="https://www.odoo.com/documentation/8.0/reference/orm.html#openerp.models.Model" title="(disponible dans odoo v8.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">openerp.models.Model</span></code></a></p>
 <dl class="attribute">
 <dt id="connector.queue.model.JobFunction.channel">
 <code class="descname">channel</code><a class="headerlink" href="#connector.queue.model.JobFunction.channel" title="Lien permanent vers cette définition">¶</a></dt>
@@ -972,8 +975,8 @@ fields or field extensions.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><ul class="first last simple">
-<li><strong>size</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(disponible dans Python v2.7)"><em>int</em></a>) – la taille maximum des valeurs stockées dans ce champ</li>
-<li><strong>translate</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#bool" title="(disponible dans Python v2.7)"><em>bool</em></a>) – si les valeurs de ce champ peuvent être traduites</li>
+<li><strong>size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(disponible dans Python v3.6)"><em>int</em></a>) – la taille maximum des valeurs stockées dans ce champ</li>
+<li><strong>translate</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(disponible dans Python v3.6)"><em>bool</em></a>) – si les valeurs de ce champ peuvent être traduites</li>
 </ul>
 </td>
 </tr>
@@ -993,15 +996,15 @@ fields or field extensions.</p>
 <li><strong>comodel_name</strong> – nom du modèle cible (chaîne de caractères)</li>
 <li><strong>domain</strong> – un <cite>domain</cite> optionnel à définir sur les valeurs candidates côté client (<cite>domain</cite> ou <cite>string</cite>)</li>
 <li><strong>context</strong> – un <cite>context</cite> optionnel à utiliser côté client à la prise en charge de ce champ (dictionnaire)</li>
-<li><strong>ondelete</strong> – quoi faire quand l’enregistrement en rapport est effacé ; les valeurs possibles sont : <code class="docutils literal"><span class="pre">'set</span> <span class="pre">null'</span></code>, <code class="docutils literal"><span class="pre">'restrict'</span></code>, <code class="docutils literal"><span class="pre">'cascade'</span></code></li>
-<li><strong>auto_join</strong> – si les JOINs sont générés lors de la recherche sur ce champ (booleen, par défaut <code class="docutils literal"><span class="pre">False</span></code>)</li>
-<li><strong>delegate</strong> – définir à <code class="docutils literal"><span class="pre">True</span></code> pour rendre les champs du modèle cible accessibles depuis le modèle en cours (correspond à <code class="docutils literal"><span class="pre">_inherits</span></code>)</li>
+<li><strong>ondelete</strong> – quoi faire quand l’enregistrement en rapport est effacé ; les valeurs possibles sont : <code class="docutils literal notranslate"><span class="pre">'set</span> <span class="pre">null'</span></code>, <code class="docutils literal notranslate"><span class="pre">'restrict'</span></code>, <code class="docutils literal notranslate"><span class="pre">'cascade'</span></code></li>
+<li><strong>auto_join</strong> – si les JOINs sont générés lors de la recherche sur ce champ (booleen, par défaut <code class="docutils literal notranslate"><span class="pre">False</span></code>)</li>
+<li><strong>delegate</strong> – définir à <code class="docutils literal notranslate"><span class="pre">True</span></code> pour rendre les champs du modèle cible accessibles depuis le modèle en cours (correspond à <code class="docutils literal notranslate"><span class="pre">_inherits</span></code>)</li>
 </ul>
 </td>
 </tr>
 </tbody>
 </table>
-<p>The attribute <code class="docutils literal"><span class="pre">comodel_name</span></code> is mandatory except in the case of related
+<p>The attribute <code class="docutils literal notranslate"><span class="pre">comodel_name</span></code> is mandatory except in the case of related
 fields or field extensions.</p>
 </dd></dl>
 
@@ -1014,8 +1017,8 @@ fields or field extensions.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><ul class="first last simple">
-<li><strong>size</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(disponible dans Python v2.7)"><em>int</em></a>) – la taille maximum des valeurs stockées dans ce champ</li>
-<li><strong>translate</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#bool" title="(disponible dans Python v2.7)"><em>bool</em></a>) – si les valeurs de ce champ peuvent être traduites</li>
+<li><strong>size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(disponible dans Python v3.6)"><em>int</em></a>) – la taille maximum des valeurs stockées dans ce champ</li>
+<li><strong>translate</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(disponible dans Python v3.6)"><em>bool</em></a>) – si les valeurs de ce champ peuvent être traduites</li>
 </ul>
 </td>
 </tr>
@@ -1028,7 +1031,7 @@ fields or field extensions.</p>
 <dl class="class">
 <dt id="connector.queue.model.QueueJob">
 <em class="property">class </em><code class="descclassname">connector.queue.model.</code><code class="descname">QueueJob</code><span class="sig-paren">(</span><em>pool</em>, <em>cr</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/queue/model.html#QueueJob"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.model.QueueJob" title="Lien permanent vers cette définition">¶</a></dt>
-<dd><p>Bases : <a class="reference external" href="https://www.odoo.com/documentation/8.0/reference/orm.html#openerp.models.Model" title="(disponible dans odoo v8.0)"><code class="xref py py-class docutils literal"><span class="pre">openerp.models.Model</span></code></a></p>
+<dd><p>Bases : <a class="reference external" href="https://www.odoo.com/documentation/8.0/reference/orm.html#openerp.models.Model" title="(disponible dans odoo v8.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">openerp.models.Model</span></code></a></p>
 <p>État du job et résultat</p>
 <dl class="attribute">
 <dt id="connector.queue.model.QueueJob.active">
@@ -1038,7 +1041,7 @@ fields or field extensions.</p>
 <dl class="method">
 <dt id="connector.queue.model.QueueJob.autovacuum">
 <code class="descname">autovacuum</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/queue/model.html#QueueJob.autovacuum"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.model.QueueJob.autovacuum" title="Lien permanent vers cette définition">¶</a></dt>
-<dd><p>Efface tous les jobs (actifs ou non) qui sont terminés depuis plus de <code class="docutils literal"><span class="pre">_removal_interval</span></code> jours.</p>
+<dd><p>Efface tous les jobs (actifs ou non) qui sont terminés depuis plus de <code class="docutils literal notranslate"><span class="pre">_removal_interval</span></code> jours.</p>
 <p>Appelé depuis une tâche planifiée (<cite>cron</cite>).</p>
 </dd></dl>
 
@@ -1056,8 +1059,8 @@ fields or field extensions.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><ul class="first last simple">
-<li><strong>size</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(disponible dans Python v2.7)"><em>int</em></a>) – la taille maximum des valeurs stockées dans ce champ</li>
-<li><strong>translate</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#bool" title="(disponible dans Python v2.7)"><em>bool</em></a>) – si les valeurs de ce champ peuvent être traduites</li>
+<li><strong>size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(disponible dans Python v3.6)"><em>int</em></a>) – la taille maximum des valeurs stockées dans ce champ</li>
+<li><strong>translate</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(disponible dans Python v3.6)"><em>bool</em></a>) – si les valeurs de ce champ peuvent être traduites</li>
 </ul>
 </td>
 </tr>
@@ -1077,15 +1080,15 @@ fields or field extensions.</p>
 <li><strong>comodel_name</strong> – nom du modèle cible (chaîne de caractères)</li>
 <li><strong>domain</strong> – un <cite>domain</cite> optionnel à définir sur les valeurs candidates côté client (<cite>domain</cite> ou <cite>string</cite>)</li>
 <li><strong>context</strong> – un <cite>context</cite> optionnel à utiliser côté client à la prise en charge de ce champ (dictionnaire)</li>
-<li><strong>ondelete</strong> – quoi faire quand l’enregistrement en rapport est effacé ; les valeurs possibles sont : <code class="docutils literal"><span class="pre">'set</span> <span class="pre">null'</span></code>, <code class="docutils literal"><span class="pre">'restrict'</span></code>, <code class="docutils literal"><span class="pre">'cascade'</span></code></li>
-<li><strong>auto_join</strong> – si les JOINs sont générés lors de la recherche sur ce champ (booleen, par défaut <code class="docutils literal"><span class="pre">False</span></code>)</li>
-<li><strong>delegate</strong> – définir à <code class="docutils literal"><span class="pre">True</span></code> pour rendre les champs du modèle cible accessibles depuis le modèle en cours (correspond à <code class="docutils literal"><span class="pre">_inherits</span></code>)</li>
+<li><strong>ondelete</strong> – quoi faire quand l’enregistrement en rapport est effacé ; les valeurs possibles sont : <code class="docutils literal notranslate"><span class="pre">'set</span> <span class="pre">null'</span></code>, <code class="docutils literal notranslate"><span class="pre">'restrict'</span></code>, <code class="docutils literal notranslate"><span class="pre">'cascade'</span></code></li>
+<li><strong>auto_join</strong> – si les JOINs sont générés lors de la recherche sur ce champ (booleen, par défaut <code class="docutils literal notranslate"><span class="pre">False</span></code>)</li>
+<li><strong>delegate</strong> – définir à <code class="docutils literal notranslate"><span class="pre">True</span></code> pour rendre les champs du modèle cible accessibles depuis le modèle en cours (correspond à <code class="docutils literal notranslate"><span class="pre">_inherits</span></code>)</li>
 </ul>
 </td>
 </tr>
 </tbody>
 </table>
-<p>The attribute <code class="docutils literal"><span class="pre">comodel_name</span></code> is mandatory except in the case of related
+<p>The attribute <code class="docutils literal notranslate"><span class="pre">comodel_name</span></code> is mandatory except in the case of related
 fields or field extensions.</p>
 </dd></dl>
 
@@ -1117,7 +1120,7 @@ fields or field extensions.</p>
 <dl class="attribute">
 <dt id="connector.queue.model.QueueJob.exc_info">
 <code class="descname">exc_info</code><a class="headerlink" href="#connector.queue.model.QueueJob.exc_info" title="Lien permanent vers cette définition">¶</a></dt>
-<dd><p>Très similaire à <code class="xref py py-class docutils literal"><span class="pre">Char</span></code> mais utilisé pour des contenus plus longs, sans taille spécifiée et généralement affiché dans une boite de texte multi-lignes.</p>
+<dd><p>Très similaire à <code class="xref py py-class docutils literal notranslate"><span class="pre">Char</span></code> mais utilisé pour des contenus plus longs, sans taille spécifiée et généralement affiché dans une boite de texte multi-lignes.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -1142,8 +1145,8 @@ fields or field extensions.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><ul class="first last simple">
-<li><strong>size</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(disponible dans Python v2.7)"><em>int</em></a>) – la taille maximum des valeurs stockées dans ce champ</li>
-<li><strong>translate</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#bool" title="(disponible dans Python v2.7)"><em>bool</em></a>) – si les valeurs de ce champ peuvent être traduites</li>
+<li><strong>size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(disponible dans Python v3.6)"><em>int</em></a>) – la taille maximum des valeurs stockées dans ce champ</li>
+<li><strong>translate</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(disponible dans Python v3.6)"><em>bool</em></a>) – si les valeurs de ce champ peuvent être traduites</li>
 </ul>
 </td>
 </tr>
@@ -1160,8 +1163,8 @@ fields or field extensions.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><ul class="first last simple">
-<li><strong>size</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(disponible dans Python v2.7)"><em>int</em></a>) – la taille maximum des valeurs stockées dans ce champ</li>
-<li><strong>translate</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#bool" title="(disponible dans Python v2.7)"><em>bool</em></a>) – si les valeurs de ce champ peuvent être traduites</li>
+<li><strong>size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(disponible dans Python v3.6)"><em>int</em></a>) – la taille maximum des valeurs stockées dans ce champ</li>
+<li><strong>translate</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(disponible dans Python v3.6)"><em>bool</em></a>) – si les valeurs de ce champ peuvent être traduites</li>
 </ul>
 </td>
 </tr>
@@ -1181,15 +1184,15 @@ fields or field extensions.</p>
 <li><strong>comodel_name</strong> – nom du modèle cible (chaîne de caractères)</li>
 <li><strong>domain</strong> – un <cite>domain</cite> optionnel à définir sur les valeurs candidates côté client (<cite>domain</cite> ou <cite>string</cite>)</li>
 <li><strong>context</strong> – un <cite>context</cite> optionnel à utiliser côté client à la prise en charge de ce champ (dictionnaire)</li>
-<li><strong>ondelete</strong> – quoi faire quand l’enregistrement en rapport est effacé ; les valeurs possibles sont : <code class="docutils literal"><span class="pre">'set</span> <span class="pre">null'</span></code>, <code class="docutils literal"><span class="pre">'restrict'</span></code>, <code class="docutils literal"><span class="pre">'cascade'</span></code></li>
-<li><strong>auto_join</strong> – si les JOINs sont générés lors de la recherche sur ce champ (booleen, par défaut <code class="docutils literal"><span class="pre">False</span></code>)</li>
-<li><strong>delegate</strong> – définir à <code class="docutils literal"><span class="pre">True</span></code> pour rendre les champs du modèle cible accessibles depuis le modèle en cours (correspond à <code class="docutils literal"><span class="pre">_inherits</span></code>)</li>
+<li><strong>ondelete</strong> – quoi faire quand l’enregistrement en rapport est effacé ; les valeurs possibles sont : <code class="docutils literal notranslate"><span class="pre">'set</span> <span class="pre">null'</span></code>, <code class="docutils literal notranslate"><span class="pre">'restrict'</span></code>, <code class="docutils literal notranslate"><span class="pre">'cascade'</span></code></li>
+<li><strong>auto_join</strong> – si les JOINs sont générés lors de la recherche sur ce champ (booleen, par défaut <code class="docutils literal notranslate"><span class="pre">False</span></code>)</li>
+<li><strong>delegate</strong> – définir à <code class="docutils literal notranslate"><span class="pre">True</span></code> pour rendre les champs du modèle cible accessibles depuis le modèle en cours (correspond à <code class="docutils literal notranslate"><span class="pre">_inherits</span></code>)</li>
 </ul>
 </td>
 </tr>
 </tbody>
 </table>
-<p>The attribute <code class="docutils literal"><span class="pre">comodel_name</span></code> is mandatory except in the case of related
+<p>The attribute <code class="docutils literal notranslate"><span class="pre">comodel_name</span></code> is mandatory except in the case of related
 fields or field extensions.</p>
 </dd></dl>
 
@@ -1207,8 +1210,8 @@ fields or field extensions.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><ul class="first last simple">
-<li><strong>size</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(disponible dans Python v2.7)"><em>int</em></a>) – la taille maximum des valeurs stockées dans ce champ</li>
-<li><strong>translate</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#bool" title="(disponible dans Python v2.7)"><em>bool</em></a>) – si les valeurs de ce champ peuvent être traduites</li>
+<li><strong>size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(disponible dans Python v3.6)"><em>int</em></a>) – la taille maximum des valeurs stockées dans ce champ</li>
+<li><strong>translate</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(disponible dans Python v3.6)"><em>bool</em></a>) – si les valeurs de ce champ peuvent être traduites</li>
 </ul>
 </td>
 </tr>
@@ -1225,8 +1228,8 @@ fields or field extensions.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><ul class="first last simple">
-<li><strong>size</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(disponible dans Python v2.7)"><em>int</em></a>) – la taille maximum des valeurs stockées dans ce champ</li>
-<li><strong>translate</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#bool" title="(disponible dans Python v2.7)"><em>bool</em></a>) – si les valeurs de ce champ peuvent être traduites</li>
+<li><strong>size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(disponible dans Python v3.6)"><em>int</em></a>) – la taille maximum des valeurs stockées dans ce champ</li>
+<li><strong>translate</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(disponible dans Python v3.6)"><em>bool</em></a>) – si les valeurs de ce champ peuvent être traduites</li>
 </ul>
 </td>
 </tr>
@@ -1253,7 +1256,7 @@ fields or field extensions.</p>
 <dl class="attribute">
 <dt id="connector.queue.model.QueueJob.result">
 <code class="descname">result</code><a class="headerlink" href="#connector.queue.model.QueueJob.result" title="Lien permanent vers cette définition">¶</a></dt>
-<dd><p>Très similaire à <code class="xref py py-class docutils literal"><span class="pre">Char</span></code> mais utilisé pour des contenus plus longs, sans taille spécifiée et généralement affiché dans une boite de texte multi-lignes.</p>
+<dd><p>Très similaire à <code class="xref py py-class docutils literal notranslate"><span class="pre">Char</span></code> mais utilisé pour des contenus plus longs, sans taille spécifiée et généralement affiché dans une boite de texte multi-lignes.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -1278,16 +1281,16 @@ fields or field extensions.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><ul class="first last simple">
 <li><strong>selection</strong> – specifies the possible values for this field.
-It is given as either a list of pairs (<code class="docutils literal"><span class="pre">value</span></code>, <code class="docutils literal"><span class="pre">string</span></code>), or a
+It is given as either a list of pairs (<code class="docutils literal notranslate"><span class="pre">value</span></code>, <code class="docutils literal notranslate"><span class="pre">string</span></code>), or a
 model method, or a method name.</li>
 <li><strong>selection_add</strong> – provides an extension of the selection in the case
-of an overridden field. It is a list of pairs (<code class="docutils literal"><span class="pre">value</span></code>, <code class="docutils literal"><span class="pre">string</span></code>).</li>
+of an overridden field. It is a list of pairs (<code class="docutils literal notranslate"><span class="pre">value</span></code>, <code class="docutils literal notranslate"><span class="pre">string</span></code>).</li>
 </ul>
 </td>
 </tr>
 </tbody>
 </table>
-<p>The attribute <code class="docutils literal"><span class="pre">selection</span></code> is mandatory except in the case of
+<p>The attribute <code class="docutils literal notranslate"><span class="pre">selection</span></code> is mandatory except in the case of
 <a class="reference external" href="https://www.odoo.com/documentation/8.0/reference/orm.html#field-related" title="(disponible dans odoo v8.0)"><span class="xref std std-ref">related fields</span></a> or <a class="reference external" href="https://www.odoo.com/documentation/8.0/reference/orm.html#field-incremental-definition" title="(disponible dans odoo v8.0)"><span class="xref std std-ref">field extensions</span></a>.</p>
 </dd></dl>
 
@@ -1303,15 +1306,15 @@ of an overridden field. It is a list of pairs (<code class="docutils literal"><s
 <li><strong>comodel_name</strong> – nom du modèle cible (chaîne de caractères)</li>
 <li><strong>domain</strong> – un <cite>domain</cite> optionnel à définir sur les valeurs candidates côté client (<cite>domain</cite> ou <cite>string</cite>)</li>
 <li><strong>context</strong> – un <cite>context</cite> optionnel à utiliser côté client à la prise en charge de ce champ (dictionnaire)</li>
-<li><strong>ondelete</strong> – quoi faire quand l’enregistrement en rapport est effacé ; les valeurs possibles sont : <code class="docutils literal"><span class="pre">'set</span> <span class="pre">null'</span></code>, <code class="docutils literal"><span class="pre">'restrict'</span></code>, <code class="docutils literal"><span class="pre">'cascade'</span></code></li>
-<li><strong>auto_join</strong> – si les JOINs sont générés lors de la recherche sur ce champ (booleen, par défaut <code class="docutils literal"><span class="pre">False</span></code>)</li>
-<li><strong>delegate</strong> – définir à <code class="docutils literal"><span class="pre">True</span></code> pour rendre les champs du modèle cible accessibles depuis le modèle en cours (correspond à <code class="docutils literal"><span class="pre">_inherits</span></code>)</li>
+<li><strong>ondelete</strong> – quoi faire quand l’enregistrement en rapport est effacé ; les valeurs possibles sont : <code class="docutils literal notranslate"><span class="pre">'set</span> <span class="pre">null'</span></code>, <code class="docutils literal notranslate"><span class="pre">'restrict'</span></code>, <code class="docutils literal notranslate"><span class="pre">'cascade'</span></code></li>
+<li><strong>auto_join</strong> – si les JOINs sont générés lors de la recherche sur ce champ (booleen, par défaut <code class="docutils literal notranslate"><span class="pre">False</span></code>)</li>
+<li><strong>delegate</strong> – définir à <code class="docutils literal notranslate"><span class="pre">True</span></code> pour rendre les champs du modèle cible accessibles depuis le modèle en cours (correspond à <code class="docutils literal notranslate"><span class="pre">_inherits</span></code>)</li>
 </ul>
 </td>
 </tr>
 </tbody>
 </table>
-<p>The attribute <code class="docutils literal"><span class="pre">comodel_name</span></code> is mandatory except in the case of related
+<p>The attribute <code class="docutils literal notranslate"><span class="pre">comodel_name</span></code> is mandatory except in the case of related
 fields or field extensions.</p>
 </dd></dl>
 
@@ -1324,8 +1327,8 @@ fields or field extensions.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><ul class="first last simple">
-<li><strong>size</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(disponible dans Python v2.7)"><em>int</em></a>) – la taille maximum des valeurs stockées dans ce champ</li>
-<li><strong>translate</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#bool" title="(disponible dans Python v2.7)"><em>bool</em></a>) – si les valeurs de ce champ peuvent être traduites</li>
+<li><strong>size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(disponible dans Python v3.6)"><em>int</em></a>) – la taille maximum des valeurs stockées dans ce champ</li>
+<li><strong>translate</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(disponible dans Python v3.6)"><em>bool</em></a>) – si les valeurs de ce champ peuvent être traduites</li>
 </ul>
 </td>
 </tr>
@@ -1345,15 +1348,15 @@ fields or field extensions.</p>
 <li><strong>comodel_name</strong> – nom du modèle cible (chaîne de caractères)</li>
 <li><strong>domain</strong> – un <cite>domain</cite> optionnel à définir sur les valeurs candidates côté client (<cite>domain</cite> ou <cite>string</cite>)</li>
 <li><strong>context</strong> – un <cite>context</cite> optionnel à utiliser côté client à la prise en charge de ce champ (dictionnaire)</li>
-<li><strong>ondelete</strong> – quoi faire quand l’enregistrement en rapport est effacé ; les valeurs possibles sont : <code class="docutils literal"><span class="pre">'set</span> <span class="pre">null'</span></code>, <code class="docutils literal"><span class="pre">'restrict'</span></code>, <code class="docutils literal"><span class="pre">'cascade'</span></code></li>
-<li><strong>auto_join</strong> – si les JOINs sont générés lors de la recherche sur ce champ (booleen, par défaut <code class="docutils literal"><span class="pre">False</span></code>)</li>
-<li><strong>delegate</strong> – définir à <code class="docutils literal"><span class="pre">True</span></code> pour rendre les champs du modèle cible accessibles depuis le modèle en cours (correspond à <code class="docutils literal"><span class="pre">_inherits</span></code>)</li>
+<li><strong>ondelete</strong> – quoi faire quand l’enregistrement en rapport est effacé ; les valeurs possibles sont : <code class="docutils literal notranslate"><span class="pre">'set</span> <span class="pre">null'</span></code>, <code class="docutils literal notranslate"><span class="pre">'restrict'</span></code>, <code class="docutils literal notranslate"><span class="pre">'cascade'</span></code></li>
+<li><strong>auto_join</strong> – si les JOINs sont générés lors de la recherche sur ce champ (booleen, par défaut <code class="docutils literal notranslate"><span class="pre">False</span></code>)</li>
+<li><strong>delegate</strong> – définir à <code class="docutils literal notranslate"><span class="pre">True</span></code> pour rendre les champs du modèle cible accessibles depuis le modèle en cours (correspond à <code class="docutils literal notranslate"><span class="pre">_inherits</span></code>)</li>
 </ul>
 </td>
 </tr>
 </tbody>
 </table>
-<p>The attribute <code class="docutils literal"><span class="pre">comodel_name</span></code> is mandatory except in the case of related
+<p>The attribute <code class="docutils literal notranslate"><span class="pre">comodel_name</span></code> is mandatory except in the case of related
 fields or field extensions.</p>
 </dd></dl>
 
@@ -1367,18 +1370,18 @@ fields or field extensions.</p>
 <dl class="class">
 <dt id="connector.queue.model.QueueWorker">
 <em class="property">class </em><code class="descclassname">connector.queue.model.</code><code class="descname">QueueWorker</code><span class="sig-paren">(</span><em>pool</em>, <em>cr</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/queue/model.html#QueueWorker"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.model.QueueWorker" title="Lien permanent vers cette définition">¶</a></dt>
-<dd><p>Bases : <a class="reference external" href="https://www.odoo.com/documentation/8.0/reference/orm.html#openerp.models.Model" title="(disponible dans odoo v8.0)"><code class="xref py py-class docutils literal"><span class="pre">openerp.models.Model</span></code></a></p>
+<dd><p>Bases : <a class="reference external" href="https://www.odoo.com/documentation/8.0/reference/orm.html#openerp.models.Model" title="(disponible dans odoo v8.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">openerp.models.Model</span></code></a></p>
 <p>Worker</p>
 <dl class="method">
 <dt id="connector.queue.model.QueueWorker.assign_jobs">
 <code class="descname">assign_jobs</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/queue/model.html#QueueWorker.assign_jobs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.model.QueueWorker.assign_jobs" title="Lien permanent vers cette définition">¶</a></dt>
-<dd><p>Affecte <code class="docutils literal"><span class="pre">n</span></code> jobs au worker du processus en cours</p>
-<p><code class="docutils literal"><span class="pre">n</span></code> est <code class="docutils literal"><span class="pre">max_jobs</span></code> ou illimité si <code class="docutils literal"><span class="pre">max_jobs</span></code> est None</p>
+<dd><p>Affecte <code class="docutils literal notranslate"><span class="pre">n</span></code> jobs au worker du processus en cours</p>
+<p><code class="docutils literal notranslate"><span class="pre">n</span></code> est <code class="docutils literal notranslate"><span class="pre">max_jobs</span></code> ou illimité si <code class="docutils literal notranslate"><span class="pre">max_jobs</span></code> est None</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><strong>max_jobs</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(disponible dans Python v2.7)"><em>int</em></a>) – nombre maximal de jobs à affecter à un worker</td>
+<tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><strong>max_jobs</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(disponible dans Python v3.6)"><em>int</em></a>) – nombre maximal de jobs à affecter à un worker</td>
 </tr>
 </tbody>
 </table>
@@ -1391,13 +1394,13 @@ fields or field extensions.</p>
 <p>Chaque opération est atomique.</p>
 <div class="admonition warning">
 <p class="first admonition-title">Avertissement</p>
-<p class="last">valide la transaction. <code class="docutils literal"><span class="pre">cr.commit()</span></code> est appelé, donc veuillez appeler cette méthode dans vos propres transactions, pas dans la transaction principale d’OpenERP</p>
+<p class="last">valide la transaction. <code class="docutils literal notranslate"><span class="pre">cr.commit()</span></code> est appelé, donc veuillez appeler cette méthode dans vos propres transactions, pas dans la transaction principale d’OpenERP</p>
 </div>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><strong>max_jobs</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(disponible dans Python v2.7)"><em>int</em></a>) – nombre maximal de jobs à affecter à un worker</td>
+<tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><strong>max_jobs</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(disponible dans Python v3.6)"><em>int</em></a>) – nombre maximal de jobs à affecter à un worker</td>
 </tr>
 </tbody>
 </table>
@@ -1423,7 +1426,7 @@ fields or field extensions.</p>
 <dt id="connector.queue.model.QueueWorker.job_ids">
 <code class="descname">job_ids</code><a class="headerlink" href="#connector.queue.model.QueueWorker.job_ids" title="Lien permanent vers cette définition">¶</a></dt>
 <dd><p>One2many field; the value of such a field is the recordset of all the
-records in <code class="docutils literal"><span class="pre">comodel_name</span></code> such that the field <code class="docutils literal"><span class="pre">inverse_name</span></code> is equal to
+records in <code class="docutils literal notranslate"><span class="pre">comodel_name</span></code> such that the field <code class="docutils literal notranslate"><span class="pre">inverse_name</span></code> is equal to
 the current record.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1431,18 +1434,18 @@ the current record.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><ul class="first last simple">
 <li><strong>comodel_name</strong> – nom du modèle cible (chaîne de caractères)</li>
-<li><strong>inverse_name</strong> – name of the inverse <code class="docutils literal"><span class="pre">Many2one</span></code> field in
-<code class="docutils literal"><span class="pre">comodel_name</span></code> (string)</li>
+<li><strong>inverse_name</strong> – name of the inverse <code class="docutils literal notranslate"><span class="pre">Many2one</span></code> field in
+<code class="docutils literal notranslate"><span class="pre">comodel_name</span></code> (string)</li>
 <li><strong>domain</strong> – un <cite>domain</cite> optionnel à définir sur les valeurs candidates côté client (<cite>domain</cite> ou <cite>string</cite>)</li>
 <li><strong>context</strong> – un <cite>context</cite> optionnel à utiliser côté client à la prise en charge de ce champ (dictionnaire)</li>
-<li><strong>auto_join</strong> – si les JOINs sont générés lors de la recherche sur ce champ (booleen, par défaut <code class="docutils literal"><span class="pre">False</span></code>)</li>
+<li><strong>auto_join</strong> – si les JOINs sont générés lors de la recherche sur ce champ (booleen, par défaut <code class="docutils literal notranslate"><span class="pre">False</span></code>)</li>
 <li><strong>limit</strong> – limite optionnelle à utiliser à la lecture (entier)</li>
 </ul>
 </td>
 </tr>
 </tbody>
 </table>
-<p>The attributes <code class="docutils literal"><span class="pre">comodel_name</span></code> and <code class="docutils literal"><span class="pre">inverse_name</span></code> are mandatory except in
+<p>The attributes <code class="docutils literal notranslate"><span class="pre">comodel_name</span></code> and <code class="docutils literal notranslate"><span class="pre">inverse_name</span></code> are mandatory except in
 the case of related fields or field extensions.</p>
 </dd></dl>
 
@@ -1455,8 +1458,8 @@ the case of related fields or field extensions.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><ul class="first last simple">
-<li><strong>size</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(disponible dans Python v2.7)"><em>int</em></a>) – la taille maximum des valeurs stockées dans ce champ</li>
-<li><strong>translate</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#bool" title="(disponible dans Python v2.7)"><em>bool</em></a>) – si les valeurs de ce champ peuvent être traduites</li>
+<li><strong>size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(disponible dans Python v3.6)"><em>int</em></a>) – la taille maximum des valeurs stockées dans ce champ</li>
+<li><strong>translate</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(disponible dans Python v3.6)"><em>bool</em></a>) – si les valeurs de ce champ peuvent être traduites</li>
 </ul>
 </td>
 </tr>
@@ -1473,8 +1476,8 @@ the case of related fields or field extensions.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><ul class="first last simple">
-<li><strong>size</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(disponible dans Python v2.7)"><em>int</em></a>) – la taille maximum des valeurs stockées dans ce champ</li>
-<li><strong>translate</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#bool" title="(disponible dans Python v2.7)"><em>bool</em></a>) – si les valeurs de ce champ peuvent être traduites</li>
+<li><strong>size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(disponible dans Python v3.6)"><em>int</em></a>) – la taille maximum des valeurs stockées dans ce champ</li>
+<li><strong>translate</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(disponible dans Python v3.6)"><em>bool</em></a>) – si les valeurs de ce champ peuvent être traduites</li>
 </ul>
 </td>
 </tr>
@@ -1492,7 +1495,7 @@ the case of related fields or field extensions.</p>
 <dl class="class">
 <dt id="connector.queue.model.RequeueJob">
 <em class="property">class </em><code class="descclassname">connector.queue.model.</code><code class="descname">RequeueJob</code><span class="sig-paren">(</span><em>pool</em>, <em>cr</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/queue/model.html#RequeueJob"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.model.RequeueJob" title="Lien permanent vers cette définition">¶</a></dt>
-<dd><p>Bases : <code class="xref py py-class docutils literal"><span class="pre">openerp.models.TransientModel</span></code></p>
+<dd><p>Bases : <code class="xref py py-class docutils literal notranslate"><span class="pre">openerp.models.TransientModel</span></code></p>
 <dl class="attribute">
 <dt id="connector.queue.model.RequeueJob.job_ids">
 <code class="descname">job_ids</code><a class="headerlink" href="#connector.queue.model.RequeueJob.job_ids" title="Lien permanent vers cette définition">¶</a></dt>
@@ -1505,7 +1508,7 @@ the case of related fields or field extensions.</p>
 </tr>
 </tbody>
 </table>
-<p>The attribute <code class="docutils literal"><span class="pre">comodel_name</span></code> is mandatory except in the case of related
+<p>The attribute <code class="docutils literal notranslate"><span class="pre">comodel_name</span></code> is mandatory except in the case of related
 fields or field extensions.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1514,17 +1517,17 @@ fields or field extensions.</p>
 <tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><ul class="first last simple">
 <li><strong>relation</strong> – nom optionnel de la table qui stocke la relation dans la base de données (string)</li>
 <li><strong>column1</strong> – optional name of the column referring to «&nbsp;these&nbsp;» records
-in the table <code class="docutils literal"><span class="pre">relation</span></code> (string)</li>
+in the table <code class="docutils literal notranslate"><span class="pre">relation</span></code> (string)</li>
 <li><strong>column2</strong> – optional name of the column referring to «&nbsp;those&nbsp;» records
-in the table <code class="docutils literal"><span class="pre">relation</span></code> (string)</li>
+in the table <code class="docutils literal notranslate"><span class="pre">relation</span></code> (string)</li>
 </ul>
 </td>
 </tr>
 </tbody>
 </table>
-<p>The attributes <code class="docutils literal"><span class="pre">relation</span></code>, <code class="docutils literal"><span class="pre">column1</span></code> and <code class="docutils literal"><span class="pre">column2</span></code> are optional. If not
+<p>The attributes <code class="docutils literal notranslate"><span class="pre">relation</span></code>, <code class="docutils literal notranslate"><span class="pre">column1</span></code> and <code class="docutils literal notranslate"><span class="pre">column2</span></code> are optional. If not
 given, names are automatically generated from model names, provided
-<code class="docutils literal"><span class="pre">model_name</span></code> and <code class="docutils literal"><span class="pre">comodel_name</span></code> are different!</p>
+<code class="docutils literal notranslate"><span class="pre">model_name</span></code> and <code class="docutils literal notranslate"><span class="pre">comodel_name</span></code> are different!</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -1570,7 +1573,7 @@ given, names are automatically generated from model names, provided
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.6.<br/>
+      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.4.<br/>
     </p>
   </div>
 </footer>

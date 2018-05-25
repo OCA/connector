@@ -2,20 +2,12 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="fr">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Use the connector with multiprocessing workers &#8212; documentation Connector </title>
+    <title>Use the connector with multiprocessing workers &#8212; Documentation Connector </title>
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
-        VERSION:     '',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <script type="text/javascript" src="../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
@@ -44,8 +36,7 @@
   ga('send', 'pageview');
 </script>
 
-  </head>
-  <body>
+  </head><body>
 
   <div id="navbar" class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -264,25 +255,25 @@ work (sic) for you, in which case we will very much appreciate
 a github issue describing the problems you encountered.</p>
 </div>
 <p>Quand Odoo est lancé avec un seul processus, le worker de jobs fonctionne dans un thread.</p>
-<p>Quand Odoo est lancé en multi-processus grâce à l’option <code class="docutils literal"><span class="pre">--workers</span></code>, les workers de jobs ne sont pas des processus indépendants, mais vous devez les lancer séparément avec le script <code class="docutils literal"><span class="pre">openerp-connector-worker</span></code> situé dans le module <cite>connector</cite>.</p>
+<p>Quand Odoo est lancé en multi-processus grâce à l’option <code class="docutils literal notranslate"><span class="pre">--workers</span></code>, les workers de jobs ne sont pas des processus indépendants, mais vous devez les lancer séparément avec le script <code class="docutils literal notranslate"><span class="pre">openerp-connector-worker</span></code> situé dans le module <cite>connector</cite>.</p>
 <p>Il prend les mêmes arguments et fichier de configuration que le serveur Odoo.</p>
 <div class="admonition important">
 <p class="first admonition-title">Important</p>
-<p class="last">Le <cite>path</cite> de Python doit contenir le chemin vers le serveur Odoo quand <code class="docutils literal"><span class="pre">openerp-connector-worker</span></code> est lancé.</p>
+<p class="last">Le <cite>path</cite> de Python doit contenir le chemin vers le serveur Odoo quand <code class="docutils literal notranslate"><span class="pre">openerp-connector-worker</span></code> est lancé.</p>
 </div>
 <p>Exemple</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>$ PYTHONPATH=/path/to/server connector/openerp-connector-worker --config /path/to/configfile \
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ PYTHONPATH=/path/to/server connector/openerp-connector-worker --config /path/to/configfile \
   --workers=2 --logfile=/path/to/logfile
 </pre></div>
 </div>
 <p>L’action planifiée “Enqueue Jobs” est inutile en mode multi-processus.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">Le script <code class="docutils literal"><span class="pre">openerp-connector-worker</span></code> ne doit pas être lancé avec Odoo quand ce dernier ne fonctionne pas en multi-processus, parce que les signaux inter-processus ne seraient pas transmis.</p>
+<p class="last">Le script <code class="docutils literal notranslate"><span class="pre">openerp-connector-worker</span></code> ne doit pas être lancé avec Odoo quand ce dernier ne fonctionne pas en multi-processus, parce que les signaux inter-processus ne seraient pas transmis.</p>
 </div>
 <div class="admonition hint">
-<p class="first admonition-title">Indice</p>
-<p class="last">Le <cite>buildout</cite> du connecteur Magento contient des commandes intégrées pour lancer les workers : <a class="reference external" href="http://odoo-magento-connector.com/project/contribute.html#installation-with-buildout" title="(disponible dans Odoo Magento Connector v)"><span>Connector with batteries included (buildout)</span></a></p>
+<p class="first admonition-title">Indication</p>
+<p class="last">Le <cite>buildout</cite> du connecteur Magento contient des commandes intégrées pour lancer les workers : <a class="reference external" href="http://odoo-magento-connector.com/project/contribute.html#installation-with-buildout" title="(in Odoo Magento Connector)"><span>Connector with batteries included (buildout)</span></a></p>
 </div>
 </div>
 
@@ -306,7 +297,7 @@ a github issue describing the problems you encountered.</p>
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.6.<br/>
+      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.4.<br/>
     </p>
   </div>
 </footer>

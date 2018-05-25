@@ -2,20 +2,12 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="fr">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Concepts du connecteur &#8212; documentation Connector </title>
+    <title>Concepts du connecteur &#8212; Documentation Connector </title>
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
-        VERSION:     '',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <script type="text/javascript" src="../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
@@ -44,8 +36,7 @@
   ga('send', 'pageview');
 </script>
 
-  </head>
-  <body>
+  </head><body>
 
   <div id="navbar" class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -276,63 +267,63 @@
 <div class="section" id="events">
 <h2>Événements<a class="headerlink" href="#events" title="Lien permanent vers ce titre">¶</a></h2>
 <p>Les événements sont des points d’accroche dans Odoo sur lesquels on peut brancher des actions. Ils sont basés sur le motif de conception « Observateur ».</p>
-<p>L’idée de base est de déclarer un <a class="reference internal" href="../api/api_event.html#connector.event.Event" title="connector.event.Event"><code class="xref py py-class docutils literal"><span class="pre">Event</span></code></a>, par exemple <a class="reference internal" href="../api/api_event.html#connector.event.on_record_create" title="connector.event.on_record_create"><code class="xref py py-class docutils literal"><span class="pre">on_record_create</span></code></a>. Grâce à ceci, chaque connecteur a la possibilité d’abonner une ou plusieurs fonctions sur l’événement. La création de l’enregistrement doit alors exécuter <a class="reference internal" href="../api/api_event.html#connector.event.on_record_create" title="connector.event.on_record_create"><code class="xref py py-class docutils literal"><span class="pre">on_record_create</span></code></a>, qui va déclencher toutes les fonctions abonnées.</p>
+<p>L’idée de base est de déclarer un <a class="reference internal" href="../api/api_event.html#connector.event.Event" title="connector.event.Event"><code class="xref py py-class docutils literal notranslate"><span class="pre">Event</span></code></a>, par exemple <a class="reference internal" href="../api/api_event.html#connector.event.on_record_create" title="connector.event.on_record_create"><code class="xref py py-class docutils literal notranslate"><span class="pre">on_record_create</span></code></a>. Grâce à ceci, chaque connecteur a la possibilité d’abonner une ou plusieurs fonctions sur l’événement. La création de l’enregistrement doit alors exécuter <a class="reference internal" href="../api/api_event.html#connector.event.on_record_create" title="connector.event.on_record_create"><code class="xref py py-class docutils literal notranslate"><span class="pre">on_record_create</span></code></a>, qui va déclencher toutes les fonctions abonnées.</p>
 <p>Le même événement peut être partagé entre plusieurs connecteurs, facilitant ainsi leur implémentation. Par exemple, le module <a class="reference external" href="https://github.com/OCA/connector-ecommerce">connector_ecommerce</a> qui est une extension du framework avec des capacités courantes pour le e-commerce, ajoute ses propres événements dédiés au e-commerce.</p>
 <p>Un développeur de connecteur est principalement intéressé par :</p>
 <ul class="simple">
-<li>abonner une nouvelle fonction à un événement (voir <a class="reference internal" href="../api/api_event.html#connector.event.Event" title="connector.event.Event"><code class="xref py py-class docutils literal"><span class="pre">connector.event.Event</span></code></a>)</li>
-<li>désabonner une fonction d’un événement (voir <a class="reference internal" href="../api/api_event.html#connector.event.Event.unsubscribe" title="connector.event.Event.unsubscribe"><code class="xref py py-meth docutils literal"><span class="pre">connector.event.Event.unsubscribe()</span></code></a>)</li>
-<li>remplacer une fonction consommatrice par une autre (voir <a class="reference internal" href="../api/api_event.html#connector.event.Event" title="connector.event.Event"><code class="xref py py-class docutils literal"><span class="pre">connector.event.Event</span></code></a>)</li>
+<li>abonner une nouvelle fonction à un événement (voir <a class="reference internal" href="../api/api_event.html#connector.event.Event" title="connector.event.Event"><code class="xref py py-class docutils literal notranslate"><span class="pre">connector.event.Event</span></code></a>)</li>
+<li>désabonner une fonction d’un événement (voir <a class="reference internal" href="../api/api_event.html#connector.event.Event.unsubscribe" title="connector.event.Event.unsubscribe"><code class="xref py py-meth docutils literal notranslate"><span class="pre">connector.event.Event.unsubscribe()</span></code></a>)</li>
+<li>remplacer une fonction consommatrice par une autre (voir <a class="reference internal" href="../api/api_event.html#connector.event.Event" title="connector.event.Event"><code class="xref py py-class docutils literal notranslate"><span class="pre">connector.event.Event</span></code></a>)</li>
 <li>filtrer les événements par modèle, de sorte qu’une fonction abonnée ne soit déclenchée que pour l’événement d’un modèle particulier</li>
 </ul>
 </div>
 <div class="section" id="jobs-queue">
 <span id="id1"></span><h2>Queue de jobs<a class="headerlink" href="#jobs-queue" title="Lien permanent vers ce titre">¶</a></h2>
-<p>Cette section résume le principe des queues de jobs, qui s’articule autour de quelques classes, dans les grandes lignes, les <a class="reference internal" href="../api/api_queue.html#connector.queue.job.Job" title="connector.queue.job.Job"><code class="xref py py-class docutils literal"><span class="pre">Job</span></code></a> sont exécutés par un <a class="reference internal" href="../api/api_queue.html#connector.queue.worker.Worker" title="connector.queue.worker.Worker"><code class="xref py py-class docutils literal"><span class="pre">Worker</span></code></a> qui les stocke dans une <a class="reference internal" href="../api/api_queue.html#connector.queue.queue.JobsQueue" title="connector.queue.queue.JobsQueue"><code class="xref py py-class docutils literal"><span class="pre">JobsQueue</span></code></a>.</p>
-<p>Les jobs son stockés dans le modèle <a class="reference internal" href="../api/api_queue.html#connector.queue.model.QueueJob" title="connector.queue.model.QueueJob"><code class="xref py py-class docutils literal"><span class="pre">QueueJob</span></code></a>.</p>
-<p>Les workers sont stockés dans le modèle <a class="reference internal" href="../api/api_queue.html#connector.queue.model.QueueWorker" title="connector.queue.model.QueueWorker"><code class="xref py py-class docutils literal"><span class="pre">QueueWorker</span></code></a>. Un <a class="reference internal" href="../api/api_queue.html#connector.queue.worker.WorkerWatcher" title="connector.queue.worker.WorkerWatcher"><code class="xref py py-class docutils literal"><span class="pre">WorkerWatcher</span></code></a> crée ou détruit de nouveaux workers quand de nouveaux <code class="xref py py-class docutils literal"><span class="pre">Registry</span></code> sont créés ou détruits, et signale si les workers sont en vie ou non.</p>
-<p>Les jobs sont affectés à un worker dans la base de données par une tâche récurrente (cron). Le worker charge en mémoire tous les jobs qui lui sont affectés, dans la <a class="reference internal" href="../api/api_queue.html#connector.queue.queue.JobsQueue" title="connector.queue.queue.JobsQueue"><code class="xref py py-class docutils literal"><span class="pre">JobsQueue</span></code></a>. Quand un worker s’arrête, il est supprimé de la base de données, de façon que les jobs soient libérés et affectés à un autre worker.</p>
+<p>Cette section résume le principe des queues de jobs, qui s’articule autour de quelques classes, dans les grandes lignes, les <a class="reference internal" href="../api/api_queue.html#connector.queue.job.Job" title="connector.queue.job.Job"><code class="xref py py-class docutils literal notranslate"><span class="pre">Job</span></code></a> sont exécutés par un <a class="reference internal" href="../api/api_queue.html#connector.queue.worker.Worker" title="connector.queue.worker.Worker"><code class="xref py py-class docutils literal notranslate"><span class="pre">Worker</span></code></a> qui les stocke dans une <a class="reference internal" href="../api/api_queue.html#connector.queue.queue.JobsQueue" title="connector.queue.queue.JobsQueue"><code class="xref py py-class docutils literal notranslate"><span class="pre">JobsQueue</span></code></a>.</p>
+<p>Les jobs son stockés dans le modèle <a class="reference internal" href="../api/api_queue.html#connector.queue.model.QueueJob" title="connector.queue.model.QueueJob"><code class="xref py py-class docutils literal notranslate"><span class="pre">QueueJob</span></code></a>.</p>
+<p>Les workers sont stockés dans le modèle <a class="reference internal" href="../api/api_queue.html#connector.queue.model.QueueWorker" title="connector.queue.model.QueueWorker"><code class="xref py py-class docutils literal notranslate"><span class="pre">QueueWorker</span></code></a>. Un <a class="reference internal" href="../api/api_queue.html#connector.queue.worker.WorkerWatcher" title="connector.queue.worker.WorkerWatcher"><code class="xref py py-class docutils literal notranslate"><span class="pre">WorkerWatcher</span></code></a> crée ou détruit de nouveaux workers quand de nouveaux <code class="xref py py-class docutils literal notranslate"><span class="pre">Registry</span></code> sont créés ou détruits, et signale si les workers sont en vie ou non.</p>
+<p>Les jobs sont affectés à un worker dans la base de données par une tâche récurrente (cron). Le worker charge en mémoire tous les jobs qui lui sont affectés, dans la <a class="reference internal" href="../api/api_queue.html#connector.queue.queue.JobsQueue" title="connector.queue.queue.JobsQueue"><code class="xref py py-class docutils literal notranslate"><span class="pre">JobsQueue</span></code></a>. Quand un worker s’arrête, il est supprimé de la base de données, de façon que les jobs soient libérés et affectés à un autre worker.</p>
 <p>Si plusieurs processus Odoo sont en marche, il y a un worker par processus, mais seuls ceux qui sont des <em>CronWorkers</em> traitent les jobs dans la queue, pour éviter d’encombrer les processus HTTP.</p>
 <p>Un développeur de connecteur est principalement intéressé par :</p>
 <ul class="simple">
-<li>Déporter un job (voir le décorateur <a class="reference internal" href="../api/api_queue.html#connector.queue.job.job" title="connector.queue.job.job"><code class="xref py py-func docutils literal"><span class="pre">job()</span></code></a>)</li>
+<li>Déporter un job (voir le décorateur <a class="reference internal" href="../api/api_queue.html#connector.queue.job.job" title="connector.queue.job.job"><code class="xref py py-func docutils literal notranslate"><span class="pre">job()</span></code></a>)</li>
 </ul>
 </div>
 <div class="section" id="session">
 <h2>Session<a class="headerlink" href="#session" title="Lien permanent vers ce titre">¶</a></h2>
-<p>Une <a class="reference internal" href="../api/api_session.html#connector.session.ConnectorSession" title="connector.session.ConnectorSession"><code class="xref py py-class docutils literal"><span class="pre">ConnectorSession</span></code></a> est un conteneur pour les classiques <code class="docutils literal"><span class="pre">cr</span></code>, <code class="docutils literal"><span class="pre">uid</span></code>, <code class="docutils literal"><span class="pre">context</span></code> utilisés dans Odoo. Maintenant il contient l”<code class="docutils literal"><span class="pre">Environment</span></code> Odoo dans <code class="docutils literal"><span class="pre">self.env</span></code>. Nous les utilisons au sein des connecteurs.</p>
+<p>Une <a class="reference internal" href="../api/api_session.html#connector.session.ConnectorSession" title="connector.session.ConnectorSession"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConnectorSession</span></code></a> est un conteneur pour les classiques <code class="docutils literal notranslate"><span class="pre">cr</span></code>, <code class="docutils literal notranslate"><span class="pre">uid</span></code>, <code class="docutils literal notranslate"><span class="pre">context</span></code> utilisés dans Odoo. Maintenant il contient l”<code class="docutils literal notranslate"><span class="pre">Environment</span></code> Odoo dans <code class="docutils literal notranslate"><span class="pre">self.env</span></code>. Nous les utilisons au sein des connecteurs.</p>
 </div>
 <div class="section" id="backend">
 <h2>Backend<a class="headerlink" href="#backend" title="Lien permanent vers ce titre">¶</a></h2>
-<p>Un <a class="reference internal" href="../api/api_backend.html#connector.backend.Backend" title="connector.backend.Backend"><code class="xref py py-class docutils literal"><span class="pre">Backend</span></code></a> est une référence à un système ou service externe à OpenERP.</p>
-<p>Un backend est défini par un nom et une version. Par exemple <code class="docutils literal"><span class="pre">Magento</span> <span class="pre">1.7</span></code>.</p>
-<p>Une référence peut avoir un parent. L’instance <code class="docutils literal"><span class="pre">Magento</span> <span class="pre">1.7</span></code> est fille de <code class="docutils literal"><span class="pre">Magento</span></code>.</p>
-<p>Les classes <a class="reference internal" href="../api/api_connector.html#connector.connector.ConnectorUnit" title="connector.connector.ConnectorUnit"><code class="xref py py-class docutils literal"><span class="pre">ConnectorUnit</span></code></a> sont inscrites dans les backends. Ceci permet de récupérer une classe inscrite dans le backend. Si aucune classe n’est trouvée, elle est cherchée dans le backend parent.</p>
-<p>Il est toujours accompagné d’une sous-classe concrète du modèle <code class="xref py py-class docutils literal"><span class="pre">connector_backend</span></code>.</p>
+<p>Un <a class="reference internal" href="../api/api_backend.html#connector.backend.Backend" title="connector.backend.Backend"><code class="xref py py-class docutils literal notranslate"><span class="pre">Backend</span></code></a> est une référence à un système ou service externe à OpenERP.</p>
+<p>Un backend est défini par un nom et une version. Par exemple <code class="docutils literal notranslate"><span class="pre">Magento</span> <span class="pre">1.7</span></code>.</p>
+<p>Une référence peut avoir un parent. L’instance <code class="docutils literal notranslate"><span class="pre">Magento</span> <span class="pre">1.7</span></code> est fille de <code class="docutils literal notranslate"><span class="pre">Magento</span></code>.</p>
+<p>Les classes <a class="reference internal" href="../api/api_connector.html#connector.connector.ConnectorUnit" title="connector.connector.ConnectorUnit"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConnectorUnit</span></code></a> sont inscrites dans les backends. Ceci permet de récupérer une classe inscrite dans le backend. Si aucune classe n’est trouvée, elle est cherchée dans le backend parent.</p>
+<p>Il est toujours accompagné d’une sous-classe concrète du modèle <code class="xref py py-class docutils literal notranslate"><span class="pre">connector_backend</span></code>.</p>
 <p>Un développeur de connecteur est principalement intéressé par :</p>
 <ul class="simple">
-<li>Déclarer les backends (voir <a class="reference internal" href="../api/api_backend.html#connector.backend.Backend" title="connector.backend.Backend"><code class="xref py py-class docutils literal"><span class="pre">connector.backend.Backend</span></code></a>)</li>
-<li>Inscrire un ConnectorUnit dans un backend (voir <a class="reference internal" href="../api/api_backend.html#connector.backend.Backend" title="connector.backend.Backend"><code class="xref py py-class docutils literal"><span class="pre">connector.backend.Backend</span></code></a>)</li>
-<li>Remplacer un ConnectorUnit dans un backend (voir <a class="reference internal" href="../api/api_backend.html#connector.backend.Backend" title="connector.backend.Backend"><code class="xref py py-class docutils literal"><span class="pre">connector.backend.Backend</span></code></a>)</li>
-<li>Utiliser un ConnectorUnit différent pour une version différente d’un backend (voir <a class="reference internal" href="../api/api_backend.html#connector.backend.Backend" title="connector.backend.Backend"><code class="xref py py-class docutils literal"><span class="pre">connector.backend.Backend</span></code></a>)</li>
+<li>Déclarer les backends (voir <a class="reference internal" href="../api/api_backend.html#connector.backend.Backend" title="connector.backend.Backend"><code class="xref py py-class docutils literal notranslate"><span class="pre">connector.backend.Backend</span></code></a>)</li>
+<li>Inscrire un ConnectorUnit dans un backend (voir <a class="reference internal" href="../api/api_backend.html#connector.backend.Backend" title="connector.backend.Backend"><code class="xref py py-class docutils literal notranslate"><span class="pre">connector.backend.Backend</span></code></a>)</li>
+<li>Remplacer un ConnectorUnit dans un backend (voir <a class="reference internal" href="../api/api_backend.html#connector.backend.Backend" title="connector.backend.Backend"><code class="xref py py-class docutils literal notranslate"><span class="pre">connector.backend.Backend</span></code></a>)</li>
+<li>Utiliser un ConnectorUnit différent pour une version différente d’un backend (voir <a class="reference internal" href="../api/api_backend.html#connector.backend.Backend" title="connector.backend.Backend"><code class="xref py py-class docutils literal notranslate"><span class="pre">connector.backend.Backend</span></code></a>)</li>
 </ul>
 </div>
 <div class="section" id="environment">
 <h2>Environnement<a class="headerlink" href="#environment" title="Lien permanent vers ce titre">¶</a></h2>
-<p>Un <code class="xref py py-class docutils literal"><span class="pre">Environment</span></code> est le périmètre à partir duquel nous allons faire des synchronisations.</p>
-<p>Il contient un <a class="reference internal" href="../api/api_backend.html#connector.backend.Backend" title="connector.backend.Backend"><code class="xref py py-class docutils literal"><span class="pre">Backend</span></code></a>, un enregistrement d’une sous-classe concrète du modèle <code class="xref py py-class docutils literal"><span class="pre">connector_backend</span></code>, une <code class="xref py py-class docutils literal"><span class="pre">Session</span></code> et le nom du modèle avec lequel travailler.</p>
+<p>Un <code class="xref py py-class docutils literal notranslate"><span class="pre">Environment</span></code> est le périmètre à partir duquel nous allons faire des synchronisations.</p>
+<p>Il contient un <a class="reference internal" href="../api/api_backend.html#connector.backend.Backend" title="connector.backend.Backend"><code class="xref py py-class docutils literal notranslate"><span class="pre">Backend</span></code></a>, un enregistrement d’une sous-classe concrète du modèle <code class="xref py py-class docutils literal notranslate"><span class="pre">connector_backend</span></code>, une <code class="xref py py-class docutils literal notranslate"><span class="pre">Session</span></code> et le nom du modèle avec lequel travailler.</p>
 <p>Un développeur de connecteur est principalement intéressé par :</p>
 <ul class="simple">
-<li>Récupère un ConnectorUnit depuis un environnement (<a class="reference internal" href="../api/api_connector.html#connector.connector.ConnectorUnit.unit_for" title="connector.connector.ConnectorUnit.unit_for"><code class="xref py py-meth docutils literal"><span class="pre">connector.connector.ConnectorUnit.unit_for()</span></code></a>, <a class="reference internal" href="../api/api_connector.html#connector.connector.ConnectorUnit.binder_for" title="connector.connector.ConnectorUnit.binder_for"><code class="xref py py-meth docutils literal"><span class="pre">connector.connector.ConnectorUnit.binder_for()</span></code></a>)</li>
+<li>Récupère un ConnectorUnit depuis un environnement (<a class="reference internal" href="../api/api_connector.html#connector.connector.ConnectorUnit.unit_for" title="connector.connector.ConnectorUnit.unit_for"><code class="xref py py-meth docutils literal notranslate"><span class="pre">connector.connector.ConnectorUnit.unit_for()</span></code></a>, <a class="reference internal" href="../api/api_connector.html#connector.connector.ConnectorUnit.binder_for" title="connector.connector.ConnectorUnit.binder_for"><code class="xref py py-meth docutils literal notranslate"><span class="pre">connector.connector.ConnectorUnit.binder_for()</span></code></a>)</li>
 </ul>
 </div>
 <div class="section" id="connectorunit">
 <h2>ConnectorUnit<a class="headerlink" href="#connectorunit" title="Lien permanent vers ce titre">¶</a></h2>
-<p>Les <a class="reference internal" href="../api/api_connector.html#connector.connector.ConnectorUnit" title="connector.connector.ConnectorUnit"><code class="xref py py-class docutils literal"><span class="pre">ConnectorUnit</span></code></a> sont des classes modulables utilisées pour la synchronisation avec des systèmes externes.</p>
+<p>Les <a class="reference internal" href="../api/api_connector.html#connector.connector.ConnectorUnit" title="connector.connector.ConnectorUnit"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConnectorUnit</span></code></a> sont des classes modulables utilisées pour la synchronisation avec des systèmes externes.</p>
 <p>Le connecteur définit des classes de bases que vous pouvez trouver ci-dessous. Notez que vous pouvez aussi définir vos propres ConnectorUnits.</p>
 <div class="section" id="mappings">
 <h3>Mappings<a class="headerlink" href="#mappings" title="Lien permanent vers ce titre">¶</a></h3>
-<p>La classe de base est <a class="reference internal" href="../api/api_mapper.html#connector.unit.mapper.Mapper" title="connector.unit.mapper.Mapper"><code class="xref py py-class docutils literal"><span class="pre">connector.unit.mapper.Mapper</span></code></a>.</p>
+<p>La classe de base est <a class="reference internal" href="../api/api_mapper.html#connector.unit.mapper.Mapper" title="connector.unit.mapper.Mapper"><code class="xref py py-class docutils literal notranslate"><span class="pre">connector.unit.mapper.Mapper</span></code></a>.</p>
 <p>Un mapping convertit un enregistrement externe en un enregistrement Odoo et inversement.</p>
 <p>Il prend en charge :</p>
 <dl class="docutils">
@@ -346,17 +337,17 @@
 </div>
 <div class="section" id="synchronizers">
 <h3>Synchroniseurs<a class="headerlink" href="#synchronizers" title="Lien permanent vers ce titre">¶</a></h3>
-<p>La classe de base est <a class="reference internal" href="../api/api_synchronizer.html#connector.unit.synchronizer.Synchronizer" title="connector.unit.synchronizer.Synchronizer"><code class="xref py py-class docutils literal"><span class="pre">connector.unit.synchronizer.Synchronizer</span></code></a>.</p>
+<p>La classe de base est <a class="reference internal" href="../api/api_synchronizer.html#connector.unit.synchronizer.Synchronizer" title="connector.unit.synchronizer.Synchronizer"><code class="xref py py-class docutils literal notranslate"><span class="pre">connector.unit.synchronizer.Synchronizer</span></code></a>.</p>
 <p>Un synchroniseur définit le flux de la synchronisation avec un backend. Il peut correspondre à un import ou un export, une suppression de quelque chose, ou n’importe quoi d’autre. Par exemple, il peut utiliser les mappeurs pour convertir des données entre les deux systèmes, les adaptateurs de backend pour lire ou écrire les données sur le backend et les binders pour créer le lien entre eux.</p>
 </div>
 <div class="section" id="backend-adapters">
 <h3>Adaptateurs de backend<a class="headerlink" href="#backend-adapters" title="Lien permanent vers ce titre">¶</a></h3>
-<p>La classe de base est <a class="reference internal" href="../api/api_backend_adapter.html#connector.unit.backend_adapter.BackendAdapter" title="connector.unit.backend_adapter.BackendAdapter"><code class="xref py py-class docutils literal"><span class="pre">connector.unit.backend_adapter.BackendAdapter</span></code></a>.</p>
+<p>La classe de base est <a class="reference internal" href="../api/api_backend_adapter.html#connector.unit.backend_adapter.BackendAdapter" title="connector.unit.backend_adapter.BackendAdapter"><code class="xref py py-class docutils literal notranslate"><span class="pre">connector.unit.backend_adapter.BackendAdapter</span></code></a>.</p>
 <p>Un adaptateur externe possède une interface commune pour parler avec le backend. Il traduit les commandes basiques (recherche, lecture, écriture) vers le protocole utilisé par le backend.</p>
 </div>
 <div class="section" id="binders">
 <h3>Binders (Liants)<a class="headerlink" href="#binders" title="Lien permanent vers ce titre">¶</a></h3>
-<p>La classe de base est <a class="reference internal" href="../api/api_connector.html#connector.connector.Binder" title="connector.connector.Binder"><code class="xref py py-class docutils literal"><span class="pre">connector.connector.Binder</span></code></a>.</p>
+<p>La classe de base est <a class="reference internal" href="../api/api_connector.html#connector.connector.Binder" title="connector.connector.Binder"><code class="xref py py-class docutils literal notranslate"><span class="pre">connector.connector.Binder</span></code></a>.</p>
 <p>Binders are classes which know how to find the external ID for an
 Odoo ID, how to find the Odoo ID for an external ID and how to
 create the binding between them. A default implementation is
@@ -398,7 +389,7 @@ available and can be inherited if needed.</p>
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.6.<br/>
+      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.4.<br/>
     </p>
   </div>
 </footer>

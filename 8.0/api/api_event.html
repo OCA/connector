@@ -2,20 +2,12 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Event &#8212; Connector  documentation</title>
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
-        VERSION:     '',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <script type="text/javascript" src="../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
@@ -43,8 +35,7 @@
   ga('send', 'pageview');
 </script>
 
-  </head>
-  <body>
+  </head><body>
 
   <div id="navbar" class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -256,11 +247,11 @@
 <dl class="class">
 <dt id="connector.event.Event">
 <em class="property">class </em><code class="descclassname">connector.event.</code><code class="descname">Event</code><a class="reference internal" href="../_modules/connector/event.html#Event"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.event.Event" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/2/library/functions.html#object" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>An event contains consumers called when the event is fired.</p>
 <p>The events are able to filter the consumers to execute by model name.</p>
 <p>The usage of an event is to instantiate an <cite>Event</cite> object:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">on_my_event</span> <span class="o">=</span> <span class="n">Event</span><span class="p">()</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">on_my_event</span> <span class="o">=</span> <span class="n">Event</span><span class="p">()</span>
 </pre></div>
 </div>
 <p>An event always have at least the 2 following arguments:</p>
@@ -269,7 +260,7 @@
 <li>model_name</li>
 </ul>
 <p>Then to subscribe one or more consumers, an event has a function:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">do_something</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">do_something</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
     <span class="nb">print</span> <span class="s2">&quot;Event was fired with arguments: </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
 
 <span class="c1"># active on all models</span>
@@ -285,7 +276,7 @@
 </pre></div>
 </div>
 <p>We can also replace a consumer:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">do_something_product2</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">do_something_product2</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
     <span class="nb">print</span> <span class="s2">&quot;Consumer 2&quot;</span>
     <span class="nb">print</span> <span class="p">(</span><span class="s2">&quot;Event was fired on a product &quot;</span>
           <span class="s2">&quot;with arguments: </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">))</span>
@@ -295,11 +286,11 @@
 </pre></div>
 </div>
 <p>Finally, we fire the event:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">on_my_event</span><span class="o">.</span><span class="n">fire</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="s1">&#39;res.users&#39;</span><span class="p">,</span> <span class="s1">&#39;value_a&#39;</span><span class="p">,</span> <span class="s1">&#39;value_b&#39;</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">on_my_event</span><span class="o">.</span><span class="n">fire</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="s1">&#39;res.users&#39;</span><span class="p">,</span> <span class="s1">&#39;value_a&#39;</span><span class="p">,</span> <span class="s1">&#39;value_b&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>A consumer can be subscribed using a decorator:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="nd">@on_my_event</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@on_my_event</span>
 <span class="k">def</span> <span class="nf">do_other_thing</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
     <span class="nb">print</span> <span class="s1">&#39;foo&#39;</span>
 
@@ -320,8 +311,8 @@ which are subscribed on the same model</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>session</strong> (<code class="xref py py-class docutils literal"><span class="pre">connector.session.Session</span></code>) – current session</li>
-<li><strong>model_name</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – name of the model</li>
+<li><strong>session</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">connector.session.Session</span></code>) – current session</li>
+<li><strong>model_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.6)"><em>str</em></a>) – name of the model</li>
 <li><strong>args</strong> – arguments propagated to the consumer
 The second argument of <cite>args</cite> is the model name.
 The first argument is the session.</li>
@@ -351,7 +342,7 @@ for the model.</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>consumer</strong> – the function to register on the event</li>
 <li><strong>model_names</strong> – the consumer will be active only on these models,
-active on all models if <code class="docutils literal"><span class="pre">None</span></code></li>
+active on all models if <code class="docutils literal notranslate"><span class="pre">None</span></code></li>
 <li><strong>replacing</strong> – the function beeing replaced by this new one.</li>
 </ul>
 </td>
@@ -371,7 +362,7 @@ active on all models if <code class="docutils literal"><span class="pre">None</s
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>consumer</strong> – the function to unsubscribe</li>
 <li><strong>model_names</strong> – remove only for these models or remove a
-consumer which is active on all models if <code class="docutils literal"><span class="pre">None</span></code>.</li>
+consumer which is active on all models if <code class="docutils literal notranslate"><span class="pre">None</span></code>.</li>
 </ul>
 </td>
 </tr>
@@ -384,11 +375,11 @@ consumer which is active on all models if <code class="docutils literal"><span c
 <dl class="data">
 <dt id="connector.event.on_record_create">
 <code class="descclassname">connector.event.</code><code class="descname">on_record_create</code><em class="property"> = &lt;connector.event.Event object&gt;</em><a class="headerlink" href="#connector.event.on_record_create" title="Permalink to this definition">¶</a></dt>
-<dd><p><code class="docutils literal"><span class="pre">on_record_create</span></code> is fired when one record has been created.</p>
+<dd><p><code class="docutils literal notranslate"><span class="pre">on_record_create</span></code> is fired when one record has been created.</p>
 <p>Listeners should take the following arguments:</p>
 <blockquote>
 <div><ul class="simple">
-<li>session: <a class="reference internal" href="api_session.html#connector.session.ConnectorSession" title="connector.session.ConnectorSession"><code class="xref py py-class docutils literal"><span class="pre">ConnectorSession</span></code></a> object</li>
+<li>session: <a class="reference internal" href="api_session.html#connector.session.ConnectorSession" title="connector.session.ConnectorSession"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConnectorSession</span></code></a> object</li>
 <li>model_name: name of the model</li>
 <li>record_id: id of the created record</li>
 <li>vals:  field values updated, e.g {‘field_name’: field_value, …}</li>
@@ -399,11 +390,11 @@ consumer which is active on all models if <code class="docutils literal"><span c
 <dl class="data">
 <dt id="connector.event.on_record_unlink">
 <code class="descclassname">connector.event.</code><code class="descname">on_record_unlink</code><em class="property"> = &lt;connector.event.Event object&gt;</em><a class="headerlink" href="#connector.event.on_record_unlink" title="Permalink to this definition">¶</a></dt>
-<dd><p><code class="docutils literal"><span class="pre">on_record_unlink</span></code> is fired when one record has been deleted.</p>
+<dd><p><code class="docutils literal notranslate"><span class="pre">on_record_unlink</span></code> is fired when one record has been deleted.</p>
 <p>Listeners should take the following arguments:</p>
 <blockquote>
 <div><ul class="simple">
-<li>session: <a class="reference internal" href="api_session.html#connector.session.ConnectorSession" title="connector.session.ConnectorSession"><code class="xref py py-class docutils literal"><span class="pre">ConnectorSession</span></code></a> object</li>
+<li>session: <a class="reference internal" href="api_session.html#connector.session.ConnectorSession" title="connector.session.ConnectorSession"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConnectorSession</span></code></a> object</li>
 <li>model_name: name of the model</li>
 <li>record_id: id of the record</li>
 </ul>
@@ -413,11 +404,11 @@ consumer which is active on all models if <code class="docutils literal"><span c
 <dl class="data">
 <dt id="connector.event.on_record_write">
 <code class="descclassname">connector.event.</code><code class="descname">on_record_write</code><em class="property"> = &lt;connector.event.Event object&gt;</em><a class="headerlink" href="#connector.event.on_record_write" title="Permalink to this definition">¶</a></dt>
-<dd><p><code class="docutils literal"><span class="pre">on_record_write</span></code> is fired when one record has been updated.</p>
+<dd><p><code class="docutils literal notranslate"><span class="pre">on_record_write</span></code> is fired when one record has been updated.</p>
 <p>Listeners should take the following arguments:</p>
 <blockquote>
 <div><ul class="simple">
-<li>session: <a class="reference internal" href="api_session.html#connector.session.ConnectorSession" title="connector.session.ConnectorSession"><code class="xref py py-class docutils literal"><span class="pre">ConnectorSession</span></code></a> object</li>
+<li>session: <a class="reference internal" href="api_session.html#connector.session.ConnectorSession" title="connector.session.ConnectorSession"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConnectorSession</span></code></a> object</li>
 <li>model_name: name of the model</li>
 <li>record_id: id of the record</li>
 <li>vals:  field values of the new record, e.g {‘field_name’: field_value, …}</li>
@@ -447,7 +438,7 @@ consumer which is active on all models if <code class="docutils literal"><span c
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.6.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.4.<br/>
     </p>
   </div>
 </footer>

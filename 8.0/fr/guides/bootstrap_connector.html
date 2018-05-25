@@ -2,20 +2,12 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="fr">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Amorcer la création un nouveau connecteur &#8212; documentation Connector </title>
+    <title>Amorcer la création un nouveau connecteur &#8212; Documentation Connector </title>
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
-        VERSION:     '',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <script type="text/javascript" src="../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
@@ -44,8 +36,7 @@
   ga('send', 'pageview');
 </script>
 
-  </head>
-  <body>
+  </head><body>
 
   <div id="navbar" class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -274,8 +265,8 @@
 <div class="section" id="odoo-manifest">
 <h2>Odoo Manifest<a class="headerlink" href="#odoo-manifest" title="Lien permanent vers ce titre">¶</a></h2>
 <p>Comme nous voulons synchroniser Odoo avec une machine à café, nous allons nommer notre connecteur connector_coffee</p>
-<p>Tout d’abord, nous devons créer le module Odoo lui-même, en modifiant le fichier <code class="docutils literal"><span class="pre">connector_coffee/__openerp__.py</span></code>.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span> <span class="c1"># -*- coding: utf-8 -*-</span>
+<p>Tout d’abord, nous devons créer le module Odoo lui-même, en modifiant le fichier <code class="docutils literal notranslate"><span class="pre">connector_coffee/__openerp__.py</span></code>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span> <span class="c1"># -*- coding: utf-8 -*-</span>
  <span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;Coffee Connector&#39;</span><span class="p">,</span>
   <span class="s1">&#39;version&#39;</span><span class="p">:</span> <span class="s1">&#39;1.0.0&#39;</span><span class="p">,</span>
 <span class="hll">  <span class="s1">&#39;category&#39;</span><span class="p">:</span> <span class="s1">&#39;Connector&#39;</span><span class="p">,</span>
@@ -301,10 +292,10 @@
 </div>
 <p>Il y a 2 points à noter :</p>
 <ul class="simple">
-<li>Il dépend de <code class="docutils literal"><span class="pre">connector</span></code>.</li>
-<li>La catégorie du module doit être <code class="docutils literal"><span class="pre">Connector</span></code>.</li>
+<li>Il dépend de <code class="docutils literal notranslate"><span class="pre">connector</span></code>.</li>
+<li>La catégorie du module doit être <code class="docutils literal notranslate"><span class="pre">Connector</span></code>.</li>
 </ul>
-<p>Bien sûr, nous devons aussi créer le fichier <code class="docutils literal"><span class="pre">__init__.py</span></code> où nous plaçons les imports de nos modules Python.</p>
+<p>Bien sûr, nous devons aussi créer le fichier <code class="docutils literal notranslate"><span class="pre">__init__.py</span></code> où nous plaçons les imports de nos modules Python.</p>
 </div>
 <div class="section" id="declare-the-backends">
 <h2>Déclaration des backends<a class="headerlink" href="#declare-the-backends" title="Lien permanent vers ce titre">¶</a></h2>
@@ -316,8 +307,8 @@
 </ul>
 </div></blockquote>
 <p>Donc nous allons déclarer un backend <cite>coffee</cite>, l’entité générique, et un backend différent par version.</p>
-<p>Placez ceci dans <code class="docutils literal"><span class="pre">connector_coffee/backend.py</span></code>:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">openerp.addons.connector.backend</span> <span class="k">as</span> <span class="nn">backend</span>
+<p>Placez ceci dans <code class="docutils literal notranslate"><span class="pre">connector_coffee/backend.py</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">openerp.addons.connector.backend</span> <span class="k">as</span> <span class="nn">backend</span>
 
 
 <span class="n">coffee</span> <span class="o">=</span> <span class="n">backend</span><span class="o">.</span><span class="n">Backend</span><span class="p">(</span><span class="s1">&#39;coffee&#39;</span><span class="p">)</span>
@@ -329,8 +320,8 @@
 <div class="section" id="backend-model">
 <h2>Modèle du backend<a class="headerlink" href="#backend-model" title="Lien permanent vers ce titre">¶</a></h2>
 <p>Nous avons déclaré les backends, mais nous avons besoin d’un modèle pour les configurer.</p>
-<p>Nous créons un modèle <code class="docutils literal"><span class="pre">coffee.backend</span></code> qui est un <code class="docutils literal"><span class="pre">_inherit</span></code> de <code class="docutils literal"><span class="pre">connector.backend</span></code>. Dans <code class="docutils literal"><span class="pre">connector_coffee/coffee_model.py</span></code>:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">openerp</span> <span class="k">import</span> <span class="n">fields</span><span class="p">,</span> <span class="n">models</span><span class="p">,</span> <span class="n">api</span>
+<p>Nous créons un modèle <code class="docutils literal notranslate"><span class="pre">coffee.backend</span></code> qui est un <code class="docutils literal notranslate"><span class="pre">_inherit</span></code> de <code class="docutils literal notranslate"><span class="pre">connector.backend</span></code>. Dans <code class="docutils literal notranslate"><span class="pre">connector_coffee/coffee_model.py</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">openerp</span> <span class="k">import</span> <span class="n">fields</span><span class="p">,</span> <span class="n">models</span><span class="p">,</span> <span class="n">api</span>
 
 
 <span class="k">class</span> <span class="nc">CoffeeBackend</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
@@ -365,7 +356,7 @@
 </div>
 <p>Notes :</p>
 <ul class="simple">
-<li>Le <code class="docutils literal"><span class="pre">_backend_type</span></code> doit être le même que le nom du backend dans <a class="reference internal" href="#declare-the-backends">Déclaration des backends</a>.</li>
+<li>Le <code class="docutils literal notranslate"><span class="pre">_backend_type</span></code> doit être le même que le nom du backend dans <a class="reference internal" href="#declare-the-backends">Déclaration des backends</a>.</li>
 <li>les versions doivent être les mêmes que celles déclarées dans <a class="reference internal" href="#declare-the-backends">Déclaration des backends</a>.</li>
 <li>Nous pouvons ajouter dans ce modèle autant de champs que nous voulons pour configurer notre connexion ou configuration en rapport avec le backend.</li>
 </ul>
@@ -373,8 +364,8 @@
 <div class="section" id="abstract-binding">
 <h2>Binding abstrait<a class="headerlink" href="#abstract-binding" title="Lien permanent vers ce titre">¶</a></h2>
 <p>Si nous avons de nombreux <a class="reference internal" href="concepts.html#binding"><span class="std std-ref">Bindings (Liaisons)</span></a>, nous pouvons créer un modèle abstrait pour eux.</p>
-<p>Cela peut être comme suit (dans <code class="docutils literal"><span class="pre">connector_coffee/connector.py</span></code>):</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">openerp</span> <span class="k">import</span> <span class="n">models</span><span class="p">,</span> <span class="n">fields</span>
+<p>Cela peut être comme suit (dans <code class="docutils literal notranslate"><span class="pre">connector_coffee/connector.py</span></code>):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">openerp</span> <span class="k">import</span> <span class="n">models</span><span class="p">,</span> <span class="n">fields</span>
 
 
 <span class="k">class</span> <span class="nc">CoffeeBinding</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">AbstractModel</span><span class="p">):</span>
@@ -397,8 +388,8 @@
 </div>
 <div class="section" id="environment">
 <h2>Environnement<a class="headerlink" href="#environment" title="Lien permanent vers ce titre">¶</a></h2>
-<p>Nous aurons souvent besoin de créer un nouvel environnement avec lequel travailler. Je propose de créer une méthode auxiliaire qui le construit (dans <code class="docutils literal"><span class="pre">connector_coffee/connector.py</span></code>:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">openerp.addons.connector.connector</span> <span class="k">import</span> <span class="n">Environment</span>
+<p>Nous aurons souvent besoin de créer un nouvel environnement avec lequel travailler. Je propose de créer une méthode auxiliaire qui le construit (dans <code class="docutils literal notranslate"><span class="pre">connector_coffee/connector.py</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">openerp.addons.connector.connector</span> <span class="k">import</span> <span class="n">Environment</span>
 
 
 <span class="k">def</span> <span class="nf">get_environment</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">backend_id</span><span class="p">):</span>
@@ -418,8 +409,8 @@
 </div>
 <div class="section" id="checkpoints">
 <h2>Points de contrôle<a class="headerlink" href="#checkpoints" title="Lien permanent vers ce titre">¶</a></h2>
-<p>Quand de nouveaux enregistrements sont importés et ont besoin de vérification, des <a class="reference internal" href="concepts.html#checkpoint"><span class="std std-ref">Point de contrôle</span></a> sont créés. Je propose de créer aussi un auxiliaire dans <code class="docutils literal"><span class="pre">connector_coffee/connector.py</span></code>:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">openerp.addons.connector.checkpoint</span> <span class="k">import</span> <span class="n">checkpoint</span>
+<p>Quand de nouveaux enregistrements sont importés et ont besoin de vérification, des <a class="reference internal" href="concepts.html#checkpoint"><span class="std std-ref">Point de contrôle</span></a> sont créés. Je propose de créer aussi un auxiliaire dans <code class="docutils literal notranslate"><span class="pre">connector_coffee/connector.py</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">openerp.addons.connector.checkpoint</span> <span class="k">import</span> <span class="n">checkpoint</span>
 
 
 <span class="k">def</span> <span class="nf">add_checkpoint</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">record_id</span><span class="p">,</span> <span class="n">backend_id</span><span class="p">):</span>
@@ -455,7 +446,7 @@
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.6.<br/>
+      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.4.<br/>
     </p>
   </div>
 </footer>

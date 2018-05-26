@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: connector (8.0)\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-11-25 02:39+0000\n"
-"PO-Revision-Date: 2017-11-30 19:09+0000\n"
+"POT-Creation-Date: 2018-05-25 13:18+0000\n"
+"PO-Revision-Date: 2018-05-24 09:48+0000\n"
 "Last-Translator: OCA Transbot <transbot@odoo-community.org>\n"
 "Language-Team: Dutch (Netherlands) (http://www.transifex.com/oca/OCA-connector-8-0/language/nl_NL/)\n"
 "MIME-Version: 1.0\n"
@@ -298,7 +298,7 @@ msgstr ""
 #. module: connector
 #: view:queue.job:connector.view_queue_job_search selection:queue.job,state:0
 msgid "Failed"
-msgstr ""
+msgstr "Mislukt"
 
 #. module: connector
 #: field:connector.checkpoint,message_follower_ids:0

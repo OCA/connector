@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: connector (9.0)\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-08-22 13:21+0000\n"
-"PO-Revision-Date: 2017-08-21 15:13+0000\n"
+"POT-Creation-Date: 2018-05-25 13:31+0000\n"
+"PO-Revision-Date: 2018-05-24 09:48+0000\n"
 "Last-Translator: OCA Transbot <transbot@odoo-community.org>\n"
 "Language-Team: Catalan (http://www.transifex.com/oca/OCA-connector-9-0/language/ca/)\n"
 "MIME-Version: 1.0\n"
@@ -440,7 +440,7 @@ msgid "Job failed"
 msgstr "Job failed"
 
 #. module: connector
-#: code:addons/connector/controllers/main.py:105
+#: code:addons/connector/controllers/main.py:117
 #, python-format
 msgid "Job interrupted and set to Done: nothing to do."
 msgstr "Treball interromput i marcat com a fet: res a fer."

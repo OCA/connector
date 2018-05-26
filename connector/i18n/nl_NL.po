@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: connector (9.0)\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-21 07:53+0000\n"
-"PO-Revision-Date: 2017-09-22 21:03+0000\n"
+"POT-Creation-Date: 2018-05-25 13:31+0000\n"
+"PO-Revision-Date: 2018-05-24 09:48+0000\n"
 "Last-Translator: OCA Transbot <transbot@odoo-community.org>\n"
 "Language-Team: Dutch (Netherlands) (http://www.transifex.com/oca/OCA-connector-9-0/language/nl_NL/)\n"
 "MIME-Version: 1.0\n"
@@ -314,7 +314,7 @@ msgstr ""
 #: model:ir.ui.view,arch_db:connector.view_queue_job_search
 #: selection:queue.job,state:0
 msgid "Failed"
-msgstr ""
+msgstr "Mislukt"
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_message_follower_ids
@@ -436,7 +436,7 @@ msgid "Job failed"
 msgstr ""
 
 #. module: connector
-#: code:addons/connector/controllers/main.py:105
+#: code:addons/connector/controllers/main.py:117
 #, python-format
 msgid "Job interrupted and set to Done: nothing to do."
 msgstr ""

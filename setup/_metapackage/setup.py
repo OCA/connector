@@ -11,6 +11,7 @@ setuptools.setup(
         'odoo8-addon-connector',
         'odoo8-addon-connector_base_product',
         'odoo8-addon-connector_job_subscribe',
+        'odoo8-addon-mail_connector_queue',
     ],
     classifiers=[
         'Programming Language :: Python',

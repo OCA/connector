@@ -22,8 +22,9 @@ def send_mail(session, mail_id):
 
 def queue_job(session, record_id, vals):
     kwargs = {}
-    if 'priority' in vals:
-        kwargs['priority'] = vals['priority']
+    record = session.env['mail.mail'].browse(record_id)
+    if record.mail_job_priority:
+        kwargs['priority'] = record.mail_job_priority
     send_mail.delay(session, record_id, **kwargs)
 
 

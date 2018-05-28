@@ -9,4 +9,4 @@ class MailMail(models.Model):
 
     _inherit = 'mail.mail'
 
-    priority = fields.Integer()
+    mail_job_priority = fields.Integer(oldname='priority')

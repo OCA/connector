@@ -11,7 +11,7 @@
         <field name="inherit_id" ref="mail.view_mail_form"/>
         <field name="arch" type="xml">
             <field name="auto_delete" position="after">
-                <field name="priority"/>
+                <field name="mail_job_priority"/>
             </field>
         </field>
     </record>
@@ -22,7 +22,7 @@
         <field name="inherit_id" ref="mail.view_mail_tree"/>
         <field name="arch" type="xml">
             <field name="date" position="after">
-                <field name="priority"/>
+                <field name="mail_job_priority"/>
             </field>
         </field>
     </record>

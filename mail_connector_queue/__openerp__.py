@@ -6,7 +6,7 @@
     'name': 'Mail Connector Queue',
     'summary': """
         Email Connector Queue""",
-    'version': '8.0.1.0.0',
+    'version': '8.0.1.0.1',
     'license': 'AGPL-3',
     'author': 'ACSONE SA/NV,Odoo Community Association (OCA)',
     'website': 'https://github.com/OCA/connector',

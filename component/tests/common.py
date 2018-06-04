@@ -205,3 +205,19 @@ class TransactionComponentRegistryCase(common.TransactionCase,
     def teardown(self):
         common.TransactionCase.tearDown(self)
         ComponentRegistryCase.tearDown(self)
+
+
+class SavepointComponentRegistryCase(common.SavepointCase,
+                                     ComponentRegistryCase):
+    """ Adds Odoo Transaction with Savepoint in the base Component TestCase """
+
+    def setUp(self):
+        # resolve an inheritance issue (common.SavepointCase does not use
+        # super)
+        common.SavepointCase.setUp(self)
+        ComponentRegistryCase.setUp(self)
+        self.collection = self.env['collection.base']
+
+    def teardown(self):
+        common.SavepointCase.tearDown(self)
+        ComponentRegistryCase.tearDown(self)

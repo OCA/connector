@@ -39,6 +39,15 @@ A queue job is created automatically when a new ``mail.mail`` record is
 created in the ``outgoing`` state. A priority may be defined in the
 ``mail.mail`` record, which will be used as the job priority.
 
+Changelog
+=========
+
+8.0.1.0.1 (2018-05-28)
+~~~~~~~~~~~~~~~~~~~~~~~
+
+* Priority field renamed to ``mail_job_priority``
+* Priority can now be passed using the context
+
 Bug Tracker
 ===========
 

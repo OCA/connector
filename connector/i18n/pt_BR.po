@@ -1,7 +1,7 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
 # * connector
-# 
+#
 # Translators:
 # danimaribeiro <danimaribeiro@gmail.com>, 2015
 # danimaribeiro <danimaribeiro@gmail.com>, 2015
@@ -13,12 +13,14 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-05-01 16:08+0000\n"
 "PO-Revision-Date: 2017-05-18 19:18+0000\n"
-"Last-Translator: Rodrigo de Almeida Sottomaior Macedo <rmsolucoeseminformatic4@gmail.com>\n"
-"Language-Team: Portuguese (Brazil) (http://www.transifex.com/oca/OCA-connector-8-0/language/pt_BR/)\n"
+"Last-Translator: Rodrigo de Almeida Sottomaior Macedo "
+"<rmsolucoeseminformatic4@gmail.com>\n"
+"Language-Team: Portuguese (Brazil) (http://www.transifex.com/oca/OCA-"
+"connector-8-0/language/pt_BR/)\n"
+"Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Language: pt_BR\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #. module: connector
@@ -33,7 +35,15 @@ msgid ""
 "                    based on their type.  Only some need a manual\n"
 "                    review.</p>\n"
 "            "
-msgstr "<p>Nenhum registro para checar.</p>\n<p> Quando um conector importa novos registros que tem\nconfigurações ou revisões manuais, eles vão\naparecer nesta lista. Um vez que o registro é\nchecado, clique no botão 'Revisado'. </p>\n<p>Os conectores listam novos registros\nbaseados no seu tipo. Apenas alguns necessitam revisão.\nmanual.</p>"
+msgstr ""
+"<p>Nenhum registro para checar.</p>\n"
+"<p> Quando um conector importa novos registros que tem\n"
+"configurações ou revisões manuais, eles vão\n"
+"aparecer nesta lista. Um vez que o registro é\n"
+"checado, clique no botão 'Revisado'. </p>\n"
+"<p>Os conectores listam novos registros\n"
+"baseados no seu tipo. Apenas alguns necessitam revisão.\n"
+"manual.</p>"
 
 #. module: connector
 #: code:addons/connector/checkpoint/checkpoint.py:136
@@ -64,7 +74,8 @@ msgstr "Permite compartilhamento de documentos"
 #. module: connector
 #: field:connector.config.settings,module_google_calendar:0
 msgid "Allow the users to synchronize their calendar  with Google Calendar"
-msgstr "Permite os usuários sincronizar seus calendários com o Calendário Google"
+msgstr ""
+"Permite os usuários sincronizar seus calendários com o Calendário Google"
 
 #. module: connector
 #: field:connector.config.settings,module_base_import:0
@@ -337,7 +348,9 @@ msgstr "Agrupar por .."
 msgid ""
 "Holds the Chatter summary (number of messages, ...). This summary is "
 "directly in html format in order to be inserted in kanban views."
-msgstr "Detém o resumo conversa ( número de mensagens , ...). Este resumo é diretamente em formato html , a fim de ser inseridas nas vistas kanban ."
+msgstr ""
+"Detém o resumo conversa ( número de mensagens , ...). Este resumo é "
+"diretamente em formato html , a fim de ser inseridas nas vistas kanban ."
 
 #. module: connector
 #: field:connector.backend,id:0 field:connector.checkpoint,id:0
@@ -356,14 +369,17 @@ msgstr "Se novas mensagens checadas precisam de atenção"
 #. module: connector
 #: view:queue.job:connector.view_queue_job_form
 msgid "If the max. retries is 0, the number of retries is infinite."
-msgstr "Se o número máximo de tentativas é 0, o número de tentativas é ilimitado."
+msgstr ""
+"Se o número máximo de tentativas é 0, o número de tentativas é ilimitado."
 
 #. module: connector
 #: help:connector.config.settings,alias_domain:0
 msgid ""
 "If you have setup a catch-all email domain redirected to the Odoo server, "
 "enter the domain name here."
-msgstr "Se você configurou um catch-all dominio de email no Odoo, coloque aqui o domínio registrado."
+msgstr ""
+"Se você configurou um catch-all dominio de email no Odoo, coloque aqui o "
+"domínio registrado."
 
 #. module: connector
 #: field:connector.checkpoint,backend_id:0
@@ -639,7 +655,9 @@ msgstr "Marcar como revisado"
 msgid ""
 "Set the font into the report header, it will be used as default font in the "
 "RML reports of the user company"
-msgstr "Setar a fonte no cabeçalho do relatório, ela vai ser usada como padrão no relatórios RML da empresa"
+msgstr ""
+"Setar a fonte no cabeçalho do relatório, ela vai ser usada como padrão no "
+"relatórios RML da empresa"
 
 #. module: connector
 #: view:queue.job:connector.view_queue_job_form
@@ -657,7 +675,9 @@ msgstr "Compartilhe ou incorpore qualquer tela do Odoo"
 msgid ""
 "Something bad happened during the execution of the job. More details in the "
 "'Exception Information' section."
-msgstr "Alguma coisa ruim aconteceu durante a execução da tarefa. Mais informações na seção 'Informações do erro'"
+msgstr ""
+"Alguma coisa ruim aconteceu durante a execução da tarefa. Mais informações "
+"na seção 'Informações do erro'"
 
 #. module: connector
 #: field:queue.job,date_started:0 field:queue.worker,date_start:0
@@ -695,7 +715,9 @@ msgstr "Tarefa"
 msgid ""
 "The job will fail if the number of tries reach the max. retries.\n"
 "Retries are infinite when empty."
-msgstr "A tarefa vai falhar quando o número de tentativas chegar ao limite\nTentativas ilimitas quando vázio."
+msgstr ""
+"A tarefa vai falhar quando o número de tentativas chegar ao limite\n"
+"Tentativas ilimitas quando vázio."
 
 #. module: connector
 #: help:connector.checkpoint,backend_id:0
@@ -762,9 +784,13 @@ msgstr "Wizard para enfileirar uma llista de tarefas"
 #. module: connector
 #: help:connector.config.settings,module_multi_company:0
 msgid ""
-"Work in multi-company environments, with appropriate security access between companies.\n"
+"Work in multi-company environments, with appropriate security access between "
+"companies.\n"
 "-This installs the module multi_company."
-msgstr "Trabalhe com multiplas companhias, com as apropriadas regras de acesso entra as mesmas.\n- Isto instala o módulo multi_company."
+msgstr ""
+"Trabalhe com multiplas companhias, com as apropriadas regras de acesso entra "
+"as mesmas.\n"
+"- Isto instala o módulo multi_company."
 
 #. module: connector
 #: field:queue.job,worker_id:0

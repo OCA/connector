@@ -1,7 +1,7 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
 # * connector
-# 
+#
 # Translators:
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2014
 # Hotellook, 2014
@@ -12,11 +12,12 @@ msgstr ""
 "POT-Creation-Date: 2017-04-05 02:47+0000\n"
 "PO-Revision-Date: 2017-04-25 10:41+0000\n"
 "Last-Translator: OCA Transbot <transbot@odoo-community.org>\n"
-"Language-Team: Dutch (http://www.transifex.com/oca/OCA-connector-8-0/language/nl/)\n"
+"Language-Team: Dutch (http://www.transifex.com/oca/OCA-connector-8-0/"
+"language/nl/)\n"
+"Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Language: nl\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #. module: connector
@@ -31,7 +32,20 @@ msgid ""
 "                    based on their type.  Only some need a manual\n"
 "                    review.</p>\n"
 "            "
-msgstr "<p>Geen record om te controleren.</p>\n                <p> Wanneer een connector nieuwe records importeert, en zijn\n                    instellingen te maken of te controleren, dan worden deze\n                    in deze lijst weergegeven.  Wanneer een record is\n                    gecontroleerd, klikt u op de 'Gecontroleerd' knop.  </p>\n                <p>De connectors geven een lijst weer van nieuwe records\n                    welke gecontroleerd moeten worden, gebaseerd op type.  Sommige\n                    moeten handmatig worden gecontroleerd.</p>\n            "
+msgstr ""
+"<p>Geen record om te controleren.</p>\n"
+"                <p> Wanneer een connector nieuwe records importeert, en "
+"zijn\n"
+"                    instellingen te maken of te controleren, dan worden "
+"deze\n"
+"                    in deze lijst weergegeven.  Wanneer een record is\n"
+"                    gecontroleerd, klikt u op de 'Gecontroleerd' knop.  </"
+"p>\n"
+"                <p>De connectors geven een lijst weer van nieuwe records\n"
+"                    welke gecontroleerd moeten worden, gebaseerd op type.  "
+"Sommige\n"
+"                    moeten handmatig worden gecontroleerd.</p>\n"
+"            "
 
 #. module: connector
 #: code:addons/connector/checkpoint/checkpoint.py:136
@@ -335,7 +349,10 @@ msgstr "Groepeer op..."
 msgid ""
 "Holds the Chatter summary (number of messages, ...). This summary is "
 "directly in html format in order to be inserted in kanban views."
-msgstr "Bevat de samenvatting van de chatter (aantal berichten,...). Deze samenvatting is direct in html formaat om zo in de kanban weergave te worden ingevoegd."
+msgstr ""
+"Bevat de samenvatting van de chatter (aantal berichten,...). Deze "
+"samenvatting is direct in html formaat om zo in de kanban weergave te worden "
+"ingevoegd."
 
 #. module: connector
 #: field:connector.backend,id:0 field:connector.checkpoint,id:0
@@ -354,7 +371,9 @@ msgstr "Indien aangevinkt zullen nieuwe berichten uw aandacht vragen."
 #. module: connector
 #: view:queue.job:connector.view_queue_job_form
 msgid "If the max. retries is 0, the number of retries is infinite."
-msgstr "Indien het maximale aantal herhalingen nul is, is het aantal herhalingen oneindig."
+msgstr ""
+"Indien het maximale aantal herhalingen nul is, is het aantal herhalingen "
+"oneindig."
 
 #. module: connector
 #: help:connector.config.settings,alias_domain:0
@@ -693,7 +712,10 @@ msgstr "Taak"
 msgid ""
 "The job will fail if the number of tries reach the max. retries.\n"
 "Retries are infinite when empty."
-msgstr "de taak is mislukt als het aantal herhalingen het maximale aantal herhalingen bereikt.\nHerhalingen zijn oneindig indien leeg."
+msgstr ""
+"de taak is mislukt als het aantal herhalingen het maximale aantal "
+"herhalingen bereikt.\n"
+"Herhalingen zijn oneindig indien leeg."
 
 #. module: connector
 #: help:connector.checkpoint,backend_id:0
@@ -740,7 +762,8 @@ msgstr "Ongelezen berichten"
 #: field:connector.config.settings,module_auth_oauth:0
 msgid ""
 "Use external authentication providers, sign in with google, facebook, ..."
-msgstr "Gebruik externe authenticatie providers. Log in met Google, Facebook, ..."
+msgstr ""
+"Gebruik externe authenticatie providers. Log in met Google, Facebook, ..."
 
 #. module: connector
 #: field:queue.job,user_id:0
@@ -760,7 +783,8 @@ msgstr "Wizard om een selectie van taken opnieuw in te plannen"
 #. module: connector
 #: help:connector.config.settings,module_multi_company:0
 msgid ""
-"Work in multi-company environments, with appropriate security access between companies.\n"
+"Work in multi-company environments, with appropriate security access between "
+"companies.\n"
 "-This installs the module multi_company."
 msgstr ""
 

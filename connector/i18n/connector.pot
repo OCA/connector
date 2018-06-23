@@ -1,82 +1,76 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
-# * connector
+#	* connector
 #
-# Translators:
-# OCA Transbot <transbot@odoo-community.org>, 2018
-# Nicolas JEUDY <njeudy@panda-chi.io>, 2018
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 11.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-02-01 01:48+0000\n"
-"PO-Revision-Date: 2018-02-01 01:48+0000\n"
-"Last-Translator: Nicolas JEUDY <njeudy@panda-chi.io>, 2018\n"
-"Language-Team: French (https://www.transifex.com/oca/teams/23907/fr/)\n"
-"Language: fr\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"Plural-Forms: \n"
 
 #. module: connector
 #: code:addons/connector/models/checkpoint.py:119
 #, python-format
 msgid "A %s needs a review."
-msgstr "Un %s a besoin d'un contrôle."
+msgstr ""
 
 #. module: connector
 #: model:ir.ui.view,arch_db:connector.view_connector_config_settings
 msgid "Apply"
-msgstr "Appliquer"
+msgstr ""
 
 #. module: connector
 #: model:ir.ui.view,arch_db:connector.view_connector_config_settings
 msgid "Backends"
-msgstr "Backends"
+msgstr ""
 
 #. module: connector
 #: model:ir.ui.view,arch_db:connector.view_connector_checkpoint_review
 #: model:ir.ui.view,arch_db:connector.view_connector_config_settings
 msgid "Cancel"
-msgstr "Annuler"
+msgstr ""
 
 #. module: connector
 #: model:ir.ui.menu,name:connector.menu_checkpoint
 msgid "Checkpoint"
-msgstr "Points de contrôle"
+msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_review_checkpoint_ids
 msgid "Checkpoints"
-msgstr "Points de contrôle"
+msgstr ""
 
 #. module: connector
 #: model:ir.model,name:connector.model_connector_checkpoint_review
 msgid "Checkpoints Review"
-msgstr "Points de contrôle"
+msgstr ""
 
 #. module: connector
 #: model:ir.ui.view,arch_db:connector.view_connector_checkpoint_form
 msgid "Click on the"
-msgstr "Cliquer sur le"
+msgstr ""
 
 #. module: connector
 #: model:ir.actions.act_window,name:connector.action_connector_config_settings
 #: model:ir.ui.view,arch_db:connector.view_connector_config_settings
 msgid "Configure Connector"
-msgstr "Configurer les connecteurs"
+msgstr ""
 
 #. module: connector
 #: model:ir.module.category,name:connector.module_category_connector
 #: model:ir.ui.menu,name:connector.menu_connector_config_settings
 msgid "Connector"
-msgstr "Connecteur"
+msgstr ""
 
 #. module: connector
 #: model:ir.model,name:connector.model_connector_backend
 msgid "Connector Backend"
-msgstr "Backend de connecteur"
+msgstr ""
 
 #. module: connector
 #: model:ir.actions.act_window,name:connector.action_connector_checkpoint
@@ -85,38 +79,38 @@ msgstr "Backend de connecteur"
 #: model:ir.ui.view,arch_db:connector.view_connector_checkpoint_search
 #: model:ir.ui.view,arch_db:connector.view_connector_checkpoint_tree
 msgid "Connector Checkpoint"
-msgstr "Point de contrôle"
+msgstr ""
 
 #. module: connector
 #: model:ir.model,name:connector.model_connector_config_settings
 msgid "Connector Configuration"
-msgstr "Configuration du connecteur"
+msgstr ""
 
 #. module: connector
 #: model:res.groups,name:connector.group_connector_manager
 msgid "Connector Manager"
-msgstr "Responsable connecteurs"
+msgstr ""
 
 #. module: connector
 #: model:ir.ui.menu,name:connector.menu_connector
 #: model:ir.ui.menu,name:connector.menu_connector_root
 #: model:ir.ui.view,arch_db:connector.view_partner_connector_form
 msgid "Connectors"
-msgstr "Connecteurs"
+msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_create_uid
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_review_create_uid
 #: model:ir.model.fields,field_description:connector.field_connector_config_settings_create_uid
 msgid "Created by"
-msgstr "Créé par"
+msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_create_date
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_review_create_date
 #: model:ir.model.fields,field_description:connector.field_connector_config_settings_create_date
 msgid "Created on"
-msgstr "Créé le"
+msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_backend_display_name
@@ -125,17 +119,17 @@ msgstr "Créé le"
 #: model:ir.model.fields,field_description:connector.field_connector_config_settings_display_name
 #: model:ir.model.fields,field_description:connector.field_external_binding_display_name
 msgid "Display Name"
-msgstr "Nom affiché"
+msgstr ""
 
 #. module: connector
 #: model:ir.model,name:connector.model_external_binding
 msgid "External Binding (abstract)"
-msgstr "Lien Externe (abstrait)"
+msgstr ""
 
 #. module: connector
 #: model:ir.ui.view,arch_db:connector.view_connector_checkpoint_search
 msgid "Group By..."
-msgstr "Grouper par..."
+msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_backend_id
@@ -144,12 +138,12 @@ msgstr "Grouper par..."
 #: model:ir.model.fields,field_description:connector.field_connector_config_settings_id
 #: model:ir.model.fields,field_description:connector.field_external_binding_id
 msgid "ID"
-msgstr "ID"
+msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_backend_id
 msgid "Imported from"
-msgstr "Importé depuis"
+msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_backend___last_update
@@ -158,87 +152,87 @@ msgstr "Importé depuis"
 #: model:ir.model.fields,field_description:connector.field_connector_config_settings___last_update
 #: model:ir.model.fields,field_description:connector.field_external_binding___last_update
 msgid "Last Modified on"
-msgstr "Dernière modification le"
+msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_review_write_uid
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_write_uid
 #: model:ir.model.fields,field_description:connector.field_connector_config_settings_write_uid
 msgid "Last Updated by"
-msgstr "Dernière mise à jour par"
+msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_review_write_date
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_write_date
 #: model:ir.model.fields,field_description:connector.field_connector_config_settings_write_date
 msgid "Last Updated on"
-msgstr "Dernière mise à jour le"
+msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_test_binding_sync_date
 #: model:ir.model.fields,field_description:connector.field_external_binding_sync_date
 #: model:ir.model.fields,field_description:connector.field_no_inherits_binding_sync_date
 msgid "Last synchronization date"
-msgstr "Dernière date de synchronisation"
+msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_model_id
 #: model:ir.ui.view,arch_db:connector.view_connector_checkpoint_search
 msgid "Model"
-msgstr "Modèle"
+msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,help:connector.field_connector_checkpoint_name
 msgid "Name of the record to review"
-msgstr "Nom de l'enregistrement à contrôler"
+msgstr ""
 
 #. module: connector
 #: selection:connector.checkpoint,state:0
 #: model:ir.ui.view,arch_db:connector.view_connector_checkpoint_search
 msgid "Need Review"
-msgstr "Nécessite un contrôle"
+msgstr ""
 
 #. module: connector
 #: model:ir.actions.act_window,help:connector.action_connector_checkpoint
 msgid "No record to check."
-msgstr "Pas d'enregistrement à contrôler."
+msgstr ""
 
 #. module: connector
 #: model:ir.actions.client,name:connector.action_client_connector_menu
 msgid "Open Connector Menu"
-msgstr "Ouvrir le menu du connecteur"
+msgstr ""
 
 #. module: connector
 #: model:ir.model,name:connector.model_queue_job
 msgid "Queue Job"
-msgstr "Queue de jobs"
+msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_record
 msgid "Record"
-msgstr "Enregistrement"
+msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_record_id
 msgid "Record ID"
-msgstr "ID de ressource"
+msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_name
 msgid "Record Name"
-msgstr "Nom d'enregistrement"
+msgstr ""
 
 #. module: connector
 #: code:addons/connector/models/queue_job.py:31
 #, python-format
 msgid "Related Record"
-msgstr "Enregistrement lié"
+msgstr ""
 
 #. module: connector
 #: model:ir.actions.act_window,name:connector.action_connector_checkpoint_review
 #: model:ir.ui.view,arch_db:connector.view_connector_checkpoint_review
 msgid "Review Checkpoints"
-msgstr "Contrôler"
+msgstr ""
 
 #. module: connector
 #: selection:connector.checkpoint,state:0
@@ -246,64 +240,56 @@ msgstr "Contrôler"
 #: model:ir.ui.view,arch_db:connector.view_connector_checkpoint_search
 #: model:ir.ui.view,arch_db:connector.view_connector_checkpoint_tree
 msgid "Reviewed"
-msgstr "Contrôlé"
+msgstr ""
 
 #. module: connector
 #: model:ir.ui.view,arch_db:connector.view_connector_checkpoint_review
 msgid "Set as reviewed"
-msgstr "Passer en contrôlé"
+msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_state
 msgid "Status"
-msgstr "État"
+msgstr ""
 
 #. module: connector
 #: model:ir.actions.act_window,help:connector.action_connector_checkpoint
-msgid ""
-"The connectors list the new records to verify\n"
+msgid "The connectors list the new records to verify\n"
 "                based on their type.  Only some need a manual\n"
 "                review."
 msgstr ""
-"Les connecteurs listent les nouveaux enregistrements pour vérifier\n"
-" leur type. Seulement certaines nécessitent un contrôle\n"
-" manuel."
 
 #. module: connector
 #: model:ir.model.fields,help:connector.field_connector_checkpoint_backend_id
 msgid "The record has been imported from this backend"
-msgstr "La ressource a été importée depuis ce backend."
+msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,help:connector.field_connector_checkpoint_record
 msgid "The record to review."
-msgstr "L'enregistrement à contrôler."
+msgstr ""
 
 #. module: connector
 #: model:ir.ui.view,arch_db:connector.view_connector_checkpoint_review
 msgid "The selected checkpoints will be set as reviewed."
 msgstr ""
-"Les points de contrôle sélectionnés vont être considérés comme contrôlés."
 
 #. module: connector
 #: model:ir.actions.act_window,help:connector.action_connector_checkpoint
-msgid ""
-"When a connector imports new records which have\n"
+msgid "When a connector imports new records which have\n"
 "                configuration or reviews to do manually, they\n"
 "                will appear in this list.  Once a record has been\n"
 "                checked, click on the 'Reviewed' button."
 msgstr ""
-"Lorsqu'un connecteur importe de nouveaux enregistrements qui doivent être "
-"configurés ou révisés manuellement, ils apparaissent dans cette liste. Une "
-"fois qu'un enregistrement a été vérifié, cliquez sur le bouton \"Controlé\"."
 
 #. module: connector
 #: model:ir.ui.view,arch_db:connector.view_connector_checkpoint_review
 #: model:ir.ui.view,arch_db:connector.view_connector_config_settings
 msgid "or"
-msgstr "ou"
+msgstr ""
 
 #. module: connector
 #: model:ir.ui.view,arch_db:connector.view_connector_checkpoint_form
 msgid "to verify it:"
-msgstr "pour le vérifier:"
+msgstr ""
+

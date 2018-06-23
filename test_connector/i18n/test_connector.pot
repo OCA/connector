@@ -1,22 +1,17 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
-# * test_connector
+#	* test_connector
 #
-# Translators:
-# OCA Transbot <transbot@odoo-community.org>, 2017
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 10.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-03-10 03:36+0000\n"
-"PO-Revision-Date: 2017-03-10 03:36+0000\n"
-"Last-Translator: OCA Transbot <transbot@odoo-community.org>, 2017\n"
-"Language-Team: Italian (https://www.transifex.com/oca/teams/23907/it/)\n"
-"Language: it\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: \n"
 
 #. module: test_connector
 #: sql_constraint:connector.test.binding:0
@@ -36,7 +31,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:test_connector.field_no_inherits_binding_create_uid
 #: model:ir.model.fields,field_description:test_connector.field_test_backend_create_uid
 msgid "Created by"
-msgstr "Creato da"
+msgstr ""
 
 #. module: test_connector
 #: model:ir.model.fields,field_description:test_connector.field_connector_test_binding_create_date
@@ -44,7 +39,7 @@ msgstr "Creato da"
 #: model:ir.model.fields,field_description:test_connector.field_no_inherits_binding_create_date
 #: model:ir.model.fields,field_description:test_connector.field_test_backend_create_date
 msgid "Created on"
-msgstr "Creato il"
+msgstr ""
 
 #. module: test_connector
 #: model:ir.model.fields,field_description:test_connector.field_connector_test_binding_display_name
@@ -52,7 +47,7 @@ msgstr "Creato il"
 #: model:ir.model.fields,field_description:test_connector.field_no_inherits_binding_display_name
 #: model:ir.model.fields,field_description:test_connector.field_test_backend_display_name
 msgid "Display Name"
-msgstr "Nome da visualizzare"
+msgstr ""
 
 #. module: test_connector
 #: model:ir.model.fields,field_description:test_connector.field_connector_test_binding_id
@@ -60,7 +55,7 @@ msgstr "Nome da visualizzare"
 #: model:ir.model.fields,field_description:test_connector.field_no_inherits_binding_id
 #: model:ir.model.fields,field_description:test_connector.field_test_backend_id
 msgid "ID"
-msgstr "ID"
+msgstr ""
 
 #. module: test_connector
 #: model:ir.model.fields,field_description:test_connector.field_connector_test_binding_external_id
@@ -74,7 +69,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:test_connector.field_no_inherits_binding___last_update
 #: model:ir.model.fields,field_description:test_connector.field_test_backend___last_update
 msgid "Last Modified on"
-msgstr "Ultima modifica il"
+msgstr ""
 
 #. module: test_connector
 #: model:ir.model.fields,field_description:test_connector.field_connector_test_binding_write_uid
@@ -82,7 +77,7 @@ msgstr "Ultima modifica il"
 #: model:ir.model.fields,field_description:test_connector.field_no_inherits_binding_write_uid
 #: model:ir.model.fields,field_description:test_connector.field_test_backend_write_uid
 msgid "Last Updated by"
-msgstr "Ultimo aggiornamento di"
+msgstr ""
 
 #. module: test_connector
 #: model:ir.model.fields,field_description:test_connector.field_connector_test_binding_write_date
@@ -90,7 +85,7 @@ msgstr "Ultimo aggiornamento di"
 #: model:ir.model.fields,field_description:test_connector.field_no_inherits_binding_write_date
 #: model:ir.model.fields,field_description:test_connector.field_test_backend_write_date
 msgid "Last Updated on"
-msgstr "Ultimo aggiornamento il"
+msgstr ""
 
 #. module: test_connector
 #: model:ir.model.fields,field_description:test_connector.field_connector_test_binding_odoo_id
@@ -121,3 +116,4 @@ msgstr ""
 #: model:ir.model,name:test_connector.model_test_backend
 msgid "test.backend"
 msgstr ""
+

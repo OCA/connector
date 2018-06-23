@@ -1,7 +1,7 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
 # * connector
-# 
+#
 # Translators:
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2014
 # llum.birque@gmail.com <inactive+Quim@transifex.com>, 2015
@@ -14,11 +14,12 @@ msgstr ""
 "POT-Creation-Date: 2018-05-25 13:31+0000\n"
 "PO-Revision-Date: 2018-05-24 09:48+0000\n"
 "Last-Translator: OCA Transbot <transbot@odoo-community.org>\n"
-"Language-Team: Catalan (http://www.transifex.com/oca/OCA-connector-9-0/language/ca/)\n"
+"Language-Team: Catalan (http://www.transifex.com/oca/OCA-connector-9-0/"
+"language/ca/)\n"
+"Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Language: ca\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #. module: connector
@@ -26,7 +27,9 @@ msgstr ""
 msgid ""
 "<span class=\"oe_grey oe_inline\"> If the max. retries is 0, the number of "
 "retries is infinite.</span>"
-msgstr "<span class=\"oe_grey oe_inline\"> Si el màxim de re-intents és 0, el número de re-intents és infinit.</span>"
+msgstr ""
+"<span class=\"oe_grey oe_inline\"> Si el màxim de re-intents és 0, el número "
+"de re-intents és infinit.</span>"
 
 #. module: connector
 #: code:addons/connector/checkpoint/checkpoint.py:160
@@ -399,7 +402,9 @@ msgstr "Si no està marcat, només els usuaris invitats poden registrar-ser. "
 msgid ""
 "If you have setup a catch-all email domain redirected to the Odoo server, "
 "enter the domain name here."
-msgstr "Si tens un domini de concentració de emails redirigit cap al servidor de odoo, introdueix el nom del domini aquí."
+msgstr ""
+"Si tens un domini de concentració de emails redirigit cap al servidor de "
+"odoo, introdueix el nom del domini aquí."
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_backend_id
@@ -724,9 +729,18 @@ msgstr "Compartir les empreses a totes les companyies"
 #: model:ir.model.fields,help:connector.field_connector_config_settings_company_share_partner
 msgid ""
 "Share your partners to all companies defined in your instance.\n"
-" * Checked : Partners are visible for every companies, even if a company is defined on the partner.\n"
-" * Unchecked : Each company can see only its partner (partners where company is defined). Partners not related to a company are visible for all companies."
-msgstr "Compartir les vostres empreses cap a totes les companyies definides en la vostra instància.\n* Marcat: Les empreses són visibles per totes les companyies, fins i tot si una companyia està definida a l'empresa.\n* Desmarcat: Cada companyia només pot veure les seves empreses (empreses on la companyia està definida). Les empreses no relacionades amb una companyia seran visibles per totes les companyies. "
+" * Checked : Partners are visible for every companies, even if a company is "
+"defined on the partner.\n"
+" * Unchecked : Each company can see only its partner (partners where company "
+"is defined). Partners not related to a company are visible for all companies."
+msgstr ""
+"Compartir les vostres empreses cap a totes les companyies definides en la "
+"vostra instància.\n"
+"* Marcat: Les empreses són visibles per totes les companyies, fins i tot si "
+"una companyia està definida a l'empresa.\n"
+"* Desmarcat: Cada companyia només pot veure les seves empreses (empreses on "
+"la companyia està definida). Les empreses no relacionades amb una companyia "
+"seran visibles per totes les companyies. "
 
 #. module: connector
 #: code:addons/connector/queue/model.py:193
@@ -734,7 +748,9 @@ msgstr "Compartir les vostres empreses cap a totes les companyies definides en l
 msgid ""
 "Something bad happened during the execution of the job. More details in the "
 "'Exception Information' section."
-msgstr "Alguna cosa ha passat durant la execució de la tasca. Més detalls en la secció 'Informació d'excepcions'."
+msgstr ""
+"Alguna cosa ha passat durant la execució de la tasca. Més detalls en la "
+"secció 'Informació d'excepcions'."
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_queue_job_date_started
@@ -766,7 +782,8 @@ msgstr "Tasca"
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_config_settings_auth_signup_template_user_id
 msgid "Template user for new users created through signup"
-msgstr "Plantilla d'usuari per als nous usuaris creats després de registrar-se."
+msgstr ""
+"Plantilla d'usuari per als nous usuaris creats després de registrar-se."
 
 #. module: connector
 #: model:ir.actions.act_window,help:connector.action_connector_checkpoint
@@ -774,14 +791,19 @@ msgid ""
 "The connectors list the new records to verify\n"
 "                    based on their type.  Only some need a manual\n"
 "                    review."
-msgstr "Els connectors llisten els nou registres per verificar-se\nen funció del seu tipus. Només alguns necessiten una revisió\nmanual."
+msgstr ""
+"Els connectors llisten els nou registres per verificar-se\n"
+"en funció del seu tipus. Només alguns necessiten una revisió\n"
+"manual."
 
 #. module: connector
 #: model:ir.model.fields,help:connector.field_queue_job_max_retries
 msgid ""
 "The job will fail if the number of tries reach the max. retries.\n"
 "Retries are infinite when empty."
-msgstr "La tasca fallarà si el nombre de intents supera el màxim permès,\nEls reintents són infinits quan està buit."
+msgstr ""
+"La tasca fallarà si el nombre de intents supera el màxim permès,\n"
+"Els reintents són infinits quan està buit."
 
 #. module: connector
 #: model:ir.model.fields,help:connector.field_connector_checkpoint_backend_id
@@ -806,7 +828,9 @@ msgstr "Les tasques seleccionades seran reencuades"
 #. module: connector
 #: model:ir.model.fields,help:connector.field_connector_config_settings_auth_signup_reset_password
 msgid "This allows users to trigger a password reset from the Login page."
-msgstr "Això permet als usuaris a desencadenar un restabliment de contrasenya a la pàgina d'inici de sessió."
+msgstr ""
+"Això permet als usuaris a desencadenar un restabliment de contrasenya a la "
+"pàgina d'inici de sessió."
 
 #. module: connector
 #: model:ir.model.fields,help:connector.field_connector_config_settings_module_google_calendar
@@ -822,8 +846,12 @@ msgstr "Això instal·la el mòdul google_docs."
 #: model:ir.model.fields,help:connector.field_connector_config_settings_module_inter_company_rules
 msgid ""
 "This installs the module inter_company_rules.\n"
-" Configure company rules to automatically create SO/PO when one of your company sells/buys to another of your company."
-msgstr "Això instal·la el mòdul inter_company_rules.\nConfigureu les normes de la companyia per crear automàticament SO/PO quan una de les companyies compra/ven a una altra de les vostres companyies."
+" Configure company rules to automatically create SO/PO when one of your "
+"company sells/buys to another of your company."
+msgstr ""
+"Això instal·la el mòdul inter_company_rules.\n"
+"Configureu les normes de la companyia per crear automàticament SO/PO quan "
+"una de les companyies compra/ven a una altra de les vostres companyies."
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_queue_job_uuid
@@ -864,7 +892,11 @@ msgid ""
 "                    configuration or reviews to do manually, they\n"
 "                    will appear in this list.  Once a record has been\n"
 "                    checked, click on the 'Reviewed' button."
-msgstr "Quan el connector importa nous registres que tenen\nconfiguració o comentaris fets manualment, apareixeran \nen aquesta llista. Un cop un registre ha estat\nmarcat, feu clic al botó 'Revisat'. "
+msgstr ""
+"Quan el connector importa nous registres que tenen\n"
+"configuració o comentaris fets manualment, apareixeran \n"
+"en aquesta llista. Un cop un registre ha estat\n"
+"marcat, feu clic al botó 'Revisat'. "
 
 #. module: connector
 #: model:ir.model,name:connector.model_queue_requeue_job
@@ -874,9 +906,11 @@ msgstr "Assistent per reencuar tasaques"
 #. module: connector
 #: model:ir.model.fields,help:connector.field_connector_config_settings_group_light_multi_company
 msgid ""
-"Work in multi-company environments, with appropriate security access between"
-" companies."
-msgstr "Treballa en entorns de multi-companyia, amb l'accés de seguretat adient entre companyies. "
+"Work in multi-company environments, with appropriate security access between "
+"companies."
+msgstr ""
+"Treballa en entorns de multi-companyia, amb l'accés de seguretat adient "
+"entre companyies. "
 
 #. module: connector
 #: model:ir.ui.view,arch_db:connector.view_connector_checkpoint_review

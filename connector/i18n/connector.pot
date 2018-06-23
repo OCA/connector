@@ -1,28 +1,21 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
-# * connector
+#	* connector
 #
-# Translators:
 msgid ""
 msgstr ""
-"Project-Id-Version: connector (9.0)\n"
+"Project-Id-Version: Odoo Server 9.0c\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-12-24 00:47+0000\n"
-"PO-Revision-Date: 2016-12-27 08:26+0000\n"
-"Last-Translator: OCA Transbot <transbot@odoo-community.org>\n"
-"Language-Team: Korean (http://www.transifex.com/oca/OCA-connector-9-0/"
-"language/ko/)\n"
-"Language: ko\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Plural-Forms: nplurals=1; plural=0;\n"
+"Plural-Forms: \n"
 
 #. module: connector
 #: model:ir.ui.view,arch_db:connector.view_queue_job_form
-msgid ""
-"<span class=\"oe_grey oe_inline\"> If the max. retries is 0, the number of "
-"retries is infinite.</span>"
+msgid "<span class=\"oe_grey oe_inline\"> If the max. retries is 0, the number of retries is infinite.</span>"
 msgstr ""
 
 #. module: connector
@@ -87,7 +80,7 @@ msgstr ""
 #: model:ir.ui.view,arch_db:connector.view_connector_config_settings
 #: model:ir.ui.view,arch_db:connector.view_requeue_job
 msgid "Cancel"
-msgstr "취소"
+msgstr ""
 
 #. module: connector
 #: code:addons/connector/queue/model.py:287
@@ -107,7 +100,7 @@ msgstr ""
 #: model:ir.ui.view,arch_db:connector.view_queue_job_function_search
 #: model:ir.ui.view,arch_db:connector.view_queue_job_search
 msgid "Channel"
-msgstr "채널"
+msgstr ""
 
 #. module: connector
 #: sql_constraint:queue.job.channel:0
@@ -121,7 +114,7 @@ msgstr ""
 #: model:ir.ui.view,arch_db:connector.view_queue_job_channel_search
 #: model:ir.ui.view,arch_db:connector.view_queue_job_channel_tree
 msgid "Channels"
-msgstr "채널"
+msgstr ""
 
 #. module: connector
 #: model:ir.ui.menu,name:connector.menu_checkpoint
@@ -204,9 +197,8 @@ msgstr ""
 
 #. module: connector
 #: model:ir.ui.view,arch_db:connector.view_queue_job_search
-#, fuzzy
 msgid "Created Last 24h"
-msgstr "작성자"
+msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_create_uid
@@ -215,7 +207,7 @@ msgstr "작성자"
 #: model:ir.model.fields,field_description:connector.field_queue_job_channel_create_uid
 #: model:ir.model.fields,field_description:connector.field_queue_requeue_job_create_uid
 msgid "Created by"
-msgstr "작성자"
+msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_create_date
@@ -224,7 +216,7 @@ msgstr "작성자"
 #: model:ir.model.fields,field_description:connector.field_queue_job_channel_create_date
 #: model:ir.model.fields,field_description:connector.field_queue_requeue_job_create_date
 msgid "Created on"
-msgstr "작성일"
+msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_queue_job_retry
@@ -245,12 +237,12 @@ msgstr ""
 #: model:ir.model.fields,help:connector.field_connector_checkpoint_message_last_post
 #: model:ir.model.fields,help:connector.field_queue_job_message_last_post
 msgid "Date of the last message posted on the record."
-msgstr "레코드에 게시된 최근 메시지의 날짜."
+msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_queue_job_name
 msgid "Description"
-msgstr "설명"
+msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_backend_display_name
@@ -263,7 +255,7 @@ msgstr "설명"
 #: model:ir.model.fields,field_description:connector.field_queue_job_function_display_name
 #: model:ir.model.fields,field_description:connector.field_queue_requeue_job_display_name
 msgid "Display Name"
-msgstr "표시 이름"
+msgstr ""
 
 #. module: connector
 #: model:ir.ui.view,arch_db:connector.view_queue_job_search
@@ -322,7 +314,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_message_follower_ids
 #: model:ir.model.fields,field_description:connector.field_queue_job_message_follower_ids
 msgid "Followers"
-msgstr "팔로워"
+msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_message_channel_ids
@@ -355,7 +347,7 @@ msgstr ""
 #: model:ir.ui.view,arch_db:connector.view_queue_job_function_search
 #: model:ir.ui.view,arch_db:connector.view_queue_job_search
 msgid "Group By"
-msgstr "그룹화"
+msgstr ""
 
 #. module: connector
 #: model:ir.ui.view,arch_db:connector.view_connector_checkpoint_search
@@ -373,13 +365,13 @@ msgstr ""
 #: model:ir.model.fields,field_description:connector.field_queue_job_id
 #: model:ir.model.fields,field_description:connector.field_queue_requeue_job_id
 msgid "ID"
-msgstr "ID"
+msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,help:connector.field_connector_checkpoint_message_unread
 #: model:ir.model.fields,help:connector.field_queue_job_message_unread
 msgid "If checked new messages require your attention."
-msgstr "선택하면 새로운 메시지를 주목할 필요가 있습니다."
+msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,help:connector.field_connector_checkpoint_message_needaction
@@ -394,9 +386,7 @@ msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,help:connector.field_connector_config_settings_alias_domain
-msgid ""
-"If you have setup a catch-all email domain redirected to the Odoo server, "
-"enter the domain name here."
+msgid "If you have setup a catch-all email domain redirected to the Odoo server, enter the domain name here."
 msgstr ""
 
 #. module: connector
@@ -457,7 +447,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_message_last_post
 #: model:ir.model.fields,field_description:connector.field_queue_job_message_last_post
 msgid "Last Message Date"
-msgstr "최근 메시지 날짜"
+msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_backend___last_update
@@ -470,7 +460,7 @@ msgstr "최근 메시지 날짜"
 #: model:ir.model.fields,field_description:connector.field_queue_job_function___last_update
 #: model:ir.model.fields,field_description:connector.field_queue_requeue_job___last_update
 msgid "Last Modified on"
-msgstr "최근 수정"
+msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_review_write_uid
@@ -479,7 +469,7 @@ msgstr "최근 수정"
 #: model:ir.model.fields,field_description:connector.field_queue_job_channel_write_uid
 #: model:ir.model.fields,field_description:connector.field_queue_requeue_job_write_uid
 msgid "Last Updated by"
-msgstr "최근 갱신한 사람"
+msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_review_write_date
@@ -488,7 +478,7 @@ msgstr "최근 갱신한 사람"
 #: model:ir.model.fields,field_description:connector.field_queue_job_channel_write_date
 #: model:ir.model.fields,field_description:connector.field_queue_requeue_job_write_date
 msgid "Last Updated on"
-msgstr "최근 갱신 날짜"
+msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_external_binding_sync_date
@@ -525,7 +515,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_message_ids
 #: model:ir.model.fields,field_description:connector.field_queue_job_message_ids
 msgid "Messages"
-msgstr "메시지"
+msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_model_id
@@ -539,7 +529,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:connector.field_queue_job_channel_name
 #: model:ir.model.fields,field_description:connector.field_queue_job_function_name
 msgid "Name"
-msgstr "이름"
+msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,help:connector.field_connector_checkpoint_name
@@ -648,7 +638,7 @@ msgstr ""
 #. module: connector
 #: model:ir.ui.view,arch_db:connector.view_queue_job_form
 msgid "Related"
-msgstr "관련됨"
+msgstr ""
 
 #. module: connector
 #: code:addons/connector/related_action.py:48
@@ -720,20 +710,15 @@ msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,help:connector.field_connector_config_settings_company_share_partner
-msgid ""
-"Share your partners to all companies defined in your instance.\n"
-" * Checked : Partners are visible for every companies, even if a company is "
-"defined on the partner.\n"
-" * Unchecked : Each company can see only its partner (partners where company "
-"is defined). Partners not related to a company are visible for all companies."
+msgid "Share your partners to all companies defined in your instance.\n"
+" * Checked : Partners are visible for every companies, even if a company is defined on the partner.\n"
+" * Unchecked : Each company can see only its partner (partners where company is defined). Partners not related to a company are visible for all companies."
 msgstr ""
 
 #. module: connector
 #: code:addons/connector/queue/model.py:193
 #, python-format
-msgid ""
-"Something bad happened during the execution of the job. More details in the "
-"'Exception Information' section."
+msgid "Something bad happened during the execution of the job. More details in the 'Exception Information' section."
 msgstr ""
 
 #. module: connector
@@ -770,16 +755,14 @@ msgstr ""
 
 #. module: connector
 #: model:ir.actions.act_window,help:connector.action_connector_checkpoint
-msgid ""
-"The connectors list the new records to verify\n"
+msgid "The connectors list the new records to verify\n"
 "                    based on their type.  Only some need a manual\n"
 "                    review."
 msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,help:connector.field_queue_job_max_retries
-msgid ""
-"The job will fail if the number of tries reach the max. retries.\n"
+msgid "The job will fail if the number of tries reach the max. retries.\n"
 "Retries are infinite when empty."
 msgstr ""
 
@@ -820,10 +803,8 @@ msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,help:connector.field_connector_config_settings_module_inter_company_rules
-msgid ""
-"This installs the module inter_company_rules.\n"
-" Configure company rules to automatically create SO/PO when one of your "
-"company sells/buys to another of your company."
+msgid "This installs the module inter_company_rules.\n"
+" Configure company rules to automatically create SO/PO when one of your company sells/buys to another of your company."
 msgstr ""
 
 #. module: connector
@@ -835,7 +816,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_message_unread
 #: model:ir.model.fields,field_description:connector.field_queue_job_message_unread
 msgid "Unread Messages"
-msgstr "읽지 않은 메시지"
+msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_message_unread_counter
@@ -860,8 +841,7 @@ msgstr ""
 
 #. module: connector
 #: model:ir.actions.act_window,help:connector.action_connector_checkpoint
-msgid ""
-"When a connector imports new records which have\n"
+msgid "When a connector imports new records which have\n"
 "                    configuration or reviews to do manually, they\n"
 "                    will appear in this list.  Once a record has been\n"
 "                    checked, click on the 'Reviewed' button."
@@ -874,9 +854,7 @@ msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,help:connector.field_connector_config_settings_group_light_multi_company
-msgid ""
-"Work in multi-company environments, with appropriate security access between "
-"companies."
+msgid "Work in multi-company environments, with appropriate security access between companies."
 msgstr ""
 
 #. module: connector
@@ -884,9 +862,10 @@ msgstr ""
 #: model:ir.ui.view,arch_db:connector.view_connector_config_settings
 #: model:ir.ui.view,arch_db:connector.view_requeue_job
 msgid "or"
-msgstr "또는"
+msgstr ""
 
 #. module: connector
 #: model:ir.ui.view,arch_db:connector.view_connector_checkpoint_form
 msgid "to verify it:"
 msgstr ""
+

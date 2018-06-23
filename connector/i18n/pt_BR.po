@@ -1,7 +1,7 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
 # * connector
-# 
+#
 # Translators:
 # danimaribeiro <danimaribeiro@gmail.com>, 2015
 msgid ""
@@ -11,11 +11,12 @@ msgstr ""
 "POT-Creation-Date: 2017-11-04 02:26+0000\n"
 "PO-Revision-Date: 2017-11-14 00:47+0000\n"
 "Last-Translator: OCA Transbot <transbot@odoo-community.org>\n"
-"Language-Team: Portuguese (Brazil) (http://www.transifex.com/oca/OCA-connector-9-0/language/pt_BR/)\n"
+"Language-Team: Portuguese (Brazil) (http://www.transifex.com/oca/OCA-"
+"connector-9-0/language/pt_BR/)\n"
+"Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Language: pt_BR\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #. module: connector
@@ -60,7 +61,8 @@ msgstr ""
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_config_settings_module_google_calendar
 msgid "Allow the users to synchronize their calendar  with Google Calendar"
-msgstr "Permite os usuários sincronizar seus calendários com o Calendário Google"
+msgstr ""
+"Permite os usuários sincronizar seus calendários com o Calendário Google"
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_config_settings_module_base_import
@@ -396,7 +398,9 @@ msgstr ""
 msgid ""
 "If you have setup a catch-all email domain redirected to the Odoo server, "
 "enter the domain name here."
-msgstr "Se você configurou um catch-all dominio de email no Odoo, coloque aqui o domínio registrado."
+msgstr ""
+"Se você configurou um catch-all dominio de email no Odoo, coloque aqui o "
+"domínio registrado."
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_backend_id
@@ -437,7 +441,7 @@ msgid "Job failed"
 msgstr "Tarefa falhou"
 
 #. module: connector
-#: code:addons/connector/controllers/main.py:105
+#: code:addons/connector/controllers/main.py:117
 #, python-format
 msgid "Job interrupted and set to Done: nothing to do."
 msgstr ""
@@ -721,8 +725,10 @@ msgstr ""
 #: model:ir.model.fields,help:connector.field_connector_config_settings_company_share_partner
 msgid ""
 "Share your partners to all companies defined in your instance.\n"
-" * Checked : Partners are visible for every companies, even if a company is defined on the partner.\n"
-" * Unchecked : Each company can see only its partner (partners where company is defined). Partners not related to a company are visible for all companies."
+" * Checked : Partners are visible for every companies, even if a company is "
+"defined on the partner.\n"
+" * Unchecked : Each company can see only its partner (partners where company "
+"is defined). Partners not related to a company are visible for all companies."
 msgstr ""
 
 #. module: connector
@@ -731,7 +737,9 @@ msgstr ""
 msgid ""
 "Something bad happened during the execution of the job. More details in the "
 "'Exception Information' section."
-msgstr "Alguma coisa ruim aconteceu durante a execução da tarefa. Mais informações na seção 'Informações do erro'"
+msgstr ""
+"Alguma coisa ruim aconteceu durante a execução da tarefa. Mais informações "
+"na seção 'Informações do erro'"
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_queue_job_date_started
@@ -778,7 +786,9 @@ msgstr ""
 msgid ""
 "The job will fail if the number of tries reach the max. retries.\n"
 "Retries are infinite when empty."
-msgstr "A tarefa vai falhar quando o número de tentativas chegar ao limite\nTentativas ilimitas quando vázio."
+msgstr ""
+"A tarefa vai falhar quando o número de tentativas chegar ao limite\n"
+"Tentativas ilimitas quando vázio."
 
 #. module: connector
 #: model:ir.model.fields,help:connector.field_connector_checkpoint_backend_id
@@ -819,7 +829,8 @@ msgstr "Isto instala o módulo google_docs"
 #: model:ir.model.fields,help:connector.field_connector_config_settings_module_inter_company_rules
 msgid ""
 "This installs the module inter_company_rules.\n"
-" Configure company rules to automatically create SO/PO when one of your company sells/buys to another of your company."
+" Configure company rules to automatically create SO/PO when one of your "
+"company sells/buys to another of your company."
 msgstr ""
 
 #. module: connector
@@ -871,8 +882,8 @@ msgstr "Wizard para enfileirar uma llista de tarefas"
 #. module: connector
 #: model:ir.model.fields,help:connector.field_connector_config_settings_group_light_multi_company
 msgid ""
-"Work in multi-company environments, with appropriate security access between"
-" companies."
+"Work in multi-company environments, with appropriate security access between "
+"companies."
 msgstr ""
 
 #. module: connector

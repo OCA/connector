@@ -1,7 +1,7 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
 # * connector
-# 
+#
 # Translators:
 # Marijan Rajic <mr.rajic@gmail.com>, 2016
 msgid ""
@@ -11,19 +11,23 @@ msgstr ""
 "POT-Creation-Date: 2017-07-01 01:41+0000\n"
 "PO-Revision-Date: 2017-08-11 11:57+0000\n"
 "Last-Translator: OCA Transbot <transbot@odoo-community.org>\n"
-"Language-Team: Croatian (Croatia) (http://www.transifex.com/oca/OCA-connector-9-0/language/hr_HR/)\n"
+"Language-Team: Croatian (Croatia) (http://www.transifex.com/oca/OCA-"
+"connector-9-0/language/hr_HR/)\n"
+"Language: hr_HR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Language: hr_HR\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
 #. module: connector
 #: model:ir.ui.view,arch_db:connector.view_queue_job_form
 msgid ""
 "<span class=\"oe_grey oe_inline\"> If the max. retries is 0, the number of "
 "retries is infinite.</span>"
-msgstr "<span class=\"oe_grey oe_inline\"> Ukoliko je max. broj pokušaja 0, broj pokušaja postavljen je na beskonačno.</span>"
+msgstr ""
+"<span class=\"oe_grey oe_inline\"> Ukoliko je max. broj pokušaja 0, broj "
+"pokušaja postavljen je na beskonačno.</span>"
 
 #. module: connector
 #: code:addons/connector/checkpoint/checkpoint.py:160
@@ -90,13 +94,13 @@ msgid "Cancel"
 msgstr "Otkaži"
 
 #. module: connector
-#: code:addons/connector/queue/model.py:279
+#: code:addons/connector/queue/model.py:287
 #, python-format
 msgid "Cannot change the root channel"
 msgstr ""
 
 #. module: connector
-#: code:addons/connector/queue/model.py:286
+#: code:addons/connector/queue/model.py:294
 #, python-format
 msgid "Cannot remove the root channel"
 msgstr ""
@@ -336,6 +340,11 @@ msgid "Followers (Partners)"
 msgstr ""
 
 #. module: connector
+#: model:ir.model.fields,field_description:connector.field_queue_job_forced_channel
+msgid "Forced channel"
+msgstr ""
+
+#. module: connector
 #: model:ir.model.fields,field_description:connector.field_queue_job_func_name
 msgid "Func name"
 msgstr ""
@@ -432,7 +441,7 @@ msgid "Job failed"
 msgstr ""
 
 #. module: connector
-#: code:addons/connector/controllers/main.py:105
+#: code:addons/connector/controllers/main.py:117
 #, python-format
 msgid "Job interrupted and set to Done: nothing to do."
 msgstr ""
@@ -500,7 +509,7 @@ msgid "Manage multiple companies"
 msgstr ""
 
 #. module: connector
-#: code:addons/connector/queue/model.py:133
+#: code:addons/connector/queue/model.py:141
 #, python-format
 msgid "Manually set to done by %s"
 msgstr ""
@@ -547,7 +556,7 @@ msgid "Need Review"
 msgstr ""
 
 #. module: connector
-#: code:addons/connector/queue/model.py:109
+#: code:addons/connector/queue/model.py:117
 #, python-format
 msgid "No action available for this job"
 msgstr ""
@@ -586,7 +595,7 @@ msgid "Parent Channel"
 msgstr ""
 
 #. module: connector
-#: code:addons/connector/queue/model.py:271
+#: code:addons/connector/queue/model.py:279
 #, python-format
 msgid "Parent channel required."
 msgstr ""
@@ -716,12 +725,14 @@ msgstr ""
 #: model:ir.model.fields,help:connector.field_connector_config_settings_company_share_partner
 msgid ""
 "Share your partners to all companies defined in your instance.\n"
-" * Checked : Partners are visible for every companies, even if a company is defined on the partner.\n"
-" * Unchecked : Each company can see only its partner (partners where company is defined). Partners not related to a company are visible for all companies."
+" * Checked : Partners are visible for every companies, even if a company is "
+"defined on the partner.\n"
+" * Unchecked : Each company can see only its partner (partners where company "
+"is defined). Partners not related to a company are visible for all companies."
 msgstr ""
 
 #. module: connector
-#: code:addons/connector/queue/model.py:185
+#: code:addons/connector/queue/model.py:193
 #, python-format
 msgid ""
 "Something bad happened during the execution of the job. More details in the "
@@ -814,7 +825,8 @@ msgstr ""
 #: model:ir.model.fields,help:connector.field_connector_config_settings_module_inter_company_rules
 msgid ""
 "This installs the module inter_company_rules.\n"
-" Configure company rules to automatically create SO/PO when one of your company sells/buys to another of your company."
+" Configure company rules to automatically create SO/PO when one of your "
+"company sells/buys to another of your company."
 msgstr ""
 
 #. module: connector
@@ -866,8 +878,8 @@ msgstr ""
 #. module: connector
 #: model:ir.model.fields,help:connector.field_connector_config_settings_group_light_multi_company
 msgid ""
-"Work in multi-company environments, with appropriate security access between"
-" companies."
+"Work in multi-company environments, with appropriate security access between "
+"companies."
 msgstr ""
 
 #. module: connector

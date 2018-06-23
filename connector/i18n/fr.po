@@ -1,7 +1,7 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
 # * connector
-# 
+#
 # Translators:
 # Guewen Baconnier <guewen.baconnier@camptocamp.com>, 2015-2016
 # Maxime Chambreuil <mchambreuil@ursainfosystems.com>, 2015
@@ -14,11 +14,12 @@ msgstr ""
 "POT-Creation-Date: 2017-08-22 13:21+0000\n"
 "PO-Revision-Date: 2017-08-21 15:13+0000\n"
 "Last-Translator: OCA Transbot <transbot@odoo-community.org>\n"
-"Language-Team: French (http://www.transifex.com/oca/OCA-connector-9-0/language/fr/)\n"
+"Language-Team: French (http://www.transifex.com/oca/OCA-connector-9-0/"
+"language/fr/)\n"
+"Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Language: fr\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #. module: connector
@@ -26,7 +27,9 @@ msgstr ""
 msgid ""
 "<span class=\"oe_grey oe_inline\"> If the max. retries is 0, the number of "
 "retries is infinite.</span>"
-msgstr "<span class=\"oe_grey oe_inline\"> Si le maximum d'essais défini est 0, le nombre d'essais sera infini.</span>"
+msgstr ""
+"<span class=\"oe_grey oe_inline\"> Si le maximum d'essais défini est 0, le "
+"nombre d'essais sera infini.</span>"
 
 #. module: connector
 #: code:addons/connector/checkpoint/checkpoint.py:160
@@ -63,7 +66,9 @@ msgstr "Autoriser les utilisateurs externes à se connecter"
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_config_settings_module_google_calendar
 msgid "Allow the users to synchronize their calendar  with Google Calendar"
-msgstr "Permettre aux utiilisateurs de syncrhoniser leurs calendriers avec Google Calendar"
+msgstr ""
+"Permettre aux utiilisateurs de syncrhoniser leurs calendriers avec Google "
+"Calendar"
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_config_settings_module_base_import
@@ -399,7 +404,9 @@ msgstr ""
 msgid ""
 "If you have setup a catch-all email domain redirected to the Odoo server, "
 "enter the domain name here."
-msgstr "Si vous avez configuré un domaine de courriel catch-all récupéré par le serveur Odoo, entrer le nom de domaine ici."
+msgstr ""
+"Si vous avez configuré un domaine de courriel catch-all récupéré par le "
+"serveur Odoo, entrer le nom de domaine ici."
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_backend_id
@@ -440,7 +447,7 @@ msgid "Job failed"
 msgstr "Job échoué"
 
 #. module: connector
-#: code:addons/connector/controllers/main.py:105
+#: code:addons/connector/controllers/main.py:117
 #, python-format
 msgid "Job interrupted and set to Done: nothing to do."
 msgstr ""
@@ -724,8 +731,10 @@ msgstr ""
 #: model:ir.model.fields,help:connector.field_connector_config_settings_company_share_partner
 msgid ""
 "Share your partners to all companies defined in your instance.\n"
-" * Checked : Partners are visible for every companies, even if a company is defined on the partner.\n"
-" * Unchecked : Each company can see only its partner (partners where company is defined). Partners not related to a company are visible for all companies."
+" * Checked : Partners are visible for every companies, even if a company is "
+"defined on the partner.\n"
+" * Unchecked : Each company can see only its partner (partners where company "
+"is defined). Partners not related to a company are visible for all companies."
 msgstr ""
 
 #. module: connector
@@ -734,7 +743,9 @@ msgstr ""
 msgid ""
 "Something bad happened during the execution of the job. More details in the "
 "'Exception Information' section."
-msgstr "Un problème est survenu pendant l'exécution du job. Plus de détails sont affichés dans la section 'Informations sur l'exception'."
+msgstr ""
+"Un problème est survenu pendant l'exécution du job. Plus de détails sont "
+"affichés dans la section 'Informations sur l'exception'."
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_queue_job_date_started
@@ -774,14 +785,18 @@ msgid ""
 "The connectors list the new records to verify\n"
 "                    based on their type.  Only some need a manual\n"
 "                    review."
-msgstr "Les connecteurs listent les nouveaux enregistrements à vérifier\nbasé sur leur type. Seulement certains nécessitent un contrôle."
+msgstr ""
+"Les connecteurs listent les nouveaux enregistrements à vérifier\n"
+"basé sur leur type. Seulement certains nécessitent un contrôle."
 
 #. module: connector
 #: model:ir.model.fields,help:connector.field_queue_job_max_retries
 msgid ""
 "The job will fail if the number of tries reach the max. retries.\n"
 "Retries are infinite when empty."
-msgstr "Le job passer en \"échoué\" si le nombre de tentatives atteint le maximum.\nQuand le maxmim est vide, le nombre de tentatives est infini."
+msgstr ""
+"Le job passer en \"échoué\" si le nombre de tentatives atteint le maximum.\n"
+"Quand le maxmim est vide, le nombre de tentatives est infini."
 
 #. module: connector
 #: model:ir.model.fields,help:connector.field_connector_checkpoint_backend_id
@@ -796,7 +811,8 @@ msgstr "L'enregistrement à contrôler."
 #. module: connector
 #: model:ir.ui.view,arch_db:connector.view_connector_checkpoint_review
 msgid "The selected checkpoints will be set as reviewed."
-msgstr "Les points de contrôle sélectionnés vont être considérés comme contrôlés."
+msgstr ""
+"Les points de contrôle sélectionnés vont être considérés comme contrôlés."
 
 #. module: connector
 #: model:ir.ui.view,arch_db:connector.view_requeue_job
@@ -822,7 +838,8 @@ msgstr "Ceci installe le module google_docs."
 #: model:ir.model.fields,help:connector.field_connector_config_settings_module_inter_company_rules
 msgid ""
 "This installs the module inter_company_rules.\n"
-" Configure company rules to automatically create SO/PO when one of your company sells/buys to another of your company."
+" Configure company rules to automatically create SO/PO when one of your "
+"company sells/buys to another of your company."
 msgstr ""
 
 #. module: connector
@@ -864,7 +881,11 @@ msgid ""
 "                    configuration or reviews to do manually, they\n"
 "                    will appear in this list.  Once a record has been\n"
 "                    checked, click on the 'Reviewed' button."
-msgstr "Quand un connecteur import de nouveaux enregistrements\nqui ont des configurations ou des contrôles à faire manuellement,\nils vont apparaître dans cette liste. Une fois qu'un enregistrement a\nété vérifié, cliquez sur le bouton \"Contrôlé\"."
+msgstr ""
+"Quand un connecteur import de nouveaux enregistrements\n"
+"qui ont des configurations ou des contrôles à faire manuellement,\n"
+"ils vont apparaître dans cette liste. Une fois qu'un enregistrement a\n"
+"été vérifié, cliquez sur le bouton \"Contrôlé\"."
 
 #. module: connector
 #: model:ir.model,name:connector.model_queue_requeue_job
@@ -874,8 +895,8 @@ msgstr "Assistant pour remettre des jobs en queue"
 #. module: connector
 #: model:ir.model.fields,help:connector.field_connector_config_settings_group_light_multi_company
 msgid ""
-"Work in multi-company environments, with appropriate security access between"
-" companies."
+"Work in multi-company environments, with appropriate security access between "
+"companies."
 msgstr ""
 
 #. module: connector

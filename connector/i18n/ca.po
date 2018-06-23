@@ -1,7 +1,7 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
 # * connector
-# 
+#
 # Translators:
 # OCA Transbot <transbot@odoo-community.org>, 2018
 msgid ""
@@ -12,10 +12,10 @@ msgstr ""
 "PO-Revision-Date: 2018-01-15 07:15+0000\n"
 "Last-Translator: OCA Transbot <transbot@odoo-community.org>, 2018\n"
 "Language-Team: Catalan (https://www.transifex.com/oca/teams/23907/ca/)\n"
+"Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Language: ca\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #. module: connector
@@ -209,6 +209,13 @@ msgid "No record to check."
 msgstr ""
 
 #. module: connector
+#: code:addons/connector/components/synchronizer.py:185
+#: code:addons/connector/components/synchronizer.py:190
+#, python-format
+msgid "Nothing to export."
+msgstr ""
+
+#. module: connector
 #: model:ir.actions.client,name:connector.action_client_connector_menu
 msgid "Open Connector Menu"
 msgstr "Menú de Open Connector"
@@ -231,6 +238,12 @@ msgstr "ID Registre"
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_name
 msgid "Record Name"
+msgstr ""
+
+#. module: connector
+#: code:addons/connector/components/synchronizer.py:192
+#, python-format
+msgid "Record exported with ID %s on Backend."
 msgstr ""
 
 #. module: connector

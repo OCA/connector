@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: Odoo Server 10.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-01-15 07:15+0000\n"
-"PO-Revision-Date: 2018-06-27 06:47+0000\n"
+"PO-Revision-Date: 2018-06-28 07:13+0000\n"
 "Last-Translator: Guewen Baconnier <guewen.baconnier@camptocamp.com>\n"
 "Language-Team: French (https://www.transifex.com/oca/teams/23907/fr/)\n"
 "Language: fr\n"
@@ -292,7 +292,7 @@ msgstr ""
 #. module: connector
 #: model:ir.model.fields,help:connector.field_connector_checkpoint_backend_id
 msgid "The record has been imported from this backend"
-msgstr "La ressource a été importée depuis ce backend."
+msgstr "La ressource a été importée depuis ce backend"
 
 #. module: connector
 #: model:ir.model.fields,help:connector.field_connector_checkpoint_record

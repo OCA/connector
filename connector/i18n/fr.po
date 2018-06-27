@@ -10,14 +10,15 @@ msgstr ""
 "Project-Id-Version: Odoo Server 10.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-01-15 07:15+0000\n"
-"PO-Revision-Date: 2018-01-15 07:15+0000\n"
-"Last-Translator: OCA Transbot <transbot@odoo-community.org>, 2018\n"
+"PO-Revision-Date: 2018-06-27 06:47+0000\n"
+"Last-Translator: Guewen Baconnier <guewen.baconnier@camptocamp.com>\n"
 "Language-Team: French (https://www.transifex.com/oca/teams/23907/fr/)\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 3.0.1\n"
 
 #. module: connector
 #: code:addons/connector/checkpoint/checkpoint.py:119
@@ -214,7 +215,7 @@ msgstr "Pas d'enregistrement à contrôler."
 #: code:addons/connector/components/synchronizer.py:190
 #, python-format
 msgid "Nothing to export."
-msgstr ""
+msgstr "Rien à exporter."
 
 #. module: connector
 #: model:ir.actions.client,name:connector.action_client_connector_menu
@@ -245,7 +246,7 @@ msgstr "Nom d'enregistrement"
 #: code:addons/connector/components/synchronizer.py:192
 #, python-format
 msgid "Record exported with ID %s on Backend."
-msgstr ""
+msgstr "Enregistrement exporté avec l'ID %s sur le Backend."
 
 #. module: connector
 #: code:addons/connector/models/queue_job.py:34
@@ -317,6 +318,10 @@ msgid ""
 "                will appear in this list.  Once a record has been\n"
 "                checked, click on the 'Reviewed' button."
 msgstr ""
+"Quand un connecteur importe de nouveaux enregistrements ayant\n"
+"de la configuration ou de la revue à faire manuellement, ils\n"
+"vont apparaître dans cette liste. Une fois l'enregistrement\n"
+"contrôlé, cliquer sur le bouton \"Contrôler\"."
 
 #. module: connector
 #: model:ir.model,name:connector.model_base

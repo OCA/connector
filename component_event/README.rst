@@ -63,11 +63,6 @@ This module triggers 3 events:
 * ``on_record_unlink(record)``
 
 
-Known issues / Roadmap
-======================
-
-* ...
-
 Bug Tracker
 ===========
 

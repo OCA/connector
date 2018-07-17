@@ -48,11 +48,6 @@ component level)::
       external_data = backend_adapter.read(external_id)
 
 
-Known issues / Roadmap
-======================
-
-* ...
-
 Bug Tracker
 ===========
 

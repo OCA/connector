@@ -7,11 +7,13 @@
 Synchronizer
 ============
 
-A synchronizer orchestrates a synchronization with a backend.  It can be a
-record's import or export, a deletion of something, or anything else.  For
-instance, it will use the mappings to convert the data between both systems,
-the backend adapters to read or write data on the backend and the binders to
-create the link between them.
+A synchronizer orchestrates a synchronization with a backend. It's the actor
+who runs the flow and glues the logic of an import or export (or else).
+It uses other components for specialized tasks.
+
+For instance, it will use the mappings to convert the data between both
+systems, the backend adapters to read or write data on the backend and the
+binders to create the link between them.
 
 """
 import logging
@@ -33,7 +35,10 @@ class Synchronizer(AbstractComponent):
     _name = 'base.synchronizer'
     _inherit = 'base.connector'
 
+    #: usage of the component used as mapper, can be customized in sub-classes
     _base_mapper_usage = 'mapper'
+    #: usage of the component used as backend adapter,
+    #: can be customized in sub-classes
     _base_backend_adapter_usage = 'backend.adapter'
 
     def __init__(self, work_context):
@@ -101,6 +106,7 @@ class Exporter(AbstractComponent):
     _name = 'base.exporter'
     _inherit = 'base.synchronizer'
     _usage = 'exporter'
+    #: usage of the component used as mapper, can be customized in sub-classes
     _base_mapper_usage = 'export.mapper'
 
 
@@ -155,7 +161,7 @@ class GenericExporter(AbstractComponent):
         # The commit will also release the lock acquired on the binding
         # record
         if not odoo.tools.config['test_enable']:
-            self.env.cr.commit()  # noqa
+            self.env.cr.commit()  # pylint: disable=E8102
 
         self._after_export()
         return result
@@ -343,7 +349,7 @@ class GenericExporter(AbstractComponent):
                     # the same binding. It will be caught and
                     # raise a RetryableJobError.
                     if not odoo.tools.config['test_enable']:
-                        self.env.cr.commit()  # noqa
+                        self.env.cr.commit()  # pylint: disable=E8102
         else:
             # If my_backend_bind_ids does not exist we are typically in a
             # "direct" binding (the binding record is the same record).
@@ -414,6 +420,7 @@ class Importer(AbstractComponent):
     _name = 'base.importer'
     _inherit = 'base.synchronizer'
     _usage = 'importer'
+    #: usage of the component used as mapper, can be customized in sub-classes
     _base_mapper_usage = 'import.mapper'
 
 
@@ -422,4 +429,5 @@ class Deleter(AbstractComponent):
 
     _name = 'base.deleter'
     _inherit = 'base.synchronizer'
+    #: usage of the component used as mapper, can be customized in sub-classes
     _usage = 'deleter'

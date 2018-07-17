@@ -9,7 +9,7 @@ Backend Model
 *************
 
 
-.. autoclass:: connector.backend_model.ConnectorBackend
+.. autoclass:: connector.models.backend_model.ConnectorBackend
    :members:
    :undoc-members:
    :show-inheritance:
@@ -20,7 +20,5 @@ Backend Model
 Binding Model
 *************
 
-.. autoclass:: connector.backend_model.ExternalBinding
-   :members:
-   :undoc-members:
+.. autoclass:: connector.models.backend_model.ExternalBinding
    :show-inheritance:

@@ -2,20 +2,12 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Configuring channels and the job runner &#8212; Connector  documentation</title>
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
-        VERSION:     '',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
@@ -43,8 +35,7 @@
   ga('send', 'pageview');
 </script>
 
-  </head>
-  <body>
+  </head><body>
 
   <div id="navbar" class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -157,11 +148,9 @@
 <li class="toctree-l1"><a class="reference internal" href="../api/api_event.html">Events</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../api/api_event.html#module-odoo.addons.component_event.components.event">Components</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../api/api_event.html#module-odoo.addons.component_event.models.base">Odoo Models Extensions</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../api/api_event.html#module-odoo.addons.component_event.core">Internals</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../api/api_queue.html">Queue</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../api/api_queue.html#module-odoo.addons.queue_job.job">Job</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../api/api_queue.html#module-odoo.addons.queue_job.models.base">Models</a></li>
 </ul>
 </li>
@@ -273,41 +262,54 @@ added or updated in the queue_job table.</li>
 <li>It maintains an in-memory priority queue of jobs that
 is populated from the queue_job tables in all databases.</li>
 <li>It does not run jobs itself, but asks Odoo to run them through an
-anonymous <code class="docutils literal"><span class="pre">/queue_job/runjob</span></code> HTTP request. <a class="footnote-reference" href="#id3" id="id1">[1]</a></li>
+anonymous <code class="docutils literal notranslate"><span class="pre">/queue_job/runjob</span></code> HTTP request. <a class="footnote-reference" href="#id3" id="id1">[1]</a></li>
 </ul>
 </div>
 <div class="section" id="how-to-use-it">
 <h2>How to use it?<a class="headerlink" href="#how-to-use-it" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li>Optionally adjust your configuration through environment variables:<ul>
-<li>set <code class="docutils literal"><span class="pre">ODOO_QUEUE_JOB_CHANNELS=root:4</span></code> (or any other channels
-configuration) if you don’t want the default <code class="docutils literal"><span class="pre">root:1</span></code>.</li>
-<li>if <code class="docutils literal"><span class="pre">xmlrpc-port</span></code> is not set, you can set it for the jobrunner only with:
-<code class="docutils literal"><span class="pre">ODOO_QUEUE_JOB_PORT=8069</span></code>.</li>
+<li><code class="docutils literal notranslate"><span class="pre">ODOO_QUEUE_JOB_CHANNELS=root:4</span></code> (or any other channels
+configuration), default <code class="docutils literal notranslate"><span class="pre">root:1</span></code>.</li>
+<li><code class="docutils literal notranslate"><span class="pre">ODOO_QUEUE_JOB_SCHEME=https</span></code>, default <code class="docutils literal notranslate"><span class="pre">http</span></code>.</li>
+<li><code class="docutils literal notranslate"><span class="pre">ODOO_QUEUE_JOB_HOST=load-balancer</span></code>, default <code class="docutils literal notranslate"><span class="pre">localhost</span></code>.</li>
+<li><code class="docutils literal notranslate"><span class="pre">ODOO_QUEUE_JOB_PORT=443</span></code>, default <code class="docutils literal notranslate"><span class="pre">xmlrpc-port</span></code> or 8069.</li>
+<li><code class="docutils literal notranslate"><span class="pre">ODOO_QUEUE_JOB_HTTP_AUTH_USER=jobrunner</span></code>, default empty.</li>
+<li><code class="docutils literal notranslate"><span class="pre">ODOO_QUEUE_JOB_HTTP_AUTH_PASSWORD=s3cr3t</span></code>, default empty.</li>
 </ul>
 </li>
 <li>Alternatively, configure the channels through the Odoo configuration
 file, like:</li>
 </ul>
-<div class="highlight-ini"><div class="highlight"><pre><span></span><span class="k">[queue_job]</span>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[queue_job]</span>
 <span class="na">channels</span> <span class="o">=</span> <span class="s">root:4</span>
+<span class="na">scheme</span> <span class="o">=</span> <span class="s">https</span>
+<span class="na">host</span> <span class="o">=</span> <span class="s">load-balancer</span>
+<span class="na">port</span> <span class="o">=</span> <span class="s">443</span>
+<span class="na">http_auth_user</span> <span class="o">=</span> <span class="s">jobrunner</span>
+<span class="na">http_auth_password</span> <span class="o">=</span> <span class="s">s3cr3t</span>
 </pre></div>
 </div>
 <ul class="simple">
-<li>Or, if using <code class="docutils literal"><span class="pre">anybox.recipe.odoo</span></code>, add this to your buildout configuration:</li>
+<li>Or, if using <code class="docutils literal notranslate"><span class="pre">anybox.recipe.odoo</span></code>, add this to your buildout configuration:</li>
 </ul>
-<div class="highlight-ini"><div class="highlight"><pre><span></span><span class="k">[odoo]</span>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[odoo]</span>
 <span class="na">recipe</span> <span class="o">=</span> <span class="s">anybox.recipe.odoo</span>
 <span class="na">(...)</span>
 <span class="na">queue_job.channels</span> <span class="o">=</span> <span class="s">root:4</span>
+<span class="na">queue_job.scheme</span> <span class="o">=</span> <span class="s">https</span>
+<span class="na">queue_job.host</span> <span class="o">=</span> <span class="s">load-balancer</span>
+<span class="na">queue_job.port</span> <span class="o">=</span> <span class="s">443</span>
+<span class="na">queue_job.http_auth_user</span> <span class="o">=</span> <span class="s">jobrunner</span>
+<span class="na">queue_job.http_auth_password</span> <span class="o">=</span> <span class="s">s3cr3t</span>
 </pre></div>
 </div>
 <ul class="simple">
-<li>Start Odoo with <code class="docutils literal"><span class="pre">--load=web,web_kanban,queue_job</span></code>
-and <code class="docutils literal"><span class="pre">--workers</span></code> greater than 1 <a class="footnote-reference" href="#id4" id="id2">[2]</a>, or set the <code class="docutils literal"><span class="pre">server_wide_modules</span></code>
+<li>Start Odoo with <code class="docutils literal notranslate"><span class="pre">--load=web,web_kanban,queue_job</span></code>
+and <code class="docutils literal notranslate"><span class="pre">--workers</span></code> greater than 1 <a class="footnote-reference" href="#id4" id="id2">[2]</a>, or set the <code class="docutils literal notranslate"><span class="pre">server_wide_modules</span></code>
 option in The Odoo configuration file:</li>
 </ul>
-<div class="highlight-ini"><div class="highlight"><pre><span></span><span class="k">[options]</span>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[options]</span>
 <span class="na">(...)</span>
 <span class="na">workers</span> <span class="o">=</span> <span class="s">4</span>
 <span class="na">server_wide_modules</span> <span class="o">=</span> <span class="s">web,web_kanban,queue_job</span>
@@ -315,9 +317,9 @@ option in The Odoo configuration file:</li>
 </pre></div>
 </div>
 <ul class="simple">
-<li>Or, if using <code class="docutils literal"><span class="pre">anybox.recipe.odoo</span></code>:</li>
+<li>Or, if using <code class="docutils literal notranslate"><span class="pre">anybox.recipe.odoo</span></code>:</li>
 </ul>
-<div class="highlight-ini"><div class="highlight"><pre><span></span><span class="k">[odoo]</span>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[odoo]</span>
 <span class="na">recipe</span> <span class="o">=</span> <span class="s">anybox.recipe.odoo</span>
 <span class="na">(...)</span>
 <span class="na">options.workers</span> <span class="o">=</span> <span class="s">4</span>
@@ -327,7 +329,7 @@ option in The Odoo configuration file:</li>
 <ul class="simple">
 <li>Confirm the runner is starting correctly by checking the odoo log file:</li>
 </ul>
-<div class="highlight-none"><div class="highlight"><pre><span></span>...INFO...queue_job.jobrunner.runner: starting
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>...INFO...queue_job.jobrunner.runner: starting
 ...INFO...queue_job.jobrunner.runner: initializing database connections
 ...INFO...queue_job.jobrunner.runner: queue job runner ready for db &lt;dbname&gt;
 ...INFO...queue_job.jobrunner.runner: database connections ready
@@ -337,7 +339,7 @@ option in The Odoo configuration file:</li>
 <li>Create jobs (eg using base_import_async) and observe they
 start immediately and in parallel.</li>
 <li>Tip: to enable debug logging for the queue job, use
-<code class="docutils literal"><span class="pre">--log-handler=odoo.addons.queue_job:DEBUG</span></code></li>
+<code class="docutils literal notranslate"><span class="pre">--log-handler=odoo.addons.queue_job:DEBUG</span></code></li>
 </ul>
 </div>
 <div class="section" id="caveat">
@@ -349,7 +351,7 @@ existing database, Odoo must be restarted for the runner to detect it.</li>
 However, when the Odoo server crashes or is otherwise force-stopped,
 running jobs are interrupted while the runner has no chance to know
 they have been aborted. In such situations, jobs may remain in
-<code class="docutils literal"><span class="pre">started</span></code> or <code class="docutils literal"><span class="pre">enqueued</span></code> state after the Odoo server is halted.
+<code class="docutils literal notranslate"><span class="pre">started</span></code> or <code class="docutils literal notranslate"><span class="pre">enqueued</span></code> state after the Odoo server is halted.
 Since the runner has no way to know if they are actually running or
 not, and does not know for sure if it is safe to restart the jobs,
 it does not attempt to restart them automatically. Such stale jobs
@@ -357,7 +359,7 @@ therefore fill the running queue and prevent other jobs to start.
 You must therefore requeue them manually, either from the Jobs view,
 or by running the following SQL statement <em>before starting Odoo</em>:</li>
 </ul>
-<div class="highlight-sql"><div class="highlight"><pre><span></span><span class="k">update</span> <span class="n">queue_job</span> <span class="k">set</span> <span class="k">state</span><span class="o">=</span><span class="s1">&#39;pending&#39;</span> <span class="k">where</span> <span class="k">state</span> <span class="k">in</span> <span class="p">(</span><span class="s1">&#39;started&#39;</span><span class="p">,</span> <span class="s1">&#39;enqueued&#39;</span><span class="p">)</span>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">update</span> <span class="n">queue_job</span> <span class="k">set</span> <span class="k">state</span><span class="o">=</span><span class="s1">&#39;pending&#39;</span> <span class="k">where</span> <span class="k">state</span> <span class="k">in</span> <span class="p">(</span><span class="s1">&#39;started&#39;</span><span class="p">,</span> <span class="s1">&#39;enqueued&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p class="rubric">Footnotes</p>
@@ -392,7 +394,7 @@ parent channel where they wait for available capacity and so on.</p>
 <p>Job channels can be visualized as water channels with a given flow
 limit (= capacity). Channels are joined together in a downstream channel
 and the flow limit of the downstream channel limits upstream channels.:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">---------------------+</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">---------------------+</span>
                      <span class="o">|</span>
                      <span class="o">|</span>
  <span class="n">Ch</span><span class="o">.</span> <span class="n">A</span> <span class="n">C</span><span class="p">:</span><span class="mi">4</span><span class="p">,</span><span class="n">Q</span><span class="p">:</span><span class="mi">12</span><span class="p">,</span><span class="n">R</span><span class="p">:</span><span class="mi">4</span>  <span class="o">+-----------------------</span>
@@ -425,22 +427,22 @@ without risking to overflow the system.</p>
 </div>
 <div class="section" id="how-to-configure-channels">
 <h2>How to configure Channels?<a class="headerlink" href="#how-to-configure-channels" title="Permalink to this headline">¶</a></h2>
-<p>The <code class="docutils literal"><span class="pre">ODOO_QUEUE_JOB_CHANNELS</span></code> environment variable must be
+<p>The <code class="docutils literal notranslate"><span class="pre">ODOO_QUEUE_JOB_CHANNELS</span></code> environment variable must be
 set before starting Odoo in order to enable the job runner
 and configure the capacity of the channels.</p>
-<p>The general syntax is <code class="docutils literal"><span class="pre">channel(.subchannel)*(:capacity(:key(=value)?)*)?,...</span></code>.</p>
+<p>The general syntax is <code class="docutils literal notranslate"><span class="pre">channel(.subchannel)*(:capacity(:key(=value)?)*)?,...</span></code>.</p>
 <p>Intermediate subchannels which are not configured explicitly are autocreated
 with an unlimited capacity (except the root channel which if not configured gets
 a default capacity of 1).</p>
 <p>A delay in seconds between jobs can be set at the channel level with
-the <code class="docutils literal"><span class="pre">throttle</span></code> key.</p>
-<p>Example <code class="docutils literal"><span class="pre">ODOO_QUEUE_JOB_CHANNELS</span></code>:</p>
+the <code class="docutils literal notranslate"><span class="pre">throttle</span></code> key.</p>
+<p>Example <code class="docutils literal notranslate"><span class="pre">ODOO_QUEUE_JOB_CHANNELS</span></code>:</p>
 <ul class="simple">
-<li><code class="docutils literal"><span class="pre">root:4</span></code>: allow up to 4 concurrent jobs in the root channel.</li>
-<li><code class="docutils literal"><span class="pre">root:4,root.sub:2</span></code>: allow up to 4 concurrent jobs in the root channel and
-up to 2 concurrent jobs in the channel named <code class="docutils literal"><span class="pre">root.sub</span></code>.</li>
-<li><code class="docutils literal"><span class="pre">sub:2</span></code>: the same.</li>
-<li><code class="docutils literal"><span class="pre">root:4:throttle=2</span></code>: wait at least 2 seconds before starting the next job</li>
+<li><code class="docutils literal notranslate"><span class="pre">root:4</span></code>: allow up to 4 concurrent jobs in the root channel.</li>
+<li><code class="docutils literal notranslate"><span class="pre">root:4,root.sub:2</span></code>: allow up to 4 concurrent jobs in the root channel and
+up to 2 concurrent jobs in the channel named <code class="docutils literal notranslate"><span class="pre">root.sub</span></code>.</li>
+<li><code class="docutils literal notranslate"><span class="pre">sub:2</span></code>: the same.</li>
+<li><code class="docutils literal notranslate"><span class="pre">root:4:throttle=2</span></code>: wait at least 2 seconds before starting the next job</li>
 </ul>
 </div>
 </div>
@@ -465,7 +467,7 @@ up to 2 concurrent jobs in the channel named <code class="docutils literal"><spa
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.6.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.6.<br/>
     </p>
   </div>
 </footer>

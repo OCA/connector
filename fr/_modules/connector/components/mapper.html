@@ -2,20 +2,12 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="fr">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>connector.components.mapper &#8212; documentation Connector </title>
+    <title>connector.components.mapper &#8212; Documentation Connector </title>
     <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../../',
-        VERSION:     '',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
@@ -42,8 +34,7 @@
   ga('send', 'pageview');
 </script>
 
-  </head>
-  <body>
+  </head><body>
 
   <div id="navbar" class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -156,11 +147,9 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../api/api_event.html">Events</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/api_event.html#module-odoo.addons.component_event.components.event">Components</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/api_event.html#module-odoo.addons.component_event.models.base">Odoo Models Extensions</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../api/api_event.html#module-odoo.addons.component_event.core">Internals</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../api/api_queue.html">Queue</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../api/api_queue.html#module-odoo.addons.queue_job.job">Job</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/api_queue.html#module-odoo.addons.queue_job.models.base">Modèles</a></li>
 </ul>
 </li>
@@ -264,6 +253,14 @@
 
 
 <span class="n">_logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s1">&#39;Mapper&#39;</span><span class="p">,</span> <span class="s1">&#39;ImportMapper&#39;</span><span class="p">,</span> <span class="s1">&#39;ExportMapper&#39;</span><span class="p">,</span> <span class="s1">&#39;mapping&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;changed_by&#39;</span><span class="p">,</span> <span class="s1">&#39;only_create&#39;</span><span class="p">,</span> <span class="s1">&#39;none&#39;</span><span class="p">,</span> <span class="s1">&#39;convert&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;m2o_to_external&#39;</span><span class="p">,</span> <span class="s1">&#39;external_to_m2o&#39;</span><span class="p">,</span> <span class="s1">&#39;follow_m2o_relations&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;MapRecord&#39;</span><span class="p">,</span> <span class="s1">&#39;MapChild&#39;</span><span class="p">,</span> <span class="s1">&#39;ImportMapChild&#39;</span><span class="p">,</span> <span class="s1">&#39;ExportMapChild&#39;</span><span class="p">,</span>
+<span class="p">]</span>
 
 
 <div class="viewcode-block" id="mapping"><a class="viewcode-back" href="../../../api/api_components.html#connector.components.mapper.mapping">[docs]</a><span class="k">def</span> <span class="nf">mapping</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
@@ -545,8 +542,8 @@
     <span class="n">_name</span> <span class="o">=</span> <span class="s1">&#39;base.map.child&#39;</span>
     <span class="n">_inherit</span> <span class="o">=</span> <span class="s1">&#39;base.connector&#39;</span>
 
-<div class="viewcode-block" id="MapChild._child_mapper"><a class="viewcode-back" href="../../../api/api_components.html#connector.components.mapper.MapChild._child_mapper">[docs]</a>    <span class="k">def</span> <span class="nf">_child_mapper</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+    <span class="k">def</span> <span class="nf">_child_mapper</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
 
 <div class="viewcode-block" id="MapChild.skip_item"><a class="viewcode-back" href="../../../api/api_components.html#connector.components.mapper.MapChild.skip_item">[docs]</a>    <span class="k">def</span> <span class="nf">skip_item</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">map_record</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Hook to implement in sub-classes when some child</span>
@@ -629,8 +626,8 @@
     <span class="n">_inherit</span> <span class="o">=</span> <span class="s1">&#39;base.map.child&#39;</span>
     <span class="n">_usage</span> <span class="o">=</span> <span class="s1">&#39;import.map.child&#39;</span>
 
-<div class="viewcode-block" id="ImportMapChild._child_mapper"><a class="viewcode-back" href="../../../api/api_components.html#connector.components.mapper.ImportMapChild._child_mapper">[docs]</a>    <span class="k">def</span> <span class="nf">_child_mapper</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">component</span><span class="p">(</span><span class="n">usage</span><span class="o">=</span><span class="s1">&#39;import.mapper&#39;</span><span class="p">)</span></div>
+    <span class="k">def</span> <span class="nf">_child_mapper</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">component</span><span class="p">(</span><span class="n">usage</span><span class="o">=</span><span class="s1">&#39;import.mapper&#39;</span><span class="p">)</span>
 
 <div class="viewcode-block" id="ImportMapChild.format_items"><a class="viewcode-back" href="../../../api/api_components.html#connector.components.mapper.ImportMapChild.format_items">[docs]</a>    <span class="k">def</span> <span class="nf">format_items</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">items_values</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Format the values of the items mapped from the child Mappers.</span>
@@ -657,8 +654,8 @@
     <span class="n">_inherit</span> <span class="o">=</span> <span class="s1">&#39;base.map.child&#39;</span>
     <span class="n">_usage</span> <span class="o">=</span> <span class="s1">&#39;export.map.child&#39;</span>
 
-<div class="viewcode-block" id="ExportMapChild._child_mapper"><a class="viewcode-back" href="../../../api/api_components.html#connector.components.mapper.ExportMapChild._child_mapper">[docs]</a>    <span class="k">def</span> <span class="nf">_child_mapper</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">component</span><span class="p">(</span><span class="n">usage</span><span class="o">=</span><span class="s1">&#39;export.mapper&#39;</span><span class="p">)</span></div></div>
+    <span class="k">def</span> <span class="nf">_child_mapper</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">component</span><span class="p">(</span><span class="n">usage</span><span class="o">=</span><span class="s1">&#39;export.mapper&#39;</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="Mapper"><a class="viewcode-back" href="../../../api/api_components.html#connector.components.mapper.Mapper">[docs]</a><span class="k">class</span> <span class="nc">Mapper</span><span class="p">(</span><span class="n">AbstractComponent</span><span class="p">):</span>
@@ -776,7 +773,7 @@
     <span class="n">_map_child_usage</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">_map_child_fallback</span> <span class="o">=</span> <span class="kc">None</span>
 
-<div class="viewcode-block" id="Mapper._build_mapper_component"><a class="viewcode-back" href="../../../api/api_components.html#connector.components.mapper.Mapper._build_mapper_component">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">_build_mapper_component</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Build a Mapper component</span>
 
@@ -848,18 +845,18 @@
                                                    <span class="n">has_only_create</span><span class="p">)</span>
                     <span class="n">map_methods</span><span class="p">[</span><span class="n">attr_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">definition</span>
 
-        <span class="bp">cls</span><span class="o">.</span><span class="n">_map_methods</span> <span class="o">=</span> <span class="n">map_methods</span></div>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">_map_methods</span> <span class="o">=</span> <span class="n">map_methods</span>
 
-<div class="viewcode-block" id="Mapper._complete_component_build"><a class="viewcode-back" href="../../../api/api_components.html#connector.components.mapper.Mapper._complete_component_build">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">_complete_component_build</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">Mapper</span><span class="p">,</span> <span class="bp">cls</span><span class="p">)</span><span class="o">.</span><span class="n">_complete_component_build</span><span class="p">()</span>
-        <span class="bp">cls</span><span class="o">.</span><span class="n">_build_mapper_component</span><span class="p">()</span></div>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">_build_mapper_component</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">work</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">Mapper</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">work</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_options</span> <span class="o">=</span> <span class="kc">None</span>
 
-<div class="viewcode-block" id="Mapper._map_direct"><a class="viewcode-back" href="../../../api/api_components.html#connector.components.mapper.Mapper._map_direct">[docs]</a>    <span class="k">def</span> <span class="nf">_map_direct</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="n">from_attr</span><span class="p">,</span> <span class="n">to_attr</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_map_direct</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="n">from_attr</span><span class="p">,</span> <span class="n">to_attr</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Apply the ``direct`` mappings.</span>
 
 <span class="sd">        :param record: record to convert from a source to a target</span>
@@ -868,10 +865,10 @@
 <span class="sd">        :param to_attr: name of the target attribute</span>
 <span class="sd">        :type to_attr: str</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
 
-<div class="viewcode-block" id="Mapper._map_children"><a class="viewcode-back" href="../../../api/api_components.html#connector.components.mapper.Mapper._map_children">[docs]</a>    <span class="k">def</span> <span class="nf">_map_children</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="n">attr</span><span class="p">,</span> <span class="n">model</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+    <span class="k">def</span> <span class="nf">_map_children</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="n">attr</span><span class="p">,</span> <span class="n">model</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">map_methods</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -879,7 +876,7 @@
         <span class="k">for</span> <span class="n">meth</span><span class="p">,</span> <span class="n">definition</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_map_methods</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="k">yield</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">meth</span><span class="p">),</span> <span class="n">definition</span>
 
-<div class="viewcode-block" id="Mapper._get_map_child_component"><a class="viewcode-back" href="../../../api/api_components.html#connector.components.mapper.Mapper._get_map_child_component">[docs]</a>    <span class="k">def</span> <span class="nf">_get_map_child_component</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model_name</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_get_map_child_component</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model_name</span><span class="p">):</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">mapper_child</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">component</span><span class="p">(</span><span class="n">usage</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_map_child_usage</span><span class="p">,</span>
                                           <span class="n">model_name</span><span class="o">=</span><span class="n">model_name</span><span class="p">)</span>
@@ -892,18 +889,18 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">_map_child_fallback</span><span class="p">,</span>
                 <span class="n">model_name</span><span class="o">=</span><span class="n">model_name</span>
             <span class="p">)</span>
-        <span class="k">return</span> <span class="n">mapper_child</span></div>
+        <span class="k">return</span> <span class="n">mapper_child</span>
 
-<div class="viewcode-block" id="Mapper._map_child"><a class="viewcode-back" href="../../../api/api_components.html#connector.components.mapper.Mapper._map_child">[docs]</a>    <span class="k">def</span> <span class="nf">_map_child</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">map_record</span><span class="p">,</span> <span class="n">from_attr</span><span class="p">,</span> <span class="n">to_attr</span><span class="p">,</span> <span class="n">model_name</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_map_child</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">map_record</span><span class="p">,</span> <span class="n">from_attr</span><span class="p">,</span> <span class="n">to_attr</span><span class="p">,</span> <span class="n">model_name</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Convert items of the record as defined by children &quot;&quot;&quot;</span>
         <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">_map_child_usage</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;_map_child_usage required&quot;</span>
         <span class="n">child_records</span> <span class="o">=</span> <span class="n">map_record</span><span class="o">.</span><span class="n">source</span><span class="p">[</span><span class="n">from_attr</span><span class="p">]</span>
         <span class="n">mapper_child</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_map_child_component</span><span class="p">(</span><span class="n">model_name</span><span class="p">)</span>
         <span class="n">items</span> <span class="o">=</span> <span class="n">mapper_child</span><span class="o">.</span><span class="n">get_items</span><span class="p">(</span><span class="n">child_records</span><span class="p">,</span> <span class="n">map_record</span><span class="p">,</span>
                                        <span class="n">to_attr</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">items</span></div>
+        <span class="k">return</span> <span class="n">items</span>
 
-<div class="viewcode-block" id="Mapper._mapping_options"><a class="viewcode-back" href="../../../api/api_components.html#connector.components.mapper.Mapper._mapping_options">[docs]</a>    <span class="nd">@contextmanager</span>
+    <span class="nd">@contextmanager</span>
     <span class="k">def</span> <span class="nf">_mapping_options</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">options</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Change the mapping options for the Mapper.</span>
 
@@ -914,7 +911,7 @@
         <span class="n">current</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_options</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_options</span> <span class="o">=</span> <span class="n">options</span>
         <span class="k">yield</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_options</span> <span class="o">=</span> <span class="n">current</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_options</span> <span class="o">=</span> <span class="n">current</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">options</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -938,7 +935,7 @@
             <span class="n">changed_by</span> <span class="o">|=</span> <span class="n">method_def</span><span class="o">.</span><span class="n">changed_by</span>
         <span class="k">return</span> <span class="n">changed_by</span></div>
 
-<div class="viewcode-block" id="Mapper._direct_source_field_name"><a class="viewcode-back" href="../../../api/api_components.html#connector.components.mapper.Mapper._direct_source_field_name">[docs]</a>    <span class="k">def</span> <span class="nf">_direct_source_field_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">direct_entry</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_direct_source_field_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">direct_entry</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Get the mapping field name. Goes through the function modifiers.</span>
 
 <span class="sd">        Ex::</span>
@@ -961,7 +958,7 @@
                 <span class="n">fieldname</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_direct_source_field_name</span><span class="p">(</span><span class="n">cells</span><span class="p">[</span><span class="s1">&#39;field&#39;</span><span class="p">])</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">fieldname</span> <span class="o">=</span> <span class="n">cells</span><span class="p">[</span><span class="s1">&#39;field&#39;</span><span class="p">]</span>
-        <span class="k">return</span> <span class="n">fieldname</span></div>
+        <span class="k">return</span> <span class="n">fieldname</span>
 
 <div class="viewcode-block" id="Mapper.map_record"><a class="viewcode-back" href="../../../api/api_components.html#connector.components.mapper.Mapper.map_record">[docs]</a>    <span class="k">def</span> <span class="nf">map_record</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Get a :py:class:`MapRecord` with record, ready to be</span>
@@ -973,7 +970,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">MapRecord</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="n">parent</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Mapper._apply"><a class="viewcode-back" href="../../../api/api_components.html#connector.components.mapper.Mapper._apply">[docs]</a>    <span class="k">def</span> <span class="nf">_apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">map_record</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">map_record</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Apply the mappings on a :py:class:`MapRecord`</span>
 
 <span class="sd">        :param map_record: source record to convert</span>
@@ -983,9 +980,9 @@
         <span class="k">if</span> <span class="n">options</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">options</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mapping_options</span><span class="p">(</span><span class="n">options</span><span class="p">):</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_apply_with_options</span><span class="p">(</span><span class="n">map_record</span><span class="p">)</span></div>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_apply_with_options</span><span class="p">(</span><span class="n">map_record</span><span class="p">)</span>
 
-<div class="viewcode-block" id="Mapper._apply_with_options"><a class="viewcode-back" href="../../../api/api_components.html#connector.components.mapper.Mapper._apply_with_options">[docs]</a>    <span class="k">def</span> <span class="nf">_apply_with_options</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">map_record</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_apply_with_options</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">map_record</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Apply the mappings on a :py:class:`MapRecord` with</span>
 <span class="sd">        contextual options (the ``options`` given in</span>
 <span class="sd">        :py:meth:`MapRecord.values()` are accessible in</span>
@@ -1034,7 +1031,7 @@
                 <span class="n">result</span><span class="p">[</span><span class="n">to_attr</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_map_child</span><span class="p">(</span><span class="n">map_record</span><span class="p">,</span> <span class="n">from_attr</span><span class="p">,</span>
                                                   <span class="n">to_attr</span><span class="p">,</span> <span class="n">model_name</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">finalize</span><span class="p">(</span><span class="n">map_record</span><span class="p">,</span> <span class="n">result</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">finalize</span><span class="p">(</span><span class="n">map_record</span><span class="p">,</span> <span class="n">result</span><span class="p">)</span>
 
 <div class="viewcode-block" id="Mapper.finalize"><a class="viewcode-back" href="../../../api/api_components.html#connector.components.mapper.Mapper.finalize">[docs]</a>    <span class="k">def</span> <span class="nf">finalize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">map_record</span><span class="p">,</span> <span class="n">values</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Called at the end of the mapping.</span>
@@ -1065,7 +1062,7 @@
     <span class="n">_map_child_usage</span> <span class="o">=</span> <span class="s1">&#39;import.map.child&#39;</span>
     <span class="n">_map_child_fallback</span> <span class="o">=</span> <span class="s1">&#39;base.map.child.import&#39;</span>
 
-<div class="viewcode-block" id="ImportMapper._map_direct"><a class="viewcode-back" href="../../../api/api_components.html#connector.components.mapper.ImportMapper._map_direct">[docs]</a>    <span class="k">def</span> <span class="nf">_map_direct</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="n">from_attr</span><span class="p">,</span> <span class="n">to_attr</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_map_direct</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="n">from_attr</span><span class="p">,</span> <span class="n">to_attr</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Apply the ``direct`` mappings.</span>
 
 <span class="sd">        :param record: record to convert from a source to a target</span>
@@ -1089,7 +1086,7 @@
         <span class="k">if</span> <span class="n">field</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s1">&#39;many2one&#39;</span><span class="p">:</span>
             <span class="n">mapping_func</span> <span class="o">=</span> <span class="n">external_to_m2o</span><span class="p">(</span><span class="n">from_attr</span><span class="p">)</span>
             <span class="n">value</span> <span class="o">=</span> <span class="n">mapping_func</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="n">to_attr</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">value</span></div></div>
+        <span class="k">return</span> <span class="n">value</span></div>
 
 
 <div class="viewcode-block" id="ExportMapper"><a class="viewcode-back" href="../../../api/api_components.html#connector.components.mapper.ExportMapper">[docs]</a><span class="k">class</span> <span class="nc">ExportMapper</span><span class="p">(</span><span class="n">AbstractComponent</span><span class="p">):</span>
@@ -1106,7 +1103,7 @@
     <span class="n">_map_child_usage</span> <span class="o">=</span> <span class="s1">&#39;export.map.child&#39;</span>
     <span class="n">_map_child_fallback</span> <span class="o">=</span> <span class="s1">&#39;base.map.child.export&#39;</span>
 
-<div class="viewcode-block" id="ExportMapper._map_direct"><a class="viewcode-back" href="../../../api/api_components.html#connector.components.mapper.ExportMapper._map_direct">[docs]</a>    <span class="k">def</span> <span class="nf">_map_direct</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="n">from_attr</span><span class="p">,</span> <span class="n">to_attr</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_map_direct</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="n">from_attr</span><span class="p">,</span> <span class="n">to_attr</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Apply the ``direct`` mappings.</span>
 
 <span class="sd">        :param record: record to convert from a source to a target</span>
@@ -1130,7 +1127,7 @@
         <span class="k">if</span> <span class="n">field</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s1">&#39;many2one&#39;</span><span class="p">:</span>
             <span class="n">mapping_func</span> <span class="o">=</span> <span class="n">m2o_to_external</span><span class="p">(</span><span class="n">from_attr</span><span class="p">)</span>
             <span class="n">value</span> <span class="o">=</span> <span class="n">mapping_func</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="n">to_attr</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">value</span></div></div>
+        <span class="k">return</span> <span class="n">value</span></div>
 
 
 <div class="viewcode-block" id="MapRecord"><a class="viewcode-back" href="../../../api/api_components.html#connector.components.mapper.MapRecord">[docs]</a><span class="k">class</span> <span class="nc">MapRecord</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -1230,7 +1227,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_forced_values</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div></div>
 
 
-<div class="viewcode-block" id="MapOptions"><a class="viewcode-back" href="../../../api/api_components.html#connector.components.mapper.MapOptions">[docs]</a><span class="k">class</span> <span class="nc">MapOptions</span><span class="p">(</span><span class="nb">dict</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">MapOptions</span><span class="p">(</span><span class="nb">dict</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Container for the options of mappings.</span>
 
 <span class="sd">    Options can be accessed using attributes of the instance.  When an</span>
@@ -1248,7 +1245,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
 
     <span class="k">def</span> <span class="nf">__setattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
-        <span class="bp">self</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span></div>
+        <span class="bp">self</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
 </pre></div>
 
     </div>
@@ -1266,7 +1263,7 @@
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.6.<br/>
+      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.6.<br/>
     </p>
   </div>
 </footer>

@@ -2,20 +2,12 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="fr">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Exceptions &#8212; documentation Connector </title>
+    <title>Exceptions &#8212; Documentation Connector </title>
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
-        VERSION:     '',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
@@ -44,8 +36,7 @@
   ga('send', 'pageview');
 </script>
 
-  </head>
-  <body>
+  </head><body>
 
   <div id="navbar" class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -158,11 +149,9 @@
 <li class="toctree-l1"><a class="reference internal" href="api_event.html">Events</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="api_event.html#module-odoo.addons.component_event.components.event">Components</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api_event.html#module-odoo.addons.component_event.models.base">Odoo Models Extensions</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api_event.html#module-odoo.addons.component_event.core">Internals</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="api_queue.html">Queue</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="api_queue.html#module-odoo.addons.queue_job.job">Job</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api_queue.html#module-odoo.addons.queue_job.models.base">Modèles</a></li>
 </ul>
 </li>
@@ -255,56 +244,56 @@
 <dl class="exception">
 <dt id="connector.exception.ConnectorException">
 <em class="property">exception </em><code class="descclassname">connector.exception.</code><code class="descname">ConnectorException</code><a class="reference internal" href="../_modules/connector/exception.html#ConnectorException"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.exception.ConnectorException" title="Lien permanent vers cette définition">¶</a></dt>
-<dd><p>Bases : <a class="reference external" href="https://docs.python.org/2/library/exceptions.html#exceptions.Exception" title="(disponible dans Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">exceptions.Exception</span></code></a></p>
+<dd><p>Bases : <code class="xref py py-class docutils literal notranslate"><span class="pre">exceptions.Exception</span></code></p>
 <p>Exception de base pour les connecteurs</p>
 </dd></dl>
 
 <dl class="exception">
 <dt id="connector.exception.NoConnectorUnitError">
 <em class="property">exception </em><code class="descclassname">connector.exception.</code><code class="descname">NoConnectorUnitError</code><a class="reference internal" href="../_modules/connector/exception.html#NoConnectorUnitError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.exception.NoConnectorUnitError" title="Lien permanent vers cette définition">¶</a></dt>
-<dd><p>Bases : <a class="reference internal" href="#connector.exception.ConnectorException" title="connector.exception.ConnectorException"><code class="xref py py-class docutils literal"><span class="pre">connector.exception.ConnectorException</span></code></a></p>
+<dd><p>Bases : <a class="reference internal" href="#connector.exception.ConnectorException" title="connector.exception.ConnectorException"><code class="xref py py-class docutils literal notranslate"><span class="pre">connector.exception.ConnectorException</span></code></a></p>
 <p>Aucune ConnectorUnit n’a été trouvé</p>
 </dd></dl>
 
 <dl class="exception">
 <dt id="connector.exception.InvalidDataError">
 <em class="property">exception </em><code class="descclassname">connector.exception.</code><code class="descname">InvalidDataError</code><a class="reference internal" href="../_modules/connector/exception.html#InvalidDataError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.exception.InvalidDataError" title="Lien permanent vers cette définition">¶</a></dt>
-<dd><p>Bases : <a class="reference internal" href="#connector.exception.ConnectorException" title="connector.exception.ConnectorException"><code class="xref py py-class docutils literal"><span class="pre">connector.exception.ConnectorException</span></code></a></p>
+<dd><p>Bases : <a class="reference internal" href="#connector.exception.ConnectorException" title="connector.exception.ConnectorException"><code class="xref py py-class docutils literal notranslate"><span class="pre">connector.exception.ConnectorException</span></code></a></p>
 <p>Donnée incorrecte</p>
 </dd></dl>
 
 <dl class="exception">
 <dt id="connector.exception.MappingError">
 <em class="property">exception </em><code class="descclassname">connector.exception.</code><code class="descname">MappingError</code><a class="reference internal" href="../_modules/connector/exception.html#MappingError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.exception.MappingError" title="Lien permanent vers cette définition">¶</a></dt>
-<dd><p>Bases : <a class="reference internal" href="#connector.exception.ConnectorException" title="connector.exception.ConnectorException"><code class="xref py py-class docutils literal"><span class="pre">connector.exception.ConnectorException</span></code></a></p>
+<dd><p>Bases : <a class="reference internal" href="#connector.exception.ConnectorException" title="connector.exception.ConnectorException"><code class="xref py py-class docutils literal notranslate"><span class="pre">connector.exception.ConnectorException</span></code></a></p>
 <p>Une erreur est survenue pendant une transformation de mapping</p>
 </dd></dl>
 
 <dl class="exception">
 <dt id="connector.exception.NetworkRetryableError">
 <em class="property">exception </em><code class="descclassname">connector.exception.</code><code class="descname">NetworkRetryableError</code><span class="sig-paren">(</span><em>msg</em>, <em>seconds=None</em>, <em>ignore_retry=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/exception.html#NetworkRetryableError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.exception.NetworkRetryableError" title="Lien permanent vers cette définition">¶</a></dt>
-<dd><p>Bases : <code class="xref py py-class docutils literal"><span class="pre">odoo.addons.queue_job.exception.RetryableJobError</span></code></p>
+<dd><p>Bases : <code class="xref py py-class docutils literal notranslate"><span class="pre">odoo.addons.queue_job.exception.RetryableJobError</span></code></p>
 <p>Une erreur de réseau a causé l’échec du job, il peut être réessayé plus tard.</p>
 </dd></dl>
 
 <dl class="exception">
 <dt id="connector.exception.NoExternalId">
 <em class="property">exception </em><code class="descclassname">connector.exception.</code><code class="descname">NoExternalId</code><span class="sig-paren">(</span><em>msg</em>, <em>seconds=None</em>, <em>ignore_retry=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/exception.html#NoExternalId"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.exception.NoExternalId" title="Lien permanent vers cette définition">¶</a></dt>
-<dd><p>Bases : <code class="xref py py-class docutils literal"><span class="pre">odoo.addons.queue_job.exception.RetryableJobError</span></code></p>
+<dd><p>Bases : <code class="xref py py-class docutils literal notranslate"><span class="pre">odoo.addons.queue_job.exception.RetryableJobError</span></code></p>
 <p>Aucun ID Externe trouvé. Peut être réessayé plus tard.</p>
 </dd></dl>
 
 <dl class="exception">
 <dt id="connector.exception.IDMissingInBackend">
 <em class="property">exception </em><code class="descclassname">connector.exception.</code><code class="descname">IDMissingInBackend</code><a class="reference internal" href="../_modules/connector/exception.html#IDMissingInBackend"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.exception.IDMissingInBackend" title="Lien permanent vers cette définition">¶</a></dt>
-<dd><p>Bases : <code class="xref py py-class docutils literal"><span class="pre">odoo.addons.queue_job.exception.JobError</span></code></p>
+<dd><p>Bases : <code class="xref py py-class docutils literal notranslate"><span class="pre">odoo.addons.queue_job.exception.JobError</span></code></p>
 <p>L’ID n’existe pas dans le backend</p>
 </dd></dl>
 
 <dl class="exception">
 <dt id="connector.exception.ManyIDSInBackend">
 <em class="property">exception </em><code class="descclassname">connector.exception.</code><code class="descname">ManyIDSInBackend</code><a class="reference internal" href="../_modules/connector/exception.html#ManyIDSInBackend"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.exception.ManyIDSInBackend" title="Lien permanent vers cette définition">¶</a></dt>
-<dd><p>Bases : <code class="xref py py-class docutils literal"><span class="pre">odoo.addons.queue_job.exception.JobError</span></code></p>
+<dd><p>Bases : <code class="xref py py-class docutils literal notranslate"><span class="pre">odoo.addons.queue_job.exception.JobError</span></code></p>
 <p>Une clé unique existe plusieurs fois dans le backend</p>
 </dd></dl>
 
@@ -330,7 +319,7 @@
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.<br/>
+      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.6.<br/>
     </p>
   </div>
 </footer>

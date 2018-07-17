@@ -2,20 +2,12 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>odoo.addons.queue_job.models.queue_job &#8212; Connector  documentation</title>
     <link rel="stylesheet" href="../../../../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../../../../',
-        VERSION:     '',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../../../_static/doctools.js"></script>
@@ -41,8 +33,7 @@
   ga('send', 'pageview');
 </script>
 
-  </head>
-  <body>
+  </head><body>
 
   <div id="navbar" class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -155,11 +146,9 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../../api/api_event.html">Events</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../../../api/api_event.html#module-odoo.addons.component_event.components.event">Components</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../../api/api_event.html#module-odoo.addons.component_event.models.base">Odoo Models Extensions</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../../../api/api_event.html#module-odoo.addons.component_event.core">Internals</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../api/api_queue.html">Queue</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../../../api/api_queue.html#module-odoo.addons.queue_job.job">Job</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../../api/api_queue.html#module-odoo.addons.queue_job.models.base">Models</a></li>
 </ul>
 </li>
@@ -252,8 +241,8 @@
 <span class="n">_logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="channel_func_name"><a class="viewcode-back" href="../../../../../api/api_queue.html#odoo.addons.queue_job.models.queue_job.channel_func_name">[docs]</a><span class="k">def</span> <span class="nf">channel_func_name</span><span class="p">(</span><span class="n">method</span><span class="p">):</span>
-    <span class="k">return</span> <span class="s1">&#39;&lt;</span><span class="si">%s</span><span class="s1">&gt;.</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">method</span><span class="o">.</span><span class="n">im_class</span><span class="o">.</span><span class="n">_name</span><span class="p">,</span> <span class="n">method</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span></div>
+<span class="k">def</span> <span class="nf">channel_func_name</span><span class="p">(</span><span class="n">method</span><span class="p">):</span>
+    <span class="k">return</span> <span class="s1">&#39;&lt;</span><span class="si">%s</span><span class="s1">&gt;.</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">method</span><span class="o">.</span><span class="n">im_class</span><span class="o">.</span><span class="n">_name</span><span class="p">,</span> <span class="n">method</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="QueueJob"><a class="viewcode-back" href="../../../../../api/api_queue.html#odoo.addons.queue_job.models.queue_job.QueueJob">[docs]</a><span class="k">class</span> <span class="nc">QueueJob</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
@@ -266,6 +255,7 @@
     <span class="n">_order</span> <span class="o">=</span> <span class="s1">&#39;date_created DESC, date_done DESC&#39;</span>
 
     <span class="n">_removal_interval</span> <span class="o">=</span> <span class="mi">30</span>  <span class="c1"># days</span>
+    <span class="n">_default_related_action</span> <span class="o">=</span> <span class="s1">&#39;related_action_open_record&#39;</span>
 
     <span class="n">uuid</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Char</span><span class="p">(</span><span class="n">string</span><span class="o">=</span><span class="s1">&#39;UUID&#39;</span><span class="p">,</span>
                        <span class="n">readonly</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
@@ -358,15 +348,15 @@
                 <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">.</span><span class="si">%s</span><span class="s2">(</span><span class="si">%s</span><span class="s2">)&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">record</span><span class="o">.</span><span class="n">method_name</span><span class="p">,</span> <span class="n">all_args</span><span class="p">)</span>
             <span class="p">)</span>
 
-<div class="viewcode-block" id="QueueJob.open_related_action"><a class="viewcode-back" href="../../../../../api/api_queue.html#odoo.addons.queue_job.models.queue_job.QueueJob.open_related_action">[docs]</a>    <span class="nd">@api</span><span class="o">.</span><span class="n">multi</span>
+    <span class="nd">@api</span><span class="o">.</span><span class="n">multi</span>
     <span class="k">def</span> <span class="nf">open_related_action</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Open the related action associated to the job &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ensure_one</span><span class="p">()</span>
         <span class="n">job</span> <span class="o">=</span> <span class="n">Job</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">uuid</span><span class="p">)</span>
         <span class="n">action</span> <span class="o">=</span> <span class="n">job</span><span class="o">.</span><span class="n">related_action</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">action</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">Warning</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;No action available for this job&#39;</span><span class="p">))</span>
-        <span class="k">return</span> <span class="n">action</span></div>
+            <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">UserError</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;No action available for this job&#39;</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">action</span>
 
     <span class="nd">@api</span><span class="o">.</span><span class="n">multi</span>
     <span class="k">def</span> <span class="nf">_change_job_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">result</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -383,18 +373,18 @@
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;State not supported: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">state</span><span class="p">)</span>
             <span class="n">job_</span><span class="o">.</span><span class="n">store</span><span class="p">()</span>
 
-<div class="viewcode-block" id="QueueJob.button_done"><a class="viewcode-back" href="../../../../../api/api_queue.html#odoo.addons.queue_job.models.queue_job.QueueJob.button_done">[docs]</a>    <span class="nd">@api</span><span class="o">.</span><span class="n">multi</span>
+    <span class="nd">@api</span><span class="o">.</span><span class="n">multi</span>
     <span class="k">def</span> <span class="nf">button_done</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">result</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span><span class="s1">&#39;Manually set to done by </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">)</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">name</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_change_job_state</span><span class="p">(</span><span class="n">DONE</span><span class="p">,</span> <span class="n">result</span><span class="o">=</span><span class="n">result</span><span class="p">)</span>
-        <span class="k">return</span> <span class="kc">True</span></div>
+        <span class="k">return</span> <span class="kc">True</span>
 
-<div class="viewcode-block" id="QueueJob.requeue"><a class="viewcode-back" href="../../../../../api/api_queue.html#odoo.addons.queue_job.models.queue_job.QueueJob.requeue">[docs]</a>    <span class="nd">@api</span><span class="o">.</span><span class="n">multi</span>
+    <span class="nd">@api</span><span class="o">.</span><span class="n">multi</span>
     <span class="k">def</span> <span class="nf">requeue</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_change_job_state</span><span class="p">(</span><span class="n">PENDING</span><span class="p">)</span>
-        <span class="k">return</span> <span class="kc">True</span></div>
+        <span class="k">return</span> <span class="kc">True</span>
 
-<div class="viewcode-block" id="QueueJob.write"><a class="viewcode-back" href="../../../../../api/api_queue.html#odoo.addons.queue_job.models.queue_job.QueueJob.write">[docs]</a>    <span class="nd">@api</span><span class="o">.</span><span class="n">multi</span>
+    <span class="nd">@api</span><span class="o">.</span><span class="n">multi</span>
     <span class="k">def</span> <span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vals</span><span class="p">):</span>
         <span class="n">res</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">QueueJob</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">vals</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">vals</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;state&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;failed&#39;</span><span class="p">:</span>
@@ -408,7 +398,7 @@
                 <span class="k">if</span> <span class="n">msg</span><span class="p">:</span>
                     <span class="n">record</span><span class="o">.</span><span class="n">message_post</span><span class="p">(</span><span class="n">body</span><span class="o">=</span><span class="n">msg</span><span class="p">,</span>
                                         <span class="n">subtype</span><span class="o">=</span><span class="s1">&#39;queue_job.mt_job_failed&#39;</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">res</span></div>
+        <span class="k">return</span> <span class="n">res</span>
 
     <span class="nd">@api</span><span class="o">.</span><span class="n">multi</span>
     <span class="k">def</span> <span class="nf">_subscribe_users_domain</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -442,7 +432,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="p">[(</span><span class="s1">&#39;state&#39;</span><span class="p">,</span> <span class="s1">&#39;=&#39;</span><span class="p">,</span> <span class="s1">&#39;failed&#39;</span><span class="p">)]</span>
 
-<div class="viewcode-block" id="QueueJob.autovacuum"><a class="viewcode-back" href="../../../../../api/api_queue.html#odoo.addons.queue_job.models.queue_job.QueueJob.autovacuum">[docs]</a>    <span class="nd">@api</span><span class="o">.</span><span class="n">model</span>
+    <span class="nd">@api</span><span class="o">.</span><span class="n">model</span>
     <span class="k">def</span> <span class="nf">autovacuum</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Delete all jobs done since more than ``_removal_interval`` days.</span>
 
@@ -453,10 +443,44 @@
             <span class="p">[(</span><span class="s1">&#39;date_done&#39;</span><span class="p">,</span> <span class="s1">&#39;&lt;=&#39;</span><span class="p">,</span> <span class="n">fields</span><span class="o">.</span><span class="n">Datetime</span><span class="o">.</span><span class="n">to_string</span><span class="p">(</span><span class="n">deadline</span><span class="p">))],</span>
         <span class="p">)</span>
         <span class="n">jobs</span><span class="o">.</span><span class="n">unlink</span><span class="p">()</span>
-        <span class="k">return</span> <span class="kc">True</span></div></div>
+        <span class="k">return</span> <span class="kc">True</span>
+
+    <span class="nd">@api</span><span class="o">.</span><span class="n">multi</span>
+    <span class="k">def</span> <span class="nf">related_action_open_record</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Open a form view with the record(s) of the job.</span>
+
+<span class="sd">        For instance, for a job on a ``product.product``, it will open a</span>
+<span class="sd">        ``product.product`` form view with the product record(s) concerned by</span>
+<span class="sd">        the job. If the job concerns more than one record, it opens them in a</span>
+<span class="sd">        list.</span>
+
+<span class="sd">        This is the default related action.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ensure_one</span><span class="p">()</span>
+        <span class="n">model_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model_name</span>
+        <span class="n">records</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="p">[</span><span class="n">model_name</span><span class="p">]</span><span class="o">.</span><span class="n">browse</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">record_ids</span><span class="p">)</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">records</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="n">action</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="n">_</span><span class="p">(</span><span class="s1">&#39;Related Record&#39;</span><span class="p">),</span>
+            <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;ir.actions.act_window&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;view_type&#39;</span><span class="p">:</span> <span class="s1">&#39;form&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;view_mode&#39;</span><span class="p">:</span> <span class="s1">&#39;form&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;res_model&#39;</span><span class="p">:</span> <span class="n">records</span><span class="o">.</span><span class="n">_name</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">records</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">action</span><span class="p">[</span><span class="s1">&#39;res_id&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">records</span><span class="o">.</span><span class="n">id</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">action</span><span class="o">.</span><span class="n">update</span><span class="p">({</span>
+                <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="n">_</span><span class="p">(</span><span class="s1">&#39;Related Records&#39;</span><span class="p">),</span>
+                <span class="s1">&#39;view_mode&#39;</span><span class="p">:</span> <span class="s1">&#39;tree,form&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;domain&#39;</span><span class="p">:</span> <span class="p">[(</span><span class="s1">&#39;id&#39;</span><span class="p">,</span> <span class="s1">&#39;in&#39;</span><span class="p">,</span> <span class="n">records</span><span class="o">.</span><span class="n">ids</span><span class="p">)],</span>
+            <span class="p">})</span>
+        <span class="k">return</span> <span class="n">action</span></div>
 
 
-<div class="viewcode-block" id="RequeueJob"><a class="viewcode-back" href="../../../../../api/api_queue.html#odoo.addons.queue_job.models.queue_job.RequeueJob">[docs]</a><span class="k">class</span> <span class="nc">RequeueJob</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">TransientModel</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">RequeueJob</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">TransientModel</span><span class="p">):</span>
     <span class="n">_name</span> <span class="o">=</span> <span class="s1">&#39;queue.requeue.job&#39;</span>
     <span class="n">_description</span> <span class="o">=</span> <span class="s1">&#39;Wizard to requeue a selection of jobs&#39;</span>
 
@@ -473,14 +497,26 @@
                                <span class="n">string</span><span class="o">=</span><span class="s1">&#39;Jobs&#39;</span><span class="p">,</span>
                                <span class="n">default</span><span class="o">=</span><span class="n">_default_job_ids</span><span class="p">)</span>
 
-<div class="viewcode-block" id="RequeueJob.requeue"><a class="viewcode-back" href="../../../../../api/api_queue.html#odoo.addons.queue_job.models.queue_job.RequeueJob.requeue">[docs]</a>    <span class="nd">@api</span><span class="o">.</span><span class="n">multi</span>
+    <span class="nd">@api</span><span class="o">.</span><span class="n">multi</span>
     <span class="k">def</span> <span class="nf">requeue</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">jobs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">job_ids</span>
         <span class="n">jobs</span><span class="o">.</span><span class="n">requeue</span><span class="p">()</span>
-        <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;ir.actions.act_window_close&#39;</span><span class="p">}</span></div></div>
+        <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;ir.actions.act_window_close&#39;</span><span class="p">}</span>
 
 
-<div class="viewcode-block" id="JobChannel"><a class="viewcode-back" href="../../../../../api/api_queue.html#odoo.addons.queue_job.models.queue_job.JobChannel">[docs]</a><span class="k">class</span> <span class="nc">JobChannel</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">SetJobsToDone</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">TransientModel</span><span class="p">):</span>
+    <span class="n">_inherit</span> <span class="o">=</span> <span class="s1">&#39;queue.requeue.job&#39;</span>
+    <span class="n">_name</span> <span class="o">=</span> <span class="s1">&#39;queue.jobs.to.done&#39;</span>
+    <span class="n">_description</span> <span class="o">=</span> <span class="s1">&#39;Set all selected jobs to done&#39;</span>
+
+    <span class="nd">@api</span><span class="o">.</span><span class="n">multi</span>
+    <span class="k">def</span> <span class="nf">set_done</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">jobs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">job_ids</span>
+        <span class="n">jobs</span><span class="o">.</span><span class="n">button_done</span><span class="p">()</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;ir.actions.act_window_close&#39;</span><span class="p">}</span>
+
+
+<span class="k">class</span> <span class="nc">JobChannel</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
     <span class="n">_name</span> <span class="o">=</span> <span class="s1">&#39;queue.job.channel&#39;</span>
     <span class="n">_description</span> <span class="o">=</span> <span class="s1">&#39;Job Channels&#39;</span>
 
@@ -515,38 +551,38 @@
                 <span class="n">parts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">channel</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
             <span class="n">record</span><span class="o">.</span><span class="n">complete_name</span> <span class="o">=</span> <span class="s1">&#39;.&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">reversed</span><span class="p">(</span><span class="n">parts</span><span class="p">))</span>
 
-<div class="viewcode-block" id="JobChannel.parent_required"><a class="viewcode-back" href="../../../../../api/api_queue.html#odoo.addons.queue_job.models.queue_job.JobChannel.parent_required">[docs]</a>    <span class="nd">@api</span><span class="o">.</span><span class="n">multi</span>
+    <span class="nd">@api</span><span class="o">.</span><span class="n">multi</span>
     <span class="nd">@api</span><span class="o">.</span><span class="n">constrains</span><span class="p">(</span><span class="s1">&#39;parent_id&#39;</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">parent_required</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">record</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">record</span><span class="o">.</span><span class="n">name</span> <span class="o">!=</span> <span class="s1">&#39;root&#39;</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">record</span><span class="o">.</span><span class="n">parent_id</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">ValidationError</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;Parent channel required.&#39;</span><span class="p">))</span></div>
+                <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">ValidationError</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;Parent channel required.&#39;</span><span class="p">))</span>
 
-<div class="viewcode-block" id="JobChannel.write"><a class="viewcode-back" href="../../../../../api/api_queue.html#odoo.addons.queue_job.models.queue_job.JobChannel.write">[docs]</a>    <span class="nd">@api</span><span class="o">.</span><span class="n">multi</span>
+    <span class="nd">@api</span><span class="o">.</span><span class="n">multi</span>
     <span class="k">def</span> <span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">values</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">channel</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
             <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;install_mode&#39;</span><span class="p">)</span> <span class="ow">and</span>
                     <span class="n">channel</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;root&#39;</span> <span class="ow">and</span>
                     <span class="p">(</span><span class="s1">&#39;name&#39;</span> <span class="ow">in</span> <span class="n">values</span> <span class="ow">or</span> <span class="s1">&#39;parent_id&#39;</span> <span class="ow">in</span> <span class="n">values</span><span class="p">)):</span>
                 <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">Warning</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;Cannot change the root channel&#39;</span><span class="p">))</span>
-        <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">JobChannel</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">values</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">JobChannel</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">values</span><span class="p">)</span>
 
-<div class="viewcode-block" id="JobChannel.unlink"><a class="viewcode-back" href="../../../../../api/api_queue.html#odoo.addons.queue_job.models.queue_job.JobChannel.unlink">[docs]</a>    <span class="nd">@api</span><span class="o">.</span><span class="n">multi</span>
+    <span class="nd">@api</span><span class="o">.</span><span class="n">multi</span>
     <span class="k">def</span> <span class="nf">unlink</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">channel</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">channel</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;root&#39;</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">Warning</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;Cannot remove the root channel&#39;</span><span class="p">))</span>
-        <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">JobChannel</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">unlink</span><span class="p">()</span></div>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">JobChannel</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">unlink</span><span class="p">()</span>
 
-<div class="viewcode-block" id="JobChannel.name_get"><a class="viewcode-back" href="../../../../../api/api_queue.html#odoo.addons.queue_job.models.queue_job.JobChannel.name_get">[docs]</a>    <span class="nd">@api</span><span class="o">.</span><span class="n">multi</span>
+    <span class="nd">@api</span><span class="o">.</span><span class="n">multi</span>
     <span class="k">def</span> <span class="nf">name_get</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">record</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
             <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">record</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">record</span><span class="o">.</span><span class="n">complete_name</span><span class="p">))</span>
-        <span class="k">return</span> <span class="n">result</span></div></div>
+        <span class="k">return</span> <span class="n">result</span>
 
 
-<div class="viewcode-block" id="JobFunction"><a class="viewcode-back" href="../../../../../api/api_queue.html#odoo.addons.queue_job.models.queue_job.JobFunction">[docs]</a><span class="k">class</span> <span class="nc">JobFunction</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">JobFunction</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
     <span class="n">_name</span> <span class="o">=</span> <span class="s1">&#39;queue.job.function&#39;</span>
     <span class="n">_description</span> <span class="o">=</span> <span class="s1">&#39;Job Functions&#39;</span>
     <span class="n">_log_access</span> <span class="o">=</span> <span class="kc">False</span>
@@ -593,7 +629,7 @@
         <span class="n">func_name</span> <span class="o">=</span> <span class="n">channel_func_name</span><span class="p">(</span><span class="n">job_method</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">search_count</span><span class="p">([(</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;=&#39;</span><span class="p">,</span> <span class="n">func_name</span><span class="p">)]):</span>
             <span class="n">channel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_find_or_create_channel</span><span class="p">(</span><span class="n">job_method</span><span class="o">.</span><span class="n">default_channel</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">create</span><span class="p">({</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="n">func_name</span><span class="p">,</span> <span class="s1">&#39;channel_id&#39;</span><span class="p">:</span> <span class="n">channel</span><span class="o">.</span><span class="n">id</span><span class="p">})</span></div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">create</span><span class="p">({</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="n">func_name</span><span class="p">,</span> <span class="s1">&#39;channel_id&#39;</span><span class="p">:</span> <span class="n">channel</span><span class="o">.</span><span class="n">id</span><span class="p">})</span>
 </pre></div>
 
     </div>
@@ -611,7 +647,7 @@
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.6.<br/>
     </p>
   </div>
 </footer>

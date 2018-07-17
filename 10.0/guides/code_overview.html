@@ -2,20 +2,12 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Code Overview &#8212; Connector  documentation</title>
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
-        VERSION:     '',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
@@ -43,8 +35,7 @@
   ga('send', 'pageview');
 </script>
 
-  </head>
-  <body>
+  </head><body>
 
   <div id="navbar" class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -157,11 +148,9 @@
 <li class="toctree-l1"><a class="reference internal" href="../api/api_event.html">Events</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../api/api_event.html#module-odoo.addons.component_event.components.event">Components</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../api/api_event.html#module-odoo.addons.component_event.models.base">Odoo Models Extensions</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../api/api_event.html#module-odoo.addons.component_event.core">Internals</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../api/api_queue.html">Queue</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../api/api_queue.html#module-odoo.addons.queue_job.job">Job</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../api/api_queue.html#module-odoo.addons.queue_job.models.base">Models</a></li>
 </ul>
 </li>
@@ -259,7 +248,7 @@
 <p>Some simple code examples.</p>
 <div class="section" id="trigger-and-listen-an-event">
 <h2>Trigger and listen an event<a class="headerlink" href="#trigger-and-listen-an-event" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">AccountInvoice</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">AccountInvoice</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
     <span class="n">_inherit</span> <span class="o">=</span> <span class="s1">&#39;account.invoice&#39;</span>
 
     <span class="nd">@api.multi</span>
@@ -270,7 +259,7 @@
         <span class="k">return</span> <span class="n">res</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">odoo.addons.component.core</span> <span class="kn">import</span> <span class="n">Component</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">odoo.addons.component.core</span> <span class="kn">import</span> <span class="n">Component</span>
 
 
 <span class="k">class</span> <span class="nc">MyEventListener</span><span class="p">(</span><span class="n">Component</span><span class="p">):</span>
@@ -285,7 +274,7 @@
 </div>
 <div class="section" id="delay-an-asynchronous-job">
 <h2>Delay an Asynchronous Job<a class="headerlink" href="#delay-an-asynchronous-job" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">odoo.addons.queue_job.job</span> <span class="kn">import</span> <span class="n">job</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">odoo.addons.queue_job.job</span> <span class="kn">import</span> <span class="n">job</span>
 
 
 <span class="k">class</span> <span class="nc">AccountInvoice</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
@@ -311,7 +300,7 @@
 <h2>Work with components<a class="headerlink" href="#work-with-components" title="Permalink to this headline">¶</a></h2>
 <p>This is a highly simplified version of a micro-connector, without using
 events or jobs, for the sake of the example.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">odoo.addons.component.core</span> <span class="kn">import</span> <span class="n">AbstractComponent</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">odoo.addons.component.core</span> <span class="kn">import</span> <span class="n">AbstractComponent</span>
 
 
 <span class="k">class</span> <span class="nc">MagentoBackend</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
@@ -445,7 +434,7 @@ events or jobs, for the sake of the example.</p>
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.6.<br/>
     </p>
   </div>
 </footer>

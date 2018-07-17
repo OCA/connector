@@ -2,20 +2,12 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="fr">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Modèles &#8212; documentation Connector </title>
+    <title>Modèles &#8212; Documentation Connector </title>
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
-        VERSION:     '',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
@@ -44,8 +36,7 @@
   ga('send', 'pageview');
 </script>
 
-  </head>
-  <body>
+  </head><body>
 
   <div id="navbar" class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -158,11 +149,9 @@
 <li class="toctree-l1"><a class="reference internal" href="api_event.html">Events</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="api_event.html#module-odoo.addons.component_event.components.event">Components</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api_event.html#module-odoo.addons.component_event.models.base">Odoo Models Extensions</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api_event.html#module-odoo.addons.component_event.core">Internals</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="api_queue.html">Queue</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="api_queue.html#module-odoo.addons.queue_job.job">Job</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api_queue.html#module-odoo.addons.queue_job.models.base">Modèles</a></li>
 </ul>
 </li>
@@ -261,14 +250,14 @@
 <dl class="class">
 <dt id="connector.backend_model.ConnectorBackend">
 <em class="property">class </em><code class="descclassname">connector.backend_model.</code><code class="descname">ConnectorBackend</code><span class="sig-paren">(</span><em>pool</em>, <em>cr</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/backend_model.html#ConnectorBackend"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.backend_model.ConnectorBackend" title="Lien permanent vers cette définition">¶</a></dt>
-<dd><p>Bases : <code class="xref py py-class docutils literal"><span class="pre">odoo.models.BaseModel</span></code></p>
+<dd><p>Bases : <code class="xref py py-class docutils literal notranslate"><span class="pre">odoo.models.BaseModel</span></code></p>
 <p>Une instance d’un backend externe auquel se synchroniser</p>
-<p>Les backends doivent <code class="docutils literal"><span class="pre">_inherit</span></code> ce modèle dans les modules des connecteurs.</p>
+<p>Les backends doivent <code class="docutils literal notranslate"><span class="pre">_inherit</span></code> ce modèle dans les modules des connecteurs.</p>
 <p>The components articulates around a collection, which in the context of the
 connectors is called a Backend.</p>
-<p>It must be defined as a Model that inherits from <code class="docutils literal"><span class="pre">'connector.backend'</span></code>.</p>
+<p>It must be defined as a Model that inherits from <code class="docutils literal notranslate"><span class="pre">'connector.backend'</span></code>.</p>
 <p>Exemple avec le connecteur Magento</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1"># in magentoerpconnect/magento_model.py</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># in magentoerpconnect/magento_model.py</span>
 
 <span class="k">class</span> <span class="nc">MagentoBackend</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
     <span class="n">_name</span> <span class="o">=</span> <span class="s1">&#39;magento.backend&#39;</span>
@@ -304,11 +293,11 @@ single-line string in clients.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><ul class="first last simple">
-<li><strong>size</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(disponible dans Python v2.7)"><em>int</em></a>) – la taille maximum des valeurs stockées dans ce champ</li>
+<li><strong>size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(disponible dans Python v3.7)"><em>int</em></a>) – la taille maximum des valeurs stockées dans ce champ</li>
 <li><strong>translate</strong> – enable the translation of the field’s values; use
-<code class="docutils literal"><span class="pre">translate=True</span></code> to translate field values as a whole; <code class="docutils literal"><span class="pre">translate</span></code>
-may also be a callable such that <code class="docutils literal"><span class="pre">translate(callback,</span> <span class="pre">value)</span></code>
-translates <code class="docutils literal"><span class="pre">value</span></code> by using <code class="docutils literal"><span class="pre">callback(term)</span></code> to retrieve the
+<code class="docutils literal notranslate"><span class="pre">translate=True</span></code> to translate field values as a whole; <code class="docutils literal notranslate"><span class="pre">translate</span></code>
+may also be a callable such that <code class="docutils literal notranslate"><span class="pre">translate(callback,</span> <span class="pre">value)</span></code>
+translates <code class="docutils literal notranslate"><span class="pre">value</span></code> by using <code class="docutils literal notranslate"><span class="pre">callback(term)</span></code> to retrieve the
 translation of terms.</li>
 </ul>
 </td>
@@ -326,24 +315,24 @@ translation of terms.</li>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><ul class="first last simple">
 <li><strong>selection</strong> – specifies the possible values for this field.
-It is given as either a list of pairs (<code class="docutils literal"><span class="pre">value</span></code>, <code class="docutils literal"><span class="pre">string</span></code>), or a
+It is given as either a list of pairs (<code class="docutils literal notranslate"><span class="pre">value</span></code>, <code class="docutils literal notranslate"><span class="pre">string</span></code>), or a
 model method, or a method name.</li>
 <li><strong>selection_add</strong> – provides an extension of the selection in the case
-of an overridden field. It is a list of pairs (<code class="docutils literal"><span class="pre">value</span></code>, <code class="docutils literal"><span class="pre">string</span></code>).</li>
+of an overridden field. It is a list of pairs (<code class="docutils literal notranslate"><span class="pre">value</span></code>, <code class="docutils literal notranslate"><span class="pre">string</span></code>).</li>
 </ul>
 </td>
 </tr>
 </tbody>
 </table>
-<p>The attribute <code class="docutils literal"><span class="pre">selection</span></code> is mandatory except in the case of
+<p>The attribute <code class="docutils literal notranslate"><span class="pre">selection</span></code> is mandatory except in the case of
 <a class="reference external" href="https://www.odoo.com/documentation/10.0/reference/orm.html#field-related" title="(disponible dans odoo v10.0)"><span class="xref std std-ref">related fields</span></a> or <a class="reference external" href="https://www.odoo.com/documentation/10.0/reference/orm.html#field-incremental-definition" title="(disponible dans odoo v10.0)"><span class="xref std std-ref">field extensions</span></a>.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="connector.backend_model.ConnectorBackend.get_backend">
 <code class="descname">get_backend</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/backend_model.html#ConnectorBackend.get_backend"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.backend_model.ConnectorBackend.get_backend" title="Lien permanent vers cette définition">¶</a></dt>
-<dd><p>Pour un enregistrement d’un backend, renvoie l’instance appropriée de <code class="xref py py-class docutils literal"><span class="pre">Backend</span></code>.</p>
-<p>Is part of the <code class="docutils literal"><span class="pre">ConnectorUnit</span></code> API.</p>
+<dd><p>Pour un enregistrement d’un backend, renvoie l’instance appropriée de <code class="xref py py-class docutils literal notranslate"><span class="pre">Backend</span></code>.</p>
+<p>Is part of the <code class="docutils literal notranslate"><span class="pre">ConnectorUnit</span></code> API.</p>
 <p>Deprecated, due to removal in Odoo 11.0.</p>
 </dd></dl>
 
@@ -355,18 +344,18 @@ of an overridden field. It is a list of pairs (<code class="docutils literal"><s
 <dl class="class">
 <dt id="connector.backend_model.ExternalBinding">
 <em class="property">class </em><code class="descclassname">connector.backend_model.</code><code class="descname">ExternalBinding</code><span class="sig-paren">(</span><em>pool</em>, <em>cr</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/backend_model.html#ExternalBinding"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.backend_model.ExternalBinding" title="Lien permanent vers cette définition">¶</a></dt>
-<dd><p>Bases : <code class="xref py py-class docutils literal"><span class="pre">odoo.models.BaseModel</span></code></p>
+<dd><p>Bases : <code class="xref py py-class docutils literal notranslate"><span class="pre">odoo.models.BaseModel</span></code></p>
 <p>Un modèle abstrait pour une liaison à des enregistrements externes</p>
-<p>Un binding externe est une liaison entre un backend et Odoo. Par exemple, pour un <cite>partner</cite>, cela peut être <code class="docutils literal"><span class="pre">magento.res.partner</span></code> ou pour un article, <code class="docutils literal"><span class="pre">magento.product</span></code>.</p>
-<p>Le modèle final sera un <code class="docutils literal"><span class="pre">_inherits</span></code> du modèle Odoo et va <code class="docutils literal"><span class="pre">_inherit</span></code> ce modèle.</p>
-<p>Il aura une relation vers l’enregistrement (via <code class="docutils literal"><span class="pre">_inherits</span></code>) et vers le modèle backend concret (par exemple <code class="docutils literal"><span class="pre">magento.backend</span></code>).</p>
+<p>Un binding externe est une liaison entre un backend et Odoo. Par exemple, pour un <cite>partner</cite>, cela peut être <code class="docutils literal notranslate"><span class="pre">magento.res.partner</span></code> ou pour un article, <code class="docutils literal notranslate"><span class="pre">magento.product</span></code>.</p>
+<p>Le modèle final sera un <code class="docutils literal notranslate"><span class="pre">_inherits</span></code> du modèle Odoo et va <code class="docutils literal notranslate"><span class="pre">_inherit</span></code> ce modèle.</p>
+<p>Il aura une relation vers l’enregistrement (via <code class="docutils literal notranslate"><span class="pre">_inherits</span></code>) et vers le modèle backend concret (par exemple <code class="docutils literal notranslate"><span class="pre">magento.backend</span></code>).</p>
 <p>Il contiendra également toutes les données relatives aux backend pour l’enregistrement.</p>
 <p>Il nécessite d’implémenter au moins ces champs :</p>
 <dl class="docutils">
 <dt>odoo_id</dt>
-<dd>Le many2one vers l’enregistrement lié (utilisé par <code class="docutils literal"><span class="pre">_inherits</span></code>).</dd>
+<dd>Le many2one vers l’enregistrement lié (utilisé par <code class="docutils literal notranslate"><span class="pre">_inherits</span></code>).</dd>
 <dt>backend_id</dt>
-<dd>Le many2one vers le backend (par exemple <code class="docutils literal"><span class="pre">magento.backend</span></code>).</dd>
+<dd>Le many2one vers le backend (par exemple <code class="docutils literal notranslate"><span class="pre">magento.backend</span></code>).</dd>
 <dt>external_id</dt>
 <dd>L’ID sur le backend.</dd>
 <dt>sync_date</dt>
@@ -375,8 +364,8 @@ of an overridden field. It is a list of pairs (<code class="docutils literal"><s
 <p>The definition of the field relations is to be done in the
 concrete classes because the relations themselves do not exist in
 this addon.</p>
-<p>Par exemple, pour un <code class="docutils literal"><span class="pre">res.partner.category</span></code> depuis Magento, J’aurais (ceci est une consolidation de toutes les colonnes des modèles abstraits. Dans <code class="docutils literal"><span class="pre">magentoerpconnect</span></code> vous ne trouveriez pas ça)</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">MagentoResPartnerCategory</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+<p>Par exemple, pour un <code class="docutils literal notranslate"><span class="pre">res.partner.category</span></code> depuis Magento, J’aurais (ceci est une consolidation de toutes les colonnes des modèles abstraits. Dans <code class="docutils literal notranslate"><span class="pre">magentoerpconnect</span></code> vous ne trouveriez pas ça)</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">MagentoResPartnerCategory</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
     <span class="n">_name</span> <span class="o">=</span> <span class="s1">&#39;magento.res.partner.category&#39;</span>
 
     <span class="n">_inherits</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;res.partner.category&#39;</span><span class="p">:</span> <span class="s1">&#39;odoo_id&#39;</span><span class="p">}</span>
@@ -399,11 +388,6 @@ this addon.</p>
     <span class="p">]</span>
 </pre></div>
 </div>
-<dl class="attribute">
-<dt id="connector.backend_model.ExternalBinding.sync_date">
-<code class="descname">sync_date</code><a class="headerlink" href="#connector.backend_model.ExternalBinding.sync_date" title="Lien permanent vers cette définition">¶</a></dt>
-<dd></dd></dl>
-
 </dd></dl>
 
 </div>
@@ -429,7 +413,7 @@ this addon.</p>
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.<br/>
+      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.6.<br/>
     </p>
   </div>
 </footer>

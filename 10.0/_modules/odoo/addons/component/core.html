@@ -2,20 +2,12 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>odoo.addons.component.core &#8212; Connector  documentation</title>
     <link rel="stylesheet" href="../../../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../../../',
-        VERSION:     '',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../../_static/doctools.js"></script>
@@ -41,8 +33,7 @@
   ga('send', 'pageview');
 </script>
 
-  </head>
-  <body>
+  </head><body>
 
   <div id="navbar" class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -155,11 +146,9 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../api/api_event.html">Events</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../../api/api_event.html#module-odoo.addons.component_event.components.event">Components</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../api/api_event.html#module-odoo.addons.component_event.models.base">Odoo Models Extensions</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../../api/api_event.html#module-odoo.addons.component_event.core">Internals</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../api/api_queue.html">Queue</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../../api/api_queue.html#module-odoo.addons.queue_job.job">Job</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../api/api_queue.html#module-odoo.addons.queue_job.models.base">Models</a></li>
 </ul>
 </li>
@@ -871,15 +860,19 @@
     <span class="n">_abstract</span> <span class="o">=</span> <span class="kc">True</span>
 
     <span class="c1"># used for inheritance</span>
-    <span class="n">_name</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">_name</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1">#: Name of the component</span>
+
+    <span class="c1">#: Name or list of names of the component(s) to inherit from</span>
     <span class="n">_inherit</span> <span class="o">=</span> <span class="kc">None</span>
 
-    <span class="c1"># name of the collection to subscribe in</span>
+    <span class="c1">#: name of the collection to subscribe in</span>
     <span class="n">_collection</span> <span class="o">=</span> <span class="kc">None</span>
 
-    <span class="c1"># None means any Model, can be a list [&#39;res.users&#39;, ...]</span>
+    <span class="c1">#: List of models on which the component can be applied.</span>
+    <span class="c1">#: None means any Model, can be a list [&#39;res.users&#39;, ...]</span>
     <span class="n">_apply_on</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="c1"># component purpose (&#39;import.mapper&#39;, ...)</span>
+
+    <span class="c1">#: Component purpose (&#39;import.mapper&#39;, ...).</span>
     <span class="n">_usage</span> <span class="o">=</span> <span class="kc">None</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">work_context</span><span class="p">):</span>
@@ -1138,7 +1131,7 @@
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.6.<br/>
     </p>
   </div>
 </footer>

@@ -122,6 +122,12 @@ Connector Components
    :exclude-members: _module
    :private-members:
 
+.. automodule:: connector.components.locker
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :exclude-members: _module
+   :private-members:
 
 ***************************
 Components Collection Model

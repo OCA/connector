@@ -62,6 +62,10 @@ The usual categories are:
   * ``batch.importer``
   * ``batch.exporter``
 
+The possibilities for components do not stop there, look at the
+:class:`~connector.components.locker.RecordLocker` for an example of
+single-purpose, decoupled component.
+
 
 """
 

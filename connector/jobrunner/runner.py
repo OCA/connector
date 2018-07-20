@@ -134,8 +134,7 @@ ERROR_RECOVERY_DELAY = 5
 
 _logger = logging.getLogger(__name__)
 
-
-session = requests.Session()
+sessions = {}
 
 
 # Unfortunately, it is not possible to extend the Odoo
@@ -157,12 +156,13 @@ def _channels():
 
 
 def _async_http_get(port, db_name, job_uuid):
-
+    if not sessions.get(db_name):
+        sessions[db_name] = requests.Session()
+    session = sessions[db_name]
     if not session.cookies:
         # obtain an anonymous session
         _logger.info("obtaining an anonymous session for the job runner")
-        url = ('http://localhost:%s/connector/session' %
-               (port, db_name, job_uuid))
+        url = 'http://localhost:%s/web/login?db=%s' % (port, db_name)
         response = session.get(url, timeout=30)
         response.raise_for_status()
 

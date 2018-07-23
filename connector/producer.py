@@ -44,9 +44,9 @@ class Base(models.AbstractModel):
 
     @api.multi
     def unlink(self):
-        result = super(Base, self).unlink()
         if is_module_installed(self.env, 'connector'):
             if on_record_unlink.has_consumer_for(self.env, self._name):
                 for record_id in self.ids:
                     on_record_unlink.fire(self.env, self._name, record_id)
-        return result
+
+        return super(Base, self).unlink()

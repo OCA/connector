@@ -273,10 +273,15 @@ anonymous <code class="docutils literal notranslate"><span class="pre">/queue_jo
 <li><code class="docutils literal notranslate"><span class="pre">ODOO_QUEUE_JOB_CHANNELS=root:4</span></code> (or any other channels
 configuration), default <code class="docutils literal notranslate"><span class="pre">root:1</span></code>.</li>
 <li><code class="docutils literal notranslate"><span class="pre">ODOO_QUEUE_JOB_SCHEME=https</span></code>, default <code class="docutils literal notranslate"><span class="pre">http</span></code>.</li>
-<li><code class="docutils literal notranslate"><span class="pre">ODOO_QUEUE_JOB_HOST=load-balancer</span></code>, default <code class="docutils literal notranslate"><span class="pre">localhost</span></code>.</li>
-<li><code class="docutils literal notranslate"><span class="pre">ODOO_QUEUE_JOB_PORT=443</span></code>, default <code class="docutils literal notranslate"><span class="pre">xmlrpc-port</span></code> or 8069.</li>
+<li><code class="docutils literal notranslate"><span class="pre">ODOO_QUEUE_JOB_HOST=load-balancer</span></code>, default <code class="docutils literal notranslate"><span class="pre">http_interface</span></code>
+or <code class="docutils literal notranslate"><span class="pre">localhost</span></code> if unset.</li>
+<li><code class="docutils literal notranslate"><span class="pre">ODOO_QUEUE_JOB_PORT=443</span></code>, default <code class="docutils literal notranslate"><span class="pre">http_port</span></code> or 8069 if unset.</li>
 <li><code class="docutils literal notranslate"><span class="pre">ODOO_QUEUE_JOB_HTTP_AUTH_USER=jobrunner</span></code>, default empty.</li>
 <li><code class="docutils literal notranslate"><span class="pre">ODOO_QUEUE_JOB_HTTP_AUTH_PASSWORD=s3cr3t</span></code>, default empty.</li>
+<li><code class="docutils literal notranslate"><span class="pre">ODOO_QUEUE_JOB_JOBRUNNER_DB_HOST=master-db</span></code>, default <code class="docutils literal notranslate"><span class="pre">db_host</span></code>
+or <code class="docutils literal notranslate"><span class="pre">False</span></code> if unset.</li>
+<li><code class="docutils literal notranslate"><span class="pre">ODOO_QUEUE_JOB_JOBRUNNER_DB_PORT=5432</span></code>, default <code class="docutils literal notranslate"><span class="pre">db_port</span></code>
+or <code class="docutils literal notranslate"><span class="pre">False</span></code> if unset.</li>
 </ul>
 </li>
 <li>Alternatively, configure the channels through the Odoo configuration
@@ -289,6 +294,8 @@ file, like:</li>
 <span class="na">port</span> <span class="o">=</span> <span class="s">443</span>
 <span class="na">http_auth_user</span> <span class="o">=</span> <span class="s">jobrunner</span>
 <span class="na">http_auth_password</span> <span class="o">=</span> <span class="s">s3cr3t</span>
+<span class="na">jobrunner_db_host</span> <span class="o">=</span> <span class="s">master-db</span>
+<span class="na">jobrunner_db_port</span> <span class="o">=</span> <span class="s">5432</span>
 </pre></div>
 </div>
 <ul class="simple">

@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: Odoo Server 11.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-01-05 16:56+0000\n"
-"PO-Revision-Date: 2018-08-03 13:24+0000\n"
+"PO-Revision-Date: 2018-08-04 13:35+0000\n"
 "Last-Translator: Rodrigo Macedo <rmsolucoeseminformatic4@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) (https://www.transifex.com/oca/teams/"
 "23907/pt_BR/)\n"
@@ -24,7 +24,7 @@ msgstr ""
 #: code:addons/connector/models/checkpoint.py:119
 #, python-format
 msgid "A %s needs a review."
-msgstr "Um %s necessita revisão"
+msgstr "Um %s necessita revisão."
 
 #. module: connector
 #: model:ir.ui.view,arch_db:connector.view_connector_config_settings
@@ -34,7 +34,7 @@ msgstr "Aplicar"
 #. module: connector
 #: model:ir.ui.view,arch_db:connector.view_connector_config_settings
 msgid "Backends"
-msgstr "Backends"
+msgstr "Back-ends"
 
 #. module: connector
 #: model:ir.ui.view,arch_db:connector.view_connector_checkpoint_review
@@ -117,7 +117,7 @@ msgstr "Criado por"
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_review_create_date
 #: model:ir.model.fields,field_description:connector.field_connector_config_settings_create_date
 msgid "Created on"
-msgstr "Criado em "
+msgstr "Criado em"
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_backend_display_name
@@ -173,7 +173,7 @@ msgstr "Última atualização por"
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_write_date
 #: model:ir.model.fields,field_description:connector.field_connector_config_settings_write_date
 msgid "Last Updated on"
-msgstr "Última atualização em "
+msgstr "Última atualização em"
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_test_binding_sync_date
@@ -307,4 +307,4 @@ msgstr "ou"
 #. module: connector
 #: model:ir.ui.view,arch_db:connector.view_connector_checkpoint_form
 msgid "to verify it:"
-msgstr "para verificar."
+msgstr "para verificar isto:"

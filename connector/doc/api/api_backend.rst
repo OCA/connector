@@ -64,6 +64,5 @@ Backend Models
 ==============
 
 .. automodule:: connector.backend_model
-   :members:
    :undoc-members:
    :show-inheritance:

@@ -2,20 +2,12 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="fr">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Backend &#8212; documentation Connector </title>
+    <title>Backend &#8212; Documentation Connector </title>
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
-        VERSION:     '',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
@@ -44,8 +36,7 @@
   ga('send', 'pageview');
 </script>
 
-  </head>
-  <body>
+  </head><body>
 
   <div id="navbar" class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -257,10 +248,10 @@
       
   <div class="section" id="backend">
 <h1>Backend<a class="headerlink" href="#backend" title="Lien permanent vers ce titre">¶</a></h1>
-<p>Le backend pour une version (par exemple Magento 1.7) est représenté par une instance de la classe <a class="reference internal" href="#connector.backend.Backend" title="connector.backend.Backend"><code class="xref py py-class docutils literal"><span class="pre">Backend</span></code></a>.</p>
-<p>Chaque connecteur va aussi créer un <code class="docutils literal"><span class="pre">connector.backend</span></code> qui permet aux utilisateurs d’inscrire leurs backends. Par exemple le connecteur Magento a un <code class="docutils literal"><span class="pre">magento.backend</span></code> (<code class="docutils literal"><span class="pre">_inherit</span></code> <code class="xref py py-class docutils literal"><span class="pre">connector.backend_model.connector_backend</span></code>).  Ce modèle contient un champ <code class="docutils literal"><span class="pre">version</span></code> qui doit avoir la même lists de versions (avec exactement le même nom) que les instances de <a class="reference internal" href="#connector.backend.Backend" title="connector.backend.Backend"><code class="xref py py-class docutils literal"><span class="pre">Backend</span></code></a>.</p>
+<p>Le backend pour une version (par exemple Magento 1.7) est représenté par une instance de la classe <a class="reference internal" href="#connector.backend.Backend" title="connector.backend.Backend"><code class="xref py py-class docutils literal notranslate"><span class="pre">Backend</span></code></a>.</p>
+<p>Chaque connecteur va aussi créer un <code class="docutils literal notranslate"><span class="pre">connector.backend</span></code> qui permet aux utilisateurs d’inscrire leurs backends. Par exemple le connecteur Magento a un <code class="docutils literal notranslate"><span class="pre">magento.backend</span></code> (<code class="docutils literal notranslate"><span class="pre">_inherit</span></code> <code class="xref py py-class docutils literal notranslate"><span class="pre">connector.backend_model.connector_backend</span></code>).  Ce modèle contient un champ <code class="docutils literal notranslate"><span class="pre">version</span></code> qui doit avoir la même lists de versions (avec exactement le même nom) que les instances de <a class="reference internal" href="#connector.backend.Backend" title="connector.backend.Backend"><code class="xref py py-class docutils literal notranslate"><span class="pre">Backend</span></code></a>.</p>
 <p>Exemple avec le connecteur Magento</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1"># in magentoerpconnect/backend.py</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># in magentoerpconnect/backend.py</span>
 
 <span class="n">magento</span> <span class="o">=</span> <span class="n">backend</span><span class="o">.</span><span class="n">Backend</span><span class="p">(</span><span class="s1">&#39;magento&#39;</span><span class="p">)</span>
 <span class="sd">&quot;&quot;&quot; Generic Magento Backend &quot;&quot;&quot;</span>
@@ -299,11 +290,11 @@
     <span class="c1"># &lt;snip&gt;</span>
 </pre></div>
 </div>
-<p>Dans le code ci-dessus, “1.7” est la clé de correspondance entre l’instance de <a class="reference internal" href="#connector.backend.Backend" title="connector.backend.Backend"><code class="xref py py-class docutils literal"><span class="pre">Backend</span></code></a> (<code class="docutils literal"><span class="pre">magento1700</span></code>) et l’enregistrement <code class="docutils literal"><span class="pre">magento_backend</span></code>.</p>
+<p>Dans le code ci-dessus, “1.7” est la clé de correspondance entre l’instance de <a class="reference internal" href="#connector.backend.Backend" title="connector.backend.Backend"><code class="xref py py-class docutils literal notranslate"><span class="pre">Backend</span></code></a> (<code class="docutils literal notranslate"><span class="pre">magento1700</span></code>) et l’enregistrement <code class="docutils literal notranslate"><span class="pre">magento_backend</span></code>.</p>
 <span class="target" id="module-connector.backend"></span><dl class="class">
 <dt id="connector.backend.Backend">
 <em class="property">class </em><code class="descclassname">connector.backend.</code><code class="descname">Backend</code><span class="sig-paren">(</span><em>service=None</em>, <em>version=None</em>, <em>parent=None</em>, <em>registry=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/backend.html#Backend"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.backend.Backend" title="Lien permanent vers cette définition">¶</a></dt>
-<dd><p>Bases : <a class="reference external" href="https://docs.python.org/2/library/functions.html#object" title="(disponible dans Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<dd><p>Bases : <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(disponible dans Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Un backend représente un système avec lequel interagir, comme Magento, Prestashop, Redmine, …</p>
 <p>Il possède trois propriétés :</p>
 <dl class="attribute">
@@ -321,18 +312,18 @@
 <dl class="attribute">
 <dt id="connector.backend.Backend.parent">
 <code class="descname">parent</code><a class="headerlink" href="#connector.backend.Backend.parent" title="Lien permanent vers cette définition">¶</a></dt>
-<dd><p>Un backend parent. Lorsqu’aucune classe <a class="reference internal" href="api_connector.html#connector.connector.ConnectorUnit" title="connector.connector.ConnectorUnit"><code class="xref py py-class docutils literal"><span class="pre">ConnectorUnit</span></code></a> n’est trouvée pour un backend, elle est cherchée dans le <cite>parent</cite>.</p>
+<dd><p>Un backend parent. Lorsqu’aucune classe <a class="reference internal" href="api_connector.html#connector.connector.ConnectorUnit" title="connector.connector.ConnectorUnit"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConnectorUnit</span></code></a> n’est trouvée pour un backend, elle est cherchée dans le <cite>parent</cite>.</p>
 </dd></dl>
 
 <p>La structure des Backends est la partie clé du framework, mais elle est plutôt simple.</p>
 <ul class="simple">
-<li>Une instance de <code class="docutils literal"><span class="pre">Backend</span></code> contient un registre de classes <a class="reference internal" href="api_connector.html#connector.connector.ConnectorUnit" title="connector.connector.ConnectorUnit"><code class="xref py py-class docutils literal"><span class="pre">ConnectorUnit</span></code></a></li>
-<li>Il peut renvoyer la classe <a class="reference internal" href="api_connector.html#connector.connector.ConnectorUnit" title="connector.connector.ConnectorUnit"><code class="xref py py-class docutils literal"><span class="pre">ConnectorUnit</span></code></a> à utiliser pour une tâche</li>
-<li>Si aucune <a class="reference internal" href="api_connector.html#connector.connector.ConnectorUnit" title="connector.connector.ConnectorUnit"><code class="xref py py-class docutils literal"><span class="pre">ConnectorUnit</span></code></a> n’est inscrite pour une tâche, le parent direct est interrogé (et ainsi de suite)</li>
+<li>Une instance de <code class="docutils literal notranslate"><span class="pre">Backend</span></code> contient un registre de classes <a class="reference internal" href="api_connector.html#connector.connector.ConnectorUnit" title="connector.connector.ConnectorUnit"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConnectorUnit</span></code></a></li>
+<li>Il peut renvoyer la classe <a class="reference internal" href="api_connector.html#connector.connector.ConnectorUnit" title="connector.connector.ConnectorUnit"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConnectorUnit</span></code></a> à utiliser pour une tâche</li>
+<li>Si aucune <a class="reference internal" href="api_connector.html#connector.connector.ConnectorUnit" title="connector.connector.ConnectorUnit"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConnectorUnit</span></code></a> n’est inscrite pour une tâche, le parent direct est interrogé (et ainsi de suite)</li>
 </ul>
 <p>Les Backends ont deux mécanismes différents d’extension. L’un est plus vertical (entre plusieurs versions) et l’autre est plus horizontal car il permet de modifier le comportement pour une version donnée du backend.</p>
 <p>Pour l’exemple, disons que nous avons les versions suivantes de backend</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>         <span class="o">&lt;</span><span class="n">Magento</span><span class="o">&gt;</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>         <span class="o">&lt;</span><span class="n">Magento</span><span class="o">&gt;</span>
              <span class="o">|</span>
       <span class="o">-----------------</span>
       <span class="o">|</span>               <span class="o">|</span>
@@ -342,16 +333,16 @@
 </pre></div>
 </div>
 <p>Et voici la façon dont elles sont déclarées en Python</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">magento</span> <span class="o">=</span> <span class="n">Backend</span><span class="p">(</span><span class="s1">&#39;magento&#39;</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">magento</span> <span class="o">=</span> <span class="n">Backend</span><span class="p">(</span><span class="s1">&#39;magento&#39;</span><span class="p">)</span>
 <span class="n">magento1700</span> <span class="o">=</span> <span class="n">Backend</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="n">magento</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s1">&#39;1.7&#39;</span><span class="p">)</span>
 <span class="n">magento2000</span> <span class="o">=</span> <span class="n">Backend</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="n">magento</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s1">&#39;2.0&#39;</span><span class="p">)</span>
 
 <span class="n">magento_specific</span> <span class="o">=</span> <span class="n">Backend</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="n">magento1700</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s1">&#39;1.7-specific&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Dans le graphe ci-dessus, <code class="docutils literal"><span class="pre">&lt;Magento&gt;</span></code> va contenir toutes les classes partagées entre toutes les versions. Chaque version de Magento (<code class="docutils literal"><span class="pre">&lt;Magento</span> <span class="pre">1.7&gt;</span></code>, <code class="docutils literal"><span class="pre">&lt;Magento</span> <span class="pre">2.0&gt;</span></code>) va utiliser les classes définies sur <code class="docutils literal"><span class="pre">&lt;Magento&gt;</span></code>, sauf si elles ont inscrit leur propres classes. C’est la même chose pour <code class="docutils literal"><span class="pre">&lt;Magento</span> <span class="pre">avec</span> <span class="pre">specifique&gt;</span></code> mais celui-ci contient des personnalisations qui sont spécifiques à une instance (typiquement pour mettre en place des mappeurs spécifiques à une instance).</p>
-<p>Voici comment inscrire des classes sur <code class="docutils literal"><span class="pre">&lt;Magento&gt;</span></code> et une autre sur <code class="docutils literal"><span class="pre">&lt;Magento</span> <span class="pre">1.7&gt;</span></code></p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="nd">@magento</span>
+<p>Dans le graphe ci-dessus, <code class="docutils literal notranslate"><span class="pre">&lt;Magento&gt;</span></code> va contenir toutes les classes partagées entre toutes les versions. Chaque version de Magento (<code class="docutils literal notranslate"><span class="pre">&lt;Magento</span> <span class="pre">1.7&gt;</span></code>, <code class="docutils literal notranslate"><span class="pre">&lt;Magento</span> <span class="pre">2.0&gt;</span></code>) va utiliser les classes définies sur <code class="docutils literal notranslate"><span class="pre">&lt;Magento&gt;</span></code>, sauf si elles ont inscrit leur propres classes. C’est la même chose pour <code class="docutils literal notranslate"><span class="pre">&lt;Magento</span> <span class="pre">avec</span> <span class="pre">specifique&gt;</span></code> mais celui-ci contient des personnalisations qui sont spécifiques à une instance (typiquement pour mettre en place des mappeurs spécifiques à une instance).</p>
+<p>Voici comment inscrire des classes sur <code class="docutils literal notranslate"><span class="pre">&lt;Magento&gt;</span></code> et une autre sur <code class="docutils literal notranslate"><span class="pre">&lt;Magento</span> <span class="pre">1.7&gt;</span></code></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@magento</span>
 <span class="k">class</span> <span class="nc">Synchronizer</span><span class="p">(</span><span class="n">ConnectorUnit</span><span class="p">):</span>
     <span class="n">_model_name</span> <span class="o">=</span> <span class="s1">&#39;res.partner&#39;</span>
 
@@ -364,8 +355,8 @@
     <span class="n">_model_name</span> <span class="o">=</span> <span class="s1">&#39;res.partner&#39;</span>
 </pre></div>
 </div>
-<p>Ici, la méthode <a class="reference internal" href="#connector.backend.Backend.get_class" title="connector.backend.Backend.get_class"><code class="xref py py-meth docutils literal"><span class="pre">get_class()</span></code></a> appelé sur <code class="docutils literal"><span class="pre">magento1700</span></code> renverrait</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">magento1700</span><span class="o">.</span><span class="n">get_class</span><span class="p">(</span><span class="n">Synchronizer</span><span class="p">,</span> <span class="n">session</span><span class="p">,</span> <span class="s1">&#39;res.partner&#39;</span><span class="p">)</span>
+<p>Ici, la méthode <a class="reference internal" href="#connector.backend.Backend.get_class" title="connector.backend.Backend.get_class"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_class()</span></code></a> appelé sur <code class="docutils literal notranslate"><span class="pre">magento1700</span></code> renverrait</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">magento1700</span><span class="o">.</span><span class="n">get_class</span><span class="p">(</span><span class="n">Synchronizer</span><span class="p">,</span> <span class="n">session</span><span class="p">,</span> <span class="s1">&#39;res.partner&#39;</span><span class="p">)</span>
 <span class="c1"># =&gt; Synchronizer1700</span>
 <span class="n">magento1700</span><span class="o">.</span><span class="n">get_class</span><span class="p">(</span><span class="n">Mapper</span><span class="p">,</span> <span class="n">session</span><span class="p">,</span> <span class="s1">&#39;res.partner&#39;</span><span class="p">)</span>
 <span class="c1"># =&gt; Mapper</span>
@@ -374,13 +365,14 @@
 <p>C’est le mécanisme d’extension verticale, il dit que chaque version fille est capable d’étendre ou remplacer le comportement de son parent.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">en utilisant le framework, vous n’aurez pas besoin d’appeler</p>
+<p class="last">when using the framework, you won’t need to call
+<a class="reference internal" href="#connector.backend.Backend.get_class" title="connector.backend.Backend.get_class"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_class()</span></code></a>, usually, you will call
+<a class="reference internal" href="api_connector.html#connector.connector.ConnectorEnvironment.get_connector_unit" title="connector.connector.ConnectorEnvironment.get_connector_unit"><code class="xref py py-meth docutils literal notranslate"><span class="pre">connector.connector.ConnectorEnvironment.get_connector_unit()</span></code></a>.</p>
 </div>
-<p><a class="reference internal" href="#connector.backend.Backend.get_class" title="connector.backend.Backend.get_class"><code class="xref py py-meth docutils literal"><span class="pre">get_class()</span></code></a>, habituellement vous appellerez <a class="reference internal" href="api_connector.html#connector.connector.ConnectorEnvironment.get_connector_unit" title="connector.connector.ConnectorEnvironment.get_connector_unit"><code class="xref py py-meth docutils literal"><span class="pre">connector.connector.ConnectorEnvironment.get_connector_unit()</span></code></a>.</p>
 <p>L’extension verticale est celle que vous utiliserez probablement le plus, parce que la plupart des choses que vous modifierez concerne vos applications personnalisées ou des comportements différents selon les versions du backend.</p>
-<p>Cependant il peut arriver que nous ayons besoin de changer le comportement d’un connecteur, en installant un module. Par exemple, imaginons que nous ayons déjà un <code class="docutils literal"><span class="pre">ImportMapper</span></code> pour les articles dans le Connecteur Magento. Nous créons un module (générique) pour gérer le catalogue d’une manière plus avancée. Nous redéfinissons un <code class="docutils literal"><span class="pre">AdvancedImportMapper</span></code> qui devrait être utilisé quand le module est installé. Ceci est le mécanisme d’extension horizontal.</p>
-<p>Remplace une clase <a class="reference internal" href="api_connector.html#connector.connector.ConnectorUnit" title="connector.connector.ConnectorUnit"><code class="xref py py-class docutils literal"><span class="pre">ConnectorUnit</span></code></a> par une autre dans le backend</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="nd">@backend</span><span class="p">(</span><span class="n">replacing</span><span class="o">=</span><span class="n">ImportMapper</span><span class="p">)</span>
+<p>Cependant il peut arriver que nous ayons besoin de changer le comportement d’un connecteur, en installant un module. Par exemple, imaginons que nous ayons déjà un <code class="docutils literal notranslate"><span class="pre">ImportMapper</span></code> pour les articles dans le Connecteur Magento. Nous créons un module (générique) pour gérer le catalogue d’une manière plus avancée. Nous redéfinissons un <code class="docutils literal notranslate"><span class="pre">AdvancedImportMapper</span></code> qui devrait être utilisé quand le module est installé. Ceci est le mécanisme d’extension horizontal.</p>
+<p>Remplace une clase <a class="reference internal" href="api_connector.html#connector.connector.ConnectorUnit" title="connector.connector.ConnectorUnit"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConnectorUnit</span></code></a> par une autre dans le backend</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@backend</span><span class="p">(</span><span class="n">replacing</span><span class="o">=</span><span class="n">ImportMapper</span><span class="p">)</span>
 <span class="k">class</span> <span class="nc">AdvancedImportMapper</span><span class="p">(</span><span class="n">ImportMapper</span><span class="p">):</span>
     <span class="n">_model_name</span> <span class="o">=</span> <span class="s1">&#39;product.product&#39;</span>
 </pre></div>
@@ -392,14 +384,14 @@
 <dl class="method">
 <dt id="connector.backend.Backend.get_class">
 <code class="descname">get_class</code><span class="sig-paren">(</span><em>base_class</em>, <em>session</em>, <em>model_name</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/backend.html#Backend.get_class"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.backend.Backend.get_class" title="Lien permanent vers cette définition">¶</a></dt>
-<dd><p>Trouve une sous-classe correspondante à <code class="docutils literal"><span class="pre">base_class</span></code> dans les classes inscrites.</p>
+<dd><p>Trouve une sous-classe correspondante à <code class="docutils literal notranslate"><span class="pre">base_class</span></code> dans les classes inscrites.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><ul class="first last simple">
-<li><strong>base_class</strong> (<a class="reference internal" href="api_connector.html#connector.connector.MetaConnectorUnit" title="connector.connector.MetaConnectorUnit"><code class="xref py py-class docutils literal"><span class="pre">connector.connector.MetaConnectorUnit</span></code></a>) – Classe (et sous-classe) à rechercher dans le registre</li>
-<li><strong>session</strong> (<a class="reference internal" href="api_session.html#connector.session.ConnectorSession" title="connector.session.ConnectorSession"><code class="xref py py-class docutils literal"><span class="pre">connector.session.ConnectorSession</span></code></a>) – session en cours</li>
+<li><strong>base_class</strong> (<a class="reference internal" href="api_connector.html#connector.connector.MetaConnectorUnit" title="connector.connector.MetaConnectorUnit"><code class="xref py py-class docutils literal notranslate"><span class="pre">connector.connector.MetaConnectorUnit</span></code></a>) – Classe (et sous-classe) à rechercher dans le registre</li>
+<li><strong>session</strong> (<a class="reference internal" href="api_session.html#connector.session.ConnectorSession" title="connector.session.ConnectorSession"><code class="xref py py-class docutils literal notranslate"><span class="pre">connector.session.ConnectorSession</span></code></a>) – session en cours</li>
 </ul>
 </td>
 </tr>
@@ -422,8 +414,8 @@
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><ul class="first last simple">
-<li><strong>cls</strong> (<a class="reference internal" href="api_connector.html#connector.connector.MetaConnectorUnit" title="connector.connector.MetaConnectorUnit"><code class="xref py py-class docutils literal"><span class="pre">connector.connector.MetaConnectorUnit</span></code></a>) – la classe ConnectorUnit à inscrire</li>
-<li><strong>replacing</strong> (<a class="reference internal" href="api_connector.html#connector.connector.MetaConnectorUnit" title="connector.connector.MetaConnectorUnit"><code class="xref py py-class docutils literal"><span class="pre">connector.connector.MetaConnectorUnit</span></code></a>) – optionnel, la classe ConnectorUnit à remplacer</li>
+<li><strong>cls</strong> (<a class="reference internal" href="api_connector.html#connector.connector.MetaConnectorUnit" title="connector.connector.MetaConnectorUnit"><code class="xref py py-class docutils literal notranslate"><span class="pre">connector.connector.MetaConnectorUnit</span></code></a>) – la classe ConnectorUnit à inscrire</li>
+<li><strong>replacing</strong> (<a class="reference internal" href="api_connector.html#connector.connector.MetaConnectorUnit" title="connector.connector.MetaConnectorUnit"><code class="xref py py-class docutils literal notranslate"><span class="pre">connector.connector.MetaConnectorUnit</span></code></a>) – optionnel, la classe ConnectorUnit à remplacer</li>
 </ul>
 </td>
 </tr>
@@ -441,125 +433,6 @@
 </div>
 <div class="section" id="module-connector.backend_model">
 <span id="backend-models"></span><h1>Modèles du backend<a class="headerlink" href="#module-connector.backend_model" title="Lien permanent vers ce titre">¶</a></h1>
-<dl class="class">
-<dt id="connector.backend_model.ConnectorBackend">
-<em class="property">class </em><code class="descclassname">connector.backend_model.</code><code class="descname">ConnectorBackend</code><span class="sig-paren">(</span><em>pool</em>, <em>cr</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/backend_model.html#ConnectorBackend"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.backend_model.ConnectorBackend" title="Lien permanent vers cette définition">¶</a></dt>
-<dd><p>Bases : <code class="xref py py-class docutils literal"><span class="pre">openerp.models.AbstractModel</span></code></p>
-<p>Une instance d’un backend externe auquel se synchroniser</p>
-<p>Les backends doivent <code class="docutils literal"><span class="pre">_inherit</span></code> ce modèle dans les modules des connecteurs.</p>
-<dl class="method">
-<dt id="connector.backend_model.ConnectorBackend.add_checkpoint">
-<code class="descname">add_checkpoint</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/backend_model.html#ConnectorBackend.add_checkpoint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.backend_model.ConnectorBackend.add_checkpoint" title="Lien permanent vers cette définition">¶</a></dt>
-<dd><p>Add a checkpoint for current backend.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="connector.backend_model.ConnectorBackend.get_backend">
-<code class="descname">get_backend</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/backend_model.html#ConnectorBackend.get_backend"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.backend_model.ConnectorBackend.get_backend" title="Lien permanent vers cette définition">¶</a></dt>
-<dd><p>Pour un enregistrement d’un backend, renvoie l’instance appropriée de <a class="reference internal" href="#connector.backend.Backend" title="connector.backend.Backend"><code class="xref py py-class docutils literal"><span class="pre">Backend</span></code></a>.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="connector.backend_model.ConnectorBackend.name">
-<code class="descname">name</code><a class="headerlink" href="#connector.backend_model.ConnectorBackend.name" title="Lien permanent vers cette définition">¶</a></dt>
-<dd><p>Basic string field, can be length-limited, usually displayed as a
-single-line string in clients.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><ul class="first last simple">
-<li><strong>size</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(disponible dans Python v2.7)"><em>int</em></a>) – la taille maximum des valeurs stockées dans ce champ</li>
-<li><strong>translate</strong> – enable the translation of the field’s values; use
-<code class="docutils literal"><span class="pre">translate=True</span></code> to translate field values as a whole; <code class="docutils literal"><span class="pre">translate</span></code>
-may also be a callable such that <code class="docutils literal"><span class="pre">translate(callback,</span> <span class="pre">value)</span></code>
-translates <code class="docutils literal"><span class="pre">value</span></code> by using <code class="docutils literal"><span class="pre">callback(term)</span></code> to retrieve the
-translation of terms.</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="connector.backend_model.ConnectorBackend.version">
-<code class="descname">version</code><a class="headerlink" href="#connector.backend_model.ConnectorBackend.version" title="Lien permanent vers cette définition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><ul class="first last simple">
-<li><strong>selection</strong> – specifies the possible values for this field.
-It is given as either a list of pairs (<code class="docutils literal"><span class="pre">value</span></code>, <code class="docutils literal"><span class="pre">string</span></code>), or a
-model method, or a method name.</li>
-<li><strong>selection_add</strong> – provides an extension of the selection in the case
-of an overridden field. It is a list of pairs (<code class="docutils literal"><span class="pre">value</span></code>, <code class="docutils literal"><span class="pre">string</span></code>).</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-<p>The attribute <code class="docutils literal"><span class="pre">selection</span></code> is mandatory except in the case of
-<a class="reference external" href="https://www.odoo.com/documentation/8.0/reference/orm.html#field-related" title="(disponible dans odoo v8.0)"><span class="xref std std-ref">related fields</span></a> or <a class="reference external" href="https://www.odoo.com/documentation/8.0/reference/orm.html#field-incremental-definition" title="(disponible dans odoo v8.0)"><span class="xref std std-ref">field extensions</span></a>.</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="connector.backend_model.ExternalBinding">
-<em class="property">class </em><code class="descclassname">connector.backend_model.</code><code class="descname">ExternalBinding</code><span class="sig-paren">(</span><em>pool</em>, <em>cr</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/backend_model.html#ExternalBinding"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.backend_model.ExternalBinding" title="Lien permanent vers cette définition">¶</a></dt>
-<dd><p>Bases : <code class="xref py py-class docutils literal"><span class="pre">openerp.models.AbstractModel</span></code></p>
-<p>Un modèle abstrait pour une liaison à des enregistrements externes</p>
-<p>Un binding externe est une liaison entre un backend et OpenERP. Par exemple, pour un <cite>partner</cite>, cela peut être <code class="docutils literal"><span class="pre">magento.res.partner</span></code> ou pour un article, <code class="docutils literal"><span class="pre">magento.product</span></code>.</p>
-<p>Le modèle final sera un <code class="docutils literal"><span class="pre">_inherits</span></code> du modèle OpenERP et va <code class="docutils literal"><span class="pre">_inherit</span></code> ce modèle.</p>
-<p>Il aura une relation vers l’enregistrement (via <code class="docutils literal"><span class="pre">_inherits</span></code>) et vers le modèle backend concret (par exemple <code class="docutils literal"><span class="pre">magento.backend</span></code>).</p>
-<p>Il contiendra également toutes les données relatives aux backend pour l’enregistrement.</p>
-<p>Il nécessite d’implémenter au moins ces champs :</p>
-<p>openerp_id</p>
-<blockquote>
-<div>Le many2one vers l’enregistrement lié (utilisé par <code class="docutils literal"><span class="pre">_inherits</span></code>).</div></blockquote>
-<p>backend_id</p>
-<blockquote>
-<div>Le many2one vers le backend (par exemple <code class="docutils literal"><span class="pre">magento.backend</span></code>).</div></blockquote>
-<p>magento_id ou prestashop_id ou …</p>
-<blockquote>
-<div>L’ID sur le backend.</div></blockquote>
-<p>sync_date</p>
-<blockquote>
-<div>Dernière date de synchronisation</div></blockquote>
-<p>La définition des relations dans <code class="docutils literal"><span class="pre">_columns</span></code> doit être faite dans les classes concrètes, parce que les relations elle-mêmes n’existent pas dans ce module.</p>
-<p>Par exemple, pour un <code class="docutils literal"><span class="pre">res.partner.category</span></code> depuis Magento, J’aurais (ceci est une consolidation de toutes les colonnes des modèles abstraits. Dans <code class="docutils literal"><span class="pre">magentoerpconnect</span></code> vous ne trouveriez pas ça)</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">MagentoResPartnerCategory</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
-    <span class="n">_name</span> <span class="o">=</span> <span class="s1">&#39;magento.res.partner.category&#39;</span>
-
-    <span class="n">_inherits</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;res.partner.category&#39;</span><span class="p">:</span> <span class="s1">&#39;openerp_id&#39;</span><span class="p">}</span>
-
-    <span class="n">openerp_id</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Many2one</span><span class="p">(</span><span class="n">comodel_name</span><span class="o">=</span><span class="s1">&#39;res.partner.category&#39;</span><span class="p">,</span>
-                                  <span class="n">string</span><span class="o">=</span><span class="s1">&#39;Partner Category&#39;</span><span class="p">,</span>
-                                  <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                                  <span class="n">ondelete</span><span class="o">=</span><span class="s1">&#39;cascade&#39;</span><span class="p">)</span>
-    <span class="n">backend_id</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Many2one</span><span class="p">(</span>
-        <span class="n">comodel_name</span><span class="o">=</span><span class="s1">&#39;magento.backend&#39;</span><span class="p">,</span>
-        <span class="n">string</span><span class="o">=</span><span class="s1">&#39;Magento Backend&#39;</span><span class="p">,</span>
-        <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-        <span class="n">ondelete</span><span class="o">=</span><span class="s1">&#39;restrict&#39;</span><span class="p">)</span>
-    <span class="n">magento_id</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Char</span><span class="p">(</span><span class="n">string</span><span class="o">=</span><span class="s1">&#39;ID on Magento&#39;</span><span class="p">)</span>
-    <span class="n">tax_class_id</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Integer</span><span class="p">(</span><span class="n">string</span><span class="o">=</span><span class="s1">&#39;Tax Class ID&#39;</span><span class="p">)</span>
-
-    <span class="n">_sql_constraints</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="p">(</span><span class="s1">&#39;magento_uniq&#39;</span><span class="p">,</span> <span class="s1">&#39;unique(backend_id, magento_id)&#39;</span><span class="p">,</span>
-         <span class="s1">&#39;Partner Tag with same ID on Magento already exists.&#39;</span><span class="p">),</span>
-    <span class="p">]</span>
-</pre></div>
-</div>
-<dl class="attribute">
-<dt id="connector.backend_model.ExternalBinding.sync_date">
-<code class="descname">sync_date</code><a class="headerlink" href="#connector.backend_model.ExternalBinding.sync_date" title="Lien permanent vers cette définition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
 </div>
 
 
@@ -582,7 +455,7 @@ of an overridden field. It is a list of pairs (<code class="docutils literal"><s
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.6.<br/>
+      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.7.<br/>
     </p>
   </div>
 </footer>

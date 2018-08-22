@@ -34,6 +34,5 @@ Models
 ******
 
 .. automodule:: connector.queue.model
-   :members:
    :undoc-members:
    :show-inheritance:

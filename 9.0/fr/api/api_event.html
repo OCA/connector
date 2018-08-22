@@ -2,20 +2,12 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="fr">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Événement &#8212; documentation Connector </title>
+    <title>Événement &#8212; Documentation Connector </title>
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
-        VERSION:     '',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
@@ -44,8 +36,7 @@
   ga('send', 'pageview');
 </script>
 
-  </head>
-  <body>
+  </head><body>
 
   <div id="navbar" class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -259,11 +250,11 @@
 <dl class="class">
 <dt id="connector.event.Event">
 <em class="property">class </em><code class="descclassname">connector.event.</code><code class="descname">Event</code><a class="reference internal" href="../_modules/connector/event.html#Event"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.event.Event" title="Lien permanent vers cette définition">¶</a></dt>
-<dd><p>Bases : <a class="reference external" href="https://docs.python.org/2/library/functions.html#object" title="(disponible dans Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<dd><p>Bases : <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(disponible dans Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Un événement contient des consommateurs qui sont appelés lorsque l’événement survient.</p>
 <p>Les événements sont capables de filtrer par nom de modèle les consommateurs à exécuter.</p>
 <p>L’usage classique d’un événement est d’instancier un objet <cite>Event</cite></p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">on_my_event</span> <span class="o">=</span> <span class="n">Event</span><span class="p">()</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">on_my_event</span> <span class="o">=</span> <span class="n">Event</span><span class="p">()</span>
 </pre></div>
 </div>
 <p>Un événement a toujours au moins les deux arguments suivants :</p>
@@ -272,7 +263,7 @@
 <li>model_name</li>
 </ul>
 <p>Ensuite pour abonner un ou plusieurs consommateurs, un événement a une fonction :</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">do_something</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">do_something</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
     <span class="nb">print</span> <span class="s2">&quot;Event was fired with arguments: </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
 
 <span class="c1"># active on all models</span>
@@ -288,7 +279,7 @@
 </pre></div>
 </div>
 <p>On peut aussi remplacer un consommateur</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">do_something_product2</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">do_something_product2</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
     <span class="nb">print</span> <span class="s2">&quot;Consumer 2&quot;</span>
     <span class="nb">print</span> <span class="p">(</span><span class="s2">&quot;Event was fired on a product &quot;</span>
           <span class="s2">&quot;with arguments: </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">))</span>
@@ -298,11 +289,11 @@
 </pre></div>
 </div>
 <p>Finalement, on déclenche l’événement</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">on_my_event</span><span class="o">.</span><span class="n">fire</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="s1">&#39;res.users&#39;</span><span class="p">,</span> <span class="s1">&#39;value_a&#39;</span><span class="p">,</span> <span class="s1">&#39;value_b&#39;</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">on_my_event</span><span class="o">.</span><span class="n">fire</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="s1">&#39;res.users&#39;</span><span class="p">,</span> <span class="s1">&#39;value_a&#39;</span><span class="p">,</span> <span class="s1">&#39;value_b&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Un consommateur peut être inscrit grâce à un décorateur</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="nd">@on_my_event</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@on_my_event</span>
 <span class="k">def</span> <span class="nf">do_other_thing</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
     <span class="nb">print</span> <span class="s1">&#39;foo&#39;</span>
 
@@ -321,8 +312,8 @@
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><ul class="first last simple">
-<li><strong>session</strong> (<code class="xref py py-class docutils literal"><span class="pre">connector.session.Session</span></code>) – session en cours</li>
-<li><strong>model_name</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(disponible dans Python v2.7)"><em>str</em></a>) – nom du modèle</li>
+<li><strong>session</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">connector.session.Session</span></code>) – session en cours</li>
+<li><strong>model_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(disponible dans Python v3.7)"><em>str</em></a>) – nom du modèle</li>
 <li><strong>args</strong> – arguments propagés au consommateur. Le deuxième argument de <cite>args</cite> est le nom de modèle. Le premier argument est la session.</li>
 <li><strong>kwargs</strong> – arguments nommés propagés au consommateur</li>
 </ul>
@@ -348,7 +339,7 @@
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><ul class="first last simple">
 <li><strong>consumer</strong> – la fonction à abonner à l’événement</li>
-<li><strong>model_names</strong> – le consommateur sera actif seulement sur ces modèles ou, si <code class="docutils literal"><span class="pre">None</span></code>, actifs sur tous les modèles</li>
+<li><strong>model_names</strong> – le consommateur sera actif seulement sur ces modèles ou, si <code class="docutils literal notranslate"><span class="pre">None</span></code>, actifs sur tous les modèles</li>
 <li><strong>replacing</strong> – la fonction à remplacer par la nouvelle.</li>
 </ul>
 </td>
@@ -367,7 +358,7 @@
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><ul class="first last simple">
 <li><strong>consumer</strong> – la fonction à désinscrire</li>
-<li><strong>model_names</strong> – retire seulement pour ces modèles ou, si <code class="docutils literal"><span class="pre">None</span></code>, retire un consommateur qui est actif sur tous les modèles</li>
+<li><strong>model_names</strong> – retire seulement pour ces modèles ou, si <code class="docutils literal notranslate"><span class="pre">None</span></code>, retire un consommateur qui est actif sur tous les modèles</li>
 </ul>
 </td>
 </tr>
@@ -380,11 +371,11 @@
 <dl class="data">
 <dt id="connector.event.on_record_create">
 <code class="descclassname">connector.event.</code><code class="descname">on_record_create</code><em class="property"> = &lt;connector.event.Event object&gt;</em><a class="headerlink" href="#connector.event.on_record_create" title="Lien permanent vers cette définition">¶</a></dt>
-<dd><p><code class="docutils literal"><span class="pre">on_record_create</span></code> est déclenché à la création d’un enregistrement.</p>
+<dd><p><code class="docutils literal notranslate"><span class="pre">on_record_create</span></code> est déclenché à la création d’un enregistrement.</p>
 <p>Les abonnés doivent prendre les arguments suivants :</p>
 <blockquote>
 <div><ul class="simple">
-<li>session : objet <a class="reference internal" href="api_session.html#connector.session.ConnectorSession" title="connector.session.ConnectorSession"><code class="xref py py-class docutils literal"><span class="pre">ConnectorSession</span></code></a></li>
+<li>session : objet <a class="reference internal" href="api_session.html#connector.session.ConnectorSession" title="connector.session.ConnectorSession"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConnectorSession</span></code></a></li>
 <li>model_name : nom du modèle</li>
 <li>record_id : Id de l’enregistrement créé</li>
 <li>vals :  valeurs des champs mis à jour, par ex. {“field_name”: field_value, …}</li>
@@ -395,11 +386,11 @@
 <dl class="data">
 <dt id="connector.event.on_record_unlink">
 <code class="descclassname">connector.event.</code><code class="descname">on_record_unlink</code><em class="property"> = &lt;connector.event.Event object&gt;</em><a class="headerlink" href="#connector.event.on_record_unlink" title="Lien permanent vers cette définition">¶</a></dt>
-<dd><p><code class="docutils literal"><span class="pre">on_record_unlink</span></code> est déclenché à la suppression d’un enregistrement.</p>
+<dd><p><code class="docutils literal notranslate"><span class="pre">on_record_unlink</span></code> est déclenché à la suppression d’un enregistrement.</p>
 <p>Les abonnés doivent prendre les arguments suivants :</p>
 <blockquote>
 <div><ul class="simple">
-<li>session : objet <a class="reference internal" href="api_session.html#connector.session.ConnectorSession" title="connector.session.ConnectorSession"><code class="xref py py-class docutils literal"><span class="pre">ConnectorSession</span></code></a></li>
+<li>session : objet <a class="reference internal" href="api_session.html#connector.session.ConnectorSession" title="connector.session.ConnectorSession"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConnectorSession</span></code></a></li>
 <li>model_name : nom du modèle</li>
 <li>record_id : Id de l’enregistrement</li>
 </ul>
@@ -409,11 +400,11 @@
 <dl class="data">
 <dt id="connector.event.on_record_write">
 <code class="descclassname">connector.event.</code><code class="descname">on_record_write</code><em class="property"> = &lt;connector.event.Event object&gt;</em><a class="headerlink" href="#connector.event.on_record_write" title="Lien permanent vers cette définition">¶</a></dt>
-<dd><p><code class="docutils literal"><span class="pre">on_record_write</span></code> est déclenché à la mise à jour d’un enregistrement.</p>
+<dd><p><code class="docutils literal notranslate"><span class="pre">on_record_write</span></code> est déclenché à la mise à jour d’un enregistrement.</p>
 <p>Les abonnés doivent prendre les arguments suivants :</p>
 <blockquote>
 <div><ul class="simple">
-<li>session : objet <a class="reference internal" href="api_session.html#connector.session.ConnectorSession" title="connector.session.ConnectorSession"><code class="xref py py-class docutils literal"><span class="pre">ConnectorSession</span></code></a></li>
+<li>session : objet <a class="reference internal" href="api_session.html#connector.session.ConnectorSession" title="connector.session.ConnectorSession"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConnectorSession</span></code></a></li>
 <li>model_name : nom du modèle</li>
 <li>record_id : Id de l’enregistrement</li>
 <li>vals :  valeurs des champ pour le nouvel enregistrement, par ex. {“field_name”: field_value, …}</li>
@@ -443,7 +434,7 @@
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.6.<br/>
+      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.7.<br/>
     </p>
   </div>
 </footer>

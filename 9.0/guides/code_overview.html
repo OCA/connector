@@ -2,20 +2,12 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Code Overview &#8212; Connector  documentation</title>
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
-        VERSION:     '',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
@@ -43,8 +35,7 @@
   ga('send', 'pageview');
 </script>
 
-  </head>
-  <body>
+  </head><body>
 
   <div id="navbar" class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -233,7 +224,7 @@
     </a>
   </li>
   <li>
-    <a href="concepts.html" title="Next Chapter: Connector Concepts"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Connector Concep... &raquo;</span>
+    <a href="concepts.html" title="Next Chapter: Connector Concepts"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Connector Con... &raquo;</span>
     </a>
   </li>
               
@@ -269,8 +260,8 @@ The steps won’t show all the steps, but a simplified excerpt of a real
 use case exposing the main ideas.</p>
 <div class="section" id="backends">
 <h2>Backends<a class="headerlink" href="#backends" title="Permalink to this headline">¶</a></h2>
-<p>All start with the declaration of the <a class="reference internal" href="../api/api_backend.html#connector.backend.Backend" title="connector.backend.Backend"><code class="xref py py-class docutils literal"><span class="pre">Backend</span></code></a>:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">openerp.addons.connector.backend</span> <span class="k">as</span> <span class="nn">backend</span>
+<p>All start with the declaration of the <a class="reference internal" href="../api/api_backend.html#connector.backend.Backend" title="connector.backend.Backend"><code class="xref py py-class docutils literal notranslate"><span class="pre">Backend</span></code></a>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">openerp.addons.connector.backend</span> <span class="k">as</span> <span class="nn">backend</span>
 
 <span class="n">magento</span> <span class="o">=</span> <span class="n">backend</span><span class="o">.</span><span class="n">Backend</span><span class="p">(</span><span class="s1">&#39;magento&#39;</span><span class="p">)</span>
 <span class="sd">&quot;&quot;&quot; Generic Magento Backend &quot;&quot;&quot;</span>
@@ -284,13 +275,13 @@ hierarchy of backends.</p>
 </div>
 <div class="section" id="bindings">
 <h2>Bindings<a class="headerlink" href="#bindings" title="Permalink to this headline">¶</a></h2>
-<p>The <code class="docutils literal"><span class="pre">binding</span></code> is the link between an Odoo record and an external
-record. There is no forced implementation for the <code class="docutils literal"><span class="pre">bindings</span></code>. The most
+<p>The <code class="docutils literal notranslate"><span class="pre">binding</span></code> is the link between an Odoo record and an external
+record. There is no forced implementation for the <code class="docutils literal notranslate"><span class="pre">bindings</span></code>. The most
 straightforward techniques are: storing the external ID in the same
-model (<code class="docutils literal"><span class="pre">account.invoice</span></code>), in a new link model or in a new link model
-which <code class="docutils literal"><span class="pre">_inherits</span></code> <code class="docutils literal"><span class="pre">account.invoice</span></code>. Here we choose the latter
+model (<code class="docutils literal notranslate"><span class="pre">account.invoice</span></code>), in a new link model or in a new link model
+which <code class="docutils literal notranslate"><span class="pre">_inherits</span></code> <code class="docutils literal notranslate"><span class="pre">account.invoice</span></code>. Here we choose the latter
 solution:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">MagentoAccountInvoice</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">MagentoAccountInvoice</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
     <span class="n">_name</span> <span class="o">=</span> <span class="s1">&#39;magento.account.invoice&#39;</span>
     <span class="n">_inherits</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;account.invoice&#39;</span><span class="p">:</span> <span class="s1">&#39;openerp_id&#39;</span><span class="p">}</span>
     <span class="n">_description</span> <span class="o">=</span> <span class="s1">&#39;Magento Invoice&#39;</span>
@@ -306,23 +297,23 @@ solution:</p>
 </div>
 <div class="section" id="session">
 <h2>Session<a class="headerlink" href="#session" title="Permalink to this headline">¶</a></h2>
-<p>The framework uses <a class="reference internal" href="../api/api_session.html#connector.session.ConnectorSession" title="connector.session.ConnectorSession"><code class="xref py py-class docutils literal"><span class="pre">ConnectorSession</span></code></a>
-objects to store the <code class="docutils literal"><span class="pre">cr</span></code>, <code class="docutils literal"><span class="pre">uid</span></code> and <code class="docutils literal"><span class="pre">context</span></code> in a
-<code class="xref py py-class docutils literal"><span class="pre">openerp.api.Environment</span></code>.  So from a session, we can access to
-the usual <code class="docutils literal"><span class="pre">self.env</span></code> (new API) or <code class="docutils literal"><span class="pre">self.pool</span></code> (old API).</p>
+<p>The framework uses <a class="reference internal" href="../api/api_session.html#connector.session.ConnectorSession" title="connector.session.ConnectorSession"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConnectorSession</span></code></a>
+objects to store the <code class="docutils literal notranslate"><span class="pre">cr</span></code>, <code class="docutils literal notranslate"><span class="pre">uid</span></code> and <code class="docutils literal notranslate"><span class="pre">context</span></code> in a
+<code class="xref py py-class docutils literal notranslate"><span class="pre">openerp.api.Environment</span></code>.  So from a session, we can access to
+the usual <code class="docutils literal notranslate"><span class="pre">self.env</span></code> (new API) or <code class="docutils literal notranslate"><span class="pre">self.pool</span></code> (old API).</p>
 </div>
 <div class="section" id="events">
 <h2>Events<a class="headerlink" href="#events" title="Permalink to this headline">¶</a></h2>
-<p>We can create <a class="reference internal" href="../api/api_event.html#connector.event.Event" title="connector.event.Event"><code class="xref py py-class docutils literal"><span class="pre">Event</span></code></a> on which we’ll be able
+<p>We can create <a class="reference internal" href="../api/api_event.html#connector.event.Event" title="connector.event.Event"><code class="xref py py-class docutils literal notranslate"><span class="pre">Event</span></code></a> on which we’ll be able
 to subscribe consumers.  The connector already integrates the most
 generic ones:
-<a class="reference internal" href="../api/api_event.html#connector.event.on_record_create" title="connector.event.on_record_create"><code class="xref py py-meth docutils literal"><span class="pre">on_record_create()</span></code></a>,
-<a class="reference internal" href="../api/api_event.html#connector.event.on_record_write" title="connector.event.on_record_write"><code class="xref py py-meth docutils literal"><span class="pre">on_record_write()</span></code></a>,
-<a class="reference internal" href="../api/api_event.html#connector.event.on_record_unlink" title="connector.event.on_record_unlink"><code class="xref py py-meth docutils literal"><span class="pre">on_record_unlink()</span></code></a></p>
-<p>When we create a <code class="docutils literal"><span class="pre">magento.account.invoice</span></code> record, we want to delay a
+<a class="reference internal" href="../api/api_event.html#connector.event.on_record_create" title="connector.event.on_record_create"><code class="xref py py-meth docutils literal notranslate"><span class="pre">on_record_create()</span></code></a>,
+<a class="reference internal" href="../api/api_event.html#connector.event.on_record_write" title="connector.event.on_record_write"><code class="xref py py-meth docutils literal notranslate"><span class="pre">on_record_write()</span></code></a>,
+<a class="reference internal" href="../api/api_event.html#connector.event.on_record_unlink" title="connector.event.on_record_unlink"><code class="xref py py-meth docutils literal notranslate"><span class="pre">on_record_unlink()</span></code></a></p>
+<p>When we create a <code class="docutils literal notranslate"><span class="pre">magento.account.invoice</span></code> record, we want to delay a
 job to export it to Magento, so we subscribe a new consumer on
-<a class="reference internal" href="../api/api_event.html#connector.event.on_record_create" title="connector.event.on_record_create"><code class="xref py py-meth docutils literal"><span class="pre">on_record_create()</span></code></a>:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="nd">@on_record_create</span><span class="p">(</span><span class="n">model_names</span><span class="o">=</span><span class="s1">&#39;magento.account.invoice&#39;</span><span class="p">)</span>
+<a class="reference internal" href="../api/api_event.html#connector.event.on_record_create" title="connector.event.on_record_create"><code class="xref py py-meth docutils literal notranslate"><span class="pre">on_record_create()</span></code></a>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@on_record_create</span><span class="p">(</span><span class="n">model_names</span><span class="o">=</span><span class="s1">&#39;magento.account.invoice&#39;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">delay_export_account_invoice</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">record_id</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Delay the job to export the magento invoice.</span>
@@ -330,17 +321,17 @@ job to export it to Magento, so we subscribe a new consumer on
     <span class="n">export_invoice</span><span class="o">.</span><span class="n">delay</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">record_id</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>On the last line, you can notice an <code class="docutils literal"><span class="pre">export_invoice.delay</span></code>. We’ll
+<p>On the last line, you can notice an <code class="docutils literal notranslate"><span class="pre">export_invoice.delay</span></code>. We’ll
 discuss about that in <a class="reference internal" href="#jobs">Jobs</a></p>
 </div>
 <div class="section" id="jobs">
 <h2>Jobs<a class="headerlink" href="#jobs" title="Permalink to this headline">¶</a></h2>
-<p>A <a class="reference internal" href="../api/api_queue.html#connector.queue.job.Job" title="connector.queue.job.Job"><code class="xref py py-class docutils literal"><span class="pre">Job</span></code></a> is a task to execute later.
+<p>A <a class="reference internal" href="../api/api_queue.html#connector.queue.job.Job" title="connector.queue.job.Job"><code class="xref py py-class docutils literal notranslate"><span class="pre">Job</span></code></a> is a task to execute later.
 In that case: create the invoice on Magento.</p>
-<p>Any function decorated with <a class="reference internal" href="../api/api_queue.html#connector.queue.job.job" title="connector.queue.job.job"><code class="xref py py-meth docutils literal"><span class="pre">job()</span></code></a> can
-be posted in the queue of jobs using a <code class="docutils literal"><span class="pre">delay()</span></code> function
+<p>Any function decorated with <a class="reference internal" href="../api/api_queue.html#connector.queue.job.job" title="connector.queue.job.job"><code class="xref py py-meth docutils literal notranslate"><span class="pre">job()</span></code></a> can
+be posted in the queue of jobs using a <code class="docutils literal notranslate"><span class="pre">delay()</span></code> function
 and will be run as soon as possible:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="nd">@job</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@job</span>
 <span class="k">def</span> <span class="nf">export_invoice</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">record_id</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Export a validated or paid invoice. &quot;&quot;&quot;</span>
     <span class="n">invoice</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">env</span><span class="p">[</span><span class="n">model_name</span><span class="p">]</span><span class="o">.</span><span class="n">browse</span><span class="p">(</span><span class="n">record_id</span><span class="p">)</span>
@@ -353,42 +344,42 @@ and will be run as soon as possible:</p>
 <p>There is a few things happening there:</p>
 <ul class="simple">
 <li>We find the backend on which we’ll export the invoice.</li>
-<li>We build an <code class="xref py py-class docutils literal"><span class="pre">Environment</span></code> with the
-current <a class="reference internal" href="../api/api_session.html#connector.session.ConnectorSession" title="connector.session.ConnectorSession"><code class="xref py py-class docutils literal"><span class="pre">ConnectorSession</span></code></a>,
+<li>We build an <code class="xref py py-class docutils literal notranslate"><span class="pre">Environment</span></code> with the
+current <a class="reference internal" href="../api/api_session.html#connector.session.ConnectorSession" title="connector.session.ConnectorSession"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConnectorSession</span></code></a>,
 the model we work with and the target backend.</li>
-<li>We get the <a class="reference internal" href="../api/api_connector.html#connector.connector.ConnectorUnit" title="connector.connector.ConnectorUnit"><code class="xref py py-class docutils literal"><span class="pre">ConnectorUnit</span></code></a> responsible
+<li>We get the <a class="reference internal" href="../api/api_connector.html#connector.connector.ConnectorUnit" title="connector.connector.ConnectorUnit"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConnectorUnit</span></code></a> responsible
 for the work using
-<code class="xref py py-meth docutils literal"><span class="pre">get_connector_unit()</span></code>
-(according the backend version and the model)  and we call <code class="docutils literal"><span class="pre">run()</span></code>
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">get_connector_unit()</span></code>
+(according the backend version and the model)  and we call <code class="docutils literal notranslate"><span class="pre">run()</span></code>
 on it.</li>
 </ul>
 </div>
 <div class="section" id="connectorunit">
 <h2>ConnectorUnit<a class="headerlink" href="#connectorunit" title="Permalink to this headline">¶</a></h2>
 <p>These are all classes which are responsible for a specific work.
-The main types of <a class="reference internal" href="../api/api_connector.html#connector.connector.ConnectorUnit" title="connector.connector.ConnectorUnit"><code class="xref py py-class docutils literal"><span class="pre">ConnectorUnit</span></code></a> are
+The main types of <a class="reference internal" href="../api/api_connector.html#connector.connector.ConnectorUnit" title="connector.connector.ConnectorUnit"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConnectorUnit</span></code></a> are
 (the implementation of theses classes belongs to the connectors):</p>
-<p><a class="reference internal" href="../api/api_connector.html#connector.connector.Binder" title="connector.connector.Binder"><code class="xref py py-class docutils literal"><span class="pre">Binder</span></code></a></p>
+<p><a class="reference internal" href="../api/api_connector.html#connector.connector.Binder" title="connector.connector.Binder"><code class="xref py py-class docutils literal notranslate"><span class="pre">Binder</span></code></a></p>
 <blockquote>
-<div>The <code class="docutils literal"><span class="pre">binders</span></code> give the external ID or Odoo ID from respectively an
+<div>The <code class="docutils literal notranslate"><span class="pre">binders</span></code> give the external ID or Odoo ID from respectively an
 Odoo ID or an external ID. A default implementation is available.</div></blockquote>
-<p><a class="reference internal" href="../api/api_mapper.html#connector.unit.mapper.Mapper" title="connector.unit.mapper.Mapper"><code class="xref py py-class docutils literal"><span class="pre">Mapper</span></code></a></p>
+<p><a class="reference internal" href="../api/api_mapper.html#connector.unit.mapper.Mapper" title="connector.unit.mapper.Mapper"><code class="xref py py-class docutils literal notranslate"><span class="pre">Mapper</span></code></a></p>
 <blockquote>
-<div>The <code class="docutils literal"><span class="pre">mappers</span></code> transform a external record into an Odoo record or
+<div>The <code class="docutils literal notranslate"><span class="pre">mappers</span></code> transform a external record into an Odoo record or
 conversely.</div></blockquote>
-<p><a class="reference internal" href="../api/api_backend_adapter.html#connector.unit.backend_adapter.BackendAdapter" title="connector.unit.backend_adapter.BackendAdapter"><code class="xref py py-class docutils literal"><span class="pre">BackendAdapter</span></code></a></p>
+<p><a class="reference internal" href="../api/api_backend_adapter.html#connector.unit.backend_adapter.BackendAdapter" title="connector.unit.backend_adapter.BackendAdapter"><code class="xref py py-class docutils literal notranslate"><span class="pre">BackendAdapter</span></code></a></p>
 <blockquote>
-<div>The <code class="docutils literal"><span class="pre">adapters</span></code> implements the discussion with the <code class="docutils literal"><span class="pre">backend's</span></code>
+<div>The <code class="docutils literal notranslate"><span class="pre">adapters</span></code> implements the discussion with the <code class="docutils literal notranslate"><span class="pre">backend's</span></code>
 APIs. They usually adapt their APIs to a common interface (CRUD).</div></blockquote>
-<p><a class="reference internal" href="../api/api_synchronizer.html#connector.unit.synchronizer.Synchronizer" title="connector.unit.synchronizer.Synchronizer"><code class="xref py py-class docutils literal"><span class="pre">Synchronizer</span></code></a></p>
+<p><a class="reference internal" href="../api/api_synchronizer.html#connector.unit.synchronizer.Synchronizer" title="connector.unit.synchronizer.Synchronizer"><code class="xref py py-class docutils literal notranslate"><span class="pre">Synchronizer</span></code></a></p>
 <blockquote>
-<div>The <code class="docutils literal"><span class="pre">synchronizers</span></code> are the main piece of a synchronization.  They
+<div>The <code class="docutils literal notranslate"><span class="pre">synchronizers</span></code> are the main piece of a synchronization.  They
 define the flow of a synchronization and use the other
-<a class="reference internal" href="../api/api_connector.html#connector.connector.ConnectorUnit" title="connector.connector.ConnectorUnit"><code class="xref py py-class docutils literal"><span class="pre">ConnectorUnit</span></code></a> (the ones above or
+<a class="reference internal" href="../api/api_connector.html#connector.connector.ConnectorUnit" title="connector.connector.ConnectorUnit"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConnectorUnit</span></code></a> (the ones above or
 specific ones).</div></blockquote>
-<p>For the export of the invoice, we just need an <code class="docutils literal"><span class="pre">adapter</span></code> and a
-<code class="docutils literal"><span class="pre">synchronizer</span></code> (the real implementation is more complete):</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="nd">@magento</span>
+<p>For the export of the invoice, we just need an <code class="docutils literal notranslate"><span class="pre">adapter</span></code> and a
+<code class="docutils literal notranslate"><span class="pre">synchronizer</span></code> (the real implementation is more complete):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@magento</span>
 <span class="k">class</span> <span class="nc">AccountInvoiceAdapter</span><span class="p">(</span><span class="n">GenericAdapter</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Backend Adapter for the Magento Invoice &quot;&quot;&quot;</span>
     <span class="n">_model_name</span> <span class="o">=</span> <span class="s1">&#39;magento.account.invoice&#39;</span>
@@ -445,7 +436,7 @@ specific ones).</div></blockquote>
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.6.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.7.<br/>
     </p>
   </div>
 </footer>

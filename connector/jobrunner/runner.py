@@ -134,6 +134,8 @@ ERROR_RECOVERY_DELAY = 5
 
 _logger = logging.getLogger(__name__)
 
+sessions = {}
+
 
 # Unfortunately, it is not possible to extend the Odoo
 # server command line arguments, so we resort to environment variables
@@ -154,6 +156,16 @@ def _channels():
 
 
 def _async_http_get(port, db_name, job_uuid):
+    if not sessions.get(db_name):
+        sessions[db_name] = requests.Session()
+    session = sessions[db_name]
+    if not session.cookies:
+        # obtain an anonymous session
+        _logger.info("obtaining an anonymous session for the job runner")
+        url = 'http://localhost:%s/web/login?db=%s' % (port, db_name)
+        response = session.get(url, timeout=30)
+        response.raise_for_status()
+
     # Method to set failed job (due to timeout, etc) as pending,
     # to avoid keeping it as enqueued.
     def set_job_pending():
@@ -175,7 +187,7 @@ def _async_http_get(port, db_name, job_uuid):
         try:
             # we are not interested in the result, so we set a short timeout
             # but not too short so we trap and log hard configuration errors
-            response = requests.get(url, timeout=1)
+            response = session.get(url, timeout=1)
 
             # raise_for_status will result in either nothing, a Client Error
             # for HTTP Response codes between 400 and 500 or a Server Error
@@ -185,6 +197,7 @@ def _async_http_get(port, db_name, job_uuid):
             set_job_pending()
         except:
             _logger.exception("exception in GET %s", url)
+            session.cookies.clear()
             set_job_pending()
     thread = threading.Thread(target=urlopen)
     thread.daemon = True

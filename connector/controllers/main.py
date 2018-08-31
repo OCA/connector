@@ -121,11 +121,10 @@ class RunJobController(http.Controller):
             retry_postpone(job, unicode(err), seconds=err.seconds)
             _logger.debug('%s postponed', job)
 
-        except (FailedJobError, Exception):
+        except:
             buff = StringIO()
             traceback.print_exc(file=buff)
             _logger.error(buff.getvalue())
-
             job.set_failed(exc_info=buff.getvalue())
             with session_hdl.session() as session:
                 clear_env(session.env)

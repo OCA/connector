@@ -324,6 +324,9 @@ Components</p>
 </ul>
 </dd>
 </dl>
+<p>The possibilities for components do not stop there, look at the
+<a class="reference internal" href="#connector.components.locker.RecordLocker" title="connector.components.locker.RecordLocker"><code class="xref py py-class docutils literal notranslate"><span class="pre">RecordLocker</span></code></a> for an example of
+single-purpose, decoupled component.</p>
 <dl class="class">
 <dt id="connector.components.core.BaseConnectorComponent">
 <em class="property">class </em><code class="descclassname">connector.components.core.</code><code class="descname">BaseConnectorComponent</code><span class="sig-paren">(</span><em>work_context</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/components/core.html#BaseConnectorComponent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.components.core.BaseConnectorComponent" title="Lien permanent vers cette définition">¶</a></dt>
@@ -1515,6 +1518,66 @@ on Events:</p>
 </dd></dl>
 
 </div>
+<span class="target" id="module-connector.components.locker"></span><dl class="class">
+<dt id="connector.components.locker.RecordLocker">
+<em class="property">class </em><code class="descclassname">connector.components.locker.</code><code class="descname">RecordLocker</code><span class="sig-paren">(</span><em>work_context</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/components/locker.html#RecordLocker"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.components.locker.RecordLocker" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Bases : <a class="reference internal" href="#odoo.addons.component.core.Component" title="odoo.addons.component.core.Component"><code class="xref py py-class docutils literal notranslate"><span class="pre">odoo.addons.component.core.Component</span></code></a></p>
+<p>Component allowing to lock record(s) for the current transaction</p>
+<p>Example of usage:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="bp">self</span><span class="o">.</span><span class="n">component</span><span class="p">(</span><span class="s1">&#39;record.locker&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">lock</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">records</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>See the definition of <a class="reference internal" href="#connector.components.locker.RecordLocker.lock" title="connector.components.locker.RecordLocker.lock"><code class="xref py py-meth docutils literal notranslate"><span class="pre">lock()</span></code></a> for details.</p>
+<dl class="attribute">
+<dt id="connector.components.locker.RecordLocker._name">
+<code class="descname">_name</code><em class="property"> = 'base.record.locker'</em><a class="headerlink" href="#connector.components.locker.RecordLocker._name" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="connector.components.locker.RecordLocker._inherit">
+<code class="descname">_inherit</code><em class="property"> = ['base.connector']</em><a class="headerlink" href="#connector.components.locker.RecordLocker._inherit" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="connector.components.locker.RecordLocker._usage">
+<code class="descname">_usage</code><em class="property"> = 'record.locker'</em><a class="headerlink" href="#connector.components.locker.RecordLocker._usage" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="connector.components.locker.RecordLocker.lock">
+<code class="descname">lock</code><span class="sig-paren">(</span><em>records</em>, <em>seconds=None</em>, <em>ignore_retry=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/components/locker.html#RecordLocker.lock"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.components.locker.RecordLocker.lock" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Lock the records.</p>
+<p>Lock the record so we are sure that only one job is running for this
+record(s) if concurrent jobs have to run a job for the same record(s).
+When concurrent jobs try to work on the same record(s), the first one
+will lock and proceed, the others will fail to acquire it and will be
+retried later
+(<code class="xref py py-exc docutils literal notranslate"><span class="pre">RetryableJobError</span></code> is raised).</p>
+<p>The lock is using a <code class="docutils literal notranslate"><span class="pre">FOR</span> <span class="pre">UPDATE</span> <span class="pre">NOWAIT</span></code> so any concurrent transaction
+trying FOR UPDATE/UPDATE will be rejected until the current transaction
+is committed or rollbacked.</p>
+<p>A classical use case for this is to prevent concurrent exports.</p>
+<p>The following parameters are forwarded to the exception
+<code class="xref py py-exc docutils literal notranslate"><span class="pre">RetryableJobError</span></code></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><ul class="first last simple">
+<li><strong>seconds</strong> – In case of retry because the lock cannot be acquired,
+in how many seconds it must be retried. If not set,
+the queue_job configuration is used.</li>
+<li><strong>ignore_retry</strong> – If True, the retry counter of the job will not be
+increased.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 <div class="section" id="module-odoo.addons.component.models.collection">
 <span id="components-collection-model"></span><h2>Components Collection Model<a class="headerlink" href="#module-odoo.addons.component.models.collection" title="Lien permanent vers ce titre">¶</a></h2>
@@ -2110,7 +2173,7 @@ the components</li>
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.6.<br/>
+      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.8.<br/>
     </p>
   </div>
 </footer>

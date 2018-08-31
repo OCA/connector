@@ -4,7 +4,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>connector.components.listener &#8212; Connector  documentation</title>
+    <title>connector.components.locker &#8212; Connector  documentation</title>
     <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
@@ -225,57 +225,76 @@
   <div class="row">
     <div class="col-md-12 content">
       
-  <h1>Source code for connector.components.listener</h1><div class="highlight"><pre>
-<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
-<span class="c1"># Copyright 2013-2017 Camptocamp SA</span>
+  <h1>Source code for connector.components.locker</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Copyright 2018 Camptocamp SA</span>
 <span class="c1"># License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html)</span>
 
-<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">Listeners</span>
-<span class="sd">=========</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">psycopg2</span>
 
-<span class="sd">Listeners are Components notified when events happen.</span>
-<span class="sd">Documentation in :mod:`odoo.addons.component_event.components.event`</span>
+<span class="kn">from</span> <span class="nn">odoo.addons.component.core</span> <span class="k">import</span> <span class="n">Component</span>
+<span class="kn">from</span> <span class="nn">odoo.addons.connector.exception</span> <span class="k">import</span> <span class="n">RetryableJobError</span>
 
-<span class="sd">The base listener for the connectors add a method</span>
-<span class="sd">:meth:`ConnectorListener.no_connector_export` which can be used with</span>
-<span class="sd">:func:`odoo.addons.component_event.skip_if`.</span>
+<span class="n">_logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 
-<span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="RecordLocker"><a class="viewcode-back" href="../../../api/api_components.html#connector.components.locker.RecordLocker">[docs]</a><span class="k">class</span> <span class="nc">RecordLocker</span><span class="p">(</span><span class="n">Component</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Component allowing to lock record(s) for the current transaction</span>
 
-<span class="kn">from</span> <span class="nn">odoo.addons.component.core</span> <span class="k">import</span> <span class="n">AbstractComponent</span>
+<span class="sd">    Example of usage::</span>
 
+<span class="sd">        self.component(&#39;record.locker&#39;).lock(self.records)</span>
 
-<div class="viewcode-block" id="ConnectorListener"><a class="viewcode-back" href="../../../api/api_components.html#connector.components.listener.ConnectorListener">[docs]</a><span class="k">class</span> <span class="nc">ConnectorListener</span><span class="p">(</span><span class="n">AbstractComponent</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; Base Backend Adapter for the connectors &quot;&quot;&quot;</span>
+<span class="sd">    See the definition of :meth:`~lock` for details.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">_name</span> <span class="o">=</span> <span class="s1">&#39;base.connector.listener&#39;</span>
-    <span class="n">_inherit</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;base.connector&#39;</span><span class="p">,</span> <span class="s1">&#39;base.event.listener&#39;</span><span class="p">]</span>
+    <span class="n">_name</span> <span class="o">=</span> <span class="s2">&quot;base.record.locker&quot;</span>
+    <span class="n">_inherit</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;base.connector&quot;</span><span class="p">]</span>
+    <span class="n">_usage</span> <span class="o">=</span> <span class="s2">&quot;record.locker&quot;</span>
 
-<div class="viewcode-block" id="ConnectorListener.no_connector_export"><a class="viewcode-back" href="../../../api/api_components.html#connector.components.listener.ConnectorListener.no_connector_export">[docs]</a>    <span class="k">def</span> <span class="nf">no_connector_export</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Return if the &#39;connector_no_export&#39; has been set in context</span>
+<div class="viewcode-block" id="RecordLocker.lock"><a class="viewcode-back" href="../../../api/api_components.html#connector.components.locker.RecordLocker.lock">[docs]</a>    <span class="k">def</span> <span class="nf">lock</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">records</span><span class="p">,</span> <span class="n">seconds</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ignore_retry</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Lock the records.</span>
 
-<span class="sd">        To be used with :func:`odoo.addons.component_event.skip_if`</span>
-<span class="sd">        on Events::</span>
+<span class="sd">        Lock the record so we are sure that only one job is running for this</span>
+<span class="sd">        record(s) if concurrent jobs have to run a job for the same record(s).</span>
+<span class="sd">        When concurrent jobs try to work on the same record(s), the first one</span>
+<span class="sd">        will lock and proceed, the others will fail to acquire it and will be</span>
+<span class="sd">        retried later</span>
+<span class="sd">        (:exc:`~odoo.addons.queue_job.exception.RetryableJobError` is raised).</span>
 
-<span class="sd">            from odoo.addons.component.core import Component</span>
-<span class="sd">            from odoo.addons.component_event import skip_if</span>
+<span class="sd">        The lock is using a ``FOR UPDATE NOWAIT`` so any concurrent transaction</span>
+<span class="sd">        trying FOR UPDATE/UPDATE will be rejected until the current transaction</span>
+<span class="sd">        is committed or rollbacked.</span>
 
+<span class="sd">        A classical use case for this is to prevent concurrent exports.</span>
 
-<span class="sd">            class MyEventListener(Component):</span>
-<span class="sd">                _name = &#39;my.event.listener&#39;</span>
-<span class="sd">                _inherit = &#39;base.connector.event.listener&#39;</span>
-<span class="sd">                _apply_on = [&#39;magento.res.partner&#39;]</span>
+<span class="sd">        The following parameters are forwarded to the exception</span>
+<span class="sd">        :exc:`~odoo.addons.queue_job.exception.RetryableJobError`</span>
 
-<span class="sd">                @skip_if(lambda: self, record, *args, **kwargs:</span>
-<span class="sd">                         self.no_connector_export(record))</span>
-<span class="sd">                def on_record_write(self, record, fields=None):</span>
-<span class="sd">                    record.with_delay().export_record()</span>
-
+<span class="sd">        :param seconds: In case of retry because the lock cannot be acquired,</span>
+<span class="sd">                        in how many seconds it must be retried. If not set,</span>
+<span class="sd">                        the queue_job configuration is used.</span>
+<span class="sd">        :param ignore_retry: If True, the retry counter of the job will not be</span>
+<span class="sd">                             increased.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="p">(</span><span class="n">record</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;no_connector_export&#39;</span><span class="p">)</span> <span class="ow">or</span>
-                <span class="n">record</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;connector_no_export&#39;</span><span class="p">))</span></div></div>
+        <span class="n">sql</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;SELECT id FROM </span><span class="si">%s</span><span class="s2"> WHERE ID IN </span><span class="si">%%</span><span class="s2">s FOR UPDATE NOWAIT&quot;</span> <span class="o">%</span>
+               <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">_table</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">cr</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sql</span><span class="p">,</span> <span class="p">(</span><span class="nb">tuple</span><span class="p">(</span><span class="n">records</span><span class="o">.</span><span class="n">ids</span><span class="p">),),</span>
+                                <span class="n">log_exceptions</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">psycopg2</span><span class="o">.</span><span class="n">OperationalError</span><span class="p">:</span>
+            <span class="n">_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                <span class="s2">&quot;A concurrent job is already working on the same &quot;</span>
+                <span class="s2">&quot;record (</span><span class="si">%s</span><span class="s2"> with one id in </span><span class="si">%s</span><span class="s2">). Job delayed later.&quot;</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">_name</span><span class="p">,</span>
+                <span class="nb">tuple</span><span class="p">(</span><span class="n">records</span><span class="o">.</span><span class="n">ids</span><span class="p">),</span>
+            <span class="p">)</span>
+            <span class="k">raise</span> <span class="n">RetryableJobError</span><span class="p">(</span>
+                <span class="s2">&quot;A concurrent job is already working on the same record &quot;</span>
+                <span class="s2">&quot;(</span><span class="si">%s</span><span class="s2"> with one id in </span><span class="si">%s</span><span class="s2">). The job will be retried later.&quot;</span>
+                <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">_name</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">records</span><span class="o">.</span><span class="n">ids</span><span class="p">),),</span>
+                <span class="n">seconds</span><span class="o">=</span><span class="n">seconds</span><span class="p">,</span> <span class="n">ignore_retry</span><span class="o">=</span><span class="n">ignore_retry</span>
+            <span class="p">)</span></div></div>
 </pre></div>
 
     </div>

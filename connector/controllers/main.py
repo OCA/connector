@@ -81,6 +81,11 @@ class RunJobController(http.Controller):
                 job.set_pending(reset_retry=False)
                 self.job_storage_class(session).store(job)
 
+        def clear_env(env):
+            """ Clear any dangling recomputations from failed job """
+            env.clear_recompute_old()
+            env.all.todo.clear()
+
         with session_hdl.session() as session:
             job = self._load_job(session, job_uuid)
             if job is None:
@@ -108,6 +113,7 @@ class RunJobController(http.Controller):
                 msg = None
             job.cancel(msg)
             with session_hdl.session() as session:
+                clear_env(session.env)
                 self.job_storage_class(session).store(job)
 
         except RetryableJobError as err:
@@ -122,6 +128,7 @@ class RunJobController(http.Controller):
 
             job.set_failed(exc_info=buff.getvalue())
             with session_hdl.session() as session:
+                clear_env(session.env)
                 self.job_storage_class(session).store(job)
             raise
 

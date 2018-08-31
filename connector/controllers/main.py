@@ -68,18 +68,6 @@ class RunJobController(http.Controller):
             self.job_storage_class(session).store(job)
         _logger.debug('%s done', job)
 
-    @http.route('/connector/session', type='http', auth="none")
-    def session(self):
-        """ Used by the jobrunner to spawn a session
-
-        The connector jobrunner uses anonymous sessions when it calls
-        ``/connnector/runjob``.  To avoid having thousands of anonymous
-        sessions, before running jobs, it creates a ``requests.Session``
-        and does a GET on ``/connector/session``, providing it a cookie
-        which will be used for subsequent calls to runjob.
-        """
-        return ''
-
     @http.route('/connector/runjob', type='http', auth='none')
     def runjob(self, db, job_uuid, **kw):
 

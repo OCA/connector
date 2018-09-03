@@ -623,11 +623,15 @@
                     <span class="bp">self</span><span class="o">.</span><span class="n">wait_notification</span><span class="p">()</span>
             <span class="k">except</span> <span class="ne">KeyboardInterrupt</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
-            <span class="k">except</span><span class="p">:</span>
-                <span class="n">_logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s2">&quot;exception: sleeping </span><span class="si">%d</span><span class="s2">s and retrying&quot;</span><span class="p">,</span>
-                                  <span class="n">ERROR_RECOVERY_DELAY</span><span class="p">)</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">close_databases</span><span class="p">()</span>
-                <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">ERROR_RECOVERY_DELAY</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="c1"># Interrupted system call, i.e. KeyboardInterrupt during select</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">select</span><span class="o">.</span><span class="n">error</span><span class="p">)</span> <span class="ow">and</span> <span class="n">e</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">_logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s2">&quot;exception: sleeping </span><span class="si">%d</span><span class="s2">s and retrying&quot;</span><span class="p">,</span>
+                                      <span class="n">ERROR_RECOVERY_DELAY</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">close_databases</span><span class="p">()</span>
+                    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">ERROR_RECOVERY_DELAY</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">close_databases</span><span class="p">(</span><span class="n">remove_jobs</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
         <span class="n">_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;stopped&quot;</span><span class="p">)</span></div></div>
 </pre></div>

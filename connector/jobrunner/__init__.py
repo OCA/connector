@@ -68,10 +68,8 @@ class WorkerJobRunner(server.Worker):
         super(WorkerJobRunner, self).__init__(multi)
         self.watchdog_timeout = None
         port = os.environ.get('ODOO_CONNECTOR_PORT') or config['xmlrpc_port']
-        base_url = port and 'http://localhost:%s' % port \
-                   or 'http://localhost:8069'
         channels = _channels()
-        self.runner = ConnectorRunner(base_url, channels or 'root:1')
+        self.runner = ConnectorRunner(port, channels or 'root:1')
 
     def sleep(self):
         pass

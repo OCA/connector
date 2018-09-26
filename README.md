@@ -1,5 +1,5 @@
-[![Build Status](https://travis-ci.org/OCA/connector.svg?branch=11.0)](https://travis-ci.org/OCA/connector)
-[![Coverage Status](https://coveralls.io/repos/OCA/connector/badge.png?branch=11.0)](https://coveralls.io/r/OCA/connector?branch=11.0)
+[![Build Status](https://travis-ci.org/OCA/connector.svg?branch=12.0)](https://travis-ci.org/OCA/connector)
+[![Coverage Status](https://coveralls.io/repos/OCA/connector/badge.png?branch=12.0)](https://coveralls.io/r/OCA/connector?branch=12.0)
 
 
 Odoo Connector Modules
@@ -16,20 +16,8 @@ Documentation:
 http://www.odoo-connector.com
 
 [//]: # (addons)
-
-Available addons
-----------------
-addon | version | summary
---- | --- | ---
-[component](component/) | 11.0.1.1.0 | Components
-[component_event](component_event/) | 11.0.1.0.0 | Components Events
-[connector](connector/) | 11.0.1.0.0 | Connector
-[connector_base_product](connector_base_product/) | 11.0.1.0.0 | Connector Base Product
-[test_component](test_component/) | 11.0.1.0.0 | Automated tests for Components, do not install.
-[test_connector](test_connector/) | 11.0.1.0.0 | Automated tests for Connector, do not install.
-
 [//]: # (end addons)
 
 Translation Status
 ------------------
-[![Transifex Status](https://www.transifex.com/projects/p/OCA-connector-11-0/chart/image_png)](https://www.transifex.com/projects/p/OCA-connector-11-0)
+[![Transifex Status](https://www.transifex.com/projects/p/OCA-connector-12-0/chart/image_png)](https://www.transifex.com/projects/p/OCA-connector-12-0)

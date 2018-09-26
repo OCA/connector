@@ -20,7 +20,7 @@ env:
   - TRANSIFEX="1" TRANSIFEX_USER='transbot@odoo-community.org'
   - DOCS="1"
   global:
-  - VERSION="11.0" TESTS="0" LINT_CHECK="0" TRANSIFEX="0" DOCS="0"
+  - VERSION="12.0" TESTS="0" LINT_CHECK="0" TRANSIFEX="0" DOCS="0"
     # travis for docs build
   - secure: "lazdZGpkqFTQiu44grYAqKcaGh0cVTBlrHcBxxs43K/OH4Uc2AjMBty83zKc0ZgzizrNOsfK3Z3UHLmTNI92Vi3PtgGzA9dUmiReGO6QcE9P31Geg4pN/1Fwosv6aSpG3hejJJ8ZYpMbEPJkZyjTVpdM2r1VEcqEvFQ2xR5bEUg="
     # transifex
@@ -31,9 +31,9 @@ install:
   - export PATH=${HOME}/maintainer-quality-tools/travis:${PATH}
   - travis_install_nightly
   - pip install sphinx sphinx_bootstrap_theme sphinx-intl
-    # install from sources because it includes a fix for Odoo 11.0 not released yet
+    # install from sources because it includes a fix for Odoo 12.0 not released yet
   - pip install git+https://github.com/OCA/odoo-sphinx-autodoc.git
-  - if [ "$DOCS" = "1" ] ; then pip install -e ${HOME}/odoo-11.0; fi
+  - if [ "$DOCS" = "1" ] ; then pip install -e ${HOME}/odoo-12.0; fi
 
 services:
   - postgresql

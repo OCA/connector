@@ -14,5 +14,6 @@
  'data': ['security/ir.model.access.csv',
           ],
  'installable': True,
+ 'development_status': 'Stable',
  'maintainers': ['guewen'],
  }

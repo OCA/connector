@@ -8,7 +8,7 @@
  'version': '12.0.1.0.0',
  'author': 'Camptocamp,'
            'Odoo Community Association (OCA)',
- 'website': 'https://www.camptocamp.com',
+ 'website': 'https://github.com/OCA/connector',
  'license': 'AGPL-3',
  'category': 'Generic Modules',
  'depends': ['base',
@@ -16,7 +16,7 @@
  'external_dependencies': {
      'python': ['cachetools'],
  },
- 'data': [],
  'installable': True,
+ 'development_status': 'Stable',
  'maintainers': ['guewen'],
  }

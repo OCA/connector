@@ -11,6 +11,7 @@
     <script type="text/javascript" src="../../../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../../../_static/doctools.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="../../../../../_static/js/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="../../../../../_static/js/jquery-fix.js"></script>
     <script type="text/javascript" src="../../../../../_static/bootstrap-3.3.7/js/bootstrap.min.js"></script>
@@ -236,12 +237,16 @@
 
 
 <div class="viewcode-block" id="Base"><a class="viewcode-back" href="../../../../../api/api_queue.html#odoo.addons.queue_job.models.base.Base">[docs]</a><span class="k">class</span> <span class="nc">Base</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">AbstractModel</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; The base model, which is implicitly inherited by all models. &quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;The base model, which is implicitly inherited by all models.</span>
+
+<span class="sd">    A new :meth:`~with_delay` method is added on all Odoo Models, allowing to</span>
+<span class="sd">    postpone the execution of a job method in an asynchronous process.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">_inherit</span> <span class="o">=</span> <span class="s1">&#39;base&#39;</span>
 
     <span class="nd">@api</span><span class="o">.</span><span class="n">model_cr</span>
     <span class="k">def</span> <span class="nf">_register_hook</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; register marked jobs &quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Register marked jobs&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">Base</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">_register_hook</span><span class="p">()</span>
         <span class="n">job_methods</span> <span class="o">=</span> <span class="p">[</span>
             <span class="n">method</span> <span class="k">for</span> <span class="n">__</span><span class="p">,</span> <span class="n">method</span>
@@ -254,7 +259,7 @@
 <div class="viewcode-block" id="Base.with_delay"><a class="viewcode-back" href="../../../../../api/api_queue.html#odoo.addons.queue_job.models.base.Base.with_delay">[docs]</a>    <span class="nd">@api</span><span class="o">.</span><span class="n">multi</span>
     <span class="k">def</span> <span class="nf">with_delay</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">priority</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">eta</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                    <span class="n">max_retries</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                   <span class="n">channel</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+                   <span class="n">channel</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">identity_key</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Return a ``DelayableRecordset``</span>
 
 <span class="sd">        The returned instance allow to enqueue any method of the recordset&#39;s</span>
@@ -280,15 +285,18 @@
 <span class="sd">        :param channel: the complete name of the channel to use to process</span>
 <span class="sd">                        the function. If specified it overrides the one</span>
 <span class="sd">                        defined on the function</span>
+<span class="sd">        :param identity_key: key uniquely identifying the job, if specified</span>
+<span class="sd">                             and a job with the same key has not yet been run,</span>
+<span class="sd">                             the new job will not be added.</span>
 <span class="sd">        :return: instance of a DelayableRecordset</span>
 <span class="sd">        :rtype: :class:`odoo.addons.queue_job.job.DelayableRecordset`</span>
-
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">DelayableRecordset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">priority</span><span class="o">=</span><span class="n">priority</span><span class="p">,</span>
                                   <span class="n">eta</span><span class="o">=</span><span class="n">eta</span><span class="p">,</span>
                                   <span class="n">max_retries</span><span class="o">=</span><span class="n">max_retries</span><span class="p">,</span>
                                   <span class="n">description</span><span class="o">=</span><span class="n">description</span><span class="p">,</span>
-                                  <span class="n">channel</span><span class="o">=</span><span class="n">channel</span><span class="p">)</span></div></div>
+                                  <span class="n">channel</span><span class="o">=</span><span class="n">channel</span><span class="p">,</span>
+                                  <span class="n">identity_key</span><span class="o">=</span><span class="n">identity_key</span><span class="p">)</span></div></div>
 </pre></div>
 
     </div>
@@ -306,7 +314,7 @@
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.8.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.1.<br/>
     </p>
   </div>
 </footer>

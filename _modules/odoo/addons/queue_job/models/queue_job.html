@@ -11,6 +11,7 @@
     <script type="text/javascript" src="../../../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../../../_static/doctools.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="../../../../../_static/js/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="../../../../../_static/js/jquery-fix.js"></script>
     <script type="text/javascript" src="../../../../../_static/bootstrap-3.3.7/js/bootstrap.min.js"></script>
@@ -250,7 +251,7 @@
 
 
 <div class="viewcode-block" id="QueueJob"><a class="viewcode-back" href="../../../../../api/api_queue.html#odoo.addons.queue_job.models.queue_job.QueueJob">[docs]</a><span class="k">class</span> <span class="nc">QueueJob</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; Job status and result &quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;Model storing the jobs to be executed.&quot;&quot;&quot;</span>
     <span class="n">_name</span> <span class="o">=</span> <span class="s1">&#39;queue.job&#39;</span>
     <span class="n">_description</span> <span class="o">=</span> <span class="s1">&#39;Queue Job&#39;</span>
     <span class="n">_inherit</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;mail.thread&#39;</span><span class="p">,</span> <span class="s1">&#39;mail.activity.mixin&#39;</span><span class="p">]</span>
@@ -315,6 +316,21 @@
                           <span class="n">store</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                           <span class="n">index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
+    <span class="n">identity_key</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Char</span><span class="p">()</span>
+
+    <span class="nd">@api</span><span class="o">.</span><span class="n">model_cr</span>
+    <span class="k">def</span> <span class="nf">init</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cr</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
+            <span class="s1">&#39;SELECT indexname FROM pg_indexes WHERE indexname = </span><span class="si">%s</span><span class="s1"> &#39;</span><span class="p">,</span>
+            <span class="p">(</span><span class="s1">&#39;queue_job_identity_key_state_partial_index&#39;</span><span class="p">,)</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cr</span><span class="o">.</span><span class="n">fetchone</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_cr</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
+                <span class="s2">&quot;CREATE INDEX queue_job_identity_key_state_partial_index &quot;</span>
+                <span class="s2">&quot;ON queue_job (identity_key) WHERE state in (&#39;pending&#39;, &quot;</span>
+                <span class="s2">&quot;&#39;enqueued&#39;) AND identity_key IS NOT NULL;&quot;</span>
+            <span class="p">)</span>
+
     <span class="nd">@api</span><span class="o">.</span><span class="n">multi</span>
     <span class="k">def</span> <span class="nf">_inverse_channel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">filtered</span><span class="p">(</span><span class="k">lambda</span> <span class="n">a</span><span class="p">:</span> <span class="ow">not</span> <span class="n">a</span><span class="o">.</span><span class="n">channel</span><span class="p">)</span><span class="o">.</span><span class="n">_compute_channel</span><span class="p">()</span>
@@ -353,7 +369,7 @@
 
     <span class="nd">@api</span><span class="o">.</span><span class="n">multi</span>
     <span class="k">def</span> <span class="nf">open_related_action</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Open the related action associated to the job &quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Open the related action associated to the job&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ensure_one</span><span class="p">()</span>
         <span class="n">job</span> <span class="o">=</span> <span class="n">Job</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">uuid</span><span class="p">)</span>
         <span class="n">action</span> <span class="o">=</span> <span class="n">job</span><span class="o">.</span><span class="n">related_action</span><span class="p">()</span>
@@ -363,8 +379,10 @@
 
     <span class="nd">@api</span><span class="o">.</span><span class="n">multi</span>
     <span class="k">def</span> <span class="nf">_change_job_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">result</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Change the state of the `Job` object itself so it</span>
-<span class="sd">        will change the other fields (date, result, ...)</span>
+        <span class="sd">&quot;&quot;&quot;Change the state of the `Job` object</span>
+
+<span class="sd">        Changing the state of the Job will automatically change some fields</span>
+<span class="sd">        (date, result, ...).</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">record</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
             <span class="n">job_</span> <span class="o">=</span> <span class="n">Job</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">record</span><span class="o">.</span><span class="n">env</span><span class="p">,</span> <span class="n">record</span><span class="o">.</span><span class="n">uuid</span><span class="p">)</span>
@@ -405,10 +423,10 @@
 
     <span class="nd">@api</span><span class="o">.</span><span class="n">multi</span>
     <span class="k">def</span> <span class="nf">_subscribe_users_domain</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Subscribe all users having the &#39;Queue Job Manager&#39; group &quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Subscribe all users having the &#39;Queue Job Manager&#39; group&quot;&quot;&quot;</span>
         <span class="n">group</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">ref</span><span class="p">(</span><span class="s1">&#39;queue_job.group_queue_job_manager&#39;</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">group</span><span class="p">:</span>
-            <span class="k">return</span>
+            <span class="k">return</span> <span class="kc">None</span>
         <span class="n">companies</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mapped</span><span class="p">(</span><span class="s1">&#39;company_id&#39;</span><span class="p">)</span>
         <span class="n">domain</span> <span class="o">=</span> <span class="p">[(</span><span class="s1">&#39;groups_id&#39;</span><span class="p">,</span> <span class="s1">&#39;=&#39;</span><span class="p">,</span> <span class="n">group</span><span class="o">.</span><span class="n">id</span><span class="p">)]</span>
         <span class="k">if</span> <span class="n">companies</span><span class="p">:</span>
@@ -417,7 +435,7 @@
 
     <span class="nd">@api</span><span class="o">.</span><span class="n">multi</span>
     <span class="k">def</span> <span class="nf">_message_failed_job</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Return a message which will be posted on the job when it is failed.</span>
+        <span class="sd">&quot;&quot;&quot;Return a message which will be posted on the job when it is failed.</span>
 
 <span class="sd">        It can be inherited to allow more precise messages based on the</span>
 <span class="sd">        exception informations.</span>
@@ -430,14 +448,15 @@
 
     <span class="nd">@api</span><span class="o">.</span><span class="n">model</span>
     <span class="k">def</span> <span class="nf">_needaction_domain_get</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Returns the domain to filter records that require an action</span>
-<span class="sd">            :return: domain or False is no action</span>
+        <span class="sd">&quot;&quot;&quot;Returns the domain to filter records that require an action</span>
+
+<span class="sd">        :return: domain or False is no action</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="p">[(</span><span class="s1">&#39;state&#39;</span><span class="p">,</span> <span class="s1">&#39;=&#39;</span><span class="p">,</span> <span class="s1">&#39;failed&#39;</span><span class="p">)]</span>
 
     <span class="nd">@api</span><span class="o">.</span><span class="n">model</span>
     <span class="k">def</span> <span class="nf">autovacuum</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Delete all jobs done since more than ``_removal_interval`` days.</span>
+        <span class="sd">&quot;&quot;&quot;Delete all jobs done since more than ``_removal_interval`` days.</span>
 
 <span class="sd">        Called from a cron.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -532,8 +551,8 @@
     <span class="nd">@api</span><span class="o">.</span><span class="n">depends</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;parent_id.complete_name&#39;</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">_compute_complete_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">record</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
-            <span class="c1"># if not record.name:</span>
-            <span class="c1">#     return  # new record</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">record</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
+                <span class="k">continue</span>  <span class="c1"># new record</span>
             <span class="n">channel</span> <span class="o">=</span> <span class="n">record</span>
             <span class="n">parts</span> <span class="o">=</span> <span class="p">[</span><span class="n">channel</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>
             <span class="k">while</span> <span class="n">channel</span><span class="o">.</span><span class="n">parent_id</span><span class="p">:</span>
@@ -604,9 +623,8 @@
             <span class="n">parent_channel</span> <span class="o">=</span> <span class="n">channel</span>
             <span class="n">channel</span> <span class="o">=</span> <span class="n">channel_model</span><span class="o">.</span><span class="n">search</span><span class="p">([</span>
                 <span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;=&#39;</span><span class="p">,</span> <span class="n">channel_name</span><span class="p">),</span>
-                <span class="p">(</span><span class="s1">&#39;parent_id&#39;</span><span class="p">,</span> <span class="s1">&#39;=&#39;</span><span class="p">,</span> <span class="n">parent_channel</span><span class="o">.</span><span class="n">id</span><span class="p">)],</span>
-                <span class="n">limit</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-            <span class="p">)</span>
+                <span class="p">(</span><span class="s1">&#39;parent_id&#39;</span><span class="p">,</span> <span class="s1">&#39;=&#39;</span><span class="p">,</span> <span class="n">parent_channel</span><span class="o">.</span><span class="n">id</span><span class="p">),</span>
+            <span class="p">],</span> <span class="n">limit</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">channel</span><span class="p">:</span>
                 <span class="n">channel</span> <span class="o">=</span> <span class="n">channel_model</span><span class="o">.</span><span class="n">create</span><span class="p">({</span>
                     <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="n">channel_name</span><span class="p">,</span>
@@ -637,7 +655,7 @@
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.8.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.1.<br/>
     </p>
   </div>
 </footer>

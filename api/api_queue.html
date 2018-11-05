@@ -11,6 +11,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
     <script type="text/javascript" src="../_static/bootstrap-3.3.7/js/bootstrap.min.js"></script>
@@ -257,9 +258,11 @@
 <em class="property">class </em><code class="descclassname">odoo.addons.queue_job.models.base.</code><code class="descname">Base</code><span class="sig-paren">(</span><em>pool</em>, <em>cr</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/models/base.html#Base"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.queue_job.models.base.Base" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">odoo.models.BaseModel</span></code></p>
 <p>The base model, which is implicitly inherited by all models.</p>
+<p>A new <a class="reference internal" href="#odoo.addons.queue_job.models.base.Base.with_delay" title="odoo.addons.queue_job.models.base.Base.with_delay"><code class="xref py py-meth docutils literal notranslate"><span class="pre">with_delay()</span></code></a> method is added on all Odoo Models, allowing to
+postpone the execution of a job method in an asynchronous process.</p>
 <dl class="method">
 <dt id="odoo.addons.queue_job.models.base.Base.with_delay">
-<code class="descname">with_delay</code><span class="sig-paren">(</span><em>priority=None</em>, <em>eta=None</em>, <em>max_retries=None</em>, <em>description=None</em>, <em>channel=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/models/base.html#Base.with_delay"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.queue_job.models.base.Base.with_delay" title="Permalink to this definition">¶</a></dt>
+<code class="descname">with_delay</code><span class="sig-paren">(</span><em>priority=None</em>, <em>eta=None</em>, <em>max_retries=None</em>, <em>description=None</em>, <em>channel=None</em>, <em>identity_key=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/models/base.html#Base.with_delay"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.queue_job.models.base.Base.with_delay" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a <code class="docutils literal notranslate"><span class="pre">DelayableRecordset</span></code></p>
 <p>The returned instance allow to enqueue any method of the recordset’s
 Model which is decorated by <a class="reference internal" href="#odoo.addons.queue_job.job.job" title="odoo.addons.queue_job.job.job"><code class="xref py py-func docutils literal notranslate"><span class="pre">job()</span></code></a>.</p>
@@ -286,6 +289,9 @@ is computed from the function doc or name</li>
 <li><strong>channel</strong> – the complete name of the channel to use to process
 the function. If specified it overrides the one
 defined on the function</li>
+<li><strong>identity_key</strong> – key uniquely identifying the job, if specified
+and a job with the same key has not yet been run,
+the new job will not be added.</li>
 </ul>
 </td>
 </tr>
@@ -304,7 +310,7 @@ defined on the function</li>
 <span class="target" id="module-odoo.addons.queue_job.models.queue_job"></span><dl class="class">
 <dt id="odoo.addons.queue_job.models.queue_job.QueueJob">
 <em class="property">class </em><code class="descclassname">odoo.addons.queue_job.models.queue_job.</code><code class="descname">QueueJob</code><span class="sig-paren">(</span><em>pool</em>, <em>cr</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/models/queue_job.html#QueueJob"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.queue_job.models.queue_job.QueueJob" title="Permalink to this definition">¶</a></dt>
-<dd><p>Job status and result</p>
+<dd><p>Model storing the jobs to be executed.</p>
 <dl class="attribute">
 <dt id="odoo.addons.queue_job.models.queue_job.QueueJob._name">
 <code class="descname">_name</code><em class="property"> = 'queue.job'</em><a class="headerlink" href="#odoo.addons.queue_job.models.queue_job.QueueJob._name" title="Permalink to this definition">¶</a></dt>
@@ -324,7 +330,8 @@ defined on the function</li>
 <dl class="function">
 <dt id="odoo.addons.queue_job.job.job">
 <code class="descclassname">odoo.addons.queue_job.job.</code><code class="descname">job</code><span class="sig-paren">(</span><em>func=None</em>, <em>default_channel='root'</em>, <em>retry_pattern=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/job.html#job"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.queue_job.job.job" title="Permalink to this definition">¶</a></dt>
-<dd><p>Decorator for jobs.</p>
+<dd><p>Decorator for job methods.</p>
+<p>It enables the possibility to use a Model’s method as a job function.</p>
 <p>Optional argument:</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -406,7 +413,7 @@ to a job</p>
 <dl class="function">
 <dt id="odoo.addons.queue_job.job.related_action">
 <code class="descclassname">odoo.addons.queue_job.job.</code><code class="descname">related_action</code><span class="sig-paren">(</span><em>action=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/job.html#related_action"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.queue_job.job.related_action" title="Permalink to this definition">¶</a></dt>
-<dd><p>Attach a <em>Related Action</em> to a job.</p>
+<dd><p>Attach a <em>Related Action</em> to a job (decorator)</p>
 <p>A <em>Related Action</em> will appear as a button on the Odoo view.
 The button will execute the action, usually it will open the
 form view of the record related to the job.</p>
@@ -468,7 +475,7 @@ form view of the record related to the job.</p>
 <h4>Internals<a class="headerlink" href="#internals" title="Permalink to this headline">¶</a></h4>
 <dl class="class">
 <dt id="odoo.addons.queue_job.job.DelayableRecordset">
-<em class="property">class </em><code class="descclassname">odoo.addons.queue_job.job.</code><code class="descname">DelayableRecordset</code><span class="sig-paren">(</span><em>recordset</em>, <em>priority=None</em>, <em>eta=None</em>, <em>max_retries=None</em>, <em>description=None</em>, <em>channel=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/job.html#DelayableRecordset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.queue_job.job.DelayableRecordset" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">odoo.addons.queue_job.job.</code><code class="descname">DelayableRecordset</code><span class="sig-paren">(</span><em>recordset</em>, <em>priority=None</em>, <em>eta=None</em>, <em>max_retries=None</em>, <em>description=None</em>, <em>channel=None</em>, <em>identity_key=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/job.html#DelayableRecordset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.queue_job.job.DelayableRecordset" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Allow to delay a method for a recordset</p>
 <p>Usage:</p>
@@ -480,13 +487,17 @@ form view of the record related to the job.</p>
 <a class="reference internal" href="#odoo.addons.queue_job.job.job" title="odoo.addons.queue_job.job.job"><code class="xref py py-func docutils literal notranslate"><span class="pre">job()</span></code></a>.</p>
 <p>The method call will be processed asynchronously in the job queue, with
 the passed arguments.</p>
+<p>This class will generally not be used directly, it is used internally
+by <a class="reference internal" href="#odoo.addons.queue_job.models.base.Base.with_delay" title="odoo.addons.queue_job.models.base.Base.with_delay"><code class="xref py py-meth docutils literal notranslate"><span class="pre">with_delay()</span></code></a></p>
 </dd></dl>
 
 <dl class="class">
 <dt id="odoo.addons.queue_job.job.Job">
-<em class="property">class </em><code class="descclassname">odoo.addons.queue_job.job.</code><code class="descname">Job</code><span class="sig-paren">(</span><em>func</em>, <em>args=None</em>, <em>kwargs=None</em>, <em>priority=None</em>, <em>eta=None</em>, <em>job_uuid=None</em>, <em>max_retries=None</em>, <em>description=None</em>, <em>channel=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/job.html#Job"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.queue_job.job.Job" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">odoo.addons.queue_job.job.</code><code class="descname">Job</code><span class="sig-paren">(</span><em>func</em>, <em>args=None</em>, <em>kwargs=None</em>, <em>priority=None</em>, <em>eta=None</em>, <em>job_uuid=None</em>, <em>max_retries=None</em>, <em>description=None</em>, <em>channel=None</em>, <em>identity_key=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/job.html#Job"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.queue_job.job.Job" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
-<p>A Job is a task to execute.</p>
+<p>A Job is a task to execute. It is the in-memory representation of a job.</p>
+<p>Jobs are stored in the <code class="docutils literal notranslate"><span class="pre">queue.job</span></code> Odoo Model, but they are handled
+through this class.</p>
 <dl class="attribute">
 <dt id="odoo.addons.queue_job.job.Job.uuid">
 <code class="descname">uuid</code><a class="headerlink" href="#odoo.addons.queue_job.job.Job.uuid" title="Permalink to this definition">¶</a></dt>
@@ -611,12 +622,20 @@ before this date/time.</p>
 <dd><p>Read a job from the Database</p>
 </dd></dl>
 
+<dl class="method">
+<dt id="odoo.addons.queue_job.job.Job.job_record_with_same_identity_key">
+<code class="descname">job_record_with_same_identity_key</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/job.html#Job.job_record_with_same_identity_key"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.queue_job.job.Job.job_record_with_same_identity_key" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if a job to be executed with the same key exists.</p>
+</dd></dl>
+
 <dl class="classmethod">
 <dt id="odoo.addons.queue_job.job.Job.enqueue">
-<em class="property">classmethod </em><code class="descname">enqueue</code><span class="sig-paren">(</span><em>func</em>, <em>args=None</em>, <em>kwargs=None</em>, <em>priority=None</em>, <em>eta=None</em>, <em>max_retries=None</em>, <em>description=None</em>, <em>channel=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/job.html#Job.enqueue"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.queue_job.job.Job.enqueue" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><code class="descname">enqueue</code><span class="sig-paren">(</span><em>func</em>, <em>args=None</em>, <em>kwargs=None</em>, <em>priority=None</em>, <em>eta=None</em>, <em>max_retries=None</em>, <em>description=None</em>, <em>channel=None</em>, <em>identity_key=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/job.html#Job.enqueue"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.queue_job.job.Job.enqueue" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a Job and enqueue it in the queue. Return the job uuid.</p>
 <p>This expects the arguments specific to the job to be already extracted
 from the ones to pass to the job function.</p>
+<p>If the identity key is the same than the one in a pending job,
+no job is created and the existing job is returned</p>
 </dd></dl>
 
 <dl class="staticmethod">
@@ -645,6 +664,11 @@ from the ones to pass to the job function.</p>
 <dl class="attribute">
 <dt>
 <code class="descname">func</code></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="odoo.addons.queue_job.job.Job.identity_key">
+<code class="descname">identity_key</code><a class="headerlink" href="#odoo.addons.queue_job.job.Job.identity_key" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -691,7 +715,8 @@ from the ones to pass to the job function.</p>
 <dl class="method">
 <dt id="odoo.addons.queue_job.job.Job.postpone">
 <code class="descname">postpone</code><span class="sig-paren">(</span><em>result=None</em>, <em>seconds=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/job.html#Job.postpone"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.queue_job.job.Job.postpone" title="Permalink to this definition">¶</a></dt>
-<dd><p>Write an estimated time arrival to n seconds
+<dd><p>Postpone the job</p>
+<p>Write an estimated time arrival to n seconds
 later than now. Used when an retryable exception
 want to retry a job later.</p>
 </dd></dl>
@@ -728,7 +753,7 @@ want to retry a job later.</p>
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.8.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.1.<br/>
     </p>
   </div>
 </footer>

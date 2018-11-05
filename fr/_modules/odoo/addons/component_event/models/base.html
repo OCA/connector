@@ -12,6 +12,7 @@
     <script type="text/javascript" src="../../../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../../../_static/doctools.js"></script>
     <script type="text/javascript" src="../../../../../_static/translations.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="../../../../../_static/js/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="../../../../../_static/js/jquery-fix.js"></script>
     <script type="text/javascript" src="../../../../../_static/bootstrap-3.3.7/js/bootstrap.min.js"></script>
@@ -304,6 +305,8 @@
             <span class="c1"># during the initialization. Hence we return an empty list of</span>
             <span class="c1"># events, the &#39;notify&#39; calls will do nothing.</span>
             <span class="k">return</span> <span class="n">CollectedEvents</span><span class="p">([])</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">comp_registry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;base.event.collecter&#39;</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">CollectedEvents</span><span class="p">([])</span>
 
         <span class="n">model_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_name</span>
         <span class="k">if</span> <span class="n">collection</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -355,7 +358,7 @@
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.8.<br/>
+      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.1.<br/>
     </p>
   </div>
 </footer>

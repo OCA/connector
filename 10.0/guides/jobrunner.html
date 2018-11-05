@@ -11,6 +11,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
     <script type="text/javascript" src="../_static/bootstrap-3.3.7/js/bootstrap.min.js"></script>
@@ -268,27 +269,51 @@ anonymous <code class="docutils literal notranslate"><span class="pre">/queue_jo
 <div class="section" id="how-to-use-it">
 <h2>How to use it?<a class="headerlink" href="#how-to-use-it" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li>Optionally adjust your configuration through environment variables:<ul>
-<li>set <code class="docutils literal notranslate"><span class="pre">ODOO_QUEUE_JOB_CHANNELS=root:4</span></code> (or any other channels
-configuration) if you don’t want the default <code class="docutils literal notranslate"><span class="pre">root:1</span></code>.</li>
-<li>if <code class="docutils literal notranslate"><span class="pre">xmlrpc-port</span></code> is not set, you can set it for the jobrunner only with:
-<code class="docutils literal notranslate"><span class="pre">ODOO_QUEUE_JOB_PORT=8069</span></code>.</li>
+<li>By default, the job runner will<ul>
+<li>use <code class="docutils literal notranslate"><span class="pre">root:1</span></code> as channels configuration (one single channel)</li>
+<li>connect to Odoo via
+- host <code class="docutils literal notranslate"><span class="pre">xmlrpc_interface</span></code> or <code class="docutils literal notranslate"><span class="pre">localhost</span></code> if unset
+- port <code class="docutils literal notranslate"><span class="pre">xmlrpc_port</span></code>, or <code class="docutils literal notranslate"><span class="pre">8069</span></code> if unset</li>
+<li>connect to the database via <code class="docutils literal notranslate"><span class="pre">db_host</span></code> and <code class="docutils literal notranslate"><span class="pre">db_port</span></code></li>
 </ul>
 </li>
-<li>Alternatively, configure the channels through the Odoo configuration
-file, like:</li>
+<li>To adjust these values, you can either use environment variables:<ul>
+<li><code class="docutils literal notranslate"><span class="pre">ODOO_QUEUE_JOB_CHANNELS=root:4</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">ODOO_QUEUE_JOB_SCHEME=https</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">ODOO_QUEUE_JOB_HOST=load-balancer</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">ODOO_QUEUE_JOB_PORT=443</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">ODOO_QUEUE_JOB_HTTP_AUTH_USER=connector</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">ODOO_QUEUE_JOB_HTTP_AUTH_PASSWORD=s3cr3t</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">ODOO_QUEUE_JOB_JOBRUNNER_DB_HOST=master-db</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">ODOO_QUEUE_JOB_JOBRUNNER_DB_PORT=5432</span></code></li>
+</ul>
+</li>
+<li>Or, alternatively, you can add a <code class="docutils literal notranslate"><span class="pre">[queue_job]</span></code> section
+in Odoo’s configuration file, like this:</li>
 </ul>
 <div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[queue_job]</span>
 <span class="na">channels</span> <span class="o">=</span> <span class="s">root:4</span>
+<span class="na">scheme</span> <span class="o">=</span> <span class="s">https</span>
+<span class="na">host</span> <span class="o">=</span> <span class="s">load-balancer</span>
+<span class="na">port</span> <span class="o">=</span> <span class="s">443</span>
+<span class="na">http_auth_user</span> <span class="o">=</span> <span class="s">connector</span>
+<span class="na">http_auth_password</span> <span class="o">=</span> <span class="s">s3cr3t</span>
+<span class="na">jobrunner_db_host</span> <span class="o">=</span> <span class="s">master-db</span>
+<span class="na">jobrunner_db_port</span> <span class="o">=</span> <span class="s">5432</span>
 </pre></div>
 </div>
 <ul class="simple">
-<li>Or, if using <code class="docutils literal notranslate"><span class="pre">anybox.recipe.odoo</span></code>, add this to your buildout configuration:</li>
+<li>If using <code class="docutils literal notranslate"><span class="pre">anybox.recipe.odoo</span></code>, add this to your buildout configuration:</li>
 </ul>
 <div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[odoo]</span>
 <span class="na">recipe</span> <span class="o">=</span> <span class="s">anybox.recipe.odoo</span>
 <span class="na">(...)</span>
 <span class="na">queue_job.channels</span> <span class="o">=</span> <span class="s">root:4</span>
+<span class="na">queue_job.scheme</span> <span class="o">=</span> <span class="s">https</span>
+<span class="na">queue_job.host</span> <span class="o">=</span> <span class="s">load-balancer</span>
+<span class="na">queue_job.port</span> <span class="o">=</span> <span class="s">443</span>
+<span class="na">queue_job.http_auth_user</span> <span class="o">=</span> <span class="s">jobrunner</span>
+<span class="na">queue_job.http_auth_password</span> <span class="o">=</span> <span class="s">s3cr3t</span>
 </pre></div>
 </div>
 <ul class="simple">
@@ -454,7 +479,7 @@ up to 2 concurrent jobs in the channel named <code class="docutils literal notra
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.6.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.1.<br/>
     </p>
   </div>
 </footer>

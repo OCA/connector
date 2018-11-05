@@ -11,6 +11,7 @@
     <script type="text/javascript" src="../../../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../../../_static/doctools.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="../../../../../_static/js/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="../../../../../_static/js/jquery-fix.js"></script>
     <script type="text/javascript" src="../../../../../_static/bootstrap-3.3.7/js/bootstrap.min.js"></script>
@@ -312,6 +313,21 @@
                           <span class="n">store</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                           <span class="n">index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
+    <span class="n">identity_key</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Char</span><span class="p">()</span>
+
+    <span class="nd">@api</span><span class="o">.</span><span class="n">model_cr</span>
+    <span class="k">def</span> <span class="nf">init</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cr</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
+            <span class="s1">&#39;SELECT indexname FROM pg_indexes WHERE indexname = </span><span class="si">%s</span><span class="s1"> &#39;</span><span class="p">,</span>
+            <span class="p">(</span><span class="s1">&#39;queue_job_identity_key_state_partial_index&#39;</span><span class="p">,)</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cr</span><span class="o">.</span><span class="n">fetchone</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_cr</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
+                <span class="s2">&quot;CREATE INDEX queue_job_identity_key_state_partial_index &quot;</span>
+                <span class="s2">&quot;ON queue_job (identity_key) WHERE state in (&#39;pending&#39;, &quot;</span>
+                <span class="s2">&quot;&#39;enqueued&#39;) AND identity_key IS NOT NULL;&quot;</span>
+            <span class="p">)</span>
+
     <span class="nd">@api</span><span class="o">.</span><span class="n">multi</span>
     <span class="k">def</span> <span class="nf">_inverse_channel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">filtered</span><span class="p">(</span><span class="k">lambda</span> <span class="n">a</span><span class="p">:</span> <span class="ow">not</span> <span class="n">a</span><span class="o">.</span><span class="n">channel</span><span class="p">)</span><span class="o">.</span><span class="n">_compute_channel</span><span class="p">()</span>
@@ -542,8 +558,8 @@
     <span class="nd">@api</span><span class="o">.</span><span class="n">depends</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;parent_id.complete_name&#39;</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">_compute_complete_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">record</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
-            <span class="c1"># if not record.name:</span>
-            <span class="c1">#     return  # new record</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">record</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
+                <span class="k">continue</span>  <span class="c1"># new record</span>
             <span class="n">channel</span> <span class="o">=</span> <span class="n">record</span>
             <span class="n">parts</span> <span class="o">=</span> <span class="p">[</span><span class="n">channel</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>
             <span class="k">while</span> <span class="n">channel</span><span class="o">.</span><span class="n">parent_id</span><span class="p">:</span>
@@ -647,7 +663,7 @@
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.6.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.1.<br/>
     </p>
   </div>
 </footer>

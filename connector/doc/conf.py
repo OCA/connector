@@ -60,7 +60,7 @@ if os.environ.get('TRAVIS_BUILD_DIR') and os.environ.get('VERSION'):
     # build from travis
     repos_home = os.environ['HOME']
     deps_path = os.path.join(repos_home, 'dependencies')
-    odoo_folder = 'odoo-11.0'
+    odoo_folder = 'odoo-12.0'
     odoo_root = os.path.join(repos_home, odoo_folder)
     build_path = os.environ['TRAVIS_BUILD_DIR']
 else:

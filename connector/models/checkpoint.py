@@ -110,7 +110,7 @@ class ConnectorCheckpoint(models.Model):
         if not group:
             return
         users = self.env['res.users'].search([('groups_id', '=', group.id)])
-        self.message_subscribe_users(user_ids=users.ids)
+        self.message_subscribe(partner_ids=users.mapped('partner_id').ids)
 
     @api.model
     def create(self, vals):

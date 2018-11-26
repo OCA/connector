@@ -19,7 +19,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #. module: connector_base_product
-#: model:ir.ui.view,arch_db:connector_base_product.product_normal_form_view
-#: model:ir.ui.view,arch_db:connector_base_product.product_template_common_form
+#: model_terms:ir.ui.view,arch_db:connector_base_product.product_normal_form_view
+#: model_terms:ir.ui.view,arch_db:connector_base_product.product_template_common_form
 msgid "Connectors"
 msgstr "Connectors"

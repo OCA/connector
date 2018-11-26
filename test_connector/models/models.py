@@ -10,16 +10,19 @@ class TestBackend(models.Model):
 
     _name = 'test.backend'
     _inherit = ['connector.backend']
+    _description = 'Backends for testing Connector'
 
 
 class ConnectorTestRecord(models.Model):
     _name = 'connector.test.record'
+    _description = 'Records for testing Connector'
 
 
 class ConnectorTestBinding(models.Model):
     _name = 'connector.test.binding'
     _inherit = 'external.binding'
     _inherits = {'connector.test.record': 'odoo_id'}
+    _description = 'Bindings for testing Connector'
 
     backend_id = fields.Many2one(
         comodel_name='test.backend',
@@ -50,6 +53,7 @@ class NoInheritsBinding(models.Model):
 
     _name = 'no.inherits.binding'
     _inherit = 'external.binding'
+    _description = 'Bindings without inherit for testing Connector'
 
     backend_id = fields.Many2one(
         comodel_name='test.backend',

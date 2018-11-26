@@ -675,7 +675,7 @@ class TestMapperRecordsets(TransactionComponentRegistryCase):
         partner = self.env.ref('base.res_partner_address_4')
         mapper = self.comp_registry['my.mapper'](self.work)
         map_record = mapper.map_record(partner)
-        expected = {'parent_name': 'Agrolait'}
+        expected = {'parent_name': 'Deco Addict'}
         self.assertEqual(map_record.values(), expected)
         self.assertEqual(map_record.values(for_create=True), expected)
 

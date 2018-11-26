@@ -83,7 +83,6 @@ Project
    project/contribute
    project/contributors
    project/license
-   project/changes
    project/roadmap
 
 *********************************

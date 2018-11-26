@@ -68,7 +68,8 @@
                 <filter name="reviewed" string="Reviewed"
                     domain="[('state', '=', 'reviewed')]"/>
                <group string="Group By...">
-                   <filter string="Model" context="{'group_by' : 'model_id'}" />
+                   <filter string="Model" name="groupby_model_id"
+                       context="{'group_by' : 'model_id'}" />
                </group>
             </search>
         </field>
@@ -100,9 +101,8 @@
             <form string="Review Checkpoints">
                 <group string="The selected checkpoints will be set as reviewed."/>
                 <footer>
-                    <button name="review" string="Set as reviewed" type="object" class="oe_highlight"/>
-                    or
-                    <button string="Cancel" class="oe_link" special="cancel"/>
+                    <button name="review" string="Set as reviewed" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
                 </footer>
             </form>
         </field>

@@ -75,6 +75,8 @@ class Base(models.AbstractModel):
             # during the initialization. Hence we return an empty list of
             # events, the 'notify' calls will do nothing.
             return CollectedEvents([])
+        if not comp_registry.get('base.event.collecter'):
+            return CollectedEvents([])
 
         model_name = self._name
         if collection is not None:

@@ -41,10 +41,23 @@ class TestComponent(TransactionComponentRegistryCase):
             _usage = 'for.test'
             _apply_on = ['res.users']
 
+        class ComponentCompanyBase(Component):
+            _name = 'component.company.base'
+            _usage = 'test.mapper'
+
+        class ComponentCompany(Component):
+            # Do not specify a collection
+            _name = 'component.company'
+            _inherit = 'component.company.base'
+            _apply_on = ['res.company']
+            _usage = 'test.mapper'
+
         # build the components and register them in our
         # test component registry
         Component1._build_component(self.comp_registry)
         Component2._build_component(self.comp_registry)
+        ComponentCompanyBase._build_component(self.comp_registry)
+        ComponentCompany._build_component(self.comp_registry)
 
         # our collection, in a less abstract use case, it
         # could be a record of 'magento.backend' for instance
@@ -106,6 +119,17 @@ class TestComponent(TransactionComponentRegistryCase):
             self.assertNotEquals(base.work, comp.work)
             self.assertEquals('res.partner', base.work.model_name)
             self.assertEquals('res.users', comp.work.model_name)
+
+    def test_without_collection(self):
+        """
+        For 2 candidate Components without collection, one without _apply_on
+        and another one with, the component with a matching model
+        must be returned
+        :return:
+        """
+        with self.collection_record.work_on(
+                'res.company', components_registry=self.comp_registry) as work:
+            self.assertTrue(bool(work.component(usage='test.mapper')))
 
     def test_component_get_by_name_wrong_model(self):
         """ Use component_by_name with a model not in _apply_on """

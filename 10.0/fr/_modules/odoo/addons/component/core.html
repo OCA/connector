@@ -12,7 +12,6 @@
     <script type="text/javascript" src="../../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../../_static/doctools.js"></script>
     <script type="text/javascript" src="../../../../_static/translations.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="../../../../_static/js/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="../../../../_static/js/jquery-fix.js"></script>
     <script type="text/javascript" src="../../../../_static/bootstrap-3.3.7/js/bootstrap.min.js"></script>
@@ -608,6 +607,7 @@
         <span class="n">component_classes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lookup_components</span><span class="p">(</span>
             <span class="n">usage</span><span class="o">=</span><span class="n">usage</span><span class="p">,</span> <span class="n">model_name</span><span class="o">=</span><span class="n">model_name</span>
         <span class="p">)</span>
+        <span class="n">save_component_classes</span> <span class="o">=</span> <span class="n">component_classes</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">component_classes</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">NoComponentError</span><span class="p">(</span>
                 <span class="s2">&quot;No component found for collection &#39;</span><span class="si">%s</span><span class="s2">&#39;, &quot;</span>
@@ -620,6 +620,10 @@
             <span class="n">component_classes</span> <span class="o">=</span> <span class="p">[</span>
                 <span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">component_classes</span>
                 <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">_collection</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">collection</span><span class="o">.</span><span class="n">_name</span><span class="p">]</span>
+        <span class="c1"># If the previous match (based on collection) remove every components,</span>
+        <span class="c1"># we have to restore it because maybe the filter based on</span>
+        <span class="c1"># apply_models could match</span>
+        <span class="n">component_classes</span> <span class="o">=</span> <span class="n">component_classes</span> <span class="ow">or</span> <span class="n">save_component_classes</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">component_classes</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
             <span class="c1"># ... or try to find the one specifically linked to the model</span>
             <span class="n">component_classes</span> <span class="o">=</span> <span class="p">[</span>
@@ -1133,7 +1137,7 @@
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.1.<br/>
+      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.2.<br/>
     </p>
   </div>
 </footer>

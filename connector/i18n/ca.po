@@ -209,8 +209,8 @@ msgid "No record to check."
 msgstr ""
 
 #. module: connector
-#: code:addons/connector/components/synchronizer.py:185
-#: code:addons/connector/components/synchronizer.py:190
+#: code:addons/connector/components/synchronizer.py:191
+#: code:addons/connector/components/synchronizer.py:196
 #, python-format
 msgid "Nothing to export."
 msgstr ""
@@ -241,7 +241,7 @@ msgid "Record Name"
 msgstr ""
 
 #. module: connector
-#: code:addons/connector/components/synchronizer.py:192
+#: code:addons/connector/components/synchronizer.py:198
 #, python-format
 msgid "Record exported with ID %s on Backend."
 msgstr ""

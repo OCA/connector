@@ -211,8 +211,8 @@ msgid "No record to check."
 msgstr "Pas d'enregistrement à contrôler."
 
 #. module: connector
-#: code:addons/connector/components/synchronizer.py:185
-#: code:addons/connector/components/synchronizer.py:190
+#: code:addons/connector/components/synchronizer.py:191
+#: code:addons/connector/components/synchronizer.py:196
 #, python-format
 msgid "Nothing to export."
 msgstr "Rien à exporter."
@@ -243,7 +243,7 @@ msgid "Record Name"
 msgstr "Nom d'enregistrement"
 
 #. module: connector
-#: code:addons/connector/components/synchronizer.py:192
+#: code:addons/connector/components/synchronizer.py:198
 #, python-format
 msgid "Record exported with ID %s on Backend."
 msgstr "Enregistrement exporté avec l'ID %s sur le Backend."

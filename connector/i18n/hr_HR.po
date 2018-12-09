@@ -441,7 +441,7 @@ msgid "Job failed"
 msgstr ""
 
 #. module: connector
-#: code:addons/connector/controllers/main.py:117
+#: code:addons/connector/controllers/main.py:105
 #, python-format
 msgid "Job interrupted and set to Done: nothing to do."
 msgstr ""

@@ -30,19 +30,19 @@ msgid "Component Builder"
 msgstr ""
 
 #. module: component
-#: model:ir.model.fields,field_description:component.field_collection_base_display_name
-#: model:ir.model.fields,field_description:component.field_component_builder_display_name
+#: model:ir.model.fields,field_description:component.field_collection_base__display_name
+#: model:ir.model.fields,field_description:component.field_component_builder__display_name
 msgid "Display Name"
 msgstr "Prikazni naziv"
 
 #. module: component
-#: model:ir.model.fields,field_description:component.field_collection_base_id
-#: model:ir.model.fields,field_description:component.field_component_builder_id
+#: model:ir.model.fields,field_description:component.field_collection_base__id
+#: model:ir.model.fields,field_description:component.field_component_builder__id
 msgid "ID"
 msgstr "ID"
 
 #. module: component
-#: model:ir.model.fields,field_description:component.field_collection_base___last_update
-#: model:ir.model.fields,field_description:component.field_component_builder___last_update
+#: model:ir.model.fields,field_description:component.field_collection_base____last_update
+#: model:ir.model.fields,field_description:component.field_component_builder____last_update
 msgid "Last Modified on"
 msgstr "Zadnjič spremenjeno"

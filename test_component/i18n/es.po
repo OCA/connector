@@ -19,42 +19,42 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #. module: test_component
-#: model:ir.model.fields,field_description:test_component.field_test_component_collection_create_uid
+#: model:ir.model.fields,field_description:test_component.field_test_component_collection__create_uid
 msgid "Created by"
 msgstr "Creado por"
 
 #. module: test_component
-#: model:ir.model.fields,field_description:test_component.field_test_component_collection_create_date
+#: model:ir.model.fields,field_description:test_component.field_test_component_collection__create_date
 msgid "Created on"
 msgstr "Creado en"
 
 #. module: test_component
-#: model:ir.model.fields,field_description:test_component.field_test_component_collection_display_name
+#: model:ir.model.fields,field_description:test_component.field_test_component_collection__display_name
 msgid "Display Name"
 msgstr "Nombre mostrado"
 
 #. module: test_component
-#: model:ir.model.fields,field_description:test_component.field_test_component_collection_id
+#: model:ir.model.fields,field_description:test_component.field_test_component_collection__id
 msgid "ID"
 msgstr "ID"
 
 #. module: test_component
-#: model:ir.model.fields,field_description:test_component.field_test_component_collection___last_update
+#: model:ir.model.fields,field_description:test_component.field_test_component_collection____last_update
 msgid "Last Modified on"
 msgstr "Última modificación el"
 
 #. module: test_component
-#: model:ir.model.fields,field_description:test_component.field_test_component_collection_write_uid
+#: model:ir.model.fields,field_description:test_component.field_test_component_collection__write_uid
 msgid "Last Updated by"
 msgstr "Última actualización por"
 
 #. module: test_component
-#: model:ir.model.fields,field_description:test_component.field_test_component_collection_write_date
+#: model:ir.model.fields,field_description:test_component.field_test_component_collection__write_date
 msgid "Last Updated on"
 msgstr "Última actualización el"
 
 #. module: test_component
-#: model:ir.model.fields,field_description:test_component.field_test_component_collection_name
+#: model:ir.model.fields,field_description:test_component.field_test_component_collection__name
 msgid "Name"
 msgstr ""
 

@@ -20,5 +20,8 @@ msgstr ""
 
 #. module: component_event
 #: model:ir.model,name:component_event.model_base
-msgid "base"
-msgstr "base"
+msgid "Base"
+msgstr ""
+
+#~ msgid "base"
+#~ msgstr "base"

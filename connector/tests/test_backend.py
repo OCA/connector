@@ -19,11 +19,13 @@ class test_backend(unittest2.TestCase):
 
     def setUp(self):
         super(test_backend, self).setUp()
+        BACKENDS._backends = BACKENDS.backends
+        BACKENDS.backends = set()
         self.service = 'calamitorium'
 
     def tearDown(self):
         super(test_backend, self).tearDown()
-        BACKENDS.backends.clear()
+        BACKENDS.backends = BACKENDS._backends
 
     def test_new_backend(self):
         """ Create a backend"""
@@ -77,6 +79,8 @@ class test_backend_register(common.TransactionCase):
 
     def setUp(self):
         super(test_backend_register, self).setUp()
+        BACKENDS._backends = BACKENDS.backends
+        BACKENDS.backends = set()
         self.service = 'calamitorium'
         self.version = '1.14'
         self.parent = Backend(self.service)
@@ -86,7 +90,7 @@ class test_backend_register(common.TransactionCase):
 
     def tearDown(self):
         super(test_backend_register, self).tearDown()
-        BACKENDS.backends.clear()
+        BACKENDS.backends = BACKENDS._backends
         del self.backend._class_entries[:]
 
     def test_register_class(self):

@@ -98,13 +98,13 @@ msgid "Cancel"
 msgstr "Annuler"
 
 #. module: connector
-#: code:addons/connector/queue/model.py:287
+#: code:addons/connector/queue/model.py:337
 #, python-format
 msgid "Cannot change the root channel"
 msgstr "Impossible de changer le canal racine"
 
 #. module: connector
-#: code:addons/connector/queue/model.py:294
+#: code:addons/connector/queue/model.py:344
 #, python-format
 msgid "Cannot remove the root channel"
 msgstr "Impossible de supprimer le canal racine"
@@ -383,6 +383,13 @@ msgid "ID"
 msgstr "ID"
 
 #. module: connector
+#: code:addons/connector/queue/model.py:253
+#, fuzzy, python-format
+#| msgid "The selected jobs will be requeued."
+msgid "If both parameters are 0, ALL jobs will be requeued!"
+msgstr "Les jobs sélectionnés vont être remis en queue."
+
+#. module: connector
 #: model:ir.model.fields,help:connector.field_connector_checkpoint_message_unread
 #: model:ir.model.fields,help:connector.field_queue_job_message_unread
 msgid "If checked new messages require your attention."
@@ -515,7 +522,7 @@ msgid "Manage multiple companies"
 msgstr "Gérer plusieurs sociétés"
 
 #. module: connector
-#: code:addons/connector/queue/model.py:141
+#: code:addons/connector/queue/model.py:142
 #, python-format
 msgid "Manually set to done by %s"
 msgstr "Défini manuellement comme terminé par %s"
@@ -562,7 +569,7 @@ msgid "Need Review"
 msgstr "Nécessite un contrôle"
 
 #. module: connector
-#: code:addons/connector/queue/model.py:117
+#: code:addons/connector/queue/model.py:118
 #, python-format
 msgid "No action available for this job"
 msgstr "Pas d'action disponible pour ce job"
@@ -601,7 +608,7 @@ msgid "Parent Channel"
 msgstr "Canal parent"
 
 #. module: connector
-#: code:addons/connector/queue/model.py:279
+#: code:addons/connector/queue/model.py:329
 #, python-format
 msgid "Parent channel required."
 msgstr "Canal parent requis"
@@ -738,7 +745,7 @@ msgid ""
 msgstr ""
 
 #. module: connector
-#: code:addons/connector/queue/model.py:193
+#: code:addons/connector/queue/model.py:194
 #, python-format
 msgid ""
 "Something bad happened during the execution of the job. More details in the "

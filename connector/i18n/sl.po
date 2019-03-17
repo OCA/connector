@@ -93,13 +93,13 @@ msgid "Cancel"
 msgstr "Preklic"
 
 #. module: connector
-#: code:addons/connector/queue/model.py:287
+#: code:addons/connector/queue/model.py:337
 #, python-format
 msgid "Cannot change the root channel"
 msgstr "Korenskega kanala ni mogoče spreminjati"
 
 #. module: connector
-#: code:addons/connector/queue/model.py:294
+#: code:addons/connector/queue/model.py:344
 #, python-format
 msgid "Cannot remove the root channel"
 msgstr "Korenskega kanala ni mogoče odstraniti"
@@ -378,6 +378,13 @@ msgid "ID"
 msgstr "ID"
 
 #. module: connector
+#: code:addons/connector/queue/model.py:253
+#, fuzzy, python-format
+#| msgid "The selected jobs will be requeued."
+msgid "If both parameters are 0, ALL jobs will be requeued!"
+msgstr "Izbrana opravila bodo prerazporejena."
+
+#. module: connector
 #: model:ir.model.fields,help:connector.field_connector_checkpoint_message_unread
 #: model:ir.model.fields,help:connector.field_queue_job_message_unread
 msgid "If checked new messages require your attention."
@@ -510,7 +517,7 @@ msgid "Manage multiple companies"
 msgstr "Upravljanje več družb"
 
 #. module: connector
-#: code:addons/connector/queue/model.py:141
+#: code:addons/connector/queue/model.py:142
 #, python-format
 msgid "Manually set to done by %s"
 msgstr "Ročno nastavil kot opravljeno: %s"
@@ -557,7 +564,7 @@ msgid "Need Review"
 msgstr "Potrebna revizija"
 
 #. module: connector
-#: code:addons/connector/queue/model.py:117
+#: code:addons/connector/queue/model.py:118
 #, python-format
 msgid "No action available for this job"
 msgstr "Za to delo ni aktivnosti"
@@ -596,7 +603,7 @@ msgid "Parent Channel"
 msgstr "Nadrejeni kanal"
 
 #. module: connector
-#: code:addons/connector/queue/model.py:279
+#: code:addons/connector/queue/model.py:329
 #, python-format
 msgid "Parent channel required."
 msgstr "Zahteva se nadrejeni kanal."
@@ -733,7 +740,7 @@ msgid ""
 msgstr ""
 
 #. module: connector
-#: code:addons/connector/queue/model.py:193
+#: code:addons/connector/queue/model.py:194
 #, python-format
 msgid ""
 "Something bad happened during the execution of the job. More details in the "

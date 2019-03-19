@@ -99,7 +99,8 @@ class SavepointComponentCase(common.SavepointCase, ComponentMixin):
         ComponentMixin.setUp(self)
 
 
-class ComponentRegistryCase(unittest.TestCase):
+class ComponentRegistryCase(
+        unittest.TestCase, common.MetaCase('DummyCase', (object,), {})):
     """ This test case can be used as a base for writings tests on components
 
     This test case is meant to test components in a special component registry,

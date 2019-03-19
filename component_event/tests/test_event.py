@@ -12,8 +12,10 @@ from odoo.addons.component.tests.common import (
 from odoo.addons.component.core import Component
 from odoo.addons.component_event.core import EventWorkContext
 from odoo.addons.component_event.components.event import skip_if
+from odoo.tests.common import tagged
 
 
+@tagged('standard', 'at_install')
 class TestEventWorkContext(unittest.TestCase):
     """ Test Events Components """
 

@@ -11,12 +11,8 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
     <script type="text/javascript" src="../_static/translations.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
-    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
-    <script type="text/javascript" src="../_static/bootstrap-3.3.7/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Recherche" href="../search.html" />
     <link rel="next" title="Amorcer la création un nouveau connecteur" href="bootstrap_connector.html" />
@@ -26,6 +22,10 @@
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
 <meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js "></script>
+<script type="text/javascript" src="../_static/js/jquery-fix.js "></script>
+<script type="text/javascript" src="../_static/bootstrap-3.3.7/js/bootstrap.min.js "></script>
+<script type="text/javascript" src="../_static/bootstrap-sphinx.js "></script>
 
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -254,7 +254,7 @@
 
 <div class="container">
   <div class="row">
-    <div class="col-md-12 content">
+    <div class="body col-md-12 content" role="main">
       
   <div class="section" id="connector-concepts">
 <span id="concepts"></span><h1>Concepts du connecteur<a class="headerlink" href="#connector-concepts" title="Lien permanent vers ce titre">¶</a></h1>
@@ -332,12 +332,9 @@ that you can and are encouraged to define your own Components as well.</p>
 <p>Un mapping convertit un enregistrement externe en un enregistrement Odoo et inversement.</p>
 <p>Il prend en charge :</p>
 <dl class="docutils">
-<dt>les mapping directs</dt>
-<dd>Le champ <em>a</em> est écrit dans le champ <em>b</em>.</dd>
-<dt>Les mapping par méthode</dt>
-<dd>Une méthode est utilisée pour convertir un ou plusieurs champs en un ou plusieurs autres champs, avec transformation éventuelle. Il peut être filtré, par exemple appliqué uniquement lorsque l’enregistrement est créé ou quand les champs source sont modifiés.</dd>
-<dt>Sous-mapping</dt>
-<dd>Un sous-enregistrement (ligne d’un bon de commande) est converti grâce à un autre Mapper</dd>
+<dt>les mapping directs</dt><dd>Le champ <em>a</em> est écrit dans le champ <em>b</em>.</dd>
+<dt>Les mapping par méthode</dt><dd>Une méthode est utilisée pour convertir un ou plusieurs champs en un ou plusieurs autres champs, avec transformation éventuelle. Il peut être filtré, par exemple appliqué uniquement lorsque l’enregistrement est créé ou quand les champs source sont modifiés.</dd>
+<dt>Sous-mapping</dt><dd>Un sous-enregistrement (ligne d’un bon de commande) est converti grâce à un autre Mapper</dd>
 </dl>
 <p>See the documentation of the class for more details.</p>
 </div>
@@ -449,7 +446,7 @@ See <code class="xref py py-mod docutils literal notranslate"><span class="pre">
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.1.<br/>
+      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.0.<br/>
     </p>
   </div>
 </footer>

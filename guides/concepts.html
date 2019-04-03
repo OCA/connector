@@ -11,11 +11,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
-    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
-    <script type="text/javascript" src="../_static/bootstrap-3.3.7/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Boostrapping a connector" href="bootstrap_connector.html" />
@@ -25,6 +21,10 @@
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
 <meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js "></script>
+<script type="text/javascript" src="../_static/js/jquery-fix.js "></script>
+<script type="text/javascript" src="../_static/bootstrap-3.3.7/js/bootstrap.min.js "></script>
+<script type="text/javascript" src="../_static/bootstrap-sphinx.js "></script>
 
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -253,7 +253,7 @@
 
 <div class="container">
   <div class="row">
-    <div class="col-md-12 content">
+    <div class="body col-md-12 content" role="main">
       
   <div class="section" id="connector-concepts">
 <span id="concepts"></span><h1>Connector Concepts<a class="headerlink" href="#connector-concepts" title="Permalink to this headline">¶</a></h1>
@@ -340,15 +340,12 @@ that you can and are encouraged to define your own Components as well.</p>
 conversely.</p>
 <p>It supports:</p>
 <dl class="docutils">
-<dt>direct mappings</dt>
-<dd>Fields <em>a</em> is written in field <em>b</em>.</dd>
-<dt>method mappings</dt>
-<dd>A method is used to convert one or many fields to one or many
+<dt>direct mappings</dt><dd>Fields <em>a</em> is written in field <em>b</em>.</dd>
+<dt>method mappings</dt><dd>A method is used to convert one or many fields to one or many
 fields, with transformation.
 It can be filtered, for example only applied when the record is
 created or when the source fields are modified.</dd>
-<dt>submapping</dt>
-<dd>a sub-record (lines of a sale order) is converted using another
+<dt>submapping</dt><dd>a sub-record (lines of a sale order) is converted using another
 Mapper</dd>
 </dl>
 <p>See the documentation of the class for more details.</p>
@@ -469,7 +466,7 @@ needs to review imported documents.</p>
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.1.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.0.<br/>
     </p>
   </div>
 </footer>

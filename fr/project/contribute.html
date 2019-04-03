@@ -11,12 +11,8 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
     <script type="text/javascript" src="../_static/translations.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
-    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
-    <script type="text/javascript" src="../_static/bootstrap-3.3.7/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Recherche" href="../search.html" />
     <link rel="next" title="Contributeurs" href="contributors.html" />
@@ -26,6 +22,10 @@
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
 <meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js "></script>
+<script type="text/javascript" src="../_static/js/jquery-fix.js "></script>
+<script type="text/javascript" src="../_static/bootstrap-3.3.7/js/bootstrap.min.js "></script>
+<script type="text/javascript" src="../_static/bootstrap-sphinx.js "></script>
 
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -245,7 +245,7 @@
 
 <div class="container">
   <div class="row">
-    <div class="col-md-12 content">
+    <div class="body col-md-12 content" role="main">
       
   <div class="section" id="contribute">
 <span id="id1"></span><h1>Contribuer<a class="headerlink" href="#contribute" title="Lien permanent vers ce titre">¶</a></h1>
@@ -257,7 +257,7 @@
 <li>traductions</li>
 <li>…</li>
 </ul>
-<p>Jetez un œil au <a class="reference external" href="http://odoo-magento-connector.com/project/contribute.html#contribute" title="(in Odoo Magento Connector)"><span class="xref std std-ref">Guide du développeur du Connecteur Magento</span></a> qui est plus complet, la plupart des informations sont les mêmes.</p>
+<p>Jetez un œil au <a class="reference external" href="http://odoo-magento-connector.com/project/contribute.html#contribute" title="(dans Odoo Magento Connector)"><span class="xref std std-ref">Guide du développeur du Connecteur Magento</span></a> qui est plus complet, la plupart des informations sont les mêmes.</p>
 <p>Le projet GitHub est : <a class="reference external" href="https://github.com/OCA/connector">https://github.com/OCA/connector</a></p>
 <div class="section" id="want-to-start-a-new-connector">
 <h2>Démarrer un nouveau connecteur<a class="headerlink" href="#want-to-start-a-new-connector" title="Lien permanent vers ce titre">¶</a></h2>
@@ -271,11 +271,9 @@
 <blockquote>
 <div>connector-xxx</div></blockquote>
 <dl class="docutils">
-<dt>Nom du module Odoo :</dt>
-<dd>connector_xxx</dd>
-<dt>Exemple :</dt>
-<dd><p class="first"><a class="reference external" href="https://github.com/OCA/connector-magento">https://github.com/OCA/connector-magento</a></p>
-<p class="last"><code class="docutils literal notranslate"><span class="pre">connector_magento</span></code></p>
+<dt>Nom du module Odoo :</dt><dd>connector_xxx</dd>
+<dt>Exemple :</dt><dd><p><a class="reference external" href="https://github.com/OCA/connector-magento">https://github.com/OCA/connector-magento</a></p>
+<p><code class="docutils literal notranslate"><span class="pre">connector_magento</span></code></p>
 </dd>
 </dl>
 <p>En réalité les connecteurs Magento et Prestashop ne respectent pas cette convention pour des raisons historiques (magentoerpconnect, prestashoperpconnect). Les nouveaux projets devraient idéalement la respecter.</p>
@@ -334,7 +332,7 @@ $ ../../../bin/sphinx-build -d connectordb -- -D language=fr -b html ./ _build/h
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.1.<br/>
+      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.0.<br/>
     </p>
   </div>
 </footer>

@@ -11,10 +11,7 @@
     <script type="text/javascript" src="../../../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../../../_static/doctools.js"></script>
-    <script type="text/javascript" src="../../../../../_static/js/jquery-1.11.0.min.js"></script>
-    <script type="text/javascript" src="../../../../../_static/js/jquery-fix.js"></script>
-    <script type="text/javascript" src="../../../../../_static/bootstrap-3.3.7/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="../../../../../_static/bootstrap-sphinx.js"></script>
+    <script type="text/javascript" src="../../../../../_static/language_data.js"></script>
     <link rel="index" title="Index" href="../../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../../search.html" />
 
@@ -22,6 +19,10 @@
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
 <meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../../../../../_static/js/jquery-1.11.0.min.js "></script>
+<script type="text/javascript" src="../../../../../_static/js/jquery-fix.js "></script>
+<script type="text/javascript" src="../../../../../_static/bootstrap-3.3.7/js/bootstrap.min.js "></script>
+<script type="text/javascript" src="../../../../../_static/bootstrap-sphinx.js "></script>
 
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -223,7 +224,7 @@
 
 <div class="container">
   <div class="row">
-    <div class="col-md-12 content">
+    <div class="body col-md-12 content" role="main">
       
   <h1>Source code for odoo.addons.queue_job.models.base</h1><div class="highlight"><pre>
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
@@ -231,9 +232,13 @@
 <span class="c1"># License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html)</span>
 
 <span class="kn">import</span> <span class="nn">inspect</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">os</span>
 
 <span class="kn">from</span> <span class="nn">odoo</span> <span class="k">import</span> <span class="n">models</span><span class="p">,</span> <span class="n">api</span>
 <span class="kn">from</span> <span class="nn">..job</span> <span class="k">import</span> <span class="n">DelayableRecordset</span>
+
+<span class="n">_logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="Base"><a class="viewcode-back" href="../../../../../api/api_queue.html#odoo.addons.queue_job.models.base.Base">[docs]</a><span class="k">class</span> <span class="nc">Base</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">AbstractModel</span><span class="p">):</span>
@@ -269,7 +274,6 @@
 <span class="sd">        In the line above, in so far ``write`` is allowed to be delayed with</span>
 <span class="sd">        ``@job``, the write will be executed in an asynchronous job.</span>
 
-
 <span class="sd">        :param priority: Priority of the job, 0 being the higher priority.</span>
 <span class="sd">                         Default is 10.</span>
 <span class="sd">        :param eta: Estimated Time of Arrival of the job. It will not be</span>
@@ -288,7 +292,26 @@
 <span class="sd">        :return: instance of a DelayableRecordset</span>
 <span class="sd">        :rtype: :class:`odoo.addons.queue_job.job.DelayableRecordset`</span>
 
+<span class="sd">        Note for developers: if you want to run tests or simply disable</span>
+<span class="sd">        jobs queueing for debugging purposes, you can:</span>
+
+<span class="sd">            a. set the env var `TEST_QUEUE_JOB_NO_DELAY=1`</span>
+<span class="sd">            b. pass a ctx key `test_queue_job_no_delay=1`</span>
+
+<span class="sd">        In tests you&#39;ll have to mute the logger like:</span>
+
+<span class="sd">            @mute_logger(&#39;odoo.addons.queue_job.models.base&#39;)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s1">&#39;TEST_QUEUE_JOB_NO_DELAY&#39;</span><span class="p">):</span>
+            <span class="n">_logger</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="s1">&#39;`TEST_QUEUE_JOB_NO_DELAY` env var found. NO JOB scheduled.&#39;</span>
+            <span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;test_queue_job_no_delay&#39;</span><span class="p">):</span>
+            <span class="n">_logger</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="s1">&#39;`test_queue_job_no_delay` ctx key found. NO JOB scheduled.&#39;</span>
+            <span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span>
         <span class="k">return</span> <span class="n">DelayableRecordset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">priority</span><span class="o">=</span><span class="n">priority</span><span class="p">,</span>
                                   <span class="n">eta</span><span class="o">=</span><span class="n">eta</span><span class="p">,</span>
                                   <span class="n">max_retries</span><span class="o">=</span><span class="n">max_retries</span><span class="p">,</span>
@@ -312,7 +335,7 @@
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.2.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.<br/>
     </p>
   </div>
 </footer>

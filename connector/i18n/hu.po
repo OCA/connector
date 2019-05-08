@@ -19,7 +19,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #. module: connector
-#: code:addons/connector/models/checkpoint.py:119
+#: code:addons/connector/models/checkpoint.py:131
 #, python-format
 msgid "A %s needs a review."
 msgstr ""
@@ -68,6 +68,11 @@ msgstr "Ellenörzőpontok felülvizsgálata"
 #: model_terms:ir.ui.view,arch_db:connector.view_connector_checkpoint_form
 msgid "Click on the"
 msgstr "Kattintson erre"
+
+#. module: connector
+#: model:ir.model.fields,field_description:connector.field_connector_checkpoint__company_id
+msgid "Company"
+msgstr ""
 
 #. module: connector
 #: model:ir.module.category,name:connector.module_category_connector
@@ -256,6 +261,13 @@ msgid "No record to check."
 msgstr ""
 
 #. module: connector
+#: code:addons/connector/components/synchronizer.py:191
+#: code:addons/connector/components/synchronizer.py:196
+#, python-format
+msgid "Nothing to export."
+msgstr ""
+
+#. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint__message_needaction_counter
 msgid "Number of Actions"
 msgstr ""
@@ -308,6 +320,12 @@ msgstr "Rekordazonosító ID"
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint__name
 msgid "Record Name"
+msgstr ""
+
+#. module: connector
+#: code:addons/connector/components/synchronizer.py:198
+#, python-format
+msgid "Record exported with ID %s on Backend."
 msgstr ""
 
 #. module: connector

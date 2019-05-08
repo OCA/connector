@@ -62,6 +62,12 @@ class ConnectorCheckpoint(models.Model):
             return [('id', '=', '0')]
         return [('id', 'in', tuple(ids))]
 
+    @api.depends('backend_id')
+    def _compute_company(self):
+        for check in self:
+            if hasattr(check.backend_id, 'company_id'):
+                check.company_id = check.backend_id.company_id.id
+
     record = fields.Reference(
         compute='_compute_record',
         selection='_reference_models',
@@ -98,6 +104,12 @@ class ConnectorCheckpoint(models.Model):
         readonly=True,
         default='need_review',
     )
+    company_id = fields.Many2one(
+        'res.company',
+        string="Company",
+        readonly=True,
+        compute='_compute_company',
+        store=True)
 
     @api.multi
     def reviewed(self):

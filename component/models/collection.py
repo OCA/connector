@@ -16,7 +16,7 @@ to use in the `_collection` of the Components usable for the Backend.
 
 from contextlib import contextmanager
 
-from odoo import models, api
+from openerp import models, api
 from ..core import WorkContext
 
 

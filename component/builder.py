@@ -10,8 +10,8 @@ Components Builder
 Build the components at the build of a registry.
 
 """
-import odoo
-from odoo import api, models
+import openerp
+from openerp import models
 from .core import (
     _component_databases,
     ComponentRegistry,
@@ -43,15 +43,17 @@ class ComponentBuilder(models.AbstractModel):
 
     _components_registry_cache_size = DEFAULT_CACHE_SIZE
 
-    @api.model_cr
-    def _register_hook(self):
+    def _register_hook(self, cr):
         # This method is called by Odoo when the registry is built,
         # so in case the registry is rebuilt (cache invalidation, ...),
         # we have to to rebuild the components. We use a new
         # registry so we have an empty cache and we'll add components in it.
-        components_registry = self._init_global_registry()
-        self.build_registry(components_registry)
-        components_registry.ready = True
+        with openerp.api.Environment.manage():
+            env = openerp.api.Environment(cr, openerp.SUPERUSER_ID, {})
+            cb = env["component.builder"]
+            components_registry = cb._init_global_registry()
+            cb.build_registry(components_registry)
+            components_registry.ready = True
 
     def _init_global_registry(self):
         components_registry = ComponentRegistry(
@@ -67,7 +69,7 @@ class ComponentBuilder(models.AbstractModel):
         # lookup all the installed (or about to be) addons and generate
         # the graph, so we can load the components following the order
         # of the addons' dependencies
-        graph = odoo.modules.graph.Graph()
+        graph = openerp.modules.graph.Graph()
         graph.add_module(self.env.cr, 'base')
 
         query = (

@@ -22,9 +22,9 @@ import operator
 
 from collections import defaultdict, OrderedDict
 
-from odoo import models
-from odoo.tools import OrderedSet, LastOrderedSet
+from openerp import models
 from .exception import NoComponentError, SeveralComponentError
+from .tools import OrderedSet, LastOrderedSet
 
 
 _logger = logging.getLogger(__name__)
@@ -51,7 +51,7 @@ def _get_addon_name(full_name):
     # ``odoo.addons.sale`` (the right way) or ``sale`` (for backward
     # compatibility).
     module_parts = full_name.split('.')
-    if len(module_parts) > 2 and module_parts[:2] == ['odoo', 'addons']:
+    if len(module_parts) > 2 and module_parts[:2] == ['openerp', 'addons']:
         addon_name = full_name.split('.')[2]
     else:
         addon_name = full_name.split('.')[0]

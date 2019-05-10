@@ -113,7 +113,7 @@ import operator
 from collections import defaultdict
 from functools import wraps
 
-from odoo.addons.component.core import AbstractComponent, Component
+from openerp.addons.component.core import AbstractComponent, Component
 
 _logger = logging.getLogger(__name__)
 

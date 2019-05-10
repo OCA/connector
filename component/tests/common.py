@@ -7,10 +7,10 @@ import copy
 from contextlib import contextmanager
 
 import unittest2
-import odoo
-from odoo import api
-from odoo.tests import common
-from odoo.addons.component.core import (
+import openerp
+from openerp import api
+from openerp.tests import common
+from openerp.addons.component.core import (
     ComponentRegistry,
     MetaComponent,
     _get_addon_name,
@@ -19,8 +19,8 @@ from odoo.addons.component.core import (
 
 @contextmanager
 def new_rollbacked_env():
-    registry = odoo.registry(common.get_db_name())
-    uid = odoo.SUPERUSER_ID
+    registry = openerp.registry(common.get_db_name())
+    uid = openerp.SUPERUSER_ID
     cr = registry.cursor()
     try:
         yield api.Environment(cr, uid, {})

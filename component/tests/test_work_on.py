@@ -2,7 +2,7 @@
 # Copyright 2017 Camptocamp SA
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html)
 
-from odoo.addons.component.core import WorkContext, ComponentRegistry
+from openerp.addons.component.core import WorkContext, ComponentRegistry
 from .common import TransactionComponentCase
 
 

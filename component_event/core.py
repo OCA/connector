@@ -12,7 +12,7 @@ Core classes for the events system.
 """
 
 
-from odoo.addons.component.core import WorkContext
+from openerp.addons.component.core import WorkContext
 
 
 class EventWorkContext(WorkContext):

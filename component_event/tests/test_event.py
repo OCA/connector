@@ -5,13 +5,13 @@
 import mock
 import unittest2
 
-from odoo.addons.component.tests.common import (
+from openerp.addons.component.tests.common import (
     ComponentRegistryCase,
     TransactionComponentRegistryCase,
 )
-from odoo.addons.component.core import Component
-from odoo.addons.component_event.core import EventWorkContext
-from odoo.addons.component_event.components.event import skip_if
+from openerp.addons.component.core import Component
+from openerp.addons.component_event.core import EventWorkContext
+from openerp.addons.component_event.components.event import skip_if
 
 
 class TestEventWorkContext(unittest2.TestCase):

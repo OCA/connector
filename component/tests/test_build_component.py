@@ -3,7 +3,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html)
 
 import mock
-from odoo.addons.component.core import AbstractComponent, Component
+from openerp.addons.component.core import AbstractComponent, Component
 from .common import ComponentRegistryCase
 
 

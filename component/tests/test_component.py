@@ -3,11 +3,11 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html)
 
 from contextlib import contextmanager
-from odoo.addons.component.core import (
+from openerp.addons.component.core import (
     Component,
 )
 from .common import TransactionComponentRegistryCase
-from odoo.addons.component.exception import (
+from openerp.addons.component.exception import (
     NoComponentError,
     SeveralComponentError,
 )

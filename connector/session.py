@@ -194,6 +194,7 @@ class ConnectorSession(object):
         """ Commit the cursor """
         # do never commit during tests
         if not getattr(threading.currentThread(), 'testing', False):
+            # pylint: disable=invalid-commit
             self.cr.commit()
 
     def rollback(self):

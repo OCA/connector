@@ -307,6 +307,7 @@ class Database(object):
             cr.execute("LISTEN connector")
 
     def select_jobs(self, where, args):
+        # pylint: disable=sql-injection
         query = ("SELECT channel, uuid, id as seq, date_created, "
                  "priority, EXTRACT(EPOCH FROM eta), state "
                  "FROM queue_job WHERE %s" %

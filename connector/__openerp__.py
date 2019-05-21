@@ -26,7 +26,9 @@
  'website': 'http://odoo-connector.com',
  'license': 'AGPL-3',
  'category': 'Generic Modules',
- 'depends': ['mail'
+ 'depends': ['mail',
+             'component',
+             'component_event',
              ],
  'external_dependencies': {'python': ['requests'
                                       ],

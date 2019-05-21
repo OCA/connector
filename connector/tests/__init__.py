@@ -31,3 +31,6 @@ from . import test_runner_channels
 from . import test_runner_runner
 from . import test_checkpoint
 from . import test_default_binder
+from .components import test_mapper
+from .components import test_listener
+from .components import test_advisory_lock

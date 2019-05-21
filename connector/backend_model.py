@@ -30,6 +30,7 @@ class ConnectorBackend(models.AbstractModel):
     modules.
     """
     _name = 'connector.backend'
+    _inherit = ['collection.base']
     _description = 'Connector Backend'
     _backend_type = None
 

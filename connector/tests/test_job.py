@@ -3,6 +3,8 @@
 import cPickle
 import mock
 import unittest
+import hashlib
+
 from datetime import datetime, timedelta
 
 from openerp import SUPERUSER_ID, exceptions
@@ -19,6 +21,7 @@ from openerp.addons.connector.queue.job import (
     FAILED,
     _unpickle,
     RETRY_INTERVAL,
+    identity_exact,
 )
 from openerp.addons.connector.session import (
     ConnectorSession,
@@ -339,6 +342,50 @@ class TestJobs(unittest.TestCase):
             storage.load(job_a)
             storage.exists(job_a)
 
+    def test_job_identity_key_str(self):
+        id_key = 'e294e8444453b09d59bdb6efbfec1323'
+        test_job_1 = Job(func=task_a,
+                         priority=15,
+                         description="Test I am the first one",
+                         identity_key=id_key)
+        test_job_1.user_id = 1
+        self.assertEqual(test_job_1.identity_key, id_key)
+
+    def test_job_identity_key_func(self):
+        def identity_key_func(job):
+            hasher = hashlib.sha1()
+            hasher.update('test.queue.job'.encode('utf-8'))
+            hasher.update('testing_method'.encode('utf-8'))
+            hasher.update(str(sorted([])).encode('utf-8'))
+            hasher.update(str((1, 'foo')).encode('utf-8'))
+            hasher.update(str(sorted({'bar': 'baz'}.items())).encode('utf-8'))
+            return hasher.hexdigest()
+        expected_key = identity_key_func(None)
+
+        test_job_1 = Job(task_a,
+                         args=(1, 'foo'),
+                         kwargs={'bar': 'baz'},
+                         identity_key=identity_key_func)
+
+        self.assertEqual(test_job_1.identity_key, expected_key)
+
+    def test_job_identity_key_func_exact(self):
+        hasher = hashlib.sha1()
+        hasher.update(
+            "openerp.addons.connector.tests.test_job.task_a".encode('utf-8'))
+        hasher.update(str((1, 'foo')).encode('utf-8'))
+        hasher.update(str(sorted({'bar': 'baz'}.items())).encode('utf-8'))
+        hasher.update(str(None).encode('utf-8'))
+        hasher.update(str(None).encode('utf-8'))
+        expected_key = hasher.hexdigest()
+
+        test_job_1 = Job(task_a,
+                         args=(1, 'foo'),
+                         kwargs={'bar': 'baz'},
+                         identity_key=identity_exact)
+
+        self.assertEqual(test_job_1.identity_key, expected_key)
+
 
 class TestJobStorage(common.TransactionCase):
     """ Test storage of jobs """
@@ -486,6 +533,27 @@ class TestJobStorage(common.TransactionCase):
         stored = self.queue_job.search([])
         self.assertEqual(len(stored), 1)
         self.assertEqual('root.sub.sub', stored.channel)
+
+    def test_job_identity_key_no_duplicate(self):
+        """ If a job with same identity key in queue do not add a new one """
+        storage = OpenERPJobStorage(self.session)
+        test_job_uuid = storage.enqueue(
+            func=task_a, args=(1, "a"), identity_key=identity_exact)
+        test_job = storage.load(test_job_uuid)
+        stored = self.queue_job.search(
+            [('identity_key', '=', test_job.identity_key)]
+        )
+        self.assertTrue(stored)
+        self.assertEqual(1, len(stored))
+        self.assertEqual(stored.uuid, test_job.uuid)
+        test_job_uuid2 = storage.enqueue(
+            func=task_a, args=(1, "a"), identity_key=identity_exact)
+        self.assertEqual(test_job_uuid2, test_job.uuid)
+        stored = self.queue_job.search(
+            [('identity_key', '=', test_job.identity_key)]
+        )
+        self.assertTrue(stored)
+        self.assertEqual(1, len(stored))
 
 
 class TestJobModel(common.TransactionCase):

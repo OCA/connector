@@ -11,8 +11,8 @@ msgstr ""
 "POT-Creation-Date: 2018-01-05 16:56+0000\n"
 "PO-Revision-Date: 2018-08-04 13:35+0000\n"
 "Last-Translator: Rodrigo Macedo <rmsolucoeseminformatic4@gmail.com>\n"
-"Language-Team: Portuguese (Brazil) (https://www.transifex.com/oca/teams/"
-"23907/pt_BR/)\n"
+"Language-Team: Portuguese (Brazil) (https://www.transifex.com/oca/"
+"teams/23907/pt_BR/)\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -205,6 +205,13 @@ msgid "No record to check."
 msgstr "sem registro para checar."
 
 #. module: connector
+#: code:addons/connector/components/synchronizer.py:191
+#: code:addons/connector/components/synchronizer.py:196
+#, python-format
+msgid "Nothing to export."
+msgstr ""
+
+#. module: connector
 #: model:ir.actions.client,name:connector.action_client_connector_menu
 msgid "Open Connector Menu"
 msgstr "Abrir menu do conector"
@@ -228,6 +235,12 @@ msgstr "ID do registro"
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_name
 msgid "Record Name"
 msgstr "Nome Registro"
+
+#. module: connector
+#: code:addons/connector/components/synchronizer.py:198
+#, python-format
+msgid "Record exported with ID %s on Backend."
+msgstr ""
 
 #. module: connector
 #: code:addons/connector/models/queue_job.py:31

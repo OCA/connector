@@ -205,6 +205,13 @@ msgid "No record to check."
 msgstr "Pas d'enregistrement à contrôler."
 
 #. module: connector
+#: code:addons/connector/components/synchronizer.py:191
+#: code:addons/connector/components/synchronizer.py:196
+#, python-format
+msgid "Nothing to export."
+msgstr ""
+
+#. module: connector
 #: model:ir.actions.client,name:connector.action_client_connector_menu
 msgid "Open Connector Menu"
 msgstr "Ouvrir le menu du connecteur"
@@ -228,6 +235,12 @@ msgstr "ID de ressource"
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_name
 msgid "Record Name"
 msgstr "Nom d'enregistrement"
+
+#. module: connector
+#: code:addons/connector/components/synchronizer.py:198
+#, python-format
+msgid "Record exported with ID %s on Backend."
+msgstr ""
 
 #. module: connector
 #: code:addons/connector/models/queue_job.py:31

@@ -627,7 +627,7 @@ before this date/time.</p>
 <dd><p>Model recordset when we are on a delayed Model method</p>
 </dd></dl>
 
-<dl class="classmethod">
+<dl class="method">
 <dt id="odoo.addons.queue_job.job.Job.load">
 <em class="property">classmethod </em><code class="descname">load</code><span class="sig-paren">(</span><em>env</em>, <em>job_uuid</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/job.html#Job.load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.queue_job.job.Job.load" title="Permalink to this definition">¶</a></dt>
 <dd><p>Read a job from the Database</p>
@@ -639,7 +639,7 @@ before this date/time.</p>
 <dd><p>Check if a job to be executed with the same key exists.</p>
 </dd></dl>
 
-<dl class="classmethod">
+<dl class="method">
 <dt id="odoo.addons.queue_job.job.Job.enqueue">
 <em class="property">classmethod </em><code class="descname">enqueue</code><span class="sig-paren">(</span><em>func</em>, <em>args=None</em>, <em>kwargs=None</em>, <em>priority=None</em>, <em>eta=None</em>, <em>max_retries=None</em>, <em>description=None</em>, <em>channel=None</em>, <em>identity_key=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/job.html#Job.enqueue"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.queue_job.job.Job.enqueue" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a Job and enqueue it in the queue. Return the job uuid.</p>
@@ -649,7 +649,7 @@ from the ones to pass to the job function.</p>
 no job is created and the existing job is returned</p>
 </dd></dl>
 
-<dl class="staticmethod">
+<dl class="method">
 <dt id="odoo.addons.queue_job.job.Job.db_record_from_uuid">
 <em class="property">static </em><code class="descname">db_record_from_uuid</code><span class="sig-paren">(</span><em>env</em>, <em>job_uuid</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/job.html#Job.db_record_from_uuid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.queue_job.job.Job.db_record_from_uuid" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -672,30 +672,30 @@ no job is created and the existing job is returned</p>
 <code class="descname">db_record</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/job.html#Job.db_record"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.queue_job.job.Job.db_record" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="attribute">
+<dl class="method">
 <dt>
-<code class="descname">func</code></dt>
+<em class="property">property </em><code class="descname">func</code></dt>
 <dd></dd></dl>
 
-<dl class="attribute">
+<dl class="method">
 <dt id="odoo.addons.queue_job.job.Job.identity_key">
-<code class="descname">identity_key</code><a class="headerlink" href="#odoo.addons.queue_job.job.Job.identity_key" title="Permalink to this definition">¶</a></dt>
+<em class="property">property </em><code class="descname">identity_key</code><a class="headerlink" href="#odoo.addons.queue_job.job.Job.identity_key" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="attribute">
+<dl class="method">
 <dt>
-<code class="descname">description</code></dt>
+<em class="property">property </em><code class="descname">description</code></dt>
 <dd></dd></dl>
 
-<dl class="attribute">
+<dl class="method">
 <dt>
-<code class="descname">uuid</code></dt>
+<em class="property">property </em><code class="descname">uuid</code></dt>
 <dd><p>Job ID, this is an UUID</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="method">
 <dt>
-<code class="descname">eta</code></dt>
+<em class="property">property </em><code class="descname">eta</code></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -764,7 +764,7 @@ want to retry a job later.</p>
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.1.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.0.<br/>
     </p>
   </div>
 </footer>

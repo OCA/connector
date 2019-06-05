@@ -245,8 +245,17 @@
 <span class="sd">binders to create the link between them.</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">psycopg2</span>
 
 <span class="kn">from</span> <span class="nn">odoo.addons.component.core</span> <span class="k">import</span> <span class="n">AbstractComponent</span>
+<span class="kn">from</span> <span class="nn">contextlib</span> <span class="k">import</span> <span class="n">contextmanager</span>
+<span class="kn">from</span> <span class="nn">odoo.addons.connector.exception</span> <span class="k">import</span> <span class="p">(</span><span class="n">IDMissingInBackend</span><span class="p">,</span>
+                                             <span class="n">RetryableJobError</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">odoo</span> <span class="k">import</span> <span class="n">_</span>
+<span class="kn">import</span> <span class="nn">odoo</span>
+
+<span class="n">_logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="Synchronizer"><a class="viewcode-back" href="../../../api/api_components.html#connector.components.synchronizer.Synchronizer">[docs]</a><span class="k">class</span> <span class="nc">Synchronizer</span><span class="p">(</span><span class="n">AbstractComponent</span><span class="p">):</span>
@@ -330,6 +339,310 @@
     <span class="n">_base_mapper_usage</span> <span class="o">=</span> <span class="s1">&#39;export.mapper&#39;</span></div>
 
 
+<div class="viewcode-block" id="GenericExporter"><a class="viewcode-back" href="../../../api/api_components.html#connector.components.synchronizer.GenericExporter">[docs]</a><span class="k">class</span> <span class="nc">GenericExporter</span><span class="p">(</span><span class="n">AbstractComponent</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Generic Synchronizer for exporting data from Odoo to a backend &quot;&quot;&quot;</span>
+    <span class="n">_name</span> <span class="o">=</span> <span class="s1">&#39;generic.exporter&#39;</span>
+    <span class="n">_inherit</span> <span class="o">=</span> <span class="s1">&#39;base.exporter&#39;</span>
+    <span class="n">_default_binding_field</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">working_context</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">GenericExporter</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">working_context</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">binding</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">external_id</span> <span class="o">=</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="GenericExporter._should_import"><a class="viewcode-back" href="../../../api/api_components.html#connector.components.synchronizer.GenericExporter._should_import">[docs]</a>    <span class="k">def</span> <span class="nf">_should_import</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="GenericExporter._delay_import"><a class="viewcode-back" href="../../../api/api_components.html#connector.components.synchronizer.GenericExporter._delay_import">[docs]</a>    <span class="k">def</span> <span class="nf">_delay_import</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Schedule an import of the record.</span>
+
+<span class="sd">        Adapt in the sub-classes when the model is not imported</span>
+<span class="sd">        using ``import_record``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># force is True because the sync_date will be more recent</span>
+        <span class="c1"># so the import would be skipped</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">external_id</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">binding</span><span class="o">.</span><span class="n">with_delay</span><span class="p">()</span><span class="o">.</span><span class="n">import_record</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">backend_record</span><span class="p">,</span>
+                                                <span class="bp">self</span><span class="o">.</span><span class="n">external_id</span><span class="p">,</span>
+                                                <span class="n">force</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="GenericExporter.run"><a class="viewcode-back" href="../../../api/api_components.html#connector.components.synchronizer.GenericExporter.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">binding</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Run the synchronization</span>
+
+<span class="sd">        :param binding: binding record to export</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">binding</span> <span class="o">=</span> <span class="n">binding</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">external_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">binder</span><span class="o">.</span><span class="n">to_external</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">binding</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">should_import</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_should_import</span><span class="p">()</span>
+        <span class="k">except</span> <span class="n">IDMissingInBackend</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">external_id</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="n">should_import</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="n">should_import</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_delay_import</span><span class="p">()</span>
+
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_run</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">binder</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">external_id</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">binding</span><span class="p">)</span>
+        <span class="c1"># Commit so we keep the external ID when there are several</span>
+        <span class="c1"># exports (due to dependencies) and one of them fails.</span>
+        <span class="c1"># The commit will also release the lock acquired on the binding</span>
+        <span class="c1"># record</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">odoo</span><span class="o">.</span><span class="n">tools</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;test_enable&#39;</span><span class="p">]:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">cr</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>  <span class="c1"># noqa</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_after_export</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">result</span></div>
+
+<div class="viewcode-block" id="GenericExporter._run"><a class="viewcode-back" href="../../../api/api_components.html#connector.components.synchronizer.GenericExporter._run">[docs]</a>    <span class="k">def</span> <span class="nf">_run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fields</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Flow of the synchronization, implemented in inherited classes&quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">binding</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">external_id</span><span class="p">:</span>
+            <span class="n">fields</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># should be created with all the fields</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_has_to_skip</span><span class="p">():</span>
+            <span class="k">return</span>
+
+        <span class="c1"># export the missing linked resources</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_export_dependencies</span><span class="p">()</span>
+
+        <span class="c1"># prevent other jobs to export the same record</span>
+        <span class="c1"># will be released on commit (or rollback)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_lock</span><span class="p">()</span>
+
+        <span class="n">map_record</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_map_data</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">external_id</span><span class="p">:</span>
+            <span class="n">record</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_update_data</span><span class="p">(</span><span class="n">map_record</span><span class="p">,</span> <span class="n">fields</span><span class="o">=</span><span class="n">fields</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">record</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">_</span><span class="p">(</span><span class="s1">&#39;Nothing to export.&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_update</span><span class="p">(</span><span class="n">record</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">record</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_data</span><span class="p">(</span><span class="n">map_record</span><span class="p">,</span> <span class="n">fields</span><span class="o">=</span><span class="n">fields</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">record</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">_</span><span class="p">(</span><span class="s1">&#39;Nothing to export.&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">external_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create</span><span class="p">(</span><span class="n">record</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">_</span><span class="p">(</span><span class="s1">&#39;Record exported with ID </span><span class="si">%s</span><span class="s1"> on Backend.&#39;</span><span class="p">)</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">external_id</span></div>
+
+<div class="viewcode-block" id="GenericExporter._after_export"><a class="viewcode-back" href="../../../api/api_components.html#connector.components.synchronizer.GenericExporter._after_export">[docs]</a>    <span class="k">def</span> <span class="nf">_after_export</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Can do several actions after exporting a record on the backend &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="GenericExporter._lock"><a class="viewcode-back" href="../../../api/api_components.html#connector.components.synchronizer.GenericExporter._lock">[docs]</a>    <span class="k">def</span> <span class="nf">_lock</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Lock the binding record.</span>
+
+<span class="sd">        Lock the binding record so we are sure that only one export</span>
+<span class="sd">        job is running for this record if concurrent jobs have to export the</span>
+<span class="sd">        same record.</span>
+
+<span class="sd">        When concurrent jobs try to export the same record, the first one</span>
+<span class="sd">        will lock and proceed, the others will fail to lock and will be</span>
+<span class="sd">        retried later.</span>
+
+<span class="sd">        This behavior works also when the export becomes multilevel</span>
+<span class="sd">        with :meth:`_export_dependencies`. Each level will set its own lock</span>
+<span class="sd">        on the binding record it has to export.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">sql</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;SELECT id FROM </span><span class="si">%s</span><span class="s2"> WHERE ID = </span><span class="si">%%</span><span class="s2">s FOR UPDATE NOWAIT&quot;</span> <span class="o">%</span>
+               <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">_table</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">cr</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sql</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">binding</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="p">),</span>
+                                <span class="n">log_exceptions</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">psycopg2</span><span class="o">.</span><span class="n">OperationalError</span><span class="p">:</span>
+            <span class="n">_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;A concurrent job is already exporting the same &#39;</span>
+                         <span class="s1">&#39;record (</span><span class="si">%s</span><span class="s1"> with id </span><span class="si">%s</span><span class="s1">). Job delayed later.&#39;</span><span class="p">,</span>
+                         <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">binding</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">RetryableJobError</span><span class="p">(</span>
+                <span class="s1">&#39;A concurrent job is already exporting the same record &#39;</span>
+                <span class="s1">&#39;(</span><span class="si">%s</span><span class="s1"> with id </span><span class="si">%s</span><span class="s1">). The job will be retried later.&#39;</span> <span class="o">%</span>
+                <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">binding</span><span class="o">.</span><span class="n">id</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="GenericExporter._has_to_skip"><a class="viewcode-back" href="../../../api/api_components.html#connector.components.synchronizer.GenericExporter._has_to_skip">[docs]</a>    <span class="k">def</span> <span class="nf">_has_to_skip</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Return True if the export can be skipped &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="GenericExporter._retry_unique_violation"><a class="viewcode-back" href="../../../api/api_components.html#connector.components.synchronizer.GenericExporter._retry_unique_violation">[docs]</a>    <span class="nd">@contextmanager</span>
+    <span class="k">def</span> <span class="nf">_retry_unique_violation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Context manager: catch Unique constraint error and retry the</span>
+<span class="sd">        job later.</span>
+
+<span class="sd">        When we execute several jobs workers concurrently, it happens</span>
+<span class="sd">        that 2 jobs are creating the same record at the same time (binding</span>
+<span class="sd">        record created by :meth:`_export_dependency`), resulting in:</span>
+
+<span class="sd">            IntegrityError: duplicate key value violates unique</span>
+<span class="sd">            constraint &quot;my_backend_product_product_odoo_uniq&quot;</span>
+<span class="sd">            DETAIL:  Key (backend_id, odoo_id)=(1, 4851) already exists.</span>
+
+<span class="sd">        In that case, we&#39;ll retry the import just later.</span>
+
+<span class="sd">        .. warning:: The unique constraint must be created on the</span>
+<span class="sd">                     binding record to prevent 2 bindings to be created</span>
+<span class="sd">                     for the same External record.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">yield</span>
+        <span class="k">except</span> <span class="n">psycopg2</span><span class="o">.</span><span class="n">IntegrityError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">err</span><span class="o">.</span><span class="n">pgcode</span> <span class="o">==</span> <span class="n">psycopg2</span><span class="o">.</span><span class="n">errorcodes</span><span class="o">.</span><span class="n">UNIQUE_VIOLATION</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">RetryableJobError</span><span class="p">(</span>
+                    <span class="s1">&#39;A database error caused the failure of the job:</span><span class="se">\n</span><span class="s1">&#39;</span>
+                    <span class="s1">&#39;</span><span class="si">%s</span><span class="se">\n\n</span><span class="s1">&#39;</span>
+                    <span class="s1">&#39;Likely due to 2 concurrent jobs wanting to create &#39;</span>
+                    <span class="s1">&#39;the same record. The job will be retried later.&#39;</span> <span class="o">%</span> <span class="n">err</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span></div>
+
+<div class="viewcode-block" id="GenericExporter._export_dependency"><a class="viewcode-back" href="../../../api/api_components.html#connector.components.synchronizer.GenericExporter._export_dependency">[docs]</a>    <span class="k">def</span> <span class="nf">_export_dependency</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">relation</span><span class="p">,</span> <span class="n">binding_model</span><span class="p">,</span>
+                           <span class="n">component_usage</span><span class="o">=</span><span class="s1">&#39;record.exporter&#39;</span><span class="p">,</span>
+                           <span class="n">binding_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                           <span class="n">binding_extra_vals</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Export a dependency. The exporter class is a subclass of</span>
+<span class="sd">        ``GenericExporter``. If a more precise class need to be defined,</span>
+<span class="sd">        it can be passed to the ``exporter_class`` keyword argument.</span>
+
+<span class="sd">        .. warning:: a commit is done at the end of the export of each</span>
+<span class="sd">                     dependency. The reason for that is that we pushed a record</span>
+<span class="sd">                     on the backend and we absolutely have to keep its ID.</span>
+
+<span class="sd">                     So you *must* take care not to modify the Odoo</span>
+<span class="sd">                     database during an export, excepted when writing</span>
+<span class="sd">                     back the external ID or eventually to store</span>
+<span class="sd">                     external data that we have to keep on this side.</span>
+
+<span class="sd">                     You should call this method only at the beginning</span>
+<span class="sd">                     of the exporter synchronization,</span>
+<span class="sd">                     in :meth:`~._export_dependencies`.</span>
+
+<span class="sd">        :param relation: record to export if not already exported</span>
+<span class="sd">        :type relation: :py:class:`odoo.models.BaseModel`</span>
+<span class="sd">        :param binding_model: name of the binding model for the relation</span>
+<span class="sd">        :type binding_model: str | unicode</span>
+<span class="sd">        :param component_usage: &#39;usage&#39; to look for to find the Component to</span>
+<span class="sd">                                for the export, by default &#39;record.exporter&#39;</span>
+<span class="sd">        :type exporter: str | unicode</span>
+<span class="sd">        :param binding_field: name of the one2many field on a normal</span>
+<span class="sd">                              record that points to the binding record</span>
+<span class="sd">                              (default: my_backend_bind_ids).</span>
+<span class="sd">                              It is used only when the relation is not</span>
+<span class="sd">                              a binding but is a normal record.</span>
+<span class="sd">        :type binding_field: str | unicode</span>
+<span class="sd">        :binding_extra_vals:  In case we want to create a new binding</span>
+<span class="sd">                              pass extra values for this binding</span>
+<span class="sd">        :type binding_extra_vals: dict</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">binding_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">binding_field</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_default_binding_field</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">relation</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="n">rel_binder</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">binder_for</span><span class="p">(</span><span class="n">binding_model</span><span class="p">)</span>
+        <span class="c1"># wrap is typically True if the relation is for instance a</span>
+        <span class="c1"># &#39;product.product&#39; record but the binding model is</span>
+        <span class="c1"># &#39;my_bakend.product.product&#39;</span>
+        <span class="n">wrap</span> <span class="o">=</span> <span class="n">relation</span><span class="o">.</span><span class="n">_name</span> <span class="o">!=</span> <span class="n">binding_model</span>
+
+        <span class="k">if</span> <span class="n">wrap</span> <span class="ow">and</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">relation</span><span class="p">,</span> <span class="n">binding_field</span><span class="p">):</span>
+            <span class="n">domain</span> <span class="o">=</span> <span class="p">[(</span><span class="s1">&#39;odoo_id&#39;</span><span class="p">,</span> <span class="s1">&#39;=&#39;</span><span class="p">,</span> <span class="n">relation</span><span class="o">.</span><span class="n">id</span><span class="p">),</span>
+                      <span class="p">(</span><span class="s1">&#39;backend_id&#39;</span><span class="p">,</span> <span class="s1">&#39;=&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">backend_record</span><span class="o">.</span><span class="n">id</span><span class="p">)]</span>
+            <span class="n">binding</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="p">[</span><span class="n">binding_model</span><span class="p">]</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">domain</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">binding</span><span class="p">:</span>
+                <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">binding</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">,</span> <span class="p">(</span>
+                    <span class="s1">&#39;only 1 binding for a backend is &#39;</span>
+                    <span class="s1">&#39;supported in _export_dependency&#39;</span><span class="p">)</span>
+            <span class="c1"># we are working with a unwrapped record (e.g.</span>
+            <span class="c1"># product.category) and the binding does not exist yet.</span>
+            <span class="c1"># Example: I created a product.product and its binding</span>
+            <span class="c1"># my_backend.product.product and we are exporting it, but we need</span>
+            <span class="c1"># to create the binding for the product.category on which it</span>
+            <span class="c1"># depends.</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">bind_values</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;backend_id&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">backend_record</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+                               <span class="s1">&#39;odoo_id&#39;</span><span class="p">:</span> <span class="n">relation</span><span class="o">.</span><span class="n">id</span><span class="p">}</span>
+                <span class="k">if</span> <span class="n">binding_extra_vals</span><span class="p">:</span>
+                    <span class="n">bind_values</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">binding_extra_vals</span><span class="p">)</span>
+                <span class="c1"># If 2 jobs create it at the same time, retry</span>
+                <span class="c1"># one later. A unique constraint (backend_id,</span>
+                <span class="c1"># odoo_id) should exist on the binding model</span>
+                <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_retry_unique_violation</span><span class="p">():</span>
+                    <span class="n">binding</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="p">[</span><span class="n">binding_model</span><span class="p">]</span>
+                               <span class="o">.</span><span class="n">with_context</span><span class="p">(</span><span class="n">connector_no_export</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                               <span class="o">.</span><span class="n">sudo</span><span class="p">()</span>
+                               <span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">bind_values</span><span class="p">))</span>
+                    <span class="c1"># Eager commit to avoid having 2 jobs</span>
+                    <span class="c1"># exporting at the same time. The constraint</span>
+                    <span class="c1"># will pop if an other job already created</span>
+                    <span class="c1"># the same binding. It will be caught and</span>
+                    <span class="c1"># raise a RetryableJobError.</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="n">odoo</span><span class="o">.</span><span class="n">tools</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;test_enable&#39;</span><span class="p">]:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">cr</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>  <span class="c1"># noqa</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># If my_backend_bind_ids does not exist we are typically in a</span>
+            <span class="c1"># &quot;direct&quot; binding (the binding record is the same record).</span>
+            <span class="c1"># If wrap is True, relation is already a binding record.</span>
+            <span class="n">binding</span> <span class="o">=</span> <span class="n">relation</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">rel_binder</span><span class="o">.</span><span class="n">to_external</span><span class="p">(</span><span class="n">binding</span><span class="p">):</span>
+            <span class="n">exporter</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">component</span><span class="p">(</span><span class="n">usage</span><span class="o">=</span><span class="n">component_usage</span><span class="p">,</span>
+                                      <span class="n">model_name</span><span class="o">=</span><span class="n">binding_model</span><span class="p">)</span>
+            <span class="n">exporter</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">binding</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="GenericExporter._export_dependencies"><a class="viewcode-back" href="../../../api/api_components.html#connector.components.synchronizer.GenericExporter._export_dependencies">[docs]</a>    <span class="k">def</span> <span class="nf">_export_dependencies</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Export the dependencies for the record&quot;&quot;&quot;</span>
+        <span class="k">return</span></div>
+
+<div class="viewcode-block" id="GenericExporter._map_data"><a class="viewcode-back" href="../../../api/api_components.html#connector.components.synchronizer.GenericExporter._map_data">[docs]</a>    <span class="k">def</span> <span class="nf">_map_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns an instance of</span>
+<span class="sd">        :py:class:`~odoo.addons.connector.components.mapper.MapRecord`</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">mapper</span><span class="o">.</span><span class="n">map_record</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">binding</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="GenericExporter._validate_create_data"><a class="viewcode-back" href="../../../api/api_components.html#connector.components.synchronizer.GenericExporter._validate_create_data">[docs]</a>    <span class="k">def</span> <span class="nf">_validate_create_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Check if the values to import are correct</span>
+
+<span class="sd">        Pro-actively check before the ``Model.create`` if some fields</span>
+<span class="sd">        are missing or invalid</span>
+
+<span class="sd">        Raise `InvalidDataError`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span></div>
+
+<div class="viewcode-block" id="GenericExporter._validate_update_data"><a class="viewcode-back" href="../../../api/api_components.html#connector.components.synchronizer.GenericExporter._validate_update_data">[docs]</a>    <span class="k">def</span> <span class="nf">_validate_update_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Check if the values to import are correct</span>
+
+<span class="sd">        Pro-actively check before the ``Model.update`` if some fields</span>
+<span class="sd">        are missing or invalid</span>
+
+<span class="sd">        Raise `InvalidDataError`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span></div>
+
+<div class="viewcode-block" id="GenericExporter._create_data"><a class="viewcode-back" href="../../../api/api_components.html#connector.components.synchronizer.GenericExporter._create_data">[docs]</a>    <span class="k">def</span> <span class="nf">_create_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">map_record</span><span class="p">,</span> <span class="n">fields</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Get the data to pass to :py:meth:`_create` &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">map_record</span><span class="o">.</span><span class="n">values</span><span class="p">(</span><span class="n">for_create</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">fields</span><span class="o">=</span><span class="n">fields</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="GenericExporter._create"><a class="viewcode-back" href="../../../api/api_components.html#connector.components.synchronizer.GenericExporter._create">[docs]</a>    <span class="k">def</span> <span class="nf">_create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Create the External record &quot;&quot;&quot;</span>
+        <span class="c1"># special check on data before export</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_validate_create_data</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">backend_adapter</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">data</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="GenericExporter._update_data"><a class="viewcode-back" href="../../../api/api_components.html#connector.components.synchronizer.GenericExporter._update_data">[docs]</a>    <span class="k">def</span> <span class="nf">_update_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">map_record</span><span class="p">,</span> <span class="n">fields</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Get the data to pass to :py:meth:`_update` &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">map_record</span><span class="o">.</span><span class="n">values</span><span class="p">(</span><span class="n">fields</span><span class="o">=</span><span class="n">fields</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="GenericExporter._update"><a class="viewcode-back" href="../../../api/api_components.html#connector.components.synchronizer.GenericExporter._update">[docs]</a>    <span class="k">def</span> <span class="nf">_update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Update an External record &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">external_id</span>
+        <span class="c1"># special check on data before export</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_validate_update_data</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">backend_adapter</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">external_id</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span></div></div>
+
+
 <div class="viewcode-block" id="Importer"><a class="viewcode-back" href="../../../api/api_components.html#connector.components.synchronizer.Importer">[docs]</a><span class="k">class</span> <span class="nc">Importer</span><span class="p">(</span><span class="n">AbstractComponent</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Synchronizer for importing data from a backend to Odoo &quot;&quot;&quot;</span>
 
@@ -364,7 +677,7 @@
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.1.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.0.<br/>
     </p>
   </div>
 </footer>

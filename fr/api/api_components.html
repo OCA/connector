@@ -336,9 +336,9 @@ and adds a few methods which are of common usage in the connectors.</p>
 <code class="descname">_name</code><em class="property"> = 'base.connector'</em><a class="headerlink" href="#connector.components.core.BaseConnectorComponent._name" title="Lien permanent vers cette définition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="attribute">
+<dl class="method">
 <dt id="connector.components.core.BaseConnectorComponent.backend_record">
-<code class="descname">backend_record</code><a class="headerlink" href="#connector.components.core.BaseConnectorComponent.backend_record" title="Lien permanent vers cette définition">¶</a></dt>
+<em class="property">property </em><code class="descname">backend_record</code><a class="headerlink" href="#connector.components.core.BaseConnectorComponent.backend_record" title="Lien permanent vers cette définition">¶</a></dt>
 <dd><p>Backend record we are working with</p>
 </dd></dl>
 
@@ -643,15 +643,15 @@ external records into Odoo records and conversely.</p>
 <code class="descname">_usage</code><em class="property"> = 'mapper'</em><a class="headerlink" href="#connector.components.mapper.Mapper._usage" title="Lien permanent vers cette définition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="attribute">
+<dl class="method">
 <dt id="connector.components.mapper.Mapper.map_methods">
-<code class="descname">map_methods</code><a class="headerlink" href="#connector.components.mapper.Mapper.map_methods" title="Lien permanent vers cette définition">¶</a></dt>
+<em class="property">property </em><code class="descname">map_methods</code><a class="headerlink" href="#connector.components.mapper.Mapper.map_methods" title="Lien permanent vers cette définition">¶</a></dt>
 <dd><p>Émets toutes les méthodes décorées avec <code class="docutils literal notranslate"><span class="pre">&#64;mapping</span></code></p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="method">
 <dt id="connector.components.mapper.Mapper.options">
-<code class="descname">options</code><a class="headerlink" href="#connector.components.mapper.Mapper.options" title="Lien permanent vers cette définition">¶</a></dt>
+<em class="property">property </em><code class="descname">options</code><a class="headerlink" href="#connector.components.mapper.Mapper.options" title="Lien permanent vers cette définition">¶</a></dt>
 <dd><p>Des options peuvent être accédées dans les méthodes de mapping avec <code class="docutils literal notranslate"><span class="pre">self.options</span></code>.</p>
 </dd></dl>
 
@@ -1010,15 +1010,15 @@ each children mapping, the default one will be used
 </table>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="method">
 <dt id="connector.components.mapper.MapRecord.parent">
-<code class="descname">parent</code><a class="headerlink" href="#connector.components.mapper.MapRecord.parent" title="Lien permanent vers cette définition">¶</a></dt>
+<em class="property">property </em><code class="descname">parent</code><a class="headerlink" href="#connector.components.mapper.MapRecord.parent" title="Lien permanent vers cette définition">¶</a></dt>
 <dd><p>Enregistrement parent si l’enregistrement en cours est un item</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="method">
 <dt id="connector.components.mapper.MapRecord.source">
-<code class="descname">source</code><a class="headerlink" href="#connector.components.mapper.MapRecord.source" title="Lien permanent vers cette définition">¶</a></dt>
+<em class="property">property </em><code class="descname">source</code><a class="headerlink" href="#connector.components.mapper.MapRecord.source" title="Lien permanent vers cette définition">¶</a></dt>
 <dd><p>Enregistrement source à convertir</p>
 </dd></dl>
 
@@ -1329,9 +1329,9 @@ can be customized in sub-classes</p>
 <dd><p>Lance la synchronisation</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="method">
 <dt id="connector.components.synchronizer.Synchronizer.mapper">
-<code class="descname">mapper</code><a class="headerlink" href="#connector.components.synchronizer.Synchronizer.mapper" title="Lien permanent vers cette définition">¶</a></dt>
+<em class="property">property </em><code class="descname">mapper</code><a class="headerlink" href="#connector.components.synchronizer.Synchronizer.mapper" title="Lien permanent vers cette définition">¶</a></dt>
 <dd><p>Renvoie une instance de mappeur <code class="docutils literal notranslate"><span class="pre">Mapper</span></code> pour la synchronisation</p>
 <p>L’instanciation est retardée parce que certaines synchronisations n’ont pas besoin d’une telle unité et celle-ci peut ne pas exister.</p>
 <p>It looks for a Component with <code class="docutils literal notranslate"><span class="pre">_usage</span></code> being equal to
@@ -1346,9 +1346,9 @@ can be customized in sub-classes</p>
 </table>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="method">
 <dt id="connector.components.synchronizer.Synchronizer.binder">
-<code class="descname">binder</code><a class="headerlink" href="#connector.components.synchronizer.Synchronizer.binder" title="Lien permanent vers cette définition">¶</a></dt>
+<em class="property">property </em><code class="descname">binder</code><a class="headerlink" href="#connector.components.synchronizer.Synchronizer.binder" title="Lien permanent vers cette définition">¶</a></dt>
 <dd><p>Renvoie une instance de liaison <code class="docutils literal notranslate"><span class="pre">Binder</span></code> pour la synchronisation.</p>
 <p>L’instanciation est retardée parce que certaines synchronisations n’ont pas besoin d’une telle unité et celle-ci peut ne pas exister.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -1361,9 +1361,9 @@ can be customized in sub-classes</p>
 </table>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="method">
 <dt id="connector.components.synchronizer.Synchronizer.backend_adapter">
-<code class="descname">backend_adapter</code><a class="headerlink" href="#connector.components.synchronizer.Synchronizer.backend_adapter" title="Lien permanent vers cette définition">¶</a></dt>
+<em class="property">property </em><code class="descname">backend_adapter</code><a class="headerlink" href="#connector.components.synchronizer.Synchronizer.backend_adapter" title="Lien permanent vers cette définition">¶</a></dt>
 <dd><p>Renvoie une instance de <code class="docutils literal notranslate"><span class="pre">BackendAdapter</span></code> pour la synchronisation.</p>
 <p>L’instanciation est retardée parce que certaines synchronisations n’ont pas besoin d’une telle unité et celle-ci peut ne pas exister.</p>
 <p>It looks for a Component with <code class="docutils literal notranslate"><span class="pre">_usage</span></code> being equal to
@@ -1404,6 +1404,209 @@ can be customized in sub-classes</p>
 <dt id="connector.components.synchronizer.Exporter._base_mapper_usage">
 <code class="descname">_base_mapper_usage</code><em class="property"> = 'export.mapper'</em><a class="headerlink" href="#connector.components.synchronizer.Exporter._base_mapper_usage" title="Lien permanent vers cette définition">¶</a></dt>
 <dd><p>usage of the component used as mapper, can be customized in sub-classes</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="connector.components.synchronizer.GenericExporter">
+<em class="property">class </em><code class="descclassname">connector.components.synchronizer.</code><code class="descname">GenericExporter</code><span class="sig-paren">(</span><em>working_context</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/components/synchronizer.html#GenericExporter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.components.synchronizer.GenericExporter" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Bases : <a class="reference internal" href="#odoo.addons.component.core.AbstractComponent" title="odoo.addons.component.core.AbstractComponent"><code class="xref py py-class docutils literal notranslate"><span class="pre">odoo.addons.component.core.AbstractComponent</span></code></a></p>
+<p>Generic Synchronizer for exporting data from Odoo to a backend</p>
+<dl class="attribute">
+<dt id="connector.components.synchronizer.GenericExporter._name">
+<code class="descname">_name</code><em class="property"> = 'generic.exporter'</em><a class="headerlink" href="#connector.components.synchronizer.GenericExporter._name" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="connector.components.synchronizer.GenericExporter._inherit">
+<code class="descname">_inherit</code><em class="property"> = 'base.exporter'</em><a class="headerlink" href="#connector.components.synchronizer.GenericExporter._inherit" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="connector.components.synchronizer.GenericExporter._default_binding_field">
+<code class="descname">_default_binding_field</code><em class="property"> = None</em><a class="headerlink" href="#connector.components.synchronizer.GenericExporter._default_binding_field" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="connector.components.synchronizer.GenericExporter._should_import">
+<code class="descname">_should_import</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/components/synchronizer.html#GenericExporter._should_import"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.components.synchronizer.GenericExporter._should_import" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="connector.components.synchronizer.GenericExporter._delay_import">
+<code class="descname">_delay_import</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/components/synchronizer.html#GenericExporter._delay_import"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.components.synchronizer.GenericExporter._delay_import" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Schedule an import of the record.</p>
+<p>Adapt in the sub-classes when the model is not imported
+using <code class="docutils literal notranslate"><span class="pre">import_record</span></code>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="connector.components.synchronizer.GenericExporter.run">
+<code class="descname">run</code><span class="sig-paren">(</span><em>binding</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/components/synchronizer.html#GenericExporter.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.components.synchronizer.GenericExporter.run" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Lance la synchronisation</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><strong>binding</strong> – binding record to export</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="connector.components.synchronizer.GenericExporter._run">
+<code class="descname">_run</code><span class="sig-paren">(</span><em>fields=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/components/synchronizer.html#GenericExporter._run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.components.synchronizer.GenericExporter._run" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Flow of the synchronization, implemented in inherited classes</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="connector.components.synchronizer.GenericExporter._after_export">
+<code class="descname">_after_export</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/components/synchronizer.html#GenericExporter._after_export"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.components.synchronizer.GenericExporter._after_export" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Can do several actions after exporting a record on the backend</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="connector.components.synchronizer.GenericExporter._lock">
+<code class="descname">_lock</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/components/synchronizer.html#GenericExporter._lock"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.components.synchronizer.GenericExporter._lock" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Lock the binding record.</p>
+<p>Lock the binding record so we are sure that only one export
+job is running for this record if concurrent jobs have to export the
+same record.</p>
+<p>When concurrent jobs try to export the same record, the first one
+will lock and proceed, the others will fail to lock and will be
+retried later.</p>
+<p>This behavior works also when the export becomes multilevel
+with <a class="reference internal" href="#connector.components.synchronizer.GenericExporter._export_dependencies" title="connector.components.synchronizer.GenericExporter._export_dependencies"><code class="xref py py-meth docutils literal notranslate"><span class="pre">_export_dependencies()</span></code></a>. Each level will set its own lock
+on the binding record it has to export.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="connector.components.synchronizer.GenericExporter._has_to_skip">
+<code class="descname">_has_to_skip</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/components/synchronizer.html#GenericExporter._has_to_skip"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.components.synchronizer.GenericExporter._has_to_skip" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Return True if the export can be skipped</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="connector.components.synchronizer.GenericExporter._retry_unique_violation">
+<code class="descname">_retry_unique_violation</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/components/synchronizer.html#GenericExporter._retry_unique_violation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.components.synchronizer.GenericExporter._retry_unique_violation" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Context manager: catch Unique constraint error and retry the
+job later.</p>
+<p>When we execute several jobs workers concurrently, it happens
+that 2 jobs are creating the same record at the same time (binding
+record created by <a class="reference internal" href="#connector.components.synchronizer.GenericExporter._export_dependency" title="connector.components.synchronizer.GenericExporter._export_dependency"><code class="xref py py-meth docutils literal notranslate"><span class="pre">_export_dependency()</span></code></a>), resulting in:</p>
+<blockquote>
+<div>IntegrityError: duplicate key value violates unique
+constraint «&nbsp;my_backend_product_product_odoo_uniq&nbsp;»
+DETAIL:  Key (backend_id, odoo_id)=(1, 4851) already exists.</div></blockquote>
+<p>In that case, we’ll retry the import just later.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Avertissement</p>
+<p class="last">The unique constraint must be created on the
+binding record to prevent 2 bindings to be created
+for the same External record.</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="connector.components.synchronizer.GenericExporter._export_dependency">
+<code class="descname">_export_dependency</code><span class="sig-paren">(</span><em>relation</em>, <em>binding_model</em>, <em>component_usage='record.exporter'</em>, <em>binding_field=None</em>, <em>binding_extra_vals=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/components/synchronizer.html#GenericExporter._export_dependency"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.components.synchronizer.GenericExporter._export_dependency" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Export a dependency. The exporter class is a subclass of
+<code class="docutils literal notranslate"><span class="pre">GenericExporter</span></code>. If a more precise class need to be defined,
+it can be passed to the <code class="docutils literal notranslate"><span class="pre">exporter_class</span></code> keyword argument.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Avertissement</p>
+<p>a commit is done at the end of the export of each
+dependency. The reason for that is that we pushed a record
+on the backend and we absolutely have to keep its ID.</p>
+<p>So you <em>must</em> take care not to modify the Odoo
+database during an export, excepted when writing
+back the external ID or eventually to store
+external data that we have to keep on this side.</p>
+<p class="last">You should call this method only at the beginning
+of the exporter synchronization,
+in <a class="reference internal" href="#connector.components.synchronizer.GenericExporter._export_dependencies" title="connector.components.synchronizer.GenericExporter._export_dependencies"><code class="xref py py-meth docutils literal notranslate"><span class="pre">_export_dependencies()</span></code></a>.</p>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><ul class="first simple">
+<li><strong>relation</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">odoo.models.BaseModel</span></code>) – record to export if not already exported</li>
+<li><strong>binding_model</strong> (<em>str | unicode</em>) – name of the binding model for the relation</li>
+<li><strong>component_usage</strong> – “usage” to look for to find the Component to
+for the export, by default “record.exporter”</li>
+<li><strong>binding_field</strong> (<em>str | unicode</em>) – name of the one2many field on a normal
+record that points to the binding record
+(default: my_backend_bind_ids).
+It is used only when the relation is not
+a binding but is a normal record.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Binding_extra_vals:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body"><p class="first last">In case we want to create a new binding
+pass extra values for this binding</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="connector.components.synchronizer.GenericExporter._export_dependencies">
+<code class="descname">_export_dependencies</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/components/synchronizer.html#GenericExporter._export_dependencies"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.components.synchronizer.GenericExporter._export_dependencies" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Export the dependencies for the record</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="connector.components.synchronizer.GenericExporter._map_data">
+<code class="descname">_map_data</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/components/synchronizer.html#GenericExporter._map_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.components.synchronizer.GenericExporter._map_data" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Returns an instance of
+<code class="xref py py-class docutils literal notranslate"><span class="pre">MapRecord</span></code></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="connector.components.synchronizer.GenericExporter._validate_create_data">
+<code class="descname">_validate_create_data</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/components/synchronizer.html#GenericExporter._validate_create_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.components.synchronizer.GenericExporter._validate_create_data" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Check if the values to import are correct</p>
+<p>Pro-actively check before the <code class="docutils literal notranslate"><span class="pre">Model.create</span></code> if some fields
+are missing or invalid</p>
+<p>Raise <cite>InvalidDataError</cite></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="connector.components.synchronizer.GenericExporter._validate_update_data">
+<code class="descname">_validate_update_data</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/components/synchronizer.html#GenericExporter._validate_update_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.components.synchronizer.GenericExporter._validate_update_data" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Check if the values to import are correct</p>
+<p>Pro-actively check before the <code class="docutils literal notranslate"><span class="pre">Model.update</span></code> if some fields
+are missing or invalid</p>
+<p>Raise <cite>InvalidDataError</cite></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="connector.components.synchronizer.GenericExporter._create_data">
+<code class="descname">_create_data</code><span class="sig-paren">(</span><em>map_record</em>, <em>fields=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/components/synchronizer.html#GenericExporter._create_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.components.synchronizer.GenericExporter._create_data" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Get the data to pass to <a class="reference internal" href="#connector.components.synchronizer.GenericExporter._create" title="connector.components.synchronizer.GenericExporter._create"><code class="xref py py-meth docutils literal notranslate"><span class="pre">_create()</span></code></a></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="connector.components.synchronizer.GenericExporter._create">
+<code class="descname">_create</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/components/synchronizer.html#GenericExporter._create"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.components.synchronizer.GenericExporter._create" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Create the External record</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="connector.components.synchronizer.GenericExporter._update_data">
+<code class="descname">_update_data</code><span class="sig-paren">(</span><em>map_record</em>, <em>fields=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/components/synchronizer.html#GenericExporter._update_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.components.synchronizer.GenericExporter._update_data" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Get the data to pass to <a class="reference internal" href="#connector.components.synchronizer.GenericExporter._update" title="connector.components.synchronizer.GenericExporter._update"><code class="xref py py-meth docutils literal notranslate"><span class="pre">_update()</span></code></a></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="connector.components.synchronizer.GenericExporter._update">
+<code class="descname">_update</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/components/synchronizer.html#GenericExporter._update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.components.synchronizer.GenericExporter._update" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Update an External record</p>
 </dd></dl>
 
 </dd></dl>
@@ -1684,6 +1887,11 @@ The most common classes used publicly are:</p>
 <li><a class="reference internal" href="#odoo.addons.component.core.AbstractComponent" title="odoo.addons.component.core.AbstractComponent"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractComponent</span></code></a></li>
 <li><a class="reference internal" href="#odoo.addons.component.core.WorkContext" title="odoo.addons.component.core.WorkContext"><code class="xref py py-class docutils literal notranslate"><span class="pre">WorkContext</span></code></a></li>
 </ul>
+<dl class="data">
+<dt id="odoo.addons.component.core.DEFAULT_CACHE_SIZE">
+<code class="descclassname">odoo.addons.component.core.</code><code class="descname">DEFAULT_CACHE_SIZE</code><em class="property"> = 512</em><a class="headerlink" href="#odoo.addons.component.core.DEFAULT_CACHE_SIZE" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="class">
 <dt id="odoo.addons.component.core.ComponentDatabases">
 <em class="property">class </em><code class="descclassname">odoo.addons.component.core.</code><code class="descname">ComponentDatabases</code><a class="reference internal" href="../_modules/odoo/addons/component/core.html#ComponentDatabases"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.component.core.ComponentDatabases" title="Lien permanent vers cette définition">¶</a></dt>
@@ -1814,9 +2022,9 @@ happens under the hood:</p>
     <span class="k">assert</span> <span class="n">work2</span><span class="o">.</span><span class="n">hello</span> <span class="o">==</span> <span class="s1">&#39;world&#39;</span>
 </pre></div>
 </div>
-<dl class="attribute">
+<dl class="method">
 <dt id="odoo.addons.component.core.WorkContext.env">
-<code class="descname">env</code><a class="headerlink" href="#odoo.addons.component.core.WorkContext.env" title="Lien permanent vers cette définition">¶</a></dt>
+<em class="property">property </em><code class="descname">env</code><a class="headerlink" href="#odoo.addons.component.core.WorkContext.env" title="Lien permanent vers cette définition">¶</a></dt>
 <dd><p>Return the current Odoo env</p>
 <p>This is the environment of the current collection.</p>
 </dd></dl>
@@ -1887,9 +2095,9 @@ list.</p>
 <p>Metaclass for Components</p>
 <p>Every new <a class="reference internal" href="#odoo.addons.component.core.Component" title="odoo.addons.component.core.Component"><code class="xref py py-class docutils literal notranslate"><span class="pre">Component</span></code></a> will be added to <code class="docutils literal notranslate"><span class="pre">_modules_components</span></code>,
 that will be used by the component builder.</p>
-<dl class="attribute">
+<dl class="method">
 <dt id="odoo.addons.component.core.MetaComponent.apply_on_models">
-<code class="descname">apply_on_models</code><a class="headerlink" href="#odoo.addons.component.core.MetaComponent.apply_on_models" title="Lien permanent vers cette définition">¶</a></dt>
+<em class="property">property </em><code class="descname">apply_on_models</code><a class="headerlink" href="#odoo.addons.component.core.MetaComponent.apply_on_models" title="Lien permanent vers cette définition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -2035,21 +2243,21 @@ with a matching or a not set <code class="docutils literal notranslate"><span cl
 <li>It is advised to namespace the names of the components (e.g.
 <code class="docutils literal notranslate"><span class="pre">magento.xxx</span></code>) to prevent conflicts between addons.</li>
 </ul>
-<dl class="attribute">
+<dl class="method">
 <dt id="odoo.addons.component.core.AbstractComponent.collection">
-<code class="descname">collection</code><a class="headerlink" href="#odoo.addons.component.core.AbstractComponent.collection" title="Lien permanent vers cette définition">¶</a></dt>
+<em class="property">property </em><code class="descname">collection</code><a class="headerlink" href="#odoo.addons.component.core.AbstractComponent.collection" title="Lien permanent vers cette définition">¶</a></dt>
 <dd><p>Collection we are working with</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="method">
 <dt id="odoo.addons.component.core.AbstractComponent.env">
-<code class="descname">env</code><a class="headerlink" href="#odoo.addons.component.core.AbstractComponent.env" title="Lien permanent vers cette définition">¶</a></dt>
+<em class="property">property </em><code class="descname">env</code><a class="headerlink" href="#odoo.addons.component.core.AbstractComponent.env" title="Lien permanent vers cette définition">¶</a></dt>
 <dd><p>Current Odoo environment, the one of the collection record</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="method">
 <dt id="odoo.addons.component.core.AbstractComponent.model">
-<code class="descname">model</code><a class="headerlink" href="#odoo.addons.component.core.AbstractComponent.model" title="Lien permanent vers cette définition">¶</a></dt>
+<em class="property">property </em><code class="descname">model</code><a class="headerlink" href="#odoo.addons.component.core.AbstractComponent.model" title="Lien permanent vers cette définition">¶</a></dt>
 <dd><p>The model instance we are working with</p>
 </dd></dl>
 
@@ -2158,7 +2366,7 @@ the components</li>
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.1.<br/>
+      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.0.<br/>
     </p>
   </div>
 </footer>

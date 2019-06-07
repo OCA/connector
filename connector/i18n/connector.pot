@@ -14,7 +14,7 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: connector
-#: code:addons/connector/models/checkpoint.py:119
+#: code:addons/connector/models/checkpoint.py:131
 #, python-format
 msgid "A %s needs a review."
 msgstr ""
@@ -62,6 +62,11 @@ msgstr ""
 #. module: connector
 #: model_terms:ir.ui.view,arch_db:connector.view_connector_checkpoint_form
 msgid "Click on the"
+msgstr ""
+
+#. module: connector
+#: model:ir.model.fields,field_description:connector.field_connector_checkpoint__company_id
+msgid "Company"
 msgstr ""
 
 #. module: connector

@@ -98,6 +98,8 @@ Connectors based on the framework
 * `JIRA Connector <https://github.com/camptocamp/connector-jira>`_
 * `Google Spreadsheet Connector <https://github.com/akretion/connector-google-spreadsheet>`_
 * `Connector Exchange <https://github.com/camptocamp/connector-exchange/tree/10.0>`_
+* `Infor Connector <https://github.com/OCA/connector-infor>`_
+* `Voicent Connector <https://github.com/ursais/osi-addons>`_
 * Develop easily and rapidly your own connector based on this powerful
   framework and list your project on this page! Examples:
 

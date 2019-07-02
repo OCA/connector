@@ -258,7 +258,7 @@
 <span id="job"></span><h2>Job<a class="headerlink" href="#module-connector.queue.job" title="Lien permanent vers ce titre">¶</a></h2>
 <dl class="class">
 <dt id="connector.queue.job.Job">
-<em class="property">class </em><code class="descclassname">connector.queue.job.</code><code class="descname">Job</code><span class="sig-paren">(</span><em>func=None</em>, <em>model_name=None</em>, <em>args=None</em>, <em>kwargs=None</em>, <em>priority=None</em>, <em>eta=None</em>, <em>job_uuid=None</em>, <em>max_retries=None</em>, <em>description=None</em>, <em>channel=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/queue/job.html#Job"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.job.Job" title="Lien permanent vers cette définition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">connector.queue.job.</code><code class="descname">Job</code><span class="sig-paren">(</span><em>func=None</em>, <em>model_name=None</em>, <em>args=None</em>, <em>kwargs=None</em>, <em>priority=None</em>, <em>eta=None</em>, <em>job_uuid=None</em>, <em>max_retries=None</em>, <em>description=None</em>, <em>channel=None</em>, <em>identity_key=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/queue/job.html#Job"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.job.Job" title="Lien permanent vers cette définition">¶</a></dt>
 <dd><p>Bases : <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(disponible dans Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Un job est une tâche à exécuter.</p>
 <dl class="attribute">
@@ -408,6 +408,11 @@ provided it overrides the one defined on the job’s function.</p>
 <code class="descname">func_string</code></dt>
 <dd></dd></dl>
 
+<dl class="attribute">
+<dt id="connector.queue.job.Job.identity_key">
+<code class="descname">identity_key</code><a class="headerlink" href="#connector.queue.job.Job.identity_key" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="method">
 <dt id="connector.queue.job.Job.perform">
 <code class="descname">perform</code><span class="sig-paren">(</span><em>session</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/queue/job.html#Job.perform"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.job.Job.perform" title="Lien permanent vers cette définition">¶</a></dt>
@@ -509,7 +514,7 @@ provided it overrides the one defined on the job’s function.</p>
 
 <dl class="method">
 <dt id="connector.queue.job.OpenERPJobStorage.enqueue">
-<code class="descname">enqueue</code><span class="sig-paren">(</span><em>func</em>, <em>model_name=None</em>, <em>args=None</em>, <em>kwargs=None</em>, <em>priority=None</em>, <em>eta=None</em>, <em>max_retries=None</em>, <em>description=None</em>, <em>channel=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/queue/job.html#OpenERPJobStorage.enqueue"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.job.OpenERPJobStorage.enqueue" title="Lien permanent vers cette définition">¶</a></dt>
+<code class="descname">enqueue</code><span class="sig-paren">(</span><em>func</em>, <em>model_name=None</em>, <em>args=None</em>, <em>kwargs=None</em>, <em>priority=None</em>, <em>eta=None</em>, <em>max_retries=None</em>, <em>description=None</em>, <em>channel=None</em>, <em>identity_key=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/queue/job.html#OpenERPJobStorage.enqueue"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.job.OpenERPJobStorage.enqueue" title="Lien permanent vers cette définition">¶</a></dt>
 <dd><p>Crée un job et le met en queue. Renvoie le UUID du job.</p>
 <p>S’attend à ce que les arguments spécifiques au job soient déjà extraites de ceux à passer à la fonction du job.</p>
 </dd></dl>
@@ -527,6 +532,12 @@ provided it overrides the one defined on the job’s function.</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="connector.queue.job.OpenERPJobStorage.job_record_with_same_identity_key">
+<code class="descname">job_record_with_same_identity_key</code><span class="sig-paren">(</span><em>identity_key</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/queue/job.html#OpenERPJobStorage.job_record_with_same_identity_key"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.job.OpenERPJobStorage.job_record_with_same_identity_key" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Check if a job to be executed with the same key exists.</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="connector.queue.job.OpenERPJobStorage.load">
 <code class="descname">load</code><span class="sig-paren">(</span><em>job_uuid</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/queue/job.html#OpenERPJobStorage.load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.job.OpenERPJobStorage.load" title="Lien permanent vers cette définition">¶</a></dt>
 <dd><p>Lit un job depuis la base de données</p>
@@ -538,6 +549,37 @@ provided it overrides the one defined on the job’s function.</p>
 <dd><p>Stocke le job</p>
 </dd></dl>
 
+</dd></dl>
+
+<dl class="function">
+<dt id="connector.queue.job.identity_exact">
+<code class="descclassname">connector.queue.job.</code><code class="descname">identity_exact</code><span class="sig-paren">(</span><em>job_</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/queue/job.html#identity_exact"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.job.identity_exact" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Identity function using the model, method and all arguments as key
+When used, this identity key will have the effect that when a job should be
+created and a pending job with the exact same recordset and arguments, the
+second will not be created.
+It should be used with the <code class="docutils literal notranslate"><span class="pre">identity_key</span></code> argument:
+.. python:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">odoo.addons.connector.queue.job</span> <span class="k">import</span> <span class="n">identity_exact</span>
+<span class="c1"># [...]</span>
+    <span class="n">my_delayable_export_record_method</span><span class="o">.</span><span class="n">delay</span><span class="p">(</span>
+        <span class="n">session</span><span class="p">,</span> <span class="s2">&quot;my.model&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">identity_key</span><span class="o">=</span><span class="n">identity_exact</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Alternative identity keys can be built using the various fields of the job.
+For example, you could compute a hash using only some arguments of
+the job.
+.. python:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">identity_example</span><span class="p">(</span><span class="n">job_</span><span class="p">):</span>
+    <span class="n">hasher</span> <span class="o">=</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">sha1</span><span class="p">()</span>
+    <span class="n">hasher</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">job_</span><span class="o">.</span><span class="n">args</span><span class="p">))</span>
+    <span class="n">hasher</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">job_</span><span class="o">.</span><span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)))</span>
+    <span class="k">return</span> <span class="n">hasher</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Usually you will probably always want to include at least the name of the
+model and method.</p>
 </dd></dl>
 
 <dl class="function">

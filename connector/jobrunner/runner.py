@@ -320,8 +320,9 @@ class Database(object):
             cr.execute("UPDATE queue_job SET state=%s, "
                        "date_enqueued=date_trunc('seconds', "
                        "                         now() at time zone 'utc') "
-                       "WHERE uuid=%s",
-                       (ENQUEUED, uuid))
+                       "WHERE uuid=%s AND state=%s",
+                       (ENQUEUED, uuid, PENDING))
+            return cr.rowcount == 1
 
 
 class ConnectorRunner(object):
@@ -380,16 +381,16 @@ class ConnectorRunner(object):
         for job in self.channel_manager.get_jobs_to_run(now):
             if self._stop:
                 break
-            _logger.info("asking Odoo to run job %s on db %s",
-                         job.uuid, job.db_name)
-            self.db_by_name[job.db_name].set_job_enqueued(job.uuid)
-            _async_http_get(self.scheme,
-                            self.host,
-                            self.port,
-                            self.user,
-                            self.password,
-                            job.db_name,
-                            job.uuid)
+            if self.db_by_name[job.db_name].set_job_enqueued(job.uuid):
+                _logger.info("asking Odoo to run job %s on db %s",
+                             job.uuid, job.db_name)
+                _async_http_get(self.scheme,
+                                self.host,
+                                self.port,
+                                self.user,
+                                self.password,
+                                job.db_name,
+                                job.uuid)
 
     def process_notifications(self):
         for db in self.db_by_name.values():

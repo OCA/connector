@@ -96,13 +96,13 @@ msgid "Cancel"
 msgstr "Cancel·lar"
 
 #. module: connector
-#: code:addons/connector/queue/model.py:337
+#: code:addons/connector/queue/model.py:350
 #, python-format
 msgid "Cannot change the root channel"
 msgstr "El Canal principal no es pot modificar"
 
 #. module: connector
-#: code:addons/connector/queue/model.py:344
+#: code:addons/connector/queue/model.py:357
 #, python-format
 msgid "Cannot remove the root channel"
 msgstr "El canal principal no es pot esborrar"
@@ -381,7 +381,12 @@ msgid "ID"
 msgstr "ID"
 
 #. module: connector
-#: code:addons/connector/queue/model.py:253
+#: model:ir.model.fields,field_description:connector.field_queue_job_identity_key
+msgid "Identity key"
+msgstr ""
+
+#. module: connector
+#: code:addons/connector/queue/model.py:266
 #, fuzzy, python-format
 #| msgid "The selected jobs will be requeued."
 msgid "If both parameters are 0, ALL jobs will be requeued!"
@@ -520,7 +525,7 @@ msgid "Manage multiple companies"
 msgstr "Gestiona múltiples empreses"
 
 #. module: connector
-#: code:addons/connector/queue/model.py:142
+#: code:addons/connector/queue/model.py:155
 #, python-format
 msgid "Manually set to done by %s"
 msgstr "Establert a Finalitzat per %s"
@@ -567,7 +572,7 @@ msgid "Need Review"
 msgstr "Necessita Revisió"
 
 #. module: connector
-#: code:addons/connector/queue/model.py:118
+#: code:addons/connector/queue/model.py:131
 #, python-format
 msgid "No action available for this job"
 msgstr "No hi ha cap acció per aquesta tasca"
@@ -606,7 +611,7 @@ msgid "Parent Channel"
 msgstr "Canal Pare"
 
 #. module: connector
-#: code:addons/connector/queue/model.py:329
+#: code:addons/connector/queue/model.py:342
 #, python-format
 msgid "Parent channel required."
 msgstr "Cal indicar Canal Pare"
@@ -750,7 +755,7 @@ msgstr ""
 "seran visibles per totes les companyies. "
 
 #. module: connector
-#: code:addons/connector/queue/model.py:194
+#: code:addons/connector/queue/model.py:207
 #, python-format
 msgid ""
 "Something bad happened during the execution of the job. More details in the "

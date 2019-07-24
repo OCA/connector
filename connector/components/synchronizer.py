@@ -26,7 +26,7 @@ from openerp.addons.connector.exception import (
     RetryableJobError
 )
 from openerp import _
-import odoo
+import openerp
 
 _logger = logging.getLogger(__name__)
 
@@ -162,7 +162,7 @@ class GenericExporter(AbstractComponent):
         # exports (due to dependencies) and one of them fails.
         # The commit will also release the lock acquired on the binding
         # record
-        if not odoo.tools.config['test_enable']:
+        if not openerp.tools.config['test_enable']:
             self.env.cr.commit()  # pylint: disable=E8102
 
         self._after_export()
@@ -350,7 +350,7 @@ class GenericExporter(AbstractComponent):
                     # will pop if an other job already created
                     # the same binding. It will be caught and
                     # raise a RetryableJobError.
-                    if not odoo.tools.config['test_enable']:
+                    if not openerp.tools.config['test_enable']:
                         self.env.cr.commit()  # pylint: disable=E8102
         else:
             # If my_backend_bind_ids does not exist we are typically in a

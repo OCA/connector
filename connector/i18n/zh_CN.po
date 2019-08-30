@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: Odoo Server 11.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-01-05 16:56+0000\n"
-"PO-Revision-Date: 2019-08-29 04:01+0000\n"
+"PO-Revision-Date: 2019-08-30 11:23+0000\n"
 "Last-Translator: 黎伟杰 <674416404@qq.com>\n"
 "Language-Team: Chinese (China) (https://www.transifex.com/oca/teams/23907/"
 "zh_CN/)\n"
@@ -29,22 +29,22 @@ msgstr "一个 %s 需要审核。"
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint__message_needaction
 msgid "Action Needed"
-msgstr ""
+msgstr "需要的操作"
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint__activity_ids
 msgid "Activities"
-msgstr ""
+msgstr "活动"
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint__activity_state
 msgid "Activity State"
-msgstr ""
+msgstr "活动状态"
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint__message_attachment_count
 msgid "Attachment Count"
-msgstr ""
+msgstr "附件计数"
 
 #. module: connector
 #: model_terms:ir.ui.view,arch_db:connector.view_connector_checkpoint_review
@@ -84,7 +84,7 @@ msgstr "连接器"
 #. module: connector
 #: model:ir.model,name:connector.model_connector_backend
 msgid "Connector Backend"
-msgstr ""
+msgstr "连接器后端"
 
 #. module: connector
 #: model:ir.actions.act_window,name:connector.action_connector_checkpoint
@@ -111,13 +111,13 @@ msgstr "连接器"
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint__create_uid
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_review__create_uid
 msgid "Created by"
-msgstr ""
+msgstr "创建人"
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint__create_date
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_review__create_date
 msgid "Created on"
-msgstr ""
+msgstr "创建时间"
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_backend__display_name
@@ -125,7 +125,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_review__display_name
 #: model:ir.model.fields,field_description:connector.field_external_binding__display_name
 msgid "Display Name"
-msgstr ""
+msgstr "显示名称"
 
 #. module: connector
 #: model:ir.model,name:connector.model_external_binding
@@ -135,17 +135,17 @@ msgstr "外部绑定"
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint__message_follower_ids
 msgid "Followers"
-msgstr ""
+msgstr "关注者"
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint__message_channel_ids
 msgid "Followers (Channels)"
-msgstr ""
+msgstr "关注者(频道)"
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint__message_partner_ids
 msgid "Followers (Partners)"
-msgstr ""
+msgstr "关注者(业务伙伴)"
 
 #. module: connector
 #: model_terms:ir.ui.view,arch_db:connector.view_connector_checkpoint_search
@@ -158,22 +158,22 @@ msgstr "分组依据是"
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_review__id
 #: model:ir.model.fields,field_description:connector.field_external_binding__id
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #. module: connector
 #: model:ir.model.fields,help:connector.field_connector_checkpoint__message_unread
 msgid "If checked new messages require your attention."
-msgstr ""
+msgstr "如果选中，则需要您注意新消息。"
 
 #. module: connector
 #: model:ir.model.fields,help:connector.field_connector_checkpoint__message_needaction
 msgid "If checked, new messages require your attention."
-msgstr ""
+msgstr "如果选中，则需要您注意新消息。"
 
 #. module: connector
 #: model:ir.model.fields,help:connector.field_connector_checkpoint__message_has_error
 msgid "If checked, some messages have a delivery error."
-msgstr ""
+msgstr "如果选中，则某些邮件会发送传递错误。"
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint__backend_id
@@ -183,7 +183,7 @@ msgstr "导入自"
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint__message_is_follower
 msgid "Is Follower"
-msgstr ""
+msgstr "是关注者"
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_backend____last_update
@@ -191,7 +191,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_review____last_update
 #: model:ir.model.fields,field_description:connector.field_external_binding____last_update
 msgid "Last Modified on"
-msgstr ""
+msgstr "最后修改日"
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint__write_uid

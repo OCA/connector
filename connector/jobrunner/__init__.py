@@ -102,7 +102,7 @@ def prefork__init__(server, app):
 
 def prefork_process_spawn(server):
     orig_prefork_process_spawn(server)
-    if not server.jobrunner and _channels():
+    if _channels() and not server.jobrunner:
         server.worker_spawn(WorkerJobRunner, server.jobrunner)
 
 

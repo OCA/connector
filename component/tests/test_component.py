@@ -25,7 +25,7 @@ class TestComponent(TransactionComponentRegistryCase):
     """
 
     def setUp(self):
-        super(TestComponent, self).setUp()
+        super().setUp()
         self.collection = self.env['collection.base']
 
         # create some Component to play with

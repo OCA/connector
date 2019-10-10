@@ -151,7 +151,7 @@ class TestBuildComponent(ComponentRegistryCase):
             msg = 'pong'
 
             def say(self):
-                return super(Component2, self).say() + ' bar'
+                return super().say() + ' bar'
 
         Component1._build_component(self.comp_registry)
         Component2._build_component(self.comp_registry)

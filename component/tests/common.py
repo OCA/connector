@@ -68,7 +68,7 @@ class TransactionComponentCase(common.TransactionCase, ComponentMixin):
 
     @classmethod
     def setUpClass(cls):
-        super(TransactionComponentCase, cls).setUpClass()
+        super().setUpClass()
         cls.setUpComponent()
 
     def setUp(self):
@@ -89,7 +89,7 @@ class SavepointComponentCase(common.SavepointCase, ComponentMixin):
 
     @classmethod
     def setUpClass(cls):
-        super(SavepointComponentCase, cls).setUpClass()
+        super().setUpClass()
         cls.setUpComponent()
 
     def setUp(self):
@@ -146,7 +146,7 @@ class ComponentRegistryCase(
     """
 
     def setUp(self):
-        super(ComponentRegistryCase, self).setUp()
+        super().setUp()
 
         # keep the original classes registered by the metaclass
         # so we'll restore them at the end of the tests, it avoid
@@ -180,7 +180,7 @@ class ComponentRegistryCase(
         self.comp_registry.ready = True
 
     def tearDown(self):
-        super(ComponentRegistryCase, self).tearDown()
+        super().tearDown()
         # restore the original metaclass' classes
         MetaComponent._modules_components = self._original_components
 

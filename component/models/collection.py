@@ -16,7 +16,7 @@ to use in the `_collection` of the Components usable for the Backend.
 
 from contextlib import contextmanager
 
-from odoo import models, api
+from odoo import models
 from ..core import WorkContext
 
 
@@ -59,7 +59,6 @@ class Collection(models.AbstractModel):
     _description = 'Base Abstract Collection'
 
     @contextmanager
-    @api.multi
     def work_on(self, model_name, **kwargs):
         """ Entry-point for the components, context manager
 
@@ -71,7 +70,6 @@ class Collection(models.AbstractModel):
         at the end of the work session, such as::
 
             @contextmanager
-            @api.multi
             def work_on(self, model_name, **kwargs):
                 self.ensure_one()
                 magento_location = MagentoLocation(

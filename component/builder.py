@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright 2017 Camptocamp SA
+# Copyright 2019 Camptocamp SA
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html)
 
 """
@@ -11,7 +11,7 @@ Build the components at the build of a registry.
 
 """
 import odoo
-from odoo import api, models
+from odoo import models
 from .core import (
     _component_databases,
     ComponentRegistry,
@@ -43,7 +43,6 @@ class ComponentBuilder(models.AbstractModel):
 
     _components_registry_cache_size = DEFAULT_CACHE_SIZE
 
-    @api.model_cr
     def _register_hook(self):
         # This method is called by Odoo when the registry is built,
         # so in case the registry is rebuilt (cache invalidation, ...),

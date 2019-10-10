@@ -451,7 +451,7 @@ class MetaComponent(type):
     def __init__(self, name, bases, attrs):
         if not self._register:
             self._register = True
-            super(MetaComponent, self).__init__(name, bases, attrs)
+            super().__init__(name, bases, attrs)
             return
 
         # If components are declared in tests, exclude them from the
@@ -655,7 +655,7 @@ class AbstractComponent(object, metaclass=MetaComponent):
     _usage = None
 
     def __init__(self, work_context):
-        super(AbstractComponent, self).__init__()
+        super().__init__()
         self.work = work_context
 
     @classmethod

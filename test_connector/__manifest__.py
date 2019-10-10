@@ -12,5 +12,5 @@
  'website': 'http://odoo-connector.com',
  'data': ['security/ir.model.access.csv',
           ],
- 'installable': True,
+ 'installable': False,
  }

@@ -15,7 +15,7 @@ class TestWorkOn(TransactionComponentCase):
     """
 
     def setUp(self):
-        super(TestWorkOn, self).setUp()
+        super().setUp()
         self.collection = self.env['collection.base']
 
     def test_collection_work_on(self):

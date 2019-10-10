@@ -16,7 +16,7 @@
  'external_dependencies': {
      'python': ['cachetools'],
  },
- 'installable': True,
+ 'installable': False,
  'development_status': 'Stable',
  'maintainers': ['guewen'],
  }

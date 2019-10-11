@@ -119,6 +119,7 @@ Contributors
 ~~~~~~~~~~~~
 
 * Guewen Baconnier <guewen.baconnier@camptocamp.com>
+* Dmaien Crier <damien.crier@camptocamp.com>
 
 Maintainers
 ~~~~~~~~~~~

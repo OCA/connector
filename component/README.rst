@@ -103,6 +103,7 @@ Contributors
 
 * Guewen Baconnier <guewen.baconnier@camptocamp.com>
 * Laurent Mignon <laurent.mignon@acsone.eu>
+* Damien Crier <damien.crier@camptocamp.com>
 
 Maintainers
 ~~~~~~~~~~~

@@ -39,7 +39,6 @@ class Base(models.AbstractModel):
 
         Usage::
 
-            @api.multi
             def button_do_something(self):
                 for record in self:
                     # do something
@@ -97,7 +96,6 @@ class Base(models.AbstractModel):
         self._event('on_record_create').notify(record, fields=fields)
         return record
 
-    @api.multi
     def write(self, vals):
         result = super(Base, self).write(vals)
         fields = list(vals.keys())
@@ -105,7 +103,6 @@ class Base(models.AbstractModel):
             self._event('on_record_write').notify(record, fields=fields)
         return result
 
-    @api.multi
     def unlink(self):
         for record in self:
             self._event('on_record_unlink').notify(record)

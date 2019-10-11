@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright 2013-2017 Camptocamp SA
+# Copyright 2013-2019 Camptocamp SA
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html)
 
 from odoo.addons.component.tests.common import TransactionComponentCase
@@ -9,13 +9,13 @@ from odoo.addons.test_component.components.components import UserTestComponent
 class TestComponentCollection(TransactionComponentCase):
 
     def setUp(self):
-        super(TestComponentCollection, self).setUp()
+        super().setUp()
         self.collection = self.env['test.component.collection'].create(
             {'name': 'Test'}
         )
 
     def tearDown(self):
-        super(TestComponentCollection, self).tearDown()
+        super().tearDown()
 
     def test_component_by_name(self):
         with self.collection.work_on('res.users') as work:

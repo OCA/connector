@@ -64,4 +64,4 @@ script:
   - travis_run_tests
 
 after_success:
-  - if [ "$DOCS" != "1" ] ; then travis_after_test_success; fi
+  - travis_after_test_success

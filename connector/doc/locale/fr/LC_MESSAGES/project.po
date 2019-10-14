@@ -582,8 +582,8 @@ msgid "License"
 msgstr "Licence"
 
 #: ../../project/license.rst:7
-msgid "This work is licensed under the AGPL3 license."
-msgstr "Ce travail est publié sous licence AGPL3."
+msgid "This work is licensed under the LGPL3 license."
+msgstr "Ce travail est publié sous licence LGPL3."
 
 #: ../../project/roadmap.rst:5
 msgid "Roadmap"

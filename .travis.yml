@@ -34,6 +34,8 @@ jobs:
     - stage: doc
       name: "doc"
       install: pip install sphinx sphinx_bootstrap_theme sphinx-intl && pip install git+https://github.com/OCA/odoo-sphinx-autodoc.git
+      script: ./.travis_build_doc
+      after_success: ./.travis_push_doc
       env:
         - DOCS="1"
         - secure: "lazdZGpkqFTQiu44grYAqKcaGh0cVTBlrHcBxxs43K/OH4Uc2AjMBty83zKc0ZgzizrNOsfK3Z3UHLmTNI92Vi3PtgGzA9dUmiReGO6QcE9P31Geg4pN/1Fwosv6aSpG3hejJJ8ZYpMbEPJkZyjTVpdM2r1VEcqEvFQ2xR5bEUg="

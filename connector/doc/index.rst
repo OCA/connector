@@ -29,7 +29,7 @@ available.
 Core Features
 *************
 
-* **100% Open Source** (`AGPL version 3`_): the full `source code is available
+* **100% Open Source** (`LGPL version 3`_): the full `source code is available
   on GitHub`_
 * Not only designed to connect Odoo with e-commerce backends,
   rather it is **adaptable** to connect Odoo with any type of service.
@@ -44,7 +44,7 @@ Core Features
 .. _Akretion: http://www.akretion.com
 .. _Acsone: https://www.acsone.eu
 .. _`source code is available on GitHub`: https://github.com/OCA/connector
-.. _`AGPL version 3`: https://www.gnu.org/licenses/agpl-3.0.html
+.. _`LGPL version 3`: https://www.gnu.org/licenses/lgpl-3.0.html
 .. _`project's mailing list (name: Connectors)`: https://odoo-community.org/groups
 
 *****************

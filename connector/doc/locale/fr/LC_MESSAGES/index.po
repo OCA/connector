@@ -27,10 +27,10 @@ msgstr "Fonctionnalités de base"
 
 #: ../../index.rst:29
 msgid ""
-"**100% Open Source** (`AGPL version 3`_): the full `source code is available "
+"**100% Open Source** (`LGPL version 3`_): the full `source code is available "
 "on GitHub`_"
 msgstr ""
-"**100% Open Source** (`AGPL version 3`_): la totalité du `code source est "
+"**100% Open Source** (`LGPL version 3`_): la totalité du `code source est "
 "disponible sur GitHub`_"
 
 #: ../../index.rst:33

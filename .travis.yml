@@ -34,6 +34,12 @@ jobs:
         - TESTS="1" ODOO_REPO="OCA/OCB"
     - stage: doc
       name: "doc"
+      install:
+        - git clone --depth=1 https://github.com/OCA/maintainer-quality-tools.git ${HOME}/maintainer-quality-tools
+        - export PATH=${HOME}/maintainer-quality-tools/travis:${PATH}
+        - travis_install_nightly
+        - pip install sphinx sphinx_bootstrap_theme sphinx-intl
+        - pip install git+https://github.com/OCA/odoo-sphinx-autodoc.git
       script: ./.travis_build_doc
       after_success: ./.travis_push_doc
       env:
@@ -43,21 +49,19 @@ jobs:
 
 env:
   global:
-  - VERSION="13.0" TESTS="0" LINT_CHECK="0" MAKEPOT="0" DOCS="0"
+  - VERSION="13.0" TESTS="0" LINT_CHECK="0" MAKEPOT="0"
 
 install:
   - git clone --depth=1 https://github.com/OCA/maintainer-quality-tools.git ${HOME}/maintainer-quality-tools
   - export PATH=${HOME}/maintainer-quality-tools/travis:${PATH}
   - travis_install_nightly
-  - pip install sphinx sphinx_bootstrap_theme sphinx-intl
-  - pip install git+https://github.com/OCA/odoo-sphinx-autodoc.git
 
 services:
   - postgresql
 
 
 script:
-  - if [ "$DOCS" != "1" ] ; then travis_run_tests; fi
+  - travis_run_tests
 
 after_success:
   - if [ "$DOCS" != "1" ] ; then travis_after_test_success; fi

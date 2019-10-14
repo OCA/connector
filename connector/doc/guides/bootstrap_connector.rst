@@ -43,7 +43,7 @@ First, we need to create the Odoo addons itself, editing the
      'depends': ['connector',
                  ],
      'author': 'Myself',
-     'license': 'AGPL-3',
+     'license': 'LGPL-3',
      'description': """
     Coffee Connector
     ================

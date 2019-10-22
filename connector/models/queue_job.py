@@ -9,7 +9,6 @@ class QueueJob(models.Model):
 
     _inherit = 'queue.job'
 
-    @api.multi
     def related_action_unwrap_binding(self, component_usage='binder'):
         """ Open a form view with the unwrapped record.
 

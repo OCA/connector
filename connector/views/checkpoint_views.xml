@@ -78,7 +78,6 @@
     <record id="action_connector_checkpoint" model="ir.actions.act_window">
         <field name="name">Connector Checkpoint</field>
         <field name="res_model">connector.checkpoint</field>
-        <field name="view_type">form</field>
         <field name="view_mode">tree,form</field>
         <field name="view_id" ref="view_connector_checkpoint_tree"/>
         <field name="help" type="html">
@@ -111,7 +110,6 @@
     <record id="action_connector_checkpoint_review" model="ir.actions.act_window">
         <field name="name">Review Checkpoints</field>
         <field name="res_model">connector.checkpoint.review</field>
-        <field name="view_type">form</field>
         <field name="view_mode">form</field>
         <field name="view_id" ref="view_connector_checkpoint_review"/>
         <field name="binding_model_id" ref="model_connector_checkpoint"/>

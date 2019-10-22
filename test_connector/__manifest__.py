@@ -3,7 +3,7 @@
 
 {'name': 'Connector Tests',
  'summary': 'Automated tests for Connector, do not install.',
- 'version': '12.0.1.0.0',
+ 'version': '13.0.1.0.0',
  'author': 'Camptocamp,Odoo Community Association (OCA)',
  'license': 'LGPL-3',
  'category': 'Hidden',
@@ -12,5 +12,5 @@
  'website': 'http://odoo-connector.com',
  'data': ['security/ir.model.access.csv',
           ],
- 'installable': False,
+ 'installable': True,
  }

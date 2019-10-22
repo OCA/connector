@@ -111,11 +111,9 @@ class ConnectorCheckpoint(models.Model):
         compute='_compute_company',
         store=True)
 
-    @api.multi
     def reviewed(self):
         return self.write({'state': 'reviewed'})
 
-    @api.multi
     def _subscribe_users(self):
         """ Subscribe all users having the 'Connector Manager' group """
         group = self.env.ref('connector.group_connector_manager')
@@ -180,7 +178,6 @@ class ConnectorCheckpointReview(models.TransientModel):
         domain="[('state', '=', 'need_review')]",
         default=_get_checkpoint_ids)
 
-    @api.multi
     def review(self):
         self.checkpoint_ids.reviewed()
         return {'type': 'ir.actions.act_window_close'}

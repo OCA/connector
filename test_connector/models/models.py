@@ -44,7 +44,6 @@ class ConnectorTestBinding(models.Model):
 
     @job
     @related_action(action='related_action_unwrap_binding')
-    @api.multi
     def job_related_action_unwrap(self):
         return self
 
@@ -69,6 +68,5 @@ class NoInheritsBinding(models.Model):
 
     @job
     @related_action(action='related_action_unwrap_binding')
-    @api.multi
     def job_related_action_unwrap(self):
         return self

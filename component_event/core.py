@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # Copyright 2017 Camptocamp SA
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl.html)
 
@@ -37,24 +36,31 @@ class EventWorkContext(WorkContext):
 
     """
 
-    def __init__(self, model_name=None, collection=None, env=None,
-                 components_registry=None, **kwargs):
+    def __init__(
+        self,
+        model_name=None,
+        collection=None,
+        env=None,
+        components_registry=None,
+        **kwargs
+    ):
         if not (collection is not None or env):
-            raise ValueError('collection or env is required')
+            raise ValueError("collection or env is required")
         if collection and env:
             # when a collection is used, the env will be the one of
             # the collection
-            raise ValueError('collection and env cannot both be provided')
+            raise ValueError("collection and env cannot both be provided")
 
         self.env = env
         super(EventWorkContext, self).__init__(
-            model_name=model_name, collection=collection,
+            model_name=model_name,
+            collection=collection,
             components_registry=components_registry,
             **kwargs
         )
         if self._env:
-            self._propagate_kwargs.remove('collection')
-            self._propagate_kwargs.append('env')
+            self._propagate_kwargs.remove("collection")
+            self._propagate_kwargs.append("env")
 
     @property
     def env(self):
@@ -72,7 +78,7 @@ class EventWorkContext(WorkContext):
         """ Return the current Odoo env """
         if self._collection is not None:
             return self._collection
-        raise ValueError('No collection, it is optional for EventWorkContext')
+        raise ValueError("No collection, it is optional for EventWorkContext")
 
     @collection.setter
     def collection(self, value):
@@ -89,25 +95,27 @@ class EventWorkContext(WorkContext):
         to be able to get components.
         """
         if self._collection is None and collection is None:
-            raise ValueError('you must provide a collection to work with')
+            raise ValueError("you must provide a collection to work with")
         if collection is not None:
             if self.env is not collection.env:
-                raise ValueError('the Odoo env of the collection must be '
-                                 'the same than the current one')
-        kwargs = {attr_name: getattr(self, attr_name)
-                  for attr_name in self._propagate_kwargs}
-        kwargs.pop('env', None)
+                raise ValueError(
+                    "the Odoo env of the collection must be "
+                    "the same than the current one"
+                )
+        kwargs = {
+            attr_name: getattr(self, attr_name) for attr_name in self._propagate_kwargs
+        }
+        kwargs.pop("env", None)
         if collection is not None:
-            kwargs['collection'] = collection
+            kwargs["collection"] = collection
         if model_name is not None:
-            kwargs['model_name'] = model_name
+            kwargs["model_name"] = model_name
         return WorkContext(**kwargs)
 
     def component_by_name(self, name, model_name=None):
         if self._collection is not None:
             # switch to a normal WorkContext
-            work = self.work_on(collection=self._collection,
-                                model_name=model_name)
+            work = self.work_on(collection=self._collection, model_name=model_name)
         else:
             raise TypeError(
                 "Can't be used on an EventWorkContext without collection. "
@@ -121,8 +129,7 @@ class EventWorkContext(WorkContext):
     def component(self, usage=None, model_name=None):
         if self._collection is not None:
             # switch to a normal WorkContext
-            work = self.work_on(collection=self._collection,
-                                model_name=model_name)
+            work = self.work_on(collection=self._collection, model_name=model_name)
         else:
             raise TypeError(
                 "Can't be used on an EventWorkContext without collection. "
@@ -136,8 +143,7 @@ class EventWorkContext(WorkContext):
     def many_components(self, usage=None, model_name=None):
         if self._collection is not None:
             # switch to a normal WorkContext
-            work = self.work_on(collection=self._collection,
-                                model_name=model_name)
+            work = self.work_on(collection=self._collection, model_name=model_name)
         else:
             raise TypeError(
                 "Can't be used on an EventWorkContext without collection. "
@@ -149,5 +155,6 @@ class EventWorkContext(WorkContext):
         return work.component(usage=usage, model_name=model_name)
 
     def __str__(self):
-        return ("EventWorkContext(%s,%s)" %
-                (repr(self._env or self._collection), self.model_name))
+        return "EventWorkContext({},{})".format(
+            repr(self._env or self._collection), self.model_name
+        )

@@ -12,7 +12,7 @@
     "category": "Generic Modules",
     "depends": ["base"],
     "external_dependencies": {"python": ["cachetools"]},
-    "installable": False,
+    "installable": True,
     "development_status": "Stable",
     "maintainers": ["guewen"],
 }

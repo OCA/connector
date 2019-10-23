@@ -11,5 +11,5 @@
     "depends": ["component"],
     "external_dependencies": {"python": ["cachetools"]},
     "data": [],
-    "installable": False,
+    "installable": True,
 }

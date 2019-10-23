@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # Copyright 2017 Camptocamp SA
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl.html)
 
@@ -17,6 +16,7 @@ to use in the `_collection` of the Components usable for the Backend.
 from contextlib import contextmanager
 
 from odoo import models
+
 from ..core import WorkContext
 
 
@@ -55,8 +55,9 @@ class Collection(models.AbstractModel):
 
 
     """
-    _name = 'collection.base'
-    _description = 'Base Abstract Collection'
+
+    _name = "collection.base"
+    _description = "Base Abstract Collection"
 
     @contextmanager
     def work_on(self, model_name, **kwargs):

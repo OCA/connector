@@ -1,4 +1,4 @@
-exclude: "^setup/|/static/lib/|/static/src/lib/|^component/|^component_event/|^connector/|^connector_base_product/|^test_component/|^test_connector/"
+exclude: "^setup/|/static/lib/|/static/src/lib/|^connector|^connector_base_product|^test_connector"
 default_language_version:
   python: python3
 repos:

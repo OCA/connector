@@ -20,4 +20,3 @@ component level)::
   def run(self, external_id):
       backend_adapter = self.component(usage='backend.adapter')
       external_data = backend_adapter.read(external_id)
-

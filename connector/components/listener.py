@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # Copyright 2013-2017 Camptocamp SA
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl.html)
 
@@ -22,8 +21,8 @@ from odoo.addons.component.core import AbstractComponent
 class ConnectorListener(AbstractComponent):
     """ Base Backend Adapter for the connectors """
 
-    _name = 'base.connector.listener'
-    _inherit = ['base.connector', 'base.event.listener']
+    _name = "base.connector.listener"
+    _inherit = ["base.connector", "base.event.listener"]
 
     def no_connector_export(self, record):
         """ Return if the 'connector_no_export' has been set in context
@@ -46,5 +45,6 @@ class ConnectorListener(AbstractComponent):
                     record.with_delay().export_record()
 
         """
-        return (record.env.context.get('no_connector_export') or
-                record.env.context.get('connector_no_export'))
+        return record.env.context.get("no_connector_export") or record.env.context.get(
+            "connector_no_export"
+        )

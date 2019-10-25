@@ -1,12 +1,7 @@
-# -*- coding: utf-8 -*-
 # Copyright 2012-2017 Camptocamp SA
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl.html)
 
-from odoo.addons.queue_job.exception import (
-    RetryableJobError,
-    JobError,
-)
-
+from odoo.addons.queue_job.exception import JobError, RetryableJobError
 
 # Connector related errors
 
@@ -24,6 +19,7 @@ class InvalidDataError(ConnectorException):
 
 
 # Job related errors
+
 
 class MappingError(ConnectorException):
     """ An error occurred during a mapping transformation. """

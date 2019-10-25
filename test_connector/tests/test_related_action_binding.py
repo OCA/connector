@@ -14,9 +14,7 @@ class TestRelatedActionBinding(TransactionComponentCase):
     def setUp(self):
         super(TestRelatedActionBinding, self).setUp()
 
-        self.backend_record = self.env["test.backend"].create(
-            {"version": "1", "name": "Test"}
-        )
+        self.backend_record = self.env["test.backend"].create({})
 
     def test_unwrap_binding(self):
         """ Call the unwrap binding related action """

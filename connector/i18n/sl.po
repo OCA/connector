@@ -20,7 +20,7 @@ msgstr ""
 "%100==4 ? 2 : 3);\n"
 
 #. module: connector
-#: code:addons/connector/models/checkpoint.py:131
+#: code:addons/connector/models/checkpoint.py:0
 #, python-format
 msgid "A %s needs a review."
 msgstr "Potrebna je revizija %s ."
@@ -33,6 +33,11 @@ msgstr ""
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint__activity_ids
 msgid "Activities"
+msgstr ""
+
+#. module: connector
+#: model:ir.model.fields,field_description:connector.field_connector_checkpoint__activity_exception_decoration
+msgid "Activity Exception Decoration"
 msgstr ""
 
 #. module: connector
@@ -160,17 +165,24 @@ msgid "ID"
 msgstr "ID"
 
 #. module: connector
-#: model:ir.model.fields,help:connector.field_connector_checkpoint__message_unread
-msgid "If checked new messages require your attention."
+#: model:ir.model.fields,field_description:connector.field_connector_checkpoint__activity_exception_icon
+msgid "Icon"
+msgstr ""
+
+#. module: connector
+#: model:ir.model.fields,help:connector.field_connector_checkpoint__activity_exception_icon
+msgid "Icon to indicate an exception activity."
 msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,help:connector.field_connector_checkpoint__message_needaction
+#: model:ir.model.fields,help:connector.field_connector_checkpoint__message_unread
 msgid "If checked, new messages require your attention."
 msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,help:connector.field_connector_checkpoint__message_has_error
+#: model:ir.model.fields,help:connector.field_connector_checkpoint__message_has_sms_error
 msgid "If checked, some messages have a delivery error."
 msgstr ""
 
@@ -236,7 +248,7 @@ msgid "Name of the record to review"
 msgstr ""
 
 #. module: connector
-#: selection:connector.checkpoint,state:0
+#: model:ir.model.fields.selection,name:connector.selection__connector_checkpoint__state__need_review
 #: model_terms:ir.ui.view,arch_db:connector.view_connector_checkpoint_search
 msgid "Need Review"
 msgstr "Potrebna revizija"
@@ -262,8 +274,7 @@ msgid "No record to check."
 msgstr ""
 
 #. module: connector
-#: code:addons/connector/components/synchronizer.py:191
-#: code:addons/connector/components/synchronizer.py:196
+#: code:addons/connector/components/synchronizer.py:0
 #, python-format
 msgid "Nothing to export."
 msgstr ""
@@ -275,7 +286,7 @@ msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint__message_has_error_counter
-msgid "Number of error"
+msgid "Number of errors"
 msgstr ""
 
 #. module: connector
@@ -291,16 +302,6 @@ msgstr ""
 #. module: connector
 #: model:ir.model.fields,help:connector.field_connector_checkpoint__message_unread_counter
 msgid "Number of unread messages"
-msgstr ""
-
-#. module: connector
-#: selection:connector.checkpoint,activity_state:0
-msgid "Overdue"
-msgstr ""
-
-#. module: connector
-#: selection:connector.checkpoint,activity_state:0
-msgid "Planned"
 msgstr ""
 
 #. module: connector
@@ -324,13 +325,13 @@ msgid "Record Name"
 msgstr ""
 
 #. module: connector
-#: code:addons/connector/components/synchronizer.py:198
+#: code:addons/connector/components/synchronizer.py:0
 #, python-format
 msgid "Record exported with ID %s on Backend."
 msgstr ""
 
 #. module: connector
-#: code:addons/connector/models/queue_job.py:31
+#: code:addons/connector/models/queue_job.py:0
 #, python-format
 msgid "Related Record"
 msgstr "Povezani zapis"
@@ -347,12 +348,17 @@ msgid "Review Checkpoints"
 msgstr "Pregled kontrolnih točk"
 
 #. module: connector
-#: selection:connector.checkpoint,state:0
+#: model:ir.model.fields.selection,name:connector.selection__connector_checkpoint__state__reviewed
 #: model_terms:ir.ui.view,arch_db:connector.view_connector_checkpoint_form
 #: model_terms:ir.ui.view,arch_db:connector.view_connector_checkpoint_search
 #: model_terms:ir.ui.view,arch_db:connector.view_connector_checkpoint_tree
 msgid "Reviewed"
 msgstr "Pregledano"
+
+#. module: connector
+#: model:ir.model.fields,field_description:connector.field_connector_checkpoint__message_has_sms_error
+msgid "SMS Delivery error"
+msgstr ""
 
 #. module: connector
 #: model_terms:ir.ui.view,arch_db:connector.view_connector_checkpoint_review
@@ -397,8 +403,8 @@ msgid "The selected checkpoints will be set as reviewed."
 msgstr "Izbrane kontrolne točke bodo označene kot pregledane."
 
 #. module: connector
-#: selection:connector.checkpoint,activity_state:0
-msgid "Today"
+#: model:ir.model.fields,help:connector.field_connector_checkpoint__activity_exception_decoration
+msgid "Type of the exception activity on record."
 msgstr ""
 
 #. module: connector

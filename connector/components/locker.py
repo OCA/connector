@@ -2,6 +2,7 @@
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl.html)
 
 import logging
+
 import psycopg2
 
 from odoo.addons.component.core import Component
@@ -49,11 +50,9 @@ class RecordLocker(Component):
         :param ignore_retry: If True, the retry counter of the job will not be
                              increased.
         """
-        sql = ("SELECT id FROM %s WHERE ID IN %%s FOR UPDATE NOWAIT" %
-               self.model._table)
+        sql = "SELECT id FROM %s WHERE ID IN %%s FOR UPDATE NOWAIT" % self.model._table
         try:
-            self.env.cr.execute(sql, (tuple(records.ids),),
-                                log_exceptions=False)
+            self.env.cr.execute(sql, (tuple(records.ids),), log_exceptions=False)
         except psycopg2.OperationalError:
             _logger.info(
                 "A concurrent job is already working on the same "
@@ -64,6 +63,7 @@ class RecordLocker(Component):
             raise RetryableJobError(
                 "A concurrent job is already working on the same record "
                 "(%s with one id in %s). The job will be retried later."
-                % (self.model._name, tuple(records.ids),),
-                seconds=seconds, ignore_retry=ignore_retry
+                % (self.model._name, tuple(records.ids)),
+                seconds=seconds,
+                ignore_retry=ignore_retry,
             )

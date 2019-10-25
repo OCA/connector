@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # Copyright 2013-2017 Camptocamp SA
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl.html)
 
@@ -19,11 +18,12 @@ from odoo.addons.component.core import AbstractComponent
 class BackendAdapter(AbstractComponent):
     """ Base Backend Adapter for the connectors """
 
-    _name = 'base.backend.adapter'
-    _inherit = 'base.connector'
-    _usage = 'backend.adapter'
+    _name = "base.backend.adapter"
+    _inherit = "base.connector"
+    _usage = "backend.adapter"
 
 
+# pylint: disable=W8106
 class CRUDAdapter(AbstractComponent):
     """ Base External Adapter specialized in the handling
     of records on external systems.
@@ -33,9 +33,9 @@ class CRUDAdapter(AbstractComponent):
 
     """
 
-    _name = 'base.backend.adapter.crud'
-    _inherit = 'base.backend.adapter'
-    _usage = 'backend.adapter'
+    _name = "base.backend.adapter.crud"
+    _inherit = "base.backend.adapter"
+    _usage = "backend.adapter"
 
     def search(self, *args, **kwargs):
         """ Search records according to some criterias

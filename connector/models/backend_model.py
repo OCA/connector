@@ -1,9 +1,8 @@
-# -*- coding: utf-8 -*-
 # Copyright 2013-2017 Camptocamp SA
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl.html)
 
 
-from odoo import models, fields
+from odoo import fields, models
 
 
 class ConnectorBackend(models.AbstractModel):
@@ -44,9 +43,10 @@ class ConnectorBackend(models.AbstractModel):
 
 
     """
-    _name = 'connector.backend'
-    _inherit = ['collection.base']
-    _description = 'Connector Backend'
+
+    _name = "connector.backend"
+    _inherit = ["collection.base"]
+    _description = "Connector Backend"
 
 
 class ExternalBinding(models.AbstractModel):
@@ -112,9 +112,10 @@ class ExternalBinding(models.AbstractModel):
 
 
     """
-    _name = 'external.binding'
-    _description = 'External Binding (abstract)'
 
-    sync_date = fields.Datetime(string='Last synchronization date')
+    _name = "external.binding"
+    _description = "External Binding (abstract)"
+
+    sync_date = fields.Datetime(string="Last synchronization date")
     # add other fields in concrete models
     # XXX we could add a default 'external_id'

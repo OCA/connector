@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # Copyright 2013-2017 Camptocamp SA
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl.html)
 
@@ -13,6 +12,7 @@ create the binding between them.
 """
 
 from odoo import fields, models, tools
+
 from odoo.addons.component.core import AbstractComponent
 
 
@@ -28,14 +28,14 @@ class Binder(AbstractComponent):
 
     """
 
-    _name = 'base.binder'
-    _inherit = 'base.connector'
-    _usage = 'binder'
+    _name = "base.binder"
+    _inherit = "base.connector"
+    _usage = "binder"
 
-    _external_field = 'external_id'  # override in sub-classes
-    _backend_field = 'backend_id'  # override in sub-classes
-    _odoo_field = 'odoo_id'  # override in sub-classes
-    _sync_date_field = 'sync_date'  # override in sub-classes
+    _external_field = "external_id"  # override in sub-classes
+    _backend_field = "backend_id"  # override in sub-classes
+    _odoo_field = "odoo_id"  # override in sub-classes
+    _sync_date_field = "sync_date"  # override in sub-classes
 
     def to_internal(self, external_id, unwrap=False):
         """ Give the Odoo recordset for an external ID
@@ -49,8 +49,10 @@ class Binder(AbstractComponent):
         :rtype: recordset
         """
         bindings = self.model.with_context(active_test=False).search(
-            [(self._external_field, '=', tools.ustr(external_id)),
-             (self._backend_field, '=', self.backend_record.id)]
+            [
+                (self._external_field, "=", tools.ustr(external_id)),
+                (self._backend_field, "=", self.backend_record.id),
+            ]
         )
         if not bindings:
             if unwrap:
@@ -76,9 +78,10 @@ class Binder(AbstractComponent):
             binding = self.model.browse(binding)
         if wrap:
             binding = self.model.with_context(active_test=False).search(
-                [(self._odoo_field, '=', binding.id),
-                 (self._backend_field, '=', self.backend_record.id),
-                 ]
+                [
+                    (self._odoo_field, "=", binding.id),
+                    (self._backend_field, "=", self.backend_record.id),
+                ]
             )
             if not binding:
                 return None
@@ -94,9 +97,11 @@ class Binder(AbstractComponent):
         :type binding: int
         """
         # Prevent False, None, or "", but not 0
-        assert (external_id or external_id is 0) and binding, (
-            "external_id or binding missing, "
-            "got: %s, %s" % (external_id, binding)
+        assert (
+            external_id or external_id == 0
+        ) and binding, "external_id or binding missing, " "got: %s, %s" % (
+            external_id,
+            binding,
         )
         # avoid to trigger the export when we modify the `external_id`
         now_fmt = fields.Datetime.now()
@@ -105,9 +110,11 @@ class Binder(AbstractComponent):
         else:
             binding = self.model.browse(binding)
         binding.with_context(connector_no_export=True).write(
-            {self._external_field: tools.ustr(external_id),
-             self._sync_date_field: now_fmt,
-             })
+            {
+                self._external_field: tools.ustr(external_id),
+                self._sync_date_field: now_fmt,
+            }
+        )
 
     def unwrap_binding(self, binding):
         """ For a binding record, gives the normal record.
@@ -135,6 +142,7 @@ class Binder(AbstractComponent):
             column = self.model._fields[self._odoo_field]
         except KeyError:
             raise ValueError(
-                'Cannot unwrap model %s, because it has no %s fields'
-                % (self.model._name, self._odoo_field))
+                "Cannot unwrap model %s, because it has no %s fields"
+                % (self.model._name, self._odoo_field)
+            )
         return column.comodel_name

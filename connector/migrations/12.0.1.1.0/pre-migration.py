@@ -4,7 +4,9 @@
 def migrate(cr, version):
     if not version:
         return
-    cr.execute("""
+    cr.execute(
+        """
         ALTER TABLE connector_checkpoint
         ADD COLUMN company_id integer
-    """)
+    """
+    )

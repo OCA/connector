@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # Copyright 2017 Camptocamp SA
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl.html)
 
@@ -12,25 +11,37 @@ external records into Odoo records and conversely.
 
 """
 
+import collections
 import logging
 from collections import namedtuple
 from contextlib import contextmanager
 
 from odoo import models
+
 from odoo.addons.component.core import AbstractComponent
 from odoo.addons.component.exception import NoComponentError
-from ..exception import MappingError
-import collections
 
+from ..exception import MappingError
 
 _logger = logging.getLogger(__name__)
 
 
 __all__ = [
-    'Mapper', 'ImportMapper', 'ExportMapper', 'mapping',
-    'changed_by', 'only_create', 'none', 'convert',
-    'm2o_to_external', 'external_to_m2o', 'follow_m2o_relations',
-    'MapRecord', 'MapChild', 'ImportMapChild', 'ExportMapChild',
+    "Mapper",
+    "ImportMapper",
+    "ExportMapper",
+    "mapping",
+    "changed_by",
+    "only_create",
+    "none",
+    "convert",
+    "m2o_to_external",
+    "external_to_m2o",
+    "follow_m2o_relations",
+    "MapRecord",
+    "MapChild",
+    "ImportMapChild",
+    "ExportMapChild",
 ]
 
 
@@ -74,9 +85,11 @@ def changed_by(*args):
     :param ``*args``: field names which trigger the mapping when modified
 
     """
+
     def register_mapping(func):
         func.changed_by = args
         return func
+
     return register_mapping
 
 
@@ -112,6 +125,7 @@ def none(field):
     :param field: name of the source field in the record
     :param binding: True if the relation is a binding record
     """
+
     def modifier(self, record, to_attr):
         if isinstance(field, collections.Callable):
             result = field(self, record, to_attr)
@@ -120,6 +134,7 @@ def none(field):
         if not result:
             return None
         return result
+
     return modifier
 
 
@@ -135,11 +150,13 @@ def convert(field, conv_type):
     :param field: name of the source field in the record
     :param binding: True if the relation is a binding record
     """
+
     def modifier(self, record, to_attr):
         value = record[field]
         if not value:
             return False
         return conv_type(value)
+
     return modifier
 
 
@@ -161,13 +178,15 @@ def m2o_to_external(field, binding=None):
     :param field: name of the source field in the record
     :param binding: name of the binding model is the relation is not a binding
     """
+
     def modifier(self, record, to_attr):
         if not record[field]:
             return False
         column = self.model._fields[field]
-        if column.type != 'many2one':
-            raise ValueError('The column %s should be a Many2one, got %s' %
-                             (field, type(column)))
+        if column.type != "many2one":
+            raise ValueError(
+                "The column {} should be a Many2one, got {}".format(field, type(column))
+            )
         rel_id = record[field].id
         if binding is None:
             binding_model = column.comodel_name
@@ -179,11 +198,13 @@ def m2o_to_external(field, binding=None):
         wrap = bool(binding)
         value = binder.to_external(rel_id, wrap=wrap)
         if not value:
-            raise MappingError("Can not find an external id for record "
-                               "%s in model %s %s wrapping" %
-                               (rel_id, binding_model,
-                                'with' if wrap else 'without'))
+            raise MappingError(
+                "Can not find an external id for record "
+                "%s in model %s %s wrapping"
+                % (rel_id, binding_model, "with" if wrap else "without")
+            )
         return value
+
     return modifier
 
 
@@ -206,13 +227,17 @@ def external_to_m2o(field, binding=None):
     :param field: name of the source field in the record
     :param binding: name of the binding model is the relation is not a binding
     """
+
     def modifier(self, record, to_attr):
         if not record[field]:
             return False
         column = self.model._fields[to_attr]
-        if column.type != 'many2one':
-            raise ValueError('The column %s should be a Many2one, got %s' %
-                             (to_attr, type(column)))
+        if column.type != "many2one":
+            raise ValueError(
+                "The column {} should be a Many2one, got {}".format(
+                    to_attr, type(column)
+                )
+            )
         rel_id = record[field]
         if binding is None:
             binding_model = column.comodel_name
@@ -224,18 +249,21 @@ def external_to_m2o(field, binding=None):
         unwrap = bool(binding)
         record = binder.to_internal(rel_id, unwrap=unwrap)
         if not record:
-            raise MappingError("Can not find an existing %s for external "
-                               "record %s %s unwrapping" %
-                               (binding_model, rel_id,
-                                'with' if unwrap else 'without'))
+            raise MappingError(
+                "Can not find an existing %s for external "
+                "record %s %s unwrapping"
+                % (binding_model, rel_id, "with" if unwrap else "without")
+            )
         if isinstance(record, models.BaseModel):
             return record.id
         else:
             _logger.debug(
-                'Binder for %s returned an id, '
-                'returning a record should be preferred.', binding_model
+                "Binder for %s returned an id, "
+                "returning a record should be preferred.",
+                binding_model,
             )
             return record
+
     return modifier
 
 
@@ -252,18 +280,18 @@ def follow_m2o_relations(field):
 
     :param field: field "path", using dots for relations as usual in Odoo
     """
+
     def modifier(self, record, to_attr):
-        attrs = field.split('.')
+        attrs = field.split(".")
         value = record
         for attr in attrs:
             value = getattr(value, attr)
         return value
+
     return modifier
 
 
-MappingDefinition = namedtuple('MappingDefinition',
-                               ['changed_by',
-                                'only_create'])
+MappingDefinition = namedtuple("MappingDefinition", ["changed_by", "only_create"])
 
 
 class MapChild(AbstractComponent):
@@ -310,8 +338,8 @@ class MapChild(AbstractComponent):
 
     """
 
-    _name = 'base.map.child'
-    _inherit = 'base.connector'
+    _name = "base.map.child"
+    _inherit = "base.connector"
 
     def _child_mapper(self):
         raise NotImplementedError
@@ -393,12 +421,12 @@ class MapChild(AbstractComponent):
 class ImportMapChild(AbstractComponent):
     """ :py:class:`MapChild` for the Imports """
 
-    _name = 'base.map.child.import'
-    _inherit = 'base.map.child'
-    _usage = 'import.map.child'
+    _name = "base.map.child.import"
+    _inherit = "base.map.child"
+    _usage = "import.map.child"
 
     def _child_mapper(self):
-        return self.component(usage='import.mapper')
+        return self.component(usage="import.mapper")
 
     def format_items(self, items_values):
         """ Format the values of the items mapped from the child Mappers.
@@ -421,12 +449,12 @@ class ImportMapChild(AbstractComponent):
 class ExportMapChild(AbstractComponent):
     """ :py:class:`MapChild` for the Exports """
 
-    _name = 'base.map.child.export'
-    _inherit = 'base.map.child'
-    _usage = 'export.map.child'
+    _name = "base.map.child.export"
+    _inherit = "base.map.child"
+    _usage = "export.map.child"
 
     def _child_mapper(self):
-        return self.component(usage='export.mapper')
+        return self.component(usage="export.mapper")
 
 
 class Mapper(AbstractComponent):
@@ -532,9 +560,9 @@ class Mapper(AbstractComponent):
 
     """
 
-    _name = 'base.mapper'
-    _inherit = 'base.connector'
-    _usage = 'mapper'
+    _name = "base.mapper"
+    _inherit = "base.connector"
+    _usage = "mapper"
 
     direct = []  # direct conversion of a field to another (from_attr, to_attr)
     children = []  # conversion of sub-records (from_attr, to_attr, model)
@@ -576,7 +604,7 @@ class Mapper(AbstractComponent):
 
         map_methods = {}
         for base in reversed(cls.__bases__):
-            if hasattr(base, '_map_methods'):
+            if hasattr(base, "_map_methods"):
                 # this is already a dynamically generated Component, so we can
                 # use it's existing mappings
                 base_map_methods = base._map_methods or {}
@@ -589,8 +617,7 @@ class Mapper(AbstractComponent):
                         # keep the last value for @only_create
                         if definition.only_create:
                             new_definition = MappingDefinition(
-                                mapping_changed_by,
-                                definition.only_create,
+                                mapping_changed_by, definition.only_create
                             )
                             map_methods[attr_name] = new_definition
                     else:
@@ -600,10 +627,10 @@ class Mapper(AbstractComponent):
                 # the base Components
                 for attr_name in dir(base):
                     attr = getattr(base, attr_name, None)
-                    if not getattr(attr, 'is_mapping', None):
+                    if not getattr(attr, "is_mapping", None):
                         continue
-                    has_only_create = getattr(attr, 'only_create', False)
-                    mapping_changed_by = set(getattr(attr, 'changed_by', ()))
+                    has_only_create = getattr(attr, "only_create", False)
+                    mapping_changed_by = set(getattr(attr, "changed_by", ()))
 
                     # if already existing, it has been defined in an previous
                     # base, extend the @changed_by set
@@ -612,8 +639,7 @@ class Mapper(AbstractComponent):
                         mapping_changed_by.update(definition.changed_by)
 
                     # keep the last choice for only_create
-                    definition = MappingDefinition(mapping_changed_by,
-                                                   has_only_create)
+                    definition = MappingDefinition(mapping_changed_by, has_only_create)
                     map_methods[attr_name] = definition
 
         cls._map_methods = map_methods
@@ -649,16 +675,15 @@ class Mapper(AbstractComponent):
 
     def _get_map_child_component(self, model_name):
         try:
-            mapper_child = self.component(usage=self._map_child_usage,
-                                          model_name=model_name)
+            mapper_child = self.component(
+                usage=self._map_child_usage, model_name=model_name
+            )
         except NoComponentError:
-            assert self._map_child_fallback is not None, (
-                "_map_child_fallback required")
+            assert self._map_child_fallback is not None, "_map_child_fallback required"
             # does not force developers to use a MapChild ->
             # will use the default one if not explicitely defined
             mapper_child = self.component_by_name(
-                self._map_child_fallback,
-                model_name=model_name
+                self._map_child_fallback, model_name=model_name
             )
         return mapper_child
 
@@ -667,8 +692,9 @@ class Mapper(AbstractComponent):
         assert self._map_child_usage is not None, "_map_child_usage required"
         child_records = map_record.source[from_attr]
         mapper_child = self._get_map_child_component(model_name)
-        items = mapper_child.get_items(child_records, map_record,
-                                       to_attr, options=self.options)
+        items = mapper_child.get_items(
+            child_records, map_record, to_attr, options=self.options
+        )
         return items
 
     @contextmanager
@@ -697,12 +723,12 @@ class Mapper(AbstractComponent):
         the decorator: ``changed_by``.
         """
         changed_by = set()
-        if getattr(self, 'direct', None):
+        if getattr(self, "direct", None):
             for from_attr, __ in self.direct:
                 fieldname = self._direct_source_field_name(from_attr)
                 changed_by.add(fieldname)
 
-        for method_name, method_def in self._map_methods.items():
+        for _method_name, method_def in self._map_methods.items():
             changed_by |= method_def.changed_by
         return changed_by
 
@@ -721,14 +747,19 @@ class Mapper(AbstractComponent):
         fieldname = direct_entry
         if isinstance(direct_entry, collections.Callable):
             # Map the closure entries with variable names
-            cells = dict(list(zip(
-                direct_entry.__code__.co_freevars,
-                (c.cell_contents for c in direct_entry.__closure__))))
-            assert 'field' in cells, "Modifier without 'field' argument."
-            if isinstance(cells['field'], collections.Callable):
-                fieldname = self._direct_source_field_name(cells['field'])
+            cells = dict(
+                list(
+                    zip(
+                        direct_entry.__code__.co_freevars,
+                        (c.cell_contents for c in direct_entry.__closure__),
+                    )
+                )
+            )
+            assert "field" in cells, "Modifier without 'field' argument."
+            if isinstance(cells["field"], collections.Callable):
+                fieldname = self._direct_source_field_name(cells["field"])
             else:
-                fieldname = cells['field']
+                fieldname = cells["field"]
         return fieldname
 
     def map_record(self, record, parent=None):
@@ -763,10 +794,10 @@ class Mapper(AbstractComponent):
         :type map_record: :py:class:`MapRecord`
 
         """
-        assert self.options is not None, (
-            "options should be defined with '_mapping_options'")
-        _logger.debug('converting record %s to model %s',
-                      map_record.source, self.model)
+        assert (
+            self.options is not None
+        ), "options should be defined with '_mapping_options'"
+        _logger.debug("converting record %s to model %s", map_record.source, self.model)
 
         fields = self.options.fields
         for_create = self.options.for_create
@@ -777,30 +808,34 @@ class Mapper(AbstractComponent):
             else:
                 attr_name = from_attr
 
-            if (not fields or attr_name in fields):
-                value = self._map_direct(map_record.source,
-                                         from_attr,
-                                         to_attr)
+            if not fields or attr_name in fields:
+                value = self._map_direct(map_record.source, from_attr, to_attr)
                 result[to_attr] = value
 
         for meth, definition in self.map_methods:
             mapping_changed_by = definition.changed_by
-            if (not fields or not mapping_changed_by or
-                    mapping_changed_by.intersection(fields)):
+            if (
+                not fields
+                or not mapping_changed_by
+                or mapping_changed_by.intersection(fields)
+            ):
                 if definition.only_create and not for_create:
                     continue
                 values = meth(map_record.source)
                 if not values:
                     continue
                 if not isinstance(values, dict):
-                    raise ValueError('%s: invalid return value for the '
-                                     'mapping method %s' % (values, meth))
+                    raise ValueError(
+                        "%s: invalid return value for the "
+                        "mapping method %s" % (values, meth)
+                    )
                 result.update(values)
 
         for from_attr, to_attr, model_name in self.children:
-            if (not fields or from_attr in fields):
-                result[to_attr] = self._map_child(map_record, from_attr,
-                                                  to_attr, model_name)
+            if not fields or from_attr in fields:
+                result[to_attr] = self._map_child(
+                    map_record, from_attr, to_attr, model_name
+                )
 
         return self.finalize(map_record, result)
 
@@ -826,12 +861,12 @@ class ImportMapper(AbstractComponent):
 
     """
 
-    _name = 'base.import.mapper'
-    _inherit = 'base.mapper'
-    _usage = 'import.mapper'
+    _name = "base.import.mapper"
+    _inherit = "base.mapper"
+    _usage = "import.mapper"
 
-    _map_child_usage = 'import.map.child'
-    _map_child_fallback = 'base.map.child.import'
+    _map_child_usage = "import.map.child"
+    _map_child_fallback = "base.map.child.import"
 
     def _map_direct(self, record, from_attr, to_attr):
         """ Apply the ``direct`` mappings.
@@ -854,7 +889,7 @@ class ImportMapper(AbstractComponent):
         # Use an explicit modifier external_to_m2o in the 'direct' mappings to
         # change that.
         field = self.model._fields[to_attr]
-        if field.type == 'many2one':
+        if field.type == "many2one":
             mapping_func = external_to_m2o(from_attr)
             value = mapping_func(self, record, to_attr)
         return value
@@ -867,12 +902,12 @@ class ExportMapper(AbstractComponent):
 
     """
 
-    _name = 'base.export.mapper'
-    _inherit = 'base.mapper'
-    _usage = 'export.mapper'
+    _name = "base.export.mapper"
+    _inherit = "base.mapper"
+    _usage = "export.mapper"
 
-    _map_child_usage = 'export.map.child'
-    _map_child_fallback = 'base.map.child.export'
+    _map_child_usage = "export.map.child"
+    _map_child_fallback = "base.map.child.export"
 
     def _map_direct(self, record, from_attr, to_attr):
         """ Apply the ``direct`` mappings.
@@ -895,7 +930,7 @@ class ExportMapper(AbstractComponent):
         # Use an explicit modifier m2o_to_external  in the 'direct' mappings to
         # change that.
         field = self.model._fields[from_attr]
-        if field.type == 'many2one':
+        if field.type == "many2one":
             mapping_func = m2o_to_external(from_attr)
             value = mapping_func(self, record, to_attr)
         return value

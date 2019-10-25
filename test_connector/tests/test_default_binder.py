@@ -12,9 +12,7 @@ class TestDefaultBinder(TransactionComponentCase):
 
         # create our backend, in case of components,
         # the version would not be required
-        self.backend_record = self.env["test.backend"].create(
-            {"version": "1", "name": "Test"}
-        )
+        self.backend_record = self.env["test.backend"].create({})
 
     def test_default_binder(self):
         """ Small scenario with the default binder """

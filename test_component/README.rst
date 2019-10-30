@@ -14,7 +14,7 @@ Components Tests
     :target: https://github.com/OCA/connector/tree/13.0/test_component
     :alt: OCA/connector
 .. |badge3| image:: https://img.shields.io/badge/weblate-Translate%20me-F47D42.png
-    :target: https://translation.odoo-community.org/projects/connector-13.0/connector-13.0-test_component
+    :target: https://translation.odoo-community.org/projects/connector-13-0/connector-13-0-test_component
     :alt: Translate me on Weblate
 .. |badge4| image:: https://img.shields.io/badge/runbot-Try%20me-875A7B.png
     :target: https://runbot.odoo-community.org/runbot/102/13.0
@@ -55,7 +55,6 @@ Contributors
 ~~~~~~~~~~~~
 
 * Guewen Baconnier (Camptocamp)
-* Damien Crier <damien.crier@camptocamp.com>
 
 Maintainers
 ~~~~~~~~~~~

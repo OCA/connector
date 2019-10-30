@@ -1,6 +1,5 @@
-# -*- coding: utf-8 -*-
 # Copyright 2017 Camptocamp SA
-# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html)
+# License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl.html)
 
 """
 Events
@@ -109,10 +108,10 @@ arguments. See :func:`skip_if`
 
 import logging
 import operator
-
 from collections import defaultdict
 from functools import wraps
 
+# pylint: disable=W7950
 from odoo.addons.component.core import AbstractComponent, Component
 
 _logger = logging.getLogger(__name__)
@@ -122,7 +121,7 @@ try:
 except ImportError:
     _logger.debug("Cannot import 'cachetools'.")
 
-__all__ = ['skip_if']
+__all__ = ["skip_if"]
 
 # Number of items we keep in LRU cache when we collect the events.
 # 1 item means: for an event name, model_name, collection, return
@@ -151,6 +150,7 @@ def skip_if(cond):
             record.with_delay().export_record()
 
     """
+
     def skip_if_decorator(func):
         @wraps(func)
         def func_wrapper(*args, **kwargs):
@@ -160,6 +160,7 @@ def skip_if(cond):
                 return func(*args, **kwargs)
 
         return func_wrapper
+
     return skip_if_decorator
 
 
@@ -213,7 +214,8 @@ class EventCollecter(Component):
     It is used by :meth:`odoo.addons.component_event.models.base.Base._event`.
 
     """
-    _name = 'base.event.collecter'
+
+    _name = "base.event.collecter"
 
     @classmethod
     def _complete_component_build(cls):
@@ -229,18 +231,14 @@ class EventCollecter(Component):
         collection_name = None
         if self.work._collection is not None:
             collection_name = self.work.collection._name
-        return self._collect_events_cached(
-            collection_name,
-            self.work.model_name,
-            name
-        )
+        return self._collect_events_cached(collection_name, self.work.model_name, name)
 
-    @cachedmethod(operator.attrgetter('_cache'))
+    @cachedmethod(operator.attrgetter("_cache"))
     def _collect_events_cached(self, collection_name, model_name, name):
         events = defaultdict(set)
         component_classes = self.work.components_registry.lookup(
             collection_name=collection_name,
-            usage='event.listener',
+            usage="event.listener",
             model_name=model_name,
         )
         for cls in component_classes:
@@ -258,7 +256,7 @@ class EventCollecter(Component):
 
     def collect_events(self, name):
         """ Collect the events of a given name """
-        if not name.startswith('on_'):
+        if not name.startswith("on_"):
             raise ValueError("an event name always starts with 'on_'")
 
         events = self._init_collected_events(self._collect_events(name))
@@ -273,8 +271,9 @@ class EventListener(AbstractComponent):
     Example: :class:`RecordsEventListener`
 
     """
-    _name = 'base.event.listener'
-    _usage = 'event.listener'
+
+    _name = "base.event.listener"
+    _usage = "event.listener"
 
     @classmethod
     def has_event(cls, name):
@@ -284,10 +283,10 @@ class EventListener(AbstractComponent):
     @classmethod
     def _build_event_listener_component(cls):
         """ Make a list of events listeners for this class """
-        events = set([])
+        events = set()
         if not cls._abstract:
             for attr_name in dir(cls):
-                if attr_name.startswith('on_'):
+                if attr_name.startswith("on_"):
                     events.add(attr_name)
         cls._events = events
 

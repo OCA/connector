@@ -1,20 +1,15 @@
-# -*- coding: utf-8 -*-
 # Copyright 2017 Camptocamp SA
-# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html)
+# License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl.html)
 
 import copy
-
+import unittest
 from contextlib import contextmanager
 
-import unittest
 import odoo
 from odoo import api
 from odoo.tests import common
-from odoo.addons.component.core import (
-    ComponentRegistry,
-    MetaComponent,
-    _get_addon_name,
-)
+
+from odoo.addons.component.core import ComponentRegistry, MetaComponent, _get_addon_name
 
 
 @contextmanager
@@ -30,11 +25,10 @@ def new_rollbacked_env():
 
 
 class ComponentMixin(object):
-
     @classmethod
     def setUpComponent(cls):
         with new_rollbacked_env() as env:
-            builder = env['component.builder']
+            builder = env["component.builder"]
             # build the components of every installed addons
             comp_registry = builder._init_global_registry()
             cls._components_registry = comp_registry
@@ -42,11 +36,12 @@ class ComponentMixin(object):
             # modules, not 'to install', which means we load only the
             # dependencies of the tested addons, not the siblings or
             # chilren addons
-            builder.build_registry(comp_registry, states=('installed',))
+            builder.build_registry(comp_registry, states=("installed",))
             # build the components of the current tested addon
             current_addon = _get_addon_name(cls.__module__)
-            env['component.builder'].load_components(current_addon)
+            env["component.builder"].load_components(current_addon)
 
+    # pylint: disable=W8106
     def setUp(self):
         # should be ready only during tests, never during installation
         # of addons
@@ -68,9 +63,10 @@ class TransactionComponentCase(common.TransactionCase, ComponentMixin):
 
     @classmethod
     def setUpClass(cls):
-        super(TransactionComponentCase, cls).setUpClass()
+        super().setUpClass()
         cls.setUpComponent()
 
+    # pylint: disable=W8106
     def setUp(self):
         # resolve an inheritance issue (common.TransactionCase does not call
         # super)
@@ -89,9 +85,10 @@ class SavepointComponentCase(common.SavepointCase, ComponentMixin):
 
     @classmethod
     def setUpClass(cls):
-        super(SavepointComponentCase, cls).setUpClass()
+        super().setUpClass()
         cls.setUpComponent()
 
+    # pylint: disable=W8106
     def setUp(self):
         # resolve an inheritance issue (common.SavepointCase does not call
         # super)
@@ -100,7 +97,8 @@ class SavepointComponentCase(common.SavepointCase, ComponentMixin):
 
 
 class ComponentRegistryCase(
-        unittest.TestCase, common.MetaCase('DummyCase', (object,), {})):
+    unittest.TestCase, common.MetaCase("DummyCase", (object,), {})
+):
     """ This test case can be used as a base for writings tests on components
 
     This test case is meant to test components in a special component registry,
@@ -146,30 +144,28 @@ class ComponentRegistryCase(
     """
 
     def setUp(self):
-        super(ComponentRegistryCase, self).setUp()
+        super().setUp()
 
         # keep the original classes registered by the metaclass
         # so we'll restore them at the end of the tests, it avoid
         # to pollute it with Stub / Test components
-        self._original_components = copy.deepcopy(
-            MetaComponent._modules_components
-        )
+        self._original_components = copy.deepcopy(MetaComponent._modules_components)
 
         # it will be our temporary component registry for our test session
         self.comp_registry = ComponentRegistry()
 
         # it builds the 'final component' for every component of the
         # 'component' addon and push them in the component registry
-        self.comp_registry.load_components('component')
+        self.comp_registry.load_components("component")
         # build the components of every installed addons already installed
         # but the current addon (when running with pytest/nosetest, we
         # simulate the --test-enable behavior by excluding the current addon
         # which is in 'to install' / 'to upgrade' with --test-enable).
         current_addon = _get_addon_name(self.__module__)
         with new_rollbacked_env() as env:
-            env['component.builder'].build_registry(
+            env["component.builder"].build_registry(
                 self.comp_registry,
-                states=('installed',),
+                states=("installed",),
                 exclude_addons=[current_addon],
             )
 
@@ -180,7 +176,7 @@ class ComponentRegistryCase(
         self.comp_registry.ready = True
 
     def tearDown(self):
-        super(ComponentRegistryCase, self).tearDown()
+        super().tearDown()
         # restore the original metaclass' classes
         MetaComponent._modules_components = self._original_components
 
@@ -192,32 +188,32 @@ class ComponentRegistryCase(
             cls._build_component(self.comp_registry)
 
 
-class TransactionComponentRegistryCase(common.TransactionCase,
-                                       ComponentRegistryCase):
+class TransactionComponentRegistryCase(common.TransactionCase, ComponentRegistryCase):
     """ Adds Odoo Transaction in the base Component TestCase """
 
+    # pylint: disable=W8106
     def setUp(self):
         # resolve an inheritance issue (common.TransactionCase does not use
         # super)
         common.TransactionCase.setUp(self)
         ComponentRegistryCase.setUp(self)
-        self.collection = self.env['collection.base']
+        self.collection = self.env["collection.base"]
 
     def teardown(self):
         common.TransactionCase.tearDown(self)
         ComponentRegistryCase.tearDown(self)
 
 
-class SavepointComponentRegistryCase(common.SavepointCase,
-                                     ComponentRegistryCase):
+class SavepointComponentRegistryCase(common.SavepointCase, ComponentRegistryCase):
     """ Adds Odoo Transaction with Savepoint in the base Component TestCase """
 
+    # pylint: disable=W8106
     def setUp(self):
         # resolve an inheritance issue (common.SavepointCase does not use
         # super)
         common.SavepointCase.setUp(self)
         ComponentRegistryCase.setUp(self)
-        self.collection = self.env['collection.base']
+        self.collection = self.env["collection.base"]
 
     def teardown(self):
         common.SavepointCase.tearDown(self)

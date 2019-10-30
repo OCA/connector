@@ -1,6 +1,5 @@
-# -*- coding: utf-8 -*-
-# Copyright 2017 Camptocamp SA
-# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html)
+# Copyright 2019 Camptocamp SA
+# License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl.html)
 
 """
 
@@ -11,12 +10,9 @@ Build the components at the build of a registry.
 
 """
 import odoo
-from odoo import api, models
-from .core import (
-    _component_databases,
-    ComponentRegistry,
-    DEFAULT_CACHE_SIZE,
-)
+from odoo import models
+
+from .core import DEFAULT_CACHE_SIZE, ComponentRegistry, _component_databases
 
 
 class ComponentBuilder(models.AbstractModel):
@@ -38,12 +34,12 @@ class ComponentBuilder(models.AbstractModel):
     order.
 
     """
-    _name = 'component.builder'
-    _description = 'Component Builder'
+
+    _name = "component.builder"
+    _description = "Component Builder"
 
     _components_registry_cache_size = DEFAULT_CACHE_SIZE
 
-    @api.model_cr
     def _register_hook(self):
         # This method is called by Odoo when the registry is built,
         # so in case the registry is rebuilt (cache invalidation, ...),
@@ -60,34 +56,27 @@ class ComponentBuilder(models.AbstractModel):
         _component_databases[self.env.cr.dbname] = components_registry
         return components_registry
 
-    def build_registry(self, components_registry, states=None,
-                       exclude_addons=None):
+    def build_registry(self, components_registry, states=None, exclude_addons=None):
         if not states:
-            states = ('installed', 'to upgrade')
+            states = ("installed", "to upgrade")
         # lookup all the installed (or about to be) addons and generate
         # the graph, so we can load the components following the order
         # of the addons' dependencies
         graph = odoo.modules.graph.Graph()
-        graph.add_module(self.env.cr, 'base')
+        graph.add_module(self.env.cr, "base")
 
-        query = (
-            "SELECT name "
-            "FROM ir_module_module "
-            "WHERE state IN %s "
-        )
+        query = "SELECT name " "FROM ir_module_module " "WHERE state IN %s "
         params = [tuple(states)]
         if exclude_addons:
             query += " AND name NOT IN %s "
             params.append(tuple(exclude_addons))
         self.env.cr.execute(query, params)
 
-        module_list = [name for (name,) in self.env.cr.fetchall()
-                       if name not in graph]
+        module_list = [name for (name,) in self.env.cr.fetchall() if name not in graph]
         graph.add_modules(self.env.cr, module_list)
 
         for module in graph:
-            self.load_components(module.name,
-                                 components_registry=components_registry)
+            self.load_components(module.name, components_registry=components_registry)
 
     def load_components(self, module, components_registry=None):
         """ Build every component known by MetaComponent for an odoo module
@@ -102,6 +91,6 @@ class ComponentBuilder(models.AbstractModel):
         :type registry: :py:class:`~.core.ComponentRegistry`
         """
         components_registry = (
-            components_registry or
-            _component_databases[self.env.cr.dbname])
+            components_registry or _component_databases[self.env.cr.dbname]
+        )
         components_registry.load_components(module)

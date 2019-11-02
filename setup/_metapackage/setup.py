@@ -10,7 +10,9 @@ setuptools.setup(
     install_requires=[
         'odoo13-addon-component',
         'odoo13-addon-component_event',
+        'odoo13-addon-connector',
         'odoo13-addon-test_component',
+        'odoo13-addon-test_connector',
     ],
     classifiers=[
         'Programming Language :: Python',

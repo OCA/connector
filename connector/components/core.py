@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # Copyright 2017 Camptocamp SA
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl.html)
 
@@ -71,6 +70,7 @@ single-purpose, decoupled component.
 
 from odoo.addons.component.core import AbstractComponent
 from odoo.addons.queue_job.exception import RetryableJobError
+
 from ..database import pg_try_advisory_lock
 
 
@@ -82,7 +82,7 @@ class BaseConnectorComponent(AbstractComponent):
 
     """
 
-    _name = 'base.connector'
+    _name = "base.connector"
 
     @property
     def backend_record(self):
@@ -96,7 +96,7 @@ class BaseConnectorComponent(AbstractComponent):
         Equivalent to: ``self.component(usage='binder', model_name='xxx')``
 
         """
-        return self.component(usage='binder', model_name=model)
+        return self.component(usage="binder", model_name=model)
 
     def advisory_lock_or_retry(self, lock, retry_seconds=1):
         """ Acquire a Postgres transactional advisory lock or retry job
@@ -129,6 +129,8 @@ class BaseConnectorComponent(AbstractComponent):
            be retried when the lock cannot be acquired.
         """
         if not pg_try_advisory_lock(self.env, lock):
-            raise RetryableJobError('Could not acquire advisory lock',
-                                    seconds=retry_seconds,
-                                    ignore_retry=True)
+            raise RetryableJobError(
+                "Could not acquire advisory lock",
+                seconds=retry_seconds,
+                ignore_retry=True,
+            )

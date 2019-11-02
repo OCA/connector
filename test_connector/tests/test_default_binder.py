@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # Copyright 2013-2017 Camptocamp SA
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl.html)
 
@@ -13,21 +12,18 @@ class TestDefaultBinder(TransactionComponentCase):
 
         # create our backend, in case of components,
         # the version would not be required
-        self.backend_record = self.env['test.backend'].create(
-            {'version': '1', 'name': 'Test'}
-        )
+        self.backend_record = self.env["test.backend"].create({})
 
     def test_default_binder(self):
         """ Small scenario with the default binder """
         # create a work context with the model we want to work with
-        with self.backend_record.work_on('connector.test.binding') as work:
+        with self.backend_record.work_on("connector.test.binding") as work:
             # get our binder component (for the model in whe work context)
-            self.binder = work.component(usage='binder')
-            test_record = self.env['connector.test.record'].create({})
-            test_binding = self.env['connector.test.binding'].create({
-                'backend_id': self.backend_record.id,
-                'odoo_id': test_record.id,
-            })
+            self.binder = work.component(usage="binder")
+            test_record = self.env["connector.test.record"].create({})
+            test_binding = self.env["connector.test.binding"].create(
+                {"backend_id": self.backend_record.id, "odoo_id": test_record.id}
+            )
 
             # bind the test binding to external id = 99
             self.binder.bind(99, test_binding)
@@ -43,8 +39,6 @@ class TestDefaultBinder(TransactionComponentCase):
             # find the external record bound to odoo record
             external_id = self.binder.to_external(test_record, wrap=True)
             self.assertEqual(external_id, 99)
-            self.assertEqual(self.binder.unwrap_model(),
-                             'connector.test.record')
+            self.assertEqual(self.binder.unwrap_model(), "connector.test.record")
             # unwrapping the binding should give the same binding
-            self.assertEqual(self.binder.unwrap_binding(test_binding),
-                             test_record)
+            self.assertEqual(self.binder.unwrap_binding(test_binding), test_record)

@@ -11,8 +11,8 @@ msgstr ""
 "POT-Creation-Date: 2018-01-05 16:56+0000\n"
 "PO-Revision-Date: 2019-08-26 15:01+0000\n"
 "Last-Translator: Rodrigo Macedo <rmsolucoeseminformatic4@gmail.com>\n"
-"Language-Team: Portuguese (Brazil) (https://www.transifex.com/oca/teams/"
-"23907/pt_BR/)\n"
+"Language-Team: Portuguese (Brazil) (https://www.transifex.com/oca/"
+"teams/23907/pt_BR/)\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -21,7 +21,7 @@ msgstr ""
 "X-Generator: Weblate 3.8\n"
 
 #. module: connector
-#: code:addons/connector/models/checkpoint.py:131
+#: code:addons/connector/models/checkpoint.py:0
 #, python-format
 msgid "A %s needs a review."
 msgstr "Um %s necessita revisão."
@@ -35,6 +35,11 @@ msgstr "Ação Necessária"
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint__activity_ids
 msgid "Activities"
 msgstr "Atividades"
+
+#. module: connector
+#: model:ir.model.fields,field_description:connector.field_connector_checkpoint__activity_exception_decoration
+msgid "Activity Exception Decoration"
+msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint__activity_state
@@ -161,17 +166,24 @@ msgid "ID"
 msgstr "ID"
 
 #. module: connector
-#: model:ir.model.fields,help:connector.field_connector_checkpoint__message_unread
-msgid "If checked new messages require your attention."
-msgstr "Se marcada, novas mensagens requerem sua atenção."
+#: model:ir.model.fields,field_description:connector.field_connector_checkpoint__activity_exception_icon
+msgid "Icon"
+msgstr ""
+
+#. module: connector
+#: model:ir.model.fields,help:connector.field_connector_checkpoint__activity_exception_icon
+msgid "Icon to indicate an exception activity."
+msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,help:connector.field_connector_checkpoint__message_needaction
+#: model:ir.model.fields,help:connector.field_connector_checkpoint__message_unread
 msgid "If checked, new messages require your attention."
 msgstr "Se marcada, novas mensagens requerem sua atenção."
 
 #. module: connector
 #: model:ir.model.fields,help:connector.field_connector_checkpoint__message_has_error
+#: model:ir.model.fields,help:connector.field_connector_checkpoint__message_has_sms_error
 msgid "If checked, some messages have a delivery error."
 msgstr "Se marcada, algumas mensagens tem um erro de entrega."
 
@@ -237,7 +249,7 @@ msgid "Name of the record to review"
 msgstr "Nome do registro para revisar"
 
 #. module: connector
-#: selection:connector.checkpoint,state:0
+#: model:ir.model.fields.selection,name:connector.selection__connector_checkpoint__state__need_review
 #: model_terms:ir.ui.view,arch_db:connector.view_connector_checkpoint_search
 msgid "Need Review"
 msgstr "Necessita revisão"
@@ -263,8 +275,7 @@ msgid "No record to check."
 msgstr "sem registro para checar."
 
 #. module: connector
-#: code:addons/connector/components/synchronizer.py:191
-#: code:addons/connector/components/synchronizer.py:196
+#: code:addons/connector/components/synchronizer.py:0
 #, python-format
 msgid "Nothing to export."
 msgstr ""
@@ -276,7 +287,9 @@ msgstr "Número de Ações"
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint__message_has_error_counter
-msgid "Number of error"
+#, fuzzy
+#| msgid "Number of error"
+msgid "Number of errors"
 msgstr "Número de erro"
 
 #. module: connector
@@ -293,16 +306,6 @@ msgstr "Número de mensagens com erro de entrega"
 #: model:ir.model.fields,help:connector.field_connector_checkpoint__message_unread_counter
 msgid "Number of unread messages"
 msgstr "Número de mensagens não lidas"
-
-#. module: connector
-#: selection:connector.checkpoint,activity_state:0
-msgid "Overdue"
-msgstr "Atrasado(a)"
-
-#. module: connector
-#: selection:connector.checkpoint,activity_state:0
-msgid "Planned"
-msgstr "Planejada"
 
 #. module: connector
 #: model:ir.model,name:connector.model_queue_job
@@ -325,13 +328,13 @@ msgid "Record Name"
 msgstr "Nome Registro"
 
 #. module: connector
-#: code:addons/connector/components/synchronizer.py:198
+#: code:addons/connector/components/synchronizer.py:0
 #, python-format
 msgid "Record exported with ID %s on Backend."
 msgstr ""
 
 #. module: connector
-#: code:addons/connector/models/queue_job.py:31
+#: code:addons/connector/models/queue_job.py:0
 #, python-format
 msgid "Related Record"
 msgstr "Registro relacionado"
@@ -348,12 +351,19 @@ msgid "Review Checkpoints"
 msgstr "Revisão dos pontos de checagem"
 
 #. module: connector
-#: selection:connector.checkpoint,state:0
+#: model:ir.model.fields.selection,name:connector.selection__connector_checkpoint__state__reviewed
 #: model_terms:ir.ui.view,arch_db:connector.view_connector_checkpoint_form
 #: model_terms:ir.ui.view,arch_db:connector.view_connector_checkpoint_search
 #: model_terms:ir.ui.view,arch_db:connector.view_connector_checkpoint_tree
 msgid "Reviewed"
 msgstr "Revisado"
+
+#. module: connector
+#: model:ir.model.fields,field_description:connector.field_connector_checkpoint__message_has_sms_error
+#, fuzzy
+#| msgid "Message Delivery error"
+msgid "SMS Delivery error"
+msgstr "Mensagem de erro de entrega"
 
 #. module: connector
 #: model_terms:ir.ui.view,arch_db:connector.view_connector_checkpoint_review
@@ -405,9 +415,9 @@ msgid "The selected checkpoints will be set as reviewed."
 msgstr "O pontos de checagem selecionados vão ser marcados como revisados."
 
 #. module: connector
-#: selection:connector.checkpoint,activity_state:0
-msgid "Today"
-msgstr "Hoje"
+#: model:ir.model.fields,help:connector.field_connector_checkpoint__activity_exception_decoration
+msgid "Type of the exception activity on record."
+msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint__message_unread
@@ -436,6 +446,18 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:connector.view_connector_checkpoint_form
 msgid "to verify it:"
 msgstr "para verificar isto:"
+
+#~ msgid "If checked new messages require your attention."
+#~ msgstr "Se marcada, novas mensagens requerem sua atenção."
+
+#~ msgid "Overdue"
+#~ msgstr "Atrasado(a)"
+
+#~ msgid "Planned"
+#~ msgstr "Planejada"
+
+#~ msgid "Today"
+#~ msgstr "Hoje"
 
 #~ msgid "Apply"
 #~ msgstr "Aplicar"

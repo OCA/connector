@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: Odoo Server 11.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-01-05 16:56+0000\n"
-"PO-Revision-Date: 2019-09-01 06:06+0000\n"
+"PO-Revision-Date: 2019-12-13 09:05+0000\n"
 "Last-Translator: 黎伟杰 <674416404@qq.com>\n"
 "Language-Team: Chinese (China) (https://www.transifex.com/oca/teams/23907/"
 "zh_CN/)\n"
@@ -18,10 +18,10 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 3.8\n"
+"X-Generator: Weblate 3.9.1\n"
 
 #. module: connector
-#: code:addons/connector/models/checkpoint.py:131
+#: code:addons/connector/models/checkpoint.py:0
 #, python-format
 msgid "A %s needs a review."
 msgstr "一个 %s 需要审核。"
@@ -35,6 +35,11 @@ msgstr "需要的操作"
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint__activity_ids
 msgid "Activities"
 msgstr "活动"
+
+#. module: connector
+#: model:ir.model.fields,field_description:connector.field_connector_checkpoint__activity_exception_decoration
+msgid "Activity Exception Decoration"
+msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint__activity_state
@@ -74,7 +79,7 @@ msgstr "单击"
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint__company_id
 msgid "Company"
-msgstr ""
+msgstr "公司"
 
 #. module: connector
 #: model:ir.module.category,name:connector.module_category_connector
@@ -161,17 +166,24 @@ msgid "ID"
 msgstr "ID"
 
 #. module: connector
-#: model:ir.model.fields,help:connector.field_connector_checkpoint__message_unread
-msgid "If checked new messages require your attention."
-msgstr "如果选中，则需要您注意新消息。"
+#: model:ir.model.fields,field_description:connector.field_connector_checkpoint__activity_exception_icon
+msgid "Icon"
+msgstr ""
+
+#. module: connector
+#: model:ir.model.fields,help:connector.field_connector_checkpoint__activity_exception_icon
+msgid "Icon to indicate an exception activity."
+msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,help:connector.field_connector_checkpoint__message_needaction
+#: model:ir.model.fields,help:connector.field_connector_checkpoint__message_unread
 msgid "If checked, new messages require your attention."
 msgstr "如果选中，则需要您注意新消息。"
 
 #. module: connector
 #: model:ir.model.fields,help:connector.field_connector_checkpoint__message_has_error
+#: model:ir.model.fields,help:connector.field_connector_checkpoint__message_has_sms_error
 msgid "If checked, some messages have a delivery error."
 msgstr "如果选中，则某些邮件会发送传递错误。"
 
@@ -237,7 +249,7 @@ msgid "Name of the record to review"
 msgstr "要审核的记录的名称"
 
 #. module: connector
-#: selection:connector.checkpoint,state:0
+#: model:ir.model.fields.selection,name:connector.selection__connector_checkpoint__state__need_review
 #: model_terms:ir.ui.view,arch_db:connector.view_connector_checkpoint_search
 msgid "Need Review"
 msgstr "需要审阅"
@@ -263,11 +275,10 @@ msgid "No record to check."
 msgstr "没有记录要检查。"
 
 #. module: connector
-#: code:addons/connector/components/synchronizer.py:191
-#: code:addons/connector/components/synchronizer.py:196
+#: code:addons/connector/components/synchronizer.py:0
 #, python-format
 msgid "Nothing to export."
-msgstr ""
+msgstr "无需输出。"
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint__message_needaction_counter
@@ -276,7 +287,9 @@ msgstr "操作次数"
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint__message_has_error_counter
-msgid "Number of error"
+#, fuzzy
+#| msgid "Number of error"
+msgid "Number of errors"
 msgstr "错误数量"
 
 #. module: connector
@@ -293,16 +306,6 @@ msgstr "发送错误的消息数量"
 #: model:ir.model.fields,help:connector.field_connector_checkpoint__message_unread_counter
 msgid "Number of unread messages"
 msgstr "未读消息数量"
-
-#. module: connector
-#: selection:connector.checkpoint,activity_state:0
-msgid "Overdue"
-msgstr "逾期"
-
-#. module: connector
-#: selection:connector.checkpoint,activity_state:0
-msgid "Planned"
-msgstr "计划"
 
 #. module: connector
 #: model:ir.model,name:connector.model_queue_job
@@ -325,13 +328,13 @@ msgid "Record Name"
 msgstr "记录名称"
 
 #. module: connector
-#: code:addons/connector/components/synchronizer.py:198
+#: code:addons/connector/components/synchronizer.py:0
 #, python-format
 msgid "Record exported with ID %s on Backend."
-msgstr ""
+msgstr "已在后端导出ID为%s的记录。"
 
 #. module: connector
-#: code:addons/connector/models/queue_job.py:31
+#: code:addons/connector/models/queue_job.py:0
 #, python-format
 msgid "Related Record"
 msgstr "相关记录"
@@ -348,12 +351,19 @@ msgid "Review Checkpoints"
 msgstr "审查检查点"
 
 #. module: connector
-#: selection:connector.checkpoint,state:0
+#: model:ir.model.fields.selection,name:connector.selection__connector_checkpoint__state__reviewed
 #: model_terms:ir.ui.view,arch_db:connector.view_connector_checkpoint_form
 #: model_terms:ir.ui.view,arch_db:connector.view_connector_checkpoint_search
 #: model_terms:ir.ui.view,arch_db:connector.view_connector_checkpoint_tree
 msgid "Reviewed"
 msgstr "已审阅"
+
+#. module: connector
+#: model:ir.model.fields,field_description:connector.field_connector_checkpoint__message_has_sms_error
+#, fuzzy
+#| msgid "Message Delivery error"
+msgid "SMS Delivery error"
+msgstr "消息递送错误"
 
 #. module: connector
 #: model_terms:ir.ui.view,arch_db:connector.view_connector_checkpoint_review
@@ -405,9 +415,9 @@ msgid "The selected checkpoints will be set as reviewed."
 msgstr "选定的检查点将设置为已审核。"
 
 #. module: connector
-#: selection:connector.checkpoint,activity_state:0
-msgid "Today"
-msgstr "今天"
+#: model:ir.model.fields,help:connector.field_connector_checkpoint__activity_exception_decoration
+msgid "Type of the exception activity on record."
+msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint__message_unread
@@ -436,6 +446,18 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:connector.view_connector_checkpoint_form
 msgid "to verify it:"
 msgstr "验证它："
+
+#~ msgid "If checked new messages require your attention."
+#~ msgstr "如果选中，则需要您注意新消息。"
+
+#~ msgid "Overdue"
+#~ msgstr "逾期"
+
+#~ msgid "Planned"
+#~ msgstr "计划"
+
+#~ msgid "Today"
+#~ msgstr "今天"
 
 #~ msgid "Apply"
 #~ msgstr "应用"

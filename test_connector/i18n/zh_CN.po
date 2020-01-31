@@ -21,7 +21,8 @@ msgstr ""
 "X-Generator: Weblate 3.8\n"
 
 #. module: test_connector
-#: sql_constraint:connector.test.binding:0 sql_constraint:no.inherits.binding:0
+#: model:ir.model.constraint,message:test_connector.constraint_connector_test_binding_test_binding_uniq
+#: model:ir.model.constraint,message:test_connector.constraint_no_inherits_binding_test_binding_uniq
 msgid "A binding already exists for this record"
 msgstr "此记录已存在绑定"
 

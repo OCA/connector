@@ -19,7 +19,8 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #. module: test_connector
-#: sql_constraint:connector.test.binding:0 sql_constraint:no.inherits.binding:0
+#: model:ir.model.constraint,message:test_connector.constraint_connector_test_binding_test_binding_uniq
+#: model:ir.model.constraint,message:test_connector.constraint_no_inherits_binding_test_binding_uniq
 msgid "A binding already exists for this record"
 msgstr ""
 

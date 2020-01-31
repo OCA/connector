@@ -11,8 +11,8 @@ msgstr ""
 "POT-Creation-Date: 2018-01-05 16:56+0000\n"
 "PO-Revision-Date: 2019-09-03 03:24+0000\n"
 "Last-Translator: Rodrigo Macedo <rmsolucoeseminformatic4@gmail.com>\n"
-"Language-Team: Portuguese (Brazil) (https://www.transifex.com/oca/teams/"
-"23907/pt_BR/)\n"
+"Language-Team: Portuguese (Brazil) (https://www.transifex.com/oca/"
+"teams/23907/pt_BR/)\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -21,7 +21,8 @@ msgstr ""
 "X-Generator: Weblate 3.8\n"
 
 #. module: test_connector
-#: sql_constraint:connector.test.binding:0 sql_constraint:no.inherits.binding:0
+#: model:ir.model.constraint,message:test_connector.constraint_connector_test_binding_test_binding_uniq
+#: model:ir.model.constraint,message:test_connector.constraint_no_inherits_binding_test_binding_uniq
 msgid "A binding already exists for this record"
 msgstr "Já existe uma ligação para este registro"
 

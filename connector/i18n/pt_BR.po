@@ -9,16 +9,16 @@ msgstr ""
 "Project-Id-Version: Odoo Server 11.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-01-05 16:56+0000\n"
-"PO-Revision-Date: 2019-08-26 15:01+0000\n"
+"PO-Revision-Date: 2020-03-21 20:14+0000\n"
 "Last-Translator: Rodrigo Macedo <rmsolucoeseminformatic4@gmail.com>\n"
-"Language-Team: Portuguese (Brazil) (https://www.transifex.com/oca/"
-"teams/23907/pt_BR/)\n"
+"Language-Team: Portuguese (Brazil) (https://www.transifex.com/oca/teams/"
+"23907/pt_BR/)\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 3.8\n"
+"X-Generator: Weblate 3.10\n"
 
 #. module: connector
 #: code:addons/connector/models/checkpoint.py:0
@@ -39,7 +39,7 @@ msgstr "Atividades"
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint__activity_exception_decoration
 msgid "Activity Exception Decoration"
-msgstr ""
+msgstr "Decoração de Exceção de Atividade"
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint__activity_state
@@ -79,7 +79,7 @@ msgstr "Clique na"
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint__company_id
 msgid "Company"
-msgstr ""
+msgstr "Empresa"
 
 #. module: connector
 #: model:ir.module.category,name:connector.module_category_connector
@@ -130,7 +130,7 @@ msgstr "Criado em"
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_review__display_name
 #: model:ir.model.fields,field_description:connector.field_external_binding__display_name
 msgid "Display Name"
-msgstr "Nome exibido"
+msgstr "Exibir Nome"
 
 #. module: connector
 #: model:ir.model,name:connector.model_external_binding
@@ -168,12 +168,12 @@ msgstr "ID"
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint__activity_exception_icon
 msgid "Icon"
-msgstr ""
+msgstr "Ícone"
 
 #. module: connector
 #: model:ir.model.fields,help:connector.field_connector_checkpoint__activity_exception_icon
 msgid "Icon to indicate an exception activity."
-msgstr ""
+msgstr "Ícone para indicar uma atividade de exceção."
 
 #. module: connector
 #: model:ir.model.fields,help:connector.field_connector_checkpoint__message_needaction
@@ -203,7 +203,7 @@ msgstr "É Seguidor"
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_review____last_update
 #: model:ir.model.fields,field_description:connector.field_external_binding____last_update
 msgid "Last Modified on"
-msgstr "Última Modificação no"
+msgstr "Última Modificação em"
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint__write_uid
@@ -215,12 +215,12 @@ msgstr "Última atualização por"
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint__write_date
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_review__write_date
 msgid "Last Updated on"
-msgstr "Última atualização em"
+msgstr "Atualizado pela última vez em"
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_external_binding__sync_date
 msgid "Last synchronization date"
-msgstr "Última sincronização"
+msgstr "Última data de sincronização"
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint__message_main_attachment_id
@@ -278,7 +278,7 @@ msgstr "sem registro para checar."
 #: code:addons/connector/components/synchronizer.py:0
 #, python-format
 msgid "Nothing to export."
-msgstr ""
+msgstr "Nada para exportar."
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint__message_needaction_counter
@@ -287,10 +287,8 @@ msgstr "Número de Ações"
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint__message_has_error_counter
-#, fuzzy
-#| msgid "Number of error"
 msgid "Number of errors"
-msgstr "Número de erro"
+msgstr "Número de erros"
 
 #. module: connector
 #: model:ir.model.fields,help:connector.field_connector_checkpoint__message_needaction_counter
@@ -331,7 +329,7 @@ msgstr "Nome Registro"
 #: code:addons/connector/components/synchronizer.py:0
 #, python-format
 msgid "Record exported with ID %s on Backend."
-msgstr ""
+msgstr "Registro exportado com o ID %s no back-end."
 
 #. module: connector
 #: code:addons/connector/models/queue_job.py:0
@@ -360,10 +358,8 @@ msgstr "Revisado"
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint__message_has_sms_error
-#, fuzzy
-#| msgid "Message Delivery error"
 msgid "SMS Delivery error"
-msgstr "Mensagem de erro de entrega"
+msgstr "SMS de erro de entrega"
 
 #. module: connector
 #: model_terms:ir.ui.view,arch_db:connector.view_connector_checkpoint_review
@@ -417,7 +413,7 @@ msgstr "O pontos de checagem selecionados vão ser marcados como revisados."
 #. module: connector
 #: model:ir.model.fields,help:connector.field_connector_checkpoint__activity_exception_decoration
 msgid "Type of the exception activity on record."
-msgstr ""
+msgstr "Tipo da atividade de exceção registrada."
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint__message_unread

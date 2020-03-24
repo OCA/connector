@@ -321,9 +321,8 @@ class WorkContext(object):
             and self.collection._name != component_class._collection
         ):
             raise NoComponentError(
-                "Component with name '%s' can't be used for collection '%s'."(
-                    name, self.collection._name
-                )
+                "Component with name '%s' can't be used for collection '%s'."
+                % (name, self.collection._name)
             )
 
         if (

@@ -16,7 +16,8 @@ if [ "$TRAVIS_BRANCH" = "11.0" ] && [ "$TRAVIS_PULL_REQUEST" = false ]; then
   git fetch upstream
   git checkout gh-pages
 
-  rsync -a "${HOME}/doc/" .
+  rm -rf "${TRAVIS_BRANCH}"
+  mv "${HOME}/doc" "${TRAVIS_BRANCH}"
 
   echo "odoo-connector.com" > CNAME
   touch .nojekyll

@@ -65,8 +65,8 @@
     <ul class="dropdown-menu"
         role="menu"
         aria-labelledby="dLabelTranslations">
-      <li><a class="reference" href="http://odoo-connector.com/8.0">English</a><li>
-      <li><a class="reference" href="http://odoo-connector.com/8.0/fr">French</a><li>
+      <li><a class="reference" href="http://odoo-connector.com/8.0">English</a></li>
+      <li><a class="reference" href="http://odoo-connector.com/8.0/fr">French</a></li>
     </ul>
   </li>
   <li class="dropdown">
@@ -78,9 +78,11 @@
     <ul class="dropdown-menu"
         role="menu"
         aria-labelledby="dLabeVersions">
-      <li><a class="reference" href="http://odoo-connector.com/9.0">9.0</a><li>
-      <li><a class="reference" href="http://odoo-connector.com/10.0">10.0</a><li>
-      <li><a class="reference" href="http://odoo-connector.com/">11.0</a><li>
+      <li><a class="reference" href="http://odoo-connector.com/9.0">9.0</a></li>
+      <li><a class="reference" href="http://odoo-connector.com/10.0">10.0</a></li>
+      <li><a class="reference" href="http://odoo-connector.com/11.0">11.0</a></li>
+      <li><a class="reference" href="http://odoo-connector.com/12.0">12.0</a></li>
+      <li><a class="reference" href="http://odoo-connector.com/">13.0</a></li>
     </ul>
   </li>
   
@@ -290,8 +292,8 @@ our connector connector_coffee.</p>
 <span class="s2"> * Poor a coffee when Odoo is busy for too long</span>
 <span class="s2"> &quot;&quot;&quot;</span><span class="p">,</span>
   <span class="s1">&#39;data&#39;</span><span class="p">:</span> <span class="p">[],</span>
-  <span class="s1">&#39;installable&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
-  <span class="s1">&#39;application&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+  <span class="s1">&#39;installable&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+  <span class="s1">&#39;application&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
  <span class="p">}</span>
 </pre></div>
 </div>
@@ -329,7 +331,7 @@ and a backend per version.</p>
 <p>We declared the backends, but we need a model to configure them.</p>
 <p>We create a model <code class="docutils literal notranslate"><span class="pre">coffee.backend</span></code> which is an <code class="docutils literal notranslate"><span class="pre">_inherit</span></code> of
 <code class="docutils literal notranslate"><span class="pre">connector.backend</span></code>. In <code class="docutils literal notranslate"><span class="pre">connector_coffee/coffee_model.py</span></code>:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">openerp</span> <span class="k">import</span> <span class="n">fields</span><span class="p">,</span> <span class="n">models</span><span class="p">,</span> <span class="n">api</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">openerp</span> <span class="kn">import</span> <span class="n">fields</span><span class="p">,</span> <span class="n">models</span><span class="p">,</span> <span class="n">api</span>
 
 
 <span class="k">class</span> <span class="nc">CoffeeBackend</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
@@ -376,7 +378,7 @@ connection or configuration regarding the backend in that model.</li>
 <p>If we have many <a class="reference internal" href="concepts.html#binding"><span class="std std-ref">Bindings</span></a>,
 we may want to create an abstract model for them.</p>
 <p>It can be as follows (in <code class="docutils literal notranslate"><span class="pre">connector_coffee/connector.py</span></code>):</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">openerp</span> <span class="k">import</span> <span class="n">models</span><span class="p">,</span> <span class="n">fields</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">openerp</span> <span class="kn">import</span> <span class="n">models</span><span class="p">,</span> <span class="n">fields</span>
 
 
 <span class="k">class</span> <span class="nc">CoffeeBinding</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">AbstractModel</span><span class="p">):</span>
@@ -402,7 +404,7 @@ we may want to create an abstract model for them.</p>
 <p>We’ll often need to create a new environment to work with.
 I propose to create a helper method which build it for us (in
 <code class="docutils literal notranslate"><span class="pre">connector_coffee/connector.py</span></code>:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">openerp.addons.connector.connector</span> <span class="k">import</span> <span class="n">Environment</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">openerp.addons.connector.connector</span> <span class="kn">import</span> <span class="n">Environment</span>
 
 
 <span class="k">def</span> <span class="nf">get_environment</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">backend_id</span><span class="p">):</span>
@@ -426,7 +428,7 @@ optional but I left it as an example.</p>
 <p>When new records are imported and need a review, <a class="reference internal" href="concepts.html#checkpoint"><span class="std std-ref">Checkpoint</span></a> are
 created. I propose to create a helper too in
 <code class="docutils literal notranslate"><span class="pre">connector_coffee/connector.py</span></code>:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">openerp.addons.connector.checkpoint</span> <span class="k">import</span> <span class="n">checkpoint</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">openerp.addons.connector.checkpoint</span> <span class="kn">import</span> <span class="n">checkpoint</span>
 
 
 <span class="k">def</span> <span class="nf">add_checkpoint</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">record_id</span><span class="p">,</span> <span class="n">backend_id</span><span class="p">):</span>

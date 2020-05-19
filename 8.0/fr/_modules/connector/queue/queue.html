@@ -64,8 +64,8 @@
     <ul class="dropdown-menu"
         role="menu"
         aria-labelledby="dLabelTranslations">
-      <li><a class="reference" href="http://odoo-connector.com/8.0">English</a><li>
-      <li><a class="reference" href="http://odoo-connector.com/8.0/fr">French</a><li>
+      <li><a class="reference" href="http://odoo-connector.com/8.0">English</a></li>
+      <li><a class="reference" href="http://odoo-connector.com/8.0/fr">French</a></li>
     </ul>
   </li>
   <li class="dropdown">
@@ -77,9 +77,11 @@
     <ul class="dropdown-menu"
         role="menu"
         aria-labelledby="dLabeVersions">
-      <li><a class="reference" href="http://odoo-connector.com/9.0">9.0</a><li>
-      <li><a class="reference" href="http://odoo-connector.com/10.0">10.0</a><li>
-      <li><a class="reference" href="http://odoo-connector.com/">11.0</a><li>
+      <li><a class="reference" href="http://odoo-connector.com/9.0">9.0</a></li>
+      <li><a class="reference" href="http://odoo-connector.com/10.0">10.0</a></li>
+      <li><a class="reference" href="http://odoo-connector.com/11.0">11.0</a></li>
+      <li><a class="reference" href="http://odoo-connector.com/12.0">12.0</a></li>
+      <li><a class="reference" href="http://odoo-connector.com/">13.0</a></li>
     </ul>
   </li>
   
@@ -252,8 +254,8 @@
 <span class="c1">#    along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
 <span class="c1">#</span>
 <span class="c1">##############################################################################</span>
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
-<span class="kn">from</span> <span class="nn">Queue</span> <span class="k">import</span> <span class="n">PriorityQueue</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">Queue</span> <span class="kn">import</span> <span class="n">PriorityQueue</span>
 
 
 <div class="viewcode-block" id="JobsQueue"><a class="viewcode-back" href="../../../api/api_queue.html#connector.queue.worker.JobsQueue">[docs]</a><span class="k">class</span> <span class="nc">JobsQueue</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -263,7 +265,7 @@
 <span class="sd">    the earlier the jobs are dequeued.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_queue</span> <span class="o">=</span> <span class="n">PriorityQueue</span><span class="p">()</span>
 
 <div class="viewcode-block" id="JobsQueue.enqueue"><a class="viewcode-back" href="../../../api/api_queue.html#connector.queue.worker.JobsQueue.enqueue">[docs]</a>    <span class="k">def</span> <span class="nf">enqueue</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">job</span><span class="p">):</span>

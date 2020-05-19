@@ -65,8 +65,8 @@
     <ul class="dropdown-menu"
         role="menu"
         aria-labelledby="dLabelTranslations">
-      <li><a class="reference" href="http://odoo-connector.com/8.0">English</a><li>
-      <li><a class="reference" href="http://odoo-connector.com/8.0/fr">French</a><li>
+      <li><a class="reference" href="http://odoo-connector.com/8.0">English</a></li>
+      <li><a class="reference" href="http://odoo-connector.com/8.0/fr">French</a></li>
     </ul>
   </li>
   <li class="dropdown">
@@ -78,9 +78,11 @@
     <ul class="dropdown-menu"
         role="menu"
         aria-labelledby="dLabeVersions">
-      <li><a class="reference" href="http://odoo-connector.com/9.0">9.0</a><li>
-      <li><a class="reference" href="http://odoo-connector.com/10.0">10.0</a><li>
-      <li><a class="reference" href="http://odoo-connector.com/">11.0</a><li>
+      <li><a class="reference" href="http://odoo-connector.com/9.0">9.0</a></li>
+      <li><a class="reference" href="http://odoo-connector.com/10.0">10.0</a></li>
+      <li><a class="reference" href="http://odoo-connector.com/11.0">11.0</a></li>
+      <li><a class="reference" href="http://odoo-connector.com/12.0">12.0</a></li>
+      <li><a class="reference" href="http://odoo-connector.com/">13.0</a></li>
     </ul>
   </li>
   
@@ -251,7 +253,7 @@ scheduling mechanisms of the job runner.</p>
 <span class="target" id="module-connector.jobrunner.channels"></span><dl class="class">
 <dt id="connector.jobrunner.channels.Channel">
 <em class="property">class </em><code class="descclassname">connector.jobrunner.channels.</code><code class="descname">Channel</code><span class="sig-paren">(</span><em>name</em>, <em>parent</em>, <em>capacity=None</em>, <em>sequential=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/jobrunner/channels.html#Channel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.jobrunner.channels.Channel" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>A channel for jobs, with a maximum capacity.</p>
 <p>When jobs are created by connector modules, they may be associated
 to a job channel. Jobs with no channel are inserted into the root channel.</p>
@@ -371,7 +373,7 @@ from parent channels queues.</p>
 <dl class="class">
 <dt id="connector.jobrunner.channels.ChannelJob">
 <em class="property">class </em><code class="descclassname">connector.jobrunner.channels.</code><code class="descname">ChannelJob</code><span class="sig-paren">(</span><em>db_name</em>, <em>channel</em>, <em>uuid</em>, <em>seq</em>, <em>date_created</em>, <em>priority</em>, <em>eta</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/jobrunner/channels.html#ChannelJob"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.jobrunner.channels.ChannelJob" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>A channel job is attached to a channel and holds the properties of a
 job that are necessary to prioritise them.</p>
 <dl class="docutils">
@@ -441,7 +443,7 @@ equal as they are different instances</p>
 <dl class="class">
 <dt id="connector.jobrunner.channels.ChannelManager">
 <em class="property">class </em><code class="descclassname">connector.jobrunner.channels.</code><code class="descname">ChannelManager</code><a class="reference internal" href="../_modules/connector/jobrunner/channels.html#ChannelManager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.jobrunner.channels.ChannelManager" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>High level interface for channels</p>
 <p>This class handles:</p>
 <ul class="simple">
@@ -451,7 +453,7 @@ equal as they are different instances</p>
 </ul>
 <p>Here is how the runner will use it.</p>
 <p>Let’s create a channel manager and configure it.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pprint</span> <span class="k">import</span> <span class="n">pprint</span> <span class="k">as</span> <span class="n">pp</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pprint</span> <span class="kn">import</span> <span class="n">pprint</span> <span class="k">as</span> <span class="n">pp</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cm</span> <span class="o">=</span> <span class="n">ChannelManager</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cm</span><span class="o">.</span><span class="n">simple_configure</span><span class="p">(</span><span class="s1">&#39;root:4,A:4,B:1&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">db</span> <span class="o">=</span> <span class="s1">&#39;db&#39;</span>
@@ -572,7 +574,7 @@ If a key is present without value, it gets True as value.
 When declaring subchannels, the root channel may be omitted
 (ie sub:4 is the same as root.sub:4).</p>
 <p>Returns a list of channel configuration dictionaries.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pprint</span> <span class="k">import</span> <span class="n">pprint</span> <span class="k">as</span> <span class="n">pp</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pprint</span> <span class="kn">import</span> <span class="n">pprint</span> <span class="k">as</span> <span class="n">pp</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pp</span><span class="p">(</span><span class="n">ChannelManager</span><span class="o">.</span><span class="n">parse_simple_config</span><span class="p">(</span><span class="s1">&#39;root:4&#39;</span><span class="p">))</span>
 <span class="go">[{&#39;capacity&#39;: 4, &#39;name&#39;: &#39;root&#39;}]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pp</span><span class="p">(</span><span class="n">ChannelManager</span><span class="o">.</span><span class="n">parse_simple_config</span><span class="p">(</span><span class="s1">&#39;root:4,root.sub:2&#39;</span><span class="p">))</span>
@@ -659,7 +661,7 @@ file.</p>
 <dl class="class">
 <dt id="connector.jobrunner.channels.ChannelQueue">
 <em class="property">class </em><code class="descclassname">connector.jobrunner.channels.</code><code class="descname">ChannelQueue</code><a class="reference internal" href="../_modules/connector/jobrunner/channels.html#ChannelQueue"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.jobrunner.channels.ChannelQueue" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>A channel queue is a priority queue for jobs that returns
 jobs with a past ETA first.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">q</span> <span class="o">=</span> <span class="n">ChannelQueue</span><span class="p">()</span>
@@ -700,7 +702,7 @@ jobs with a past ETA first.</p>
 <dl class="class">
 <dt id="connector.jobrunner.channels.PriorityQueue">
 <em class="property">class </em><code class="descclassname">connector.jobrunner.channels.</code><code class="descname">PriorityQueue</code><a class="reference internal" href="../_modules/connector/jobrunner/channels.html#PriorityQueue"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.jobrunner.channels.PriorityQueue" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>A priority queue that supports removing arbitrary objects.</p>
 <p>Adding an object already in the queue is a no op.
 Popping an empty queue returns None.</p>
@@ -750,7 +752,7 @@ Popping an empty queue returns None.</p>
 <dl class="class">
 <dt id="connector.jobrunner.channels.SafeSet">
 <em class="property">class </em><code class="descclassname">connector.jobrunner.channels.</code><code class="descname">SafeSet</code><a class="reference internal" href="../_modules/connector/jobrunner/channels.html#SafeSet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.jobrunner.channels.SafeSet" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">set</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">set</span></code></a></p>
 <p>A set that does not raise KeyError when removing non-existent items.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">SafeSet</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>

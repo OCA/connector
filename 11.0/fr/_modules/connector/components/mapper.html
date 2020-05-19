@@ -1,0 +1,1274 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="fr">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>connector.components.mapper &#8212; Documentation Connector </title>
+    <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <script src="../../../_static/translations.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Recherche" href="../../../search.html" />
+
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../../../_static/js/jquery-1.11.0.min.js "></script>
+<script type="text/javascript" src="../../../_static/js/jquery-fix.js "></script>
+<script type="text/javascript" src="../../../_static/bootstrap-3.3.7/js/bootstrap.min.js "></script>
+<script type="text/javascript" src="../../../_static/bootstrap-sphinx.js "></script>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-7628916-3', 'odoo-connector.com');
+  ga('send', 'pageview');
+</script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../../index.html">
+          Odoo Connector</a>
+        <span class="navbar-text navbar-version pull-left"><b></b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+  <li class="dropdown">
+    <a role="button"
+       id="dLabelTranslations"
+       data-toggle="dropdown"
+       data-target="#"
+       href="#">Translations<b class="caret"></b></a>
+    <ul class="dropdown-menu"
+        role="menu"
+        aria-labelledby="dLabelTranslations">
+      <li><a class="reference" href="http://odoo-connector.com">English</a><li>
+      <li><a class="reference" href="http://odoo-connector.com/fr">French</a><li>
+    </ul>
+  </li>
+  <li class="dropdown">
+    <a role="button"
+       id="dLabelVersions"
+       data-toggle="dropdown"
+       data-target="#"
+       href="#">Version<b class="caret"></b></a>
+    <ul class="dropdown-menu"
+        role="menu"
+        aria-labelledby="dLabeVersions">
+      <li><a class="reference" href="http://odoo-connector.com/8.0">8.0</a><li>
+      <li><a class="reference" href="http://odoo-connector.com/9.0">9.0</a><li>
+      <li><a class="reference" href="http://odoo-connector.com/10.0">10.0</a><li>
+          <li><a class="reference" href="http://odoo-connector.com/12.0">12.0</a><li>
+              <li><a class="reference" href="http://odoo-connector.com/">13.0</a><li>
+    </ul>
+  </li>
+  
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../guides/migration_guide.html">Migration Guide to the new Connector API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/migration_guide.html#migrating-jobs">Migrating Jobs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/migration_guide.html#migrating-events">Migrating Events</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/migration_guide.html#migrating-components">Migrating Components</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../guides/code_overview.html">Survol du code</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/code_overview.html#trigger-and-listen-an-event">Trigger and listen an event</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/code_overview.html#delay-an-asynchronous-job">Delay an Asynchronous Job</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/code_overview.html#work-with-components">Work with components</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../guides/concepts.html">Concepts du connecteur</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/concepts.html#events">Événements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/concepts.html#jobs-queue">Queue de jobs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/concepts.html#backend">Backend</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/concepts.html#workcontext">WorkContext</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/concepts.html#component">Component</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/concepts.html#bindings">Bindings (Liaisons)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/concepts.html#checkpoint">Point de contrôle</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../guides/bootstrap_connector.html">Amorcer la création un nouveau connecteur</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/bootstrap_connector.html#odoo-manifest">Odoo Manifest</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/bootstrap_connector.html#backend-model">Modèle du backend</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/bootstrap_connector.html#abstract-binding">Binding abstrait</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/bootstrap_connector.html#components">Components</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../guides/jobrunner.html">Configuring channels and the job runner</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/jobrunner.html#what-is-the-job-runner">What is the job runner?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/jobrunner.html#how-does-it-work">How does it work?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/jobrunner.html#how-to-use-it">How to use it?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/jobrunner.html#caveat">Caveat</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/jobrunner.html#what-is-a-channel">What is a channel?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/jobrunner.html#how-to-configure-channels">How to configure Channels?</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/api_components.html">Components</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/api_components.html#module-connector.components.core">Core Components</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/api_components.html#module-connector.components.binder">Connector Components</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/api_components.html#module-odoo.addons.component.models.collection">Components Collection Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/api_components.html#module-odoo.addons.component.exception">Components Exceptions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/api_components.html#components-internals">Components Internals</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/api_backend.html">Modèles</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/api_backend.html#backend-model">Backend Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/api_backend.html#binding-model">Binding Model</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/api_event.html">Events</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/api_event.html#module-odoo.addons.component_event.components.event">Components</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/api_event.html#module-odoo.addons.component_event.models.base">Odoo Models Extensions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/api_queue.html">Queue</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/api_queue.html#module-odoo.addons.queue_job.models.base">Modèles</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/api_exception.html">Exceptions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/api_channels.html">Channels</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../project/contribute.html">Contribuer</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../project/contribute.html#want-to-start-a-new-connector">Démarrer un nouveau connecteur</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../project/contribute.html#creating-or-maintaining-a-translation-of-this-doc">Créer ou maintenir une traduction de cette doc</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../project/contributors.html">Contributeurs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../project/contributors.html#financial-contributors">Contributeurs financiers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../project/license.html">Licence</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../project/changes.html">Changements</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../project/changes.html#future">Future (?)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../project/changes.html#id2">9.0.1.0.2 (2016-03-03)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../project/changes.html#id3">9.0.1.0.1 (2016-03-03)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../project/changes.html#id4">8.0.3.3.0 (2016-02-29)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../project/changes.html#id5">3.2.0 (2015-09-10)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../project/changes.html#id6">3.1.0 (2015-05-15)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../project/changes.html#id7">3.0.0 (2015-04-01)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../project/changes.html#id8">2.2.0 (2014-05-26)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../project/changes.html#id9">2.1.1 (2014-02-06)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../project/changes.html#warning-breaks-compatibility">2.1.0 (2014-01-15 - attention : rupture de compatibilité)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../project/changes.html#id10">2.0.1 (2013-09-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../project/changes.html#id11">2.0.0</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../project/roadmap.html">Roadmap</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"></ul>
+</li>
+              
+            
+
+            
+              
+                
+              
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <h1>Code source de connector.components.mapper</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1"># Copyright 2017 Camptocamp SA</span>
+<span class="c1"># License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html)</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">Mappers</span>
+<span class="sd">=======</span>
+
+<span class="sd">Mappers are the components responsible to transform</span>
+<span class="sd">external records into Odoo records and conversely.</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">namedtuple</span>
+<span class="kn">from</span> <span class="nn">contextlib</span> <span class="kn">import</span> <span class="n">contextmanager</span>
+
+<span class="kn">from</span> <span class="nn">odoo</span> <span class="kn">import</span> <span class="n">models</span>
+<span class="kn">from</span> <span class="nn">odoo.addons.component.core</span> <span class="kn">import</span> <span class="n">AbstractComponent</span>
+<span class="kn">from</span> <span class="nn">odoo.addons.component.exception</span> <span class="kn">import</span> <span class="n">NoComponentError</span>
+<span class="kn">from</span> <span class="nn">..exception</span> <span class="kn">import</span> <span class="n">MappingError</span>
+<span class="kn">import</span> <span class="nn">collections</span>
+
+
+<span class="n">_logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s1">&#39;Mapper&#39;</span><span class="p">,</span> <span class="s1">&#39;ImportMapper&#39;</span><span class="p">,</span> <span class="s1">&#39;ExportMapper&#39;</span><span class="p">,</span> <span class="s1">&#39;mapping&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;changed_by&#39;</span><span class="p">,</span> <span class="s1">&#39;only_create&#39;</span><span class="p">,</span> <span class="s1">&#39;none&#39;</span><span class="p">,</span> <span class="s1">&#39;convert&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;m2o_to_external&#39;</span><span class="p">,</span> <span class="s1">&#39;external_to_m2o&#39;</span><span class="p">,</span> <span class="s1">&#39;follow_m2o_relations&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;MapRecord&#39;</span><span class="p">,</span> <span class="s1">&#39;MapChild&#39;</span><span class="p">,</span> <span class="s1">&#39;ImportMapChild&#39;</span><span class="p">,</span> <span class="s1">&#39;ExportMapChild&#39;</span><span class="p">,</span>
+<span class="p">]</span>
+
+
+<div class="viewcode-block" id="mapping"><a class="viewcode-back" href="../../../api/api_components.html#connector.components.mapper.mapping">[docs]</a><span class="k">def</span> <span class="nf">mapping</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Decorator, declare that a method is a mapping method.</span>
+
+<span class="sd">    It is then used by the :py:class:`Mapper` to convert the records.</span>
+
+<span class="sd">    Usage::</span>
+
+<span class="sd">        @mapping</span>
+<span class="sd">        def any(self, record):</span>
+<span class="sd">            return {&#39;output_field&#39;: record[&#39;input_field&#39;]}</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">func</span><span class="o">.</span><span class="n">is_mapping</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">return</span> <span class="n">func</span></div>
+
+
+<div class="viewcode-block" id="changed_by"><a class="viewcode-back" href="../../../api/api_components.html#connector.components.mapper.changed_by">[docs]</a><span class="k">def</span> <span class="nf">changed_by</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Decorator for the mapping methods (:py:func:`mapping`)</span>
+
+<span class="sd">    When fields are modified in Odoo, we want to export only the</span>
+<span class="sd">    modified fields. Using this decorator, we can specify which fields</span>
+<span class="sd">    updates should trigger which mapping method.</span>
+
+<span class="sd">    If ``changed_by`` is empty, the mapping is always active.</span>
+
+<span class="sd">    As far as possible, this decorator should be used for the exports,</span>
+<span class="sd">    thus, when we do an update on only a small number of fields on a</span>
+<span class="sd">    record, the size of the output record will be limited to only the</span>
+<span class="sd">    fields really having to be exported.</span>
+
+<span class="sd">    Usage::</span>
+
+<span class="sd">        @changed_by(&#39;input_field&#39;)</span>
+<span class="sd">        @mapping</span>
+<span class="sd">        def any(self, record):</span>
+<span class="sd">            return {&#39;output_field&#39;: record[&#39;input_field&#39;]}</span>
+
+<span class="sd">    :param ``*args``: field names which trigger the mapping when modified</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">register_mapping</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+        <span class="n">func</span><span class="o">.</span><span class="n">changed_by</span> <span class="o">=</span> <span class="n">args</span>
+        <span class="k">return</span> <span class="n">func</span>
+    <span class="k">return</span> <span class="n">register_mapping</span></div>
+
+
+<div class="viewcode-block" id="only_create"><a class="viewcode-back" href="../../../api/api_components.html#connector.components.mapper.only_create">[docs]</a><span class="k">def</span> <span class="nf">only_create</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Decorator for the mapping methods (:py:func:`mapping`)</span>
+
+<span class="sd">    A mapping decorated with ``only_create`` means that it has to be</span>
+<span class="sd">    used only for the creation of the records.</span>
+
+<span class="sd">    Usage::</span>
+
+<span class="sd">        @only_create</span>
+<span class="sd">        @mapping</span>
+<span class="sd">        def any(self, record):</span>
+<span class="sd">            return {&#39;output_field&#39;: record[&#39;input_field&#39;]}</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">func</span><span class="o">.</span><span class="n">only_create</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">return</span> <span class="n">func</span></div>
+
+
+<div class="viewcode-block" id="none"><a class="viewcode-back" href="../../../api/api_components.html#connector.components.mapper.none">[docs]</a><span class="k">def</span> <span class="nf">none</span><span class="p">(</span><span class="n">field</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; A modifier intended to be used on the ``direct`` mappings.</span>
+
+<span class="sd">    Replace the False-ish values by None.</span>
+<span class="sd">    It can be used in a pipeline of modifiers when .</span>
+
+<span class="sd">    Example::</span>
+
+<span class="sd">        direct = [(none(&#39;source&#39;), &#39;target&#39;),</span>
+<span class="sd">                  (none(m2o_to_external(&#39;rel_id&#39;), &#39;rel_id&#39;)]</span>
+
+<span class="sd">    :param field: name of the source field in the record</span>
+<span class="sd">    :param binding: True if the relation is a binding record</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">modifier</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="n">to_attr</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">collections</span><span class="o">.</span><span class="n">Callable</span><span class="p">):</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="n">to_attr</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">record</span><span class="p">[</span><span class="n">field</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">result</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="n">result</span>
+    <span class="k">return</span> <span class="n">modifier</span></div>
+
+
+<div class="viewcode-block" id="convert"><a class="viewcode-back" href="../../../api/api_components.html#connector.components.mapper.convert">[docs]</a><span class="k">def</span> <span class="nf">convert</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">conv_type</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; A modifier intended to be used on the ``direct`` mappings.</span>
+
+<span class="sd">    Convert a field&#39;s value to a given type.</span>
+
+<span class="sd">    Example::</span>
+
+<span class="sd">        direct = [(convert(&#39;source&#39;, str), &#39;target&#39;)]</span>
+
+<span class="sd">    :param field: name of the source field in the record</span>
+<span class="sd">    :param binding: True if the relation is a binding record</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">modifier</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="n">to_attr</span><span class="p">):</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="n">record</span><span class="p">[</span><span class="n">field</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">value</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">return</span> <span class="n">conv_type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">modifier</span></div>
+
+
+<div class="viewcode-block" id="m2o_to_external"><a class="viewcode-back" href="../../../api/api_components.html#connector.components.mapper.m2o_to_external">[docs]</a><span class="k">def</span> <span class="nf">m2o_to_external</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">binding</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; A modifier intended to be used on the ``direct`` mappings.</span>
+
+<span class="sd">    For a many2one, get the external ID and returns it.</span>
+
+<span class="sd">    When the field&#39;s relation is not a binding (i.e. it does not point to</span>
+<span class="sd">    something like ``magento.*``), the binding model needs to be provided</span>
+<span class="sd">    in the ``binding`` keyword argument.</span>
+
+<span class="sd">    Example::</span>
+
+<span class="sd">        direct = [(m2o_to_external(&#39;country_id&#39;,</span>
+<span class="sd">                                   binding=&#39;magento.res.country&#39;), &#39;country&#39;),</span>
+<span class="sd">                  (m2o_to_external(&#39;magento_country_id&#39;), &#39;country&#39;)]</span>
+
+<span class="sd">    :param field: name of the source field in the record</span>
+<span class="sd">    :param binding: name of the binding model is the relation is not a binding</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">modifier</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="n">to_attr</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">record</span><span class="p">[</span><span class="n">field</span><span class="p">]:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="n">column</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">_fields</span><span class="p">[</span><span class="n">field</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">column</span><span class="o">.</span><span class="n">type</span> <span class="o">!=</span> <span class="s1">&#39;many2one&#39;</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;The column </span><span class="si">%s</span><span class="s1"> should be a Many2one, got </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span>
+                             <span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">column</span><span class="p">)))</span>
+        <span class="n">rel_id</span> <span class="o">=</span> <span class="n">record</span><span class="p">[</span><span class="n">field</span><span class="p">]</span><span class="o">.</span><span class="n">id</span>
+        <span class="k">if</span> <span class="n">binding</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">binding_model</span> <span class="o">=</span> <span class="n">column</span><span class="o">.</span><span class="n">comodel_name</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">binding_model</span> <span class="o">=</span> <span class="n">binding</span>
+        <span class="n">binder</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">binder_for</span><span class="p">(</span><span class="n">binding_model</span><span class="p">)</span>
+        <span class="c1"># if a relation is not a binding, we wrap the record in the</span>
+        <span class="c1"># binding, we&#39;ll return the id of the binding</span>
+        <span class="n">wrap</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">binding</span><span class="p">)</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="n">binder</span><span class="o">.</span><span class="n">to_external</span><span class="p">(</span><span class="n">rel_id</span><span class="p">,</span> <span class="n">wrap</span><span class="o">=</span><span class="n">wrap</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">value</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">MappingError</span><span class="p">(</span><span class="s2">&quot;Can not find an external id for record &quot;</span>
+                               <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> in model </span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2"> wrapping&quot;</span> <span class="o">%</span>
+                               <span class="p">(</span><span class="n">rel_id</span><span class="p">,</span> <span class="n">binding_model</span><span class="p">,</span>
+                                <span class="s1">&#39;with&#39;</span> <span class="k">if</span> <span class="n">wrap</span> <span class="k">else</span> <span class="s1">&#39;without&#39;</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">value</span>
+    <span class="k">return</span> <span class="n">modifier</span></div>
+
+
+<div class="viewcode-block" id="external_to_m2o"><a class="viewcode-back" href="../../../api/api_components.html#connector.components.mapper.external_to_m2o">[docs]</a><span class="k">def</span> <span class="nf">external_to_m2o</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">binding</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; A modifier intended to be used on the ``direct`` mappings.</span>
+
+<span class="sd">    For a field from a backend which is an ID, search the corresponding</span>
+<span class="sd">    binding in Odoo and returns it.</span>
+
+<span class="sd">    When the field&#39;s relation is not a binding (i.e. it does not point to</span>
+<span class="sd">    something like ``magento.*``), the binding model needs to be provided</span>
+<span class="sd">    in the ``binding`` keyword argument.</span>
+
+<span class="sd">    Example::</span>
+
+<span class="sd">        direct = [(external_to_m2o(&#39;country&#39;, binding=&#39;magento.res.country&#39;),</span>
+<span class="sd">                   &#39;country_id&#39;),</span>
+<span class="sd">                  (external_to_m2o(&#39;country&#39;), &#39;magento_country_id&#39;)]</span>
+
+<span class="sd">    :param field: name of the source field in the record</span>
+<span class="sd">    :param binding: name of the binding model is the relation is not a binding</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">modifier</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="n">to_attr</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">record</span><span class="p">[</span><span class="n">field</span><span class="p">]:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="n">column</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">_fields</span><span class="p">[</span><span class="n">to_attr</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">column</span><span class="o">.</span><span class="n">type</span> <span class="o">!=</span> <span class="s1">&#39;many2one&#39;</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;The column </span><span class="si">%s</span><span class="s1"> should be a Many2one, got </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span>
+                             <span class="p">(</span><span class="n">to_attr</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">column</span><span class="p">)))</span>
+        <span class="n">rel_id</span> <span class="o">=</span> <span class="n">record</span><span class="p">[</span><span class="n">field</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">binding</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">binding_model</span> <span class="o">=</span> <span class="n">column</span><span class="o">.</span><span class="n">comodel_name</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">binding_model</span> <span class="o">=</span> <span class="n">binding</span>
+        <span class="n">binder</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">binder_for</span><span class="p">(</span><span class="n">binding_model</span><span class="p">)</span>
+        <span class="c1"># if we want the normal record, not a binding,</span>
+        <span class="c1"># we ask to the binder to unwrap the binding</span>
+        <span class="n">unwrap</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">binding</span><span class="p">)</span>
+        <span class="n">record</span> <span class="o">=</span> <span class="n">binder</span><span class="o">.</span><span class="n">to_internal</span><span class="p">(</span><span class="n">rel_id</span><span class="p">,</span> <span class="n">unwrap</span><span class="o">=</span><span class="n">unwrap</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">record</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">MappingError</span><span class="p">(</span><span class="s2">&quot;Can not find an existing </span><span class="si">%s</span><span class="s2"> for external &quot;</span>
+                               <span class="s2">&quot;record </span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2"> unwrapping&quot;</span> <span class="o">%</span>
+                               <span class="p">(</span><span class="n">binding_model</span><span class="p">,</span> <span class="n">rel_id</span><span class="p">,</span>
+                                <span class="s1">&#39;with&#39;</span> <span class="k">if</span> <span class="n">unwrap</span> <span class="k">else</span> <span class="s1">&#39;without&#39;</span><span class="p">))</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">record</span><span class="p">,</span> <span class="n">models</span><span class="o">.</span><span class="n">BaseModel</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">record</span><span class="o">.</span><span class="n">id</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+                <span class="s1">&#39;Binder for </span><span class="si">%s</span><span class="s1"> returned an id, &#39;</span>
+                <span class="s1">&#39;returning a record should be preferred.&#39;</span><span class="p">,</span> <span class="n">binding_model</span>
+            <span class="p">)</span>
+            <span class="k">return</span> <span class="n">record</span>
+    <span class="k">return</span> <span class="n">modifier</span></div>
+
+
+<div class="viewcode-block" id="follow_m2o_relations"><a class="viewcode-back" href="../../../api/api_components.html#connector.components.mapper.follow_m2o_relations">[docs]</a><span class="k">def</span> <span class="nf">follow_m2o_relations</span><span class="p">(</span><span class="n">field</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A modifier intended to be used on ``direct`` mappings.</span>
+
+<span class="sd">    &#39;Follows&#39; Many2one relations and return the final field value.</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        Assuming model is ``product.product``::</span>
+
+<span class="sd">            direct = [</span>
+<span class="sd">                (follow_m2o_relations(&#39;product_tmpl_id.categ_id.name&#39;), &#39;cat&#39;)]</span>
+
+<span class="sd">    :param field: field &quot;path&quot;, using dots for relations as usual in Odoo</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">modifier</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="n">to_attr</span><span class="p">):</span>
+        <span class="n">attrs</span> <span class="o">=</span> <span class="n">field</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="n">record</span>
+        <span class="k">for</span> <span class="n">attr</span> <span class="ow">in</span> <span class="n">attrs</span><span class="p">:</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">attr</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">value</span>
+    <span class="k">return</span> <span class="n">modifier</span></div>
+
+
+<span class="n">MappingDefinition</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="s1">&#39;MappingDefinition&#39;</span><span class="p">,</span>
+                               <span class="p">[</span><span class="s1">&#39;changed_by&#39;</span><span class="p">,</span>
+                                <span class="s1">&#39;only_create&#39;</span><span class="p">])</span>
+
+
+<div class="viewcode-block" id="MapChild"><a class="viewcode-back" href="../../../api/api_components.html#connector.components.mapper.MapChild">[docs]</a><span class="k">class</span> <span class="nc">MapChild</span><span class="p">(</span><span class="n">AbstractComponent</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; MapChild is responsible to convert items.</span>
+
+<span class="sd">    Items are sub-records of a main record.</span>
+<span class="sd">    In this example, the items are the records in ``lines``::</span>
+
+<span class="sd">        sales = {&#39;name&#39;: &#39;SO10&#39;,</span>
+<span class="sd">                 &#39;lines&#39;: [{&#39;product_id&#39;: 1, &#39;quantity&#39;: 2},</span>
+<span class="sd">                           {&#39;product_id&#39;: 2, &#39;quantity&#39;: 2}]}</span>
+
+<span class="sd">    A MapChild is always called from another :py:class:`Mapper` which</span>
+<span class="sd">    provides a ``children`` configuration.</span>
+
+<span class="sd">    Considering the example above, the &quot;main&quot; :py:class:`Mapper` would</span>
+<span class="sd">    returns something as follows::</span>
+
+<span class="sd">        {&#39;name&#39;: &#39;SO10&#39;,</span>
+<span class="sd">                 &#39;lines&#39;: [(0, 0, {&#39;product_id&#39;: 11, &#39;quantity&#39;: 2}),</span>
+<span class="sd">                           (0, 0, {&#39;product_id&#39;: 12, &#39;quantity&#39;: 2})]}</span>
+
+<span class="sd">    A MapChild is responsible to:</span>
+
+<span class="sd">    * Find the :py:class:`Mapper` to convert the items</span>
+<span class="sd">    * Possibly filter out some lines (can be done by inheriting</span>
+<span class="sd">      :py:meth:`skip_item`)</span>
+<span class="sd">    * Convert the items&#39; records using the found :py:class:`Mapper`</span>
+<span class="sd">    * Format the output values to the format expected by Odoo or the</span>
+<span class="sd">      backend (as seen above with ``(0, 0, {values})``</span>
+
+<span class="sd">    A MapChild can be extended like any other</span>
+<span class="sd">    :py:class:`~component.core.Component`.</span>
+<span class="sd">    However, it is not mandatory to explicitly create a MapChild for</span>
+<span class="sd">    each children mapping, the default one will be used</span>
+<span class="sd">    (:py:class:`ImportMapChild` or :py:class:`ExportMapChild`).</span>
+
+<span class="sd">    The implementation by default does not take care of the updates: if</span>
+<span class="sd">    I import a sales order 2 times, the lines will be duplicated. This</span>
+<span class="sd">    is not a problem as long as an importation should only support the</span>
+<span class="sd">    creation (typical for sales orders). It can be implemented on a</span>
+<span class="sd">    case-by-case basis by inheriting :py:meth:`get_item_values` and</span>
+<span class="sd">    :py:meth:`format_items`.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">_name</span> <span class="o">=</span> <span class="s1">&#39;base.map.child&#39;</span>
+    <span class="n">_inherit</span> <span class="o">=</span> <span class="s1">&#39;base.connector&#39;</span>
+
+    <span class="k">def</span> <span class="nf">_child_mapper</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+
+<div class="viewcode-block" id="MapChild.skip_item"><a class="viewcode-back" href="../../../api/api_components.html#connector.components.mapper.MapChild.skip_item">[docs]</a>    <span class="k">def</span> <span class="nf">skip_item</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">map_record</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Hook to implement in sub-classes when some child</span>
+<span class="sd">        records should be skipped.</span>
+
+<span class="sd">        The parent record is accessible in ``map_record``.</span>
+<span class="sd">        If it returns True, the current child record is skipped.</span>
+
+<span class="sd">        :param map_record: record that we are converting</span>
+<span class="sd">        :type map_record: :py:class:`MapRecord`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="MapChild.get_items"><a class="viewcode-back" href="../../../api/api_components.html#connector.components.mapper.MapChild.get_items">[docs]</a>    <span class="k">def</span> <span class="nf">get_items</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">items</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">to_attr</span><span class="p">,</span> <span class="n">options</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns the formatted output values of items from a main record</span>
+
+<span class="sd">        :param items: list of item records</span>
+<span class="sd">        :type items: list</span>
+<span class="sd">        :param parent: parent record</span>
+<span class="sd">        :param to_attr: destination field (can be used for introspecting</span>
+<span class="sd">                        the relation)</span>
+<span class="sd">        :type to_attr: str</span>
+<span class="sd">        :param options: dict of options, herited from the main mapper</span>
+<span class="sd">        :return: formatted output values for the item</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">mapper</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_child_mapper</span><span class="p">()</span>
+        <span class="n">mapped</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">items</span><span class="p">:</span>
+            <span class="n">map_record</span> <span class="o">=</span> <span class="n">mapper</span><span class="o">.</span><span class="n">map_record</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="n">parent</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">skip_item</span><span class="p">(</span><span class="n">map_record</span><span class="p">):</span>
+                <span class="k">continue</span>
+            <span class="n">item_values</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_item_values</span><span class="p">(</span><span class="n">map_record</span><span class="p">,</span> <span class="n">to_attr</span><span class="p">,</span> <span class="n">options</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">item_values</span><span class="p">:</span>
+                <span class="n">mapped</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item_values</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">format_items</span><span class="p">(</span><span class="n">mapped</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="MapChild.get_item_values"><a class="viewcode-back" href="../../../api/api_components.html#connector.components.mapper.MapChild.get_item_values">[docs]</a>    <span class="k">def</span> <span class="nf">get_item_values</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">map_record</span><span class="p">,</span> <span class="n">to_attr</span><span class="p">,</span> <span class="n">options</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Get the raw values from the child Mappers for the items.</span>
+
+<span class="sd">        It can be overridden for instance to:</span>
+
+<span class="sd">        * Change options</span>
+<span class="sd">        * Use a :py:class:`~connector.connector.Binder` to know if an</span>
+<span class="sd">          item already exists to modify an existing item, rather than to</span>
+<span class="sd">          add it</span>
+
+<span class="sd">        :param map_record: record that we are converting</span>
+<span class="sd">        :type map_record: :py:class:`MapRecord`</span>
+<span class="sd">        :param to_attr: destination field (can be used for introspecting</span>
+<span class="sd">                        the relation)</span>
+<span class="sd">        :type to_attr: str</span>
+<span class="sd">        :param options: dict of options, herited from the main mapper</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">map_record</span><span class="o">.</span><span class="n">values</span><span class="p">(</span><span class="o">**</span><span class="n">options</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="MapChild.format_items"><a class="viewcode-back" href="../../../api/api_components.html#connector.components.mapper.MapChild.format_items">[docs]</a>    <span class="k">def</span> <span class="nf">format_items</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">items_values</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Format the values of the items mapped from the child Mappers.</span>
+
+<span class="sd">        It can be overridden for instance to add the Odoo</span>
+<span class="sd">        relationships commands ``(6, 0, [IDs])``, ...</span>
+
+<span class="sd">        As instance, it can be modified to handle update of existing</span>
+<span class="sd">        items: check if an &#39;id&#39; has been defined by</span>
+<span class="sd">        :py:meth:`get_item_values` then use the ``(1, ID, {values}``)</span>
+<span class="sd">        command</span>
+
+<span class="sd">        :param items_values: mapped values for the items</span>
+<span class="sd">        :type items_values: list</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">items_values</span></div></div>
+
+
+<div class="viewcode-block" id="ImportMapChild"><a class="viewcode-back" href="../../../api/api_components.html#connector.components.mapper.ImportMapChild">[docs]</a><span class="k">class</span> <span class="nc">ImportMapChild</span><span class="p">(</span><span class="n">AbstractComponent</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; :py:class:`MapChild` for the Imports &quot;&quot;&quot;</span>
+
+    <span class="n">_name</span> <span class="o">=</span> <span class="s1">&#39;base.map.child.import&#39;</span>
+    <span class="n">_inherit</span> <span class="o">=</span> <span class="s1">&#39;base.map.child&#39;</span>
+    <span class="n">_usage</span> <span class="o">=</span> <span class="s1">&#39;import.map.child&#39;</span>
+
+    <span class="k">def</span> <span class="nf">_child_mapper</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">component</span><span class="p">(</span><span class="n">usage</span><span class="o">=</span><span class="s1">&#39;import.mapper&#39;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="ImportMapChild.format_items"><a class="viewcode-back" href="../../../api/api_components.html#connector.components.mapper.ImportMapChild.format_items">[docs]</a>    <span class="k">def</span> <span class="nf">format_items</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">items_values</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Format the values of the items mapped from the child Mappers.</span>
+
+<span class="sd">        It can be overridden for instance to add the Odoo</span>
+<span class="sd">        relationships commands ``(6, 0, [IDs])``, ...</span>
+
+<span class="sd">        As instance, it can be modified to handle update of existing</span>
+<span class="sd">        items: check if an &#39;id&#39; has been defined by</span>
+<span class="sd">        :py:meth:`get_item_values` then use the ``(1, ID, {values}``)</span>
+<span class="sd">        command</span>
+
+<span class="sd">        :param items_values: list of values for the items to create</span>
+<span class="sd">        :type items_values: list</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">values</span><span class="p">)</span> <span class="k">for</span> <span class="n">values</span> <span class="ow">in</span> <span class="n">items_values</span><span class="p">]</span></div></div>
+
+
+<div class="viewcode-block" id="ExportMapChild"><a class="viewcode-back" href="../../../api/api_components.html#connector.components.mapper.ExportMapChild">[docs]</a><span class="k">class</span> <span class="nc">ExportMapChild</span><span class="p">(</span><span class="n">AbstractComponent</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; :py:class:`MapChild` for the Exports &quot;&quot;&quot;</span>
+
+    <span class="n">_name</span> <span class="o">=</span> <span class="s1">&#39;base.map.child.export&#39;</span>
+    <span class="n">_inherit</span> <span class="o">=</span> <span class="s1">&#39;base.map.child&#39;</span>
+    <span class="n">_usage</span> <span class="o">=</span> <span class="s1">&#39;export.map.child&#39;</span>
+
+    <span class="k">def</span> <span class="nf">_child_mapper</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">component</span><span class="p">(</span><span class="n">usage</span><span class="o">=</span><span class="s1">&#39;export.mapper&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Mapper"><a class="viewcode-back" href="../../../api/api_components.html#connector.components.mapper.Mapper">[docs]</a><span class="k">class</span> <span class="nc">Mapper</span><span class="p">(</span><span class="n">AbstractComponent</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; A Mapper translates an external record to an Odoo record and</span>
+<span class="sd">    conversely. The output of a Mapper is a ``dict``.</span>
+
+<span class="sd">    3 types of mappings are supported:</span>
+
+<span class="sd">    Direct Mappings</span>
+<span class="sd">        Example::</span>
+
+<span class="sd">            direct = [(&#39;source&#39;, &#39;target&#39;)]</span>
+
+<span class="sd">        Here, the ``source`` field will be copied in the ``target`` field.</span>
+
+<span class="sd">        A modifier can be used in the source item.</span>
+<span class="sd">        The modifier will be applied to the source field before being</span>
+<span class="sd">        copied in the target field.</span>
+<span class="sd">        It should be a closure function respecting this idiom::</span>
+
+<span class="sd">            def a_function(field):</span>
+<span class="sd">                &#39;&#39;&#39; ``field`` is the name of the source field.</span>
+
+<span class="sd">                    Naming the arg: ``field`` is required for the conversion&#39;&#39;&#39;</span>
+<span class="sd">                def modifier(self, record, to_attr):</span>
+<span class="sd">                    &#39;&#39;&#39; self is the current Mapper,</span>
+<span class="sd">                        record is the current record to map,</span>
+<span class="sd">                        to_attr is the target field&#39;&#39;&#39;</span>
+<span class="sd">                    return record[field]</span>
+<span class="sd">                return modifier</span>
+
+<span class="sd">        And used like that::</span>
+
+<span class="sd">            direct = [</span>
+<span class="sd">                    (a_function(&#39;source&#39;), &#39;target&#39;),</span>
+<span class="sd">            ]</span>
+
+<span class="sd">        A more concrete example of modifier::</span>
+
+<span class="sd">            def convert(field, conv_type):</span>
+<span class="sd">                &#39;&#39;&#39; Convert the source field to a defined ``conv_type``</span>
+<span class="sd">                (ex. str) before returning it&#39;&#39;&#39;</span>
+<span class="sd">                def modifier(self, record, to_attr):</span>
+<span class="sd">                    value = record[field]</span>
+<span class="sd">                    if not value:</span>
+<span class="sd">                        return None</span>
+<span class="sd">                    return conv_type(value)</span>
+<span class="sd">                return modifier</span>
+
+<span class="sd">        And used like that::</span>
+
+<span class="sd">            direct = [</span>
+<span class="sd">                (convert(&#39;myfield&#39;, float), &#39;target_field&#39;),</span>
+<span class="sd">            ]</span>
+
+<span class="sd">        More examples of modifiers:</span>
+
+<span class="sd">        * :py:func:`convert`</span>
+<span class="sd">        * :py:func:`m2o_to_external`</span>
+<span class="sd">        * :py:func:`external_to_m2o`</span>
+
+<span class="sd">    Method Mappings</span>
+<span class="sd">        A mapping method allows to execute arbitrary code and return one</span>
+<span class="sd">        or many fields::</span>
+
+<span class="sd">            @mapping</span>
+<span class="sd">            def compute_state(self, record):</span>
+<span class="sd">                # compute some state, using the ``record`` or not</span>
+<span class="sd">                state = &#39;pending&#39;</span>
+<span class="sd">                return {&#39;state&#39;: state}</span>
+
+<span class="sd">        We can also specify that a mapping methods should be applied</span>
+<span class="sd">        only when an object is created, and never applied on further</span>
+<span class="sd">        updates::</span>
+
+<span class="sd">            @only_create</span>
+<span class="sd">            @mapping</span>
+<span class="sd">            def default_warehouse(self, record):</span>
+<span class="sd">                # get default warehouse</span>
+<span class="sd">                warehouse_id = ...</span>
+<span class="sd">                return {&#39;warehouse_id&#39;: warehouse_id}</span>
+
+<span class="sd">    Submappings</span>
+<span class="sd">        When a record contains sub-items, like the lines of a sales order,</span>
+<span class="sd">        we can convert the children using another Mapper::</span>
+
+<span class="sd">            children = [(&#39;items&#39;, &#39;line_ids&#39;, &#39;model.name&#39;)]</span>
+
+<span class="sd">        It allows to create the sales order and all its lines with the</span>
+<span class="sd">        same call to :py:meth:`odoo.models.BaseModel.create()`.</span>
+
+<span class="sd">        When using ``children`` for items of a record, we need to create</span>
+<span class="sd">        a :py:class:`Mapper` for the model of the items, and optionally a</span>
+<span class="sd">        :py:class:`MapChild`.</span>
+
+<span class="sd">    Usage of a Mapper::</span>
+
+<span class="sd">        &gt;&gt;&gt; mapper = self.component(usage=&#39;mapper&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; map_record = mapper.map_record(record)</span>
+<span class="sd">        &gt;&gt;&gt; values = map_record.values()</span>
+<span class="sd">        &gt;&gt;&gt; values = map_record.values(only_create=True)</span>
+<span class="sd">        &gt;&gt;&gt; values = map_record.values(fields=[&#39;name&#39;, &#39;street&#39;])</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">_name</span> <span class="o">=</span> <span class="s1">&#39;base.mapper&#39;</span>
+    <span class="n">_inherit</span> <span class="o">=</span> <span class="s1">&#39;base.connector&#39;</span>
+    <span class="n">_usage</span> <span class="o">=</span> <span class="s1">&#39;mapper&#39;</span>
+
+    <span class="n">direct</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># direct conversion of a field to another (from_attr, to_attr)</span>
+    <span class="n">children</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># conversion of sub-records (from_attr, to_attr, model)</span>
+
+    <span class="n">_map_methods</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="n">_map_child_usage</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">_map_child_fallback</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">_build_mapper_component</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Build a Mapper component</span>
+
+<span class="sd">        When a Mapper component is built, we will look into every of its bases</span>
+<span class="sd">        and look for methods decorated by ``@mapping`` or ``@changed_by``.  We</span>
+<span class="sd">        keep the definitions in a ``_map_methods`` attribute for later use by</span>
+<span class="sd">        the Mapper instances.</span>
+
+<span class="sd">        The ``__bases__`` of a newly generated Component are of 2 kinds:</span>
+
+<span class="sd">        * other dynamically generated components (below &#39;base&#39; and</span>
+<span class="sd">          &#39;second.mapper&#39;)</span>
+<span class="sd">        * &quot;real&quot; Python classes applied on top of existing components (here</span>
+<span class="sd">          ThirdMapper)</span>
+
+<span class="sd">        ::</span>
+
+<span class="sd">            &gt;&gt;&gt; cls.__bases__</span>
+<span class="sd">            (&lt;class &#39;odoo.addons.connector.tests.test_mapper.ThirdMapper&#39;&gt;,</span>
+<span class="sd">             &lt;class &#39;odoo.addons.component.core.second.mapper&#39;&gt;,</span>
+<span class="sd">             &lt;class &#39;odoo.addons.component.core.base&#39;&gt;)</span>
+
+<span class="sd">        This method traverses these bases, from the bottom to the top, and</span>
+<span class="sd">        merges the mapping definitions. It reuses the computed definitions</span>
+<span class="sd">        for the generated components (for which this code already ran), and</span>
+<span class="sd">        inspect the real classes to find mapping methods.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">map_methods</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">base</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="vm">__bases__</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="s1">&#39;_map_methods&#39;</span><span class="p">):</span>
+                <span class="c1"># this is already a dynamically generated Component, so we can</span>
+                <span class="c1"># use it&#39;s existing mappings</span>
+                <span class="n">base_map_methods</span> <span class="o">=</span> <span class="n">base</span><span class="o">.</span><span class="n">_map_methods</span> <span class="ow">or</span> <span class="p">{}</span>
+                <span class="k">for</span> <span class="n">attr_name</span><span class="p">,</span> <span class="n">definition</span> <span class="ow">in</span> <span class="n">base_map_methods</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                    <span class="k">if</span> <span class="n">attr_name</span> <span class="ow">in</span> <span class="n">map_methods</span><span class="p">:</span>
+                        <span class="c1"># Update the existing @changed_by with the content</span>
+                        <span class="c1"># of each base (it is mutated in place).</span>
+                        <span class="n">mapping_changed_by</span> <span class="o">=</span> <span class="n">map_methods</span><span class="p">[</span><span class="n">attr_name</span><span class="p">]</span><span class="o">.</span><span class="n">changed_by</span>
+                        <span class="n">mapping_changed_by</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">definition</span><span class="o">.</span><span class="n">changed_by</span><span class="p">)</span>
+                        <span class="c1"># keep the last value for @only_create</span>
+                        <span class="k">if</span> <span class="n">definition</span><span class="o">.</span><span class="n">only_create</span><span class="p">:</span>
+                            <span class="n">new_definition</span> <span class="o">=</span> <span class="n">MappingDefinition</span><span class="p">(</span>
+                                <span class="n">mapping_changed_by</span><span class="p">,</span>
+                                <span class="n">definition</span><span class="o">.</span><span class="n">only_create</span><span class="p">,</span>
+                            <span class="p">)</span>
+                            <span class="n">map_methods</span><span class="p">[</span><span class="n">attr_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_definition</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">map_methods</span><span class="p">[</span><span class="n">attr_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">definition</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># this is a real class that needs to be applied upon</span>
+                <span class="c1"># the base Components</span>
+                <span class="k">for</span> <span class="n">attr_name</span> <span class="ow">in</span> <span class="nb">dir</span><span class="p">(</span><span class="n">base</span><span class="p">):</span>
+                    <span class="n">attr</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="n">attr_name</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">attr</span><span class="p">,</span> <span class="s1">&#39;is_mapping&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span>
+                        <span class="k">continue</span>
+                    <span class="n">has_only_create</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">attr</span><span class="p">,</span> <span class="s1">&#39;only_create&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+                    <span class="n">mapping_changed_by</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">attr</span><span class="p">,</span> <span class="s1">&#39;changed_by&#39;</span><span class="p">,</span> <span class="p">()))</span>
+
+                    <span class="c1"># if already existing, it has been defined in an previous</span>
+                    <span class="c1"># base, extend the @changed_by set</span>
+                    <span class="k">if</span> <span class="n">map_methods</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">attr_name</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                        <span class="n">definition</span> <span class="o">=</span> <span class="n">map_methods</span><span class="p">[</span><span class="n">attr_name</span><span class="p">]</span>
+                        <span class="n">mapping_changed_by</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">definition</span><span class="o">.</span><span class="n">changed_by</span><span class="p">)</span>
+
+                    <span class="c1"># keep the last choice for only_create</span>
+                    <span class="n">definition</span> <span class="o">=</span> <span class="n">MappingDefinition</span><span class="p">(</span><span class="n">mapping_changed_by</span><span class="p">,</span>
+                                                   <span class="n">has_only_create</span><span class="p">)</span>
+                    <span class="n">map_methods</span><span class="p">[</span><span class="n">attr_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">definition</span>
+
+        <span class="bp">cls</span><span class="o">.</span><span class="n">_map_methods</span> <span class="o">=</span> <span class="n">map_methods</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">_complete_component_build</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Mapper</span><span class="p">,</span> <span class="bp">cls</span><span class="p">)</span><span class="o">.</span><span class="n">_complete_component_build</span><span class="p">()</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">_build_mapper_component</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">work</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Mapper</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">work</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_options</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="nf">_map_direct</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="n">from_attr</span><span class="p">,</span> <span class="n">to_attr</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Apply the ``direct`` mappings.</span>
+
+<span class="sd">        :param record: record to convert from a source to a target</span>
+<span class="sd">        :param from_attr: name of the source attribute or a callable</span>
+<span class="sd">        :type from_attr: callable | str</span>
+<span class="sd">        :param to_attr: name of the target attribute</span>
+<span class="sd">        :type to_attr: str</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+
+    <span class="k">def</span> <span class="nf">_map_children</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="n">attr</span><span class="p">,</span> <span class="n">model</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">map_methods</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Yield all the methods decorated with ``@mapping`` &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">meth</span><span class="p">,</span> <span class="n">definition</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_map_methods</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">yield</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">meth</span><span class="p">),</span> <span class="n">definition</span>
+
+    <span class="k">def</span> <span class="nf">_get_map_child_component</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model_name</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">mapper_child</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">component</span><span class="p">(</span><span class="n">usage</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_map_child_usage</span><span class="p">,</span>
+                                          <span class="n">model_name</span><span class="o">=</span><span class="n">model_name</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">NoComponentError</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">_map_child_fallback</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">,</span> <span class="p">(</span>
+                <span class="s2">&quot;_map_child_fallback required&quot;</span><span class="p">)</span>
+            <span class="c1"># does not force developers to use a MapChild -&gt;</span>
+            <span class="c1"># will use the default one if not explicitely defined</span>
+            <span class="n">mapper_child</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">component_by_name</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_map_child_fallback</span><span class="p">,</span>
+                <span class="n">model_name</span><span class="o">=</span><span class="n">model_name</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="n">mapper_child</span>
+
+    <span class="k">def</span> <span class="nf">_map_child</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">map_record</span><span class="p">,</span> <span class="n">from_attr</span><span class="p">,</span> <span class="n">to_attr</span><span class="p">,</span> <span class="n">model_name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Convert items of the record as defined by children &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">_map_child_usage</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;_map_child_usage required&quot;</span>
+        <span class="n">child_records</span> <span class="o">=</span> <span class="n">map_record</span><span class="o">.</span><span class="n">source</span><span class="p">[</span><span class="n">from_attr</span><span class="p">]</span>
+        <span class="n">mapper_child</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_map_child_component</span><span class="p">(</span><span class="n">model_name</span><span class="p">)</span>
+        <span class="n">items</span> <span class="o">=</span> <span class="n">mapper_child</span><span class="o">.</span><span class="n">get_items</span><span class="p">(</span><span class="n">child_records</span><span class="p">,</span> <span class="n">map_record</span><span class="p">,</span>
+                                       <span class="n">to_attr</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">items</span>
+
+    <span class="nd">@contextmanager</span>
+    <span class="k">def</span> <span class="nf">_mapping_options</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">options</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Change the mapping options for the Mapper.</span>
+
+<span class="sd">        Context Manager to use in order to alter the behavior</span>
+<span class="sd">        of the mapping, when using ``_apply`` or ``finalize``.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">current</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_options</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_options</span> <span class="o">=</span> <span class="n">options</span>
+        <span class="k">yield</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_options</span> <span class="o">=</span> <span class="n">current</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">options</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Options can be accessed in the mapping methods with</span>
+<span class="sd">        ``self.options``. &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_options</span>
+
+<div class="viewcode-block" id="Mapper.changed_by_fields"><a class="viewcode-back" href="../../../api/api_components.html#connector.components.mapper.Mapper.changed_by_fields">[docs]</a>    <span class="k">def</span> <span class="nf">changed_by_fields</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Build a set of fields used by the mapper</span>
+
+<span class="sd">        It takes in account the ``direct`` fields and the fields used by</span>
+<span class="sd">        the decorator: ``changed_by``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">changed_by</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;direct&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">from_attr</span><span class="p">,</span> <span class="n">__</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">direct</span><span class="p">:</span>
+                <span class="n">fieldname</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_direct_source_field_name</span><span class="p">(</span><span class="n">from_attr</span><span class="p">)</span>
+                <span class="n">changed_by</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">fieldname</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">method_name</span><span class="p">,</span> <span class="n">method_def</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_map_methods</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">changed_by</span> <span class="o">|=</span> <span class="n">method_def</span><span class="o">.</span><span class="n">changed_by</span>
+        <span class="k">return</span> <span class="n">changed_by</span></div>
+
+    <span class="k">def</span> <span class="nf">_direct_source_field_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">direct_entry</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Get the mapping field name. Goes through the function modifiers.</span>
+
+<span class="sd">        Ex::</span>
+
+<span class="sd">            [(none(convert(field_name, str)), out_field_name)]</span>
+
+<span class="sd">        It assumes that the modifier has ``field`` as first argument like::</span>
+
+<span class="sd">            def modifier(field, args):</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">fieldname</span> <span class="o">=</span> <span class="n">direct_entry</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">direct_entry</span><span class="p">,</span> <span class="n">collections</span><span class="o">.</span><span class="n">Callable</span><span class="p">):</span>
+            <span class="c1"># Map the closure entries with variable names</span>
+            <span class="n">cells</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span>
+                <span class="n">direct_entry</span><span class="o">.</span><span class="vm">__code__</span><span class="o">.</span><span class="n">co_freevars</span><span class="p">,</span>
+                <span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">cell_contents</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">direct_entry</span><span class="o">.</span><span class="vm">__closure__</span><span class="p">))))</span>
+            <span class="k">assert</span> <span class="s1">&#39;field&#39;</span> <span class="ow">in</span> <span class="n">cells</span><span class="p">,</span> <span class="s2">&quot;Modifier without &#39;field&#39; argument.&quot;</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">cells</span><span class="p">[</span><span class="s1">&#39;field&#39;</span><span class="p">],</span> <span class="n">collections</span><span class="o">.</span><span class="n">Callable</span><span class="p">):</span>
+                <span class="n">fieldname</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_direct_source_field_name</span><span class="p">(</span><span class="n">cells</span><span class="p">[</span><span class="s1">&#39;field&#39;</span><span class="p">])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">fieldname</span> <span class="o">=</span> <span class="n">cells</span><span class="p">[</span><span class="s1">&#39;field&#39;</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">fieldname</span>
+
+<div class="viewcode-block" id="Mapper.map_record"><a class="viewcode-back" href="../../../api/api_components.html#connector.components.mapper.Mapper.map_record">[docs]</a>    <span class="k">def</span> <span class="nf">map_record</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Get a :py:class:`MapRecord` with record, ready to be</span>
+<span class="sd">        converted using the current Mapper.</span>
+
+<span class="sd">        :param record: record to transform</span>
+<span class="sd">        :param parent: optional parent record, for items</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">MapRecord</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="n">parent</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">map_record</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Apply the mappings on a :py:class:`MapRecord`</span>
+
+<span class="sd">        :param map_record: source record to convert</span>
+<span class="sd">        :type map_record: :py:class:`MapRecord`</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">options</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">options</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mapping_options</span><span class="p">(</span><span class="n">options</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_apply_with_options</span><span class="p">(</span><span class="n">map_record</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_apply_with_options</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">map_record</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Apply the mappings on a :py:class:`MapRecord` with</span>
+<span class="sd">        contextual options (the ``options`` given in</span>
+<span class="sd">        :py:meth:`MapRecord.values()` are accessible in</span>
+<span class="sd">        ``self.options``)</span>
+
+<span class="sd">        :param map_record: source record to convert</span>
+<span class="sd">        :type map_record: :py:class:`MapRecord`</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">,</span> <span class="p">(</span>
+            <span class="s2">&quot;options should be defined with &#39;_mapping_options&#39;&quot;</span><span class="p">)</span>
+        <span class="n">_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;converting record </span><span class="si">%s</span><span class="s1"> to model </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span>
+                      <span class="n">map_record</span><span class="o">.</span><span class="n">source</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">)</span>
+
+        <span class="n">fields</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">fields</span>
+        <span class="n">for_create</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">for_create</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">from_attr</span><span class="p">,</span> <span class="n">to_attr</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">direct</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">from_attr</span><span class="p">,</span> <span class="n">collections</span><span class="o">.</span><span class="n">Callable</span><span class="p">):</span>
+                <span class="n">attr_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_direct_source_field_name</span><span class="p">(</span><span class="n">from_attr</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">attr_name</span> <span class="o">=</span> <span class="n">from_attr</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">fields</span> <span class="ow">or</span> <span class="n">attr_name</span> <span class="ow">in</span> <span class="n">fields</span><span class="p">):</span>
+                <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_map_direct</span><span class="p">(</span><span class="n">map_record</span><span class="o">.</span><span class="n">source</span><span class="p">,</span>
+                                         <span class="n">from_attr</span><span class="p">,</span>
+                                         <span class="n">to_attr</span><span class="p">)</span>
+                <span class="n">result</span><span class="p">[</span><span class="n">to_attr</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+
+        <span class="k">for</span> <span class="n">meth</span><span class="p">,</span> <span class="n">definition</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">map_methods</span><span class="p">:</span>
+            <span class="n">mapping_changed_by</span> <span class="o">=</span> <span class="n">definition</span><span class="o">.</span><span class="n">changed_by</span>
+            <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">fields</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">mapping_changed_by</span> <span class="ow">or</span>
+                    <span class="n">mapping_changed_by</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="n">fields</span><span class="p">)):</span>
+                <span class="k">if</span> <span class="n">definition</span><span class="o">.</span><span class="n">only_create</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">for_create</span><span class="p">:</span>
+                    <span class="k">continue</span>
+                <span class="n">values</span> <span class="o">=</span> <span class="n">meth</span><span class="p">(</span><span class="n">map_record</span><span class="o">.</span><span class="n">source</span><span class="p">)</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">values</span><span class="p">:</span>
+                    <span class="k">continue</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">: invalid return value for the &#39;</span>
+                                     <span class="s1">&#39;mapping method </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="n">meth</span><span class="p">))</span>
+                <span class="n">result</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">values</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">from_attr</span><span class="p">,</span> <span class="n">to_attr</span><span class="p">,</span> <span class="n">model_name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">children</span><span class="p">:</span>
+            <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">fields</span> <span class="ow">or</span> <span class="n">from_attr</span> <span class="ow">in</span> <span class="n">fields</span><span class="p">):</span>
+                <span class="n">result</span><span class="p">[</span><span class="n">to_attr</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_map_child</span><span class="p">(</span><span class="n">map_record</span><span class="p">,</span> <span class="n">from_attr</span><span class="p">,</span>
+                                                  <span class="n">to_attr</span><span class="p">,</span> <span class="n">model_name</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">finalize</span><span class="p">(</span><span class="n">map_record</span><span class="p">,</span> <span class="n">result</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Mapper.finalize"><a class="viewcode-back" href="../../../api/api_components.html#connector.components.mapper.Mapper.finalize">[docs]</a>    <span class="k">def</span> <span class="nf">finalize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">map_record</span><span class="p">,</span> <span class="n">values</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Called at the end of the mapping.</span>
+
+<span class="sd">        Can be used to modify the values generated by all the mappings before</span>
+<span class="sd">        returning them.</span>
+
+<span class="sd">        :param map_record: source map_record</span>
+<span class="sd">        :type map_record: :py:class:`MapRecord`</span>
+<span class="sd">        :param values: mapped values</span>
+<span class="sd">        :returns: mapped values</span>
+<span class="sd">        :rtype: dict</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">values</span></div></div>
+
+
+<div class="viewcode-block" id="ImportMapper"><a class="viewcode-back" href="../../../api/api_components.html#connector.components.mapper.ImportMapper">[docs]</a><span class="k">class</span> <span class="nc">ImportMapper</span><span class="p">(</span><span class="n">AbstractComponent</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; :py:class:`Mapper` for imports.</span>
+
+<span class="sd">    Transform a record from a backend to an Odoo record</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">_name</span> <span class="o">=</span> <span class="s1">&#39;base.import.mapper&#39;</span>
+    <span class="n">_inherit</span> <span class="o">=</span> <span class="s1">&#39;base.mapper&#39;</span>
+    <span class="n">_usage</span> <span class="o">=</span> <span class="s1">&#39;import.mapper&#39;</span>
+
+    <span class="n">_map_child_usage</span> <span class="o">=</span> <span class="s1">&#39;import.map.child&#39;</span>
+    <span class="n">_map_child_fallback</span> <span class="o">=</span> <span class="s1">&#39;base.map.child.import&#39;</span>
+
+    <span class="k">def</span> <span class="nf">_map_direct</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="n">from_attr</span><span class="p">,</span> <span class="n">to_attr</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Apply the ``direct`` mappings.</span>
+
+<span class="sd">        :param record: record to convert from a source to a target</span>
+<span class="sd">        :param from_attr: name of the source attribute or a callable</span>
+<span class="sd">        :type from_attr: callable | str</span>
+<span class="sd">        :param to_attr: name of the target attribute</span>
+<span class="sd">        :type to_attr: str</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">from_attr</span><span class="p">,</span> <span class="n">collections</span><span class="o">.</span><span class="n">Callable</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">from_attr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="n">to_attr</span><span class="p">)</span>
+
+        <span class="n">value</span> <span class="o">=</span> <span class="n">record</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">from_attr</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">value</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="c1"># Backward compatibility: when a field is a relation, and a modifier is</span>
+        <span class="c1"># not used, we assume that the relation model is a binding.</span>
+        <span class="c1"># Use an explicit modifier external_to_m2o in the &#39;direct&#39; mappings to</span>
+        <span class="c1"># change that.</span>
+        <span class="n">field</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">_fields</span><span class="p">[</span><span class="n">to_attr</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">field</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s1">&#39;many2one&#39;</span><span class="p">:</span>
+            <span class="n">mapping_func</span> <span class="o">=</span> <span class="n">external_to_m2o</span><span class="p">(</span><span class="n">from_attr</span><span class="p">)</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">mapping_func</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="n">to_attr</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">value</span></div>
+
+
+<div class="viewcode-block" id="ExportMapper"><a class="viewcode-back" href="../../../api/api_components.html#connector.components.mapper.ExportMapper">[docs]</a><span class="k">class</span> <span class="nc">ExportMapper</span><span class="p">(</span><span class="n">AbstractComponent</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; :py:class:`Mapper` for exports.</span>
+
+<span class="sd">    Transform a record from Odoo to a backend record</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">_name</span> <span class="o">=</span> <span class="s1">&#39;base.export.mapper&#39;</span>
+    <span class="n">_inherit</span> <span class="o">=</span> <span class="s1">&#39;base.mapper&#39;</span>
+    <span class="n">_usage</span> <span class="o">=</span> <span class="s1">&#39;export.mapper&#39;</span>
+
+    <span class="n">_map_child_usage</span> <span class="o">=</span> <span class="s1">&#39;export.map.child&#39;</span>
+    <span class="n">_map_child_fallback</span> <span class="o">=</span> <span class="s1">&#39;base.map.child.export&#39;</span>
+
+    <span class="k">def</span> <span class="nf">_map_direct</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="n">from_attr</span><span class="p">,</span> <span class="n">to_attr</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Apply the ``direct`` mappings.</span>
+
+<span class="sd">        :param record: record to convert from a source to a target</span>
+<span class="sd">        :param from_attr: name of the source attribute or a callable</span>
+<span class="sd">        :type from_attr: callable | str</span>
+<span class="sd">        :param to_attr: name of the target attribute</span>
+<span class="sd">        :type to_attr: str</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">from_attr</span><span class="p">,</span> <span class="n">collections</span><span class="o">.</span><span class="n">Callable</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">from_attr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="n">to_attr</span><span class="p">)</span>
+
+        <span class="n">value</span> <span class="o">=</span> <span class="n">record</span><span class="p">[</span><span class="n">from_attr</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">value</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="c1"># Backward compatibility: when a field is a relation, and a modifier is</span>
+        <span class="c1"># not used, we assume that the relation model is a binding.</span>
+        <span class="c1"># Use an explicit modifier m2o_to_external  in the &#39;direct&#39; mappings to</span>
+        <span class="c1"># change that.</span>
+        <span class="n">field</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">_fields</span><span class="p">[</span><span class="n">from_attr</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">field</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s1">&#39;many2one&#39;</span><span class="p">:</span>
+            <span class="n">mapping_func</span> <span class="o">=</span> <span class="n">m2o_to_external</span><span class="p">(</span><span class="n">from_attr</span><span class="p">)</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">mapping_func</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="n">to_attr</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">value</span></div>
+
+
+<div class="viewcode-block" id="MapRecord"><a class="viewcode-back" href="../../../api/api_components.html#connector.components.mapper.MapRecord">[docs]</a><span class="k">class</span> <span class="nc">MapRecord</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; A record prepared to be converted using a :py:class:`Mapper`.</span>
+
+<span class="sd">    MapRecord instances are prepared by :py:meth:`Mapper.map_record`.</span>
+
+<span class="sd">    Usage::</span>
+
+<span class="sd">        &gt;&gt;&gt; map_record = mapper.map_record(record)</span>
+<span class="sd">        &gt;&gt;&gt; output_values = map_record.values()</span>
+
+<span class="sd">    See :py:meth:`values` for more information on the available arguments.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mapper</span><span class="p">,</span> <span class="n">source</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_source</span> <span class="o">=</span> <span class="n">source</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_mapper</span> <span class="o">=</span> <span class="n">mapper</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_parent</span> <span class="o">=</span> <span class="n">parent</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_forced_values</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">source</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Source record to be converted &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_source</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">parent</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Parent record if the current record is an item &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parent</span>
+
+<div class="viewcode-block" id="MapRecord.values"><a class="viewcode-back" href="../../../api/api_components.html#connector.components.mapper.MapRecord.values">[docs]</a>    <span class="k">def</span> <span class="nf">values</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">for_create</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fields</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Build and returns the mapped values according to the options.</span>
+
+<span class="sd">        Usage::</span>
+
+<span class="sd">            &gt;&gt;&gt; map_record = mapper.map_record(record)</span>
+<span class="sd">            &gt;&gt;&gt; output_values = map_record.values()</span>
+
+<span class="sd">        Creation of records</span>
+<span class="sd">            When using the option ``for_create``, only the mappings decorated</span>
+<span class="sd">            with ``@only_create`` will be mapped.</span>
+
+<span class="sd">            ::</span>
+
+<span class="sd">                &gt;&gt;&gt; output_values = map_record.values(for_create=True)</span>
+
+<span class="sd">        Filter on fields</span>
+<span class="sd">            When using the ``fields`` argument, the mappings will be</span>
+<span class="sd">            filtered using either the source key in ``direct`` arguments,</span>
+<span class="sd">            either the ``changed_by`` arguments for the mapping methods.</span>
+
+<span class="sd">            ::</span>
+
+<span class="sd">                &gt;&gt;&gt; output_values = map_record.values(</span>
+<span class="sd">                        fields=[&#39;name&#39;, &#39;street&#39;]</span>
+<span class="sd">                    )</span>
+
+<span class="sd">        Custom options</span>
+<span class="sd">            Arbitrary key and values can be defined in the ``kwargs``</span>
+<span class="sd">            arguments.  They can later be used in the mapping methods</span>
+<span class="sd">            using ``self.options``.</span>
+
+<span class="sd">            ::</span>
+
+<span class="sd">                &gt;&gt;&gt; output_values = map_record.values(tax_include=True)</span>
+
+<span class="sd">        :param for_create: specify if only the mappings for creation</span>
+<span class="sd">                           (``@only_create``) should be mapped.</span>
+<span class="sd">        :type for_create: boolean</span>
+<span class="sd">        :param fields: filter on fields</span>
+<span class="sd">        :type fields: list</span>
+<span class="sd">        :param ``**kwargs``: custom options, they can later be used in the</span>
+<span class="sd">                             mapping methods</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">options</span> <span class="o">=</span> <span class="n">MapOptions</span><span class="p">(</span><span class="n">for_create</span><span class="o">=</span><span class="n">for_create</span><span class="p">,</span> <span class="n">fields</span><span class="o">=</span><span class="n">fields</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">values</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mapper</span><span class="o">.</span><span class="n">_apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">options</span><span class="p">)</span>
+        <span class="n">values</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_forced_values</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">values</span></div>
+
+<div class="viewcode-block" id="MapRecord.update"><a class="viewcode-back" href="../../../api/api_components.html#connector.components.mapper.MapRecord.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Force values to be applied after a mapping.</span>
+
+<span class="sd">        Usage::</span>
+
+<span class="sd">            &gt;&gt;&gt; map_record = mapper.map_record(record)</span>
+<span class="sd">            &gt;&gt;&gt; map_record.update(a=1)</span>
+<span class="sd">            &gt;&gt;&gt; output_values = map_record.values()</span>
+<span class="sd">            # output_values will at least contain {&#39;a&#39;: 1}</span>
+
+<span class="sd">        The values assigned with ``update()`` are in any case applied,</span>
+<span class="sd">        they have a greater priority than the mapping values.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_forced_values</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div></div>
+
+
+<span class="k">class</span> <span class="nc">MapOptions</span><span class="p">(</span><span class="nb">dict</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Container for the options of mappings.</span>
+
+<span class="sd">    Options can be accessed using attributes of the instance.  When an</span>
+<span class="sd">    option is accessed and does not exist, it returns None.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">MapOptions</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__getitem__</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="fm">__getattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="fm">__setattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+</pre></div>
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+        <br/>
+        
+      
+    </p>
+    <p>
+        &copy; Copyright 2013, Camptocamp SA.<br/>
+      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.3.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Connector Concepts &#8212; Connector  documentation</title>
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Boostrapping a connector" href="bootstrap_connector.html" />
+    <link rel="prev" title="Code Overview" href="code_overview.html" />
+
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js "></script>
+<script type="text/javascript" src="../_static/js/jquery-fix.js "></script>
+<script type="text/javascript" src="../_static/bootstrap-3.3.7/js/bootstrap.min.js "></script>
+<script type="text/javascript" src="../_static/bootstrap-sphinx.js "></script>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-7628916-3', 'odoo-connector.com');
+  ga('send', 'pageview');
+</script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../index.html">
+          Odoo Connector</a>
+        <span class="navbar-text navbar-version pull-left"><b></b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+  <li class="dropdown">
+    <a role="button"
+       id="dLabelTranslations"
+       data-toggle="dropdown"
+       data-target="#"
+       href="#">Translations<b class="caret"></b></a>
+    <ul class="dropdown-menu"
+        role="menu"
+        aria-labelledby="dLabelTranslations">
+      <li><a class="reference" href="http://odoo-connector.com">English</a><li>
+      <li><a class="reference" href="http://odoo-connector.com/fr">French</a><li>
+    </ul>
+  </li>
+  <li class="dropdown">
+    <a role="button"
+       id="dLabelVersions"
+       data-toggle="dropdown"
+       data-target="#"
+       href="#">Version<b class="caret"></b></a>
+    <ul class="dropdown-menu"
+        role="menu"
+        aria-labelledby="dLabeVersions">
+      <li><a class="reference" href="http://odoo-connector.com/8.0">8.0</a><li>
+      <li><a class="reference" href="http://odoo-connector.com/9.0">9.0</a><li>
+      <li><a class="reference" href="http://odoo-connector.com/10.0">10.0</a><li>
+          <li><a class="reference" href="http://odoo-connector.com/12.0">12.0</a><li>
+              <li><a class="reference" href="http://odoo-connector.com/">13.0</a><li>
+    </ul>
+  </li>
+  
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="migration_guide.html">Migration Guide to the new Connector API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="migration_guide.html#migrating-jobs">Migrating Jobs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="migration_guide.html#migrating-events">Migrating Events</a></li>
+<li class="toctree-l2"><a class="reference internal" href="migration_guide.html#migrating-components">Migrating Components</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="code_overview.html">Code Overview</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="code_overview.html#trigger-and-listen-an-event">Trigger and listen an event</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code_overview.html#delay-an-asynchronous-job">Delay an Asynchronous Job</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code_overview.html#work-with-components">Work with components</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Connector Concepts</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#events">Events</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#jobs-queue">Jobs Queue</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#backend">Backend</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#workcontext">WorkContext</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#component">Component</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#bindings">Bindings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#checkpoint">Checkpoint</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="bootstrap_connector.html">Boostrapping a connector</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="bootstrap_connector.html#odoo-manifest">Odoo Manifest</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bootstrap_connector.html#backend-model">Backend Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bootstrap_connector.html#abstract-binding">Abstract Binding</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bootstrap_connector.html#components">Components</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="jobrunner.html">Configuring channels and the job runner</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="jobrunner.html#what-is-the-job-runner">What is the job runner?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jobrunner.html#how-does-it-work">How does it work?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jobrunner.html#how-to-use-it">How to use it?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jobrunner.html#caveat">Caveat</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jobrunner.html#what-is-a-channel">What is a channel?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jobrunner.html#how-to-configure-channels">How to configure Channels?</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/api_components.html">Components</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../api/api_components.html#module-connector.components.core">Core Components</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/api_components.html#module-connector.components.binder">Connector Components</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/api_components.html#module-odoo.addons.component.models.collection">Components Collection Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/api_components.html#module-odoo.addons.component.exception">Components Exceptions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/api_components.html#components-internals">Components Internals</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../api/api_backend.html">Models</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../api/api_backend.html#backend-model">Backend Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/api_backend.html#binding-model">Binding Model</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../api/api_event.html">Events</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../api/api_event.html#module-odoo.addons.component_event.components.event">Components</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/api_event.html#module-odoo.addons.component_event.models.base">Odoo Models Extensions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../api/api_queue.html">Queue</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../api/api_queue.html#module-odoo.addons.queue_job.models.base">Models</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../api/api_exception.html">Exceptions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/api_channels.html">Channels</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../project/contribute.html">Contribute</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../project/contribute.html#want-to-start-a-new-connector">Want to start a new connector</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../project/contribute.html#creating-or-maintaining-a-translation-of-this-doc">Creating or maintaining a translation of this doc</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../project/contributors.html">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../project/contributors.html#financial-contributors">Financial Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../project/license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../project/changes.html">Changes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../project/changes.html#future">Future (?)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../project/changes.html#id2">9.0.1.0.2 (2016-03-03)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../project/changes.html#id3">9.0.1.0.1 (2016-03-03)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../project/changes.html#id4">8.0.3.3.0 (2016-02-29)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../project/changes.html#id5">3.2.0 (2015-09-10)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../project/changes.html#id6">3.1.0 (2015-05-15)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../project/changes.html#id7">3.0.0 (2015-04-01)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../project/changes.html#id8">2.2.0 (2014-05-26)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../project/changes.html#id9">2.1.1 (2014-02-06)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../project/changes.html#warning-breaks-compatibility">2.1.0 (2014-01-15 - warning: breaks compatibility)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../project/changes.html#id10">2.0.1 (2013-09-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../project/changes.html#id11">2.0.0</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../project/roadmap.html">Roadmap</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">Connector Concepts</a><ul>
+<li><a class="reference internal" href="#events">Events</a></li>
+<li><a class="reference internal" href="#jobs-queue">Jobs Queue</a></li>
+<li><a class="reference internal" href="#backend">Backend</a></li>
+<li><a class="reference internal" href="#workcontext">WorkContext</a></li>
+<li><a class="reference internal" href="#component">Component</a><ul>
+<li><a class="reference internal" href="#mappings">Mappings</a></li>
+<li><a class="reference internal" href="#synchronizers">Synchronizers</a></li>
+<li><a class="reference internal" href="#backend-adapters">Backend Adapters</a></li>
+<li><a class="reference internal" href="#binders">Binders</a></li>
+<li><a class="reference internal" href="#listeners">Listeners</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#bindings">Bindings</a></li>
+<li><a class="reference internal" href="#checkpoint">Checkpoint</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+            
+
+            
+              
+                
+  <li>
+    <a href="code_overview.html" title="Previous Chapter: Code Overview"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Code Overview</span>
+    </a>
+  </li>
+  <li>
+    <a href="bootstrap_connector.html" title="Next Chapter: Boostrapping a connector"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Boostrapping ... &raquo;</span>
+    </a>
+  </li>
+              
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <div class="section" id="connector-concepts">
+<span id="concepts"></span><h1>Connector Concepts<a class="headerlink" href="#connector-concepts" title="Permalink to this headline">¶</a></h1>
+<p>The framework to develop connectors is decoupled in small pieces of
+codes interacting together. Each of them can be used or not in an
+implementation.</p>
+<p>An example of implementation is the <a class="reference external" href="http://www.odoo-magento-connector.com">Odoo Magento Connector</a>.</p>
+<p>This document describes them from a high-level point of view and gives
+pointers to more concrete ‘how-to’ or small tutorials.</p>
+<div class="section" id="events">
+<h2>Events<a class="headerlink" href="#events" title="Permalink to this headline">¶</a></h2>
+<p>Reference: <a class="reference internal" href="../api/api_event.html#api-event"><span class="std std-ref">Events</span></a></p>
+<p>Events are hooks in Odoo on which we can plug some actions. They are
+based on an Observer pattern.</p>
+<p>The same event can be shared across several connectors, easing their
+implementation.
+For instance, the module <a class="reference external" href="https://github.com/OCA/connector-ecommerce">connector_ecommerce</a> which extends the
+framework with common e-commerce capabilities, adds its own events
+common to e-commerce.</p>
+<p>A connectors developer is mostly interested by:</p>
+<ul class="simple">
+<li>adding and listening to events (see <a class="reference internal" href="../api/api_event.html#api-event"><span class="std std-ref">Events</span></a>)</li>
+</ul>
+</div>
+<div class="section" id="jobs-queue">
+<span id="id1"></span><h2>Jobs Queue<a class="headerlink" href="#jobs-queue" title="Permalink to this headline">¶</a></h2>
+<p>Reference: <a class="reference internal" href="../api/api_queue.html#api-queue"><span class="std std-ref">Queue</span></a></p>
+<p>This feature is part of a standalone addon, but is a prerequisite for
+the connector framework.</p>
+<p>The module is <code class="docutils literal notranslate"><span class="pre">queue_job</span></code> in <a class="reference external" href="https://github.com/OCA/queue">https://github.com/OCA/queue</a>.</p>
+<p>A connectors developer is mostly interested by:</p>
+<ul class="simple">
+<li>Delay a job (see the decorator <a class="reference internal" href="../api/api_queue.html#odoo.addons.queue_job.job.job" title="odoo.addons.queue_job.job.job"><code class="xref py py-func docutils literal notranslate"><span class="pre">job()</span></code></a>)</li>
+</ul>
+</div>
+<div class="section" id="backend">
+<h2>Backend<a class="headerlink" href="#backend" title="Permalink to this headline">¶</a></h2>
+<p>Reference: <a class="reference internal" href="../api/api_backend.html#api-backend-model"><span class="std std-ref">Backend Model</span></a></p>
+<p>The Backend Model is what represents the external service / system we
+synchronize with. The name on the backend indicates what is the collection the
+Components will be registered into. Put another way: every backend has its own
+collection of Components.</p>
+<p>It must use an <code class="docutils literal notranslate"><span class="pre">_inherit</span></code> on <code class="docutils literal notranslate"><span class="pre">connector.backend</span></code>.</p>
+<p><code class="docutils literal notranslate"><span class="pre">connector.backend</span></code> inherits
+<a class="reference internal" href="../api/api_components.html#odoo.addons.component.models.collection.Collection" title="odoo.addons.component.models.collection.Collection"><code class="xref py py-class docutils literal notranslate"><span class="pre">odoo.addons.component.models.collection.Collection</span></code></a> which has a
+<a class="reference internal" href="../api/api_components.html#odoo.addons.component.models.collection.Collection.work_on" title="odoo.addons.component.models.collection.Collection.work_on"><code class="xref py py-meth docutils literal notranslate"><span class="pre">odoo.addons.component.models.collection.Collection.work_on()</span></code></a> that will be
+used as entrypoint for the component system.  This method returns a
+<a class="reference internal" href="../api/api_components.html#odoo.addons.component.core.WorkContext" title="odoo.addons.component.core.WorkContext"><code class="xref py py-class docutils literal notranslate"><span class="pre">WorkContext</span></code></a></p>
+</div>
+<div class="section" id="workcontext">
+<h2>WorkContext<a class="headerlink" href="#workcontext" title="Permalink to this headline">¶</a></h2>
+<p>Reference: <a class="reference internal" href="../api/api_components.html#odoo.addons.component.core.WorkContext" title="odoo.addons.component.core.WorkContext"><code class="xref py py-class docutils literal notranslate"><span class="pre">WorkContext</span></code></a></p>
+<p>A <a class="reference internal" href="../api/api_components.html#odoo.addons.component.core.WorkContext" title="odoo.addons.component.core.WorkContext"><code class="xref py py-class docutils literal notranslate"><span class="pre">WorkContext</span></code></a> is the work environment or
+context that will be passed transversally through all the components. This is
+also the entrypoint to the component system.</p>
+<p>A connectors developer is mostly interested by:</p>
+<ul class="simple">
+<li>Get a Component from a WorkContext (<a class="reference internal" href="../api/api_components.html#odoo.addons.component.core.WorkContext.component" title="odoo.addons.component.core.WorkContext.component"><code class="xref py py-meth docutils literal notranslate"><span class="pre">component()</span></code></a>)</li>
+</ul>
+</div>
+<div class="section" id="component">
+<h2>Component<a class="headerlink" href="#component" title="Permalink to this headline">¶</a></h2>
+<p>Reference: <a class="reference internal" href="../api/api_components.html#api-component"><span class="std std-ref">Components</span></a></p>
+<p><a class="reference internal" href="../api/api_components.html#odoo.addons.component.core.Component" title="odoo.addons.component.core.Component"><code class="xref py py-class docutils literal notranslate"><span class="pre">Component</span></code></a> are pluggable classes used
+for the synchronizations with the external systems (or anything!)</p>
+<p>The Components system has been extracted in a standalone addon (<code class="docutils literal notranslate"><span class="pre">component</span></code>),
+which means it can really be used in a totally different way.</p>
+<p>The connector defines some base components, which you can find below.  Note
+that you can and are encouraged to define your own Components as well.</p>
+<div class="section" id="mappings">
+<h3>Mappings<a class="headerlink" href="#mappings" title="Permalink to this headline">¶</a></h3>
+<p>The base class is <a class="reference internal" href="../api/api_components.html#connector.components.mapper.Mapper" title="connector.components.mapper.Mapper"><code class="xref py py-class docutils literal notranslate"><span class="pre">connector.components.mapper.Mapper</span></code></a>.</p>
+<p>In your components, you probably want to inherit from:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">_inherit</span> <span class="pre">=</span> <span class="pre">'base.import.mapper'</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">_inherit</span> <span class="pre">=</span> <span class="pre">'base.export.mapper'</span></code></li>
+</ul>
+<p>And the usages for the lookups are:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">import.mapper</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">export.mapper</span></code></li>
+</ul>
+<p>A mapping translates an external record to an Odoo record and
+conversely.</p>
+<p>It supports:</p>
+<dl class="docutils">
+<dt>direct mappings</dt><dd>Fields <em>a</em> is written in field <em>b</em>.</dd>
+<dt>method mappings</dt><dd>A method is used to convert one or many fields to one or many
+fields, with transformation.
+It can be filtered, for example only applied when the record is
+created or when the source fields are modified.</dd>
+<dt>submapping</dt><dd>a sub-record (lines of a sale order) is converted using another
+Mapper</dd>
+</dl>
+<p>See the documentation of the class for more details.</p>
+</div>
+<div class="section" id="synchronizers">
+<h3>Synchronizers<a class="headerlink" href="#synchronizers" title="Permalink to this headline">¶</a></h3>
+<p>The base class is <a class="reference internal" href="../api/api_components.html#connector.components.synchronizer.Synchronizer" title="connector.components.synchronizer.Synchronizer"><code class="xref py py-class docutils literal notranslate"><span class="pre">connector.components.synchronizer.Synchronizer</span></code></a>.</p>
+<p>In your components, you probably want to inherit from:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">_inherit</span> <span class="pre">=</span> <span class="pre">'base.importer'</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">_inherit</span> <span class="pre">=</span> <span class="pre">'base.exporter'</span></code></li>
+</ul>
+<p>And the usages for the lookups are:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">importer</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">exporter</span></code></li>
+</ul>
+<p>However, in your implementation, it is advised to use more refined usages such
+as:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">record.importer</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">record.exporter</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">batch.importer</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">batch.exporter</span></code></li>
+<li></li>
+</ul>
+<p>A synchronizer orchestrates a synchronization with a backend.  It can be a
+record’s import or export, a deletion of something, or anything else.  For
+instance, it will use the mappings to convert the data between both systems,
+the backend adapters to read or write data on the backend and the binders to
+create the link between them.</p>
+</div>
+<div class="section" id="backend-adapters">
+<h3>Backend Adapters<a class="headerlink" href="#backend-adapters" title="Permalink to this headline">¶</a></h3>
+<p>The base class is
+<a class="reference internal" href="../api/api_components.html#connector.components.backend_adapter.BackendAdapter" title="connector.components.backend_adapter.BackendAdapter"><code class="xref py py-class docutils literal notranslate"><span class="pre">connector.components.backend_adapter.BackendAdapter</span></code></a>.</p>
+<p>In your components, you probably want to inherit from:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">_inherit</span> <span class="pre">=</span> <span class="pre">'base.backend.adapter'</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">_inherit</span> <span class="pre">=</span> <span class="pre">'base.backend.adapter.crud'</span></code></li>
+</ul>
+<p>And the usages for the lookups are:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">backend.adapter</span></code></li>
+</ul>
+<p>An external adapter has a common interface to speak with the backend.
+It translates the basic orders (search, read, write) to the protocol
+used by the backend.</p>
+</div>
+<div class="section" id="binders">
+<h3>Binders<a class="headerlink" href="#binders" title="Permalink to this headline">¶</a></h3>
+<p>The base class is
+<a class="reference internal" href="../api/api_components.html#connector.components.binder.Binder" title="connector.components.binder.Binder"><code class="xref py py-class docutils literal notranslate"><span class="pre">connector.components.binder.Binder</span></code></a>.</p>
+<p>In your components, you probably want to inherit from:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">_inherit</span> <span class="pre">=</span> <span class="pre">'base.binder'</span></code></li>
+</ul>
+<p>And the usages for the lookups are:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">binder</span></code></li>
+</ul>
+<p>Binders are components that know how to find the external ID for an
+Odoo ID, how to find the Odoo ID for an external ID and how to
+create the binding between them. A default implementation is
+available and can be inherited if needed.</p>
+</div>
+<div class="section" id="listeners">
+<h3>Listeners<a class="headerlink" href="#listeners" title="Permalink to this headline">¶</a></h3>
+<p>The base class is
+<a class="reference internal" href="../api/api_components.html#connector.components.listener.ConnectorListener" title="connector.components.listener.ConnectorListener"><code class="xref py py-class docutils literal notranslate"><span class="pre">connector.components.listener.ConnectorListener</span></code></a>.</p>
+<p>In your components, you probably want to inherit from:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">_inherit</span> <span class="pre">=</span> <span class="pre">'base.connector.listener'</span></code></li>
+</ul>
+<p>This is where you will register your event listeners.
+See <code class="xref py py-mod docutils literal notranslate"><span class="pre">addons.component_event.components.event</span></code>.</p>
+</div>
+</div>
+<div class="section" id="bindings">
+<span id="binding"></span><h2>Bindings<a class="headerlink" href="#bindings" title="Permalink to this headline">¶</a></h2>
+<p>Reference: <a class="reference internal" href="../api/api_backend.html#api-binding-model"><span class="std std-ref">Binding Model</span></a></p>
+<p>A binding represents the link of a record between Odoo and a backend.</p>
+<p>The proposed implementation for the connectors widely use the
+<cite>_inherits</cite> capabilities.</p>
+<p>Say we import a customer from <em>Magento</em>.</p>
+<p>We create a <cite>magento.res.partner</cite> model, which <cite>_inherits</cite>
+<cite>res.partner</cite>.</p>
+<p>This model, called a <em>binding</em> model, knows the ID of the partner in
+Odoo, the ID in Magento and the relation to the backend model.</p>
+<p>It also stores all the necessary metadata related to this customer
+coming from Magento.</p>
+</div>
+<div class="section" id="checkpoint">
+<span id="id2"></span><h2>Checkpoint<a class="headerlink" href="#checkpoint" title="Permalink to this headline">¶</a></h2>
+<p>A checkpoint is a record in the model <cite>connector.checkpoint</cite> linked to a
+model and a record, the connectors can create a new one when the user
+needs to review imported documents.</p>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+        <br/>
+        
+<div id="sourcelink">
+  <a href="../_sources/guides/concepts.rst.txt"
+     rel="nofollow">Source</a>
+</div>
+      
+    </p>
+    <p>
+        &copy; Copyright 2013, Camptocamp SA.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.3.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

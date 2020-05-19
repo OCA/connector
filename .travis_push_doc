@@ -2,7 +2,7 @@
 
 set -o errexit -o nounset
 
-if [ "$TRAVIS_BRANCH" = "11.0" ] && [ "$TRAVIS_PULL_REQUEST" = false ]; then
+if [ "$TRAVIS_BRANCH" = "12.0" ] && [ "$TRAVIS_PULL_REQUEST" = false ]; then
   cd "${TRAVIS_BUILD_DIR}"
   rev=$(git rev-parse --short HEAD)
 
@@ -16,7 +16,8 @@ if [ "$TRAVIS_BRANCH" = "11.0" ] && [ "$TRAVIS_PULL_REQUEST" = false ]; then
   git fetch upstream
   git checkout gh-pages
 
-  rsync -a "${HOME}/doc/" .
+  rm -rf "${TRAVIS_BRANCH}"
+  mv "${HOME}/doc" "${TRAVIS_BRANCH}"
 
   echo "odoo-connector.com" > CNAME
   touch .nojekyll

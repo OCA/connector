@@ -66,8 +66,8 @@
     <ul class="dropdown-menu"
         role="menu"
         aria-labelledby="dLabelTranslations">
-      <li><a class="reference" href="http://odoo-connector.com/10.0">English</a><li>
-      <li><a class="reference" href="http://odoo-connector.com/10.0/fr">French</a><li>
+      <li><a class="reference" href="http://odoo-connector.com/10.0">English</a></li>
+      <li><a class="reference" href="http://odoo-connector.com/10.0/fr">French</a></li>
     </ul>
   </li>
   <li class="dropdown">
@@ -79,9 +79,11 @@
     <ul class="dropdown-menu"
         role="menu"
         aria-labelledby="dLabeVersions">
-      <li><a class="reference" href="http://odoo-connector.com/8.0">8.0</a><li>
-      <li><a class="reference" href="http://odoo-connector.com/9.0">9.0</a><li>
-      <li><a class="reference" href="http://odoo-connector.com">11.0</a><li>
+      <li><a class="reference" href="http://odoo-connector.com/8.0">8.0</a></li>
+      <li><a class="reference" href="http://odoo-connector.com/9.0">9.0</a></li>
+      <li><a class="reference" href="http://odoo-connector.com/11.0">11.0</a></li>
+      <li><a class="reference" href="http://odoo-connector.com/12.0">12.0</a></li>
+      <li><a class="reference" href="http://odoo-connector.com/">13.0</a></li>
     </ul>
   </li>
   
@@ -392,13 +394,13 @@ paths change.</p>
 <span class="c1"># function at module-level</span>
 <span class="nd">@job</span><span class="p">(</span><span class="n">default_channel</span><span class="o">=</span><span class="s1">&#39;root.magento&#39;</span><span class="p">)</span>
 <span class="nd">@related_action</span><span class="p">(</span><span class="n">action</span><span class="o">=</span><span class="n">link</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">import_record</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">backend_id</span><span class="p">,</span> <span class="n">magento_id</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">import_record</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">backend_id</span><span class="p">,</span> <span class="n">magento_id</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Import a record from Magento &quot;&quot;&quot;</span>
     <span class="c1"># ...</span>
 
 <span class="nd">@job</span><span class="p">(</span><span class="n">default_channel</span><span class="o">=</span><span class="s1">&#39;root.magento&#39;</span><span class="p">)</span>
 <span class="nd">@related_action</span><span class="p">(</span><span class="n">action</span><span class="o">=</span><span class="n">unwrap_binding</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">export_record</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">binding_id</span><span class="p">,</span> <span class="n">fields</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">export_record</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">binding_id</span><span class="p">,</span> <span class="n">fields</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Import a record from Magento &quot;&quot;&quot;</span>
     <span class="c1"># ...</span>
 </pre></div>
@@ -417,16 +419,16 @@ paths change.</p>
 
     <span class="nd">@job</span><span class="p">(</span><span class="n">default_channel</span><span class="o">=</span><span class="s1">&#39;root.magento&#39;</span><span class="p">)</span>
     <span class="nd">@related_action</span><span class="p">(</span><span class="n">action</span><span class="o">=</span><span class="s1">&#39;related_action_magento_link&#39;</span><span class="p">)</span>
-    <span class="nd">@api.model</span>
-    <span class="k">def</span> <span class="nf">import_record</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">backend</span><span class="p">,</span> <span class="n">external_id</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="nd">@api</span><span class="o">.</span><span class="n">model</span>
+    <span class="k">def</span> <span class="nf">import_record</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">backend</span><span class="p">,</span> <span class="n">external_id</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Import a Magento record &quot;&quot;&quot;</span>
         <span class="n">backend</span><span class="o">.</span><span class="n">ensure_one</span><span class="p">()</span>
         <span class="c1"># ...</span>
 
     <span class="nd">@job</span><span class="p">(</span><span class="n">default_channel</span><span class="o">=</span><span class="s1">&#39;root.magento&#39;</span><span class="p">)</span>
     <span class="nd">@related_action</span><span class="p">(</span><span class="n">action</span><span class="o">=</span><span class="s1">&#39;related_action_unwrap_binding&#39;</span><span class="p">)</span>
-    <span class="nd">@api.multi</span>
-    <span class="k">def</span> <span class="nf">export_record</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fields</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="nd">@api</span><span class="o">.</span><span class="n">multi</span>
+    <span class="k">def</span> <span class="nf">export_record</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fields</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Export a record on Magento &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ensure_one</span><span class="p">()</span>
         <span class="c1"># ...</span>
@@ -470,12 +472,12 @@ AbstractModel and add an <code class="docutils literal notranslate"><span class=
     <span class="n">_name</span> <span class="o">=</span> <span class="s1">&#39;my.binding&#39;</span>
     <span class="n">_inherit</span> <span class="o">=</span> <span class="s1">&#39;magento.binding&#39;</span>
 
-    <span class="nd">@api.multi</span>
+    <span class="nd">@api</span><span class="o">.</span><span class="n">multi</span>
     <span class="k">def</span> <span class="nf">button_trigger_export_sync</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">session</span> <span class="o">=</span> <span class="n">ConnectorSession</span><span class="o">.</span><span class="n">from_env</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="p">)</span>
         <span class="n">export_record</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">binding</span><span class="o">.</span><span class="n">_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">fields</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">])</span>
 
-    <span class="nd">@api.multi</span>
+    <span class="nd">@api</span><span class="o">.</span><span class="n">multi</span>
     <span class="k">def</span> <span class="nf">button_trigger_export_async</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">session</span> <span class="o">=</span> <span class="n">ConnectorSession</span><span class="o">.</span><span class="n">from_env</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="p">)</span>
         <span class="n">export_record</span><span class="o">.</span><span class="n">delay</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
@@ -488,11 +490,11 @@ AbstractModel and add an <code class="docutils literal notranslate"><span class=
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">MyBinding</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
     <span class="n">_name</span> <span class="o">=</span> <span class="s1">&#39;my.binding&#39;</span>
 
-    <span class="nd">@api.multi</span>
+    <span class="nd">@api</span><span class="o">.</span><span class="n">multi</span>
     <span class="k">def</span> <span class="nf">button_trigger_export_sync</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">export_record</span><span class="p">(</span><span class="n">fields</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">])</span>
 
-    <span class="nd">@api.multi</span>
+    <span class="nd">@api</span><span class="o">.</span><span class="n">multi</span>
     <span class="k">def</span> <span class="nf">button_trigger_export_async</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">with_delay</span><span class="p">(</span><span class="n">priority</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span><span class="o">.</span><span class="n">export_record</span><span class="p">(</span><span class="n">fields</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">])</span>
 </pre></div>
@@ -516,9 +518,9 @@ on an instance of this record:</p>
 </div>
 <p>In the execution of the job:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@job</span>
-<span class="k">def</span> <span class="nf">export_record</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fields</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
-    <span class="k">print</span> <span class="bp">self</span>
-    <span class="k">print</span> <span class="n">fields</span>
+<span class="k">def</span> <span class="nf">export_record</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fields</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="nb">print</span> <span class="bp">self</span>
+    <span class="nb">print</span> <span class="n">fields</span>
 <span class="c1"># =&gt;</span>
 <span class="c1"># my.binding,1</span>
 <span class="c1"># [&#39;name&#39;]</span>
@@ -554,7 +556,7 @@ on an instance of this record:</p>
     <span class="sd">&quot;&quot;&quot; The base model, which is implicitly inherited by all models. &quot;&quot;&quot;</span>
     <span class="n">_inherit</span> <span class="o">=</span> <span class="s1">&#39;base&#39;</span>
 
-    <span class="nd">@api.model</span>
+    <span class="nd">@api</span><span class="o">.</span><span class="n">model</span>
     <span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vals</span><span class="p">):</span>
         <span class="n">record</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">Base</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">vals</span><span class="p">)</span>
         <span class="n">on_record_create</span><span class="o">.</span><span class="n">fire</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="p">,</span> <span class="n">record</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">vals</span><span class="p">)</span>
@@ -567,7 +569,7 @@ on an instance of this record:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Base</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">AbstractModel</span><span class="p">):</span>
     <span class="n">_inherit</span> <span class="o">=</span> <span class="s1">&#39;base&#39;</span>
 
-    <span class="nd">@api.model</span>
+    <span class="nd">@api</span><span class="o">.</span><span class="n">model</span>
     <span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vals</span><span class="p">):</span>
         <span class="n">record</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">Base</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">vals</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_event</span><span class="p">(</span><span class="s1">&#39;on_record_create&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">notify</span><span class="p">(</span><span class="n">record</span><span class="p">,</span> <span class="n">fields</span><span class="o">=</span><span class="n">vals</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
@@ -620,7 +622,7 @@ Only the arguments you want to pass should be passed to
     <span class="n">_inherit</span> <span class="o">=</span> <span class="s1">&#39;base.connector.listener&#39;</span>
 
     <span class="nd">@skip_if</span><span class="p">(</span><span class="k">lambda</span> <span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">no_connector_export</span><span class="p">(</span><span class="n">record</span><span class="p">))</span>
-    <span class="k">def</span> <span class="nf">on_record_create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="n">fields</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">on_record_create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="n">fields</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Called when a record is created &quot;&quot;&quot;</span>
         <span class="n">record</span><span class="o">.</span><span class="n">with_delay</span><span class="p">()</span><span class="o">.</span><span class="n">export_record</span><span class="p">(</span><span class="n">fields</span><span class="o">=</span><span class="n">fields</span><span class="p">)</span>
 
@@ -674,7 +676,7 @@ be replaced by the decorator <code class="xref py py-func docutils literal notra
     <span class="n">_apply_on</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;magento.address&#39;</span><span class="p">,</span> <span class="s1">&#39;magento.res.partner&#39;</span><span class="p">]</span>
 
     <span class="nd">@skip_if</span><span class="p">(</span><span class="k">lambda</span> <span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">no_connector_export</span><span class="p">(</span><span class="n">record</span><span class="p">))</span>
-    <span class="k">def</span> <span class="nf">on_record_create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="n">fields</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">on_record_create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="n">fields</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Called when a record is created &quot;&quot;&quot;</span>
         <span class="n">record</span><span class="o">.</span><span class="n">with_delay</span><span class="p">()</span><span class="o">.</span><span class="n">export_record</span><span class="p">(</span><span class="n">fields</span><span class="o">=</span><span class="n">fields</span><span class="p">)</span>
 </pre></div>
@@ -719,7 +721,7 @@ be replaced by the decorator <code class="xref py py-func docutils literal notra
 
     <span class="n">_backend_type</span> <span class="o">=</span> <span class="s1">&#39;magento&#39;</span>
 
-    <span class="nd">@api.model</span>
+    <span class="nd">@api</span><span class="o">.</span><span class="n">model</span>
     <span class="k">def</span> <span class="nf">select_versions</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Available versions in the backend.</span>
 <span class="sd">        Can be inherited to add custom versions.  Using this method</span>
@@ -728,7 +730,7 @@ be replaced by the decorator <code class="xref py py-func docutils literal notra
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="p">[(</span><span class="s1">&#39;1.7&#39;</span><span class="p">,</span> <span class="s1">&#39;1.7+&#39;</span><span class="p">)]</span>
 
-    <span class="n">version</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Selection</span><span class="p">(</span><span class="n">selection</span><span class="o">=</span><span class="s1">&#39;select_versions&#39;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">version</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Selection</span><span class="p">(</span><span class="n">selection</span><span class="o">=</span><span class="s1">&#39;select_versions&#39;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -741,7 +743,7 @@ be replaced by the decorator <code class="xref py py-func docutils literal notra
     <span class="n">_description</span> <span class="o">=</span> <span class="s1">&#39;Magento Backend&#39;</span>
     <span class="n">_inherit</span> <span class="o">=</span> <span class="s1">&#39;connector.backend&#39;</span>
 
-    <span class="nd">@api.model</span>
+    <span class="nd">@api</span><span class="o">.</span><span class="n">model</span>
     <span class="k">def</span> <span class="nf">select_versions</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Available versions in the backend.</span>
 <span class="sd">        Can be inherited to add custom versions.  Using this method</span>
@@ -750,7 +752,7 @@ be replaced by the decorator <code class="xref py py-func docutils literal notra
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="p">[(</span><span class="s1">&#39;1.7&#39;</span><span class="p">,</span> <span class="s1">&#39;1.7+&#39;</span><span class="p">)]</span>
 
-    <span class="n">version</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Selection</span><span class="p">(</span><span class="n">selection</span><span class="o">=</span><span class="s1">&#39;select_versions&#39;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">version</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Selection</span><span class="p">(</span><span class="n">selection</span><span class="o">=</span><span class="s1">&#39;select_versions&#39;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1144,7 +1146,7 @@ another, let’s say there is this component:</p>
 
 <span class="k">class</span> <span class="nc">ProductImportMapper</span><span class="p">(</span><span class="n">Component</span><span class="p">):</span>
     <span class="n">_inherit</span> <span class="o">=</span> <span class="s1">&#39;magento.product.import.mapper&#39;</span>
-    <span class="n">_usage</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="n">_usage</span> <span class="o">=</span> <span class="kc">None</span>
 </pre></div>
 </div>
 <p>And create your own, that will be picked up instead of the base one:</p>

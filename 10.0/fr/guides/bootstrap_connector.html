@@ -66,8 +66,8 @@
     <ul class="dropdown-menu"
         role="menu"
         aria-labelledby="dLabelTranslations">
-      <li><a class="reference" href="http://odoo-connector.com/10.0">English</a><li>
-      <li><a class="reference" href="http://odoo-connector.com/10.0/fr">French</a><li>
+      <li><a class="reference" href="http://odoo-connector.com/10.0">English</a></li>
+      <li><a class="reference" href="http://odoo-connector.com/10.0/fr">French</a></li>
     </ul>
   </li>
   <li class="dropdown">
@@ -79,9 +79,11 @@
     <ul class="dropdown-menu"
         role="menu"
         aria-labelledby="dLabeVersions">
-      <li><a class="reference" href="http://odoo-connector.com/8.0">8.0</a><li>
-      <li><a class="reference" href="http://odoo-connector.com/9.0">9.0</a><li>
-      <li><a class="reference" href="http://odoo-connector.com">11.0</a><li>
+      <li><a class="reference" href="http://odoo-connector.com/8.0">8.0</a></li>
+      <li><a class="reference" href="http://odoo-connector.com/9.0">9.0</a></li>
+      <li><a class="reference" href="http://odoo-connector.com/11.0">11.0</a></li>
+      <li><a class="reference" href="http://odoo-connector.com/12.0">12.0</a></li>
+      <li><a class="reference" href="http://odoo-connector.com/">13.0</a></li>
     </ul>
   </li>
   
@@ -282,7 +284,7 @@ might be outdated.</p>
 <span class="s2"> * Poor a coffee when Odoo is busy for too long</span>
 <span class="s2"> &quot;&quot;&quot;</span><span class="p">,</span>
   <span class="s1">&#39;data&#39;</span><span class="p">:</span> <span class="p">[],</span>
-  <span class="s1">&#39;installable&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+  <span class="s1">&#39;installable&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
  <span class="p">}</span>
 </pre></div>
 </div>
@@ -303,7 +305,7 @@ synchronize will be linked with a record of <code class="docutils literal notran
 is our <em>collection</em> of Components.</p>
 <p>The <code class="docutils literal notranslate"><span class="pre">coffee.backend</span></code> model is an <code class="docutils literal notranslate"><span class="pre">_inherit</span></code> of <code class="docutils literal notranslate"><span class="pre">connector.backend</span></code>. In
 <code class="docutils literal notranslate"><span class="pre">connector_coffee/models/coffee_binding.py</span></code>:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">odoo</span> <span class="k">import</span> <span class="n">api</span><span class="p">,</span> <span class="n">fields</span><span class="p">,</span> <span class="n">models</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">odoo</span> <span class="kn">import</span> <span class="n">api</span><span class="p">,</span> <span class="n">fields</span><span class="p">,</span> <span class="n">models</span>
 
 
 <span class="k">class</span> <span class="nc">CoffeeBackend</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
@@ -328,7 +330,7 @@ synchronizations.</li>
 <p>In order to share common features between all the bindings (see
 <a class="reference internal" href="concepts.html#binding"><span class="std std-ref">Bindings (Liaisons)</span></a>), create an abstract binding model.</p>
 <p>It can be as follows (in <code class="docutils literal notranslate"><span class="pre">connector_coffee/models/coffee_binding.py</span></code>):</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">odoo</span> <span class="k">import</span> <span class="n">models</span><span class="p">,</span> <span class="n">fields</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">odoo</span> <span class="kn">import</span> <span class="n">models</span><span class="p">,</span> <span class="n">fields</span>
 
 
 <span class="k">class</span> <span class="nc">CoffeeBinding</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">AbstractModel</span><span class="p">):</span>

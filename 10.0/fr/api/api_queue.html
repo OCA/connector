@@ -66,8 +66,8 @@
     <ul class="dropdown-menu"
         role="menu"
         aria-labelledby="dLabelTranslations">
-      <li><a class="reference" href="http://odoo-connector.com/10.0">English</a><li>
-      <li><a class="reference" href="http://odoo-connector.com/10.0/fr">French</a><li>
+      <li><a class="reference" href="http://odoo-connector.com/10.0">English</a></li>
+      <li><a class="reference" href="http://odoo-connector.com/10.0/fr">French</a></li>
     </ul>
   </li>
   <li class="dropdown">
@@ -79,9 +79,11 @@
     <ul class="dropdown-menu"
         role="menu"
         aria-labelledby="dLabeVersions">
-      <li><a class="reference" href="http://odoo-connector.com/8.0">8.0</a><li>
-      <li><a class="reference" href="http://odoo-connector.com/9.0">9.0</a><li>
-      <li><a class="reference" href="http://odoo-connector.com">11.0</a><li>
+      <li><a class="reference" href="http://odoo-connector.com/8.0">8.0</a></li>
+      <li><a class="reference" href="http://odoo-connector.com/9.0">9.0</a></li>
+      <li><a class="reference" href="http://odoo-connector.com/11.0">11.0</a></li>
+      <li><a class="reference" href="http://odoo-connector.com/12.0">12.0</a></li>
+      <li><a class="reference" href="http://odoo-connector.com/">13.0</a></li>
     </ul>
   </li>
   
@@ -349,7 +351,7 @@ jobs queueing for debugging purposes, you can:</p>
 <li><strong>default_channel</strong> – the channel wherein the job will be assigned. This
 channel is set at the installation of the module
 and can be manually changed later using the views.</li>
-<li><strong>retry_pattern</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(disponible dans Python v3.7)"><em>dict</em></a><em>(</em><em>retry_count</em><em>,</em><em>retry_eta_seconds</em><em>)</em>) – The retry pattern to use for postponing a job.
+<li><strong>retry_pattern</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(disponible dans Python v3.8)"><em>dict</em></a><em>(</em><em>retry_count</em><em>,</em><em>retry_eta_seconds</em><em>)</em>) – The retry pattern to use for postponing a job.
 If a job is postponed and there is no eta
 specified, the eta will be determined from the
 dict in retry_pattern. When no retry pattern
@@ -376,7 +378,7 @@ values are the delay to postpone a job.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">ProductProduct</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
     <span class="n">_inherit</span> <span class="o">=</span> <span class="s1">&#39;product.product&#39;</span>
 
-    <span class="nd">@api.multi</span>
+    <span class="nd">@api</span><span class="o">.</span><span class="n">multi</span>
     <span class="nd">@job</span>
     <span class="k">def</span> <span class="nf">export_one_thing</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">one_thing</span><span class="p">):</span>
         <span class="c1"># work</span>
@@ -427,7 +429,7 @@ values are the delay to postpone a job.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">QueueJob</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
     <span class="n">_inherit</span> <span class="o">=</span> <span class="s1">&#39;queue.job&#39;</span>
 
-    <span class="nd">@api.multi</span>
+    <span class="nd">@api</span><span class="o">.</span><span class="n">multi</span>
     <span class="k">def</span> <span class="nf">related_action_partner</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ensure_one</span><span class="p">()</span>
         <span class="n">model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model_name</span>
@@ -446,7 +448,7 @@ values are the delay to postpone a job.</p>
 <span class="k">class</span> <span class="nc">ResPartner</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
     <span class="n">_inherit</span> <span class="o">=</span> <span class="s1">&#39;res.partner&#39;</span>
 
-    <span class="nd">@api.multi</span>
+    <span class="nd">@api</span><span class="o">.</span><span class="n">multi</span>
     <span class="nd">@job</span>
     <span class="nd">@related_action</span><span class="p">(</span><span class="n">action</span><span class="o">=</span><span class="s1">&#39;related_action_partner&#39;</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">export_partner</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -457,7 +459,7 @@ values are the delay to postpone a job.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">QueueJob</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
     <span class="n">_inherit</span> <span class="o">=</span> <span class="s1">&#39;queue.job&#39;</span>
 
-    <span class="nd">@api.multi</span>
+    <span class="nd">@api</span><span class="o">.</span><span class="n">multi</span>
     <span class="k">def</span> <span class="nf">related_action_product</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">extra_arg</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
         <span class="k">assert</span> <span class="n">extra_arg</span> <span class="o">==</span> <span class="mi">2</span>
         <span class="n">model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model_name</span>
@@ -466,7 +468,7 @@ values are the delay to postpone a job.</p>
 <span class="k">class</span> <span class="nc">ProductProduct</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
     <span class="n">_inherit</span> <span class="o">=</span> <span class="s1">&#39;product.product&#39;</span>
 
-    <span class="nd">@api.multi</span>
+    <span class="nd">@api</span><span class="o">.</span><span class="n">multi</span>
     <span class="nd">@job</span>
     <span class="nd">@related_action</span><span class="p">(</span><span class="n">action</span><span class="o">=</span><span class="s1">&#39;related_action_product&#39;</span><span class="p">,</span> <span class="n">extra_arg</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">export_product</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -481,7 +483,7 @@ values are the delay to postpone a job.</p>
 <dl class="class">
 <dt id="odoo.addons.queue_job.job.DelayableRecordset">
 <em class="property">class </em><code class="descclassname">odoo.addons.queue_job.job.</code><code class="descname">DelayableRecordset</code><span class="sig-paren">(</span><em>recordset</em>, <em>priority=None</em>, <em>eta=None</em>, <em>max_retries=None</em>, <em>description=None</em>, <em>channel=None</em>, <em>identity_key=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/job.html#DelayableRecordset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.queue_job.job.DelayableRecordset" title="Lien permanent vers cette définition">¶</a></dt>
-<dd><p>Bases : <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(disponible dans Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dd><p>Bases : <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(disponible dans Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Allow to delay a method for a recordset</p>
 <p>Utilisation</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">delayable</span> <span class="o">=</span> <span class="n">DelayableRecordset</span><span class="p">(</span><span class="n">recordset</span><span class="p">,</span> <span class="n">priority</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
@@ -497,7 +499,7 @@ the passed arguments.</p>
 <dl class="class">
 <dt id="odoo.addons.queue_job.job.Job">
 <em class="property">class </em><code class="descclassname">odoo.addons.queue_job.job.</code><code class="descname">Job</code><span class="sig-paren">(</span><em>func</em>, <em>args=None</em>, <em>kwargs=None</em>, <em>priority=None</em>, <em>eta=None</em>, <em>job_uuid=None</em>, <em>max_retries=None</em>, <em>description=None</em>, <em>channel=None</em>, <em>identity_key=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/job.html#Job"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.queue_job.job.Job" title="Lien permanent vers cette définition">¶</a></dt>
-<dd><p>Bases : <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(disponible dans Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dd><p>Bases : <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(disponible dans Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Un job est une tâche à exécuter.</p>
 <dl class="attribute">
 <dt id="odoo.addons.queue_job.job.Job.uuid">

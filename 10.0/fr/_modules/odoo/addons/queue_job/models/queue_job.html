@@ -64,8 +64,8 @@
     <ul class="dropdown-menu"
         role="menu"
         aria-labelledby="dLabelTranslations">
-      <li><a class="reference" href="http://odoo-connector.com/10.0">English</a><li>
-      <li><a class="reference" href="http://odoo-connector.com/10.0/fr">French</a><li>
+      <li><a class="reference" href="http://odoo-connector.com/10.0">English</a></li>
+      <li><a class="reference" href="http://odoo-connector.com/10.0/fr">French</a></li>
     </ul>
   </li>
   <li class="dropdown">
@@ -77,9 +77,11 @@
     <ul class="dropdown-menu"
         role="menu"
         aria-labelledby="dLabeVersions">
-      <li><a class="reference" href="http://odoo-connector.com/8.0">8.0</a><li>
-      <li><a class="reference" href="http://odoo-connector.com/9.0">9.0</a><li>
-      <li><a class="reference" href="http://odoo-connector.com">11.0</a><li>
+      <li><a class="reference" href="http://odoo-connector.com/8.0">8.0</a></li>
+      <li><a class="reference" href="http://odoo-connector.com/9.0">9.0</a></li>
+      <li><a class="reference" href="http://odoo-connector.com/11.0">11.0</a></li>
+      <li><a class="reference" href="http://odoo-connector.com/12.0">12.0</a></li>
+      <li><a class="reference" href="http://odoo-connector.com/">13.0</a></li>
     </ul>
   </li>
   
@@ -233,12 +235,12 @@
 <span class="c1"># License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html)</span>
 
 <span class="kn">import</span> <span class="nn">logging</span>
-<span class="kn">from</span> <span class="nn">datetime</span> <span class="k">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">timedelta</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">timedelta</span>
 
-<span class="kn">from</span> <span class="nn">odoo</span> <span class="k">import</span> <span class="n">models</span><span class="p">,</span> <span class="n">fields</span><span class="p">,</span> <span class="n">api</span><span class="p">,</span> <span class="n">exceptions</span><span class="p">,</span> <span class="n">_</span>
+<span class="kn">from</span> <span class="nn">odoo</span> <span class="kn">import</span> <span class="n">models</span><span class="p">,</span> <span class="n">fields</span><span class="p">,</span> <span class="n">api</span><span class="p">,</span> <span class="n">exceptions</span><span class="p">,</span> <span class="n">_</span>
 
-<span class="kn">from</span> <span class="nn">..job</span> <span class="k">import</span> <span class="n">STATES</span><span class="p">,</span> <span class="n">DONE</span><span class="p">,</span> <span class="n">PENDING</span><span class="p">,</span> <span class="n">Job</span>
-<span class="kn">from</span> <span class="nn">..fields</span> <span class="k">import</span> <span class="n">JobSerialized</span>
+<span class="kn">from</span> <span class="nn">..job</span> <span class="kn">import</span> <span class="n">STATES</span><span class="p">,</span> <span class="n">DONE</span><span class="p">,</span> <span class="n">PENDING</span><span class="p">,</span> <span class="n">Job</span>
+<span class="kn">from</span> <span class="nn">..fields</span> <span class="kn">import</span> <span class="n">JobSerialized</span>
 
 <span class="n">_logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
@@ -391,10 +393,28 @@
             <span class="n">job_</span><span class="o">.</span><span class="n">store</span><span class="p">()</span>
 
     <span class="nd">@api</span><span class="o">.</span><span class="n">multi</span>
-    <span class="k">def</span> <span class="nf">button_done</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">result</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span><span class="s1">&#39;Manually set to done by </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">)</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">name</span>
+    <span class="k">def</span> <span class="nf">action_done</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">reason</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span>
+            <span class="sa">u</span><span class="s2">&quot;Manually set to done by </span><span class="si">{}</span><span class="s2">&quot;</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">reason</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span>
+                <span class="sa">u</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> with reason: </span><span class="si">{}</span><span class="s2">&quot;</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">reason</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_change_job_state</span><span class="p">(</span><span class="n">DONE</span><span class="p">,</span> <span class="n">result</span><span class="o">=</span><span class="n">result</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">True</span>
+
+    <span class="nd">@api</span><span class="o">.</span><span class="n">multi</span>
+    <span class="k">def</span> <span class="nf">button_done</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">_logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;deprecated, replaced by action_done()&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">action_done</span><span class="p">()</span>
+
+    <span class="nd">@api</span><span class="o">.</span><span class="n">multi</span>
+    <span class="k">def</span> <span class="nf">button_done_ask_reason</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">action</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">ref</span><span class="p">(</span>
+            <span class="s1">&#39;queue_job.action_set_jobs_done&#39;</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">action</span>
 
     <span class="nd">@api</span><span class="o">.</span><span class="n">multi</span>
     <span class="k">def</span> <span class="nf">requeue</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -451,15 +471,20 @@
 
     <span class="nd">@api</span><span class="o">.</span><span class="n">model</span>
     <span class="k">def</span> <span class="nf">autovacuum</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Delete all jobs done since more than ``_removal_interval`` days.</span>
+        <span class="sd">&quot;&quot;&quot; Delete all jobs done based on the removal interval defined on the</span>
+<span class="sd">            channel</span>
 
 <span class="sd">        Called from a cron.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">deadline</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span> <span class="o">-</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_removal_interval</span><span class="p">)</span>
-        <span class="n">jobs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">search</span><span class="p">(</span>
-            <span class="p">[(</span><span class="s1">&#39;date_done&#39;</span><span class="p">,</span> <span class="s1">&#39;&lt;=&#39;</span><span class="p">,</span> <span class="n">fields</span><span class="o">.</span><span class="n">Datetime</span><span class="o">.</span><span class="n">to_string</span><span class="p">(</span><span class="n">deadline</span><span class="p">))],</span>
-        <span class="p">)</span>
-        <span class="n">jobs</span><span class="o">.</span><span class="n">unlink</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">channel</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="p">[</span><span class="s1">&#39;queue.job.channel&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">search</span><span class="p">([]):</span>
+            <span class="n">deadline</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span> <span class="o">-</span> <span class="n">timedelta</span><span class="p">(</span>
+                <span class="n">days</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">channel</span><span class="o">.</span><span class="n">removal_interval</span><span class="p">))</span>
+            <span class="n">jobs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">search</span><span class="p">(</span>
+                <span class="p">[(</span><span class="s1">&#39;date_done&#39;</span><span class="p">,</span> <span class="s1">&#39;&lt;=&#39;</span><span class="p">,</span> <span class="n">fields</span><span class="o">.</span><span class="n">Datetime</span><span class="o">.</span><span class="n">to_string</span><span class="p">(</span><span class="n">deadline</span><span class="p">)),</span>
+                 <span class="p">(</span><span class="s1">&#39;channel&#39;</span><span class="p">,</span> <span class="s1">&#39;=&#39;</span><span class="p">,</span> <span class="n">channel</span><span class="o">.</span><span class="n">complete_name</span><span class="p">)],</span>
+            <span class="p">)</span>
+            <span class="k">if</span> <span class="n">jobs</span><span class="p">:</span>
+                <span class="n">jobs</span><span class="o">.</span><span class="n">unlink</span><span class="p">()</span>
         <span class="k">return</span> <span class="kc">True</span>
 
     <span class="nd">@api</span><span class="o">.</span><span class="n">multi</span>
@@ -526,10 +551,12 @@
     <span class="n">_name</span> <span class="o">=</span> <span class="s1">&#39;queue.jobs.to.done&#39;</span>
     <span class="n">_description</span> <span class="o">=</span> <span class="s1">&#39;Set all selected jobs to done&#39;</span>
 
+    <span class="n">reason</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Text</span><span class="p">(</span><span class="n">string</span><span class="o">=</span><span class="s1">&#39;Reason to set to done&#39;</span><span class="p">)</span>
+
     <span class="nd">@api</span><span class="o">.</span><span class="n">multi</span>
     <span class="k">def</span> <span class="nf">set_done</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">jobs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">job_ids</span>
-        <span class="n">jobs</span><span class="o">.</span><span class="n">button_done</span><span class="p">()</span>
+        <span class="n">jobs</span><span class="o">.</span><span class="n">action_done</span><span class="p">(</span><span class="n">reason</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">reason</span><span class="p">)</span>
         <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;ir.actions.act_window_close&#39;</span><span class="p">}</span>
 
 
@@ -548,6 +575,9 @@
     <span class="n">job_function_ids</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">One2many</span><span class="p">(</span><span class="n">comodel_name</span><span class="o">=</span><span class="s1">&#39;queue.job.function&#39;</span><span class="p">,</span>
                                        <span class="n">inverse_name</span><span class="o">=</span><span class="s1">&#39;channel_id&#39;</span><span class="p">,</span>
                                        <span class="n">string</span><span class="o">=</span><span class="s1">&#39;Job Functions&#39;</span><span class="p">)</span>
+    <span class="n">removal_interval</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Integer</span><span class="p">(</span>
+        <span class="n">default</span><span class="o">=</span><span class="k">lambda</span> <span class="bp">self</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="p">[</span><span class="s1">&#39;queue.job&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">_removal_interval</span><span class="p">,</span>
+        <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
     <span class="n">_sql_constraints</span> <span class="o">=</span> <span class="p">[</span>
         <span class="p">(</span><span class="s1">&#39;name_uniq&#39;</span><span class="p">,</span>

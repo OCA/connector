@@ -64,8 +64,8 @@
     <ul class="dropdown-menu"
         role="menu"
         aria-labelledby="dLabelTranslations">
-      <li><a class="reference" href="http://odoo-connector.com/10.0">English</a><li>
-      <li><a class="reference" href="http://odoo-connector.com/10.0/fr">French</a><li>
+      <li><a class="reference" href="http://odoo-connector.com/10.0">English</a></li>
+      <li><a class="reference" href="http://odoo-connector.com/10.0/fr">French</a></li>
     </ul>
   </li>
   <li class="dropdown">
@@ -77,9 +77,11 @@
     <ul class="dropdown-menu"
         role="menu"
         aria-labelledby="dLabeVersions">
-      <li><a class="reference" href="http://odoo-connector.com/8.0">8.0</a><li>
-      <li><a class="reference" href="http://odoo-connector.com/9.0">9.0</a><li>
-      <li><a class="reference" href="http://odoo-connector.com">11.0</a><li>
+      <li><a class="reference" href="http://odoo-connector.com/8.0">8.0</a></li>
+      <li><a class="reference" href="http://odoo-connector.com/9.0">9.0</a></li>
+      <li><a class="reference" href="http://odoo-connector.com/11.0">11.0</a></li>
+      <li><a class="reference" href="http://odoo-connector.com/12.0">12.0</a></li>
+      <li><a class="reference" href="http://odoo-connector.com/">13.0</a></li>
     </ul>
   </li>
   
@@ -233,11 +235,11 @@
 
 <span class="sd">&quot;&quot;&quot; High-level objects for fields. &quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">OrderedDict</span><span class="p">,</span> <span class="n">defaultdict</span>
-<span class="kn">from</span> <span class="nn">datetime</span> <span class="k">import</span> <span class="n">date</span><span class="p">,</span> <span class="n">datetime</span>
-<span class="kn">from</span> <span class="nn">functools</span> <span class="k">import</span> <span class="n">partial</span>
-<span class="kn">from</span> <span class="nn">operator</span> <span class="k">import</span> <span class="n">attrgetter</span>
-<span class="kn">from</span> <span class="nn">types</span> <span class="k">import</span> <span class="n">NoneType</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">OrderedDict</span><span class="p">,</span> <span class="n">defaultdict</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">date</span><span class="p">,</span> <span class="n">datetime</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
+<span class="kn">from</span> <span class="nn">operator</span> <span class="kn">import</span> <span class="n">attrgetter</span>
+<span class="kn">from</span> <span class="nn">types</span> <span class="kn">import</span> <span class="n">NoneType</span>
 <span class="kn">import</span> <span class="nn">json</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">pytz</span>
@@ -245,12 +247,12 @@
 
 <span class="kn">import</span> <span class="nn">psycopg2</span>
 
-<span class="kn">from</span> <span class="nn">odoo.sql_db</span> <span class="k">import</span> <span class="n">LazyCursor</span>
-<span class="kn">from</span> <span class="nn">odoo.tools</span> <span class="k">import</span> <span class="n">float_precision</span><span class="p">,</span> <span class="n">float_repr</span><span class="p">,</span> <span class="n">float_round</span><span class="p">,</span> <span class="n">frozendict</span><span class="p">,</span> \
+<span class="kn">from</span> <span class="nn">odoo.sql_db</span> <span class="kn">import</span> <span class="n">LazyCursor</span>
+<span class="kn">from</span> <span class="nn">odoo.tools</span> <span class="kn">import</span> <span class="n">float_precision</span><span class="p">,</span> <span class="n">float_repr</span><span class="p">,</span> <span class="n">float_round</span><span class="p">,</span> <span class="n">frozendict</span><span class="p">,</span> \
                        <span class="n">html_sanitize</span><span class="p">,</span> <span class="n">human_size</span><span class="p">,</span> <span class="n">pg_varchar</span><span class="p">,</span> <span class="n">ustr</span><span class="p">,</span> <span class="n">OrderedSet</span>
-<span class="kn">from</span> <span class="nn">odoo.tools</span> <span class="k">import</span> <span class="n">DEFAULT_SERVER_DATE_FORMAT</span> <span class="k">as</span> <span class="n">DATE_FORMAT</span>
-<span class="kn">from</span> <span class="nn">odoo.tools</span> <span class="k">import</span> <span class="n">DEFAULT_SERVER_DATETIME_FORMAT</span> <span class="k">as</span> <span class="n">DATETIME_FORMAT</span>
-<span class="kn">from</span> <span class="nn">odoo.tools.translate</span> <span class="k">import</span> <span class="n">html_translate</span><span class="p">,</span> <span class="n">_</span>
+<span class="kn">from</span> <span class="nn">odoo.tools</span> <span class="kn">import</span> <span class="n">DEFAULT_SERVER_DATE_FORMAT</span> <span class="k">as</span> <span class="n">DATE_FORMAT</span>
+<span class="kn">from</span> <span class="nn">odoo.tools</span> <span class="kn">import</span> <span class="n">DEFAULT_SERVER_DATETIME_FORMAT</span> <span class="k">as</span> <span class="n">DATETIME_FORMAT</span>
+<span class="kn">from</span> <span class="nn">odoo.tools.translate</span> <span class="kn">import</span> <span class="n">html_translate</span><span class="p">,</span> <span class="n">_</span>
 
 <span class="n">DATE_LENGTH</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">date</span><span class="o">.</span><span class="n">today</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="n">DATE_FORMAT</span><span class="p">))</span>
 <span class="n">DATETIME_LENGTH</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="n">DATETIME_FORMAT</span><span class="p">))</span>
@@ -265,14 +267,14 @@
 
 <span class="k">class</span> <span class="nc">SpecialValue</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Encapsulates a value in the cache in place of a normal value. &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">value</span>
     <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span>
 
 <span class="k">class</span> <span class="nc">FailedValue</span><span class="p">(</span><span class="n">SpecialValue</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Special value that encapsulates an exception instead of a value. &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exception</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exception</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">exception</span> <span class="o">=</span> <span class="n">exception</span>
     <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">raise</span> <span class="bp">self</span><span class="o">.</span><span class="n">exception</span>
@@ -330,7 +332,7 @@
     <span class="sd">&quot;&quot;&quot; Metaclass for field classes. &quot;&quot;&quot;</span>
     <span class="n">by_type</span> <span class="o">=</span> <span class="p">{}</span>
 
-    <span class="k">def</span> <span class="nf">__new__</span><span class="p">(</span><span class="n">meta</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">attrs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__new__</span><span class="p">(</span><span class="n">meta</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">attrs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Combine the ``_slots`` dict from parent classes, and determine</span>
 <span class="sd">        ``__slots__`` for them on the new class.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -345,7 +347,7 @@
         <span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;_slots&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">slots</span>
         <span class="k">return</span> <span class="nb">type</span><span class="o">.</span><span class="fm">__new__</span><span class="p">(</span><span class="n">meta</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">attrs</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">attrs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">attrs</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">MetaField</span><span class="p">,</span> <span class="bp">cls</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">attrs</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">type</span> <span class="ow">and</span> <span class="bp">cls</span><span class="o">.</span><span class="n">type</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">MetaField</span><span class="o">.</span><span class="n">by_type</span><span class="p">:</span>
             <span class="n">MetaField</span><span class="o">.</span><span class="n">by_type</span><span class="p">[</span><span class="bp">cls</span><span class="o">.</span><span class="n">type</span><span class="p">]</span> <span class="o">=</span> <span class="bp">cls</span>
@@ -587,7 +589,7 @@
         <span class="s1">&#39;prefetch&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>               <span class="c1"># whether the field is prefetched</span>
     <span class="p">}</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">string</span><span class="o">=</span><span class="n">Default</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">string</span><span class="o">=</span><span class="n">Default</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;string&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">string</span>
         <span class="n">args</span> <span class="o">=</span> <span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="n">val</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">iteritems</span><span class="p">()</span> <span class="k">if</span> <span class="n">val</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">Default</span><span class="p">}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">args</span> <span class="o">=</span> <span class="n">args</span> <span class="ow">or</span> <span class="n">EMPTY_DICT</span>
@@ -597,14 +599,14 @@
         <span class="sd">&quot;&quot;&quot; Return a field of the same type as ``self``, with its own parameters. &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">__getattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__getattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Access non-slot field attribute. &quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_attrs</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
         <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">__setattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__setattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Set slot or non-slot field attribute. &quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="nb">object</span><span class="o">.</span><span class="fm">__setattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
@@ -623,17 +625,17 @@
         <span class="k">if</span> <span class="n">attrs</span><span class="p">:</span>
             <span class="n">assign</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;_attrs&#39;</span><span class="p">,</span> <span class="n">attrs</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">__delattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__delattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Remove non-slot field attribute. &quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_attrs</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
         <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">.</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">.</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
 
     <span class="c1">############################################################################</span>
@@ -951,7 +953,7 @@
     <span class="c1"># on ``path``. See method ``modified`` below for details.</span>
     <span class="c1">#</span>
 
-    <span class="k">def</span> <span class="nf">resolve_deps</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">resolve_deps</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">path0</span><span class="o">=</span><span class="p">[],</span> <span class="n">seen</span><span class="o">=</span><span class="nb">frozenset</span><span class="p">()):</span>
         <span class="sd">&quot;&quot;&quot; Return the dependencies of ``self`` as tuples ``(model, field, path)``,</span>
 <span class="sd">            where ``path`` is an optional list of field names.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -962,11 +964,12 @@
         <span class="k">for</span> <span class="n">dotnames</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">depends</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">dotnames</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
                 <span class="n">_logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Field </span><span class="si">%s</span><span class="s2"> depends on itself; please fix its decorator @api.depends().&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
-            <span class="n">model</span><span class="p">,</span> <span class="n">path</span> <span class="o">=</span> <span class="n">model0</span><span class="p">,</span> <span class="n">dotnames</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)</span>
-            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">fname</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+            <span class="n">model</span><span class="p">,</span> <span class="n">path</span> <span class="o">=</span> <span class="n">model0</span><span class="p">,</span> <span class="n">path0</span>
+            <span class="k">for</span> <span class="n">fname</span> <span class="ow">in</span> <span class="n">dotnames</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">):</span>
                 <span class="n">field</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">_fields</span><span class="p">[</span><span class="n">fname</span><span class="p">]</span>
-                <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">model</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">path</span><span class="p">[:</span><span class="n">i</span><span class="p">]))</span>
+                <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">model</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">path</span><span class="p">))</span>
                 <span class="n">model</span> <span class="o">=</span> <span class="n">model0</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">field</span><span class="o">.</span><span class="n">comodel_name</span><span class="p">)</span>
+                <span class="n">path</span> <span class="o">=</span> <span class="kc">None</span> <span class="k">if</span> <span class="n">path</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">path</span> <span class="o">+</span> <span class="p">[</span><span class="n">fname</span><span class="p">]</span>
 
         <span class="c1"># add self&#39;s model dependencies</span>
         <span class="k">for</span> <span class="n">mname</span><span class="p">,</span> <span class="n">fnames</span> <span class="ow">in</span> <span class="n">model0</span><span class="o">.</span><span class="n">_depends</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
@@ -976,11 +979,14 @@
                 <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">model</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="kc">None</span><span class="p">))</span>
 
         <span class="c1"># add indirect dependencies from the dependencies found above</span>
+        <span class="n">seen</span> <span class="o">=</span> <span class="n">seen</span><span class="o">.</span><span class="n">union</span><span class="p">([</span><span class="bp">self</span><span class="p">])</span>
         <span class="k">for</span> <span class="n">model</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">path</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">result</span><span class="p">):</span>
             <span class="k">for</span> <span class="n">inv_field</span> <span class="ow">in</span> <span class="n">model</span><span class="o">.</span><span class="n">_field_inverses</span><span class="p">[</span><span class="n">field</span><span class="p">]:</span>
                 <span class="n">inv_model</span> <span class="o">=</span> <span class="n">model0</span><span class="o">.</span><span class="n">env</span><span class="p">[</span><span class="n">inv_field</span><span class="o">.</span><span class="n">model_name</span><span class="p">]</span>
                 <span class="n">inv_path</span> <span class="o">=</span> <span class="kc">None</span> <span class="k">if</span> <span class="n">path</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">path</span> <span class="o">+</span> <span class="p">[</span><span class="n">field</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>
                 <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">inv_model</span><span class="p">,</span> <span class="n">inv_field</span><span class="p">,</span> <span class="n">inv_path</span><span class="p">))</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">field</span><span class="o">.</span><span class="n">store</span> <span class="ow">and</span> <span class="n">field</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">seen</span><span class="p">:</span>
+                <span class="n">result</span> <span class="o">+=</span> <span class="n">field</span><span class="o">.</span><span class="n">resolve_deps</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">seen</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">result</span>
 
@@ -1141,7 +1147,7 @@
     <span class="c1"># Descriptor methods</span>
     <span class="c1">#</span>
 
-    <span class="k">def</span> <span class="nf">__get__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="n">owner</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__get__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="n">owner</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; return the value of field ``self`` on ``record`` &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">record</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span>         <span class="c1"># the field is accessed through the owner class</span>
@@ -1164,7 +1170,7 @@
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">convert_to_record</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">record</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">__set__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__set__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; set the value of field ``self`` on ``record`` &quot;&quot;&quot;</span>
         <span class="n">env</span> <span class="o">=</span> <span class="n">record</span><span class="o">.</span><span class="n">env</span>
 
@@ -1240,6 +1246,8 @@
                 <span class="n">recs</span> <span class="o">=</span> <span class="n">record</span><span class="o">.</span><span class="n">_recompute_check</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
                 <span class="k">if</span> <span class="n">recs</span><span class="p">:</span>
                     <span class="c1"># recompute the value (only in cache)</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">recursive</span><span class="p">:</span>
+                        <span class="n">recs</span> <span class="o">=</span> <span class="n">record</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">compute_value</span><span class="p">(</span><span class="n">recs</span><span class="p">)</span>
                     <span class="c1"># HACK: if result is in the wrong cache, copy values</span>
                     <span class="k">if</span> <span class="n">recs</span><span class="o">.</span><span class="n">env</span> <span class="o">!=</span> <span class="n">env</span><span class="p">:</span>
@@ -1441,7 +1449,7 @@
         <span class="s1">&#39;group_operator&#39;</span><span class="p">:</span> <span class="s1">&#39;sum&#39;</span><span class="p">,</span>
     <span class="p">}</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">string</span><span class="o">=</span><span class="n">Default</span><span class="p">,</span> <span class="n">digits</span><span class="o">=</span><span class="n">Default</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">string</span><span class="o">=</span><span class="n">Default</span><span class="p">,</span> <span class="n">digits</span><span class="o">=</span><span class="n">Default</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">Float</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">string</span><span class="o">=</span><span class="n">string</span><span class="p">,</span> <span class="n">_digits</span><span class="o">=</span><span class="n">digits</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
     <span class="nd">@property</span>
@@ -1501,7 +1509,7 @@
         <span class="s1">&#39;group_operator&#39;</span><span class="p">:</span> <span class="s1">&#39;sum&#39;</span><span class="p">,</span>
     <span class="p">}</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">string</span><span class="o">=</span><span class="n">Default</span><span class="p">,</span> <span class="n">currency_field</span><span class="o">=</span><span class="n">Default</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">string</span><span class="o">=</span><span class="n">Default</span><span class="p">,</span> <span class="n">currency_field</span><span class="o">=</span><span class="n">Default</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">Monetary</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">string</span><span class="o">=</span><span class="n">string</span><span class="p">,</span> <span class="n">currency_field</span><span class="o">=</span><span class="n">currency_field</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
     <span class="n">_related_currency_field</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">attrgetter</span><span class="p">(</span><span class="s1">&#39;currency_field&#39;</span><span class="p">))</span>
@@ -1549,7 +1557,7 @@
         <span class="s1">&#39;translate&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>             <span class="c1"># whether the field is translated</span>
     <span class="p">}</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">string</span><span class="o">=</span><span class="n">Default</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">string</span><span class="o">=</span><span class="n">Default</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="c1"># translate is either True, False, or a callable</span>
         <span class="k">if</span> <span class="s1">&#39;translate&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">callable</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;translate&#39;</span><span class="p">]):</span>
             <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;translate&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;translate&#39;</span><span class="p">])</span>
@@ -1960,7 +1968,7 @@
         <span class="s1">&#39;selection&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>              <span class="c1"># [(value, string), ...], function or method name</span>
     <span class="p">}</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">selection</span><span class="o">=</span><span class="n">Default</span><span class="p">,</span> <span class="n">string</span><span class="o">=</span><span class="n">Default</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">selection</span><span class="o">=</span><span class="n">Default</span><span class="p">,</span> <span class="n">string</span><span class="o">=</span><span class="n">Default</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">Selection</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">selection</span><span class="o">=</span><span class="n">selection</span><span class="p">,</span> <span class="n">string</span><span class="o">=</span><span class="n">string</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
     <span class="nd">@property</span>
@@ -2165,7 +2173,7 @@
         <span class="s1">&#39;delegate&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>              <span class="c1"># whether self implements delegation</span>
     <span class="p">}</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">comodel_name</span><span class="o">=</span><span class="n">Default</span><span class="p">,</span> <span class="n">string</span><span class="o">=</span><span class="n">Default</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">comodel_name</span><span class="o">=</span><span class="n">Default</span><span class="p">,</span> <span class="n">string</span><span class="o">=</span><span class="n">Default</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">Many2one</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">comodel_name</span><span class="o">=</span><span class="n">comodel_name</span><span class="p">,</span> <span class="n">string</span><span class="o">=</span><span class="n">string</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_setup_attrs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
@@ -2238,7 +2246,7 @@
     <span class="sd">&quot;&quot;&quot; Placeholder for a value update; when this value is taken from the cache,</span>
 <span class="sd">        it returns ``record[field.name] | value`` and stores it in the cache.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">args</span> <span class="o">=</span> <span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -2404,7 +2412,7 @@
         <span class="s1">&#39;copy&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>                  <span class="c1"># o2m are not copied by default</span>
     <span class="p">}</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">comodel_name</span><span class="o">=</span><span class="n">Default</span><span class="p">,</span> <span class="n">inverse_name</span><span class="o">=</span><span class="n">Default</span><span class="p">,</span> <span class="n">string</span><span class="o">=</span><span class="n">Default</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">comodel_name</span><span class="o">=</span><span class="n">Default</span><span class="p">,</span> <span class="n">inverse_name</span><span class="o">=</span><span class="n">Default</span><span class="p">,</span> <span class="n">string</span><span class="o">=</span><span class="n">Default</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">One2many</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
             <span class="n">comodel_name</span><span class="o">=</span><span class="n">comodel_name</span><span class="p">,</span>
             <span class="n">inverse_name</span><span class="o">=</span><span class="n">inverse_name</span><span class="p">,</span>
@@ -2541,7 +2549,7 @@
         <span class="s1">&#39;limit&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>                  <span class="c1"># optional limit to use upon read</span>
     <span class="p">}</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">comodel_name</span><span class="o">=</span><span class="n">Default</span><span class="p">,</span> <span class="n">relation</span><span class="o">=</span><span class="n">Default</span><span class="p">,</span> <span class="n">column1</span><span class="o">=</span><span class="n">Default</span><span class="p">,</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">comodel_name</span><span class="o">=</span><span class="n">Default</span><span class="p">,</span> <span class="n">relation</span><span class="o">=</span><span class="n">Default</span><span class="p">,</span> <span class="n">column1</span><span class="o">=</span><span class="n">Default</span><span class="p">,</span>
                  <span class="n">column2</span><span class="o">=</span><span class="n">Default</span><span class="p">,</span> <span class="n">string</span><span class="o">=</span><span class="n">Default</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">Many2many</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
             <span class="n">comodel_name</span><span class="o">=</span><span class="n">comodel_name</span><span class="p">,</span>
@@ -2724,20 +2732,20 @@
         <span class="s1">&#39;readonly&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
     <span class="p">}</span>
 
-    <span class="k">def</span> <span class="nf">__get__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="n">owner</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__get__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="n">owner</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">record</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span>         <span class="c1"># the field is accessed through the class owner</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">record</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">False</span>
         <span class="k">return</span> <span class="n">record</span><span class="o">.</span><span class="n">ensure_one</span><span class="p">()</span><span class="o">.</span><span class="n">_ids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
-    <span class="k">def</span> <span class="nf">__set__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__set__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;field &#39;id&#39; cannot be assigned&quot;</span><span class="p">)</span>
 
 <span class="c1"># imported here to avoid dependency cycle issues</span>
-<span class="kn">from</span> <span class="nn">odoo</span> <span class="k">import</span> <span class="n">SUPERUSER_ID</span>
-<span class="kn">from</span> <span class="nn">.exceptions</span> <span class="k">import</span> <span class="n">AccessError</span><span class="p">,</span> <span class="n">MissingError</span><span class="p">,</span> <span class="n">UserError</span>
-<span class="kn">from</span> <span class="nn">.models</span> <span class="k">import</span> <span class="n">check_pg_name</span><span class="p">,</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">IdType</span>
+<span class="kn">from</span> <span class="nn">odoo</span> <span class="kn">import</span> <span class="n">SUPERUSER_ID</span>
+<span class="kn">from</span> <span class="nn">.exceptions</span> <span class="kn">import</span> <span class="n">AccessError</span><span class="p">,</span> <span class="n">MissingError</span><span class="p">,</span> <span class="n">UserError</span>
+<span class="kn">from</span> <span class="nn">.models</span> <span class="kn">import</span> <span class="n">check_pg_name</span><span class="p">,</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">IdType</span>
 </pre></div>
 
     </div>

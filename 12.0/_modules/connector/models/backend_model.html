@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>connector.models.backend_model &#8212; Connector  documentation</title>
+    <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../../../_static/js/jquery-1.11.0.min.js "></script>
+<script type="text/javascript" src="../../../_static/js/jquery-fix.js "></script>
+<script type="text/javascript" src="../../../_static/bootstrap-3.3.7/js/bootstrap.min.js "></script>
+<script type="text/javascript" src="../../../_static/bootstrap-sphinx.js "></script>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-7628916-3', 'odoo-connector.com');
+  ga('send', 'pageview');
+</script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../../index.html">
+          Odoo Connector</a>
+        <span class="navbar-text navbar-version pull-left"><b></b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+  <li class="dropdown">
+    <a role="button"
+       id="dLabelTranslations"
+       data-toggle="dropdown"
+       data-target="#"
+       href="#">Translations<b class="caret"></b></a>
+    <ul class="dropdown-menu"
+        role="menu"
+        aria-labelledby="dLabelTranslations">
+      <li><a class="reference" href="http://odoo-connector.com">English</a><li>
+      <li><a class="reference" href="http://odoo-connector.com/fr">French</a><li>
+    </ul>
+  </li>
+  <li class="dropdown">
+    <a role="button"
+       id="dLabelVersions"
+       data-toggle="dropdown"
+       data-target="#"
+       href="#">Version<b class="caret"></b></a>
+    <ul class="dropdown-menu"
+        role="menu"
+        aria-labelledby="dLabeVersions">
+      <li><a class="reference" href="http://odoo-connector.com/8.0">8.0</a><li>
+      <li><a class="reference" href="http://odoo-connector.com/9.0">9.0</a><li>
+      <li><a class="reference" href="http://odoo-connector.com/10.0">10.0</a><li>
+      <li><a class="reference" href="http://odoo-connector.com/11.0">11.0</a><li>
+      <li><a class="reference" href="http://odoo-connector.com/">13.0</a><li>
+    </ul>
+  </li>
+  
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../guides/migration_guide.html">Migration Guide to the new Connector API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/migration_guide.html#migrating-jobs">Migrating Jobs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/migration_guide.html#migrating-events">Migrating Events</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/migration_guide.html#migrating-components">Migrating Components</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../guides/code_overview.html">Code Overview</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/code_overview.html#trigger-and-listen-an-event">Trigger and listen an event</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/code_overview.html#delay-an-asynchronous-job">Delay an Asynchronous Job</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/code_overview.html#work-with-components">Work with components</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../guides/concepts.html">Connector Concepts</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/concepts.html#events">Events</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/concepts.html#jobs-queue">Jobs Queue</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/concepts.html#backend">Backend</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/concepts.html#workcontext">WorkContext</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/concepts.html#component">Component</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/concepts.html#bindings">Bindings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/concepts.html#checkpoint">Checkpoint</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../guides/bootstrap_connector.html">Boostrapping a connector</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/bootstrap_connector.html#odoo-manifest">Odoo Manifest</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/bootstrap_connector.html#backend-model">Backend Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/bootstrap_connector.html#abstract-binding">Abstract Binding</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/bootstrap_connector.html#components">Components</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../guides/jobrunner.html">Configuring channels and the job runner</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/jobrunner.html#what-is-the-job-runner">What is the job runner?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/jobrunner.html#how-does-it-work">How does it work?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/jobrunner.html#how-to-use-it">How to use it?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/jobrunner.html#caveat">Caveat</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/jobrunner.html#what-is-a-channel">What is a channel?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guides/jobrunner.html#how-to-configure-channels">How to configure Channels?</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/api_components.html">Components</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/api_components.html#module-connector.components.core">Core Components</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/api_components.html#module-connector.components.binder">Connector Components</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/api_components.html#module-odoo.addons.component.models.collection">Components Collection Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/api_components.html#module-odoo.addons.component.exception">Components Exceptions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/api_components.html#components-internals">Components Internals</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/api_backend.html">Models</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/api_backend.html#backend-model">Backend Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/api_backend.html#binding-model">Binding Model</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/api_event.html">Events</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/api_event.html#module-odoo.addons.component_event.components.event">Components</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/api_event.html#module-odoo.addons.component_event.models.base">Odoo Models Extensions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/api_queue.html">Queue</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/api_queue.html#module-odoo.addons.queue_job.models.base">Models</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/api_exception.html">Exceptions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/api_channels.html">Channels</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../project/contribute.html">Contribute</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../project/contribute.html#want-to-start-a-new-connector">Want to start a new connector</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../project/contribute.html#creating-or-maintaining-a-translation-of-this-doc">Creating or maintaining a translation of this doc</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../project/contributors.html">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../project/contributors.html#financial-contributors">Financial Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../project/license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../project/roadmap.html">Roadmap</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"></ul>
+</li>
+              
+            
+
+            
+              
+                
+              
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <h1>Source code for connector.models.backend_model</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1"># Copyright 2013-2017 Camptocamp SA</span>
+<span class="c1"># License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl.html)</span>
+
+
+<span class="kn">from</span> <span class="nn">odoo</span> <span class="kn">import</span> <span class="n">models</span><span class="p">,</span> <span class="n">fields</span>
+
+
+<div class="viewcode-block" id="ConnectorBackend"><a class="viewcode-back" href="../../../api/api_backend.html#connector.models.backend_model.ConnectorBackend">[docs]</a><span class="k">class</span> <span class="nc">ConnectorBackend</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">AbstractModel</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; An instance of an external backend to synchronize with.</span>
+
+<span class="sd">    The backends have to ``_inherit`` this model in the connectors</span>
+<span class="sd">    modules.</span>
+
+<span class="sd">    The components articulates around a collection, which in the context of the</span>
+<span class="sd">    connectors is called a Backend.</span>
+
+<span class="sd">    It must be defined as a Model that inherits from ``&#39;connector.backend&#39;``.</span>
+
+<span class="sd">    Example with the Magento Connector::</span>
+
+<span class="sd">        # in connector_magento/models/magento_backend.py</span>
+
+<span class="sd">        class MagentoBackend(models.Model):</span>
+<span class="sd">            _name = &#39;magento.backend&#39;</span>
+<span class="sd">            _inherit = &#39;connector.backend&#39;</span>
+<span class="sd">            _description = &#39;Magento Backend&#39;</span>
+
+<span class="sd">            # the version in not mandatory</span>
+<span class="sd">            @api.model</span>
+<span class="sd">            def _select_versions(self):</span>
+<span class="sd">                \&quot;\&quot;\&quot; Available versions</span>
+
+<span class="sd">                Can be inherited to add custom versions.</span>
+<span class="sd">                \&quot;\&quot;\&quot;</span>
+<span class="sd">                return [(&#39;1.7&#39;, &#39;Magento 1.7&#39;)]</span>
+
+<span class="sd">            location = fields.Char(string=&#39;Location&#39;, required=True)</span>
+<span class="sd">            username = fields.Char(string=&#39;Username&#39;)</span>
+<span class="sd">            password = fields.Char(string=&#39;Password&#39;)</span>
+<span class="sd">            versions = fields.Selection(</span>
+<span class="sd">                selection=&#39;_select_versions&#39;, required=True</span>
+<span class="sd">            )</span>
+
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">_name</span> <span class="o">=</span> <span class="s1">&#39;connector.backend&#39;</span>
+    <span class="n">_inherit</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;collection.base&#39;</span><span class="p">]</span>
+    <span class="n">_description</span> <span class="o">=</span> <span class="s1">&#39;Connector Backend&#39;</span></div>
+
+
+<div class="viewcode-block" id="ExternalBinding"><a class="viewcode-back" href="../../../api/api_backend.html#connector.models.backend_model.ExternalBinding">[docs]</a><span class="k">class</span> <span class="nc">ExternalBinding</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">AbstractModel</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; An abstract model for bindings to external records.</span>
+
+<span class="sd">    An external binding is a binding between a backend and Odoo.  For</span>
+<span class="sd">    example, for a partner, it could be ``magento.res.partner`` or for a</span>
+<span class="sd">    product, ``magento.product``.</span>
+
+<span class="sd">    The final model, will be an ``_inherits`` of the Odoo model and</span>
+<span class="sd">    will ``_inherit`` this model.</span>
+
+<span class="sd">    It will have a relation to the record (via ``_inherits``) and to the</span>
+<span class="sd">    concrete backend model (``magento.backend`` for instance).</span>
+
+<span class="sd">    It will also contains all the data relative to the backend for the</span>
+<span class="sd">    record.</span>
+
+<span class="sd">    It needs to implements at least these fields:</span>
+
+<span class="sd">    odoo_id</span>
+<span class="sd">        The many2one to the record it links (used by ``_inherits``).</span>
+
+<span class="sd">    backend_id</span>
+<span class="sd">        The many2one to the backend (for instance ``magento.backend``).</span>
+
+<span class="sd">    external_id</span>
+<span class="sd">        The ID on the backend.</span>
+
+<span class="sd">    sync_date</span>
+<span class="sd">        Last date of synchronization</span>
+
+
+<span class="sd">    The definition of the field relations is to be done in the</span>
+<span class="sd">    concrete classes because the relations themselves do not exist in</span>
+<span class="sd">    this addon.</span>
+
+<span class="sd">    For example, for a ``res.partner.category`` from Magento, I would have</span>
+<span class="sd">    (this is a consolidation of all the columns from the abstract models,</span>
+<span class="sd">    in ``magentoerpconnect`` you would not find that)::</span>
+
+<span class="sd">        class MagentoResPartnerCategory(models.Model):</span>
+<span class="sd">            _name = &#39;magento.res.partner.category&#39;</span>
+
+<span class="sd">            _inherits = {&#39;res.partner.category&#39;: &#39;odoo_id&#39;}</span>
+
+<span class="sd">            odoo_id = fields.Many2one(comodel_name=&#39;res.partner.category&#39;,</span>
+<span class="sd">                                      string=&#39;Partner Category&#39;,</span>
+<span class="sd">                                      required=True,</span>
+<span class="sd">                                      ondelete=&#39;cascade&#39;)</span>
+<span class="sd">            backend_id = fields.Many2one(</span>
+<span class="sd">                comodel_name=&#39;magento.backend&#39;,</span>
+<span class="sd">                string=&#39;Magento Backend&#39;,</span>
+<span class="sd">                required=True,</span>
+<span class="sd">                ondelete=&#39;restrict&#39;)</span>
+<span class="sd">            external_id = fields.Char(string=&#39;ID on Magento&#39;)</span>
+<span class="sd">            tax_class_id = fields.Integer(string=&#39;Tax Class ID&#39;)</span>
+
+<span class="sd">            _sql_constraints = [</span>
+<span class="sd">                (&#39;magento_uniq&#39;, &#39;unique(backend_id, magento_id)&#39;,</span>
+<span class="sd">                 &#39;Partner Tag with same ID on Magento already exists.&#39;),</span>
+<span class="sd">            ]</span>
+
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">_name</span> <span class="o">=</span> <span class="s1">&#39;external.binding&#39;</span>
+    <span class="n">_description</span> <span class="o">=</span> <span class="s1">&#39;External Binding (abstract)&#39;</span>
+
+    <span class="n">sync_date</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Datetime</span><span class="p">(</span><span class="n">string</span><span class="o">=</span><span class="s1">&#39;Last synchronization date&#39;</span><span class="p">)</span></div>
+    <span class="c1"># add other fields in concrete models</span>
+    <span class="c1"># XXX we could add a default &#39;external_id&#39;</span>
+</pre></div>
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+        <br/>
+        
+      
+    </p>
+    <p>
+        &copy; Copyright 2013, Camptocamp SA.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.3.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

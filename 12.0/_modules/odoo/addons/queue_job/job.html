@@ -1,0 +1,1090 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>odoo.addons.queue_job.job &#8212; Connector  documentation</title>
+    <link rel="stylesheet" href="../../../../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+    <script src="../../../../_static/jquery.js"></script>
+    <script src="../../../../_static/underscore.js"></script>
+    <script src="../../../../_static/doctools.js"></script>
+    <script src="../../../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../../../../_static/js/jquery-1.11.0.min.js "></script>
+<script type="text/javascript" src="../../../../_static/js/jquery-fix.js "></script>
+<script type="text/javascript" src="../../../../_static/bootstrap-3.3.7/js/bootstrap.min.js "></script>
+<script type="text/javascript" src="../../../../_static/bootstrap-sphinx.js "></script>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-7628916-3', 'odoo-connector.com');
+  ga('send', 'pageview');
+</script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../../../index.html">
+          Odoo Connector</a>
+        <span class="navbar-text navbar-version pull-left"><b></b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+  <li class="dropdown">
+    <a role="button"
+       id="dLabelTranslations"
+       data-toggle="dropdown"
+       data-target="#"
+       href="#">Translations<b class="caret"></b></a>
+    <ul class="dropdown-menu"
+        role="menu"
+        aria-labelledby="dLabelTranslations">
+      <li><a class="reference" href="http://odoo-connector.com">English</a><li>
+      <li><a class="reference" href="http://odoo-connector.com/fr">French</a><li>
+    </ul>
+  </li>
+  <li class="dropdown">
+    <a role="button"
+       id="dLabelVersions"
+       data-toggle="dropdown"
+       data-target="#"
+       href="#">Version<b class="caret"></b></a>
+    <ul class="dropdown-menu"
+        role="menu"
+        aria-labelledby="dLabeVersions">
+      <li><a class="reference" href="http://odoo-connector.com/8.0">8.0</a><li>
+      <li><a class="reference" href="http://odoo-connector.com/9.0">9.0</a><li>
+      <li><a class="reference" href="http://odoo-connector.com/10.0">10.0</a><li>
+      <li><a class="reference" href="http://odoo-connector.com/11.0">11.0</a><li>
+      <li><a class="reference" href="http://odoo-connector.com/">13.0</a><li>
+    </ul>
+  </li>
+  
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../../../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../guides/migration_guide.html">Migration Guide to the new Connector API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guides/migration_guide.html#migrating-jobs">Migrating Jobs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guides/migration_guide.html#migrating-events">Migrating Events</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guides/migration_guide.html#migrating-components">Migrating Components</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../guides/code_overview.html">Code Overview</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guides/code_overview.html#trigger-and-listen-an-event">Trigger and listen an event</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guides/code_overview.html#delay-an-asynchronous-job">Delay an Asynchronous Job</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guides/code_overview.html#work-with-components">Work with components</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../guides/concepts.html">Connector Concepts</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guides/concepts.html#events">Events</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guides/concepts.html#jobs-queue">Jobs Queue</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guides/concepts.html#backend">Backend</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guides/concepts.html#workcontext">WorkContext</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guides/concepts.html#component">Component</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guides/concepts.html#bindings">Bindings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guides/concepts.html#checkpoint">Checkpoint</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../guides/bootstrap_connector.html">Boostrapping a connector</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guides/bootstrap_connector.html#odoo-manifest">Odoo Manifest</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guides/bootstrap_connector.html#backend-model">Backend Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guides/bootstrap_connector.html#abstract-binding">Abstract Binding</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guides/bootstrap_connector.html#components">Components</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../guides/jobrunner.html">Configuring channels and the job runner</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guides/jobrunner.html#what-is-the-job-runner">What is the job runner?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guides/jobrunner.html#how-does-it-work">How does it work?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guides/jobrunner.html#how-to-use-it">How to use it?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guides/jobrunner.html#caveat">Caveat</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guides/jobrunner.html#what-is-a-channel">What is a channel?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guides/jobrunner.html#how-to-configure-channels">How to configure Channels?</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/api_components.html">Components</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/api_components.html#module-connector.components.core">Core Components</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/api_components.html#module-connector.components.binder">Connector Components</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/api_components.html#module-odoo.addons.component.models.collection">Components Collection Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/api_components.html#module-odoo.addons.component.exception">Components Exceptions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/api_components.html#components-internals">Components Internals</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/api_backend.html">Models</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/api_backend.html#backend-model">Backend Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/api_backend.html#binding-model">Binding Model</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/api_event.html">Events</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/api_event.html#module-odoo.addons.component_event.components.event">Components</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/api_event.html#module-odoo.addons.component_event.models.base">Odoo Models Extensions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/api_queue.html">Queue</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/api_queue.html#module-odoo.addons.queue_job.models.base">Models</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/api_exception.html">Exceptions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/api_channels.html">Channels</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../project/contribute.html">Contribute</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../project/contribute.html#want-to-start-a-new-connector">Want to start a new connector</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../project/contribute.html#creating-or-maintaining-a-translation-of-this-doc">Creating or maintaining a translation of this doc</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../project/contributors.html">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../project/contributors.html#financial-contributors">Financial Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../project/license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../project/roadmap.html">Roadmap</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"></ul>
+</li>
+              
+            
+
+            
+              
+                
+              
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <h1>Source code for odoo.addons.queue_job.job</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Copyright 2013-2016 Camptocamp</span>
+<span class="c1"># License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl.html)</span>
+
+<span class="kn">import</span> <span class="nn">inspect</span>
+<span class="kn">import</span> <span class="nn">functools</span>
+<span class="kn">import</span> <span class="nn">hashlib</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">uuid</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">timedelta</span>
+
+<span class="kn">import</span> <span class="nn">odoo</span>
+
+<span class="kn">from</span> <span class="nn">.exception</span> <span class="kn">import</span> <span class="p">(</span><span class="n">NoSuchJobError</span><span class="p">,</span>
+                        <span class="n">FailedJobError</span><span class="p">,</span>
+                        <span class="n">RetryableJobError</span><span class="p">)</span>
+
+
+<span class="n">PENDING</span> <span class="o">=</span> <span class="s1">&#39;pending&#39;</span>
+<span class="n">ENQUEUED</span> <span class="o">=</span> <span class="s1">&#39;enqueued&#39;</span>
+<span class="n">DONE</span> <span class="o">=</span> <span class="s1">&#39;done&#39;</span>
+<span class="n">STARTED</span> <span class="o">=</span> <span class="s1">&#39;started&#39;</span>
+<span class="n">FAILED</span> <span class="o">=</span> <span class="s1">&#39;failed&#39;</span>
+
+<span class="n">STATES</span> <span class="o">=</span> <span class="p">[(</span><span class="n">PENDING</span><span class="p">,</span> <span class="s1">&#39;Pending&#39;</span><span class="p">),</span>
+          <span class="p">(</span><span class="n">ENQUEUED</span><span class="p">,</span> <span class="s1">&#39;Enqueued&#39;</span><span class="p">),</span>
+          <span class="p">(</span><span class="n">STARTED</span><span class="p">,</span> <span class="s1">&#39;Started&#39;</span><span class="p">),</span>
+          <span class="p">(</span><span class="n">DONE</span><span class="p">,</span> <span class="s1">&#39;Done&#39;</span><span class="p">),</span>
+          <span class="p">(</span><span class="n">FAILED</span><span class="p">,</span> <span class="s1">&#39;Failed&#39;</span><span class="p">)]</span>
+
+<span class="n">DEFAULT_PRIORITY</span> <span class="o">=</span> <span class="mi">10</span>  <span class="c1"># used by the PriorityQueue to sort the jobs</span>
+<span class="n">DEFAULT_MAX_RETRIES</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="n">RETRY_INTERVAL</span> <span class="o">=</span> <span class="mi">10</span> <span class="o">*</span> <span class="mi">60</span>  <span class="c1"># seconds</span>
+
+<span class="n">_logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="DelayableRecordset"><a class="viewcode-back" href="../../../../api/api_queue.html#odoo.addons.queue_job.job.DelayableRecordset">[docs]</a><span class="k">class</span> <span class="nc">DelayableRecordset</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Allow to delay a method for a recordset</span>
+
+<span class="sd">    Usage::</span>
+
+<span class="sd">        delayable = DelayableRecordset(recordset, priority=20)</span>
+<span class="sd">        delayable.method(args, kwargs)</span>
+
+<span class="sd">    ``method`` must be a method of the recordset&#39;s Model, decorated with</span>
+<span class="sd">    :func:`~odoo.addons.queue_job.job.job`.</span>
+
+<span class="sd">    The method call will be processed asynchronously in the job queue, with</span>
+<span class="sd">    the passed arguments.</span>
+
+<span class="sd">    This class will generally not be used directly, it is used internally</span>
+<span class="sd">    by :meth:`~odoo.addons.queue_job.models.base.Base.with_delay`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">recordset</span><span class="p">,</span> <span class="n">priority</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">eta</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">max_retries</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">channel</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">identity_key</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">recordset</span> <span class="o">=</span> <span class="n">recordset</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">priority</span> <span class="o">=</span> <span class="n">priority</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">eta</span> <span class="o">=</span> <span class="n">eta</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_retries</span> <span class="o">=</span> <span class="n">max_retries</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">description</span> <span class="o">=</span> <span class="n">description</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">channel</span> <span class="o">=</span> <span class="n">channel</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">identity_key</span> <span class="o">=</span> <span class="n">identity_key</span>
+
+    <span class="k">def</span> <span class="fm">__getattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">recordset</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span>
+                <span class="s1">&#39;only methods can be delayed (</span><span class="si">%s</span><span class="s1"> called on </span><span class="si">%s</span><span class="s1">)&#39;</span> <span class="o">%</span>
+                <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">recordset</span><span class="p">)</span>
+            <span class="p">)</span>
+        <span class="n">recordset_method</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">recordset</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">recordset_method</span><span class="p">,</span> <span class="s1">&#39;delayable&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span>
+                <span class="s1">&#39;method </span><span class="si">%s</span><span class="s1"> on </span><span class="si">%s</span><span class="s1"> is not allowed to be delayed, &#39;</span>
+                <span class="s1">&#39;it should be decorated with odoo.addons.queue_job.job.job&#39;</span> <span class="o">%</span>
+                <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">recordset</span><span class="p">)</span>
+            <span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">delay</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">Job</span><span class="o">.</span><span class="n">enqueue</span><span class="p">(</span><span class="n">recordset_method</span><span class="p">,</span>
+                               <span class="n">args</span><span class="o">=</span><span class="n">args</span><span class="p">,</span>
+                               <span class="n">kwargs</span><span class="o">=</span><span class="n">kwargs</span><span class="p">,</span>
+                               <span class="n">priority</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">priority</span><span class="p">,</span>
+                               <span class="n">max_retries</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">max_retries</span><span class="p">,</span>
+                               <span class="n">eta</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">eta</span><span class="p">,</span>
+                               <span class="n">description</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">description</span><span class="p">,</span>
+                               <span class="n">channel</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">channel</span><span class="p">,</span>
+                               <span class="n">identity_key</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">identity_key</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">delay</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;DelayableRecordset(</span><span class="si">%s%s</span><span class="s2">)&quot;</span> <span class="o">%</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">recordset</span><span class="o">.</span><span class="n">_name</span><span class="p">,</span>
+            <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">recordset</span><span class="p">,</span> <span class="s1">&#39;_ids&#39;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="p">)</span>
+
+    <span class="fm">__repr__</span> <span class="o">=</span> <span class="fm">__str__</span></div>
+
+
+<span class="k">def</span> <span class="nf">identity_exact</span><span class="p">(</span><span class="n">job_</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Identity function using the model, method and all arguments as key</span>
+
+<span class="sd">    When used, this identity key will have the effect that when a job should be</span>
+<span class="sd">    created and a pending job with the exact same recordset and arguments, the</span>
+<span class="sd">    second will not be created.</span>
+
+<span class="sd">    It should be used with the ``identity_key`` argument:</span>
+
+<span class="sd">    .. python::</span>
+
+<span class="sd">        from odoo.addons.queue_job.job import identity_exact</span>
+
+<span class="sd">        # [...]</span>
+<span class="sd">            delayable = self.with_delay(identity_key=identity_exact)</span>
+<span class="sd">            delayable.export_record(force=True)</span>
+
+<span class="sd">    Alternative identity keys can be built using the various fields of the job.</span>
+<span class="sd">    For example, you could compute a hash using only some arguments of</span>
+<span class="sd">    the job.</span>
+
+<span class="sd">    .. python::</span>
+
+<span class="sd">        def identity_example(job_):</span>
+<span class="sd">            hasher = hashlib.sha1()</span>
+<span class="sd">            hasher.update(job_.model_name)</span>
+<span class="sd">            hasher.update(job_.method_name)</span>
+<span class="sd">            hasher.update(str(sorted(job_.recordset.ids)))</span>
+<span class="sd">            hasher.update(str(job_.args[1]))</span>
+<span class="sd">            hasher.update(str(job_.kwargs.get(&#39;foo&#39;, &#39;&#39;)))</span>
+<span class="sd">            return hasher.hexdigest()</span>
+
+<span class="sd">    Usually you will probably always want to include at least the name of the</span>
+<span class="sd">    model and method.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">hasher</span> <span class="o">=</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">sha1</span><span class="p">()</span>
+    <span class="n">hasher</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">job_</span><span class="o">.</span><span class="n">model_name</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">))</span>
+    <span class="n">hasher</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">job_</span><span class="o">.</span><span class="n">method_name</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">))</span>
+    <span class="n">hasher</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">job_</span><span class="o">.</span><span class="n">recordset</span><span class="o">.</span><span class="n">ids</span><span class="p">))</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">))</span>
+    <span class="n">hasher</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">job_</span><span class="o">.</span><span class="n">args</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">))</span>
+    <span class="n">hasher</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">job_</span><span class="o">.</span><span class="n">kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">()))</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">hasher</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span>
+
+
+<div class="viewcode-block" id="Job"><a class="viewcode-back" href="../../../../api/api_queue.html#odoo.addons.queue_job.job.Job">[docs]</a><span class="k">class</span> <span class="nc">Job</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A Job is a task to execute. It is the in-memory representation of a job.</span>
+
+<span class="sd">    Jobs are stored in the ``queue.job`` Odoo Model, but they are handled</span>
+<span class="sd">    through this class.</span>
+
+<span class="sd">    .. attribute:: uuid</span>
+
+<span class="sd">        Id (UUID) of the job.</span>
+
+<span class="sd">    .. attribute:: state</span>
+
+<span class="sd">        State of the job, can pending, enqueued, started, done or failed.</span>
+<span class="sd">        The start state is pending and the final state is done.</span>
+
+<span class="sd">    .. attribute:: retry</span>
+
+<span class="sd">        The current try, starts at 0 and each time the job is executed,</span>
+<span class="sd">        it increases by 1.</span>
+
+<span class="sd">    .. attribute:: max_retries</span>
+
+<span class="sd">        The maximum number of retries allowed before the job is</span>
+<span class="sd">        considered as failed.</span>
+
+<span class="sd">    .. attribute:: args</span>
+
+<span class="sd">        Arguments passed to the function when executed.</span>
+
+<span class="sd">    .. attribute:: kwargs</span>
+
+<span class="sd">        Keyword arguments passed to the function when executed.</span>
+
+<span class="sd">    .. attribute:: description</span>
+
+<span class="sd">        Human description of the job.</span>
+
+<span class="sd">    .. attribute:: func</span>
+
+<span class="sd">        The python function itself.</span>
+
+<span class="sd">    .. attribute:: model_name</span>
+
+<span class="sd">        Odoo model on which the job will run.</span>
+
+<span class="sd">    .. attribute:: priority</span>
+
+<span class="sd">        Priority of the job, 0 being the higher priority.</span>
+
+<span class="sd">    .. attribute:: date_created</span>
+
+<span class="sd">        Date and time when the job was created.</span>
+
+<span class="sd">    .. attribute:: date_enqueued</span>
+
+<span class="sd">        Date and time when the job was enqueued.</span>
+
+<span class="sd">    .. attribute:: date_started</span>
+
+<span class="sd">        Date and time when the job was started.</span>
+
+<span class="sd">    .. attribute:: date_done</span>
+
+<span class="sd">        Date and time when the job was done.</span>
+
+<span class="sd">    .. attribute:: result</span>
+
+<span class="sd">        A description of the result (for humans).</span>
+
+<span class="sd">    .. attribute:: exc_info</span>
+
+<span class="sd">        Exception information (traceback) when the job failed.</span>
+
+<span class="sd">    .. attribute:: user_id</span>
+
+<span class="sd">        Odoo user id which created the job</span>
+
+<span class="sd">    .. attribute:: eta</span>
+
+<span class="sd">        Estimated Time of Arrival of the job. It will not be executed</span>
+<span class="sd">        before this date/time.</span>
+
+<span class="sd">    .. attribute:: recordset</span>
+
+<span class="sd">        Model recordset when we are on a delayed Model method</span>
+
+<span class="sd">    .. attribute::channel</span>
+
+<span class="sd">        The complete name of the channel to use to process the job. If</span>
+<span class="sd">        provided it overrides the one defined on the job&#39;s function.</span>
+
+<span class="sd">    .. attribute::identity_key</span>
+
+<span class="sd">        A key referencing the job, multiple job with the same key will not</span>
+<span class="sd">        be added to a channel if the existing job with the same key is not yet</span>
+<span class="sd">        started or executed.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="Job.load"><a class="viewcode-back" href="../../../../api/api_queue.html#odoo.addons.queue_job.job.Job.load">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">env</span><span class="p">,</span> <span class="n">job_uuid</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Read a job from the Database&quot;&quot;&quot;</span>
+        <span class="n">stored</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">db_record_from_uuid</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">job_uuid</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">stored</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">NoSuchJobError</span><span class="p">(</span>
+                <span class="s1">&#39;Job </span><span class="si">%s</span><span class="s1"> does no longer exist in the storage.&#39;</span> <span class="o">%</span> <span class="n">job_uuid</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_load_from_db_record</span><span class="p">(</span><span class="n">stored</span><span class="p">)</span></div>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">_load_from_db_record</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">job_db_record</span><span class="p">):</span>
+        <span class="n">stored</span> <span class="o">=</span> <span class="n">job_db_record</span>
+        <span class="n">env</span> <span class="o">=</span> <span class="n">job_db_record</span><span class="o">.</span><span class="n">env</span>
+
+        <span class="n">args</span> <span class="o">=</span> <span class="n">stored</span><span class="o">.</span><span class="n">args</span>
+        <span class="n">kwargs</span> <span class="o">=</span> <span class="n">stored</span><span class="o">.</span><span class="n">kwargs</span>
+        <span class="n">method_name</span> <span class="o">=</span> <span class="n">stored</span><span class="o">.</span><span class="n">method_name</span>
+
+        <span class="n">model</span> <span class="o">=</span> <span class="n">env</span><span class="p">[</span><span class="n">stored</span><span class="o">.</span><span class="n">model_name</span><span class="p">]</span>
+
+        <span class="n">recordset</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">browse</span><span class="p">(</span><span class="n">stored</span><span class="o">.</span><span class="n">record_ids</span><span class="p">)</span>
+        <span class="n">method</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">recordset</span><span class="p">,</span> <span class="n">method_name</span><span class="p">)</span>
+
+        <span class="n">eta</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">stored</span><span class="o">.</span><span class="n">eta</span><span class="p">:</span>
+            <span class="n">eta</span> <span class="o">=</span> <span class="n">stored</span><span class="o">.</span><span class="n">eta</span>
+
+        <span class="n">job_</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">(</span><span class="n">method</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">=</span><span class="n">kwargs</span><span class="p">,</span>
+                   <span class="n">priority</span><span class="o">=</span><span class="n">stored</span><span class="o">.</span><span class="n">priority</span><span class="p">,</span> <span class="n">eta</span><span class="o">=</span><span class="n">eta</span><span class="p">,</span> <span class="n">job_uuid</span><span class="o">=</span><span class="n">stored</span><span class="o">.</span><span class="n">uuid</span><span class="p">,</span>
+                   <span class="n">description</span><span class="o">=</span><span class="n">stored</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">channel</span><span class="o">=</span><span class="n">stored</span><span class="o">.</span><span class="n">channel</span><span class="p">,</span>
+                   <span class="n">identity_key</span><span class="o">=</span><span class="n">stored</span><span class="o">.</span><span class="n">identity_key</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">stored</span><span class="o">.</span><span class="n">date_created</span><span class="p">:</span>
+            <span class="n">job_</span><span class="o">.</span><span class="n">date_created</span> <span class="o">=</span> <span class="n">stored</span><span class="o">.</span><span class="n">date_created</span>
+
+        <span class="k">if</span> <span class="n">stored</span><span class="o">.</span><span class="n">date_enqueued</span><span class="p">:</span>
+            <span class="n">job_</span><span class="o">.</span><span class="n">date_enqueued</span> <span class="o">=</span> <span class="n">stored</span><span class="o">.</span><span class="n">date_enqueued</span>
+
+        <span class="k">if</span> <span class="n">stored</span><span class="o">.</span><span class="n">date_started</span><span class="p">:</span>
+            <span class="n">job_</span><span class="o">.</span><span class="n">date_started</span> <span class="o">=</span> <span class="n">stored</span><span class="o">.</span><span class="n">date_started</span>
+
+        <span class="k">if</span> <span class="n">stored</span><span class="o">.</span><span class="n">date_done</span><span class="p">:</span>
+            <span class="n">job_</span><span class="o">.</span><span class="n">date_done</span> <span class="o">=</span> <span class="n">stored</span><span class="o">.</span><span class="n">date_done</span>
+
+        <span class="n">job_</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="n">stored</span><span class="o">.</span><span class="n">state</span>
+        <span class="n">job_</span><span class="o">.</span><span class="n">result</span> <span class="o">=</span> <span class="n">stored</span><span class="o">.</span><span class="n">result</span> <span class="k">if</span> <span class="n">stored</span><span class="o">.</span><span class="n">result</span> <span class="k">else</span> <span class="kc">None</span>
+        <span class="n">job_</span><span class="o">.</span><span class="n">exc_info</span> <span class="o">=</span> <span class="n">stored</span><span class="o">.</span><span class="n">exc_info</span> <span class="k">if</span> <span class="n">stored</span><span class="o">.</span><span class="n">exc_info</span> <span class="k">else</span> <span class="kc">None</span>
+        <span class="n">job_</span><span class="o">.</span><span class="n">user_id</span> <span class="o">=</span> <span class="n">stored</span><span class="o">.</span><span class="n">user_id</span><span class="o">.</span><span class="n">id</span> <span class="k">if</span> <span class="n">stored</span><span class="o">.</span><span class="n">user_id</span> <span class="k">else</span> <span class="kc">None</span>
+        <span class="n">job_</span><span class="o">.</span><span class="n">model_name</span> <span class="o">=</span> <span class="n">stored</span><span class="o">.</span><span class="n">model_name</span> <span class="k">if</span> <span class="n">stored</span><span class="o">.</span><span class="n">model_name</span> <span class="k">else</span> <span class="kc">None</span>
+        <span class="n">job_</span><span class="o">.</span><span class="n">retry</span> <span class="o">=</span> <span class="n">stored</span><span class="o">.</span><span class="n">retry</span>
+        <span class="n">job_</span><span class="o">.</span><span class="n">max_retries</span> <span class="o">=</span> <span class="n">stored</span><span class="o">.</span><span class="n">max_retries</span>
+        <span class="k">if</span> <span class="n">stored</span><span class="o">.</span><span class="n">company_id</span><span class="p">:</span>
+            <span class="n">job_</span><span class="o">.</span><span class="n">company_id</span> <span class="o">=</span> <span class="n">stored</span><span class="o">.</span><span class="n">company_id</span><span class="o">.</span><span class="n">id</span>
+        <span class="n">job_</span><span class="o">.</span><span class="n">identity_key</span> <span class="o">=</span> <span class="n">stored</span><span class="o">.</span><span class="n">identity_key</span>
+        <span class="k">return</span> <span class="n">job_</span>
+
+<div class="viewcode-block" id="Job.job_record_with_same_identity_key"><a class="viewcode-back" href="../../../../api/api_queue.html#odoo.addons.queue_job.job.Job.job_record_with_same_identity_key">[docs]</a>    <span class="k">def</span> <span class="nf">job_record_with_same_identity_key</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Check if a job to be executed with the same key exists.&quot;&quot;&quot;</span>
+        <span class="n">existing</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="p">[</span><span class="s1">&#39;queue.job&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sudo</span><span class="p">()</span><span class="o">.</span><span class="n">search</span><span class="p">(</span>
+            <span class="p">[(</span><span class="s1">&#39;identity_key&#39;</span><span class="p">,</span> <span class="s1">&#39;=&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">identity_key</span><span class="p">),</span>
+             <span class="p">(</span><span class="s1">&#39;state&#39;</span><span class="p">,</span> <span class="s1">&#39;in&#39;</span><span class="p">,</span> <span class="p">[</span><span class="n">PENDING</span><span class="p">,</span> <span class="n">ENQUEUED</span><span class="p">])],</span>
+            <span class="n">limit</span><span class="o">=</span><span class="mi">1</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">existing</span></div>
+
+<div class="viewcode-block" id="Job.enqueue"><a class="viewcode-back" href="../../../../api/api_queue.html#odoo.addons.queue_job.job.Job.enqueue">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">enqueue</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                <span class="n">priority</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">eta</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">max_retries</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                <span class="n">channel</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">identity_key</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Create a Job and enqueue it in the queue. Return the job uuid.</span>
+
+<span class="sd">        This expects the arguments specific to the job to be already extracted</span>
+<span class="sd">        from the ones to pass to the job function.</span>
+
+<span class="sd">        If the identity key is the same than the one in a pending job,</span>
+<span class="sd">        no job is created and the existing job is returned</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">new_job</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">(</span><span class="n">func</span><span class="o">=</span><span class="n">func</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="n">args</span><span class="p">,</span>
+                      <span class="n">kwargs</span><span class="o">=</span><span class="n">kwargs</span><span class="p">,</span> <span class="n">priority</span><span class="o">=</span><span class="n">priority</span><span class="p">,</span> <span class="n">eta</span><span class="o">=</span><span class="n">eta</span><span class="p">,</span>
+                      <span class="n">max_retries</span><span class="o">=</span><span class="n">max_retries</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="n">description</span><span class="p">,</span>
+                      <span class="n">channel</span><span class="o">=</span><span class="n">channel</span><span class="p">,</span> <span class="n">identity_key</span><span class="o">=</span><span class="n">identity_key</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">new_job</span><span class="o">.</span><span class="n">identity_key</span><span class="p">:</span>
+            <span class="n">existing</span> <span class="o">=</span> <span class="n">new_job</span><span class="o">.</span><span class="n">job_record_with_same_identity_key</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">existing</span><span class="p">:</span>
+                <span class="n">_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+                    <span class="s1">&#39;a job has not been enqueued due to having &#39;</span>
+                    <span class="s1">&#39;the same identity key (</span><span class="si">%s</span><span class="s1">) than job </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span>
+                    <span class="n">new_job</span><span class="o">.</span><span class="n">identity_key</span><span class="p">,</span>
+                    <span class="n">existing</span><span class="o">.</span><span class="n">uuid</span>
+                <span class="p">)</span>
+                <span class="k">return</span> <span class="n">Job</span><span class="o">.</span><span class="n">_load_from_db_record</span><span class="p">(</span><span class="n">existing</span><span class="p">)</span>
+        <span class="n">new_job</span><span class="o">.</span><span class="n">store</span><span class="p">()</span>
+        <span class="n">_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+            <span class="s2">&quot;enqueued </span><span class="si">%s</span><span class="s2">:</span><span class="si">%s</span><span class="s2">(*</span><span class="si">%r</span><span class="s2">, **</span><span class="si">%r</span><span class="s2">) with uuid: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="n">new_job</span><span class="o">.</span><span class="n">recordset</span><span class="p">,</span>
+            <span class="n">new_job</span><span class="o">.</span><span class="n">method_name</span><span class="p">,</span>
+            <span class="n">new_job</span><span class="o">.</span><span class="n">args</span><span class="p">,</span>
+            <span class="n">new_job</span><span class="o">.</span><span class="n">kwargs</span><span class="p">,</span>
+            <span class="n">new_job</span><span class="o">.</span><span class="n">uuid</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">new_job</span></div>
+
+<div class="viewcode-block" id="Job.db_record_from_uuid"><a class="viewcode-back" href="../../../../api/api_queue.html#odoo.addons.queue_job.job.Job.db_record_from_uuid">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">db_record_from_uuid</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">job_uuid</span><span class="p">):</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">env</span><span class="p">[</span><span class="s1">&#39;queue.job&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sudo</span><span class="p">()</span>
+        <span class="n">record</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">search</span><span class="p">([(</span><span class="s1">&#39;uuid&#39;</span><span class="p">,</span> <span class="s1">&#39;=&#39;</span><span class="p">,</span> <span class="n">job_uuid</span><span class="p">)],</span> <span class="n">limit</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">record</span><span class="o">.</span><span class="n">with_env</span><span class="p">(</span><span class="n">env</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span>
+                 <span class="n">args</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">priority</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">eta</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">job_uuid</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">max_retries</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">description</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">channel</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">identity_key</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Create a Job</span>
+
+<span class="sd">        :param func: function to execute</span>
+<span class="sd">        :type func: function</span>
+<span class="sd">        :param args: arguments for func</span>
+<span class="sd">        :type args: tuple</span>
+<span class="sd">        :param kwargs: keyworkd arguments for func</span>
+<span class="sd">        :type kwargs: dict</span>
+<span class="sd">        :param priority: priority of the job,</span>
+<span class="sd">                         the smaller is the higher priority</span>
+<span class="sd">        :type priority: int</span>
+<span class="sd">        :param eta: the job can be executed only after this datetime</span>
+<span class="sd">                           (or now + timedelta)</span>
+<span class="sd">        :type eta: datetime or timedelta</span>
+<span class="sd">        :param job_uuid: UUID of the job</span>
+<span class="sd">        :param max_retries: maximum number of retries before giving up and set</span>
+<span class="sd">            the job state to &#39;failed&#39;. A value of 0 means infinite retries.</span>
+<span class="sd">        :param description: human description of the job. If None, description</span>
+<span class="sd">            is computed from the function doc or name</span>
+<span class="sd">        :param channel: The complete channel name to use to process the job.</span>
+<span class="sd">        :param identity_key: A hash to uniquely identify a job, or a function</span>
+<span class="sd">                             that returns this hash (the function takes the job</span>
+<span class="sd">                             as argument)</span>
+<span class="sd">        :param env: Odoo Environment</span>
+<span class="sd">        :type env: :class:`odoo.api.Environment`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">args</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">args</span> <span class="o">=</span> <span class="p">()</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="n">args</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">),</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">: args are not a tuple&quot;</span> <span class="o">%</span> <span class="n">args</span>
+        <span class="k">if</span> <span class="n">kwargs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">kwargs</span><span class="p">,</span> <span class="nb">dict</span><span class="p">),</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">: kwargs are not a dict&quot;</span> <span class="o">%</span> <span class="n">kwargs</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">_is_model_method</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Job accepts only methods of Models&quot;</span><span class="p">)</span>
+
+        <span class="n">recordset</span> <span class="o">=</span> <span class="n">func</span><span class="o">.</span><span class="vm">__self__</span>
+        <span class="n">env</span> <span class="o">=</span> <span class="n">recordset</span><span class="o">.</span><span class="n">env</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model_name</span> <span class="o">=</span> <span class="n">recordset</span><span class="o">.</span><span class="n">_name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">method_name</span> <span class="o">=</span> <span class="n">func</span><span class="o">.</span><span class="vm">__name__</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">recordset</span> <span class="o">=</span> <span class="n">recordset</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">env</span> <span class="o">=</span> <span class="n">env</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">job_model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="p">[</span><span class="s1">&#39;queue.job&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">job_model_name</span> <span class="o">=</span> <span class="s1">&#39;queue.job&#39;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="n">PENDING</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">retry</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">if</span> <span class="n">max_retries</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">max_retries</span> <span class="o">=</span> <span class="n">DEFAULT_MAX_RETRIES</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">max_retries</span> <span class="o">=</span> <span class="n">max_retries</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_uuid</span> <span class="o">=</span> <span class="n">job_uuid</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">args</span> <span class="o">=</span> <span class="n">args</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span> <span class="o">=</span> <span class="n">kwargs</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">priority</span> <span class="o">=</span> <span class="n">priority</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">priority</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">priority</span> <span class="o">=</span> <span class="n">DEFAULT_PRIORITY</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">date_created</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_description</span> <span class="o">=</span> <span class="n">description</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">identity_key</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_identity_key</span> <span class="o">=</span> <span class="n">identity_key</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_identity_key_func</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># we&#39;ll compute the key on the fly when called</span>
+            <span class="c1"># from the function</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_identity_key</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_identity_key_func</span> <span class="o">=</span> <span class="n">identity_key</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">date_enqueued</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">date_started</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">date_done</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">result</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">exc_info</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">user_id</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">uid</span>
+        <span class="k">if</span> <span class="s1">&#39;company_id&#39;</span> <span class="ow">in</span> <span class="n">env</span><span class="o">.</span><span class="n">context</span><span class="p">:</span>
+            <span class="n">company_id</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">context</span><span class="p">[</span><span class="s1">&#39;company_id&#39;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">company_model</span> <span class="o">=</span> <span class="n">env</span><span class="p">[</span><span class="s1">&#39;res.company&#39;</span><span class="p">]</span>
+            <span class="n">company_model</span> <span class="o">=</span> <span class="n">company_model</span><span class="o">.</span><span class="n">sudo</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">user_id</span><span class="p">)</span>
+            <span class="n">company_id</span> <span class="o">=</span> <span class="n">company_model</span><span class="o">.</span><span class="n">_company_default_get</span><span class="p">(</span>
+                <span class="nb">object</span><span class="o">=</span><span class="s1">&#39;queue.job&#39;</span><span class="p">,</span>
+                <span class="n">field</span><span class="o">=</span><span class="s1">&#39;company_id&#39;</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">id</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">company_id</span> <span class="o">=</span> <span class="n">company_id</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_eta</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">eta</span> <span class="o">=</span> <span class="n">eta</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">channel</span> <span class="o">=</span> <span class="n">channel</span>
+
+<div class="viewcode-block" id="Job.perform"><a class="viewcode-back" href="../../../../api/api_queue.html#odoo.addons.queue_job.job.Job.perform">[docs]</a>    <span class="k">def</span> <span class="nf">perform</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Execute the job.</span>
+
+<span class="sd">        The job is executed with the user which has initiated it.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">retry</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">),</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">RetryableJobError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">err</span><span class="o">.</span><span class="n">ignore_retry</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">retry</span> <span class="o">-=</span> <span class="mi">1</span>
+                <span class="k">raise</span>
+            <span class="k">elif</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_retries</span><span class="p">:</span>  <span class="c1"># infinite retries</span>
+                <span class="k">raise</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">retry</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_retries</span><span class="p">:</span>
+                <span class="n">type_</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">traceback</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">exc_info</span><span class="p">()</span>
+                <span class="c1"># change the exception type but keep the original</span>
+                <span class="c1"># traceback and message:</span>
+                <span class="c1"># http://blog.ianbicking.org/2007/09/12/re-raising-exceptions/</span>
+                <span class="n">new_exc</span> <span class="o">=</span> <span class="n">FailedJobError</span><span class="p">(</span><span class="s2">&quot;Max. retries (</span><span class="si">%d</span><span class="s2">) reached: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span>
+                                         <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">max_retries</span><span class="p">,</span> <span class="n">value</span> <span class="ow">or</span> <span class="n">type_</span><span class="p">)</span>
+                                         <span class="p">)</span>
+                <span class="k">raise</span> <span class="n">new_exc</span> <span class="kn">from</span> <span class="nn">err</span>
+            <span class="k">raise</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">result</span></div>
+
+<div class="viewcode-block" id="Job.store"><a class="viewcode-back" href="../../../../api/api_queue.html#odoo.addons.queue_job.job.Job.store">[docs]</a>    <span class="k">def</span> <span class="nf">store</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Store the Job&quot;&quot;&quot;</span>
+        <span class="n">vals</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;state&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">,</span>
+                <span class="s1">&#39;priority&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">priority</span><span class="p">,</span>
+                <span class="s1">&#39;retry&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">retry</span><span class="p">,</span>
+                <span class="s1">&#39;max_retries&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_retries</span><span class="p">,</span>
+                <span class="s1">&#39;exc_info&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">exc_info</span><span class="p">,</span>
+                <span class="s1">&#39;user_id&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">user_id</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">uid</span><span class="p">,</span>
+                <span class="s1">&#39;company_id&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">company_id</span><span class="p">,</span>
+                <span class="s1">&#39;result&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">result</span><span class="p">)</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">result</span> <span class="k">else</span> <span class="kc">False</span><span class="p">,</span>
+                <span class="s1">&#39;date_enqueued&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+                <span class="s1">&#39;date_started&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+                <span class="s1">&#39;date_done&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+                <span class="s1">&#39;eta&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+                <span class="s1">&#39;identity_key&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+                <span class="p">}</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">date_enqueued</span><span class="p">:</span>
+            <span class="n">vals</span><span class="p">[</span><span class="s1">&#39;date_enqueued&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">date_enqueued</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">date_started</span><span class="p">:</span>
+            <span class="n">vals</span><span class="p">[</span><span class="s1">&#39;date_started&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">date_started</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">date_done</span><span class="p">:</span>
+            <span class="n">vals</span><span class="p">[</span><span class="s1">&#39;date_done&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">date_done</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">eta</span><span class="p">:</span>
+            <span class="n">vals</span><span class="p">[</span><span class="s1">&#39;eta&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">eta</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">identity_key</span><span class="p">:</span>
+            <span class="n">vals</span><span class="p">[</span><span class="s1">&#39;identity_key&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">identity_key</span>
+
+        <span class="n">db_record</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">db_record</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">db_record</span><span class="p">:</span>
+            <span class="n">db_record</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">vals</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">date_created</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">date_created</span>
+            <span class="c1"># The following values must never be modified after the</span>
+            <span class="c1"># creation of the job</span>
+            <span class="n">vals</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">&#39;uuid&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">uuid</span><span class="p">,</span>
+                         <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">description</span><span class="p">,</span>
+                         <span class="s1">&#39;date_created&#39;</span><span class="p">:</span> <span class="n">date_created</span><span class="p">,</span>
+                         <span class="s1">&#39;model_name&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">model_name</span><span class="p">,</span>
+                         <span class="s1">&#39;method_name&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">method_name</span><span class="p">,</span>
+                         <span class="s1">&#39;record_ids&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">recordset</span><span class="o">.</span><span class="n">ids</span><span class="p">,</span>
+                         <span class="s1">&#39;args&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">,</span>
+                         <span class="s1">&#39;kwargs&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span><span class="p">,</span>
+                         <span class="p">})</span>
+            <span class="c1"># it the channel is not specified, lets the job_model compute</span>
+            <span class="c1"># the right one to use</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">channel</span><span class="p">:</span>
+                <span class="n">vals</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">&#39;channel&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">channel</span><span class="p">})</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">job_model_name</span><span class="p">]</span><span class="o">.</span><span class="n">sudo</span><span class="p">()</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">vals</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Job.db_record"><a class="viewcode-back" href="../../../../api/api_queue.html#odoo.addons.queue_job.job.Job.db_record">[docs]</a>    <span class="k">def</span> <span class="nf">db_record</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">db_record_from_uuid</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">uuid</span><span class="p">)</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">func</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">recordset</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">recordset</span><span class="o">.</span><span class="n">with_context</span><span class="p">(</span><span class="n">job_uuid</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">uuid</span><span class="p">)</span>
+        <span class="n">recordset</span> <span class="o">=</span> <span class="n">recordset</span><span class="o">.</span><span class="n">sudo</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">user_id</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">recordset</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">method_name</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">identity_key</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_identity_key</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_identity_key_func</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_identity_key</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_identity_key_func</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_identity_key</span>
+
+    <span class="nd">@identity_key</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">identity_key</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_identity_key</span> <span class="o">=</span> <span class="n">value</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_identity_key_func</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># we&#39;ll compute the key on the fly when called</span>
+            <span class="c1"># from the function</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_identity_key</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_identity_key_func</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">description</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_description</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_description</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">func</span><span class="o">.</span><span class="vm">__doc__</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">func</span><span class="o">.</span><span class="vm">__doc__</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">.</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">func</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">uuid</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Job ID, this is an UUID &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_uuid</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_uuid</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">())</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_uuid</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">eta</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_eta</span>
+
+    <span class="nd">@eta</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">eta</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">value</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_eta</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">timedelta</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_eta</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span> <span class="o">+</span> <span class="n">value</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_eta</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span> <span class="o">+</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_eta</span> <span class="o">=</span> <span class="n">value</span>
+
+<div class="viewcode-block" id="Job.set_pending"><a class="viewcode-back" href="../../../../api/api_queue.html#odoo.addons.queue_job.job.Job.set_pending">[docs]</a>    <span class="k">def</span> <span class="nf">set_pending</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">result</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">reset_retry</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="n">PENDING</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">date_enqueued</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">date_started</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">reset_retry</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">retry</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">result</span> <span class="o">=</span> <span class="n">result</span></div>
+
+<div class="viewcode-block" id="Job.set_enqueued"><a class="viewcode-back" href="../../../../api/api_queue.html#odoo.addons.queue_job.job.Job.set_enqueued">[docs]</a>    <span class="k">def</span> <span class="nf">set_enqueued</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="n">ENQUEUED</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">date_enqueued</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">date_started</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+<div class="viewcode-block" id="Job.set_started"><a class="viewcode-back" href="../../../../api/api_queue.html#odoo.addons.queue_job.job.Job.set_started">[docs]</a>    <span class="k">def</span> <span class="nf">set_started</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="n">STARTED</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">date_started</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Job.set_done"><a class="viewcode-back" href="../../../../api/api_queue.html#odoo.addons.queue_job.job.Job.set_done">[docs]</a>    <span class="k">def</span> <span class="nf">set_done</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">result</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="n">DONE</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">exc_info</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">date_done</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">result</span> <span class="o">=</span> <span class="n">result</span></div>
+
+<div class="viewcode-block" id="Job.set_failed"><a class="viewcode-back" href="../../../../api/api_queue.html#odoo.addons.queue_job.job.Job.set_failed">[docs]</a>    <span class="k">def</span> <span class="nf">set_failed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc_info</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="n">FAILED</span>
+        <span class="k">if</span> <span class="n">exc_info</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">exc_info</span> <span class="o">=</span> <span class="n">exc_info</span></div>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;&lt;Job </span><span class="si">%s</span><span class="s1">, priority:</span><span class="si">%d</span><span class="s1">&gt;&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">uuid</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">priority</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_retry_seconds</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">seconds</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="n">retry_pattern</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">func</span><span class="o">.</span><span class="n">retry_pattern</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">seconds</span> <span class="ow">and</span> <span class="n">retry_pattern</span><span class="p">:</span>
+            <span class="c1"># ordered from higher to lower count of retries</span>
+            <span class="n">patt</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">retry_pattern</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">t</span><span class="p">:</span> <span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">seconds</span> <span class="o">=</span> <span class="n">RETRY_INTERVAL</span>
+            <span class="k">for</span> <span class="n">retry_count</span><span class="p">,</span> <span class="n">postpone_seconds</span> <span class="ow">in</span> <span class="n">patt</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">retry</span> <span class="o">&gt;=</span> <span class="n">retry_count</span><span class="p">:</span>
+                    <span class="n">seconds</span> <span class="o">=</span> <span class="n">postpone_seconds</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">break</span>
+        <span class="k">elif</span> <span class="ow">not</span> <span class="n">seconds</span><span class="p">:</span>
+            <span class="n">seconds</span> <span class="o">=</span> <span class="n">RETRY_INTERVAL</span>
+        <span class="k">return</span> <span class="n">seconds</span>
+
+<div class="viewcode-block" id="Job.postpone"><a class="viewcode-back" href="../../../../api/api_queue.html#odoo.addons.queue_job.job.Job.postpone">[docs]</a>    <span class="k">def</span> <span class="nf">postpone</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">result</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">seconds</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Postpone the job</span>
+
+<span class="sd">        Write an estimated time arrival to n seconds</span>
+<span class="sd">        later than now. Used when an retryable exception</span>
+<span class="sd">        want to retry a job later.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">eta_seconds</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_retry_seconds</span><span class="p">(</span><span class="n">seconds</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">eta</span> <span class="o">=</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="n">eta_seconds</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">exc_info</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">result</span> <span class="o">=</span> <span class="n">result</span></div>
+
+<div class="viewcode-block" id="Job.related_action"><a class="viewcode-back" href="../../../../api/api_queue.html#odoo.addons.queue_job.job.Job.related_action">[docs]</a>    <span class="k">def</span> <span class="nf">related_action</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">record</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">db_record</span><span class="p">()</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">func</span><span class="p">,</span> <span class="s1">&#39;related_action&#39;</span><span class="p">):</span>
+            <span class="n">funcname</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">func</span><span class="o">.</span><span class="n">related_action</span>
+            <span class="c1"># decorator is set but empty: disable the default one</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">funcname</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">funcname</span> <span class="o">=</span> <span class="n">record</span><span class="o">.</span><span class="n">_default_related_action</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">funcname</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;related_action must be the name of the &#39;</span>
+                             <span class="s1">&#39;method on queue.job as string&#39;</span><span class="p">)</span>
+        <span class="n">action</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">record</span><span class="p">,</span> <span class="n">funcname</span><span class="p">)</span>
+        <span class="n">action_kwargs</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">func</span><span class="p">,</span> <span class="s1">&#39;kwargs&#39;</span><span class="p">,</span> <span class="p">{})</span>
+        <span class="k">return</span> <span class="n">action</span><span class="p">(</span><span class="o">**</span><span class="n">action_kwargs</span><span class="p">)</span></div></div>
+
+
+<span class="k">def</span> <span class="nf">_is_model_method</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">inspect</span><span class="o">.</span><span class="n">ismethod</span><span class="p">(</span><span class="n">func</span><span class="p">)</span> <span class="ow">and</span>
+            <span class="nb">isinstance</span><span class="p">(</span><span class="n">func</span><span class="o">.</span><span class="vm">__self__</span><span class="o">.</span><span class="vm">__class__</span><span class="p">,</span> <span class="n">odoo</span><span class="o">.</span><span class="n">models</span><span class="o">.</span><span class="n">MetaModel</span><span class="p">))</span>
+
+
+<div class="viewcode-block" id="job"><a class="viewcode-back" href="../../../../api/api_queue.html#odoo.addons.queue_job.job.job">[docs]</a><span class="k">def</span> <span class="nf">job</span><span class="p">(</span><span class="n">func</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">default_channel</span><span class="o">=</span><span class="s1">&#39;root&#39;</span><span class="p">,</span> <span class="n">retry_pattern</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Decorator for job methods.</span>
+
+<span class="sd">    It enables the possibility to use a Model&#39;s method as a job function.</span>
+
+<span class="sd">    Optional argument:</span>
+
+<span class="sd">    :param default_channel: the channel wherein the job will be assigned. This</span>
+<span class="sd">                            channel is set at the installation of the module</span>
+<span class="sd">                            and can be manually changed later using the views.</span>
+<span class="sd">    :param retry_pattern: The retry pattern to use for postponing a job.</span>
+<span class="sd">                          If a job is postponed and there is no eta</span>
+<span class="sd">                          specified, the eta will be determined from the</span>
+<span class="sd">                          dict in retry_pattern. When no retry pattern</span>
+<span class="sd">                          is provided, jobs will be retried after</span>
+<span class="sd">                          :const:`RETRY_INTERVAL` seconds.</span>
+<span class="sd">    :type retry_pattern: dict(retry_count,retry_eta_seconds)</span>
+
+<span class="sd">    Indicates that a method of a Model can be delayed in the Job Queue.</span>
+
+<span class="sd">    When a method has the ``@job`` decorator, its calls can then be delayed</span>
+<span class="sd">    with::</span>
+
+<span class="sd">        recordset.with_delay(priority=10).the_method(args, **kwargs)</span>
+
+<span class="sd">    Where ``the_method`` is the method decorated with ``@job``. Its arguments</span>
+<span class="sd">    and keyword arguments will be kept in the Job Queue for its asynchronous</span>
+<span class="sd">    execution.</span>
+
+<span class="sd">    ``default_channel`` indicates in which channel the job must be executed</span>
+
+<span class="sd">    ``retry_pattern`` is a dict where keys are the count of retries and the</span>
+<span class="sd">    values are the delay to postpone a job.</span>
+
+<span class="sd">    Example:</span>
+
+<span class="sd">    .. code-block:: python</span>
+
+<span class="sd">        class ProductProduct(models.Model):</span>
+<span class="sd">            _inherit = &#39;product.product&#39;</span>
+
+<span class="sd">            @api.multi</span>
+<span class="sd">            @job</span>
+<span class="sd">            def export_one_thing(self, one_thing):</span>
+<span class="sd">                # work</span>
+<span class="sd">                # export one_thing</span>
+
+<span class="sd">        # [...]</span>
+
+<span class="sd">        env[&#39;a.model&#39;].export_one_thing(the_thing_to_export)</span>
+<span class="sd">        # =&gt; normal and synchronous function call</span>
+
+<span class="sd">        env[&#39;a.model&#39;].with_delay().export_one_thing(the_thing_to_export)</span>
+<span class="sd">        # =&gt; the job will be executed as soon as possible</span>
+
+<span class="sd">        delayable = env[&#39;a.model&#39;].with_delay(priority=30, eta=60*60*5)</span>
+<span class="sd">        delayable.export_one_thing(the_thing_to_export)</span>
+<span class="sd">        # =&gt; the job will be executed with a low priority and not before a</span>
+<span class="sd">        # delay of 5 hours from now</span>
+
+<span class="sd">        @job(default_channel=&#39;root.subchannel&#39;)</span>
+<span class="sd">        def export_one_thing(one_thing):</span>
+<span class="sd">            # work</span>
+<span class="sd">            # export one_thing</span>
+
+<span class="sd">        @job(retry_pattern={1: 10 * 60,</span>
+<span class="sd">                            5: 20 * 60,</span>
+<span class="sd">                            10: 30 * 60,</span>
+<span class="sd">                            15: 12 * 60 * 60})</span>
+<span class="sd">        def retryable_example():</span>
+<span class="sd">            # 5 first retries postponed 10 minutes later</span>
+<span class="sd">            # retries 5 to 10 postponed 20 minutes later</span>
+<span class="sd">            # retries 10 to 15 postponed 30 minutes later</span>
+<span class="sd">            # all subsequent retries postponed 12 hours later</span>
+<span class="sd">            raise RetryableJobError(&#39;Must be retried later&#39;)</span>
+
+<span class="sd">        env[&#39;a.model&#39;].with_delay().retryable_example()</span>
+
+
+<span class="sd">    See also: :py:func:`related_action` a related action can be attached</span>
+<span class="sd">    to a job</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">func</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">functools</span><span class="o">.</span><span class="n">partial</span><span class="p">(</span><span class="n">job</span><span class="p">,</span> <span class="n">default_channel</span><span class="o">=</span><span class="n">default_channel</span><span class="p">,</span>
+                                 <span class="n">retry_pattern</span><span class="o">=</span><span class="n">retry_pattern</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">delay_from_model</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span>
+            <span class="s2">&quot;method.delay() can no longer be used, the general form is &quot;</span>
+            <span class="s2">&quot;env[&#39;res.users&#39;].with_delay().method()&quot;</span>
+            <span class="p">)</span>
+
+    <span class="k">assert</span> <span class="n">default_channel</span> <span class="o">==</span> <span class="s1">&#39;root&#39;</span> <span class="ow">or</span> <span class="n">default_channel</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;root.&#39;</span><span class="p">),</span> <span class="p">(</span>
+        <span class="s2">&quot;The channel path must start by &#39;root&#39;&quot;</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">retry_pattern</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">retry_pattern</span><span class="p">,</span> <span class="nb">dict</span><span class="p">),</span> <span class="p">(</span>
+        <span class="s2">&quot;retry_pattern must be a dict&quot;</span>
+    <span class="p">)</span>
+
+    <span class="n">delay_func</span> <span class="o">=</span> <span class="n">delay_from_model</span>
+
+    <span class="n">func</span><span class="o">.</span><span class="n">delayable</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">func</span><span class="o">.</span><span class="n">delay</span> <span class="o">=</span> <span class="n">delay_func</span>
+    <span class="n">func</span><span class="o">.</span><span class="n">retry_pattern</span> <span class="o">=</span> <span class="n">retry_pattern</span>
+    <span class="n">func</span><span class="o">.</span><span class="n">default_channel</span> <span class="o">=</span> <span class="n">default_channel</span>
+    <span class="k">return</span> <span class="n">func</span></div>
+
+
+<div class="viewcode-block" id="related_action"><a class="viewcode-back" href="../../../../api/api_queue.html#odoo.addons.queue_job.job.related_action">[docs]</a><span class="k">def</span> <span class="nf">related_action</span><span class="p">(</span><span class="n">action</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Attach a *Related Action* to a job (decorator)</span>
+
+<span class="sd">    A *Related Action* will appear as a button on the Odoo view.</span>
+<span class="sd">    The button will execute the action, usually it will open the</span>
+<span class="sd">    form view of the record related to the job.</span>
+
+<span class="sd">    The ``action`` must be a method on the `queue.job` model.</span>
+
+<span class="sd">    Example usage:</span>
+
+<span class="sd">    .. code-block:: python</span>
+
+<span class="sd">        class QueueJob(models.Model):</span>
+<span class="sd">            _inherit = &#39;queue.job&#39;</span>
+
+<span class="sd">            @api.multi</span>
+<span class="sd">            def related_action_partner(self):</span>
+<span class="sd">                self.ensure_one()</span>
+<span class="sd">                model = self.model_name</span>
+<span class="sd">                partner = self.env[model].browse(self.record_ids)</span>
+<span class="sd">                # possibly get the real ID if partner_id is a binding ID</span>
+<span class="sd">                action = {</span>
+<span class="sd">                    &#39;name&#39;: _(&quot;Partner&quot;),</span>
+<span class="sd">                    &#39;type&#39;: &#39;ir.actions.act_window&#39;,</span>
+<span class="sd">                    &#39;res_model&#39;: model,</span>
+<span class="sd">                    &#39;view_type&#39;: &#39;form&#39;,</span>
+<span class="sd">                    &#39;view_mode&#39;: &#39;form&#39;,</span>
+<span class="sd">                    &#39;res_id&#39;: partner.id,</span>
+<span class="sd">                }</span>
+<span class="sd">                return action</span>
+
+<span class="sd">        class ResPartner(models.Model):</span>
+<span class="sd">            _inherit = &#39;res.partner&#39;</span>
+
+<span class="sd">            @api.multi</span>
+<span class="sd">            @job</span>
+<span class="sd">            @related_action(action=&#39;related_action_partner&#39;)</span>
+<span class="sd">            def export_partner(self):</span>
+<span class="sd">                # ...</span>
+
+<span class="sd">    The kwargs are transmitted to the action:</span>
+
+<span class="sd">    .. code-block:: python</span>
+
+<span class="sd">        class QueueJob(models.Model):</span>
+<span class="sd">            _inherit = &#39;queue.job&#39;</span>
+
+<span class="sd">            @api.multi</span>
+<span class="sd">            def related_action_product(self, extra_arg=1):</span>
+<span class="sd">                assert extra_arg == 2</span>
+<span class="sd">                model = self.model_name</span>
+<span class="sd">                ...</span>
+
+<span class="sd">        class ProductProduct(models.Model):</span>
+<span class="sd">            _inherit = &#39;product.product&#39;</span>
+
+<span class="sd">            @api.multi</span>
+<span class="sd">            @job</span>
+<span class="sd">            @related_action(action=&#39;related_action_product&#39;, extra_arg=2)</span>
+<span class="sd">            def export_product(self):</span>
+<span class="sd">                # ...</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">decorate</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+        <span class="n">func</span><span class="o">.</span><span class="n">related_action</span> <span class="o">=</span> <span class="n">action</span>
+        <span class="n">func</span><span class="o">.</span><span class="n">kwargs</span> <span class="o">=</span> <span class="n">kwargs</span>
+        <span class="k">return</span> <span class="n">func</span>
+    <span class="k">return</span> <span class="n">decorate</span></div>
+</pre></div>
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+        <br/>
+        
+      
+    </p>
+    <p>
+        &copy; Copyright 2013, Camptocamp SA.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.3.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

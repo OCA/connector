@@ -29,7 +29,7 @@ available.
 Core Features
 *************
 
-* **100% Open Source** (`AGPL version 3`_): the full `source code is available
+* **100% Open Source** (`LGPL version 3`_): the full `source code is available
   on GitHub`_
 * Not only designed to connect Odoo with e-commerce backends,
   rather it is **adaptable** to connect Odoo with any type of service.
@@ -44,7 +44,7 @@ Core Features
 .. _Akretion: http://www.akretion.com
 .. _Acsone: https://www.acsone.eu
 .. _`source code is available on GitHub`: https://github.com/OCA/connector
-.. _`AGPL version 3`: https://www.gnu.org/licenses/agpl-3.0.html
+.. _`LGPL version 3`: https://www.gnu.org/licenses/lgpl-3.0.html
 .. _`project's mailing list (name: Connectors)`: https://odoo-community.org/groups
 
 *****************
@@ -83,7 +83,6 @@ Project
    project/contribute
    project/contributors
    project/license
-   project/changes
    project/roadmap
 
 *********************************
@@ -99,6 +98,8 @@ Connectors based on the framework
 * `JIRA Connector <https://github.com/camptocamp/connector-jira>`_
 * `Google Spreadsheet Connector <https://github.com/akretion/connector-google-spreadsheet>`_
 * `Connector Exchange <https://github.com/camptocamp/connector-exchange/tree/10.0>`_
+* `Infor Connector <https://github.com/OCA/connector-infor>`_
+* `Voicent Connector <https://github.com/ursais/osi-addons>`_
 * Develop easily and rapidly your own connector based on this powerful
   framework and list your project on this page! Examples:
 

@@ -27,7 +27,7 @@ Intermediate subchannels which are not configured explicitly are autocreated
 with an unlimited capacity (except the root channel which if not configured gets
 a default capacity of 1).
 
-A delay in seconds between jobs can be set at the channel level with 
+A delay in seconds between jobs can be set at the channel level with
 the ``throttle`` key.
 
 Example ``ODOO_QUEUE_JOB_CHANNELS``:

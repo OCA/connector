@@ -66,8 +66,8 @@
     <ul class="dropdown-menu"
         role="menu"
         aria-labelledby="dLabelTranslations">
-      <li><a class="reference" href="http://odoo-connector.com/9.0">English</a><li>
-      <li><a class="reference" href="http://odoo-connector.com/9.0/fr">French</a><li>
+      <li><a class="reference" href="http://odoo-connector.com/9.0">English</a></li>
+      <li><a class="reference" href="http://odoo-connector.com/9.0/fr">French</a></li>
     </ul>
   </li>
   <li class="dropdown">
@@ -79,9 +79,11 @@
     <ul class="dropdown-menu"
         role="menu"
         aria-labelledby="dLabeVersions">
-      <li><a class="reference" href="http://odoo-connector.com/8.0">8.0</a><li>
-      <li><a class="reference" href="http://odoo-connector.com/10.0">10.0</a><li>
-      <li><a class="reference" href="http://odoo-connector.com/">11.0</a><li>
+      <li><a class="reference" href="http://odoo-connector.com/8.0">8.0</a></li>
+      <li><a class="reference" href="http://odoo-connector.com/10.0">10.0</a></li>
+      <li><a class="reference" href="http://odoo-connector.com/11.0">11.0</a></li>
+      <li><a class="reference" href="http://odoo-connector.com/12.0">12.0</a></li>
+      <li><a class="reference" href="http://odoo-connector.com/">13.0</a></li>
     </ul>
   </li>
   
@@ -251,7 +253,7 @@
 <dl class="class">
 <dt id="connector.session.ConnectorSession">
 <em class="property">class </em><code class="descclassname">connector.session.</code><code class="descname">ConnectorSession</code><span class="sig-paren">(</span><em>cr</em>, <em>uid</em>, <em>context=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/session.html#ConnectorSession"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.session.ConnectorSession" title="Lien permanent vers cette définition">¶</a></dt>
-<dd><p>Bases : <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(disponible dans Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dd><p>Bases : <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(disponible dans Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Conteneur pour les choses transactionnelles d’OpenERP :</p>
 <dl class="attribute">
 <dt id="connector.session.ConnectorSession.env">
@@ -290,9 +292,9 @@
 <p>Génère un nouvel <code class="xref py py-class docutils literal notranslate"><span class="pre">openerp.api.Environment</span></code> utilisé à l’intérieur du <cite>context manager</cite>, où le <cite>context</cite> est enrichi avec les arguments. L’environnement original est restauré à la fermeture du <cite>context manager</cite>.</p>
 <p>Le <cite>context</cite> enrichi est soit le <code class="docutils literal notranslate"><span class="pre">context</span></code> fourni, dans lequel les <code class="docutils literal notranslate"><span class="pre">overrides</span></code> sont fusionnés, ou le <cite>context</cite> <em>actuel</em> dans lequel  les <code class="docutils literal notranslate"><span class="pre">overrides</span></code> sont fusionné, càd</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># current context is {&#39;key1&#39;: True}</span>
-<span class="n">r2</span> <span class="o">=</span> <span class="n">records</span><span class="o">.</span><span class="n">with_context</span><span class="p">({},</span> <span class="n">key2</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">r2</span> <span class="o">=</span> <span class="n">records</span><span class="o">.</span><span class="n">with_context</span><span class="p">({},</span> <span class="n">key2</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="c1"># -&gt; r2._context is {&#39;key2&#39;: True}</span>
-<span class="n">r2</span> <span class="o">=</span> <span class="n">records</span><span class="o">.</span><span class="n">with_context</span><span class="p">(</span><span class="n">key2</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">r2</span> <span class="o">=</span> <span class="n">records</span><span class="o">.</span><span class="n">with_context</span><span class="p">(</span><span class="n">key2</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="c1"># -&gt; r2._context is {&#39;key1&#39;: True, &#39;key2&#39;: True}</span>
 </pre></div>
 </div>
@@ -369,7 +371,7 @@
 <dl class="class">
 <dt id="connector.session.ConnectorSessionHandler">
 <em class="property">class </em><code class="descclassname">connector.session.</code><code class="descname">ConnectorSessionHandler</code><span class="sig-paren">(</span><em>db_name</em>, <em>uid</em>, <em>context=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/session.html#ConnectorSessionHandler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.session.ConnectorSessionHandler" title="Lien permanent vers cette définition">¶</a></dt>
-<dd><p>Bases : <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(disponible dans Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dd><p>Bases : <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(disponible dans Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Permet de créer une nouvelle instance de <a class="reference internal" href="#connector.session.ConnectorSession" title="connector.session.ConnectorSession"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConnectorSession</span></code></a> pour une base de données.</p>
 <dl class="attribute">
 <dt id="connector.session.ConnectorSessionHandler.db_name">

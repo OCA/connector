@@ -66,8 +66,8 @@
     <ul class="dropdown-menu"
         role="menu"
         aria-labelledby="dLabelTranslations">
-      <li><a class="reference" href="http://odoo-connector.com/9.0">English</a><li>
-      <li><a class="reference" href="http://odoo-connector.com/9.0/fr">French</a><li>
+      <li><a class="reference" href="http://odoo-connector.com/9.0">English</a></li>
+      <li><a class="reference" href="http://odoo-connector.com/9.0/fr">French</a></li>
     </ul>
   </li>
   <li class="dropdown">
@@ -79,9 +79,11 @@
     <ul class="dropdown-menu"
         role="menu"
         aria-labelledby="dLabeVersions">
-      <li><a class="reference" href="http://odoo-connector.com/8.0">8.0</a><li>
-      <li><a class="reference" href="http://odoo-connector.com/10.0">10.0</a><li>
-      <li><a class="reference" href="http://odoo-connector.com/">11.0</a><li>
+      <li><a class="reference" href="http://odoo-connector.com/8.0">8.0</a></li>
+      <li><a class="reference" href="http://odoo-connector.com/10.0">10.0</a></li>
+      <li><a class="reference" href="http://odoo-connector.com/11.0">11.0</a></li>
+      <li><a class="reference" href="http://odoo-connector.com/12.0">12.0</a></li>
+      <li><a class="reference" href="http://odoo-connector.com/">13.0</a></li>
     </ul>
   </li>
   
@@ -251,7 +253,7 @@
 <dl class="class">
 <dt id="connector.event.Event">
 <em class="property">class </em><code class="descclassname">connector.event.</code><code class="descname">Event</code><a class="reference internal" href="../_modules/connector/event.html#Event"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.event.Event" title="Lien permanent vers cette définition">¶</a></dt>
-<dd><p>Bases : <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(disponible dans Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dd><p>Bases : <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(disponible dans Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Un événement contient des consommateurs qui sont appelés lorsque l’événement survient.</p>
 <p>Les événements sont capables de filtrer par nom de modèle les consommateurs à exécuter.</p>
 <p>L’usage classique d’un événement est d’instancier un objet <cite>Event</cite></p>
@@ -314,7 +316,7 @@
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><ul class="first last simple">
 <li><strong>session</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">connector.session.Session</span></code>) – session en cours</li>
-<li><strong>model_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(disponible dans Python v3.7)"><em>str</em></a>) – nom du modèle</li>
+<li><strong>model_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(disponible dans Python v3.8)"><em>str</em></a>) – nom du modèle</li>
 <li><strong>args</strong> – arguments propagés au consommateur. Le deuxième argument de <cite>args</cite> est le nom de modèle. Le premier argument est la session.</li>
 <li><strong>kwargs</strong> – arguments nommés propagés au consommateur</li>
 </ul>

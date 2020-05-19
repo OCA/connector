@@ -64,8 +64,8 @@
     <ul class="dropdown-menu"
         role="menu"
         aria-labelledby="dLabelTranslations">
-      <li><a class="reference" href="http://odoo-connector.com/9.0">English</a><li>
-      <li><a class="reference" href="http://odoo-connector.com/9.0/fr">French</a><li>
+      <li><a class="reference" href="http://odoo-connector.com/9.0">English</a></li>
+      <li><a class="reference" href="http://odoo-connector.com/9.0/fr">French</a></li>
     </ul>
   </li>
   <li class="dropdown">
@@ -77,9 +77,11 @@
     <ul class="dropdown-menu"
         role="menu"
         aria-labelledby="dLabeVersions">
-      <li><a class="reference" href="http://odoo-connector.com/8.0">8.0</a><li>
-      <li><a class="reference" href="http://odoo-connector.com/10.0">10.0</a><li>
-      <li><a class="reference" href="http://odoo-connector.com/">11.0</a><li>
+      <li><a class="reference" href="http://odoo-connector.com/8.0">8.0</a></li>
+      <li><a class="reference" href="http://odoo-connector.com/10.0">10.0</a></li>
+      <li><a class="reference" href="http://odoo-connector.com/11.0">11.0</a></li>
+      <li><a class="reference" href="http://odoo-connector.com/12.0">12.0</a></li>
+      <li><a class="reference" href="http://odoo-connector.com/">13.0</a></li>
     </ul>
   </li>
   
@@ -359,7 +361,7 @@
 <span class="sd">       of running Odoo is obviously not for production purposes.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">contextlib</span> <span class="k">import</span> <span class="n">closing</span>
+<span class="kn">from</span> <span class="nn">contextlib</span> <span class="kn">import</span> <span class="n">closing</span>
 <span class="kn">import</span> <span class="nn">datetime</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">os</span>
@@ -368,13 +370,13 @@
 <span class="kn">import</span> <span class="nn">time</span>
 
 <span class="kn">import</span> <span class="nn">psycopg2</span>
-<span class="kn">from</span> <span class="nn">psycopg2.extensions</span> <span class="k">import</span> <span class="n">ISOLATION_LEVEL_AUTOCOMMIT</span>
+<span class="kn">from</span> <span class="nn">psycopg2.extensions</span> <span class="kn">import</span> <span class="n">ISOLATION_LEVEL_AUTOCOMMIT</span>
 <span class="kn">import</span> <span class="nn">requests</span>
 
 <span class="kn">import</span> <span class="nn">openerp</span>
-<span class="kn">from</span> <span class="nn">openerp.tools</span> <span class="k">import</span> <span class="n">config</span>
+<span class="kn">from</span> <span class="nn">openerp.tools</span> <span class="kn">import</span> <span class="n">config</span>
 
-<span class="kn">from</span> <span class="nn">.channels</span> <span class="k">import</span> <span class="n">ChannelManager</span><span class="p">,</span> <span class="n">PENDING</span><span class="p">,</span> <span class="n">ENQUEUED</span><span class="p">,</span> <span class="n">NOT_DONE</span>
+<span class="kn">from</span> <span class="nn">.channels</span> <span class="kn">import</span> <span class="n">ChannelManager</span><span class="p">,</span> <span class="n">PENDING</span><span class="p">,</span> <span class="n">ENQUEUED</span><span class="p">,</span> <span class="n">NOT_DONE</span>
 
 <span class="n">SELECT_TIMEOUT</span> <span class="o">=</span> <span class="mi">60</span>
 <span class="n">ERROR_RECOVERY_DELAY</span> <span class="o">=</span> <span class="mi">5</span>
@@ -485,7 +487,7 @@
 
 <div class="viewcode-block" id="Database"><a class="viewcode-back" href="../../../api/api_runner.html#connector.jobrunner.runner.Database">[docs]</a><span class="k">class</span> <span class="nc">Database</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">db_name</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">db_name</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">db_name</span> <span class="o">=</span> <span class="n">db_name</span>
         <span class="n">connection_info</span> <span class="o">=</span> <span class="n">_connection_info_for</span><span class="p">(</span><span class="n">db_name</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">conn</span> <span class="o">=</span> <span class="n">psycopg2</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="o">**</span><span class="n">connection_info</span><span class="p">)</span>
@@ -562,7 +564,7 @@
 
 <div class="viewcode-block" id="ConnectorRunner"><a class="viewcode-back" href="../../../api/api_runner.html#connector.jobrunner.runner.ConnectorRunner">[docs]</a><span class="k">class</span> <span class="nc">ConnectorRunner</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                  <span class="n">scheme</span><span class="o">=</span><span class="s1">&#39;http&#39;</span><span class="p">,</span>
                  <span class="n">host</span><span class="o">=</span><span class="s1">&#39;localhost&#39;</span><span class="p">,</span>
                  <span class="n">port</span><span class="o">=</span><span class="mi">8069</span><span class="p">,</span>

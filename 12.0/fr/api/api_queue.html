@@ -4,6 +4,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Queue &#8212; Documentation Connector </title>
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -243,7 +244,7 @@
 <span id="models"></span><h2>Modèles<a class="headerlink" href="#module-odoo.addons.queue_job.models.base" title="Lien permanent vers ce titre">¶</a></h2>
 <dl class="py class">
 <dt id="odoo.addons.queue_job.models.base.Base">
-<em class="property">class </em><code class="descclassname">odoo.addons.queue_job.models.base.</code><code class="descname">Base</code><span class="sig-paren">(</span><em><span class="n">pool</span></em>, <em><span class="n">cr</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/models/base.html#Base"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.queue_job.models.base.Base" title="Lien permanent vers cette définition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">odoo.addons.queue_job.models.base.</code><code class="descname">Base</code><a class="reference internal" href="../_modules/odoo/addons/queue_job/models/base.html#Base"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.queue_job.models.base.Base" title="Lien permanent vers cette définition">¶</a></dt>
 <dd><p>Bases : <code class="xref py py-class docutils literal notranslate"><span class="pre">odoo.models.BaseModel</span></code></p>
 <p>The base model, which is implicitly inherited by all models.</p>
 <p>A new <a class="reference internal" href="#odoo.addons.queue_job.models.base.Base.with_delay" title="odoo.addons.queue_job.models.base.Base.with_delay"><code class="xref py py-meth docutils literal notranslate"><span class="pre">with_delay()</span></code></a> method is added on all Odoo Models, allowing to
@@ -307,7 +308,7 @@ jobs queueing for debugging purposes, you can:</p>
 
 <span class="target" id="module-odoo.addons.queue_job.models.queue_job"></span><dl class="py class">
 <dt id="odoo.addons.queue_job.models.queue_job.QueueJob">
-<em class="property">class </em><code class="descclassname">odoo.addons.queue_job.models.queue_job.</code><code class="descname">QueueJob</code><span class="sig-paren">(</span><em><span class="n">pool</span></em>, <em><span class="n">cr</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/models/queue_job.html#QueueJob"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.queue_job.models.queue_job.QueueJob" title="Lien permanent vers cette définition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">odoo.addons.queue_job.models.queue_job.</code><code class="descname">QueueJob</code><a class="reference internal" href="../_modules/odoo/addons/queue_job/models/queue_job.html#QueueJob"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.queue_job.models.queue_job.QueueJob" title="Lien permanent vers cette définition">¶</a></dt>
 <dd><p>Model storing the jobs to be executed.</p>
 <dl class="py attribute">
 <dt id="odoo.addons.queue_job.models.queue_job.QueueJob._name">
@@ -741,7 +742,7 @@ no job is created and the existing job is returned</p>
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.3.<br/>
+      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 3.1.1.<br/>
     </p>
   </div>
 </footer>

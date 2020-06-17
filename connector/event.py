@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # Copyright 2012-2017 Camptocamp SA
-# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html)
+# License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl.html)
 
 from collections import Callable
 from .connector import get_odoo_module, is_module_installed

@@ -3,6 +3,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Components &#8212; Connector  documentation</title>
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -1016,19 +1017,6 @@ mapping methods</p></li>
 </dd></dl>
 
 <dl class="py function">
-<dt id="connector.components.mapper.mapping">
-<code class="sig-prename descclassname">connector.components.mapper.</code><code class="sig-name descname">mapping</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">func</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/components/mapper.html#mapping"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.components.mapper.mapping" title="Permalink to this definition">¶</a></dt>
-<dd><p>Decorator, declare that a method is a mapping method.</p>
-<p>It is then used by the <a class="reference internal" href="#connector.components.mapper.Mapper" title="connector.components.mapper.Mapper"><code class="xref py py-class docutils literal notranslate"><span class="pre">Mapper</span></code></a> to convert the records.</p>
-<p>Usage:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@mapping</span>
-<span class="k">def</span> <span class="nf">any</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">):</span>
-    <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;output_field&#39;</span><span class="p">:</span> <span class="n">record</span><span class="p">[</span><span class="s1">&#39;input_field&#39;</span><span class="p">]}</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="py function">
 <dt id="connector.components.mapper.changed_by">
 <code class="sig-prename descclassname">connector.components.mapper.</code><code class="sig-name descname">changed_by</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/components/mapper.html#changed_by"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.components.mapper.changed_by" title="Permalink to this definition">¶</a></dt>
 <dd><p>Decorator for the mapping methods (<a class="reference internal" href="#connector.components.mapper.mapping" title="connector.components.mapper.mapping"><code class="xref py py-func docutils literal notranslate"><span class="pre">mapping()</span></code></a>)</p>
@@ -1055,42 +1043,6 @@ fields really having to be exported.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="connector.components.mapper.only_create">
-<code class="sig-prename descclassname">connector.components.mapper.</code><code class="sig-name descname">only_create</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">func</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/components/mapper.html#only_create"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.components.mapper.only_create" title="Permalink to this definition">¶</a></dt>
-<dd><p>Decorator for the mapping methods (<a class="reference internal" href="#connector.components.mapper.mapping" title="connector.components.mapper.mapping"><code class="xref py py-func docutils literal notranslate"><span class="pre">mapping()</span></code></a>)</p>
-<p>A mapping decorated with <code class="docutils literal notranslate"><span class="pre">only_create</span></code> means that it has to be
-used only for the creation of the records.</p>
-<p>Usage:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@only_create</span>
-<span class="nd">@mapping</span>
-<span class="k">def</span> <span class="nf">any</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">):</span>
-    <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;output_field&#39;</span><span class="p">:</span> <span class="n">record</span><span class="p">[</span><span class="s1">&#39;input_field&#39;</span><span class="p">]}</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="py function">
-<dt id="connector.components.mapper.none">
-<code class="sig-prename descclassname">connector.components.mapper.</code><code class="sig-name descname">none</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">field</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/components/mapper.html#none"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.components.mapper.none" title="Permalink to this definition">¶</a></dt>
-<dd><p>A modifier intended to be used on the <code class="docutils literal notranslate"><span class="pre">direct</span></code> mappings.</p>
-<p>Replace the False-ish values by None.
-It can be used in a pipeline of modifiers when .</p>
-<p>Example:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">direct</span> <span class="o">=</span> <span class="p">[(</span><span class="n">none</span><span class="p">(</span><span class="s1">&#39;source&#39;</span><span class="p">),</span> <span class="s1">&#39;target&#39;</span><span class="p">),</span>
-          <span class="p">(</span><span class="n">none</span><span class="p">(</span><span class="n">m2o_to_external</span><span class="p">(</span><span class="s1">&#39;rel_id&#39;</span><span class="p">),</span> <span class="s1">&#39;rel_id&#39;</span><span class="p">)]</span>
-</pre></div>
-</div>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>field</strong> – name of the source field in the record</p></li>
-<li><p><strong>binding</strong> – True if the relation is a binding record</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
 <dt id="connector.components.mapper.convert">
 <code class="sig-prename descclassname">connector.components.mapper.</code><code class="sig-name descname">convert</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">field</span></em>, <em class="sig-param"><span class="n">conv_type</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/components/mapper.html#convert"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.components.mapper.convert" title="Permalink to this definition">¶</a></dt>
 <dd><p>A modifier intended to be used on the <code class="docutils literal notranslate"><span class="pre">direct</span></code> mappings.</p>
@@ -1104,30 +1056,6 @@ It can be used in a pipeline of modifiers when .</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>field</strong> – name of the source field in the record</p></li>
 <li><p><strong>binding</strong> – True if the relation is a binding record</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt id="connector.components.mapper.m2o_to_external">
-<code class="sig-prename descclassname">connector.components.mapper.</code><code class="sig-name descname">m2o_to_external</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">field</span></em>, <em class="sig-param"><span class="n">binding</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/components/mapper.html#m2o_to_external"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.components.mapper.m2o_to_external" title="Permalink to this definition">¶</a></dt>
-<dd><p>A modifier intended to be used on the <code class="docutils literal notranslate"><span class="pre">direct</span></code> mappings.</p>
-<p>For a many2one, get the external ID and returns it.</p>
-<p>When the field’s relation is not a binding (i.e. it does not point to
-something like <code class="docutils literal notranslate"><span class="pre">magento.*</span></code>), the binding model needs to be provided
-in the <code class="docutils literal notranslate"><span class="pre">binding</span></code> keyword argument.</p>
-<p>Example:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">direct</span> <span class="o">=</span> <span class="p">[(</span><span class="n">m2o_to_external</span><span class="p">(</span><span class="s1">&#39;country_id&#39;</span><span class="p">,</span>
-                           <span class="n">binding</span><span class="o">=</span><span class="s1">&#39;magento.res.country&#39;</span><span class="p">),</span> <span class="s1">&#39;country&#39;</span><span class="p">),</span>
-          <span class="p">(</span><span class="n">m2o_to_external</span><span class="p">(</span><span class="s1">&#39;magento_country_id&#39;</span><span class="p">),</span> <span class="s1">&#39;country&#39;</span><span class="p">)]</span>
-</pre></div>
-</div>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>field</strong> – name of the source field in the record</p></li>
-<li><p><strong>binding</strong> – name of the binding model is the relation is not a binding</p></li>
 </ul>
 </dd>
 </dl>
@@ -1176,6 +1104,79 @@ in the <code class="docutils literal notranslate"><span class="pre">binding</spa
 <dd class="field-odd"><p><strong>field</strong> – field “path”, using dots for relations as usual in Odoo</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="connector.components.mapper.m2o_to_external">
+<code class="sig-prename descclassname">connector.components.mapper.</code><code class="sig-name descname">m2o_to_external</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">field</span></em>, <em class="sig-param"><span class="n">binding</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/components/mapper.html#m2o_to_external"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.components.mapper.m2o_to_external" title="Permalink to this definition">¶</a></dt>
+<dd><p>A modifier intended to be used on the <code class="docutils literal notranslate"><span class="pre">direct</span></code> mappings.</p>
+<p>For a many2one, get the external ID and returns it.</p>
+<p>When the field’s relation is not a binding (i.e. it does not point to
+something like <code class="docutils literal notranslate"><span class="pre">magento.*</span></code>), the binding model needs to be provided
+in the <code class="docutils literal notranslate"><span class="pre">binding</span></code> keyword argument.</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">direct</span> <span class="o">=</span> <span class="p">[(</span><span class="n">m2o_to_external</span><span class="p">(</span><span class="s1">&#39;country_id&#39;</span><span class="p">,</span>
+                           <span class="n">binding</span><span class="o">=</span><span class="s1">&#39;magento.res.country&#39;</span><span class="p">),</span> <span class="s1">&#39;country&#39;</span><span class="p">),</span>
+          <span class="p">(</span><span class="n">m2o_to_external</span><span class="p">(</span><span class="s1">&#39;magento_country_id&#39;</span><span class="p">),</span> <span class="s1">&#39;country&#39;</span><span class="p">)]</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>field</strong> – name of the source field in the record</p></li>
+<li><p><strong>binding</strong> – name of the binding model is the relation is not a binding</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="connector.components.mapper.mapping">
+<code class="sig-prename descclassname">connector.components.mapper.</code><code class="sig-name descname">mapping</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">func</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/components/mapper.html#mapping"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.components.mapper.mapping" title="Permalink to this definition">¶</a></dt>
+<dd><p>Decorator, declare that a method is a mapping method.</p>
+<p>It is then used by the <a class="reference internal" href="#connector.components.mapper.Mapper" title="connector.components.mapper.Mapper"><code class="xref py py-class docutils literal notranslate"><span class="pre">Mapper</span></code></a> to convert the records.</p>
+<p>Usage:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@mapping</span>
+<span class="k">def</span> <span class="nf">any</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">):</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;output_field&#39;</span><span class="p">:</span> <span class="n">record</span><span class="p">[</span><span class="s1">&#39;input_field&#39;</span><span class="p">]}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt id="connector.components.mapper.none">
+<code class="sig-prename descclassname">connector.components.mapper.</code><code class="sig-name descname">none</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">field</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/components/mapper.html#none"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.components.mapper.none" title="Permalink to this definition">¶</a></dt>
+<dd><p>A modifier intended to be used on the <code class="docutils literal notranslate"><span class="pre">direct</span></code> mappings.</p>
+<p>Replace the False-ish values by None.
+It can be used in a pipeline of modifiers when .</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">direct</span> <span class="o">=</span> <span class="p">[(</span><span class="n">none</span><span class="p">(</span><span class="s1">&#39;source&#39;</span><span class="p">),</span> <span class="s1">&#39;target&#39;</span><span class="p">),</span>
+          <span class="p">(</span><span class="n">none</span><span class="p">(</span><span class="n">m2o_to_external</span><span class="p">(</span><span class="s1">&#39;rel_id&#39;</span><span class="p">),</span> <span class="s1">&#39;rel_id&#39;</span><span class="p">)]</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>field</strong> – name of the source field in the record</p></li>
+<li><p><strong>binding</strong> – True if the relation is a binding record</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="connector.components.mapper.only_create">
+<code class="sig-prename descclassname">connector.components.mapper.</code><code class="sig-name descname">only_create</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">func</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/components/mapper.html#only_create"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.components.mapper.only_create" title="Permalink to this definition">¶</a></dt>
+<dd><p>Decorator for the mapping methods (<a class="reference internal" href="#connector.components.mapper.mapping" title="connector.components.mapper.mapping"><code class="xref py py-func docutils literal notranslate"><span class="pre">mapping()</span></code></a>)</p>
+<p>A mapping decorated with <code class="docutils literal notranslate"><span class="pre">only_create</span></code> means that it has to be
+used only for the creation of the records.</p>
+<p>Usage:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@only_create</span>
+<span class="nd">@mapping</span>
+<span class="k">def</span> <span class="nf">any</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">):</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;output_field&#39;</span><span class="p">:</span> <span class="n">record</span><span class="p">[</span><span class="s1">&#39;input_field&#39;</span><span class="p">]}</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </div>
@@ -1749,7 +1750,7 @@ The <cite>_name</cite> given to the Collection Model will be the name
 to use in the <cite>_collection</cite> of the Components usable for the Backend.</p>
 <dl class="py class">
 <dt id="odoo.addons.component.models.collection.Collection">
-<em class="property">class </em><code class="sig-prename descclassname">odoo.addons.component.models.collection.</code><code class="sig-name descname">Collection</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pool</span></em>, <em class="sig-param"><span class="n">cr</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/component/models/collection.html#Collection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.component.models.collection.Collection" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">odoo.addons.component.models.collection.</code><code class="sig-name descname">Collection</code><a class="reference internal" href="../_modules/odoo/addons/component/models/collection.html#Collection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.component.models.collection.Collection" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">odoo.models.BaseModel</span></code></p>
 <p>The model on which components are subscribed</p>
 <p>It would be for instance the <code class="docutils literal notranslate"><span class="pre">backend</span></code> for the connectors.</p>
@@ -1882,7 +1883,7 @@ are loaded.</p>
 
 <dl class="py method">
 <dt id="odoo.addons.component.core.ComponentRegistry.lookup">
-<code class="sig-name descname">lookup</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">collection_name</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">usage</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">model_name</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/component/core.html#ComponentRegistry.lookup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.component.core.ComponentRegistry.lookup" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">lookup</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/component/core.html#ComponentRegistry.lookup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.component.core.ComponentRegistry.lookup" title="Permalink to this definition">¶</a></dt>
 <dd><p>Find and return a list of components for a usage</p>
 <p>If a component is not registered in a particular collection (no
 <code class="docutils literal notranslate"><span class="pre">_collection</span></code>), it will be returned in any case (as far as
@@ -2260,7 +2261,7 @@ be registered in the component collections.</p>
 <p>Build the components at the build of a registry.</p>
 <dl class="py class">
 <dt id="odoo.addons.component.builder.ComponentBuilder">
-<em class="property">class </em><code class="sig-prename descclassname">odoo.addons.component.builder.</code><code class="sig-name descname">ComponentBuilder</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pool</span></em>, <em class="sig-param"><span class="n">cr</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/component/builder.html#ComponentBuilder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.component.builder.ComponentBuilder" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">odoo.addons.component.builder.</code><code class="sig-name descname">ComponentBuilder</code><a class="reference internal" href="../_modules/odoo/addons/component/builder.html#ComponentBuilder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.component.builder.ComponentBuilder" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">odoo.models.BaseModel</span></code></p>
 <p>Build the component classes</p>
 <p>And register them in a global registry.</p>
@@ -2322,7 +2323,7 @@ the components</p></li>
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.3.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.1.1.<br/>
     </p>
   </div>
 </footer>

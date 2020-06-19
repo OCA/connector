@@ -117,6 +117,7 @@ import logging
 import os
 import re
 import select
+import signal
 import threading
 import time
 
@@ -212,6 +213,15 @@ class Database(object):
         self.conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
         self.has_connector = self._has_connector()
         if self.has_connector:
+            if not self._lock():
+                _logger.exception(
+                    "Jobrunner lock was not granted. Is there another "
+                    "jobrunner active in database %s? Trying to stop Odoo.",
+                    self.db_name)
+                os.kill(openerp.service.server.server.pid, signal.SIGINT)
+                raise RuntimeError(
+                    'Jobrunner lock was not granted in database %s' % db_name)
+
             self.has_channel = self._has_queue_job_column('channel')
             self._initialize()
 
@@ -235,6 +245,14 @@ class Database(object):
                 else:
                     raise
             return cr.fetchone()
+
+    def _lock(self):
+        """ Request a session lock on the database. The session lock will be
+        released when self.conn is deleted. If the lock is not granted, there
+        is already a jobrunner running in this database. """
+        with closing(self.conn.cursor()) as cr:
+            cr.execute("select pg_try_advisory_lock(hashtext('jobrunner'))")
+            return cr.fetchone()[0]
 
     def _has_queue_job_column(self, column):
         if not self.has_connector:

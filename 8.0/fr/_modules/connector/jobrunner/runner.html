@@ -353,6 +353,7 @@
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">re</span>
 <span class="kn">import</span> <span class="nn">select</span>
+<span class="kn">import</span> <span class="nn">signal</span>
 <span class="kn">import</span> <span class="nn">threading</span>
 <span class="kn">import</span> <span class="nn">time</span>
 
@@ -448,6 +449,15 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">set_isolation_level</span><span class="p">(</span><span class="n">ISOLATION_LEVEL_AUTOCOMMIT</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">has_connector</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_has_connector</span><span class="p">()</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">has_connector</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lock</span><span class="p">():</span>
+                <span class="n">_logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span>
+                    <span class="s2">&quot;Jobrunner lock was not granted. Is there another &quot;</span>
+                    <span class="s2">&quot;jobrunner active in database </span><span class="si">%s</span><span class="s2">? Trying to stop Odoo.&quot;</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">db_name</span><span class="p">)</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">kill</span><span class="p">(</span><span class="n">openerp</span><span class="o">.</span><span class="n">service</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">pid</span><span class="p">,</span> <span class="n">signal</span><span class="o">.</span><span class="n">SIGINT</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+                    <span class="s1">&#39;Jobrunner lock was not granted in database </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">db_name</span><span class="p">)</span>
+
             <span class="bp">self</span><span class="o">.</span><span class="n">has_channel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_has_queue_job_column</span><span class="p">(</span><span class="s1">&#39;channel&#39;</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_initialize</span><span class="p">()</span>
 
@@ -471,6 +481,14 @@
                 <span class="k">else</span><span class="p">:</span>
                     <span class="k">raise</span>
             <span class="k">return</span> <span class="n">cr</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_lock</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Request a session lock on the database. The session lock will be</span>
+<span class="sd">        released when self.conn is deleted. If the lock is not granted, there</span>
+<span class="sd">        is already a jobrunner running in this database. &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="n">closing</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">())</span> <span class="k">as</span> <span class="n">cr</span><span class="p">:</span>
+            <span class="n">cr</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;select pg_try_advisory_lock(hashtext(&#39;jobrunner&#39;))&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">cr</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
 
     <span class="k">def</span> <span class="nf">_has_queue_job_column</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">column</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">has_connector</span><span class="p">:</span>

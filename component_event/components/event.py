@@ -118,7 +118,7 @@ from odoo.addons.component.core import AbstractComponent, Component
 _logger = logging.getLogger(__name__)
 
 try:
-    from cachetools import LRUCache, cachedmethod, keys
+    from cachetools import LRUCache, cachedmethod
 except ImportError:
     _logger.debug("Cannot import 'cachetools'.")
 
@@ -225,22 +225,23 @@ class EventCollecter(Component):
         # until the next rebuild of odoo's registry
         cls._cache = LRUCache(maxsize=DEFAULT_EVENT_CACHE_SIZE)
 
-    @cachedmethod(operator.attrgetter('_cache'),
-                  key=lambda self, name: keys.hashkey(
-                      self.work.collection._name
-                      if self.work._collection is not None else None,
-                      self.work.model_name,
-                      name)
-                  )
     def _collect_events(self, name):
+        collection_name = None
+        if self.work._collection is not None:
+            collection_name = self.work.collection._name
+        return self._collect_events_cached(
+            collection_name,
+            self.work.model_name,
+            name
+        )
+
+    @cachedmethod(operator.attrgetter('_cache'))
+    def _collect_events_cached(self, collection_name, model_name, name):
         events = defaultdict(set)
-        collection_name = (self.work.collection._name
-                           if self.work._collection is not None
-                           else None)
         component_classes = self.work.components_registry.lookup(
             collection_name=collection_name,
             usage='event.listener',
-            model_name=self.work.model_name,
+            model_name=model_name,
         )
         for cls in component_classes:
             if cls.has_event(name):

@@ -390,7 +390,6 @@ msgstr ""
 #. module: connector
 #: code:addons/connector/queue/model.py:266
 #, fuzzy, python-format
-#| msgid "The selected jobs will be requeued."
 msgid "If both parameters are 0, ALL jobs will be requeued!"
 msgstr "Les jobs sélectionnés vont être remis en queue."
 

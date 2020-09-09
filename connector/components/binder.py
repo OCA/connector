@@ -48,6 +48,7 @@ class Binder(AbstractComponent):
                  or an empty recordset if the external_id is not mapped
         :rtype: recordset
         """
+        context = self.env.context
         bindings = self.model.with_context(active_test=False).search(
             [
                 (self._external_field, "=", tools.ustr(external_id)),
@@ -61,6 +62,7 @@ class Binder(AbstractComponent):
         bindings.ensure_one()
         if unwrap:
             bindings = bindings[self._odoo_field]
+        bindings = bindings.with_context(context)
         return bindings
 
     def to_external(self, binding, wrap=False):

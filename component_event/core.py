@@ -15,7 +15,7 @@ from odoo.addons.component.core import WorkContext
 
 
 class EventWorkContext(WorkContext):
-    """ Work context used by the Events internals
+    """Work context used by the Events internals
 
     Should not be used outside of the events internals.
     The work context to use generally is
@@ -85,7 +85,7 @@ class EventWorkContext(WorkContext):
         self._collection = value
 
     def work_on(self, model_name=None, collection=None):
-        """ Create a new work context for another model keeping attributes
+        """Create a new work context for another model keeping attributes
 
         Used when one need to lookup components for another model.
 

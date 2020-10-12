@@ -19,7 +19,7 @@ from ..core import EventWorkContext
 
 
 class Base(models.AbstractModel):
-    """ The base model, which is implicitly inherited by all models.
+    """The base model, which is implicitly inherited by all models.
 
     Add an :meth:`_event` method to all Models. This method allows to
     trigger events.
@@ -37,7 +37,7 @@ class Base(models.AbstractModel):
     _inherit = "base"
 
     def _event(self, name, collection=None, components_registry=None):
-        """ Collect events for notifications
+        """Collect events for notifications
 
         Usage::
 

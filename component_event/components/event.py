@@ -130,7 +130,7 @@ DEFAULT_EVENT_CACHE_SIZE = 512
 
 
 def skip_if(cond):
-    """ Decorator allowing to skip an event based on a condition
+    """Decorator allowing to skip an event based on a condition
 
     The condition is a python lambda expression, which takes the
     same arguments than the event.
@@ -165,7 +165,7 @@ def skip_if(cond):
 
 
 class CollectedEvents(object):
-    """ Event methods ready to be notified
+    """Event methods ready to be notified
 
     This is a rather internal class. An instance of this class
     is prepared by the :class:`EventCollecter` when we need to notify
@@ -192,7 +192,7 @@ class CollectedEvents(object):
 
 
 class EventCollecter(Component):
-    """ Component that collects the event from an event name
+    """Component that collects the event from an event name
 
     For doing so, it searches all the components that respond to the
     ``event.listener`` ``_usage`` and having an event of the same
@@ -264,7 +264,7 @@ class EventCollecter(Component):
 
 
 class EventListener(AbstractComponent):
-    """ Base Component for the Event listeners
+    """Base Component for the Event listeners
 
     Events must be methods starting with ``on_``.
 

@@ -17,7 +17,7 @@ from odoo.addons.component.core import AbstractComponent
 
 
 class Binder(AbstractComponent):
-    """ For one record of a model, capable to find an external or
+    """For one record of a model, capable to find an external or
     internal id, or create the binding (link) between them
 
     This is a default implementation that can be inherited or reimplemented
@@ -38,7 +38,7 @@ class Binder(AbstractComponent):
     _sync_date_field = "sync_date"  # override in sub-classes
 
     def to_internal(self, external_id, unwrap=False):
-        """ Give the Odoo recordset for an external ID
+        """Give the Odoo recordset for an external ID
 
         :param external_id: external ID for which we want
                             the Odoo ID
@@ -64,7 +64,7 @@ class Binder(AbstractComponent):
         return bindings
 
     def to_external(self, binding, wrap=False):
-        """ Give the external ID for an Odoo binding ID
+        """Give the external ID for an Odoo binding ID
 
         :param binding: Odoo binding for which we want the external id
         :param wrap: if True, binding is a normal record, the
@@ -90,7 +90,7 @@ class Binder(AbstractComponent):
         return binding[self._external_field]
 
     def bind(self, external_id, binding):
-        """ Create the link between an external ID and an Odoo ID
+        """Create the link between an external ID and an Odoo ID
 
         :param external_id: external id to bind
         :param binding: Odoo record to bind
@@ -117,7 +117,7 @@ class Binder(AbstractComponent):
         )
 
     def unwrap_binding(self, binding):
-        """ For a binding record, gives the normal record.
+        """For a binding record, gives the normal record.
 
         Example: when called with a ``magento.product.product`` id,
         it will return the corresponding ``product.product`` id.
@@ -133,7 +133,7 @@ class Binder(AbstractComponent):
         return binding[self._odoo_field]
 
     def unwrap_model(self):
-        """ For a binding model, gives the normal model.
+        """For a binding model, gives the normal model.
 
         Example: when called on a binder for ``magento.product.product``,
         it will return ``product.product``.

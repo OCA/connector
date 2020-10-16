@@ -102,7 +102,7 @@ class TestMapper(ComponentRegistryCase):
         self.assertEqual(comp._map_methods, {"email": zapp_def})
 
     def test_mapping_decorator_cumul(self):
-        """ Mappings should cumulate the ``super`` mappings
+        """Mappings should cumulate the ``super`` mappings
         and the local mappings."""
 
         class FryMapper(Component):
@@ -132,8 +132,8 @@ class TestMapper(ComponentRegistryCase):
         self.assertEqual(comp._map_methods, {"name": name_def, "email": email_def})
 
     def test_mapping_decorator_cumul_changed_by(self):
-        """ Mappings should cumulate the changed_by fields of the
-        ``super`` mappings and the local mappings """
+        """Mappings should cumulate the changed_by fields of the
+        ``super`` mappings and the local mappings"""
 
         class FryMapper(Component):
             _name = "fry.mapper"
@@ -503,7 +503,7 @@ class TestMapper(ComponentRegistryCase):
         self.assertEqual(map_record.values(for_create=True), expected)
 
     def test_modifier_import_filter_field(self):
-        """ A direct mapping with a modifier must still be considered
+        """A direct mapping with a modifier must still be considered
         from the list of fields
         """
 

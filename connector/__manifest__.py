@@ -1,12 +1,11 @@
-# Copyright 2013-2017 Camptocamp SA
+# Copyright 2013 Camptocamp SA
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl.html)
 
 {
     "name": "Connector",
-    "version": "13.0.1.0.0",
-    "author": "Camptocamp,Openerp Connector Core Editors,"
-    "Odoo Community Association (OCA)",
-    "website": "http://odoo-connector.com",
+    "version": "14.0.1.0.0",
+    "author": "Camptocamp,Odoo Community Association (OCA)",
+    "website": "https://github.com/OCA/connector",
     "license": "LGPL-3",
     "category": "Generic Modules",
     "depends": ["mail", "queue_job", "component", "component_event"],

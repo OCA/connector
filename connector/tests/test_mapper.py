@@ -1,13 +1,10 @@
-# Copyright 2013-2017 Camptocamp SA
+# Copyright 2013 Camptocamp SA
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl.html)
 
 import mock
 
 from odoo.addons.component.core import Component, WorkContext
-from odoo.addons.component.tests.common import (
-    ComponentRegistryCase,
-    TransactionComponentRegistryCase,
-)
+from odoo.addons.component.tests.common import TransactionComponentRegistryCase
 from odoo.addons.connector.components.mapper import (
     MapOptions,
     MappingDefinition,
@@ -22,7 +19,7 @@ from odoo.addons.connector.components.mapper import (
 )
 
 
-class TestMapper(ComponentRegistryCase):
+class TestMapper(TransactionComponentRegistryCase):
     def setUp(self):
         super(TestMapper, self).setUp()
         self.comp_registry.load_components("connector")

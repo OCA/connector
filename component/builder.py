@@ -16,7 +16,7 @@ from .core import DEFAULT_CACHE_SIZE, ComponentRegistry, _component_databases
 
 
 class ComponentBuilder(models.AbstractModel):
-    """ Build the component classes
+    """Build the component classes
 
     And register them in a global registry.
 
@@ -79,7 +79,7 @@ class ComponentBuilder(models.AbstractModel):
             self.load_components(module.name, components_registry=components_registry)
 
     def load_components(self, module, components_registry=None):
-        """ Build every component known by MetaComponent for an odoo module
+        """Build every component known by MetaComponent for an odoo module
 
         The final component (composed by all the Component classes in this
         module) will be pushed into the registry.

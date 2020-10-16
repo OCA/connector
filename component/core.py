@@ -61,7 +61,7 @@ class ComponentDatabases(dict):
 
 
 class ComponentRegistry(object):
-    """ Store all the components and allow to find them using criteria
+    """Store all the components and allow to find them using criteria
 
     The key is the ``_name`` of the components.
 
@@ -103,7 +103,7 @@ class ComponentRegistry(object):
 
     @cachedmethod(operator.attrgetter("_cache"))
     def lookup(self, collection_name=None, usage=None, model_name=None):
-        """ Find and return a list of components for a usage
+        """Find and return a list of components for a usage
 
         If a component is not registered in a particular collection (no
         ``_collection``), it will be returned in any case (as far as
@@ -170,7 +170,7 @@ _component_databases = ComponentDatabases()
 
 
 class WorkContext(object):
-    """ Transport the context required to work with components
+    """Transport the context required to work with components
 
     It is propagated through all the components, so any
     data or instance (like a random RPC client) that need
@@ -267,14 +267,14 @@ class WorkContext(object):
 
     @property
     def env(self):
-        """ Return the current Odoo env
+        """Return the current Odoo env
 
         This is the environment of the current collection.
         """
         return self.collection.env
 
     def work_on(self, model_name=None, collection=None):
-        """ Create a new work context for another model keeping attributes
+        """Create a new work context for another model keeping attributes
 
         Used when one need to lookup components for another model.
         """
@@ -295,7 +295,7 @@ class WorkContext(object):
         return component_class
 
     def component_by_name(self, name, model_name=None):
-        """ Return a component by its name
+        """Return a component by its name
 
         If the component exists, an instance of it will be returned,
         initialized with the current :class:`WorkContext`.
@@ -354,7 +354,7 @@ class WorkContext(object):
         return [cls for cls in component_classes if cls._component_match(self)]
 
     def component(self, usage=None, model_name=None):
-        """ Find a component by usage and model for the current collection
+        """Find a component by usage and model for the current collection
 
         It searches a component using the rules of
         :meth:`ComponentRegistry.lookup`. When a component is found,
@@ -417,7 +417,7 @@ class WorkContext(object):
         return component_classes[0](work_context)
 
     def many_components(self, usage=None, model_name=None):
-        """ Find many components by usage and model for the current collection
+        """Find many components by usage and model for the current collection
 
         It searches a component using the rules of
         :meth:`ComponentRegistry.lookup`. When components are found, they
@@ -444,7 +444,7 @@ class WorkContext(object):
 
 
 class MetaComponent(type):
-    """ Metaclass for Components
+    """Metaclass for Components
 
     Every new :class:`Component` will be added to ``_modules_components``,
     that will be used by the component builder.
@@ -487,7 +487,7 @@ class MetaComponent(type):
 
 
 class AbstractComponent(object, metaclass=MetaComponent):
-    """ Main Component Model
+    """Main Component Model
 
     All components have a Python inheritance either on
     :class:`AbstractComponent` or either on :class:`Component`.
@@ -665,7 +665,7 @@ class AbstractComponent(object, metaclass=MetaComponent):
 
     @classmethod
     def _component_match(cls, work):
-        """ Evaluated on candidate components
+        """Evaluated on candidate components
 
         When a component lookup is done and candidate(s) have
         been found for a usage, a final call is done on this method.
@@ -700,21 +700,21 @@ class AbstractComponent(object, metaclass=MetaComponent):
         return self.work.model
 
     def component_by_name(self, name, model_name=None):
-        """ Return a component by its name
+        """Return a component by its name
 
         Shortcut to meth:`~WorkContext.component_by_name`
         """
         return self.work.component_by_name(name, model_name=model_name)
 
     def component(self, usage=None, model_name=None):
-        """ Return a component
+        """Return a component
 
         Shortcut to meth:`~WorkContext.component`
         """
         return self.work.component(usage=usage, model_name=model_name)
 
     def many_components(self, usage=None, model_name=None):
-        """ Return several components
+        """Return several components
 
         Shortcut to meth:`~WorkContext.many_components`
         """
@@ -727,7 +727,7 @@ class AbstractComponent(object, metaclass=MetaComponent):
 
     @classmethod
     def _build_component(cls, registry):
-        """ Instantiate a given Component in the components registry.
+        """Instantiate a given Component in the components registry.
 
         This method is called at the end of the Odoo's registry build.  The
         caller is :meth:`component.builder.ComponentBuilder.load_components`.
@@ -869,8 +869,7 @@ class AbstractComponent(object, metaclass=MetaComponent):
 
     @classmethod
     def _build_component_check_parent(component_class, cls, parent_class):  # noqa: B902
-        """ Check whether ``model_class`` can inherit from ``parent_class``.
-        """
+        """Check whether ``model_class`` can inherit from ``parent_class``."""
         if component_class._abstract and not parent_class._abstract:
             msg = (
                 "In %s, the abstract Component %r cannot inherit "
@@ -880,7 +879,7 @@ class AbstractComponent(object, metaclass=MetaComponent):
 
     @classmethod
     def _complete_component_build(cls):
-        """ Complete build of the new component class
+        """Complete build of the new component class
 
         After the component has been built from its bases, this method is
         called, and can be used to customize the class before it can be used.
@@ -891,7 +890,7 @@ class AbstractComponent(object, metaclass=MetaComponent):
 
 
 class Component(AbstractComponent):
-    """ Concrete Component class
+    """Concrete Component class
 
     This is the class you inherit from when you want your component to
     be registered in the component collections.

@@ -53,7 +53,7 @@ class ComponentMixin(object):
 
 
 class TransactionComponentCase(common.TransactionCase, ComponentMixin):
-    """ A TransactionCase that loads all the components
+    """A TransactionCase that loads all the components
 
     It it used like an usual Odoo's TransactionCase, but it ensures
     that all the components of the current addon and its dependencies
@@ -75,7 +75,7 @@ class TransactionComponentCase(common.TransactionCase, ComponentMixin):
 
 
 class SavepointComponentCase(common.SavepointCase, ComponentMixin):
-    """ A SavepointCase that loads all the components
+    """A SavepointCase that loads all the components
 
     It it used like an usual Odoo's SavepointCase, but it ensures
     that all the components of the current addon and its dependencies
@@ -99,7 +99,7 @@ class SavepointComponentCase(common.SavepointCase, ComponentMixin):
 class ComponentRegistryCase(
     unittest.TestCase, common.MetaCase("DummyCase", (object,), {})
 ):
-    """ This test case can be used as a base for writings tests on components
+    """This test case can be used as a base for writings tests on components
 
     This test case is meant to test components in a special component registry,
     where you want to have maximum control on which components are loaded

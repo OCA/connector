@@ -9,7 +9,7 @@ from .common import ComponentRegistryCase
 
 
 class TestBuildComponent(ComponentRegistryCase):
-    """ Test build of components
+    """Test build of components
 
     All the tests in this suite are based on the same principle with
     variations:

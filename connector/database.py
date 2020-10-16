@@ -9,7 +9,7 @@ _logger = logging.getLogger(__name__)
 
 
 def pg_try_advisory_lock(env, lock):
-    """ Try to acquire a Postgres transactional advisory lock.
+    """Try to acquire a Postgres transactional advisory lock.
 
     The function tries to acquire a lock, returns a boolean indicating
     if it could be obtained or not. An acquired lock is released at the

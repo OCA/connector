@@ -25,7 +25,7 @@ class ConnectorListener(AbstractComponent):
     _inherit = ["base.connector", "base.event.listener"]
 
     def no_connector_export(self, record):
-        """ Return if the 'connector_no_export' has been set in context
+        """Return if the 'connector_no_export' has been set in context
 
         To be used with :func:`odoo.addons.component_event.skip_if`
         on Events::

@@ -21,7 +21,7 @@ from ..core import WorkContext
 
 
 class Collection(models.AbstractModel):
-    """ The model on which components are subscribed
+    """The model on which components are subscribed
 
     It would be for instance the ``backend`` for the connectors.
 
@@ -61,7 +61,7 @@ class Collection(models.AbstractModel):
 
     @contextmanager
     def work_on(self, model_name, **kwargs):
-        """ Entry-point for the components, context manager
+        """Entry-point for the components, context manager
 
         Start a work using the components on the model.
         Any keyword argument will be assigned to the work context.

@@ -7,7 +7,7 @@ from .common import TransactionComponentCase
 
 
 class TestWorkOn(TransactionComponentCase):
-    """ Test on WorkContext
+    """Test on WorkContext
 
     This model is mostly a container, so we check the access
     to the attributes and properties.

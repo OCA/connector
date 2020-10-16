@@ -5,7 +5,7 @@ from ..core import AbstractComponent
 
 
 class BaseComponent(AbstractComponent):
-    """ This is the base component for every component
+    """This is the base component for every component
 
     It is implicitely inherited by all components.
 

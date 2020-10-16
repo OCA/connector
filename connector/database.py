@@ -1,4 +1,4 @@
-# Copyright 2013-2017 Camptocamp SA
+# Copyright 2013 Camptocamp SA
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl.html)
 
 import hashlib

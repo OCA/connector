@@ -1,4 +1,4 @@
-# Copyright 2013-2017 Camptocamp SA
+# Copyright 2013 Camptocamp SA
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl.html)
 
 """
@@ -84,7 +84,11 @@ class ConnectorCheckpoint(models.Model):
     )
     record_id = fields.Integer(string="Record ID", required=True, readonly=True)
     model_id = fields.Many2one(
-        comodel_name="ir.model", string="Model", required=True, readonly=True
+        comodel_name="ir.model",
+        string="Model",
+        required=True,
+        readonly=True,
+        ondelete="cascade",
     )
     backend_id = fields.Reference(
         string="Imported from",

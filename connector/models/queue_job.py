@@ -9,7 +9,7 @@ class QueueJob(models.Model):
     _inherit = "queue.job"
 
     def related_action_unwrap_binding(self, component_usage="binder"):
-        """ Open a form view with the unwrapped record.
+        """Open a form view with the unwrapped record.
 
         For instance, for a job on a ``magento.product.product``,
         it will open a ``product.product`` form view with the unwrapped

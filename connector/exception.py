@@ -26,8 +26,7 @@ class MappingError(ConnectorException):
 
 
 class NetworkRetryableError(RetryableJobError):
-    """ A network error caused the failure of the job, it can be retried later.
-    """
+    """A network error caused the failure of the job, it can be retried later."""
 
 
 class NoExternalId(RetryableJobError):

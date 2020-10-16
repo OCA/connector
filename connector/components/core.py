@@ -75,7 +75,7 @@ from ..database import pg_try_advisory_lock
 
 
 class BaseConnectorComponent(AbstractComponent):
-    """ Base component for the connector
+    """Base component for the connector
 
     Is inherited by every components of the Connector (Binder, Mapper, ...)
     and adds a few methods which are of common usage in the connectors.
@@ -91,7 +91,7 @@ class BaseConnectorComponent(AbstractComponent):
         return self.work.collection
 
     def binder_for(self, model=None):
-        """ Shortcut to get Binder for a model
+        """Shortcut to get Binder for a model
 
         Equivalent to: ``self.component(usage='binder', model_name='xxx')``
 
@@ -99,7 +99,7 @@ class BaseConnectorComponent(AbstractComponent):
         return self.component(usage="binder", model_name=model)
 
     def advisory_lock_or_retry(self, lock, retry_seconds=1):
-        """ Acquire a Postgres transactional advisory lock or retry job
+        """Acquire a Postgres transactional advisory lock or retry job
 
         When the lock cannot be acquired, it raises a
         :exc:`odoo.addons.queue_job.exception.RetryableJobError` so the job

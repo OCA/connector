@@ -16,8 +16,8 @@
         <field name="name">Connector Checkpoint multi-company</field>
         <field name="model_id" ref="model_connector_checkpoint" />
         <field name="global" eval="True" />
-        <field
-            name="domain_force"
-        > ['|','|',('company_id.child_ids','child_of',[user.company_id.id]),('company_id','child_of',[user.company_id.id]),('company_id','=',False)]</field>
+        <field name="domain_force">
+            ['|','|',('company_id.child_ids','child_of',[user.company_id.id]),('company_id','child_of',[user.company_id.id]),('company_id','=',False)]
+        </field>
     </record>
 </odoo>

@@ -6,7 +6,7 @@ from odoo import fields, models
 
 
 class ConnectorBackend(models.AbstractModel):
-    """ An instance of an external backend to synchronize with.
+    """An instance of an external backend to synchronize with.
 
     The backends have to ``_inherit`` this model in the connectors
     modules.
@@ -50,7 +50,7 @@ class ConnectorBackend(models.AbstractModel):
 
 
 class ExternalBinding(models.AbstractModel):
-    """ An abstract model for bindings to external records.
+    """An abstract model for bindings to external records.
 
     An external binding is a binding between a backend and Odoo.  For
     example, for a partner, it could be ``magento.res.partner`` or for a

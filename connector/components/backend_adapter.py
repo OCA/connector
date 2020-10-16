@@ -25,7 +25,7 @@ class BackendAdapter(AbstractComponent):
 
 # pylint: disable=W8106
 class CRUDAdapter(AbstractComponent):
-    """ Base External Adapter specialized in the handling
+    """Base External Adapter specialized in the handling
     of records on external systems.
 
     This is an empty shell, Components can inherit and implement their own
@@ -38,8 +38,8 @@ class CRUDAdapter(AbstractComponent):
     _usage = "backend.adapter"
 
     def search(self, *args, **kwargs):
-        """ Search records according to some criterias
-        and returns a list of ids """
+        """Search records according to some criterias
+        and returns a list of ids"""
         raise NotImplementedError
 
     def read(self, *args, **kwargs):
@@ -47,7 +47,7 @@ class CRUDAdapter(AbstractComponent):
         raise NotImplementedError
 
     def search_read(self, *args, **kwargs):
-        """ Search records according to some criterias
+        """Search records according to some criterias
         and returns their information"""
         raise NotImplementedError
 

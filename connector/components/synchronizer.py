@@ -53,7 +53,7 @@ class Synchronizer(AbstractComponent):
 
     @property
     def mapper(self):
-        """ Return an instance of ``Mapper`` for the synchronization.
+        """Return an instance of ``Mapper`` for the synchronization.
 
         The instanciation is delayed because some synchronisations do
         not need such an unit and the unit may not exist.
@@ -69,7 +69,7 @@ class Synchronizer(AbstractComponent):
 
     @property
     def binder(self):
-        """ Return an instance of ``Binder`` for the synchronization.
+        """Return an instance of ``Binder`` for the synchronization.
 
         The instanciation is delayed because some synchronisations do
         not need such an unit and the unit may not exist.
@@ -82,7 +82,7 @@ class Synchronizer(AbstractComponent):
 
     @property
     def backend_adapter(self):
-        """ Return an instance of ``BackendAdapter`` for the
+        """Return an instance of ``BackendAdapter`` for the
         synchronization.
 
         The instanciation is delayed because some synchronisations do
@@ -126,7 +126,7 @@ class GenericExporter(AbstractComponent):
         return False
 
     def _delay_import(self):
-        """ Schedule an import of the record.
+        """Schedule an import of the record.
 
         Adapt in the sub-classes when the model is not imported
         using ``import_record``.
@@ -139,7 +139,7 @@ class GenericExporter(AbstractComponent):
         )
 
     def run(self, binding, *args, **kwargs):
-        """ Run the synchronization
+        """Run the synchronization
 
         :param binding: binding record to export
         """
@@ -200,10 +200,9 @@ class GenericExporter(AbstractComponent):
 
     def _after_export(self):
         """ Can do several actions after exporting a record on the backend """
-        pass
 
     def _lock(self):
-        """ Lock the binding record.
+        """Lock the binding record.
 
         Lock the binding record so we are sure that only one export
         job is running for this record if concurrent jobs have to export the
@@ -240,7 +239,7 @@ class GenericExporter(AbstractComponent):
 
     @contextmanager
     def _retry_unique_violation(self):
-        """ Context manager: catch Unique constraint error and retry the
+        """Context manager: catch Unique constraint error and retry the
         job later.
 
         When we execute several jobs workers concurrently, it happens
@@ -379,14 +378,14 @@ class GenericExporter(AbstractComponent):
         return
 
     def _map_data(self):
-        """ Returns an instance of
+        """Returns an instance of
         :py:class:`~odoo.addons.connector.components.mapper.MapRecord`
 
         """
         return self.mapper.map_record(self.binding)
 
     def _validate_create_data(self, data):
-        """ Check if the values to import are correct
+        """Check if the values to import are correct
 
         Pro-actively check before the ``Model.create`` if some fields
         are missing or invalid
@@ -396,7 +395,7 @@ class GenericExporter(AbstractComponent):
         return
 
     def _validate_update_data(self, data):
-        """ Check if the values to import are correct
+        """Check if the values to import are correct
 
         Pro-actively check before the ``Model.update`` if some fields
         are missing or invalid

@@ -46,7 +46,7 @@ __all__ = [
 
 
 def mapping(func):
-    """ Decorator, declare that a method is a mapping method.
+    """Decorator, declare that a method is a mapping method.
 
     It is then used by the :py:class:`Mapper` to convert the records.
 
@@ -62,7 +62,7 @@ def mapping(func):
 
 
 def changed_by(*args):
-    """ Decorator for the mapping methods (:py:func:`mapping`)
+    """Decorator for the mapping methods (:py:func:`mapping`)
 
     When fields are modified in Odoo, we want to export only the
     modified fields. Using this decorator, we can specify which fields
@@ -94,7 +94,7 @@ def changed_by(*args):
 
 
 def only_create(func):
-    """ Decorator for the mapping methods (:py:func:`mapping`)
+    """Decorator for the mapping methods (:py:func:`mapping`)
 
     A mapping decorated with ``only_create`` means that it has to be
     used only for the creation of the records.
@@ -112,7 +112,7 @@ def only_create(func):
 
 
 def none(field):
-    """ A modifier intended to be used on the ``direct`` mappings.
+    """A modifier intended to be used on the ``direct`` mappings.
 
     Replace the False-ish values by None.
     It can be used in a pipeline of modifiers when .
@@ -139,7 +139,7 @@ def none(field):
 
 
 def convert(field, conv_type):
-    """ A modifier intended to be used on the ``direct`` mappings.
+    """A modifier intended to be used on the ``direct`` mappings.
 
     Convert a field's value to a given type.
 
@@ -161,7 +161,7 @@ def convert(field, conv_type):
 
 
 def m2o_to_external(field, binding=None):
-    """ A modifier intended to be used on the ``direct`` mappings.
+    """A modifier intended to be used on the ``direct`` mappings.
 
     For a many2one, get the external ID and returns it.
 
@@ -209,7 +209,7 @@ def m2o_to_external(field, binding=None):
 
 
 def external_to_m2o(field, binding=None):
-    """ A modifier intended to be used on the ``direct`` mappings.
+    """A modifier intended to be used on the ``direct`` mappings.
 
     For a field from a backend which is an ID, search the corresponding
     binding in Odoo and returns it.
@@ -295,7 +295,7 @@ MappingDefinition = namedtuple("MappingDefinition", ["changed_by", "only_create"
 
 
 class MapChild(AbstractComponent):
-    """ MapChild is responsible to convert items.
+    """MapChild is responsible to convert items.
 
     Items are sub-records of a main record.
     In this example, the items are the records in ``lines``::
@@ -345,7 +345,7 @@ class MapChild(AbstractComponent):
         raise NotImplementedError
 
     def skip_item(self, map_record):
-        """ Hook to implement in sub-classes when some child
+        """Hook to implement in sub-classes when some child
         records should be skipped.
 
         The parent record is accessible in ``map_record``.
@@ -357,7 +357,7 @@ class MapChild(AbstractComponent):
         return False
 
     def get_items(self, items, parent, to_attr, options):
-        """ Returns the formatted output values of items from a main record
+        """Returns the formatted output values of items from a main record
 
         :param items: list of item records
         :type items: list
@@ -381,7 +381,7 @@ class MapChild(AbstractComponent):
         return self.format_items(mapped)
 
     def get_item_values(self, map_record, to_attr, options):
-        """ Get the raw values from the child Mappers for the items.
+        """Get the raw values from the child Mappers for the items.
 
         It can be overridden for instance to:
 
@@ -401,7 +401,7 @@ class MapChild(AbstractComponent):
         return map_record.values(**options)
 
     def format_items(self, items_values):
-        """ Format the values of the items mapped from the child Mappers.
+        """Format the values of the items mapped from the child Mappers.
 
         It can be overridden for instance to add the Odoo
         relationships commands ``(6, 0, [IDs])``, ...
@@ -429,7 +429,7 @@ class ImportMapChild(AbstractComponent):
         return self.component(usage="import.mapper")
 
     def format_items(self, items_values):
-        """ Format the values of the items mapped from the child Mappers.
+        """Format the values of the items mapped from the child Mappers.
 
         It can be overridden for instance to add the Odoo
         relationships commands ``(6, 0, [IDs])``, ...
@@ -458,7 +458,7 @@ class ExportMapChild(AbstractComponent):
 
 
 class Mapper(AbstractComponent):
-    """ A Mapper translates an external record to an Odoo record and
+    """A Mapper translates an external record to an Odoo record and
     conversely. The output of a Mapper is a ``dict``.
 
     3 types of mappings are supported:
@@ -574,7 +574,7 @@ class Mapper(AbstractComponent):
 
     @classmethod
     def _build_mapper_component(cls):
-        """ Build a Mapper component
+        """Build a Mapper component
 
         When a Mapper component is built, we will look into every of its bases
         and look for methods decorated by ``@mapping`` or ``@changed_by``.  We
@@ -654,7 +654,7 @@ class Mapper(AbstractComponent):
         self._options = None
 
     def _map_direct(self, record, from_attr, to_attr):
-        """ Apply the ``direct`` mappings.
+        """Apply the ``direct`` mappings.
 
         :param record: record to convert from a source to a target
         :param from_attr: name of the source attribute or a callable
@@ -699,7 +699,7 @@ class Mapper(AbstractComponent):
 
     @contextmanager
     def _mapping_options(self, options):
-        """ Change the mapping options for the Mapper.
+        """Change the mapping options for the Mapper.
 
         Context Manager to use in order to alter the behavior
         of the mapping, when using ``_apply`` or ``finalize``.
@@ -712,12 +712,12 @@ class Mapper(AbstractComponent):
 
     @property
     def options(self):
-        """ Options can be accessed in the mapping methods with
-        ``self.options``. """
+        """Options can be accessed in the mapping methods with
+        ``self.options``."""
         return self._options
 
     def changed_by_fields(self):
-        """ Build a set of fields used by the mapper
+        """Build a set of fields used by the mapper
 
         It takes in account the ``direct`` fields and the fields used by
         the decorator: ``changed_by``.
@@ -733,7 +733,7 @@ class Mapper(AbstractComponent):
         return changed_by
 
     def _direct_source_field_name(self, direct_entry):
-        """ Get the mapping field name. Goes through the function modifiers.
+        """Get the mapping field name. Goes through the function modifiers.
 
         Ex::
 
@@ -763,7 +763,7 @@ class Mapper(AbstractComponent):
         return fieldname
 
     def map_record(self, record, parent=None):
-        """ Get a :py:class:`MapRecord` with record, ready to be
+        """Get a :py:class:`MapRecord` with record, ready to be
         converted using the current Mapper.
 
         :param record: record to transform
@@ -773,7 +773,7 @@ class Mapper(AbstractComponent):
         return MapRecord(self, record, parent=parent)
 
     def _apply(self, map_record, options=None):
-        """ Apply the mappings on a :py:class:`MapRecord`
+        """Apply the mappings on a :py:class:`MapRecord`
 
         :param map_record: source record to convert
         :type map_record: :py:class:`MapRecord`
@@ -785,7 +785,7 @@ class Mapper(AbstractComponent):
             return self._apply_with_options(map_record)
 
     def _apply_with_options(self, map_record):
-        """ Apply the mappings on a :py:class:`MapRecord` with
+        """Apply the mappings on a :py:class:`MapRecord` with
         contextual options (the ``options`` given in
         :py:meth:`MapRecord.values()` are accessible in
         ``self.options``)
@@ -840,7 +840,7 @@ class Mapper(AbstractComponent):
         return self.finalize(map_record, result)
 
     def finalize(self, map_record, values):
-        """ Called at the end of the mapping.
+        """Called at the end of the mapping.
 
         Can be used to modify the values generated by all the mappings before
         returning them.
@@ -855,7 +855,7 @@ class Mapper(AbstractComponent):
 
 
 class ImportMapper(AbstractComponent):
-    """ :py:class:`Mapper` for imports.
+    """:py:class:`Mapper` for imports.
 
     Transform a record from a backend to an Odoo record
 
@@ -869,7 +869,7 @@ class ImportMapper(AbstractComponent):
     _map_child_fallback = "base.map.child.import"
 
     def _map_direct(self, record, from_attr, to_attr):
-        """ Apply the ``direct`` mappings.
+        """Apply the ``direct`` mappings.
 
         :param record: record to convert from a source to a target
         :param from_attr: name of the source attribute or a callable
@@ -896,7 +896,7 @@ class ImportMapper(AbstractComponent):
 
 
 class ExportMapper(AbstractComponent):
-    """ :py:class:`Mapper` for exports.
+    """:py:class:`Mapper` for exports.
 
     Transform a record from Odoo to a backend record
 
@@ -910,7 +910,7 @@ class ExportMapper(AbstractComponent):
     _map_child_fallback = "base.map.child.export"
 
     def _map_direct(self, record, from_attr, to_attr):
-        """ Apply the ``direct`` mappings.
+        """Apply the ``direct`` mappings.
 
         :param record: record to convert from a source to a target
         :param from_attr: name of the source attribute or a callable
@@ -937,7 +937,7 @@ class ExportMapper(AbstractComponent):
 
 
 class MapRecord(object):
-    """ A record prepared to be converted using a :py:class:`Mapper`.
+    """A record prepared to be converted using a :py:class:`Mapper`.
 
     MapRecord instances are prepared by :py:meth:`Mapper.map_record`.
 
@@ -967,7 +967,7 @@ class MapRecord(object):
         return self._parent
 
     def values(self, for_create=None, fields=None, **kwargs):
-        """ Build and returns the mapped values according to the options.
+        """Build and returns the mapped values according to the options.
 
         Usage::
 
@@ -1017,7 +1017,7 @@ class MapRecord(object):
         return values
 
     def update(self, *args, **kwargs):
-        """ Force values to be applied after a mapping.
+        """Force values to be applied after a mapping.
 
         Usage::
 
@@ -1034,7 +1034,7 @@ class MapRecord(object):
 
 
 class MapOptions(dict):
-    """ Container for the options of mappings.
+    """Container for the options of mappings.
 
     Options can be accessed using attributes of the instance.  When an
     option is accessed and does not exist, it returns None.

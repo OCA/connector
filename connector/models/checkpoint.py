@@ -140,8 +140,8 @@ class ConnectorCheckpoint(models.Model):
 
     @api.model
     def _needaction_domain_get(self):
-        """ Returns the domain to filter records that require an action
-            :return: domain or False is no action
+        """Returns the domain to filter records that require an action
+        :return: domain or False is no action
         """
         return [("state", "=", "need_review")]
 

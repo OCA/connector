@@ -9,6 +9,7 @@ setuptools.setup(
     version=version,
     install_requires=[
         'odoo14-addon-component',
+        'odoo14-addon-component_event',
     ],
     classifiers=[
         'Programming Language :: Python',

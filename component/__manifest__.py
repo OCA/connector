@@ -14,7 +14,6 @@
     "external_dependencies": {
         "python": [
             "cachetools",
-            "mock",
         ]
     },
     "installable": True,

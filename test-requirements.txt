@@ -1,1 +1,0 @@
-odoo14-addon-component_event @ git+https://github.com/OCA/connector@refs/pull/382/head#subdirectory=setup/connector_event

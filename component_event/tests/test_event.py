@@ -1,6 +1,7 @@
 # Copyright 2017 Camptocamp SA
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl.html)
 
+import sys
 import unittest
 
 import mock
@@ -20,8 +21,34 @@ from odoo.addons.component_event.core import EventWorkContext
 class TestEventWorkContext(unittest.TestCase):
     """ Test Events Components """
 
+    if sys.version_info < (3, 8):
+        # Copy/paste from
+        # https://github.com/odoo/odoo/blob/0218d870d319af4f263d5e9aa324990f7cc90139/
+        # odoo/tests/common.py#L248-L268
+        # Partial backport of bpo-24412, merged in CPython 3.8
+        _class_cleanups = []
+
+        @classmethod
+        def addClassCleanup(cls, function, *args, **kwargs):
+            """Same as addCleanup, except the cleanup items are called even if
+            setUpClass fails (unlike tearDownClass). Backport of bpo-24412."""
+            cls._class_cleanups.append((function, args, kwargs))
+
+        @classmethod
+        def doClassCleanups(cls):
+            """Execute all class cleanup functions.
+            Normally called for you after tearDownClass.
+            Backport of bpo-24412."""
+            cls.tearDown_exceptions = []
+            while cls._class_cleanups:
+                function, args, kwargs = cls._class_cleanups.pop()
+                try:
+                    function(*args, **kwargs)
+                except Exception:
+                    cls.tearDown_exceptions.append(sys.exc_info())
+
     def setUp(self):
-        super(TestEventWorkContext, self).setUp()
+        super().setUp()
         self.env = mock.MagicMock(name="env")
         self.record = mock.MagicMock(name="record")
         self.components_registry = mock.MagicMock(name="ComponentRegistry")

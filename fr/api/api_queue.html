@@ -338,7 +338,7 @@ jobs queueing for debugging purposes, you can:</p>
 <li><p><strong>default_channel</strong> – the channel wherein the job will be assigned. This
 channel is set at the installation of the module
 and can be manually changed later using the views.</p></li>
-<li><p><strong>retry_pattern</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(disponible dans Python v3.8)"><em>dict</em></a><em>(</em><em>retry_count</em><em>,</em><em>retry_eta_seconds</em><em>)</em>) – The retry pattern to use for postponing a job.
+<li><p><strong>retry_pattern</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(disponible dans Python v3.9)"><em>dict</em></a><em>(</em><em>retry_count</em><em>,</em><em>retry_eta_seconds</em><em>)</em>) – The retry pattern to use for postponing a job.
 If a job is postponed and there is no eta
 specified, the eta will be determined from the
 dict in retry_pattern. When no retry pattern
@@ -463,7 +463,7 @@ values are the delay to postpone a job.</p>
 <dl class="py class">
 <dt id="odoo.addons.queue_job.job.DelayableRecordset">
 <em class="property">class </em><code class="sig-prename descclassname">odoo.addons.queue_job.job.</code><code class="sig-name descname">DelayableRecordset</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">recordset</span></em>, <em class="sig-param"><span class="n">priority</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">eta</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">max_retries</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">description</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">channel</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">identity_key</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/job.html#DelayableRecordset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.queue_job.job.DelayableRecordset" title="Lien permanent vers cette définition">¶</a></dt>
-<dd><p>Bases : <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(disponible dans Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dd><p>Bases : <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(disponible dans Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Allow to delay a method for a recordset</p>
 <p>Utilisation</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">delayable</span> <span class="o">=</span> <span class="n">DelayableRecordset</span><span class="p">(</span><span class="n">recordset</span><span class="p">,</span> <span class="n">priority</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
@@ -481,7 +481,7 @@ by <a class="reference internal" href="#odoo.addons.queue_job.models.base.Base.w
 <dl class="py class">
 <dt id="odoo.addons.queue_job.job.Job">
 <em class="property">class </em><code class="sig-prename descclassname">odoo.addons.queue_job.job.</code><code class="sig-name descname">Job</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">func</span></em>, <em class="sig-param"><span class="n">args</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">kwargs</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">priority</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">eta</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">job_uuid</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">max_retries</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">description</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">channel</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">identity_key</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/job.html#Job"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.queue_job.job.Job" title="Lien permanent vers cette définition">¶</a></dt>
-<dd><p>Bases : <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(disponible dans Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dd><p>Bases : <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(disponible dans Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>A Job is a task to execute. It is the in-memory representation of a job.</p>
 <p>Jobs are stored in the <code class="docutils literal notranslate"><span class="pre">queue.job</span></code> Odoo Model, but they are handled
 through this class.</p>
@@ -733,7 +733,7 @@ no job is created and the existing job is returned</p>
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 3.2.0.<br/>
+      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 3.2.1.<br/>
     </p>
   </div>
 </footer>

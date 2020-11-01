@@ -478,7 +478,7 @@ the external id of the binding</p></li>
 <dt class="field-odd">Paramètres</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>external_id</strong> – ID externe à lier</p></li>
-<li><p><strong>binding</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(disponible dans Python v3.8)"><em>int</em></a>) – Odoo record to bind</p></li>
+<li><p><strong>binding</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(disponible dans Python v3.9)"><em>int</em></a>) – Odoo record to bind</p></li>
 </ul>
 </dd>
 </dl>
@@ -666,7 +666,7 @@ returning them.</p>
 <dd class="field-even"><p>valeurs mappées</p>
 </dd>
 <dt class="field-odd">Type renvoyé</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(disponible dans Python v3.8)">dict</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(disponible dans Python v3.9)">dict</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -784,9 +784,9 @@ each children mapping, the default one will be used
 <dl class="field-list simple">
 <dt class="field-odd">Paramètres</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>items</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(disponible dans Python v3.8)"><em>list</em></a>) – liste d’enregistrements d’items</p></li>
+<li><p><strong>items</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(disponible dans Python v3.9)"><em>list</em></a>) – liste d’enregistrements d’items</p></li>
 <li><p><strong>parent</strong> – enregistrement parent</p></li>
-<li><p><strong>to_attr</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(disponible dans Python v3.8)"><em>str</em></a>) – champ destination (peut être utilisé pour inspecter la relation)</p></li>
+<li><p><strong>to_attr</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(disponible dans Python v3.9)"><em>str</em></a>) – champ destination (peut être utilisé pour inspecter la relation)</p></li>
 <li><p><strong>options</strong> – dictionnaire des options, hérité du mappeur principal</p></li>
 </ul>
 </dd>
@@ -809,7 +809,7 @@ each children mapping, the default one will be used
 <dt class="field-odd">Paramètres</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>map_record</strong> (<a class="reference internal" href="#connector.components.mapper.MapRecord" title="connector.components.mapper.MapRecord"><code class="xref py py-class docutils literal notranslate"><span class="pre">MapRecord</span></code></a>) – enregistrement que nous sommes en train de convertir</p></li>
-<li><p><strong>to_attr</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(disponible dans Python v3.8)"><em>str</em></a>) – champ destination (peut être utilisé pour inspecter la relation)</p></li>
+<li><p><strong>to_attr</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(disponible dans Python v3.9)"><em>str</em></a>) – champ destination (peut être utilisé pour inspecter la relation)</p></li>
 <li><p><strong>options</strong> – dictionnaire des options, hérité du mappeur principal</p></li>
 </ul>
 </dd>
@@ -824,7 +824,7 @@ each children mapping, the default one will be used
 <p>Par exemple, il peut être modifié pour pour gérer la mise à jour d’items existants : vérifier si un “id” a bien été défini par <a class="reference internal" href="#connector.components.mapper.MapChild.get_item_values" title="connector.components.mapper.MapChild.get_item_values"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_item_values()</span></code></a> puis utilise la commande <code class="docutils literal notranslate"><span class="pre">(1,</span> <span class="pre">ID,</span> <span class="pre">{valeurs}</span></code>)</p>
 <dl class="field-list simple">
 <dt class="field-odd">Paramètres</dt>
-<dd class="field-odd"><p><strong>items_values</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(disponible dans Python v3.8)"><em>list</em></a>) – valeurs traduites pour les items</p>
+<dd class="field-odd"><p><strong>items_values</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(disponible dans Python v3.9)"><em>list</em></a>) – valeurs traduites pour les items</p>
 </dd>
 </dl>
 </dd></dl>
@@ -859,7 +859,7 @@ each children mapping, the default one will be used
 <p>Par exemple, il peut être modifié pour pour gérer la mise à jour d’items existants : vérifier si un “id” a bien été défini par <code class="xref py py-meth docutils literal notranslate"><span class="pre">get_item_values()</span></code> puis utilise la commande <code class="docutils literal notranslate"><span class="pre">(1,</span> <span class="pre">ID,</span> <span class="pre">{valeurs}</span></code>)</p>
 <dl class="field-list simple">
 <dt class="field-odd">Paramètres</dt>
-<dd class="field-odd"><p><strong>items_values</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(disponible dans Python v3.8)"><em>list</em></a>) – liste des valeurs pour les items à créer</p>
+<dd class="field-odd"><p><strong>items_values</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(disponible dans Python v3.9)"><em>list</em></a>) – liste des valeurs pour les items à créer</p>
 </dd>
 </dl>
 </dd></dl>
@@ -891,7 +891,7 @@ each children mapping, the default one will be used
 <dl class="py class">
 <dt id="connector.components.mapper.MapRecord">
 <em class="property">class </em><code class="sig-prename descclassname">connector.components.mapper.</code><code class="sig-name descname">MapRecord</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mapper</span></em>, <em class="sig-param"><span class="n">source</span></em>, <em class="sig-param"><span class="n">parent</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/components/mapper.html#MapRecord"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.components.mapper.MapRecord" title="Lien permanent vers cette définition">¶</a></dt>
-<dd><p>Bases : <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(disponible dans Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dd><p>Bases : <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(disponible dans Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Un enregistrement préparé à être converti en utilisans un <a class="reference internal" href="#connector.components.mapper.Mapper" title="connector.components.mapper.Mapper"><code class="xref py py-class docutils literal notranslate"><span class="pre">Mapper</span></code></a>.</p>
 <p>Les instances de MapRecord sont préparées par <a class="reference internal" href="#connector.components.mapper.Mapper.map_record" title="connector.components.mapper.Mapper.map_record"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Mapper.map_record()</span></code></a>.</p>
 <p>Utilisation</p>
@@ -946,7 +946,7 @@ each children mapping, the default one will be used
 <dt class="field-odd">Paramètres</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>for_create</strong> (<em>boolean</em>) – précise si seuls les mappings de création (<code class="docutils literal notranslate"><span class="pre">&#64;only_create</span></code>) doivent être mappés.</p></li>
-<li><p><strong>fields</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(disponible dans Python v3.8)"><em>list</em></a>) – filtre sur les champs</p></li>
+<li><p><strong>fields</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(disponible dans Python v3.9)"><em>list</em></a>) – filtre sur les champs</p></li>
 <li><p><strong>**kwargs</strong> – options spécifiques, elles peuvent être utilisées plus tard dans les méthodes de mapping</p></li>
 </ul>
 </dd>
@@ -1756,7 +1756,7 @@ at the end of the work session, such as:</p>
 <dl class="py exception">
 <dt id="odoo.addons.component.exception.ComponentException">
 <em class="property">exception </em><code class="sig-prename descclassname">odoo.addons.component.exception.</code><code class="sig-name descname">ComponentException</code><a class="reference internal" href="../_modules/odoo/addons/component/exception.html#ComponentException"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.component.exception.ComponentException" title="Lien permanent vers cette définition">¶</a></dt>
-<dd><p>Bases : <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#Exception" title="(disponible dans Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></a></p>
+<dd><p>Bases : <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#Exception" title="(disponible dans Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></a></p>
 <p>Base Exception for the components</p>
 </dd></dl>
 
@@ -1790,14 +1790,14 @@ The most common classes used publicly are:</p>
 <dl class="py class">
 <dt id="odoo.addons.component.core.ComponentDatabases">
 <em class="property">class </em><code class="sig-prename descclassname">odoo.addons.component.core.</code><code class="sig-name descname">ComponentDatabases</code><a class="reference internal" href="../_modules/odoo/addons/component/core.html#ComponentDatabases"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.component.core.ComponentDatabases" title="Lien permanent vers cette définition">¶</a></dt>
-<dd><p>Bases : <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(disponible dans Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></p>
+<dd><p>Bases : <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(disponible dans Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></p>
 <p>Holds a registry of components for each database</p>
 </dd></dl>
 
 <dl class="py class">
 <dt id="odoo.addons.component.core.ComponentRegistry">
 <em class="property">class </em><code class="sig-prename descclassname">odoo.addons.component.core.</code><code class="sig-name descname">ComponentRegistry</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cachesize</span><span class="o">=</span><span class="default_value">512</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/component/core.html#ComponentRegistry"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.component.core.ComponentRegistry" title="Lien permanent vers cette définition">¶</a></dt>
-<dd><p>Bases : <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(disponible dans Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dd><p>Bases : <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(disponible dans Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Store all the components and allow to find them using criteria</p>
 <p>The key is the <code class="docutils literal notranslate"><span class="pre">_name</span></code> of the components.</p>
 <p>This is an OrderedDict, because we want to keep the registration order of
@@ -1850,7 +1850,7 @@ registered into.</p></li>
 <dl class="py class">
 <dt id="odoo.addons.component.core.WorkContext">
 <em class="property">class </em><code class="sig-prename descclassname">odoo.addons.component.core.</code><code class="sig-name descname">WorkContext</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">model_name</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">collection</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">components_registry</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/component/core.html#WorkContext"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.component.core.WorkContext" title="Lien permanent vers cette définition">¶</a></dt>
-<dd><p>Bases : <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(disponible dans Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dd><p>Bases : <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(disponible dans Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Transport the context required to work with components</p>
 <p>It is propagated through all the components, so any
 data or instance (like a random RPC client) that need
@@ -1982,7 +1982,7 @@ list.</p>
 <dl class="py class">
 <dt id="odoo.addons.component.core.MetaComponent">
 <em class="property">class </em><code class="sig-prename descclassname">odoo.addons.component.core.</code><code class="sig-name descname">MetaComponent</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span></em>, <em class="sig-param"><span class="n">bases</span></em>, <em class="sig-param"><span class="n">attrs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/component/core.html#MetaComponent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.component.core.MetaComponent" title="Lien permanent vers cette définition">¶</a></dt>
-<dd><p>Bases : <a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(disponible dans Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">type</span></code></a></p>
+<dd><p>Bases : <a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(disponible dans Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">type</span></code></a></p>
 <p>Metaclass for Components</p>
 <p>Every new <a class="reference internal" href="#odoo.addons.component.core.Component" title="odoo.addons.component.core.Component"><code class="xref py py-class docutils literal notranslate"><span class="pre">Component</span></code></a> will be added to <code class="docutils literal notranslate"><span class="pre">_modules_components</span></code>,
 that will be used by the component builder.</p>
@@ -1996,7 +1996,7 @@ that will be used by the component builder.</p>
 <dl class="py class">
 <dt id="odoo.addons.component.core.AbstractComponent">
 <em class="property">class </em><code class="sig-prename descclassname">odoo.addons.component.core.</code><code class="sig-name descname">AbstractComponent</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">work_context</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/component/core.html#AbstractComponent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.component.core.AbstractComponent" title="Lien permanent vers cette définition">¶</a></dt>
-<dd><p>Bases : <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(disponible dans Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dd><p>Bases : <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(disponible dans Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Main Component Model</p>
 <p>All components have a Python inheritance either on
 <a class="reference internal" href="#odoo.addons.component.core.AbstractComponent" title="odoo.addons.component.core.AbstractComponent"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractComponent</span></code></a> or either on <a class="reference internal" href="#odoo.addons.component.core.Component" title="odoo.addons.component.core.Component"><code class="xref py py-class docutils literal notranslate"><span class="pre">Component</span></code></a>.</p>
@@ -2256,7 +2256,7 @@ the components</p></li>
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 3.2.0.<br/>
+      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 3.2.1.<br/>
     </p>
   </div>
 </footer>

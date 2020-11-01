@@ -229,7 +229,7 @@
 <span class="kn">from</span> <span class="nn">odoo.osv</span> <span class="kn">import</span> <span class="n">expression</span>
 
 <span class="kn">from</span> <span class="nn">..fields</span> <span class="kn">import</span> <span class="n">JobSerialized</span>
-<span class="kn">from</span> <span class="nn">..job</span> <span class="kn">import</span> <span class="n">DONE</span><span class="p">,</span> <span class="n">PENDING</span><span class="p">,</span> <span class="n">STATES</span><span class="p">,</span> <span class="n">Job</span>
+<span class="kn">from</span> <span class="nn">..job</span> <span class="kn">import</span> <span class="n">DONE</span><span class="p">,</span> <span class="n">PENDING</span><span class="p">,</span> <span class="n">STATES</span><span class="p">,</span> <span class="n">Job</span><span class="p">,</span> <span class="n">job</span>
 
 <span class="n">_logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
@@ -524,7 +524,11 @@
                     <span class="s2">&quot;domain&quot;</span><span class="p">:</span> <span class="p">[(</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="s2">&quot;in&quot;</span><span class="p">,</span> <span class="n">records</span><span class="o">.</span><span class="n">ids</span><span class="p">)],</span>
                 <span class="p">}</span>
             <span class="p">)</span>
-        <span class="k">return</span> <span class="n">action</span></div>
+        <span class="k">return</span> <span class="n">action</span>
+
+    <span class="nd">@job</span>
+    <span class="k">def</span> <span class="nf">_test_job</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Running test job.&quot;</span><span class="p">)</span></div>
 
 
 <span class="k">class</span> <span class="nc">RequeueJob</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">TransientModel</span><span class="p">):</span>
@@ -683,7 +687,7 @@
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 3.2.0.<br/>
+      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 3.2.1.<br/>
     </p>
   </div>
 </footer>

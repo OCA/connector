@@ -46,10 +46,10 @@ class ComponentMixin(object):
             # build the components of the current tested addon
             current_addon = _get_addon_name(cls.__module__)
             env["component.builder"].load_components(current_addon)
-            if hasattr(cls, "env"):
-                cls.env.context = dict(
-                    cls.env.context, components_registry=cls._components_registry
-                )
+            # share component registry everywhere
+            cls.env.context = dict(
+                cls.env.context, components_registry=cls._components_registry
+            )
 
     def setUp(self):
         # should be ready only during tests, never during installation
@@ -73,6 +73,7 @@ class TransactionComponentCase(common.TransactionCase, ComponentMixin):
     @classmethod
     def setUpClass(cls):
         super(TransactionComponentCase, cls).setUpClass()
+        super().setUpClass()
         cls.setUpComponent()
 
     def setUp(self):
@@ -183,13 +184,10 @@ class ComponentRegistryCase(unittest.TestCase):
         # normally, it is set to True and the end of the build
         # of the components. Here, we'll add components later in
         # the components registry, but we don't mind for the tests.
-        class_or_instance.comp_registry.ready = True
-        if hasattr(class_or_instance, "env"):
-            # let it propagate via ctx
-            class_or_instance.env.context = dict(
-                class_or_instance.env.context,
-                components_registry=class_or_instance.comp_registry,
-            )
+        self.comp_registry.ready = True
+        self.env.context = dict(
+            self.env.context, components_registry=self.comp_registry
+        )
 
     @staticmethod
     def _teardown_registry(class_or_instance):

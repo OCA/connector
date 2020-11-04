@@ -40,6 +40,10 @@ class ComponentMixin(object):
             # build the components of the current tested addon
             current_addon = _get_addon_name(cls.__module__)
             env["component.builder"].load_components(current_addon)
+            # share component registry everywhere
+            cls.env.context = dict(
+                cls.env.context, components_registry=cls._components_registry
+            )
 
     # pylint: disable=W8106
     def setUp(self):
@@ -174,6 +178,9 @@ class ComponentRegistryCase(
         # of the components. Here, we'll add components later in
         # the components registry, but we don't mind for the tests.
         self.comp_registry.ready = True
+        self.env.context = dict(
+            self.env.context, components_registry=self.comp_registry
+        )
 
     def tearDown(self):
         super().tearDown()

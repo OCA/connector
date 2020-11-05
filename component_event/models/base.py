@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # Copyright 2017 Camptocamp SA
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl.html)
 
@@ -62,6 +61,9 @@ class Base(models.AbstractModel):
 
         """
         dbname = self.env.cr.dbname
+        components_registry = self.env.context.get(
+            "components_registry", components_registry
+        )
         comp_registry = (
             components_registry or _component_databases.get(dbname)
         )

@@ -5,10 +5,10 @@ import mock
 
 from odoo.addons.component.core import AbstractComponent, Component
 
-from .common import ComponentRegistryCase
+from .common import TransactionComponentRegistryCase
 
 
-class TestBuildComponent(ComponentRegistryCase):
+class TestBuildComponent(TransactionComponentRegistryCase):
     """Test build of components
 
     All the tests in this suite are based on the same principle with

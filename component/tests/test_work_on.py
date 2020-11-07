@@ -28,6 +28,20 @@ class TestWorkOn(TransactionComponentCase):
             self.assertEqual(self.env['res.partner'], work.model)
             self.assertEqual(self.env, work.env)
 
+    def test_collection_work_on_registry_via_context(self):
+        """ Test propagation of registry via context """
+        registry = ComponentRegistry()
+        collection_record = self.collection.with_context(
+            components_registry=registry
+        ).new()
+        with collection_record.work_on("res.partner") as work:
+            self.assertEqual(collection_record, work.collection)
+            self.assertEqual("collection.base", work.collection._name)
+            self.assertEqual("res.partner", work.model_name)
+            self.assertEqual(self.env["res.partner"], work.model)
+            self.assertEqual(work.env, collection_record.env)
+            self.assertEqual(work.components_registry, registry)
+
     def test_propagate_work_on(self):
         """ Check custom attributes and their propagation """
         registry = ComponentRegistry()

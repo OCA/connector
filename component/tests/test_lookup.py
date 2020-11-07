@@ -2,14 +2,12 @@
 # Copyright 2017 Camptocamp SA
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl.html)
 
-from odoo.addons.component.core import (
-    AbstractComponent,
-    Component,
-)
-from .common import ComponentRegistryCase
+from odoo.addons.component.core import AbstractComponent, Component
+
+from .common import TransactionComponentRegistryCase
 
 
-class TestLookup(ComponentRegistryCase):
+class TestLookup(TransactionComponentRegistryCase):
     """ Test the ComponentRegistry
 
     Tests in this testsuite mainly do:

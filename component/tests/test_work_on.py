@@ -2,11 +2,12 @@
 # Copyright 2017 Camptocamp SA
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl.html)
 
-from odoo.addons.component.core import WorkContext, ComponentRegistry
-from .common import TransactionComponentCase
+from odoo.addons.component.core import ComponentRegistry, WorkContext
+
+from .common import SavepointComponentRegistryCase
 
 
-class TestWorkOn(TransactionComponentCase):
+class TestWorkOn(SavepointComponentRegistryCase):
     """ Test on WorkContext
 
     This model is mostly a container, so we check the access

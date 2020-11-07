@@ -3,20 +3,16 @@
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl.html)
 
 from odoo.addons.component.core import WorkContext, ComponentRegistry
-from .common import TransactionComponentCase
+from .common import SavepointComponentRegistryCase
 
 
-class TestWorkOn(TransactionComponentCase):
+class TestWorkOn(SavepointComponentRegistryCase):
     """ Test on WorkContext
 
     This model is mostly a container, so we check the access
     to the attributes and properties.
 
     """
-
-    def setUp(self):
-        super(TestWorkOn, self).setUp()
-        self.collection = self.env['collection.base']
 
     def test_collection_work_on(self):
         """ Create a new instance and test attributes access """

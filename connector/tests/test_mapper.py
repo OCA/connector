@@ -27,7 +27,12 @@ class TestMapper(ComponentRegistryCase):
 
     def setUp(self):
         super(TestMapper, self).setUp()
-        self.comp_registry.load_components('connector')
+        ComponentRegistryCase._setup_registry(self)
+        self.comp_registry.load_components("connector")
+
+    def tearDown(self):
+        ComponentRegistryCase._teardown_registry(self)
+        super(TestMapper, self).tearDown()
 
     def test_mapping_decorator(self):
         class KifKrokerMapper(Component):

@@ -90,12 +90,13 @@ class Base(models.AbstractModel):
         collecter = work._component_class_by_name('base.event.collecter')(work)
         return collecter.collect_events(name)
 
-    @api.model
-    def create(self, vals):
-        record = super(Base, self).create(vals)
-        fields = list(vals.keys())
-        self._event('on_record_create').notify(record, fields=fields)
-        return record
+    @api.model_create_multi
+    def create(self, vals_list):
+        records = super(Base, self).create(vals_list)
+        for idx, vals in enumerate(vals_list):
+            fields = list(vals.keys())
+            self._event("on_record_create").notify(records[idx], fields=fields)
+        return records
 
     @api.multi
     def write(self, vals):

@@ -4,10 +4,10 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Channels &#8212; Documentation Connector </title>
-    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
     <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
@@ -236,7 +236,7 @@ scheduling mechanisms of the job runner.</p>
 <span class="target" id="module-odoo.addons.queue_job.jobrunner.channels"></span><dl class="py class">
 <dt id="odoo.addons.queue_job.jobrunner.channels.PriorityQueue">
 <em class="property">class </em><code class="descclassname">odoo.addons.queue_job.jobrunner.channels.</code><code class="descname">PriorityQueue</code><a class="reference internal" href="../_modules/odoo/addons/queue_job/jobrunner/channels.html#PriorityQueue"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.queue_job.jobrunner.channels.PriorityQueue" title="Lien permanent vers cette définition">¶</a></dt>
-<dd><p>Bases : <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(disponible dans Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dd><p>Bases : <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(disponible dans Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>A priority queue that supports removing arbitrary objects.</p>
 <p>Adding an object already in the queue is a no op.
 Popping an empty queue returns None.</p>
@@ -286,7 +286,7 @@ Popping an empty queue returns None.</p>
 <dl class="py class">
 <dt id="odoo.addons.queue_job.jobrunner.channels.SafeSet">
 <em class="property">class </em><code class="descclassname">odoo.addons.queue_job.jobrunner.channels.</code><code class="descname">SafeSet</code><a class="reference internal" href="../_modules/odoo/addons/queue_job/jobrunner/channels.html#SafeSet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.queue_job.jobrunner.channels.SafeSet" title="Lien permanent vers cette définition">¶</a></dt>
-<dd><p>Bases : <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(disponible dans Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">set</span></code></a></p>
+<dd><p>Bases : <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(disponible dans Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">set</span></code></a></p>
 <p>A set that does not raise KeyError when removing non-existent items.</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">SafeSet</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
@@ -307,7 +307,7 @@ Popping an empty queue returns None.</p>
 <dl class="py class">
 <dt id="odoo.addons.queue_job.jobrunner.channels.ChannelJob">
 <em class="property">class </em><code class="descclassname">odoo.addons.queue_job.jobrunner.channels.</code><code class="descname">ChannelJob</code><span class="sig-paren">(</span><em><span class="n">db_name</span></em>, <em><span class="n">channel</span></em>, <em><span class="n">uuid</span></em>, <em><span class="n">seq</span></em>, <em><span class="n">date_created</span></em>, <em><span class="n">priority</span></em>, <em><span class="n">eta</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/jobrunner/channels.html#ChannelJob"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.queue_job.jobrunner.channels.ChannelJob" title="Lien permanent vers cette définition">¶</a></dt>
-<dd><p>Bases : <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(disponible dans Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dd><p>Bases : <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(disponible dans Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>A channel job is attached to a channel and holds the properties of a
 job that are necessary to prioritise them.</p>
 <dl class="docutils">
@@ -391,7 +391,7 @@ equal as they are different instances</p>
 <dl class="py class">
 <dt id="odoo.addons.queue_job.jobrunner.channels.ChannelQueue">
 <em class="property">class </em><code class="descclassname">odoo.addons.queue_job.jobrunner.channels.</code><code class="descname">ChannelQueue</code><span class="sig-paren">(</span><em><span class="n">sequential</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/jobrunner/channels.html#ChannelQueue"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.queue_job.jobrunner.channels.ChannelQueue" title="Lien permanent vers cette définition">¶</a></dt>
-<dd><p>Bases : <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(disponible dans Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dd><p>Bases : <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(disponible dans Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>A channel queue is a priority queue for jobs.</p>
 <p>Jobs with an eta are set aside until their eta is past due, at
 which point they start competing normally with other jobs.</p>
@@ -497,7 +497,7 @@ it’s eta.</p>
 <dl class="py class">
 <dt id="odoo.addons.queue_job.jobrunner.channels.Channel">
 <em class="property">class </em><code class="descclassname">odoo.addons.queue_job.jobrunner.channels.</code><code class="descname">Channel</code><span class="sig-paren">(</span><em><span class="n">name</span></em>, <em><span class="n">parent</span></em>, <em><span class="n">capacity</span><span class="o">=</span><span class="default_value">None</span></em>, <em><span class="n">sequential</span><span class="o">=</span><span class="default_value">False</span></em>, <em><span class="n">throttle</span><span class="o">=</span><span class="default_value">0</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/jobrunner/channels.html#Channel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.queue_job.jobrunner.channels.Channel" title="Lien permanent vers cette définition">¶</a></dt>
-<dd><p>Bases : <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(disponible dans Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dd><p>Bases : <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(disponible dans Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>A channel for jobs, with a maximum capacity.</p>
 <p>When jobs are created by queue_job modules, they may be associated
 to a job channel. Jobs with no channel are inserted into the root channel.</p>
@@ -646,7 +646,7 @@ yield.</p>
 <dl class="py class">
 <dt id="odoo.addons.queue_job.jobrunner.channels.ChannelManager">
 <em class="property">class </em><code class="descclassname">odoo.addons.queue_job.jobrunner.channels.</code><code class="descname">ChannelManager</code><a class="reference internal" href="../_modules/odoo/addons/queue_job/jobrunner/channels.html#ChannelManager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.queue_job.jobrunner.channels.ChannelManager" title="Lien permanent vers cette définition">¶</a></dt>
-<dd><p>Bases : <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(disponible dans Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dd><p>Bases : <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(disponible dans Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>High level interface for channels</p>
 <p>This class handles:</p>
 <ul class="simple">
@@ -1027,7 +1027,7 @@ is raised.</p>
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 3.1.1.<br/>
+      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 3.3.1.<br/>
     </p>
   </div>
 </footer>

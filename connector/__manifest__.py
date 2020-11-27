@@ -3,7 +3,7 @@
 
 {
     "name": "Connector",
-    "version": "13.0.1.0.0",
+    "version": "13.0.1.1.0",
     "author": "Camptocamp,Openerp Connector Core Editors,"
     "Odoo Community Association (OCA)",
     "website": "http://odoo-connector.com",

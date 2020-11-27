@@ -4,7 +4,7 @@
 
 {'name': 'Components Tests',
  'summary': 'Automated tests for Components, do not install.',
- 'version': '12.0.1.0.0',
+ 'version': '12.0.1.0.1',
  'author': 'Camptocamp,Odoo Community Association (OCA)',
  'license': 'LGPL-3',
  'category': 'Hidden',

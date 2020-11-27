@@ -5,8 +5,8 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>odoo.addons.queue_job.models.queue_job &#8212; Documentation Connector </title>
-    <link rel="stylesheet" href="../../../../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../../_static/bootstrap-sphinx.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
     <script src="../../../../../_static/jquery.js"></script>
     <script src="../../../../../_static/underscore.js"></script>
@@ -222,20 +222,22 @@
 <span></span><span class="c1"># Copyright 2013-2016 Camptocamp SA</span>
 <span class="c1"># License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl.html)</span>
 
+<span class="kn">import</span> <span class="nn">ast</span>
 <span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">namedtuple</span>
 <span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">timedelta</span>
 
-<span class="kn">from</span> <span class="nn">odoo</span> <span class="kn">import</span> <span class="n">_</span><span class="p">,</span> <span class="n">api</span><span class="p">,</span> <span class="n">exceptions</span><span class="p">,</span> <span class="n">fields</span><span class="p">,</span> <span class="n">models</span>
+<span class="kn">from</span> <span class="nn">odoo</span> <span class="kn">import</span> <span class="n">_</span><span class="p">,</span> <span class="n">api</span><span class="p">,</span> <span class="n">exceptions</span><span class="p">,</span> <span class="n">fields</span><span class="p">,</span> <span class="n">models</span><span class="p">,</span> <span class="n">tools</span>
 <span class="kn">from</span> <span class="nn">odoo.osv</span> <span class="kn">import</span> <span class="n">expression</span>
 
 <span class="kn">from</span> <span class="nn">..fields</span> <span class="kn">import</span> <span class="n">JobSerialized</span>
-<span class="kn">from</span> <span class="nn">..job</span> <span class="kn">import</span> <span class="n">DONE</span><span class="p">,</span> <span class="n">PENDING</span><span class="p">,</span> <span class="n">STATES</span><span class="p">,</span> <span class="n">Job</span><span class="p">,</span> <span class="n">job</span>
+<span class="kn">from</span> <span class="nn">..job</span> <span class="kn">import</span> <span class="n">DONE</span><span class="p">,</span> <span class="n">PENDING</span><span class="p">,</span> <span class="n">STATES</span><span class="p">,</span> <span class="n">Job</span>
 
 <span class="n">_logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">channel_func_name</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">method</span><span class="p">):</span>
-    <span class="k">return</span> <span class="s2">&quot;&lt;</span><span class="si">{}</span><span class="s2">&gt;.</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">_name</span><span class="p">,</span> <span class="n">method</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
+<span class="n">regex_job_function_name</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;^&lt;([0-9a-z_\.]+)&gt;\.([0-9a-zA-Z_]+)$&quot;</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="QueueJob"><a class="viewcode-back" href="../../../../../api/api_queue.html#odoo.addons.queue_job.models.queue_job.QueueJob">[docs]</a><span class="k">class</span> <span class="nc">QueueJob</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
@@ -251,16 +253,45 @@
     <span class="n">_removal_interval</span> <span class="o">=</span> <span class="mi">30</span>  <span class="c1"># days</span>
     <span class="n">_default_related_action</span> <span class="o">=</span> <span class="s2">&quot;related_action_open_record&quot;</span>
 
+    <span class="c1"># This must be passed in a context key &quot;_job_edit_sentinel&quot; to write on</span>
+    <span class="c1"># protected fields. It protects against crafting &quot;queue.job&quot; records from</span>
+    <span class="c1"># RPC (e.g. on internal methods). When ``with_delay`` is used, the sentinel</span>
+    <span class="c1"># is set.</span>
+    <span class="n">EDIT_SENTINEL</span> <span class="o">=</span> <span class="nb">object</span><span class="p">()</span>
+    <span class="n">_protected_fields</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="s2">&quot;uuid&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;name&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;date_created&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;model_name&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;method_name&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;records&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;args&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;kwargs&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+
     <span class="n">uuid</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Char</span><span class="p">(</span><span class="n">string</span><span class="o">=</span><span class="s2">&quot;UUID&quot;</span><span class="p">,</span> <span class="n">readonly</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">user_id</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Many2one</span><span class="p">(</span><span class="n">comodel_name</span><span class="o">=</span><span class="s2">&quot;res.users&quot;</span><span class="p">,</span> <span class="n">string</span><span class="o">=</span><span class="s2">&quot;User ID&quot;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">user_id</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Many2one</span><span class="p">(</span>
+        <span class="n">comodel_name</span><span class="o">=</span><span class="s2">&quot;res.users&quot;</span><span class="p">,</span>
+        <span class="n">string</span><span class="o">=</span><span class="s2">&quot;User ID&quot;</span><span class="p">,</span>
+        <span class="n">compute</span><span class="o">=</span><span class="s2">&quot;_compute_user_id&quot;</span><span class="p">,</span>
+        <span class="n">inverse</span><span class="o">=</span><span class="s2">&quot;_inverse_user_id&quot;</span><span class="p">,</span>
+        <span class="n">store</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span>
     <span class="n">company_id</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Many2one</span><span class="p">(</span>
         <span class="n">comodel_name</span><span class="o">=</span><span class="s2">&quot;res.company&quot;</span><span class="p">,</span> <span class="n">string</span><span class="o">=</span><span class="s2">&quot;Company&quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">True</span>
     <span class="p">)</span>
     <span class="n">name</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Char</span><span class="p">(</span><span class="n">string</span><span class="o">=</span><span class="s2">&quot;Description&quot;</span><span class="p">,</span> <span class="n">readonly</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-    <span class="n">model_name</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Char</span><span class="p">(</span><span class="n">string</span><span class="o">=</span><span class="s2">&quot;Model&quot;</span><span class="p">,</span> <span class="n">readonly</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">model_name</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Char</span><span class="p">(</span>
+        <span class="n">string</span><span class="o">=</span><span class="s2">&quot;Model&quot;</span><span class="p">,</span> <span class="n">compute</span><span class="o">=</span><span class="s2">&quot;_compute_model_name&quot;</span><span class="p">,</span> <span class="n">store</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">readonly</span><span class="o">=</span><span class="kc">True</span>
+    <span class="p">)</span>
     <span class="n">method_name</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Char</span><span class="p">(</span><span class="n">readonly</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">record_ids</span> <span class="o">=</span> <span class="n">JobSerialized</span><span class="p">(</span><span class="n">readonly</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">base_type</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
+    <span class="c1"># record_ids field is only for backward compatibility (e.g. used in related</span>
+    <span class="c1"># actions), can be removed (replaced by &quot;records&quot;) in 14.0</span>
+    <span class="n">record_ids</span> <span class="o">=</span> <span class="n">JobSerialized</span><span class="p">(</span><span class="n">compute</span><span class="o">=</span><span class="s2">&quot;_compute_record_ids&quot;</span><span class="p">,</span> <span class="n">base_type</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
+    <span class="n">records</span> <span class="o">=</span> <span class="n">JobSerialized</span><span class="p">(</span>
+        <span class="n">string</span><span class="o">=</span><span class="s2">&quot;Record(s)&quot;</span><span class="p">,</span> <span class="n">readonly</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">base_type</span><span class="o">=</span><span class="n">models</span><span class="o">.</span><span class="n">BaseModel</span><span class="p">,</span>
+    <span class="p">)</span>
     <span class="n">args</span> <span class="o">=</span> <span class="n">JobSerialized</span><span class="p">(</span><span class="n">readonly</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">base_type</span><span class="o">=</span><span class="nb">tuple</span><span class="p">)</span>
     <span class="n">kwargs</span> <span class="o">=</span> <span class="n">JobSerialized</span><span class="p">(</span><span class="n">readonly</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">base_type</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
     <span class="n">func_string</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Char</span><span class="p">(</span>
@@ -302,6 +333,7 @@
     <span class="p">)</span>
 
     <span class="n">identity_key</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Char</span><span class="p">()</span>
+    <span class="n">worker_pid</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Integer</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">init</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_cr</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
@@ -315,6 +347,25 @@
                 <span class="s2">&quot;&#39;enqueued&#39;) AND identity_key IS NOT NULL;&quot;</span>
             <span class="p">)</span>
 
+    <span class="nd">@api</span><span class="o">.</span><span class="n">depends</span><span class="p">(</span><span class="s2">&quot;records&quot;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">_compute_user_id</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">record</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
+            <span class="n">record</span><span class="o">.</span><span class="n">user_id</span> <span class="o">=</span> <span class="n">record</span><span class="o">.</span><span class="n">records</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">uid</span>
+
+    <span class="k">def</span> <span class="nf">_inverse_user_id</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">record</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">with_context</span><span class="p">(</span><span class="n">_job_edit_sentinel</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">EDIT_SENTINEL</span><span class="p">):</span>
+            <span class="n">record</span><span class="o">.</span><span class="n">records</span> <span class="o">=</span> <span class="n">record</span><span class="o">.</span><span class="n">records</span><span class="o">.</span><span class="n">with_user</span><span class="p">(</span><span class="n">record</span><span class="o">.</span><span class="n">user_id</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+
+    <span class="nd">@api</span><span class="o">.</span><span class="n">depends</span><span class="p">(</span><span class="s2">&quot;records&quot;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">_compute_model_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">record</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
+            <span class="n">record</span><span class="o">.</span><span class="n">model_name</span> <span class="o">=</span> <span class="n">record</span><span class="o">.</span><span class="n">records</span><span class="o">.</span><span class="n">_name</span>
+
+    <span class="nd">@api</span><span class="o">.</span><span class="n">depends</span><span class="p">(</span><span class="s2">&quot;records&quot;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">_compute_record_ids</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">record</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
+            <span class="n">record</span><span class="o">.</span><span class="n">record_ids</span> <span class="o">=</span> <span class="n">record</span><span class="o">.</span><span class="n">records</span><span class="o">.</span><span class="n">ids</span>
+
     <span class="k">def</span> <span class="nf">_inverse_channel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">record</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
             <span class="n">record</span><span class="o">.</span><span class="n">override_channel</span> <span class="o">=</span> <span class="n">record</span><span class="o">.</span><span class="n">channel</span>
@@ -322,28 +373,58 @@
     <span class="nd">@api</span><span class="o">.</span><span class="n">depends</span><span class="p">(</span><span class="s2">&quot;job_function_id.channel_id&quot;</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">_compute_channel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">record</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
-            <span class="n">record</span><span class="o">.</span><span class="n">channel</span> <span class="o">=</span> <span class="n">record</span><span class="o">.</span><span class="n">override_channel</span> <span class="ow">or</span> <span class="n">record</span><span class="o">.</span><span class="n">job_function_id</span><span class="o">.</span><span class="n">channel</span>
+            <span class="n">channel</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">record</span><span class="o">.</span><span class="n">override_channel</span> <span class="ow">or</span> <span class="n">record</span><span class="o">.</span><span class="n">job_function_id</span><span class="o">.</span><span class="n">channel</span> <span class="ow">or</span> <span class="s2">&quot;root&quot;</span>
+            <span class="p">)</span>
+            <span class="k">if</span> <span class="n">record</span><span class="o">.</span><span class="n">channel</span> <span class="o">!=</span> <span class="n">channel</span><span class="p">:</span>
+                <span class="n">record</span><span class="o">.</span><span class="n">channel</span> <span class="o">=</span> <span class="n">channel</span>
 
     <span class="nd">@api</span><span class="o">.</span><span class="n">depends</span><span class="p">(</span><span class="s2">&quot;model_name&quot;</span><span class="p">,</span> <span class="s2">&quot;method_name&quot;</span><span class="p">,</span> <span class="s2">&quot;job_function_id.channel_id&quot;</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">_compute_job_function</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">record</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
-            <span class="n">model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="p">[</span><span class="n">record</span><span class="o">.</span><span class="n">model_name</span><span class="p">]</span>
-            <span class="n">method</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">record</span><span class="o">.</span><span class="n">method_name</span><span class="p">)</span>
-            <span class="n">channel_method_name</span> <span class="o">=</span> <span class="n">channel_func_name</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">method</span><span class="p">)</span>
             <span class="n">func_model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="p">[</span><span class="s2">&quot;queue.job.function&quot;</span><span class="p">]</span>
+            <span class="n">channel_method_name</span> <span class="o">=</span> <span class="n">func_model</span><span class="o">.</span><span class="n">job_function_name</span><span class="p">(</span>
+                <span class="n">record</span><span class="o">.</span><span class="n">model_name</span><span class="p">,</span> <span class="n">record</span><span class="o">.</span><span class="n">method_name</span>
+            <span class="p">)</span>
             <span class="n">function</span> <span class="o">=</span> <span class="n">func_model</span><span class="o">.</span><span class="n">search</span><span class="p">([(</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;=&quot;</span><span class="p">,</span> <span class="n">channel_method_name</span><span class="p">)],</span> <span class="n">limit</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
             <span class="n">record</span><span class="o">.</span><span class="n">channel_method_name</span> <span class="o">=</span> <span class="n">channel_method_name</span>
             <span class="n">record</span><span class="o">.</span><span class="n">job_function_id</span> <span class="o">=</span> <span class="n">function</span>
 
-    <span class="nd">@api</span><span class="o">.</span><span class="n">depends</span><span class="p">(</span><span class="s2">&quot;model_name&quot;</span><span class="p">,</span> <span class="s2">&quot;method_name&quot;</span><span class="p">,</span> <span class="s2">&quot;record_ids&quot;</span><span class="p">,</span> <span class="s2">&quot;args&quot;</span><span class="p">,</span> <span class="s2">&quot;kwargs&quot;</span><span class="p">)</span>
+    <span class="nd">@api</span><span class="o">.</span><span class="n">depends</span><span class="p">(</span><span class="s2">&quot;model_name&quot;</span><span class="p">,</span> <span class="s2">&quot;method_name&quot;</span><span class="p">,</span> <span class="s2">&quot;records&quot;</span><span class="p">,</span> <span class="s2">&quot;args&quot;</span><span class="p">,</span> <span class="s2">&quot;kwargs&quot;</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">_compute_func_string</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">record</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
-            <span class="n">record_ids</span> <span class="o">=</span> <span class="n">record</span><span class="o">.</span><span class="n">record_ids</span>
-            <span class="n">model</span> <span class="o">=</span> <span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="p">[</span><span class="n">record</span><span class="o">.</span><span class="n">model_name</span><span class="p">]</span><span class="o">.</span><span class="n">browse</span><span class="p">(</span><span class="n">record_ids</span><span class="p">))</span>
+            <span class="n">model</span> <span class="o">=</span> <span class="nb">repr</span><span class="p">(</span><span class="n">record</span><span class="o">.</span><span class="n">records</span><span class="p">)</span>
             <span class="n">args</span> <span class="o">=</span> <span class="p">[</span><span class="nb">repr</span><span class="p">(</span><span class="n">arg</span><span class="p">)</span> <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">record</span><span class="o">.</span><span class="n">args</span><span class="p">]</span>
             <span class="n">kwargs</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">=</span><span class="si">{!r}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">val</span><span class="p">)</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">record</span><span class="o">.</span><span class="n">kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">()]</span>
             <span class="n">all_args</span> <span class="o">=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">args</span> <span class="o">+</span> <span class="n">kwargs</span><span class="p">)</span>
             <span class="n">record</span><span class="o">.</span><span class="n">func_string</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">.</span><span class="si">{}</span><span class="s2">(</span><span class="si">{}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">record</span><span class="o">.</span><span class="n">method_name</span><span class="p">,</span> <span class="n">all_args</span><span class="p">)</span>
+
+    <span class="nd">@api</span><span class="o">.</span><span class="n">model_create_multi</span>
+    <span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vals_list</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;_job_edit_sentinel&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">EDIT_SENTINEL</span><span class="p">:</span>
+            <span class="c1"># Prevent to create a queue.job record &quot;raw&quot; from RPC.</span>
+            <span class="c1"># ``with_delay()`` must be used.</span>
+            <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">AccessError</span><span class="p">(</span>
+                <span class="n">_</span><span class="p">(</span><span class="s2">&quot;Queue jobs must created by calling &#39;with_delay()&#39;.&quot;</span><span class="p">)</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">vals_list</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vals</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;_job_edit_sentinel&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">EDIT_SENTINEL</span><span class="p">:</span>
+            <span class="n">write_on_protected_fields</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">fieldname</span> <span class="k">for</span> <span class="n">fieldname</span> <span class="ow">in</span> <span class="n">vals</span> <span class="k">if</span> <span class="n">fieldname</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_protected_fields</span>
+            <span class="p">]</span>
+            <span class="k">if</span> <span class="n">write_on_protected_fields</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">AccessError</span><span class="p">(</span>
+                    <span class="n">_</span><span class="p">(</span><span class="s2">&quot;Not allowed to change field(s): </span><span class="si">{}</span><span class="s2">&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                        <span class="n">write_on_protected_fields</span>
+                    <span class="p">)</span>
+                <span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">vals</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;state&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;failed&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_message_post_on_failure</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">vals</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">open_related_action</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Open the related action associated to the job&quot;&quot;&quot;</span>
@@ -389,12 +470,6 @@
             <span class="n">msg</span> <span class="o">=</span> <span class="n">record</span><span class="o">.</span><span class="n">_message_failed_job</span><span class="p">()</span>
             <span class="k">if</span> <span class="n">msg</span><span class="p">:</span>
                 <span class="n">record</span><span class="o">.</span><span class="n">message_post</span><span class="p">(</span><span class="n">body</span><span class="o">=</span><span class="n">msg</span><span class="p">,</span> <span class="n">subtype</span><span class="o">=</span><span class="s2">&quot;queue_job.mt_job_failed&quot;</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vals</span><span class="p">):</span>
-        <span class="n">res</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">QueueJob</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">vals</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">vals</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;state&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;failed&quot;</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_message_post_on_failure</span><span class="p">()</span>
-        <span class="k">return</span> <span class="n">res</span>
 
     <span class="k">def</span> <span class="nf">_subscribe_users_domain</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Subscribe all users having the &#39;Queue Job Manager&#39; group&quot;&quot;&quot;</span>
@@ -488,7 +563,7 @@
     <span class="k">def</span> <span class="nf">_get_stuck_jobs_to_requeue</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">enqueued_delta</span><span class="p">,</span> <span class="n">started_delta</span><span class="p">):</span>
         <span class="n">job_model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="p">[</span><span class="s2">&quot;queue.job&quot;</span><span class="p">]</span>
         <span class="n">stuck_jobs</span> <span class="o">=</span> <span class="n">job_model</span><span class="o">.</span><span class="n">search</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_get_stuck_jobs_domain</span><span class="p">(</span><span class="n">enqueued_delta</span><span class="p">,</span> <span class="n">started_delta</span><span class="p">,)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_get_stuck_jobs_domain</span><span class="p">(</span><span class="n">enqueued_delta</span><span class="p">,</span> <span class="n">started_delta</span><span class="p">)</span>
         <span class="p">)</span>
         <span class="k">return</span> <span class="n">stuck_jobs</span>
 
@@ -504,8 +579,7 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ensure_one</span><span class="p">()</span>
-        <span class="n">model_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model_name</span>
-        <span class="n">records</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="p">[</span><span class="n">model_name</span><span class="p">]</span><span class="o">.</span><span class="n">browse</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">record_ids</span><span class="p">)</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span>
+        <span class="n">records</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">records</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">records</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">None</span>
         <span class="n">action</span> <span class="o">=</span> <span class="p">{</span>
@@ -526,7 +600,6 @@
             <span class="p">)</span>
         <span class="k">return</span> <span class="n">action</span>
 
-    <span class="nd">@job</span>
     <span class="k">def</span> <span class="nf">_test_job</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Running test job.&quot;</span><span class="p">)</span></div>
 
@@ -604,6 +677,31 @@
             <span class="k">if</span> <span class="n">record</span><span class="o">.</span><span class="n">name</span> <span class="o">!=</span> <span class="s2">&quot;root&quot;</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">record</span><span class="o">.</span><span class="n">parent_id</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">ValidationError</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;Parent channel required.&quot;</span><span class="p">))</span>
 
+    <span class="nd">@api</span><span class="o">.</span><span class="n">model_create_multi</span>
+    <span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vals_list</span><span class="p">):</span>
+        <span class="n">records</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">browse</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;install_mode&quot;</span><span class="p">):</span>
+            <span class="c1"># installing a module that creates a channel: rebinds the channel</span>
+            <span class="c1"># to an existing one (likely we already had the channel created by</span>
+            <span class="c1"># the @job decorator previously)</span>
+            <span class="n">new_vals_list</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">vals</span> <span class="ow">in</span> <span class="n">vals_list</span><span class="p">:</span>
+                <span class="n">name</span> <span class="o">=</span> <span class="n">vals</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">)</span>
+                <span class="n">parent_id</span> <span class="o">=</span> <span class="n">vals</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;parent_id&quot;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">name</span> <span class="ow">and</span> <span class="n">parent_id</span><span class="p">:</span>
+                    <span class="n">existing</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">search</span><span class="p">(</span>
+                        <span class="p">[(</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;=&quot;</span><span class="p">,</span> <span class="n">name</span><span class="p">),</span> <span class="p">(</span><span class="s2">&quot;parent_id&quot;</span><span class="p">,</span> <span class="s2">&quot;=&quot;</span><span class="p">,</span> <span class="n">parent_id</span><span class="p">)]</span>
+                    <span class="p">)</span>
+                    <span class="k">if</span> <span class="n">existing</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="ow">not</span> <span class="n">existing</span><span class="o">.</span><span class="n">get_metadata</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;noupdate&quot;</span><span class="p">):</span>
+                            <span class="n">existing</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">vals</span><span class="p">)</span>
+                        <span class="n">records</span> <span class="o">|=</span> <span class="n">existing</span>
+                        <span class="k">continue</span>
+                <span class="n">new_vals_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">vals</span><span class="p">)</span>
+            <span class="n">vals_list</span> <span class="o">=</span> <span class="n">new_vals_list</span>
+        <span class="n">records</span> <span class="o">|=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">vals_list</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">records</span>
+
     <span class="k">def</span> <span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">values</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">channel</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
             <span class="k">if</span> <span class="p">(</span>
@@ -632,10 +730,29 @@
     <span class="n">_description</span> <span class="o">=</span> <span class="s2">&quot;Job Functions&quot;</span>
     <span class="n">_log_access</span> <span class="o">=</span> <span class="kc">False</span>
 
+    <span class="n">JobConfig</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span>
+        <span class="s2">&quot;JobConfig&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;channel &quot;</span>
+        <span class="s2">&quot;retry_pattern &quot;</span>
+        <span class="s2">&quot;related_action_enable &quot;</span>
+        <span class="s2">&quot;related_action_func_name &quot;</span>
+        <span class="s2">&quot;related_action_kwargs &quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+
     <span class="k">def</span> <span class="nf">_default_channel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">ref</span><span class="p">(</span><span class="s2">&quot;queue_job.channel_root&quot;</span><span class="p">)</span>
 
-    <span class="n">name</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Char</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Char</span><span class="p">(</span>
+        <span class="n">compute</span><span class="o">=</span><span class="s2">&quot;_compute_name&quot;</span><span class="p">,</span> <span class="n">inverse</span><span class="o">=</span><span class="s2">&quot;_inverse_name&quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">store</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="c1"># model and method should be required, but the required flag doesn&#39;t</span>
+    <span class="c1"># let a chance to _inverse_name to be executed</span>
+    <span class="n">model_id</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Many2one</span><span class="p">(</span>
+        <span class="n">comodel_name</span><span class="o">=</span><span class="s2">&quot;ir.model&quot;</span><span class="p">,</span> <span class="n">string</span><span class="o">=</span><span class="s2">&quot;Model&quot;</span><span class="p">,</span> <span class="n">ondelete</span><span class="o">=</span><span class="s2">&quot;cascade&quot;</span>
+    <span class="p">)</span>
+    <span class="n">method</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Char</span><span class="p">()</span>
+
     <span class="n">channel_id</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Many2one</span><span class="p">(</span>
         <span class="n">comodel_name</span><span class="o">=</span><span class="s2">&quot;queue.job.channel&quot;</span><span class="p">,</span>
         <span class="n">string</span><span class="o">=</span><span class="s2">&quot;Channel&quot;</span><span class="p">,</span>
@@ -643,7 +760,76 @@
         <span class="n">default</span><span class="o">=</span><span class="k">lambda</span> <span class="n">r</span><span class="p">:</span> <span class="n">r</span><span class="o">.</span><span class="n">_default_channel</span><span class="p">(),</span>
     <span class="p">)</span>
     <span class="n">channel</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Char</span><span class="p">(</span><span class="n">related</span><span class="o">=</span><span class="s2">&quot;channel_id.complete_name&quot;</span><span class="p">,</span> <span class="n">store</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">readonly</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">retry_pattern</span> <span class="o">=</span> <span class="n">JobSerialized</span><span class="p">(</span><span class="n">string</span><span class="o">=</span><span class="s2">&quot;Retry Pattern (serialized)&quot;</span><span class="p">,</span> <span class="n">base_type</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
+    <span class="n">edit_retry_pattern</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Text</span><span class="p">(</span>
+        <span class="n">string</span><span class="o">=</span><span class="s2">&quot;Retry Pattern&quot;</span><span class="p">,</span>
+        <span class="n">compute</span><span class="o">=</span><span class="s2">&quot;_compute_edit_retry_pattern&quot;</span><span class="p">,</span>
+        <span class="n">inverse</span><span class="o">=</span><span class="s2">&quot;_inverse_edit_retry_pattern&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Pattern expressing from the count of retries on retryable errors,&quot;</span>
+        <span class="s2">&quot; the number of of seconds to postpone the next execution.</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="s2">&quot;Example: {1: 10, 5: 20, 10: 30, 15: 300}.</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="s2">&quot;See the module description for details.&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">related_action</span> <span class="o">=</span> <span class="n">JobSerialized</span><span class="p">(</span><span class="n">string</span><span class="o">=</span><span class="s2">&quot;Related Action (serialized)&quot;</span><span class="p">,</span> <span class="n">base_type</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
+    <span class="n">edit_related_action</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Text</span><span class="p">(</span>
+        <span class="n">string</span><span class="o">=</span><span class="s2">&quot;Related Action&quot;</span><span class="p">,</span>
+        <span class="n">compute</span><span class="o">=</span><span class="s2">&quot;_compute_edit_related_action&quot;</span><span class="p">,</span>
+        <span class="n">inverse</span><span class="o">=</span><span class="s2">&quot;_inverse_edit_related_action&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;The action when the button *Related Action* is used on a job. &quot;</span>
+        <span class="s2">&quot;The default action is to open the view of the record related &quot;</span>
+        <span class="s2">&quot;to the job. Configured as a dictionary with optional keys: &quot;</span>
+        <span class="s2">&quot;enable, func_name, kwargs.</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="s2">&quot;See the module description for details.&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
 
+    <span class="nd">@api</span><span class="o">.</span><span class="n">depends</span><span class="p">(</span><span class="s2">&quot;model_id.model&quot;</span><span class="p">,</span> <span class="s2">&quot;method&quot;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">_compute_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">record</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">record</span><span class="o">.</span><span class="n">model_id</span> <span class="ow">and</span> <span class="n">record</span><span class="o">.</span><span class="n">method</span><span class="p">):</span>
+                <span class="n">record</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+                <span class="k">continue</span>
+            <span class="n">record</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">job_function_name</span><span class="p">(</span><span class="n">record</span><span class="o">.</span><span class="n">model_id</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="n">record</span><span class="o">.</span><span class="n">method</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_inverse_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">groups</span> <span class="o">=</span> <span class="n">regex_job_function_name</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">groups</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">UserError</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;Invalid job function: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
+        <span class="n">model_name</span> <span class="o">=</span> <span class="n">groups</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">method</span> <span class="o">=</span> <span class="n">groups</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="p">[</span><span class="s2">&quot;ir.model&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">search</span><span class="p">([(</span><span class="s2">&quot;model&quot;</span><span class="p">,</span> <span class="s2">&quot;=&quot;</span><span class="p">,</span> <span class="n">model_name</span><span class="p">)],</span> <span class="n">limit</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">model</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">UserError</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;Model </span><span class="si">{}</span><span class="s2"> not found&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">model_name</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model_id</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">id</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="o">=</span> <span class="n">method</span>
+
+    <span class="nd">@api</span><span class="o">.</span><span class="n">depends</span><span class="p">(</span><span class="s2">&quot;retry_pattern&quot;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">_compute_edit_retry_pattern</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">record</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
+            <span class="n">retry_pattern</span> <span class="o">=</span> <span class="n">record</span><span class="o">.</span><span class="n">_parse_retry_pattern</span><span class="p">()</span>
+            <span class="n">record</span><span class="o">.</span><span class="n">edit_retry_pattern</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">retry_pattern</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_inverse_edit_retry_pattern</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">retry_pattern</span> <span class="o">=</span> <span class="n">ast</span><span class="o">.</span><span class="n">literal_eval</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">edit_retry_pattern</span> <span class="ow">or</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">UserError</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_retry_pattern_format_error_message</span><span class="p">())</span>
+
+    <span class="nd">@api</span><span class="o">.</span><span class="n">depends</span><span class="p">(</span><span class="s2">&quot;related_action&quot;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">_compute_edit_related_action</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">record</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
+            <span class="n">record</span><span class="o">.</span><span class="n">edit_related_action</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">record</span><span class="o">.</span><span class="n">related_action</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_inverse_edit_related_action</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">related_action</span> <span class="o">=</span> <span class="n">ast</span><span class="o">.</span><span class="n">literal_eval</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">edit_related_action</span> <span class="ow">or</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">UserError</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_related_action_format_error_message</span><span class="p">())</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">job_function_name</span><span class="p">(</span><span class="n">model_name</span><span class="p">,</span> <span class="n">method_name</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;&lt;</span><span class="si">{}</span><span class="s2">&gt;.</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">model_name</span><span class="p">,</span> <span class="n">method_name</span><span class="p">)</span>
+
+    <span class="c1"># TODO deprecated by :job-no-decorator:</span>
     <span class="k">def</span> <span class="nf">_find_or_create_channel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">channel_path</span><span class="p">):</span>
         <span class="n">channel_model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="p">[</span><span class="s2">&quot;queue.job.channel&quot;</span><span class="p">]</span>
         <span class="n">parts</span> <span class="o">=</span> <span class="n">channel_path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)</span>
@@ -665,8 +851,127 @@
                 <span class="p">)</span>
         <span class="k">return</span> <span class="n">channel</span>
 
+    <span class="k">def</span> <span class="nf">job_default_config</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">JobConfig</span><span class="p">(</span>
+            <span class="n">channel</span><span class="o">=</span><span class="s2">&quot;root&quot;</span><span class="p">,</span>
+            <span class="n">retry_pattern</span><span class="o">=</span><span class="p">{},</span>
+            <span class="n">related_action_enable</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">related_action_func_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">related_action_kwargs</span><span class="o">=</span><span class="p">{},</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_parse_retry_pattern</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># as json can&#39;t have integers as keys and the field is stored</span>
+            <span class="c1"># as json, convert back to int</span>
+            <span class="n">retry_pattern</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="nb">int</span><span class="p">(</span><span class="n">try_count</span><span class="p">):</span> <span class="n">postpone_seconds</span>
+                <span class="k">for</span> <span class="n">try_count</span><span class="p">,</span> <span class="n">postpone_seconds</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">retry_pattern</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+            <span class="p">}</span>
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+            <span class="n">_logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
+                <span class="s2">&quot;Invalid retry pattern for job function </span><span class="si">%s</span><span class="s2">,&quot;</span>
+                <span class="s2">&quot; keys could not be parsed as integers, fallback&quot;</span>
+                <span class="s2">&quot; to the default retry pattern.&quot;</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">retry_pattern</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">return</span> <span class="n">retry_pattern</span>
+
+    <span class="nd">@tools</span><span class="o">.</span><span class="n">ormcache</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">job_config</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="n">config</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">search</span><span class="p">([(</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;=&quot;</span><span class="p">,</span> <span class="n">name</span><span class="p">)],</span> <span class="n">limit</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">config</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">job_default_config</span><span class="p">()</span>
+        <span class="n">retry_pattern</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">_parse_retry_pattern</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">JobConfig</span><span class="p">(</span>
+            <span class="n">channel</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">channel</span><span class="p">,</span>
+            <span class="n">retry_pattern</span><span class="o">=</span><span class="n">retry_pattern</span><span class="p">,</span>
+            <span class="n">related_action_enable</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">related_action</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;enable&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span>
+            <span class="n">related_action_func_name</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">related_action</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;func_name&quot;</span><span class="p">),</span>
+            <span class="n">related_action_kwargs</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">related_action</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;kwargs&quot;</span><span class="p">),</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_retry_pattern_format_error_message</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">_</span><span class="p">(</span>
+            <span class="s2">&quot;Unexpected format of Retry Pattern for </span><span class="si">{}</span><span class="s2">.</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="s2">&quot;Example of valid format:</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="s2">&quot;{{1: 300, 5: 600, 10: 1200, 15: 3000}}&quot;</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+
+    <span class="nd">@api</span><span class="o">.</span><span class="n">constrains</span><span class="p">(</span><span class="s2">&quot;retry_pattern&quot;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">_check_retry_pattern</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">record</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
+            <span class="n">retry_pattern</span> <span class="o">=</span> <span class="n">record</span><span class="o">.</span><span class="n">retry_pattern</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">retry_pattern</span><span class="p">:</span>
+                <span class="k">continue</span>
+
+            <span class="n">all_values</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">retry_pattern</span><span class="p">)</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">retry_pattern</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+            <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">all_values</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+                <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">UserError</span><span class="p">(</span>
+                        <span class="n">record</span><span class="o">.</span><span class="n">_retry_pattern_format_error_message</span><span class="p">()</span>
+                    <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_related_action_format_error_message</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">_</span><span class="p">(</span>
+            <span class="s2">&quot;Unexpected format of Related Action for </span><span class="si">{}</span><span class="s2">.</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="s2">&quot;Example of valid format:</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="s1">&#39;{{&quot;enable&quot;: True, &quot;func_name&quot;: &quot;related_action_foo&quot;,&#39;</span>
+            <span class="s1">&#39; &quot;kwargs&quot; {{&quot;limit&quot;: 10}}}}&#39;</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+
+    <span class="nd">@api</span><span class="o">.</span><span class="n">constrains</span><span class="p">(</span><span class="s2">&quot;related_action&quot;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">_check_related_action</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">valid_keys</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;enable&quot;</span><span class="p">,</span> <span class="s2">&quot;func_name&quot;</span><span class="p">,</span> <span class="s2">&quot;kwargs&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">record</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
+            <span class="n">related_action</span> <span class="o">=</span> <span class="n">record</span><span class="o">.</span><span class="n">related_action</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">related_action</span><span class="p">:</span>
+                <span class="k">continue</span>
+
+            <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">valid_keys</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">related_action</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">UserError</span><span class="p">(</span>
+                    <span class="n">record</span><span class="o">.</span><span class="n">_related_action_format_error_message</span><span class="p">()</span>
+                <span class="p">)</span>
+
+    <span class="nd">@api</span><span class="o">.</span><span class="n">model_create_multi</span>
+    <span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vals_list</span><span class="p">):</span>
+        <span class="n">records</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">browse</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;install_mode&quot;</span><span class="p">):</span>
+            <span class="c1"># installing a module that creates a job function: rebinds the record</span>
+            <span class="c1"># to an existing one (likely we already had the job function created by</span>
+            <span class="c1"># the @job decorator previously)</span>
+            <span class="n">new_vals_list</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">vals</span> <span class="ow">in</span> <span class="n">vals_list</span><span class="p">:</span>
+                <span class="n">name</span> <span class="o">=</span> <span class="n">vals</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">name</span><span class="p">:</span>
+                    <span class="n">existing</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">search</span><span class="p">([(</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;=&quot;</span><span class="p">,</span> <span class="n">name</span><span class="p">)],</span> <span class="n">limit</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">existing</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="ow">not</span> <span class="n">existing</span><span class="o">.</span><span class="n">get_metadata</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;noupdate&quot;</span><span class="p">):</span>
+                            <span class="n">existing</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">vals</span><span class="p">)</span>
+                        <span class="n">records</span> <span class="o">|=</span> <span class="n">existing</span>
+                        <span class="k">continue</span>
+                <span class="n">new_vals_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">vals</span><span class="p">)</span>
+            <span class="n">vals_list</span> <span class="o">=</span> <span class="n">new_vals_list</span>
+        <span class="n">records</span> <span class="o">|=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">vals_list</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">clear_caches</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">records</span>
+
+    <span class="k">def</span> <span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">values</span><span class="p">):</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">values</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">clear_caches</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">res</span>
+
+    <span class="k">def</span> <span class="nf">unlink</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">unlink</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">clear_caches</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">res</span>
+
+    <span class="c1"># TODO deprecated by :job-no-decorator:</span>
     <span class="k">def</span> <span class="nf">_register_job</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">job_method</span><span class="p">):</span>
-        <span class="n">func_name</span> <span class="o">=</span> <span class="n">channel_func_name</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">job_method</span><span class="p">)</span>
+        <span class="n">func_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">job_function_name</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">_name</span><span class="p">,</span> <span class="n">job_method</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">search_count</span><span class="p">([(</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;=&quot;</span><span class="p">,</span> <span class="n">func_name</span><span class="p">)]):</span>
             <span class="n">channel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_find_or_create_channel</span><span class="p">(</span><span class="n">job_method</span><span class="o">.</span><span class="n">default_channel</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">create</span><span class="p">({</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">func_name</span><span class="p">,</span> <span class="s2">&quot;channel_id&quot;</span><span class="p">:</span> <span class="n">channel</span><span class="o">.</span><span class="n">id</span><span class="p">})</span>
@@ -687,7 +992,7 @@
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 3.2.1.<br/>
+      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 3.3.1.<br/>
     </p>
   </div>
 </footer>

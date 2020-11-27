@@ -5,8 +5,8 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>odoo.addons.queue_job.models.base &#8212; Documentation Connector </title>
-    <link rel="stylesheet" href="../../../../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../../_static/bootstrap-sphinx.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
     <script src="../../../../../_static/jquery.js"></script>
     <script src="../../../../../_static/underscore.js"></script>
@@ -242,6 +242,7 @@
 
     <span class="n">_inherit</span> <span class="o">=</span> <span class="s2">&quot;base&quot;</span>
 
+    <span class="c1"># TODO deprecated by :job-no-decorator:</span>
     <span class="k">def</span> <span class="nf">_register_hook</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Register marked jobs&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">Base</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">_register_hook</span><span class="p">()</span>
@@ -266,15 +267,22 @@
     <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Return a ``DelayableRecordset``</span>
 
-<span class="sd">        The returned instance allow to enqueue any method of the recordset&#39;s</span>
-<span class="sd">        Model which is decorated by :func:`~odoo.addons.queue_job.job.job`.</span>
+<span class="sd">        The returned instance allows to enqueue any method of the recordset&#39;s</span>
+<span class="sd">        Model.</span>
 
 <span class="sd">        Usage::</span>
 
 <span class="sd">            self.env[&#39;res.users&#39;].with_delay().write({&#39;name&#39;: &#39;test&#39;})</span>
 
-<span class="sd">        In the line above, in so far ``write`` is allowed to be delayed with</span>
-<span class="sd">        ``@job``, the write will be executed in an asynchronous job.</span>
+<span class="sd">        ``with_delay()`` accepts job properties which specify how the job will</span>
+<span class="sd">        be executed.</span>
+
+<span class="sd">        Usage with job properties::</span>
+
+<span class="sd">            delayable = env[&#39;a.model&#39;].with_delay(priority=30, eta=60*60*5)</span>
+<span class="sd">            delayable.export_one_thing(the_thing_to_export)</span>
+<span class="sd">            # =&gt; the job will be executed with a low priority and not before a</span>
+<span class="sd">            # delay of 5 hours from now</span>
 
 <span class="sd">        :param priority: Priority of the job, 0 being the higher priority.</span>
 <span class="sd">                         Default is 10.</span>
@@ -290,7 +298,9 @@
 <span class="sd">                        defined on the function</span>
 <span class="sd">        :param identity_key: key uniquely identifying the job, if specified</span>
 <span class="sd">                             and a job with the same key has not yet been run,</span>
-<span class="sd">                             the new job will not be added.</span>
+<span class="sd">                             the new job will not be added. It is either a</span>
+<span class="sd">                             string, either a function that takes the job as</span>
+<span class="sd">                             argument (see :py:func:`..job.identity_exact`).</span>
 <span class="sd">        :return: instance of a DelayableRecordset</span>
 <span class="sd">        :rtype: :class:`odoo.addons.queue_job.job.DelayableRecordset`</span>
 
@@ -336,7 +346,7 @@
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 3.2.1.<br/>
+      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 3.3.1.<br/>
     </p>
   </div>
 </footer>

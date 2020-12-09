@@ -597,7 +597,7 @@
     <span class="k">def</span> <span class="nf">db_record_from_uuid</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">job_uuid</span><span class="p">):</span>
         <span class="n">model</span> <span class="o">=</span> <span class="n">env</span><span class="p">[</span><span class="s2">&quot;queue.job&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">sudo</span><span class="p">()</span>
         <span class="n">record</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">search</span><span class="p">([(</span><span class="s2">&quot;uuid&quot;</span><span class="p">,</span> <span class="s2">&quot;=&quot;</span><span class="p">,</span> <span class="n">job_uuid</span><span class="p">)],</span> <span class="n">limit</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">record</span><span class="o">.</span><span class="n">with_env</span><span class="p">(</span><span class="n">env</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">record</span><span class="o">.</span><span class="n">with_env</span><span class="p">(</span><span class="n">env</span><span class="p">)</span><span class="o">.</span><span class="n">sudo</span><span class="p">()</span></div>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>

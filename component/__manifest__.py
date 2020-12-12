@@ -17,6 +17,6 @@
         ]
     },
     "installable": True,
-    "development_status": "Stable",
+    "development_status": "Production/Stable",
     "maintainers": ["guewen"],
 }

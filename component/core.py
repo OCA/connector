@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # Copyright 2017 Camptocamp SA
 # Copyright 2017 Odoo
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl.html)
@@ -347,16 +346,33 @@ class WorkContext(object):
             work_context = self.work_on(model_name)
         return component_class(work_context)
 
-    def _lookup_components(self, usage=None, model_name=None):
+    def _lookup_components(self, usage=None, model_name=None, **kw):
         component_classes = self.components_registry.lookup(
             self.collection._name,
             usage=usage,
             model_name=model_name,
         )
+        matching_components = []
+        for cls in component_classes:
+            try:
+                matching = cls._component_match(
+                    self, usage=usage, model_name=model_name, **kw
+                )
+            except TypeError as err:
+                # Backward compat
+                _logger.info(str(err))
+                _logger.info(
+                    "The signature of %s._component_match has changed. "
+                    "Please, adapt your code as "
+                    "(self, usage=usage, model_name=model_name, **kw)",
+                    cls.__name__,
+                )
+                matching = cls._component_match(self)
+            if matching:
+                matching_components.append(cls)
+        return matching_components
 
-        return [cls for cls in component_classes if cls._component_match(self)]
-
-    def component(self, usage=None, model_name=None):
+    def component(self, usage=None, model_name=None, **kw):
         """ Find a component by usage and model for the current collection
 
         It searches a component using the rules of
@@ -384,6 +400,7 @@ class WorkContext(object):
         model_name = model_name or self.model_name
         component_classes = self._lookup_components(
             usage=usage, model_name=model_name
+        , **kw
         )
         if not component_classes:
             raise NoComponentError(
@@ -416,7 +433,7 @@ class WorkContext(object):
             work_context = self.work_on(model_name)
         return component_classes[0](work_context)
 
-    def many_components(self, usage=None, model_name=None):
+    def many_components(self, usage=None, model_name=None, **kw):
         """ Find many components by usage and model for the current collection
 
         It searches a component using the rules of
@@ -432,6 +449,7 @@ class WorkContext(object):
         model_name = model_name or self.model_name
         component_classes = self._lookup_components(
             usage=usage, model_name=model_name
+        , **kw
         )
         if model_name == self.model_name:
             work_context = self
@@ -666,7 +684,7 @@ class AbstractComponent(object, metaclass=MetaComponent):
         self.work = work_context
 
     @classmethod
-    def _component_match(cls, work):
+    def _component_match(cls, work, usage=None, model_name=None, **kw):
         """ Evaluated on candidate components
 
         When a component lookup is done and candidate(s) have
@@ -708,19 +726,19 @@ class AbstractComponent(object, metaclass=MetaComponent):
         """
         return self.work.component_by_name(name, model_name=model_name)
 
-    def component(self, usage=None, model_name=None):
+    def component(self, usage=None, model_name=None, **kw):
         """ Return a component
 
         Shortcut to meth:`~WorkContext.component`
         """
-        return self.work.component(usage=usage, model_name=model_name)
+        return self.work.component(usage=usage, model_name=model_name, **kw)
 
-    def many_components(self, usage=None, model_name=None):
+    def many_components(self, usage=None, model_name=None, **kw):
         """ Return several components
 
         Shortcut to meth:`~WorkContext.many_components`
         """
-        return self.work.many_components(usage=usage, model_name=model_name)
+        return self.work.many_components(usage=usage, model_name=model_name, **kw)
 
     def __str__(self):
         return "Component(%s)" % self._name

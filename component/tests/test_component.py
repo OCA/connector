@@ -364,7 +364,7 @@ class TestComponent(TransactionComponentRegistryCase):
             _apply_on = ["res.partner"]
 
             @classmethod
-            def _component_match(cls, work):
+            def _component_match(cls, work, **kw):
                 return False
 
         class Bar(Component):

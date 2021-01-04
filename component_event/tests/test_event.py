@@ -162,6 +162,7 @@ class TestEvent(ComponentRegistryCase):
 
     def setUp(self):
         super(TestEvent, self).setUp()
+        ComponentRegistryCase._setup_registry(self)
         self._load_module_components("component_event")
 
         # get the collecter to notify the event

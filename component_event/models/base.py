@@ -63,6 +63,9 @@ class Base(models.AbstractModel):
 
         """
         dbname = self.env.cr.dbname
+        components_registry = self.env.context.get(
+            "components_registry", components_registry
+        )
         comp_registry = components_registry or _component_databases.get(dbname)
         if not comp_registry or not comp_registry.ready:
             # No event should be triggered before the registry has been loaded

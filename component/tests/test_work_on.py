@@ -3,20 +3,16 @@
 
 from odoo.addons.component.core import ComponentRegistry, WorkContext
 
-from .common import TransactionComponentCase
+from .common import SavepointComponentRegistryCase
 
 
-class TestWorkOn(TransactionComponentCase):
+class TestWorkOn(SavepointComponentRegistryCase):
     """Test on WorkContext
 
     This model is mostly a container, so we check the access
     to the attributes and properties.
 
     """
-
-    def setUp(self):
-        super().setUp()
-        self.collection = self.env["collection.base"]
 
     def test_collection_work_on(self):
         """ Create a new instance and test attributes access """
@@ -27,6 +23,20 @@ class TestWorkOn(TransactionComponentCase):
             self.assertEqual("res.partner", work.model_name)
             self.assertEqual(self.env["res.partner"], work.model)
             self.assertEqual(self.env, work.env)
+
+    def test_collection_work_on_registry_via_context(self):
+        """ Test propagation of registry via context """
+        registry = ComponentRegistry()
+        collection_record = self.collection.with_context(
+            components_registry=registry
+        ).new()
+        with collection_record.work_on("res.partner") as work:
+            self.assertEqual(collection_record, work.collection)
+            self.assertEqual("collection.base", work.collection._name)
+            self.assertEqual("res.partner", work.model_name)
+            self.assertEqual(self.env["res.partner"], work.model)
+            self.assertEqual(work.env, collection_record.env)
+            self.assertEqual(work.components_registry, registry)
 
     def test_propagate_work_on(self):
         """ Check custom attributes and their propagation """

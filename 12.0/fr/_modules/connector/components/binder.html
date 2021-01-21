@@ -12,7 +12,6 @@
     <script src="../../../_static/jquery.js"></script>
     <script src="../../../_static/underscore.js"></script>
     <script src="../../../_static/doctools.js"></script>
-    <script src="../../../_static/language_data.js"></script>
     <script src="../../../_static/translations.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Recherche" href="../../../search.html" />
@@ -266,6 +265,7 @@
 <span class="sd">                 or an empty recordset if the external_id is not mapped</span>
 <span class="sd">        :rtype: recordset</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">context</span>
         <span class="n">bindings</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">with_context</span><span class="p">(</span><span class="n">active_test</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">search</span><span class="p">(</span>
             <span class="p">[(</span><span class="bp">self</span><span class="o">.</span><span class="n">_external_field</span><span class="p">,</span> <span class="s1">&#39;=&#39;</span><span class="p">,</span> <span class="n">tools</span><span class="o">.</span><span class="n">ustr</span><span class="p">(</span><span class="n">external_id</span><span class="p">)),</span>
              <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_backend_field</span><span class="p">,</span> <span class="s1">&#39;=&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">backend_record</span><span class="o">.</span><span class="n">id</span><span class="p">)]</span>
@@ -277,6 +277,7 @@
         <span class="n">bindings</span><span class="o">.</span><span class="n">ensure_one</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">unwrap</span><span class="p">:</span>
             <span class="n">bindings</span> <span class="o">=</span> <span class="n">bindings</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_odoo_field</span><span class="p">]</span>
+        <span class="n">bindings</span> <span class="o">=</span> <span class="n">bindings</span><span class="o">.</span><span class="n">with_context</span><span class="p">(</span><span class="n">context</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">bindings</span></div>
 
 <div class="viewcode-block" id="Binder.to_external"><a class="viewcode-back" href="../../../api/api_components.html#connector.components.binder.Binder.to_external">[docs]</a>    <span class="k">def</span> <span class="nf">to_external</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">binding</span><span class="p">,</span> <span class="n">wrap</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
@@ -373,7 +374,7 @@
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 3.3.1.<br/>
+      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 3.4.3.<br/>
     </p>
   </div>
 </footer>

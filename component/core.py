@@ -370,6 +370,33 @@ class WorkContext(object):
                 matching_components.append(cls)
         return matching_components
 
+    def _filter_components_by_collection(self, component_classes):
+        return [c for c in component_classes if c._collection == self.collection._name]
+
+    def _filter_components_by_model(self, component_classes, model_name):
+        return [
+            c
+            for c in component_classes
+            if c.apply_on_models and model_name in c.apply_on_models
+        ]
+
+    def _ensure_model_name(self, model_name):
+        """Make sure model name is a string or fallback to current ctx value."""
+        if isinstance(model_name, models.BaseModel):
+            model_name = model_name._name
+        return model_name or self.model_name
+
+    def _matching_components(self, usage=None, model_name=None, **kw):
+        """Retrieve matching components and their work context."""
+        component_classes = self._lookup_components(
+            usage=usage, model_name=model_name, **kw
+        )
+        if model_name == self.model_name:
+            work_context = self
+        else:
+            work_context = self.work_on(model_name)
+        return component_classes, work_context
+
     def component(self, usage=None, model_name=None, **kw):
         """Find a component by usage and model for the current collection
 
@@ -393,10 +420,8 @@ class WorkContext(object):
         if no component is found for the provided ``usage``/``model_name``.
 
         """
-        if isinstance(model_name, models.BaseModel):
-            model_name = model_name._name
-        model_name = model_name or self.model_name
-        component_classes = self._lookup_components(
+        model_name = self._ensure_model_name(model_name)
+        component_classes, work_context = self._matching_components(
             usage=usage, model_name=model_name, **kw
         )
         if not component_classes:
@@ -408,16 +433,12 @@ class WorkContext(object):
         elif len(component_classes) > 1:
             # If we have more than one component, try to find the one
             # specifically linked to the collection...
-            component_classes = [
-                c for c in component_classes if c._collection == self.collection._name
-            ]
+            component_classes = self._filter_components_by_collection(component_classes)
         if len(component_classes) > 1:
             # ... or try to find the one specifically linked to the model
-            component_classes = [
-                c
-                for c in component_classes
-                if c.apply_on_models and model_name in c.apply_on_models
-            ]
+            component_classes = self._filter_components_by_model(
+                component_classes, model_name
+            )
         if len(component_classes) != 1:
             raise SeveralComponentError(
                 "Several components found for collection '%s', "
@@ -429,10 +450,6 @@ class WorkContext(object):
                     component_classes,
                 )
             )
-        if model_name == self.model_name:
-            work_context = self
-        else:
-            work_context = self.work_on(model_name)
         return component_classes[0](work_context)
 
     def many_components(self, usage=None, model_name=None, **kw):
@@ -446,16 +463,10 @@ class WorkContext(object):
         If no component is found, an empty list is returned.
 
         """
-        if isinstance(model_name, models.BaseModel):
-            model_name = model_name._name
-        model_name = model_name or self.model_name
-        component_classes = self._lookup_components(
+        model_name = self._ensure_model_name(model_name)
+        component_classes, work_context = self._matching_components(
             usage=usage, model_name=model_name, **kw
         )
-        if model_name == self.model_name:
-            work_context = self
-        else:
-            work_context = self.work_on(model_name)
         return [comp(work_context) for comp in component_classes]
 
     def __str__(self):

@@ -11,7 +11,6 @@
     <script src="../../../../_static/jquery.js"></script>
     <script src="../../../../_static/underscore.js"></script>
     <script src="../../../../_static/doctools.js"></script>
-    <script src="../../../../_static/language_data.js"></script>
     <script src="../../../../_static/translations.js"></script>
     <link rel="index" title="Index" href="../../../../genindex.html" />
     <link rel="search" title="Recherche" href="../../../../search.html" /> 
@@ -662,13 +661,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">job_model_name</span> <span class="o">=</span> <span class="s2">&quot;queue.job&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">job_config</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="p">[</span><span class="s2">&quot;queue.job.function&quot;</span><span class="p">]</span>
-            <span class="o">.</span><span class="n">sudo</span><span class="p">()</span>
-            <span class="o">.</span><span class="n">job_config</span><span class="p">(</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="p">[</span><span class="s2">&quot;queue.job.function&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">job_function_name</span><span class="p">(</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">model_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">method_name</span>
-                <span class="p">)</span>
-            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="p">[</span><span class="s2">&quot;queue.job.function&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">sudo</span><span class="p">()</span><span class="o">.</span><span class="n">job_config</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">job_function_name</span><span class="p">)</span>
         <span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="n">PENDING</span>
@@ -781,26 +774,34 @@
         <span class="k">if</span> <span class="n">db_record</span><span class="p">:</span>
             <span class="n">db_record</span><span class="o">.</span><span class="n">with_context</span><span class="p">(</span><span class="n">_job_edit_sentinel</span><span class="o">=</span><span class="n">edit_sentinel</span><span class="p">)</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">vals</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">date_created</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">date_created</span>
-            <span class="c1"># The following values must never be modified after the</span>
-            <span class="c1"># creation of the job</span>
             <span class="n">vals</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
                 <span class="p">{</span>
+                    <span class="s2">&quot;user_id&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">uid</span><span class="p">,</span>
+                    <span class="s2">&quot;channel&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">channel</span><span class="p">,</span>
+                    <span class="c1"># The following values must never be modified after the</span>
+                    <span class="c1"># creation of the job</span>
                     <span class="s2">&quot;uuid&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">uuid</span><span class="p">,</span>
                     <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">description</span><span class="p">,</span>
-                    <span class="s2">&quot;date_created&quot;</span><span class="p">:</span> <span class="n">date_created</span><span class="p">,</span>
+                    <span class="s2">&quot;func_string&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">func_string</span><span class="p">,</span>
+                    <span class="s2">&quot;date_created&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">date_created</span><span class="p">,</span>
+                    <span class="s2">&quot;model_name&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">recordset</span><span class="o">.</span><span class="n">_name</span><span class="p">,</span>
                     <span class="s2">&quot;method_name&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">method_name</span><span class="p">,</span>
+                    <span class="s2">&quot;job_function_id&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">job_config</span><span class="o">.</span><span class="n">job_function_id</span><span class="p">,</span>
+                    <span class="s2">&quot;channel_method_name&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">job_function_name</span><span class="p">,</span>
                     <span class="s2">&quot;records&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">recordset</span><span class="p">,</span>
                     <span class="s2">&quot;args&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">,</span>
                     <span class="s2">&quot;kwargs&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span><span class="p">,</span>
                 <span class="p">}</span>
             <span class="p">)</span>
-            <span class="c1"># it the channel is not specified, lets the job_model compute</span>
-            <span class="c1"># the right one to use</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">channel</span><span class="p">:</span>
-                <span class="n">vals</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;channel&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">channel</span><span class="p">})</span>
-
             <span class="n">job_model</span><span class="o">.</span><span class="n">with_context</span><span class="p">(</span><span class="n">_job_edit_sentinel</span><span class="o">=</span><span class="n">edit_sentinel</span><span class="p">)</span><span class="o">.</span><span class="n">sudo</span><span class="p">()</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">vals</span><span class="p">)</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">func_string</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">recordset</span><span class="p">)</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="p">[</span><span class="nb">repr</span><span class="p">(</span><span class="n">arg</span><span class="p">)</span> <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">]</span>
+        <span class="n">kwargs</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">=</span><span class="si">{!r}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">val</span><span class="p">)</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">()]</span>
+        <span class="n">all_args</span> <span class="o">=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">args</span> <span class="o">+</span> <span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">.</span><span class="si">{}</span><span class="s2">(</span><span class="si">{}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">method_name</span><span class="p">,</span> <span class="n">all_args</span><span class="p">)</span>
 
 <div class="viewcode-block" id="Job.db_record"><a class="viewcode-back" href="../../../../api/api_queue.html#odoo.addons.queue_job.job.Job.db_record">[docs]</a>    <span class="k">def</span> <span class="nf">db_record</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">db_record_from_uuid</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">uuid</span><span class="p">)</span></div>
@@ -809,6 +810,11 @@
     <span class="k">def</span> <span class="nf">func</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">recordset</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">recordset</span><span class="o">.</span><span class="n">with_context</span><span class="p">(</span><span class="n">job_uuid</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">uuid</span><span class="p">)</span>
         <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">recordset</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">method_name</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">job_function_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">func_model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="p">[</span><span class="s2">&quot;queue.job.function&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">sudo</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">func_model</span><span class="o">.</span><span class="n">job_function_name</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">recordset</span><span class="o">.</span><span class="n">_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">method_name</span><span class="p">)</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">identity_key</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -866,6 +872,14 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_eta</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span> <span class="o">+</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="n">value</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_eta</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">channel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_channel</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">job_config</span><span class="o">.</span><span class="n">channel</span>
+
+    <span class="nd">@channel</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">channel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_channel</span> <span class="o">=</span> <span class="n">value</span>
 
 <div class="viewcode-block" id="Job.set_pending"><a class="viewcode-back" href="../../../../api/api_queue.html#odoo.addons.queue_job.job.Job.set_pending">[docs]</a>    <span class="k">def</span> <span class="nf">set_pending</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">result</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">reset_retry</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="n">PENDING</span>
@@ -1221,7 +1235,7 @@
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 3.3.1.<br/>
+      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 3.4.3.<br/>
     </p>
   </div>
 </footer>

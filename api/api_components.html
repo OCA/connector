@@ -11,7 +11,6 @@
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
     <script src="../_static/doctools.js"></script>
-    <script src="../_static/language_data.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Models" href="api_backend.html" />
@@ -2014,7 +2013,7 @@ argument.</p>
 
 <dl class="py method">
 <dt id="odoo.addons.component.core.WorkContext.component">
-<code class="sig-name descname">component</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">usage</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">model_name</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/component/core.html#WorkContext.component"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.component.core.WorkContext.component" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">component</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">usage</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">model_name</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kw</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/component/core.html#WorkContext.component"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.component.core.WorkContext.component" title="Permalink to this definition">¶</a></dt>
 <dd><p>Find a component by usage and model for the current collection</p>
 <p>It searches a component using the rules of
 <a class="reference internal" href="#odoo.addons.component.core.ComponentRegistry.lookup" title="odoo.addons.component.core.ComponentRegistry.lookup"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ComponentRegistry.lookup()</span></code></a>. When a component is found,
@@ -2035,7 +2034,7 @@ if no component is found for the provided <code class="docutils literal notransl
 
 <dl class="py method">
 <dt id="odoo.addons.component.core.WorkContext.many_components">
-<code class="sig-name descname">many_components</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">usage</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">model_name</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/component/core.html#WorkContext.many_components"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.component.core.WorkContext.many_components" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">many_components</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">usage</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">model_name</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kw</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/component/core.html#WorkContext.many_components"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.component.core.WorkContext.many_components" title="Permalink to this definition">¶</a></dt>
 <dd><p>Find many components by usage and model for the current collection</p>
 <p>It searches a component using the rules of
 <a class="reference internal" href="#odoo.addons.component.core.ComponentRegistry.lookup" title="odoo.addons.component.core.ComponentRegistry.lookup"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ComponentRegistry.lookup()</span></code></a>. When components are found, they
@@ -2231,14 +2230,14 @@ with a matching or a not set <code class="docutils literal notranslate"><span cl
 
 <dl class="py method">
 <dt id="odoo.addons.component.core.AbstractComponent.component">
-<code class="sig-name descname">component</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">usage</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">model_name</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/component/core.html#AbstractComponent.component"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.component.core.AbstractComponent.component" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">component</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">usage</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">model_name</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kw</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/component/core.html#AbstractComponent.component"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.component.core.AbstractComponent.component" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a component</p>
 <p>Shortcut to meth:<cite>~WorkContext.component</cite></p>
 </dd></dl>
 
 <dl class="py method">
 <dt id="odoo.addons.component.core.AbstractComponent.many_components">
-<code class="sig-name descname">many_components</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">usage</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">model_name</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/component/core.html#AbstractComponent.many_components"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.component.core.AbstractComponent.many_components" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">many_components</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">usage</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">model_name</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kw</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/component/core.html#AbstractComponent.many_components"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.component.core.AbstractComponent.many_components" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return several components</p>
 <p>Shortcut to meth:<cite>~WorkContext.many_components</cite></p>
 </dd></dl>
@@ -2323,7 +2322,7 @@ the components</p></li>
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.3.1.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.4.3.<br/>
     </p>
   </div>
 </footer>

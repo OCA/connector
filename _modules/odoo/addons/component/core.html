@@ -11,7 +11,6 @@
     <script src="../../../../_static/jquery.js"></script>
     <script src="../../../../_static/underscore.js"></script>
     <script src="../../../../_static/doctools.js"></script>
-    <script src="../../../../_static/language_data.js"></script>
     <link rel="index" title="Index" href="../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../search.html" /> 
 <meta charset='utf-8'>
@@ -566,15 +565,59 @@
             <span class="n">work_context</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">work_on</span><span class="p">(</span><span class="n">model_name</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">component_class</span><span class="p">(</span><span class="n">work_context</span><span class="p">)</span></div>
 
-    <span class="k">def</span> <span class="nf">_lookup_components</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">usage</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">model_name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_lookup_components</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">usage</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">model_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
         <span class="n">component_classes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">components_registry</span><span class="o">.</span><span class="n">lookup</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">collection</span><span class="o">.</span><span class="n">_name</span><span class="p">,</span> <span class="n">usage</span><span class="o">=</span><span class="n">usage</span><span class="p">,</span> <span class="n">model_name</span><span class="o">=</span><span class="n">model_name</span>
         <span class="p">)</span>
+        <span class="n">matching_components</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="bp">cls</span> <span class="ow">in</span> <span class="n">component_classes</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">matching</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_component_match</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="p">,</span> <span class="n">usage</span><span class="o">=</span><span class="n">usage</span><span class="p">,</span> <span class="n">model_name</span><span class="o">=</span><span class="n">model_name</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span>
+                <span class="p">)</span>
+            <span class="k">except</span> <span class="ne">TypeError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+                <span class="c1"># Backward compat</span>
+                <span class="n">_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">err</span><span class="p">))</span>
+                <span class="n">_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                    <span class="s2">&quot;The signature of </span><span class="si">%s</span><span class="s2">._component_match has changed. &quot;</span>
+                    <span class="s2">&quot;Please, adapt your code as &quot;</span>
+                    <span class="s2">&quot;(self, usage=usage, model_name=model_name, **kw)&quot;</span><span class="p">,</span>
+                    <span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span>
+                <span class="p">)</span>
+                <span class="n">matching</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_component_match</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">matching</span><span class="p">:</span>
+                <span class="n">matching_components</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">matching_components</span>
 
-        <span class="k">return</span> <span class="p">[</span><span class="bp">cls</span> <span class="k">for</span> <span class="bp">cls</span> <span class="ow">in</span> <span class="n">component_classes</span> <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_component_match</span><span class="p">(</span><span class="bp">self</span><span class="p">)]</span>
+    <span class="k">def</span> <span class="nf">_filter_components_by_collection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">component_classes</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">component_classes</span> <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">_collection</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">collection</span><span class="o">.</span><span class="n">_name</span><span class="p">]</span>
 
-<div class="viewcode-block" id="WorkContext.component"><a class="viewcode-back" href="../../../../api/api_components.html#odoo.addons.component.core.WorkContext.component">[docs]</a>    <span class="k">def</span> <span class="nf">component</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">usage</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">model_name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Find a component by usage and model for the current collection</span>
+    <span class="k">def</span> <span class="nf">_filter_components_by_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">component_classes</span><span class="p">,</span> <span class="n">model_name</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[</span>
+            <span class="n">c</span>
+            <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">component_classes</span>
+            <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">apply_on_models</span> <span class="ow">and</span> <span class="n">model_name</span> <span class="ow">in</span> <span class="n">c</span><span class="o">.</span><span class="n">apply_on_models</span>
+        <span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">_ensure_model_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model_name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Make sure model name is a string or fallback to current ctx value.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model_name</span><span class="p">,</span> <span class="n">models</span><span class="o">.</span><span class="n">BaseModel</span><span class="p">):</span>
+            <span class="n">model_name</span> <span class="o">=</span> <span class="n">model_name</span><span class="o">.</span><span class="n">_name</span>
+        <span class="k">return</span> <span class="n">model_name</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">model_name</span>
+
+    <span class="k">def</span> <span class="nf">_matching_components</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">usage</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">model_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Retrieve matching components and their work context.&quot;&quot;&quot;</span>
+        <span class="n">component_classes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lookup_components</span><span class="p">(</span>
+            <span class="n">usage</span><span class="o">=</span><span class="n">usage</span><span class="p">,</span> <span class="n">model_name</span><span class="o">=</span><span class="n">model_name</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">model_name</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">model_name</span><span class="p">:</span>
+            <span class="n">work_context</span> <span class="o">=</span> <span class="bp">self</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">work_context</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">work_on</span><span class="p">(</span><span class="n">model_name</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">component_classes</span><span class="p">,</span> <span class="n">work_context</span>
+
+<div class="viewcode-block" id="WorkContext.component"><a class="viewcode-back" href="../../../../api/api_components.html#odoo.addons.component.core.WorkContext.component">[docs]</a>    <span class="k">def</span> <span class="nf">component</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">usage</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">model_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Find a component by usage and model for the current collection</span>
 
 <span class="sd">        It searches a component using the rules of</span>
 <span class="sd">        :meth:`ComponentRegistry.lookup`. When a component is found,</span>
@@ -596,10 +639,10 @@
 <span class="sd">        if no component is found for the provided ``usage``/``model_name``.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model_name</span><span class="p">,</span> <span class="n">models</span><span class="o">.</span><span class="n">BaseModel</span><span class="p">):</span>
-            <span class="n">model_name</span> <span class="o">=</span> <span class="n">model_name</span><span class="o">.</span><span class="n">_name</span>
-        <span class="n">model_name</span> <span class="o">=</span> <span class="n">model_name</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">model_name</span>
-        <span class="n">component_classes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lookup_components</span><span class="p">(</span><span class="n">usage</span><span class="o">=</span><span class="n">usage</span><span class="p">,</span> <span class="n">model_name</span><span class="o">=</span><span class="n">model_name</span><span class="p">)</span>
+        <span class="n">model_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ensure_model_name</span><span class="p">(</span><span class="n">model_name</span><span class="p">)</span>
+        <span class="n">component_classes</span><span class="p">,</span> <span class="n">work_context</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_matching_components</span><span class="p">(</span>
+            <span class="n">usage</span><span class="o">=</span><span class="n">usage</span><span class="p">,</span> <span class="n">model_name</span><span class="o">=</span><span class="n">model_name</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span>
+        <span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">component_classes</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">NoComponentError</span><span class="p">(</span>
                 <span class="s2">&quot;No component found for collection &#39;</span><span class="si">%s</span><span class="s2">&#39;, &quot;</span>
@@ -609,16 +652,12 @@
         <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">component_classes</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
             <span class="c1"># If we have more than one component, try to find the one</span>
             <span class="c1"># specifically linked to the collection...</span>
-            <span class="n">component_classes</span> <span class="o">=</span> <span class="p">[</span>
-                <span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">component_classes</span> <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">_collection</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">collection</span><span class="o">.</span><span class="n">_name</span>
-            <span class="p">]</span>
+            <span class="n">component_classes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filter_components_by_collection</span><span class="p">(</span><span class="n">component_classes</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">component_classes</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
             <span class="c1"># ... or try to find the one specifically linked to the model</span>
-            <span class="n">component_classes</span> <span class="o">=</span> <span class="p">[</span>
-                <span class="n">c</span>
-                <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">component_classes</span>
-                <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">apply_on_models</span> <span class="ow">and</span> <span class="n">model_name</span> <span class="ow">in</span> <span class="n">c</span><span class="o">.</span><span class="n">apply_on_models</span>
-            <span class="p">]</span>
+            <span class="n">component_classes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filter_components_by_model</span><span class="p">(</span>
+                <span class="n">component_classes</span><span class="p">,</span> <span class="n">model_name</span>
+            <span class="p">)</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">component_classes</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">SeveralComponentError</span><span class="p">(</span>
                 <span class="s2">&quot;Several components found for collection &#39;</span><span class="si">%s</span><span class="s2">&#39;, &quot;</span>
@@ -630,13 +669,9 @@
                     <span class="n">component_classes</span><span class="p">,</span>
                 <span class="p">)</span>
             <span class="p">)</span>
-        <span class="k">if</span> <span class="n">model_name</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">model_name</span><span class="p">:</span>
-            <span class="n">work_context</span> <span class="o">=</span> <span class="bp">self</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">work_context</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">work_on</span><span class="p">(</span><span class="n">model_name</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">component_classes</span><span class="p">[</span><span class="mi">0</span><span class="p">](</span><span class="n">work_context</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="WorkContext.many_components"><a class="viewcode-back" href="../../../../api/api_components.html#odoo.addons.component.core.WorkContext.many_components">[docs]</a>    <span class="k">def</span> <span class="nf">many_components</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">usage</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">model_name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="WorkContext.many_components"><a class="viewcode-back" href="../../../../api/api_components.html#odoo.addons.component.core.WorkContext.many_components">[docs]</a>    <span class="k">def</span> <span class="nf">many_components</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">usage</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">model_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Find many components by usage and model for the current collection</span>
 
 <span class="sd">        It searches a component using the rules of</span>
@@ -647,14 +682,10 @@
 <span class="sd">        If no component is found, an empty list is returned.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model_name</span><span class="p">,</span> <span class="n">models</span><span class="o">.</span><span class="n">BaseModel</span><span class="p">):</span>
-            <span class="n">model_name</span> <span class="o">=</span> <span class="n">model_name</span><span class="o">.</span><span class="n">_name</span>
-        <span class="n">model_name</span> <span class="o">=</span> <span class="n">model_name</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">model_name</span>
-        <span class="n">component_classes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lookup_components</span><span class="p">(</span><span class="n">usage</span><span class="o">=</span><span class="n">usage</span><span class="p">,</span> <span class="n">model_name</span><span class="o">=</span><span class="n">model_name</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">model_name</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">model_name</span><span class="p">:</span>
-            <span class="n">work_context</span> <span class="o">=</span> <span class="bp">self</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">work_context</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">work_on</span><span class="p">(</span><span class="n">model_name</span><span class="p">)</span>
+        <span class="n">model_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ensure_model_name</span><span class="p">(</span><span class="n">model_name</span><span class="p">)</span>
+        <span class="n">component_classes</span><span class="p">,</span> <span class="n">work_context</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_matching_components</span><span class="p">(</span>
+            <span class="n">usage</span><span class="o">=</span><span class="n">usage</span><span class="p">,</span> <span class="n">model_name</span><span class="o">=</span><span class="n">model_name</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span>
+        <span class="p">)</span>
         <span class="k">return</span> <span class="p">[</span><span class="n">comp</span><span class="p">(</span><span class="n">work_context</span><span class="p">)</span> <span class="k">for</span> <span class="n">comp</span> <span class="ow">in</span> <span class="n">component_classes</span><span class="p">]</span></div>
 
     <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -884,7 +915,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">work</span> <span class="o">=</span> <span class="n">work_context</span>
 
     <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">_component_match</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">work</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_component_match</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">work</span><span class="p">,</span> <span class="n">usage</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">model_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Evaluated on candidate components</span>
 
 <span class="sd">        When a component lookup is done and candidate(s) have</span>
@@ -926,19 +957,19 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">work</span><span class="o">.</span><span class="n">component_by_name</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">model_name</span><span class="o">=</span><span class="n">model_name</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="AbstractComponent.component"><a class="viewcode-back" href="../../../../api/api_components.html#odoo.addons.component.core.AbstractComponent.component">[docs]</a>    <span class="k">def</span> <span class="nf">component</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">usage</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">model_name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="AbstractComponent.component"><a class="viewcode-back" href="../../../../api/api_components.html#odoo.addons.component.core.AbstractComponent.component">[docs]</a>    <span class="k">def</span> <span class="nf">component</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">usage</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">model_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Return a component</span>
 
 <span class="sd">        Shortcut to meth:`~WorkContext.component`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">work</span><span class="o">.</span><span class="n">component</span><span class="p">(</span><span class="n">usage</span><span class="o">=</span><span class="n">usage</span><span class="p">,</span> <span class="n">model_name</span><span class="o">=</span><span class="n">model_name</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">work</span><span class="o">.</span><span class="n">component</span><span class="p">(</span><span class="n">usage</span><span class="o">=</span><span class="n">usage</span><span class="p">,</span> <span class="n">model_name</span><span class="o">=</span><span class="n">model_name</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="AbstractComponent.many_components"><a class="viewcode-back" href="../../../../api/api_components.html#odoo.addons.component.core.AbstractComponent.many_components">[docs]</a>    <span class="k">def</span> <span class="nf">many_components</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">usage</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">model_name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="AbstractComponent.many_components"><a class="viewcode-back" href="../../../../api/api_components.html#odoo.addons.component.core.AbstractComponent.many_components">[docs]</a>    <span class="k">def</span> <span class="nf">many_components</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">usage</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">model_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Return several components</span>
 
 <span class="sd">        Shortcut to meth:`~WorkContext.many_components`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">work</span><span class="o">.</span><span class="n">many_components</span><span class="p">(</span><span class="n">usage</span><span class="o">=</span><span class="n">usage</span><span class="p">,</span> <span class="n">model_name</span><span class="o">=</span><span class="n">model_name</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">work</span><span class="o">.</span><span class="n">many_components</span><span class="p">(</span><span class="n">usage</span><span class="o">=</span><span class="n">usage</span><span class="p">,</span> <span class="n">model_name</span><span class="o">=</span><span class="n">model_name</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span></div>
 
     <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s2">&quot;Component(</span><span class="si">%s</span><span class="s2">)&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">_name</span>
@@ -1139,7 +1170,7 @@
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.3.1.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.4.3.<br/>
     </p>
   </div>
 </footer>

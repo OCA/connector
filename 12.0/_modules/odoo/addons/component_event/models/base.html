@@ -214,8 +214,7 @@
     <div class="body col-md-12 content" role="main">
       
   <h1>Source code for odoo.addons.component_event.models.base</h1><div class="highlight"><pre>
-<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
-<span class="c1"># Copyright 2017 Camptocamp SA</span>
+<span></span><span class="c1"># Copyright 2017 Camptocamp SA</span>
 <span class="c1"># License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl.html)</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
@@ -278,6 +277,9 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">dbname</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">cr</span><span class="o">.</span><span class="n">dbname</span>
+        <span class="n">components_registry</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+            <span class="s2">&quot;components_registry&quot;</span><span class="p">,</span> <span class="n">components_registry</span>
+        <span class="p">)</span>
         <span class="n">comp_registry</span> <span class="o">=</span> <span class="p">(</span>
             <span class="n">components_registry</span> <span class="ow">or</span> <span class="n">_component_databases</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">dbname</span><span class="p">)</span>
         <span class="p">)</span>
@@ -345,7 +347,7 @@
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.4.3.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.5.2.<br/>
     </p>
   </div>
 </footer>

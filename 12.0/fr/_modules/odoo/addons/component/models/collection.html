@@ -311,6 +311,11 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ensure_one</span><span class="p">()</span>
+        <span class="c1"># Allow propagation of custom component registry via context</span>
+        <span class="c1"># TODO: maybe to be moved to `WorkContext.__init__`</span>
+        <span class="n">components_registry</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;components_registry&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">components_registry</span><span class="p">:</span>
+            <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;components_registry&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">components_registry</span>
         <span class="k">yield</span> <span class="n">WorkContext</span><span class="p">(</span><span class="n">model_name</span><span class="o">=</span><span class="n">model_name</span><span class="p">,</span> <span class="n">collection</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div></div>
 </pre></div>
 
@@ -329,7 +334,7 @@
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 3.4.3.<br/>
+      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 3.5.2.<br/>
     </p>
   </div>
 </footer>

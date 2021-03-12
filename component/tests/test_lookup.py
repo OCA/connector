@@ -6,10 +6,10 @@ from odoo.addons.component.core import (
     AbstractComponent,
     Component,
 )
-from .common import ComponentRegistryCase
+from .common import TransactionComponentRegistryCase
 
 
-class TestLookup(ComponentRegistryCase):
+class TestLookup(TransactionComponentRegistryCase):
     """ Test the ComponentRegistry
 
     Tests in this testsuite mainly do:

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # Copyright 2013-2017 Camptocamp SA
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl.html)
 
@@ -27,7 +26,12 @@ class TestMapper(ComponentRegistryCase):
 
     def setUp(self):
         super(TestMapper, self).setUp()
+        ComponentRegistryCase._setup_registry(self)
         self.comp_registry.load_components('connector')
+
+    def tearDown(self):
+        ComponentRegistryCase._teardown_registry(self)
+        super(TestMapper, self).tearDown()
 
     def test_mapping_decorator(self):
         class KifKrokerMapper(Component):

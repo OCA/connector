@@ -3,7 +3,7 @@
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl.html)
 
 {'name': 'Components Events',
- 'version': '12.0.1.0.1',
+ 'version': '12.0.1.1.0',
  'author': 'Camptocamp,'
            'Odoo Community Association (OCA)',
  'website': 'http://odoo-connector.com',

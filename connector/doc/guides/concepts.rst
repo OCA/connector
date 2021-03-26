@@ -240,16 +240,3 @@ Odoo, the ID in Magento and the relation to the backend model.
 
 It also stores all the necessary metadata related to this customer
 coming from Magento.
-
-.. _checkpoint:
-
-**********
-Checkpoint
-**********
-
-A checkpoint is a record in the model `connector.checkpoint` linked to a
-model and a record, the connectors can create a new one when the user
-needs to review imported documents.
-
-
-.. _connector_ecommerce: https://github.com/OCA/connector-ecommerce

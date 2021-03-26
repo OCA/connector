@@ -11,8 +11,6 @@
     "depends": ["mail", "queue_job", "component", "component_event"],
     "data": [
         "security/connector_security.xml",
-        "security/ir.model.access.csv",
-        "views/checkpoint_views.xml",
         "views/connector_menu.xml",
         "views/res_partner_views.xml",
     ],

@@ -299,6 +299,11 @@
     <span class="n">date_started</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Datetime</span><span class="p">(</span><span class="n">string</span><span class="o">=</span><span class="s2">&quot;Start Date&quot;</span><span class="p">,</span> <span class="n">readonly</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">date_enqueued</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Datetime</span><span class="p">(</span><span class="n">string</span><span class="o">=</span><span class="s2">&quot;Enqueue Time&quot;</span><span class="p">,</span> <span class="n">readonly</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">date_done</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Datetime</span><span class="p">(</span><span class="n">readonly</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">exec_time</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Float</span><span class="p">(</span>
+        <span class="n">string</span><span class="o">=</span><span class="s2">&quot;Execution Time (avg)&quot;</span><span class="p">,</span>
+        <span class="n">group_operator</span><span class="o">=</span><span class="s2">&quot;avg&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Time required to execute this job in seconds. Average when grouped.&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
 
     <span class="n">eta</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Datetime</span><span class="p">(</span><span class="n">string</span><span class="o">=</span><span class="s2">&quot;Execute only after&quot;</span><span class="p">)</span>
     <span class="n">retry</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Integer</span><span class="p">(</span><span class="n">string</span><span class="o">=</span><span class="s2">&quot;Current try&quot;</span><span class="p">)</span>
@@ -951,7 +956,7 @@
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 3.4.3.<br/>
+      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 3.5.3.<br/>
     </p>
   </div>
 </footer>

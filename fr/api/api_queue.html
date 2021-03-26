@@ -246,14 +246,14 @@
 <span id="models"></span><h2>Modèles<a class="headerlink" href="#module-odoo.addons.queue_job.models.base" title="Lien permanent vers ce titre">¶</a></h2>
 <dl class="py class">
 <dt id="odoo.addons.queue_job.models.base.Base">
-<em class="property">class </em><code class="sig-prename descclassname">odoo.addons.queue_job.models.base.</code><code class="sig-name descname">Base</code><a class="reference internal" href="../_modules/odoo/addons/queue_job/models/base.html#Base"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.queue_job.models.base.Base" title="Lien permanent vers cette définition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">odoo.addons.queue_job.models.base.</span></code><code class="sig-name descname"><span class="pre">Base</span></code><a class="reference internal" href="../_modules/odoo/addons/queue_job/models/base.html#Base"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#odoo.addons.queue_job.models.base.Base" title="Lien permanent vers cette définition">¶</a></dt>
 <dd><p>Bases : <code class="xref py py-class docutils literal notranslate"><span class="pre">odoo.models.BaseModel</span></code></p>
 <p>The base model, which is implicitly inherited by all models.</p>
 <p>A new <a class="reference internal" href="#odoo.addons.queue_job.models.base.Base.with_delay" title="odoo.addons.queue_job.models.base.Base.with_delay"><code class="xref py py-meth docutils literal notranslate"><span class="pre">with_delay()</span></code></a> method is added on all Odoo Models, allowing to
 postpone the execution of a job method in an asynchronous process.</p>
 <dl class="py method">
 <dt id="odoo.addons.queue_job.models.base.Base.with_delay">
-<code class="sig-name descname">with_delay</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">priority</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">eta</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">max_retries</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">description</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">channel</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">identity_key</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/models/base.html#Base.with_delay"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.queue_job.models.base.Base.with_delay" title="Lien permanent vers cette définition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">with_delay</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">priority</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_retries</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">identity_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/models/base.html#Base.with_delay"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#odoo.addons.queue_job.models.base.Base.with_delay" title="Lien permanent vers cette définition">¶</a></dt>
 <dd><p>Return a <code class="docutils literal notranslate"><span class="pre">DelayableRecordset</span></code></p>
 <p>The returned instance allows to enqueue any method of the recordset’s
 Model.</p>
@@ -316,17 +316,31 @@ jobs queueing for debugging purposes, you can:</p>
 
 <span class="target" id="module-odoo.addons.queue_job.models.queue_job"></span><dl class="py class">
 <dt id="odoo.addons.queue_job.models.queue_job.QueueJob">
-<em class="property">class </em><code class="sig-prename descclassname">odoo.addons.queue_job.models.queue_job.</code><code class="sig-name descname">QueueJob</code><a class="reference internal" href="../_modules/odoo/addons/queue_job/models/queue_job.html#QueueJob"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.queue_job.models.queue_job.QueueJob" title="Lien permanent vers cette définition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">odoo.addons.queue_job.models.queue_job.</span></code><code class="sig-name descname"><span class="pre">QueueJob</span></code><a class="reference internal" href="../_modules/odoo/addons/queue_job/models/queue_job.html#QueueJob"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#odoo.addons.queue_job.models.queue_job.QueueJob" title="Lien permanent vers cette définition">¶</a></dt>
 <dd><p>Model storing the jobs to be executed.</p>
 <dl class="py attribute">
 <dt id="odoo.addons.queue_job.models.queue_job.QueueJob._name">
-<code class="sig-name descname">_name</code><em class="property"> = 'queue.job'</em><a class="headerlink" href="#odoo.addons.queue_job.models.queue_job.QueueJob._name" title="Lien permanent vers cette définition">¶</a></dt>
-<dd></dd></dl>
+<code class="sig-name descname"><span class="pre">_name</span></code><em class="property"> <span class="pre">=</span> <span class="pre">'queue.job'</span></em><a class="headerlink" href="#odoo.addons.queue_job.models.queue_job.QueueJob._name" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>the model name (in dot-notation, module namespace)</p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt id="odoo.addons.queue_job.models.queue_job.QueueJob._inherit">
-<code class="sig-name descname">_inherit</code><em class="property"> = ['mail.thread', 'mail.activity.mixin']</em><a class="headerlink" href="#odoo.addons.queue_job.models.queue_job.QueueJob._inherit" title="Lien permanent vers cette définition">¶</a></dt>
-<dd></dd></dl>
+<code class="sig-name descname"><span class="pre">_inherit</span></code><em class="property"> <span class="pre">=</span> <span class="pre">['mail.thread',</span> <span class="pre">'mail.activity.mixin']</span></em><a class="headerlink" href="#odoo.addons.queue_job.models.queue_job.QueueJob._inherit" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Python-inherited models:</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(disponible dans Python v3.9)">str</a> or <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(disponible dans Python v3.9)">list</a>(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(disponible dans Python v3.9)">str</a>)</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>If <a class="reference internal" href="#odoo.addons.queue_job.models.queue_job.QueueJob._name" title="odoo.addons.queue_job.models.queue_job.QueueJob._name"><code class="xref py py-attr docutils literal notranslate"><span class="pre">_name</span></code></a> is set, name(s) of parent models to inherit from</p></li>
+<li><p>If <a class="reference internal" href="#odoo.addons.queue_job.models.queue_job.QueueJob._name" title="odoo.addons.queue_job.models.queue_job.QueueJob._name"><code class="xref py py-attr docutils literal notranslate"><span class="pre">_name</span></code></a> is unset, name of a single model to extend in-place</p></li>
+</ul>
+</div>
+</dd></dl>
 
 </dd></dl>
 
@@ -336,7 +350,7 @@ jobs queueing for debugging purposes, you can:</p>
 <h4>Decorators<a class="headerlink" href="#decorators" title="Lien permanent vers ce titre">¶</a></h4>
 <dl class="py function">
 <dt id="odoo.addons.queue_job.job.job">
-<code class="sig-prename descclassname">odoo.addons.queue_job.job.</code><code class="sig-name descname">job</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">func</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">default_channel</span><span class="o">=</span><span class="default_value">'root'</span></em>, <em class="sig-param"><span class="n">retry_pattern</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/job.html#job"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.queue_job.job.job" title="Lien permanent vers cette définition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">odoo.addons.queue_job.job.</span></code><code class="sig-name descname"><span class="pre">job</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default_channel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'root'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">retry_pattern</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/job.html#job"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#odoo.addons.queue_job.job.job" title="Lien permanent vers cette définition">¶</a></dt>
 <dd><p>Decorator for job methods.</p>
 <p>Deprecated. Use <code class="docutils literal notranslate"><span class="pre">queue.job.function</span></code> XML records (details in
 <code class="docutils literal notranslate"><span class="pre">readme/USAGE.rst</span></code>).</p>
@@ -415,7 +429,7 @@ values are the delay to postpone a job.</p>
 
 <dl class="py function">
 <dt id="odoo.addons.queue_job.job.related_action">
-<code class="sig-prename descclassname">odoo.addons.queue_job.job.</code><code class="sig-name descname">related_action</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">action</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/job.html#related_action"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.queue_job.job.related_action" title="Lien permanent vers cette définition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">odoo.addons.queue_job.job.</span></code><code class="sig-name descname"><span class="pre">related_action</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">action</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/job.html#related_action"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#odoo.addons.queue_job.job.related_action" title="Lien permanent vers cette définition">¶</a></dt>
 <dd><p>Attach a <em>Related Action</em> to a job (decorator)</p>
 <p>Deprecated. Use <code class="docutils literal notranslate"><span class="pre">queue.job.function</span></code> XML records (details in
 <code class="docutils literal notranslate"><span class="pre">readme/USAGE.rst</span></code>).</p>
@@ -474,7 +488,7 @@ values are the delay to postpone a job.</p>
 <h4>Internals<a class="headerlink" href="#internals" title="Lien permanent vers ce titre">¶</a></h4>
 <dl class="py class">
 <dt id="odoo.addons.queue_job.job.DelayableRecordset">
-<em class="property">class </em><code class="sig-prename descclassname">odoo.addons.queue_job.job.</code><code class="sig-name descname">DelayableRecordset</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">recordset</span></em>, <em class="sig-param"><span class="n">priority</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">eta</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">max_retries</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">description</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">channel</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">identity_key</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/job.html#DelayableRecordset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.queue_job.job.DelayableRecordset" title="Lien permanent vers cette définition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">odoo.addons.queue_job.job.</span></code><code class="sig-name descname"><span class="pre">DelayableRecordset</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">recordset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">priority</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_retries</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">identity_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/job.html#DelayableRecordset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#odoo.addons.queue_job.job.DelayableRecordset" title="Lien permanent vers cette définition">¶</a></dt>
 <dd><p>Bases : <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(disponible dans Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Allow to delay a method for a recordset</p>
 <p>Utilisation</p>
@@ -490,140 +504,140 @@ by <a class="reference internal" href="#odoo.addons.queue_job.models.base.Base.w
 
 <dl class="py class">
 <dt id="odoo.addons.queue_job.job.Job">
-<em class="property">class </em><code class="sig-prename descclassname">odoo.addons.queue_job.job.</code><code class="sig-name descname">Job</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">func</span></em>, <em class="sig-param"><span class="n">args</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">kwargs</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">priority</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">eta</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">job_uuid</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">max_retries</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">description</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">channel</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">identity_key</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/job.html#Job"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.queue_job.job.Job" title="Lien permanent vers cette définition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">odoo.addons.queue_job.job.</span></code><code class="sig-name descname"><span class="pre">Job</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">args</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">priority</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">job_uuid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_retries</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">identity_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/job.html#Job"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#odoo.addons.queue_job.job.Job" title="Lien permanent vers cette définition">¶</a></dt>
 <dd><p>Bases : <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(disponible dans Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>A Job is a task to execute. It is the in-memory representation of a job.</p>
 <p>Jobs are stored in the <code class="docutils literal notranslate"><span class="pre">queue.job</span></code> Odoo Model, but they are handled
 through this class.</p>
 <dl class="py attribute">
 <dt id="odoo.addons.queue_job.job.Job.uuid">
-<code class="sig-name descname">uuid</code><a class="headerlink" href="#odoo.addons.queue_job.job.Job.uuid" title="Lien permanent vers cette définition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">uuid</span></code><a class="headerlink" href="#odoo.addons.queue_job.job.Job.uuid" title="Lien permanent vers cette définition">¶</a></dt>
 <dd><p>Id (UUID) du job.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt id="odoo.addons.queue_job.job.Job.state">
-<code class="sig-name descname">state</code><a class="headerlink" href="#odoo.addons.queue_job.job.Job.state" title="Lien permanent vers cette définition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">state</span></code><a class="headerlink" href="#odoo.addons.queue_job.job.Job.state" title="Lien permanent vers cette définition">¶</a></dt>
 <dd><p>État du job, peut être en attente, en queue, démarré, terminé, échoué. L’état initial est <cite>en attente</cite> et l’état final est <cite>terminé</cite>.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt id="odoo.addons.queue_job.job.Job.retry">
-<code class="sig-name descname">retry</code><a class="headerlink" href="#odoo.addons.queue_job.job.Job.retry" title="Lien permanent vers cette définition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">retry</span></code><a class="headerlink" href="#odoo.addons.queue_job.job.Job.retry" title="Lien permanent vers cette définition">¶</a></dt>
 <dd><p>L’essai actuel, démarre à 0 et s’incrémente de 1 chaque fois que le job est exécuté.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt id="odoo.addons.queue_job.job.Job.max_retries">
-<code class="sig-name descname">max_retries</code><a class="headerlink" href="#odoo.addons.queue_job.job.Job.max_retries" title="Lien permanent vers cette définition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">max_retries</span></code><a class="headerlink" href="#odoo.addons.queue_job.job.Job.max_retries" title="Lien permanent vers cette définition">¶</a></dt>
 <dd><p>Le nombre maximum d’essais permis avant que le job soit considéré comme échoué.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt id="odoo.addons.queue_job.job.Job.args">
-<code class="sig-name descname">args</code><a class="headerlink" href="#odoo.addons.queue_job.job.Job.args" title="Lien permanent vers cette définition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">args</span></code><a class="headerlink" href="#odoo.addons.queue_job.job.Job.args" title="Lien permanent vers cette définition">¶</a></dt>
 <dd><p>Arguments transmis à la fonction pendant l’exécution.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt id="odoo.addons.queue_job.job.Job.kwargs">
-<code class="sig-name descname">kwargs</code><a class="headerlink" href="#odoo.addons.queue_job.job.Job.kwargs" title="Lien permanent vers cette définition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">kwargs</span></code><a class="headerlink" href="#odoo.addons.queue_job.job.Job.kwargs" title="Lien permanent vers cette définition">¶</a></dt>
 <dd><p>Arguments nommés transmis à la fonction pendant l’exécution.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt id="odoo.addons.queue_job.job.Job.description">
-<code class="sig-name descname">description</code><a class="headerlink" href="#odoo.addons.queue_job.job.Job.description" title="Lien permanent vers cette définition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">description</span></code><a class="headerlink" href="#odoo.addons.queue_job.job.Job.description" title="Lien permanent vers cette définition">¶</a></dt>
 <dd><p>Description du job à destination des utilisateurs.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt id="odoo.addons.queue_job.job.Job.func">
-<code class="sig-name descname">func</code><a class="headerlink" href="#odoo.addons.queue_job.job.Job.func" title="Lien permanent vers cette définition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">func</span></code><a class="headerlink" href="#odoo.addons.queue_job.job.Job.func" title="Lien permanent vers cette définition">¶</a></dt>
 <dd><p>La fonction Python elle-même.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt id="odoo.addons.queue_job.job.Job.model_name">
-<code class="sig-name descname">model_name</code><a class="headerlink" href="#odoo.addons.queue_job.job.Job.model_name" title="Lien permanent vers cette définition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">model_name</span></code><a class="headerlink" href="#odoo.addons.queue_job.job.Job.model_name" title="Lien permanent vers cette définition">¶</a></dt>
 <dd><p>Modèle Odoo pour lequel le job va fonctionner.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt id="odoo.addons.queue_job.job.Job.priority">
-<code class="sig-name descname">priority</code><a class="headerlink" href="#odoo.addons.queue_job.job.Job.priority" title="Lien permanent vers cette définition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">priority</span></code><a class="headerlink" href="#odoo.addons.queue_job.job.Job.priority" title="Lien permanent vers cette définition">¶</a></dt>
 <dd><p>Priorité du job, 0 étant la plus haute priorité.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt id="odoo.addons.queue_job.job.Job.date_created">
-<code class="sig-name descname">date_created</code><a class="headerlink" href="#odoo.addons.queue_job.job.Job.date_created" title="Lien permanent vers cette définition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">date_created</span></code><a class="headerlink" href="#odoo.addons.queue_job.job.Job.date_created" title="Lien permanent vers cette définition">¶</a></dt>
 <dd><p>Date et heure de création du job.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt id="odoo.addons.queue_job.job.Job.date_enqueued">
-<code class="sig-name descname">date_enqueued</code><a class="headerlink" href="#odoo.addons.queue_job.job.Job.date_enqueued" title="Lien permanent vers cette définition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">date_enqueued</span></code><a class="headerlink" href="#odoo.addons.queue_job.job.Job.date_enqueued" title="Lien permanent vers cette définition">¶</a></dt>
 <dd><p>Date et heure de mise en queue du job.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt id="odoo.addons.queue_job.job.Job.date_started">
-<code class="sig-name descname">date_started</code><a class="headerlink" href="#odoo.addons.queue_job.job.Job.date_started" title="Lien permanent vers cette définition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">date_started</span></code><a class="headerlink" href="#odoo.addons.queue_job.job.Job.date_started" title="Lien permanent vers cette définition">¶</a></dt>
 <dd><p>Date et heure de démarrage du job.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt id="odoo.addons.queue_job.job.Job.date_done">
-<code class="sig-name descname">date_done</code><a class="headerlink" href="#odoo.addons.queue_job.job.Job.date_done" title="Lien permanent vers cette définition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">date_done</span></code><a class="headerlink" href="#odoo.addons.queue_job.job.Job.date_done" title="Lien permanent vers cette définition">¶</a></dt>
 <dd><p>Date et heure d’arrêt du job.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt id="odoo.addons.queue_job.job.Job.result">
-<code class="sig-name descname">result</code><a class="headerlink" href="#odoo.addons.queue_job.job.Job.result" title="Lien permanent vers cette définition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">result</span></code><a class="headerlink" href="#odoo.addons.queue_job.job.Job.result" title="Lien permanent vers cette définition">¶</a></dt>
 <dd><p>Une description du résultat (à destination des utilisateurs).</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt id="odoo.addons.queue_job.job.Job.exc_info">
-<code class="sig-name descname">exc_info</code><a class="headerlink" href="#odoo.addons.queue_job.job.Job.exc_info" title="Lien permanent vers cette définition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">exc_info</span></code><a class="headerlink" href="#odoo.addons.queue_job.job.Job.exc_info" title="Lien permanent vers cette définition">¶</a></dt>
 <dd><p>Informations sur l”<cite>Exception</cite> (<a href="#id1"><span class="problematic" id="id2">`</span></a>traceback”) ayant causé l’échec du job</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt id="odoo.addons.queue_job.job.Job.user_id">
-<code class="sig-name descname">user_id</code><a class="headerlink" href="#odoo.addons.queue_job.job.Job.user_id" title="Lien permanent vers cette définition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">user_id</span></code><a class="headerlink" href="#odoo.addons.queue_job.job.Job.user_id" title="Lien permanent vers cette définition">¶</a></dt>
 <dd><p>Id de l’utilisateur Odoo qui a créé le job</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt id="odoo.addons.queue_job.job.Job.eta">
-<code class="sig-name descname">eta</code><a class="headerlink" href="#odoo.addons.queue_job.job.Job.eta" title="Lien permanent vers cette définition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">eta</span></code><a class="headerlink" href="#odoo.addons.queue_job.job.Job.eta" title="Lien permanent vers cette définition">¶</a></dt>
 <dd><p>Heure estimée de lancement (ETA) du job. Il ne sera pas exécuté avant cette date/heure.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt id="odoo.addons.queue_job.job.Job.recordset">
-<code class="sig-name descname">recordset</code><a class="headerlink" href="#odoo.addons.queue_job.job.Job.recordset" title="Lien permanent vers cette définition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">recordset</span></code><a class="headerlink" href="#odoo.addons.queue_job.job.Job.recordset" title="Lien permanent vers cette définition">¶</a></dt>
 <dd><p>Model recordset when we are on a delayed Model method</p>
 </dd></dl>
 
 <dl class="py method">
 <dt id="odoo.addons.queue_job.job.Job.load">
-<em class="property">classmethod </em><code class="sig-name descname">load</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">env</span></em>, <em class="sig-param"><span class="n">job_uuid</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/job.html#Job.load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.queue_job.job.Job.load" title="Lien permanent vers cette définition">¶</a></dt>
+<em class="property"><span class="pre">classmethod</span> </em><code class="sig-name descname"><span class="pre">load</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">job_uuid</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/job.html#Job.load"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#odoo.addons.queue_job.job.Job.load" title="Lien permanent vers cette définition">¶</a></dt>
 <dd><p>Lit un job depuis la base de données</p>
 </dd></dl>
 
 <dl class="py method">
 <dt id="odoo.addons.queue_job.job.Job.job_record_with_same_identity_key">
-<code class="sig-name descname">job_record_with_same_identity_key</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/job.html#Job.job_record_with_same_identity_key"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.queue_job.job.Job.job_record_with_same_identity_key" title="Lien permanent vers cette définition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">job_record_with_same_identity_key</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/job.html#Job.job_record_with_same_identity_key"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#odoo.addons.queue_job.job.Job.job_record_with_same_identity_key" title="Lien permanent vers cette définition">¶</a></dt>
 <dd><p>Check if a job to be executed with the same key exists.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt id="odoo.addons.queue_job.job.Job.enqueue">
-<em class="property">classmethod </em><code class="sig-name descname">enqueue</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">func</span></em>, <em class="sig-param"><span class="n">args</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">kwargs</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">priority</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">eta</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">max_retries</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">description</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">channel</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">identity_key</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/job.html#Job.enqueue"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.queue_job.job.Job.enqueue" title="Lien permanent vers cette définition">¶</a></dt>
+<em class="property"><span class="pre">classmethod</span> </em><code class="sig-name descname"><span class="pre">enqueue</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">args</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">priority</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_retries</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">identity_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/job.html#Job.enqueue"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#odoo.addons.queue_job.job.Job.enqueue" title="Lien permanent vers cette définition">¶</a></dt>
 <dd><p>Crée un job et le met en queue. Renvoie le UUID du job.</p>
 <p>S’attend à ce que les arguments spécifiques au job soient déjà extraites de ceux à passer à la fonction du job.</p>
 <p>If the identity key is the same than the one in a pending job,
@@ -632,113 +646,118 @@ no job is created and the existing job is returned</p>
 
 <dl class="py method">
 <dt id="odoo.addons.queue_job.job.Job.db_record_from_uuid">
-<em class="property">static </em><code class="sig-name descname">db_record_from_uuid</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">env</span></em>, <em class="sig-param"><span class="n">job_uuid</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/job.html#Job.db_record_from_uuid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.queue_job.job.Job.db_record_from_uuid" title="Lien permanent vers cette définition">¶</a></dt>
+<em class="property"><span class="pre">static</span> </em><code class="sig-name descname"><span class="pre">db_record_from_uuid</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">job_uuid</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/job.html#Job.db_record_from_uuid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#odoo.addons.queue_job.job.Job.db_record_from_uuid" title="Lien permanent vers cette définition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt id="odoo.addons.queue_job.job.Job.perform">
-<code class="sig-name descname">perform</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/job.html#Job.perform"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.queue_job.job.Job.perform" title="Lien permanent vers cette définition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">perform</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/job.html#Job.perform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#odoo.addons.queue_job.job.Job.perform" title="Lien permanent vers cette définition">¶</a></dt>
 <dd><p>Exécute le job.</p>
 <p>Le job est exécuté avec l’utilisateur qui l’a initié.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt id="odoo.addons.queue_job.job.Job.store">
-<code class="sig-name descname">store</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/job.html#Job.store"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.queue_job.job.Job.store" title="Lien permanent vers cette définition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">store</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/job.html#Job.store"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#odoo.addons.queue_job.job.Job.store" title="Lien permanent vers cette définition">¶</a></dt>
 <dd><p>Stocke le job</p>
 </dd></dl>
 
 <dl class="py method">
 <dt id="odoo.addons.queue_job.job.Job.func_string">
-<em class="property">property </em><code class="sig-name descname">func_string</code><a class="headerlink" href="#odoo.addons.queue_job.job.Job.func_string" title="Lien permanent vers cette définition">¶</a></dt>
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">func_string</span></code><a class="headerlink" href="#odoo.addons.queue_job.job.Job.func_string" title="Lien permanent vers cette définition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt id="odoo.addons.queue_job.job.Job.db_record">
-<code class="sig-name descname">db_record</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/job.html#Job.db_record"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.queue_job.job.Job.db_record" title="Lien permanent vers cette définition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">db_record</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/job.html#Job.db_record"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#odoo.addons.queue_job.job.Job.db_record" title="Lien permanent vers cette définition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt id="id0">
-<em class="property">property </em><code class="sig-name descname">func</code><a class="headerlink" href="#id0" title="Lien permanent vers cette définition">¶</a></dt>
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">func</span></code><a class="headerlink" href="#id0" title="Lien permanent vers cette définition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt id="odoo.addons.queue_job.job.Job.job_function_name">
-<em class="property">property </em><code class="sig-name descname">job_function_name</code><a class="headerlink" href="#odoo.addons.queue_job.job.Job.job_function_name" title="Lien permanent vers cette définition">¶</a></dt>
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">job_function_name</span></code><a class="headerlink" href="#odoo.addons.queue_job.job.Job.job_function_name" title="Lien permanent vers cette définition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt id="odoo.addons.queue_job.job.Job.identity_key">
-<em class="property">property </em><code class="sig-name descname">identity_key</code><a class="headerlink" href="#odoo.addons.queue_job.job.Job.identity_key" title="Lien permanent vers cette définition">¶</a></dt>
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">identity_key</span></code><a class="headerlink" href="#odoo.addons.queue_job.job.Job.identity_key" title="Lien permanent vers cette définition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt id="id1">
-<em class="property">property </em><code class="sig-name descname">description</code><a class="headerlink" href="#id1" title="Lien permanent vers cette définition">¶</a></dt>
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">description</span></code><a class="headerlink" href="#id1" title="Lien permanent vers cette définition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt id="id2">
-<em class="property">property </em><code class="sig-name descname">uuid</code><a class="headerlink" href="#id2" title="Lien permanent vers cette définition">¶</a></dt>
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">uuid</span></code><a class="headerlink" href="#id2" title="Lien permanent vers cette définition">¶</a></dt>
 <dd><p>Id du job, c’est un UUID</p>
 </dd></dl>
 
 <dl class="py method">
 <dt id="id3">
-<em class="property">property </em><code class="sig-name descname">model_name</code><a class="headerlink" href="#id3" title="Lien permanent vers cette définition">¶</a></dt>
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">model_name</span></code><a class="headerlink" href="#id3" title="Lien permanent vers cette définition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt id="id4">
-<em class="property">property </em><code class="sig-name descname">user_id</code><a class="headerlink" href="#id4" title="Lien permanent vers cette définition">¶</a></dt>
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">user_id</span></code><a class="headerlink" href="#id4" title="Lien permanent vers cette définition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt id="id5">
-<em class="property">property </em><code class="sig-name descname">eta</code><a class="headerlink" href="#id5" title="Lien permanent vers cette définition">¶</a></dt>
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">eta</span></code><a class="headerlink" href="#id5" title="Lien permanent vers cette définition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt id="odoo.addons.queue_job.job.Job.channel">
-<em class="property">property </em><code class="sig-name descname">channel</code><a class="headerlink" href="#odoo.addons.queue_job.job.Job.channel" title="Lien permanent vers cette définition">¶</a></dt>
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">channel</span></code><a class="headerlink" href="#odoo.addons.queue_job.job.Job.channel" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="odoo.addons.queue_job.job.Job.exec_time">
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">exec_time</span></code><a class="headerlink" href="#odoo.addons.queue_job.job.Job.exec_time" title="Lien permanent vers cette définition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt id="odoo.addons.queue_job.job.Job.set_pending">
-<code class="sig-name descname">set_pending</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">result</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">reset_retry</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/job.html#Job.set_pending"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.queue_job.job.Job.set_pending" title="Lien permanent vers cette définition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">set_pending</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">result</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reset_retry</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/job.html#Job.set_pending"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#odoo.addons.queue_job.job.Job.set_pending" title="Lien permanent vers cette définition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt id="odoo.addons.queue_job.job.Job.set_enqueued">
-<code class="sig-name descname">set_enqueued</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/job.html#Job.set_enqueued"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.queue_job.job.Job.set_enqueued" title="Lien permanent vers cette définition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">set_enqueued</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/job.html#Job.set_enqueued"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#odoo.addons.queue_job.job.Job.set_enqueued" title="Lien permanent vers cette définition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt id="odoo.addons.queue_job.job.Job.set_started">
-<code class="sig-name descname">set_started</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/job.html#Job.set_started"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.queue_job.job.Job.set_started" title="Lien permanent vers cette définition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">set_started</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/job.html#Job.set_started"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#odoo.addons.queue_job.job.Job.set_started" title="Lien permanent vers cette définition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt id="odoo.addons.queue_job.job.Job.set_done">
-<code class="sig-name descname">set_done</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">result</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/job.html#Job.set_done"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.queue_job.job.Job.set_done" title="Lien permanent vers cette définition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">set_done</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">result</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/job.html#Job.set_done"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#odoo.addons.queue_job.job.Job.set_done" title="Lien permanent vers cette définition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt id="odoo.addons.queue_job.job.Job.set_failed">
-<code class="sig-name descname">set_failed</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">exc_info</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/job.html#Job.set_failed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.queue_job.job.Job.set_failed" title="Lien permanent vers cette définition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">set_failed</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">exc_info</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/job.html#Job.set_failed"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#odoo.addons.queue_job.job.Job.set_failed" title="Lien permanent vers cette définition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt id="odoo.addons.queue_job.job.Job.postpone">
-<code class="sig-name descname">postpone</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">result</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">seconds</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/job.html#Job.postpone"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.queue_job.job.Job.postpone" title="Lien permanent vers cette définition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">postpone</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">result</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seconds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/job.html#Job.postpone"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#odoo.addons.queue_job.job.Job.postpone" title="Lien permanent vers cette définition">¶</a></dt>
 <dd><p>Postpone the job</p>
 <p>Écrit un heure estimée de lancement dans <cite>n</cite> secondes. Utilisé quand une <cite>Exception</cite> non fatale souhaite relancer un job.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt id="odoo.addons.queue_job.job.Job.related_action">
-<code class="sig-name descname">related_action</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/job.html#Job.related_action"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#odoo.addons.queue_job.job.Job.related_action" title="Lien permanent vers cette définition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">related_action</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/job.html#Job.related_action"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#odoo.addons.queue_job.job.Job.related_action" title="Lien permanent vers cette définition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -768,7 +787,7 @@ no job is created and the existing job is returned</p>
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 3.4.3.<br/>
+      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 3.5.3.<br/>
     </p>
   </div>
 </footer>

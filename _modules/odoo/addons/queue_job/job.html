@@ -748,6 +748,7 @@
             <span class="s2">&quot;date_enqueued&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
             <span class="s2">&quot;date_started&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
             <span class="s2">&quot;date_done&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+            <span class="s2">&quot;exec_time&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
             <span class="s2">&quot;eta&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
             <span class="s2">&quot;identity_key&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
             <span class="s2">&quot;worker_pid&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">worker_pid</span><span class="p">,</span>
@@ -759,6 +760,8 @@
             <span class="n">vals</span><span class="p">[</span><span class="s2">&quot;date_started&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">date_started</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">date_done</span><span class="p">:</span>
             <span class="n">vals</span><span class="p">[</span><span class="s2">&quot;date_done&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">date_done</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">exec_time</span><span class="p">:</span>
+            <span class="n">vals</span><span class="p">[</span><span class="s2">&quot;exec_time&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">exec_time</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">eta</span><span class="p">:</span>
             <span class="n">vals</span><span class="p">[</span><span class="s2">&quot;eta&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">eta</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">identity_key</span><span class="p">:</span>
@@ -880,10 +883,17 @@
     <span class="k">def</span> <span class="nf">channel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_channel</span> <span class="o">=</span> <span class="n">value</span>
 
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">exec_time</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">date_done</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">date_started</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">date_done</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">date_started</span><span class="p">)</span><span class="o">.</span><span class="n">total_seconds</span><span class="p">()</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
 <div class="viewcode-block" id="Job.set_pending"><a class="viewcode-back" href="../../../../api/api_queue.html#odoo.addons.queue_job.job.Job.set_pending">[docs]</a>    <span class="k">def</span> <span class="nf">set_pending</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">result</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">reset_retry</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="n">PENDING</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">date_enqueued</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">date_started</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">date_done</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">worker_pid</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">if</span> <span class="n">reset_retry</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">retry</span> <span class="o">=</span> <span class="mi">0</span>
@@ -1234,7 +1244,7 @@
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.4.3.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.5.3.<br/>
     </p>
   </div>
 </footer>

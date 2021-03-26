@@ -199,20 +199,6 @@ msgstr ""
 "Remarquez que la partie qui concerne la définition du langage est "
 "complètement optionnelle mais elle est conservée pour l'exemple."
 
-#: ../../guides/bootstrap_connector.rst:224
-msgid "Checkpoints"
-msgstr "Points de contrôle"
-
-#: ../../guides/bootstrap_connector.rst:226
-msgid ""
-"When new records are imported and need a review, :ref:`checkpoint` are "
-"created. I propose to create a helper too in ``connector_coffee/connector."
-"py``::"
-msgstr ""
-"Quand de nouveaux enregistrements sont importés et ont besoin de "
-"vérification, des :ref:`checkpoint` sont créés. Je propose de créer aussi un "
-"auxiliaire dans ``connector_coffee/connector.py``::"
-
 #: ../../guides/bootstrap_connector.rst:239
 msgid "ConnectorUnit classes"
 msgstr "Classes ConnectorUnit"
@@ -808,20 +794,6 @@ msgid ""
 msgstr ""
 "Il stocke également toutes les métadonnées nécessaires à ce client venant de "
 "Magento"
-
-#: ../../guides/concepts.rst:235
-msgid "Checkpoint"
-msgstr "Point de contrôle"
-
-#: ../../guides/concepts.rst:237
-msgid ""
-"A checkpoint is a record in the model `connector.checkpoint` linked to a "
-"model and a record, the connectors can create a new one when the user needs "
-"to review imported documents."
-msgstr ""
-"Un point de contrôle est un enregistrement du modèle `connector.checkpoint` "
-"lié à un modèle et un enregistrement. Les connecteurs peuvent en créer de "
-"nouveaux quand l'utilisateur a besoin de vérifier des documents importés."
 
 #: ../../guides/multiprocessing.rst:6
 msgid "Use the connector with multiprocessing"

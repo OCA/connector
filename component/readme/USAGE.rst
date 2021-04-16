@@ -20,3 +20,14 @@ component level)::
   def run(self, external_id):
       backend_adapter = self.component(usage='backend.adapter')
       external_data = backend_adapter.read(external_id)
+
+
+In order for tests using components to work, you will need to use the base
+classes provided by `odoo.addons.component.tests.common`:
+
+* `TransactionComponentCase`
+* `SavepointComponentCase`
+
+There are also some specific base classes for testing the component registry,
+using the ComponentRegistryCase as a base class. See the docstrings in
+`tests/common.py`.

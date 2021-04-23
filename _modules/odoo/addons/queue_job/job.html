@@ -433,6 +433,14 @@
 
 <span class="sd">        A description of the result (for humans).</span>
 
+<span class="sd">    .. attribute:: exc_name</span>
+
+<span class="sd">        Exception error name when the job failed.</span>
+
+<span class="sd">    .. attribute:: exc_message</span>
+
+<span class="sd">        Exception error message when the job failed.</span>
+
 <span class="sd">    .. attribute:: exc_info</span>
 
 <span class="sd">        Exception information (traceback) when the job failed.</span>
@@ -697,6 +705,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">date_done</span> <span class="o">=</span> <span class="kc">None</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">result</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">exc_name</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">exc_message</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">exc_info</span> <span class="o">=</span> <span class="kc">None</span>
 
         <span class="k">if</span> <span class="s2">&quot;company_id&quot;</span> <span class="ow">in</span> <span class="n">env</span><span class="o">.</span><span class="n">context</span><span class="p">:</span>
@@ -737,11 +747,29 @@
 
 <div class="viewcode-block" id="Job.store"><a class="viewcode-back" href="../../../../api/api_queue.html#odoo.addons.queue_job.job.Job.store">[docs]</a>    <span class="k">def</span> <span class="nf">store</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Store the Job&quot;&quot;&quot;</span>
+        <span class="n">job_model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="p">[</span><span class="s2">&quot;queue.job&quot;</span><span class="p">]</span>
+        <span class="c1"># The sentinel is used to prevent edition sensitive fields (such as</span>
+        <span class="c1"># method_name) from RPC methods.</span>
+        <span class="n">edit_sentinel</span> <span class="o">=</span> <span class="n">job_model</span><span class="o">.</span><span class="n">EDIT_SENTINEL</span>
+
+        <span class="n">db_record</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">db_record</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">db_record</span><span class="p">:</span>
+            <span class="n">db_record</span><span class="o">.</span><span class="n">with_context</span><span class="p">(</span><span class="n">_job_edit_sentinel</span><span class="o">=</span><span class="n">edit_sentinel</span><span class="p">)</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_store_values</span><span class="p">()</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">job_model</span><span class="o">.</span><span class="n">with_context</span><span class="p">(</span><span class="n">_job_edit_sentinel</span><span class="o">=</span><span class="n">edit_sentinel</span><span class="p">)</span><span class="o">.</span><span class="n">sudo</span><span class="p">()</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_store_values</span><span class="p">(</span><span class="n">create</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_store_values</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">create</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="n">vals</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s2">&quot;state&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">,</span>
             <span class="s2">&quot;priority&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">priority</span><span class="p">,</span>
             <span class="s2">&quot;retry&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">retry</span><span class="p">,</span>
             <span class="s2">&quot;max_retries&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_retries</span><span class="p">,</span>
+            <span class="s2">&quot;exc_name&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">exc_name</span><span class="p">,</span>
+            <span class="s2">&quot;exc_message&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">exc_message</span><span class="p">,</span>
             <span class="s2">&quot;exc_info&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">exc_info</span><span class="p">,</span>
             <span class="s2">&quot;company_id&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">company_id</span><span class="p">,</span>
             <span class="s2">&quot;result&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">result</span><span class="p">)</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">result</span> <span class="k">else</span> <span class="kc">False</span><span class="p">,</span>
@@ -767,15 +795,7 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">identity_key</span><span class="p">:</span>
             <span class="n">vals</span><span class="p">[</span><span class="s2">&quot;identity_key&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">identity_key</span>
 
-        <span class="n">job_model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="p">[</span><span class="s2">&quot;queue.job&quot;</span><span class="p">]</span>
-        <span class="c1"># The sentinel is used to prevent edition sensitive fields (such as</span>
-        <span class="c1"># method_name) from RPC methods.</span>
-        <span class="n">edit_sentinel</span> <span class="o">=</span> <span class="n">job_model</span><span class="o">.</span><span class="n">EDIT_SENTINEL</span>
-
-        <span class="n">db_record</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">db_record</span><span class="p">()</span>
-        <span class="k">if</span> <span class="n">db_record</span><span class="p">:</span>
-            <span class="n">db_record</span><span class="o">.</span><span class="n">with_context</span><span class="p">(</span><span class="n">_job_edit_sentinel</span><span class="o">=</span><span class="n">edit_sentinel</span><span class="p">)</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">vals</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">create</span><span class="p">:</span>
             <span class="n">vals</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
                 <span class="p">{</span>
                     <span class="s2">&quot;user_id&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">uid</span><span class="p">,</span>
@@ -795,7 +815,24 @@
                     <span class="s2">&quot;kwargs&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span><span class="p">,</span>
                 <span class="p">}</span>
             <span class="p">)</span>
-            <span class="n">job_model</span><span class="o">.</span><span class="n">with_context</span><span class="p">(</span><span class="n">_job_edit_sentinel</span><span class="o">=</span><span class="n">edit_sentinel</span><span class="p">)</span><span class="o">.</span><span class="n">sudo</span><span class="p">()</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">vals</span><span class="p">)</span></div>
+
+        <span class="n">vals_from_model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_store_values_from_model</span><span class="p">()</span>
+        <span class="c1"># Sanitize values: make sure you cannot screw core values</span>
+        <span class="n">vals_from_model</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">vals_from_model</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">vals</span><span class="p">}</span>
+        <span class="n">vals</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">vals_from_model</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">vals</span>
+
+    <span class="k">def</span> <span class="nf">_store_values_from_model</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">vals</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">value_handlers_candidates</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;_job_store_values_for_&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">method_name</span><span class="p">,</span>
+            <span class="s2">&quot;_job_store_values&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">for</span> <span class="n">candidate</span> <span class="ow">in</span> <span class="n">value_handlers_candidates</span><span class="p">:</span>
+            <span class="n">handler</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">recordset</span><span class="p">,</span> <span class="n">candidate</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">handler</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">vals</span> <span class="o">=</span> <span class="n">handler</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">vals</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">func_string</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -913,15 +950,17 @@
 
 <div class="viewcode-block" id="Job.set_done"><a class="viewcode-back" href="../../../../api/api_queue.html#odoo.addons.queue_job.job.Job.set_done">[docs]</a>    <span class="k">def</span> <span class="nf">set_done</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">result</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="n">DONE</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">exc_name</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">exc_info</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">date_done</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">result</span> <span class="o">=</span> <span class="n">result</span></div>
 
-<div class="viewcode-block" id="Job.set_failed"><a class="viewcode-back" href="../../../../api/api_queue.html#odoo.addons.queue_job.job.Job.set_failed">[docs]</a>    <span class="k">def</span> <span class="nf">set_failed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc_info</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="Job.set_failed"><a class="viewcode-back" href="../../../../api/api_queue.html#odoo.addons.queue_job.job.Job.set_failed">[docs]</a>    <span class="k">def</span> <span class="nf">set_failed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="n">FAILED</span>
-        <span class="k">if</span> <span class="n">exc_info</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">exc_info</span> <span class="o">=</span> <span class="n">exc_info</span></div>
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">kw</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">v</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span></div>
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s2">&quot;&lt;Job </span><span class="si">%s</span><span class="s2">, priority:</span><span class="si">%d</span><span class="s2">&gt;&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">uuid</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">priority</span><span class="p">)</span>
@@ -953,6 +992,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">eta_seconds</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_retry_seconds</span><span class="p">(</span><span class="n">seconds</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">eta</span> <span class="o">=</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="n">eta_seconds</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">exc_name</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">exc_info</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">result</span> <span class="o">=</span> <span class="n">result</span></div>
@@ -1244,7 +1284,7 @@
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.5.3.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.5.4.<br/>
     </p>
   </div>
 </footer>

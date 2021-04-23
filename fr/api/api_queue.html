@@ -600,6 +600,18 @@ through this class.</p>
 </dd></dl>
 
 <dl class="py attribute">
+<dt id="odoo.addons.queue_job.job.Job.exc_name">
+<code class="sig-name descname"><span class="pre">exc_name</span></code><a class="headerlink" href="#odoo.addons.queue_job.job.Job.exc_name" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Exception error name when the job failed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="odoo.addons.queue_job.job.Job.exc_message">
+<code class="sig-name descname"><span class="pre">exc_message</span></code><a class="headerlink" href="#odoo.addons.queue_job.job.Job.exc_message" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Exception error message when the job failed.</p>
+</dd></dl>
+
+<dl class="py attribute">
 <dt id="odoo.addons.queue_job.job.Job.exc_info">
 <code class="sig-name descname"><span class="pre">exc_info</span></code><a class="headerlink" href="#odoo.addons.queue_job.job.Job.exc_info" title="Lien permanent vers cette définition">¶</a></dt>
 <dd><p>Informations sur l”<cite>Exception</cite> (<a href="#id1"><span class="problematic" id="id2">`</span></a>traceback”) ayant causé l’échec du job</p>
@@ -745,7 +757,7 @@ no job is created and the existing job is returned</p>
 
 <dl class="py method">
 <dt id="odoo.addons.queue_job.job.Job.set_failed">
-<code class="sig-name descname"><span class="pre">set_failed</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">exc_info</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/job.html#Job.set_failed"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#odoo.addons.queue_job.job.Job.set_failed" title="Lien permanent vers cette définition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">set_failed</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/job.html#Job.set_failed"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#odoo.addons.queue_job.job.Job.set_failed" title="Lien permanent vers cette définition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -787,7 +799,7 @@ no job is created and the existing job is returned</p>
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 3.5.3.<br/>
+      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 3.5.4.<br/>
     </p>
   </div>
 </footer>

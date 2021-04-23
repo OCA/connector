@@ -225,7 +225,7 @@
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">os</span>
 
-<span class="kn">from</span> <span class="nn">odoo</span> <span class="kn">import</span> <span class="n">models</span>
+<span class="kn">from</span> <span class="nn">odoo</span> <span class="kn">import</span> <span class="n">api</span><span class="p">,</span> <span class="n">models</span>
 
 <span class="kn">from</span> <span class="nn">..job</span> <span class="kn">import</span> <span class="n">DelayableRecordset</span>
 
@@ -418,7 +418,23 @@
                 <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">delayed</span><span class="p">,</span> <span class="n">method_name</span><span class="p">)(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
         <span class="n">origin</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method_name</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">functools</span><span class="o">.</span><span class="n">update_wrapper</span><span class="p">(</span><span class="n">auto_delay_wrapper</span><span class="p">,</span> <span class="n">origin</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">functools</span><span class="o">.</span><span class="n">update_wrapper</span><span class="p">(</span><span class="n">auto_delay_wrapper</span><span class="p">,</span> <span class="n">origin</span><span class="p">)</span>
+
+    <span class="nd">@api</span><span class="o">.</span><span class="n">model</span>
+    <span class="k">def</span> <span class="nf">_job_store_values</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">job</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Hook for manipulating job stored values.</span>
+
+<span class="sd">        You can define a more specific hook for a job function</span>
+<span class="sd">        by defining a method name with this pattern:</span>
+
+<span class="sd">            `_queue_job_store_values_${func_name}`</span>
+
+<span class="sd">        NOTE: values will be stored only if they match stored fields on `queue.job`.</span>
+
+<span class="sd">        :param job: current queue_job.job.Job instance.</span>
+<span class="sd">        :return: dictionary for setting job values.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">{}</span></div>
 </pre></div>
 
     </div>
@@ -436,7 +452,7 @@
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.5.3.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.5.4.<br/>
     </p>
   </div>
 </footer>

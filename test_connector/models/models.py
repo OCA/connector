@@ -3,8 +3,6 @@
 
 from odoo import fields, models
 
-from odoo.addons.queue_job.job import job, related_action
-
 
 class TestBackend(models.Model):
 
@@ -47,8 +45,6 @@ class ConnectorTestBinding(models.Model):
         )
     ]
 
-    @job
-    @related_action(action="related_action_unwrap_binding")
     def job_related_action_unwrap(self):
         return self
 
@@ -74,7 +70,5 @@ class NoInheritsBinding(models.Model):
         )
     ]
 
-    @job
-    @related_action(action="related_action_unwrap_binding")
     def job_related_action_unwrap(self):
         return self

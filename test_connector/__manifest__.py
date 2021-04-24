@@ -9,7 +9,7 @@
     "license": "LGPL-3",
     "category": "Hidden",
     "depends": ["connector"],
-    "website": "http://odoo-connector.com",
+    "website": "https://github.com/OCA/connector",
     "data": ["security/ir.model.access.csv"],
     "installable": True,
 }

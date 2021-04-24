@@ -7,6 +7,7 @@ from odoo import fields, models
 class TestComponentCollection(models.Model):
 
     _name = "test.component.collection"
+    _description = "Test Component Collection"
     _inherit = ["collection.base"]
 
     name = fields.Char()

@@ -9,7 +9,7 @@
     "license": "LGPL-3",
     "category": "Hidden",
     "depends": ["component"],
-    "website": "https://www.camptocamp.com",
+    "website": "https://github.com/OCA/connector",
     "data": ["security/ir.model.access.csv"],
     "installable": True,
     "development_status": "Production/Stable",

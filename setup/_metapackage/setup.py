@@ -11,6 +11,7 @@ setuptools.setup(
         'odoo14-addon-component',
         'odoo14-addon-component_event',
         'odoo14-addon-connector',
+        'odoo14-addon-test_component',
     ],
     classifiers=[
         'Programming Language :: Python',

@@ -1,0 +1,25 @@
+<odoo noupdate="1">
+    <record
+        id="job_function_connector_test_binding_job_related_action_unwrap"
+        model="queue.job.function"
+    >
+        <field name="model_id" ref="test_connector.model_connector_test_binding" />
+        <field name="method">job_related_action_unwrap</field>
+        <field
+            name="related_action"
+            eval='{"func_name": "related_action_unwrap_binding"}'
+        />
+    </record>
+
+    <record
+        id="job_function_no_inherits_binding_job_related_action_unwrap"
+        model="queue.job.function"
+    >
+        <field name="model_id" ref="test_connector.model_no_inherits_binding" />
+        <field name="method">job_related_action_unwrap</field>
+        <field
+            name="related_action"
+            eval='{"func_name": "related_action_unwrap_binding"}'
+        />
+    </record>
+</odoo>

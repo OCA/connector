@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_test_backend,access_test_backend,model_test_backend,,1,1,1,1
+access_connector_test_record,access_connector_test_record,model_connector_test_record,,1,1,1,1
+access_connector_test_binding,access_connector_test_binding,model_connector_test_binding,,1,1,1,1
+access_no_inherits_binding,access_no_inherits_binding,model_no_inherits_binding,,1,1,1,1

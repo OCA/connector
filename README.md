@@ -23,7 +23,7 @@ addon | version | summary
 --- | --- | ---
 [component](component/) | 10.0.1.1.1 | Components
 [component_event](component_event/) | 10.0.1.0.1 | Components Events
-[connector](connector/) | 10.0.2.1.0 | Connector
+[connector](connector/) | 10.0.2.1.1 | Connector
 [connector_base_product](connector_base_product/) | 10.0.1.0.0 | Connector Base Product
 [test_component](test_component/) | 10.0.1.0.0 | Automated tests for Components, do not install.
 [test_connector](test_connector/) | 10.0.1.0.0 | Automated tests for Connector, do not install.

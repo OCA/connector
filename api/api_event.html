@@ -5,9 +5,9 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Events &#8212; Connector  documentation</title>
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
-    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/bootstrap-sphinx.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
     <script src="../_static/doctools.js"></script>
@@ -332,8 +332,8 @@ will be executed:</p>
 <p>An event can be skipped based on a condition evaluated from the notified
 arguments. See <a class="reference internal" href="#odoo.addons.component_event.components.event.skip_if" title="odoo.addons.component_event.components.event.skip_if"><code class="xref py py-func docutils literal notranslate"><span class="pre">skip_if()</span></code></a></p>
 <dl class="py function">
-<dt id="odoo.addons.component_event.components.event.skip_if">
-<code class="sig-prename descclassname"><span class="pre">odoo.addons.component_event.components.event.</span></code><code class="sig-name descname"><span class="pre">skip_if</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cond</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/component_event/components/event.html#skip_if"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#odoo.addons.component_event.components.event.skip_if" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="odoo.addons.component_event.components.event.skip_if">
+<span class="sig-prename descclassname"><span class="pre">odoo.addons.component_event.components.event.</span></span><span class="sig-name descname"><span class="pre">skip_if</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cond</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/component_event/components/event.html#skip_if"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#odoo.addons.component_event.components.event.skip_if" title="Permalink to this definition">¶</a></dt>
 <dd><p>Decorator allowing to skip an event based on a condition</p>
 <p>The condition is a python lambda expression, which takes the
 same arguments than the event.</p>
@@ -362,8 +362,8 @@ same arguments than the event.</p>
 <h3>Base Model<a class="headerlink" href="#base-model" title="Permalink to this headline">¶</a></h3>
 <p>Extend the ‘base’ Odoo Model to add Events related features.</p>
 <dl class="py class">
-<dt id="odoo.addons.component_event.models.base.Base">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">odoo.addons.component_event.models.base.</span></code><code class="sig-name descname"><span class="pre">Base</span></code><a class="reference internal" href="../_modules/odoo/addons/component_event/models/base.html#Base"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#odoo.addons.component_event.models.base.Base" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="odoo.addons.component_event.models.base.Base">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">odoo.addons.component_event.models.base.</span></span><span class="sig-name descname"><span class="pre">Base</span></span><a class="reference internal" href="../_modules/odoo/addons/component_event/models/base.html#Base"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#odoo.addons.component_event.models.base.Base" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">odoo.models.BaseModel</span></code></p>
 <p>The base model, which is implicitly inherited by all models.</p>
 <p>Add an <code class="xref py py-meth docutils literal notranslate"><span class="pre">_event()</span></code> method to all Models. This method allows to
@@ -401,7 +401,7 @@ trigger events.</p>
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.5.4.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.0.2.<br/>
     </p>
   </div>
 </footer>

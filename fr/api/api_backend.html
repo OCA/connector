@@ -5,9 +5,9 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Modèles &#8212; Documentation Connector </title>
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
-    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/bootstrap-sphinx.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
     <script src="../_static/doctools.js"></script>
@@ -239,8 +239,8 @@
 <div class="section" id="backend-model">
 <span id="api-backend-model"></span><h2>Backend Model<a class="headerlink" href="#backend-model" title="Lien permanent vers ce titre">¶</a></h2>
 <dl class="py class">
-<dt id="connector.models.backend_model.ConnectorBackend">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">connector.models.backend_model.</span></code><code class="sig-name descname"><span class="pre">ConnectorBackend</span></code><a class="reference internal" href="../_modules/connector/models/backend_model.html#ConnectorBackend"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#connector.models.backend_model.ConnectorBackend" title="Lien permanent vers cette définition">¶</a></dt>
+<dt class="sig sig-object py" id="connector.models.backend_model.ConnectorBackend">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">connector.models.backend_model.</span></span><span class="sig-name descname"><span class="pre">ConnectorBackend</span></span><a class="reference internal" href="../_modules/connector/models/backend_model.html#ConnectorBackend"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#connector.models.backend_model.ConnectorBackend" title="Lien permanent vers cette définition">¶</a></dt>
 <dd><p>Bases : <code class="xref py py-class docutils literal notranslate"><span class="pre">odoo.models.BaseModel</span></code></p>
 <p>Une instance d’un backend externe auquel se synchroniser</p>
 <p>Les backends doivent <code class="docutils literal notranslate"><span class="pre">_inherit</span></code> ce modèle dans les modules des connecteurs.</p>
@@ -278,8 +278,8 @@ connectors is called a Backend.</p>
 <div class="section" id="binding-model">
 <span id="api-binding-model"></span><h2>Binding Model<a class="headerlink" href="#binding-model" title="Lien permanent vers ce titre">¶</a></h2>
 <dl class="py class">
-<dt id="connector.models.backend_model.ExternalBinding">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">connector.models.backend_model.</span></code><code class="sig-name descname"><span class="pre">ExternalBinding</span></code><a class="reference internal" href="../_modules/connector/models/backend_model.html#ExternalBinding"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#connector.models.backend_model.ExternalBinding" title="Lien permanent vers cette définition">¶</a></dt>
+<dt class="sig sig-object py" id="connector.models.backend_model.ExternalBinding">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">connector.models.backend_model.</span></span><span class="sig-name descname"><span class="pre">ExternalBinding</span></span><a class="reference internal" href="../_modules/connector/models/backend_model.html#ExternalBinding"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#connector.models.backend_model.ExternalBinding" title="Lien permanent vers cette définition">¶</a></dt>
 <dd><p>Bases : <code class="xref py py-class docutils literal notranslate"><span class="pre">odoo.models.BaseModel</span></code></p>
 <p>Un modèle abstrait pour une liaison à des enregistrements externes</p>
 <p>Un binding externe est une liaison entre un backend et Odoo. Par exemple, pour un <cite>partner</cite>, cela peut être <code class="docutils literal notranslate"><span class="pre">magento.res.partner</span></code> ou pour un article, <code class="docutils literal notranslate"><span class="pre">magento.product</span></code>.</p>
@@ -349,7 +349,7 @@ this addon.</p>
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 3.5.4.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.0.2.<br/>
     </p>
   </div>
 </footer>

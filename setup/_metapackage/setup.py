@@ -11,6 +11,7 @@ setuptools.setup(
         'odoo13-addon-component',
         'odoo13-addon-component_event',
         'odoo13-addon-connector',
+        'odoo13-addon-connector_base_product',
         'odoo13-addon-test_component',
         'odoo13-addon-test_connector',
     ],

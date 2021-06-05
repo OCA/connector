@@ -548,9 +548,14 @@
         <span class="n">wrap</span> <span class="o">=</span> <span class="n">relation</span><span class="o">.</span><span class="n">_name</span> <span class="o">!=</span> <span class="n">binding_model</span>
 
         <span class="k">if</span> <span class="n">wrap</span> <span class="ow">and</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">relation</span><span class="p">,</span> <span class="n">binding_field</span><span class="p">):</span>
-            <span class="n">domain</span> <span class="o">=</span> <span class="p">[(</span><span class="s1">&#39;odoo_id&#39;</span><span class="p">,</span> <span class="s1">&#39;=&#39;</span><span class="p">,</span> <span class="n">relation</span><span class="o">.</span><span class="n">id</span><span class="p">),</span>
-                      <span class="p">(</span><span class="s1">&#39;backend_id&#39;</span><span class="p">,</span> <span class="s1">&#39;=&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">backend_record</span><span class="o">.</span><span class="n">id</span><span class="p">)]</span>
-            <span class="n">binding</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="p">[</span><span class="n">binding_model</span><span class="p">]</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">domain</span><span class="p">)</span>
+            <span class="n">backend_field</span> <span class="o">=</span> <span class="n">rel_binder</span><span class="o">.</span><span class="n">_backend_field</span>
+            <span class="n">odoo_field</span> <span class="o">=</span> <span class="n">rel_binder</span><span class="o">.</span><span class="n">_odoo_field</span>
+            <span class="n">domain</span> <span class="o">=</span> <span class="p">[(</span><span class="n">odoo_field</span><span class="p">,</span> <span class="s1">&#39;=&#39;</span><span class="p">,</span> <span class="n">relation</span><span class="o">.</span><span class="n">id</span><span class="p">),</span>
+                      <span class="p">(</span><span class="n">backend_field</span><span class="p">,</span> <span class="s1">&#39;=&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">backend_record</span><span class="o">.</span><span class="n">id</span><span class="p">)]</span>
+            <span class="n">context</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">context</span>
+            <span class="n">binding</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="p">[</span><span class="n">binding_model</span><span class="p">]</span><span class="o">.</span><span class="n">with_context</span><span class="p">(</span>
+                <span class="n">active_test</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">domain</span><span class="p">)</span>
+            <span class="n">binding</span> <span class="o">=</span> <span class="n">binding</span><span class="o">.</span><span class="n">with_context</span><span class="p">(</span><span class="n">context</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">binding</span><span class="p">:</span>
                 <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">binding</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">,</span> <span class="p">(</span>
                     <span class="s1">&#39;only 1 binding for a backend is &#39;</span>
@@ -562,8 +567,8 @@
             <span class="c1"># to create the binding for the product.category on which it</span>
             <span class="c1"># depends.</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">bind_values</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;backend_id&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">backend_record</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
-                               <span class="s1">&#39;odoo_id&#39;</span><span class="p">:</span> <span class="n">relation</span><span class="o">.</span><span class="n">id</span><span class="p">}</span>
+                <span class="n">bind_values</span> <span class="o">=</span> <span class="p">{</span><span class="n">backend_field</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">backend_record</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+                               <span class="n">odoo_field</span><span class="p">:</span> <span class="n">relation</span><span class="o">.</span><span class="n">id</span><span class="p">}</span>
                 <span class="k">if</span> <span class="n">binding_extra_vals</span><span class="p">:</span>
                     <span class="n">bind_values</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">binding_extra_vals</span><span class="p">)</span>
                 <span class="c1"># If 2 jobs create it at the same time, retry</span>

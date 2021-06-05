@@ -317,9 +317,14 @@ class GenericExporter(AbstractComponent):
         wrap = relation._name != binding_model
 
         if wrap and hasattr(relation, binding_field):
-            domain = [('odoo_id', '=', relation.id),
-                      ('backend_id', '=', self.backend_record.id)]
-            binding = self.env[binding_model].search(domain)
+            backend_field = rel_binder._backend_field
+            odoo_field = rel_binder._odoo_field
+            domain = [(odoo_field, '=', relation.id),
+                      (backend_field, '=', self.backend_record.id)]
+            context = self.env.context
+            binding = self.env[binding_model].with_context(
+                active_test=False).search(domain)
+            binding = binding.with_context(context)
             if binding:
                 assert len(binding) == 1, (
                     'only 1 binding for a backend is '
@@ -331,8 +336,8 @@ class GenericExporter(AbstractComponent):
             # to create the binding for the product.category on which it
             # depends.
             else:
-                bind_values = {'backend_id': self.backend_record.id,
-                               'odoo_id': relation.id}
+                bind_values = {backend_field: self.backend_record.id,
+                               odoo_field: relation.id}
                 if binding_extra_vals:
                     bind_values.update(binding_extra_vals)
                 # If 2 jobs create it at the same time, retry

@@ -2,7 +2,6 @@
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl.html)
 
 import copy
-import unittest
 from contextlib import contextmanager
 
 import odoo
@@ -105,7 +104,7 @@ class SavepointComponentCase(common.SavepointCase, ComponentMixin):
 
 
 class ComponentRegistryCase(
-    unittest.TestCase, common.MetaCase("DummyCase", (object,), {})
+    common.TreeCase, common.MetaCase("DummyCase", (object,), {})
 ):
     """ This test case can be used as a base for writings tests on components
 

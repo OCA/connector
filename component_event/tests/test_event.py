@@ -1,6 +1,7 @@
 # Copyright 2017 Camptocamp SA
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl.html)
 
+import sys
 import unittest
 
 import mock
@@ -15,9 +16,22 @@ from odoo.addons.component.tests.common import (
 from odoo.addons.component_event.components.event import skip_if
 from odoo.addons.component_event.core import EventWorkContext
 
+if sys.version_info < (3, 8):
+    # This commit
+    # https://github.com/odoo/odoo/commit/ed831abd7d91ee873a1a92ecea2de316a025754f
+    # introduced a backward imcompatible change
+    # that makes simple unit tests ran through Odoo suite fail
+    # because `doClassCleanups` is not defined.
+    # They defined it on `TreeCase` so... there we go.
+    from odoo.tests.common import TreeCase
+
+    TestCase = TreeCase
+else:
+    TestCase = unittest.TestCase
+
 
 @tagged("standard", "at_install")
-class TestEventWorkContext(unittest.TestCase):
+class TestEventWorkContext(TestCase):
     """ Test Events Components """
 
     def setUp(self):
@@ -130,7 +144,7 @@ class TestEventWorkContext(unittest.TestCase):
         self.assertEqual(self.components_registry, work2.components_registry)
 
 
-class TestEvent(ComponentRegistryCase):
+class TestEvent(ComponentRegistryCase, TestCase):
     """ Test Events Components """
 
     def setUp(self):

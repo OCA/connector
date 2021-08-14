@@ -290,7 +290,7 @@ command</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>items_values</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)"><em>list</em></a>) – list of values for the items to create</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>items_values</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a>) – list of values for the items to create</td>
 </tr>
 </tbody>
 </table>
@@ -361,7 +361,7 @@ command</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>items_values</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)"><em>list</em></a>) – mapped values for the items</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>items_values</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a>) – mapped values for the items</td>
 </tr>
 </tbody>
 </table>
@@ -384,7 +384,7 @@ add it</li>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>map_record</strong> (<a class="reference internal" href="#connector.unit.mapper.MapRecord" title="connector.unit.mapper.MapRecord"><code class="xref py py-class docutils literal notranslate"><span class="pre">MapRecord</span></code></a>) – record that we are converting</li>
-<li><strong>to_attr</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – destination field (can be used for introspecting
+<li><strong>to_attr</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – destination field (can be used for introspecting
 the relation)</li>
 <li><strong>options</strong> – dict of options, herited from the main mapper</li>
 </ul>
@@ -403,9 +403,9 @@ the relation)</li>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>items</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)"><em>list</em></a>) – list of item records</li>
+<li><strong>items</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a>) – list of item records</li>
 <li><strong>parent</strong> – parent record</li>
-<li><strong>to_attr</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – destination field (can be used for introspecting
+<li><strong>to_attr</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – destination field (can be used for introspecting
 the relation)</li>
 <li><strong>options</strong> – dict of options, herited from the main mapper</li>
 </ul>
@@ -440,7 +440,7 @@ If it returns True, the current child record is skipped.</p>
 <dl class="class">
 <dt id="connector.unit.mapper.MapOptions">
 <em class="property">class </em><code class="descclassname">connector.unit.mapper.</code><code class="descname">MapOptions</code><a class="reference internal" href="../_modules/connector/unit/mapper.html#MapOptions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.unit.mapper.MapOptions" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></p>
 <p>Container for the options of mappings.</p>
 <p>Options can be accessed using attributes of the instance.  When an
 option is accessed and does not exist, it returns None.</p>
@@ -449,7 +449,7 @@ option is accessed and does not exist, it returns None.</p>
 <dl class="class">
 <dt id="connector.unit.mapper.MapRecord">
 <em class="property">class </em><code class="descclassname">connector.unit.mapper.</code><code class="descname">MapRecord</code><span class="sig-paren">(</span><em>mapper</em>, <em>source</em>, <em>parent=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/unit/mapper.html#MapRecord"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.unit.mapper.MapRecord" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>A record prepared to be converted using a <a class="reference internal" href="#connector.unit.mapper.Mapper" title="connector.unit.mapper.Mapper"><code class="xref py py-class docutils literal notranslate"><span class="pre">Mapper</span></code></a>.</p>
 <p>MapRecord instances are prepared by <a class="reference internal" href="#connector.unit.mapper.Mapper.map_record" title="connector.unit.mapper.Mapper.map_record"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Mapper.map_record()</span></code></a>.</p>
 <p>Usage:</p>
@@ -529,7 +529,7 @@ using <code class="docutils literal notranslate"><span class="pre">self.options<
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>for_create</strong> (<em>boolean</em>) – specify if only the mappings for creation
 (<code class="docutils literal notranslate"><span class="pre">&#64;only_create</span></code>) should be mapped.</li>
-<li><strong>fields</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)"><em>list</em></a>) – filter on fields</li>
+<li><strong>fields</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a>) – filter on fields</li>
 <li><strong>**kwargs</strong> – <p>custom options, they can later be used in the
 mapping methods</p>
 </li>
@@ -675,7 +675,7 @@ a <a class="reference internal" href="#connector.unit.mapper.Mapper" title="conn
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">mapped values</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)">dict</a></p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)">dict</a></p>
 </td>
 </tr>
 </tbody>
@@ -719,7 +719,7 @@ converted using the current Mapper.</p>
 <dl class="class">
 <dt id="connector.unit.mapper.MappingDefinition">
 <em class="property">class </em><code class="descclassname">connector.unit.mapper.</code><code class="descname">MappingDefinition</code><span class="sig-paren">(</span><em>changed_by</em>, <em>only_create</em><span class="sig-paren">)</span><a class="headerlink" href="#connector.unit.mapper.MappingDefinition" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a></p>
 <dl class="attribute">
 <dt id="connector.unit.mapper.MappingDefinition.changed_by">
 <code class="descname">changed_by</code><a class="headerlink" href="#connector.unit.mapper.MappingDefinition.changed_by" title="Permalink to this definition">¶</a></dt>

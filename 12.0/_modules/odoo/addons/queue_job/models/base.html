@@ -217,11 +217,12 @@
 <span></span><span class="c1"># Copyright 2016 Camptocamp</span>
 <span class="c1"># License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl.html)</span>
 
+<span class="kn">import</span> <span class="nn">functools</span>
 <span class="kn">import</span> <span class="nn">inspect</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">os</span>
 
-<span class="kn">from</span> <span class="nn">odoo</span> <span class="kn">import</span> <span class="n">models</span><span class="p">,</span> <span class="n">api</span>
+<span class="kn">from</span> <span class="nn">odoo</span> <span class="kn">import</span> <span class="n">api</span><span class="p">,</span> <span class="n">models</span>
 <span class="kn">from</span> <span class="nn">..job</span> <span class="kn">import</span> <span class="n">DelayableRecordset</span>
 
 <span class="n">_logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
@@ -235,6 +236,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">_inherit</span> <span class="o">=</span> <span class="s1">&#39;base&#39;</span>
 
+    <span class="c1"># TODO deprecated by :job-no-decorator:</span>
     <span class="nd">@api</span><span class="o">.</span><span class="n">model_cr</span>
     <span class="k">def</span> <span class="nf">_register_hook</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Register marked jobs&quot;&quot;&quot;</span>
@@ -253,15 +255,22 @@
                    <span class="n">channel</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">identity_key</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Return a ``DelayableRecordset``</span>
 
-<span class="sd">        The returned instance allow to enqueue any method of the recordset&#39;s</span>
-<span class="sd">        Model which is decorated by :func:`~odoo.addons.queue_job.job.job`.</span>
+<span class="sd">        The returned instance allows to enqueue any method of the recordset&#39;s</span>
+<span class="sd">        Model.</span>
 
 <span class="sd">        Usage::</span>
 
 <span class="sd">            self.env[&#39;res.users&#39;].with_delay().write({&#39;name&#39;: &#39;test&#39;})</span>
 
-<span class="sd">        In the line above, in so far ``write`` is allowed to be delayed with</span>
-<span class="sd">        ``@job``, the write will be executed in an asynchronous job.</span>
+<span class="sd">        ``with_delay()`` accepts job properties which specify how the job will</span>
+<span class="sd">        be executed.</span>
+
+<span class="sd">        Usage with job properties::</span>
+
+<span class="sd">            delayable = env[&#39;a.model&#39;].with_delay(priority=30, eta=60*60*5)</span>
+<span class="sd">            delayable.export_one_thing(the_thing_to_export)</span>
+<span class="sd">            # =&gt; the job will be executed with a low priority and not before a</span>
+<span class="sd">            # delay of 5 hours from now</span>
 
 <span class="sd">        :param priority: Priority of the job, 0 being the higher priority.</span>
 <span class="sd">                         Default is 10.</span>
@@ -277,7 +286,9 @@
 <span class="sd">                        defined on the function</span>
 <span class="sd">        :param identity_key: key uniquely identifying the job, if specified</span>
 <span class="sd">                             and a job with the same key has not yet been run,</span>
-<span class="sd">                             the new job will not be added.</span>
+<span class="sd">                             the new job will not be added. It is either a</span>
+<span class="sd">                             string, either a function that takes the job as</span>
+<span class="sd">                             argument (see :py:func:`..job.identity_exact`).</span>
 <span class="sd">        :return: instance of a DelayableRecordset</span>
 <span class="sd">        :rtype: :class:`odoo.addons.queue_job.job.DelayableRecordset`</span>
 
@@ -306,7 +317,114 @@
                                   <span class="n">max_retries</span><span class="o">=</span><span class="n">max_retries</span><span class="p">,</span>
                                   <span class="n">description</span><span class="o">=</span><span class="n">description</span><span class="p">,</span>
                                   <span class="n">channel</span><span class="o">=</span><span class="n">channel</span><span class="p">,</span>
-                                  <span class="n">identity_key</span><span class="o">=</span><span class="n">identity_key</span><span class="p">)</span></div></div>
+                                  <span class="n">identity_key</span><span class="o">=</span><span class="n">identity_key</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_patch_job_auto_delay</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method_name</span><span class="p">,</span> <span class="n">context_key</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Patch a method to be automatically delayed as job method when called</span>
+
+<span class="sd">        This patch method has to be called in ``_register_hook`` (example</span>
+<span class="sd">        below).</span>
+
+<span class="sd">        When a method is patched, any call to the method will not directly</span>
+<span class="sd">        execute the method&#39;s body, but will instead enqueue a job.</span>
+
+<span class="sd">        When a ``context_key`` is set when calling ``_patch_job_auto_delay``,</span>
+<span class="sd">        the patched method is automatically delayed only when this key is</span>
+<span class="sd">        ``True`` in the caller&#39;s context. It is advised to patch the method</span>
+<span class="sd">        with a ``context_key``, because making the automatic delay *in any</span>
+<span class="sd">        case* can produce nasty and unexpected side effects (e.g. another</span>
+<span class="sd">        module calls the method and expects it to be computed before doing</span>
+<span class="sd">        something else, expecting a result, ...).</span>
+
+<span class="sd">        A typical use case is when a method in a module we don&#39;t control is</span>
+<span class="sd">        called synchronously in the middle of another method, and we&#39;d like all</span>
+<span class="sd">        the calls to this method become asynchronous.</span>
+
+<span class="sd">        The options of the job usually passed to ``with_delay()`` (priority,</span>
+<span class="sd">        description, identity_key, ...) can be returned in a dictionary by a</span>
+<span class="sd">        method named after the name of the method suffixed by ``_job_options``</span>
+<span class="sd">        which takes the same parameters as the initial method.</span>
+
+<span class="sd">        It is still possible to force synchronous execution of the method by</span>
+<span class="sd">        setting a key ``_job_force_sync`` to True in the environment context.</span>
+
+<span class="sd">        Example patching the &quot;foo&quot; method to be automatically delayed as job</span>
+<span class="sd">        (the job options method is optional):</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            # original method:</span>
+<span class="sd">            def foo(self, arg1):</span>
+<span class="sd">                print(&quot;hello&quot;, arg1)</span>
+
+<span class="sd">            def large_method(self):</span>
+<span class="sd">                # doing a lot of things</span>
+<span class="sd">                self.foo(&quot;world)</span>
+<span class="sd">                # doing a lot of other things</span>
+
+<span class="sd">            def button_x(self):</span>
+<span class="sd">                self.with_context(auto_delay_foo=True).large_method()</span>
+
+<span class="sd">            # auto delay patch:</span>
+<span class="sd">            def foo_job_options(self, arg1):</span>
+<span class="sd">                return {</span>
+<span class="sd">                  &quot;priority&quot;: 100,</span>
+<span class="sd">                  &quot;description&quot;: &quot;Saying hello to {}&quot;.format(arg1)</span>
+<span class="sd">                }</span>
+
+<span class="sd">            def _register_hook(self):</span>
+<span class="sd">                self._patch_method(</span>
+<span class="sd">                    &quot;foo&quot;,</span>
+<span class="sd">                    self._patch_job_auto_delay(&quot;foo&quot;, context_key=&quot;auto_delay_foo&quot;)</span>
+<span class="sd">                )</span>
+<span class="sd">                return super()._register_hook()</span>
+
+<span class="sd">        The result when ``button_x`` is called, is that a new job for ``foo``</span>
+<span class="sd">        is delayed.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">def</span> <span class="nf">auto_delay_wrapper</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+            <span class="c1"># when no context_key is set, we delay in any case (warning, can be</span>
+            <span class="c1"># dangerous)</span>
+            <span class="n">context_delay</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">context_key</span><span class="p">)</span> <span class="k">if</span> <span class="n">context_key</span> <span class="k">else</span> <span class="kc">True</span>
+            <span class="k">if</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;job_uuid&quot;</span><span class="p">)</span>
+                <span class="ow">or</span> <span class="ow">not</span> <span class="n">context_delay</span>
+                <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;_job_force_sync&quot;</span><span class="p">)</span>
+                <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;test_queue_job_no_delay&quot;</span><span class="p">)</span>
+            <span class="p">):</span>
+                <span class="c1"># we are in the job execution</span>
+                <span class="k">return</span> <span class="n">auto_delay_wrapper</span><span class="o">.</span><span class="n">origin</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># replace the synchronous call by a job on itself</span>
+                <span class="n">method_name</span> <span class="o">=</span> <span class="n">auto_delay_wrapper</span><span class="o">.</span><span class="n">origin</span><span class="o">.</span><span class="vm">__name__</span>
+                <span class="n">job_options_method</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">_job_options&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">method_name</span><span class="p">),</span> <span class="kc">None</span>
+                <span class="p">)</span>
+                <span class="n">job_options</span> <span class="o">=</span> <span class="p">{}</span>
+                <span class="k">if</span> <span class="n">job_options_method</span><span class="p">:</span>
+                    <span class="n">job_options</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">job_options_method</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">))</span>
+                <span class="n">delayed</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">with_delay</span><span class="p">(</span><span class="o">**</span><span class="n">job_options</span><span class="p">)</span>
+                <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">delayed</span><span class="p">,</span> <span class="n">method_name</span><span class="p">)(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="n">origin</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method_name</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">functools</span><span class="o">.</span><span class="n">update_wrapper</span><span class="p">(</span><span class="n">auto_delay_wrapper</span><span class="p">,</span> <span class="n">origin</span><span class="p">)</span>
+
+    <span class="nd">@api</span><span class="o">.</span><span class="n">model</span>
+    <span class="k">def</span> <span class="nf">_job_store_values</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">job</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Hook for manipulating job stored values.</span>
+
+<span class="sd">        You can define a more specific hook for a job function</span>
+<span class="sd">        by defining a method name with this pattern:</span>
+
+<span class="sd">            `_queue_job_store_values_${func_name}`</span>
+
+<span class="sd">        NOTE: values will be stored only if they match stored fields on `queue.job`.</span>
+
+<span class="sd">        :param job: current queue_job.job.Job instance.</span>
+<span class="sd">        :return: dictionary for setting job values.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">{}</span></div>
 </pre></div>
 
     </div>
@@ -324,7 +442,7 @@
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.5.2.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.5.4.<br/>
     </p>
   </div>
 </footer>

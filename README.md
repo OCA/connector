@@ -19,12 +19,12 @@ http://www.odoo-connector.com
 
 Available addons
 ----------------
-addon | version | summary
---- | --- | ---
-[connector](connector/) | 8.0.3.4.0 | Connector
-[connector_base_product](connector_base_product/) | 8.0.1.0.0 | Connector Base Product
-[connector_job_subscribe](connector_job_subscribe/) | 8.0.1.0.0 | Connector
-[mail_connector_queue](mail_connector_queue/) | 8.0.1.0.1 | Email Connector Queue
+addon | version | maintainers | summary
+--- | --- | --- | ---
+[connector](connector/) | 8.0.3.4.0 |  | Connector
+[connector_base_product](connector_base_product/) | 8.0.1.0.0 |  | Connector Base Product
+[connector_job_subscribe](connector_job_subscribe/) | 8.0.1.0.0 |  | Connector
+[mail_connector_queue](mail_connector_queue/) | 8.0.1.0.1 |  | Email Connector Queue
 
 [//]: # (end addons)
 

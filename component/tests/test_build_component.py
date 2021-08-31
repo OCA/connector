@@ -58,7 +58,7 @@ class TestBuildComponent(TransactionComponentRegistryCase):
             _inherit = 'component1'  # pylint: disable=R7980
 
         class Component3(Component):
-            _inherit = 'component1'
+            _inherit = 'component1'  # pylint: disable=R7980
 
         Component1._build_component(self.comp_registry)
         Component2._build_component(self.comp_registry)

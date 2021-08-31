@@ -7,12 +7,6 @@
  'website': 'http://odoo-connector.com',
  'license': 'LGPL-3',
  'category': 'Connector',
- 'description': """
-Connector Base Product
-======================
-
-Add 'Connector' tab to product view
-""",
  'depends': [
      'connector',
      'product',

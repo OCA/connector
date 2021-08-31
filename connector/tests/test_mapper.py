@@ -126,7 +126,7 @@ class TestMapper(ComponentRegistryCase):
                 pass
 
         class FryMapperInherit(Component):
-            _inherit = 'fry.mapper'
+            _inherit = 'fry.mapper'  # pylint: disable=R7980
 
             @changed_by('email')
             @mapping

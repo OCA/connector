@@ -55,7 +55,7 @@ class TestBuildComponent(TransactionComponentRegistryCase):
             _name = 'component1'
 
         class Component2(Component):
-            _inherit = 'component1'
+            _inherit = 'component1'  # pylint: disable=R7980
 
         class Component3(Component):
             _inherit = 'component1'

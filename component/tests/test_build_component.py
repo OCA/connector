@@ -182,7 +182,7 @@ class TestBuildComponent(TransactionComponentRegistryCase):
         """ Ensure we can't _inherit a non-existent component """
         class Component1(Component):
             _name = 'component1'
-            _inherit = 'component1'
+            _inherit = 'component1'  # pylint: disable=R7980
 
         msg = 'Component.*does not exist in registry.*'
         with self.assertRaisesRegex(TypeError, msg):

@@ -9,8 +9,8 @@ from odoo.addons.queue_job.exception import RetryableJobError
 from odoo.addons.connector.database import pg_try_advisory_lock
 from odoo.addons.component.core import WorkContext
 from odoo.addons.component.tests.common import SavepointComponentCase
-from odoo.addons.connector.database import pg_try_advisory_lock
-from odoo.addons.queue_job.exception import RetryableJobError
+from odoo.addons.connector.database import pg_try_advisory_lock  # pylint: disable=W0404
+from odoo.addons.queue_job.exception import RetryableJobError  # pylint: disable=W0404
 
 
 class TestAdvisoryLock(SavepointComponentCase):

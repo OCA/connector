@@ -5,7 +5,7 @@ import logging
 import psycopg2
 
 from odoo.addons.component.core import Component
-from odoo.addons.connector.exception import RetryableJobError
+from odoo.addons.connector.exception import RetryableJobError  # pylint: disable=W7950
 
 _logger = logging.getLogger(__name__)
 

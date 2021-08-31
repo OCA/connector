@@ -21,7 +21,7 @@ import psycopg2
 from odoo.addons.component.core import AbstractComponent
 from contextlib import contextmanager
 from odoo.addons.connector.exception import (IDMissingInBackend,
-                                             RetryableJobError)
+                                             RetryableJobError)  # pylint: disable=W7950
 from odoo import _
 import odoo
 

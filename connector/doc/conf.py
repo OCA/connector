@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 #
 # Connectors documentation build configuration file, created by
 # sphinx-quickstart on Mon Feb  4 11:35:44 2013.

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 
 from . import test_build_component
 from . import test_component

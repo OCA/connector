@@ -19,7 +19,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #. module: connector
-#: code:addons/connector/models/checkpoint.py:119
+#: code:addons/connector/models/checkpoint.py:118
 #, python-format
 msgid "A %s needs a review."
 msgstr "Un %s necessita revisió."
@@ -203,8 +203,8 @@ msgid "No record to check."
 msgstr ""
 
 #. module: connector
-#: code:addons/connector/components/synchronizer.py:191
-#: code:addons/connector/components/synchronizer.py:196
+#: code:addons/connector/components/synchronizer.py:190
+#: code:addons/connector/components/synchronizer.py:195
 #, python-format
 msgid "Nothing to export."
 msgstr ""
@@ -235,13 +235,13 @@ msgid "Record Name"
 msgstr ""
 
 #. module: connector
-#: code:addons/connector/components/synchronizer.py:198
+#: code:addons/connector/components/synchronizer.py:197
 #, python-format
 msgid "Record exported with ID %s on Backend."
 msgstr ""
 
 #. module: connector
-#: code:addons/connector/models/queue_job.py:31
+#: code:addons/connector/models/queue_job.py:30
 #, python-format
 msgid "Related Record"
 msgstr "Registre relacionat"

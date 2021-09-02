@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # Copyright 2017 Camptocamp SA
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl.html)
 
@@ -113,7 +112,8 @@ class TestEvent(ComponentRegistryCase):
 
     def setUp(self):
         super(TestEvent, self).setUp()
-        self._load_module_components('component_event')
+        ComponentRegistryCase._setup_registry(self)
+        self._load_module_components("component_event")
 
         # get the collecter to notify the event
         # we don't mind about the collection and the model here,

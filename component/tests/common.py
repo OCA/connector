@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # Copyright 2017 Camptocamp SA
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl.html)
 
@@ -45,7 +44,7 @@ class ComponentMixin(object):
             builder.build_registry(comp_registry, states=('installed',))
             # build the components of the current tested addon
             current_addon = _get_addon_name(cls.__module__)
-            env['component.builder'].load_components(current_addon)
+            env["component.builder"].load_components(current_addon)
 
     def setUp(self):
         # should be ready only during tests, never during installation
@@ -69,6 +68,7 @@ class TransactionComponentCase(common.TransactionCase, ComponentMixin):
     @classmethod
     def setUpClass(cls):
         super(TransactionComponentCase, cls).setUpClass()
+        super().setUpClass()
         cls.setUpComponent()
 
     def setUp(self):
@@ -76,6 +76,10 @@ class TransactionComponentCase(common.TransactionCase, ComponentMixin):
         # super)
         common.TransactionCase.setUp(self)
         ComponentMixin.setUp(self)
+        # There's no env on setUpClass of TransactionCase, must do it here.
+        self.env.context = dict(
+            self.env.context, components_registry=self._components_registry
+        )
 
 
 class SavepointComponentCase(common.SavepointCase, ComponentMixin):
@@ -144,31 +148,30 @@ class ComponentRegistryCase(unittest.TestCase):
 
     """
 
-    def setUp(self):
-        super(ComponentRegistryCase, self).setUp()
-
+    @staticmethod
+    def _setup_registry(class_or_instance):
         # keep the original classes registered by the metaclass
         # so we'll restore them at the end of the tests, it avoid
         # to pollute it with Stub / Test components
-        self._original_components = copy.deepcopy(
+        class_or_instance._original_components = copy.deepcopy(
             MetaComponent._modules_components
         )
 
         # it will be our temporary component registry for our test session
-        self.comp_registry = ComponentRegistry()
+        class_or_instance.comp_registry = ComponentRegistry()
 
         # it builds the 'final component' for every component of the
         # 'component' addon and push them in the component registry
-        self.comp_registry.load_components('component')
+        class_or_instance.comp_registry.load_components("component")
         # build the components of every installed addons already installed
         # but the current addon (when running with pytest/nosetest, we
         # simulate the --test-enable behavior by excluding the current addon
         # which is in 'to install' / 'to upgrade' with --test-enable).
-        current_addon = _get_addon_name(self.__module__)
+        current_addon = _get_addon_name(class_or_instance.__module__)
         with new_rollbacked_env() as env:
-            env['component.builder'].build_registry(
-                self.comp_registry,
-                states=('installed',),
+            env["component.builder"].build_registry(
+                class_or_instance.comp_registry,
+                states=("installed",),
                 exclude_addons=[current_addon],
             )
 
@@ -176,12 +179,18 @@ class ComponentRegistryCase(unittest.TestCase):
         # normally, it is set to True and the end of the build
         # of the components. Here, we'll add components later in
         # the components registry, but we don't mind for the tests.
-        self.comp_registry.ready = True
+        class_or_instance.comp_registry.ready = True
+        if hasattr(class_or_instance, "env"):
+            # let it propagate via ctx
+            class_or_instance.env.context = dict(
+                class_or_instance.env.context,
+                components_registry=class_or_instance.comp_registry,
+            )
 
-    def tearDown(self):
-        super(ComponentRegistryCase, self).tearDown()
+    @staticmethod
+    def _teardown_registry(class_or_instance):
         # restore the original metaclass' classes
-        MetaComponent._modules_components = self._original_components
+        MetaComponent._modules_components = class_or_instance._original_components
 
     def _load_module_components(self, module):
         self.comp_registry.load_components(module)
@@ -199,12 +208,13 @@ class TransactionComponentRegistryCase(common.TransactionCase,
         # resolve an inheritance issue (common.TransactionCase does not use
         # super)
         common.TransactionCase.setUp(self)
-        ComponentRegistryCase.setUp(self)
-        self.collection = self.env['collection.base']
+        ComponentRegistryCase._setup_registry(self)
+        self.collection = self.env["collection.base"]
 
-    def teardown(self):
-        common.TransactionCase.tearDown(self)
+    def tearDown(self):
+        ComponentRegistryCase._teardown_registry(self)
         ComponentRegistryCase.tearDown(self)
+        common.TransactionCase.tearDown(self)
 
 
 class SavepointComponentRegistryCase(common.SavepointCase,
@@ -216,8 +226,9 @@ class SavepointComponentRegistryCase(common.SavepointCase,
         # super)
         common.SavepointCase.setUp(self)
         ComponentRegistryCase.setUp(self)
+        ComponentRegistryCase._setup_registry(self)
         self.collection = self.env['collection.base']
 
-    def teardown(self):
-        common.SavepointCase.tearDown(self)
+    def tearDown(self):
         ComponentRegistryCase.tearDown(self)
+        common.SavepointCase.tearDown(self)

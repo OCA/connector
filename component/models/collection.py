@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # Copyright 2017 Camptocamp SA
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl.html)
 
@@ -94,4 +93,9 @@ class Collection(models.AbstractModel):
 
         """
         self.ensure_one()
+        # Allow propagation of custom component registry via context
+        # TODO: maybe to be moved to `WorkContext.__init__`
+        components_registry = self.env.context.get("components_registry")
+        if components_registry:
+            kwargs["components_registry"] = components_registry
         yield WorkContext(model_name=model_name, collection=self, **kwargs)

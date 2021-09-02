@@ -1,13 +1,13 @@
-# -*- coding: utf-8 -*-
 # Copyright 2017 Camptocamp SA
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl.html)
 
 import mock
 from odoo.addons.component.core import AbstractComponent, Component
-from .common import ComponentRegistryCase
+
+from .common import TransactionComponentRegistryCase
 
 
-class TestBuildComponent(ComponentRegistryCase):
+class TestBuildComponent(TransactionComponentRegistryCase):
     """ Test build of components
 
     All the tests in this suite are based on the same principle with
@@ -55,10 +55,10 @@ class TestBuildComponent(ComponentRegistryCase):
             _name = 'component1'
 
         class Component2(Component):
-            _inherit = 'component1'
+            _inherit = 'component1'  # pylint: disable=R7980
 
         class Component3(Component):
-            _inherit = 'component1'
+            _inherit = 'component1'  # pylint: disable=R7980
 
         Component1._build_component(self.comp_registry)
         Component2._build_component(self.comp_registry)
@@ -182,7 +182,7 @@ class TestBuildComponent(ComponentRegistryCase):
         """ Ensure we can't _inherit a non-existent component """
         class Component1(Component):
             _name = 'component1'
-            _inherit = 'component1'
+            _inherit = 'component1'  # pylint: disable=R7980
 
         msg = 'Component.*does not exist in registry.*'
         with self.assertRaisesRegex(TypeError, msg):

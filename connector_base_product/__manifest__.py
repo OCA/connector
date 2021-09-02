@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # © 2014 David BEAL Akretion, Sodexis
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl.html)
 
@@ -8,12 +7,6 @@
  'website': 'http://odoo-connector.com',
  'license': 'LGPL-3',
  'category': 'Connector',
- 'description': """
-Connector Base Product
-======================
-
-Add 'Connector' tab to product view
-""",
  'depends': [
      'connector',
      'product',

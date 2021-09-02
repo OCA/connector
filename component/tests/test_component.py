@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # Copyright 2017 Camptocamp SA
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl.html)
 
@@ -375,7 +374,7 @@ class TestComponent(TransactionComponentRegistryCase):
             _apply_on = ['res.partner']
 
             @classmethod
-            def _component_match(cls, work):
+            def _component_match(cls, work, **kw):
                 return False
 
         class Bar(Component):

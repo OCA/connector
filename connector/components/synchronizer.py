@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # Copyright 2013-2017 Camptocamp SA
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl.html)
 
@@ -22,7 +21,7 @@ import psycopg2
 from odoo.addons.component.core import AbstractComponent
 from contextlib import contextmanager
 from odoo.addons.connector.exception import (IDMissingInBackend,
-                                             RetryableJobError)
+                                             RetryableJobError)  # pylint: disable=W7950
 from odoo import _
 import odoo
 
@@ -161,7 +160,7 @@ class GenericExporter(AbstractComponent):
         # The commit will also release the lock acquired on the binding
         # record
         if not odoo.tools.config['test_enable']:
-            self.env.cr.commit()  # noqa
+            self.env.cr.commit()  # pylint: disable=E8102
 
         self._after_export()
         return result
@@ -349,7 +348,7 @@ class GenericExporter(AbstractComponent):
                     # the same binding. It will be caught and
                     # raise a RetryableJobError.
                     if not odoo.tools.config['test_enable']:
-                        self.env.cr.commit()  # noqa
+                        self.env.cr.commit()  # pylint: disable=E8102
         else:
             # If my_backend_bind_ids does not exist we are typically in a
             # "direct" binding (the binding record is the same record).

@@ -2,7 +2,7 @@
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl.html)
 
 {'name': 'Components',
- 'version': '11.0.1.1.0',
+ 'version': '11.0.1.2.0',
  'author': 'Camptocamp,'
            'Odoo Community Association (OCA)',
  'website': 'https://www.camptocamp.com',

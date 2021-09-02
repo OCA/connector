@@ -21,12 +21,12 @@ Available addons
 ----------------
 addon | version | maintainers | summary
 --- | --- | --- | ---
-[component](component/) | 11.0.1.1.0 |  | Components
-[component_event](component_event/) | 11.0.1.0.0 |  | Components Events
-[connector](connector/) | 11.0.1.0.1 |  | Connector
-[connector_base_product](connector_base_product/) | 11.0.1.0.0 |  | Connector Base Product
-[test_component](test_component/) | 11.0.1.0.0 |  | Automated tests for Components, do not install.
-[test_connector](test_connector/) | 11.0.1.0.0 |  | Automated tests for Connector, do not install.
+[component](component/) | 11.0.1.2.0 |  | Components
+[component_event](component_event/) | 11.0.1.1.0 |  | Components Events
+[connector](connector/) | 11.0.1.1.0 |  | Connector
+[connector_base_product](connector_base_product/) | 11.0.1.1.0 |  | Connector Base Product
+[test_component](test_component/) | 11.0.1.1.0 |  | Automated tests for Components, do not install.
+[test_connector](test_connector/) | 11.0.1.1.0 |  | Automated tests for Connector, do not install.
 
 [//]: # (end addons)
 

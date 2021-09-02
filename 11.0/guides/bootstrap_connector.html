@@ -268,13 +268,12 @@ Odoo with a coffee machine.</p>
 our connector connector_coffee.</p>
 <p>First, we need to create the Odoo addons itself, editing the
 <code class="docutils literal notranslate"><span class="pre">connector_coffee/__manifest__.py</span></code> manifest.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span> <span class="c1"># -*- coding: utf-8 -*-</span>
- <span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;Coffee Connector&#39;</span><span class="p">,</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span> <span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;Coffee Connector&#39;</span><span class="p">,</span>
   <span class="s1">&#39;version&#39;</span><span class="p">:</span> <span class="s1">&#39;1.0.0&#39;</span><span class="p">,</span>
-<span class="hll">  <span class="s1">&#39;category&#39;</span><span class="p">:</span> <span class="s1">&#39;Connector&#39;</span><span class="p">,</span>
-</span><span class="hll">  <span class="s1">&#39;depends&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;connector&#39;</span><span class="p">,</span>
-</span>              <span class="p">],</span>
-  <span class="s1">&#39;author&#39;</span><span class="p">:</span> <span class="s1">&#39;Myself&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;category&#39;</span><span class="p">:</span> <span class="s1">&#39;Connector&#39;</span><span class="p">,</span>
+<span class="hll">  <span class="s1">&#39;depends&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;connector&#39;</span><span class="p">,</span>
+</span><span class="hll">              <span class="p">],</span>
+</span>  <span class="s1">&#39;author&#39;</span><span class="p">:</span> <span class="s1">&#39;Myself&#39;</span><span class="p">,</span>
   <span class="s1">&#39;license&#39;</span><span class="p">:</span> <span class="s1">&#39;LGPL-3&#39;</span><span class="p">,</span>
   <span class="s1">&#39;description&#39;</span><span class="p">:</span> <span class="s2">&quot;&quot;&quot;</span>
 <span class="s2"> Coffee Connector</span>

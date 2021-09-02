@@ -230,8 +230,7 @@
     <div class="body col-md-12 content" role="main">
       
   <h1>Code source de odoo.addons.component.models.collection</h1><div class="highlight"><pre>
-<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
-<span class="c1"># Copyright 2017 Camptocamp SA</span>
+<span></span><span class="c1"># Copyright 2017 Camptocamp SA</span>
 <span class="c1"># License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl.html)</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
@@ -326,6 +325,11 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ensure_one</span><span class="p">()</span>
+        <span class="c1"># Allow propagation of custom component registry via context</span>
+        <span class="c1"># TODO: maybe to be moved to `WorkContext.__init__`</span>
+        <span class="n">components_registry</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;components_registry&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">components_registry</span><span class="p">:</span>
+            <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;components_registry&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">components_registry</span>
         <span class="k">yield</span> <span class="n">WorkContext</span><span class="p">(</span><span class="n">model_name</span><span class="o">=</span><span class="n">model_name</span><span class="p">,</span> <span class="n">collection</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div></div>
 </pre></div>
 

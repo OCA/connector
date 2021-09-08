@@ -167,12 +167,10 @@ class ComponentRegistryCase(unittest.TestCase):
         # but the current addon (when running with pytest/nosetest, we
         # simulate the --test-enable behavior by excluding the current addon
         # which is in 'to install' / 'to upgrade' with --test-enable).
-        current_addon = _get_addon_name(class_or_instance.__module__)
         with new_rollbacked_env() as env:
             env["component.builder"].build_registry(
                 class_or_instance.comp_registry,
                 states=("installed",),
-                exclude_addons=[current_addon],
             )
 
         # Fake that we are ready to work with the registry

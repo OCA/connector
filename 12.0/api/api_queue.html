@@ -21,9 +21,9 @@
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
 <meta name="apple-mobile-web-app-capable" content="yes">
-<script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js "></script>
+<script type="text/javascript" src="../_static/js/jquery-1.12.4.min.js "></script>
 <script type="text/javascript" src="../_static/js/jquery-fix.js "></script>
-<script type="text/javascript" src="../_static/bootstrap-3.3.7/js/bootstrap.min.js "></script>
+<script type="text/javascript" src="../_static/bootstrap-3.4.1/js/bootstrap.min.js "></script>
 <script type="text/javascript" src="../_static/bootstrap-sphinx.js "></script>
 
 <script>
@@ -350,7 +350,7 @@ jobs queueing for debugging purposes, you can:</p>
 <li><strong>default_channel</strong> – the channel wherein the job will be assigned. This
 channel is set at the installation of the module
 and can be manually changed later using the views.</li>
-<li><strong>retry_pattern</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><em>dict</em></a><em>(</em><em>retry_count</em><em>,</em><em>retry_eta_seconds</em><em>)</em>) – The retry pattern to use for postponing a job.
+<li><strong>retry_pattern</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><em>dict</em></a><em>(</em><em>retry_count</em><em>,</em><em>retry_eta_seconds</em><em>)</em>) – The retry pattern to use for postponing a job.
 If a job is postponed and there is no eta
 specified, the eta will be determined from the
 dict in retry_pattern. When no retry pattern
@@ -487,7 +487,7 @@ form view of the record related to the job.</p>
 <dl class="py class">
 <dt id="odoo.addons.queue_job.job.DelayableRecordset">
 <em class="property"><span class="pre">class</span> </em><code class="descclassname"><span class="pre">odoo.addons.queue_job.job.</span></code><code class="descname"><span class="pre">DelayableRecordset</span></code><span class="sig-paren">(</span><em><span class="n"><span class="pre">recordset</span></span></em>, <em><span class="n"><span class="pre">priority</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em><span class="n"><span class="pre">eta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em><span class="n"><span class="pre">max_retries</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em><span class="n"><span class="pre">description</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em><span class="n"><span class="pre">channel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em><span class="n"><span class="pre">identity_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/job.html#DelayableRecordset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#odoo.addons.queue_job.job.DelayableRecordset" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Allow to delay a method for a recordset</p>
 <p>Usage:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">delayable</span> <span class="o">=</span> <span class="n">DelayableRecordset</span><span class="p">(</span><span class="n">recordset</span><span class="p">,</span> <span class="n">priority</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
@@ -503,7 +503,7 @@ by <a class="reference internal" href="#odoo.addons.queue_job.models.base.Base.w
 <dl class="py class">
 <dt id="odoo.addons.queue_job.job.Job">
 <em class="property"><span class="pre">class</span> </em><code class="descclassname"><span class="pre">odoo.addons.queue_job.job.</span></code><code class="descname"><span class="pre">Job</span></code><span class="sig-paren">(</span><em><span class="n"><span class="pre">func</span></span></em>, <em><span class="n"><span class="pre">args</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em><span class="n"><span class="pre">kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em><span class="n"><span class="pre">priority</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em><span class="n"><span class="pre">eta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em><span class="n"><span class="pre">job_uuid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em><span class="n"><span class="pre">max_retries</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em><span class="n"><span class="pre">description</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em><span class="n"><span class="pre">channel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em><span class="n"><span class="pre">identity_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/job.html#Job"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#odoo.addons.queue_job.job.Job" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>A Job is a task to execute. It is the in-memory representation of a job.</p>
 <p>Jobs are stored in the <code class="docutils literal notranslate"><span class="pre">queue.job</span></code> Odoo Model, but they are handled
 through this class.</p>
@@ -756,6 +756,11 @@ no job is created and the existing job is returned</p>
 <dl class="py method">
 <dt id="odoo.addons.queue_job.job.Job.set_done">
 <code class="descname"><span class="pre">set_done</span></code><span class="sig-paren">(</span><em><span class="n"><span class="pre">result</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/job.html#Job.set_done"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#odoo.addons.queue_job.job.Job.set_done" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="odoo.addons.queue_job.job.Job.set_cancelled">
+<code class="descname"><span class="pre">set_cancelled</span></code><span class="sig-paren">(</span><em><span class="n"><span class="pre">result</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/job.html#Job.set_cancelled"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#odoo.addons.queue_job.job.Job.set_cancelled" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">

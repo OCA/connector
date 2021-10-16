@@ -22,9 +22,9 @@
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
 <meta name="apple-mobile-web-app-capable" content="yes">
-<script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js "></script>
+<script type="text/javascript" src="../_static/js/jquery-1.12.4.min.js "></script>
 <script type="text/javascript" src="../_static/js/jquery-fix.js "></script>
-<script type="text/javascript" src="../_static/bootstrap-3.3.7/js/bootstrap.min.js "></script>
+<script type="text/javascript" src="../_static/bootstrap-3.4.1/js/bootstrap.min.js "></script>
 <script type="text/javascript" src="../_static/bootstrap-sphinx.js "></script>
 
 <script>
@@ -267,7 +267,7 @@ the models they are binding.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><ul class="first last simple">
 <li><strong>external_id</strong> – ID externe à lier</li>
-<li><strong>binding_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(disponible dans Python v3.9)"><em>int</em></a>) – ID OpenERP à lier</li>
+<li><strong>binding_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(disponible dans Python v3.10)"><em>int</em></a>) – ID OpenERP à lier</li>
 </ul>
 </td>
 </tr>
@@ -349,7 +349,7 @@ or an empty recordset if the external_id is not mapped</p>
 <dl class="class">
 <dt id="connector.connector.ConnectorEnvironment">
 <em class="property">class </em><code class="descclassname">connector.connector.</code><code class="descname">ConnectorEnvironment</code><span class="sig-paren">(</span><em>backend_record</em>, <em>session</em>, <em>model_name</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/connector.html#ConnectorEnvironment"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.connector.ConnectorEnvironment" title="Lien permanent vers cette définition">¶</a></dt>
-<dd><p>Bases : <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(disponible dans Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dd><p>Bases : <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(disponible dans Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Environnement utilisé par les différentes unités pour la synchronisation.</p>
 <dl class="attribute">
 <dt id="connector.connector.ConnectorEnvironment.backend">
@@ -393,9 +393,9 @@ when a new connector environment is instantiated.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><ul class="first last simple">
-<li><strong>backend_record</strong> (<a class="reference external" href="https://www.odoo.com/documentation/8.0/reference/orm.html#openerp.models.Model" title="(disponible dans odoo v8.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">openerp.models.Model</span></code></a>) – browse record of the backend</li>
+<li><strong>backend_record</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">openerp.models.Model</span></code>) – browse record of the backend</li>
 <li><strong>session</strong> (<a class="reference internal" href="api_session.html#connector.session.ConnectorSession" title="connector.session.ConnectorSession"><code class="xref py py-class docutils literal notranslate"><span class="pre">connector.session.ConnectorSession</span></code></a>) – current session (cr, uid, context)</li>
-<li><strong>model_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(disponible dans Python v3.9)"><em>str</em></a>) – nom du modèle</li>
+<li><strong>model_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(disponible dans Python v3.10)"><em>str</em></a>) – nom du modèle</li>
 <li><strong>connector_env</strong> (<a class="reference internal" href="#connector.connector.ConnectorEnvironment" title="connector.connector.ConnectorEnvironment"><code class="xref py py-class docutils literal notranslate"><span class="pre">connector.connector.ConnectorEnvironment</span></code></a>) – an existing environment from which the kwargs
 will be propagated to the new one</li>
 </ul>
@@ -447,7 +447,7 @@ will be propagated to the new one</li>
 <dl class="class">
 <dt id="connector.connector.ConnectorUnit">
 <em class="property">class </em><code class="descclassname">connector.connector.</code><code class="descname">ConnectorUnit</code><span class="sig-paren">(</span><em>connector_env</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/connector.html#ConnectorUnit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.connector.ConnectorUnit" title="Lien permanent vers cette définition">¶</a></dt>
-<dd><p>Bases : <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(disponible dans Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dd><p>Bases : <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(disponible dans Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Classe abstraite pour chaque composant du connecteur :</p>
 <dl class="docutils">
 <dt>Exemples :</dt>
@@ -546,7 +546,7 @@ be retried when the lock cannot be acquired.</li>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><ul class="first last simple">
 <li><strong>session</strong> (<a class="reference internal" href="api_session.html#connector.session.ConnectorSession" title="connector.session.ConnectorSession"><code class="xref py py-class docutils literal notranslate"><span class="pre">connector.session.ConnectorSession</span></code></a>) – session en cours</li>
-<li><strong>model</strong> (str or <a class="reference external" href="https://www.odoo.com/documentation/8.0/reference/orm.html#openerp.models.Model" title="(disponible dans odoo v8.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">openerp.models.Model</span></code></a>) – modèle à rechercher</li>
+<li><strong>model</strong> (str or <code class="xref py py-class docutils literal notranslate"><span class="pre">openerp.models.Model</span></code>) – modèle à rechercher</li>
 </ul>
 </td>
 </tr>
@@ -573,7 +573,7 @@ the same class as in <cite>self.connector_env</cite> which must be
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Paramètres:</th><td class="field-body"><ul class="first last simple">
 <li><strong>connector_unit_class</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">connector.</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">connector.ConnectorUnit</span></code>) – <code class="docutils literal notranslate"><span class="pre">ConnectorUnit</span></code> à rechercher (classe ou sous-classe)</li>
-<li><strong>model</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(disponible dans Python v3.9)"><em>str</em></a>) – à donner si le <code class="docutils literal notranslate"><span class="pre">ConnectorUnit</span></code> est pour un autre modèle que le modèle actuel</li>
+<li><strong>model</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(disponible dans Python v3.10)"><em>str</em></a>) – à donner si le <code class="docutils literal notranslate"><span class="pre">ConnectorUnit</span></code> est pour un autre modèle que le modèle actuel</li>
 </ul>
 </td>
 </tr>
@@ -586,7 +586,7 @@ the same class as in <cite>self.connector_env</cite> which must be
 <dl class="class">
 <dt id="connector.connector.MetaConnectorUnit">
 <em class="property">class </em><code class="descclassname">connector.connector.</code><code class="descname">MetaConnectorUnit</code><span class="sig-paren">(</span><em>name</em>, <em>bases</em>, <em>attrs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/connector.html#MetaConnectorUnit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.connector.MetaConnectorUnit" title="Lien permanent vers cette définition">¶</a></dt>
-<dd><p>Bases : <a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(disponible dans Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">type</span></code></a></p>
+<dd><p>Bases : <a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(disponible dans Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">type</span></code></a></p>
 <p>Metaclass pour ConnectorUnit.</p>
 <p>Conserve un attribut <code class="docutils literal notranslate"><span class="pre">_module</span></code> sur les classes, de la même façon qu’OpenERP pour les classes de modèles. Il est utilisé ensuite pour les filtrer en fonction de l’état du module (installé ou non).</p>
 <dl class="attribute">

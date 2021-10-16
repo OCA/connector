@@ -21,9 +21,9 @@
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
 <meta name="apple-mobile-web-app-capable" content="yes">
-<script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js "></script>
+<script type="text/javascript" src="../_static/js/jquery-1.12.4.min.js "></script>
 <script type="text/javascript" src="../_static/js/jquery-fix.js "></script>
-<script type="text/javascript" src="../_static/bootstrap-3.3.7/js/bootstrap.min.js "></script>
+<script type="text/javascript" src="../_static/bootstrap-3.4.1/js/bootstrap.min.js "></script>
 <script type="text/javascript" src="../_static/bootstrap-sphinx.js "></script>
 
 <script>
@@ -258,7 +258,7 @@
 <dl class="class">
 <dt id="connector.queue.job.Job">
 <em class="property">class </em><code class="descclassname">connector.queue.job.</code><code class="descname">Job</code><span class="sig-paren">(</span><em>func=None</em>, <em>model_name=None</em>, <em>args=None</em>, <em>kwargs=None</em>, <em>priority=None</em>, <em>eta=None</em>, <em>job_uuid=None</em>, <em>max_retries=None</em>, <em>description=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/queue/job.html#Job"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.job.Job" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>A Job is a task to execute.</p>
 <dl class="attribute">
 <dt id="connector.queue.job.Job.uuid">
@@ -486,7 +486,7 @@ want to retry a job later.</p>
 <dl class="class">
 <dt id="connector.queue.job.JobStorage">
 <em class="property">class </em><code class="descclassname">connector.queue.job.</code><code class="descname">JobStorage</code><a class="reference internal" href="../_modules/connector/queue/job.html#JobStorage"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.job.JobStorage" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Interface for the storage of jobs</p>
 <dl class="method">
 <dt id="connector.queue.job.JobStorage.exists">
@@ -570,7 +570,7 @@ from the ones to pass to the job function.</p>
 <li><strong>default_channel</strong> – the channel wherein the job will be assigned. This
 channel is set at the installation of the module
 and can be manually changed later using the views.</li>
-<li><strong>retry_pattern</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><em>dict</em></a><em>(</em><em>retry_count</em><em>,</em><em>retry_eta_seconds</em><em>)</em>) – The retry pattern to use for postponing a job.
+<li><strong>retry_pattern</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><em>dict</em></a><em>(</em><em>retry_count</em><em>,</em><em>retry_eta_seconds</em><em>)</em>) – The retry pattern to use for postponing a job.
 If a job is postponed and there is no eta
 specified, the eta will be determined from the
 dict in retry_pattern. When no retry pattern
@@ -739,7 +739,7 @@ you can add it by using:</p>
 <dl class="class">
 <dt id="connector.queue.worker.Worker">
 <em class="property">class </em><code class="descclassname">connector.queue.worker.</code><code class="descname">Worker</code><span class="sig-paren">(</span><em>db_name</em>, <em>watcher_</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/queue/worker.html#Worker"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.worker.Worker" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/threading.html#threading.Thread" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">threading.Thread</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/threading.html#threading.Thread" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">threading.Thread</span></code></a></p>
 <p>Post and retrieve jobs from the queue, execute them</p>
 <dl class="method">
 <dt id="connector.queue.worker.Worker.enqueue_job_uuid">
@@ -781,7 +781,7 @@ longer exist, it break the loop so the thread stops properly.</p>
 <dl class="class">
 <dt id="connector.queue.worker.WorkerWatcher">
 <em class="property">class </em><code class="descclassname">connector.queue.worker.</code><code class="descname">WorkerWatcher</code><a class="reference internal" href="../_modules/connector/queue/worker.html#WorkerWatcher"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.worker.WorkerWatcher" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/threading.html#threading.Thread" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">threading.Thread</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/threading.html#threading.Thread" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">threading.Thread</span></code></a></p>
 <p>Keep a sight on the workers and signal their aliveness.</p>
 <p>A <cite>WorkerWatcher</cite> is shared between databases, so only 1 instance is
 necessary to check the aliveness of the workers for every database.</p>
@@ -797,7 +797,7 @@ the connector module installed.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">database names</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)">list</a></td>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)">list</a></td>
 </tr>
 </tbody>
 </table>
@@ -844,7 +844,7 @@ dead, remove them from the worker’s pool.</p>
 <span class="target" id="module-connector.queue.queue"></span><dl class="class">
 <dt id="connector.queue.queue.JobsQueue">
 <em class="property">class </em><code class="descclassname">connector.queue.queue.</code><code class="descname">JobsQueue</code><a class="reference internal" href="../_modules/connector/queue/queue.html#JobsQueue"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.queue.JobsQueue" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Holds the jobs planned for execution in memory.</p>
 <p>The Jobs are sorted, the higher the priority is,
 the earlier the jobs are dequeued.</p>
@@ -868,7 +868,7 @@ and return it</p>
 <dl class="class">
 <dt id="connector.queue.model.JobChannel">
 <em class="property">class </em><code class="descclassname">connector.queue.model.</code><code class="descname">JobChannel</code><span class="sig-paren">(</span><em>pool</em>, <em>cr</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/queue/model.html#JobChannel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.model.JobChannel" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://www.odoo.com/documentation/8.0/reference/orm.html#openerp.models.Model" title="(in odoo v8.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">openerp.models.Model</span></code></a></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">openerp.models.Model</span></code></p>
 <dl class="attribute">
 <dt id="connector.queue.model.JobChannel.complete_name">
 <code class="descname">complete_name</code><a class="headerlink" href="#connector.queue.model.JobChannel.complete_name" title="Permalink to this definition">¶</a></dt>
@@ -879,8 +879,8 @@ single-line string in clients</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – the maximum size of values stored for that field</li>
-<li><strong>translate</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – whether the values of this field can be translated</li>
+<li><strong>size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – the maximum size of values stored for that field</li>
+<li><strong>translate</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – whether the values of this field can be translated</li>
 </ul>
 </td>
 </tr>
@@ -928,8 +928,8 @@ single-line string in clients</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – the maximum size of values stored for that field</li>
-<li><strong>translate</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – whether the values of this field can be translated</li>
+<li><strong>size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – the maximum size of values stored for that field</li>
+<li><strong>translate</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – whether the values of this field can be translated</li>
 </ul>
 </td>
 </tr>
@@ -948,7 +948,7 @@ By default this is the value of the <code class="docutils literal notranslate"><
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">list of pairs <code class="docutils literal notranslate"><span class="pre">(id,</span> <span class="pre">text_repr)</span></code> for each records</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)">list</a>(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.9)">tuple</a>)</td>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)">list</a>(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.10)">tuple</a>)</td>
 </tr>
 </tbody>
 </table>
@@ -1004,7 +1004,7 @@ fields or field extensions.</p>
 <dl class="class">
 <dt id="connector.queue.model.JobFunction">
 <em class="property">class </em><code class="descclassname">connector.queue.model.</code><code class="descname">JobFunction</code><span class="sig-paren">(</span><em>pool</em>, <em>cr</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/queue/model.html#JobFunction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.model.JobFunction" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://www.odoo.com/documentation/8.0/reference/orm.html#openerp.models.Model" title="(in odoo v8.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">openerp.models.Model</span></code></a></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">openerp.models.Model</span></code></p>
 <dl class="attribute">
 <dt id="connector.queue.model.JobFunction.channel">
 <code class="descname">channel</code><a class="headerlink" href="#connector.queue.model.JobFunction.channel" title="Permalink to this definition">¶</a></dt>
@@ -1015,8 +1015,8 @@ single-line string in clients</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – the maximum size of values stored for that field</li>
-<li><strong>translate</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – whether the values of this field can be translated</li>
+<li><strong>size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – the maximum size of values stored for that field</li>
+<li><strong>translate</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – whether the values of this field can be translated</li>
 </ul>
 </td>
 </tr>
@@ -1064,8 +1064,8 @@ single-line string in clients</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – the maximum size of values stored for that field</li>
-<li><strong>translate</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – whether the values of this field can be translated</li>
+<li><strong>size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – the maximum size of values stored for that field</li>
+<li><strong>translate</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – whether the values of this field can be translated</li>
 </ul>
 </td>
 </tr>
@@ -1078,7 +1078,7 @@ single-line string in clients</p>
 <dl class="class">
 <dt id="connector.queue.model.QueueJob">
 <em class="property">class </em><code class="descclassname">connector.queue.model.</code><code class="descname">QueueJob</code><span class="sig-paren">(</span><em>pool</em>, <em>cr</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/queue/model.html#QueueJob"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.model.QueueJob" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://www.odoo.com/documentation/8.0/reference/orm.html#openerp.models.Model" title="(in odoo v8.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">openerp.models.Model</span></code></a></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">openerp.models.Model</span></code></p>
 <p>Job status and result</p>
 <dl class="attribute">
 <dt id="connector.queue.model.QueueJob.active">
@@ -1108,8 +1108,8 @@ single-line string in clients</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – the maximum size of values stored for that field</li>
-<li><strong>translate</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – whether the values of this field can be translated</li>
+<li><strong>size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – the maximum size of values stored for that field</li>
+<li><strong>translate</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – whether the values of this field can be translated</li>
 </ul>
 </td>
 </tr>
@@ -1202,8 +1202,8 @@ single-line string in clients</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – the maximum size of values stored for that field</li>
-<li><strong>translate</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – whether the values of this field can be translated</li>
+<li><strong>size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – the maximum size of values stored for that field</li>
+<li><strong>translate</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – whether the values of this field can be translated</li>
 </ul>
 </td>
 </tr>
@@ -1221,8 +1221,8 @@ single-line string in clients</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – the maximum size of values stored for that field</li>
-<li><strong>translate</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – whether the values of this field can be translated</li>
+<li><strong>size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – the maximum size of values stored for that field</li>
+<li><strong>translate</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – whether the values of this field can be translated</li>
 </ul>
 </td>
 </tr>
@@ -1275,8 +1275,8 @@ single-line string in clients</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – the maximum size of values stored for that field</li>
-<li><strong>translate</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – whether the values of this field can be translated</li>
+<li><strong>size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – the maximum size of values stored for that field</li>
+<li><strong>translate</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – whether the values of this field can be translated</li>
 </ul>
 </td>
 </tr>
@@ -1294,8 +1294,8 @@ single-line string in clients</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – the maximum size of values stored for that field</li>
-<li><strong>translate</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – whether the values of this field can be translated</li>
+<li><strong>size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – the maximum size of values stored for that field</li>
+<li><strong>translate</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – whether the values of this field can be translated</li>
 </ul>
 </td>
 </tr>
@@ -1358,7 +1358,7 @@ of an overridden field. It is a list of pairs (<code class="docutils literal not
 </tbody>
 </table>
 <p>The attribute <code class="docutils literal notranslate"><span class="pre">selection</span></code> is mandatory except in the case of
-<a class="reference external" href="https://www.odoo.com/documentation/8.0/reference/orm.html#field-related" title="(in odoo v8.0)"><span class="xref std std-ref">related fields</span></a> or <a class="reference external" href="https://www.odoo.com/documentation/8.0/reference/orm.html#field-incremental-definition" title="(in odoo v8.0)"><span class="xref std std-ref">field extensions</span></a>.</p>
+<span class="xref std std-ref">related fields</span> or <span class="xref std std-ref">field extensions</span>.</p>
 </dd></dl>
 
 <dl class="attribute">
@@ -1401,8 +1401,8 @@ single-line string in clients</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – the maximum size of values stored for that field</li>
-<li><strong>translate</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – whether the values of this field can be translated</li>
+<li><strong>size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – the maximum size of values stored for that field</li>
+<li><strong>translate</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – whether the values of this field can be translated</li>
 </ul>
 </td>
 </tr>
@@ -1450,7 +1450,7 @@ fields or field extensions.</p>
 <dl class="class">
 <dt id="connector.queue.model.QueueWorker">
 <em class="property">class </em><code class="descclassname">connector.queue.model.</code><code class="descname">QueueWorker</code><span class="sig-paren">(</span><em>pool</em>, <em>cr</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/queue/model.html#QueueWorker"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#connector.queue.model.QueueWorker" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://www.odoo.com/documentation/8.0/reference/orm.html#openerp.models.Model" title="(in odoo v8.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">openerp.models.Model</span></code></a></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">openerp.models.Model</span></code></p>
 <p>Worker</p>
 <dl class="method">
 <dt id="connector.queue.model.QueueWorker.assign_jobs">
@@ -1461,7 +1461,7 @@ fields or field extensions.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>max_jobs</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – maximal limit of jobs to assign on a worker</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>max_jobs</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – maximal limit of jobs to assign on a worker</td>
 </tr>
 </tbody>
 </table>
@@ -1484,7 +1484,7 @@ OpenERP’s transaction</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>max_jobs</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – maximal limit of jobs to assign on a worker</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>max_jobs</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – maximal limit of jobs to assign on a worker</td>
 </tr>
 </tbody>
 </table>
@@ -1547,8 +1547,8 @@ single-line string in clients</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – the maximum size of values stored for that field</li>
-<li><strong>translate</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – whether the values of this field can be translated</li>
+<li><strong>size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – the maximum size of values stored for that field</li>
+<li><strong>translate</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – whether the values of this field can be translated</li>
 </ul>
 </td>
 </tr>
@@ -1566,8 +1566,8 @@ single-line string in clients</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – the maximum size of values stored for that field</li>
-<li><strong>translate</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – whether the values of this field can be translated</li>
+<li><strong>size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – the maximum size of values stored for that field</li>
+<li><strong>translate</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – whether the values of this field can be translated</li>
 </ul>
 </td>
 </tr>

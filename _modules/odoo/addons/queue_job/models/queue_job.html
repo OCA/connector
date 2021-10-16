@@ -17,9 +17,9 @@
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
 <meta name="apple-mobile-web-app-capable" content="yes">
-<script type="text/javascript" src="../../../../../_static/js/jquery-1.11.0.min.js "></script>
+<script type="text/javascript" src="../../../../../_static/js/jquery-1.12.4.min.js "></script>
 <script type="text/javascript" src="../../../../../_static/js/jquery-fix.js "></script>
-<script type="text/javascript" src="../../../../../_static/bootstrap-3.3.7/js/bootstrap.min.js "></script>
+<script type="text/javascript" src="../../../../../_static/bootstrap-3.4.1/js/bootstrap.min.js "></script>
 <script type="text/javascript" src="../../../../../_static/bootstrap-sphinx.js "></script>
 
 <script>
@@ -473,11 +473,19 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">channel</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="p">[</span><span class="s2">&quot;queue.job.channel&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">search</span><span class="p">([]):</span>
             <span class="n">deadline</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span> <span class="o">-</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">channel</span><span class="o">.</span><span class="n">removal_interval</span><span class="p">))</span>
-            <span class="n">jobs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">search</span><span class="p">(</span>
-                <span class="p">[(</span><span class="s2">&quot;date_done&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;=&quot;</span><span class="p">,</span> <span class="n">deadline</span><span class="p">),</span> <span class="p">(</span><span class="s2">&quot;channel&quot;</span><span class="p">,</span> <span class="s2">&quot;=&quot;</span><span class="p">,</span> <span class="n">channel</span><span class="o">.</span><span class="n">complete_name</span><span class="p">)]</span>
-            <span class="p">)</span>
-            <span class="k">if</span> <span class="n">jobs</span><span class="p">:</span>
-                <span class="n">jobs</span><span class="o">.</span><span class="n">unlink</span><span class="p">()</span>
+            <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+                <span class="n">jobs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">search</span><span class="p">(</span>
+                    <span class="p">[</span>
+                        <span class="p">(</span><span class="s2">&quot;date_done&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;=&quot;</span><span class="p">,</span> <span class="n">deadline</span><span class="p">),</span>
+                        <span class="p">(</span><span class="s2">&quot;channel&quot;</span><span class="p">,</span> <span class="s2">&quot;=&quot;</span><span class="p">,</span> <span class="n">channel</span><span class="o">.</span><span class="n">complete_name</span><span class="p">),</span>
+                    <span class="p">],</span>
+                    <span class="n">limit</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+                <span class="p">)</span>
+                <span class="k">if</span> <span class="n">jobs</span><span class="p">:</span>
+                    <span class="n">jobs</span><span class="o">.</span><span class="n">unlink</span><span class="p">()</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">cr</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">break</span>
         <span class="k">return</span> <span class="kc">True</span>
 
     <span class="k">def</span> <span class="nf">requeue_stuck_jobs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">enqueued_delta</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">started_delta</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
@@ -957,7 +965,7 @@
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.0.2.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.2.0.<br/>
     </p>
   </div>
 </footer>

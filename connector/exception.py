@@ -45,5 +45,6 @@ class IDMissingInBackend(JobError):
 class ManyIDSInBackend(JobError):
     """Unique key exists many times in backend"""
 
+
 class FailedJobError(JobError):
     """ A job had an error having to be resolved. """

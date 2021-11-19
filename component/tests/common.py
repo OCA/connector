@@ -2,7 +2,6 @@
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl.html)
 
 import copy
-import sys
 import unittest
 from contextlib import contextmanager
 
@@ -83,7 +82,7 @@ class TransactionComponentCase(common.TransactionCase, ComponentMixin):
         )
 
 
-class SavepointComponentCase(common.SavepointCase, ComponentMixin):
+class SavepointComponentCase(common.TransactionComponentCase, ComponentMixin):
     """A SavepointCase that loads all the components
 
     It it used like an usual Odoo's SavepointCase, but it ensures
@@ -96,13 +95,8 @@ class SavepointComponentCase(common.SavepointCase, ComponentMixin):
     def setUpClass(cls):
         super().setUpClass()
         cls.setUpComponent()
-
-    # pylint: disable=W8106
-    def setUp(self):
-        # resolve an inheritance issue (common.SavepointCase does not call
-        # super)
-        common.SavepointCase.setUp(self)
-        ComponentMixin.setUp(self)
+        common.SavepointCase.setUp(cls)
+        ComponentMixin.setUp(cls)
 
 
 class ComponentRegistryCase(
@@ -151,32 +145,6 @@ class ComponentRegistryCase(
                 components_registry=self.comp_registry) as work:
 
     """
-
-    if sys.version_info < (3, 8):
-        # Copy/paste from
-        # https://github.com/odoo/odoo/blob/0218d870d319af4f263d5e9aa324990f7cc90139/
-        # odoo/tests/common.py#L248-L268
-        # Partial backport of bpo-24412, merged in CPython 3.8
-        _class_cleanups = []
-
-        @classmethod
-        def addClassCleanup(cls, function, *args, **kwargs):
-            """Same as addCleanup, except the cleanup items are called even if
-            setUpClass fails (unlike tearDownClass). Backport of bpo-24412."""
-            cls._class_cleanups.append((function, args, kwargs))
-
-        @classmethod
-        def doClassCleanups(cls):
-            """Execute all class cleanup functions.
-            Normally called for you after tearDownClass.
-            Backport of bpo-24412."""
-            cls.tearDown_exceptions = []
-            while cls._class_cleanups:
-                function, args, kwargs = cls._class_cleanups.pop()
-                try:
-                    function(*args, **kwargs)
-                except Exception:
-                    cls.tearDown_exceptions.append(sys.exc_info())
 
     @staticmethod
     def _setup_registry(class_or_instance):
@@ -246,7 +214,9 @@ class TransactionComponentRegistryCase(common.TransactionCase, ComponentRegistry
         common.TransactionCase.tearDown(self)
 
 
-class SavepointComponentRegistryCase(common.SavepointCase, ComponentRegistryCase):
+class SavepointComponentRegistryCase(
+    common.TransactionComponentCase, ComponentRegistryCase
+):
     """Adds Odoo Transaction with Savepoint in the base Component TestCase"""
 
     # pylint: disable=W8106

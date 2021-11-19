@@ -1,6 +1,9 @@
 # Copyright 2017 Camptocamp SA
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl.html)
 
+# Tell pylint to not bother us for all our fake component classes
+# pylint: disable=consider-merging-classes-inherited
+
 import mock
 
 from odoo.addons.component.core import AbstractComponent, Component
@@ -160,6 +163,7 @@ class TestBuildComponent(TransactionComponentRegistryCase):
         self.assertEqual("pong", component2.msg)
         self.assertEqual("foo", component1.say())
         self.assertEqual("foo bar", component2.say())
+        return
 
     def test_duplicate_component(self):
         """Check that we can't have 2 components with the same name"""

@@ -231,7 +231,7 @@ class ComponentRegistryCase(
 
 
 class TransactionComponentRegistryCase(common.TransactionCase, ComponentRegistryCase):
-    """ Adds Odoo Transaction in the base Component TestCase """
+    """Adds Odoo Transaction in the base Component TestCase"""
 
     # pylint: disable=W8106
     def setUp(self):
@@ -247,7 +247,7 @@ class TransactionComponentRegistryCase(common.TransactionCase, ComponentRegistry
 
 
 class SavepointComponentRegistryCase(common.SavepointCase, ComponentRegistryCase):
-    """ Adds Odoo Transaction with Savepoint in the base Component TestCase """
+    """Adds Odoo Transaction with Savepoint in the base Component TestCase"""
 
     # pylint: disable=W8106
     @classmethod

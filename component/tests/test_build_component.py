@@ -1,6 +1,9 @@
 # Copyright 2017 Camptocamp SA
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl.html)
 
+# Tell pylint to not bother us for all our fake component classes
+# pylint: disable=consider-merging-classes-inherited
+
 import mock
 
 from odoo.addons.component.core import AbstractComponent, Component
@@ -23,6 +26,14 @@ class TestBuildComponent(TransactionComponentRegistryCase):
     * Assert that classes are built, registered, have correct ``__bases__``...
 
     """
+
+    def setUp(self):
+        super().setUp()
+        self._setup_registry(self)
+
+    def tearDown(self):
+        self._teardown_registry(self)
+        super().tearDown()
 
     def test_no_name(self):
         """Ensure that a component has a _name"""
@@ -113,6 +124,7 @@ class TestBuildComponent(TransactionComponentRegistryCase):
             self.comp_registry["component4"].__bases__,
         )
 
+    # pylint: disable=W8110
     def test_custom_build(self):
         """Check that we can hook at the end of a Component build"""
 

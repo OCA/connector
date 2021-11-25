@@ -65,7 +65,7 @@ class TestMapper(TransactionComponentRegistryCase):
         )
 
     def test_mapping_decorator_cross_classes(self):
-        """ Mappings should not propagate to other classes"""
+        """Mappings should not propagate to other classes"""
 
         class MomMapper(Component):
             _name = "mom.mapper"
@@ -248,7 +248,7 @@ class TestMapper(TransactionComponentRegistryCase):
         self.assertEqual(comp._map_methods["zip"], zip_def)
 
     def test_mapping_record(self):
-        """ Map a record and check the result """
+        """Map a record and check the result"""
 
         class MyMapper(Component):
             _name = "my.mapper"
@@ -272,7 +272,7 @@ class TestMapper(TransactionComponentRegistryCase):
         self.assertEqual(map_record.values(for_create=True), expected)
 
     def test_mapping_record_on_create(self):
-        """ Map a record and check the result for creation of record """
+        """Map a record and check the result for creation of record"""
 
         class MyMapper(Component):
             _name = "my.mapper"
@@ -302,7 +302,7 @@ class TestMapper(TransactionComponentRegistryCase):
         self.assertEqual(map_record.values(for_create=True), expected)
 
     def test_mapping_update(self):
-        """ Force values on a map record """
+        """Force values on a map record"""
 
         class MyMapper(Component):
             _name = "my.mapper"
@@ -342,7 +342,7 @@ class TestMapper(TransactionComponentRegistryCase):
         self.assertEqual(map_record.values(for_create=True), expected)
 
     def test_finalize(self):
-        """ Inherit finalize to modify values """
+        """Inherit finalize to modify values"""
 
         class MyMapper(Component):
             _name = "my.mapper"
@@ -367,7 +367,7 @@ class TestMapper(TransactionComponentRegistryCase):
         self.assertEqual(map_record.values(for_create=True), expected)
 
     def test_some_fields(self):
-        """ Map only a selection of fields """
+        """Map only a selection of fields"""
 
         class MyMapper(Component):
             _name = "my.mapper"
@@ -394,7 +394,7 @@ class TestMapper(TransactionComponentRegistryCase):
         )
 
     def test_mapping_modifier(self):
-        """ Map a direct record with a modifier function """
+        """Map a direct record with a modifier function"""
 
         def do_nothing(field):
             def transform(self, record, to_attr):
@@ -419,7 +419,7 @@ class TestMapper(TransactionComponentRegistryCase):
         self.assertEqual(map_record.values(for_create=True), expected)
 
     def test_mapping_direct_property(self):
-        """ Map a direct record with 'direct' being a property """
+        """Map a direct record with 'direct' being a property"""
 
         class MyMapper(Component):
             _name = "my.mapper"
@@ -440,7 +440,7 @@ class TestMapper(TransactionComponentRegistryCase):
         self.assertEqual(map_record.values(for_create=True), expected)
 
     def test_mapping_convert(self):
-        """ Map a direct record with the convert modifier function """
+        """Map a direct record with the convert modifier function"""
 
         class MyMapper(Component):
             _name = "my.mapper"
@@ -459,7 +459,7 @@ class TestMapper(TransactionComponentRegistryCase):
         self.assertEqual(map_record.values(for_create=True), expected)
 
     def test_mapping_modifier_none(self):
-        """ Pipeline of modifiers """
+        """Pipeline of modifiers"""
 
         class MyMapper(Component):
             _name = "my.mapper"
@@ -478,7 +478,7 @@ class TestMapper(TransactionComponentRegistryCase):
         self.assertEqual(map_record.values(for_create=True), expected)
 
     def test_mapping_modifier_pipeline(self):
-        """ Pipeline of modifiers """
+        """Pipeline of modifiers"""
 
         class MyMapper(Component):
             _name = "my.mapper"
@@ -527,7 +527,7 @@ class TestMapper(TransactionComponentRegistryCase):
         )
 
     def test_modifier_export_filter_field(self):
-        """ A direct mapping with a modifier on an export mapping """
+        """A direct mapping with a modifier on an export mapping"""
 
         class MyMapper(Component):
             _name = "my.mapper"
@@ -552,7 +552,7 @@ class TestMapper(TransactionComponentRegistryCase):
         )
 
     def test_mapping_custom_option(self):
-        """ Usage of custom options in mappings """
+        """Usage of custom options in mappings"""
 
         class MyMapper(Component):
             _name = "my.mapper"
@@ -576,7 +576,7 @@ class TestMapper(TransactionComponentRegistryCase):
         self.assertEqual(map_record.values(custom=True), expected)
 
     def test_mapping_custom_option_not_defined(self):
-        """ Usage of custom options not defined raise AttributeError """
+        """Usage of custom options not defined raise AttributeError"""
 
         class MyMapper(Component):
             _name = "my.mapper"
@@ -600,7 +600,7 @@ class TestMapper(TransactionComponentRegistryCase):
         self.assertEqual(map_record.values(), expected)
 
     def test_map_options(self):
-        """ Test MapOptions """
+        """Test MapOptions"""
         options = MapOptions({"xyz": "abc"}, k=1)
         options.l = 2  # noqa: E741
         self.assertEqual(options["xyz"], "abc")
@@ -613,7 +613,7 @@ class TestMapper(TransactionComponentRegistryCase):
         self.assertEqual(options.undefined, None)
 
     def test_changed_by_fields(self):
-        """ Test attribute ``_changed_by_fields`` on Mapper."""
+        """Test attribute ``_changed_by_fields`` on Mapper."""
 
         class MyMapper(Component):
             _name = "my.mapper"
@@ -650,7 +650,7 @@ class TestMapper(TransactionComponentRegistryCase):
 
 
 class TestMapperRecordsets(TransactionComponentRegistryCase):
-    """ Test mapper with "real" records instead of mocks """
+    """Test mapper with "real" records instead of mocks"""
 
     def setUp(self):
         super(TestMapperRecordsets, self).setUp()
@@ -665,7 +665,7 @@ class TestMapperRecordsets(TransactionComponentRegistryCase):
         )
 
     def test_mapping_modifier_follow_m2o_relations(self):
-        """ Map with the follow_m2o_relations modifier """
+        """Map with the follow_m2o_relations modifier"""
 
         class MyMapper(Component):
             _name = "my.mapper"
@@ -684,7 +684,7 @@ class TestMapperRecordsets(TransactionComponentRegistryCase):
 
 
 class TestMapperBinding(TransactionComponentRegistryCase):
-    """ Test Mapper with Bindings"""
+    """Test Mapper with Bindings"""
 
     def setUp(self):
         super(TestMapperBinding, self).setUp()
@@ -710,7 +710,7 @@ class TestMapperBinding(TransactionComponentRegistryCase):
         self.comp_registry["test.binder"] = self.country_binder
 
     def test_mapping_m2o_to_external(self):
-        """ Map a direct record with the m2o_to_external modifier function """
+        """Map a direct record with the m2o_to_external modifier function"""
 
         class MyMapper(Component):
             _name = "my.mapper"
@@ -733,7 +733,7 @@ class TestMapperBinding(TransactionComponentRegistryCase):
         )
 
     def test_mapping_backend_to_m2o(self):
-        """ Map a direct record with the backend_to_m2o modifier function """
+        """Map a direct record with the backend_to_m2o modifier function"""
 
         class MyMapper(Component):
             _name = "my.mapper"
@@ -753,7 +753,7 @@ class TestMapperBinding(TransactionComponentRegistryCase):
         self.country_binder.to_internal.assert_called_once_with(10, unwrap=False)
 
     def test_mapping_record_children_no_map_child(self):
-        """ Map a record with children, using default MapChild """
+        """Map a record with children, using default MapChild"""
         # we need these components which make the 'link' between
         # the main mapper and the line mapper
 
@@ -811,7 +811,7 @@ class TestMapperBinding(TransactionComponentRegistryCase):
         self.assertEqual(map_record.values(for_create=True), expected)
 
     def test_mapping_record_children(self):
-        """ Map a record with children, using defined MapChild """
+        """Map a record with children, using defined MapChild"""
         # we need these components which make the 'link' between
         # the main mapper and the line mapper
 
@@ -877,7 +877,7 @@ class TestMapperBinding(TransactionComponentRegistryCase):
         self.assertEqual(map_record.values(for_create=True), expected)
 
     def test_mapping_record_children_void(self):
-        """ Map a record with children, using defined MapChild """
+        """Map a record with children, using defined MapChild"""
 
         class LineMapper(Component):
             _name = "line.mapper"

@@ -13,7 +13,7 @@ from odoo.addons.connector import components
 
 
 class TestEventListener(TransactionComponentRegistryCase):
-    """ Test Connecter Listener """
+    """Test Connecter Listener"""
 
     def test_skip_if_no_connector_export(self):
         class MyEventListener(Component):

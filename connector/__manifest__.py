@@ -14,5 +14,5 @@
         "views/connector_menu.xml",
         "views/res_partner_views.xml",
     ],
-    "installable": True,
+    "installable": False,
 }

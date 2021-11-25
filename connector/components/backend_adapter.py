@@ -16,7 +16,7 @@ from odoo.addons.component.core import AbstractComponent
 
 
 class BackendAdapter(AbstractComponent):
-    """ Base Backend Adapter for the connectors """
+    """Base Backend Adapter for the connectors"""
 
     _name = "base.backend.adapter"
     _inherit = "base.connector"
@@ -43,7 +43,7 @@ class CRUDAdapter(AbstractComponent):
         raise NotImplementedError
 
     def read(self, *args, **kwargs):
-        """ Returns the information of a record """
+        """Returns the information of a record"""
         raise NotImplementedError
 
     def search_read(self, *args, **kwargs):
@@ -52,13 +52,13 @@ class CRUDAdapter(AbstractComponent):
         raise NotImplementedError
 
     def create(self, *args, **kwargs):
-        """ Create a record on the external system """
+        """Create a record on the external system"""
         raise NotImplementedError
 
     def write(self, *args, **kwargs):
-        """ Update records on the external system """
+        """Update records on the external system"""
         raise NotImplementedError
 
     def delete(self, *args, **kwargs):
-        """ Delete a record on the external system """
+        """Delete a record on the external system"""
         raise NotImplementedError

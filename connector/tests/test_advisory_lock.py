@@ -28,7 +28,7 @@ class TestAdvisoryLock(TransactionComponentCase):
             self.cr2.close()
 
     def test_concurrent_lock(self):
-        """ 2 concurrent transactions cannot acquire the same lock """
+        """2 concurrent transactions cannot acquire the same lock"""
         # the lock is based on a string, a second transaction trying
         # to acquire the same lock won't be able to acquire it
         lock = "import_record({}, {}, {}, {})".format(
@@ -41,7 +41,7 @@ class TestAdvisoryLock(TransactionComponentCase):
         self.assertFalse(inner_acquired)
 
     def test_concurrent_import_lock(self):
-        """ A 2nd concurrent transaction must retry """
+        """A 2nd concurrent transaction must retry"""
         # the lock is based on a string, a second transaction trying
         # to acquire the same lock won't be able to acquire it
         lock = "import_record({}, {}, {}, {})".format(

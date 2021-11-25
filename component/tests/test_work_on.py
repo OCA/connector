@@ -3,16 +3,24 @@
 
 from odoo.addons.component.core import ComponentRegistry, WorkContext
 
-from .common import SavepointComponentRegistryCase
+from .common import TransactionComponentRegistryCase
 
 
-class TestWorkOn(SavepointComponentRegistryCase):
+class TestWorkOn(TransactionComponentRegistryCase):
     """Test on WorkContext
 
     This model is mostly a container, so we check the access
     to the attributes and properties.
 
     """
+
+    def setUp(self):
+        super().setUp()
+        self._setup_registry(self)
+
+    def tearDown(self):
+        self._teardown_registry(self)
+        super().tearDown()
 
     def test_collection_work_on(self):
         """Create a new instance and test attributes access"""

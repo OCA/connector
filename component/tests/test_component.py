@@ -22,8 +22,14 @@ class TestComponent(TransactionComponentRegistryCase):
 
     def setUp(self):
         super().setUp()
-        self.collection = self.env["collection.base"]
+        self._setup_registry(self)
+        self._setUpComponents()
 
+    def tearDown(self):
+        self._teardown_registry(self)
+        super().tearDown()
+
+    def _setUpComponents(self):
         # create some Component to play with
         class Component1(Component):
             _name = "component1"

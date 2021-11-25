@@ -22,6 +22,14 @@ class TestLookup(TransactionComponentRegistryCase):
 
     """
 
+    def setUp(self):
+        super().setUp()
+        self._setup_registry(self)
+
+    def tearDown(self):
+        self._teardown_registry(self)
+        super().tearDown()
+
     def test_lookup_collection(self):
         """Lookup components of a collection"""
         # we register 2 components in foobar and one in other

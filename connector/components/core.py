@@ -86,7 +86,7 @@ class BaseConnectorComponent(AbstractComponent):
 
     @property
     def backend_record(self):
-        """ Backend record we are working with """
+        """Backend record we are working with"""
         # backward compatibility
         return self.work.collection
 

@@ -25,7 +25,7 @@ class TestBuildComponent(TransactionComponentRegistryCase):
     """
 
     def test_no_name(self):
-        """ Ensure that a component has a _name """
+        """Ensure that a component has a _name"""
 
         class Component1(Component):
             pass
@@ -35,7 +35,7 @@ class TestBuildComponent(TransactionComponentRegistryCase):
             Component1._build_component(self.comp_registry)
 
     def test_register(self):
-        """ Able to register components in components registry """
+        """Able to register components in components registry"""
 
         class Component1(Component):
             _name = "component1"
@@ -50,7 +50,7 @@ class TestBuildComponent(TransactionComponentRegistryCase):
         self.assertEqual(["base", "component1", "component2"], list(self.comp_registry))
 
     def test_inherit_bases(self):
-        """ Check __bases__ of Component with _inherit """
+        """Check __bases__ of Component with _inherit"""
 
         class Component1(Component):
             _name = "component1"
@@ -70,7 +70,7 @@ class TestBuildComponent(TransactionComponentRegistryCase):
         )
 
     def test_prototype_inherit_bases(self):
-        """ Check __bases__ of Component with _inherit and different _name """
+        """Check __bases__ of Component with _inherit and different _name"""
 
         class Component1(Component):
             _name = "component1"
@@ -114,7 +114,7 @@ class TestBuildComponent(TransactionComponentRegistryCase):
         )
 
     def test_custom_build(self):
-        """ Check that we can hook at the end of a Component build """
+        """Check that we can hook at the end of a Component build"""
 
         class Component1(Component):
             _name = "component1"
@@ -130,7 +130,7 @@ class TestBuildComponent(TransactionComponentRegistryCase):
         self.assertTrue(self.comp_registry["component1"]._build_done)
 
     def test_inherit_attrs(self):
-        """ Check attributes inheritance of Components with _inherit """
+        """Check attributes inheritance of Components with _inherit"""
 
         class Component1(Component):
             _name = "component1"
@@ -162,7 +162,7 @@ class TestBuildComponent(TransactionComponentRegistryCase):
         self.assertEqual("foo bar", component2.say())
 
     def test_duplicate_component(self):
-        """ Check that we can't have 2 components with the same name """
+        """Check that we can't have 2 components with the same name"""
 
         class Component1(Component):
             _name = "component1"
@@ -176,7 +176,7 @@ class TestBuildComponent(TransactionComponentRegistryCase):
             Component2._build_component(self.comp_registry)
 
     def test_no_parent(self):
-        """ Ensure we can't _inherit a non-existent component """
+        """Ensure we can't _inherit a non-existent component"""
 
         class Component1(Component):
             _name = "component1"
@@ -187,7 +187,7 @@ class TestBuildComponent(TransactionComponentRegistryCase):
             Component1._build_component(self.comp_registry)
 
     def test_no_parent2(self):
-        """ Ensure we can't _inherit by prototype a non-existent component """
+        """Ensure we can't _inherit by prototype a non-existent component"""
 
         class Component1(Component):
             _name = "component1"
@@ -202,7 +202,7 @@ class TestBuildComponent(TransactionComponentRegistryCase):
             Component2._build_component(self.comp_registry)
 
     def test_add_inheritance(self):
-        """ Ensure we can add a new inheritance """
+        """Ensure we can add a new inheritance"""
 
         class Component1(Component):
             _name = "component1"
@@ -229,7 +229,7 @@ class TestBuildComponent(TransactionComponentRegistryCase):
         )
 
     def test_check_parent_component_over_abstract(self):
-        """ Component can inherit from AbstractComponent """
+        """Component can inherit from AbstractComponent"""
 
         class Component1(AbstractComponent):
             _name = "component1"
@@ -244,7 +244,7 @@ class TestBuildComponent(TransactionComponentRegistryCase):
         self.assertFalse(self.comp_registry["component2"]._abstract)
 
     def test_check_parent_abstract_over_component(self):
-        """ Prevent AbstractComponent to inherit from Component """
+        """Prevent AbstractComponent to inherit from Component"""
 
         class Component1(Component):
             _name = "component1"
@@ -259,7 +259,7 @@ class TestBuildComponent(TransactionComponentRegistryCase):
             Component2._build_component(self.comp_registry)
 
     def test_check_transform_abstract_to_component(self):
-        """ Prevent AbstractComponent to be transformed to Component """
+        """Prevent AbstractComponent to be transformed to Component"""
 
         class Component1(AbstractComponent):
             _name = "component1"

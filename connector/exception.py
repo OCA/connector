@@ -7,22 +7,22 @@ from odoo.addons.queue_job.exception import JobError, RetryableJobError
 
 
 class ConnectorException(Exception):
-    """ Base Exception for the connectors """
+    """Base Exception for the connectors"""
 
 
 class NoConnectorUnitError(ConnectorException):
-    """ No ConnectorUnit has been found """
+    """No ConnectorUnit has been found"""
 
 
 class InvalidDataError(ConnectorException):
-    """ Data Invalid """
+    """Data Invalid"""
 
 
 # Job related errors
 
 
 class MappingError(ConnectorException):
-    """ An error occurred during a mapping transformation. """
+    """An error occurred during a mapping transformation."""
 
 
 class NetworkRetryableError(RetryableJobError):
@@ -30,11 +30,11 @@ class NetworkRetryableError(RetryableJobError):
 
 
 class NoExternalId(RetryableJobError):
-    """ No External ID found, it can be retried later. """
+    """No External ID found, it can be retried later."""
 
 
 class IDMissingInBackend(JobError):
-    """ The ID does not exist in the backend """
+    """The ID does not exist in the backend"""
 
 
 class ManyIDSInBackend(JobError):

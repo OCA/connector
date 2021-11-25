@@ -19,7 +19,7 @@ from odoo.addons.component.core import AbstractComponent
 
 
 class ConnectorListener(AbstractComponent):
-    """ Base Backend Adapter for the connectors """
+    """Base Backend Adapter for the connectors"""
 
     _name = "base.connector.listener"
     _inherit = ["base.connector", "base.event.listener"]

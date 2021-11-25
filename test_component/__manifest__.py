@@ -11,7 +11,7 @@
     "depends": ["component"],
     "website": "https://github.com/OCA/connector",
     "data": ["security/ir.model.access.csv"],
-    "installable": True,
+    "installable": False,
     "development_status": "Production/Stable",
     "maintainers": ["guewen"],
 }

@@ -419,7 +419,7 @@ class MapChild(AbstractComponent):
 
 
 class ImportMapChild(AbstractComponent):
-    """ :py:class:`MapChild` for the Imports """
+    """:py:class:`MapChild` for the Imports"""
 
     _name = "base.map.child.import"
     _inherit = "base.map.child"
@@ -447,7 +447,7 @@ class ImportMapChild(AbstractComponent):
 
 
 class ExportMapChild(AbstractComponent):
-    """ :py:class:`MapChild` for the Exports """
+    """:py:class:`MapChild` for the Exports"""
 
     _name = "base.map.child.export"
     _inherit = "base.map.child"
@@ -669,7 +669,7 @@ class Mapper(AbstractComponent):
 
     @property
     def map_methods(self):
-        """ Yield all the methods decorated with ``@mapping`` """
+        """Yield all the methods decorated with ``@mapping``"""
         for meth, definition in self._map_methods.items():
             yield getattr(self, meth), definition
 
@@ -688,7 +688,7 @@ class Mapper(AbstractComponent):
         return mapper_child
 
     def _map_child(self, map_record, from_attr, to_attr, model_name):
-        """ Convert items of the record as defined by children """
+        """Convert items of the record as defined by children"""
         assert self._map_child_usage is not None, "_map_child_usage required"
         child_records = map_record.source[from_attr]
         mapper_child = self._get_map_child_component(model_name)
@@ -958,12 +958,12 @@ class MapRecord(object):
 
     @property
     def source(self):
-        """ Source record to be converted """
+        """Source record to be converted"""
         return self._source
 
     @property
     def parent(self):
-        """ Parent record if the current record is an item """
+        """Parent record if the current record is an item"""
         return self._parent
 
     def values(self, for_create=None, fields=None, **kwargs):

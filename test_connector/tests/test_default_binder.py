@@ -5,7 +5,7 @@ from odoo.addons.component.tests.common import TransactionComponentCase
 
 
 class TestDefaultBinder(TransactionComponentCase):
-    """ Test the default binder implementation using Components """
+    """Test the default binder implementation using Components"""
 
     def setUp(self):
         super(TestDefaultBinder, self).setUp()
@@ -15,7 +15,7 @@ class TestDefaultBinder(TransactionComponentCase):
         self.backend_record = self.env["test.backend"].create({})
 
     def test_default_binder(self):
-        """ Small scenario with the default binder """
+        """Small scenario with the default binder"""
         # create a work context with the model we want to work with
         with self.backend_record.work_on("connector.test.binding") as work:
             # get our binder component (for the model in whe work context)

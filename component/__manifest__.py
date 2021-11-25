@@ -16,7 +16,7 @@
             "cachetools",
         ]
     },
-    "installable": True,
+    "installable": False,
     "development_status": "Production/Stable",
     "maintainers": ["guewen"],
 }

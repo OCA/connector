@@ -64,7 +64,7 @@ class EventWorkContext(WorkContext):
 
     @property
     def env(self):
-        """ Return the current Odoo env """
+        """Return the current Odoo env"""
         if self._env:
             return self._env
         return super(EventWorkContext, self).env
@@ -75,7 +75,7 @@ class EventWorkContext(WorkContext):
 
     @property
     def collection(self):
-        """ Return the current Odoo env """
+        """Return the current Odoo env"""
         if self._collection is not None:
             return self._collection
         raise ValueError("No collection, it is optional for EventWorkContext")

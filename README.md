@@ -1,7 +1,7 @@
-[![Runbot Status](https://runbot.odoo-community.org/runbot/badge/flat/102/14.0.svg)](https://runbot.odoo-community.org/runbot/repo/github-com-oca-connector-102)
-[![Build Status](https://travis-ci.com/OCA/connector.svg?branch=14.0)](https://travis-ci.com/OCA/connector)
-[![codecov](https://codecov.io/gh/OCA/connector/branch/14.0/graph/badge.svg)](https://codecov.io/gh/OCA/connector)
-[![Translation Status](https://translation.odoo-community.org/widgets/connector-14-0/-/svg-badge.svg)](https://translation.odoo-community.org/engage/connector-14-0/?utm_source=widget)
+[![Runbot Status](https://runbot.odoo-community.org/runbot/badge/flat/102/15.0.svg)](https://runbot.odoo-community.org/runbot/repo/github-com-oca-connector-102)
+[![Build Status](https://travis-ci.com/OCA/connector.svg?branch=15.0)](https://travis-ci.com/OCA/connector)
+[![codecov](https://codecov.io/gh/OCA/connector/branch/15.0/graph/badge.svg)](https://codecov.io/gh/OCA/connector)
+[![Translation Status](https://translation.odoo-community.org/widgets/connector-15-0/-/svg-badge.svg)](https://translation.odoo-community.org/engage/connector-15-0/?utm_source=widget)
 
 <!-- /!\ do not modify above this line -->
 
@@ -15,16 +15,16 @@ TODO: add repo description.
 
 [//]: # (addons)
 
-Available addons
-----------------
-addon | version | maintainers | summary
---- | --- | --- | ---
-[component](component/) | 14.0.1.1.0 | [![guewen](https://github.com/guewen.png?size=30px)](https://github.com/guewen) | Add capabilities to register and use decoupled components, as an alternative to model classes
-[component_event](component_event/) | 14.0.1.0.2 |  | Components Events
-[connector](connector/) | 14.0.1.1.0 |  | Connector
-[connector_base_product](connector_base_product/) | 14.0.1.0.0 |  | Connector Base Product
-[test_component](test_component/) | 14.0.1.0.0 | [![guewen](https://github.com/guewen.png?size=30px)](https://github.com/guewen) | Automated tests for Components, do not install.
-[test_connector](test_connector/) | 14.0.1.0.0 |  | Automated tests for Connector, do not install.
+Unported addons
+---------------
+addon | version | summary
+--- | --- | ---
+[component](component/) | 14.0.1.1.0 (unported) | Add capabilities to register and use decoupled components, as an alternative to model classes
+[component_event](component_event/) | 14.0.1.0.2 (unported) | Components Events
+[connector](connector/) | 14.0.1.1.0 (unported) | Connector
+[connector_base_product](connector_base_product/) | 14.0.1.0.0 (unported) | Connector Base Product
+[test_component](test_component/) | 14.0.1.0.0 (unported) | Automated tests for Components, do not install.
+[test_connector](test_connector/) | 14.0.1.0.0 (unported) | Automated tests for Connector, do not install.
 
 [//]: # (end addons)
 

@@ -23,7 +23,7 @@ class TestLookup(TransactionComponentRegistryCase):
     """
 
     def test_lookup_collection(self):
-        """ Lookup components of a collection """
+        """Lookup components of a collection"""
         # we register 2 components in foobar and one in other
         class Foo(Component):
             _name = "foo"
@@ -44,7 +44,7 @@ class TestLookup(TransactionComponentRegistryCase):
         self.assertEqual(["foo", "bar"], [c._name for c in components])
 
     def test_lookup_usage(self):
-        """ Lookup components by usage """
+        """Lookup components by usage"""
 
         class Foo(Component):
             _name = "foo"
@@ -70,13 +70,13 @@ class TestLookup(TransactionComponentRegistryCase):
         self.assertEqual(["foo", "bar"], [c._name for c in components])
 
     def test_lookup_no_component(self):
-        """ No component """
+        """No component"""
         # we just expect an empty list when no component match, the error
         # handling is handled at an higher level
         self.assertEqual([], self.comp_registry.lookup("something", usage="something"))
 
     def test_get_by_name(self):
-        """ Get component by name """
+        """Get component by name"""
 
         class Foo(AbstractComponent):
             _name = "foo"
@@ -87,7 +87,7 @@ class TestLookup(TransactionComponentRegistryCase):
         self.assertEqual("foo", self.comp_registry["foo"]._name)
 
     def test_lookup_abstract(self):
-        """ Do not include abstract components in lookup """
+        """Do not include abstract components in lookup"""
 
         class Foo(AbstractComponent):
             _name = "foo"
@@ -111,7 +111,7 @@ class TestLookup(TransactionComponentRegistryCase):
         self.assertEqual(["bar"], [c._name for c in components])
 
     def test_lookup_model_name(self):
-        """ Lookup with model names """
+        """Lookup with model names"""
 
         class Foo(Component):
             _name = "foo"
@@ -152,7 +152,7 @@ class TestLookup(TransactionComponentRegistryCase):
         self.assertEqual("any", components[0]._name)
 
     def test_lookup_cache(self):
-        """ Lookup uses a cache """
+        """Lookup uses a cache"""
 
         class Foo(Component):
             _name = "foo"

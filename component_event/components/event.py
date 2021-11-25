@@ -186,7 +186,7 @@ class CollectedEvents(object):
         self.events = events
 
     def notify(self, *args, **kwargs):
-        """ Forward the arguments to every listeners of an event """
+        """Forward the arguments to every listeners of an event"""
         for event in self.events:
             event(*args, **kwargs)
 
@@ -219,7 +219,7 @@ class EventCollecter(Component):
 
     @classmethod
     def _complete_component_build(cls):
-        """ Create a cache on the class when the component is built """
+        """Create a cache on the class when the component is built"""
         super(EventCollecter, cls)._complete_component_build()
         # the _cache being on the component class, which is
         # dynamically rebuild when odoo registry is rebuild, we
@@ -255,7 +255,7 @@ class EventCollecter(Component):
         return events
 
     def collect_events(self, name):
-        """ Collect the events of a given name """
+        """Collect the events of a given name"""
         if not name.startswith("on_"):
             raise ValueError("an event name always starts with 'on_'")
 
@@ -277,12 +277,12 @@ class EventListener(AbstractComponent):
 
     @classmethod
     def has_event(cls, name):
-        """ Indicate if the class has an event of this name """
+        """Indicate if the class has an event of this name"""
         return name in cls._events
 
     @classmethod
     def _build_event_listener_component(cls):
-        """ Make a list of events listeners for this class """
+        """Make a list of events listeners for this class"""
         events = set()
         if not cls._abstract:
             for attr_name in dir(cls):

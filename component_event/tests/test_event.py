@@ -19,7 +19,7 @@ from odoo.addons.component_event.core import EventWorkContext
 
 @tagged("standard", "at_install")
 class TestEventWorkContext(unittest.TestCase):
-    """ Test Events Components """
+    """Test Events Components"""
 
     if sys.version_info < (3, 8):
         # Copy/paste from
@@ -54,7 +54,7 @@ class TestEventWorkContext(unittest.TestCase):
         self.components_registry = mock.MagicMock(name="ComponentRegistry")
 
     def test_env(self):
-        """ WorkContext with env """
+        """WorkContext with env"""
         work = EventWorkContext(
             model_name="res.users",
             env=self.env,
@@ -67,7 +67,7 @@ class TestEventWorkContext(unittest.TestCase):
             work.collection  # noqa
 
     def test_collection(self):
-        """ WorkContext with collection """
+        """WorkContext with collection"""
         env = mock.MagicMock(name="env")
         collection = mock.MagicMock(name="collection")
         collection.env = env
@@ -81,7 +81,7 @@ class TestEventWorkContext(unittest.TestCase):
         self.assertEqual("res.users", work.model_name)
 
     def test_env_and_collection(self):
-        """ WorkContext with collection and env is forbidden """
+        """WorkContext with collection and env is forbidden"""
         env = mock.MagicMock(name="env")
         collection = mock.MagicMock(name="collection")
         collection.env = env
@@ -94,14 +94,14 @@ class TestEventWorkContext(unittest.TestCase):
             )
 
     def test_missing(self):
-        """ WorkContext with collection and env is forbidden """
+        """WorkContext with collection and env is forbidden"""
         with self.assertRaises(ValueError):
             EventWorkContext(
                 model_name="res.users", components_registry=self.components_registry
             )
 
     def test_env_work_on(self):
-        """ WorkContext propagated through work_on """
+        """WorkContext propagated through work_on"""
         env = mock.MagicMock(name="env")
         collection = mock.MagicMock(name="collection")
         collection.env = env
@@ -120,7 +120,7 @@ class TestEventWorkContext(unittest.TestCase):
             work.collection  # noqa
 
     def test_collection_work_on(self):
-        """ WorkContext propagated through work_on """
+        """WorkContext propagated through work_on"""
         env = mock.MagicMock(name="env")
         collection = mock.MagicMock(name="collection")
         collection.env = env
@@ -137,7 +137,7 @@ class TestEventWorkContext(unittest.TestCase):
         self.assertEqual(self.components_registry, work2.components_registry)
 
     def test_collection_work_on_collection(self):
-        """ WorkContext collection changed with work_on """
+        """WorkContext collection changed with work_on"""
         env = mock.MagicMock(name="env")
         collection = mock.MagicMock(name="collection")
         collection.env = env
@@ -158,7 +158,7 @@ class TestEventWorkContext(unittest.TestCase):
 
 
 class TestEvent(ComponentRegistryCase):
-    """ Test Events Components """
+    """Test Events Components"""
 
     def setUp(self):
         super(TestEvent, self).setUp()
@@ -388,7 +388,7 @@ class TestEvent(ComponentRegistryCase):
 
 
 class TestEventFromModel(TransactionComponentRegistryCase):
-    """ Test Events Components from Models """
+    """Test Events Components from Models"""
 
     def setUp(self):
         super(TestEventFromModel, self).setUp()

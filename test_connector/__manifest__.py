@@ -14,5 +14,5 @@
         "security/ir.model.access.csv",
         "data/queue_job_function_data.xml",
     ],
-    "installable": True,
+    "installable": False,
 }

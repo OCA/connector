@@ -2,7 +2,6 @@
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl.html)
 
 import copy
-import sys
 import unittest
 from contextlib import contextmanager
 
@@ -83,28 +82,6 @@ class TransactionComponentCase(common.TransactionCase, ComponentMixin):
         )
 
 
-class SavepointComponentCase(common.SavepointCase, ComponentMixin):
-    """A SavepointCase that loads all the components
-
-    It it used like an usual Odoo's SavepointCase, but it ensures
-    that all the components of the current addon and its dependencies
-    are loaded.
-
-    """
-
-    @classmethod
-    def setUpClass(cls):
-        super().setUpClass()
-        cls.setUpComponent()
-
-    # pylint: disable=W8106
-    def setUp(self):
-        # resolve an inheritance issue (common.SavepointCase does not call
-        # super)
-        common.SavepointCase.setUp(self)
-        ComponentMixin.setUp(self)
-
-
 class ComponentRegistryCase(
     unittest.TestCase, common.MetaCase("DummyCase", (object,), {})
 ):
@@ -115,10 +92,9 @@ class ComponentRegistryCase(
     or not, or when you want to create additional components in your tests.
 
     If you only want to *use* the components of the tested addon in your tests,
-    then consider using one of:
+    then consider using:
 
     * :class:`TransactionComponentCase`
-    * :class:`SavepointComponentCase`
 
     This test case creates a special
     :class:`odoo.addons.component.core.ComponentRegistry` for the purpose of
@@ -151,32 +127,6 @@ class ComponentRegistryCase(
                 components_registry=self.comp_registry) as work:
 
     """
-
-    if sys.version_info < (3, 8):
-        # Copy/paste from
-        # https://github.com/odoo/odoo/blob/0218d870d319af4f263d5e9aa324990f7cc90139/
-        # odoo/tests/common.py#L248-L268
-        # Partial backport of bpo-24412, merged in CPython 3.8
-        _class_cleanups = []
-
-        @classmethod
-        def addClassCleanup(cls, function, *args, **kwargs):
-            """Same as addCleanup, except the cleanup items are called even if
-            setUpClass fails (unlike tearDownClass). Backport of bpo-24412."""
-            cls._class_cleanups.append((function, args, kwargs))
-
-        @classmethod
-        def doClassCleanups(cls):
-            """Execute all class cleanup functions.
-            Normally called for you after tearDownClass.
-            Backport of bpo-24412."""
-            cls.tearDown_exceptions = []
-            while cls._class_cleanups:
-                function, args, kwargs = cls._class_cleanups.pop()
-                try:
-                    function(*args, **kwargs)
-                except Exception:
-                    cls.tearDown_exceptions.append(sys.exc_info())
 
     @staticmethod
     def _setup_registry(class_or_instance):
@@ -231,34 +181,41 @@ class ComponentRegistryCase(
 
 
 class TransactionComponentRegistryCase(common.TransactionCase, ComponentRegistryCase):
-    """Adds Odoo Transaction in the base Component TestCase"""
+    """Adds Odoo Transaction in the base Component TestCase.
 
-    # pylint: disable=W8106
-    def setUp(self):
-        # resolve an inheritance issue (common.TransactionCase does not use
-        # super)
-        common.TransactionCase.setUp(self)
-        ComponentRegistryCase._setup_registry(self)
-        self.collection = self.env["collection.base"]
+    This class doesn't set up the registry for you.
+    You're supposed to explicitly call `_setup_registry` and `_teardown_registry`
+    when you need it, either on setUpClass and tearDownClass or setUp and tearDown.
 
-    def tearDown(self):
-        ComponentRegistryCase._teardown_registry(self)
-        common.TransactionCase.tearDown(self)
+    class MyTestCase(TransactionComponentRegistryCase):
+        def setUp(self):
+            super().setUp()
+            self._setup_registry(self)
 
+        def tearDown(self):
+            self._teardown_registry(self)
+            super().tearDown()
 
-class SavepointComponentRegistryCase(common.SavepointCase, ComponentRegistryCase):
-    """Adds Odoo Transaction with Savepoint in the base Component TestCase"""
+    class MyTestCase(TransactionComponentRegistryCase):
+        @classmethod
+        def setUpClass(cls):
+            super().setUpClass()
+            cls._setup_registry(cls)
+
+        @classmethod
+        def tearDownClass(cls):
+            cls._teardown_registry(cls)
+            super().tearDownClass()
+    """
 
     # pylint: disable=W8106
     @classmethod
     def setUpClass(cls):
-        # resolve an inheritance issue (common.SavepointCase does not use
+        # resolve an inheritance issue (common.TransactionCase does not use
         # super)
-        common.SavepointCase.setUpClass()
-        ComponentRegistryCase._setup_registry(cls)
+        common.TransactionCase.setUpClass()
         cls.collection = cls.env["collection.base"]
 
     @classmethod
     def tearDownClass(cls):
-        ComponentRegistryCase._teardown_registry(cls)
-        common.SavepointCase.tearDownClass()
+        common.TransactionCase.tearDownClass()

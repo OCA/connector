@@ -4,14 +4,14 @@
 {
     "name": "Components Tests",
     "summary": "Automated tests for Components, do not install.",
-    "version": "14.0.1.0.0",
+    "version": "15.0.1.0.0",
     "author": "Camptocamp,Odoo Community Association (OCA)",
     "license": "LGPL-3",
     "category": "Hidden",
     "depends": ["component"],
     "website": "https://github.com/OCA/connector",
     "data": ["security/ir.model.access.csv"],
-    "installable": False,
+    "installable": True,
     "development_status": "Production/Stable",
     "maintainers": ["guewen"],
 }

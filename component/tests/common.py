@@ -35,7 +35,7 @@ class ComponentMixin(object):
             # ensure that we load only the components of the 'installed'
             # modules, not 'to install', which means we load only the
             # dependencies of the tested addons, not the siblings or
-            # chilren addons
+            # children addons
             builder.build_registry(comp_registry, states=("installed",))
             # build the components of the current tested addon
             current_addon = _get_addon_name(cls.__module__)

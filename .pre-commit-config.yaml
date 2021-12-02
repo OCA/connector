@@ -1,7 +1,6 @@
 exclude: |
   (?x)
   # NOT INSTALLABLE ADDONS
-  ^connector/|
   ^connector_base_product/|
   ^test_connector/|
   # END NOT INSTALLABLE ADDONS

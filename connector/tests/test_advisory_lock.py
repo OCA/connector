@@ -15,7 +15,7 @@ from odoo.addons.queue_job.exception import RetryableJobError
 
 class TestAdvisoryLock(TransactionComponentCase):
     def setUp(self):
-        super(TestAdvisoryLock, self).setUp()
+        super().setUp()
         self.registry2 = Registry(common.get_db_name())
         self.cr2 = self.registry2.cursor()
         self.env2 = api.Environment(self.cr2, self.env.uid, {})

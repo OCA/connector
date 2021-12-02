@@ -4,7 +4,7 @@
 {
     "name": "Connector Tests",
     "summary": "Automated tests for Connector, do not install.",
-    "version": "14.0.1.0.0",
+    "version": "15.0.1.0.0",
     "author": "Camptocamp,Odoo Community Association (OCA)",
     "license": "LGPL-3",
     "category": "Hidden",
@@ -14,5 +14,5 @@
         "security/ir.model.access.csv",
         "data/queue_job_function_data.xml",
     ],
-    "installable": False,
+    "installable": True,
 }

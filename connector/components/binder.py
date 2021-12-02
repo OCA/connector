@@ -140,9 +140,9 @@ class Binder(AbstractComponent):
         """
         try:
             column = self.model._fields[self._odoo_field]
-        except KeyError:
+        except KeyError as err:
             raise ValueError(
                 "Cannot unwrap model %s, because it has no %s fields"
                 % (self.model._name, self._odoo_field)
-            )
+            ) from err
         return column.comodel_name

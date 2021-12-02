@@ -41,27 +41,9 @@ msgid "Connectors"
 msgstr "Connectors"
 
 #. module: connector
-#: model:ir.model.fields,field_description:connector.field_connector_backend__display_name
-#: model:ir.model.fields,field_description:connector.field_external_binding__display_name
-msgid "Display Name"
-msgstr ""
-
-#. module: connector
 #: model:ir.model,name:connector.model_external_binding
 msgid "External Binding (abstract)"
 msgstr "Lligam extern (abstracte)"
-
-#. module: connector
-#: model:ir.model.fields,field_description:connector.field_connector_backend__id
-#: model:ir.model.fields,field_description:connector.field_external_binding__id
-msgid "ID"
-msgstr "ID"
-
-#. module: connector
-#: model:ir.model.fields,field_description:connector.field_connector_backend____last_update
-#: model:ir.model.fields,field_description:connector.field_external_binding____last_update
-msgid "Last Modified on"
-msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_external_binding__sync_date
@@ -90,6 +72,9 @@ msgstr ""
 #, python-format
 msgid "Related Record"
 msgstr "Registre relacionat"
+
+#~ msgid "ID"
+#~ msgstr "ID"
 
 #~ msgid "A %s needs a review."
 #~ msgstr "Un %s necessita revisió."

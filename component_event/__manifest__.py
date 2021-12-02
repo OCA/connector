@@ -3,7 +3,7 @@
 
 {
     "name": "Components Events",
-    "version": "14.0.1.0.2",
+    "version": "15.0.1.0.0",
     "author": "Camptocamp," "Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/connector",
     "license": "LGPL-3",
@@ -11,5 +11,5 @@
     "depends": ["component"],
     "external_dependencies": {"python": ["cachetools"]},
     "data": [],
-    "installable": False,
+    "installable": True,
 }

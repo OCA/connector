@@ -1,7 +1,6 @@
 exclude: |
   (?x)
   # NOT INSTALLABLE ADDONS
-  ^component_event/|
   ^connector/|
   ^connector_base_product/|
   ^test_connector/|

@@ -1,7 +1,6 @@
 # Copyright 2017 Camptocamp SA
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl.html)
 
-import sys
 import unittest
 
 import mock
@@ -20,7 +19,6 @@ from odoo.addons.component_event.core import EventWorkContext
 @tagged("standard", "at_install")
 class TestEventWorkContext(unittest.TestCase):
     """Test Events Components"""
-
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

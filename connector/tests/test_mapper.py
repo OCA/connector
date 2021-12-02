@@ -21,7 +21,8 @@ from odoo.addons.connector.components.mapper import (
 
 class TestMapper(TransactionComponentRegistryCase):
     def setUp(self):
-        super(TestMapper, self).setUp()
+        super().setUp()
+        self._setup_registry(self)
         self.comp_registry.load_components("connector")
 
     def test_mapping_decorator(self):
@@ -112,6 +113,7 @@ class TestMapper(TransactionComponentRegistryCase):
             def name(self):
                 pass
 
+        # pylint: disable=R7980
         class FryMapperInherit(Component):
             _inherit = "fry.mapper"
 
@@ -341,6 +343,7 @@ class TestMapper(TransactionComponentRegistryCase):
         }
         self.assertEqual(map_record.values(for_create=True), expected)
 
+    # pylint: disable=W8110
     def test_finalize(self):
         """Inherit finalize to modify values"""
 
@@ -351,7 +354,7 @@ class TestMapper(TransactionComponentRegistryCase):
             direct = [("name", "out_name")]
 
             def finalize(self, record, values):
-                result = super(MyMapper, self).finalize(record, values)
+                result = super().finalize(record, values)
                 result["test"] = "abc"
                 return result
 
@@ -653,7 +656,8 @@ class TestMapperRecordsets(TransactionComponentRegistryCase):
     """Test mapper with "real" records instead of mocks"""
 
     def setUp(self):
-        super(TestMapperRecordsets, self).setUp()
+        super().setUp()
+        self._setup_registry(self)
         self.comp_registry.load_components("connector")
 
         backend_record = mock.Mock()
@@ -687,7 +691,8 @@ class TestMapperBinding(TransactionComponentRegistryCase):
     """Test Mapper with Bindings"""
 
     def setUp(self):
-        super(TestMapperBinding, self).setUp()
+        super().setUp()
+        self._setup_registry(self)
         self.comp_registry.load_components("connector")
 
         backend_record = mock.Mock()

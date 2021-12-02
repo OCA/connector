@@ -43,27 +43,9 @@ msgid "Connectors"
 msgstr "连接器"
 
 #. module: connector
-#: model:ir.model.fields,field_description:connector.field_connector_backend__display_name
-#: model:ir.model.fields,field_description:connector.field_external_binding__display_name
-msgid "Display Name"
-msgstr "显示名称"
-
-#. module: connector
 #: model:ir.model,name:connector.model_external_binding
 msgid "External Binding (abstract)"
 msgstr "外部绑定"
-
-#. module: connector
-#: model:ir.model.fields,field_description:connector.field_connector_backend__id
-#: model:ir.model.fields,field_description:connector.field_external_binding__id
-msgid "ID"
-msgstr "ID"
-
-#. module: connector
-#: model:ir.model.fields,field_description:connector.field_connector_backend____last_update
-#: model:ir.model.fields,field_description:connector.field_external_binding____last_update
-msgid "Last Modified on"
-msgstr "最后修改日"
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_external_binding__sync_date
@@ -92,6 +74,15 @@ msgstr "已在后端导出ID为%s的记录。"
 #, python-format
 msgid "Related Record"
 msgstr "相关记录"
+
+#~ msgid "Display Name"
+#~ msgstr "显示名称"
+
+#~ msgid "ID"
+#~ msgstr "ID"
+
+#~ msgid "Last Modified on"
+#~ msgstr "最后修改日"
 
 #~ msgid "A %s needs a review."
 #~ msgstr "一个 %s 需要审核。"

@@ -24,7 +24,8 @@ import odoo
 from odoo import _
 
 from odoo.addons.component.core import AbstractComponent
-from odoo.addons.connector.exception import IDMissingInBackend, RetryableJobError
+
+from ..exception import IDMissingInBackend, RetryableJobError
 
 _logger = logging.getLogger(__name__)
 
@@ -55,7 +56,7 @@ class Synchronizer(AbstractComponent):
     def mapper(self):
         """Return an instance of ``Mapper`` for the synchronization.
 
-        The instanciation is delayed because some synchronisations do
+        The instantiation is delayed because some synchronizations do
         not need such an unit and the unit may not exist.
 
         It looks for a Component with ``_usage`` being equal to
@@ -71,7 +72,7 @@ class Synchronizer(AbstractComponent):
     def binder(self):
         """Return an instance of ``Binder`` for the synchronization.
 
-        The instanciation is delayed because some synchronisations do
+        The instantiations is delayed because some synchronizations do
         not need such an unit and the unit may not exist.
 
         :rtype: :py:class:`odoo.addons.component.core.Component`
@@ -85,7 +86,7 @@ class Synchronizer(AbstractComponent):
         """Return an instance of ``BackendAdapter`` for the
         synchronization.
 
-        The instanciation is delayed because some synchronisations do
+        The instantiations is delayed because some synchronizations do
         not need such an unit and the unit may not exist.
 
         It looks for a Component with ``_usage`` being equal to
@@ -220,7 +221,7 @@ class GenericExporter(AbstractComponent):
         sql = "SELECT id FROM %s WHERE ID = %%s FOR UPDATE NOWAIT" % self.model._table
         try:
             self.env.cr.execute(sql, (self.binding.id,), log_exceptions=False)
-        except psycopg2.OperationalError:
+        except psycopg2.OperationalError as err:
             _logger.info(
                 "A concurrent job is already exporting the same "
                 "record (%s with id %s). Job delayed later.",
@@ -231,7 +232,7 @@ class GenericExporter(AbstractComponent):
                 "A concurrent job is already exporting the same record "
                 "(%s with id %s). The job will be retried later."
                 % (self.model._name, self.binding.id)
-            )
+            ) from err
 
     def _has_to_skip(self):
         """Return True if the export can be skipped"""
@@ -266,7 +267,7 @@ class GenericExporter(AbstractComponent):
                     "%s\n\n"
                     "Likely due to 2 concurrent jobs wanting to create "
                     "the same record. The job will be retried later." % err
-                )
+                ) from err
             else:
                 raise
 

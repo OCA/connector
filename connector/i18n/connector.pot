@@ -91,13 +91,13 @@ msgid "Canceled. Nothing to do."
 msgstr ""
 
 #. module: connector
-#: code:addons/connector/queue/model.py:462
+#: code:addons/connector/queue/model.py:513
 #, python-format
 msgid "Cannot change the root channel"
 msgstr ""
 
 #. module: connector
-#: code:addons/connector/queue/model.py:469
+#: code:addons/connector/queue/model.py:520
 #, python-format
 msgid "Cannot remove the root channel"
 msgstr ""
@@ -352,6 +352,12 @@ msgid "ID"
 msgstr ""
 
 #. module: connector
+#: code:addons/connector/queue/model.py:254
+#, python-format
+msgid "If both parameters are 0, ALL jobs will be requeued!"
+msgstr ""
+
+#. module: connector
 #: help:connector.checkpoint,message_unread:0
 #: help:queue.job,message_unread:0
 msgid "If checked new messages require your attention."
@@ -470,7 +476,7 @@ msgid "Manage multiple companies"
 msgstr ""
 
 #. module: connector
-#: code:addons/connector/queue/model.py:141
+#: code:addons/connector/queue/model.py:143
 #, python-format
 msgid "Manually set to done by %s"
 msgstr ""
@@ -518,7 +524,7 @@ msgid "Need Review"
 msgstr ""
 
 #. module: connector
-#: code:addons/connector/queue/model.py:117
+#: code:addons/connector/queue/model.py:119
 #, python-format
 msgid "No action available for this job"
 msgstr ""
@@ -539,7 +545,7 @@ msgid "Parent Channel"
 msgstr ""
 
 #. module: connector
-#: code:addons/connector/queue/model.py:454
+#: code:addons/connector/queue/model.py:505
 #, python-format
 msgid "Parent channel required."
 msgstr ""
@@ -663,7 +669,7 @@ msgid "Share or embbed any screen of Odoo."
 msgstr ""
 
 #. module: connector
-#: code:addons/connector/queue/model.py:192
+#: code:addons/connector/queue/model.py:194
 #, python-format
 msgid "Something bad happened during the execution of the job. More details in the 'Exception Information' section."
 msgstr ""

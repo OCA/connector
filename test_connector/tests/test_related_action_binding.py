@@ -12,7 +12,7 @@ class TestRelatedActionBinding(TransactionComponentCase):
     """Test Related Actions with Bindings"""
 
     def setUp(self):
-        super(TestRelatedActionBinding, self).setUp()
+        super().setUp()
 
         self.backend_record = self.env["test.backend"].create({})
 

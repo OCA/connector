@@ -644,6 +644,7 @@ class Mapper(AbstractComponent):
 
         cls._map_methods = map_methods
 
+    # pylint: disable=W8110
     @classmethod
     def _complete_component_build(cls):
         super(Mapper, cls)._complete_component_build()

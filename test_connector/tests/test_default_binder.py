@@ -8,7 +8,7 @@ class TestDefaultBinder(TransactionComponentCase):
     """Test the default binder implementation using Components"""
 
     def setUp(self):
-        super(TestDefaultBinder, self).setUp()
+        super().setUp()
 
         # create our backend, in case of components,
         # the version would not be required

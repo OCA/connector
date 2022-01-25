@@ -41,26 +41,8 @@ msgid "Connectors"
 msgstr ""
 
 #. module: connector
-#: model:ir.model.fields,field_description:connector.field_connector_backend__display_name
-#: model:ir.model.fields,field_description:connector.field_external_binding__display_name
-msgid "Display Name"
-msgstr ""
-
-#. module: connector
 #: model:ir.model,name:connector.model_external_binding
 msgid "External Binding (abstract)"
-msgstr ""
-
-#. module: connector
-#: model:ir.model.fields,field_description:connector.field_connector_backend__id
-#: model:ir.model.fields,field_description:connector.field_external_binding__id
-msgid "ID"
-msgstr "ID"
-
-#. module: connector
-#: model:ir.model.fields,field_description:connector.field_connector_backend____last_update
-#: model:ir.model.fields,field_description:connector.field_external_binding____last_update
-msgid "Last Modified on"
 msgstr ""
 
 #. module: connector
@@ -90,6 +72,9 @@ msgstr ""
 #, python-format
 msgid "Related Record"
 msgstr ""
+
+#~ msgid "ID"
+#~ msgstr "ID"
 
 #~ msgid "Cancel"
 #~ msgstr "Cancelar"

@@ -60,7 +60,7 @@ class ComponentDatabases(dict):
     """ Holds a registry of components for each database """
 
 
-class ComponentRegistry(object):
+class ComponentRegistry:
     """Store all the components and allow to find them using criteria
 
     The key is the ``_name`` of the components.
@@ -169,7 +169,7 @@ class ComponentRegistry(object):
 _component_databases = ComponentDatabases()
 
 
-class WorkContext(object):
+class WorkContext:
     """Transport the context required to work with components
 
     It is propagated through all the components, so any
@@ -518,7 +518,7 @@ class MetaComponent(type):
         return cls._apply_on
 
 
-class AbstractComponent(object, metaclass=MetaComponent):
+class AbstractComponent(metaclass=MetaComponent):
     """Main Component Model
 
     All components have a Python inheritance either on

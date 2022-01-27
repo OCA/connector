@@ -936,7 +936,7 @@ class ExportMapper(AbstractComponent):
         return value
 
 
-class MapRecord(object):
+class MapRecord:
     """A record prepared to be converted using a :py:class:`Mapper`.
 
     MapRecord instances are prepared by :py:meth:`Mapper.map_record`.

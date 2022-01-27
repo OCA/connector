@@ -24,7 +24,7 @@ def new_rollbacked_env():
         cr.close()
 
 
-class ComponentMixin(object):
+class ComponentMixin:
     @classmethod
     def setUpComponent(cls):
         with new_rollbacked_env() as env:
@@ -82,9 +82,7 @@ class TransactionComponentCase(common.TransactionCase, ComponentMixin):
         )
 
 
-class ComponentRegistryCase(
-    unittest.TestCase, common.MetaCase("DummyCase", (object,), {})
-):
+class ComponentRegistryCase(unittest.TestCase, common.MetaCase("DummyCase", (), {})):
     """This test case can be used as a base for writings tests on components
 
     This test case is meant to test components in a special component registry,

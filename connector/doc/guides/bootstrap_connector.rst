@@ -34,9 +34,8 @@ First, we need to create the Odoo addons itself, editing the
 
 
 .. code-block:: python
-   :emphasize-lines: 4,5
+   :emphasize-lines: 3,4
 
-    # -*- coding: utf-8 -*-
     {'name': 'Coffee Connector',
      'version': '1.0.0',
      'category': 'Connector',
@@ -52,7 +51,7 @@ First, we need to create the Odoo addons itself, editing the
 
     Features:
 
-    * Poor a coffee when Odoo is busy for too long
+    * Pour a coffee when Odoo is busy for too long
     """,
      'data': [],
      'installable': True,

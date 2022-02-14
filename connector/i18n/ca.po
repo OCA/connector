@@ -10,15 +10,16 @@ msgstr ""
 "Project-Id-Version: connector (8.0)\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-04-05 02:47+0000\n"
-"PO-Revision-Date: 2017-04-25 10:40+0000\n"
-"Last-Translator: OCA Transbot <transbot@odoo-community.org>\n"
+"PO-Revision-Date: 2022-02-14 11:17+0000\n"
+"Last-Translator: Noel estudillo <noelestudilloviera@gmail.com>\n"
 "Language-Team: Catalan (http://www.transifex.com/oca/OCA-connector-8-0/"
 "language/ca/)\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.3.2\n"
 
 #. module: connector
 #: model:ir.actions.act_window,help:connector.action_connector_checkpoint
@@ -34,13 +35,14 @@ msgid ""
 "            "
 msgstr ""
 "<p>No hi ha registres a seleccionar.</p>\n"
-"<p> Quan un connector importa registres que han de ser \n"
-"revisats o configurats manualment apareixeran \n"
-"en aquesta llista. Un cop ha estat validat, clica \n"
-"en el botó \"Revisat\".<p>\n"
-"<p>Els connectors mostren la llista de registres nous \n"
-"per verificar segons el seu tipus. Només alguns \n"
-"necessiten intervenció manual.<p>"
+"\t\t<p>Quan un connector importa registres que han de ser\n"
+"\t\t revisats o configurats manualment apareixeran \n"
+"\t\ten aquesta llista. Un cop ha estat validat, clica\n"
+"\t\t en el botó \"Revisat\".<p>\n"
+"\t\t <p>Els connectors mostren la llista de registres nous\n"
+"\t\t per verificar segons el seu tipus. Només alguns\n"
+"\t\t necessiten intervenció manual.<p>\n"
+"            "
 
 #. module: connector
 #: code:addons/connector/checkpoint/checkpoint.py:136
@@ -61,7 +63,7 @@ msgstr "Actiu"
 #. module: connector
 #: field:connector.config.settings,alias_domain:0
 msgid "Alias Domain"
-msgstr "Alias Domain"
+msgstr "Alias de domini"
 
 #. module: connector
 #: field:connector.config.settings,module_share:0
@@ -91,7 +93,7 @@ msgstr "Annexar Google documents a qualsevol registre"
 #. module: connector
 #: view:connector.config.settings:connector.view_connector_config_settings
 msgid "Backends"
-msgstr "Backends"
+msgstr "Àrea d'administració"
 
 #. module: connector
 #: view:connector.checkpoint.review:connector.view_connector_checkpoint_review

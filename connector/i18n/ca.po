@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: connector (9.0)\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-05-25 13:31+0000\n"
-"PO-Revision-Date: 2022-02-25 11:17+0000\n"
+"PO-Revision-Date: 2022-03-02 13:17+0000\n"
 "Last-Translator: Noel estudillo <noelestudilloviera@gmail.com>\n"
 "Language-Team: Catalan (http://www.transifex.com/oca/OCA-connector-9-0/"
 "language/ca/)\n"
@@ -42,7 +42,7 @@ msgstr "Un %s necessita revisió."
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_message_needaction
 #: model:ir.model.fields,field_description:connector.field_queue_job_message_needaction
 msgid "Action Needed"
-msgstr "Acció necessària "
+msgstr "Acció necessària"
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_config_settings_module_portal
@@ -62,7 +62,7 @@ msgstr "Permet compartició de documents"
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_config_settings_auth_signup_uninvited
 msgid "Allow external users to sign up"
-msgstr "Permetre a usuaris externs registrar-se "
+msgstr "Permetre a usuaris externs registrar-se"
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_config_settings_module_google_calendar
@@ -251,7 +251,7 @@ msgstr "Data realitzat"
 #: model:ir.model.fields,help:connector.field_connector_checkpoint_message_last_post
 #: model:ir.model.fields,help:connector.field_queue_job_message_last_post
 msgid "Date of the last message posted on the record."
-msgstr "Data del darrer missatge annexat al registre"
+msgstr "Data del darrer missatge annexat al registre."
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_queue_job_name
@@ -334,13 +334,13 @@ msgstr "Seguidors"
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_message_channel_ids
 #: model:ir.model.fields,field_description:connector.field_queue_job_message_channel_ids
 msgid "Followers (Channels)"
-msgstr "Seguidors (Canals) "
+msgstr "Seguidors (Canals)"
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_message_partner_ids
 #: model:ir.model.fields,field_description:connector.field_queue_job_message_partner_ids
 msgid "Followers (Partners)"
-msgstr "Seguidors (Empreses) "
+msgstr "Seguidors (Empreses)"
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_queue_job_forced_channel
@@ -355,7 +355,7 @@ msgstr "Nom Funció"
 #. module: connector
 #: model:ir.model.fields,help:connector.field_connector_config_settings_module_portal
 msgid "Give your customers access to their documents."
-msgstr "Donar als clients accés als seus documents"
+msgstr "Donar als clients accés als seus documents."
 
 #. module: connector
 #: model:ir.ui.view,arch_db:connector.view_queue_job_function_search
@@ -397,18 +397,18 @@ msgstr ""
 #: model:ir.model.fields,help:connector.field_connector_checkpoint_message_unread
 #: model:ir.model.fields,help:connector.field_queue_job_message_unread
 msgid "If checked new messages require your attention."
-msgstr "Si està marcat, hi ha nous missatges "
+msgstr "Si està marcat, hi ha nous missatges."
 
 #. module: connector
 #: model:ir.model.fields,help:connector.field_connector_checkpoint_message_needaction
 #: model:ir.model.fields,help:connector.field_queue_job_message_needaction
 msgid "If checked, new messages require your attention."
-msgstr "Si està marcat, els nous missatges volen la vostra atenció. "
+msgstr "Si està marcat, els nous missatges volen la vostra atenció."
 
 #. module: connector
 #: model:ir.model.fields,help:connector.field_connector_config_settings_auth_signup_uninvited
 msgid "If unchecked, only invited users may sign up."
-msgstr "Si no està marcat, només els usuaris invitats poden registrar-ser. "
+msgstr "Si no està marcat, només els usuaris invitats poden registrar-ser."
 
 #. module: connector
 #: model:ir.model.fields,help:connector.field_connector_config_settings_alias_domain
@@ -439,7 +439,7 @@ msgstr "Job Channels"
 #: model:ir.model.fields,field_description:connector.field_queue_job_job_function_id
 #: model:ir.ui.view,arch_db:connector.view_queue_job_search
 msgid "Job Function"
-msgstr "Job Function"
+msgstr "Funció laboral"
 
 #. module: connector
 #: model:ir.actions.act_window,name:connector.action_queue_job_function
@@ -450,12 +450,12 @@ msgstr "Job Function"
 #: model:ir.ui.view,arch_db:connector.view_queue_job_function_search
 #: model:ir.ui.view,arch_db:connector.view_queue_job_function_tree
 msgid "Job Functions"
-msgstr "Job Functions"
+msgstr "Funcions del lloc de treball"
 
 #. module: connector
 #: model:mail.message.subtype,name:connector.mt_job_failed
 msgid "Job failed"
-msgstr "Job failed"
+msgstr "La feina ha fallat"
 
 #. module: connector
 #: code:addons/connector/controllers/main.py:105
@@ -564,7 +564,7 @@ msgstr "Nom"
 #. module: connector
 #: model:ir.model.fields,help:connector.field_connector_checkpoint_name
 msgid "Name of the record to review"
-msgstr "Nom del registre a revisar "
+msgstr "Nom del registre a revisar"
 
 #. module: connector
 #: selection:connector.checkpoint,state:0
@@ -581,25 +581,25 @@ msgstr "No hi ha cap acció per aquesta tasca"
 #. module: connector
 #: model:ir.actions.act_window,help:connector.action_connector_checkpoint
 msgid "No record to check."
-msgstr "Cap registre per comprovar. "
+msgstr "Cap registre per comprovar."
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_message_needaction_counter
 #: model:ir.model.fields,field_description:connector.field_queue_job_message_needaction_counter
 msgid "Number of Actions"
-msgstr "Número d'accions "
+msgstr "Número d'accions"
 
 #. module: connector
 #: model:ir.model.fields,help:connector.field_connector_checkpoint_message_needaction_counter
 #: model:ir.model.fields,help:connector.field_queue_job_message_needaction_counter
 msgid "Number of messages which requires an action"
-msgstr "Número de missatges que requereixen una acció "
+msgstr "Número de missatges que requereixen una acció"
 
 #. module: connector
 #: model:ir.model.fields,help:connector.field_connector_checkpoint_message_unread_counter
 #: model:ir.model.fields,help:connector.field_queue_job_message_unread_counter
 msgid "Number of unread messages"
-msgstr "Número de missatges no llegits "
+msgstr "Número de missatges no llegits"
 
 #. module: connector
 #: model:ir.actions.client,name:connector.action_client_connector_menu
@@ -615,7 +615,7 @@ msgstr "Canal Pare"
 #: code:addons/connector/queue/model.py:342
 #, python-format
 msgid "Parent channel required."
-msgstr "Cal indicar Canal Pare"
+msgstr "Cal indicar Canal Pare."
 
 #. module: connector
 #: model:ir.ui.view,arch_db:connector.view_queue_job_search
@@ -638,7 +638,7 @@ msgstr "Prioritat"
 #: sql_constraint:connector.checkpoint:0
 #, python-format
 msgid "Provide relation to a record or a message."
-msgstr "Proporciona relació per a un registre o un missatge. "
+msgstr "Proporciona relació per a un registre o un missatge."
 
 #. module: connector
 #: model:ir.ui.menu,name:connector.menu_queue
@@ -663,7 +663,7 @@ msgstr "ID Registre"
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_name
 msgid "Record Name"
-msgstr "Nom del Registre "
+msgstr "Nom del Registre"
 
 #. module: connector
 #: model:ir.ui.view,arch_db:connector.view_queue_job_form
@@ -731,7 +731,7 @@ msgstr "Canvia a 'Fet'"
 #. module: connector
 #: model:ir.model.fields,help:connector.field_connector_config_settings_module_share
 msgid "Share or embbed any screen of Odoo."
-msgstr "Compartir o incrustar qualsevol pantalla de odoo"
+msgstr "Compartir o incrustar qualsevol pantalla de odoo."
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_config_settings_company_share_partner
@@ -753,7 +753,7 @@ msgstr ""
 "una companyia està definida a l'empresa.\n"
 "* Desmarcat: Cada companyia només pot veure les seves empreses (empreses on "
 "la companyia està definida). Les empreses no relacionades amb una companyia "
-"seran visibles per totes les companyies. "
+"seran visibles per totes les companyies."
 
 #. module: connector
 #: code:addons/connector/queue/model.py:207
@@ -795,8 +795,7 @@ msgstr "Tasca"
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_config_settings_auth_signup_template_user_id
 msgid "Template user for new users created through signup"
-msgstr ""
-"Plantilla d'usuari per als nous usuaris creats després de registrar-se."
+msgstr "Plantilla d'usuari per als nous usuaris creats després de registrar-se"
 
 #. module: connector
 #: model:ir.actions.act_window,help:connector.action_connector_checkpoint
@@ -826,17 +825,17 @@ msgstr "El registre ha estat importat des d'aquest backend"
 #. module: connector
 #: model:ir.model.fields,help:connector.field_connector_checkpoint_record
 msgid "The record to review."
-msgstr "El registre per revisar. "
+msgstr "El registre per revisar."
 
 #. module: connector
 #: model:ir.ui.view,arch_db:connector.view_connector_checkpoint_review
 msgid "The selected checkpoints will be set as reviewed."
-msgstr "Els seleccionats seran marcats com revisats. "
+msgstr "Els seleccionats seran marcats com revisats."
 
 #. module: connector
 #: model:ir.ui.view,arch_db:connector.view_requeue_job
 msgid "The selected jobs will be requeued."
-msgstr "Les tasques seleccionades seran reencuades"
+msgstr "Les tasques seleccionades seran reencuades."
 
 #. module: connector
 #: model:ir.model.fields,help:connector.field_connector_config_settings_auth_signup_reset_password
@@ -848,7 +847,7 @@ msgstr ""
 #. module: connector
 #: model:ir.model.fields,help:connector.field_connector_config_settings_module_google_calendar
 msgid "This installs the module google_calendar."
-msgstr "Aixó instal·la el mòdul google_calendar"
+msgstr "Aixó instal·la el mòdul google_calendar."
 
 #. module: connector
 #: model:ir.model.fields,help:connector.field_connector_config_settings_module_google_drive
@@ -909,7 +908,7 @@ msgstr ""
 "Quan el connector importa nous registres que tenen\n"
 "configuració o comentaris fets manualment, apareixeran \n"
 "en aquesta llista. Un cop un registre ha estat\n"
-"marcat, feu clic al botó 'Revisat'. "
+"marcat, feu clic al botó 'Revisat'."
 
 #. module: connector
 #: model:ir.model,name:connector.model_queue_requeue_job
@@ -923,14 +922,14 @@ msgid ""
 "companies."
 msgstr ""
 "Treballa en entorns de multi-companyia, amb l'accés de seguretat adient "
-"entre companyies. "
+"entre companyies."
 
 #. module: connector
 #: model:ir.ui.view,arch_db:connector.view_connector_checkpoint_review
 #: model:ir.ui.view,arch_db:connector.view_connector_config_settings
 #: model:ir.ui.view,arch_db:connector.view_requeue_job
 msgid "or"
-msgstr "o "
+msgstr "o"
 
 #. module: connector
 #: model:ir.ui.view,arch_db:connector.view_connector_checkpoint_form

@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: connector (8.0)\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-04-05 02:47+0000\n"
-"PO-Revision-Date: 2022-02-14 11:17+0000\n"
+"PO-Revision-Date: 2022-03-02 13:17+0000\n"
 "Last-Translator: Noel estudillo <noelestudilloviera@gmail.com>\n"
 "Language-Team: Catalan (http://www.transifex.com/oca/OCA-connector-8-0/"
 "language/ca/)\n"
@@ -254,7 +254,7 @@ msgstr "Data realitzat"
 #: help:connector.checkpoint,message_last_post:0
 #: help:queue.job,message_last_post:0
 msgid "Date of the last message posted on the record."
-msgstr "Data del darrer missatge annexat al registre"
+msgstr "Data del darrer missatge annexat al registre."
 
 #. module: connector
 #: field:queue.job,name:0
@@ -327,7 +327,7 @@ msgstr "Nom Funció"
 #. module: connector
 #: help:connector.config.settings,module_portal:0
 msgid "Give your customers access to their documents."
-msgstr "Donar als clients accés als seus documents"
+msgstr "Donar als clients accés als seus documents."
 
 #. module: connector
 #: view:queue.job:connector.view_queue_job_search
@@ -349,7 +349,7 @@ msgid ""
 msgstr ""
 "Emmagatzema un resum del Interlocutor del Chat (nombre de missatges, ...). "
 "Aquest resum és directament en format html per tal de ser introduït en "
-"vistes kanban"
+"vistes kanban."
 
 #. module: connector
 #: field:connector.backend,id:0 field:connector.checkpoint,id:0
@@ -363,12 +363,12 @@ msgstr "ID"
 #. module: connector
 #: help:connector.checkpoint,message_unread:0 help:queue.job,message_unread:0
 msgid "If checked new messages require your attention."
-msgstr "Si està marcat, hi ha nous missatges "
+msgstr "Si està marcat, hi ha nous missatges."
 
 #. module: connector
 #: view:queue.job:connector.view_queue_job_form
 msgid "If the max. retries is 0, the number of retries is infinite."
-msgstr "Si el max. intents és 0, s'assumeix infinit"
+msgstr "Si el max. intents és 0, s'assumeix infinit."
 
 #. module: connector
 #: help:connector.config.settings,alias_domain:0
@@ -393,13 +393,13 @@ msgstr "És un seguidor"
 #. module: connector
 #: model:ir.model,name:connector.model_queue_job_channel
 msgid "Job Channels"
-msgstr "Job Channels"
+msgstr "Canals de treball"
 
 #. module: connector
 #: view:queue.job:connector.view_queue_job_search
 #: field:queue.job,job_function_id:0
 msgid "Job Function"
-msgstr "Job Function"
+msgstr "Funció laboral"
 
 #. module: connector
 #: model:ir.actions.act_window,name:connector.action_queue_job_function
@@ -410,12 +410,12 @@ msgstr "Job Function"
 #: view:queue.job.function:connector.view_queue_job_function_search
 #: view:queue.job.function:connector.view_queue_job_function_tree
 msgid "Job Functions"
-msgstr "Job Functions"
+msgstr "Funcions del lloc de treball"
 
 #. module: connector
 #: model:mail.message.subtype,name:connector.mt_job_failed
 msgid "Job failed"
-msgstr "Job failed"
+msgstr "La feina ha fallat"
 
 #. module: connector
 #: model:ir.actions.act_window,name:connector.action_queue_job
@@ -512,7 +512,7 @@ msgstr "Nom"
 #. module: connector
 #: help:connector.checkpoint,name:0
 msgid "Name of the record to review"
-msgstr "Nom del registre a revisar "
+msgstr "Nom del registre a revisar"
 
 #. module: connector
 #: view:connector.checkpoint:connector.view_connector_checkpoint_search
@@ -545,7 +545,7 @@ msgstr "Canal Pare"
 #: code:addons/connector/queue/model.py:454
 #, python-format
 msgid "Parent channel required."
-msgstr "Cal indicar Canal Pare"
+msgstr "Cal indicar Canal Pare."
 
 #. module: connector
 #: view:queue.job:connector.view_queue_job_search selection:queue.job,state:0
@@ -590,7 +590,7 @@ msgstr "ID Registre"
 #. module: connector
 #: field:connector.checkpoint,name:0
 msgid "Record Name"
-msgstr "Nom del Registre "
+msgstr "Nom del Registre"
 
 #. module: connector
 #: view:queue.job:connector.view_queue_job_form
@@ -655,7 +655,7 @@ msgid ""
 "RML reports of the user company"
 msgstr ""
 "Indica el tipus de lletra en la capçalera del informe, també serà usada com "
-"a tipus de lletra per defecte en els informes RML de la empresa del usuari."
+"a tipus de lletra per defecte en els informes RML de la empresa del usuari"
 
 #. module: connector
 #: view:queue.job:connector.view_queue_job_form
@@ -665,7 +665,7 @@ msgstr "Canvia a 'Fet'"
 #. module: connector
 #: help:connector.config.settings,module_share:0
 msgid "Share or embbed any screen of Odoo."
-msgstr "Compartir o incrustar qualsevol pantalla de odoo"
+msgstr "Compartir o incrustar qualsevol pantalla de odoo."
 
 #. module: connector
 #: code:addons/connector/queue/model.py:192
@@ -725,22 +725,22 @@ msgstr "El registre ha estat importat des d'aquest backend"
 #. module: connector
 #: help:connector.checkpoint,record:0
 msgid "The record to review."
-msgstr "El registre per revisar. "
+msgstr "El registre per revisar."
 
 #. module: connector
 #: view:connector.checkpoint.review:connector.view_connector_checkpoint_review
 msgid "The selected checkpoints will be set as reviewed."
-msgstr "Els seleccionats seran marcats com revisats. "
+msgstr "Els seleccionats seran marcats com revisats."
 
 #. module: connector
 #: view:queue.requeue.job:connector.view_requeue_job
 msgid "The selected jobs will be requeued."
-msgstr "Les tasques seleccionades seran reencuades"
+msgstr "Les tasques seleccionades seran reencuades."
 
 #. module: connector
 #: help:connector.config.settings,module_google_calendar:0
 msgid "This installs the module google_calendar."
-msgstr "Aixó instal·la el mòdul google_calendar"
+msgstr "Aixó instal·la el mòdul google_calendar."
 
 #. module: connector
 #: help:connector.config.settings,module_google_drive:0
@@ -787,28 +787,29 @@ msgid ""
 "companies.\n"
 "-This installs the module multi_company."
 msgstr ""
-"Treballa en entorns multi-empresa amb els nivells d'accés apropiats entre "
-"empreses"
+"Treballar en entorns multiempresa, amb accés de seguretat adequat entre "
+"empreses.\n"
+"-Això instal·la el mòdul multi_company."
 
 #. module: connector
 #: field:queue.job,worker_id:0
 #: view:queue.worker:connector.view_queue_worker_form
 #: view:queue.worker:connector.view_queue_worker_tree
 msgid "Worker"
-msgstr "Worker"
+msgstr "Treballador"
 
 #. module: connector
 #: model:ir.actions.act_window,name:connector.action_queue_worker
 #: model:ir.ui.menu,name:connector.menu_queue_worker
 msgid "Workers"
-msgstr "Workers"
+msgstr "Treballador"
 
 #. module: connector
 #: view:connector.checkpoint.review:connector.view_connector_checkpoint_review
 #: view:connector.config.settings:connector.view_connector_config_settings
 #: view:queue.requeue.job:connector.view_requeue_job
 msgid "or"
-msgstr "o "
+msgstr "o"
 
 #. module: connector
 #: view:connector.checkpoint:connector.view_connector_checkpoint_form

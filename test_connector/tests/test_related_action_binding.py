@@ -9,7 +9,7 @@ from odoo.addons.component.tests.common import TransactionComponentCase
 
 
 class TestRelatedActionBinding(TransactionComponentCase):
-    """ Test Related Actions with Bindings """
+    """Test Related Actions with Bindings"""
 
     def setUp(self):
         super(TestRelatedActionBinding, self).setUp()
@@ -17,7 +17,7 @@ class TestRelatedActionBinding(TransactionComponentCase):
         self.backend_record = self.env["test.backend"].create({})
 
     def test_unwrap_binding(self):
-        """ Call the unwrap binding related action """
+        """Call the unwrap binding related action"""
         binding = self.env["connector.test.binding"].create(
             {"backend_id": self.backend_record.id, "external_id": 99}
         )
@@ -36,7 +36,7 @@ class TestRelatedActionBinding(TransactionComponentCase):
         self.assertEqual(action, expected)
 
     def test_unwrap_binding_direct_binding(self):
-        """ Call the unwrap binding related action """
+        """Call the unwrap binding related action"""
         binding = self.env["no.inherits.binding"].create(
             {"backend_id": self.backend_record.id, "external_id": 99}
         )
@@ -55,7 +55,7 @@ class TestRelatedActionBinding(TransactionComponentCase):
         self.assertEqual(action, expected)
 
     def test_unwrap_binding_not_exists(self):
-        """ Call the related action on the model on non-existing record """
+        """Call the related action on the model on non-existing record"""
         binding = self.env["connector.test.binding"].create(
             {"backend_id": self.backend_record.id, "external_id": 99}
         )

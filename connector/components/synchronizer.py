@@ -30,7 +30,7 @@ _logger = logging.getLogger(__name__)
 
 
 class Synchronizer(AbstractComponent):
-    """ Base class for synchronizers """
+    """Base class for synchronizers"""
 
     _name = "base.synchronizer"
     _inherit = "base.connector"
@@ -48,7 +48,7 @@ class Synchronizer(AbstractComponent):
         self._mapper = None
 
     def run(self):
-        """ Run the synchronization """
+        """Run the synchronization"""
         raise NotImplementedError
 
     @property
@@ -101,7 +101,7 @@ class Synchronizer(AbstractComponent):
 
 
 class Exporter(AbstractComponent):
-    """ Synchronizer for exporting data from Odoo to a backend """
+    """Synchronizer for exporting data from Odoo to a backend"""
 
     _name = "base.exporter"
     _inherit = "base.synchronizer"
@@ -111,7 +111,7 @@ class Exporter(AbstractComponent):
 
 
 class GenericExporter(AbstractComponent):
-    """ Generic Synchronizer for exporting data from Odoo to a backend """
+    """Generic Synchronizer for exporting data from Odoo to a backend"""
 
     _name = "generic.exporter"
     _inherit = "base.exporter"
@@ -168,7 +168,7 @@ class GenericExporter(AbstractComponent):
         return result
 
     def _run(self, fields=None):
-        """ Flow of the synchronization, implemented in inherited classes"""
+        """Flow of the synchronization, implemented in inherited classes"""
         assert self.binding
 
         if not self.external_id:
@@ -199,7 +199,7 @@ class GenericExporter(AbstractComponent):
         return _("Record exported with ID %s on Backend.") % self.external_id
 
     def _after_export(self):
-        """ Can do several actions after exporting a record on the backend """
+        """Can do several actions after exporting a record on the backend"""
 
     def _lock(self):
         """Lock the binding record.
@@ -234,7 +234,7 @@ class GenericExporter(AbstractComponent):
             )
 
     def _has_to_skip(self):
-        """ Return True if the export can be skipped """
+        """Return True if the export can be skipped"""
         return False
 
     @contextmanager
@@ -374,7 +374,7 @@ class GenericExporter(AbstractComponent):
             exporter.run(binding)
 
     def _export_dependencies(self):
-        """ Export the dependencies for the record"""
+        """Export the dependencies for the record"""
         return
 
     def _map_data(self):
@@ -405,21 +405,21 @@ class GenericExporter(AbstractComponent):
         return
 
     def _create_data(self, map_record, fields=None, **kwargs):
-        """ Get the data to pass to :py:meth:`_create` """
+        """Get the data to pass to :py:meth:`_create`"""
         return map_record.values(for_create=True, fields=fields, **kwargs)
 
     def _create(self, data):
-        """ Create the External record """
+        """Create the External record"""
         # special check on data before export
         self._validate_create_data(data)
         return self.backend_adapter.create(data)
 
     def _update_data(self, map_record, fields=None, **kwargs):
-        """ Get the data to pass to :py:meth:`_update` """
+        """Get the data to pass to :py:meth:`_update`"""
         return map_record.values(fields=fields, **kwargs)
 
     def _update(self, data):
-        """ Update an External record """
+        """Update an External record"""
         assert self.external_id
         # special check on data before export
         self._validate_update_data(data)
@@ -427,7 +427,7 @@ class GenericExporter(AbstractComponent):
 
 
 class Importer(AbstractComponent):
-    """ Synchronizer for importing data from a backend to Odoo """
+    """Synchronizer for importing data from a backend to Odoo"""
 
     _name = "base.importer"
     _inherit = "base.synchronizer"
@@ -437,7 +437,7 @@ class Importer(AbstractComponent):
 
 
 class Deleter(AbstractComponent):
-    """ Synchronizer for deleting a record on the backend """
+    """Synchronizer for deleting a record on the backend"""
 
     _name = "base.deleter"
     _inherit = "base.synchronizer"

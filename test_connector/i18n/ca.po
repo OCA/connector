@@ -9,26 +9,27 @@ msgstr ""
 "Project-Id-Version: Odoo Server 10.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-03-10 03:36+0000\n"
-"PO-Revision-Date: 2017-03-10 03:36+0000\n"
-"Last-Translator: OCA Transbot <transbot@odoo-community.org>, 2017\n"
+"PO-Revision-Date: 2022-04-13 11:05+0000\n"
+"Last-Translator: Noel estudillo <noelestudilloviera@gmail.com>\n"
 "Language-Team: Catalan (https://www.transifex.com/oca/teams/23907/ca/)\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.3.2\n"
 
 #. module: test_connector
 #: sql_constraint:connector.test.binding:0
 #: sql_constraint:no.inherits.binding:0
 msgid "A binding already exists for this record"
-msgstr ""
+msgstr "Ja existeix una vinculació per a aquest registre"
 
 #. module: test_connector
 #: model:ir.model.fields,field_description:test_connector.field_connector_test_binding_backend_id
 #: model:ir.model.fields,field_description:test_connector.field_no_inherits_binding_backend_id
 msgid "Backend"
-msgstr ""
+msgstr "Backend"
 
 #. module: test_connector
 #: model:ir.model.fields,field_description:test_connector.field_connector_test_binding_create_uid
@@ -52,7 +53,7 @@ msgstr "Creat a"
 #: model:ir.model.fields,field_description:test_connector.field_no_inherits_binding_display_name
 #: model:ir.model.fields,field_description:test_connector.field_test_backend_display_name
 msgid "Display Name"
-msgstr ""
+msgstr "Nom de visualització"
 
 #. module: test_connector
 #: model:ir.model.fields,field_description:test_connector.field_connector_test_binding_id
@@ -66,7 +67,7 @@ msgstr "ID"
 #: model:ir.model.fields,field_description:test_connector.field_connector_test_binding_external_id
 #: model:ir.model.fields,field_description:test_connector.field_no_inherits_binding_external_id
 msgid "ID on External"
-msgstr ""
+msgstr "Identificació externa"
 
 #. module: test_connector
 #: model:ir.model.fields,field_description:test_connector.field_connector_test_binding___last_update
@@ -74,7 +75,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:test_connector.field_no_inherits_binding___last_update
 #: model:ir.model.fields,field_description:test_connector.field_test_backend___last_update
 msgid "Last Modified on"
-msgstr ""
+msgstr "Última modificació el"
 
 #. module: test_connector
 #: model:ir.model.fields,field_description:test_connector.field_connector_test_binding_write_uid
@@ -95,7 +96,7 @@ msgstr "Darrera modificació el"
 #. module: test_connector
 #: model:ir.model.fields,field_description:test_connector.field_connector_test_binding_odoo_id
 msgid "Test Record"
-msgstr ""
+msgstr "Registre de la prova"
 
 #. module: test_connector
 #: model:ir.model.fields,field_description:test_connector.field_test_backend_version
@@ -105,19 +106,19 @@ msgstr "Versió"
 #. module: test_connector
 #: model:ir.model,name:test_connector.model_connector_test_binding
 msgid "connector.test.binding"
-msgstr ""
+msgstr "connector.test.binding"
 
 #. module: test_connector
 #: model:ir.model,name:test_connector.model_connector_test_record
 msgid "connector.test.record"
-msgstr ""
+msgstr "connector.test.record"
 
 #. module: test_connector
 #: model:ir.model,name:test_connector.model_no_inherits_binding
 msgid "no.inherits.binding"
-msgstr ""
+msgstr "no.hereta.vinculació"
 
 #. module: test_connector
 #: model:ir.model,name:test_connector.model_test_backend
 msgid "test.backend"
-msgstr ""
+msgstr "prova.backend"

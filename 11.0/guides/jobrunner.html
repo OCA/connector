@@ -21,10 +21,10 @@
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
 <meta name="apple-mobile-web-app-capable" content="yes">
-<script type="text/javascript" src="../_static/js/jquery-1.12.4.min.js "></script>
-<script type="text/javascript" src="../_static/js/jquery-fix.js "></script>
-<script type="text/javascript" src="../_static/bootstrap-3.4.1/js/bootstrap.min.js "></script>
-<script type="text/javascript" src="../_static/bootstrap-sphinx.js "></script>
+<script type="text/javascript" src="../_static/js/jquery-1.12.4.min.js"></script>
+<script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+<script type="text/javascript" src="../_static/bootstrap-3.4.1/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
 
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -289,29 +289,29 @@ or <code class="docutils literal notranslate"><span class="pre">False</span></co
 <li>Alternatively, configure the channels through the Odoo configuration
 file, like:</li>
 </ul>
-<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[queue_job]</span>
-<span class="na">channels</span> <span class="o">=</span> <span class="s">root:4</span>
-<span class="na">scheme</span> <span class="o">=</span> <span class="s">https</span>
-<span class="na">host</span> <span class="o">=</span> <span class="s">load-balancer</span>
-<span class="na">port</span> <span class="o">=</span> <span class="s">443</span>
-<span class="na">http_auth_user</span> <span class="o">=</span> <span class="s">jobrunner</span>
-<span class="na">http_auth_password</span> <span class="o">=</span> <span class="s">s3cr3t</span>
-<span class="na">jobrunner_db_host</span> <span class="o">=</span> <span class="s">master-db</span>
-<span class="na">jobrunner_db_port</span> <span class="o">=</span> <span class="s">5432</span>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[queue_job]</span><span class="w"></span>
+<span class="na">channels</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">root:4</span><span class="w"></span>
+<span class="na">scheme</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">https</span><span class="w"></span>
+<span class="na">host</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">load-balancer</span><span class="w"></span>
+<span class="na">port</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">443</span><span class="w"></span>
+<span class="na">http_auth_user</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">jobrunner</span><span class="w"></span>
+<span class="na">http_auth_password</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">s3cr3t</span><span class="w"></span>
+<span class="na">jobrunner_db_host</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">master-db</span><span class="w"></span>
+<span class="na">jobrunner_db_port</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">5432</span><span class="w"></span>
 </pre></div>
 </div>
 <ul class="simple">
 <li>Or, if using <code class="docutils literal notranslate"><span class="pre">anybox.recipe.odoo</span></code>, add this to your buildout configuration:</li>
 </ul>
-<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[odoo]</span>
-<span class="na">recipe</span> <span class="o">=</span> <span class="s">anybox.recipe.odoo</span>
-<span class="na">(...)</span>
-<span class="na">queue_job.channels</span> <span class="o">=</span> <span class="s">root:4</span>
-<span class="na">queue_job.scheme</span> <span class="o">=</span> <span class="s">https</span>
-<span class="na">queue_job.host</span> <span class="o">=</span> <span class="s">load-balancer</span>
-<span class="na">queue_job.port</span> <span class="o">=</span> <span class="s">443</span>
-<span class="na">queue_job.http_auth_user</span> <span class="o">=</span> <span class="s">jobrunner</span>
-<span class="na">queue_job.http_auth_password</span> <span class="o">=</span> <span class="s">s3cr3t</span>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[odoo]</span><span class="w"></span>
+<span class="na">recipe</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">anybox.recipe.odoo</span><span class="w"></span>
+<span class="na">(...)</span><span class="w"></span>
+<span class="na">queue_job.channels</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">root:4</span><span class="w"></span>
+<span class="na">queue_job.scheme</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">https</span><span class="w"></span>
+<span class="na">queue_job.host</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">load-balancer</span><span class="w"></span>
+<span class="na">queue_job.port</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">443</span><span class="w"></span>
+<span class="na">queue_job.http_auth_user</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">jobrunner</span><span class="w"></span>
+<span class="na">queue_job.http_auth_password</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">s3cr3t</span><span class="w"></span>
 </pre></div>
 </div>
 <ul class="simple">
@@ -319,21 +319,21 @@ file, like:</li>
 and <code class="docutils literal notranslate"><span class="pre">--workers</span></code> greater than 1 <a class="footnote-reference" href="#id4" id="id2">[2]</a>, or set the <code class="docutils literal notranslate"><span class="pre">server_wide_modules</span></code>
 option in The Odoo configuration file:</li>
 </ul>
-<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[options]</span>
-<span class="na">(...)</span>
-<span class="na">workers</span> <span class="o">=</span> <span class="s">4</span>
-<span class="na">server_wide_modules</span> <span class="o">=</span> <span class="s">web,web_kanban,queue_job</span>
-<span class="na">(...)</span>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[options]</span><span class="w"></span>
+<span class="na">(...)</span><span class="w"></span>
+<span class="na">workers</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">4</span><span class="w"></span>
+<span class="na">server_wide_modules</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">web,web_kanban,queue_job</span><span class="w"></span>
+<span class="na">(...)</span><span class="w"></span>
 </pre></div>
 </div>
 <ul class="simple">
 <li>Or, if using <code class="docutils literal notranslate"><span class="pre">anybox.recipe.odoo</span></code>:</li>
 </ul>
-<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[odoo]</span>
-<span class="na">recipe</span> <span class="o">=</span> <span class="s">anybox.recipe.odoo</span>
-<span class="na">(...)</span>
-<span class="na">options.workers</span> <span class="o">=</span> <span class="s">4</span>
-<span class="na">options.server_wide_modules</span> <span class="o">=</span> <span class="s">web,web_kanban,queue_job</span>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[odoo]</span><span class="w"></span>
+<span class="na">recipe</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">anybox.recipe.odoo</span><span class="w"></span>
+<span class="na">(...)</span><span class="w"></span>
+<span class="na">options.workers</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">4</span><span class="w"></span>
+<span class="na">options.server_wide_modules</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">web,web_kanban,queue_job</span><span class="w"></span>
 </pre></div>
 </div>
 <ul class="simple">
@@ -369,7 +369,7 @@ therefore fill the running queue and prevent other jobs to start.
 You must therefore requeue them manually, either from the Jobs view,
 or by running the following SQL statement <em>before starting Odoo</em>:</li>
 </ul>
-<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">update</span> <span class="n">queue_job</span> <span class="k">set</span> <span class="k">state</span><span class="o">=</span><span class="s1">&#39;pending&#39;</span> <span class="k">where</span> <span class="k">state</span> <span class="k">in</span> <span class="p">(</span><span class="s1">&#39;started&#39;</span><span class="p">,</span> <span class="s1">&#39;enqueued&#39;</span><span class="p">)</span>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">update</span><span class="w"> </span><span class="n">queue_job</span><span class="w"> </span><span class="k">set</span><span class="w"> </span><span class="k">state</span><span class="o">=</span><span class="s1">&#39;pending&#39;</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="k">state</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;started&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;enqueued&#39;</span><span class="p">)</span><span class="w"></span>
 </pre></div>
 </div>
 <p class="rubric">Footnotes</p>

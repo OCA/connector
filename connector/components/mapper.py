@@ -11,10 +11,10 @@ external records into Odoo records and conversely.
 
 """
 
-import collections
 import logging
 from collections import namedtuple
 from contextlib import contextmanager
+from typing import Callable
 
 from odoo import models
 
@@ -127,7 +127,7 @@ def none(field):
     """
 
     def modifier(self, record, to_attr):
-        if isinstance(field, collections.Callable):
+        if isinstance(field, Callable):
             result = field(self, record, to_attr)
         else:
             result = record[field]
@@ -746,7 +746,7 @@ class Mapper(AbstractComponent):
 
         """
         fieldname = direct_entry
-        if isinstance(direct_entry, collections.Callable):
+        if isinstance(direct_entry, Callable):
             # Map the closure entries with variable names
             cells = dict(
                 list(
@@ -757,7 +757,7 @@ class Mapper(AbstractComponent):
                 )
             )
             assert "field" in cells, "Modifier without 'field' argument."
-            if isinstance(cells["field"], collections.Callable):
+            if isinstance(cells["field"], Callable):
                 fieldname = self._direct_source_field_name(cells["field"])
             else:
                 fieldname = cells["field"]
@@ -804,7 +804,7 @@ class Mapper(AbstractComponent):
         for_create = self.options.for_create
         result = {}
         for from_attr, to_attr in self.direct:
-            if isinstance(from_attr, collections.Callable):
+            if isinstance(from_attr, Callable):
                 attr_name = self._direct_source_field_name(from_attr)
             else:
                 attr_name = from_attr
@@ -878,7 +878,7 @@ class ImportMapper(AbstractComponent):
         :param to_attr: name of the target attribute
         :type to_attr: str
         """
-        if isinstance(from_attr, collections.Callable):
+        if isinstance(from_attr, Callable):
             return from_attr(self, record, to_attr)
 
         value = record.get(from_attr)
@@ -919,7 +919,7 @@ class ExportMapper(AbstractComponent):
         :param to_attr: name of the target attribute
         :type to_attr: str
         """
-        if isinstance(from_attr, collections.Callable):
+        if isinstance(from_attr, Callable):
             return from_attr(self, record, to_attr)
 
         value = record[from_attr]

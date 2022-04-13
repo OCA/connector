@@ -9,14 +9,15 @@ msgstr ""
 "Project-Id-Version: Odoo Server 10.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-01-15 07:15+0000\n"
-"PO-Revision-Date: 2018-01-15 07:15+0000\n"
-"Last-Translator: OCA Transbot <transbot@odoo-community.org>, 2018\n"
+"PO-Revision-Date: 2022-04-13 11:05+0000\n"
+"Last-Translator: Noel estudillo <noelestudilloviera@gmail.com>\n"
 "Language-Team: Catalan (https://www.transifex.com/oca/teams/23907/ca/)\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.3.2\n"
 
 #. module: connector
 #: code:addons/connector/checkpoint/checkpoint.py:119
@@ -124,7 +125,7 @@ msgstr "Creat a"
 #: model:ir.model.fields,field_description:connector.field_connector_config_settings_display_name
 #: model:ir.model.fields,field_description:connector.field_external_binding_display_name
 msgid "Display Name"
-msgstr ""
+msgstr "Nom de visualització"
 
 #. module: connector
 #: model:ir.model,name:connector.model_external_binding
@@ -157,7 +158,7 @@ msgstr "Importat de"
 #: model:ir.model.fields,field_description:connector.field_connector_config_settings___last_update
 #: model:ir.model.fields,field_description:connector.field_external_binding___last_update
 msgid "Last Modified on"
-msgstr ""
+msgstr "Última modificació el"
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_review_write_uid
@@ -195,7 +196,7 @@ msgstr "Nom"
 #. module: connector
 #: model:ir.model.fields,help:connector.field_connector_checkpoint_name
 msgid "Name of the record to review"
-msgstr ""
+msgstr "Nom del registre a revisar"
 
 #. module: connector
 #: selection:connector.checkpoint,state:0
@@ -206,14 +207,14 @@ msgstr "Necessita Revisió"
 #. module: connector
 #: model:ir.actions.act_window,help:connector.action_connector_checkpoint
 msgid "No record to check."
-msgstr ""
+msgstr "No hi ha registre per comprovar."
 
 #. module: connector
 #: code:addons/connector/components/synchronizer.py:191
 #: code:addons/connector/components/synchronizer.py:196
 #, python-format
 msgid "Nothing to export."
-msgstr ""
+msgstr "Res a exportar."
 
 #. module: connector
 #: model:ir.actions.client,name:connector.action_client_connector_menu
@@ -228,7 +229,7 @@ msgstr "Tasca de Cua"
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_record
 msgid "Record"
-msgstr ""
+msgstr "Registre"
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_record_id
@@ -238,13 +239,13 @@ msgstr "ID Registre"
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_name
 msgid "Record Name"
-msgstr ""
+msgstr "Nom del registre"
 
 #. module: connector
 #: code:addons/connector/components/synchronizer.py:198
 #, python-format
 msgid "Record exported with ID %s on Backend."
-msgstr ""
+msgstr "Registre exportat amb l'ID %s al backend."
 
 #. module: connector
 #: code:addons/connector/models/queue_job.py:34
@@ -283,6 +284,9 @@ msgid ""
 "                based on their type.  Only some need a manual\n"
 "                review."
 msgstr ""
+"Els connectors llisten els registres nous per verificar\n"
+"                en funció del seu tipus. Només alguns necessiten un manual\n"
+"                revisió."
 
 #. module: connector
 #: model:ir.model.fields,help:connector.field_connector_checkpoint_backend_id
@@ -292,12 +296,12 @@ msgstr "El registre ha estat importat des d'aquest backend"
 #. module: connector
 #: model:ir.model.fields,help:connector.field_connector_checkpoint_record
 msgid "The record to review."
-msgstr ""
+msgstr "El registre a revisar."
 
 #. module: connector
 #: model:ir.ui.view,arch_db:connector.view_connector_checkpoint_review
 msgid "The selected checkpoints will be set as reviewed."
-msgstr "Els seleccionats seran marcats com revisats. "
+msgstr "Els seleccionats seran marcats com revisats."
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_backend_version
@@ -312,17 +316,21 @@ msgid ""
 "                will appear in this list.  Once a record has been\n"
 "                checked, click on the 'Reviewed' button."
 msgstr ""
+"Quan un connector importa nous registres que tenen\n"
+"                configuració o revisions per fer manualment, ells\n"
+"                apareixerà en aquesta llista. Un cop s'ha fet un rècord\n"
+"                marcat, feu clic al botó \"Revisat\"."
 
 #. module: connector
 #: model:ir.model,name:connector.model_base
 msgid "base"
-msgstr ""
+msgstr "base"
 
 #. module: connector
 #: model:ir.ui.view,arch_db:connector.view_connector_checkpoint_review
 #: model:ir.ui.view,arch_db:connector.view_connector_config_settings
 msgid "or"
-msgstr "o "
+msgstr "o"
 
 #. module: connector
 #: model:ir.ui.view,arch_db:connector.view_connector_checkpoint_form

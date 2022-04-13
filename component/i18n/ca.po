@@ -9,30 +9,31 @@ msgstr ""
 "Project-Id-Version: Odoo Server 10.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-01-15 07:15+0000\n"
-"PO-Revision-Date: 2018-01-15 07:15+0000\n"
-"Last-Translator: OCA Transbot <transbot@odoo-community.org>, 2018\n"
+"PO-Revision-Date: 2022-04-13 11:05+0000\n"
+"Last-Translator: Noel estudillo <noelestudilloviera@gmail.com>\n"
 "Language-Team: Catalan (https://www.transifex.com/oca/teams/23907/ca/)\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.3.2\n"
 
 #. module: component
 #: model:ir.model,name:component.model_collection_base
 msgid "Base Abstract Collection"
-msgstr ""
+msgstr "Col·lecció d'abstractes base"
 
 #. module: component
 #: model:ir.model,name:component.model_component_builder
 msgid "Component Builder"
-msgstr ""
+msgstr "Constructor de components"
 
 #. module: component
 #: model:ir.model.fields,field_description:component.field_collection_base_display_name
 #: model:ir.model.fields,field_description:component.field_component_builder_display_name
 msgid "Display Name"
-msgstr ""
+msgstr "Nom de visualització"
 
 #. module: component
 #: model:ir.model.fields,field_description:component.field_collection_base_id
@@ -44,4 +45,4 @@ msgstr "ID"
 #: model:ir.model.fields,field_description:component.field_collection_base___last_update
 #: model:ir.model.fields,field_description:component.field_component_builder___last_update
 msgid "Last Modified on"
-msgstr ""
+msgstr "Última modificació el"

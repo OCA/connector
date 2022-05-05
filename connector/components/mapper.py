@@ -14,7 +14,6 @@ external records into Odoo records and conversely.
 import logging
 from collections import namedtuple
 from contextlib import contextmanager
-from typing import Callable
 
 from odoo import models
 
@@ -127,7 +126,7 @@ def none(field):
     """
 
     def modifier(self, record, to_attr):
-        if isinstance(field, Callable):
+        if callable(field):
             result = field(self, record, to_attr)
         else:
             result = record[field]
@@ -745,7 +744,7 @@ class Mapper(AbstractComponent):
 
         """
         fieldname = direct_entry
-        if isinstance(direct_entry, Callable):
+        if callable(direct_entry):
             # Map the closure entries with variable names
             cells = dict(
                 list(
@@ -756,7 +755,7 @@ class Mapper(AbstractComponent):
                 )
             )
             assert "field" in cells, "Modifier without 'field' argument."
-            if isinstance(cells["field"], Callable):
+            if callable(cells["field"]):
                 fieldname = self._direct_source_field_name(cells["field"])
             else:
                 fieldname = cells["field"]
@@ -803,7 +802,7 @@ class Mapper(AbstractComponent):
         for_create = self.options.for_create
         result = {}
         for from_attr, to_attr in self.direct:
-            if isinstance(from_attr, Callable):
+            if callable(from_attr):
                 attr_name = self._direct_source_field_name(from_attr)
             else:
                 attr_name = from_attr
@@ -877,7 +876,7 @@ class ImportMapper(AbstractComponent):
         :param to_attr: name of the target attribute
         :type to_attr: str
         """
-        if isinstance(from_attr, Callable):
+        if callable(from_attr):
             return from_attr(self, record, to_attr)
 
         value = record.get(from_attr)
@@ -918,7 +917,7 @@ class ExportMapper(AbstractComponent):
         :param to_attr: name of the target attribute
         :type to_attr: str
         """
-        if isinstance(from_attr, Callable):
+        if callable(from_attr):
             return from_attr(self, record, to_attr)
 
         value = record[from_attr]

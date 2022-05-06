@@ -3,7 +3,7 @@
 
 {
     "name": "Connector",
-    "version": "14.0.1.1.3",
+    "version": "14.0.1.1.4",
     "author": "Camptocamp,Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/connector",
     "license": "LGPL-3",

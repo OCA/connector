@@ -3,7 +3,7 @@
 
 {
     "name": "Components Events",
-    "version": "14.0.1.0.2",
+    "version": "14.0.1.0.3",
     "author": "Camptocamp," "Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/connector",
     "license": "LGPL-3",

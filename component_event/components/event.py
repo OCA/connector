@@ -164,7 +164,7 @@ def skip_if(cond):
     return skip_if_decorator
 
 
-class CollectedEvents(object):
+class CollectedEvents:
     """Event methods ready to be notified
 
     This is a rather internal class. An instance of this class

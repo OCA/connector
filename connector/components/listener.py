@@ -39,7 +39,7 @@ class ConnectorListener(AbstractComponent):
                 _inherit = 'base.connector.event.listener'
                 _apply_on = ['magento.res.partner']
 
-                @skip_if(lambda: self, record, *args, **kwargs:
+                @skip_if(lambda self, record, *args, **kwargs:
                          self.no_connector_export(record))
                 def on_record_write(self, record, fields=None):
                     record.with_delay().export_record()

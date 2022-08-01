@@ -175,7 +175,7 @@ def m2o_to_external(field, binding=None):
                   (m2o_to_external('magento_country_id'), 'country')]
 
     :param field: name of the source field in the record
-    :param binding: name of the binding model is the relation is not a binding
+    :param binding: name of the binding model if the relation is not a binding
     """
 
     def modifier(self, record, to_attr):
@@ -224,7 +224,7 @@ def external_to_m2o(field, binding=None):
                   (external_to_m2o('country'), 'magento_country_id')]
 
     :param field: name of the source field in the record
-    :param binding: name of the binding model is the relation is not a binding
+    :param binding: name of the binding model if the relation is not a binding
     """
 
     def modifier(self, record, to_attr):
@@ -554,7 +554,7 @@ class Mapper(AbstractComponent):
         >>> mapper = self.component(usage='mapper')
         >>> map_record = mapper.map_record(record)
         >>> values = map_record.values()
-        >>> values = map_record.values(only_create=True)
+        >>> values = map_record.values(for_create=True)
         >>> values = map_record.values(fields=['name', 'street'])
 
     """
@@ -605,7 +605,7 @@ class Mapper(AbstractComponent):
         for base in reversed(cls.__bases__):
             if hasattr(base, "_map_methods"):
                 # this is already a dynamically generated Component, so we can
-                # use it's existing mappings
+                # use its existing mappings
                 base_map_methods = base._map_methods or {}
                 for attr_name, definition in base_map_methods.items():
                     if attr_name in map_methods:
@@ -936,7 +936,7 @@ class ExportMapper(AbstractComponent):
         return value
 
 
-class MapRecord(object):
+class MapRecord:
     """A record prepared to be converted using a :py:class:`Mapper`.
 
     MapRecord instances are prepared by :py:meth:`Mapper.map_record`.

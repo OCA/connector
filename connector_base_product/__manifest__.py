@@ -3,7 +3,7 @@
 
 {
     "name": "Connector Base Product",
-    "version": "14.0.1.0.0",
+    "version": "15.0.1.0.0",
     "author": "Openerp Connector Core Editors, Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/connector",
     "license": "LGPL-3",
@@ -13,5 +13,5 @@
         "product",
     ],
     "data": ["views/product_view.xml"],
-    "installable": False,
+    "installable": True,
 }

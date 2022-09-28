@@ -1,7 +1,7 @@
 # Copyright 2018 Camptocamp SA
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
 
-import mock
+from unittest import mock
 
 from odoo import api
 from odoo.modules.registry import Registry

@@ -1,7 +1,7 @@
 # Copyright 2013 Camptocamp SA
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl.html)
 
-import mock
+from unittest import mock
 
 from odoo.addons.component.core import Component, WorkContext
 from odoo.addons.component.tests.common import TransactionComponentRegistryCase

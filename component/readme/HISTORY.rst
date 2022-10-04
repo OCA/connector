@@ -8,6 +8,11 @@
     forbidden and will likely break the structure of the README.rst
     or other documents where this fragment is included. ]
 
+16.0.1.0.0 (2022-10-04)
+~~~~~~~~~~~~~~~~~~~~~~~
+
+* [MIGRATION] from 15.0
+
 15.0.1.0.0 (2021-11-25)
 ~~~~~~~~~~~~~~~~~~~~~~~
 

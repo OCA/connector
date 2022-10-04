@@ -11,8 +11,8 @@ msgstr ""
 "POT-Creation-Date: 2018-01-05 16:56+0000\n"
 "PO-Revision-Date: 2020-08-12 20:00+0000\n"
 "Last-Translator: Rodrigo Macedo <rmsolucoeseminformatic4@gmail.com>\n"
-"Language-Team: Portuguese (Brazil) (https://www.transifex.com/oca/teams/"
-"23907/pt_BR/)\n"
+"Language-Team: Portuguese (Brazil) (https://www.transifex.com/oca/"
+"teams/23907/pt_BR/)\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -30,20 +30,11 @@ msgstr "Coleção Base Abstrata"
 msgid "Component Builder"
 msgstr "Construtor de Componentes"
 
-#. module: component
-#: model:ir.model.fields,field_description:component.field_collection_base__display_name
-#: model:ir.model.fields,field_description:component.field_component_builder__display_name
-msgid "Display Name"
-msgstr "Exibir Nome"
+#~ msgid "Display Name"
+#~ msgstr "Exibir Nome"
 
-#. module: component
-#: model:ir.model.fields,field_description:component.field_collection_base__id
-#: model:ir.model.fields,field_description:component.field_component_builder__id
-msgid "ID"
-msgstr "ID"
+#~ msgid "ID"
+#~ msgstr "ID"
 
-#. module: component
-#: model:ir.model.fields,field_description:component.field_collection_base____last_update
-#: model:ir.model.fields,field_description:component.field_component_builder____last_update
-msgid "Last Modified on"
-msgstr "Última modificação em"
+#~ msgid "Last Modified on"
+#~ msgstr "Última modificação em"

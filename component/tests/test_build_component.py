@@ -4,7 +4,7 @@
 # Tell pylint to not bother us for all our fake component classes
 # pylint: disable=consider-merging-classes-inherited
 
-import mock
+from unittest import mock
 
 from odoo.addons.component.core import AbstractComponent, Component
 
